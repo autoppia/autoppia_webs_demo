@@ -24,8 +24,8 @@ echo "=== Levantando Proyecto 1 (web_1_demo_django_jobs) ==="
 cd web_1_demo_django_jobs
 EXTERNAL_PORT=8001 INTERNAL_PORT=8001 docker-compose up -d --build
 
-echo "=== Levantando Proyecto 2 (web_2_demo_angular_django_personal_management) ==="
-cd ../web_2_demo_angular_django_personal_management
-docker-compose up -d --build
+# echo "=== Levantando Proyecto 2 (web_2_demo_angular_django_personal_management) ==="
+# cd ../web_2_demo_angular_django_personal_management
+# docker-compose up -d --build
 
 echo "=== Listo: Ambos proyectos están en ejecución en segundo plano. ==="
