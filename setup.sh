@@ -1,31 +1,49 @@
 #!/bin/bash
 # setup.sh
+# -----------------------------------------
+# Installs Docker (if not already installed), removes Docker Compose v1,
+# and installs Docker Compose v2 (docker-compose-plugin).
+# Finally, it starts the projects using Docker Compose v2.
 
-# Stop the script on first error
-set -e
+set -e  # Stop the script if an error occurs
 
-# Check and install Docker if not present
+echo "=== 1. Checking and installing Docker if not present ==="
 if ! command -v docker &> /dev/null; then
-    echo "Docker not found. Installing Docker..."
-    sudo apt-get update
+    echo "Docker not found. Installing..."
+    sudo apt-get update -y
     sudo apt-get install -y docker.io
-    sudo systemctl start docker
     sudo systemctl enable docker
+    sudo systemctl start docker
+else
+    echo "Docker is already installed."
 fi
 
-# Check and install Docker Compose if not present
-if ! command -v docker-compose &> /dev/null; then
-    echo "Docker Compose not found. Installing Docker Compose..."
-    sudo apt-get update
-    sudo apt-get install -y docker-compose
+echo "=== 2. Removing Docker Compose v1 (if present) ==="
+if command -v docker-compose &> /dev/null; then
+    echo "Found docker-compose v1. Removing..."
+    sudo apt-get remove -y docker-compose
+else
+    echo "docker-compose v1 is not installed or has already been removed."
 fi
 
-echo "=== Levantando Proyecto 1 (web_1_demo_django_jobs) ==="
+echo "=== 3. Installing Docker Compose v2 (docker-compose-plugin) ==="
+sudo apt-get update -y
+sudo apt-get install -y docker-compose-plugin
+
+# Verify the installed version of Docker Compose v2
+echo "Installed Docker Compose version:"
+docker compose version || true
+
+# Ensure Docker is running and enabled at startup
+sudo systemctl enable docker
+sudo systemctl start docker
+
+echo "=== 4. Starting Project 1 (web_1_demo_django_jobs) with Docker Compose v2 ==="
 cd web_1_demo_django_jobs
-EXTERNAL_PORT=8001 INTERNAL_PORT=8001 docker-compose up -d --build
+docker compose up -d --build
 
-echo "=== Levantando Proyecto 2 (web_2_demo_angular_django_personal_management) ==="
-cd ../web_2_demo_angular_django_personal_management
-docker-compose up -d --build
+# echo "=== 5. Starting Project 2 (web_2_demo_angular_django_personal_management) with Docker Compose v2 ==="
+# cd ../web_2_demo_angular_django_personal_management
+# docker compose up -d --build
 
-echo "=== Listo: Ambos proyectos están en ejecución en segundo plano. ==="
+echo "=== Done: Both projects are running in the background with Docker Compose v2. ==="
