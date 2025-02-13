@@ -7,8 +7,8 @@ services:
             dockerfile: Dockerfile
         container_name: web1_demo_jobs_portal
         ports:
-          - "8000:8001"
-         environment:
+            - "8000:8001"
+        environment:
             - POSTGRES_DB=web_demo_1_job_portal
             - POSTGRES_USER=root
             - POSTGRES_PASSWORD=autoppia_2025
