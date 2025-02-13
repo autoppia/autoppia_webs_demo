@@ -26,7 +26,7 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "job_portal_test_bittensor"),
+        "NAME": os.environ.get("DB_NAME", "web_demo_1_job_portal"),
         "USER": os.environ.get("DB_USER", "root"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "autoppia_2025"),
         "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
