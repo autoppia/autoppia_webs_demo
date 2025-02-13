@@ -10,7 +10,7 @@ services:
     ports:
       - "${EXTERNAL_PORT}:${INTERNAL_PORT}"
     environment:
-      - POSTGRES_DB=job_portal_test_bittensor
+      - POSTGRES_DB=web_demo_1_job_portal
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=autoppia_2025
       - DB_HOST=db
