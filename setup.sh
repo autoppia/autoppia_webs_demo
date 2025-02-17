@@ -102,6 +102,7 @@ main() {
     sudo systemctl start docker
 
     # Deploy specific project (modify path as needed)
+    cd ..
     deploy_project "web_1_demo_django_jobs"
 
     echo "✨ Deployment complete! Project is running in the background."
