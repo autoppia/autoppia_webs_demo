@@ -78,6 +78,7 @@ class LoginView(FormView):
     def form_valid(self, form):
         user = form.get_user()
         auth.login(self.request, user)
+
         web_agent_id = self.request.headers.get("X-WebAgent-Id")
         create_event(user=user, event_type='login', description=f'User logged in with email {user.email}', web_agent_id=web_agent_id)
         return HttpResponseRedirect(self.get_success_url())
