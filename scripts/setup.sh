@@ -37,4 +37,6 @@ deploy_project "web_1_demo_django_jobs"
 # Add more projects as needed with:
 # deploy_project "web_2_demo_..."
 
+cd ..
+
 echo "✨ Web demos deployment complete!"
