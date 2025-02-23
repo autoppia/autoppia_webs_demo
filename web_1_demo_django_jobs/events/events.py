@@ -16,3 +16,9 @@ EVENTS_ALLOWED = [
     "search",
     "page_view"
 ]
+RELEVANT_DATA = {
+    "Authorization":{
+        "email":"admin@jobsapp.com",
+        "password":"admin123"
+    }
+}
