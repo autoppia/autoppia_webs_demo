@@ -1,6 +1,128 @@
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-  <input type="submit">
+{% extends 'base.html' %}
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-white">
+                    <h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Editar Película</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" class="movie-form">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h4 class="alert-heading">Por favor, corrige los siguientes errores:</h4>
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ field.label }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                {% for field in form %}
+                                    {% if field.name != 'img' %}
+                                    <div class="form-group">
+                                        <label for="{{ field.id_for_label }}">
+                                            {% if field.name == 'name' %}
+                                                <i class="fas fa-film mr-1"></i>
+                                            {% elif field.name == 'year' %}
+                                                <i class="fas fa-calendar-alt mr-1"></i>
+                                            {% elif field.name == 'director' %}
+                                                <i class="fas fa-user mr-1"></i>
+                                            {% elif field.name == 'cast' %}
+                                                <i class="fas fa-users mr-1"></i>
+                                            {% elif field.name == 'duration' %}
+                                                <i class="fas fa-clock mr-1"></i>
+                                            {% elif field.name == 'trailer_url' %}
+                                                <i class="fab fa-youtube mr-1"></i>
+                                            {% elif field.name == 'rating' %}
+                                                <i class="fas fa-star mr-1"></i>
+                                            {% elif field.name == 'genres' %}
+                                                <i class="fas fa-tags mr-1"></i>
+                                            {% elif field.name == 'desc' %}
+                                                <i class="fas fa-info-circle mr-1"></i>
+                                            {% endif %}
+                                            {{ field.label }}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="{{ form.img.id_for_label }}">
+                                        <i class="fas fa-image mr-1"></i> {{ form.img.label }}
+                                    </label>
+                                    
+                                    {% if movie.img %}
+                                    <div class="current-image mb-3">
+                                        <p class="text-muted">Imagen actual:</p>
+                                        <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="custom-file">
+                                        {{ form.img }}
+                                        <label class="custom-file-label" for="{{ form.img.id_for_label }}">
+                                            {% if movie.img %}Cambiar imagen{% else %}Seleccionar archivo{% endif %}
+                                        </label>
+                                    </div>
+                                    <small class="form-text text-muted">Formatos aceptados: JPG, PNG. Tamaño máximo: 5MB.</small>
+                                </div>
+                                
+                                <div class="form-group" id="imagePreview" style="display: none;">
+                                    <label>Vista previa:</label>
+                                    <img id="preview" src="#" alt="Vista previa" class="img-fluid mt-2 img-thumbnail" style="max-height: 150px;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group text-center mt-4">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="fas fa-save mr-2"></i>Actualizar Película
+                            </button>
+                            <a href="{% url 'movieapp:detail' movie.id %}" class="btn btn-secondary btn-lg ml-2">
+                                <i class="fas fa-times mr-2"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-</form>
+<script>
+    // Script para mostrar la vista previa de la imagen
+    document.getElementById('{{ form.img.id_for_label }}').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        
+        reader.onload = function(e) {
+            document.getElementById('preview').src = e.target.result;
+            document.getElementById('imagePreview').style.display = 'block';
+        }
+        
+        if (file) {
+            reader.readAsDataURL(file);
+            
+            // Actualizar el nombre del archivo en la etiqueta
+            var fileName = file.name;
+            var label = document.querySelector('.custom-file-label');
+            label.textContent = fileName;
+        }
+    });
+</script>
+{% endblock %}
