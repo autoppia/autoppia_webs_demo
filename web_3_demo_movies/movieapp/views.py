@@ -9,9 +9,9 @@ from django.urls import reverse
 
 from .forms import (
     MovieForm, CommentForm, CustomLoginForm, SignUpForm, 
-    UserProfileForm, UserForm
+    UserProfileForm, UserForm,ContactForm
 )
-from .models import Movie, Genre, Comment, UserProfile
+from .models import Movie, Genre, Comment, UserProfile, ContactMessage
 
 # Create your views here.
 def index(request):
@@ -52,6 +52,8 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+def about(request):
+    return render(request, 'about.html')
 def detail(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
     
@@ -183,7 +185,33 @@ def genre_detail(request, genre_id):
         'movies': movies
     }
     return render(request, 'genre_detail.html', context)
-
+# Vista de contacto simplificada - Solo guarda en la base de datos
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            
+            # Guardar el mensaje en la base de datos
+            contact_message = ContactMessage.objects.create(
+                name=name,
+                email=email,
+                subject=subject,
+                message=message
+            )
+            
+            # Mostrar mensaje de éxito
+            messages.success(request, 'Your message has been received successfully. We will review it soon!')
+            
+            # Redireccionar para evitar reenvíos del formulario
+            return redirect('movieapp:contact')
+    else:
+        form = ContactForm()  # Formulario vacío para solicitudes GET
+    
+    return render(request, 'contact.html', {'form': form})
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q

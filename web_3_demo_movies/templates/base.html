@@ -167,6 +167,64 @@
             border-color: #025aa5;
         }
         
+        /* Team member cards */
+        .team-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            border: none;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,.15);
+        }
+        
+        .team-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .team-card .social-icons a {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            color: #343a40;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .team-card .social-icons a:hover {
+            background-color: #0275d8;
+            color: #fff;
+        }
+        
+        /* Contact form styling */
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info-item .icon {
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            background-color: #0275d8;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
         @media (max-width: 576px) {
             .auth-buttons {
                 margin-top: 10px;
@@ -211,6 +269,12 @@
                             <a class="dropdown-item" href="{% url 'movieapp:genre_detail' genre.id %}">{{ genre.name }}</a>
                             {% endfor %}
                         </div>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'movieapp:about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'movieapp:contact' %}">Contact</a>
                     </li>
                 </ul>
                 
@@ -290,6 +354,8 @@
                         <li><a href="{% url 'movieapp:index' %}" class="text-light">Home</a></li>
                         <li><a href="{% url 'movieapp:add_movie' %}" class="text-light">Add Movie</a></li>
                         <li><a href="{% url 'movieapp:genre_list' %}" class="text-light">Categories</a></li>
+                        <li><a href="{% url 'movieapp:about' %}" class="text-light">About Us</a></li>
+                        <li><a href="{% url 'movieapp:contact' %}" class="text-light">Contact</a></li>
                         {% if user.is_authenticated %}
                         <li><a href="{% url 'movieapp:profile' %}" class="text-light">My Profile</a></li>
                         {% else %}

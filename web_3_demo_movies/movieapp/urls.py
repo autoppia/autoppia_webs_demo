@@ -21,7 +21,8 @@ urlpatterns = [
     
     # Comments
     path('movie/<int:movie_id>/comment/', views.add_comment, name='add_comment'),
-    
+    path('contact/', views.contact, name='contact'),
+    path('about/', views.about, name='about'),
     # Authentication
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
