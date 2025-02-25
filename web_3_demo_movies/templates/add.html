@@ -5,28 +5,28 @@
         <div class="col-lg-8">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"><i class="fas fa-plus-circle mr-2"></i>Añadir Nueva Película</h3>
+                    <h3 class="mb-0"><i class="fas fa-plus-circle mr-2"></i>Add New Movie</h3>
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data" class="movie-form">
                         {% csrf_token %}
                         
                         <div class="form-group">
-                            <label for="name"><i class="fas fa-film mr-1"></i> Nombre de la Película</label>
-                            <input type="text" id="name" name="name" class="form-control" placeholder="Introduce el nombre de la película" required>
+                            <label for="name"><i class="fas fa-film mr-1"></i> Movie Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter movie name" required>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="year"><i class="fas fa-calendar-alt mr-1"></i> Año</label>
-                                    <input type="number" id="year" name="year" class="form-control" placeholder="Año de lanzamiento" min="1900" max="2025" required>
+                                    <label for="year"><i class="fas fa-calendar-alt mr-1"></i> Year</label>
+                                    <input type="number" id="year" name="year" class="form-control" placeholder="Release year" min="1900" max="2025" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="duration"><i class="fas fa-clock mr-1"></i> Duración (minutos)</label>
-                                    <input type="number" id="duration" name="duration" class="form-control" placeholder="Duración en minutos" min="1">
+                                    <label for="duration"><i class="fas fa-clock mr-1"></i> Duration (minutes)</label>
+                                    <input type="number" id="duration" name="duration" class="form-control" placeholder="Duration in minutes" min="1">
                                 </div>
                             </div>
                         </div>
@@ -35,75 +35,75 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="director"><i class="fas fa-user mr-1"></i> Director</label>
-                                    <input type="text" id="director" name="director" class="form-control" placeholder="Nombre del director">
+                                    <input type="text" id="director" name="director" class="form-control" placeholder="Director's name">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="rating"><i class="fas fa-star mr-1"></i> Calificación</label>
+                                    <label for="rating"><i class="fas fa-star mr-1"></i> Rating</label>
                                     <select id="rating" name="rating" class="form-control">
-                                        <option value="">Selecciona una calificación</option>
-                                        <option value="5">5 - Excelente</option>
-                                        <option value="4">4 - Muy Buena</option>
-                                        <option value="3">3 - Buena</option>
-                                        <option value="2">2 - Regular</option>
-                                        <option value="1">1 - Mala</option>
+                                        <option value="">Select a rating</option>
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Very Good</option>
+                                        <option value="3">3 - Good</option>
+                                        <option value="2">2 - Fair</option>
+                                        <option value="1">1 - Poor</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="genre"><i class="fas fa-tags mr-1"></i> Género</label>
+                            <label for="genre"><i class="fas fa-tags mr-1"></i> Genre</label>
                             <select id="genre" name="genre" class="form-control" multiple>
-                                <option value="accion">Acción</option>
-                                <option value="aventura">Aventura</option>
-                                <option value="comedia">Comedia</option>
+                                <option value="action">Action</option>
+                                <option value="adventure">Adventure</option>
+                                <option value="comedy">Comedy</option>
                                 <option value="drama">Drama</option>
-                                <option value="terror">Terror</option>
-                                <option value="ciencia_ficcion">Ciencia Ficción</option>
+                                <option value="horror">Horror</option>
+                                <option value="sci_fi">Science Fiction</option>
                                 <option value="romance">Romance</option>
-                                <option value="animacion">Animación</option>
-                                <option value="documental">Documental</option>
+                                <option value="animation">Animation</option>
+                                <option value="documentary">Documentary</option>
                             </select>
-                            <small class="form-text text-muted">Mantén presionada la tecla Ctrl para seleccionar múltiples géneros.</small>
+                            <small class="form-text text-muted">Hold Ctrl key to select multiple genres.</small>
                         </div>
                         
                         <div class="form-group">
-                            <label for="cast"><i class="fas fa-users mr-1"></i> Reparto</label>
-                            <input type="text" id="cast" name="cast" class="form-control" placeholder="Actores principales separados por comas">
+                            <label for="cast"><i class="fas fa-users mr-1"></i> Cast</label>
+                            <input type="text" id="cast" name="cast" class="form-control" placeholder="Main actors separated by commas">
                         </div>
                         
                         <div class="form-group">
-                            <label for="desc"><i class="fas fa-info-circle mr-1"></i> Descripción</label>
-                            <textarea id="desc" name="desc" class="form-control" rows="4" placeholder="Escribe una sinopsis o descripción de la película" required></textarea>
+                            <label for="desc"><i class="fas fa-info-circle mr-1"></i> Description</label>
+                            <textarea id="desc" name="desc" class="form-control" rows="4" placeholder="Write a synopsis or description of the movie" required></textarea>
                         </div>
                         
                         <div class="form-group">
-                            <label for="trailer"><i class="fab fa-youtube mr-1"></i> URL del Trailer (YouTube)</label>
+                            <label for="trailer"><i class="fab fa-youtube mr-1"></i> Trailer URL (YouTube)</label>
                             <input type="url" id="trailer" name="trailer" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
                         </div>
                         
                         <div class="form-group">
-                            <label for="img"><i class="fas fa-image mr-1"></i> Póster de la Película</label>
+                            <label for="img"><i class="fas fa-image mr-1"></i> Movie Poster</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="img" name="img" accept="image/*" required>
-                                <label class="custom-file-label" for="img">Seleccionar archivo</label>
+                                <label class="custom-file-label" for="img">Choose file</label>
                             </div>
-                            <small class="form-text text-muted">Formatos aceptados: JPG, PNG. Tamaño máximo: 5MB.</small>
+                            <small class="form-text text-muted">Accepted formats: JPG, PNG. Maximum size: 5MB.</small>
                         </div>
                         
                         <div class="form-group" id="imagePreview" style="display: none;">
-                            <label>Vista previa:</label>
-                            <img id="preview" src="#" alt="Vista previa" class="img-fluid mt-2 img-thumbnail" style="max-height: 300px;">
+                            <label>Preview:</label>
+                            <img id="preview" src="#" alt="Preview" class="img-fluid mt-2 img-thumbnail" style="max-height: 300px;">
                         </div>
                                 
                         <div class="form-group text-center mt-4">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save mr-2"></i>Guardar Película
+                                <i class="fas fa-save mr-2"></i>Save Movie
                             </button>
                             <a href="{% url 'movieapp:index' %}" class="btn btn-secondary btn-lg ml-2">
-                                <i class="fas fa-times mr-2"></i>Cancelar
+                                <i class="fas fa-times mr-2"></i>Cancel
                             </a>
                         </div>
                     </form>
@@ -114,7 +114,7 @@
 </div>
 
 <script>
-    // Script para mostrar la vista previa de la imagen
+    // Script to show image preview
     document.getElementById('img').addEventListener('change', function(e) {
         var file = e.target.files[0];
         var reader = new FileReader();
@@ -126,7 +126,7 @@
         
         reader.readAsDataURL(file);
         
-        // Actualizar el nombre del archivo en la etiqueta
+        // Update file name in the label
         var fileName = file.name;
         var label = document.querySelector('.custom-file-label');
         label.textContent = fileName;

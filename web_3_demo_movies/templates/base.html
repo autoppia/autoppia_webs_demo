@@ -1,15 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineStore - Tu tienda de películas</title>
+    <title>CineStore - Your Movie Store</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <style>
-        /* Estilos adicionales */
+        /* Additional styles */
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -77,6 +77,15 @@
         .search-form {
             margin-bottom: 1.5rem;
         }
+        
+        .hero-image {
+            max-height: 500px;
+            width: auto;
+            object-fit: contain;
+        }
+        .img-list-header{
+          max-height: 400px;
+        }
     </style>
 </head>
 <body>
@@ -92,25 +101,25 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'movieapp:index' %}">Inicio</a>
+                        <a class="nav-link" href="{% url 'movieapp:index' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'movieapp:add_movie' %}">Añadir Película</a>
+                        <a class="nav-link" href="{% url 'movieapp:add_movie' %}">Add Movie</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Categorías
+                            Categories
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Acción</a>
-                            <a class="dropdown-item" href="#">Comedia</a>
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Comedy</a>
                             <a class="dropdown-item" href="#">Drama</a>
-                            <a class="dropdown-item" href="#">Ciencia Ficción</a>
+                            <a class="dropdown-item" href="#">Sci-Fi</a>
                         </div>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'movieapp:index' %}">
-                    <input class="form-control mr-sm-2" type="search" name="search" placeholder="Buscar" aria-label="Buscar">
+                    <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
@@ -131,19 +140,19 @@
             <div class="row">
                 <div class="col-md-4">
                     <h5>CineStore</h5>
-                    <p>Tu tienda online de películas favorita con la mejor selección y calidad.</p>
+                    <p>Your favorite online movie store with the best selection and quality.</p>
                 </div>
                 <div class="col-md-4">
-                    <h5>Enlaces Rápidos</h5>
+                    <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'movieapp:index' %}" class="text-light">Inicio</a></li>
-                        <li><a href="{% url 'movieapp:add_movie' %}" class="text-light">Añadir Película</a></li>
-                        <li><a href="#" class="text-light">Sobre Nosotros</a></li>
-                        <li><a href="#" class="text-light">Contacto</a></li>
+                        <li><a href="{% url 'movieapp:index' %}" class="text-light">Home</a></li>
+                        <li><a href="{% url 'movieapp:add_movie' %}" class="text-light">Add Movie</a></li>
+                        <li><a href="#" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h5>Síguenos</h5>
+                    <h5>Follow Us</h5>
                     <div class="social-icons">
                         <a href="#" class="text-light mr-3"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="text-light mr-3"><i class="fab fa-twitter"></i></a>
@@ -154,7 +163,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-12 text-center">
-                    <p class="mb-0">&copy; 2025 CineStore. Todos los derechos reservados.</p>
+                    <p class="mb-0">&copy; 2025 CineStore. All rights reserved.</p>
                 </div>
             </div>
         </div>

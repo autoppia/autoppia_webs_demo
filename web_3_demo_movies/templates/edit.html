@@ -5,7 +5,7 @@
         <div class="col-lg-8">
             <div class="card shadow">
                 <div class="card-header bg-warning text-white">
-                    <h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Editar Película</h3>
+                    <h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Edit Movie</h3>
                 </div>
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data" class="movie-form">
@@ -13,7 +13,7 @@
                         
                         {% if form.errors %}
                         <div class="alert alert-danger">
-                            <h4 class="alert-heading">Por favor, corrige los siguientes errores:</h4>
+                            <h4 class="alert-heading">Please correct the following errors:</h4>
                             <ul>
                                 {% for field in form %}
                                     {% for error in field.errors %}
@@ -68,33 +68,33 @@
                                     
                                     {% if movie.img %}
                                     <div class="current-image mb-3">
-                                        <p class="text-muted">Imagen actual:</p>
-                                        <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="max-height: 200px;">
+                                        <p class="text-muted">Current image:</p>
+                                        <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="height: 200px; object-fit: cover;">
                                     </div>
                                     {% endif %}
                                     
                                     <div class="custom-file">
                                         {{ form.img }}
                                         <label class="custom-file-label" for="{{ form.img.id_for_label }}">
-                                            {% if movie.img %}Cambiar imagen{% else %}Seleccionar archivo{% endif %}
+                                            {% if movie.img %}Change image{% else %}Choose file{% endif %}
                                         </label>
                                     </div>
-                                    <small class="form-text text-muted">Formatos aceptados: JPG, PNG. Tamaño máximo: 5MB.</small>
+                                    <small class="form-text text-muted">Accepted formats: JPG, PNG. Maximum size: 5MB.</small>
                                 </div>
                                 
                                 <div class="form-group" id="imagePreview" style="display: none;">
-                                    <label>Vista previa:</label>
-                                    <img id="preview" src="#" alt="Vista previa" class="img-fluid mt-2 img-thumbnail" style="max-height: 150px;">
+                                    <label>Preview:</label>
+                                    <img id="preview" src="#" alt="Preview" class="img-fluid mt-2 img-thumbnail" style="max-height: 150px;">
                                 </div>
                             </div>
                         </div>
                         
                         <div class="form-group text-center mt-4">
                             <button type="submit" class="btn btn-warning btn-lg">
-                                <i class="fas fa-save mr-2"></i>Actualizar Película
+                                <i class="fas fa-save mr-2"></i>Update Movie
                             </button>
                             <a href="{% url 'movieapp:detail' movie.id %}" class="btn btn-secondary btn-lg ml-2">
-                                <i class="fas fa-times mr-2"></i>Cancelar
+                                <i class="fas fa-times mr-2"></i>Cancel
                             </a>
                         </div>
                     </form>
@@ -105,7 +105,7 @@
 </div>
 
 <script>
-    // Script para mostrar la vista previa de la imagen
+    // Script to show image preview
     document.getElementById('{{ form.img.id_for_label }}').addEventListener('change', function(e) {
         var file = e.target.files[0];
         var reader = new FileReader();
@@ -118,7 +118,7 @@
         if (file) {
             reader.readAsDataURL(file);
             
-            // Actualizar el nombre del archivo en la etiqueta
+            // Update file name in the label
             var fileName = file.name;
             var label = document.querySelector('.custom-file-label');
             label.textContent = fileName;
