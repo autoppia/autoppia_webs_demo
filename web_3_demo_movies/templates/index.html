@@ -17,8 +17,8 @@
                 </form>
                 <a href="{% url 'movieapp:add_movie' %}" class="btn btn-success">Add new movie</a>
             </div>
-            <div class="col-md-6 text-center" >
-                <img src="media/gallery/sleeping_dogs.png" alt="Movie Collection" class="img-fluid img-list-header rounded shadow">
+            <div class="col-md-6 text-center">
+                <img src="media/gallery/sleeping_dogs.png" alt="Movie Collection" style="max-height: 400px;" class="img-fluid rounded shadow">
             </div>
         </div>
     </div>
@@ -35,17 +35,39 @@
     <div class="row">
         {% for i in movie_list %}
         <div class="col-md-3 mb-4">
-            <div class="card movie-card h-100">
-                <div class="card-img-container">
+            <div class="card movie-card h-100 shadow-sm">
+                <div class="card-img-container position-relative">
                     <img src="{{i.img.url}}" class="card-img-top" alt="{{i.name}}" style="height: 250px; object-fit: cover;">
-                    <div class="movie-year">{{i.year}}</div>
+                    <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{i.year}}</div>
+                    {% if i.rating %}
+                    <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">
+                        <span class="badge badge-warning p-2">
+                            <i class="fas fa-star"></i> {{i.rating|floatformat:1}}
+                        </span>
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{i.name}}</h5>
-                    <p class="card-text movie-desc">{{i.desc|truncatechars:100}}</p>
+                <div class="card-body pb-0">
+                    <h5 class="card-title font-weight-bold">{{i.name}}</h5>
+                    {% if i.director %}
+                    <p class="card-subtitle text-muted mb-2"><i class="fas fa-user"></i> {{i.director}}</p>
+                    {% endif %}
+                    <p class="card-text movie-desc">{{i.desc|truncatechars:80}}</p>
+                    {% if i.genres.all %}
+                    <div class="mb-2">
+                        {% for genre in i.genres.all|slice:":2" %}
+                        <span class="badge badge-info mr-1">{{genre.name}}</span>
+                        {% endfor %}
+                        {% if i.genres.all|length > 2 %}
+                        <span class="badge badge-secondary">+{{i.genres.all|length|add:"-2"}}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="card-footer bg-transparent border-top-0">
-                    <a href="{% url 'movieapp:detail' i.id %}" class="btn btn-primary btn-block">View Details</a>
+                <div class="card-footer bg-transparent border-top-0 pt-0">
+                    <a href="{% url 'movieapp:detail' i.id %}" class="btn btn-primary btn-block">
+                        <i class="fas fa-info-circle mr-1"></i> View Details
+                    </a>
                 </div>
             </div>
         </div>
