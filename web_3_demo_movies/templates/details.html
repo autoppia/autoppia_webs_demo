@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
+
 {% block body %}
 <div class="container mt-5">
     <div class="card border-0 shadow">
@@ -102,7 +104,23 @@
                     {% if comment.avatar %}
                         <img src="{{ comment.avatar.url }}" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
                     {% else %}
-                        <img src="/media/gallery/people/person{% cycle '1' '2' '3' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                        <!-- Simplified avatar assignment based on name -->
+                        {% with name_lower=comment.name|lower %}
+                            {% if name_lower == "james" or name_lower == "michael" or name_lower == "william" or name_lower == "daniel" or name_lower == "david" or name_lower == "john" or name_lower == "robert" %}
+                                <!-- Use male avatars for common male names -->
+                                <img src="/media/gallery/people/person{% cycle '2' '3' %}.jpg " class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% elif name_lower == "emma" or name_lower == "sophia" or name_lower == "olivia" or name_lower == "ava" or name_lower == "isabella" or name_lower == "mia" or name_lower == "charlotte" %}
+                                <!-- Use female avatars for common female names -->
+                                <img src="/media/gallery/people/person{% cycle '1' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                                <!-- For other names, use this simplified algorithm -->
+                                {% if forloop.counter|divisibleby:2 %}
+                                    <img src="/media/gallery/people/person{% cycle '2' '3' %}.jpg " class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                {% else %}
+                                    <img src="/media/gallery/people/person{% cycle '1' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                {% endif %}
+                            {% endif %}
+                        {% endwith %}
                     {% endif %}
                     <div class="media-body">
                         <h5 class="mt-0">{{ comment.name }} <small class="text-muted ml-2">{{ comment.created_at|timesince }} ago</small></h5>
@@ -159,6 +177,17 @@
         const commentsContainer = document.getElementById('comments-container');
         const noCommentsMsg = document.getElementById('no-comments');
         
+        // List of male and female names for avatar assignment
+        const maleNames = ["James", "Michael", "William", "Daniel", "David", "Robert", "John", "Thomas", 
+                         "Matthew", "Christopher", "Joseph", "Andrew", "Edward", "Mark", "Brian", "Steven", 
+                         "Kevin", "Jason", "Timothy", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas", 
+                         "Eric", "Jonathan", "Stephen", "Justin", "Charles", "Anthony", "Richard", "Scott"];
+        
+        const femaleNames = ["Emma", "Sophia", "Olivia", "Ava", "Isabella", "Mia", "Charlotte", "Amelia", 
+                           "Harper", "Evelyn", "Abigail", "Emily", "Elizabeth", "Sofia", "Madison", "Avery", 
+                           "Ella", "Scarlett", "Grace", "Victoria", "Lily", "Samantha", "Eleanor", "Hannah", 
+                           "Lillian", "Addison", "Aubrey", "Layla", "Ellie", "Stella", "Natalie", "Zoe", "Leah", "Haley"];
+        
         commentForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -183,8 +212,35 @@
                     const commentDiv = document.createElement('div');
                     commentDiv.className = 'media mb-3 p-3 border-bottom';
                     
-                    // Use a default avatar or the provided one
-                    const avatarUrl = data.comment.avatar || '/media/gallery/people/person1.jpg';
+                    // Determine appropriate avatar based on name
+                    let avatarUrl;
+                    const userName = data.comment.name;
+                    
+                    if (data.comment.avatar) {
+                        avatarUrl = data.comment.avatar;
+                    } else {
+                        // Check if name is in our male or female lists
+                        const userNameLower = userName.toLowerCase();
+                        const isMale = maleNames.some(name => name.toLowerCase() === userNameLower);
+                        const isFemale = femaleNames.some(name => name.toLowerCase() === userNameLower);
+                        
+                        if (isMale) {
+                            // Use either person2.png or person3.jpg for male names
+                            avatarUrl = Math.random() < 0.5 ? '/media/gallery/people/person2.png' : '/media/gallery/people/person3.jpg';
+                        } else if (isFemale) {
+                            // Use either person1.jpg or person4.jpg for female names
+                            avatarUrl = Math.random() < 0.5 ? '/media/gallery/people/person1.jpg' : '/media/gallery/people/person4.jpg';
+                        } else {
+                            // If name is not in our lists, randomly choose
+                            const randomAvatars = [
+                                '/media/gallery/people/person1.jpg',
+                                '/media/gallery/people/person2.png',
+                                '/media/gallery/people/person3.jpg',
+                                '/media/gallery/people/person4.jpg'
+                            ];
+                            avatarUrl = randomAvatars[Math.floor(Math.random() * randomAvatars.length)];
+                        }
+                    }
                     
                     commentDiv.innerHTML = `
                         <img src="${avatarUrl}" class="mr-3 rounded-circle" alt="${data.comment.name}" style="width: 80px; height: 80px; object-fit: cover;">

@@ -155,40 +155,49 @@ class Command(BaseCommand):
         ]
 
         # Sample comment data
-        sample_comments = [
-            {
-                "names": ["John", "Emma", "Michael", "Sophia", "Daniel", "Olivia", "James", "Ava", "William", "Isabella"],
-                "positive_comments": [
-                    "Absolutely loved this movie! A masterpiece that stands the test of time.",
-                    "One of the best films I've ever seen. The acting was phenomenal.",
-                    "Incredible storytelling and direction. This movie deserves all the praise!",
-                    "The cinematography was breathtaking. Every frame looked like a painting.",
-                    "A perfect blend of emotion and technical brilliance.",
-                    "This film had me on the edge of my seat the entire time!",
-                    "I've watched this multiple times and it gets better with each viewing.",
-                    "The score perfectly complements the storytelling. A true classic!",
-                    "Masterful performances by the entire cast. Truly unforgettable.",
-                    "This movie changed my perspective on cinema. Absolutely brilliant."
-                ],
-                "mixed_comments": [
-                    "Good film overall, though some scenes dragged on a bit too long.",
-                    "Solid performances, but the plot had a few holes I couldn't ignore.",
-                    "Visually stunning, but the character development felt a bit weak.",
-                    "Enjoyed it, but I think it's slightly overrated in some aspects.",
-                    "A good movie that could have been great with some tighter editing.",
-                    "Interesting concept but the execution was somewhat inconsistent.",
-                    "Worth watching, though I expected a bit more given all the hype.",
-                    "Some brilliant moments mixed with a few that didn't quite land."
-                ],
-                "critical_comments": [
-                    "Not my cup of tea. I found the pacing to be too slow.",
-                    "The plot was confusing and hard to follow at times.",
-                    "I expected more given the high ratings. A bit disappointing.",
-                    "The characters weren't believable enough for me to get invested.",
-                    "Technically well-made but emotionally distant."
-                ]
-            }
-        ]
+        sample_comments = {
+            "male_names": ["James", "Michael", "William", "Daniel", "David", "Robert", "John", "Thomas", 
+                         "Matthew", "Christopher", "Joseph", "Andrew", "Edward", "Mark", "Brian", "Steven", 
+                         "Kevin", "Jason", "Timothy", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas", 
+                         "Eric", "Jonathan", "Stephen", "Justin", "Charles", "Anthony", "Richard", "Scott"],
+                         
+            "female_names": ["Emma", "Sophia", "Olivia", "Ava", "Isabella", "Mia", "Charlotte", "Amelia", 
+                           "Harper", "Evelyn", "Abigail", "Emily", "Elizabeth", "Sofia", "Madison", "Avery", 
+                           "Ella", "Scarlett", "Grace", "Victoria", "Lily", "Samantha", "Eleanor", "Hannah", 
+                           "Lillian", "Addison", "Aubrey", "Layla", "Ellie", "Stella", "Natalie", "Zoe", "Leah", "Haley"],
+                           
+            "positive_comments": [
+                "Absolutely loved this movie! A masterpiece that stands the test of time.",
+                "One of the best films I've ever seen. The acting was phenomenal.",
+                "Incredible storytelling and direction. This movie deserves all the praise!",
+                "The cinematography was breathtaking. Every frame looked like a painting.",
+                "A perfect blend of emotion and technical brilliance.",
+                "This film had me on the edge of my seat the entire time!",
+                "I've watched this multiple times and it gets better with each viewing.",
+                "The score perfectly complements the storytelling. A true classic!",
+                "Masterful performances by the entire cast. Truly unforgettable.",
+                "This movie changed my perspective on cinema. Absolutely brilliant."
+            ],
+            
+            "mixed_comments": [
+                "Good film overall, though some scenes dragged on a bit too long.",
+                "Solid performances, but the plot had a few holes I couldn't ignore.",
+                "Visually stunning, but the character development felt a bit weak.",
+                "Enjoyed it, but I think it's slightly overrated in some aspects.",
+                "A good movie that could have been great with some tighter editing.",
+                "Interesting concept but the execution was somewhat inconsistent.",
+                "Worth watching, though I expected a bit more given all the hype.",
+                "Some brilliant moments mixed with a few that didn't quite land."
+            ],
+            
+            "critical_comments": [
+                "Not my cup of tea. I found the pacing to be too slow.",
+                "The plot was confusing and hard to follow at times.",
+                "I expected more given the high ratings. A bit disappointing.",
+                "The characters weren't believable enough for me to get invested.",
+                "Technically well-made but emotionally distant."
+            ]
+        }
         
         # First check if movies already exist
         if Movie.objects.count() > 0:
@@ -244,13 +253,17 @@ class Command(BaseCommand):
         # Add comments to movies
         self.stdout.write(self.style.SUCCESS("Adding comments to movies..."))
         
-        comment_data = sample_comments[0]
-        names = comment_data["names"]
-        positive_comments = comment_data["positive_comments"]
-        mixed_comments = comment_data["mixed_comments"]
-        critical_comments = comment_data["critical_comments"]
+        male_names = sample_comments["male_names"]
+        female_names = sample_comments["female_names"]
+        positive_comments = sample_comments["positive_comments"]
+        mixed_comments = sample_comments["mixed_comments"]
+        critical_comments = sample_comments["critical_comments"]
         
         now = timezone.now()
+        
+        # Define avatar associations - person1.jpg and person4.jpg are female, person2.png and person3.jpg are male
+        female_avatars = ["person1.jpg", "person4.jpg"]
+        male_avatars = ["person2.png", "person3.jpg"]
         
         for movie in created_movies:
             # Determine number of comments for this movie (3-8)
@@ -285,10 +298,21 @@ class Command(BaseCommand):
                 days_ago = random.randint(1, 60)
                 comment_date = now - timedelta(days=days_ago)
                 
+                # Randomly select gender and name
+                use_male = random.choice([True, False])
+                if use_male:
+                    commenter_name = random.choice(male_names)
+                    # Create a relative path to the male avatar
+                    avatar_file = f"gallery/people/{random.choice(male_avatars)}"
+                else:
+                    commenter_name = random.choice(female_names)
+                    # Create a relative path to the female avatar
+                    avatar_file = f"gallery/people/{random.choice(female_avatars)}"
+                
                 # Create comment
                 Comment.objects.create(
                     movie=movie,
-                    name=random.choice(names),
+                    name=commenter_name,
                     content=comment_text,
                     created_at=comment_date
                 )
