@@ -5,11 +5,14 @@
     <div class="container">
         <div class="row align-items-center py-5">
             <div class="col-md-6">
-                <h1 class="display-4 text-white">Discover the best Autoppia Films</h1>
+                <h1 class="display-4 text-white">Discover the best cinema</h1>
                 <p class="lead text-light">Find your favorite movies and discover new classics</p>
                 <form method="GET" action="{% url 'movieapp:index' %}" class="search-form">
+                    {% if selected_genre %}
+                    <input type="hidden" name="genre" value="{{ selected_genre }}">
+                    {% endif %}
                     <div class="input-group mb-3">
-                        <input type="text" name="search" class="form-control" placeholder="Search movies..." aria-label="Search movies">
+                        <input type="text" name="search" class="form-control" placeholder="Search movies..." value="{{ search_query }}">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="submit">Search</button>
                         </div>
@@ -18,19 +21,57 @@
                 <a href="{% url 'movieapp:add_movie' %}" class="btn btn-success">Add new movie</a>
             </div>
             <div class="col-md-6 text-center">
-                <img src="https://m.media-amazon.com/images/M/MV5BY2NkZjEzMDgtN2RjYy00YzM1LWI4ZmQtMjIwYjFjNmI3ZGEwXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg" alt="Movie Collection" style="max-height: 400px;" class="img-fluid rounded shadow">
+                <img src="/media/gallery/goodfellas.jpg" alt="Movie Collection" style="max-height: 400px;" class="img-fluid rounded shadow">
             </div>
         </div>
     </div>
 </div>
 
 <div class="container mt-5">
+    <!-- Filter bar -->
     <div class="row mb-4">
-        <div class="col-12">
+        <div class="col-md-6">
             <h2 class="section-title">Our Collection</h2>
-            <hr>
+        </div>
+        <div class="col-md-6">
+            <form method="GET" action="{% url 'movieapp:index' %}" class="float-md-right">
+                {% if search_query %}
+                <input type="hidden" name="search" value="{{ search_query }}">
+                {% endif %}
+                <div class="input-group">
+                    <select name="genre" class="form-control" id="genreFilter" onchange="this.form.submit()">
+                        <option value="">All Genres</option>
+                        {% for genre in genres %}
+                        <option value="{{ genre.id }}" {% if selected_genre == genre.id|stringformat:"i" %}selected{% endif %}>{{ genre.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Filter</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+    
+    <!-- Search results summary if searching -->
+    {% if search_query or selected_genre %}
+    <div class="alert alert-info mb-4">
+        {% if search_query and selected_genre %}
+            Showing results for search "{{ search_query }}" in 
+            {% for genre in genres %}
+                {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
+            {% endfor %} genre
+        {% elif search_query %}
+            Showing results for search "{{ search_query }}"
+        {% elif selected_genre %}
+            Showing movies in 
+            {% for genre in genres %}
+                {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
+            {% endfor %} genre
+        {% endif %}
+        <a href="{% url 'movieapp:index' %}" class="float-right">Clear filters</a>
+    </div>
+    {% endif %}
     
     <div class="row">
         {% for i in movie_list %}
@@ -74,7 +115,7 @@
         {% empty %}
         <div class="col-12 text-center py-5">
             <h3>No movies found</h3>
-            <p>Why not add one?</p>
+            <p>Try changing your search criteria or add a new movie</p>
             <a href="{% url 'movieapp:add_movie' %}" class="btn btn-success">Add movie</a>
         </div>
         {% endfor %}

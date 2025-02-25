@@ -1,3 +1,83 @@
-body {
-    background-color:aqua;
+.hero-section {
+    background: linear-gradient(135deg, #321575 0%, #4a148c 100%);
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Estilos de tarjetas de películas */
+.movie-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+    background-color: #fff;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.15) !important;
+}
+
+.movie-card .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-desc {
+    font-size: 0.85rem;
+    color: #666;
+    height: 60px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    margin-bottom: 0.75rem;
+}
+
+.card-subtitle {
+    font-size: 0.8rem;
+}
+
+.card-img-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-img-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
+}
+
+/* Estilos de filtros y búsqueda */
+.alert-info {
+    background-color: #e8f4fd;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+/* Estilos responsivos */
+@media (max-width: 767.98px) {
+    .hero-section {
+        padding: 2rem 0;
+        text-align: center;
+    }
+    
+    .hero-section img {
+        margin-top: 1.5rem;
+        max-height: 300px !important;
+    }
 }

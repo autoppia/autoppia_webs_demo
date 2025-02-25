@@ -1,5 +1,7 @@
 from django import forms
-from .models import Movie, Genre, Comment
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from .models import Movie, Genre, Comment, UserProfile
 
 class MovieForm(forms.ModelForm):
     class Meta:
@@ -53,4 +55,72 @@ class CommentForm(forms.ModelForm):
         labels = {
             'name': 'Name',
             'content': 'Comment',
+        }
+
+# Custom login form with Bootstrap styling
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'})
+    )
+
+# Custom registration form with Bootstrap styling
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(
+        max_length=254,
+        help_text='Required. Enter a valid email address.',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'})
+    )
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+        
+    def __init__(self, *args, **kwargs):
+        super(SignUpForm, self).__init__(*args, **kwargs)
+        # Add Bootstrap classes to default fields
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password'})
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email
+
+# Form for updating user profile
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['bio', 'profile_pic', 'favorite_genres', 'website', 'location']
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Tell us about yourself'}),
+            'profile_pic': forms.FileInput(attrs={'class': 'custom-file-input'}),
+            'favorite_genres': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Your website URL'}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your location'}),
+        }
+        labels = {
+            'bio': 'About Me',
+            'profile_pic': 'Profile Picture',
+            'favorite_genres': 'Favorite Genres',
+            'website': 'Website',
+            'location': 'Location',
+        }
+        help_texts = {
+            'favorite_genres': 'Hold Ctrl/Cmd key to select multiple genres.',
+        }
+
+# Form for updating basic user information
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
         }
