@@ -5,11 +5,12 @@ services:
     volumes:
       - .:/app
       - sqlite_data:/app/db
+      - ./static:/app/static  # Añade esta línea
     ports:
       - "8003:8003"
     environment:
       - DEBUG=0
-      - AUTO_SEED=true  # Add this line to automatically confirm seeding
+      - AUTO_SEED=true
 
 volumes:
   sqlite_data:

@@ -1,14 +1,12 @@
 import os
-from django.core.management.base import BaseCommand
-from django.core.files.images import ImageFile
-from django.core.files.base import ContentFile
-from django.utils.text import slugify
-from django.utils import timezone
-import requests
-from io import BytesIO
-from movieapp.models import Movie, Genre, Comment
 import random
 from datetime import timedelta
+from django.conf import settings
+from django.core.management.base import BaseCommand
+from django.utils import timezone
+from django.utils.text import slugify
+
+from movieapp.models import Movie, Genre, Comment
 
 class Command(BaseCommand):
     help = "Seeds the database with initial movies, genres, and comments"
@@ -30,7 +28,7 @@ class Command(BaseCommand):
             status = "Created" if created else "Already exists"
             self.stdout.write(f"{status}: Genre '{genre_name}'")
         
-        # Sample movie data
+        # Sample movie data (usando nombres de archivos locales en vez de URLs)
         movies_data = [
             {
                 "name": "The Shawshank Redemption",
@@ -41,7 +39,7 @@ class Command(BaseCommand):
                 "duration": 142,
                 "trailer_url": "https://www.youtube.com/watch?v=6hB3S9bIaco",
                 "rating": 4.8,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
+                "img_file": "the-shawshank-redemption.jpg",  # <-- archivo local
                 "genres": ["Drama"]
             },
             {
@@ -53,7 +51,7 @@ class Command(BaseCommand):
                 "duration": 175,
                 "trailer_url": "https://www.youtube.com/watch?v=sY1S34973zA",
                 "rating": 4.7,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
+                "img_file": "the-godfather.jpg",
                 "genres": ["Crime", "Drama"]
             },
             {
@@ -65,7 +63,7 @@ class Command(BaseCommand):
                 "duration": 152,
                 "trailer_url": "https://www.youtube.com/watch?v=EXeTwQWrcwY",
                 "rating": 4.7,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg",
+                "img_file": "the-dark-knight.jpg",
                 "genres": ["Action", "Crime", "Drama", "Thriller"]
             },
             {
@@ -77,7 +75,7 @@ class Command(BaseCommand):
                 "duration": 154,
                 "trailer_url": "https://www.youtube.com/watch?v=s7EdQ4FqbhY",
                 "rating": 4.6,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
+                "img_file": "pulp-fiction.jpg",
                 "genres": ["Crime", "Drama"]
             },
             {
@@ -89,7 +87,7 @@ class Command(BaseCommand):
                 "duration": 148,
                 "trailer_url": "https://www.youtube.com/watch?v=YoHD9XEInc0",
                 "rating": 4.5,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg",
+                "img_file": "inception.jpg",
                 "genres": ["Action", "Adventure", "Sci-Fi", "Thriller"]
             },
             {
@@ -101,7 +99,7 @@ class Command(BaseCommand):
                 "duration": 178,
                 "trailer_url": "https://www.youtube.com/watch?v=V75dMMIW2B4",
                 "rating": 4.6,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg",
+                "img_file": "the-lord-of-the-rings-the-fellowship-of-the-ring.jpg",
                 "genres": ["Action", "Adventure", "Drama", "Fantasy"]
             },
             {
@@ -113,7 +111,7 @@ class Command(BaseCommand):
                 "duration": 142,
                 "trailer_url": "https://www.youtube.com/watch?v=bLvqoHBptjg",
                 "rating": 4.6,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BNWIwODRlZTUtY2U3ZS00Yzg1LWJhNzYtMmZiYmEyNmU1NjMzXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg",
+                "img_file": "forrest-gump.jpg",
                 "genres": ["Drama", "Romance"]
             },
             {
@@ -125,7 +123,7 @@ class Command(BaseCommand):
                 "duration": 136,
                 "trailer_url": "https://www.youtube.com/watch?v=vKQi3bBA1y8",
                 "rating": 4.5,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
+                "img_file": "the-matrix.jpg",
                 "genres": ["Action", "Sci-Fi"]
             },
             {
@@ -137,7 +135,7 @@ class Command(BaseCommand):
                 "duration": 146,
                 "trailer_url": "https://www.youtube.com/watch?v=qo5jJpHtI1Y",
                 "rating": 4.6,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BY2NkZjEzMDgtN2RjYy00YzM1LWI4ZmQtMjIwYjFjNmI3ZGEwXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
+                "img_file": "goodfellas.jpg",
                 "genres": ["Biography", "Crime", "Drama"]
             },
             {
@@ -149,23 +147,25 @@ class Command(BaseCommand):
                 "duration": 169,
                 "trailer_url": "https://www.youtube.com/watch?v=zSWdZVtXT7E",
                 "rating": 4.5,
-                "img_url": "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
+                "img_file": "interstellar.jpg",
                 "genres": ["Adventure", "Drama", "Sci-Fi"]
             }
         ]
 
         # Sample comment data
         sample_comments = {
-            "male_names": ["James", "Michael", "William", "Daniel", "David", "Robert", "John", "Thomas", 
-                         "Matthew", "Christopher", "Joseph", "Andrew", "Edward", "Mark", "Brian", "Steven", 
-                         "Kevin", "Jason", "Timothy", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas", 
-                         "Eric", "Jonathan", "Stephen", "Justin", "Charles", "Anthony", "Richard", "Scott"],
-                         
-            "female_names": ["Emma", "Sophia", "Olivia", "Ava", "Isabella", "Mia", "Charlotte", "Amelia", 
-                           "Harper", "Evelyn", "Abigail", "Emily", "Elizabeth", "Sofia", "Madison", "Avery", 
-                           "Ella", "Scarlett", "Grace", "Victoria", "Lily", "Samantha", "Eleanor", "Hannah", 
-                           "Lillian", "Addison", "Aubrey", "Layla", "Ellie", "Stella", "Natalie", "Zoe", "Leah", "Haley"],
-                           
+            "male_names": [
+                "James", "Michael", "William", "Daniel", "David", "Robert", "John", "Thomas",
+                "Matthew", "Christopher", "Joseph", "Andrew", "Edward", "Mark", "Brian", "Steven",
+                "Kevin", "Jason", "Timothy", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas",
+                "Eric", "Jonathan", "Stephen", "Justin", "Charles", "Anthony", "Richard", "Scott"
+            ],
+            "female_names": [
+                "Emma", "Sophia", "Olivia", "Ava", "Isabella", "Mia", "Charlotte", "Amelia",
+                "Harper", "Evelyn", "Abigail", "Emily", "Elizabeth", "Sofia", "Madison", "Avery",
+                "Ella", "Scarlett", "Grace", "Victoria", "Lily", "Samantha", "Eleanor", "Hannah",
+                "Lillian", "Addison", "Aubrey", "Layla", "Ellie", "Stella", "Natalie", "Zoe", "Leah", "Haley"
+            ],
             "positive_comments": [
                 "Absolutely loved this movie! A masterpiece that stands the test of time.",
                 "One of the best films I've ever seen. The acting was phenomenal.",
@@ -178,7 +178,6 @@ class Command(BaseCommand):
                 "Masterful performances by the entire cast. Truly unforgettable.",
                 "This movie changed my perspective on cinema. Absolutely brilliant."
             ],
-            
             "mixed_comments": [
                 "Good film overall, though some scenes dragged on a bit too long.",
                 "Solid performances, but the plot had a few holes I couldn't ignore.",
@@ -189,7 +188,6 @@ class Command(BaseCommand):
                 "Worth watching, though I expected a bit more given all the hype.",
                 "Some brilliant moments mixed with a few that didn't quite land."
             ],
-            
             "critical_comments": [
                 "Not my cup of tea. I found the pacing to be too slow.",
                 "The plot was confusing and hard to follow at times.",
@@ -200,17 +198,18 @@ class Command(BaseCommand):
         }
         
         # First check if movies already exist
-          # Add this block to automatically proceed if an environment variable is set
         auto_confirm = os.environ.get('AUTO_SEED', 'false').lower() == 'true'
         
-        # Check if movies exist
         if Movie.objects.count() > 0:
             if auto_confirm:
                 Comment.objects.all().delete()
                 Movie.objects.all().delete()
                 self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
             else:
-                self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
+                self.stdout.write(self.style.WARNING(
+                    "Movies already exist in the database. "
+                    "Do you want to delete all existing movies and comments? (yes/no)"
+                ))
                 confirm = input()
                 if confirm.lower() != 'yes':
                     self.stdout.write(self.style.SUCCESS("Seeding cancelled."))
@@ -219,19 +218,18 @@ class Command(BaseCommand):
                     Comment.objects.all().delete()
                     Movie.objects.all().delete()
                     self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
-            
+        
         # Create movies
         created_movies = []
         for movie_data in movies_data:
             try:
-                # Download image
-                response = requests.get(movie_data['img_url'])
-                response.raise_for_status()  # Ensure we got a successful response
+                # Nombre de archivo local que YA tienes en media/gallery
+                file_name = movie_data['img_file']
                 
-                # Create file name
-                file_name = f"{slugify(movie_data['name'])}.jpg"
+                # Ruta absoluta hasta donde está tu imagen en media/gallery
+                local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
                 
-                # Create movie instance
+                # Creamos la instancia del Movie
                 movie = Movie(
                     name=movie_data['name'],
                     desc=movie_data['desc'],
@@ -242,22 +240,32 @@ class Command(BaseCommand):
                     trailer_url=movie_data['trailer_url'],
                     rating=movie_data['rating']
                 )
+                movie.save()
                 
-                # Save image to model
-                movie.img.save(file_name, ContentFile(response.content), save=True)
+                # Asignamos la imagen local (asumiendo que existe en media/gallery)
+                if os.path.exists(local_path):
+                    # Ajusta la ruta relativa para que Django la maneje
+                    movie.img = f"gallery/{file_name}"
+                    movie.save()
+                    self.stdout.write(self.style.SUCCESS(
+                        f"Using local image: Movie '{movie_data['name']}'"
+                    ))
+                else:
+                    self.stdout.write(self.style.WARNING(
+                        f"Image not found for '{movie_data['name']}': {local_path}"
+                    ))
                 
-                # Add genres
+                # Añadimos géneros
                 for genre_name in movie_data['genres']:
                     if genre_name in genres:
                         movie.genres.add(genres[genre_name])
                 
                 created_movies.append(movie)
-                self.stdout.write(self.style.SUCCESS(f"Created: Movie '{movie_data['name']}'"))
                 
-            except requests.RequestException as e:
-                self.stdout.write(self.style.ERROR(f"Error downloading image for {movie_data['name']}: {e}"))
             except Exception as e:
-                self.stdout.write(self.style.ERROR(f"Error creating movie {movie_data['name']}: {e}"))
+                self.stdout.write(self.style.ERROR(
+                    f"Error creating movie {movie_data['name']}: {e}"
+                ))
         
         # Add comments to movies
         self.stdout.write(self.style.SUCCESS("Adding comments to movies..."))
@@ -279,7 +287,6 @@ class Command(BaseCommand):
             num_comments = random.randint(3, 8)
             
             # Generate comments with different sentiment distributions based on rating
-            # Higher rated movies get more positive comments
             if movie.rating >= 4.5:
                 sentiment_weights = [0.8, 0.15, 0.05]  # 80% positive, 15% mixed, 5% critical
             elif movie.rating >= 4.0:
@@ -287,15 +294,13 @@ class Command(BaseCommand):
             else:
                 sentiment_weights = [0.4, 0.4, 0.2]    # 40% positive, 40% mixed, 20% critical
             
-            for i in range(num_comments):
-                # Select sentiment based on weights
+            for _ in range(num_comments):
                 sentiment = random.choices(
                     ["positive", "mixed", "critical"], 
                     weights=sentiment_weights, 
                     k=1
                 )[0]
                 
-                # Select appropriate comment
                 if sentiment == "positive":
                     comment_text = random.choice(positive_comments)
                 elif sentiment == "mixed":
@@ -311,14 +316,11 @@ class Command(BaseCommand):
                 use_male = random.choice([True, False])
                 if use_male:
                     commenter_name = random.choice(male_names)
-                    # Create a relative path to the male avatar
                     avatar_file = f"gallery/people/{random.choice(male_avatars)}"
                 else:
                     commenter_name = random.choice(female_names)
-                    # Create a relative path to the female avatar
                     avatar_file = f"gallery/people/{random.choice(female_avatars)}"
                 
-                # Create comment
                 Comment.objects.create(
                     movie=movie,
                     name=commenter_name,
