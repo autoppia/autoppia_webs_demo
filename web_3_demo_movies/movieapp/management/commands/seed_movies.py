@@ -7,13 +7,17 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from movieapp.models import Movie, Genre, Comment
+from django.apps import apps 
 
 class Command(BaseCommand):
-    help = "Seeds the database with initial movies, genres, and comments"
+    help = "Resets ALL tables and then seeds the database with initial movies, genres, and comments"
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS("Starting to seed the database..."))
-        
+        all_models = apps.get_models()  
+        for model in all_models:
+            model.objects.all().delete()
+        self.stdout.write(self.style.SUCCESS("All tables have been reset (all records deleted)."))
         # Create genres
         genres_to_create = [
             "Action", "Adventure", "Animation", "Comedy", "Crime", 
