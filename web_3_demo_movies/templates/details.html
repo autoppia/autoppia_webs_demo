@@ -20,27 +20,36 @@
                             <div class="col-md-6">
                                 <p class="text-muted">
                                     <strong><i class="fas fa-film mr-2"></i>Category:</strong> 
-                                    <span class="badge badge-secondary">Drama</span>
-                                    <span class="badge badge-secondary">Action</span>
+                                    {% for genre in movie.genres.all %}
+                                    <span class="badge badge-secondary">{{ genre.name }}</span>
+                                    {% empty %}
+                                    <span class="text-muted">Not categorized</span>
+                                    {% endfor %}
                                 </p>
                                 <p class="text-muted">
                                     <strong><i class="fas fa-star mr-2"></i>Rating:</strong> 
                                     <span class="text-warning">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= movie.rating|floatformat:"0" %}
+                                                <i class="fas fa-star"></i>
+                                            {% elif forloop.counter <= movie.rating|add:"0.5"|floatformat:"0" %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
                                     </span>
-                                    (4.0/5)
+                                    ({{movie.rating|floatformat:"1"}}/5)
                                 </p>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted">
-                                    <strong><i class="fas fa-user mr-2"></i>Director:</strong> Director
+                                    <strong><i class="fas fa-user mr-2"></i>Director:</strong> 
+                                    {{ movie.director|default:"Not specified" }}
                                 </p>
                                 <p class="text-muted">
-                                    <strong><i class="fas fa-clock mr-2"></i>Duration:</strong> 120 min
+                                    <strong><i class="fas fa-clock mr-2"></i>Duration:</strong> 
+                                    {% if movie.duration %}{{ movie.duration }} min{% else %}Not specified{% endif %}
                                 </p>
                             </div>
                         </div>
@@ -50,12 +59,14 @@
                     <p class="card-text">{{movie.desc}}</p>
                     
                     <h5 class="card-subtitle mb-3 mt-4"><i class="fas fa-users mr-2"></i>Cast</h5>
-                    <p>Actor 1, Actor 2, Actor 3, Actor 4</p>
+                    <p>{{ movie.cast|default:"No cast information available" }}</p>
                     
                     <div class="mt-4">
-                        <a href="#" class="btn btn-primary mr-2">
+                        {% if movie.trailer_url %}
+                        <a href="{{ movie.trailer_url }}" target="_blank" class="btn btn-primary mr-2">
                             <i class="fas fa-play-circle mr-1"></i> Watch Trailer
                         </a>
+                        {% endif %}
                         <a href="{% url 'movieapp:update' movie.id %}" class="btn btn-warning mr-2">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </a>
@@ -85,14 +96,14 @@
             <!-- Comments list -->
             <div class="comment-list">
                 <div class="media mb-3 p-3 border-bottom">
-                    <img src="/media/gallery/people/person1.jpg" class="mr-3 rounded-circle" alt="Avatar" style="max-width: 80px;">
+                    <img src="/media/gallery/people/person1.jpg" class="mr-3 rounded-circle" alt="Avatar" style="width: 80px; height: 80px; object-fit: cover;">
                     <div class="media-body">
                         <h5 class="mt-0">Maria <small class="text-muted ml-2">3 days ago</small></h5>
                         <p>Excellent movie! I highly recommend it.</p>
                     </div>
                 </div>
                 <div class="media mb-3 p-3">
-                    <img src="/media/gallery/people/person2.png" class="mr-3 rounded-circle" alt="Avatar" style="width: 80px; height: 80px;">
+                    <img src="/media/gallery/people/person2.png" class="mr-3 rounded-circle" alt="Avatar" style="width: 80px; height: 80px; object-fit: cover;">
                     <div class="media-body">
                         <h5 class="mt-0">Juan <small class="text-muted ml-2">5 days ago</small></h5>
                         <p>One of my favorite movies of all time.</p>
@@ -103,50 +114,36 @@
     </div>
     
     <!-- Related movies -->
+    {% if related_movies %}
     <div class="mt-5">
         <h3 class="mb-4">Related Movies</h3>
         <div class="row">
+            {% for related in related_movies %}
             <div class="col-md-3">
-                <div class="card movie-card h-100">
-                    <img src="https://via.placeholder.com/250x350" class="card-img-top" alt="Related movie" style="height: 250px; object-fit: cover;">
+                <div class="card movie-card h-100 shadow-sm">
+                    <div class="card-img-container position-relative">
+                        <img src="{{ related.img.url }}" class="card-img-top" alt="{{ related.name }}" style="height: 250px; object-fit: cover;">
+                        <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{ related.year }}</div>
+                        {% if related.rating %}
+                        <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">
+                            <span class="badge badge-warning p-2">
+                                <i class="fas fa-star"></i> {{ related.rating|floatformat:1 }}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Related Movie 1</h5>
-                        <p class="card-text small">Brief description of the related movie.</p>
-                        <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                        <h5 class="card-title">{{ related.name }}</h5>
+                        <p class="card-text small">{{ related.desc|truncatechars:80 }}</p>
+                        <a href="{% url 'movieapp:detail' related.id %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-info-circle mr-1"></i> View Details
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card movie-card h-100">
-                    <img src="https://via.placeholder.com/250x350" class="card-img-top" alt="Related movie" style="height: 250px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Related Movie 2</h5>
-                        <p class="card-text small">Brief description of the related movie.</p>
-                        <a href="#" class="btn btn-sm btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card movie-card h-100">
-                    <img src="https://via.placeholder.com/250x350" class="card-img-top" alt="Related movie" style="height: 250px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Related Movie 3</h5>
-                        <p class="card-text small">Brief description of the related movie.</p>
-                        <a href="#" class="btn btn-sm btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card movie-card h-100">
-                    <img src="https://via.placeholder.com/250x350" class="card-img-top" alt="Related movie" style="height: 250px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Related Movie 4</h5>
-                        <p class="card-text small">Brief description of the related movie.</p>
-                        <a href="#" class="btn btn-sm btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
