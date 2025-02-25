@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   web:
     build: .
@@ -10,6 +9,7 @@ services:
       - "8003:8003"
     environment:
       - DEBUG=0
+      - AUTO_SEED=true  # Add this line to automatically confirm seeding
 
 volumes:
   sqlite_data:

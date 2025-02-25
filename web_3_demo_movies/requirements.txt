@@ -12,3 +12,5 @@ setuptools==74.0.0
 sqlparse==0.5.1
 uritemplate==4.1.1
 whitenoise==6.7.0
+requests
+Pillow>=9.0.0

@@ -200,17 +200,26 @@ class Command(BaseCommand):
         }
         
         # First check if movies already exist
+          # Add this block to automatically proceed if an environment variable is set
+        auto_confirm = os.environ.get('AUTO_SEED', 'false').lower() == 'true'
+        
+        # Check if movies exist
         if Movie.objects.count() > 0:
-            self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
-            confirm = input()
-            if confirm.lower() != 'yes':
-                self.stdout.write(self.style.SUCCESS("Seeding cancelled."))
-                return
-            else:
+            if auto_confirm:
                 Comment.objects.all().delete()
                 Movie.objects.all().delete()
                 self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
-        
+            else:
+                self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
+                confirm = input()
+                if confirm.lower() != 'yes':
+                    self.stdout.write(self.style.SUCCESS("Seeding cancelled."))
+                    return
+                else:
+                    Comment.objects.all().delete()
+                    Movie.objects.all().delete()
+                    self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
+            
         # Create movies
         created_movies = []
         for movie_data in movies_data:
