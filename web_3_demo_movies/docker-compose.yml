@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+      - sqlite_data:/app/db
+    ports:
+      - "8003:8003"
+    environment:
+      - DEBUG=0
+
+volumes:
+  sqlite_data:
