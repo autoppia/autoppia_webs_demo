@@ -17,13 +17,19 @@
         
         .navbar {
             box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            background-color: #16181e !important;
         }
         
+
         .hero-section {
-            background: linear-gradient(to right, #1a237e, #4a148c);
+            background-image: url('/media/gallery/banner.png'), linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/static/grid-background.png');
+            background-position: center, center, center;
+            background-size: cover, cover, 500px 500px;
+            background-repeat: no-repeat, no-repeat, repeat;
             color: white;
             padding: 2rem 0;
             margin-bottom: 2rem;
+            position: relative;
         }
         
         .section-title {
@@ -245,7 +251,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'movieapp:index' %}">
-                <i class="fas fa-film mr-2"></i>CineStore
+                <img src="/media/gallery/autoppia_logo.png" alt="AutoPpia" height="30">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -255,21 +261,7 @@
                     <li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
                         <a class="nav-link" href="{% url 'movieapp:index' %}">Home</a>
                     </li>
-                    <li class="nav-item {% if request.resolver_match.url_name == 'add_movie' %}active{% endif %}">
-                        <a class="nav-link" href="{% url 'movieapp:add_movie' %}">Add Movie</a>
-                    </li>
-                    <li class="nav-item dropdown {% if 'genre' in request.resolver_match.url_name %}active{% endif %}">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Categories
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'movieapp:genre_list' %}">All Categories</a>
-                            <div class="dropdown-divider"></div>
-                            {% for genre in genres %}
-                            <a class="dropdown-item" href="{% url 'movieapp:genre_detail' genre.id %}">{{ genre.name }}</a>
-                            {% endfor %}
-                        </div>
-                    </li>
+                   
                     <li class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
                         <a class="nav-link" href="{% url 'movieapp:about' %}">About Us</a>
                     </li>
@@ -375,7 +367,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-12 text-center">
-                    <p class="mb-0">&copy; 2025 CineStore. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2025 Autoppia IAcinema. All rights reserved.</p>
                 </div>
             </div>
         </div>
