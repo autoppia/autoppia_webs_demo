@@ -1,10 +1,12 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.contrib import messages
+from django.utils import timezone
+from django.views.decorators.http import require_POST
 
-from .forms import MovieForm
-from .models import Movie, Genre
+from .forms import MovieForm, CommentForm
+from .models import Movie, Genre, Comment
 
 # Create your views here.
 def index(request):
@@ -58,11 +60,54 @@ def detail(request, movie_id):
         
         related_movies = list(related_movies) + list(random_movies)
     
+    # Get comments and prepare the comment form
+    comments = movie.comments.all()
+    comment_form = CommentForm()
+    
     context = {
         'movie': movie,
-        'related_movies': related_movies
+        'related_movies': related_movies,
+        'comments': comments,
+        'comment_form': comment_form
     }
     return render(request, "details.html", context)
+
+@require_POST
+def add_comment(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+    
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.movie = movie
+            comment.created_at = timezone.now()
+            
+            # If avatar is not provided, use default or random avatar logic could be added here
+            # comment.avatar = ...
+            
+            comment.save()
+            
+            # For AJAX requests to update the comments section without page reload
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'comment': {
+                        'name': comment.name,
+                        'content': comment.content,
+                        'created_at': comment.created_at.strftime('%b %d, %Y, %I:%M %p'),
+                        'time_ago': f"{(timezone.now() - comment.created_at).days} days ago" 
+                                  if (timezone.now() - comment.created_at).days > 0 
+                                  else "Today",
+                        'avatar': comment.avatar.url if comment.avatar else '/media/gallery/people/default-avatar.jpg'
+                    }
+                })
+            
+            messages.success(request, 'Your comment has been added successfully!')
+            return redirect('movieapp:detail', movie_id=movie.id)
+    
+    messages.error(request, 'There was a problem with your comment.')
+    return redirect('movieapp:detail', movie_id=movie.id)
 
 def add_movie(request):
     if request.method == "POST":

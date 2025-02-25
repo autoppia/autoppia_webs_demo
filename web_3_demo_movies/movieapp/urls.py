@@ -4,18 +4,21 @@ from . import views
 app_name = 'movieapp'
 
 urlpatterns = [
-    # Vista principal
+    # Main view
     path('', views.index, name='index'),
     
-    # Detalles de película
+    # Movie details
     path('movie/<int:movie_id>/', views.detail, name='detail'),
     
-    # Operaciones CRUD para películas
+    # CRUD operations for movies
     path('add/', views.add_movie, name='add_movie'),
     path('update/<int:id>', views.update, name='update'),
     path('delete/<int:id>', views.delete, name='delete'),
     
-    # Páginas de género
+    # Genre pages
     path('genres/', views.genre_list, name='genre_list'),
     path('genre/<int:genre_id>/', views.genre_detail, name='genre_detail'),
+    
+    # Comments
+    path('movie/<int:movie_id>/comment/', views.add_comment, name='add_comment'),
 ]

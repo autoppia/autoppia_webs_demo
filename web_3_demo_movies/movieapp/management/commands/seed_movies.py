@@ -3,13 +3,15 @@ from django.core.management.base import BaseCommand
 from django.core.files.images import ImageFile
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from django.utils import timezone
 import requests
 from io import BytesIO
-from movieapp.models import Movie, Genre
+from movieapp.models import Movie, Genre, Comment
 import random
+from datetime import timedelta
 
 class Command(BaseCommand):
-    help = "Seeds the database with initial movies and genres"
+    help = "Seeds the database with initial movies, genres, and comments"
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS("Starting to seed the database..."))
@@ -151,19 +153,57 @@ class Command(BaseCommand):
                 "genres": ["Adventure", "Drama", "Sci-Fi"]
             }
         ]
+
+        # Sample comment data
+        sample_comments = [
+            {
+                "names": ["John", "Emma", "Michael", "Sophia", "Daniel", "Olivia", "James", "Ava", "William", "Isabella"],
+                "positive_comments": [
+                    "Absolutely loved this movie! A masterpiece that stands the test of time.",
+                    "One of the best films I've ever seen. The acting was phenomenal.",
+                    "Incredible storytelling and direction. This movie deserves all the praise!",
+                    "The cinematography was breathtaking. Every frame looked like a painting.",
+                    "A perfect blend of emotion and technical brilliance.",
+                    "This film had me on the edge of my seat the entire time!",
+                    "I've watched this multiple times and it gets better with each viewing.",
+                    "The score perfectly complements the storytelling. A true classic!",
+                    "Masterful performances by the entire cast. Truly unforgettable.",
+                    "This movie changed my perspective on cinema. Absolutely brilliant."
+                ],
+                "mixed_comments": [
+                    "Good film overall, though some scenes dragged on a bit too long.",
+                    "Solid performances, but the plot had a few holes I couldn't ignore.",
+                    "Visually stunning, but the character development felt a bit weak.",
+                    "Enjoyed it, but I think it's slightly overrated in some aspects.",
+                    "A good movie that could have been great with some tighter editing.",
+                    "Interesting concept but the execution was somewhat inconsistent.",
+                    "Worth watching, though I expected a bit more given all the hype.",
+                    "Some brilliant moments mixed with a few that didn't quite land."
+                ],
+                "critical_comments": [
+                    "Not my cup of tea. I found the pacing to be too slow.",
+                    "The plot was confusing and hard to follow at times.",
+                    "I expected more given the high ratings. A bit disappointing.",
+                    "The characters weren't believable enough for me to get invested.",
+                    "Technically well-made but emotionally distant."
+                ]
+            }
+        ]
         
         # First check if movies already exist
         if Movie.objects.count() > 0:
-            self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies? (yes/no)"))
+            self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
             confirm = input()
             if confirm.lower() != 'yes':
                 self.stdout.write(self.style.SUCCESS("Seeding cancelled."))
                 return
             else:
+                Comment.objects.all().delete()
                 Movie.objects.all().delete()
-                self.stdout.write(self.style.SUCCESS("All existing movies deleted."))
+                self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
         
         # Create movies
+        created_movies = []
         for movie_data in movies_data:
             try:
                 # Download image
@@ -193,11 +233,66 @@ class Command(BaseCommand):
                     if genre_name in genres:
                         movie.genres.add(genres[genre_name])
                 
+                created_movies.append(movie)
                 self.stdout.write(self.style.SUCCESS(f"Created: Movie '{movie_data['name']}'"))
                 
             except requests.RequestException as e:
                 self.stdout.write(self.style.ERROR(f"Error downloading image for {movie_data['name']}: {e}"))
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"Error creating movie {movie_data['name']}: {e}"))
+        
+        # Add comments to movies
+        self.stdout.write(self.style.SUCCESS("Adding comments to movies..."))
+        
+        comment_data = sample_comments[0]
+        names = comment_data["names"]
+        positive_comments = comment_data["positive_comments"]
+        mixed_comments = comment_data["mixed_comments"]
+        critical_comments = comment_data["critical_comments"]
+        
+        now = timezone.now()
+        
+        for movie in created_movies:
+            # Determine number of comments for this movie (3-8)
+            num_comments = random.randint(3, 8)
+            
+            # Generate comments with different sentiment distributions based on rating
+            # Higher rated movies get more positive comments
+            if movie.rating >= 4.5:
+                sentiment_weights = [0.8, 0.15, 0.05]  # 80% positive, 15% mixed, 5% critical
+            elif movie.rating >= 4.0:
+                sentiment_weights = [0.6, 0.3, 0.1]    # 60% positive, 30% mixed, 10% critical
+            else:
+                sentiment_weights = [0.4, 0.4, 0.2]    # 40% positive, 40% mixed, 20% critical
+            
+            for i in range(num_comments):
+                # Select sentiment based on weights
+                sentiment = random.choices(
+                    ["positive", "mixed", "critical"], 
+                    weights=sentiment_weights, 
+                    k=1
+                )[0]
+                
+                # Select appropriate comment
+                if sentiment == "positive":
+                    comment_text = random.choice(positive_comments)
+                elif sentiment == "mixed":
+                    comment_text = random.choice(mixed_comments)
+                else:
+                    comment_text = random.choice(critical_comments)
+                
+                # Create a random date in the past 60 days
+                days_ago = random.randint(1, 60)
+                comment_date = now - timedelta(days=days_ago)
+                
+                # Create comment
+                Comment.objects.create(
+                    movie=movie,
+                    name=random.choice(names),
+                    content=comment_text,
+                    created_at=comment_date
+                )
+            
+            self.stdout.write(f"Added {num_comments} comments to '{movie.name}'")
         
         self.stdout.write(self.style.SUCCESS("Database seeding completed successfully!"))

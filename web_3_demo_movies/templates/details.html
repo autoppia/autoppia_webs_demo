@@ -82,33 +82,38 @@
     <!-- Comments section -->
     <div class="card mt-4 shadow">
         <div class="card-header bg-light">
-            <h4 class="mb-0"><i class="fas fa-comments mr-2"></i>Comments</h4>
+            <h4 class="mb-0"><i class="fas fa-comments mr-2"></i>Comments ({{ comments.count }})</h4>
         </div>
         <div class="card-body">
             <!-- Form for adding comments -->
-            <form class="mb-4">
+            <form id="comment-form" method="POST" action="{% url 'movieapp:add_comment' movie.id %}">
+                {% csrf_token %}
                 <div class="form-group">
-                    <textarea class="form-control" rows="3" placeholder="Write a comment..."></textarea>
+                    <input type="text" name="name" class="form-control mb-2" placeholder="Your name" required>
+                    <textarea name="content" class="form-control" rows="3" placeholder="Write a comment..." required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit comment</button>
             </form>
             
             <!-- Comments list -->
-            <div class="comment-list">
-                <div class="media mb-3 p-3 border-bottom">
-                    <img src="/media/gallery/people/person1.jpg" class="mr-3 rounded-circle" alt="Avatar" style="width: 80px; height: 80px; object-fit: cover;">
+            <div class="comment-list mt-4" id="comments-container">
+                {% for comment in comments %}
+                <div class="media mb-3 p-3 {% if not forloop.last %}border-bottom{% endif %}">
+                    {% if comment.avatar %}
+                        <img src="{{ comment.avatar.url }}" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% else %}
+                        <img src="/media/gallery/people/person{% cycle '1' '2' '3' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                    {% endif %}
                     <div class="media-body">
-                        <h5 class="mt-0">Maria <small class="text-muted ml-2">3 days ago</small></h5>
-                        <p>Excellent movie! I highly recommend it.</p>
+                        <h5 class="mt-0">{{ comment.name }} <small class="text-muted ml-2">{{ comment.created_at|timesince }} ago</small></h5>
+                        <p>{{ comment.content }}</p>
                     </div>
                 </div>
-                <div class="media mb-3 p-3">
-                    <img src="/media/gallery/people/person2.png" class="mr-3 rounded-circle" alt="Avatar" style="width: 80px; height: 80px; object-fit: cover;">
-                    <div class="media-body">
-                        <h5 class="mt-0">Juan <small class="text-muted ml-2">5 days ago</small></h5>
-                        <p>One of my favorite movies of all time.</p>
-                    </div>
+                {% empty %}
+                <div class="text-center py-4" id="no-comments">
+                    <p class="text-muted">No comments yet. Be the first to comment!</p>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -146,4 +151,65 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+    // AJAX comment submission
+    document.addEventListener('DOMContentLoaded', function() {
+        const commentForm = document.getElementById('comment-form');
+        const commentsContainer = document.getElementById('comments-container');
+        const noCommentsMsg = document.getElementById('no-comments');
+        
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(commentForm);
+            
+            fetch(commentForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Remove the no comments message if it exists
+                    if (noCommentsMsg) {
+                        noCommentsMsg.remove();
+                    }
+                    
+                    // Create new comment element
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'media mb-3 p-3 border-bottom';
+                    
+                    // Use a default avatar or the provided one
+                    const avatarUrl = data.comment.avatar || '/media/gallery/people/person1.jpg';
+                    
+                    commentDiv.innerHTML = `
+                        <img src="${avatarUrl}" class="mr-3 rounded-circle" alt="${data.comment.name}" style="width: 80px; height: 80px; object-fit: cover;">
+                        <div class="media-body">
+                            <h5 class="mt-0">${data.comment.name} <small class="text-muted ml-2">Just now</small></h5>
+                            <p>${data.comment.content}</p>
+                        </div>
+                    `;
+                    
+                    // Add the new comment at the top
+                    commentsContainer.prepend(commentDiv);
+                    
+                    // Reset the form
+                    commentForm.reset();
+                    
+                    // Update the comment count in the header
+                    const commentHeader = document.querySelector('.card-header h4');
+                    const currentCount = parseInt(commentHeader.textContent.match(/\d+/)[0]);
+                    commentHeader.innerHTML = `<i class="fas fa-comments mr-2"></i>Comments (${currentCount + 1})`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
 {% endblock %}

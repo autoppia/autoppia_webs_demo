@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block body %}
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow">
-                <div class="card-header bg-warning text-white">
+        <div class="col-lg-10">
+            <div class="card shadow border-0">
+                <div class="card-header bg-warning text-white py-3">
                     <h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Edit Movie</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form method="POST" enctype="multipart/form-data" class="movie-form">
                         {% csrf_token %}
                         
@@ -24,76 +24,131 @@
                         </div>
                         {% endif %}
                         
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col-md-8">
-                                {% for field in form %}
-                                    {% if field.name != 'img' %}
+                                <div class="card-shadow p-3 bg-light rounded">
                                     <div class="form-group">
-                                        <label for="{{ field.id_for_label }}">
-                                            {% if field.name == 'name' %}
-                                                <i class="fas fa-film mr-1"></i>
-                                            {% elif field.name == 'year' %}
-                                                <i class="fas fa-calendar-alt mr-1"></i>
-                                            {% elif field.name == 'director' %}
-                                                <i class="fas fa-user mr-1"></i>
-                                            {% elif field.name == 'cast' %}
-                                                <i class="fas fa-users mr-1"></i>
-                                            {% elif field.name == 'duration' %}
-                                                <i class="fas fa-clock mr-1"></i>
-                                            {% elif field.name == 'trailer_url' %}
-                                                <i class="fab fa-youtube mr-1"></i>
-                                            {% elif field.name == 'rating' %}
-                                                <i class="fas fa-star mr-1"></i>
-                                            {% elif field.name == 'genres' %}
-                                                <i class="fas fa-tags mr-1"></i>
-                                            {% elif field.name == 'desc' %}
-                                                <i class="fas fa-info-circle mr-1"></i>
-                                            {% endif %}
-                                            {{ field.label }}
+                                        <label for="{{ form.name.id_for_label }}" class="font-weight-bold">
+                                            <i class="fas fa-film mr-2"></i>Movie Title
                                         </label>
-                                        {{ field }}
-                                        {% if field.help_text %}
-                                            <small class="form-text text-muted">{{ field.help_text }}</small>
-                                        {% endif %}
+                                        {{ form.name|safe }}
+                                        <div class="form-text small text-muted">Enter the official title of the movie</div>
                                     </div>
-                                    {% endif %}
-                                {% endfor %}
+                                    
+                                    <div class="form-group mt-4">
+                                        <label for="{{ form.desc.id_for_label }}" class="font-weight-bold">
+                                            <i class="fas fa-info-circle mr-2"></i>Synopsis
+                                        </label>
+                                        {{ form.desc|safe }}
+                                        <div class="form-text small text-muted">A brief summary of the movie's plot</div>
+                                    </div>
+                                    
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="{{ form.year.id_for_label }}" class="font-weight-bold">
+                                                    <i class="fas fa-calendar-alt mr-2"></i>Release Year
+                                                </label>
+                                                {{ form.year|safe }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="{{ form.duration.id_for_label }}" class="font-weight-bold">
+                                                    <i class="fas fa-clock mr-2"></i>Duration (minutes)
+                                                </label>
+                                                {{ form.duration|safe }}
+                                                <div class="form-text small text-muted">Length of the movie in minutes</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group mt-4">
+                                        <label for="{{ form.director.id_for_label }}" class="font-weight-bold">
+                                            <i class="fas fa-user mr-2"></i>Director
+                                        </label>
+                                        {{ form.director|safe }}
+                                    </div>
+                                    
+                                    <div class="form-group mt-4">
+                                        <label for="{{ form.cast.id_for_label }}" class="font-weight-bold">
+                                            <i class="fas fa-users mr-2"></i>Cast
+                                        </label>
+                                        {{ form.cast|safe }}
+                                        <div class="form-text small text-muted">Names of actors separated by commas</div>
+                                    </div>
+                                    
+                                    <div class="form-group mt-4">
+                                        <label for="{{ form.trailer_url.id_for_label }}" class="font-weight-bold">
+                                            <i class="fab fa-youtube mr-2"></i>Trailer URL
+                                        </label>
+                                        {{ form.trailer_url|safe }}
+                                        <div class="form-text small text-muted">YouTube URL for the movie trailer</div>
+                                    </div>
+                                    
+                                    <div class="form-group mt-4">
+                                        <label for="{{ form.rating.id_for_label }}" class="font-weight-bold">
+                                            <i class="fas fa-star mr-2"></i>Rating
+                                        </label>
+                                        {{ form.rating|safe }}
+                                        <div class="form-text small text-muted">Rating from 0 to 5 stars</div>
+                                    </div>
+                                    
+                                    <div class="form-group mt-4">
+                                        <label for="{{ form.genres.id_for_label }}" class="font-weight-bold">
+                                            <i class="fas fa-tags mr-2"></i>Genres
+                                        </label>
+                                        {{ form.genres|safe }}
+                                        <div class="form-text small text-muted">Hold Ctrl/Cmd key to select multiple genres</div>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="{{ form.img.id_for_label }}">
-                                        <i class="fas fa-image mr-1"></i> {{ form.img.label }}
-                                    </label>
-                                    
-                                    {% if movie.img %}
-                                    <div class="current-image mb-3">
-                                        <p class="text-muted">Current image:</p>
-                                        <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="height: 200px; object-fit: cover;">
+                                <div class="card border-0 shadow">
+                                    <div class="card-header bg-dark text-white">
+                                        <h5 class="mb-0"><i class="fas fa-image mr-2"></i>Movie Poster</h5>
                                     </div>
-                                    {% endif %}
-                                    
-                                    <div class="custom-file">
-                                        {{ form.img }}
-                                        <label class="custom-file-label" for="{{ form.img.id_for_label }}">
-                                            {% if movie.img %}Change image{% else %}Choose file{% endif %}
-                                        </label>
+                                    <div class="card-body text-center">
+                                        {% if movie.img %}
+                                        <div class="current-image mb-3">
+                                            <p class="text-muted mb-2">Current image:</p>
+                                            <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;">
+                                        </div>
+                                        <hr>
+                                        {% endif %}
+                                        
+                                        <div class="form-group mt-3">
+                                            <label for="{{ form.img.id_for_label }}" class="btn btn-outline-primary">
+                                                <i class="fas fa-upload mr-2"></i>Change image
+                                            </label>
+                                            <div class="custom-file d-none">
+                                                {{ form.img }}
+                                                <label class="custom-file-label" for="{{ form.img.id_for_label }}">
+                                                    Choose file
+                                                </label>
+                                            </div>
+                                            <div id="file-selected" class="small text-muted mt-2"></div>
+                                            <div class="small text-muted mt-1">
+                                                Accepted formats: JPG, PNG.<br>
+                                                Maximum size: 5MB.
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group mt-3" id="imagePreview" style="display: none;">
+                                            <label>Preview:</label>
+                                            <img id="preview" src="#" alt="Preview" class="img-fluid mt-2 img-thumbnail" style="max-height: 200px;">
+                                        </div>
                                     </div>
-                                    <small class="form-text text-muted">Accepted formats: JPG, PNG. Maximum size: 5MB.</small>
-                                </div>
-                                
-                                <div class="form-group" id="imagePreview" style="display: none;">
-                                    <label>Preview:</label>
-                                    <img id="preview" src="#" alt="Preview" class="img-fluid mt-2 img-thumbnail" style="max-height: 150px;">
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="form-group text-center mt-4">
-                            <button type="submit" class="btn btn-warning btn-lg">
-                                <i class="fas fa-save mr-2"></i>Update Movie
+                        <div class="form-group text-center mt-4 mb-2">
+                            <button type="submit" class="btn btn-warning btn-lg px-5">
+                                <i class="fas fa-save mr-2"></i>Save Changes
                             </button>
-                            <a href="{% url 'movieapp:detail' movie.id %}" class="btn btn-secondary btn-lg ml-2">
+                            <a href="{% url 'movieapp:detail' movie.id %}" class="btn btn-secondary btn-lg ml-2 px-5">
                                 <i class="fas fa-times mr-2"></i>Cancel
                             </a>
                         </div>
@@ -118,10 +173,8 @@
         if (file) {
             reader.readAsDataURL(file);
             
-            // Update file name in the label
-            var fileName = file.name;
-            var label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
+            // Update selected file name display
+            document.getElementById('file-selected').textContent = 'Selected: ' + file.name;
         }
     });
 </script>
