@@ -1,6 +1,6 @@
 from faker import Faker
 import re
-from typing import Optional, Dict, Any, Type, Literal
+from typing import Optional, Dict, Any, Type
 from pydantic import BaseModel
 from movieapp.models import Genre, Movie, Comment, UserProfile, ContactMessage
 
@@ -18,10 +18,9 @@ class Event(BaseModel):
     user_id: Optional[int] = None
 
     class ValidationCriteria(BaseModel):
-        """Base validation criteria for any event"""
-        match_type: Literal["exact", "contains", "regex"] = "contains"
+        pass
 
-    def validate(self, criteria: "Event.ValidationCriteria") -> bool:
+    def validate(self) -> bool:
         """Check if this event meets the validation criteria"""
         # Base implementation just checks event type
         return self.type == self.__class__.__name__
@@ -37,12 +36,12 @@ class FilmDetailEvent(Event):
     """Event triggered when a film detail page is viewed"""
     movie: Movie
 
-    class ValidationCriteria(Event.ValidationCriteria):
+    class ValidationCriteria(BaseModel):
         """Validation criteria for FilmDetailEvent"""
-        movie_title: Optional[str] = None
-        movie_genre: Optional[str] = None
-        movie_director: Optional[str] = None
-        movie_year: Optional[int] = None
+        title: Optional[str] = None
+        genre: Optional[str] = None
+        director: Optional[str] = None
+        year: Optional[int] = None
 
         class Config:
             title = "Film Detail Validation"
@@ -55,6 +54,7 @@ class FilmDetailEvent(Event):
 
         # Helper function for text matching based on match_type
         def text_matches(actual, expected):
+            return actual.lower() == expected.lower()
             if not expected:
                 return True
             if criteria.match_type == "exact":
@@ -66,11 +66,11 @@ class FilmDetailEvent(Event):
             return False
 
         # Check movie attributes
-        if criteria.movie_title and not text_matches(self.movie.title, criteria.movie_title):
+        if criteria.title and not text_matches(self.movie.title, criteria.title):
             return False
-        if criteria.movie_genre and not text_matches(self.movie.genre, criteria.movie_genre):
+        if criteria.genre and not text_matches(self.movie.genre, criteria.genre):
             return False
-        if criteria.movie_director and not text_matches(self.movie.director, criteria.movie_director):
+        if criteria.director and not text_matches(self.movie.director, criteria.director):
             return False
         # Check year if specified (exact match only)
         if criteria.movie_year is not None and self.movie.year != criteria.movie_year:
@@ -132,7 +132,7 @@ USE_CASES = [
         "tests": [
             {
                 "type": "CheckEventTest", 
-                "event_type": "RegistrationEvent",
+                "event_name": "RegistrationEvent",
                 "event_criteria": {},  # No special criteria needed
                 "code": RegistrationEvent.code()
             },
@@ -140,19 +140,21 @@ USE_CASES = [
     },
     {
         "name": "Search film",
-        "prompt_template": "Search for a film with {filters} filters and open its detail page",
+        "prompt_template": "Search for a film with {filters} and open its detail page",
         "event": FilmDetailEvent,
         "success_criteria": "Task is successful when there is an event of type 'FilmDetailEvent' emitted with the correct movie associated",
-        "tests_instructions": [
+        "tests": [
             {
                 "type": "CheckEventTest", 
-                "event_type": "FilmDetailEvent", 
-                "validation_schema": FilmDetailEvent.ValidationCriteria.schema(),
+                "event_name": "FilmDetailEvent", 
+                "validation_schema": FilmDetailEvent.ValidationCriteria.model_json_schema(),
                 "code": FilmDetailEvent.code()
             },
         ]
     },
 ]
+
+
 # ================ Relevant Data ================
 
 RELEVANT_DATA = {
