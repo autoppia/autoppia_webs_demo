@@ -57,8 +57,10 @@ def about(request):
     return render(request, 'about.html')
 def detail(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
-    
-    # Obtener películas relacionadas por género
+    web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+    detail_event = Event.create_film_detail_event(request.user, web_agent_id, movie)
+    detail_event.save()
+        # Obtener películas relacionadas por género
     related_movies = []
     if movie.genres.exists():
         # Obtener películas que comparten al menos un género con la película actual,
