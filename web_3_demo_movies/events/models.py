@@ -45,9 +45,24 @@ class Event(models.Model):
             web_agent_id=web_agent_id
         )
         
-        # Guardar datos específicos en formato JSON
+        # Obtener los géneros (ya que es una relación ManyToMany)
+        genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+        
+        # Guardar datos completos de la película en formato JSON
         event.data = {
-            'movie_id': movie.id,
+            'id': movie.id,
+            'name': movie.name,
+            'desc': movie.desc,
+            'year': movie.year,
+            'img': movie.img.url if movie.img else None,
+            'director': movie.director,
+            'cast': movie.cast,
+            'duration': movie.duration,
+            'trailer_url': movie.trailer_url,
+            'rating': float(movie.rating),
+            'genres': genres,
+            'created_at': movie.created_at.isoformat() if movie.created_at else None,
+            'updated_at': movie.updated_at.isoformat() if movie.updated_at else None
         }
         
         return event
