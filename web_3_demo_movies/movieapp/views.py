@@ -12,6 +12,7 @@ from .forms import (
     UserProfileForm, UserForm,ContactForm
 )
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
+from events.models import Event
 
 # Create your views here.
 def index(request):
@@ -237,6 +238,12 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
+            
+            # Registrar evento de login usando el X-WebAgent-Id del header
+            web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+            login_event = Event.create_login_event(user, web_agent_id)
+            login_event.save()
+            
             next_url = request.GET.get('next', reverse('movieapp:index'))
             messages.success(request, f'Welcome back, {username}!')
             return redirect(next_url)
@@ -246,7 +253,10 @@ def login_view(request):
     return render(request, 'login.html')
 
 def logout_view(request):
+    web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+    register_event = Event.create_logout_event(request.user, web_agent_id)
     logout(request)
+    register_event.save()    
     messages.success(request, 'You have been logged out successfully.')
     return redirect('movieapp:index')
 
@@ -290,7 +300,15 @@ def register_view(request):
                 email=email,
                 password=password1
             )
+                 
+            # Registrar evento de login usando el X-WebAgent-Id del header
+            web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+            register_event = Event.create_registration_event(user, web_agent_id)
+            register_event.save()
             login(request, user)
+            login_event = Event.create_login_event(user, web_agent_id)
+            login_event.save()
+            
             messages.success(request, f'Account created successfully. Welcome, {username}!')
             return redirect('movieapp:index')
     

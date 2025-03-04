@@ -1,34 +1,114 @@
+# En models.py
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+from movieapp.models import Movie
 
-from accounts.models import User  # Import your custom user model
-
+class EventName(models.TextChoices):
+    FILM_DETAIL = 'FILM_DETAIL', 'Film Detail View'
+    SEARCH = 'SEARCH', 'Search Performed'
+    REGISTRATION = 'REGISTRATION', 'User Registration'
+    LOGIN = 'LOGIN', 'User Login'
+    LOGOUT = 'LOGOUT', 'User lOGOUT'
+    # Puedes añadir más tipos según necesites
 
 class Event(models.Model):
-    EVENT_TYPES = [
-        ('registration', 'User Registration'),
-        ('login', 'User Login'),
-        ('logout', 'User Logout'),
-        ('password_change', 'Password Change'),
-        ('profile_update', 'Profile Update'),
-        ('job_application', 'Job Application'),
-        ('job_post_creation', 'Job Post Creation'),
-        ('job_post_update', 'Job Post Update'),
-        ('job_post_deletion', 'Job Post Deletion'),
-        ('resume_upload', 'Resume Upload'),
-        ('newsletter_subscription', 'Newsletter Subscription'),
-        ('newsletter_unsubscription', 'Newsletter Unsubscription'),
-        ('message_sent', 'Message Sent'),
-        ('message_received', 'Message Received'),
-        ('page_view', 'Page View'),
-        ('search', 'Search'),
-    ]
-
-    event_type = models.CharField(max_length=50, choices=EVENT_TYPES)
-    description = models.TextField()
-    data = models.JSONField(blank=True, null=True)  # JSON field compatible con MySQL
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events', blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    web_agent_id = models.CharField(max_length=100, null=True, blank=True)
-
+    # Campos básicos comunes a todos los eventos
+    event_name = models.CharField(max_length=50, choices=EventName.choices)
+    timestamp = models.DateTimeField(default=timezone.now)
+    web_agent_id = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # Campo JSON para datos específicos del evento
+    data = models.JSONField(default=dict)
+    
+    # Campo adicional para búsquedas específicas
+    search_query = models.CharField(max_length=255, null=True, blank=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['event_name']),
+            models.Index(fields=['timestamp']),
+            models.Index(fields=['user']),
+        ]
+        ordering = ['-timestamp']
+    
     def __str__(self):
-        return f"{self.event_type} at {self.created_at} for web_agent {self.web_agent_id}"
+        return f"{self.get_event_name_display()} at {self.timestamp}"
+    
+    @classmethod
+    def create_film_detail_event(cls, user, web_agent_id, movie):
+        """Factory method para crear un evento de detalles de película"""
+        event = cls(
+            event_name=EventName.FILM_DETAIL,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        # Guardar datos específicos en formato JSON
+        event.data = {
+            'movie_id': movie.id,
+        }
+        
+        return event
+    
+    @classmethod
+    def create_search_event(cls, user, web_agent_id, query):
+        """Factory method para crear un evento de búsqueda"""
+        event = cls(
+            event_name=EventName.SEARCH,
+            user=user,
+            web_agent_id=web_agent_id,
+            search_query=query
+        )
+        
+        event.data = {
+            'query': query,
+        }
+        
+        return event
+    
+    @classmethod
+    def create_registration_event(cls, user, web_agent_id):
+        """Factory method para crear un evento de registro"""
+        event = cls(
+            event_name=EventName.REGISTRATION,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        event.data = {
+            'username': user.username,
+        }
+        
+        return event
+    
+    @classmethod
+    def create_login_event(cls, user, web_agent_id):
+        """Factory method para crear un evento de inicio de sesión"""
+        event = cls(
+            event_name=EventName.LOGIN,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        event.data = {
+            'username': user.username,
+        }
+        
+        return event
+    
+    @classmethod
+    def create_logout_event(cls, user, web_agent_id):
+        """Factory method para crear un evento de inicio de sesión"""
+        event = cls(
+            event_name=EventName.LOGOUT,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        event.data = {
+            'username': user.username,
+        }
+        
+        return event
