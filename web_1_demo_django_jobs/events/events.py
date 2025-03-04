@@ -14,11 +14,5 @@ EVENTS_ALLOWED = [
     "message_sent",
     "message_received",
     "search",
-    "page_view"
+    # "page_view"
 ]
-RELEVANT_DATA = {
-    "Authorization":{
-        "email":"admin@jobsapp.com",
-        "password":"admin123"
-    }
-}
