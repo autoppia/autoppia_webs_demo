@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_movie_app
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
+    ports:
+      - "8001:8001"
+    environment:
+      - DEBUG=0
+      - DB_NAME=web3_movies
+      - DB_USER=postgres
+      - DB_PASSWORD=autoppia_2025
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:latest
+    container_name: postgres_movies_db
+    environment:
+      - POSTGRES_DB=web3_movies
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=autoppia_2025
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+
+volumes:
+  postgres_data:

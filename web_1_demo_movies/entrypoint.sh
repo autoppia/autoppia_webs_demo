@@ -11,4 +11,4 @@ python manage.py create_user
 
 
 # 4. Arrancar Gunicorn en el puerto 8003
-exec gunicorn --bind 0.0.0.0:8003 movieproject.wsgi:application
+exec gunicorn --bind 0.0.0.0:8001 movieproject.wsgi:application
