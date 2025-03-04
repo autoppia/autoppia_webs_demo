@@ -58,9 +58,14 @@ def about(request):
 def detail(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", 0)
-    detail_event = Event.create_film_detail_event(request.user, web_agent_id, movie)
-    detail_event.save()
-        # Obtener películas relacionadas por género
+    # Registrar evento solo si el usuario está autenticado
+    if request.user.is_authenticated:
+        detail_event = Event.create_film_detail_event(request.user, web_agent_id, movie)
+        detail_event.save()
+    else:
+        # Para usuarios anónimos puedes crear el evento sin usuario o no crear evento
+        detail_event = Event.create_film_detail_event(None, web_agent_id, movie)
+        detail_event.save()
     related_movies = []
     if movie.genres.exists():
         # Obtener películas que comparten al menos un género con la película actual,
