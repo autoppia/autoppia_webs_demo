@@ -1,4 +1,3 @@
-# models.py
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -45,7 +44,7 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.get_event_name_display()} at {self.timestamp}"
 
-    # ========== MÉTODOS DE FÁBRICA ==========
+    # -------------------- EVENTOS RELACIONADOS CON PELÍCULAS --------------------
 
     @classmethod
     def create_film_detail_event(cls, user, web_agent_id, movie):
@@ -181,14 +180,12 @@ class Event(models.Model):
 
     @classmethod
     def create_add_comment_event(cls, user, web_agent_id, comment, movie):
-        """Factory method para crear un evento de añadir comentario"""
+        """Factory method para crear un evento de añadir comentario."""
         event = cls(
             event_name=EventName.ADD_COMMENT,
             user=user,
             web_agent_id=web_agent_id
         )
-        
-        # Guardar datos del comentario y película en formato JSON
         event.data = {
             'comment_id': comment.id,
             'name': comment.name,
@@ -201,9 +198,10 @@ class Event(models.Model):
                 'year': movie.year
             }
         }
-        
         return event
-        
+
+    # -------------------- EVENTOS DE USUARIO --------------------
+
     @classmethod
     def create_registration_event(cls, user, web_agent_id):
         """Factory method para crear un evento de registro."""
