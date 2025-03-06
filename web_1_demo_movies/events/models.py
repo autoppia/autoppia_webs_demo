@@ -6,7 +6,7 @@ from movieapp.models import Movie
 
 class EventName(models.TextChoices):
     FILM_DETAIL = 'FILM_DETAIL', 'Film Detail View'
-    SEARCH = 'SEARCH', 'Search Performed'
+    SEARCH_FILM = 'SEARCH_FILM', 'Search Film'
     REGISTRATION = 'REGISTRATION', 'User Registration'
     LOGIN = 'LOGIN', 'User Login'
     LOGOUT = 'LOGOUT', 'User lOGOUT'
@@ -124,6 +124,21 @@ class Event(models.Model):
         
         event.data = {
             'username': user.username,
+        }
+        
+        return event
+
+    @classmethod
+    def create_search_event(cls, user, web_agent_id, query):
+        """Factory method para crear un evento de búsqueda de película"""
+        event = cls(
+            event_name=EventName.SEARCH_FILM,  # Cambiado de LOGOUT a SEARCH_FILM
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        event.data = {
+            'query': query,
         }
         
         return event
