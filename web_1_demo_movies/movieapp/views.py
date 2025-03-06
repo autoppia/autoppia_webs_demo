@@ -152,7 +152,17 @@ def add_movie(request):
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            movie = form.save()
+            
+            # Crear evento de ADD_FILM
+            from events.models import Event
+            add_film_event = Event.create_add_film_event(
+                user=request.user if request.user.is_authenticated else None,
+                web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+                movie=movie
+            )
+            add_film_event.save()
+            
             messages.success(request, 'Movie added successfully.')
             return redirect('movieapp:index')
         else:
@@ -161,14 +171,68 @@ def add_movie(request):
         form = MovieForm()  # Empty form for GET request
     
     return render(request, 'add.html', {'form': form})
-
-def update(request, id):
+    
+def update_movie(request, id):
     movie = get_object_or_404(Movie, id=id)
+    
+    # Guardar los valores originales para trackear cambios
+    original_values = {
+        'name': movie.name,
+        'desc': movie.desc,
+        'year': movie.year,
+        'director': movie.director,
+        'cast': movie.cast,
+        'duration': movie.duration,
+        'trailer_url': movie.trailer_url,
+        'rating': float(movie.rating) if movie.rating else None,
+        'genres': [genre.name for genre in movie.genres.all()]
+    }
     
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES, instance=movie)
         if form.is_valid():
-            form.save()
+            updated_movie = form.save()
+            
+            # Determinar qué campos han cambiado
+            changed_fields = []
+            
+            if updated_movie.name != original_values['name']:
+                changed_fields.append('name')
+            if updated_movie.desc != original_values['desc']:
+                changed_fields.append('desc')
+            if updated_movie.year != original_values['year']:
+                changed_fields.append('year')
+            if updated_movie.director != original_values['director']:
+                changed_fields.append('director')
+            if updated_movie.cast != original_values['cast']:
+                changed_fields.append('cast')
+            if updated_movie.duration != original_values['duration']:
+                changed_fields.append('duration')
+            if updated_movie.trailer_url != original_values['trailer_url']:
+                changed_fields.append('trailer_url')
+            
+            # Comparar rating (teniendo en cuenta posibles None)
+            current_rating = float(updated_movie.rating) if updated_movie.rating else None
+            if current_rating != original_values['rating']:
+                changed_fields.append('rating')
+            
+            # Comparar géneros
+            updated_genres = [genre.name for genre in updated_movie.genres.all()]
+            if set(updated_genres) != set(original_values['genres']):
+                changed_fields.append('genres')
+            
+            # Crear evento de EDIT_FILM solo si hay cambios
+            if changed_fields:
+                from events.models import Event
+                edit_film_event = Event.create_edit_film_event(
+                    user=request.user if request.user.is_authenticated else None,
+                    web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+                    movie=updated_movie,
+                    previous_values=original_values,
+                    changed_fields=changed_fields
+                )
+                edit_film_event.save()
+            
             messages.success(request, 'Movie updated successfully.')
             return redirect('movieapp:detail', movie_id=id)
         else:
@@ -178,11 +242,19 @@ def update(request, id):
     
     return render(request, 'edit.html', {'form': form, 'movie': movie})
 
-def delete(request, id):
+def delete_movie(request, id):
     movie = get_object_or_404(Movie, id=id)
     
     if request.method == 'POST':
+        delete_film_event = Event.create_delete_film_event(
+            user=request.user if request.user.is_authenticated else None,
+            web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+            movie=movie
+        )
+        delete_film_event.save()
+        
         movie.delete()
+        
         messages.success(request, 'Movie deleted successfully.')
         return redirect('/')
     

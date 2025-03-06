@@ -12,8 +12,8 @@ urlpatterns = [
     
     # CRUD operations for movies
     path('add/', views.add_movie, name='add_movie'),
-    path('update/<int:id>', views.update, name='update'),
-    path('delete/<int:id>', views.delete, name='delete'),
+    path('update/<int:id>', views.update_movie, name='update'),
+    path('delete/<int:id>', views.delete_movie, name='delete'),
     
     # Genre pages
     path('genres/', views.genre_list, name='genre_list'),

@@ -7,10 +7,12 @@ from movieapp.models import Movie
 class EventName(models.TextChoices):
     FILM_DETAIL = 'FILM_DETAIL', 'Film Detail View'
     SEARCH_FILM = 'SEARCH_FILM', 'Search Film'
+    ADD_FILM = 'ADD_FILM', 'Add Film'
+    EDIT_FILM = 'EDIT_FILM', 'Edit Film'
+    DELETE_FILM = 'DELETE_FILM', 'Delete Film'  
     REGISTRATION = 'REGISTRATION', 'User Registration'
     LOGIN = 'LOGIN', 'User Login'
-    LOGOUT = 'LOGOUT', 'User lOGOUT'
-    # Puedes añadir más tipos según necesites
+    LOGOUT = 'LOGOUT', 'User Logout'
 
 class Event(models.Model):
     # Campos básicos comunes a todos los eventos
@@ -132,7 +134,7 @@ class Event(models.Model):
     def create_search_event(cls, user, web_agent_id, query):
         """Factory method para crear un evento de búsqueda de película"""
         event = cls(
-            event_name=EventName.SEARCH_FILM,  # Cambiado de LOGOUT a SEARCH_FILM
+            event_name=EventName.SEARCH_FILM, 
             user=user,
             web_agent_id=web_agent_id
         )
@@ -142,3 +144,100 @@ class Event(models.Model):
         }
         
         return event
+
+    @classmethod
+    def create_add_film_event(cls, user, web_agent_id, movie):
+        """Factory method para crear un evento de añadir película"""
+        event = cls(
+            event_name=EventName.ADD_FILM,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        # Obtener los géneros (ya que es una relación ManyToMany)
+        genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+        
+        # Guardar datos completos de la película en formato JSON
+        event.data = {
+            'id': movie.id,
+            'name': movie.name,
+            'desc': movie.desc,
+            'year': movie.year,
+            'img': movie.img.url if movie.img else None,
+            'director': movie.director,
+            'cast': movie.cast,
+            'duration': movie.duration,
+            'trailer_url': movie.trailer_url,
+            'rating': float(movie.rating),
+            'genres': genres,
+            'created_at': movie.created_at.isoformat() if movie.created_at else None,
+            'updated_at': movie.updated_at.isoformat() if movie.updated_at else None
+        }
+        
+        return event
+
+    @classmethod
+    def create_edit_film_event(cls, user, web_agent_id, movie, previous_values=None, changed_fields=None):
+        """Factory method para crear un evento de editar película"""
+        event = cls(
+            event_name=EventName.EDIT_FILM,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        # Obtener los géneros (ya que es una relación ManyToMany)
+        genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+        
+        # Guardar datos completos de la película en formato JSON
+        event.data = {
+            'id': movie.id,
+            'name': movie.name,
+            'desc': movie.desc,
+            'year': movie.year,
+            'img': movie.img.url if movie.img else None,
+            'director': movie.director,
+            'cast': movie.cast,
+            'duration': movie.duration,
+            'trailer_url': movie.trailer_url,
+            'rating': float(movie.rating),
+            'genres': genres,
+            'created_at': movie.created_at.isoformat() if movie.created_at else None,
+            'updated_at': movie.updated_at.isoformat() if movie.updated_at else None,
+            'previous_values': previous_values or {},
+            'changed_fields': changed_fields or []
+        }
+        
+        return event
+
+
+        # En la clase Event en models.py
+@classmethod
+def create_delete_film_event(cls, user, web_agent_id, movie):
+    """Factory method para crear un evento de eliminar película"""
+    event = cls(
+        event_name=EventName.DELETE_FILM,
+        user=user,
+        web_agent_id=web_agent_id
+    )
+    
+    # Obtener los géneros (ya que es una relación ManyToMany)
+    genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+    
+    # Guardar datos completos de la película en formato JSON
+    event.data = {
+        'id': movie.id,
+        'name': movie.name,
+        'desc': movie.desc,
+        'year': movie.year,
+        'img': movie.img.url if movie.img else None,
+        'director': movie.director,
+        'cast': movie.cast,
+        'duration': movie.duration,
+        'trailer_url': movie.trailer_url,
+        'rating': float(movie.rating),
+        'genres': genres,
+        'created_at': movie.created_at.isoformat() if movie.created_at else None,
+        'updated_at': movie.updated_at.isoformat() if movie.updated_at else None
+    }
+    
+    return event
