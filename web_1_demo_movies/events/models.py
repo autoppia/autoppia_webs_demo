@@ -16,6 +16,7 @@ class EventName(models.TextChoices):
     LOGOUT = 'LOGOUT', 'User Logout'
     CONTACT = 'CONTACT', 'Contact Message'  
     EDIT_USER = 'EDIT_USER', 'Edit User Profile'  
+    FILTER_FILM = 'FILTER_FILM', 'Filter Films'  
 
 
 class Event(models.Model):
@@ -176,6 +177,45 @@ class Event(models.Model):
             'created_at': movie.created_at.isoformat() if movie.created_at else None,
             'updated_at': movie.updated_at.isoformat() if movie.updated_at else None
         }
+        return event
+
+    @classmethod
+    def create_filter_film_event(cls, user, web_agent_id, genre=None, year=None):
+        """Factory method to create a filter films event"""
+        event = cls(
+            event_name=EventName.FILTER_FILM,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        # Get genre information if provided
+        genre_data = None
+        if genre:
+            if isinstance(genre, int):
+                try:
+                    genre_obj = Genre.objects.get(id=genre)
+                    genre_data = {
+                        "id": genre_obj.id,
+                        "name": genre_obj.name
+                    }
+                except Genre.DoesNotExist:
+                    pass
+            elif hasattr(genre, 'id') and hasattr(genre, 'name'):
+                genre_data = {
+                    "id": genre.id,
+                    "name": genre.name
+                }
+        
+        # Save filter data in JSON format
+        event.data = {
+            'genre': genre_data,
+            'year': year,
+            'filters_applied': {
+                'genre': genre_data is not None,
+                'year': year is not None
+            }
+        }
+        
         return event
 
     @classmethod

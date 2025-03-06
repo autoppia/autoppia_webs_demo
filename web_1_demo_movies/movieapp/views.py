@@ -18,13 +18,23 @@ from events.models import Event
 
 def index(request):
     """
-    Vista principal: muestra la lista de películas con filtros de búsqueda y género.
+    Vista principal que muestra la lista de películas con opciones de búsqueda y filtrado.
     """
+    # Obtener todos los géneros para el dropdown de filtro
     all_genres = Genre.objects.all().order_by('name')
+    
+    # Obtener años disponibles para el filtro
+    available_years = Movie.objects.values_list('year', flat=True).distinct().order_by('-year')
+    
+    # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get('search', '')
     genre_filter = request.GET.get('genre', '')
+    year_filter = request.GET.get('year', '')
+    
+    # Comenzar con todas las películas
     movies = Movie.objects.all()
-
+    
+    # Aplicar filtro de búsqueda si se proporciona
     if search_query:
         movies = movies.filter(
             Q(name__icontains=search_query) |
@@ -32,27 +42,59 @@ def index(request):
             Q(director__icontains=search_query) |
             Q(cast__icontains=search_query)
         ).distinct()
-        # Registrar evento de búsqueda
+        
+        # Crear evento de búsqueda
         search_event = Event.create_search_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
             query=search_query
         )
         search_event.save()
-
+    
+    # Verificar si se aplicó algún filtro (género o año)
+    filter_applied = False
+    genre_obj = None
+    year_value = None
+    
+    # Aplicar filtro de género si se proporciona
     if genre_filter:
+        filter_applied = True
         try:
             genre_id = int(genre_filter)
-            genre = Genre.objects.get(id=genre_id)
-            movies = movies.filter(genres=genre)
+            genre_obj = Genre.objects.get(id=genre_id)
+            movies = movies.filter(genres=genre_obj)
         except (ValueError, Genre.DoesNotExist):
+            # ID de género inválido, ignorar filtro
             pass
-
+    
+    # Aplicar filtro de año si se proporciona
+    if year_filter:
+        filter_applied = True
+        try:
+            year_value = int(year_filter)
+            movies = movies.filter(year=year_value)
+        except ValueError:
+            # Valor de año inválido, ignorar filtro
+            pass
+    
+    # Crear evento de filtro si se aplicó algún filtro
+    if filter_applied:
+        from events.models import Event
+        filter_event = Event.create_filter_film_event(
+            user=request.user if request.user.is_authenticated else None,
+            web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+            genre=genre_obj,
+            year=year_value
+        )
+        filter_event.save()
+    
     context = {
         'movie_list': movies,
         'search_query': search_query,
         'genres': all_genres,
-        'selected_genre': genre_filter
+        'available_years': available_years,
+        'selected_genre': genre_filter,
+        'selected_year': year_filter
     }
     return render(request, 'index.html', context)
 
