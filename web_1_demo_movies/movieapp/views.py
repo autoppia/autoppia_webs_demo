@@ -15,9 +15,6 @@ from .forms import (
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
 from events.models import Event
 
-# =============================================================================
-#                            VISTAS DE PELÍCULAS
-# =============================================================================
 
 def index(request):
     """
@@ -63,6 +60,10 @@ def about(request):
     """Vista de la página "Acerca de"."""
     return render(request, 'about.html')
 
+# =============================================================================
+#                            VISTAS DE PELÍCULAS
+# =============================================================================
+
 def detail(request, movie_id):
     """
     Vista de detalle de película: muestra información, películas relacionadas y comentarios.
@@ -106,55 +107,6 @@ def detail(request, movie_id):
         'comments': comments
     }
     return render(request, "details.html", context)
-
-def add_comment(request, movie_id):
-    """
-    Vista para agregar un comentario a una película.
-    Registra el evento de añadir comentario y, si la solicitud es AJAX, devuelve una respuesta JSON.
-    """
-    movie = get_object_or_404(Movie, id=movie_id)
-
-    if request.method == 'POST':
-        name = request.POST.get('name', '')
-        if request.user.is_authenticated:
-            name = request.user.username
-
-        content = request.POST.get('content', '')
-
-        if name and content:
-            comment = Comment.objects.create(
-                movie=movie,
-                name=name,
-                content=content
-            )
-            # Registrar evento de ADD_COMMENT
-            add_comment_event = Event.create_add_comment_event(
-                user=request.user if request.user.is_authenticated else None,
-                web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
-                comment=comment,
-                movie=movie
-            )
-            add_comment_event.save()
-
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'status': 'success',
-                    'comment': {
-                        'name': comment.name,
-                        'content': comment.content,
-                        'created_at': comment.created_at.strftime('%b %d, %Y, %I:%M %p'),
-                        'time_ago': f"{(timezone.now() - comment.created_at).days} days ago"
-                                    if (timezone.now() - comment.created_at).days > 0 
-                                    else "Today",
-                        'avatar': comment.avatar.url if comment.avatar else None
-                    }
-                })
-
-            messages.success(request, 'Your comment has been added successfully!')
-            return redirect('movieapp:detail', movie_id=movie.id)
-
-    messages.error(request, 'There was a problem with your comment.')
-    return redirect('movieapp:detail', movie_id=movie.id)
 
 def add_movie(request):
     """
@@ -258,6 +210,56 @@ def delete_movie(request, id):
         messages.success(request, 'Movie deleted successfully.')
         return redirect('/')
     return render(request, 'delete.html', {'movie': movie})
+
+def add_comment(request, movie_id):
+    """
+    Vista para agregar un comentario a una película.
+    Registra el evento de añadir comentario y, si la solicitud es AJAX, devuelve una respuesta JSON.
+    """
+    movie = get_object_or_404(Movie, id=movie_id)
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        if request.user.is_authenticated:
+            name = request.user.username
+
+        content = request.POST.get('content', '')
+
+        if name and content:
+            comment = Comment.objects.create(
+                movie=movie,
+                name=name,
+                content=content
+            )
+            # Registrar evento de ADD_COMMENT
+            add_comment_event = Event.create_add_comment_event(
+                user=request.user if request.user.is_authenticated else None,
+                web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+                comment=comment,
+                movie=movie
+            )
+            add_comment_event.save()
+
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'comment': {
+                        'name': comment.name,
+                        'content': comment.content,
+                        'created_at': comment.created_at.strftime('%b %d, %Y, %I:%M %p'),
+                        'time_ago': f"{(timezone.now() - comment.created_at).days} days ago"
+                                    if (timezone.now() - comment.created_at).days > 0 
+                                    else "Today",
+                        'avatar': comment.avatar.url if comment.avatar else None
+                    }
+                })
+
+            messages.success(request, 'Your comment has been added successfully!')
+            return redirect('movieapp:detail', movie_id=movie.id)
+
+    messages.error(request, 'There was a problem with your comment.')
+    return redirect('movieapp:detail', movie_id=movie.id)
+
 
 def genre_list(request):
     """
@@ -412,6 +414,19 @@ def profile_view(request):
         profile = UserProfile.objects.create(user=user)
 
     if request.method == 'POST':
+        # Save original values for change tracking
+        previous_values = {
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'bio': profile.bio,
+            'location': profile.location,
+            'website': profile.website,
+            'has_profile_pic': bool(profile.profile_pic),
+            'favorite_genres': [genre.name for genre in profile.favorite_genres.all()]
+        }
+
+        # Get form data
         first_name = request.POST.get('first_name', '')
         last_name = request.POST.get('last_name', '')
         email = request.POST.get('email', '')
@@ -419,6 +434,7 @@ def profile_view(request):
         location = request.POST.get('location', '')
         website = request.POST.get('website', '')
 
+        # Update user model fields
         user.first_name = first_name
         user.last_name = last_name
         if email != user.email and User.objects.filter(email=email).exists():
@@ -427,13 +443,16 @@ def profile_view(request):
             user.email = email
             user.save()
 
+        # Update profile fields
         profile.bio = bio
         profile.location = location
         profile.website = website
 
+        # Process profile picture if provided
         if 'profile_pic' in request.FILES:
             profile.profile_pic = request.FILES['profile_pic']
 
+        # Process favorite genres
         if 'favorite_genres' in request.POST:
             profile.favorite_genres.clear()
             genre_ids = request.POST.getlist('favorite_genres')
@@ -444,10 +463,23 @@ def profile_view(request):
                 except (ValueError, Genre.DoesNotExist):
                     pass
 
+        # Save profile changes
         profile.save()
+        
+        # Create EDIT_USER event
+        from events.models import Event
+        edit_user_event = Event.create_edit_user_event(
+            user=user,
+            web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+            profile=profile,
+            previous_values=previous_values
+        )
+        edit_user_event.save()
+        
         messages.success(request, 'Your profile has been updated successfully!')
         return redirect('movieapp:profile')
 
+    # For GET requests, display the form
     all_genres = Genre.objects.all().order_by('name')
     context = {
         'profile': profile,

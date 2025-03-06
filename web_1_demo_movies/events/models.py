@@ -15,6 +15,7 @@ class EventName(models.TextChoices):
     LOGIN = 'LOGIN', 'User Login'
     LOGOUT = 'LOGOUT', 'User Logout'
     CONTACT = 'CONTACT', 'Contact Message'  
+    EDIT_USER = 'EDIT_USER', 'Edit User Profile'  
 
 
 class Event(models.Model):
@@ -32,7 +33,6 @@ class Event(models.Model):
     data = models.JSONField(default=dict)
     
     # Campo adicional para búsquedas específicas
-    search_query = models.CharField(max_length=255, null=True, blank=True)
     
     class Meta:
         indexes = [
@@ -83,7 +83,6 @@ class Event(models.Model):
             event_name=EventName.SEARCH_FILM,
             user=user,
             web_agent_id=web_agent_id,
-            search_query=query
         )
         event.data = {
             'query': query,
@@ -260,4 +259,37 @@ class Event(models.Model):
         event.data = {
             'username': user.username,
         }
+        return event
+
+
+    @classmethod
+    def create_edit_user_event(cls, user, web_agent_id, profile, previous_values=None):
+        """Factory method to create an edit user profile event"""
+        event = cls(
+            event_name=EventName.EDIT_USER,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        # Get favorite genres as a list of dictionaries
+        favorite_genres = []
+        if hasattr(profile, 'favorite_genres') and profile.favorite_genres.exists():
+            favorite_genres = [{"id": genre.id, "name": genre.name} for genre in profile.favorite_genres.all()]
+        
+        # Save user and profile data in JSON format
+        event.data = {
+            'user_id': user.id,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'profile_id': profile.id if profile else None,
+            'bio': profile.bio if profile else None,
+            'location': profile.location if profile else None,
+            'website': profile.website if profile else None,
+            'has_profile_pic': bool(profile.profile_pic) if profile and hasattr(profile, 'profile_pic') else False,
+            'favorite_genres': favorite_genres,
+            'previous_values': previous_values or {}
+        }
+        
         return event
