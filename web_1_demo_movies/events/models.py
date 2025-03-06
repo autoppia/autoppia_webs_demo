@@ -14,6 +14,7 @@ class EventName(models.TextChoices):
     REGISTRATION = 'REGISTRATION', 'User Registration'
     LOGIN = 'LOGIN', 'User Login'
     LOGOUT = 'LOGOUT', 'User Logout'
+    CONTACT = 'CONTACT', 'Contact Message'  
 
 
 class Event(models.Model):
@@ -199,7 +200,27 @@ class Event(models.Model):
             }
         }
         return event
-
+    # --------------------- CONTACT --------------------------------
+    @classmethod
+    def create_contact_event(cls, user, web_agent_id, contact):
+        """Factory method para crear un evento de contacto"""
+        event = cls(
+            event_name=EventName.CONTACT,
+            user=user,
+            web_agent_id=web_agent_id
+        )
+        
+        # Guardar datos del mensaje de contacto en formato JSON
+        event.data = {
+            'id': contact.id,
+            'name': contact.name,
+            'email': contact.email,
+            'subject': contact.subject,
+            'message': contact.message,
+            'created_at': contact.created_at.isoformat() if hasattr(contact, 'created_at') and contact.created_at else None
+        }
+        
+        return event
     # -------------------- EVENTOS DE USUARIO --------------------
 
     @classmethod

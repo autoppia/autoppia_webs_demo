@@ -278,9 +278,12 @@ def genre_detail(request, genre_id):
     }
     return render(request, 'genre_detail.html', context)
 
+# =============================================================================
+#                        CONTACT
+# =============================================================================
 def contact(request):
     """
-    Vista de contacto: guarda el mensaje en la base de datos y evita reenvíos.
+    Vista de contacto: guarda el mensaje en la base de datos y crea un evento.
     """
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -289,12 +292,23 @@ def contact(request):
             email = form.cleaned_data['email']
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
-            ContactMessage.objects.create(
+            
+            # Crear el mensaje de contacto
+            contact_message = ContactMessage.objects.create(
                 name=name,
                 email=email,
                 subject=subject,
                 message=message
             )
+            
+            # Crear evento de CONTACT
+            contact_event = Event.create_contact_event(
+                user=request.user if request.user.is_authenticated else None,
+                web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+                contact=contact_message
+            )
+            contact_event.save()
+            
             messages.success(request, 'Your message has been received successfully. We will review it soon!')
             return redirect('movieapp:contact')
     else:
