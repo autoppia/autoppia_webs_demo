@@ -6,27 +6,28 @@ from django.utils import timezone
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 from .forms import (
     MovieForm, CommentForm, CustomLoginForm, SignUpForm, 
-    UserProfileForm, UserForm,ContactForm
+    UserProfileForm, UserForm, ContactForm
 )
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
 from events.models import Event
 
-# Create your views here.
+# =============================================================================
+#                            VISTAS DE PELÍCULAS
+# =============================================================================
+
 def index(request):
-    # Obtener todos los géneros para el dropdown de filtro
+    """
+    Vista principal: muestra la lista de películas con filtros de búsqueda y género.
+    """
     all_genres = Genre.objects.all().order_by('name')
-    
-    # Obtener parámetros de búsqueda
     search_query = request.GET.get('search', '')
     genre_filter = request.GET.get('genre', '')
-    
-    # Comenzar con todas las películas
     movies = Movie.objects.all()
-    
-    # Aplicar filtro de búsqueda si se proporciona
+
     if search_query:
         movies = movies.filter(
             Q(name__icontains=search_query) |
@@ -34,25 +35,22 @@ def index(request):
             Q(director__icontains=search_query) |
             Q(cast__icontains=search_query)
         ).distinct()
-        
-        # Crear y guardar el evento de búsqueda
+        # Registrar evento de búsqueda
         search_event = Event.create_search_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
             query=search_query
         )
         search_event.save()
-    
-    # Aplicar filtro de género si se proporciona
+
     if genre_filter:
         try:
             genre_id = int(genre_filter)
             genre = Genre.objects.get(id=genre_id)
             movies = movies.filter(genres=genre)
         except (ValueError, Genre.DoesNotExist):
-            # ID de género inválido, ignorar filtro
             pass
-    
+
     context = {
         'movie_list': movies,
         'search_query': search_query,
@@ -62,47 +60,46 @@ def index(request):
     return render(request, 'index.html', context)
 
 def about(request):
+    """Vista de la página "Acerca de"."""
     return render(request, 'about.html')
+
 def detail(request, movie_id):
+    """
+    Vista de detalle de película: muestra información, películas relacionadas y comentarios.
+    Además, registra el evento de visualización de detalle.
+    """
     movie = get_object_or_404(Movie, id=movie_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", 0)
-    # Registrar evento solo si el usuario está autenticado
-    if request.user.is_authenticated:
-        detail_event = Event.create_film_detail_event(request.user, web_agent_id, movie)
-        detail_event.save()
-    else:
-        # Para usuarios anónimos puedes crear el evento sin usuario o no crear evento
-        detail_event = Event.create_film_detail_event(None, web_agent_id, movie)
-        detail_event.save()
+
+    # Registrar evento de detalle de película
+    detail_event = Event.create_film_detail_event(
+        request.user if request.user.is_authenticated else None,
+        web_agent_id,
+        movie
+    )
+    detail_event.save()
+
+    # Películas relacionadas
     related_movies = []
     if movie.genres.exists():
-        # Obtener películas que comparten al menos un género con la película actual,
-        # excluyendo la película actual
         related_movies = Movie.objects.filter(
             genres__in=movie.genres.all()
         ).exclude(id=movie.id).distinct()[:4]
-    
-    # Si no tenemos suficientes películas relacionadas por género, completar con películas del mismo año
+
     if len(related_movies) < 4:
-        more_movies = Movie.objects.filter(
-            year=movie.year
-        ).exclude(
+        more_movies = Movie.objects.filter(year=movie.year).exclude(
             id__in=[m.id for m in list(related_movies) + [movie]]
         )[:4-len(related_movies)]
-        
         related_movies = list(related_movies) + list(more_movies)
-        
-    # Si aún no tenemos 4 películas, agregar algunas aleatorias
+
     if len(related_movies) < 4:
         random_movies = Movie.objects.exclude(
             id__in=[m.id for m in list(related_movies) + [movie]]
         ).order_by('?')[:4-len(related_movies)]
-        
         related_movies = list(related_movies) + list(random_movies)
-    
-    # Obtener comentarios
+
     comments = movie.comments.all()
-    
+
     context = {
         'movie': movie,
         'related_movies': related_movies,
@@ -111,24 +108,26 @@ def detail(request, movie_id):
     return render(request, "details.html", context)
 
 def add_comment(request, movie_id):
+    """
+    Vista para agregar un comentario a una película.
+    Registra el evento de añadir comentario y, si la solicitud es AJAX, devuelve una respuesta JSON.
+    """
     movie = get_object_or_404(Movie, id=movie_id)
-    
+
     if request.method == 'POST':
         name = request.POST.get('name', '')
         if request.user.is_authenticated:
             name = request.user.username
-            
+
         content = request.POST.get('content', '')
-        
+
         if name and content:
             comment = Comment.objects.create(
                 movie=movie,
                 name=name,
                 content=content
             )
-            
-            # Crear evento de ADD_COMMENT
-            from events.models import Event
+            # Registrar evento de ADD_COMMENT
             add_comment_event = Event.create_add_comment_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
@@ -136,8 +135,7 @@ def add_comment(request, movie_id):
                 movie=movie
             )
             add_comment_event.save()
-            
-            # Para solicitudes AJAX para actualizar la sección de comentarios sin recargar la página
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({
                     'status': 'success',
@@ -145,47 +143,47 @@ def add_comment(request, movie_id):
                         'name': comment.name,
                         'content': comment.content,
                         'created_at': comment.created_at.strftime('%b %d, %Y, %I:%M %p'),
-                        'time_ago': f"{(timezone.now() - comment.created_at).days} days ago" 
-                                  if (timezone.now() - comment.created_at).days > 0 
-                                  else "Today",
+                        'time_ago': f"{(timezone.now() - comment.created_at).days} days ago"
+                                    if (timezone.now() - comment.created_at).days > 0 
+                                    else "Today",
                         'avatar': comment.avatar.url if comment.avatar else None
                     }
                 })
-            
+
             messages.success(request, 'Your comment has been added successfully!')
             return redirect('movieapp:detail', movie_id=movie.id)
-    
+
     messages.error(request, 'There was a problem with your comment.')
     return redirect('movieapp:detail', movie_id=movie.id)
 
 def add_movie(request):
+    """
+    Vista para agregar una nueva película y registrar el evento de ADD_FILM.
+    """
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES)
         if form.is_valid():
             movie = form.save()
-            
-            # Crear evento de ADD_FILM
-            from events.models import Event
             add_film_event = Event.create_add_film_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
                 movie=movie
             )
             add_film_event.save()
-            
             messages.success(request, 'Movie added successfully.')
             return redirect('movieapp:index')
         else:
             messages.error(request, 'Please correct the errors in the form.')
     else:
-        form = MovieForm()  # Empty form for GET request
-    
+        form = MovieForm()
     return render(request, 'add.html', {'form': form})
-    
+
 def update_movie(request, id):
+    """
+    Vista para actualizar una película existente.
+    Registra el evento de EDIT_FILM si se detectan cambios.
+    """
     movie = get_object_or_404(Movie, id=id)
-    
-    # Guardar los valores originales para trackear cambios
     original_values = {
         'name': movie.name,
         'desc': movie.desc,
@@ -197,15 +195,12 @@ def update_movie(request, id):
         'rating': float(movie.rating) if movie.rating else None,
         'genres': [genre.name for genre in movie.genres.all()]
     }
-    
+
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES, instance=movie)
         if form.is_valid():
             updated_movie = form.save()
-            
-            # Determinar qué campos han cambiado
             changed_fields = []
-            
             if updated_movie.name != original_values['name']:
                 changed_fields.append('name')
             if updated_movie.desc != original_values['desc']:
@@ -220,20 +215,14 @@ def update_movie(request, id):
                 changed_fields.append('duration')
             if updated_movie.trailer_url != original_values['trailer_url']:
                 changed_fields.append('trailer_url')
-            
-            # Comparar rating (teniendo en cuenta posibles None)
             current_rating = float(updated_movie.rating) if updated_movie.rating else None
             if current_rating != original_values['rating']:
                 changed_fields.append('rating')
-            
-            # Comparar géneros
             updated_genres = [genre.name for genre in updated_movie.genres.all()]
             if set(updated_genres) != set(original_values['genres']):
                 changed_fields.append('genres')
-            
-            # Crear evento de EDIT_FILM solo si hay cambios
+
             if changed_fields:
-                from events.models import Event
                 edit_film_event = Event.create_edit_film_event(
                     user=request.user if request.user.is_authenticated else None,
                     web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
@@ -242,19 +231,22 @@ def update_movie(request, id):
                     changed_fields=changed_fields
                 )
                 edit_film_event.save()
-            
+
             messages.success(request, 'Movie updated successfully.')
             return redirect('movieapp:detail', movie_id=id)
         else:
             messages.error(request, 'Please correct the errors in the form.')
     else:
         form = MovieForm(instance=movie)
-    
+
     return render(request, 'edit.html', {'form': form, 'movie': movie})
 
 def delete_movie(request, id):
+    """
+    Vista para eliminar una película y registrar el evento de DELETE_FILM.
+    """
     movie = get_object_or_404(Movie, id=id)
-    
+
     if request.method == 'POST':
         delete_film_event = Event.create_delete_film_event(
             user=request.user if request.user.is_authenticated else None,
@@ -262,29 +254,34 @@ def delete_movie(request, id):
             movie=movie
         )
         delete_film_event.save()
-        
         movie.delete()
-        
         messages.success(request, 'Movie deleted successfully.')
         return redirect('/')
-    
     return render(request, 'delete.html', {'movie': movie})
 
 def genre_list(request):
+    """
+    Vista que muestra la lista de géneros.
+    """
     genres = Genre.objects.all()
     return render(request, 'genres.html', {'genres': genres})
 
 def genre_detail(request, genre_id):
+    """
+    Vista que muestra los detalles de un género y las películas asociadas.
+    """
     genre = get_object_or_404(Genre, id=genre_id)
     movies = Movie.objects.filter(genres=genre)
-    
     context = {
         'genre': genre,
         'movies': movies
     }
     return render(request, 'genre_detail.html', context)
-# Vista de contacto simplificada - Solo guarda en la base de datos
+
 def contact(request):
+    """
+    Vista de contacto: guarda el mensaje en la base de datos y evita reenvíos.
+    """
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -292,165 +289,137 @@ def contact(request):
             email = form.cleaned_data['email']
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
-            
-            # Guardar el mensaje en la base de datos
-            contact_message = ContactMessage.objects.create(
+            ContactMessage.objects.create(
                 name=name,
                 email=email,
                 subject=subject,
                 message=message
             )
-            
-            # Mostrar mensaje de éxito
             messages.success(request, 'Your message has been received successfully. We will review it soon!')
-            
-            # Redireccionar para evitar reenvíos del formulario
             return redirect('movieapp:contact')
     else:
-        form = ContactForm()  # Formulario vacío para solicitudes GET
-    
+        form = ContactForm()
     return render(request, 'contact.html', {'form': form})
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Q
-from django.contrib import messages
-from django.utils import timezone
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse
-from django.contrib.auth.models import User
 
-from .models import Movie, Genre, Comment, UserProfile
+# =============================================================================
+#                         VISTAS DE AUTENTICACIÓN
+# =============================================================================
 
-# Authentication Views
 def login_view(request):
+    """
+    Vista para iniciar sesión.
+    Si el usuario ya está autenticado, redirige a la página principal.
+    """
     if request.user.is_authenticated:
         return redirect('movieapp:index')
-    
-    # Si el usuario ya está autenticado, redirigir a la página principal
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            
-            # Registrar evento de login usando el X-WebAgent-Id del header
             web_agent_id = request.headers.get("X-WebAgent-Id", 0)
             login_event = Event.create_login_event(user, web_agent_id)
             login_event.save()
-            
             next_url = request.GET.get('next', reverse('movieapp:index'))
             messages.success(request, f'Welcome back, {username}!')
             return redirect(next_url)
         else:
             messages.error(request, 'Invalid username or password.')
-    
     return render(request, 'login.html')
 
 def logout_view(request):
+    """
+    Vista para cerrar sesión.
+    Registra el evento de cierre de sesión antes de finalizar la sesión.
+    """
     web_agent_id = request.headers.get("X-WebAgent-Id", 0)
-    register_event = Event.create_logout_event(request.user, web_agent_id)
+    logout_event = Event.create_logout_event(request.user, web_agent_id)
     logout(request)
-    register_event.save()    
+    logout_event.save()
     messages.success(request, 'You have been logged out successfully.')
     return redirect('movieapp:index')
 
 def register_view(request):
+    """
+    Vista para registrar un nuevo usuario.
+    Valida la información, crea el usuario, registra los eventos de registro e inicio de sesión y redirige a la página principal.
+    """
     if request.user.is_authenticated:
         return redirect('movieapp:index')
-    
+
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        
-        # Validación básica
+
         error = False
-        
         if not username or not email or not password1 or not password2:
             messages.error(request, 'All fields are required.')
             error = True
-        
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists.')
             error = True
-            
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Email already in use.')
             error = True
-            
         if password1 != password2:
             messages.error(request, 'Passwords do not match.')
             error = True
-            
         if len(password1) < 8:
             messages.error(request, 'Password must be at least 8 characters long.')
             error = True
-            
+
         if not error:
-            # Crear el usuario
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password1
-            )
-                 
-            # Registrar evento de login usando el X-WebAgent-Id del header
+            user = User.objects.create_user(username=username, email=email, password=password1)
             web_agent_id = request.headers.get("X-WebAgent-Id", 0)
             register_event = Event.create_registration_event(user, web_agent_id)
             register_event.save()
             login(request, user)
             login_event = Event.create_login_event(user, web_agent_id)
             login_event.save()
-            
             messages.success(request, f'Account created successfully. Welcome, {username}!')
             return redirect('movieapp:index')
-    
+
     return render(request, 'register.html')
 
 @login_required
 def profile_view(request):
+    """
+    Vista para mostrar y actualizar el perfil del usuario.
+    Permite actualizar datos personales, email, imagen y géneros favoritos.
+    """
     user = request.user
-    
     try:
         profile = user.profile
     except UserProfile.DoesNotExist:
-        # Si el perfil no existe, créalo
         profile = UserProfile.objects.create(user=user)
-    
+
     if request.method == 'POST':
-        # Actualizar información del usuario
         first_name = request.POST.get('first_name', '')
         last_name = request.POST.get('last_name', '')
         email = request.POST.get('email', '')
         bio = request.POST.get('bio', '')
         location = request.POST.get('location', '')
         website = request.POST.get('website', '')
-        
-        # Actualizar usuario
+
         user.first_name = first_name
         user.last_name = last_name
-        
-        # Verificar si el email ya existe
         if email != user.email and User.objects.filter(email=email).exists():
             messages.error(request, 'Email already in use by another account.')
         else:
             user.email = email
             user.save()
-        
-        # Actualizar perfil
+
         profile.bio = bio
         profile.location = location
         profile.website = website
-        
-        # Manejar la imagen de perfil
+
         if 'profile_pic' in request.FILES:
             profile.profile_pic = request.FILES['profile_pic']
-        
-        # Manejar géneros favoritos
+
         if 'favorite_genres' in request.POST:
             profile.favorite_genres.clear()
             genre_ids = request.POST.getlist('favorite_genres')
@@ -460,18 +429,15 @@ def profile_view(request):
                     profile.favorite_genres.add(genre)
                 except (ValueError, Genre.DoesNotExist):
                     pass
-        
+
         profile.save()
         messages.success(request, 'Your profile has been updated successfully!')
         return redirect('movieapp:profile')
-    
-    # Obtener todos los géneros para el formulario
+
     all_genres = Genre.objects.all().order_by('name')
-    
     context = {
         'profile': profile,
         'genres': all_genres,
         'selected_genres': [g.id for g in profile.favorite_genres.all()]
     }
-    
     return render(request, 'profile.html', context)
