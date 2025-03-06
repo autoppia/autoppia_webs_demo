@@ -127,6 +127,16 @@ def add_comment(request, movie_id):
                 content=content
             )
             
+            # Crear evento de ADD_COMMENT
+            from events.models import Event
+            add_comment_event = Event.create_add_comment_event(
+                user=request.user if request.user.is_authenticated else None,
+                web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+                comment=comment,
+                movie=movie
+            )
+            add_comment_event.save()
+            
             # Para solicitudes AJAX para actualizar la sección de comentarios sin recargar la página
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({
