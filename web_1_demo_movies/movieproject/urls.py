@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("movieapp.urls")),
     path('', include("events.urls")),
-    path('', include("admin.urls")),
+    path('', include("management_admin.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,

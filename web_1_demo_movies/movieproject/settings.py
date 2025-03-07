@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['0.0.0.0','localhost']
 
 INSTALLED_APPS = [
     'movieapp',
-    'admin',
+    'management_admin',
     'events',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'movieproject.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "web3_movies"),
+        "NAME": os.environ.get("DB_NAME", "web1_movies"),
         "USER": os.environ.get("DB_USER", "postgres"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "autoppia_2025"),
         "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
