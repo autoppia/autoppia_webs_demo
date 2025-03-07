@@ -19,16 +19,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if not options['force']:
             self.stdout.write(self.style.WARNING("⚠️ WARNING: This will delete ALL data in the database!"))
-            confirm = input("Are you sure you want to continue? [y/N]: ")
-            if confirm.lower() != 'y':
-                self.stdout.write(self.style.SUCCESS("Reset cancelled."))
-                return
+            self.stdout.write(self.style.SUCCESS("Proceeding with database reset..."))
+        
 
         self.stdout.write(self.style.NOTICE("🔄 Resetting database..."))
-
-        # Get the current Django project module
-        django_project = os.path.basename(settings.BASE_DIR)
-
+        
         # 1. Reset the database
         try:
             # For SQLite
@@ -58,7 +53,7 @@ class Command(BaseCommand):
         # 3. Create test users
         self.stdout.write(self.style.NOTICE("👤 Creating test users..."))
         try:
-            self.run_command('create_user')
+            self.run_command('seed_users')
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"❌ Error creating test users: {e}"))
             return
@@ -66,7 +61,28 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("✅ Database reset and seeded successfully!"))
 
     def run_command(self, *args):
-        """Run a Django management command"""
+        """Run a Django management command and wait for it to complete"""
         cmd = [sys.executable, 'manage.py'] + list(args)
         self.stdout.write(f"Running: {' '.join(cmd)}")
-        subprocess.run(cmd, check=True)
+        
+        # Use subprocess.run with appropriate parameters to ensure waiting
+        # This is a blocking call - it will not return until the process completes
+        self.stdout.write("Waiting for command to complete...")
+        
+        process = subprocess.run(
+            cmd,
+            check=True,            # Raise exception if command fails
+            stdout=subprocess.PIPE, # Capture stdout
+            stderr=subprocess.PIPE, # Capture stderr
+            text=True,             # Return strings rather than bytes
+            encoding='utf-8'       # Specify encoding
+        )
+        
+        self.stdout.write(f"Command completed with return code: {process.returncode}")
+        
+        # Log command output if desired
+        if process.stdout:
+            self.stdout.write(process.stdout)
+        
+        # Return the completed process object in case it's needed
+        return process
