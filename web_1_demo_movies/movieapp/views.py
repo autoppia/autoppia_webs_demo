@@ -112,7 +112,7 @@ def detail(request, movie_id):
     Además, registra el evento de visualización de detalle.
     """
     movie = get_object_or_404(Movie, id=movie_id)
-    web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+    web_agent_id = request.headers.get("X-WebAgent-Id", '0')
 
     # Registrar evento de detalle de película
     detail_event = Event.create_film_detail_event(
@@ -377,7 +377,7 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+            web_agent_id = request.headers.get("X-WebAgent-Id", '0')
             login_event = Event.create_login_event(user, web_agent_id)
             login_event.save()
             next_url = request.GET.get('next', reverse('movieapp:index'))
@@ -392,7 +392,7 @@ def logout_view(request):
     Vista para cerrar sesión.
     Registra el evento de cierre de sesión antes de finalizar la sesión.
     """
-    web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+    web_agent_id = request.headers.get("X-WebAgent-Id", '0')
     logout_event = Event.create_logout_event(request.user, web_agent_id)
     logout(request)
     logout_event.save()
@@ -432,7 +432,7 @@ def register_view(request):
 
         if not error:
             user = User.objects.create_user(username=username, email=email, password=password1)
-            web_agent_id = request.headers.get("X-WebAgent-Id", 0)
+            web_agent_id = request.headers.get("X-WebAgent-Id", '0')
             register_event = Event.create_registration_event(user, web_agent_id)
             register_event.save()
             login(request, user)

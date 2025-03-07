@@ -27,7 +27,7 @@ class Event(models.Model):
     # Campos básicos comunes a todos los eventos
     event_name = models.CharField(max_length=50, choices=EventName.choices)
     timestamp = models.DateTimeField(default=timezone.now)
-    web_agent_id = models.IntegerField()
+    web_agent_id = models.CharField()
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     # Campo JSON para datos específicos del evento
