@@ -1,14 +1,13 @@
 #!/bin/bash
-
-# 1. Ejecutar migraciones en SQLite
+# 1. Execute migrations in SQLite
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
-# 3. Seedear la base de datos
+# 2. Seed users (with optional parameters if needed)
+python manage.py seed_users --start=1 --end=255 --prefix="user" --password="PASSWORD"
+
+# 3. Seed movies
 python manage.py seed_movies
-# 2. Crear usuario de prueba
-python manage.py create_user
 
-
-# 4. Arrancar Gunicorn en el puerto 8003
+# 4. Start Gunicorn on port 8001 (note this was incorrectly commented as 8003)
 exec gunicorn --bind 0.0.0.0:8001 movieproject.wsgi:application
