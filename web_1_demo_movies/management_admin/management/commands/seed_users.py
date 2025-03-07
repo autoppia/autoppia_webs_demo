@@ -1,3 +1,6 @@
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
+from movieapp.models import UserProfile, Genre
 import random
 import time
 import concurrent.futures
@@ -13,29 +16,43 @@ class Command(BaseCommand):
     help = "Seed many test users quickly using bulk_create, with optional parallelization."
 
     def add_arguments(self, parser):
-        parser.add_argument('--start', type=int, default=1,
-                            help='Starting user number (default: 1)')
-        parser.add_argument('--end', type=int, default=255,
-                            help='Ending user number (default: 255)')
-        parser.add_argument('--prefix', type=str, default='user',
-                            help='Username prefix (default: "user")')
-        parser.add_argument('--password', type=str, default='password123',
-                            help='Plain-text password for all users (default: "password123")')
-        parser.add_argument('--profile-pic', type=str, default='/media/gallery/people/default_profile.jpg',
-                            help='Path/URL of profile pic for all users (default: "/media/gallery/people/default_profile.jpg")')
-        parser.add_argument('--batch-size', type=int, default=500,
-                            help='Number of users per batch (default: 500)')
-        parser.add_argument('--workers', type=int, default=4,
-                            help='Number of parallel workers for seeding (default: 4)')
+        parser.add_argument(
+            '--start',
+            type=int,
+            default=1,
+            help='Starting user number (default: 1)'
+        )
+        parser.add_argument(
+            '--end',
+            type=int,
+            default=255,
+            help='Ending user number (default: 255)'
+        )
+        parser.add_argument(
+            '--prefix',
+            type=str,
+            default='user',
+            help='Username prefix (default: "user")'
+        )
+        parser.add_argument(
+            '--password',
+            type=str,
+            default='password123',
+            help='Password for all users (default: "password123")'
+        )
+        parser.add_argument(
+            '--profile-pic',
+            type=str,
+            default='/media/gallery/people/default_profile.jpg',
+            help='Profile picture URL to use for all users (default: "/media/gallery/people/default_profile.jpg")'
+        )
 
     def handle(self, *args, **options):
         start_num = options['start']
         end_num = options['end']
-        prefix = options['prefix']
-        plain_password = options['password']
+        username_prefix = options['prefix']
+        default_password = options['password']
         profile_pic_url = options['profile_pic']
-        batch_size = options['batch_size']
-        max_workers = options['workers']
 
         total_to_create = end_num - start_num + 1
         self.stdout.write(f"\nSeeding {total_to_create} users in batches of {batch_size}...")
@@ -47,14 +64,10 @@ class Command(BaseCommand):
         # Gather all genres for random assignment (optional).
         all_genres = list(Genre.objects.all())
 
-        # Build batch ranges
-        batches = []
-        for bstart in range(start_num, end_num + 1, batch_size):
-            bend = min(bstart + batch_size - 1, end_num)
-            batches.append((bstart, bend))
-
-        # Start timer
-        start_time = time.time()
+        # Create users from start_num to end_num
+        created_count = 0
+        skipped_count = 0
+        error_count = 0
 
         # We'll collect aggregated results here
         aggregated = {
@@ -202,17 +215,8 @@ class Command(BaseCommand):
                     loc = random.choice(locations)
                     web = random.choice(website_templates).format(num=user_index_map[user.username])
 
-                    profiles_to_create.append(
-                        UserProfile(
-                            user=user,
-                            bio=bio,
-                            location=loc,
-                            website=web,
-                            profile_pic=profile_pic_url
-                        )
-                    )
-
-                UserProfile.objects.bulk_create(profiles_to_create, batch_size=len(profiles_to_create))
+                # Set the same profile picture URL for all users
+                profile.profile_pic = profile_pic_url
 
                 # 3) Optionally assign favorite genres if desired (M2M). This is typically
                 #    done with multiple insert statements, but can be done in a second pass:
@@ -223,4 +227,22 @@ class Command(BaseCommand):
             # If the transaction fails, mark them all as errors
             result["errors"] = len(users_to_create)
 
-        return result
+                # Progress indicator (every 10 users or at the end)
+                if i % 10 == 0 or i == end_num:
+                    self.stdout.write(f"Progress: Created {created_count} users so far...")
+
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Error creating user {username}: {e}"))
+                error_count += 1
+
+        # Final summary
+        self.stdout.write(self.style.SUCCESS(f"Completed: Created {created_count} users"))
+        if skipped_count > 0:
+            self.stdout.write(self.style.WARNING(f"Skipped {skipped_count} existing users"))
+        if error_count > 0:
+            self.stdout.write(self.style.ERROR(f"Encountered {error_count} errors"))
+
+        self.stdout.write(f"Users created with username format: {username_prefix}[1-{end_num}]")
+        self.stdout.write(f"Email format: {username_prefix}[1-{end_num}]@example.com")
+        self.stdout.write(f"Password format: {default_password}[1-{end_num}]")
+        self.stdout.write(f"All users have the same profile picture: {profile_pic_url}")
