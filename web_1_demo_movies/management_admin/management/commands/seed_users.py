@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from movieapp.models import UserProfile, Genre
-from django.core.files.base import ContentFile
-import os
 import random
 
 
@@ -34,12 +32,19 @@ class Command(BaseCommand):
             default='password123',
             help='Password for all users (default: "password123")'
         )
+        parser.add_argument(
+            '--profile-pic',
+            type=str,
+            default='/media/gallery/people/default_profile.jpg',
+            help='Profile picture URL to use for all users (default: "/media/gallery/people/default_profile.jpg")'
+        )
 
     def handle(self, *args, **options):
         start_num = options['start']
         end_num = options['end']
         username_prefix = options['prefix']
         default_password = options['password']
+        profile_pic_url = options['profile_pic']
 
         # Bio options for variety
         bio_templates = [
@@ -68,12 +73,6 @@ class Command(BaseCommand):
         all_genres = list(Genre.objects.all())
         if not all_genres:
             self.stdout.write(self.style.WARNING("No genres found in database. Users will be created without favorite genres."))
-
-        # Get available profile pictures
-        profile_pic_dir = os.path.join('media', 'gallery', 'people')
-        profile_pics = []
-        if os.path.exists(profile_pic_dir):
-            profile_pics = [f for f in os.listdir(profile_pic_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
 
         # Create users from start_num to end_num
         created_count = 0
@@ -123,16 +122,8 @@ class Command(BaseCommand):
                 website_template = random.choice(website_templates)
                 profile.website = website_template.format(num=i)
 
-                # Set random profile picture if available
-                if profile_pics:
-                    profile_pic_name = random.choice(profile_pics)
-                    profile_pic_path = os.path.join(profile_pic_dir, profile_pic_name)
-
-                    try:
-                        with open(profile_pic_path, 'rb') as f:
-                            profile.profile_pic.save(f'profile_{i}.jpg', ContentFile(f.read()), save=False)
-                    except Exception as e:
-                        self.stdout.write(self.style.WARNING(f"Error setting profile picture for {username}: {e}"))
+                # Set the same profile picture URL for all users
+                profile.profile_pic = profile_pic_url
 
                 # Add favorite genres
                 if user_genres:
@@ -160,4 +151,5 @@ class Command(BaseCommand):
 
         self.stdout.write(f"Users created with username format: {username_prefix}[1-{end_num}]")
         self.stdout.write(f"Email format: {username_prefix}[1-{end_num}]@example.com")
-        self.stdout.write(f"Password for all users: {default_password}")
+        self.stdout.write(f"Password format: {default_password}[1-{end_num}]")
+        self.stdout.write(f"All users have the same profile picture: {profile_pic_url}")
