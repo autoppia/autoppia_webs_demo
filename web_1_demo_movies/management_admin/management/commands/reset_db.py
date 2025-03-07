@@ -20,10 +20,9 @@ class Command(BaseCommand):
         if not options['force']:
             self.stdout.write(self.style.WARNING("⚠️ WARNING: This will delete ALL data in the database!"))
             self.stdout.write(self.style.SUCCESS("Proceeding with database reset..."))
-        
 
         self.stdout.write(self.style.NOTICE("🔄 Resetting database..."))
-        
+
         # 1. Reset the database
         try:
             # For SQLite
@@ -64,25 +63,25 @@ class Command(BaseCommand):
         """Run a Django management command and wait for it to complete"""
         cmd = [sys.executable, 'manage.py'] + list(args)
         self.stdout.write(f"Running: {' '.join(cmd)}")
-        
+
         # Use subprocess.run with appropriate parameters to ensure waiting
         # This is a blocking call - it will not return until the process completes
         self.stdout.write("Waiting for command to complete...")
-        
+
         process = subprocess.run(
             cmd,
             check=True,            # Raise exception if command fails
-            stdout=subprocess.PIPE, # Capture stdout
-            stderr=subprocess.PIPE, # Capture stderr
+            stdout=subprocess.PIPE,  # Capture stdout
+            stderr=subprocess.PIPE,  # Capture stderr
             text=True,             # Return strings rather than bytes
             encoding='utf-8'       # Specify encoding
         )
-        
+
         self.stdout.write(f"Command completed with return code: {process.returncode}")
-        
+
         # Log command output if desired
         if process.stdout:
             self.stdout.write(process.stdout)
-        
+
         # Return the completed process object in case it's needed
         return process
