@@ -36,7 +36,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Exponer puerto
-EXPOSE 8001
+EXPOSE 8000
 
 # Configurar entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
