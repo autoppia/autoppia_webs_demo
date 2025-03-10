@@ -35,10 +35,10 @@ echo "🔄 Deploying web demos..."
 
 cd ..
 
-deploy_project "web_3_demo_django_jobs"
+# deploy_project "web_3_demo_django_jobs"
 
 # Add more projects as needed with:
-# deploy_project "web_1_movies" 
+deploy_project "web_1_movies" 
 cd scripts
 
 echo "✨ Web demos deployment complete!"
