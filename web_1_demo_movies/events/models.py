@@ -78,7 +78,7 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_search_event(cls, user, web_agent_id, query):
+    def create_search_film_event(cls, user, web_agent_id, query):
         """Factory method para crear un evento de búsqueda de película."""
         event = cls(
             event_name=EventName.SEARCH_FILM,

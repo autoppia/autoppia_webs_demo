@@ -42,14 +42,14 @@ def index(request):
             Q(director__icontains=search_query) |
             Q(cast__icontains=search_query)
         ).distinct()
-        
-        # Crear evento de búsqueda
-        search_event = Event.create_search_event(
-            user=request.user if request.user.is_authenticated else None,
-            web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
-            query=search_query
-        )
-        search_event.save()
+    
+    from events.models import Event
+    search_event = Event.create_search_film_event(
+        user=request.user if request.user.is_authenticated else None,
+        web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
+        query=search_query
+    )
+    search_event.save()
     
     # Verificar si se aplicó algún filtro (género o año)
     filter_applied = False
