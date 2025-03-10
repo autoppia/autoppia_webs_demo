@@ -435,9 +435,9 @@ def register_view(request):
             web_agent_id = request.headers.get("X-WebAgent-Id", '0')
             register_event = Event.create_registration_event(user, web_agent_id)
             register_event.save()
-            login(request, user)
-            login_event = Event.create_login_event(user, web_agent_id)
-            login_event.save()
+            # login(request, user)
+            # login_event = Event.create_login_event(user, web_agent_id)
+            # login_event.save()
             messages.success(request, f'Account created successfully. Welcome, {username}!')
             return redirect('movieapp:index')
 
