@@ -23,21 +23,21 @@ def reset_database(request):
             'status': 'error',
             'message': 'This endpoint is only available in development mode'
         }, status=403)
-    
+
     start_time = time.time()
     success = True
     error_message = None
-    
+
     try:
         # Call our custom reset_db command with --force to skip confirmation
         call_command('reset_db', force=True)
     except Exception as e:
         success = False
         error_message = str(e)
-    
+
     end_time = time.time()
     duration = round(end_time - start_time, 2)
-    
+
     # Log the result
     if success:
         message = f"Database reset completed successfully in {duration} seconds"
