@@ -5,7 +5,6 @@ set -e
 
 echo "🚀 Setting up web demos..."
 
-# Default ports
 WEB_PORT_DEFAULT=8000
 POSTGRES_PORT_DEFAULT=5434
 
@@ -26,36 +25,41 @@ for ARG in "$@"; do
   esac
 done
 
-# If not provided, use defaults
+# Defaults if not provided
 WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 
 echo "Using web port: $WEB_PORT"
 echo "Using Postgres port: $POSTGRES_PORT"
 
-# Check if Docker is installed
+# Check Docker installed
 if ! command -v docker &> /dev/null; then
-    echo "❌ Docker not found. Please run install_docker.sh first"
+    echo "❌ Docker not found."
     exit 1
 fi
 
-# Check if Docker is running
+# Check Docker running
 if ! systemctl is-active --quiet docker; then
     echo "🔄 Starting Docker service..."
     sudo systemctl start docker
 fi
 
-# Export environment variables so docker-compose can use them
+# Export variables so Compose can read them
 export WEB_PORT
 export POSTGRES_PORT
 
-# Function to deploy a project directory
+# A unique project name based on the web port (could also include Postgres port)
+PROJECT_NAME="movies_${WEB_PORT}"
+
 deploy_project() {
     local project_dir="$1"
     if [ -d "$project_dir" ]; then
         echo "📂 Deploying $project_dir..."
         cd "$project_dir"
-        sudo docker compose up -d --build
+        
+        # Use the -p flag so Compose creates unique containers/volumes
+        sudo docker compose -p "$PROJECT_NAME" up -d --build
+        
         cd ..
     else
         echo "⚠️ Project directory $project_dir not found."
@@ -64,13 +68,8 @@ deploy_project() {
 
 echo "🔄 Deploying web demos..."
 
-# Go up one level to find project directories
 cd ..
-
-# Deploy your web_1_demo_movies (you can add more deploy_project calls below)
 deploy_project "web_1_demo_movies"
-
-# Return to scripts directory
 cd scripts
 
 echo "✨ Web demos deployment complete!"
