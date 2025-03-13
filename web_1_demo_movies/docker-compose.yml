@@ -2,18 +2,22 @@ version: '3.8'
 
 services:
   web:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
-    container_name: django_movie_app
+    # Dynamically name the container to avoid conflicts if multiple instances
+    container_name: "django_movie_app_${WEB_PORT:-8000}"
     volumes:
       - .:/app
       - ./static:/app/static
       - ./media:/app/media
     ports:
-      - "8000:8000"
+      # Map the host port to the container's port 8000
+      - "${WEB_PORT:-8000}:8000"
     environment:
       - DEBUG=0
+      # If you want each instance to have its own *database name*, you can extend 
+      # this pattern. For now we keep it as originally "web3_movies".
       - DB_NAME=web3_movies
       - DB_USER=postgres
       - DB_PASSWORD=autoppia_2025
@@ -21,18 +25,24 @@ services:
       - DB_PORT=5432
     depends_on:
       - db
-  
+
   db:
     image: postgres:latest
-    container_name: postgres_movies_db
+    # Dynamically name this container as well
+    container_name: "postgres_movies_db_${POSTGRES_PORT:-5434}"
     environment:
+      # If you want each instance to store to a differently named DB, you can also 
+      # incorporate the port here, e.g. "web3_movies_${WEB_PORT:-8000}"
       - POSTGRES_DB=web3_movies
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=autoppia_2025
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # Different volume per instance so they don't overwrite each other's DB
+      - postgres_data_${WEB_PORT:-8000}:/var/lib/postgresql/data
     ports:
-      - "5434:5432"
+      # Map the host port to the container's port 5432
+      - "${POSTGRES_PORT:-5434}:5432"
 
 volumes:
-  postgres_data:
+  # Volume name also includes the WEB_PORT so each instance has its own
+  postgres_data_${WEB_PORT:-8000}:

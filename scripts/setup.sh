@@ -1,9 +1,37 @@
 #!/bin/bash
-# setup.sh - Deploy web demo projects
+# setup.sh - Deploy web demo projects with optional custom ports
 
 set -e
 
 echo "🚀 Setting up web demos..."
+
+# Default ports
+WEB_PORT_DEFAULT=8000
+POSTGRES_PORT_DEFAULT=5434
+
+# Parse command line arguments for --web_port and --postgres_port
+for ARG in "$@"; do
+  case $ARG in
+    --web_port=*)
+      WEB_PORT="${ARG#*=}"
+      shift
+      ;;
+    --postgres_port=*)
+      POSTGRES_PORT="${ARG#*=}"
+      shift
+      ;;
+    *)
+      # Unknown option; ignore or handle as needed
+      ;;
+  esac
+done
+
+# If not provided, use defaults
+WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
+POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
+
+echo "Using web port: $WEB_PORT"
+echo "Using Postgres port: $POSTGRES_PORT"
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
@@ -17,7 +45,11 @@ if ! systemctl is-active --quiet docker; then
     sudo systemctl start docker
 fi
 
-# Deploy projects
+# Export environment variables so docker-compose can use them
+export WEB_PORT
+export POSTGRES_PORT
+
+# Function to deploy a project directory
 deploy_project() {
     local project_dir="$1"
     if [ -d "$project_dir" ]; then
@@ -30,15 +62,15 @@ deploy_project() {
     fi
 }
 
-# Deploy each web demo project
 echo "🔄 Deploying web demos..."
 
+# Go up one level to find project directories
 cd ..
 
+# Deploy your web_1_demo_movies (you can add more deploy_project calls below)
+deploy_project "web_1_demo_movies"
 
-deploy_project "web_1_demo_movies" 
-# deploy_project "web_3_demo_django_jobs"
-
+# Return to scripts directory
 cd scripts
 
 echo "✨ Web demos deployment complete!"
