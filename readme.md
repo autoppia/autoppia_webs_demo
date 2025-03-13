@@ -60,7 +60,10 @@ Once Docker is installed, deploy the demo webs:
 chmod +x scripts/setup.sh
 ./scripts/setup.sh
 ```
-
+Deploy with specific ports
+```bash
+ ./setup.sh --web_port=8002 --postgres_port=5436
+```
 ### 3. Verify Installation
 
 Verify that all containers are running:
