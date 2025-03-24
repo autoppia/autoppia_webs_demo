@@ -24,43 +24,32 @@ def reset_database(request):
             'message': 'This endpoint is only available in development mode'
         }, status=403)
 
-    # Optional: Add authentication requirement
-    # if not request.user.is_superuser:
-    #     return JsonResponse({
-    #         'status': 'error',
-    #         'message': 'You must be a superuser to reset the database'
-    #     }, status=403)
+    start_time = time.time()
+    success = True
+    error_message = None
 
-    # Start the reset process in a separate thread
-    # This prevents timeout issues when resetting large databases
-    def reset_process():
-        start_time = time.time()
-        success = True
-        error_message = None
+    try:
+        # Call our custom reset_db command with --force to skip confirmation
+        call_command('reset_db', force=True)
+    except Exception as e:
+        success = False
+        error_message = str(e)
 
-        try:
-            # Call our custom reset_db command with --force to skip confirmation
-            call_command('reset_db', force=True)
-        except Exception as e:
-            success = False
-            error_message = str(e)
+    end_time = time.time()
+    duration = round(end_time - start_time, 2)
 
-        end_time = time.time()
-        duration = round(end_time - start_time, 2)
-
-        # Log the result
-        if success:
-            print(f"Database reset completed successfully in {duration} seconds")
-        else:
-            print(f"Database reset failed after {duration} seconds: {error_message}")
-
-    # Start the reset thread
-    thread = threading.Thread(target=reset_process)
-    thread.daemon = True
-    thread.start()
-
-    # Return immediately with a message that the process has started
-    return JsonResponse({
-        'status': 'success',
-        'message': 'Database reset initiated. This may take a few minutes to complete.'
-    })
+    # Log the result
+    if success:
+        message = f"Database reset completed successfully in {duration} seconds"
+        print(message)
+        return JsonResponse({
+            'status': 'success',
+            'message': message
+        })
+    else:
+        message = f"Database reset failed after {duration} seconds: {error_message}"
+        print(message)
+        return JsonResponse({
+            'status': 'error',
+            'message': message
+        }, status=500)
