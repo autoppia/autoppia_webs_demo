@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block body %}
+<div class="container mt-5">
+    {% for movie in movies %}
+    <div class="card border-0 shadow mb-4">
+        <div class="row no-gutters">
+            <div class="col-md-2">
+                <img src="{{movie.img.url}}" class="card-img" alt="{{movie.name}}" style="height: 250px; object-fit: contain;">
+            </div>
+            <div class="col-md-10">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title">{{movie.name}}</h1>
+                        {% comment %} <span class="badge badge-primary p-2">${{movie.price}}</span> {% endcomment %}
+                        <h3 style="font-size: 18px">${{movie.price}}</h3>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="movie-info mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="text-muted">
+                                    <strong><i class="fas fa-file mr-2"></i>Category:</strong> 
+                                    {% for genre in movie.genres.all %}
+                                    <span class="badge badge-secondary">{{ genre.name }}</span>
+                                    {% empty %}
+                                    <span class="text-muted">Not categorized</span>
+                                    {% endfor %}
+                                </p>
+                                <p class="text-muted">
+                                    <strong><i class="fas fa-star mr-2"></i>Rating:</strong> 
+                                    <span class="text-warning">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= movie.rating|floatformat:"0" %}
+                                                <i class="fas fa-star"></i>
+                                            {% elif forloop.counter <= movie.rating|add:"0.5"|floatformat:"0" %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    ({{movie.rating|floatformat:"1"}}/5)
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-muted">
+                                    <strong><i class="fas fa-user mr-2"></i>Author:</strong> 
+                                    {{ movie.director|default:"Not specified" }}
+                                </p>
+                                <p class="text-muted">
+                                    <strong><i class="fas fa-file mr-2"></i>Pages:</strong> 
+                                    {% if movie.duration %}{{ movie.duration }} pages{% else %}Not specified{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <a class="btn btn-success mr-2 btn-buy">
+                                    <i class="fas fa-wallet mr-1"></i> Buy
+                                </a>
+                                <a class="btn btn-warning" href="{% url 'movieapp:delete_cart' movie.id %}">
+                                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Complete Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    X
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="card_number" placeholder="Card Number" required style="width: 100%; margin-bottom: 10px">
+                    <input type="text" name="exp_date" placeholder="MM/YY" required style="width: 100%; margin-bottom: 10px">
+                    <input type="text" name="cvc" placeholder="CVC" required style="width: 100%; margin-bottom: 10px">
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-close">Close</button>
+                <a type="button" class="btn btn-primary complete-payment" href="{% url 'movieapp:payment_success' %}">Buy</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
