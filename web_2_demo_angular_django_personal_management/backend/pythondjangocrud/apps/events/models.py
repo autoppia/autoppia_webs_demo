@@ -4,9 +4,6 @@ from pythondjangocrud.apps.users.models import User
 
 
 class Web2EventNames(models.TextChoices):
-    LOGIN = "LOGIN", "User Login"
-    LOGOUT = "LOGOUT", "User Logout"
-
     # Attendance Events
     ATTENDANCE_CREATE = "ATTENDANCE_CREATE", "Attendance Created"
     ATTENDANCE_UPDATE = "ATTENDANCE_UPDATE", "Attendance Updated"
