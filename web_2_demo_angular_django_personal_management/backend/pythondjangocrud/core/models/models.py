@@ -9,34 +9,31 @@ class AbstractAudit(models.Model):
     """
     An abstract model that manages the modifications made to a model
     """
+
     is_active = models.BooleanField(
-        _('active'),
+        _("active"),
         default=True,
         help_text=_(
-            'Designates whether this record should be treated as active. '
-            'Unselect this instead of deleting accounts.'
+            "Designates whether this record should be treated as active. "
+            "Unselect this instead of deleting accounts."
         ),
     )
     creation_date = models.DateTimeField(
-        _('creation date'),
-        auto_now_add=True,
-        help_text=_('record creation date')
+        _("creation date"), auto_now_add=True, help_text=_("record creation date")
     )
     created_by = models.CharField(
-        _('username created'),
+        _("username created"),
         max_length=100,  # max length of User.username
-        help_text=_('username that created the record')
+        help_text=_("username that created the record"),
     )
     update_date = models.DateTimeField(
-        _('update date'),
-        auto_now=True,
-        help_text=_('record update date')
+        _("update date"), auto_now=True, help_text=_("record update date")
     )
 
     update_by = models.CharField(
-        _('username updated'),
+        _("username updated"),
         max_length=100,  # max length of User.username
-        help_text=_('username that updated the record')
+        help_text=_("username that updated the record"),
     )
 
     objects = CoreManager()
@@ -51,8 +48,8 @@ class AbstractAudit(models.Model):
         """
         user = get_current_user()
         if user and user.is_authenticated:
-            return getattr(user, user.USERNAME_FIELD, 'system')
-        return 'system'
+            return getattr(user, user.USERNAME_FIELD, "system")
+        return "system"
 
     def set_created_by(self):
         if self.pk is None:
@@ -71,8 +68,9 @@ class AbstractChoice(AbstractAudit):
     """
     An abstract model for and id and name entry (i.e. field).
     """
+
     name = models.CharField(
-        _('name'),
+        _("name"),
         max_length=200,
         blank=True,
         null=True,
@@ -80,7 +78,7 @@ class AbstractChoice(AbstractAudit):
         help_text=_("Name of the choice."),
     )
     code = models.CharField(
-        _('code'),
+        _("code"),
         max_length=20,
         blank=True,
         null=True,

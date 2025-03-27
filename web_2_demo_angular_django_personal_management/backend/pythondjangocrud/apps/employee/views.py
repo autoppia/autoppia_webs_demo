@@ -3,13 +3,15 @@ from rest_framework.viewsets import ModelViewSet
 
 from pythondjangocrud.apps.employee.models import Employee
 from pythondjangocrud.apps.employee.serializers import EmployeeSerializer
+from pythondjangocrud.apps.events.models import Web2EventNames
 from pythondjangocrud.apps.events.utils import create_event
 
 
 class EmployeeViewSet(ModelViewSet):
     """
-        Viewset EmployeeViewSet
+    Viewset EmployeeViewSet
     """
+
     queryset = Employee.objects.actives()
     serializer_class = EmployeeSerializer
     permission_classes = (AllowAny,)
@@ -24,10 +26,10 @@ class EmployeeViewSet(ModelViewSet):
         # Log the event (creating an employee record)
         create_event(
             user=self.request.user,
-            event_type='employee_create',
-            description=f'Employee record created for {employee.name}',
-            data={'employee_id': employee.id, 'name': employee.name},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.EMPLOYEE_CREATE,
+            description=f"Employee record created for {employee.name}",
+            data={"employee_id": employee.id, "name": employee.name},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
     def perform_update(self, serializer):
@@ -40,10 +42,10 @@ class EmployeeViewSet(ModelViewSet):
         # Log the event (updating an employee record)
         create_event(
             user=self.request.user,
-            event_type='employee_update',
-            description=f'Employee record updated for {employee.name}',
-            data={'employee_id': employee.id, 'name': employee.name},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.EMPLOYEE_UPDATE,
+            description=f"Employee record updated for {employee.name}",
+            data={"employee_id": employee.id, "name": employee.name},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
     def perform_destroy(self, instance):
@@ -53,10 +55,10 @@ class EmployeeViewSet(ModelViewSet):
         # Log the event (deleting an employee record)
         create_event(
             user=self.request.user,
-            event_type='employee_delete',
-            description=f'Employee record deleted for {instance.name}',
-            data={'employee_id': instance.id, 'name': instance.name},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.EMPLOYEE_DELETE,
+            description=f"Employee record deleted for {instance.name}",
+            data={"employee_id": instance.id, "name": instance.name},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
         # Perform the deletion

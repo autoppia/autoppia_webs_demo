@@ -1,5 +1,8 @@
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
+from web_2_demo_angular_django_personal_management.backend.pythondjangocrud.apps.events.models import (
+    Web2EventNames,
+)
 
 from pythondjangocrud.apps.events.utils import create_event
 from pythondjangocrud.apps.position.models import Position
@@ -8,8 +11,9 @@ from pythondjangocrud.apps.position.serializers import PositionSerializer
 
 class PositionViewSet(ModelViewSet):
     """
-        Viewset PositionViewSet
+    Viewset PositionViewSet
     """
+
     queryset = Position.objects.actives()
     serializer_class = PositionSerializer
     permission_classes = (AllowAny,)
@@ -24,10 +28,10 @@ class PositionViewSet(ModelViewSet):
         # Log the event (creating a position record)
         create_event(
             user=self.request.user,
-            event_type='position_create',
-            description=f'Position record created for {position.title}',
-            data={'position_id': position.id, 'title': position.title},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.POSITION_CREATE,
+            description=f"Position record created for {position.title}",
+            data={"position_id": position.id, "title": position.title},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
     def perform_update(self, serializer):
@@ -40,11 +44,10 @@ class PositionViewSet(ModelViewSet):
         # Log the event (updating a position record)
         create_event(
             user=self.request.user,
-            event_type='position_update',
-            description=f'Position record updated for {position.title}',
-            data={'position_id': position.id, 'title': position.title},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
-
+            event_type=Web2EventNames.POSITION_UPDATE,
+            description=f"Position record updated for {position.title}",
+            data={"position_id": position.id, "title": position.title},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
     def perform_destroy(self, instance):
@@ -54,10 +57,10 @@ class PositionViewSet(ModelViewSet):
         # Log the event (deleting a position record)
         create_event(
             user=self.request.user,
-            event_type='position_delete',
-            description=f'Position record deleted for {instance.title}',
-            data={'position_id': instance.id, 'title': instance.title},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.POSITION_DELETE,
+            description=f"Position record deleted for {instance.title}",
+            data={"position_id": instance.id, "title": instance.title},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
         # Perform the deletion

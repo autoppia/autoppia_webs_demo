@@ -3,13 +3,15 @@ from rest_framework.viewsets import ModelViewSet
 
 from pythondjangocrud.apps.department.models import Department
 from pythondjangocrud.apps.department.serializers import DepartmentSerializer
+from pythondjangocrud.apps.events.models import Web2EventNames
 from pythondjangocrud.apps.events.utils import create_event
 
 
 class DepartmentViewSet(ModelViewSet):
     """
-        Viewset DepartmentViewSet
+    Viewset DepartmentViewSet
     """
+
     queryset = Department.objects.actives()
     serializer_class = DepartmentSerializer
     permission_classes = (AllowAny,)
@@ -24,10 +26,10 @@ class DepartmentViewSet(ModelViewSet):
         # Log the event (creating a department record)
         create_event(
             user=self.request.user,
-            event_type='department_create',
-            description=f'Department record created for {department.name}',
-            data={'department_id': department.id, 'name': department.name},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.DEPARTMENT_CREATE,
+            description=f"Department record created for {department.name}",
+            data={"department_id": department.id, "name": department.name},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
     def perform_update(self, serializer):
@@ -40,10 +42,10 @@ class DepartmentViewSet(ModelViewSet):
         # Log the event (updating a department record)
         create_event(
             user=self.request.user,
-            event_type='department_update',
-            description=f'Department record updated for {department.name}',
-            data={'department_id': department.id, 'name': department.name},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.DEPARTMENT_UPDATE,
+            description=f"Department record updated for {department.name}",
+            data={"department_id": department.id, "name": department.name},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
     def perform_destroy(self, instance):
@@ -53,10 +55,10 @@ class DepartmentViewSet(ModelViewSet):
         # Log the event (deleting a department record)
         create_event(
             user=self.request.user,
-            event_type='department_delete',
-            description=f'Department record deleted for {instance.name}',
-            data={'department_id': instance.id, 'name': instance.name},
-            web_agent_id=self.request.headers.get("X-WebAgent-Id", None)
+            event_type=Web2EventNames.DEPARTMENT_DELETE,
+            description=f"Department record deleted for {instance.name}",
+            data={"department_id": instance.id, "name": instance.name},
+            web_agent_id=self.request.headers.get("X-WebAgent-Id", None),
         )
 
         # Perform the deletion

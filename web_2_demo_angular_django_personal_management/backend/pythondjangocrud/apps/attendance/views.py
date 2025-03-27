@@ -3,12 +3,15 @@ from rest_framework.viewsets import ModelViewSet
 
 from pythondjangocrud.apps.attendance.models import Attendance
 from pythondjangocrud.apps.attendance.serializers import AttendanceSerializer
+from pythondjangocrud.apps.events.models import Web2EventNames
 from pythondjangocrud.apps.events.utils import create_event
+
 
 class AttendanceViewSet(ModelViewSet):
     """
-        Viewset AttendanceViewSet
+    Viewset AttendanceViewSet
     """
+
     queryset = Attendance.objects.actives()
     serializer_class = AttendanceSerializer
     permission_classes = (AllowAny,)
@@ -23,10 +26,14 @@ class AttendanceViewSet(ModelViewSet):
         # Log the event (creating an attendance record)
         create_event(
             user=self.request.user,
-            event_type='attendance_create',
-            description=f'Attendance record created for {attendance.employee_id.first_name} on {attendance.date.isoformat()}',
-            data={'attendance_id': attendance.id, 'user': attendance.employee_id.id, 'date': attendance.date.isoformat()},
-            miner_id=self.request.headers.get("X-Miner-Id", None)
+            event_type=Web2EventNames.ATTENDANCE_CREATE,
+            description=f"Attendance record created for {attendance.employee_id.first_name} on {attendance.date.isoformat()}",
+            data={
+                "attendance_id": attendance.id,
+                "user": attendance.employee_id.id,
+                "date": attendance.date.isoformat(),
+            },
+            web_agent_id=self.request.headers.get("X-Miner-Id", None),
         )
 
     def perform_update(self, serializer):
@@ -39,10 +46,14 @@ class AttendanceViewSet(ModelViewSet):
         # Log the event (updating an attendance record)
         create_event(
             user=self.request.user,
-            event_type='attendance_update',  # Define event type
-            description=f'Attendance record updated for {attendance.employee_id.first_name} on {attendance.date.isoformat()}',
-            data={'attendance_id': attendance.id, 'user': attendance.employee_id.id, 'date': attendance.date.isoformat()},
-            miner_id=self.request.headers.get("X-Miner-Id", None)
+            event_type=Web2EventNames.ATTENDANCE_UPDATE,  # Define event type
+            description=f"Attendance record updated for {attendance.employee_id.first_name} on {attendance.date.isoformat()}",
+            data={
+                "attendance_id": attendance.id,
+                "user": attendance.employee_id.id,
+                "date": attendance.date.isoformat(),
+            },
+            web_agent_id=self.request.headers.get("X-Miner-Id", None),
         )
 
     def perform_destroy(self, instance):
@@ -52,10 +63,14 @@ class AttendanceViewSet(ModelViewSet):
         # Log the event (deleting an attendance record)
         create_event(
             user=self.request.user,
-            event_type='attendance_delete',
-            description=f'Attendance record deleted for {instance.employee_id.first_name} on {instance.date.isoformat()}',
-            data={'attendance_id': instance.id, 'user': instance.employee_id.id, 'date': instance.date.isoformat()},
-            miner_id=self.request.headers.get("X-Miner-Id", None)
+            event_type=Web2EventNames.ATTENDANCE_DELETE,
+            description=f"Attendance record deleted for {instance.employee_id.first_name} on {instance.date.isoformat()}",
+            data={
+                "attendance_id": instance.id,
+                "user": instance.employee_id.id,
+                "date": instance.date.isoformat(),
+            },
+            web_agent_id=self.request.headers.get("X-Miner-Id", None),
         )
 
         # Perform the deletion
