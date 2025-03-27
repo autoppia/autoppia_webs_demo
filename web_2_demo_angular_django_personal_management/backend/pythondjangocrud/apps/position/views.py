@@ -1,8 +1,6 @@
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
-from web_2_demo_angular_django_personal_management.backend.pythondjangocrud.apps.events.models import (
-    Web2EventNames,
-)
+from pythondjangocrud.apps.events.models import Web2EventNames
 
 from pythondjangocrud.apps.events.utils import create_event
 from pythondjangocrud.apps.position.models import Position

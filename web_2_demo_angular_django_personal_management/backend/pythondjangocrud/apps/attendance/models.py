@@ -2,7 +2,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from pythondjangocrud.apps.employee.models import Employee
-# Let models be here
 from pythondjangocrud.core.models import AbstractChoice
 
 

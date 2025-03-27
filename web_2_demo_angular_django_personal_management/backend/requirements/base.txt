@@ -1,3 +1,5 @@
+setuptools==68.0.0
+
 pytz==2021.3  # https://github.com/stub42/pytz
 python-slugify==5.0.2  # https://github.com/un33k/python-slugify
 Pillow==8.3.2  # https://github.com/python-pillow/Pillow
