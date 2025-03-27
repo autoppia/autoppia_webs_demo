@@ -16,6 +16,6 @@ EVENTS_ALLOWED = [
     "POSITION_DELETE",
     "USER_VIEW",
     "USER_UPDATE",
-    "PAGE_VIEW",
+    # "PAGE_VIEW",
     "USER_REDIRECT",
 ]
