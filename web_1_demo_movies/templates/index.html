@@ -64,19 +64,19 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Search results summary if searching -->
     {% if search_query or selected_genre %}
     <div class="alert alert-info mb-4">
         {% if search_query and selected_genre %}
-            Showing results for search "{{ search_query }}" in 
+            Showing results for search "{{ search_query }}" in
             {% for genre in genres %}
                 {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
             {% endfor %} genre
         {% elif search_query %}
             Showing results for search "{{ search_query }}"
         {% elif selected_genre %}
-            Showing movies in 
+            Showing movies in
             {% for genre in genres %}
                 {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
             {% endfor %} genre
@@ -84,20 +84,25 @@
         <a href="{% url 'movieapp:index' %}" class="float-right">Clear filters</a>
     </div>
     {% endif %}
-    
+
     <div class="row">
         {% for i in movie_list %}
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100 shadow-sm">
                 <div class="card-img-container position-relative">
-                    <img src="{{i.img.url}}" class="card-img-top" alt="{{i.name}}" style="height: 250px; object-fit: cover;">
-                    <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{i.year}}</div>
+                    {% if i.img %}
+                        <img src="{{ i.img.url }}" class="card-img-top" alt="{{ i.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default-movie.jpg' %}" class="card-img-top" alt="Default movie poster" style="height: 250px; object-fit: cover;">
+                    {% endif %}
+                    <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{ i.year }}</div>
+
                     {% if i.rating %}
-                    <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">
-                        <span class="badge badge-warning p-2">
-                            <i class="fas fa-star"></i> {{i.rating|floatformat:1}}
-                        </span>
-                    </div>
+                        <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">
+                            <span class="badge badge-warning p-2">
+                                <i class="fas fa-star"></i> {{ i.rating|floatformat:1 }}
+                            </span>
+                        </div>
                     {% endif %}
                 </div>
                 <div class="card-body pb-0">
@@ -132,8 +137,8 @@
         </div>
         {% endfor %}
     </div>
-    
-    
+
+
 </div>
 
 {% endblock %}
