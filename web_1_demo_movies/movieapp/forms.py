@@ -6,7 +6,7 @@ from .models import Movie, Genre, Comment, UserProfile
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = ['name', 'desc', 'year', 'img', 'director', 'cast', 'duration', 'trailer_url', 'rating', 'genres']
+        fields = ['name', 'desc', 'year', 'director', 'cast', 'duration', 'trailer_url', 'rating', 'genres']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the movie name'}),
             'desc': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Write a synopsis or description of the movie'}),

@@ -85,9 +85,9 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="img"><i class="fas fa-image mr-1"></i> Movie Poster</label>
+                            <label for="img"><i class="fas fa-image mr-1"></i> Movie Poster (Optional)</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="img" name="img" accept="image/*" required>
+                                <input type="file" class="custom-file-input" id="img" name="img" accept="image/*">
                                 <label class="custom-file-label" for="img">Choose file</label>
                             </div>
                             <small class="form-text text-muted">Accepted formats: JPG, PNG. Maximum size: 5MB.</small>
@@ -117,19 +117,23 @@
     // Script to show image preview
     document.getElementById('img').addEventListener('change', function(e) {
         var file = e.target.files[0];
-        var reader = new FileReader();
-        
-        reader.onload = function(e) {
-            document.getElementById('preview').src = e.target.result;
-            document.getElementById('imagePreview').style.display = 'block';
-        }
-        
-        reader.readAsDataURL(file);
-        
-        // Update file name in the label
-        var fileName = file.name;
+        var preview = document.getElementById('preview');
+        var imagePreview = document.getElementById('imagePreview');
         var label = document.querySelector('.custom-file-label');
-        label.textContent = fileName;
+
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+            label.textContent = file.name;
+        } else {
+            imagePreview.style.display = 'none';
+            preview.src = '#';
+            label.textContent = "Choose file";
+        }
     });
 </script>
 {% endblock %}
