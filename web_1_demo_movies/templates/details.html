@@ -6,8 +6,12 @@
     <div class="card border-0 shadow">
         <div class="row no-gutters">
             <div class="col-md-4">
-                <img src="{{movie.img.url}}" class="card-img" alt="{{movie.name}}" style="height: 450px; object-fit: cover;">
-            </div>
+                {% if movie.img %}
+                <img src="{{ movie.img.url }}" alt="{{ movie.name }}">
+              {% else %}
+                <!-- Puedes mostrar una imagen por defecto o nada -->
+                <img src="{% static 'default_movie.jpg' %}" alt="No image available">
+              {% endif %}            </div>
             <div class="col-md-8">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">

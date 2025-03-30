@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block body %}
 
 <div class="hero-section">
     <div class="container">
         <div class="row align-items-center py-5">
             <div class="col-md-6">
-                <h1 class="display-4 text-white">Decentralized Store
-                    for AI Films</h1>
+                <h1 class="display-4 text-white">Decentralized Store for AI Films</h1>
                 <p class="lead text-light">The Revolution of AI Films</p>
                 <form method="GET" action="{% url 'movieapp:index' %}" class="search-form">
                     {% if selected_genre %}
@@ -20,7 +20,6 @@
                     </div>
                 </form>
                 <a href="{% url 'movieapp:add_movie' %}" class="btn  btn-autoppia-color">Add new movie</a>
-
             </div>
             <div class="col-md-6 text-center">
                 <img src="/media/gallery/goodfellas.jpg" alt="Movie Collection" style="max-height: 400px;" class="img-fluid rounded shadow">
@@ -90,29 +89,35 @@
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100 shadow-sm">
                 <div class="card-img-container position-relative">
-                    <img src="{{i.img.url}}" class="card-img-top" alt="{{i.name}}" style="height: 250px; object-fit: cover;">
-                    <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{i.year}}</div>
+                    {% if i.img %}
+                    <img src="{{ i.img.url }}" alt="{{ i.name }}" class="card-img-top" alt="{{i.name}}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <!-- Aquí puedes mostrar una imagen por defecto o simplemente nada -->
+                    <img src="{% static 'images/placeholder.jpg' %}" alt="No image available" class="card-img-top" style="height: 250px; object-fit: cover;">
+                    {% endif %}
+                    
+                    <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{ i.year }}</div>
                     {% if i.rating %}
                     <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">
                         <span class="badge badge-warning p-2">
-                            <i class="fas fa-star"></i> {{i.rating|floatformat:1}}
+                            <i class="fas fa-star"></i> {{ i.rating|floatformat:1 }}
                         </span>
                     </div>
                     {% endif %}
                 </div>
                 <div class="card-body pb-0">
-                    <h5 class="card-title font-weight-bold">{{i.name}}</h5>
+                    <h5 class="card-title font-weight-bold">{{ i.name }}</h5>
                     {% if i.director %}
-                    <p class="card-subtitle text-muted mb-2"><i class="fas fa-user"></i> {{i.director}}</p>
+                    <p class="card-subtitle text-muted mb-2"><i class="fas fa-user"></i> {{ i.director }}</p>
                     {% endif %}
-                    <p class="card-text movie-desc">{{i.desc|truncatechars:80}}</p>
+                    <p class="card-text movie-desc">{{ i.desc|truncatechars:80 }}</p>
                     {% if i.genres.all %}
                     <div class="mb-2">
                         {% for genre in i.genres.all|slice:":2" %}
-                        <span class="badge badge-info mr-1">{{genre.name}}</span>
+                        <span class="badge badge-info mr-1">{{ genre.name }}</span>
                         {% endfor %}
                         {% if i.genres.all|length > 2 %}
-                        <span class="badge badge-secondary">+{{i.genres.all|length|add:"-2"}}</span>
+                        <span class="badge badge-secondary">+{{ i.genres.all|length|add:"-2" }}</span>
                         {% endif %}
                     </div>
                     {% endif %}

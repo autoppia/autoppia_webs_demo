@@ -4,14 +4,19 @@ from django.contrib.auth.models import User
 from .models import Movie, Genre, Comment, UserProfile
 
 class MovieForm(forms.ModelForm):
+    # Incluimos el campo 'img' como opcional.
+    img = forms.ImageField(required=False)
+
     class Meta:
         model = Movie
+        # Se incluye 'img' en la lista de campos para que se renderice en el formulario,
+        # pero luego lo ignoramos al guardar.
         fields = ['name', 'desc', 'year', 'img', 'director', 'cast', 'duration', 'trailer_url', 'rating', 'genres']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the movie name'}),
             'desc': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Write a synopsis or description of the movie'}),
             'year': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Release year', 'min': 1900, 'max': 2025}),
-            'director': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Director\'s name'}),
+            'director': forms.TextInput(attrs={'class': 'form-control', 'placeholder': "Director's name"}),
             'cast': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Main actors separated by commas'}),
             'duration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Duration in minutes', 'min': 1}),
             'trailer_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://www.youtube.com/watch?v=...'}),
@@ -35,6 +40,15 @@ class MovieForm(forms.ModelForm):
             'rating': 'Rating between 0 and 5 stars.',
         }
 
+    def save(self, commit=True):
+        # Primero obtenemos la instancia sin guardar.
+        instance = super().save(commit=False)
+        # Ignoramos el archivo subido (si es que lo hubiera) y dejamos el campo en None.
+        instance.img = None
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
