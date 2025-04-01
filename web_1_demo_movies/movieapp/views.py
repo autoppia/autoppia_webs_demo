@@ -157,7 +157,7 @@ def add_movie(request):
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES)
         if form.is_valid():
-            movie = form.save()
+            # movie = form.save()
             add_film_event = Event.create_add_film_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
@@ -171,11 +171,10 @@ def add_movie(request):
     else:
         form = MovieForm()
     return render(request, 'add.html', {'form': form})
-
 def update_movie(request, id):
     """
     Vista para actualizar una película existente.
-    Registra el evento de EDIT_FILM si se detectan cambios.
+    Registra el evento de EDIT_FILM si se detectan cambios, pero NO guarda los cambios en la BD.
     """
     movie = get_object_or_404(Movie, id=id)
     original_values = {
@@ -193,48 +192,64 @@ def update_movie(request, id):
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES, instance=movie)
         if form.is_valid():
-            updated_movie = form.save()
+            # Obtiene el objeto actualizado SIN guardar en la base de datos
+            updated_movie = form.save(commit=False)
+            
+            new_values = {}
             changed_fields = []
-            if updated_movie.name != original_values['name']:
+            
+            if form.cleaned_data.get('name') != original_values['name']:
                 changed_fields.append('name')
-            if updated_movie.desc != original_values['desc']:
+                new_values['name'] = form.cleaned_data.get('name')
+            if form.cleaned_data.get('desc') != original_values['desc']:
                 changed_fields.append('desc')
-            if updated_movie.year != original_values['year']:
+                new_values['desc'] = form.cleaned_data.get('desc')
+            if form.cleaned_data.get('year') != original_values['year']:
                 changed_fields.append('year')
-            if updated_movie.director != original_values['director']:
+                new_values['year'] = form.cleaned_data.get('year')
+            if form.cleaned_data.get('director') != original_values['director']:
                 changed_fields.append('director')
-            if updated_movie.cast != original_values['cast']:
+                new_values['director'] = form.cleaned_data.get('director')
+            if form.cleaned_data.get('cast') != original_values['cast']:
                 changed_fields.append('cast')
-            if updated_movie.duration != original_values['duration']:
+                new_values['cast'] = form.cleaned_data.get('cast')
+            if form.cleaned_data.get('duration') != original_values['duration']:
                 changed_fields.append('duration')
-            if updated_movie.trailer_url != original_values['trailer_url']:
+                new_values['duration'] = form.cleaned_data.get('duration')
+            if form.cleaned_data.get('trailer_url') != original_values['trailer_url']:
                 changed_fields.append('trailer_url')
-            current_rating = float(updated_movie.rating) if updated_movie.rating else None
+                new_values['trailer_url'] = form.cleaned_data.get('trailer_url')
+            
+            current_rating = float(form.cleaned_data.get('rating')) if form.cleaned_data.get('rating') else None
             if current_rating != original_values['rating']:
                 changed_fields.append('rating')
-            updated_genres = [genre.name for genre in updated_movie.genres.all()]
+                new_values['rating'] = current_rating
+            
+            # Procesar los géneros: se asume que el formulario devuelve una lista de objetos género
+            updated_genres = [genre.name for genre in form.cleaned_data.get('genres')]
             if set(updated_genres) != set(original_values['genres']):
                 changed_fields.append('genres')
-
+                new_values['genres'] = updated_genres
+            
             if changed_fields:
-                edit_film_event = Event.create_edit_film_event(
+                event = Event.create_edit_film_event(
                     user=request.user if request.user.is_authenticated else None,
                     web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
-                    movie=updated_movie,
+                    movie=movie,
                     previous_values=original_values,
-                    changed_fields=changed_fields
+                    changed_fields=changed_fields,
+                    new_values=new_values
                 )
-                edit_film_event.save()
-
-            messages.success(request, 'Movie updated successfully.')
+                event.save()
+            
+            messages.success(request, 'Evento registrado exitosamente, pero los cambios no se han guardado.')
             return redirect('movieapp:detail', movie_id=id)
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
         form = MovieForm(instance=movie)
-
+    
     return render(request, 'edit.html', {'form': form, 'movie': movie})
-
 def delete_movie(request, id):
     """
     Vista para eliminar una película y registrar el evento de DELETE_FILM.
@@ -248,7 +263,7 @@ def delete_movie(request, id):
             movie=movie
         )
         delete_film_event.save()
-        movie.delete()
+        # movie.delete()
         messages.success(request, 'Movie deleted successfully.')
         return redirect('/')
     return render(request, 'delete.html', {'movie': movie})

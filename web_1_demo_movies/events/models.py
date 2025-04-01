@@ -118,20 +118,27 @@ class Event(models.Model):
             'updated_at': movie.updated_at.isoformat() if movie.updated_at else None
         }
         return event
-
+    
+   
     @classmethod
-    def create_edit_film_event(cls, user, web_agent_id, movie, previous_values=None, changed_fields=None):
-        """Factory method para crear un evento de editar película."""
+    def create_edit_film_event(cls, user, web_agent_id, movie, previous_values=None, changed_fields=None, new_values=None):
+        """
+        Factory method para crear un evento de editar película, incorporando los nuevos valores sin persistirlos.
+        """
         event = cls(
             event_name=EventName.EDIT_FILM,
             user=user,
             web_agent_id=web_agent_id
         )
+        
+        # Obtiene los géneros actuales de la película
         genres = [
             {"id": genre.id, "name": genre.name}
             for genre in movie.genres.all()
         ]
-        event.data = {
+        
+        # Datos base tomados de la película original
+        base_data = {
             'id': movie.id,
             'name': movie.name,
             'desc': movie.desc,
@@ -141,14 +148,26 @@ class Event(models.Model):
             'cast': movie.cast,
             'duration': movie.duration,
             'trailer_url': movie.trailer_url,
-            'rating': float(movie.rating),
+            'rating': float(movie.rating) if movie.rating is not None else None,
             'genres': genres,
             'created_at': movie.created_at.isoformat() if movie.created_at else None,
             'updated_at': movie.updated_at.isoformat() if movie.updated_at else None,
+        }
+        
+        # Si se reciben nuevos valores para campos modificados, se sobreescriben en base_data
+        if new_values:
+            for field in changed_fields or []:
+                if field in new_values:
+                    base_data[field] = new_values[field]
+        
+        event.data = {
+            **base_data,
             'previous_values': previous_values or {},
             'changed_fields': changed_fields or []
         }
+        
         return event
+
 
     @classmethod
     def create_delete_film_event(cls, user, web_agent_id, movie):

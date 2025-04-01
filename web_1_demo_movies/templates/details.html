@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
+{% load static %}
 
 {% block body %}
 <div class="container mt-5">
@@ -7,10 +8,10 @@
         <div class="row no-gutters">
             <div class="col-md-4">
                 {% if movie.img %}
-                <img src="{{ movie.img.url }}" alt="{{ movie.name }}">
+                <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;">
               {% else %}
                 <!-- Puedes mostrar una imagen por defecto o nada -->
-                <img src="{% static 'default_movie.jpg' %}" alt="No image available">
+                <img src="{% static 'default_movie.jpg' %}" alt="No image available" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;">
               {% endif %}            </div>
             <div class="col-md-8">
                 <div class="card-body">
