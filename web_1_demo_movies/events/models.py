@@ -91,34 +91,37 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_add_film_event(cls, user, web_agent_id, movie):
+    def create_add_film_event(cls, user, web_agent_id, movie_data):
         """Factory method para crear un evento de añadir película."""
         event = cls(
             event_name=EventName.ADD_FILM,
             user=user,
             web_agent_id=web_agent_id
         )
-        genres = [
-            {"id": genre.id, "name": genre.name}
-            for genre in movie.genres.all()
-        ]
+        
+        genres = movie_data.get('genres', [])
+        processed_genres = []
+        if genres:
+            processed_genres = [
+                {"name": genre.name, "id": genre.id} if hasattr(genre, 'id') and hasattr(genre, 'name') 
+                else {"name": str(genre)} 
+                for genre in genres
+            ]
+
         event.data = {
-            'id': movie.id,
-            'name': movie.name,
-            'desc': movie.desc,
-            'year': movie.year,
-            'img': movie.img.url if movie.img else None,
-            'director': movie.director,
-            'cast': movie.cast,
-            'duration': movie.duration,
-            'trailer_url': movie.trailer_url,
-            'rating': float(movie.rating),
-            'genres': genres,
-            'created_at': movie.created_at.isoformat() if movie.created_at else None,
-            'updated_at': movie.updated_at.isoformat() if movie.updated_at else None
+            'name': movie_data.get('name'),
+            'desc': movie_data.get('desc'),
+            'year': movie_data.get('year'),
+            'director': movie_data.get('director'),
+            'cast': movie_data.get('cast'),
+            'duration': movie_data.get('duration'),
+            'trailer_url': movie_data.get('trailer_url'),
+            'rating': float(movie_data.get('rating')) if movie_data.get('rating') else None,
+            'genres': processed_genres,
+          
         }
         return event
-    
+        
    
     @classmethod
     def create_edit_film_event(cls, user, web_agent_id, movie, previous_values=None, changed_fields=None, new_values=None):

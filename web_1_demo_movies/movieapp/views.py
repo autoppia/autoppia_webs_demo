@@ -152,24 +152,39 @@ def detail(request, movie_id):
 
 def add_movie(request):
     """
-    Vista para agregar una nueva película y registrar el evento de ADD_FILM.
+    Vista para registrar un evento de ADD_FILM sin guardar la película.
     """
     if request.method == "POST":
         form = MovieForm(request.POST, request.FILES)
         if form.is_valid():
-            # movie = form.save()
+            # Preparar los valores a añadir
+            new_values = {
+                'name': form.cleaned_data.get('name'),
+                'desc': form.cleaned_data.get('desc'),
+                'year': form.cleaned_data.get('year'),
+                'director': form.cleaned_data.get('director'),
+                'cast': form.cleaned_data.get('cast'),
+                'duration': form.cleaned_data.get('duration'),
+                'trailer_url': form.cleaned_data.get('trailer_url'),
+                'rating': float(form.cleaned_data.get('rating')) if form.cleaned_data.get('rating') else 0,
+                'genres': [genre for genre in form.cleaned_data.get('genres')] if form.cleaned_data.get('genres') else []
+            }
+
+            # Crear el evento de añadir película
             add_film_event = Event.create_add_film_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get('X-WebAgent-Id', '0'),
-                movie=movie
+                movie_data=new_values
             )
             add_film_event.save()
-            messages.success(request, 'Movie added successfully.')
+            
+            messages.success(request, 'Evento de añadir película registrado exitosamente.')
             return redirect('movieapp:index')
         else:
-            messages.error(request, 'Please correct the errors in the form.')
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
         form = MovieForm()
+    
     return render(request, 'add.html', {'form': form})
 def update_movie(request, id):
     """
