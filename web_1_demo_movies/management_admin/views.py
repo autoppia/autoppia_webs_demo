@@ -2,12 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
-from django.conf import settings
-import subprocess
-import sys
-import os
 import time
-import threading
 
 
 @csrf_exempt
@@ -17,13 +12,7 @@ def reset_database(request):
     API endpoint to reset and reseed the database.
     Only available in development mode for security.
     """
-    # Security check: Only allow in development
-    if not settings.DEBUG:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'This endpoint is only available in development mode'
-        }, status=403)
-
+  
     start_time = time.time()
     success = True
     error_message = None
