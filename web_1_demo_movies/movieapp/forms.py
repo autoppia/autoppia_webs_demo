@@ -21,7 +21,7 @@ class MovieForm(forms.ModelForm):
             'duration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Duration in minutes', 'min': 1}),
             'trailer_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://www.youtube.com/watch?v=...'}),
             'rating': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Rating (0-5)', 'step': '0.1', 'min': 0, 'max': 5}),
-            'genres': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'genres': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
             'name': 'Movie Title',
@@ -36,7 +36,6 @@ class MovieForm(forms.ModelForm):
             'genres': 'Genres',
         }
         help_texts = {
-            'genres': 'Hold Ctrl/Cmd key to select multiple genres.',
             'rating': 'Rating between 0 and 5 stars.',
         }
 
@@ -113,7 +112,7 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Tell us about yourself'}),
             'profile_pic': forms.FileInput(attrs={'class': 'custom-file-input'}),
-            'favorite_genres': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'favorite_genres': forms.Select(attrs={'class': 'form-control'}),
             'website': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Your website URL'}),
             'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your location'}),
         }
@@ -124,9 +123,7 @@ class UserProfileForm(forms.ModelForm):
             'website': 'Website',
             'location': 'Location',
         }
-        help_texts = {
-            'favorite_genres': 'Hold Ctrl/Cmd key to select multiple genres.',
-        }
+       
 
 # Form for updating basic user information
 class UserForm(forms.ModelForm):

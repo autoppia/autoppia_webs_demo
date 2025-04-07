@@ -274,11 +274,11 @@ def update_movie(request, id):
 
             messages.success(
                 request,
-                "Evento registrado exitosamente, pero los cambios no se han guardado.",
+                "Event added successfully ",
             )
             return redirect("movieapp:detail", movie_id=id)
         else:
-            messages.error(request, "Por favor, corrige los errores en el formulario.")
+            messages.error(request, "Please, fix your bugs in the form")
     else:
         form = MovieForm(instance=movie)
 
