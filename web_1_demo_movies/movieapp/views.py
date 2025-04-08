@@ -254,8 +254,10 @@ def update_movie(request, id):
                 new_values["rating"] = current_rating
 
             # Procesar los géneros: se asume que el formulario devuelve una lista de objetos género
-            updated_genres = [genre.name for genre in form.cleaned_data.get("genres")]
-            if set(updated_genres) != set(original_values["genres"]):
+            selected_genre = form.cleaned_data.get("genres")
+            updated_genres = [selected_genre.name] if selected_genre else []
+
+            if updated_genres != original_values["genres"]:
                 changed_fields.append("genres")
                 new_values["genres"] = updated_genres
 
@@ -270,7 +272,7 @@ def update_movie(request, id):
                 )
                 event.save()
                 updated_movie.save()
-                form.save_m2m()
+                # form.save_m2m()
 
             messages.success(
                 request,
