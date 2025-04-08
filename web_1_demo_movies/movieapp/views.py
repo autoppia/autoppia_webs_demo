@@ -170,9 +170,11 @@ def add_movie(request):
                 "rating": float(form.cleaned_data.get("rating"))
                 if form.cleaned_data.get("rating")
                 else 0,
-                "genres": [genre for genre in form.cleaned_data.get("genres")]
-                if form.cleaned_data.get("genres")
-                else [],
+                "genres": (
+                    [form.cleaned_data.get("genres")]
+                    if isinstance(form.cleaned_data.get("genres"), Genre)
+                    else [genre for genre in form.cleaned_data.get("genres", [])]
+                ),
             }
 
             # Crear el evento de añadir película
