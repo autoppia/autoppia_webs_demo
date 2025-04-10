@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Movie
+from .models import Book
 from .models import ContactMessage
 
-admin.site.register(Movie)
+admin.site.register(Book)
 
 
 @admin.register(ContactMessage)

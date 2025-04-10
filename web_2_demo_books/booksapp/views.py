@@ -9,10 +9,10 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 from .forms import (
-    MovieForm,
+    BookForm,
     ContactForm,
 )
-from .models import Movie, Genre, Comment, UserProfile, ContactMessage, Cart
+from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
 from events.models import Event
 
 
@@ -24,7 +24,7 @@ def index(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
+    available_years = Book.objects.values_list("year", flat=True).distinct().order_by("-year")
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -32,7 +32,7 @@ def index(request):
     year_filter = request.GET.get("year", "")
 
     # Comenzar con todas las películas
-    movies = Movie.objects.all()
+    movies = Book.objects.all()
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
@@ -111,7 +111,7 @@ def detail(request, movie_id):
     Vista de detalle de película: muestra información, películas relacionadas y comentarios.
     Además, registra el evento de visualización de detalle.
     """
-    movie = get_object_or_404(Movie, id=movie_id)
+    movie = get_object_or_404(Book, id=movie_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
 
     # Registrar evento de detalle de película
@@ -121,14 +121,14 @@ def detail(request, movie_id):
     # Películas relacionadas
     related_movies = []
     if movie.genres.exists():
-        related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct()[:4]
+        related_movies = Book.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct()[:4]
 
     if len(related_movies) < 4:
-        more_movies = Movie.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]])[: 4 - len(related_movies)]
+        more_movies = Book.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]])[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(more_movies)
 
     if len(related_movies) < 4:
-        random_movies = Movie.objects.exclude(id__in=[m.id for m in list(related_movies) + [movie]]).order_by("?")[: 4 - len(related_movies)]
+        random_movies = Book.objects.exclude(id__in=[m.id for m in list(related_movies) + [movie]]).order_by("?")[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(random_movies)
 
     comments = movie.comments.all()
@@ -149,7 +149,7 @@ def shoppingcart(request):
     carts = Cart.objects.filter(userId=userId)
     books = []
     for cart in carts:
-        book = Movie.objects.filter(id=cart.bookId).first()
+        book = Book.objects.filter(id=cart.bookId).first()
         print(book)
         books.append(book)
 
@@ -164,7 +164,7 @@ def mybook(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
+    available_years = Book.objects.values_list("year", flat=True).distinct().order_by("-year")
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -172,7 +172,7 @@ def mybook(request):
     year_filter = request.GET.get("year", "")
     print(request.user.id)
     # Comenzar con todas las películas
-    movies = Movie.objects.filter(userId=request.user.id)
+    movies = Book.objects.filter(userId=request.user.id)
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
@@ -256,12 +256,12 @@ def delete_cart(request, id):
     return redirect("movieapp:shoppingcart")
 
 
-def add_movie(request):
+def add_book(request):
     """
     Vista para agregar una nueva película y registrar el evento de ADD_FILM.
     """
     if request.method == "POST":
-        form = MovieForm(request.POST, request.FILES)
+        form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             movie = form.save()
             add_film_event = Event.create_add_book_event(
@@ -275,7 +275,7 @@ def add_movie(request):
         else:
             messages.error(request, "Please correct the errors in the form.")
     else:
-        form = MovieForm()
+        form = BookForm()
     return render(request, "add.html", {"form": form})
 
 
@@ -284,7 +284,7 @@ def update_movie(request, id):
     Vista para actualizar una película existente.
     Registra el evento de EDIT_FILM si se detectan cambios.
     """
-    movie = get_object_or_404(Movie, id=id)
+    movie = get_object_or_404(Book, id=id)
     original_values = {
         "name": movie.name,
         "userId": movie.userId,
@@ -299,28 +299,28 @@ def update_movie(request, id):
     }
 
     if request.method == "POST":
-        form = MovieForm(request.POST, request.FILES, instance=movie)
+        form = BookForm(request.POST, request.FILES, instance=movie)
         if form.is_valid():
-            updated_movie = form.save()
+            updated_book = form.save()
             changed_fields = []
-            if updated_movie.name != original_values["name"]:
+            if updated_book.name != original_values["name"]:
                 changed_fields.append("name")
-            if updated_movie.desc != original_values["desc"]:
+            if updated_book.desc != original_values["desc"]:
                 changed_fields.append("desc")
-            if updated_movie.year != original_values["year"]:
+            if updated_book.year != original_values["year"]:
                 changed_fields.append("year")
-            if updated_movie.director != original_values["director"]:
+            if updated_book.director != original_values["director"]:
                 changed_fields.append("director")
-            if updated_movie.cast != original_values["cast"]:
+            if updated_book.cast != original_values["cast"]:
                 changed_fields.append("cast")
-            if updated_movie.duration != original_values["duration"]:
+            if updated_book.duration != original_values["duration"]:
                 changed_fields.append("duration")
-            if updated_movie.trailer_url != original_values["trailer_url"]:
+            if updated_book.trailer_url != original_values["trailer_url"]:
                 changed_fields.append("trailer_url")
-            current_rating = float(updated_movie.rating) if updated_movie.rating else None
+            current_rating = float(updated_book.rating) if updated_book.rating else None
             if current_rating != original_values["rating"]:
                 changed_fields.append("rating")
-            updated_genres = [genre.name for genre in updated_movie.genres.all()]
+            updated_genres = [genre.name for genre in updated_book.genres.all()]
             if set(updated_genres) != set(original_values["genres"]):
                 changed_fields.append("genres")
 
@@ -328,18 +328,18 @@ def update_movie(request, id):
                 edit_film_event = Event.create_edit_book_event(
                     user=request.user if request.user.is_authenticated else None,
                     web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
-                    movie=updated_movie,
+                    movie=updated_book,
                     previous_values=original_values,
                     changed_fields=changed_fields,
                 )
                 edit_film_event.save()
-
+                updated_book.save()
             messages.success(request, "Movie updated successfully.")
-            return redirect("movieapp:detail", movie_id=id)
+            return redirect("booksapp:detail", movie_id=id)
         else:
             messages.error(request, "Please correct the errors in the form.")
     else:
-        form = MovieForm(instance=movie)
+        form = BookForm(instance=movie)
 
     return render(request, "edit.html", {"form": form, "movie": movie})
 
@@ -348,7 +348,7 @@ def delete_movie(request, id):
     """
     Vista para eliminar una película y registrar el evento de DELETE_FILM.
     """
-    movie = get_object_or_404(Movie, id=id)
+    movie = get_object_or_404(Book, id=id)
 
     if request.method == "POST":
         delete_film_event = Event.create_delete_book_event(
@@ -375,7 +375,7 @@ def add_to_cart(request, id):
             Cart.objects.create(userId=userId, bookId=bookId)
 
             messages.success(request, "Book added to the shopping cart.")
-        return redirect("movieapp:detail", movie_id=id)
+        return redirect("booksapp:detail", movie_id=id)
 
 
 def add_comment(request, movie_id):
@@ -383,7 +383,7 @@ def add_comment(request, movie_id):
     Vista para agregar un comentario a una película.
     Registra el evento de añadir comentario y, si la solicitud es AJAX, devuelve una respuesta JSON.
     """
-    movie = get_object_or_404(Movie, id=movie_id)
+    movie = get_object_or_404(Book, id=movie_id)
 
     if request.method == "POST":
         name = request.POST.get("name", "")
@@ -418,10 +418,10 @@ def add_comment(request, movie_id):
                 )
 
             messages.success(request, "Your comment has been added successfully!")
-            return redirect("movieapp:detail", movie_id=movie.id)
+            return redirect("booksapp:detail", movie_id=movie.id)
 
     messages.error(request, "There was a problem with your comment.")
-    return redirect("movieapp:detail", movie_id=movie.id)
+    return redirect("booksapp:detail", movie_id=movie.id)
 
 
 def genre_list(request):
@@ -437,7 +437,7 @@ def genre_detail(request, genre_id):
     Vista que muestra los detalles de un género y las películas asociadas.
     """
     genre = get_object_or_404(Genre, id=genre_id)
-    movies = Movie.objects.filter(genres=genre)
+    movies = Book.objects.filter(genres=genre)
     context = {"genre": genre, "movies": movies}
     return render(request, "genre_detail.html", context)
 
@@ -472,7 +472,7 @@ def contact(request):
                 request,
                 "Your message has been received successfully. We will review it soon!",
             )
-            return redirect("movieapp:contact")
+            return redirect("booksapp:contact")
     else:
         form = ContactForm()
     return render(request, "contact.html", {"form": form})
@@ -489,7 +489,7 @@ def login_view(request):
     Si el usuario ya está autenticado, redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("movieapp:index")
+        return redirect("booksapp:index")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -500,7 +500,7 @@ def login_view(request):
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
             login_event = Event.create_login_event(user, web_agent_id)
             login_event.save()
-            next_url = request.GET.get("next", reverse("movieapp:index"))
+            next_url = request.GET.get("next", reverse("booksapp:index"))
             messages.success(request, f"Welcome back, {username}!")
             return redirect(next_url)
         else:
@@ -518,7 +518,7 @@ def logout_view(request):
     logout(request)
     logout_event.save()
     messages.success(request, "You have been logged out successfully.")
-    return redirect("movieapp:index")
+    return redirect("booksapp:index")
 
 
 def register_view(request):
@@ -527,7 +527,7 @@ def register_view(request):
     Valida la información, crea el usuario, registra los eventos de registro e inicio de sesión y redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("movieapp:index")
+        return redirect("booksapp:index")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -561,7 +561,7 @@ def register_view(request):
             # login_event = Event.create_login_event(user, web_agent_id)
             # login_event.save()
             messages.success(request, f"Account created successfully. Welcome, {username}!")
-            return redirect("movieapp:index")
+            return redirect("booksapp:index")
 
     return render(request, "register.html")
 
@@ -643,7 +643,7 @@ def profile_view(request):
         edit_user_event.save()
 
         messages.success(request, "Your profile has been updated successfully!")
-        return redirect("movieapp:profile")
+        return redirect("booksapp:profile")
 
     # For GET requests, display the form
     all_genres = Genre.objects.all().order_by("name")

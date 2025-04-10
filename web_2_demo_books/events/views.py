@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Event
 from .serializers import EventSerializer
-from movieapp.models import Movie
+from booksapp.models import Book
 
 
 @api_view(["GET"])
@@ -160,8 +160,8 @@ def add_event(request):
                 )
 
             try:
-                movie = Movie.objects.get(id=movie_id)
-            except Movie.DoesNotExist:
+                movie = Book.objects.get(id=movie_id)
+            except Book.DoesNotExist:
                 return Response(
                     {"error": f"Movie with id {movie_id} not found."},
                     status=status.HTTP_404_NOT_FOUND,
@@ -210,8 +210,8 @@ def add_event(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             try:
-                book = Movie.objects.get(id=book_id)
-            except Movie.DoesNotExist:
+                book = Book.objects.get(id=book_id)
+            except Book.DoesNotExist:
                 return Response(
                     {"error": f"Book with id {book_id} not found."},
                     status=status.HTTP_404_NOT_FOUND,
@@ -231,8 +231,8 @@ def add_event(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             try:
-                book = Movie.objects.get(id=book_id)
-            except Movie.DoesNotExist:
+                book = Book.objects.get(id=book_id)
+            except Book.DoesNotExist:
                 return Response(
                     {"error": f"Book with id {book_id} not found."},
                     status=status.HTTP_404_NOT_FOUND,
