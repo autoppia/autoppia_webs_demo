@@ -279,7 +279,7 @@ def add_book(request):
     return render(request, "add.html", {"form": form})
 
 
-def update_movie(request, id):
+def update_book(request, id):
     """
     Vista para actualizar una película existente.
     Registra el evento de EDIT_FILM si se detectan cambios.
@@ -344,7 +344,7 @@ def update_movie(request, id):
     return render(request, "edit.html", {"form": form, "movie": movie})
 
 
-def delete_movie(request, id):
+def delete_book(request, id):
     """
     Vista para eliminar una película y registrar el evento de DELETE_FILM.
     """

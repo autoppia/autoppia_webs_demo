@@ -22,7 +22,7 @@
                     <p class="card-text movie-desc">{{ movie.desc|truncatechars:100 }}</p>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
-                    <a href="{% url 'movieapp:detail' movie.id %}" class="btn btn-primary btn-block">View Details</a>
+                    <a href="{% url 'booksapp:detail' movie.id %}" class="btn btn-primary btn-block">View Details</a>
                 </div>
             </div>
         </div>
@@ -31,14 +31,14 @@
             <div class="alert alert-info">
                 No movies available in this category.
             </div>
-            <a href="{% url 'movieapp:add_movie' %}" class="btn btn-success mt-3">Add movie</a>
+            <a href="{% url 'booksapp:add_movie' %}" class="btn btn-success mt-3">Add movie</a>
         </div>
         {% endfor %}
     </div>
 
     <div class="row mt-4">
         <div class="col-12">
-            <a href="{% url 'movieapp:genre_list' %}" class="btn btn-secondary">
+            <a href="{% url 'booksapp:genre_list' %}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i>Back to genre list
             </a>
         </div>

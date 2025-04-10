@@ -10,9 +10,9 @@ urlpatterns = [
     path("book/<int:movie_id>/", views.detail, name="detail"),
     # CRUD operations for movies
     path("add/", views.add_book, name="add_movie"),
-    path("update/<int:id>", views.update_movie, name="update"),
+    path("update/<int:id>", views.update_book, name="update"),
     path("delete_cart/<int:id>", views.delete_cart, name="delete_cart"),
-    path("delete/<int:id>", views.delete_movie, name="delete"),
+    path("delete/<int:id>", views.delete_book, name="delete"),
     path("cart/<int:id>", views.add_to_cart, name="cart"),
     path("carts/", views.carts_count, name="carts_count"),
     path("shoppingcarts/", views.shoppingcart, name="shoppingcart"),

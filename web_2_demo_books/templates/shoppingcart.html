@@ -62,7 +62,7 @@
                                 <a class="btn btn-success mr-2 btn-buy">
                                     <i class="fas fa-wallet mr-1"></i> Buy
                                 </a>
-                                <a class="btn btn-warning" href="{% url 'movieapp:delete_cart' movie.id %}">
+                                <a class="btn btn-warning" href="{% url 'booksapp:delete_cart' movie.id %}">
                                     <i class="fas fa-trash-alt mr-1"></i> Delete
                                 </a>
                             </div>
@@ -99,7 +99,7 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-close">Close</button>
-                <a type="button" class="btn btn-primary complete-payment" href="{% url 'movieapp:payment_success' %}">Buy</a>
+                <a type="button" class="btn btn-primary complete-payment" href="{% url 'booksapp:payment_success' %}">Buy</a>
             </div>
 
         </div>
