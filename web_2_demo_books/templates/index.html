@@ -66,19 +66,19 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Search results summary if searching -->
     {% if search_query or selected_genre %}
     <div class="alert alert-info mb-4">
         {% if search_query and selected_genre %}
-            Showing results for search "{{ search_query }}" in 
+            Showing results for search "{{ search_query }}" in
             {% for genre in genres %}
                 {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
             {% endfor %} genre
         {% elif search_query %}
             Showing results for search "{{ search_query }}"
         {% elif selected_genre %}
-            Showing movies in 
+            Showing movies in
             {% for genre in genres %}
                 {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
             {% endfor %} genre
@@ -86,7 +86,7 @@
         <a href="{% url 'movieapp:index' %}" class="float-right">Clear filters</a>
     </div>
     {% endif %}
-    
+
     <div class="row">
         {% for i in movie_list %}
         <div class="col-md-3 mb-4">
@@ -139,8 +139,8 @@
         </div>
         {% endfor %}
     </div>
-    
-    
+
+
 </div>
 
 {% endblock %}

@@ -3,11 +3,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.core.management import call_command
 from django.conf import settings
-import subprocess
-import sys
-import os
 import time
-import threading
 
 
 @csrf_exempt
@@ -19,10 +15,13 @@ def reset_database(request):
     """
     # Security check: Only allow in development
     if not settings.DEBUG:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'This endpoint is only available in development mode'
-        }, status=403)
+        return JsonResponse(
+            {
+                "status": "error",
+                "message": "This endpoint is only available in development mode",
+            },
+            status=403,
+        )
 
     start_time = time.time()
     success = True
@@ -30,7 +29,7 @@ def reset_database(request):
 
     try:
         # Call our custom reset_db command with --force to skip confirmation
-        call_command('reset_db', force=True)
+        call_command("reset_db", force=True)
     except Exception as e:
         success = False
         error_message = str(e)
@@ -42,14 +41,8 @@ def reset_database(request):
     if success:
         message = f"Database reset completed successfully in {duration} seconds"
         print(message)
-        return JsonResponse({
-            'status': 'success',
-            'message': message
-        })
+        return JsonResponse({"status": "success", "message": message})
     else:
         message = f"Database reset failed after {duration} seconds: {error_message}"
         print(message)
-        return JsonResponse({
-            'status': 'error',
-            'message': message
-        }, status=500)
+        return JsonResponse({"status": "error", "message": message}, status=500)
