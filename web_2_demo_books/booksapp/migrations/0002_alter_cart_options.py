@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("movieapp", "0001_initial"),
+        ("booksapp", "0001_initial"),
     ]
 
     operations = [

@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    "movieapp",
+    "booksapp",
     "management_admin",
     "events",
     "django.contrib.admin",

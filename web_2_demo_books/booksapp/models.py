@@ -14,12 +14,12 @@ class Genre(models.Model):
         return self.name
 
 
-class Movie(models.Model):
+class Book(models.Model):
     userId = models.BigIntegerField()
     name = models.CharField(max_length=250)
     desc = models.TextField()
     year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
-    img = models.ImageField(upload_to="gallery")
+    img = models.ImageField(upload_to="gallery", blank=True, null=True)
     director = models.CharField(max_length=250, blank=True, null=True)
     cast = models.TextField(blank=True, null=True, help_text="Names of actors separated by commas")
     duration = models.IntegerField(blank=True, null=True, help_text="Duration in minutes")
@@ -50,7 +50,7 @@ class Movie(models.Model):
 
 
 class Comment(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="comments")
+    movie = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="comments")
     name = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

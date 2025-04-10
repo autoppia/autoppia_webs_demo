@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from booksapp.models import Movie, Genre, Comment
+from booksapp.models import Book, Genre, Comment
 from django.apps import apps
 
 
@@ -279,10 +279,10 @@ class Command(BaseCommand):
         # First check if movies already exist
         auto_confirm = os.environ.get("AUTO_SEED", "false").lower() == "true"
 
-        if Movie.objects.count() > 0:
+        if Book.objects.count() > 0:
             if auto_confirm:
                 Comment.objects.all().delete()
-                Movie.objects.all().delete()
+                Book.objects.all().delete()
                 self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
             else:
                 self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
@@ -292,7 +292,7 @@ class Command(BaseCommand):
                     return
                 else:
                     Comment.objects.all().delete()
-                    Movie.objects.all().delete()
+                    Book.objects.all().delete()
                     self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
 
         # Create movies
@@ -307,7 +307,7 @@ class Command(BaseCommand):
                 local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
 
                 # Creamos la instancia del Movie
-                movie = Movie(
+                movie = Book(
                     userId=index,
                     name=movie_data["name"],
                     desc=movie_data["desc"],

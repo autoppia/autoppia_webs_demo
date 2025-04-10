@@ -1,12 +1,23 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Movie, Comment, UserProfile
+from .models import Book, Genre, Comment, UserProfile
 
 
-class MovieForm(forms.ModelForm):
+class BookForm(forms.ModelForm):
+    # Incluimos el campo 'img' como opcional.
+    img = forms.ImageField(required=False)
+
+    # Now required=True to make genre selection mandatory
+    genres = forms.ModelChoiceField(
+        queryset=Genre.objects.all(),
+        required=True,
+        widget=forms.Select(attrs={"class": "form-control"}),
+        label="Genre",
+    )
+
     class Meta:
-        model = Movie
+        model = Book
         fields = [
             "name",
             "userId",
@@ -68,7 +79,6 @@ class MovieForm(forms.ModelForm):
                     "max": 5,
                 }
             ),
-            "genres": forms.SelectMultiple(attrs={"class": "form-control"}),
         }
         labels = {
             "name": "Movie Title",
@@ -81,12 +91,19 @@ class MovieForm(forms.ModelForm):
             "duration": "Duration (minutes)",
             "trailer_url": "Trailer URL",
             "rating": "Rating",
-            "genres": "Genres",
+            "genres": "Genre",
         }
-        help_texts = {
-            "genres": "Hold Ctrl/Cmd key to select multiple genres.",
-            "rating": "Rating between 0 and 5 stars.",
-        }
+        help_texts = {"rating": "Rating between 0 and 5 stars."}
+
+    def save(self, commit=True):
+        # Primero obtenemos la instancia sin guardar.
+        instance = super().save(commit=False)
+        # Ignoramos el archivo subido (si es que lo hubiera) y dejamos el campo en None.
+        instance.img = None
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
 
 
 class CommentForm(forms.ModelForm):
@@ -162,7 +179,7 @@ class UserProfileForm(forms.ModelForm):
                 }
             ),
             "profile_pic": forms.FileInput(attrs={"class": "custom-file-input"}),
-            "favorite_genres": forms.SelectMultiple(attrs={"class": "form-control"}),
+            "favorite_genres": forms.Select(attrs={"class": "form-control"}),
             "website": forms.URLInput(attrs={"class": "form-control", "placeholder": "Your website URL"}),
             "location": forms.TextInput(attrs={"class": "form-control", "placeholder": "Your location"}),
         }
@@ -172,9 +189,6 @@ class UserProfileForm(forms.ModelForm):
             "favorite_genres": "Favorite Genres",
             "website": "Website",
             "location": "Location",
-        }
-        help_texts = {
-            "favorite_genres": "Hold Ctrl/Cmd key to select multiple genres.",
         }
 
 
@@ -193,16 +207,6 @@ class UserForm(forms.ModelForm):
 # Formulario de contacto - Agregar al archivo forms.py existente
 # Formulario de contacto
 class ContactForm(forms.Form):
-    name = forms.CharField(
-        max_length=100,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Your name"}),
-    )
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Your email address"}))
-    subject = forms.CharField(
-        max_length=200,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "What is this regarding?"}),
-    )
-    message = forms.CharField(widget=forms.Textarea(attrs={"class": "form-control", "placeholder": "Your message", "rows": 5}))
     name = forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Your name"}),
