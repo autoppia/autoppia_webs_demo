@@ -10,7 +10,7 @@
                 <div class="card-body p-4">
                     <form method="POST" enctype="multipart/form-data" class="movie-form">
                         {% csrf_token %}
-                        
+
                         {% if form.errors %}
                         <div class="alert alert-danger">
                             <h4 class="alert-heading">Please correct the following errors:</h4>
@@ -23,7 +23,7 @@
                             </ul>
                         </div>
                         {% endif %}
-                        
+
                         <div class="row mb-4">
                             <div class="col-md-8">
                                 <div class="card-shadow p-3 bg-light rounded">
@@ -38,7 +38,7 @@
                                         <label for="name"><i class="fas fa-book mr-1"></i> User Id</label>
                                         <input type="number" id="userId" name="userId" class="form-control" placeholder="User Id" required value="{{ user.id }}">
                                     </div>
-                                    
+
                                     <div class="form-group mt-4">
                                         <label for="{{ form.desc.id_for_label }}" class="font-weight-bold">
                                             <i class="fas fa-info-circle mr-2"></i>Description
@@ -46,7 +46,7 @@
                                         {{ form.desc|safe }}
                                         <div class="form-text small text-muted">A brief introduction about the book</div>
                                     </div>
-                                    
+
                                     <div class="row mt-4">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -66,14 +66,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group mt-4">
                                         <label for="{{ form.director.id_for_label }}" class="font-weight-bold">
                                             <i class="fas fa-user mr-2"></i>Author
                                         </label>
                                         {{ form.director|safe }}
                                     </div>
-                                    
+
                                     {% comment %} <div class="form-group mt-4">
                                         <label for="{{ form.cast.id_for_label }}" class="font-weight-bold">
                                             <i class="fas fa-users mr-2"></i>Cast
@@ -81,7 +81,7 @@
                                         {{ form.cast|safe }}
                                         <div class="form-text small text-muted">Names of actors separated by commas</div>
                                     </div> {% endcomment %}
-                                    
+
                                     <div class="form-group mt-4">
                                         <label for="{{ form.trailer_url.id_for_label }}" class="font-weight-bold">
                                             <i class="fab fa-youtube mr-2"></i>Trailer URL
@@ -89,7 +89,7 @@
                                         {{ form.trailer_url|safe }}
                                         <div class="form-text small text-muted">YouTube URL for the book trailer</div>
                                     </div>
-                                    
+
                                     <div class="form-group mt-4">
                                         <label for="{{ form.rating.id_for_label }}" class="font-weight-bold">
                                             <i class="fas fa-star mr-2"></i>Rating
@@ -97,7 +97,7 @@
                                         {{ form.rating|safe }}
                                         <div class="form-text small text-muted">Rating from 0 to 5 stars</div>
                                     </div>
-                                    
+
                                     <div class="form-group mt-4">
                                         <label for="{{ form.genres.id_for_label }}" class="font-weight-bold">
                                             <i class="fas fa-tags mr-2"></i>Categories
@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4">
                                 <div class="card border-0 shadow">
                                     <div class="card-header bg-dark text-white">
@@ -121,7 +121,7 @@
                                         </div>
                                         <hr>
                                         {% endif %}
-                                        
+
                                         <div class="form-group mt-3">
                                             <label for="{{ form.img.id_for_label }}" class="btn btn-outline-primary">
                                                 <i class="fas fa-upload mr-2"></i>Change image
@@ -138,7 +138,7 @@
                                                 Maximum size: 5MB.
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group mt-3" id="imagePreview" style="display: none;">
                                             <label>Preview:</label>
                                             <img id="preview" src="#" alt="Preview" class="img-fluid mt-2 img-thumbnail" style="max-height: 200px;">
@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group text-center mt-4 mb-2">
                             <button type="submit" class="btn btn-warning btn-lg px-5">
                                 <i class="fas fa-save mr-2"></i>Save Changes
@@ -168,15 +168,15 @@
     document.getElementById('{{ form.img.id_for_label }}').addEventListener('change', function(e) {
         var file = e.target.files[0];
         var reader = new FileReader();
-        
+
         reader.onload = function(e) {
             document.getElementById('preview').src = e.target.result;
             document.getElementById('imagePreview').style.display = 'block';
         }
-        
+
         if (file) {
             reader.readAsDataURL(file);
-            
+
             // Update selected file name display
             document.getElementById('file-selected').textContent = 'Selected: ' + file.name;
         }

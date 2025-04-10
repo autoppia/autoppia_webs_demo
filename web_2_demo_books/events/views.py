@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Event
@@ -144,7 +144,10 @@ def add_event(request):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            return Response({"error": f"User with id {user_id} not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": f"User with id {user_id} not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
     # Create event based on its type using factory methods
     try:
@@ -152,16 +155,16 @@ def add_event(request):
             movie_id = data.get("movie_id")
             if not movie_id:
                 return Response(
-                    {"error": "movie_id is required for BOOK_DETAIL events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": "movie_id is required for BOOK_DETAIL events."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
             try:
                 movie = Movie.objects.get(id=movie_id)
             except Movie.DoesNotExist:
                 return Response(
-                    {"error": f"Movie with id {movie_id} not found."}, 
-                    status=status.HTTP_404_NOT_FOUND
+                    {"error": f"Movie with id {movie_id} not found."},
+                    status=status.HTTP_404_NOT_FOUND,
                 )
 
             event = Event.create_book_detail_event(user, web_agent_id, movie)
@@ -170,8 +173,8 @@ def add_event(request):
             query = data.get("query")
             if not query:
                 return Response(
-                    {"error": "query is required for SEARCH events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": "query is required for SEARCH events."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
             event = Event.create_search_book_event(user, web_agent_id, query)
@@ -179,8 +182,8 @@ def add_event(request):
         elif event_name == "REGISTRATION":
             if not user:
                 return Response(
-                    {"error": "user_id is required for REGISTRATION events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": "user_id is required for REGISTRATION events."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
             event = Event.create_registration_event(user, web_agent_id)
@@ -188,58 +191,58 @@ def add_event(request):
         elif event_name == "LOGIN":
             if not user:
                 return Response(
-                    {"error": "user_id is required for LOGIN events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": "user_id is required for LOGIN events."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
             event = Event.create_login_event(user, web_agent_id)
-        
+
         elif event_name == "PURCHASE_BOOK":
             if not user:
                 return Response(
                     {"error": "user_id is required for PURCHASE_BOOK events."},
-                    status=status.HTTP_400_BAD_REQUEST
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             book_id = data.get("book_id")
             if not book_id:
                 return Response(
-                    {"error": "book_id is required for PURCHASE_BOOK events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": "book_id is required for PURCHASE_BOOK events."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             try:
                 book = Movie.objects.get(id=book_id)
             except Movie.DoesNotExist:
                 return Response(
-                    {"error": f"Book with id {book_id} not found."}, 
-                    status=status.HTTP_404_NOT_FOUND
+                    {"error": f"Book with id {book_id} not found."},
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             event = Event.create_purchase_book_event(user, web_agent_id, book)
-            
+
         elif event_name == "SHOPPING_CART":
             if not user:
                 return Response(
                     {"error": "user_id is required for SHOPPING_CART events."},
-                    status=status.HTTP_400_BAD_REQUEST
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             book_id = data.get("book_id")
             if not book_id:
                 return Response(
-                    {"error": "book_id is required for SHOPPINGCART events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": "book_id is required for SHOPPINGCART events."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             try:
                 book = Movie.objects.get(id=book_id)
             except Movie.DoesNotExist:
                 return Response(
-                    {"error": f"Book with id {book_id} not found."}, 
-                    status=status.HTTP_404_NOT_FOUND
+                    {"error": f"Book with id {book_id} not found."},
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             event = Event.create_shoppingcart_event(user, web_agent_id, book)
-        
+
         else:
             return Response(
-                {"error": f"Unknown event_name: {event_name}"}, 
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": f"Unknown event_name: {event_name}"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         # Save the event

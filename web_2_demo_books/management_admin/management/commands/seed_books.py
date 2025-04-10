@@ -4,39 +4,46 @@ from datetime import timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from django.utils.text import slugify
 
-from movieapp.models import Movie, Genre, Comment
-from django.apps import apps 
+from booksapp.models import Movie, Genre, Comment
+from django.apps import apps
+
 
 class Command(BaseCommand):
     help = "Resets ALL tables and then seeds the database with initial movies, genres, and comments"
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS("Starting to seed the database..."))
-        all_models = apps.get_models()  
+        all_models = apps.get_models()
         for model in all_models:
             model.objects.all().delete()
         self.stdout.write(self.style.SUCCESS("All tables have been reset (all records deleted)."))
         # Create genres
         genres_to_create = [
-            "Science", "Education", "Cooking", "Story", "History", 
-            "Children", "Culture", "Music", "Magazine",
-            "Romance"
+            "Science",
+            "Education",
+            "Cooking",
+            "Story",
+            "History",
+            "Children",
+            "Culture",
+            "Music",
+            "Magazine",
+            "Romance",
         ]
-        
+
         genres = {}
         for genre_name in genres_to_create:
             genre, created = Genre.objects.get_or_create(name=genre_name)
             genres[genre_name] = genre
             status = "Created" if created else "Already exists"
             self.stdout.write(f"{status}: Genre '{genre_name}'")
-        
+
         # Sample movie data (usando nombres de archivos locales en vez de URLs)
         movies_data = [
             {
                 "name": "Lidia's Italian-American Kitchen",
-                "desc": "Focusing on the Italian-American kitchen--the cooking she encountered when she first came to America as a young adolescent--Lidia pays homage to this \"cuisine of adaptation born of necessity.\" But she transforms it subtly with her light, discriminating touch, using the authentic ingredients, not accessible to the early immigrants, which are all so readily available today. The aromatic flavors of fine Italian olive oil, imported Parmigiano-Reggiano and Gorgonzola dolce latte, fresh basil, oregano, and rosemary, sun-sweetened San Marzano tomatoes, prosciutto, and pancetta permeate the dishes she makes in her Italian-American kitchen today. And they will transform for you this time-honored cuisine, as you cook with Lidia, learning from her the many secret, sensuous touches that make her food superlative.",
+                "desc": 'Focusing on the Italian-American kitchen--the cooking she encountered when she first came to America as a young adolescent--Lidia pays homage to this "cuisine of adaptation born of necessity." But she transforms it subtly with her light, discriminating touch, using the authentic ingredients, not accessible to the early immigrants, which are all so readily available today. The aromatic flavors of fine Italian olive oil, imported Parmigiano-Reggiano and Gorgonzola dolce latte, fresh basil, oregano, and rosemary, sun-sweetened San Marzano tomatoes, prosciutto, and pancetta permeate the dishes she makes in her Italian-American kitchen today. And they will transform for you this time-honored cuisine, as you cook with Lidia, learning from her the many secret, sensuous touches that make her food superlative.',
                 "year": 2001,
                 "director": "Lidia Matticchio Bastianich",
                 "cast": "Tim Robbins, Morgan Freeman, Bob Gunton",
@@ -45,7 +52,7 @@ class Command(BaseCommand):
                 "rating": 4.8,
                 "price": 12.90,
                 "img_file": "9780375411502.jpg",  # <-- archivo local
-                "genres": ["Cooking"]
+                "genres": ["Cooking"],
             },
             {
                 "name": "Programming Massively Parallel Processors",
@@ -71,7 +78,7 @@ class Command(BaseCommand):
                 "rating": 4.7,
                 "price": 98.47,
                 "img_file": "9780134683416.jpg",
-                "genres": ["Science", "Education"]
+                "genres": ["Science", "Education"],
             },
             {
                 "name": "Dark Nights: Metal: Dark Knights Rising",
@@ -84,7 +91,7 @@ class Command(BaseCommand):
                 "rating": 4.6,
                 "price": 14.55,
                 "img_file": "9781401289072.jpg",
-                "genres": ["Story"]
+                "genres": ["Story"],
             },
             {
                 "name": "Case Files Family Medicine 5th Edition",
@@ -97,7 +104,7 @@ class Command(BaseCommand):
                 "rating": 4.5,
                 "price": 44.00,
                 "img_file": "9781260468595.jpg",
-                "genres": ["Culture"]
+                "genres": ["Culture"],
             },
             {
                 "name": "A Breath of Snow and Ashes",
@@ -110,7 +117,7 @@ class Command(BaseCommand):
                 "rating": 4.6,
                 "price": 7.47,
                 "img_file": "9780385324168.jpg",
-                "genres": ["Magazine"]
+                "genres": ["Magazine"],
             },
             {
                 "name": "Ettinger's Textbook of Veterinary Internal Medicine",
@@ -123,11 +130,11 @@ class Command(BaseCommand):
                 "rating": 4.6,
                 "price": 207.02,
                 "img_file": "9780323779319.jpg",
-                "genres": ["Romance"]
+                "genres": ["Romance"],
             },
             {
                 "name": "Art of Computer Programming, the, Volumes 1-4B, Boxed Set",
-                "desc": "Countless readers have spoken about the profound personal influence of Knuth's work. Scientists have marveled at the beauty and elegance of his analysis, while ordinary programmers have successfully applied his \"cookbook\" solutions to their day-to-day problems. All have admired Knuth for the breadth, clarity, accuracy, and good humor found in his books.",
+                "desc": 'Countless readers have spoken about the profound personal influence of Knuth\'s work. Scientists have marveled at the beauty and elegance of his analysis, while ordinary programmers have successfully applied his "cookbook" solutions to their day-to-day problems. All have admired Knuth for the breadth, clarity, accuracy, and good humor found in his books.',
                 "year": 2022,
                 "director": "Donald Knuth",
                 "cast": "Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss",
@@ -136,7 +143,7 @@ class Command(BaseCommand):
                 "rating": 4.5,
                 "price": 239.92,
                 "img_file": "9780137935109.jpg",
-                "genres": ["Education", "Science"]
+                "genres": ["Education", "Science"],
             },
             {
                 "name": "Fourth Wing",
@@ -149,7 +156,7 @@ class Command(BaseCommand):
                 "rating": 4.6,
                 "price": 23.47,
                 "img_file": "9781649374042.jpg",
-                "genres": ["Education", "Science"]
+                "genres": ["Education", "Science"],
             },
             {
                 "name": "The Housemaid Is Watching",
@@ -162,23 +169,81 @@ class Command(BaseCommand):
                 "trailer_url": "https://www.bookstores.com/books/the-housemaid-is-watching-freida-mcfadden/9781464221132",
                 "rating": 4.5,
                 "img_file": "9781464221132.jpg",
-                "genres": ["Education", "Science"]
-            }
+                "genres": ["Education", "Science"],
+            },
         ]
 
         # Sample comment data
         sample_comments = {
             "male_names": [
-                "James", "Michael", "William", "Daniel", "David", "Robert", "John", "Thomas",
-                "Matthew", "Christopher", "Joseph", "Andrew", "Edward", "Mark", "Brian", "Steven",
-                "Kevin", "Jason", "Timothy", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas",
-                "Eric", "Jonathan", "Stephen", "Justin", "Charles", "Anthony", "Richard", "Scott"
+                "James",
+                "Michael",
+                "William",
+                "Daniel",
+                "David",
+                "Robert",
+                "John",
+                "Thomas",
+                "Matthew",
+                "Christopher",
+                "Joseph",
+                "Andrew",
+                "Edward",
+                "Mark",
+                "Brian",
+                "Steven",
+                "Kevin",
+                "Jason",
+                "Timothy",
+                "Jeffrey",
+                "Ryan",
+                "Jacob",
+                "Gary",
+                "Nicholas",
+                "Eric",
+                "Jonathan",
+                "Stephen",
+                "Justin",
+                "Charles",
+                "Anthony",
+                "Richard",
+                "Scott",
             ],
             "female_names": [
-                "Emma", "Sophia", "Olivia", "Ava", "Isabella", "Mia", "Charlotte", "Amelia",
-                "Harper", "Evelyn", "Abigail", "Emily", "Elizabeth", "Sofia", "Madison", "Avery",
-                "Ella", "Scarlett", "Grace", "Victoria", "Lily", "Samantha", "Eleanor", "Hannah",
-                "Lillian", "Addison", "Aubrey", "Layla", "Ellie", "Stella", "Natalie", "Zoe", "Leah", "Haley"
+                "Emma",
+                "Sophia",
+                "Olivia",
+                "Ava",
+                "Isabella",
+                "Mia",
+                "Charlotte",
+                "Amelia",
+                "Harper",
+                "Evelyn",
+                "Abigail",
+                "Emily",
+                "Elizabeth",
+                "Sofia",
+                "Madison",
+                "Avery",
+                "Ella",
+                "Scarlett",
+                "Grace",
+                "Victoria",
+                "Lily",
+                "Samantha",
+                "Eleanor",
+                "Hannah",
+                "Lillian",
+                "Addison",
+                "Aubrey",
+                "Layla",
+                "Ellie",
+                "Stella",
+                "Natalie",
+                "Zoe",
+                "Leah",
+                "Haley",
             ],
             "positive_comments": [
                 "Absolutely loved this book! A masterpiece that stands the test of time.",
@@ -190,7 +255,7 @@ class Command(BaseCommand):
                 "I've watched this multiple times and it gets better with each viewing.",
                 "The score perfectly complements the storytelling. A true classic!",
                 "Masterful performances by the entire cast. Truly unforgettable.",
-                "This book changed my perspective on cinema. Absolutely brilliant."
+                "This book changed my perspective on cinema. Absolutely brilliant.",
             ],
             "mixed_comments": [
                 "Good book overall, though some scenes dragged on a bit too long.",
@@ -200,151 +265,150 @@ class Command(BaseCommand):
                 "A good book that could have been great with some tighter editing.",
                 "Interesting concept but the execution was somewhat inconsistent.",
                 "Worth watching, though I expected a bit more given all the hype.",
-                "Some brilliant moments mixed with a few that didn't quite land."
+                "Some brilliant moments mixed with a few that didn't quite land.",
             ],
             "critical_comments": [
                 "Not my cup of tea. I found the pacing to be too slow.",
                 "The plot was confusing and hard to follow at times.",
                 "I expected more given the high ratings. A bit disappointing.",
                 "The characters weren't believable enough for me to get invested.",
-                "Technically well-made but emotionally distant."
-            ]
+                "Technically well-made but emotionally distant.",
+            ],
         }
-        
+
         # First check if movies already exist
-        auto_confirm = os.environ.get('AUTO_SEED', 'false').lower() == 'true'
-        
+        auto_confirm = os.environ.get("AUTO_SEED", "false").lower() == "true"
+
         if Movie.objects.count() > 0:
             if auto_confirm:
                 Comment.objects.all().delete()
                 Movie.objects.all().delete()
                 self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
             else:
-                self.stdout.write(self.style.WARNING(
-                    "Movies already exist in the database. "
-                    "Do you want to delete all existing movies and comments? (yes/no)"
-                ))
+                self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
                 confirm = input()
-                if confirm.lower() != 'yes':
+                if confirm.lower() != "yes":
                     self.stdout.write(self.style.SUCCESS("Seeding cancelled."))
                     return
                 else:
                     Comment.objects.all().delete()
                     Movie.objects.all().delete()
                     self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
-        
+
         # Create movies
         created_movies = []
         for index in range(1, 256):
             try:
                 movie_data = movies_data[index % 10]
                 # Nombre de archivo local que YA tienes en media/gallery
-                file_name = movie_data['img_file']
-                
+                file_name = movie_data["img_file"]
+
                 # Ruta absoluta hasta donde está tu imagen en media/gallery
                 local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
-                
+
                 # Creamos la instancia del Movie
                 movie = Movie(
-                    userId = index,
-                    name=movie_data['name'],
-                    desc=movie_data['desc'],
-                    year=movie_data['year'],
-                    director=movie_data['director'],
-                    cast=movie_data['cast'],
-                    duration=movie_data['duration'],
-                    trailer_url=movie_data['trailer_url'],
-                    rating=movie_data['rating'],
-                    price=movie_data["price"]
+                    userId=index,
+                    name=movie_data["name"],
+                    desc=movie_data["desc"],
+                    year=movie_data["year"],
+                    director=movie_data["director"],
+                    cast=movie_data["cast"],
+                    duration=movie_data["duration"],
+                    trailer_url=movie_data["trailer_url"],
+                    rating=movie_data["rating"],
+                    price=movie_data["price"],
                 )
                 movie.save()
-                
+
                 # Asignamos la imagen local (asumiendo que existe en media/gallery)
                 if os.path.exists(local_path):
                     # Ajusta la ruta relativa para que Django la maneje
                     movie.img = f"gallery/{file_name}"
                     movie.save()
-                    self.stdout.write(self.style.SUCCESS(
-                        f"Using local image: Movie '{movie_data['name']}'"
-                    ))
+                    self.stdout.write(self.style.SUCCESS(f"Using local image: Movie '{movie_data['name']}'"))
                 else:
-                    self.stdout.write(self.style.WARNING(
-                        f"Image not found for '{movie_data['name']}': {local_path}"
-                    ))
-                
+                    self.stdout.write(self.style.WARNING(f"Image not found for '{movie_data['name']}': {local_path}"))
+
                 # Añadimos géneros
-                for genre_name in movie_data['genres']:
+                for genre_name in movie_data["genres"]:
                     if genre_name in genres:
                         movie.genres.add(genres[genre_name])
-                
+
                 created_movies.append(movie)
-                
+
             except Exception as e:
-                self.stdout.write(self.style.ERROR(
-                    f"Error creating movie {movie_data['name']}: {e}"
-                ))
-        
+                self.stdout.write(self.style.ERROR(f"Error creating movie {movie_data['name']}: {e}"))
+
         # Add comments to movies
         self.stdout.write(self.style.SUCCESS("Adding comments to movies..."))
-        
+
         male_names = sample_comments["male_names"]
         female_names = sample_comments["female_names"]
         positive_comments = sample_comments["positive_comments"]
         mixed_comments = sample_comments["mixed_comments"]
         critical_comments = sample_comments["critical_comments"]
-        
+
         now = timezone.now()
-        
+
         # Define avatar associations - person1.jpg and person4.jpg are female, person2.png and person3.jpg are male
-        female_avatars = ["person1.jpg", "person4.jpg"]
-        male_avatars = ["person2.png", "person3.jpg"]
-        
+        # female_avatars = ["person1.jpg", "person4.jpg"]
+        # male_avatars = ["person2.png", "person3.jpg"]
+
         for movie in created_movies:
             # Determine number of comments for this movie (3-8)
             num_comments = random.randint(3, 8)
-            
+
             # Generate comments with different sentiment distributions based on rating
             if movie.rating >= 4.5:
-                sentiment_weights = [0.8, 0.15, 0.05]  # 80% positive, 15% mixed, 5% critical
+                sentiment_weights = [
+                    0.8,
+                    0.15,
+                    0.05,
+                ]  # 80% positive, 15% mixed, 5% critical
             elif movie.rating >= 4.0:
-                sentiment_weights = [0.6, 0.3, 0.1]    # 60% positive, 30% mixed, 10% critical
+                sentiment_weights = [
+                    0.6,
+                    0.3,
+                    0.1,
+                ]  # 60% positive, 30% mixed, 10% critical
             else:
-                sentiment_weights = [0.4, 0.4, 0.2]    # 40% positive, 40% mixed, 20% critical
-            
+                sentiment_weights = [
+                    0.4,
+                    0.4,
+                    0.2,
+                ]  # 40% positive, 40% mixed, 20% critical
+
             for _ in range(num_comments):
-                sentiment = random.choices(
-                    ["positive", "mixed", "critical"], 
-                    weights=sentiment_weights, 
-                    k=1
-                )[0]
-                
+                sentiment = random.choices(["positive", "mixed", "critical"], weights=sentiment_weights, k=1)[0]
+
                 if sentiment == "positive":
                     comment_text = random.choice(positive_comments)
                 elif sentiment == "mixed":
                     comment_text = random.choice(mixed_comments)
                 else:
                     comment_text = random.choice(critical_comments)
-                
+
                 # Create a random date in the past 60 days
                 days_ago = random.randint(1, 60)
                 comment_date = now - timedelta(days=days_ago)
-                
+
                 # Randomly select gender and name
                 use_male = random.choice([True, False])
                 if use_male:
                     commenter_name = random.choice(male_names)
-                    avatar_file = f"gallery/people/{random.choice(male_avatars)}"
+                    # avatar_file = f"gallery/people/{random.choice(male_avatars)}"
                 else:
                     commenter_name = random.choice(female_names)
-                    avatar_file = f"gallery/people/{random.choice(female_avatars)}"
-                
+                    # avatar_file = f"gallery/people/{random.choice(female_avatars)}"
+
                 Comment.objects.create(
                     movie=movie,
                     name=commenter_name,
                     content=comment_text,
-                    created_at=comment_date
+                    created_at=comment_date,
                 )
-            
+
             self.stdout.write(f"Added {num_comments} comments to '{movie.name}'")
-        
+
         self.stdout.write(self.style.SUCCESS("Database seeding completed successfully!"))

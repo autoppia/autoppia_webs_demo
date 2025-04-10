@@ -16,5 +16,5 @@ def create_event(user, event_type, description, data=None, web_agent_id=None):
         event_type=event_type,
         description=description,
         data=data or {},  # Use empty dict if no data is provided
-        web_agent_id=web_agent_id
+        web_agent_id=web_agent_id,
     )

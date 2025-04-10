@@ -19,14 +19,14 @@
                         <h1 class="card-title">{{movie.name}}</h1>
                         <span class="badge badge-primary p-2">{{movie.year}}</span>
                     </div>
-                    
+
                     <hr>
-                    
+
                     <div class="movie-info mb-4">
                         <div class="row">
                             <div class="col-md-6">
                                 <p class="text-muted">
-                                    <strong><i class="fas fa-file mr-2"></i>Category:</strong> 
+                                    <strong><i class="fas fa-file mr-2"></i>Category:</strong>
                                     {% for genre in movie.genres.all %}
                                     <span class="badge badge-secondary">{{ genre.name }}</span>
                                     {% empty %}
@@ -34,7 +34,7 @@
                                     {% endfor %}
                                 </p>
                                 <p class="text-muted">
-                                    <strong><i class="fas fa-star mr-2"></i>Rating:</strong> 
+                                    <strong><i class="fas fa-star mr-2"></i>Rating:</strong>
                                     <span class="text-warning">
                                         {% for i in "12345" %}
                                             {% if forloop.counter <= movie.rating|floatformat:"0" %}
@@ -51,23 +51,23 @@
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted">
-                                    <strong><i class="fas fa-user mr-2"></i>Author:</strong> 
+                                    <strong><i class="fas fa-user mr-2"></i>Author:</strong>
                                     {{ movie.director|default:"Not specified" }}
                                 </p>
                                 <p class="text-muted">
-                                    <strong><i class="fas fa-file mr-2"></i>Pages:</strong> 
+                                    <strong><i class="fas fa-file mr-2"></i>Pages:</strong>
                                     {% if movie.duration %}{{ movie.duration }} pages{% else %}Not specified{% endif %}
                                 </p>
                             </div>
                         </div>
                     </div>
-                    
+
                     <h5 class="card-subtitle mb-3"><i class="fas fa-info-circle mr-2"></i>Description</h5>
                     <p class="card-text">{{movie.desc}}</p>
-                    
+
                     {% comment %} <h5 class="card-subtitle mb-3 mt-4"><i class="fas fa-users mr-2"></i>Cast</h5>
                     <p>{{ movie.cast|default:"No cast information available" }}</p> {% endcomment %}
-                    
+
                     <div class="mt-4">
                         {% if movie.trailer_url %}
                         <a href="{{ movie.trailer_url }}" target="_blank" class="btn btn-success mr-2">
@@ -92,7 +92,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Comments section -->
     <div class="card mt-4 shadow">
         <div class="card-header bg-light">
@@ -108,7 +108,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit comment</button>
             </form>
-            
+
             <!-- Comments list -->
             <div class="comment-list mt-4" id="comments-container">
                 {% for comment in comments %}
@@ -147,7 +147,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Related movies -->
     {% if related_movies %}
     <div class="mt-5">
@@ -188,23 +188,23 @@
         const commentForm = document.getElementById('comment-form');
         const commentsContainer = document.getElementById('comments-container');
         const noCommentsMsg = document.getElementById('no-comments');
-        
+
         // List of male and female names for avatar assignment
-        const maleNames = ["James", "Michael", "William", "Daniel", "David", "Robert", "John", "Thomas", 
-                         "Matthew", "Christopher", "Joseph", "Andrew", "Edward", "Mark", "Brian", "Steven", 
-                         "Kevin", "Jason", "Timothy", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas", 
+        const maleNames = ["James", "Michael", "William", "Daniel", "David", "Robert", "John", "Thomas",
+                         "Matthew", "Christopher", "Joseph", "Andrew", "Edward", "Mark", "Brian", "Steven",
+                         "Kevin", "Jason", "Timothy", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas",
                          "Eric", "Jonathan", "Stephen", "Justin", "Charles", "Anthony", "Richard", "Scott"];
-        
-        const femaleNames = ["Emma", "Sophia", "Olivia", "Ava", "Isabella", "Mia", "Charlotte", "Amelia", 
-                           "Harper", "Evelyn", "Abigail", "Emily", "Elizabeth", "Sofia", "Madison", "Avery", 
-                           "Ella", "Scarlett", "Grace", "Victoria", "Lily", "Samantha", "Eleanor", "Hannah", 
+
+        const femaleNames = ["Emma", "Sophia", "Olivia", "Ava", "Isabella", "Mia", "Charlotte", "Amelia",
+                           "Harper", "Evelyn", "Abigail", "Emily", "Elizabeth", "Sofia", "Madison", "Avery",
+                           "Ella", "Scarlett", "Grace", "Victoria", "Lily", "Samantha", "Eleanor", "Hannah",
                            "Lillian", "Addison", "Aubrey", "Layla", "Ellie", "Stella", "Natalie", "Zoe", "Leah", "Haley"];
-        
+
         commentForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(commentForm);
-            
+
             fetch(commentForm.action, {
                 method: 'POST',
                 body: formData,
@@ -219,15 +219,15 @@
                     if (noCommentsMsg) {
                         noCommentsMsg.remove();
                     }
-                    
+
                     // Create new comment element
                     const commentDiv = document.createElement('div');
                     commentDiv.className = 'media mb-3 p-3 border-bottom';
-                    
+
                     // Determine appropriate avatar based on name
                     let avatarUrl;
                     const userName = data.comment.name;
-                    
+
                     if (data.comment.avatar) {
                         avatarUrl = data.comment.avatar;
                     } else {
@@ -235,7 +235,7 @@
                         const userNameLower = userName.toLowerCase();
                         const isMale = maleNames.some(name => name.toLowerCase() === userNameLower);
                         const isFemale = femaleNames.some(name => name.toLowerCase() === userNameLower);
-                        
+
                         if (isMale) {
                             // Use either person2.png or person3.jpg for male names
                             avatarUrl = Math.random() < 0.5 ? '/media/gallery/people/person2.png' : '/media/gallery/people/person3.jpg';
@@ -253,7 +253,7 @@
                             avatarUrl = randomAvatars[Math.floor(Math.random() * randomAvatars.length)];
                         }
                     }
-                    
+
                     commentDiv.innerHTML = `
                         <img src="${avatarUrl}" class="mr-3 rounded-circle" alt="${data.comment.name}" style="width: 80px; height: 80px; object-fit: cover;">
                         <div class="media-body">
@@ -261,13 +261,13 @@
                             <p>${data.comment.content}</p>
                         </div>
                     `;
-                    
+
                     // Add the new comment at the top
                     commentsContainer.prepend(commentDiv);
-                    
+
                     // Reset the form
                     commentForm.reset();
-                    
+
                     // Update the comment count in the header
                     const commentHeader = document.querySelector('.card-header h4');
                     const currentCount = parseInt(commentHeader.textContent.match(/\d+/)[0]);

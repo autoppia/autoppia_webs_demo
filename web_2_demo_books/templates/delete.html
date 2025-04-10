@@ -11,15 +11,15 @@
                     <div class="mb-4">
                         <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid rounded" style="max-height: 200px;">
                     </div>
-                    
+
                     <h4 class="mb-3">¿Estás seguro de que deseas eliminar la película?</h4>
                     <h5 class="text-danger mb-4">"{{ movie.name }}" ({{ movie.year }})</h5>
-                    
+
                     <p class="alert alert-warning">
                         <i class="fas fa-exclamation-circle mr-2"></i>
                         Esta acción no se puede deshacer. Al eliminar esta película, se eliminarán todos los datos asociados.
                     </p>
-                    
+
                     <form method="POST">
                         {% csrf_token %}
                         <div class="form-group d-flex justify-content-center mt-4">

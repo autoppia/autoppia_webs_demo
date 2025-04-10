@@ -7,37 +7,37 @@
                 <div class="card-header bg-primary text-white text-center py-3">
                     <h3 class="mb-0"><i class="fas fa-sign-in-alt mr-2"></i>Sign In</h3>
                 </div>
-                
+
                 <div class="card-body p-4">
                     <form method="post" action="{% url 'movieapp:login' %}">
                         {% csrf_token %}
-                        
+
                         <div class="form-group">
                             <label for="username">
                                 <i class="fas fa-user mr-1"></i> Username
                             </label>
                             <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required autofocus>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="password">
                                 <i class="fas fa-lock mr-1"></i> Password
                             </label>
                             <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
                         </div>
-                        
+
                         <div class="form-group mt-4">
                             <button type="submit" class="btn btn-primary btn-block">
                                 <i class="fas fa-sign-in-alt mr-1"></i> Sign In
                             </button>
                         </div>
-                        
+
                         {% if next %}
                         <input type="hidden" name="next" value="{{ next }}">
                         {% endif %}
                     </form>
                 </div>
-                
+
                 <div class="card-footer bg-light text-center py-3">
                     <p class="mb-0">Don't have an account? <a href="{% url 'movieapp:register' %}">Register</a></p>
                 </div>
