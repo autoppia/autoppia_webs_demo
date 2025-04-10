@@ -75,14 +75,14 @@
                         </a>
                         {% endif %}
                         {% if user.is_authenticated %}
-                        <a href="{% url 'movieapp:cart' movie.id %}" class="btn btn-primary mr-2">
+                        <a href="{% url 'booksapp:cart' movie.id %}" class="btn btn-primary mr-2">
                             <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
                         </a>
                         {% if user.id == movie.userId%}
-                        <a href="{% url 'movieapp:update' movie.id %}" class="btn btn-warning mr-2">
+                        <a href="{% url 'booksapp:update' movie.id %}" class="btn btn-warning mr-2">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </a>
-                        <a href="{% url 'movieapp:delete' movie.id %}" class="btn btn-danger">
+                        <a href="{% url 'booksapp:delete' movie.id %}" class="btn btn-danger">
                             <i class="fas fa-trash-alt mr-1"></i> Delete
                         </a>
                         {% endif %}
@@ -100,7 +100,7 @@
         </div>
         <div class="card-body">
             <!-- Form for adding comments -->
-            <form id="comment-form" method="POST" action="{% url 'movieapp:add_comment' movie.id %}">
+            <form id="comment-form" method="POST" action="{% url 'booksapp:add_comment' movie.id %}">
                 {% csrf_token %}
                 <div class="form-group">
                     <input type="text" name="name" class="form-control mb-2" placeholder="Your name" required>
@@ -170,7 +170,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ related.name }}</h5>
                         <p class="card-text small">{{ related.desc|truncatechars:80 }}</p>
-                        <a href="{% url 'movieapp:detail' related.id %}" class="btn btn-sm btn-primary">
+                        <a href="{% url 'booksapp:detail' related.id %}" class="btn btn-sm btn-primary">
                             <i class="fas fa-info-circle mr-1"></i> View Details
                         </a>
                     </div>

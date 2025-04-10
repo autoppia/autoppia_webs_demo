@@ -16,7 +16,7 @@
                 <div class="card-body text-center">
                     <h3 class="card-title">{{ genre.name }}</h3>
                     <p class="card-text text-muted">{{ genre.movies.count }} movies</p>
-                    <a href="{% url 'movieapp:genre_detail' genre.id %}" class="btn btn-primary">View movies</a>
+                    <a href="{% url 'booksapp:genre_detail' genre.id %}" class="btn btn-primary">View movies</a>
                 </div>
             </div>
         </div>

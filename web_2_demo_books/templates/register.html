@@ -9,7 +9,7 @@
                 </div>
 
                 <div class="card-body p-4">
-                    <form method="post" action="{% url 'movieapp:register' %}">
+                    <form method="post" action="{% url 'booksapp:register' %}">
                         {% csrf_token %}
 
                         <div class="form-group">
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="card-footer bg-light text-center py-3">
-                    <p class="mb-0">Already have an account? <a href="{% url 'movieapp:login' %}">Sign In</a></p>
+                    <p class="mb-0">Already have an account? <a href="{% url 'booksapp:login' %}">Sign In</a></p>
                 </div>
             </div>
         </div>
