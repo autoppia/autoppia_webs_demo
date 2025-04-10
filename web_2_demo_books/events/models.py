@@ -18,6 +18,7 @@ class EventName(models.TextChoices):
     CONTACT = "CONTACT", "Contact Message"
     EDIT_USER = "EDIT_USER", "Edit User Profile"
     FILTER_BOOK = "FILTER_BOOK", "Filter Book"
+    # TODO: Add the following event in iwa
     PURCHASE_BOOK = (
         "PURCHASE_BOOK",
         "Purchase Book",
