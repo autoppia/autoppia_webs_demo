@@ -12,7 +12,7 @@ services:
       - ./media:/app/media
     # Host's port = WEB_PORT; container's port = 8000
     ports:
-      - "${WEB_PORT}:8000"
+      - "${WEB_PORT}:8001"
     environment:
       - DEBUG=0
       - DB_NAME=web2_books
