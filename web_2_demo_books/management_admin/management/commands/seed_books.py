@@ -1,46 +1,57 @@
 import os
 import random
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.core.files import File
 
 from booksapp.models import Book, Genre, Comment
 from django.apps import apps
 
 
 class Command(BaseCommand):
-    help = "Resets ALL tables and then seeds the database with initial movies, genres, and comments"
+    help = "Resets and seeds the database with books, genres, and comments (optimized version)"
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS("Starting to seed the database..."))
-        all_models = apps.get_models()
-        for model in all_models:
-            model.objects.all().delete()
-        self.stdout.write(self.style.SUCCESS("All tables have been reset (all records deleted)."))
-        # Create genres
-        genres_to_create = [
-            "Science",
-            "Education",
-            "Cooking",
-            "Story",
-            "History",
-            "Children",
-            "Culture",
-            "Music",
-            "Magazine",
-            "Romance",
-        ]
+        self.stdout.write(self.style.SUCCESS("Starting optimized database seeding..."))
 
-        genres = {}
-        for genre_name in genres_to_create:
-            genre, created = Genre.objects.get_or_create(name=genre_name)
-            genres[genre_name] = genre
-            status = "Created" if created else "Already exists"
-            self.stdout.write(f"{status}: Genre '{genre_name}'")
+        # Step 1: Reset database (fastest method)
+        self._reset_database()
 
-        # Sample movie data (usando nombres de archivos locales en vez de URLs)
-        movies_data = [
+        # Step 2: Create genres in bulk
+        genres = self._create_genres()
+
+        # Step 3: Create books in parallel with bulk operations
+        books = self._create_books(genres)
+
+        # Step 4: Add comments in bulk
+        self._add_comments(books)
+
+        self.stdout.write(self.style.SUCCESS("Database seeding completed successfully!"))
+
+    def _reset_database(self):
+        """Fastest way to reset all data"""
+        self.stdout.write("Resetting database...")
+        with ThreadPoolExecutor() as executor:
+            for model in apps.get_models():
+                executor.submit(model.objects.all().delete)
+        self.stdout.write(self.style.SUCCESS("All tables reset."))
+
+    def _create_genres(self):
+        """Bulk create genres with conflict handling"""
+        genre_names = ["Science", "Education", "Cooking", "Story", "History", "Children", "Culture", "Music", "Magazine", "Romance"]
+
+        # Bulk create ignoring conflicts
+        Genre.objects.bulk_create([Genre(name=name) for name in genre_names], ignore_conflicts=True)
+
+        # Return dict of name:genre for quick lookup
+        return {g.name: g for g in Genre.objects.all()}
+
+    def _create_books(self, genres):
+        """Create books with optimized bulk operations"""
+        books_data = [
             {
                 "name": "Lidia's Italian-American Kitchen",
                 "desc": 'Focusing on the Italian-American kitchen--the cooking she encountered when she first came to America as a young adolescent--Lidia pays homage to this "cuisine of adaptation born of necessity." But she transforms it subtly with her light, discriminating touch, using the authentic ingredients, not accessible to the early immigrants, which are all so readily available today. The aromatic flavors of fine Italian olive oil, imported Parmigiano-Reggiano and Gorgonzola dolce latte, fresh basil, oregano, and rosemary, sun-sweetened San Marzano tomatoes, prosciutto, and pancetta permeate the dishes she makes in her Italian-American kitchen today. And they will transform for you this time-honored cuisine, as you cook with Lidia, learning from her the many secret, sensuous touches that make her food superlative.',
@@ -173,7 +184,61 @@ class Command(BaseCommand):
             },
         ]
 
-        # Sample comment data
+        # Prepare all book objects in memory first
+        book_objects = []
+        image_tasks = []
+
+        for index in range(1, 256):
+            book_data = books_data[index % 10]
+            book = Book(
+                userId=index,
+                name=book_data["name"],
+                desc=book_data["desc"],
+                year=book_data["year"],
+                director=book_data["director"],
+                cast=book_data["cast"],
+                duration=book_data["duration"],
+                trailer_url=book_data["trailer_url"],
+                rating=book_data["rating"],
+                price=book_data["price"],
+            )
+            book_objects.append(book)
+
+            # Prepare image path for later processing
+            file_name = book_data["img_file"]
+            local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
+            image_tasks.append((book, local_path, file_name))
+
+        # Bulk create all books at once
+        Book.objects.bulk_create(book_objects)
+
+        # Process images in parallel
+        self._process_images(image_tasks)
+
+        # Add genres through M2M (optimized)
+        all_books = Book.objects.all()
+        with ThreadPoolExecutor() as executor:
+            for book in all_books:
+                book_data = books_data[book.userId % 10]
+                executor.submit(book.genres.add, *[genres[name] for name in book_data["genres"]])
+
+        return list(all_books)
+
+    def _process_images(self, image_tasks):
+        """Process book images in parallel"""
+
+        def process_task(task):
+            book, local_path, file_name = task
+            if os.path.exists(local_path):
+                with open(local_path, "rb") as f:
+                    book.img.save(file_name, File(f))
+                    book.save()
+
+        with ThreadPoolExecutor() as executor:
+            executor.map(process_task, image_tasks)
+
+    def _add_comments(self, books):
+        """Bulk create comments with optimized operations"""
         sample_comments = {
             "male_names": [
                 "James",
@@ -276,139 +341,39 @@ class Command(BaseCommand):
             ],
         }
 
-        # First check if movies already exist
-        auto_confirm = os.environ.get("AUTO_SEED", "false").lower() == "true"
-
-        if Book.objects.count() > 0:
-            if auto_confirm:
-                Comment.objects.all().delete()
-                Book.objects.all().delete()
-                self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
-            else:
-                self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
-                confirm = input()
-                if confirm.lower() != "yes":
-                    self.stdout.write(self.style.SUCCESS("Seeding cancelled."))
-                    return
-                else:
-                    Comment.objects.all().delete()
-                    Book.objects.all().delete()
-                    self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
-
-        # Create movies
-        created_movies = []
-        for index in range(1, 256):
-            try:
-                movie_data = movies_data[index % 10]
-                # Nombre de archivo local que YA tienes en media/gallery
-                file_name = movie_data["img_file"]
-
-                # Ruta absoluta hasta donde está tu imagen en media/gallery
-                local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
-
-                # Creamos la instancia del Movie
-                movie = Book(
-                    userId=index,
-                    name=movie_data["name"],
-                    desc=movie_data["desc"],
-                    year=movie_data["year"],
-                    director=movie_data["director"],
-                    cast=movie_data["cast"],
-                    duration=movie_data["duration"],
-                    trailer_url=movie_data["trailer_url"],
-                    rating=movie_data["rating"],
-                    price=movie_data["price"],
-                )
-                movie.save()
-
-                # Asignamos la imagen local (asumiendo que existe en media/gallery)
-                if os.path.exists(local_path):
-                    # Ajusta la ruta relativa para que Django la maneje
-                    movie.img = f"gallery/{file_name}"
-                    movie.save()
-                    self.stdout.write(self.style.SUCCESS(f"Using local image: Movie '{movie_data['name']}'"))
-                else:
-                    self.stdout.write(self.style.WARNING(f"Image not found for '{movie_data['name']}': {local_path}"))
-
-                # Añadimos géneros
-                for genre_name in movie_data["genres"]:
-                    if genre_name in genres:
-                        movie.genres.add(genres[genre_name])
-
-                created_movies.append(movie)
-
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f"Error creating movie {movie_data['name']}: {e}"))
-
-        # Add comments to movies
-        self.stdout.write(self.style.SUCCESS("Adding comments to movies..."))
-
-        male_names = sample_comments["male_names"]
-        female_names = sample_comments["female_names"]
-        positive_comments = sample_comments["positive_comments"]
-        mixed_comments = sample_comments["mixed_comments"]
-        critical_comments = sample_comments["critical_comments"]
-
+        # Prepare all comment objects in memory
+        comment_objects = []
         now = timezone.now()
 
-        # Define avatar associations - person1.jpg and person4.jpg are female, person2.png and person3.jpg are male
-        # female_avatars = ["person1.jpg", "person4.jpg"]
-        # male_avatars = ["person2.png", "person3.jpg"]
-
-        for movie in created_movies:
-            # Determine number of comments for this movie (3-8)
+        for book in books:
             num_comments = random.randint(3, 8)
 
-            # Generate comments with different sentiment distributions based on rating
-            if movie.rating >= 4.5:
-                sentiment_weights = [
-                    0.8,
-                    0.15,
-                    0.05,
-                ]  # 80% positive, 15% mixed, 5% critical
-            elif movie.rating >= 4.0:
-                sentiment_weights = [
-                    0.6,
-                    0.3,
-                    0.1,
-                ]  # 60% positive, 30% mixed, 10% critical
+            # Determine sentiment distribution
+            if book.rating >= 4.5:
+                weights = [0.8, 0.15, 0.05]  # positive, mixed, critical
+            elif book.rating >= 4.0:
+                weights = [0.6, 0.3, 0.1]
             else:
-                sentiment_weights = [
-                    0.4,
-                    0.4,
-                    0.2,
-                ]  # 40% positive, 40% mixed, 20% critical
+                weights = [0.4, 0.4, 0.2]
 
             for _ in range(num_comments):
-                sentiment = random.choices(["positive", "mixed", "critical"], weights=sentiment_weights, k=1)[0]
+                sentiment = random.choices(["positive", "mixed", "critical"], weights=weights, k=1)[0]
 
                 if sentiment == "positive":
-                    comment_text = random.choice(positive_comments)
+                    text = random.choice(sample_comments["positive_comments"])
                 elif sentiment == "mixed":
-                    comment_text = random.choice(mixed_comments)
+                    text = random.choice(sample_comments["mixed_comments"])
                 else:
-                    comment_text = random.choice(critical_comments)
+                    text = random.choice(sample_comments["critical_comments"])
 
-                # Create a random date in the past 60 days
                 days_ago = random.randint(1, 60)
                 comment_date = now - timedelta(days=days_ago)
 
-                # Randomly select gender and name
                 use_male = random.choice([True, False])
-                if use_male:
-                    commenter_name = random.choice(male_names)
-                    # avatar_file = f"gallery/people/{random.choice(male_avatars)}"
-                else:
-                    commenter_name = random.choice(female_names)
-                    # avatar_file = f"gallery/people/{random.choice(female_avatars)}"
+                name = random.choice(sample_comments["male_names"] if use_male else sample_comments["female_names"])
 
-                Comment.objects.create(
-                    movie=movie,
-                    name=commenter_name,
-                    content=comment_text,
-                    created_at=comment_date,
-                )
+                comment_objects.append(Comment(movie=book, name=name, content=text, created_at=comment_date))
 
-            self.stdout.write(f"Added {num_comments} comments to '{movie.name}'")
-
-        self.stdout.write(self.style.SUCCESS("Database seeding completed successfully!"))
+        # Bulk create all comments at once
+        Comment.objects.bulk_create(comment_objects)
+        self.stdout.write(f"Added {len(comment_objects)} comments in bulk.")
