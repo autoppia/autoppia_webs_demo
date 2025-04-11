@@ -126,7 +126,7 @@
                             <label for="favorite_genres">
                                 <i class="fas fa-film mr-1"></i> Favorite Genres
                             </label>
-                            <select id="favorite_genres" name="favorite_genres" class="form-control" multiple>
+                            <select id="favorite_genres" name="favorite_genres" class="form-control" >
                                 {% for genre in genres %}
                                 <option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>
                                 {% endfor %}
