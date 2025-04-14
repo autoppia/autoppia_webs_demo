@@ -9,7 +9,7 @@ class BookForm(forms.ModelForm):
     img = forms.ImageField(required=False)
 
     # Now required=True to make genre selection mandatory
-    genres = forms.ModelChoiceField(
+    genre = forms.ModelChoiceField(
         queryset=Genre.objects.all(),
         required=True,
         widget=forms.Select(attrs={"class": "form-control"}),
@@ -79,7 +79,6 @@ class BookForm(forms.ModelForm):
             "duration": "Duration (minutes)",
             "trailer_url": "Trailer URL",
             "rating": "Rating",
-            "genres": "Genre",
         }
         help_texts = {"rating": "Rating between 0 and 5 stars."}
 
