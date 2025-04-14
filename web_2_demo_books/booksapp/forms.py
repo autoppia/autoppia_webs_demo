@@ -18,19 +18,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = [
-            "name",
-            "userId",
-            "desc",
-            "year",
-            "img",
-            "director",
-            "cast",
-            "duration",
-            "trailer_url",
-            "rating",
-            "genres",
-        ]
+        fields = ["name", "userId", "desc", "year", "director", "cast", "duration", "trailer_url", "rating", "genres"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter the book name"}),
             "userId": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Enter the user id"}),

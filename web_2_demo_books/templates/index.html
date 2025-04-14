@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
+{% load static %}
 
 <div class="hero-section">
     <div class="container">
@@ -92,8 +93,13 @@
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100 shadow-sm">
                 <div class="card-img-container position-relative">
-                    <img src="{{i.img.url}}" class="card-img-top" alt="{{i.name}}" style="height: 250px; object-fit: cover;">
-                    <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{i.year}}</div>
+                    {% if i.img %}
+                        <img src="{{ i.img.url }}" class="card-img-top" alt="{{ i.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default-movie.jpg' %}" class="card-img-top" alt="Default movie poster" style="height: 250px; object-fit: cover;">
+                    {% endif %}
+                    <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{ i.year }}</div>
+
                     {% if i.rating %}
                     <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">
                         <span class="badge badge-warning p-2">
