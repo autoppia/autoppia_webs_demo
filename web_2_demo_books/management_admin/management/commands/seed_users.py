@@ -173,10 +173,10 @@ class Command(BaseCommand):
 
         # We'll pick random data for profiles
         bio_templates = [
-            "I'm a passionate movie enthusiast who loves {genre1} and {genre2}.",
+            "I'm a passionate book enthusiast who loves {genre1} and {genre2}.",
             "Cinephile with a taste for {genre1} and {genre2} classics!",
             "When not watching {genre1}, you'll find me exploring {genre2} hits.",
-            "Always up for a great {genre1} or {genre2} movie!",
+            "Always up for a great {genre1} or {genre2} book!",
         ]
         locations = [
             "New York, USA",

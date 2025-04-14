@@ -32,13 +32,13 @@ class BookForm(forms.ModelForm):
             "genres",
         ]
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter the movie name"}),
+            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter the book name"}),
             "userId": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Enter the user id"}),
             "desc": forms.Textarea(
                 attrs={
                     "class": "form-control",
                     "rows": 4,
-                    "placeholder": "Write a synopsis or description of the movie",
+                    "placeholder": "Write a synopsis or description of the book",
                 }
             ),
             "year": forms.NumberInput(

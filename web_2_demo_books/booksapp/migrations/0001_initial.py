@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ("content", models.TextField()),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
                 ("avatar", models.ImageField(blank=True, null=True, upload_to="gallery/avatars")),
-                ("movie", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="comments", to="booksapp.book")),
+                ("book", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="comments", to="booksapp.book")),
             ],
             options={
                 "ordering": ["-created_at"],

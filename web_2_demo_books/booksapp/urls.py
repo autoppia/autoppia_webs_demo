@@ -9,7 +9,7 @@ urlpatterns = [
     # Movie details
     path("book/<int:movie_id>/", views.detail, name="detail"),
     # CRUD operations for movies
-    path("add/", views.add_book, name="add_movie"),
+    path("add/", views.add_book, name="add_book"),
     path("update/<int:id>", views.update_book, name="update"),
     path("delete_cart/<int:id>", views.delete_cart, name="delete_cart"),
     path("delete/<int:id>", views.delete_book, name="delete"),

@@ -18,11 +18,7 @@ class EventName(models.TextChoices):
     CONTACT = "CONTACT", "Contact Message"
     EDIT_USER = "EDIT_USER", "Edit User Profile"
     FILTER_BOOK = "FILTER_BOOK", "Filter Book"
-    # TODO: Add the following event in iwa
-    PURCHASE_BOOK = (
-        "PURCHASE_BOOK",
-        "Purchase Book",
-    )
+    PURCHASE_BOOK = "PURCHASE_BOOK", "Purchase Book"
     SHOPPING_CART = "SHOPPING_CART", "Shopping Cart"
 
 
@@ -250,7 +246,7 @@ class Event(models.Model):
             "name": comment.name,
             "content": comment.content,
             "created_at": comment.created_at.isoformat() if comment.created_at else None,
-            "movie": {
+            "book": {
                 "id": movie.id,
                 "name": movie.name,
                 "director": movie.director,

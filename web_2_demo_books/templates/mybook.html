@@ -16,7 +16,7 @@
                 {% endif %}
                 <div class="form-row">
                     <div class="col-md-3">
-                        <a class="btn btn-outline-secondary w-100" href="{% url 'booksapp:add_movie' %}">
+                        <a class="btn btn-outline-secondary w-100" href="{% url 'booksapp:add_book' %}">
                             <i class="fas fa-plus"></i>
                             Add
                         </a>
@@ -113,7 +113,7 @@
         <div class="col-12 text-center py-5">
             <h3>No movies found</h3>
             <p>Try changing your search criteria or add a new movie</p>
-            <a href="{% url 'booksapp:add_movie' %}" class="btn btn-success">Add movie</a>
+            <a href="{% url 'booksapp:add_book' %}" class="btn btn-success">Add movie</a>
         </div>
         {% endfor %}
     </div>

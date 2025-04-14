@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Create your models here.
 
 
 class Genre(models.Model):
@@ -50,7 +49,7 @@ class Book(models.Model):
 
 
 class Comment(models.Model):
-    movie = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="comments")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="comments")
     name = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -60,7 +59,7 @@ class Comment(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"Comment by {self.name} on {self.movie.name}"
+        return f"Comment by {self.name} on {self.book.name}"
 
 
 class UserProfile(models.Model):
