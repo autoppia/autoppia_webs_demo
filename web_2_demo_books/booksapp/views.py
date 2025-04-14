@@ -260,6 +260,7 @@ def add_book(request):
     """
     Vista para agregar una nueva película y registrar el evento de ADD_FILM.
     """
+    all_genres = Genre.objects.all().order_by("name")
     if request.method == "POST":
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
@@ -270,13 +271,15 @@ def add_book(request):
                 movie=book,
             )
             add_film_event.save()
-            messages.success(request, "Movie added successfully.")
+            messages.success(request, "Book added successfully.")
             return redirect("booksapp:index")
         else:
-            messages.error(request, "Please correct the errors in the form.")
+            print("Form errors:", form.errors)
+            messages.error(request, "Please fix the errors in the form.")
     else:
         form = BookForm()
-    return render(request, "add.html", {"form": form})
+
+    return render(request, "add.html", {"form": form, "genres": all_genres})
 
 
 def update_book(request, id):
