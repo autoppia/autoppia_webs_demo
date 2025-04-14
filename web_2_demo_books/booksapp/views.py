@@ -131,12 +131,12 @@ def detail(request, movie_id):
         random_movies = Book.objects.exclude(id__in=[m.id for m in list(related_movies) + [book]]).order_by("?")[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(random_movies)
 
-    comments = book.comments.all()
+    comments = Comment.objects.filter(movie=book)
 
     carts = Cart.objects.filter(userId=request.user.id)
 
     context = {
-        "book": book,
+        "movie": book,
         "related_movies": related_movies,
         "comments": comments,
         "carts": len(carts),
