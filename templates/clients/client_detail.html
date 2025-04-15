@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ client.name }} - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{{ client.name }}</h1>
+        <div class="btn-group">
+            <a href="{% url 'client-update' client.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'client-delete' client.id %}" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+        </div>
+    </div>
+    
+    <!-- Client Details -->
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Client Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Email:</strong>
+                        {{ client.email|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Phone:</strong>
+                        {{ client.phone|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Address:</strong>
+                        {% if client.address %}
+                            {{ client.address }}<br>
+                            {% if client.city %}{{ client.city }},{% endif %}
+                            {% if client.state %}{{ client.state }}{% endif %}
+                            {% if client.zip_code %}{{ client.zip_code }}{% endif %}<br>
+                            {{ client.country|default:"" }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Website:</strong>
+                        {% if client.website %}
+                            <a href="{{ client.website }}" target="_blank">{{ client.website }}</a>
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Industry:</strong>
+                        {{ client.industry|default:"Not specified" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge {% if client.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ client.is_active|yesno:"Active,Inactive" }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Created:</strong>
+                        {{ client.created_at|date:"M d, Y" }}
+                    </div>
+                </div>
+            </div>
+            
+            {% if client.notes %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="m-0">Notes</h5>
+                </div>
+                <div class="card-body">
+                    {{ client.notes|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-8">
+            <!-- Contacts Section -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Contacts</h5>
+                    <a href="{% url 'contact-create' %}?client={{ client.id }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Contact
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Job Title</th>
+                                    <th>Primary</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contacts %}
+                                <tr>
+                                    <td><a href="{% url 'contact-detail' contact.id %}">{{ contact.first_name }} {{ contact.last_name }}</a></td>
+                                    <td>{{ contact.email|default:"-" }}</td>
+                                    <td>{{ contact.phone|default:"-" }}</td>
+                                    <td>{{ contact.job_title|default:"-" }}</td>
+                                    <td>
+                                        {% if contact.is_primary %}
+                                            <span class="badge bg-success">Primary</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'contact-detail' contact.id %}" class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{% url 'contact-update' contact.id %}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'contact-delete' contact.id %}" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No contacts found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects Section -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Projects</h5>
+                    <a href="{% url 'project-create' %}?client={{ client.id }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Project
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Progress</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in projects %}
+                                <tr>
+                                    <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
+                                    <td>
+                                        <span class="badge bg-{{ project.status|slugify }}">
+                                            {{ project.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ project.priority|slugify }}">
+                                            {{ project.get_priority_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ project.start_date|default:"-" }}</td>
+                                    <td>{{ project.end_date|default:"-" }}</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ project.progress }}%" aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">{{ project.progress }}%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'project-detail' project.id %}" class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{% url 'project-update' project.id %}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'project-delete' project.id %}" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center">No projects found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Documents Section -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Documents</h5>
+                    <a href="{% url 'document-create' %}?client={{ client.id }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Document
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Uploaded By</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for document in documents %}
+                                <tr>
+                                    <td><a href="{% url 'document-detail' document.id %}">{{ document.title }}</a></td>
+                                    <td>{{ document.get_category_display }}</td>
+                                    <td>{{ document.uploaded_by.get_full_name|default:document.uploaded_by.username }}</td>
+                                    <td>{{ document.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'document-download' document.id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                            <a href="{% url 'document-update' document.id %}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'document-delete' document.id %}" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No documents found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

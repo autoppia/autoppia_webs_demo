@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ contact.first_name }} {{ contact.last_name }} - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{{ contact.first_name }} {{ contact.last_name }}</h1>
+        <div class="btn-group">
+            <a href="{% url 'contact-update' contact.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'contact-delete' contact.id %}" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Contact Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Client:</strong>
+                        <a href="{% url 'client-detail' contact.client.id %}">{{ contact.client.name }}</a>
+                        {% if contact.is_primary %}
+                            <span class="badge bg-success ms-2">Primary Contact</span>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Email:</strong>
+                        {% if contact.email %}
+                            <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Phone:</strong>
+                        {% if contact.phone %}
+                            <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Mobile:</strong>
+                        {% if contact.mobile %}
+                            <a href="tel:{{ contact.mobile }}">{{ contact.mobile }}</a>
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Job Title:</strong>
+                        {{ contact.job_title|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Department:</strong>
+                        {{ contact.department|default:"Not provided" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Created:</strong>
+                        {{ contact.created_at|date:"M d, Y" }}
+                    </div>
+                </div>
+            </div>
+            
+            {% if contact.notes %}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="m-0">Notes</h5>
+                </div>
+                <div class="card-body">
+                    {{ contact.notes|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <a href="mailto:{{ contact.email }}" class="btn btn-primary w-100 {% if not contact.email %}disabled{% endif %}">
+                                <i class="fas fa-envelope"></i> Send Email
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="tel:{{ contact.phone }}" class="btn btn-success w-100 {% if not contact.phone %}disabled{% endif %}">
+                                <i class="fas fa-phone"></i> Call
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="{% url 'chat-direct' contact.id %}" class="btn btn-info w-100">
+                                <i class="fas fa-comments"></i> Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Related Projects -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="m-0">Client Projects</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in contact.client.projects.all %}
+                                <tr>
+                                    <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
+                                    <td>
+                                        <span class="badge bg-{{ project.status|slugify }}">
+                                            {{ project.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ project.priority|slugify }}">
+                                            {{ project.get_priority_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ project.start_date|default:"-" }}</td>
+                                    <td>{{ project.end_date|default:"-" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No projects found for this client.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Contacts -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="m-0">Other Contacts at {{ contact.client.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Job Title</th>
+                                    <th>Primary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for other_contact in contact.client.contacts.all %}
+                                    {% if other_contact.id != contact.id %}
+                                    <tr>
+                                        <td><a href="{% url 'contact-detail' other_contact.id %}">{{ other_contact.first_name }} {{ other_contact.last_name }}</a></td>
+                                        <td>{{ other_contact.email|default:"-" }}</td>
+                                        <td>{{ other_contact.phone|default:"-" }}</td>
+                                        <td>{{ other_contact.job_title|default:"-" }}</td>
+                                        <td>
+                                            {% if other_contact.is_primary %}
+                                                <span class="badge bg-success">Primary</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No other contacts found for this client.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

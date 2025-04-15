@@ -1,0 +1,13 @@
+Name: Sergey Mikhailov
+Given Name: Sergey
+Family Name: Mikhailov
+Address Ehitajate tee 5, Tallinn Estonia
+City: Tallin
+Street: Ehitajate tee 5
+Building Number: 5
+Postal Code: 19086
+City: Tallinn (the capital city)
+Country: Estonia
+Personal Code: 38001085718
+Document Number: AS0000343
+Citizenship: EST

@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load doc_filters %}
+{% block title %}{{ document.title }} - Document Details - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Document Details</h1>
+        <div>
+            <a href="{% url 'document-list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Documents
+            </a>
+            <a href="{% url 'document-update' document.id %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit Document
+            </a>
+            <a href="{% url 'document-delete' document.id %}" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete Document
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ document.title }}</h6>
+                    {% if document.is_confidential %}
+                    <span class="badge bg-danger">Confidential</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Description</h6>
+                        <p>{{ document.description|default:"No description provided."|linebreaks }}</p>
+                    </div>
+
+                    {% if document.notes %}
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Notes</h6>
+                        <p>{{ document.notes|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if document.tags %}
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Tags</h6>
+                        <div>
+                            {% for tag in document.tags %}
+                            <span class="badge bg-secondary">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Document Preview</h6>
+                        <div class="document-preview mt-3">
+                            {% if document.file.url|lower|endswith:'.pdf' %}
+                                <div class="ratio ratio-16x9" style="height: 600px;">
+                                    <iframe src="{{ document.file.url }}" allowfullscreen></iframe>
+                                </div>
+                            {% elif document.file.url|lower|endswith:'.jpg' or document.file.url|lower|endswith:'.jpeg' or document.file.url|lower|endswith:'.png' or document.file.url|lower|endswith:'.gif' %}
+                                <img src="{{ document.file.url }}" alt="{{ document.title }}" class="img-fluid">
+                            {% else %}
+                                <div class="text-center p-5 bg-light">
+                                    <i class="fas fa-file fa-4x text-secondary mb-3"></i>
+                                    <p>Preview not available for this file type.</p>
+                                    <a href="{{ document.file.url }}" class="btn btn-primary" target="_blank">
+                                        <i class="fas fa-download"></i> Download File
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <a href="{{ document.file.url }}" class="btn btn-primary" target="_blank">
+                            <i class="fas fa-download"></i> Download Document
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Document Details</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Category</h6>
+                        <p>{{ document.category }}</p>
+                    </div>
+
+                    {% if document.project %}
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Related Project</h6>
+                        <p><a href="{% url 'project-detail' document.project.id %}">{{ document.project.name }}</a></p>
+                    </div>
+                    {% endif %}
+
+                    {% if document.client %}
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Related Client</h6>
+                        <p><a href="{% url 'client-detail' document.client.id %}">{{ document.client.name }}</a></p>
+                    </div>
+                    {% endif %}
+
+                    {% if document.version %}
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Version</h6>
+                        <p>{{ document.version }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">File Information</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td>File Name:</td>
+                                <td>{{ document.file.name|split:"/"|last }}</td>
+                            </tr>
+                            <tr>
+                                <td>File Size:</td>
+                                <td>{{ document.file.size|filesizeformat }}</td>
+                            </tr>
+                            <tr>
+                                <td>File Type:</td>
+                                <td>{{ document.file.name|split:"."|last|upper }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Dates</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td>Upload Date:</td>
+                                <td>{{ document.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Last Updated:</td>
+                                <td>{{ document.updated_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% if document.expiry_date %}
+                            <tr>
+                                <td>Expiry Date:</td>
+                                <td>
+                                    {{ document.expiry_date|date:"M d, Y" }}
+                                    {% if document.is_expired %}
+                                        <span class="badge bg-danger ms-1">Expired</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </table>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Uploaded By</h6>
+                        <p>{{ document.uploaded_by.get_full_name|default:document.uploaded_by.username }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

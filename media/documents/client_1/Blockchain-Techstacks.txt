@@ -1,0 +1,9 @@
+Qualifications:
+
+5+ years of hands-on experience in software development with a focus on blockchain technologies.
+Strong proficiency in at least one programming language commonly used for blockchain development (e.g., Solidity, Java, C++, Python).
+In-depth understanding of blockchain concepts, consensus mechanisms (e.g., Proof-of-Work, Proof-of-Stake), and smart contract development.
+Experience with popular blockchain frameworks and tools (e.g., Truffle, Web3.js, Ganache).
+Knowledge of distributed systems, cryptography, and data structures.
+
++389 75 789053

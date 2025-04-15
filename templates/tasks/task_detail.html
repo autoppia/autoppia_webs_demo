@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+{% load task_filters %}
+{% block title %}{{ task.title }} - Task Details - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Task Details</h1>
+        <div>
+            <a href="{% url 'task-list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Tasks
+            </a>
+            <a href="{% url 'task-update' task.id %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit Task
+            </a>
+            <a href="{% url 'task-delete' task.id %}" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete Task
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ task.title }}</h6>
+                    <span class="{{ task.get_status_badge_class }}">{{ task.get_status_display }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Description</h6>
+                        <p>{{ task.description|default:"No description provided."|linebreaks }}</p>
+                    </div>
+
+                    {% if task.notes %}
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Notes</h6>
+                        <p>{{ task.notes|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if task.tags %}
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Tags</h6>
+                        <div>
+                            {% for tag in task.tags %}
+                            <span class="badge bg-secondary">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ task.get_completion_percentage }}%" 
+                             aria-valuenow="{{ task.get_completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ task.get_completion_percentage }}%
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Change Status</h6>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm {% if task.status == 'not_started' %}btn-secondary active{% else %}btn-outline-secondary{% endif %}" 
+                                    data-status="not_started" onclick="updateTaskStatus(this)">
+                                Not Started
+                            </button>
+                            <button type="button" class="btn btn-sm {% if task.status == 'in_progress' %}btn-primary active{% else %}btn-outline-primary{% endif %}" 
+                                    data-status="in_progress" onclick="updateTaskStatus(this)">
+                                In Progress
+                            </button>
+                            <button type="button" class="btn btn-sm {% if task.status == 'on_hold' %}btn-warning active{% else %}btn-outline-warning{% endif %}" 
+                                    data-status="on_hold" onclick="updateTaskStatus(this)">
+                                On Hold
+                            </button>
+                            <button type="button" class="btn btn-sm {% if task.status == 'completed' %}btn-success active{% else %}btn-outline-success{% endif %}" 
+                                    data-status="completed" onclick="updateTaskStatus(this)">
+                                Completed
+                            </button>
+                            <button type="button" class="btn btn-sm {% if task.status == 'cancelled' %}btn-danger active{% else %}btn-outline-danger{% endif %}" 
+                                    data-status="cancelled" onclick="updateTaskStatus(this)">
+                                Cancelled
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="font-weight-bold">Comments</h6>
+                        <div class="comments-container">
+                            {% for comment in task.comments.all %}
+                            <div class="card mb-2">
+                                <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong>
+                                        <small class="text-muted">{{ comment.created_at|date:"M d, Y H:i" }}</small>
+                                    </div>
+                                </div>
+                                <div class="card-body py-2">
+                                    <p class="mb-1">{{ comment.content|linebreaks }}</p>
+                                    {% if comment.attachment %}
+                                    <div>
+                                        <a href="{{ comment.attachment.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-paperclip"></i> {{ comment.attachment.name|split:"/"|last }}
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p class="text-muted">No comments yet.</p>
+                            {% endfor %}
+                        </div>
+
+                        <form method="post" action="{% url 'task-add-comment' task.id %}" enctype="multipart/form-data" class="mt-3">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ comment_form.content.id_for_label }}" class="form-label">Add Comment</label>
+                                {{ comment_form.content }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ comment_form.attachment.id_for_label }}" class="form-label">Attachment</label>
+                                {{ comment_form.attachment }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-comment"></i> Post Comment
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Task Details</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Project</h6>
+                        <p><a href="{% url 'project-detail' task.project.id %}">{{ task.project.name }}</a></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Assignee</h6>
+                        <p>{{ task.assignee.get_full_name|default:task.assignee.username }}</p>
+                    </div>
+
+                    {% if task.parent_task %}
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Parent Task</h6>
+                        <p><a href="{% url 'task-detail' task.parent_task.id %}">{{ task.parent_task.title }}</a></p>
+                    </div>
+                    {% endif %}
+
+                    {% if task.subtasks.exists %}
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Subtasks</h6>
+                        <ul class="list-group">
+                            {% for subtask in task.subtasks.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="{% url 'task-detail' subtask.id %}">{{ subtask.title }}</a>
+                                <span class="{{ subtask.get_status_badge_class }}">{{ subtask.get_status_display }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Priority</h6>
+                        <p><span class="{{ task.get_priority_badge_class }}">{{ task.get_priority_display }}</span></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Dates</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td>Start Date:</td>
+                                <td>{{ task.start_date|date:"M d, Y"|default:"Not set" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Due Date:</td>
+                                <td>
+                                    {{ task.due_date|date:"M d, Y" }}
+                                    {% if task.is_overdue %}
+                                        <span class="badge bg-danger ms-1">Overdue</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Completion Date:</td>
+                                <td id="completion-date">{{ task.completion_date|date:"M d, Y"|default:"Not completed" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Time Tracking</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td>Estimated Hours:</td>
+                                <td>{{ task.estimated_hours|default:"Not estimated" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Actual Hours:</td>
+                                <td>{{ task.actual_hours|default:"Not tracked" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    {% if task.is_recurring %}
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Recurrence</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td>Type:</td>
+                                <td>{{ task.get_recurrence_type_display }}</td>
+                            </tr>
+                            <tr>
+                                <td>End Date:</td>
+                                <td>{{ task.recurrence_end_date|date:"M d, Y" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <h6 class="font-weight-bold">Other Information</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <td>Billable:</td>
+                                <td>{% if task.is_billable %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Created By:</td>
+                                <td>{{ task.created_by.get_full_name|default:task.created_by.username|default:"Unknown" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Created On:</td>
+                                <td>{{ task.created_at|date:"M d, Y H:i" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Last Updated:</td>
+                                <td>{{ task.updated_at|date:"M d, Y H:i" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Attachments</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'task-upload-attachments' task.id %}" enctype="multipart/form-data" class="mb-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ attachment_form.files.id_for_label }}" class="form-label">Upload Files</label>
+                            {{ attachment_form.files }}
+                            <div class="form-text">You can select multiple files.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Upload Files
+                        </button>
+                    </form>
+
+                    <hr>
+
+                    <h6>Attached Files</h6>
+                    <div class="list-group">
+                        {% for attachment in task.attachment_files.all %}
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <a href="{{ attachment.file.url }}" target="_blank">
+                                    <i class="fas fa-file"></i> {{ attachment.filename }}
+                                </a>
+                                <small class="d-block text-muted">
+                                    Uploaded {{ attachment.uploaded_at|date:"M d, Y" }} by {{ attachment.uploaded_by.get_full_name|default:attachment.uploaded_by.username|default:"Unknown" }}
+                                </small>
+                            </div>
+                            <form method="post" action="{% url 'task-delete-attachment' task.id attachment.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this file?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                        {% empty %}
+                        <div class="text-center text-muted py-3">
+                            <p>No files attached to this task.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateTaskStatus(button) {
+        const status = button.getAttribute('data-status');
+        
+        fetch('{% url "task-update-status" task.id %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `status=${status}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update status badge
+                const statusBadges = document.querySelectorAll('.card-header .badge');
+                statusBadges.forEach(badge => {
+                    badge.className = '';
+                    badge.classList.add('badge');
+                    
+                    if (status === 'not_started') {
+                        badge.classList.add('bg-secondary');
+                    } else if (status === 'in_progress') {
+                        badge.classList.add('bg-primary');
+                    } else if (status === 'on_hold') {
+                        badge.classList.add('bg-warning');
+                    } else if (status === 'completed') {
+                        badge.classList.add('bg-success');
+                    } else if (status === 'cancelled') {
+                        badge.classList.add('bg-danger');
+                    }
+                    
+                    badge.textContent = data.status_display;
+                });
+                
+                // Update progress bar
+                const progressBar = document.querySelector('.progress-bar');
+                let percentage = 0;
+                
+                if (status === 'completed') {
+                    percentage = 100;
+                } else if (status === 'in_progress') {
+                    percentage = 50;
+                } else if (status === 'on_hold') {
+                    percentage = 25;
+                }
+                
+                progressBar.style.width = `${percentage}%`;
+                progressBar.setAttribute('aria-valuenow', percentage);
+                progressBar.textContent = `${percentage}%`;
+                
+                // Update completion date
+                if (data.completion_date) {
+                    document.getElementById('completion-date').textContent = data.completion_date;
+                } else {
+                    document.getElementById('completion-date').textContent = 'Not completed';
+                }
+                
+                // Update button states
+                const buttons = document.querySelectorAll('.btn-group button');
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.remove('btn-secondary', 'btn-primary', 'btn-warning', 'btn-success', 'btn-danger');
+                    btn.classList.add(`btn-outline-${btn.classList.contains('btn-outline-secondary') ? 'secondary' : 
+                                       btn.classList.contains('btn-outline-primary') ? 'primary' : 
+                                       btn.classList.contains('btn-outline-warning') ? 'warning' : 
+                                       btn.classList.contains('btn-outline-success') ? 'success' : 'danger'}`);
+                });
+                
+                button.classList.remove(`btn-outline-${button.classList.contains('btn-outline-secondary') ? 'secondary' : 
+                                        button.classList.contains('btn-outline-primary') ? 'primary' : 
+                                        button.classList.contains('btn-outline-warning') ? 'warning' : 
+                                        button.classList.contains('btn-outline-success') ? 'success' : 'danger'}`);
+                
+                if (status === 'not_started') {
+                    button.classList.add('btn-secondary', 'active');
+                } else if (status === 'in_progress') {
+                    button.classList.add('btn-primary', 'active');
+                } else if (status === 'on_hold') {
+                    button.classList.add('btn-warning', 'active');
+                } else if (status === 'completed') {
+                    button.classList.add('btn-success', 'active');
+                } else if (status === 'cancelled') {
+                    button.classList.add('btn-danger', 'active');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update task status. Please try again.');
+        });
+    }
+</script>
+{% endblock %}

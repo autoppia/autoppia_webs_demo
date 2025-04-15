@@ -1,0 +1,656 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}{% if form.instance.id %}Edit Document{% else %}Upload Document{% endif %} - Company Management System{% endblock %}
+
+{% block extra_css %}
+<!-- Add Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+<!-- Your existing CSS -->
+<style>
+    .upload-area {
+        width: 100%;
+        border: 2px dashed #e0e0e0;
+        border-radius: 5px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .upload-area.highlight {
+        border-color: #4e73df;
+        background-color: rgba(78, 115, 223, 0.05);
+    }
+
+    .upload-area__drop-zone {
+        padding: 20px;
+    }
+
+    .upload-area__title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .upload-area__paragraph {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 15px;
+    }
+
+    .upload-area__button {
+        background-color: #4e73df;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .upload-area__button:hover {
+        background-color: #2e59d9;
+    }
+
+    .upload-area__file-list {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .file-item {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 8px;
+    }
+
+    .file-item__icon {
+        margin-right: 10px;
+        color: #4e73df;
+    }
+
+    .file-item__info {
+        flex-grow: 1;
+    }
+
+    .file-item__name {
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+
+    .file-item__size {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    .file-item__remove {
+        color: #e74a3b;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .preview-container {
+        margin-top: 20px;
+        display: none;
+    }
+
+    .preview-container img {
+        max-width: 100%;
+        max-height: 300px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+    }
+
+    .preview-container iframe {
+        width: 100%;
+        height: 500px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+        clip-path: inset(50%)
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{% if form.instance.id %}Edit Document{% else %}Upload Document{% endif %}</h1>
+        <a href="{% url 'document-list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Documents
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Document Information</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="document-upload-form">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        {% if not form.instance.id %}
+                        <div class="mb-4">
+                            <div class="upload-area" id="dropzone">
+                                <div class="upload-area__drop-zone">
+                                    <p class="upload-area__title">Drag and drop files here</p>
+                                    <p class="upload-area__paragraph">or</p>
+                                    <button class="upload-area__button" type="button">Browse Files</button>
+                                    <input type="file" name="file" id="file-input" class="visually-hidden" {% if form.instance.id %}{% else %}required{% endif %}>
+                                </div>
+                                <div class="upload-area__file-list" id="file-list">
+                                    <!-- Files will be listed here -->
+                                </div>
+                            </div>
+                            <div class="preview-container" id="preview-container">
+                                <h6 class="font-weight-bold mb-2">Preview:</h6>
+                                <div id="file-preview"></div>
+                            </div>
+                            {% if form.file.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.file.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <div class="mb-4">
+                            <h6 class="font-weight-bold">Current File:</h6>
+                            <div class="d-flex align-items-center">
+                                <div class="file-item__icon">
+                                    <i class="fas fa-file"></i>
+                                </div>
+                                <div class="file-item__info">
+                                    <div class="file-item__name">{{ form.instance.file.name }}</div>
+                                    <div class="file-item__size">
+                                        {% if form.instance.file.size %}
+                                            {{ form.instance.file.size|filesizeformat }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <a href="{{ form.instance.file.url }}" target="_blank" class="btn btn-sm btn-info ml-2">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="replace-file" name="replace_file">
+                                <label class="form-check-label" for="replace-file">
+                                    Replace with new file
+                                </label>
+                            </div>
+                            <div id="new-file-container" class="mt-3" style="display: none;">
+                                <label for="file-input-edit" class="form-label">Select New File</label>
+                                <input type="file" name="file" id="file-input-edit" class="form-control">
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.title.id_for_label }}" class="form-label">Title*</label>
+                                    {% render_field form.title class="form-control" placeholder="Enter document title" %}
+                                    {% if form.title.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.title.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.category.id_for_label }}" class="form-label">Category*</label>
+                                    {% render_field form.category class="form-select" %}
+                                    {% if form.category.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.category.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {% render_field form.description class="form-control" rows="4" placeholder="Enter document description" %}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.description.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.project.id_for_label }}" class="form-label">Related Project</label>
+                                    {% render_field form.project class="form-select" %}
+                                    {% if form.project.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.project.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.client.id_for_label }}" class="form-label">Related Client</label>
+                                    {% render_field form.client class="form-select" %}
+                                    {% if form.client.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.client.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.tags.id_for_label }}" class="form-label">Tags</label>
+                                    {% render_field form.tags class="form-control" placeholder="Enter tags separated by commas" %}
+                                    {% if form.tags.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.tags.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.version.id_for_label }}" class="form-label">Version</label>
+                                    {% render_field form.version class="form-control" placeholder="e.g., 1.0" %}
+                                    {% if form.version.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.version.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.expiry_date.id_for_label }}" class="form-label">Expiry Date</label>
+                                    <div class="input-group">
+                                        {% render_field form.expiry_date class="form-control datepicker" placeholder="YYYY-MM-DD" %}
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                    </div>
+                                    {% if form.expiry_date.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.expiry_date.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3 form-check mt-4">
+                                    {% render_field form.is_confidential class="form-check-input" %}
+                                    <label class="form-check-label" for="{{ form.is_confidential.id_for_label }}">
+                                        Confidential Document
+                                    </label>
+                                    {% if form.is_confidential.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.is_confidential.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.notes.id_for_label }}" class="form-label">Notes</label>
+                            {% render_field form.notes class="form-control" rows="3" placeholder="Enter any additional notes" %}
+                            {% if form.notes.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.notes.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'document-list' %}" class="btn btn-secondary">Cancel</a>
+                            <div>
+                                <button type="submit" name="save_and_add" class="btn btn-info me-2">
+                                    <i class="fas fa-plus"></i> Save & Add Another
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> {% if form.instance.id %}Update{% else %}Upload{% endif %} Document
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    // Use jQuery in noConflict mode
+    var jq = jQuery.noConflict();
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Use jq instead of $
+        jq('select').select2({
+            theme: 'bootstrap-5',
+        });
+        
+        // Rest of your JavaScript using jq instead of $
+        // Initialize datepickers
+        jq('.datepicker').each(function() {
+            jq(this).datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: 'linked'
+            });
+        });
+        
+        // Initialize select2 for better dropdown experience
+        /*
+        $('select').select2({
+            theme: 'bootstrap4',
+        });
+        */
+        
+        // Handle file replacement toggle for edit mode
+        const replaceFileCheckbox = document.getElementById('replace-file');
+        const newFileContainer = document.getElementById('new-file-container');
+        
+        if (replaceFileCheckbox && newFileContainer) {
+            replaceFileCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    newFileContainer.style.display = 'block';
+                } else {
+                    newFileContainer.style.display = 'none';
+                }
+            });
+        }
+        
+        // Drag and drop functionality
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const uploadButton = document.querySelector('.upload-area__button');
+        const form = document.getElementById('document-upload-form');
+        const previewContainer = document.getElementById('preview-container');
+        const filePreview = document.getElementById('file-preview');
+        
+        if (dropzone && fileInput && fileList && uploadButton) {
+            // Open file dialog when the button is clicked
+            uploadButton.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Handle file selection via input
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    handleFiles(this.files);
+                }
+            });
+            
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            // Highlight drop area when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, unhighlight, false);
+            });
+            
+            // Handle dropped files
+            dropzone.addEventListener('drop', handleDrop, false);
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            function highlight() {
+                dropzone.classList.add('highlight');
+            }
+            
+            function unhighlight() {
+                dropzone.classList.remove('highlight');
+            }
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    handleFiles(files);
+                }
+            }
+            
+            function handleFiles(files) {
+                // We only handle one file for document uploads
+                const file = files[0];
+                
+                // Clear the file list
+                fileList.innerHTML = '';
+                
+                // Display file in the list
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileIcon = document.createElement('div');
+                fileIcon.className = 'file-item__icon';
+                fileIcon.innerHTML = getFileIcon(file.name);
+                
+                const fileInfo = document.createElement('div');
+                fileInfo.className = 'file-item__info';
+                
+                const fileName = document.createElement('div');
+                fileName.className = 'file-item__name';
+                fileName.textContent = file.name;
+                
+                const fileSize = document.createElement('div');
+                fileSize.className = 'file-item__size';
+                fileSize.textContent = formatFileSize(file.size);
+                
+                const removeButton = document.createElement('div');
+                removeButton.className = 'file-item__remove';
+                removeButton.innerHTML = '<i class="fas fa-times"></i>';
+                removeButton.addEventListener('click', function() {
+                    fileItem.remove();
+                    fileInput.value = '';
+                    previewContainer.style.display = 'none';
+                });
+                
+                fileInfo.appendChild(fileName);
+                fileInfo.appendChild(fileSize);
+                
+                fileItem.appendChild(fileIcon);
+                fileItem.appendChild(fileInfo);
+                fileItem.appendChild(removeButton);
+                
+                fileList.appendChild(fileItem);
+                
+                // Show file preview if it's an image or PDF
+                showFilePreview(file);
+                
+                // Auto-fill title field with filename (without extension)
+                const titleField = document.getElementById('{{ form.title.id_for_label }}');
+                if (titleField && !titleField.value) {
+                    const fileNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
+                    titleField.value = fileNameWithoutExt;
+                }
+            }
+            
+            function getFileIcon(fileName) {
+                const extension = fileName.split('.').pop().toLowerCase();
+                let iconClass = 'fas fa-file';
+                
+                if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg'].includes(extension)) {
+                    iconClass = 'fas fa-file-image';
+                } else if (['pdf'].includes(extension)) {
+                    iconClass = 'fas fa-file-pdf';
+                } else if (['doc', 'docx'].includes(extension)) {
+                    iconClass = 'fas fa-file-word';
+                } else if (['xls', 'xlsx', 'csv'].includes(extension)) {
+                    iconClass = 'fas fa-file-excel';
+                } else if (['ppt', 'pptx'].includes(extension)) {
+                    iconClass = 'fas fa-file-powerpoint';
+                } else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(extension)) {
+                    iconClass = 'fas fa-file-archive';
+                } else if (['txt', 'rtf'].includes(extension)) {
+                    iconClass = 'fas fa-file-alt';
+                } else if (['mp3', 'wav', 'ogg'].includes(extension)) {
+                    iconClass = 'fas fa-file-audio';
+                } else if (['mp4', 'avi', 'mov', 'wmv'].includes(extension)) {
+                    iconClass = 'fas fa-file-video';
+                } else if (['html', 'css', 'js', 'php', 'py', 'java', 'c', 'cpp'].includes(extension)) {
+                    iconClass = 'fas fa-file-code';
+                }
+                
+                return `<i class="${iconClass}"></i>`;
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function showFilePreview(file) {
+                const fileType = file.type;
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    filePreview.innerHTML = '';
+                    
+                    if (fileType.startsWith('image/')) {
+                        // Image preview
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = file.name;
+                        filePreview.appendChild(img);
+                        previewContainer.style.display = 'block';
+                    } else if (fileType === 'application/pdf') {
+                        // PDF preview
+                        const iframe = document.createElement('iframe');
+                        iframe.src = e.target.result;
+                        filePreview.appendChild(iframe);
+                        previewContainer.style.display = 'block';
+                    } else {
+                        // No preview available
+                        previewContainer.style.display = 'none';
+                    }
+                };
+                
+                if (fileType.startsWith('image/') || fileType === 'application/pdf') {
+                    reader.readAsDataURL(file);
+                } else {
+                    previewContainer.style.display = 'none';
+                }
+            }
+        }
+        
+        // Form validation
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                
+                // Check required fields
+                const requiredFields = ['title', 'category'];
+                requiredFields.forEach(field => {
+                    const input = document.getElementById(`id_${field}`);
+                    if (input && !input.value) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                        
+                        // Add error message if it doesn't exist
+                        let errorDiv = input.nextElementSibling;
+                        if (!errorDiv || !errorDiv.classList.contains('invalid-feedback')) {
+                            errorDiv = document.createElement('div');
+                            errorDiv.className = 'invalid-feedback d-block';
+                            errorDiv.textContent = 'This field is required.';
+                            input.parentNode.insertBefore(errorDiv, input.nextSibling);
+                        }
+                    } else if (input) {
+                        input.classList.remove('is-invalid');
+                        
+                        // Remove error message if it exists
+                        const errorDiv = input.nextElementSibling;
+                        if (errorDiv && errorDiv.classList.contains('invalid-feedback')) {
+                            errorDiv.remove();
+                        }
+                    }
+                });
+                
+                // Check file input for new documents
+                if (!document.querySelector('input[name="replace_file"]')) {
+                    const fileInput = document.getElementById('file-input');
+                    if (fileInput && fileInput.files.length === 0) {
+                        isValid = false;
+                        
+                        // Add error message to dropzone
+                        let errorDiv = document.querySelector('#dropzone + .invalid-feedback');
+                        if (!errorDiv) {
+                            errorDiv = document.createElement('div');
+                            errorDiv.className = 'invalid-feedback d-block';
+                            errorDiv.textContent = 'Please select a file to upload.';
+                            dropzone.parentNode.insertBefore(errorDiv, dropzone.nextSibling);
+                        }
+                    } else if (fileInput) {
+                        // Remove error message if it exists
+                        const errorDiv = document.querySelector('#dropzone + .invalid-feedback');
+                        if (errorDiv) {
+                            errorDiv.remove();
+                        }
+                    }
+                }
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    
+                    // Scroll to the first error
+                    const firstError = document.querySelector('.is-invalid, .invalid-feedback');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

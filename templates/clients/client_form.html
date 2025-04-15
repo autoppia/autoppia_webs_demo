@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{% if form.instance.id %}Edit{% else %}Add{% endif %} Client - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{% if form.instance.id %}Edit{% else %}Add{% endif %} Client</h1>
+        <a href="{% if form.instance.id %}{% url 'client-detail' form.instance.id %}{% else %}{% url 'client-list' %}{% endif %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">Name *</label>
+                        {% render_field form.name class="form-control" placeholder="Enter client name" %}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                        {% render_field form.email class="form-control" placeholder="Enter email address" %}
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.email.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.phone.id_for_label }}" class="form-label">Phone</label>
+                        <div class="phone-input">
+                            {% render_field form.phone class="form-control phone-mask" placeholder="(123) 456-7890" %}
+                        </div>
+                        {% if form.phone.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.phone.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.website.id_for_label }}" class="form-label">Website</label>
+                        {% render_field form.website class="form-control" placeholder="https://example.com" %}
+                        {% if form.website.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.website.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+                    {% render_field form.address class="form-control" placeholder="Enter street address" %}
+                    {% if form.address.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.address.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.city.id_for_label }}" class="form-label">City</label>
+                        {% render_field form.city class="form-control" placeholder="Enter city" %}
+                        {% if form.city.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.city.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.state.id_for_label }}" class="form-label">State/Province</label>
+                        {% render_field form.state class="form-control" placeholder="Enter state or province" %}
+                        {% if form.state.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.state.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.zip_code.id_for_label }}" class="form-label">Zip/Postal Code</label>
+                        {% render_field form.zip_code class="form-control" placeholder="Enter zip or postal code" %}
+                        {% if form.zip_code.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.zip_code.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.country.id_for_label }}" class="form-label">Country</label>
+                        {% render_field form.country class="form-control" placeholder="Enter country" %}
+                        {% if form.country.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.country.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="{{ form.industry.id_for_label }}" class="form-label">Industry</label>
+                    {% render_field form.industry class="form-control" placeholder="Enter industry" %}
+                    {% if form.industry.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.industry.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label for="{{ form.notes.id_for_label }}" class="form-label">Notes</label>
+                    {% render_field form.notes class="form-control" placeholder="Enter notes about this client" %}
+                    {% if form.notes.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.notes.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3 form-check">
+                    {% render_field form.is_active class="form-check-input" %}
+                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">Active</label>
+                    {% if form.is_active.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.is_active.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

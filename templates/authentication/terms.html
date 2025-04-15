@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms of Service - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center font-weight-light my-4">Terms of Service</h3>
+                </div>
+                <div class="card-body">
+                    <h4>1. Acceptance of Terms</h4>
+                    <p>By accessing and using the Company Management System, you accept and agree to be bound by the terms and provisions of this agreement.</p>
+                    
+                    <h4>2. Description of Service</h4>
+                    <p>The Company Management System provides tools for managing clients, projects, tasks, documents, and team communication.</p>
+                    
+                    <h4>3. User Account</h4>
+                    <p>To use the service, you must create an account. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.</p>
+                    
+                    <h4>4. User Conduct</h4>
+                    <p>You agree to use the service only for lawful purposes and in accordance with these Terms. You agree not to use the service:</p>
+                    <ul>
+                        <li>In any way that violates any applicable federal, state, local, or international law or regulation</li>
+                        <li>To transmit any material that is defamatory, obscene, or offensive</li>
+                        <li>To impersonate or attempt to impersonate the Company, a Company employee, another user, or any other person or entity</li>
+                        <li>To engage in any other conduct that restricts or inhibits anyone's use or enjoyment of the service</li>
+                    </ul>
+                    
+                    <h4>5. Intellectual Property</h4>
+                    <p>The service and its original content, features, and functionality are and will remain the exclusive property of the Company and its licensors.</p>
+                    
+                    <h4>6. Termination</h4>
+                    <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+                    
+                    <h4>7. Limitation of Liability</h4>
+                    <p>In no event shall the Company, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the service.</p>
+                    
+                    <h4>8. Changes to Terms</h4>
+                    <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days' notice prior to any new terms taking effect.</p>
+                    
+                    <h4>9. Contact Us</h4>
+                    <p>If you have any questions about these Terms, please contact us at support@companymanagement.com.</p>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <a href="{% url 'login' %}">Return to login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

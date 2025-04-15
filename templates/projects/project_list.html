@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load project_filters %}
+{% block title %}Projects - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Projects</h1>
+        <a href="{% url 'project-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Project
+        </a>
+    </div>
+    
+    <!-- Status Tabs -->
+    <div class="card mb-4">
+        <div class="card-body p-0">
+            <ul class="nav nav-tabs" id="statusTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+                        All <span class="badge bg-secondary">{{ projects|length }}</span>
+                    </button>
+                </li>
+                {% for status, label in filter_form.fields.status.choices %}
+                    {% if status %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="{{ status }}-tab" data-bs-toggle="tab" data-bs-target="#{{ status }}" type="button" role="tab" aria-controls="{{ status }}" aria-selected="false">
+                            {{ label }} <span class="badge bg-{{ status|slugify }}">{{ status_counts|get_item:status }}</span>
+                        </button>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="tab-content" id="statusTabsContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                    <!-- Search and Filter -->
+                    <div class="p-3">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Search projects..." value="{{ search_query }}">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                {{ filter_form.client }}
+                            </div>
+                            
+                            <div class="col-md-2">
+                                {{ filter_form.status }}
+                            </div>
+                            
+                            <div class="col-md-2">
+                                {{ filter_form.priority }}
+                            </div>
+                            
+                            <div class="col-md-1 text-end">
+                                {% if search_query or request.GET.client or request.GET.status or request.GET.priority %}
+                                <a href="{% url 'project-list' %}" class="btn btn-outline-secondary">Clear</a>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Projects Table -->
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Client</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Progress</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in projects %}
+                                <tr>
+                                    <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
+                                    <td><a href="{% url 'client-detail' project.client.id %}">{{ project.client.name }}</a></td>
+                                    <td>
+                                        <span class="badge bg-{{ project.status|slugify }}">
+                                            {{ project.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ project.priority|slugify }}">
+                                            {{ project.get_priority_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ project.start_date|default:"-" }}</td>
+                                    <td>{{ project.end_date|default:"-" }}</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ project.progress }}%" aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">{{ project.progress }}%</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'project-detail' project.id %}" class="btn btn-sm btn-info">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{% url 'project-update' project.id %}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'project-delete' project.id %}" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">No projects found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                {% for status, label in filter_form.fields.status.choices %}
+                    {% if status %}
+                    <div class="tab-pane fade" id="{{ status }}" role="tabpanel" aria-labelledby="{{ status }}-tab">
+                        <div class="table-container">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Client</th>
+                                        <th>Priority</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Progress</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for project in projects %}
+                                        {% if project.status == status %}
+                                        <tr>
+                                            <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
+                                            <td><a href="{% url 'client-detail' project.client.id %}">{{ project.client.name }}</a></td>
+                                            <td>
+                                                <span class="badge bg-{{ project.priority|slugify }}">
+                                                    {{ project.get_priority_display }}
+                                                </span>
+                                            </td>
+                                            <td>{{ project.start_date|default:"-" }}</td>
+                                            <td>{{ project.end_date|default:"-" }}</td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ project.progress }}%" aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">{{ project.progress }}%</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{% url 'project-detail' project.id %}" class="btn btn-sm btn-info">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="{% url 'project-update' project.id %}" class="btn btn-sm btn-warning">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="{% url 'project-delete' project.id %}" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7" class="text-center">No projects found with this status.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

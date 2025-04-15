@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Chat Rooms - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Chat Rooms</h1>
+        <a href="{% url 'create-chat-room' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> New Chat Room
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Available Chat Rooms</h6>
+        </div>
+        <div class="card-body">
+            {% if chat_rooms %}
+                <div class="list-group">
+                    {% for room in chat_rooms %}
+                        <a href="{% url 'chat-room' room.id %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ room.name }}</h5>
+                                <small>Created {{ room.created_at|timesince }} ago</small>
+                            </div>
+                            {% if room.description %}
+                                <p class="mb-1">{{ room.description }}</p>
+                            {% endif %}
+                            <small>
+                                <i class="fas fa-users mr-1"></i> {{ room.participants.count }} participants
+                                {% if room.last_message %}
+                                    <span class="mx-2">•</span>
+                                    <i class="fas fa-comment-alt mr-1"></i> Last message {{ room.last_message.created_at|timesince }} ago
+                                {% endif %}
+                            </small>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <p class="text-muted">No chat rooms available.</p>
+                    <a href="{% url 'create-chat-room' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create a Chat Room
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

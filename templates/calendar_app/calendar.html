@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Calendar - Company Management System{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+<style>
+    .fc-event {
+        cursor: pointer;
+    }
+    .fc-event-title {
+        font-weight: 500;
+    }
+    .fc-daygrid-event-dot {
+        border-color: inherit !important;
+    }
+    .event-tooltip {
+        position: absolute;
+        z-index: 10001;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+        max-width: 300px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .event-tooltip h5 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+    .event-tooltip p {
+        margin-bottom: 5px;
+    }
+    .event-tooltip .close-tooltip {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+    }
+    #loading-indicator {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Calendar</h1>
+        <a href="{% url 'calendar-event-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Event
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Event Calendar</h6>
+        </div>
+        <div class="card-body">
+            <div id="loading-indicator">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Event Quick Add Modal -->
+<div class="modal fade" id="quickAddEventModal" tabindex="-1" aria-labelledby="quickAddEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quickAddEventModalLabel">Quick Add Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="quickAddEventForm">
+                    <div class="mb-3">
+                        <label for="eventTitle" class="form-label">Event Title</label>
+                        <input type="text" class="form-control" id="eventTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="allDayEvent">
+                            <label class="form-check-label" for="allDayEvent">
+                                All Day Event
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="eventStartDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="eventStartDate" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 time-field">
+                            <div class="mb-3">
+                                <label for="eventStartTime" class="form-label">Start Time</label>
+                                <input type="time" class="form-control" id="eventStartTime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="eventEndDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="eventEndDate" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 time-field">
+                            <div class="mb-3">
+                                <label for="eventEndTime" class="form-label">End Time</label>
+                                <input type="time" class="form-control" id="eventEndTime">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveQuickEvent">Save Event</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        
+        // Initialize FullCalendar
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            },
+            themeSystem: 'bootstrap',
+            navLinks: true,
+            editable: true,
+            selectable: true,
+            selectMirror: true,
+            dayMaxEvents: true,
+            weekNumbers: true,
+            nowIndicator: true,
+            businessHours: {
+                daysOfWeek: [1, 2, 3, 4, 5], // Monday - Friday
+                startTime: '09:00',
+                endTime: '17:00',
+            },
+            
+            // Event sources
+            events: {
+                url: '{% url "calendar-get-events" %}',
+                failure: function() {
+                    alert('There was an error loading events!');
+                },
+                color: '#4e73df',
+                textColor: 'white'
+            },
+            
+            // Loading callback
+            loading: function(isLoading) {
+                if (isLoading) {
+                    loadingIndicator.style.display = 'block';
+                } else {
+                    loadingIndicator.style.display = 'none';
+                }
+            },
+            
+            // Date click - quick add event
+            dateClick: function(info) {
+                // Set the date in the quick add modal
+                document.getElementById('eventStartDate').value = info.dateStr;
+                document.getElementById('eventEndDate').value = info.dateStr;
+                
+                // Set default times
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                document.getElementById('eventStartTime').value = `${hours}:${minutes}`;
+                
+                const endTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour later
+                const endHours = endTime.getHours().toString().padStart(2, '0');
+                const endMinutes = endTime.getMinutes().toString().padStart(2, '0');
+                document.getElementById('eventEndTime').value = `${endHours}:${endMinutes}`;
+                
+                // Show the modal
+                const modal = new bootstrap.Modal(document.getElementById('quickAddEventModal'));
+                modal.show();
+            },
+            
+            // Event click - go to event detail
+            eventClick: function(info) {
+                info.jsEvent.preventDefault();
+                window.location.href = info.event.url;
+            },
+            
+            // Event drag and drop
+            eventDrop: function(info) {
+                updateEventDates(info.event);
+            },
+            
+            // Event resize
+            eventResize: function(info) {
+                updateEventDates(info.event);
+            },
+            
+            // Select dates range
+            select: function(info) {
+                // Set the dates in the quick add modal
+                document.getElementById('eventStartDate').value = info.startStr;
+                document.getElementById('eventEndDate').value = info.endStr;
+                
+                // Check if it's an all-day selection
+                const allDay = info.allDay || info.view.type === 'dayGridMonth';
+                document.getElementById('allDayEvent').checked = allDay;
+                
+                // Toggle time fields based on all-day selection
+                const timeFields = document.querySelectorAll('.time-field');
+                timeFields.forEach(field => {
+                    field.style.display = allDay ? 'none' : 'block';
+                });
+                
+                // Set default times if not all day
+                if (!allDay) {
+                    const startDate = new Date(info.start);
+                    const endDate = new Date(info.end);
+                    
+                    const startHours = startDate.getHours().toString().padStart(2, '0');
+                    const startMinutes = startDate.getMinutes().toString().padStart(2, '0');
+                    document.getElementById('eventStartTime').value = `${startHours}:${startMinutes}`;
+                    
+                    const endHours = endDate.getHours().toString().padStart(2, '0');
+                    const endMinutes = endDate.getMinutes().toString().padStart(2, '0');
+                    document.getElementById('eventEndTime').value = `${endHours}:${endMinutes}`;
+                }
+                
+                // Show the modal
+                const modal = new bootstrap.Modal(document.getElementById('quickAddEventModal'));
+                modal.show();
+            }
+        });
+        
+        calendar.render();
+        
+        // Toggle time fields based on all-day checkbox
+        document.getElementById('allDayEvent').addEventListener('change', function() {
+            const timeFields = document.querySelectorAll('.time-field');
+            timeFields.forEach(field => {
+                field.style.display = this.checked ? 'none' : 'block';
+            });
+        });
+        
+        // Save quick event
+        document.getElementById('saveQuickEvent').addEventListener('click', function() {
+            const title = document.getElementById('eventTitle').value;
+            const allDay = document.getElementById('allDayEvent').checked;
+            const startDate = document.getElementById('eventStartDate').value;
+            const startTime = document.getElementById('eventStartTime').value || '00:00';
+            const endDate = document.getElementById('eventEndDate').value;
+            const endTime = document.getElementById('eventEndTime').value || '23:59';
+            
+            if (!title || !startDate || !endDate) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Create ISO datetime strings
+            const start = allDay ? startDate : `${startDate}T${startTime}:00`;
+            const end = allDay ? endDate : `${endDate}T${endTime}:00`;
+            
+            // Send AJAX request to create event
+            fetch('{% url "calendar-quick-add-event" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify({
+                    title: title,
+                    start: start,
+                    end: end,
+                    allDay: allDay
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Add the new event to the calendar
+                    calendar.addEvent(data.event);
+                    
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('quickAddEventModal'));
+                    modal.hide();
+                    
+                    // Reset the form
+                    document.getElementById('quickAddEventForm').reset();
+                } else {
+                    alert('Error creating event: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while creating the event. Please try again.');
+            });
+        });
+        
+        // Function to update event dates (for drag and drop)
+        function updateEventDates(event) {
+            fetch(`/calendar/events/${event.id}/update-dates/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify({
+                    start: event.start.toISOString(),
+                    end: event.end ? event.end.toISOString() : null,
+                    allDay: event.allDay
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Error updating event: ' + data.error);
+                    calendar.refetchEvents();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating the event. The calendar will be refreshed.');
+                calendar.refetchEvents();
+            });
+        }
+        
+        // Function to get CSRF token
+        function getCsrfToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+    });
+</script>
+{% endblock %}

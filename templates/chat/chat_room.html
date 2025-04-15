@@ -1,0 +1,479 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load doc_filters %}
+{% block title %}Chat Room: {{ chat_room.name }} - Company Management System{% endblock %}
+
+{% block content %}
+<!-- Chat room content here -->
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ chat_room.name }}</h1>
+        <div>
+            <button id="loadMoreBtn" class="btn btn-outline-primary mr-2">
+                <i class="fas fa-history"></i> Load More
+            </button>
+            <!-- Change 'chat-list' to 'chat-index' or whatever your actual URL name is -->
+            <a href="{% url 'chat-home' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Chats
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-comments"></i> Chat Room
+            </h6>
+            <div>
+                <span id="onlineUsers" class="badge badge-success">0 online</span>
+                <span id="typingIndicator" class="text-muted ml-2" style="display: none;">
+                    <i class="fas fa-keyboard"></i> Someone is typing...
+                </span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="chat-messages" class="chat-messages mb-4" style="height: 400px; overflow-y: auto;">
+                <!-- Messages will be loaded here -->
+            </div>
+            
+            <form id="chat-form" class="mt-3">
+                <div class="input-group">
+                    <input type="text" id="message-input" class="form-control" placeholder="Type your message here..." autocomplete="off">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-paper-plane"></i> Send
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Chat room configuration
+    const roomId = "{{ chat_room.id }}";
+    const currentUser = {
+        id: "{{ request.user.id }}",
+        username: "{{ request.user.username }}",
+        fullName: "{{ request.user.get_full_name|default:request.user.username }}",
+        avatar: "{% if request.user.profile.profile_image %}{{ request.user.profile.profile_image.url }}{% else %}{% static 'img/undraw_profile.svg' %}{% endif %}"
+    };
+    
+    // WebSocket connection
+    let chatSocket;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    let messageOffset = 0;
+    const messageLimit = 20;
+    let isTyping = false;
+    let typingTimeout;
+    let onlineUsers = new Set();
+    
+    // Initialize the chat when the document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeChat();
+        loadInitialMessages();
+        
+        // Set up event listeners
+        document.getElementById('chat-form').addEventListener('submit', handleMessageSubmit);
+        document.getElementById('message-input').addEventListener('input', handleTyping);
+        document.getElementById('loadMoreBtn').addEventListener('click', loadMoreMessages);
+        
+        // Auto-scroll to bottom on page load
+        scrollToBottom();
+    });
+    
+    // Initialize WebSocket connection
+    function initializeChat() {
+        // Determine WebSocket protocol (wss:// for HTTPS, ws:// for HTTP)
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const wsUrl = `${wsProtocol}${window.location.host}/ws/chat/${roomId}/`;
+        
+        chatSocket = new WebSocket(wsUrl);
+        
+        chatSocket.onopen = function(e) {
+            console.log('WebSocket connection established');
+            reconnectAttempts = 0;
+            
+            // Send a join message to the server
+            sendWebSocketMessage({
+                'type': 'join',
+                'user': currentUser
+            });
+        };
+        
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            handleWebSocketMessage(data);
+        };
+        
+        chatSocket.onclose = function(e) {
+            console.log('WebSocket connection closed');
+            
+            // Attempt to reconnect if not closed cleanly
+            if (e.code !== 1000) {
+                handleReconnect();
+            }
+        };
+        
+        chatSocket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+        };
+    }
+    
+    // Handle reconnection attempts
+    function handleReconnect() {
+        if (reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            
+            const delay = Math.min(30, Math.pow(2, reconnectAttempts)) * 1000;
+            console.log(`Attempting to reconnect in ${delay/1000} seconds...`);
+            
+            setTimeout(function() {
+                initializeChat();
+            }, delay);
+        } else {
+            console.error('Maximum reconnection attempts reached');
+            showErrorMessage('Connection lost. Please refresh the page to reconnect.');
+        }
+    }
+    
+    // Handle different types of WebSocket messages
+    function handleWebSocketMessage(data) {
+        switch(data.type) {
+            case 'chat_message':
+                addMessageToChat(data.message);
+                break;
+            case 'typing_status':
+                updateTypingIndicator(data.user, data.is_typing);
+                break;
+            case 'user_join':
+                handleUserJoin(data.user);
+                break;
+            case 'user_leave':
+                handleUserLeave(data.user);
+                break;
+            case 'online_users':
+                updateOnlineUsers(data.users);
+                break;
+            default:
+                console.log('Unknown message type:', data.type);
+        }
+    }
+    
+    // Send a message through WebSocket
+    function sendWebSocketMessage(message) {
+        if (chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify(message));
+        } else {
+            console.error('WebSocket is not connected');
+            showErrorMessage('Connection issue. Your message could not be sent.');
+        }
+    }
+    
+    // Handle form submission to send a message
+    function handleMessageSubmit(e) {
+        e.preventDefault();
+        
+        const messageInput = document.getElementById('message-input');
+        const message = messageInput.value.trim();
+        
+        if (message) {
+            // Send the message to the server
+            sendWebSocketMessage({
+                'type': 'chat_message',
+                'message': message,
+                'user': currentUser
+            });
+            
+            // Clear the input field
+            messageInput.value = '';
+            
+            // Reset typing status
+            clearTimeout(typingTimeout);
+            isTyping = false;
+            sendTypingStatus(false);
+        }
+    }
+    
+    // Handle typing indicator
+    function handleTyping() {
+        if (!isTyping) {
+            isTyping = true;
+            sendTypingStatus(true);
+        }
+        
+        // Clear existing timeout
+        clearTimeout(typingTimeout);
+        
+        // Set a new timeout to stop the typing indicator after 2 seconds of inactivity
+        typingTimeout = setTimeout(function() {
+            isTyping = false;
+            sendTypingStatus(false);
+        }, 2000);
+    }
+    
+    // Send typing status to the server
+    function sendTypingStatus(isTyping) {
+        sendWebSocketMessage({
+            'type': 'typing_status',
+            'is_typing': isTyping,
+            'user': currentUser
+        });
+    }
+    
+    // Update typing indicator in the UI
+    function updateTypingIndicator(user, isTyping) {
+        // Don't show typing indicator for current user
+        if (user.id === currentUser.id) {
+            return;
+        }
+        
+        const typingIndicator = document.getElementById('typingIndicator');
+        
+        if (isTyping) {
+            typingIndicator.textContent = `${user.fullName} is typing...`;
+            typingIndicator.style.display = 'inline';
+        } else {
+            // Check if there are other users typing
+            // For simplicity, we'll just hide it when any user stops typing
+            typingIndicator.style.display = 'none';
+        }
+    }
+    
+    // Handle user join event
+    function handleUserJoin(user) {
+        // Don't show join message for current user
+        if (user.id === currentUser.id) {
+            return;
+        }
+        
+        // Add user to online users set
+        onlineUsers.add(user.id);
+        updateOnlineUsersCount();
+        
+        // Show join message
+        const joinMessage = {
+            id: Date.now(),
+            content: `${user.fullName} has joined the chat`,
+            timestamp: new Date().toISOString(),
+            is_system_message: true
+        };
+        
+        addMessageToChat(joinMessage);
+    }
+    
+    // Handle user leave event
+    function handleUserLeave(user) {
+        // Remove user from online users set
+        onlineUsers.delete(user.id);
+        updateOnlineUsersCount();
+        
+        // Show leave message
+        const leaveMessage = {
+            id: Date.now(),
+            content: `${user.fullName} has left the chat`,
+            timestamp: new Date().toISOString(),
+            is_system_message: true
+        };
+        
+        addMessageToChat(leaveMessage);
+    }
+    
+    // Update online users count in the UI
+    function updateOnlineUsers(users) {
+        onlineUsers = new Set(users.map(user => user.id));
+        updateOnlineUsersCount();
+    }
+    
+    function updateOnlineUsersCount() {
+        const count = onlineUsers.size;
+        document.getElementById('onlineUsers').textContent = `${count} online`;
+    }
+    
+    // Add a message to the chat UI
+    function addMessageToChat(message) {
+        const chatMessages = document.getElementById('chat-messages');
+        const wasScrolledToBottom = isScrolledToBottom(chatMessages);
+        
+        const messageElement = createMessageElement(message);
+        chatMessages.appendChild(messageElement);
+        
+        // Auto-scroll to bottom if the user was already at the bottom
+        if (wasScrolledToBottom) {
+            scrollToBottom();
+        }
+    }
+    
+    // Create a message element
+    function createMessageElement(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('chat-message', 'mb-3');
+        
+        if (message.is_system_message) {
+            // System message (join/leave notifications)
+            messageDiv.innerHTML = `
+                <div class="text-center">
+                    <span class="badge badge-light">${message.content}</span>
+                    <small class="text-muted ml-2">${formatTimestamp(message.timestamp)}</small>
+                </div>
+            `;
+        } else {
+            // Regular user message
+            const isCurrentUser = message.user.id === currentUser.id;
+            messageDiv.classList.add(isCurrentUser ? 'text-right' : 'text-left');
+            
+            messageDiv.innerHTML = `
+                <div class="d-flex ${isCurrentUser ? 'justify-content-end' : 'justify-content-start'}">
+                    ${!isCurrentUser ? `
+                        <img src="${message.user.avatar}" class="rounded-circle mr-2" width="40" height="40" alt="${message.user.fullName}">
+                    ` : ''}
+                    <div class="message-content ${isCurrentUser ? 'bg-primary text-white' : 'bg-light'}" style="max-width: 70%; padding: 10px; border-radius: 10px;">
+                        ${!isCurrentUser ? `<div class="font-weight-bold">${message.user.fullName}</div>` : ''}
+                        <div>${formatMessageContent(message.content)}</div>
+                        <div class="text-${isCurrentUser ? 'white-50' : 'muted'} small text-right">
+                            ${formatTimestamp(message.timestamp)}
+                        </div>
+                    </div>
+                    ${isCurrentUser ? `
+                        <img src="${currentUser.avatar}" class="rounded-circle ml-2" width="40" height="40" alt="${currentUser.fullName}">
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        return messageDiv;
+    }
+    
+    // Format message content (handle links, emojis, etc.)
+    function formatMessageContent(content) {
+        // Convert URLs to clickable links
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        content = content.replace(urlRegex, function(url) {
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+        });
+        
+        // Convert line breaks to <br>
+        content = content.replace(/\n/g, '<br>');
+        
+        return content;
+    }
+    
+    // Format timestamp to a readable format
+    function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        const today = new Date();
+        
+        // Check if the message is from today
+        if (date.toDateString() === today.toDateString()) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } else {
+            return date.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + 
+                   date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+    }
+    
+    // Load initial messages from the server
+    function loadInitialMessages() {
+        fetchMessages(0, messageLimit);
+    }
+    
+    // Load more messages (for pagination)
+    function loadMoreMessages() {
+        fetchMessages(messageOffset, messageLimit);
+    }
+    
+    // Fetch messages from the server
+    function fetchMessages(offset, limit) {
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        
+        fetch(`/chat/api/rooms/${roomId}/messages/?offset=${offset}&limit=${limit}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.messages.length > 0) {
+                    const chatMessages = document.getElementById('chat-messages');
+                    const wasScrolledToBottom = isScrolledToBottom(chatMessages);
+                    
+                    // Prepend messages in reverse order (oldest first)
+                    data.messages.reverse().forEach(message => {
+                        const messageElement = createMessageElement(message);
+                        chatMessages.prepend(messageElement);
+                    });
+                    
+                    // Update offset for next pagination
+                    messageOffset += data.messages.length;
+                    
+                    // If we got fewer messages than requested, there are no more to load
+                    if (data.messages.length < limit) {
+                        loadMoreBtn.style.display = 'none';
+                    }
+                    
+                    // Maintain scroll position if user wasn't at the bottom
+                    if (!wasScrolledToBottom) {
+                        // Adjust scroll position to account for new content
+                        const heightDifference = chatMessages.scrollHeight - chatMessages.scrollTop;
+                        chatMessages.scrollTop = chatMessages.scrollHeight - heightDifference;
+                    }
+                } else {
+                    // No more messages to load
+                    loadMoreBtn.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching messages:', error);
+                showErrorMessage('Failed to load messages. Please try again.');
+            })
+            .finally(() => {
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.innerHTML = '<i class="fas fa-history"></i> Load More';
+            });
+    }
+    
+    // Check if the chat container is scrolled to the bottom
+    function isScrolledToBottom(element) {
+        return element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
+    }
+    
+    // Scroll to the bottom of the chat container
+    function scrollToBottom() {
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Show error message in the chat
+    function showErrorMessage(message) {
+        const errorMessage = {
+            id: Date.now(),
+            content: message,
+            timestamp: new Date().toISOString(),
+            is_system_message: true
+        };
+        
+        addMessageToChat(errorMessage);
+    }
+    
+    // Clean up when leaving the page
+    window.addEventListener('beforeunload', function() {
+        if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+            // Send a leave message
+            sendWebSocketMessage({
+                'type': 'leave',
+                'user': currentUser
+            });
+            
+            // Close the WebSocket connection
+            chatSocket.close();
+        }
+    });
+</script>
+{% endblock %}

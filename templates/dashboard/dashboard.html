@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4">Dashboard</h1>
+    
+    <!-- Summary Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="dashboard-widget widget-clients">
+                <div class="widget-header">
+                    <h5 class="m-0">Clients</h5>
+                </div>
+                <div class="widget-body">
+                    <h2 class="display-4">{{ client_count }}</h2>
+                </div>
+                <div class="widget-footer">
+                    <a href="{% url 'client-list' %}" class="text-white">View all clients <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="dashboard-widget widget-projects">
+                <div class="widget-header">
+                    <h5 class="m-0">Projects</h5>
+                </div>
+                <div class="widget-body">
+                    <h2 class="display-4">{{ project_count }}</h2>
+                </div>
+                <div class="widget-footer">
+                    <a href="{% url 'project-list' %}" class="text-white">View all projects <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="dashboard-widget widget-tasks">
+                <div class="widget-header">
+                    <h5 class="m-0">Tasks</h5>
+                </div>
+                <div class="widget-body">
+                    <h2 class="display-4">{{ task_count }}</h2>
+                </div>
+                <div class="widget-footer">
+                    <a href="{% url 'task-list' %}" class="text-white">View all tasks <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="dashboard-widget widget-documents">
+                <div class="widget-header">
+                    <h5 class="m-0">Documents</h5>
+                </div>
+                <div class="widget-body">
+                    <h2 class="display-4">{{ document_count }}</h2>
+                </div>
+                <div class="widget-footer">
+                    <a href="{% url 'document-list' %}" class="text-white">View all documents <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts Row -->
+    <div class="row">
+        <div class="col-xl-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Projects by Status</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="projectStatusChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Tasks by Status</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="taskStatusChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Items Row -->
+    <div class="row">
+        <div class="col-xl-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Recent Projects</h5>
+                    <a href="{% url 'project-list' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Client</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in recent_projects %}
+                                <tr>
+                                    <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
+                                    <td>{{ project.client.name }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ project.status|slugify }}">
+                                            {{ project.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ project.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No projects found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Tasks Due Soon</h5>
+                    <a href="{% url 'task-list' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Project</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for task in tasks_due_soon %}
+                                <tr>
+                                    <td><a href="{% url 'task-detail' task.id %}">{{ task.title }}</a></td>
+                                    <td>{{ task.project.name }}</td>
+                                    <td>{{ task.due_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ task.status|slugify }}">
+                                            {{ task.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No tasks due soon.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calendar and Events Row -->
+    <div class="row">
+        <div class="col-xl-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Upcoming Events</h5>
+                    <a href="{% url 'calendar' %}" class="btn btn-sm btn-primary">View Calendar</a>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for event in upcoming_events %}
+                        <a href="{% url 'event-detail' event.id %}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ event.title }}</h5>
+                                <small>{{ event.start_time|date:"M d, Y" }}</small>
+                            </div>
+                            <p class="mb-1">{{ event.description|truncatechars:100 }}</p>
+                            <small>{{ event.get_event_type_display }}</small>
+                        </a>
+                        {% empty %}
+                        <div class="list-group-item">No upcoming events.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Recent Clients</h5>
+                    <a href="{% url 'client-list' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for client in recent_clients %}
+                                <tr>
+                                    <td><a href="{% url 'client-detail' client.id %}">{{ client.name }}</a></td>
+                                    <td>{{ client.email|default:"-" }}</td>
+                                    <td>{{ client.phone|default:"-" }}</td>
+                                    <td>{{ client.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No clients found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Project Status Chart
+        var projectCtx = document.getElementById('projectStatusChart').getContext('2d');
+        var projectStatusChart = new Chart(projectCtx, {
+            type: 'pie',
+            data: {
+                labels: [{% for item in project_status_counts %}'{{ item.status }}',{% endfor %}],
+                datasets: [{
+                    data: [{% for item in project_status_counts %}{{ item.count }},{% endfor %}],
+                    backgroundColor: [
+                        '#4e73df',
+                        '#1cc88a',
+                        '#36b9cc',
+                        '#f6c23e',
+                        '#e74a3b'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Project Status Distribution'
+                    }
+                }
+            }
+        });
+        
+        // Task Status Chart
+        var taskCtx = document.getElementById('taskStatusChart').getContext('2d');
+        var taskStatusChart = new Chart(taskCtx, {
+            type: 'bar',
+            data: {
+                labels: [{% for item in task_status_counts %}'{{ item.status }}',{% endfor %}],
+                datasets: [{
+                    label: 'Number of Tasks',
+                    data: [{% for item in task_status_counts %}{{ item.count }},{% endfor %}],
+                    backgroundColor: [
+                        '#4e73df',
+                        '#1cc88a',
+                        '#36b9cc',
+                        '#f6c23e',
+                        '#e74a3b'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Tasks by Status'
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

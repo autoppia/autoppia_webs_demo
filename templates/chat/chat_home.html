@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Chat</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createChatModal">
+            <i class="fas fa-plus"></i> New Chat
+        </button>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Conversations</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% for room in chat_rooms %}
+                        <a href="{% url 'chat-room' room.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ room.name }}</h6>
+                                <small class="text-muted">
+                                    {% if room.is_group %}
+                                        Group Chat ({{ room.participants.count }} members)
+                                    {% else %}
+                                        Direct Message
+                                    {% endif %}
+                                </small>
+                            </div>
+                            {% if room.messages.exists %}
+                            <small class="text-muted">{{ room.messages.last.created_at|date:"M d" }}</small>
+                            {% endif %}
+                        </a>
+                        {% empty %}
+                        <div class="list-group-item text-center text-muted">No conversations yet.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-comments fa-5x text-muted mb-3"></i>
+                    <h4>Select a conversation or start a new one</h4>
+                    <p class="text-muted">Your messages will appear here</p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createChatModal">
+                        <i class="fas fa-plus"></i> New Chat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Chat Modal -->
+<div class="modal fade" id="createChatModal" tabindex="-1" aria-labelledby="createChatModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createChatModalLabel">Create New Chat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" id="chatTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="direct-tab" data-bs-toggle="tab" data-bs-target="#direct" type="button" role="tab" aria-controls="direct" aria-selected="true">Direct Message</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="group-tab" data-bs-toggle="tab" data-bs-target="#group" type="button" role="tab" aria-controls="group" aria-selected="false">Group Chat</button>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3" id="chatTabsContent">
+                    <div class="tab-pane fade show active" id="direct" role="tabpanel" aria-labelledby="direct-tab">
+                        <div class="mb-3">
+                            <label for="directUser" class="form-label">Select User</label>
+                            <select class="form-select" id="directUser">
+                                <option value="">Select a user...</option>
+                                {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.get_full_name|default:user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="d-grid">
+                            <button type="button" id="startDirectChat" class="btn btn-primary">Start Chat</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="group" role="tabpanel" aria-labelledby="group-tab">
+                        <form method="post" action="{% url 'chat-create' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="groupName" class="form-label">Group Name</label>
+                                <input type="text" class="form-control" id="groupName" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="groupParticipants" class="form-label">Participants</label>
+                                <select class="form-select" id="groupParticipants" name="participants" multiple required>
+                                    {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.get_full_name|default:user.username }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text">Hold Ctrl (or Cmd) to select multiple users.</div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Create Group</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle direct chat creation
+        document.getElementById('startDirectChat').addEventListener('click', function() {
+            var userId = document.getElementById('directUser').value;
+            if (userId) {
+                window.location.href = '/chat/direct/' + userId + '/';
+            } else {
+                showToast('Please select a user', 'error');
+            }
+        });
+    });
+</script>
+{% endblock %}

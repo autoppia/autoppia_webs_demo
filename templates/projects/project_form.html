@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}{% if form.instance.id %}Edit Project{% else %}New Project{% endif %} - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{% if form.instance.id %}Edit Project{% else %}New Project{% endif %}</h1>
+        <a href="{% url 'project-list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Projects
+        </a>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Project Information</h6>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">Project Name*</label>
+                            {% render_field form.name class="form-control" placeholder="Enter project name" %}
+                            {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.client.id_for_label }}" class="form-label">Client*</label>
+                            {% render_field form.client class="form-select" %}
+                            {% if form.client.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.client.errors }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                <a href="{% url 'client-create' %}" target="_blank">
+                                    <i class="fas fa-plus-circle"></i> Add New Client
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                    {% render_field form.description class="form-control" rows="4" placeholder="Enter project description" %}
+                    {% if form.description.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.start_date.id_for_label }}" class="form-label">Start Date*</label>
+                            <div class="input-group">
+                                {% render_field form.start_date class="form-control datepicker" placeholder="YYYY-MM-DD" %}
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                            {% if form.start_date.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.start_date.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.end_date.id_for_label }}" class="form-label">End Date</label>
+                            <div class="input-group">
+                                {% render_field form.end_date class="form-control datepicker" placeholder="YYYY-MM-DD" %}
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                            </div>
+                            {% if form.end_date.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.end_date.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">Status*</label>
+                            {% render_field form.status class="form-select" %}
+                            {% if form.status.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.status.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.priority.id_for_label }}" class="form-label">Priority*</label>
+                            {% render_field form.priority class="form-select" %}
+                            {% if form.priority.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.priority.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.budget.id_for_label }}" class="form-label">Budget</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                {% render_field form.budget class="form-control" placeholder="Enter project budget" %}
+                            </div>
+                            {% if form.budget.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.budget.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="{{ form.manager.id_for_label }}" class="form-label">Project Manager</label>
+                            {% render_field form.manager class="form-select" %}
+                            {% if form.manager.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.manager.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="{{ form.team_members.id_for_label }}" class="form-label">Team Members</label>
+                    {% render_field form.team_members class="form-select" multiple="multiple" %}
+                    {% if form.team_members.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.team_members.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-text">Hold Ctrl (or Cmd) to select multiple team members.</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="{{ form.tags.id_for_label }}" class="form-label">Tags</label>
+                    {% render_field form.tags class="form-control" placeholder="Enter tags separated by commas" %}
+                    {% if form.tags.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.tags.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label for="{{ form.attachments.id_for_label }}" class="form-label">Attachments</label>
+                    {% render_field form.attachments class="form-control" multiple="multiple" %}
+                    {% if form.attachments.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.attachments.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-text">You can select multiple files.</div>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    {% render_field form.is_billable class="form-check-input" %}
+                    <label class="form-check-label" for="{{ form.is_billable.id_for_label }}">
+                        Billable Project
+                    </label>
+                    {% if form.is_billable.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.is_billable.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'project-list' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> {% if form.instance.id %}Update{% else %}Create{% endif %} Project
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize datepickers
+        $('.datepicker').each(function() {
+            $(this).datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: 'linked'
+            });
+        });
+        
+        // Initialize select2 for better dropdown experience
+        $('select').select2({
+            theme: 'bootstrap4',
+        });
+        
+        // Handle client selection change
+        $('#{{ form.client.id_for_label }}').on('change', function() {
+            const clientId = $(this).val();
+            if (clientId) {
+                // You can add AJAX functionality here to load client-specific data if needed
+                console.log('Selected client ID:', clientId);
+            }
+        });
+        
+        // Form validation
+        $('form').on('submit', function(e) {
+            let isValid = true;
+            
+            // Check required fields
+            const requiredFields = ['name', 'client', 'start_date', 'status', 'priority'];
+            requiredFields.forEach(field => {
+                const input = $(`#id_${field}`);
+                if (!input.val()) {
+                    isValid = false;
+                    input.addClass('is-invalid');
+                    input.after(`<div class="invalid-feedback">This field is required.</div>`);
+                } else {
+                    input.removeClass('is-invalid');
+                }
+            });
+            
+            // Validate date range if both dates are provided
+            const startDate = $('#id_start_date').val();
+            const endDate = $('#id_end_date').val();
+            if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+                isValid = false;
+                $('#id_end_date').addClass('is-invalid');
+                $('#id_end_date').after(`<div class="invalid-feedback">End date must be after start date.</div>`);
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+                // Scroll to the first error
+                $('html, body').animate({
+                    scrollTop: $('.is-invalid:first').offset().top - 100
+                }, 200);
+            }
+        });
+    });
+</script>
+{% endblock %}

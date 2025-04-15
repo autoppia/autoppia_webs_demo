@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load doc_filters %}
+{% block title %}Documents - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Documents</h1>
+        <div class="btn-group">
+            <a href="{% url 'document-create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Upload Document
+            </a>
+            <a href="{% url 'document-sample' %}" class="btn btn-secondary">
+                <i class="fas fa-download"></i> Sample Document
+            </a>
+        </div>
+    </div>
+    
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search documents..." value="{{ search_query }}">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="col-md-2">
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        {% for key, value in categories.items %}
+                        <option value="{{ key }}" {% if category == key %}selected{% endif %}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <select name="client" class="form-select">
+                        <option value="">All Clients</option>
+                        {% for client in clients %}
+                        <option value="{{ client.id }}" {% if request.GET.client == client.id|stringformat:"i" %}selected{% endif %}>{{ client.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <select name="project" class="form-select">
+                        <option value="">All Projects</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}" {% if request.GET.project == project.id|stringformat:"i" %}selected{% endif %}>{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-1 text-end">
+                    {% if search_query or category or request.GET.client or request.GET.project %}
+                    <a href="{% url 'document-list' %}" class="btn btn-outline-secondary">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Documents Grid -->
+    <div class="row">
+        {% for document in documents %}
+        <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 text-truncate" title="{{ document.title }}">{{ document.title }}</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'document-detail' document.id %}">View Details</a></li>
+                            <li><a class="dropdown-item" href="{% url 'document-download' document.id %}">Download</a></li>
+                            <li><a class="dropdown-item" href="{% url 'document-update' document.id %}">Edit</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'document-delete' document.id %}">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="document-icon text-center mb-3">
+                        {% if document.file.name|lower|endswith:".pdf" %}
+                            <i class="fas fa-file-pdf fa-4x text-danger"></i>
+                        {% elif document.file.name|lower|endswith:".doc" or document.file.name|lower|endswith:".docx" %}
+                            <i class="fas fa-file-word fa-4x text-primary"></i>
+                        {% elif document.file.name|lower|endswith:".xls" or document.file.name|lower|endswith:".xlsx" %}
+                            <i class="fas fa-file-excel fa-4x text-success"></i>
+                        {% elif document.file.name|lower|endswith:".ppt" or document.file.name|lower|endswith:".pptx" %}
+                            <i class="fas fa-file-powerpoint fa-4x text-warning"></i>
+                        {% elif document.file.name|lower|endswith:".jpg" or document.file.name|lower|endswith:".jpeg" or document.file.name|lower|endswith:".png" or document.file.name|lower|endswith:".gif" %}
+                            <i class="fas fa-file-image fa-4x text-info"></i>
+                        {% elif document.file.name|lower|endswith:".zip" or document.file.name|lower|endswith:".rar" %}
+                            <i class="fas fa-file-archive fa-4x text-secondary"></i>
+                        {% else %}
+                            <i class="fas fa-file fa-4x text-muted"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="card-text">
+                        <span class="badge bg-secondary">{{ document.get_category_display }}</span>
+                        {% if document.is_public %}
+                            <span class="badge bg-success">Public</span>
+                        {% else %}
+                            <span class="badge bg-danger">Private</span>
+                        {% endif %}
+                    </p>
+                    
+                    {% if document.description %}
+                    <p class="card-text small text-muted">{{ document.description|truncatechars:50 }}</p>
+                    {% endif %}
+                    
+                    {% if document.client %}
+                    <p class="card-text small">
+                        <strong>Client:</strong> <a href="{% url 'client-detail' document.client.id %}">{{ document.client.name }}</a>
+                    </p>
+                    {% endif %}
+                    
+                    {% if document.project %}
+                    <p class="card-text small">
+                        <strong>Project:</strong> <a href="{% url 'project-detail' document.project.id %}">{{ document.project.name }}</a>
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted">
+                    <small>Uploaded {{ document.created_at|date:"M d, Y" }}</small>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                No documents found. <a href="{% url 'document-create' %}" class="alert-link">Upload a document</a> to get started.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

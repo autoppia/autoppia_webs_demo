@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - Calendar Event - Company Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .event-header {
+        border-left: 5px solid {{ event.get_event_color }};
+        padding-left: 15px;
+    }
+    .event-meta {
+        background-color: #f8f9fc;
+        border-radius: 0.35rem;
+        padding: 1.25rem;
+    }
+    .event-meta-item {
+        margin-bottom: 0.75rem;
+    }
+    .event-meta-item:last-child {
+        margin-bottom: 0;
+    }
+    .event-meta-label {
+        font-weight: 600;
+        color: #4e73df;
+    }
+    .event-description {
+        white-space: pre-line;
+    }
+    .attendee-list {
+        list-style: none;
+        padding-left: 0;
+    }
+    .attendee-list li {
+        margin-bottom: 0.5rem;
+    }
+    .attendee-list li:last-child {
+        margin-bottom: 0;
+    }
+    .event-actions {
+        margin-top: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 event-header">Event Details</h1>
+        <a href="{% url 'calendar' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Calendar
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ event.title }}</h6>
+                    <span class="badge" style="background-color: {{ event.get_event_color }}; color: white;">
+                        {{ event.get_event_type_display }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {% if event.description %}
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Description</h5>
+                        <p class="event-description">{{ event.description }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h5 class="font-weight-bold">Date & Time</h5>
+                                <p>
+                                    {% if event.all_day %}
+                                        <strong>All Day Event</strong><br>
+                                        {% if event.start_time.date == event.end_time.date %}
+                                            {{ event.start_time|date:"F j, Y" }}
+                                        {% else %}
+                                            {{ event.start_time|date:"F j, Y" }} - {{ event.end_time|date:"F j, Y" }}
+                                        {% endif %}
+                                    {% else %}
+                                        {% if event.start_time.date == event.end_time.date %}
+                                            {{ event.start_time|date:"F j, Y" }}<br>
+                                            {{ event.start_time|date:"g:i A" }} - {{ event.end_time|date:"g:i A" }}
+                                        {% else %}
+                                            {{ event.start_time|date:"F j, Y g:i A" }} - {{ event.end_time|date:"F j, Y g:i A" }}
+                                        {% endif %}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {% if event.location %}
+                            <div class="mb-4">
+                                <h5 class="font-weight-bold">Location</h5>
+                                <p>{{ event.location }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if event.is_recurring %}
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Recurrence</h5>
+                        <p>
+                            This event repeats: {{ event.recurrence_pattern }}<br>
+                            Until: {{ event.recurrence_end_date|date:"F j, Y" }}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    {% if event.attendees.exists %}
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Attendees</h5>
+                        <ul class="attendee-list">
+                            {% for attendee in event.attendees.all %}
+                            <li>
+                                <i class="fas fa-user mr-2"></i>
+                                {% if attendee.get_full_name %}
+                                    {{ attendee.get_full_name }}
+                                {% else %}
+                                    {{ attendee.username }}
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Event Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="event-meta">
+                        <div class="event-meta-item">
+                            <span class="event-meta-label">Created By:</span>
+                            <span>
+                                {% if event.created_by.get_full_name %}
+                                    {{ event.created_by.get_full_name }}
+                                {% else %}
+                                    {{ event.created_by.username }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="event-meta-item">
+                            <span class="event-meta-label">Created On:</span>
+                            <span>{{ event.created_at|date:"F j, Y g:i A" }}</span>
+                        </div>
+                        {% if event.updated_at != event.created_at %}
+                        <div class="event-meta-item">
+                            <span class="event-meta-label">Last Updated:</span>
+                            <span>{{ event.updated_at|date:"F j, Y g:i A" }}</span>
+                        </div>
+                        {% endif %}
+                        {% if event.project %}
+                        <div class="event-meta-item">
+                            <span class="event-meta-label">Related Project:</span>
+                            <span>
+                                <a href="{% url 'project-detail' event.project.id %}">
+                                    {{ event.project.name }}
+                                </a>
+                            </span>
+                        </div>
+                        {% endif %}
+                        {% if event.client %}
+                        <div class="event-meta-item">
+                            <span class="event-meta-label">Related Client:</span>
+                            <span>
+                                <a href="{% url 'client-detail' event.client.id %}">
+                                    {{ event.client.name }}
+                                </a>
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="event-actions">
+                        <a href="{% url 'calendar-event-update' event.id %}" class="btn btn-primary btn-block mb-2">
+                            <i class="fas fa-edit"></i> Edit Event
+                        </a>
+                        <a href="{% url 'calendar-event-delete' event.id %}" class="btn btn-danger btn-block">
+                            <i class="fas fa-trash"></i> Delete Event
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

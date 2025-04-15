@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.name }} - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{{ project.name }}</h1>
+        <div class="btn-group">
+            <a href="{% url 'project-update' project.id %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'project-delete' project.id %}" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+        </div>
+    </div>
+    
+    <!-- Project Details -->
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Project Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Client:</strong>
+                        <a href="{% url 'client-detail' project.client.id %}">{{ project.client.name }}</a>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <span class="badge bg-{{ project.status|slugify }}">
+                            {{ project.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Priority:</strong>
+                        <span class="badge bg-{{ project.priority|slugify }}">
+                            {{ project.get_priority_display }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Start Date:</strong>
+                        {{ project.start_date|default:"Not set" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>End Date:</strong>
+                        {{ project.end_date|default:"Not set" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Budget:</strong>
+                        {% if project.budget %}${{ project.budget }}{% else %}Not set{% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Project Manager:</strong>
+                        {{ project.manager|default:"Not assigned" }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Team Members:</strong>
+                        {% if project.team_members.all %}
+                            <ul class="list-unstyled">
+                                {% for member in project.team_members.all %}
+                                    <li>{{ member.get_full_name|default:member.username }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            None assigned
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="m-0">Description</h5>
+                </div>
+                <div class="card-body">
+                    {{ project.description|linebreaks|default:"No description provided." }}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="m-0">Progress</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="progressSlider" class="form-label">Project Progress: {{ project.progress }}%</label>
+                        <input type="range" class="form-range custom-range" id="progressSlider" min="0" max="100" step="5" value="{{ project.progress }}" data-project-id="{{ project.id }}">
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ project.progress }}%" aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">{{ project.progress }}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tasks Section -->
+    <div class="card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="m-0">Tasks</h5>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                <i class="fas fa-plus"></i> Add Task
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for status, label in task_status_choices %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-{{ status|slugify }} text-white">
+                            <h6 class="m-0">{{ label }}</h6>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush sortable-list" data-status="{{ status }}" data-update-url="{% url 'task-update-order' %}">
+                                {% for task in tasks_by_status.status %}
+                                <li class="list-group-item sortable-item" data-id="{{ task.id }}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="{% url 'task-detail' task.id %}">{{ task.title }}</a>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="{% url 'task-detail' task.id %}">View</a></li>
+                                                <li><a class="dropdown-item" href="{% url 'task-update' task.id %}">Edit</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item text-danger" href="{% url 'task-delete' task.id %}">Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    {% if task.due_date %}
+                                    <small class="text-muted">Due: {{ task.due_date }}</small>
+                                    {% endif %}
+                                    {% if task.assigned_to %}
+                                    <small class="text-muted d-block">Assigned to: {{ task.assigned_to.get_full_name|default:task.assigned_to.username }}</small>
+                                    {% endif %}
+                                </li>
+                                {% empty %}
+                                <li class="list-group-item text-center text-muted">No tasks</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Documents Section -->
+    <div class="card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="m-0">Documents</h5>
+            <a href="{% url 'document-create' %}?project={{ project.id }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Document
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Uploaded By</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for document in documents %}
+                        <tr>
+                            <td><a href="{% url 'document-detail' document.id %}">{{ document.title }}</a></td>
+                            <td>{{ document.get_category_display }}</td>
+                            <td>{{ document.uploaded_by.get_full_name|default:document.uploaded_by.username }}</td>
+                            <td>{{ document.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'document-download' document.id %}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <a href="{% url 'document-update' document.id %}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'document-delete' document.id %}" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No documents found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Events Section -->
+    <div class="card mt-4 mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="m-0">Events</h5>
+            <a href="{% url 'calendar-event-create' %}?project={{ project.id }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Event
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% for event in events %}
+                <a href="{% url 'event-detail' event.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ event.title }}</h5>
+                        <small>{{ event.start_time|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="mb-1">{{ event.description|truncatechars:100 }}</p>
+                    <small>{{ event.get_event_type_display }}</small>
+                </a>
+                {% empty %}
+                <div class="list-group-item">No events found.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Task Modal -->
+<div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'task-create' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="project" value="{{ project.id }}">
+                    
+                    <div class="mb-3">
+                        <label for="id_title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="id_title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_description" class="form-label">Description</label>
+                        <textarea class="form-control" id="id_description" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_status" class="form-label">Status</label>
+                            <select class="form-select" id="id_status" name="status">
+                                {% for value, label in task_form.fields.status.choices %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="id_priority" class="form-label">Priority</label>
+                            <select class="form-select" id="id_priority" name="priority">
+                                {% for value, label in task_form.fields.priority.choices %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_due_date" class="form-label">Due Date</label>
+                            <input type="text" class="form-control datepicker" id="id_due_date" name="due_date">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="id_assigned_to" class="form-label">Assigned To</label>
+                            <select class="form-select" id="id_assigned_to" name="assigned_to">
+                                <option value="">---------</option>
+                                {% for user in project.team_members.all %}
+                                <option value="{{ user.id }}">{{ user.get_full_name|default:user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_estimated_hours" class="form-label">Estimated Hours</label>
+                            <input type="number" class="form-control" id="id_estimated_hours" name="estimated_hours" step="0.5">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="id_actual_hours" class="form-label">Actual Hours</label>
+                            <input type="number" class="form-control" id="id_actual_hours" name="actual_hours" step="0.5">
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize sortable for task lists
+        document.querySelectorAll('.sortable-list').forEach(function(list) {
+            new Sortable(list, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function(evt) {
+                    // Get the new order
+                    var items = Array.from(evt.to.children)
+                        .filter(item => item.dataset.id)
+                        .map(function(item) {
+                            return item.dataset.id;
+                        });
+                    
+                    // Send the new order to the server
+                    if (items.length > 0 && list.dataset.updateUrl) {
+                        fetch(list.dataset.updateUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: JSON.stringify({items: items})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showToast('Task order updated successfully', 'success');
+                            } else {
+                                showToast('Failed to update task order', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showToast('An error occurred', 'error');
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Handle progress slider
+        var progressSlider = document.getElementById('progressSlider');
+        if (progressSlider) {
+            progressSlider.addEventListener('change', function() {
+                var projectId = this.dataset.projectId;
+                var progress = this.value;
+                
+                fetch('/projects/' + projectId + '/update-progress/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({progress: progress})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('Project progress updated successfully', 'success');
+                        // Update the progress bar
+                        document.querySelector('.progress-bar').style.width = progress + '%';
+                        document.querySelector('.progress-bar').setAttribute('aria-valuenow', progress);
+                        document.querySelector('.progress-bar').textContent = progress + '%';
+                        // Update the label
+                        document.querySelector('label[for="progressSlider"]').textContent = 'Project Progress: ' + progress + '%';
+                    } else {
+                        showToast('Failed to update project progress', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('An error occurred', 'error');
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

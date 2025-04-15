@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+
+{% block title %}Tasks - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Tasks</h1>
+        <a href="{% url 'task-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> New Task
+        </a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Not Started</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ not_started_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                In Progress</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ in_progress_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-spinner fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                On Hold</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ on_hold_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-pause fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Completed</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ completed_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Task List</h6>
+        </div>
+        <div class="card-body">
+            <form method="get" class="mb-4">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="{{ filter_form.search.id_for_label }}" class="form-label">Search</label>
+                        {{ filter_form.search }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="{{ filter_form.status.id_for_label }}" class="form-label">Status</label>
+                        {{ filter_form.status }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="{{ filter_form.priority.id_for_label }}" class="form-label">Priority</label>
+                        {{ filter_form.priority }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="{{ filter_form.project.id_for_label }}" class="form-label">Project</label>
+                        {{ filter_form.project }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="{{ filter_form.assignee.id_for_label }}" class="form-label">Assignee</label>
+                        {{ filter_form.assignee }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="{{ filter_form.due_date_from.id_for_label }}" class="form-label">Due Date From</label>
+                        {{ filter_form.due_date_from }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="{{ filter_form.due_date_to.id_for_label }}" class="form-label">Due Date To</label>
+                        {{ filter_form.due_date_to }}
+                    </div>
+                    <div class="col-md-3 mb-3 d-flex align-items-end">
+                        <div class="form-check">
+                            {{ filter_form.is_overdue }}
+                            <label class="form-check-label" for="{{ filter_form.is_overdue.id_for_label }}">
+                                Show Overdue Tasks Only
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <a href="{% url 'task-list' %}" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Reset
+                    </a>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="tasksTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Project</th>
+                            <th>Assignee</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr {% if task.is_overdue %}class="table-danger"{% endif %}>
+                            <td>
+                                <a href="{% url 'task-detail' task.id %}">{{ task.title }}</a>
+                                {% if task.is_recurring %}
+                                    <span class="badge bg-info ms-1" title="Recurring Task"><i class="fas fa-sync-alt"></i></span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'project-detail' task.project.id %}">{{ task.project.name }}</a>
+                            </td>
+                            <td>
+                                {{ task.assignee.get_full_name|default:task.assignee.username }}
+                            </td>
+                            <td>
+                                {{ task.due_date|date:"M d, Y" }}
+                                {% if task.is_overdue %}
+                                    <span class="badge bg-danger ms-1">Overdue</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="{{ task.get_status_badge_class }}">
+                                    {{ task.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="{{ task.get_priority_badge_class }}">
+                                    {{ task.get_priority_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'task-detail' task.id %}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'task-update' task.id %}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'task-delete' task.id %}" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No tasks found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize datepickers
+        $('.datepicker').each(function() {
+            $(this).datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                todayBtn: 'linked'
+            });
+        });
+        
+        // Initialize select2 for better dropdown experience
+        $('select').select2({
+            theme: 'bootstrap4',
+        });
+    });
+</script>
+{% endblock %}

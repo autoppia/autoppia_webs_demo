@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}Clients - Company Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Clients</h1>
+        <a href="{% url 'client-create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add Client
+        </a>
+    </div>
+    
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search clients..." value="{{ search_query }}">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    {% if search_query %}
+                    <a href="{% url 'client-list' %}" class="btn btn-outline-secondary">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Clients Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Contacts</th>
+                            <th>Projects</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr data-context-menu="clientContextMenu" data-id="{{ client.id }}">
+                            <td><a href="{% url 'client-detail' client.id %}">{{ client.name }}</a></td>
+                            <td>{{ client.email|default:"-" }}</td>
+                            <td>{{ client.phone|default:"-" }}</td>
+                            <td>{{ client.contact_count }}</td>
+                            <td>{{ client.project_count }}</td>
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="clientStatus{{ client.id }}" {% if client.is_active %}checked{% endif %} data-client-id="{{ client.id }}">
+                                    <label class="form-check-label" for="clientStatus{{ client.id }}">
+                                        {{ client.is_active|yesno:"Active,Inactive" }}
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'client-detail' client.id %}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'client-update' client.id %}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'client-delete' client.id %}" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No clients found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Context Menu -->
+<div id="clientContextMenu" class="context-menu">
+    <div class="context-menu-item view-client">
+        <i class="fas fa-eye"></i> View Details
+    </div>
+    <div class="context-menu-item edit-client">
+        <i class="fas fa-edit"></i> Edit Client
+    </div>
+    <div class="context-menu-item add-contact">
+        <i class="fas fa-user-plus"></i> Add Contact
+    </div>
+    <div class="context-menu-item add-project">
+        <i class="fas fa-project-diagram"></i> Add Project
+    </div>
+    <div class="context-menu-item delete-client">
+        <i class="fas fa-trash"></i> Delete Client
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle client status toggle
+        document.querySelectorAll('[data-client-id]').forEach(function(toggle) {
+            toggle.addEventListener('change', function() {
+                var clientId = this.dataset.clientId;
+                var isActive = this.checked;
+                
+                fetch('/clients/' + clientId + '/update-status/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({is_active: isActive})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('Client status updated successfully', 'success');
+                        // Update the label
+                        this.nextElementSibling.textContent = isActive ? 'Active' : 'Inactive';
+                    } else {
+                        showToast('Failed to update client status', 'error');
+                        // Revert the toggle
+                        this.checked = !isActive;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('An error occurred', 'error');
+                    // Revert the toggle
+                    this.checked = !isActive;
+                });
+            });
+        });
+        
+        // Handle context menu actions
+        document.querySelector('.context-menu-item.view-client').addEventListener('click', function() {
+            var clientId = document.querySelector('.context-menu').dataset.targetId;
+            window.location.href = '/clients/' + clientId + '/';
+        });
+        
+        document.querySelector('.context-menu-item.edit-client').addEventListener('click', function() {
+            var clientId = document.querySelector('.context-menu').dataset.targetId;
+            window.location.href = '/clients/' + clientId + '/update/';
+        });
+        
+        document.querySelector('.context-menu-item.add-contact').addEventListener('click', function() {
+            var clientId = document.querySelector('.context-menu').dataset.targetId;
+            window.location.href = '/contacts/create/?client=' + clientId;
+        });
+        
+        document.querySelector('.context-menu-item.add-project').addEventListener('click', function() {
+            var clientId = document.querySelector('.context-menu').dataset.targetId;
+            window.location.href = '/projects/create/?client=' + clientId;
+        });
+        
+        document.querySelector('.context-menu-item.delete-client').addEventListener('click', function() {
+            var clientId = document.querySelector('.context-menu').dataset.targetId;
+            window.location.href = '/clients/' + clientId + '/delete/';
+        });
+    });
+</script>
+{% endblock %}
