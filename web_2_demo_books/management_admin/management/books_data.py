@@ -1054,8 +1054,10 @@ if __name__ == "__main__":
         name_counts[book["name"]].append(book)
 
     duplicates_by_name = [entries for entries in name_counts.values() if len(entries) > 1]
-
-    print("Duplicates by name:")
-    for group in duplicates_by_name:
-        for dup in group:
-            print(json.dumps(dup, indent=2))
+    if len(duplicates_by_name) > 0:
+        print("Duplicates by name:")
+        for group in duplicates_by_name:
+            for dup in group:
+                print(json.dumps(dup, indent=2))
+    else:
+        print("No duplicates found.")
