@@ -439,7 +439,7 @@ def genre_detail(request, genre_id):
     genre = get_object_or_404(Genre, id=genre_id)
     movies = Book.objects.filter(genres=genre)
     context = {"genre": genre, "movies": movies}
-    return render(request, "genre_detail.html", context)
+    return render(request, "genres_detail.html", context)
 
 
 # =============================================================================
