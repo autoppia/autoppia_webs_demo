@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
 {% load static %}
-
 {% block body %}
 <div class="container mt-5">
     <div class="card border-0 shadow">
         <div class="row no-gutters">
             <div class="col-md-4">
                 {% if movie.img %}
-                <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;">
-              {% else %}
-                <!-- Puedes mostrar una imagen por defecto o nada -->
-                <img src="{% static 'default_movie.jpg' %}" alt="No image available" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;">
-              {% endif %}            </div>
+                    <img src="{{ movie.img.url }}" class="card-img" alt="{{ movie.name }}" style="height: 450px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'images/default_book.jpg' %}" class="card-img" alt="No Image" style="height: 450px; object-fit: cover;">
+                {% endif %}
+            </div>
             <div class="col-md-8">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -157,7 +156,11 @@
             <div class="col-md-3">
                 <div class="card movie-card h-100 shadow-sm">
                     <div class="card-img-container position-relative">
+                    {% if related.img and related.img.url %}
                         <img src="{{ related.img.url }}" class="card-img-top" alt="{{ related.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <img src="images/default_book.jp" class="card-img-top" alt="{{ related.name }}" style="height: 250px; object-fit: cover;">
+                    {% endif %}
                         <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{ related.year }}</div>
                         {% if related.rating %}
                         <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">

@@ -344,7 +344,7 @@ def update_book(request, id):
     else:
         form = BookForm(instance=book)
 
-    return render(request, "edit.html", {"form": form, "book": book})
+    return render(request, "edit.html", {"form": form, "movie": book})
 
 
 def delete_book(request, id):
@@ -363,7 +363,7 @@ def delete_book(request, id):
         book.delete()
         messages.success(request, "Movie deleted successfully.")
         return redirect("/")
-    return render(request, "delete.html", {"book": book})
+    return render(request, "delete.html", {"movie": book})
 
 
 def add_to_cart(request, id):

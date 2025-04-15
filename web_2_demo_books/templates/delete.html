@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
+{% load static  %}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -9,7 +10,11 @@
                 </div>
                 <div class="card-body text-center">
                     <div class="mb-4">
-                        <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid rounded" style="max-height: 200px;">
+                        {% if movie.img %}
+                            <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid rounded" style="max-height: 200px;">
+                        {% else %}
+                            <img src="{% static 'images/default_book.jpg' %}" alt="No Image" class="img-fluid rounded" style="max-height: 200px;">
+                        {% endif %}
                     </div>
 
                     <h4 class="mb-3">¿Estás seguro de que deseas eliminar la película?</h4>
