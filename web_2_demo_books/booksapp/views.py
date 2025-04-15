@@ -36,7 +36,7 @@ def index(request):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query) | Q(cast__icontains=search_query)).distinct()
+        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
 
     from events.models import Event
 
@@ -176,7 +176,7 @@ def mybook(request):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query) | Q(cast__icontains=search_query)).distinct()
+        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
 
     from events.models import Event
 
@@ -294,7 +294,6 @@ def update_book(request, id):
         "desc": book.desc,
         "year": book.year,
         "director": book.director,
-        "cast": book.cast,
         "duration": book.duration,
         "trailer_url": book.trailer_url,
         "rating": float(book.rating) if book.rating else None,
@@ -314,8 +313,6 @@ def update_book(request, id):
                 changed_fields.append("year")
             if updated_book.director != original_values["director"]:
                 changed_fields.append("director")
-            if updated_book.cast != original_values["cast"]:
-                changed_fields.append("cast")
             if updated_book.duration != original_values["duration"]:
                 changed_fields.append("duration")
             if updated_book.trailer_url != original_values["trailer_url"]:

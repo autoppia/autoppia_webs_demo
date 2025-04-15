@@ -19,7 +19,6 @@ class Book(models.Model):
     year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
     img = models.ImageField(upload_to="gallery", blank=True, null=True)
     director = models.CharField(max_length=250, blank=True, null=True)
-    cast = models.TextField(blank=True, null=True, help_text="Names of actors separated by commas")
     duration = models.IntegerField(blank=True, null=True, help_text="Duration in minutes")
     trailer_url = models.URLField(blank=True, null=True)
     rating = models.FloatField(
@@ -40,11 +39,6 @@ class Book(models.Model):
 
     def get_genre_list(self):
         return ", ".join([g.name for g in self.genres.all()])
-
-    def get_cast_list(self):
-        if not self.cast:
-            return []
-        return [actor.strip() for actor in self.cast.split(",")]
 
 
 class Comment(models.Model):
