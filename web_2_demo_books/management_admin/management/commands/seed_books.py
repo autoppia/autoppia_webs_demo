@@ -196,7 +196,6 @@ class Command(BaseCommand):
                 desc=book_data["desc"],
                 year=book_data["year"],
                 director=book_data["director"],
-                cast=book_data["cast"],
                 duration=book_data["duration"],
                 trailer_url=book_data["trailer_url"],
                 rating=book_data["rating"],

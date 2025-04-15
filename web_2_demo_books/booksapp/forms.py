@@ -18,7 +18,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ["name", "userId", "desc", "year", "director", "cast", "duration", "trailer_url", "rating", "genres"]
+        fields = ["name", "userId", "desc", "year", "director", "duration", "trailer_url", "rating", "genres"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter the book name"}),
             "userId": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Enter the user id"}),
@@ -38,13 +38,6 @@ class BookForm(forms.ModelForm):
                 }
             ),
             "director": forms.TextInput(attrs={"class": "form-control", "placeholder": "Director's name"}),
-            "cast": forms.Textarea(
-                attrs={
-                    "class": "form-control",
-                    "rows": 2,
-                    "placeholder": "Main actors separated by commas",
-                }
-            ),
             "duration": forms.NumberInput(
                 attrs={
                     "class": "form-control",
@@ -75,7 +68,6 @@ class BookForm(forms.ModelForm):
             "year": "Release Year",
             "img": "Movie Poster",
             "director": "Director",
-            "cast": "Cast",
             "duration": "Duration (minutes)",
             "trailer_url": "Trailer URL",
             "rating": "Rating",
