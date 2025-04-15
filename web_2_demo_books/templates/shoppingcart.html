@@ -7,7 +7,11 @@
     <div class="card border-0 shadow mb-4">
         <div class="row no-gutters">
             <div class="col-md-2">
-                <img src="{{movie.img.url}}" class="card-img" alt="{{movie.name}}" style="height: 250px; object-fit: contain;">
+                {% if movie.img and movie.img.url %}
+                    <img src="{{movie.img.url}}" class="card-img" alt="{{movie.name}}" style="height: 250px; object-fit: contain;">
+                {% else %}
+                    <img src="/media/gallery/default_book.png" class="card-img" alt="No Image" style="height: 250px; object-fit: contain;">
+                {% endif %}
             </div>
             <div class="col-md-10">
                 <div class="card-body">
