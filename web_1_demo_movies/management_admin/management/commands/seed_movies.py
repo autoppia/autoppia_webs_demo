@@ -20,7 +20,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("All tables have been reset (all records deleted)."))
         # Create genres
         genres_to_create = [
-            "Action", "Adventure", "Animation", "Comedy", "Crime", 
+            "Action", "Adventure", "Animation", "Comedy", "Crime", "Biography",
             "Documentary", "Drama", "Fantasy", "Horror", "Mystery",
             "Romance", "Sci-Fi", "Thriller", "War", "Western"
         ]
