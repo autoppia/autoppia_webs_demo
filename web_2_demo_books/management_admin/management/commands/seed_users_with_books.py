@@ -2,17 +2,19 @@ import concurrent.futures
 import os
 import random
 import time
+from datetime import timedelta
 
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from django.core.files import File
+from django.utils import timezone
 
-from booksapp.models import Book, Genre, UserProfile
-from ..books_data import BOOKS_DATA, GENRE_NAMES as all_genre_names
+from booksapp.models import Book, Genre, UserProfile, Comment
+from ..books_data import BOOKS_DATA, GENRE_NAMES, SAMPLE_COMMENTS
 
 
 class Command(BaseCommand):
@@ -74,6 +76,9 @@ class Command(BaseCommand):
         # 3. Create users with their books
         self._create_users_with_books(options, all_genres)
 
+        # 4. Add comments in bulk
+        self._add_comments()
+
         duration = time.time() - start_time
         self.stdout.write(self.style.SUCCESS(f"Database reset and seeding complete in {duration:.2f}s"))
 
@@ -97,7 +102,7 @@ class Command(BaseCommand):
         self.stdout.write("Creating genres...")
 
         # Create all genres in one bulk operation
-        genres_to_create = [Genre(name=name) for name in all_genre_names if not Genre.objects.filter(name=name).exists()]
+        genres_to_create = [Genre(name=name) for name in GENRE_NAMES if not Genre.objects.filter(name=name).exists()]
 
         if genres_to_create:
             Genre.objects.bulk_create(genres_to_create)
@@ -260,55 +265,67 @@ class Command(BaseCommand):
         return result
 
     def _create_user_books(self, users, books_per_user, all_genres):
-        """Create books for a batch of users"""
+        """Create books for a batch of users ensuring:
+        1. All books are properly assigned to users
+        2. No null userId violations
+        3. Unique book assignments per user
+        """
+        # Create all needed books in one pass
         books_to_create = []
         book_genres = []
-        book_data_index = 0
+        books_created = 0
 
-        for user in users:
-            for _ in range(books_per_user):
-                if book_data_index >= len(BOOKS_DATA):
-                    book_data_index = 0
+        # Create a shuffled copy of BOOKS_DATA for assignment
+        shuffled_books = random.sample(BOOKS_DATA, len(BOOKS_DATA))
+        book_index = 0
 
-                book_data = BOOKS_DATA[book_data_index]
-                book_data_index += 1
+        with transaction.atomic():
+            for user in users:
+                for _ in range(books_per_user):
+                    if book_index >= len(shuffled_books):
+                        # If we run out of books, reshuffle
+                        shuffled_books = random.sample(BOOKS_DATA, len(BOOKS_DATA))
+                        book_index = 0
 
-                book = Book(
-                    userId=user.id,
-                    name=book_data["name"],
-                    desc=book_data["desc"],
-                    year=book_data["year"],
-                    director=book_data["director"],
-                    duration=book_data["duration"],
-                    trailer_url=book_data["trailer_url"],
-                    rating=book_data["rating"],
-                    price=book_data["price"],
-                )
-                books_to_create.append(book)
+                    book_data = shuffled_books[book_index]
+                    book_index += 1
 
-                # Store genre relationships
-                genres = [g for g in all_genres if g.name in book_data["genres"]]
-                book_genres.append((book, genres))
+                    book = Book(
+                        userId=user.id,
+                        name=book_data["name"],
+                        desc=book_data["desc"],
+                        year=book_data["year"],
+                        director=book_data["director"],
+                        duration=book_data["duration"],
+                        trailer_url=book_data["trailer_url"],
+                        rating=book_data["rating"],
+                        price=book_data["price"],
+                    )
+                    books_to_create.append(book)
 
-        # Bulk create books
-        Book.objects.bulk_create(books_to_create)
+                    # Store genre relationships
+                    genres = [g for g in all_genres if g.name in book_data["genres"]]
+                    book_genres.append((book, genres))
+                    books_created += 1
 
-        # Process images synchronously (since we can't pickle file handlers)
-        for book, genres in book_genres:
+            # Bulk create books
+            Book.objects.bulk_create(books_to_create)
+
             # Assign genres
-            if genres:
-                book.genres.add(*genres)
+            for book, genres in book_genres:
+                if genres:
+                    book.genres.add(*genres)
 
-            # Handle image upload
-            book_data = BOOKS_DATA[book_data_index - 1]  # Get the book data used
-            file_name = book_data["img_file"]
-            local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
-            if os.path.exists(local_path):
-                with open(local_path, "rb") as f:
-                    book.img.save(file_name, File(f))
-                    book.save()
+                # Handle image upload
+                book_data = next(b for b in BOOKS_DATA if b["name"] == book.name)
+                file_name = book_data["img_file"]
+                local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
+                if os.path.exists(local_path):
+                    with open(local_path, "rb") as f:
+                        book.img.save(file_name, File(f))
+                        book.save()
 
-        return len(books_to_create)
+        return books_created
 
     def _generate_bio(self, genres):
         """Generate a bio based on favorite genres"""
@@ -316,15 +333,50 @@ class Command(BaseCommand):
             return "Book and movie enthusiast."
 
         genre1 = genres[0].name
-        genre2 = genres[1].name if len(genres) > 1 else "drama"
+        genre2 = genres[1].name if len(genres) > 1 else "Drama"
         return random.choice(self.BIO_TEMPLATES).format(genre1=genre1, genre2=genre2)
 
     def _generate_website(self, user_num):
         """Generate a website URL for the user"""
-        WEBSITE_TEMPLATES = [
-            "https://moviefan{num}.example.com",
-            "https://cinemalover{num}.example.org",
-            "https://filmcritics{num}.example.net",
-            "https://movienight{num}.example.io",
-        ]
-        return random.choice(WEBSITE_TEMPLATES).format(num=user_num)
+        return random.choice(self.WEBSITE_TEMPLATES).format(num=user_num)
+
+    def _add_comments(self):
+        """Bulk create comments with optimized operations"""
+        existing_books = [book for book in Book.objects.all()]
+
+        # Prepare all comment objects in memory
+        comment_objects = []
+        now = timezone.now()
+
+        for book in existing_books:
+            num_comments = random.randint(3, 8)
+
+            # Determine sentiment distribution
+            if book.rating >= 4.5:
+                weights = [0.8, 0.15, 0.05]  # positive, mixed, critical
+            elif book.rating >= 4.0:
+                weights = [0.6, 0.3, 0.1]
+            else:
+                weights = [0.4, 0.4, 0.2]
+
+            for _ in range(num_comments):
+                sentiment = random.choices(["positive", "mixed", "critical"], weights=weights, k=1)[0]
+
+                if sentiment == "positive":
+                    text = random.choice(SAMPLE_COMMENTS["positive_comments"])
+                elif sentiment == "mixed":
+                    text = random.choice(SAMPLE_COMMENTS["mixed_comments"])
+                else:
+                    text = random.choice(SAMPLE_COMMENTS["critical_comments"])
+
+                days_ago = random.randint(1, 60)
+                comment_date = now - timedelta(days=days_ago)
+
+                use_male = random.choice([True, False])
+                name = random.choice(SAMPLE_COMMENTS["male_names"] if use_male else SAMPLE_COMMENTS["female_names"])
+
+                comment_objects.append(Comment(movie=book, name=name, content=text, created_at=comment_date))
+
+        # Bulk create all comments at once
+        Comment.objects.bulk_create(comment_objects)
+        self.stdout.write(f"Added {len(comment_objects)} comments in bulk.")
