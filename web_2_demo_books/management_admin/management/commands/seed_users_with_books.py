@@ -124,6 +124,19 @@ class Command(BaseCommand):
                     num_deleted, _ = model.objects.all().delete()
                     deleted_counts[model.__name__] = num_deleted
                     self.stdout.write(f"Deleted {num_deleted} records from {model.__name__}")
+
+                    # Reset sequence/auto-increment counter
+                    if db_vendor == "postgresql":
+                        table_name = model._meta.db_table
+                        sequence_name = f"{table_name}_id_seq"
+                        cursor.execute(f"ALTER SEQUENCE {sequence_name} RESTART WITH 1;")
+                    elif db_vendor == "mysql":
+                        table_name = model._meta.db_table
+                        cursor.execute(f"ALTER TABLE {table_name} AUTO_INCREMENT = 1;")
+                    elif db_vendor == "sqlite":
+                        table_name = model._meta.db_table
+                        cursor.execute(f"DELETE FROM sqlite_sequence WHERE name = '{table_name}';")
+
                 except Exception as e:
                     self.stderr.write(self.style.WARNING(f"Could not delete from {model.__name__}: {e} (perhaps table doesn't exist yet?)"))
 
