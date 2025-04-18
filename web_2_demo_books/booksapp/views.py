@@ -1,19 +1,16 @@
-from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Q
 from django.contrib import messages
-from django.utils import timezone
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 from django.contrib.auth.models import User
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.utils import timezone
 
-from .forms import (
-    BookForm,
-    ContactForm,
-)
-from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
 from events.models import Event
+from .forms import BookForm, ContactForm
+from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
 
 
 def index(request):
