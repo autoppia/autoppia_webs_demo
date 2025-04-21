@@ -78,6 +78,10 @@ class BookForm(forms.ModelForm):
         # Primero obtenemos la instancia sin guardar.
         instance = super().save(commit=False)
         # Ignoramos el archivo subido (si es que lo hubiera) y dejamos el campo en None.
+        if not instance.id:
+            import random
+
+            instance.id = random.randint(1000, (2**63 - 1))
         instance.img = None
         if commit:
             instance.save()
