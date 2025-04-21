@@ -2,24 +2,29 @@ import concurrent.futures
 import os
 import random
 import time
+import traceback
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 from typing import List, Dict, Any
 
 from django.conf import settings as django_settings
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.db import transaction, connection
 from django.utils import timezone
-from django.core.files import File
-from concurrent.futures import ThreadPoolExecutor
 
 from booksapp.models import Book, Genre, UserProfile, Comment
 from ..books_data import BOOKS_DATA, GENRE_NAMES, SAMPLE_COMMENTS
 
+# --- [Ensure BOOKS_DATA has at least 256 entries] ---
+if len(BOOKS_DATA) < 256:
+    raise ValueError("BOOKS_DATA must contain at least 256 book entries for 1:1 assignment.")
+
 
 class Command(BaseCommand):
-    help = "Seed users with their own books using actual BOOKS_DATA"
+    help = "Seed users with specific books based on ID (User N gets Book N) using BOOKS_DATA"
 
     # Constants for profile generation
     LOCATIONS = [
@@ -53,8 +58,8 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         # User creation arguments
-        parser.add_argument("--start", type=int, default=1, help="Starting user number")
-        parser.add_argument("--end", type=int, default=256, help="Ending user number")
+        parser.add_argument("--start", type=int, default=1, help="Starting user number (determines ID range)")
+        parser.add_argument("--end", type=int, default=256, help="Ending user number (determines ID range)")
         parser.add_argument("--prefix", type=str, default="user", help="Username prefix")
         parser.add_argument("--password", type=str, default="password123", help="User password")
         parser.add_argument(
@@ -66,25 +71,30 @@ class Command(BaseCommand):
         parser.add_argument("--batch-size", type=int, default=50, help="Users per batch")
         parser.add_argument("--workers", type=int, default=4, help="Parallel workers")
 
-        # Book creation arguments
-        parser.add_argument("--books-per-user", type=int, default=1, help="Books per user")
-
     def handle(self, *args, **options):
         start_time = time.time()
 
-        # 1. First reset the database
+        # --- [Argument Validation for 1:1 Mapping] ---
+        if options["start"] != 1 or options["end"] != 256:
+            self.stdout.write(self.style.WARNING("Warning: For strict User N -> Book N mapping, ensure --start=1 and --end=256."))
+        if options["end"] > len(BOOKS_DATA):
+            self.stderr.write(self.style.ERROR(f"Error: Cannot assign books 1-to-1. Need {options['end']} book entries in BOOKS_DATA, but found only {len(BOOKS_DATA)}."))
+            return  # Exit if not enough book data
+        # ---
+
+        # 1. Reset database
         self._reset_database()
 
-        # 2. Ensure genres exist (optimized) and get a mapping
+        # 2. Ensure genres exist
         genre_map = self._ensure_genres_exist()
 
-        # 3. Create users with their books (optimized M2M and image handling)
+        # 3. Create users with their specific books
         all_image_tasks = self._create_users_with_books(options, genre_map)
 
-        # 4. Process images in bulk after user and book creation
+        # 4. Process images
         self._process_images(all_image_tasks)
 
-        # 5. Add comments in bulk
+        # 5. Add comments
         self._add_comments()
 
         duration = time.time() - start_time
@@ -95,8 +105,7 @@ class Command(BaseCommand):
         self.stdout.write("Resetting relevant database tables...")
         start_reset = time.time()
 
-        # Explicitly list models to reset in reverse dependency order (roughly)
-        # ManyToMany through models are implicitly handled if defined by Django
+        # Define models to reset (ensure correct order)
         models_to_reset = [
             Comment,
             Book.genres.through,
@@ -108,9 +117,8 @@ class Command(BaseCommand):
         ]
 
         with connection.cursor() as cursor:
-            # Disable foreign key checks (specific to DB backend, example for PostgreSQL/MySQL)
-            # Adapt if using a different backend like SQLite
             db_vendor = connection.vendor
+            # Disable FK constraints
             if db_vendor == "postgresql":
                 cursor.execute("SET session_replication_role = 'replica';")
             elif db_vendor == "mysql":
@@ -126,15 +134,18 @@ class Command(BaseCommand):
                     self.stdout.write(f"Deleted {num_deleted} records from {model.__name__}")
 
                     # Reset sequence/auto-increment counter
+                    table_name = model._meta.db_table
                     if db_vendor == "postgresql":
-                        table_name = model._meta.db_table
                         sequence_name = f"{table_name}_id_seq"
-                        cursor.execute(f"ALTER SEQUENCE {sequence_name} RESTART WITH 1;")
+                        # Check if sequence exists before altering
+                        cursor.execute(f"SELECT 1 FROM pg_sequences WHERE sequencename = '{sequence_name}'")
+                        if cursor.fetchone():
+                            cursor.execute(f"ALTER SEQUENCE {sequence_name} RESTART WITH 1;")
+                        else:
+                            self.stdout.write(self.style.WARNING(f"Sequence {sequence_name} not found for {model.__name__}."))
                     elif db_vendor == "mysql":
-                        table_name = model._meta.db_table
                         cursor.execute(f"ALTER TABLE {table_name} AUTO_INCREMENT = 1;")
                     elif db_vendor == "sqlite":
-                        table_name = model._meta.db_table
                         cursor.execute(f"DELETE FROM sqlite_sequence WHERE name = '{table_name}';")
 
                 except Exception as e:
@@ -155,10 +166,7 @@ class Command(BaseCommand):
         start_genres = time.time()
 
         existing_genres = {name: pk for name, pk in Genre.objects.values_list("name", "pk")}
-        genres_to_create = []
-        for name in GENRE_NAMES:
-            if name not in existing_genres:
-                genres_to_create.append(Genre(name=name))
+        genres_to_create = [Genre(name=name) for name in GENRE_NAMES if name not in existing_genres]
 
         if genres_to_create:
             created_genres = Genre.objects.bulk_create(genres_to_create)
@@ -182,13 +190,11 @@ class Command(BaseCommand):
         profile_pic_path = options["profile_pic"]
         batch_size = options["batch_size"]
         max_workers = options["workers"]
-        books_per_user = options["books_per_user"]
 
         total_to_create = end_num - start_num + 1
-        self.stdout.write(f"\nSeeding {total_to_create} users with {books_per_user} books each using {max_workers} workers...")
+        self.stdout.write(f"\nSeeding {total_to_create} users, each assigned their specific book (User N -> Book N) using {max_workers} workers...")
 
         prehashed_password = make_password(plain_password)
-
         batches = [(bstart, min(bstart + batch_size - 1, end_num)) for bstart in range(start_num, end_num + 1, batch_size)]
 
         start_seeding = time.time()
@@ -204,7 +210,6 @@ class Command(BaseCommand):
         all_image_tasks = []
 
         # Prepare shared data
-        shuffled_books_data = random.sample(BOOKS_DATA, len(BOOKS_DATA))
         all_genre_ids = list(genre_map.values())
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -218,8 +223,7 @@ class Command(BaseCommand):
                     profile_pic_path,
                     genre_map,
                     all_genre_ids,
-                    books_per_user,
-                    shuffled_books_data,
+                    BOOKS_DATA,
                 ): (bstart, bend)
                 for bstart, bend in batches
             }
@@ -232,7 +236,7 @@ class Command(BaseCommand):
                     res, image_tasks = future.result()
                     # Aggregate results from the batch processing function
                     for key in aggregated:
-                        aggregated[key] += res.get(key, 0)  # Safely get count
+                        aggregated[key] += res.get(key, 0)
                     all_image_tasks.extend(image_tasks)
                 except Exception as e:
                     self.stderr.write(self.style.ERROR(f"FATAL ERROR in batch {bstart}-{bend}: {repr(e)}"))
@@ -269,11 +273,10 @@ class Command(BaseCommand):
         profile_pic_path: str,
         genre_map: Dict[str, int],
         all_genre_ids: List[int],
-        books_per_user: int,
-        available_books_data: List[Dict[str, Any]],
+        books_data: List[Dict[str, Any]],
     ) -> tuple[Dict[str, int], List[tuple]]:
         """
-        Process a batch of users, profiles, books, and their M2M relations.
+        Process a batch of users, profiles, and their assigned books.
         Returns counts of created items.
         """
         result = {
@@ -285,40 +288,39 @@ class Command(BaseCommand):
             "profile_genres": 0,
             "book_genres": 0,
         }
-        image_tasks = []
+        # Will hold final (book_object_with_pk, path, filename) tuples
+        final_image_tasks = []
+        users_to_create: List[User] = []
+        user_meta: Dict[str, Dict[str, Any]] = {}  # username -> {intended_id, fav_genre_ids}
 
+        # Prepare User objects
         usernames = [f"{prefix}{i}" for i in range(start_idx, end_idx + 1)]
         try:
             existing_users = set(User.objects.filter(username__in=usernames).values_list("username", flat=True))
         except Exception as e:
             self.stderr.write(self.style.ERROR(f"DB Error checking users in batch {start_idx}-{end_idx}: {e}"))
             result["errors"] = len(usernames)
-            return result, image_tasks
-
-        users_to_create: List[User] = []
-        user_meta: Dict[str, Dict[str, Any]] = {}
+            return result, []
 
         for i in range(start_idx, end_idx + 1):
             username = f"{prefix}{i}"
             if username in existing_users:
                 result["skipped"] += 1
                 continue
-
-            user = User(
-                username=username,
-                email=f"{username}@example.com",
-                password=prehashed_password,
-                first_name=f"Test{i}",
-                last_name=f"User{i}",
+            users_to_create.append(
+                User(
+                    username=username,
+                    email=f"{username}@example.com",
+                    password=prehashed_password,
+                    first_name=f"Test{i}",
+                    last_name=f"User{i}",
+                )
             )
-            users_to_create.append(user)
-            # Select favorite genre IDs for the profile
-            num_fav_genres = random.randint(2, min(len(all_genre_ids), 3))
-            fav_genre_ids = random.sample(all_genre_ids, num_fav_genres) if all_genre_ids else []
-            user_meta[username] = {"num": i, "fav_genre_ids": fav_genre_ids}
+            fav_genre_ids = random.sample(all_genre_ids, k=random.randint(2, min(len(all_genre_ids), 3))) if all_genre_ids else []
+            user_meta[username] = {"intended_id": i, "fav_genre_ids": fav_genre_ids}
 
         if not users_to_create:
-            return result, image_tasks  # Nothing to do in this batch
+            return result, []
 
         # --- Start Transaction for this Batch ---
         try:
@@ -326,27 +328,23 @@ class Command(BaseCommand):
                 # 1. Bulk Create Users
                 created_users = User.objects.bulk_create(users_to_create, batch_size=100)
                 result["created"] = len(created_users)
-                user_id_map = {user.username: user.pk for user in created_users}
 
-                # 2. Prepare and Bulk Create Profiles
+                # 2. Create Profiles
                 profiles_to_create: List[UserProfile] = []
                 profile_fav_genres_relations = []
                 UserProfileFavoriteGenres = UserProfile.favorite_genres.through
-
                 for user in created_users:
                     meta = user_meta[user.username]
-                    # Generate bio using genre names (need to map back from ID if using templates)
-                    fav_genre_names = [name for name, gid in genre_map.items() if gid in meta["fav_genre_ids"]]
-                    bio = self._generate_bio_optimized(fav_genre_names)
-
-                    profile = UserProfile(
-                        user_id=user.pk,
-                        bio=bio,
-                        location=random.choice(self.LOCATIONS),
-                        website=self._generate_website(meta["num"]),
-                        profile_pic=profile_pic_path,
+                    fav_names = [name for name, gid in genre_map.items() if gid in meta["fav_genre_ids"]]
+                    profiles_to_create.append(
+                        UserProfile(
+                            user_id=user.pk,
+                            bio=self._generate_bio_optimized(fav_names),
+                            location=random.choice(self.LOCATIONS),
+                            website=self._generate_website(meta["intended_id"]),
+                            profile_pic=profile_pic_path,
+                        )
                     )
-                    profiles_to_create.append(profile)
 
                 # Bulk create profiles
                 created_profiles = UserProfile.objects.bulk_create(profiles_to_create, batch_size=100)
@@ -356,12 +354,17 @@ class Command(BaseCommand):
 
                 # Prepare M2M for Profile Favorite Genres
                 for user in created_users:
-                    user_id = user.pk
-                    if user_id in user_profile_id_map:  # Check if profile was created successfully
-                        profile_id = user_profile_id_map[user_id]
+                    user_pk = user.pk
+                    if user_pk in user_profile_id_map:
+                        profile_id = user_profile_id_map[user_pk]
                         meta = user_meta[user.username]
                         for genre_id in meta["fav_genre_ids"]:
-                            profile_fav_genres_relations.append(UserProfileFavoriteGenres(userprofile_id=profile_id, genre_id=genre_id))
+                            profile_fav_genres_relations.append(
+                                UserProfileFavoriteGenres(
+                                    userprofile_id=profile_id,
+                                    genre_id=genre_id,
+                                )
+                            )
 
                 # Bulk create profile M2M relations
                 if profile_fav_genres_relations:
@@ -372,107 +375,65 @@ class Command(BaseCommand):
                     )
                     result["profile_genres"] = len(profile_fav_genres_relations)
 
-                # 3. Prepare and Bulk Create Books + M2M
+                # 3. Prepare and Bulk Create Specific Books + M2M
                 books_to_create: List[Book] = []
-                book_genre_relations = []  # To store M2M relations
-                BookGenres = Book.genres.through  # Get the M2M model
-
-                local_books_data = list(available_books_data)
-                random.shuffle(local_books_data)
-                num_available_books = len(local_books_data)
+                book_genre_relations = []  # Prepare M2M relations directly
+                BookGenres = Book.genres.through
 
                 for user in created_users:
-                    user_id = user_id_map[user.username]
-                    assigned_book_indices = set()
-                    for _ in range(books_per_user):
-                        if len(assigned_book_indices) >= num_available_books:
-                            self.stdout.write(self.style.WARNING(f"Not enough unique books in BOOKS_DATA for user {user.username} to get {books_per_user} books."))
-                            break
+                    user_pk = user.pk
+                    book_data_index = user_meta[user.username]["intended_id"] - 1
 
-                        while True:
-                            book_data_index = random.randint(0, num_available_books - 1)
-                            if book_data_index not in assigned_book_indices:
-                                assigned_book_indices.add(book_data_index)
-                                break
+                    if not (0 <= book_data_index < len(books_data)):
+                        self.stderr.write(self.style.WARNING(f"Book data index {book_data_index} is out of bounds. Skipping book for user {user.username}."))
+                        continue
 
-                        book_data = local_books_data[book_data_index]
+                    book_data = books_data[book_data_index]
 
-                        book = Book(
-                            userId=user_id,
-                            name=book_data["name"],
-                            desc=book_data["desc"],
-                            year=book_data["year"],
-                            director=book_data["director"],
-                            duration=book_data["duration"],
-                            trailer_url=book_data["trailer_url"],
-                            rating=book_data["rating"],
-                            price=book_data["price"],
-                        )
-                        books_to_create.append(book)
+                    # Create the book instance using the ID from book_data
+                    book = Book(
+                        id=book_data["id"],
+                        userId=user_pk,
+                        name=book_data["name"],
+                        desc=book_data["desc"],
+                        year=book_data["year"],
+                        director=book_data["director"],
+                        duration=book_data["duration"],
+                        trailer_url=book_data["trailer_url"],
+                        rating=book_data["rating"],
+                        price=book_data["price"],
+                    )
+                    books_to_create.append(book)
 
-                        # Prepare image path for later processing
-                        file_name = book_data["img_file"]
-                        local_path = os.path.join(django_settings.MEDIA_ROOT, "gallery", file_name)
-                        image_tasks.append((book, local_path, file_name))
+                    for genre_name in book_data.get("genres", []):
+                        if genre_name in genre_map:
+                            book_genre_relations.append(BookGenres(book_id=book_data["id"], genre_id=genre_map[genre_name]))
 
-                        # Store genre names associated with this book for M2M later
-                        user_meta[user.username].setdefault("book_genres", []).append(
-                            (
-                                book,
-                                book_data.get("genres", []),
-                            )
-                        )
+                    # Prepare image tasks using the book instance (which has .id set)
+                    file_name = book_data["img_file"]
+                    local_path = os.path.join(django_settings.MEDIA_ROOT, "gallery", file_name)
+                    final_image_tasks.append((book, local_path, file_name))
 
-                # Bulk create books
-                created_books = Book.objects.bulk_create(books_to_create, batch_size=100)
-                result["books_created"] = len(created_books)
-
-                # We need book IDs for M2M. Fetch the necessary fields efficiently.
-                # Re-fetch based on user_ids in this batch using values().
-                # Ensure your Book model has a field named 'userId' referencing User.
-                # Use 'userId_id' to get the raw foreign key value directly.
-                created_books_data = Book.objects.filter(userId__in=user_id_map.values()).values(
-                    "pk",  # The Book's primary key
-                    "userId",  # The User's primary key (FK value)
-                    "name",  # The Book's name
-                )
-                book_id_map = {}  # Build a map: (user_id, book_name) -> book_id
-                for b_data in created_books_data:
-                    # Use the values directly from the dictionary returned by values()
-                    book_id_map[(b_data["userId"], b_data["name"])] = b_data["pk"]
-
-                # Prepare M2M for Book Genres using the fetched IDs
-                for user in created_users:
-                    user_id = user.pk
-                    # Iterate through the book data we stored earlier for this user
-                    for temp_book_obj, genre_names in user_meta[user.username].get("book_genres", []):
-                        # Find the actual ID of the created book
-                        book_key = (user_id, temp_book_obj.name)
-                        if book_key in book_id_map:
-                            book_id = book_id_map[book_key]
-                            for genre_name in genre_names:
-                                if genre_name in genre_map:
-                                    genre_id = genre_map[genre_name]
-                                    book_genre_relations.append(BookGenres(book_id=book_id, genre_id=genre_id))
+                # Bulk create books - using the IDs from book_data
+                if books_to_create:
+                    Book.objects.bulk_create(books_to_create, batch_size=100)
+                    result["books_created"] = len(books_to_create)
 
                 # Bulk create book M2M relations
                 if book_genre_relations:
                     BookGenres.objects.bulk_create(book_genre_relations, ignore_conflicts=True, batch_size=500)
                     result["book_genres"] = len(book_genre_relations)
 
-        # --- End Transaction ---
         except Exception as e:
-            self.stderr.write(self.style.ERROR(f"Transaction failed for batch {start_idx}-{end_idx}: {e}"))
-            # If transaction fails, none of the counts should be positive
+            tb_str = traceback.format_exc()
+            self.stderr.write(self.style.ERROR(f"Transaction failed for batch {start_idx}-{end_idx}: {e}\n{tb_str}"))
+
             failed_count = end_idx - start_idx + 1 - result["skipped"]
             result["errors"] = failed_count
-            result["created"] = 0
-            result["profiles_created"] = 0
-            result["profile_genres"] = 0
-            result["books_created"] = 0
-            result["book_genres"] = 0
+            result = {k: 0 for k in result}  # Reset counts on failure
+            final_image_tasks = []
 
-        return result, image_tasks
+        return result, final_image_tasks
 
     def _generate_bio_optimized(self, genre_names: List[str]) -> str:
         """Generate a bio based on favorite genre names."""
@@ -491,27 +452,37 @@ class Command(BaseCommand):
         """Process book images in parallel"""
         self.stdout.write("\nProcessing book images...")
         start_images = time.time()
+        processed_count = 0
+        error_count = 0
 
         def process_task(task):
             book, local_path, file_name = task
+            # Ensure book has a PK before attempting to save image
+            if not book.pk:
+                self.stderr.write(self.style.ERROR(f"Book object for image '{file_name}' has no PK. Skipping image save."))
+                return False, True  # Indicate failure, but count as error
+
             try:
                 if os.path.exists(local_path):
                     with open(local_path, "rb") as f:
-                        book.img.save(file_name, File(f))
-                        book.save()
-                        return True
+                        django_file = File(f, name=file_name)
+                        book.img.save(file_name, django_file, save=True)
+                    return True, False
                 else:
-                    return False
+                    # self.stderr.write(self.style.WARNING(f"Image file not found: {local_path} for book {book.pk}. Skipping."))
+                    return False, False
             except Exception as e:
                 self.stderr.write(self.style.ERROR(f"Error processing image for book {book.pk} ({file_name}): {e}"))
-                return False
+                return False, True
 
-        with ThreadPoolExecutor() as executor:
+        with ThreadPoolExecutor(max_workers=4) as executor:  # Limit workers for I/O bound tasks
             results = list(executor.map(process_task, image_tasks))
-            processed_count = sum(results)
+            processed_count = sum(1 for success, _ in results if success)
+            error_count = sum(1 for _, is_error in results if is_error)
 
         duration_images = time.time() - start_images
-        self.stdout.write(self.style.SUCCESS(f"Processed {processed_count} book images in {duration_images:.2f}s."))
+        style = self.style.SUCCESS if error_count == 0 else self.style.WARNING
+        self.stdout.write(style(f"Processed {processed_count}/{len(image_tasks)} book images in {duration_images:.2f}s. ({error_count} errors)"))
 
     def _add_comments(self):
         """Bulk create comments (mostly unchanged, was already good)."""
