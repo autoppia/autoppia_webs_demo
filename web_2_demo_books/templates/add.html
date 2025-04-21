@@ -47,14 +47,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="rating"><i class="fas fa-star mr-1"></i> Rating</label>
-                                    <select id="rating" name="rating" class="form-control">
-                                        <option value="">Select a rating</option>
-                                        <option value="5">5 - Excellent</option>
-                                        <option value="4">4 - Very Good</option>
-                                        <option value="3">3 - Good</option>
-                                        <option value="2">2 - Fair</option>
-                                        <option value="1">1 - Poor</option>
-                                    </select>
+                                    <input type="number" id="rating" name="rating" class="form-control" placeholder="Rating" min="0" max="5" step="0.5" required>
+                                    <div class="form-text small text-muted">Rating from 0 to 5 stars</div>
                                 </div>
                             </div>
                         </div>
