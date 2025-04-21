@@ -20,19 +20,20 @@ class Command(BaseCommand):
             help="Force reset without confirmation",
         )
         parser.add_argument(
-            "--no-migrate",
-            action="store_true",
-            help="Skip running migrations after reset",
-        )
-        parser.add_argument(
             "--database",
             default=DEFAULT_DB_ALIAS,
             help="Specifies the database to reset.",
         )
+        parser.add_argument(
+            "--parallel",
+            type=int,
+            default=4,
+            help="Number of parallel workers for seeding",
+        )
 
     def handle(self, *args, **options):
         start_time = time.monotonic()
-        db_alias = DEFAULT_DB_ALIAS
+        db_alias = options["database"]
         try:
             db_config = settings.DATABASES[db_alias]
         except KeyError:
@@ -49,8 +50,8 @@ class Command(BaseCommand):
         try:
             self.drop_database_data(db_alias, db_config)
 
-            if not options["no_migrate"]:
-                self.recreate_schema(db_alias)
+            self.apply_migrations(db_alias)
+            self.seed_database()
 
             end_time = time.monotonic()
             total_time = end_time - start_time
@@ -193,21 +194,21 @@ class Command(BaseCommand):
         except Exception as e:
             raise ValueError(f"Error dropping MySQL data in '{db_name}': {e}")
 
-    def recreate_schema(self, db_alias):
-        """Rebuild database schema using Django's migrate command."""
-        self.stdout.write(f"\n🔵 Recreating database schema for the '{db_alias}' database...")
+    def apply_migrations(self, db_alias):
+        """Applies all migrations."""
+        self.stdout.write("\n🛠️ Applying migrations...")
         try:
-            call_command(
-                "migrate",
-                # --run-syncdb might not be needed unless you have legacy apps without migrations
-                # It's generally recommended to rely solely on migrations if possible.
-                # Remove it if you don't specifically need its behavior.
-                # "--run-syncdb",
-                database=db_alias,
-                interactive=False,
-                verbosity=1,  # Adjust verbosity as needed (0=minimal, 1=normal, 2=verbose, 3=debug)
-            )
-            self.stdout.write(self.style.SUCCESS(f"Schema rebuilt successfully for the '{db_alias}' database via migrate"))
+            call_command("makemigrations", "--noinput")
+            call_command("migrate", "--noinput")
+            self.stdout.write(self.style.SUCCESS("Migrations applied successfully."))
         except Exception as e:
-            # Catch specific exceptions if needed, e.g., CommandError
-            raise ValueError(f"Schema recreate failed for the '{db_alias}' database: {e}")
+            raise ValueError(f"Error applying migrations: {e}")
+
+    def seed_database(self):
+        """Seeds the database with initial data."""
+        self.stdout.write("\n🌱 Seeding the database...")
+        try:
+            call_command("seed_users_with_books", "--start=1", "--end=256", "--prefix=user", "--password=PASSWORD")
+            self.stdout.write(self.style.SUCCESS("Database seeded successfully."))
+        except Exception as e:
+            raise ValueError(f"Error seeding the database: {e}")
