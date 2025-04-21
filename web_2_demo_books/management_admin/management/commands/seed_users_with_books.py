@@ -307,17 +307,29 @@ class Command(BaseCommand):
             if username in existing_users:
                 result["skipped"] += 1
                 continue
-            users_to_create.append(
-                User(
-                    username=username,
-                    email=f"{username}@example.com",
-                    password=prehashed_password,
-                    first_name=f"Test{i}",
-                    last_name=f"User{i}",
-                )
-            )
-            fav_genre_ids = random.sample(all_genre_ids, k=random.randint(2, min(len(all_genre_ids), 3))) if all_genre_ids else []
-            user_meta[username] = {"intended_id": i, "fav_genre_ids": fav_genre_ids}
+
+            book_data_index = i - 1
+            if 0 <= book_data_index < len(books_data):
+                intended_user_id = books_data[book_data_index].get("id")
+                if intended_user_id is not None:
+                    users_to_create.append(
+                        User(
+                            id=intended_user_id,  # Set User ID from books_data
+                            username=username,
+                            email=f"{username}@example.com",
+                            password=prehashed_password,
+                            first_name=f"Test{i}",
+                            last_name=f"User{i}",
+                        )
+                    )
+                    fav_genre_ids = random.sample(all_genre_ids, k=random.randint(2, min(len(all_genre_ids), 3))) if all_genre_ids else []
+                    user_meta[username] = {"intended_id": i, "fav_genre_ids": fav_genre_ids}
+                else:
+                    self.stderr.write(self.style.WARNING(f"Book data at index {book_data_index} has no 'id'. Skipping user {username}."))
+                    result["skipped"] += 1
+            else:
+                self.stderr.write(self.style.WARNING(f"No book data for index {book_data_index}. Skipping user {username}."))
+                result["skipped"] += 1
 
         if not users_to_create:
             return result, []
@@ -325,26 +337,30 @@ class Command(BaseCommand):
         # --- Start Transaction for this Batch ---
         try:
             with transaction.atomic():
-                # 1. Bulk Create Users
-                created_users = User.objects.bulk_create(users_to_create, batch_size=100)
-                result["created"] = len(created_users)
+                # 1. Bulk Create Users (using IDs from books_data)
+                User.objects.bulk_create(users_to_create, ignore_conflicts=True, batch_size=100)
+                result["created"] = len(users_to_create)  # Update created count based on actual created
 
                 # 2. Create Profiles
                 profiles_to_create: List[UserProfile] = []
                 profile_fav_genres_relations = []
                 UserProfileFavoriteGenres = UserProfile.favorite_genres.through
-                for user in created_users:
-                    meta = user_meta[user.username]
-                    fav_names = [name for name, gid in genre_map.items() if gid in meta["fav_genre_ids"]]
-                    profiles_to_create.append(
-                        UserProfile(
-                            user_id=user.pk,
-                            bio=self._generate_bio_optimized(fav_names),
-                            location=random.choice(self.LOCATIONS),
-                            website=self._generate_website(meta["intended_id"]),
-                            profile_pic=profile_pic_path,
+                created_user_pks = {user.pk: user for user in User.objects.filter(username__in=[u.username for u in users_to_create])}
+
+                for user_to_create in users_to_create:
+                    if user_to_create.pk in created_user_pks:
+                        user = created_user_pks[user_to_create.pk]
+                        meta = user_meta[user.username]
+                        fav_names = [name for name, gid in genre_map.items() if gid in meta["fav_genre_ids"]]
+                        profiles_to_create.append(
+                            UserProfile(
+                                user_id=user.pk,
+                                bio=self._generate_bio_optimized(fav_names),
+                                location=random.choice(self.LOCATIONS),
+                                website=self._generate_website(meta["intended_id"]),
+                                profile_pic=profile_pic_path,
+                            )
                         )
-                    )
 
                 # Bulk create profiles
                 created_profiles = UserProfile.objects.bulk_create(profiles_to_create, batch_size=100)
@@ -352,19 +368,20 @@ class Command(BaseCommand):
                 # Map user_id to profile_id for M2M
                 user_profile_id_map = {profile.user_id: profile.pk for profile in created_profiles}
 
-                # Prepare M2M for Profile Favorite Genres
-                for user in created_users:
-                    user_pk = user.pk
-                    if user_pk in user_profile_id_map:
-                        profile_id = user_profile_id_map[user_pk]
-                        meta = user_meta[user.username]
-                        for genre_id in meta["fav_genre_ids"]:
-                            profile_fav_genres_relations.append(
-                                UserProfileFavoriteGenres(
-                                    userprofile_id=profile_id,
-                                    genre_id=genre_id,
+                for user_to_create in users_to_create:
+                    if user_to_create.pk in created_user_pks:
+                        user = created_user_pks[user_to_create.pk]
+                        user_pk = user.pk
+                        if user_pk in user_profile_id_map:
+                            profile_id = user_profile_id_map[user_pk]
+                            meta = user_meta[user.username]
+                            for genre_id in meta["fav_genre_ids"]:
+                                profile_fav_genres_relations.append(
+                                    UserProfileFavoriteGenres(
+                                        userprofile_id=profile_id,
+                                        genre_id=genre_id,
+                                    )
                                 )
-                            )
 
                 # Bulk create profile M2M relations
                 if profile_fav_genres_relations:
@@ -380,43 +397,38 @@ class Command(BaseCommand):
                 book_genre_relations = []  # Prepare M2M relations directly
                 BookGenres = Book.genres.through
 
-                for user in created_users:
-                    user_pk = user.pk
-                    book_data_index = user_meta[user.username]["intended_id"] - 1
+                created_user_ids = {user.pk for user in User.objects.filter(username__in=[u.username for u in users_to_create])}
 
-                    if not (0 <= book_data_index < len(books_data)):
-                        self.stderr.write(self.style.WARNING(f"Book data index {book_data_index} is out of bounds. Skipping book for user {user.username}."))
-                        continue
+                for book_data in books_data:
+                    book_id = book_data.get("id")
+                    user_id = book_id  # Assuming book ID should match user ID
 
-                    book_data = books_data[book_data_index]
+                    if book_id in created_user_ids:
+                        book = Book(
+                            id=book_id,
+                            userId=user_id,
+                            name=book_data["name"],
+                            desc=book_data["desc"],
+                            year=book_data["year"],
+                            director=book_data["director"],
+                            duration=book_data["duration"],
+                            trailer_url=book_data["trailer_url"],
+                            rating=book_data["rating"],
+                            price=book_data["price"],
+                        )
+                        books_to_create.append(book)
 
-                    # Create the book instance using the ID from book_data
-                    book = Book(
-                        id=book_data["id"],
-                        userId=user_pk,
-                        name=book_data["name"],
-                        desc=book_data["desc"],
-                        year=book_data["year"],
-                        director=book_data["director"],
-                        duration=book_data["duration"],
-                        trailer_url=book_data["trailer_url"],
-                        rating=book_data["rating"],
-                        price=book_data["price"],
-                    )
-                    books_to_create.append(book)
+                        for genre_name in book_data.get("genres", []):
+                            if genre_name in genre_map:
+                                book_genre_relations.append(BookGenres(book_id=book_id, genre_id=genre_map[genre_name]))
 
-                    for genre_name in book_data.get("genres", []):
-                        if genre_name in genre_map:
-                            book_genre_relations.append(BookGenres(book_id=book_data["id"], genre_id=genre_map[genre_name]))
-
-                    # Prepare image tasks using the book instance (which has .id set)
-                    file_name = book_data["img_file"]
-                    local_path = os.path.join(django_settings.MEDIA_ROOT, "gallery", file_name)
-                    final_image_tasks.append((book, local_path, file_name))
+                        file_name = book_data["img_file"]
+                        local_path = os.path.join(django_settings.MEDIA_ROOT, "gallery", file_name)
+                        final_image_tasks.append((book, local_path, file_name))
 
                 # Bulk create books - using the IDs from book_data
                 if books_to_create:
-                    Book.objects.bulk_create(books_to_create, batch_size=100)
+                    Book.objects.bulk_create(books_to_create, ignore_conflicts=True, batch_size=100)
                     result["books_created"] = len(books_to_create)
 
                 # Bulk create book M2M relations
