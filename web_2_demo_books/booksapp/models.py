@@ -13,6 +13,7 @@ class Genre(models.Model):
 
 
 class Book(models.Model):
+    id = models.BigIntegerField(primary_key=True)
     userId = models.BigIntegerField()
     name = models.CharField(max_length=250)
     desc = models.TextField()
@@ -32,10 +33,10 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["id"]  # Or keep ["-created_at"]
 
     def __str__(self):
-        return self.name
+        return f"{self.name} (ID: {self.id})"
 
     def get_genre_list(self):
         return ", ".join([g.name for g in self.genres.all()])

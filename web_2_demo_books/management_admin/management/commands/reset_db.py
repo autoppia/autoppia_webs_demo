@@ -54,8 +54,7 @@ class Command(BaseCommand):
 
             end_time = time.monotonic()
             total_time = end_time - start_time
-            self.stdout.write(self.style.SUCCESS(
-                f"Database '{db_name}' (alias: '{db_alias}') reset successfully in {total_time:.2f} seconds"))
+            self.stdout.write(self.style.SUCCESS(f"Database '{db_name}' (alias: '{db_alias}') reset successfully in {total_time:.2f} seconds"))
 
         except (ValueError, OperationalError, Exception) as e:
             self.stderr.write(self.style.ERROR(f"An error occurred during reset: {e}"))
@@ -79,8 +78,7 @@ class Command(BaseCommand):
         elif "mysql" in db_engine:
             self.drop_mysql(db_alias, db_config)
         else:
-            self.stdout.write(self.style.WARNING(
-                f"Unsupported database engine '{db_engine}' - falling back to 'flush' on the '{db_alias}' database"))
+            self.stdout.write(self.style.WARNING(f"Unsupported database engine '{db_engine}' - falling back to 'flush' on the '{db_alias}' database"))
             try:
                 # Flush often requires the connection to be open
                 # call_command handles connections internally, but ensure it's logical
@@ -105,8 +103,7 @@ class Command(BaseCommand):
             except OSError as e:
                 raise ValueError(f"Couldn't delete SQLite file '{db_path}': {e}")
         else:
-            self.stdout.write(
-                self.style.WARNING(f"SQLite file not found at {db_path} (might be in-memory or already deleted)"))
+            self.stdout.write(self.style.WARNING(f"SQLite file not found at {db_path} (might be in-memory or already deleted)"))
 
     def drop_postgresql(self, db_alias, db_config):
         """PostgreSQL-specific data destruction"""
@@ -210,8 +207,7 @@ class Command(BaseCommand):
                 interactive=False,
                 verbosity=1,  # Adjust verbosity as needed (0=minimal, 1=normal, 2=verbose, 3=debug)
             )
-            self.stdout.write(
-                self.style.SUCCESS(f"Schema rebuilt successfully for the '{db_alias}' database via migrate"))
+            self.stdout.write(self.style.SUCCESS(f"Schema rebuilt successfully for the '{db_alias}' database via migrate"))
         except Exception as e:
             # Catch specific exceptions if needed, e.g., CommandError
             raise ValueError(f"Schema recreate failed for the '{db_alias}' database: {e}")
