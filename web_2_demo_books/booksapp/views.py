@@ -372,6 +372,14 @@ def add_to_cart(request, id):
             Cart.objects.create(userId=userId, bookId=bookId)
 
             messages.success(request, "Book added to the shopping cart.")
+        book = Book.objects.get(id=id)
+        add_to_cart_event = Event.create_shoppingcart_event(
+            user=request.user if request.user.is_authenticated else None,
+            web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            book=book,
+        )
+        add_to_cart_event.save()
+
         return redirect("booksapp:detail", movie_id=id)
 
 
