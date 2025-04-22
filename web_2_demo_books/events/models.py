@@ -209,9 +209,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_shoppingcart_event(cls, user, web_agent, book):
+    def create_shoppingcart_event(cls, user, web_agent_id, book):
         """Factory method to create a shopping cart event"""
-        event = cls(event_name=EventName.SHOPPING_CART, user=user)
+        event = cls(event_name=EventName.SHOPPING_CART, user=user, web_agent_id=web_agent_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
             "id": book.id,
