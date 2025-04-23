@@ -8,7 +8,7 @@
         <div class="row no-gutters">
             <div class="col-md-2">
                 {% if movie.img and movie.img.url %}
-                    <img src="{{movie.img.url}}" class="card-img" alt="{{movie.name}}" style="height: 250px; object-fit: contain;">
+                    <img src="{{ movie.img.url }}" class="card-img" alt="{{ movie.name }}" style="height: 250px; object-fit: contain;">
                 {% else %}
                     <img src="/media/gallery/default_book.png" class="card-img" alt="No Image" style="height: 250px; object-fit: contain;">
                 {% endif %}
@@ -16,9 +16,8 @@
             <div class="col-md-10">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="card-title">{{movie.name}}</h1>
-                        {% comment %} <span class="badge badge-primary p-2">${{movie.price}}</span> {% endcomment %}
-                        <h3 style="font-size: 18px">${{movie.price}}</h3>
+                        <h1 class="card-title">{{ movie.name }}</h1>
+                        <h3 style="font-size: 18px">${{ movie.price }}</h3>
                     </div>
 
                     <hr>
@@ -29,9 +28,9 @@
                                 <p class="text-muted">
                                     <strong><i class="fas fa-file mr-2"></i>Category:</strong>
                                     {% for genre in movie.genres.all %}
-                                    <span class="badge badge-secondary">{{ genre.name }}</span>
+                                        <span class="badge badge-secondary">{{ genre.name }}</span>
                                     {% empty %}
-                                    <span class="text-muted">Not categorized</span>
+                                        <span class="text-muted">Not categorized</span>
                                     {% endfor %}
                                 </p>
                                 <p class="text-muted">
@@ -47,7 +46,7 @@
                                             {% endif %}
                                         {% endfor %}
                                     </span>
-                                    ({{movie.rating|floatformat:"1"}}/5)
+                                    ({{ movie.rating|floatformat:"1" }}/5)
                                 </p>
                             </div>
                             <div class="col-md-6">
@@ -61,11 +60,13 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col-md-12 d-flex">
-                                <a class="btn btn-success mr-2 btn-buy">
+                                <button type="button" class="btn btn-success mr-2 btn-buy"
+                                        data-book-id="{{ movie.id }}" data-bs-toggle="modal"
+                                        data-bs-target="#myModal">
                                     <i class="fas fa-wallet mr-1"></i> Buy
-                                </a>
+                                </button>
                                 <a class="btn btn-warning" href="{% url 'booksapp:delete_cart' movie.id %}">
                                     <i class="fas fa-trash-alt mr-1"></i> Delete
                                 </a>
@@ -78,10 +79,11 @@
     </div>
     {% endfor %}
 </div>
+
+<!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <!-- Modal Header -->
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitle">Complete Payment</h5>
@@ -92,21 +94,37 @@
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" action="" id="paymentForm">
                     {% csrf_token %}
-                    <input type="text" name="card_number" placeholder="Card Number" required style="width: 100%; margin-bottom: 10px">
-                    <input type="text" name="exp_date" placeholder="MM/YY" required style="width: 100%; margin-bottom: 10px">
-                    <input type="text" name="cvc" placeholder="CVC" required style="width: 100%; margin-bottom: 10px">
+                    <input type="text" name="card_number" placeholder="Card Number" required class="form-control mb-3">
+                    <input type="text" name="exp_date" placeholder="MM/YY" required class="form-control mb-3">
+                    <input type="text" name="cvc" placeholder="CVC" required class="form-control mb-3">
+                    <input type="hidden" id="bookIdInput" name="book_id" value="">
                 </form>
             </div>
 
             <!-- Modal Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-close">Close</button>
-                <a type="button" class="btn btn-primary complete-payment" href="{% url 'booksapp:payment_success' %}">Buy</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="paymentForm">Buy</button>
             </div>
-
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buyButtons = document.querySelectorAll('.btn-buy');
+        const paymentForm = document.getElementById('paymentForm');
+        const bookIdInput = document.getElementById('bookIdInput');
+
+        buyButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const bookId = this.getAttribute('data-book-id');
+                paymentForm.action = `/payment-success/${bookId}/`;
+                bookIdInput.value = bookId;
+            });
+        });
+    });
+</script>
 {% endblock %}

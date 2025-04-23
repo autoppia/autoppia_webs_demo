@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.http import require_http_methods
 
 from events.models import Event
 from .forms import BookForm, ContactForm
@@ -233,8 +234,24 @@ def mybook(request):
     return render(request, "mybook.html", context)
 
 
-def payment_success(request):
-    return render(request, "payment_success.html")
+@require_http_methods(["GET", "POST"])
+def payment_success(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+
+    if request.method == "POST":
+        payment_success_event = Event.create_purchase_book_event(
+            user=request.user if request.user.is_authenticated else None,
+            web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            book=book,
+        )
+        payment_success_event.save()
+
+        if request.user.is_authenticated:
+            book_to_delete = Cart.objects.get(userId=request.user.id, bookId=book_id)
+            book_to_delete.delete()
+        return render(request, "payment_success.html", {"book": book})
+
+    return render(request, "payment_success.html", {"book": book})
 
 
 def carts_count(request):
