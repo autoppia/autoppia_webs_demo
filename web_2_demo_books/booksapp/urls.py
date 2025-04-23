@@ -20,7 +20,7 @@ urlpatterns = [
     # Genre pages
     path("genres/", views.genre_list, name="genre_list"),
     path("genre/<int:genre_id>/", views.genre_detail, name="genre_detail"),
-    path("payment-success/", views.payment_success, name="payment_success"),
+    path("payment-success/<int:book_id>/", views.payment_success, name="payment_success"),
     # Comments
     path("book/<int:movie_id>/comment/", views.add_comment, name="add_comment"),
     path("contact/", views.contact, name="contact"),
