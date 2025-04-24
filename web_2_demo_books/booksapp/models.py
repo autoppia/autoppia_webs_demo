@@ -1,6 +1,6 @@
-from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -61,7 +61,7 @@ class UserProfile(models.Model):
     bio = models.TextField(max_length=500, blank=True, null=True)
     profile_pic = models.ImageField(upload_to="gallery/profiles", blank=True, null=True)
     favorite_genres = models.ManyToManyField(Genre, blank=True, related_name="user_favorites")
-    website = models.URLField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True, help_text="Please include http:// or https://")
     location = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
