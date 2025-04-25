@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+
 from .models import Book, Genre, Comment, UserProfile
 
 
@@ -60,6 +61,7 @@ class BookForm(forms.ModelForm):
                     "max": 5,
                 }
             ),
+            "genres": forms.HiddenInput(),  # Hide the ManyToMany field in the form
         }
         labels = {
             "name": "Movie Title",
@@ -71,22 +73,23 @@ class BookForm(forms.ModelForm):
             "duration": "Duration (minutes)",
             "trailer_url": "Trailer URL",
             "rating": "Rating",
+            "genres": "Genres",
         }
         help_texts = {"rating": "Rating between 0 and 5 stars."}
 
     def save(self, commit=True):
-        # Primero obtenemos la instancia sin guardar.
-        instance = super().save(commit=False)
-        # Ignoramos el archivo subido (si es que lo hubiera) y dejamos el campo en None.
-        if not instance.id:
+        book = super().save(commit=False)
+        book.img = None
+        if not book.id:
             import random
+            book.id = random.randint(1000, (2 ** 63 - 1))
 
-            instance.id = random.randint(1000, (2**63 - 1))
-        instance.img = None
         if commit:
-            instance.save()
-            self.save_m2m()
-        return instance
+            book.save()
+            book.img = self.cleaned_data['img'] or None
+            genre = self.cleaned_data['genre']
+            book.genres.add(genre)
+        return book
 
 
 class CommentForm(forms.ModelForm):
