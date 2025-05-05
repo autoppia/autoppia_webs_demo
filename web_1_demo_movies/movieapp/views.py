@@ -21,9 +21,7 @@ def index(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = (
-        Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
-    )
+    available_years = Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -35,12 +33,7 @@ def index(request):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        movies = movies.filter(
-            Q(name__icontains=search_query)
-            | Q(desc__icontains=search_query)
-            | Q(director__icontains=search_query)
-            | Q(cast__icontains=search_query)
-        ).distinct()
+        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query) | Q(cast__icontains=search_query)).distinct()
 
         from events.models import Event
 
@@ -119,30 +112,20 @@ def detail(request, movie_id):
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
 
     # Registrar evento de detalle de película
-    detail_event = Event.create_film_detail_event(
-        request.user if request.user.is_authenticated else None, web_agent_id, movie
-    )
+    detail_event = Event.create_film_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, movie)
     detail_event.save()
 
     # Películas relacionadas
     related_movies = []
     if movie.genres.exists():
-        related_movies = (
-            Movie.objects.filter(genres__in=movie.genres.all())
-            .exclude(id=movie.id)
-            .distinct()[:4]
-        )
+        related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct()[:4]
 
     if len(related_movies) < 4:
-        more_movies = Movie.objects.filter(year=movie.year).exclude(
-            id__in=[m.id for m in list(related_movies) + [movie]]
-        )[: 4 - len(related_movies)]
+        more_movies = Movie.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]])[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(more_movies)
 
     if len(related_movies) < 4:
-        random_movies = Movie.objects.exclude(
-            id__in=[m.id for m in list(related_movies) + [movie]]
-        ).order_by("?")[: 4 - len(related_movies)]
+        random_movies = Movie.objects.exclude(id__in=[m.id for m in list(related_movies) + [movie]]).order_by("?")[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(random_movies)
 
     comments = movie.comments.all()
@@ -167,14 +150,8 @@ def add_movie(request):
                 "cast": form.cleaned_data.get("cast"),
                 "duration": form.cleaned_data.get("duration"),
                 "trailer_url": form.cleaned_data.get("trailer_url"),
-                "rating": float(form.cleaned_data.get("rating"))
-                if form.cleaned_data.get("rating")
-                else 0,
-                "genres": (
-                    [form.cleaned_data.get("genres")]
-                    if isinstance(form.cleaned_data.get("genres"), Genre)
-                    else [genre for genre in form.cleaned_data.get("genres", [])]
-                ),
+                "rating": float(form.cleaned_data.get("rating")) if form.cleaned_data.get("rating") else 0,
+                "genres": ([form.cleaned_data.get("genres")] if isinstance(form.cleaned_data.get("genres"), Genre) else [genre for genre in form.cleaned_data.get("genres", [])]),
             }
 
             # Crear el evento de añadir película
@@ -185,9 +162,7 @@ def add_movie(request):
             )
             add_film_event.save()
 
-            messages.success(
-                request, "Evento de añadir película registrado exitosamente."
-            )
+            messages.success(request, "Evento de añadir película registrado exitosamente.")
             return redirect("movieapp:index")
         else:
             messages.error(request, "Por favor, corrige los errores en el formulario.")
@@ -246,11 +221,7 @@ def update_movie(request, id):
                 changed_fields.append("trailer_url")
                 new_values["trailer_url"] = form.cleaned_data.get("trailer_url")
 
-            current_rating = (
-                float(form.cleaned_data.get("rating"))
-                if form.cleaned_data.get("rating")
-                else None
-            )
+            current_rating = float(form.cleaned_data.get("rating")) if form.cleaned_data.get("rating") else None
             if current_rating != original_values["rating"]:
                 changed_fields.append("rating")
                 new_values["rating"] = current_rating
@@ -340,12 +311,8 @@ def add_comment(request, movie_id):
                         "comment": {
                             "name": comment.name,
                             "content": comment.content,
-                            "created_at": comment.created_at.strftime(
-                                "%b %d, %Y, %I:%M %p"
-                            ),
-                            "time_ago": f"{(timezone.now() - comment.created_at).days} days ago"
-                            if (timezone.now() - comment.created_at).days > 0
-                            else "Today",
+                            "created_at": comment.created_at.strftime("%b %d, %Y, %I:%M %p"),
+                            "time_ago": f"{(timezone.now() - comment.created_at).days} days ago" if (timezone.now() - comment.created_at).days > 0 else "Today",
                             "avatar": comment.avatar.url if comment.avatar else None,
                         },
                     }
@@ -392,9 +359,7 @@ def contact(request):
             message = form.cleaned_data["message"]
 
             # Crear el mensaje de contacto
-            contact_message = ContactMessage.objects.create(
-                name=name, email=email, subject=subject, message=message
-            )
+            contact_message = ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
 
             # Crear evento de CONTACT
             contact_event = Event.create_contact_event(
@@ -489,18 +454,14 @@ def register_view(request):
             error = True
 
         if not error:
-            user = User.objects.create_user(
-                username=username, email=email, password=password1
-            )
+            user = User.objects.create_user(username=username, email=email, password=password1)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
             register_event = Event.create_registration_event(user, web_agent_id)
             register_event.save()
             # login(request, user)
             # login_event = Event.create_login_event(user, web_agent_id)
             # login_event.save()
-            messages.success(
-                request, f"Account created successfully. Welcome, {username}!"
-            )
+            messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect("movieapp:index")
 
     return render(request, "register.html")

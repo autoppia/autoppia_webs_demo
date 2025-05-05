@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('events', '0003_remove_event_search_query_alter_event_event_name'),
+        ("events", "0003_remove_event_search_query_alter_event_event_name"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='web_agent_id',
+            model_name="event",
+            name="web_agent_id",
             field=models.CharField(),
         ),
     ]

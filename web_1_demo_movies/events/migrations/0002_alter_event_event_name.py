@@ -4,15 +4,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('events', '0001_initial'),
+        ("events", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='event_name',
-            field=models.CharField(choices=[('FILM_DETAIL', 'Film Detail View'), ('SEARCH', 'Search Performed'), ('REGISTRATION', 'User Registration'), ('LOGIN', 'User Login'), ('LOGOUT', 'User lOGOUT')], max_length=50),
+            model_name="event",
+            name="event_name",
+            field=models.CharField(
+                choices=[("FILM_DETAIL", "Film Detail View"), ("SEARCH", "Search Performed"), ("REGISTRATION", "User Registration"), ("LOGIN", "User Login"), ("LOGOUT", "User lOGOUT")], max_length=50
+            ),
         ),
     ]

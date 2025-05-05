@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Event
@@ -131,54 +131,36 @@ def add_event(request):
         if event_name == "FILM_DETAIL":
             movie_id = data.get("movie_id")
             if not movie_id:
-                return Response(
-                    {"error": "movie_id is required for FILM_DETAIL events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"error": "movie_id is required for FILM_DETAIL events."}, status=status.HTTP_400_BAD_REQUEST)
 
             try:
                 movie = Movie.objects.get(id=movie_id)
             except Movie.DoesNotExist:
-                return Response(
-                    {"error": f"Movie with id {movie_id} not found."}, 
-                    status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": f"Movie with id {movie_id} not found."}, status=status.HTTP_404_NOT_FOUND)
 
             event = Event.create_film_detail_event(user, web_agent_id, movie)
 
         elif event_name == "SEARCH":
             query = data.get("query")
             if not query:
-                return Response(
-                    {"error": "query is required for SEARCH events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"error": "query is required for SEARCH events."}, status=status.HTTP_400_BAD_REQUEST)
 
             event = Event.create_search_event(user, web_agent_id, query)
 
         elif event_name == "REGISTRATION":
             if not user:
-                return Response(
-                    {"error": "user_id is required for REGISTRATION events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"error": "user_id is required for REGISTRATION events."}, status=status.HTTP_400_BAD_REQUEST)
 
             event = Event.create_registration_event(user, web_agent_id)
 
         elif event_name == "LOGIN":
             if not user:
-                return Response(
-                    {"error": "user_id is required for LOGIN events."}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({"error": "user_id is required for LOGIN events."}, status=status.HTTP_400_BAD_REQUEST)
 
             event = Event.create_login_event(user, web_agent_id)
 
         else:
-            return Response(
-                {"error": f"Unknown event_name: {event_name}"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": f"Unknown event_name: {event_name}"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Save the event
         event.save()

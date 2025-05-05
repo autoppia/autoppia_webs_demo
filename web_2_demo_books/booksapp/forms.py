@@ -82,12 +82,13 @@ class BookForm(forms.ModelForm):
         book.img = None
         if not book.id:
             import random
-            book.id = random.randint(1000, (2 ** 63 - 1))
+
+            book.id = random.randint(1000, (2**63 - 1))
 
         if commit:
             book.save()
-            book.img = self.cleaned_data['img'] or None
-            genre = self.cleaned_data['genre']
+            book.img = self.cleaned_data["img"] or None
+            genre = self.cleaned_data["genre"]
             book.genres.add(genre)
         return book
 

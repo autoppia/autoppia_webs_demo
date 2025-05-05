@@ -400,12 +400,7 @@ class Command(BaseCommand):
                 book_genre_relations = []  # Prepare M2M relations directly
                 BookGenres = Book.genres.through
 
-                created_user_ids = {
-                    user.pk
-                    for user in User.objects.filter(
-                        username__in=[u.username for u in users_to_create]
-                    )
-                }
+                created_user_ids = {user.pk for user in User.objects.filter(username__in=[u.username for u in users_to_create])}
 
                 for book_data in books_data:
                     book_id = book_data.get("id")
@@ -446,11 +441,7 @@ class Command(BaseCommand):
 
         except Exception as e:
             tb_str = traceback.format_exc()
-            self.stderr.write(
-                self.style.ERROR(
-                    f"Transaction failed for batch {start_idx}-{end_idx}: {e}\n{tb_str}"
-                )
-            )
+            self.stderr.write(self.style.ERROR(f"Transaction failed for batch {start_idx}-{end_idx}: {e}\n{tb_str}"))
 
             failed_count = end_idx - start_idx + 1 - result["skipped"]
             result["errors"] = failed_count
@@ -575,9 +566,7 @@ class Command(BaseCommand):
     def _set_increment_to_257(self):
         if connection.vendor == "postgresql":
             with connection.cursor() as cursor:
-                cursor.execute(
-                    "SELECT setval('auth_user_id_seq', 257, false);"
-                )  # Set next val to 257
+                cursor.execute("SELECT setval('auth_user_id_seq', 257, false);")  # Set next val to 257
         elif connection.vendor == "mysql":
             with connection.cursor() as cursor:
                 cursor.execute("ALTER TABLE auth_user AUTO_INCREMENT = 257;")

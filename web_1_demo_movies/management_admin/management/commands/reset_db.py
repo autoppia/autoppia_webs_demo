@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand
-from django.db import connection
 from django.conf import settings
 import subprocess
 import os
@@ -7,17 +6,17 @@ import sys
 
 
 class Command(BaseCommand):
-    help = 'Reset the database and seed it with initial data'
+    help = "Reset the database and seed it with initial data"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--force',
-            action='store_true',
-            help='Force reset without confirmation',
+            "--force",
+            action="store_true",
+            help="Force reset without confirmation",
         )
 
     def handle(self, *args, **options):
-        if not options['force']:
+        if not options["force"]:
             self.stdout.write(self.style.WARNING("⚠️ WARNING: This will delete ALL data in the database!"))
             self.stdout.write(self.style.SUCCESS("Proceeding with database reset..."))
 
@@ -26,17 +25,17 @@ class Command(BaseCommand):
         # 1. Reset the database
         try:
             # For SQLite
-            if 'sqlite' in settings.DATABASES['default']['ENGINE']:
-                db_path = settings.DATABASES['default']['NAME']
-                if os.path.exists(db_path) and db_path != ':memory:':
+            if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
+                db_path = settings.DATABASES["default"]["NAME"]
+                if os.path.exists(db_path) and db_path != ":memory:":
                     self.stdout.write(f"Removing SQLite database at {db_path}")
                     os.remove(db_path)
                 # Run migrations to recreate the database
-                self.run_command('migrate')
+                self.run_command("migrate")
             # For PostgreSQL, MySQL, etc.
             else:
                 # Flush the database
-                self.run_command('flush', '--no-input')
+                self.run_command("flush", "--no-input")
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"❌ Error resetting database: {e}"))
             return
@@ -44,7 +43,7 @@ class Command(BaseCommand):
         # 2. Seed the database with movies
         self.stdout.write(self.style.NOTICE("🎬 Seeding movies..."))
         try:
-            self.run_command('seed_movies')
+            self.run_command("seed_movies")
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"❌ Error seeding movies: {e}"))
             return
@@ -52,7 +51,7 @@ class Command(BaseCommand):
         # 3. Create test users
         self.stdout.write(self.style.NOTICE("👤 Creating test users..."))
         try:
-            self.run_command('seed_users')
+            self.run_command("seed_users")
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"❌ Error creating test users: {e}"))
             return
@@ -61,7 +60,7 @@ class Command(BaseCommand):
 
     def run_command(self, *args):
         """Run a Django management command and wait for it to complete"""
-        cmd = [sys.executable, 'manage.py'] + list(args)
+        cmd = [sys.executable, "manage.py"] + list(args)
         self.stdout.write(f"Running: {' '.join(cmd)}")
 
         # Use subprocess.run with appropriate parameters to ensure waiting
@@ -70,11 +69,11 @@ class Command(BaseCommand):
 
         process = subprocess.run(
             cmd,
-            check=True,            # Raise exception if command fails
+            check=True,  # Raise exception if command fails
             stdout=subprocess.PIPE,  # Capture stdout
             stderr=subprocess.PIPE,  # Capture stderr
-            text=True,             # Return strings rather than bytes
-            encoding='utf-8'       # Specify encoding
+            text=True,  # Return strings rather than bytes
+            encoding="utf-8",  # Specify encoding
         )
 
         self.stdout.write(f"Command completed with return code: {process.returncode}")

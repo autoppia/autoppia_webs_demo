@@ -12,14 +12,14 @@ def reset_database(request):
     API endpoint to reset and reseed the database.
     Only available in development mode for security.
     """
-  
+
     start_time = time.time()
     success = True
     error_message = None
 
     try:
         # Call our custom reset_db command with --force to skip confirmation
-        call_command('reset_db', force=True)
+        call_command("reset_db", force=True)
     except Exception as e:
         success = False
         error_message = str(e)
@@ -31,14 +31,8 @@ def reset_database(request):
     if success:
         message = f"Database reset completed successfully in {duration} seconds"
         print(message)
-        return JsonResponse({
-            'status': 'success',
-            'message': message
-        })
+        return JsonResponse({"status": "success", "message": message})
     else:
         message = f"Database reset failed after {duration} seconds: {error_message}"
         print(message)
-        return JsonResponse({
-            'status': 'error',
-            'message': message
-        }, status=500)
+        return JsonResponse({"status": "error", "message": message}, status=500)

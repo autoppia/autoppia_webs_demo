@@ -12,6 +12,7 @@ MODELS = [Genre, Movie, Comment, UserProfile, ContactMessage]
 
 class Event(BaseModel):
     """Base event class for all event types"""
+
     type: str
     timestamp: int
     web_agent_id: int
@@ -29,15 +30,18 @@ class Event(BaseModel):
     def code(cls) -> str:
         """Return the source code of the class"""
         import inspect
+
         return inspect.getsource(cls)
 
 
 class FilmDetailEvent(Event):
     """Event triggered when a film detail page is viewed"""
+
     movie: Movie
 
     class ValidationCriteria(BaseModel):
         """Validation criteria for FilmDetailEvent"""
+
         title: Optional[str] = None
         genre: Optional[str] = None
         director: Optional[str] = None
@@ -81,10 +85,12 @@ class FilmDetailEvent(Event):
 
 class SearchEvent(Event):
     """Event triggered when a search is performed"""
+
     query: str
 
     class ValidationCriteria(Event.ValidationCriteria):
         """Validation criteria for SearchEvent"""
+
         query: Optional[str] = None
 
         class Config:
@@ -111,11 +117,13 @@ class SearchEvent(Event):
 
 class RegistrationEvent(Event):
     """Event triggered when a user registration is completed"""
+
     # No additional validation needed, just check the event type
 
 
 class LoginEvent(Event):
     """Event triggered when a user logs in"""
+
     username: str
     # No additional validation needed, just check the event type
 
@@ -131,12 +139,12 @@ USE_CASES = [
         "success_criteria": "Task is successful if the user is actually registered",
         "tests": [
             {
-                "type": "CheckEventTest", 
+                "type": "CheckEventTest",
                 "event_name": "RegistrationEvent",
                 "event_criteria": {},  # No special criteria needed
-                "code": RegistrationEvent.code()
+                "code": RegistrationEvent.code(),
             },
-        ]
+        ],
     },
     {
         "name": "Search film",
@@ -144,29 +152,15 @@ USE_CASES = [
         "event": FilmDetailEvent,
         "success_criteria": "Task is successful when there is an event of type 'FilmDetailEvent' emitted with the correct movie associated",
         "tests": [
-            {
-                "type": "CheckEventTest", 
-                "event_name": "FilmDetailEvent", 
-                "validation_schema": FilmDetailEvent.ValidationCriteria.model_json_schema(),
-                "code": FilmDetailEvent.code()
-            },
-        ]
+            {"type": "CheckEventTest", "event_name": "FilmDetailEvent", "validation_schema": FilmDetailEvent.ValidationCriteria.model_json_schema(), "code": FilmDetailEvent.code()},
+        ],
     },
 ]
 
 
 # ================ Relevant Data ================
 
-RELEVANT_DATA = {
-    "User for Login": {
-        "email": "admin@moviesapp.com",
-        "password": "admin123"
-    },
-    "User for Registration": {
-        "email": "new-user@moviesapp.com",
-        "password": "admin123"
-    }
-}
+RELEVANT_DATA = {"User for Login": {"email": "admin@moviesapp.com", "password": "admin123"}, "User for Registration": {"email": "new-user@moviesapp.com", "password": "admin123"}}
 
 
 # ================ Data Generation Functions ================
@@ -176,43 +170,16 @@ faker = Faker()
 
 MODEL_GENERATION_MAP: Dict[str, Any] = {
     "Genre": lambda faker: {"name": faker.word()},
-    "Movie": lambda faker: {
-        "id": faker.random_number(digits=6),
-        "title": faker.catch_phrase(),
-        "genre": faker.word(),
-        "director": faker.name(),
-        "release_year": int(faker.year())
-    },
-    "Comment": lambda faker: {
-        "user_id": faker.random_number(digits=6),
-        "movie_id": faker.random_number(digits=6),
-        "content": faker.text(),
-        "created_at": faker.iso8601()
-    },
-    "UserProfile": lambda faker: {
-        "user_id": faker.random_number(digits=6),
-        "username": faker.user_name(),
-        "email": faker.email(),
-        "created_at": faker.iso8601()
-    },
-    "ContactMessage": lambda faker: {
-        "message_id": faker.random_number(digits=6),
-        "sender_email": faker.email(),
-        "message": faker.text(max_nb_chars=200),
-        "sent_at": faker.iso8601()
-    },
+    "Movie": lambda faker: {"id": faker.random_number(digits=6), "title": faker.catch_phrase(), "genre": faker.word(), "director": faker.name(), "release_year": int(faker.year())},
+    "Comment": lambda faker: {"user_id": faker.random_number(digits=6), "movie_id": faker.random_number(digits=6), "content": faker.text(), "created_at": faker.iso8601()},
+    "UserProfile": lambda faker: {"user_id": faker.random_number(digits=6), "username": faker.user_name(), "email": faker.email(), "created_at": faker.iso8601()},
+    "ContactMessage": lambda faker: {"message_id": faker.random_number(digits=6), "sender_email": faker.email(), "message": faker.text(max_nb_chars=200), "sent_at": faker.iso8601()},
 }
 
 
 def generate_random_movie_instance():
     """Generate a random movie instance for testing"""
-    return Movie(
-        id=faker.random_number(),
-        title=faker.catch_phrase(),
-        genre=faker.word(),
-        director=faker.name(),
-        release_year=int(faker.year())
-    )
+    return Movie(id=faker.random_number(), title=faker.catch_phrase(), genre=faker.word(), director=faker.name(), release_year=int(faker.year()))
 
 
 def generate_random_instance(model_class: Type[Any]) -> Any:
