@@ -14,7 +14,11 @@
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100">
                 <div class="card-img-container">
-                    <img src="{{ movie.img.url }}" class="card-img-top" alt="{{ movie.name }}" style="height: 250px; object-fit: cover;">
+                    {% if movie.img %}
+                        <img src="{{ movie.img.url }}" class="card-img-top" alt="{{ movie.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <img src="/media/gallery/default_book.png" class="card-img-top" alt="No Image" style="height: 250px; object-fit: cover;">
+                    {% endif %}
                     <div class="movie-year">{{ movie.year }}</div>
                 </div>
                 <div class="card-body">
