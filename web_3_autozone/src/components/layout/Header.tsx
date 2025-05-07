@@ -1,0 +1,126 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Search,
+  MapPin,
+  ChevronDown,
+  ShoppingCart,
+  Menu,
+  Globe,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useCart } from "@/context/CartContext";
+
+export function Header() {
+  const { state } = useCart();
+  const cartItemCount = state.totalItems;
+
+  return (
+    <header>
+      {/* Main navigation bar */}
+      <nav className="bg-white px-2 py-2 flex items-center gap-2 md:gap-4 border-b border-gray-200">
+        {/* Logo */}
+        <Link href="/" className="mr-2 flex-shrink-0">
+          <div className="relative h-8 w-28">
+            {/* <Image
+              src="/images/logo/logo.png"
+              alt="Autozon"
+              fill
+              priority
+              className="object-contain"
+            /> */}
+            <h1 className="font-semibold">Autozone</h1>
+          </div>
+        </Link>
+
+        {/* Deliver to */}
+        <div className="text-gray-700 hidden md:flex items-start gap-1 flex-shrink-0">
+          <MapPin size={18} className="mt-1 text-gray-400" />
+          <div className="text-xs leading-tight">
+            <span className="text-gray-400">Deliver to user</span>
+            <p className="font-bold">San Francisco</p>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="flex-grow flex mx-1 md:mx-4">
+          <div className="w-full flex">
+            <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md">
+              <span className="text-xs font-medium text-gray-700">All</span>
+              <ChevronDown size={16} className="text-gray-500" />
+            </div>
+            <Input
+              type="search"
+              placeholder="Search Autozon"
+              className="flex-grow rounded-none border-none bg-white shadow-inner focus:bg-white focus-visible:ring-2 focus-visible:ring-amazon-blue px-3 text-gray-800"
+            />
+            <Button className="rounded-l-none bg-amazon-yellow hover:bg-amazon-darkYellow shadow">
+              <Search className="h-5 w-5 text-amazon-lightBlue" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Nav links */}
+        <div className="hidden md:flex items-center gap-3 md:gap-4">
+          {/* Language */}
+          <div className="text-gray-700 flex items-center text-xs gap-1">
+            <Globe size={16} />
+            <span className="font-bold">EN</span>
+            <ChevronDown size={14} />
+          </div>
+
+          {/* Account */}
+          <div className="text-gray-700 text-xs hidden md:block">
+            <div>Hello, user</div>
+            <div className="font-bold flex items-center">
+              Account & Lists
+              <ChevronDown size={14} className="ml-1" />
+            </div>
+          </div>
+
+          {/* Returns & Orders */}
+          <div className="text-gray-700 text-xs hidden md:block">
+            <div>Returns</div>
+            <div className="font-bold">& Orders</div>
+          </div>
+
+          {/* Cart */}
+          <Link href="/cart" className="text-gray-700 flex items-end">
+            <div className="relative">
+              <ShoppingCart size={32} />
+              <span className="absolute -top-1 right-[10px] text-amazon-orange font-bold">
+                {cartItemCount}
+              </span>
+            </div>
+            <span className="hidden md:inline-block font-bold mb-1">Cart</span>
+          </Link>
+        </div>
+      </nav>
+
+      {/* Secondary navigation */}
+      <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
+        <button className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
+          <Menu size={18} className="mr-1" />
+          <span className="font-bold">All</span>
+        </button>
+        <div className="flex gap-4 flex-grow overflow-x-auto no-scrollbar">
+          <span className="cursor-default text-gray-300">Rufus</span>
+          <span className="cursor-default text-gray-300">
+            Today&apos;s Deals
+          </span>
+          <span className="cursor-default text-gray-300">Buy Again</span>
+          <span className="cursor-default text-gray-300">Customer Service</span>
+          <span className="cursor-default text-gray-300">Registry</span>
+          <span className="cursor-default text-gray-300">Gift Cards</span>
+          <span className="cursor-default text-gray-300">Sell</span>
+        </div>
+        <div className="ml-auto font-bold whitespace-nowrap">
+          $5 flat delivery fee
+        </div>
+      </div>
+    </header>
+  );
+}
