@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--start", type=int, default=1, help="Starting user number (default: 1)")
-        parser.add_argument("--end", type=int, default=255, help="Ending user number (default: 255)")
+        parser.add_argument("--end", type=int, default=256, help="Ending user number (default: 255)")
         parser.add_argument("--prefix", type=str, default="user", help='Username prefix (default: "user")')
         parser.add_argument("--password", type=str, default="password123", help='Plain-text password for all users (default: "password123")')
         parser.add_argument(

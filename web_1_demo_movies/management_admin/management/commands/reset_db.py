@@ -1,86 +1,112 @@
-from django.core.management.base import BaseCommand
-from django.conf import settings
-import subprocess
 import os
-import sys
+import time
+
+from django.conf import settings
+from django.core.management import call_command
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
     help = "Reset the database and seed it with initial data"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.start_time = 0
+        self.force = False
+
     def add_arguments(self, parser):
         parser.add_argument(
             "--force",
             action="store_true",
+            dest="force",
             help="Force reset without confirmation",
+        )
+        parser.add_argument(
+            "--skip-seed",
+            action="store_true",
+            dest="skip_seed",
+            help="Skip seeding data after reset",
+        )
+        parser.add_argument(
+            "--skip-migrate",
+            action="store_true",
+            dest="skip_migrate",
+            help="Skip running migrations after reset",
         )
 
     def handle(self, *args, **options):
-        if not options["force"]:
-            self.stdout.write(self.style.WARNING("⚠️ WARNING: This will delete ALL data in the database!"))
-            self.stdout.write(self.style.SUCCESS("Proceeding with database reset..."))
+        self.force = options["force"]
+        self.start_time = time.time()
 
-        self.stdout.write(self.style.NOTICE("🔄 Resetting database..."))
-
-        # 1. Reset the database
-        try:
-            # For SQLite
-            if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
-                db_path = settings.DATABASES["default"]["NAME"]
-                if os.path.exists(db_path) and db_path != ":memory:":
-                    self.stdout.write(f"Removing SQLite database at {db_path}")
-                    os.remove(db_path)
-                # Run migrations to recreate the database
-                self.run_command("migrate")
-            # For PostgreSQL, MySQL, etc.
-            else:
-                # Flush the database
-                self.run_command("flush", "--no-input")
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f"❌ Error resetting database: {e}"))
+        if not self.confirm_reset():
             return
 
-        # 2. Seed the database with movies
-        self.stdout.write(self.style.NOTICE("🎬 Seeding movies..."))
         try:
-            self.run_command("seed_movies")
+            self.reset_database(options)
+
+            if not options["skip_seed"]:
+                self.seed_data()
+
+            self.print_success()
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f"❌ Error seeding movies: {e}"))
-            return
+            self.print_error(str(e))
+            raise  # Re-raise to ensure proper error code is returned
 
-        # 3. Create test users
-        self.stdout.write(self.style.NOTICE("👤 Creating test users..."))
-        try:
-            self.run_command("seed_users")
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f"❌ Error creating test users: {e}"))
-            return
+    def confirm_reset(self) -> bool:
+        """Confirm the user wants to reset the database."""
+        if self.force:
+            return True
 
-        self.stdout.write(self.style.SUCCESS("✅ Database reset and seeded successfully!"))
+        self.stdout.write(self.style.WARNING("\n⚠️ WARNING: This will delete ALL data in the database!"))
+        confirm = input("Are you sure you want to continue? [y/N]: ").strip().lower()
+        return confirm == "y"
 
-    def run_command(self, *args):
-        """Run a Django management command and wait for it to complete"""
-        cmd = [sys.executable, "manage.py"] + list(args)
-        self.stdout.write(f"Running: {' '.join(cmd)}")
+    def reset_database(self, options: dict):
+        """Reset the database based on the engine type."""
+        self.stdout.write(self.style.NOTICE("\n🔄 Resetting database..."))
 
-        # Use subprocess.run with appropriate parameters to ensure waiting
-        # This is a blocking call - it will not return until the process completes
-        self.stdout.write("Waiting for command to complete...")
+        db_engine = settings.DATABASES["default"]["ENGINE"]
 
-        process = subprocess.run(
-            cmd,
-            check=True,  # Raise exception if command fails
-            stdout=subprocess.PIPE,  # Capture stdout
-            stderr=subprocess.PIPE,  # Capture stderr
-            text=True,  # Return strings rather than bytes
-            encoding="utf-8",  # Specify encoding
-        )
+        if "sqlite" in db_engine:
+            self.reset_sqlite()
+        else:
+            call_command("flush", verbosity=1, interactive=False, reset_sequences=True)
 
-        self.stdout.write(f"Command completed with return code: {process.returncode}")
+        if not options["skip_migrate"]:
+            call_command("migrate", verbosity=1, interactive=False)
 
-        # Log command output if desired
-        if process.stdout:
-            self.stdout.write(process.stdout)
+    def reset_sqlite(self):
+        """Handle SQLite database reset."""
+        db_path = settings.DATABASES["default"]["NAME"]
 
-        # Return the completed process object in case it's needed
-        return process
+        if db_path == ":memory:":
+            self.stdout.write(self.style.NOTICE("Using in-memory SQLite database - no file to remove"))
+        elif os.path.exists(db_path):
+            try:
+                os.remove(db_path)
+                self.stdout.write(self.style.SUCCESS(f"SQLite database removed: {db_path}"))
+            except PermissionError as e:
+                raise Exception(f"Permission denied when trying to remove {db_path}: {e}")
+        else:
+            self.stdout.write(self.style.NOTICE(f"SQLite database not found at {db_path}"))
+
+    def seed_data(self):
+        """Seed the database with initial data."""
+        seed_commands = [
+            ("seed_movies", "🎬 Seeding movies..."),
+            ("seed_users", "👤 Creating test users..."),
+        ]
+
+        for command, message in seed_commands:
+            self.stdout.write(self.style.NOTICE(f"\n{message}"))
+            call_command(command, verbosity=1)
+
+    def print_success(self):
+        """Print success message with timing."""
+        elapsed = time.time() - self.start_time
+        self.stdout.write(self.style.SUCCESS(f"\n✅ Database reset completed successfully in {elapsed:.2f} seconds!"))
+
+    def print_error(self, message: str):
+        """Print error message with timing."""
+        elapsed = time.time() - self.start_time
+        self.stdout.write(self.style.ERROR(f"\n❌ Operation failed after {elapsed:.2f} seconds: {message}"))
