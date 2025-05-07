@@ -32,14 +32,15 @@ demo-webs/
 
 ## Port Configuration
 
-The demo webs are configured to run on consecutive ports starting from 8000. Each web application's port is defined in its respective `docker-compose.yml`:
+The demo webs are configured to run on consecutive ports, starting from the values you specify via CLI flags. Each demo uses two ports:
 
-```yaml
-ports:
-  - "8000:8001"  # First demo web
-  - "8001:8001"  # Second demo web
-  # etc...
-```
+* One for the Django web server (`--web_port`)
+* One for the PostgreSQL database (`--postgres_port`)
+
+Defaults if not overridden:
+
+* Movies demo: `8000` (web) and `5435` (db)
+* Books demo: `8001` (web) and `5436` (db)
 
 ## Installation & Deployment
 
@@ -54,16 +55,28 @@ chmod +x scripts/install_docker.sh
 
 ### 2. Deploy Demo Webs
 
-Once Docker is installed, deploy the demo webs:
+Use the setup script to deploy the desired demo(s). You can specify the type of demo with the `--demo` flag:
+
+#### Deploy Movies Demo
 
 ```bash
-chmod +x scripts/setup.sh
-./scripts/setup.sh
+./scripts/setup.sh --demo=movies --web_port=8000 --postgres_port=5435
 ```
-Deploy with specific ports
+
+#### Deploy Books Demo
+
 ```bash
- ./setup.sh --web_port=8002 --postgres_port=5436
+./scripts/setup.sh --demo=books --web_port=8001 --postgres_port=5436
 ```
+
+#### Deploy Both Demos (Movies + Books)
+
+```bash
+./scripts/setup.sh --demo=all
+```
+
+> When using `--demo=all`, the second demo's ports will automatically be offset.
+
 ### 3. Verify Installation
 
 Verify that all containers are running:

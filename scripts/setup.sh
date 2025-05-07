@@ -8,8 +8,7 @@ echo "🚀 Setting up web demos..."
 # Default ports
 WEB_PORT_DEFAULT=8000
 POSTGRES_PORT_DEFAULT=5434
-
-# Flags
+DEMO="all"
 FORCE_DELETE=false
 
 # Parse command line arguments
@@ -23,6 +22,10 @@ for ARG in "$@"; do
       POSTGRES_PORT="${ARG#*=}"
       shift
       ;;
+    --demo=*)
+      DEMO="${ARG#*=}"
+      shift
+      ;;
     -y|--yes)
       FORCE_DELETE=true
       shift
@@ -33,10 +36,10 @@ for ARG in "$@"; do
   esac
 done
 
-# If not provided, use defaults
 WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 
+echo "Selected demo: $DEMO"
 echo "Using web port: $WEB_PORT"
 echo "Using Postgres port: $POSTGRES_PORT"
 
@@ -55,26 +58,24 @@ fi
 # This function deploys the specified project folder
 deploy_project() {
   local project_dir="$1"
+  local project_web_port="$2"
+  local project_postgres_port="$3"
+  local project_name="$4"
 
   if [ -d "$project_dir" ]; then
     echo "📂 Deploying $project_dir..."
 
-    # Step 1: Create or overwrite a .env file inside the project directory
+    # Create or overwrite a .env file inside the project directory
     cat <<EOF > "$project_dir/.env"
-WEB_PORT=$WEB_PORT
-POSTGRES_PORT=$POSTGRES_PORT
+WEB_PORT=$project_web_port
+POSTGRES_PORT=$project_postgres_port
 EOF
 
-    # Step 2: Use a unique project name
-    local project_name="movies_${WEB_PORT}"
-
-    # Step 3: Check if containers for this project already exist
-    # If they do, prompt or force-delete them
+    # Check for existing containers
     if sudo docker compose -p "$project_name" ps &>/dev/null; then
-      # Check if there's at least one container running or stopped
       existing_containers=$(sudo docker compose -p "$project_name" ps -q | wc -l)
       if [ "$existing_containers" -gt 0 ]; then
-        echo "⚠️ Detected existing containers for project $project_name."
+        echo "⚠️ Detected existing containers for $project_name."
 
         if [ "$FORCE_DELETE" = true ]; then
           echo "🗑  Force-deleting existing containers for $project_name..."
@@ -94,24 +95,33 @@ EOF
       fi
     fi
 
-    # Step 4: Spin up containers
-    cd "$project_dir"
+    # Spin up containers
+    pushd "$project_dir" > /dev/null
     sudo docker compose -p "$project_name" up -d --build
-    cd ..
+    popd > /dev/null
   else
     echo "⚠️ Project directory $project_dir not found."
   fi
 }
 
-echo "🔄 Deploying web demos..."
-
-# If your `scripts/` folder is inside the project structure, 
-# make sure you adjust paths as needed
+echo "🔄 Deploying selected demo(s)..."
 cd ..
 
-# Deploy web_1_demo_movies
-deploy_project "web_1_demo_movies"
+case "$DEMO" in
+  movies)
+    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
+    ;;
+  books)
+    deploy_project "web_2_demo_books" "$WEB_PORT" "$POSTGRES_PORT" "books_${WEB_PORT}"
+    ;;
+  all)
+    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
+    deploy_project "web_2_demo_books" "$((WEB_PORT+1))" "$((POSTGRES_PORT+1))" "books_$((WEB_PORT+1))"
+    ;;
+  *)
+    echo "❌ Unknown demo type: $DEMO. Use 'movies', 'books', or 'all'."
+    exit 1
+    ;;
+esac
 
-cd scripts
-
-echo "✨ Web demos deployment complete!"
+echo "✨ Deployment complete!"
