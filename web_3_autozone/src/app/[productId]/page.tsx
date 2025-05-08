@@ -7,6 +7,7 @@ import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
+import { logEvent ,EVENT_TYPES} from "@/lib/logger";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
@@ -41,6 +42,11 @@ export default function ProductPage() {
     for (let i = 0; i < quantity; i++) {
       addToCart(product);
     }
+    logEvent(EVENT_TYPES.ADD_TO_CART, {
+      productId: product.id,
+      title: product.title,
+      quantity,
+    });
     setAddedToCart(true);
 
     setTimeout(() => {
@@ -224,21 +230,35 @@ export default function ProductPage() {
               id="quantity-select"
               className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
               value={quantity}
-              onChange={(e) => setQuantity(Number.parseInt(e.target.value))}
+              onChange={(e) => {
+                const newQty = Number.parseInt(e.target.value);
+                setQuantity(newQty);
+                logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
+                  productId: product.id,
+                  newQuantity: newQty,
+                });
+              }}              
               style={{maxWidth: '170px'}}
             >
               {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
             </select>
             <Button
               className="block w-full bg-[#FFD814] hover:bg-[#F7CA00] text-black font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
-              onClick={handleAddToCart}
+              onClick={() => {
+                handleAddToCart();
+                router.push("/cart");
+              }}
             >
               Add to Cart
             </Button>
             <Button
               className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
               onClick={() => {
-                handleAddToCart();
+                logEvent(EVENT_TYPES.BUY_NOW, {
+                  productId: product.id,
+                  title: product.title,
+                  quantity,
+                });
                 router.push('/checkout');
               }}
             >

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { logEvent, EVENT_TYPES } from "@/lib/logger";
 
 export default function CheckoutPage() {
   // Static mock data for hydration match
@@ -203,9 +204,21 @@ export default function CheckoutPage() {
               </div>
               {/* Order total bottom card */}
               <div className="border border-[#d5d9d9] rounded-md bg-white p-4 max-w-[600px] flex flex-col md:flex-row items-center gap-3 mt-2">
-                <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold px-8 rounded min-w-[140px] py-2">
+                <Button
+                  className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold px-8 rounded min-w-[140px] py-2"
+                  onClick={() =>
+                    logEvent(EVENT_TYPES.PLACE_ORDER, {
+                      items: totalItems,
+                      totalAmount,
+                      tax,
+                      shipping,
+                      orderTotal,
+                    })
+                  }
+                >
                   Place your order
                 </Button>
+
                 <span className="text-[20px] font-semibold text-[#b12704] block ml-2">
                   Order total: ${orderTotal.toFixed(2)}
                 </span>
@@ -227,9 +240,21 @@ export default function CheckoutPage() {
         {/* Sidebar right */}
         <div className="w-full md:w-[320px] flex-shrink-0 mt-8 md:mt-0">
           <div className="bg-white border border-[#d5d9d9] shadow-sm rounded-md p-5 pt-6 min-h-[350px] flex flex-col">
-            <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold w-full mb-2 py-2 rounded">
+            <Button
+              className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold w-full mb-2 py-2 rounded"
+              onClick={() =>
+                logEvent(EVENT_TYPES.PLACE_ORDER, {
+                  items: totalItems,
+                  totalAmount,
+                  tax,
+                  shipping,
+                  orderTotal,
+                })
+              }
+            >
               Place your order
             </Button>
+
             <div className="text-[#565959] text-xs leading-tight mb-2 mt-1 px-1 text-center">
               By placing your order, you agree to Autozon's{" "}
               <a className="underline text-[#017185]" href="#">

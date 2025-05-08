@@ -1,0 +1,15 @@
+[
+  {
+    "event": "PLACE_ORDER",
+    "web_agent_id": null,
+    "user": null,
+    "data": {
+      "items": 0,
+      "totalAmount": 0,
+      "tax": 0,
+      "shipping": 0,
+      "orderTotal": 0
+    },
+    "timestamp": "2025-05-08T12:08:02.799Z"
+  }
+]

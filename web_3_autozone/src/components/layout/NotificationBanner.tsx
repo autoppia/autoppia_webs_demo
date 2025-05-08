@@ -2,6 +2,8 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
+import { logEvent,EVENT_TYPES } from "@/lib/logger";
+
 
 export function NotificationBanner() {
   const [isVisible, setIsVisible] = useState(true);
@@ -23,7 +25,10 @@ export function NotificationBanner() {
         </p>
       </div>
       <button
-        onClick={() => setIsVisible(false)}
+         onClick={() => {
+          logEvent(EVENT_TYPES.CLOSE_BANNER);
+          setIsVisible(false);
+        }}
         className="absolute top-3 right-4 text-white hover:text-gray-200"
         aria-label="Close notification"
       >

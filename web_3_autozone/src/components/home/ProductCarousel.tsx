@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
+import { logEvent,EVENT_TYPES } from "@/lib/logger";
+
 
 interface ProductCarouselProps {
   title: string;
@@ -19,27 +21,29 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
 
   const scroll = (direction: "left" | "right") => {
     if (!containerRef.current) return;
-
+  
     const container = containerRef.current;
     const scrollAmount = container.clientWidth * 0.8;
-
-    if (direction === "left") {
-      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    } else {
-      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-
+  
+    container.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+  
+    // ✅ Log the event
+    logEvent(EVENT_TYPES.SCROLL_CAROUSEL, {
+      direction: direction.toUpperCase(),
+      title,
+    });
+  
     // Update button visibility after scrolling
     setTimeout(() => {
       if (!containerRef.current) return;
-
-      const container = containerRef.current;
+  
       setShowLeftButton(container.scrollLeft > 0);
       setShowRightButton(
         container.scrollLeft < container.scrollWidth - container.clientWidth - 10
       );
     }, 300);
   };
+  
 
   return (
     <Card className="category-card relative">

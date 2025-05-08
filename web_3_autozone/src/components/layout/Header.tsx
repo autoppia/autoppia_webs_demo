@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,10 +13,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
+import { logEvent,EVENT_TYPES } from "@/lib/logger";
 
 export function Header() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { state } = useCart();
+
   const cartItemCount = state.totalItems;
+
+  function toggleDropdown() {
+    const newState = !isDropdownOpen;
+    setIsDropdownOpen(newState);
+    if (newState) {
+      logEvent(EVENT_TYPES.OPENED_ALL_DROPDOWN);
+    }
+  }
 
   return (
     <header>
@@ -54,10 +66,15 @@ export function Header() {
             </div>
             <Input
               type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Autozon"
               className="flex-grow rounded-none border-none bg-white shadow-inner focus:bg-white focus-visible:ring-2 focus-visible:ring-amazon-blue px-3 text-gray-800"
             />
-            <Button className="rounded-l-none bg-amazon-yellow hover:bg-amazon-darkYellow shadow">
+            <Button
+              className="rounded-l-none bg-amazon-yellow hover:bg-amazon-darkYellow shadow"
+              onClick={() => logEvent(EVENT_TYPES.SEARCH, { query: searchQuery })}
+            >
               <Search className="h-5 w-5 text-amazon-lightBlue" />
             </Button>
           </div>
@@ -88,7 +105,11 @@ export function Header() {
           </div>
 
           {/* Cart */}
-          <Link href="/cart" className="text-gray-700 flex items-end">
+          <Link
+            href="/cart"
+            className="text-gray-700 flex items-end"
+            onClick={() => logEvent(EVENT_TYPES.CART_OPENED)}
+          >
             <div className="relative">
               <ShoppingCart size={32} />
               <span className="absolute -top-1 right-[10px] text-amazon-orange font-bold">
@@ -102,7 +123,10 @@ export function Header() {
 
       {/* Secondary navigation */}
       <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
-        <button className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
+        <button
+          className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded"
+          onClick={toggleDropdown}
+        >
           <Menu size={18} className="mr-1" />
           <span className="font-bold">All</span>
         </button>
