@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { logEvent, EVENT_TYPES } from "@/lib/logger";
+import { logEvent, EVENT_TYPES } from "@/library/logger";
 
 export default function CheckoutPage() {
   // Static mock data for hydration match

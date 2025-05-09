@@ -7,7 +7,7 @@ import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
-import { logEvent ,EVENT_TYPES} from "@/lib/logger";
+import { logEvent ,EVENT_TYPES} from "@/library/logger";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";

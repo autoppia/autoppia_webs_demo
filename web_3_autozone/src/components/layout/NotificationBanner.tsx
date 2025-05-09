@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
-import { logEvent,EVENT_TYPES } from "@/lib/logger";
+import { logEvent,EVENT_TYPES } from "@/library/logger";
 
 
 export function NotificationBanner() {

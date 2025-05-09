@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
-import { logEvent,EVENT_TYPES } from "@/lib/logger";
+import { logEvent,EVENT_TYPES } from "@/library/logger";
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
