@@ -12,6 +12,7 @@ export const products: Product[] = [
     rating: 4.5,
     brand: "SumKea",
     inStock: true,
+    
   },
   {
     id: "kitchen-2",

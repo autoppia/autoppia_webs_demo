@@ -1,3 +1,5 @@
+"use client";
+import { useEffect } from "react";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
@@ -30,6 +32,18 @@ const kitchenProducts = getProductsByCategory("Kitchen");
 const techProducts = getProductsByCategory("Technology");
 
 export default function Home() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const webAgentId = params.get("X-WebAgent-Id"); // AI param
+    const userId = params.get("user");
+
+    if (webAgentId) localStorage.setItem("web_agent_id", webAgentId);
+    else localStorage.setItem("web_agent_id", "null");
+
+    if (userId) localStorage.setItem("user", userId);
+    else localStorage.setItem("user", "null");
+  }, []);
   return (
     <main className="min-h-screen bg-gray-100">
       {/* Hero Slider */}

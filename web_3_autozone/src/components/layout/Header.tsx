@@ -22,13 +22,6 @@ export function Header() {
 
   const cartItemCount = state.totalItems;
 
-  function toggleDropdown() {
-    const newState = !isDropdownOpen;
-    setIsDropdownOpen(newState);
-    if (newState) {
-      logEvent(EVENT_TYPES.OPENED_ALL_DROPDOWN);
-    }
-  }
 
   return (
     <header>
@@ -60,7 +53,7 @@ export function Header() {
         {/* Search */}
         <div className="flex-grow flex mx-1 md:mx-4">
           <div className="w-full flex">
-            <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md">
+            <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md" onClick={() => logEvent(EVENT_TYPES.OPENED_ALL_DROPDOWN)}>
               <span className="text-xs font-medium text-gray-700">All</span>
               <ChevronDown size={16} className="text-gray-500" />
             </div>
@@ -125,7 +118,10 @@ export function Header() {
       <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
         <button
           className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded"
-          onClick={toggleDropdown}
+          onClick={() => {
+            console.log("🟢 CLICKED ALL BUTTON");
+            logEvent(EVENT_TYPES.OPENED_ALL_DROPDOWN);
+          }}
         >
           <Menu size={18} className="mr-1" />
           <span className="font-bold">All</span>

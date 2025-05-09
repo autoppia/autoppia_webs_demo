@@ -69,6 +69,12 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
             <Link
               key={product.id}
               href={`/${product.id}`}
+              onClick={() => logEvent(EVENT_TYPES.VIEW_DETAIL, {
+                productId: product.id,
+                title: product.title,
+                price: product.price,
+                category: product.category,
+              })}
               className="flex-none w-[160px] md:w-[200px] group"
             >
               <div className="relative h-48 w-full bg-gray-100">

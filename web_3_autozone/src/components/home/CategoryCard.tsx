@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { logEvent,EVENT_TYPES } from "@/lib/logger";
 
 interface CategoryItem {
   image: string;
@@ -54,6 +55,14 @@ export function CategoryCard({
               <Link
                 href={item.link || "#"}
                 key={`${item.title}-${index}`}
+                onClick={() =>
+                  logEvent(EVENT_TYPES.VIEW_DETAIL, {
+                    title: item.title,
+                    image: item.image,
+                    link: item.link,
+                    section: title, // comes from props
+                  })
+                }
                 className="space-y-2 hover:opacity-90 transition-opacity"
               >
                 <div className="relative h-36 w-full">

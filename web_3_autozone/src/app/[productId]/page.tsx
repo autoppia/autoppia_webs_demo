@@ -234,8 +234,12 @@ export default function ProductPage() {
                 const newQty = Number.parseInt(e.target.value);
                 setQuantity(newQty);
                 logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
-                  productId: product.id,
-                  newQuantity: newQty,
+                  product_id: product.id,
+                  product_name: product.title,
+                  previous_quantity: quantity,
+                  new_quantity: newQty,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
                 });
               }}              
               style={{maxWidth: '170px'}}
