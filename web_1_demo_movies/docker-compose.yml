@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   web:
@@ -15,7 +15,7 @@ services:
       - "${WEB_PORT}:8000"
     environment:
       - DEBUG=0
-      - DB_NAME=web3_movies
+      - DB_NAME=web1_movies
       - DB_USER=postgres
       - DB_PASSWORD=autoppia_2025
       - DB_HOST=db

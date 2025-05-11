@@ -86,7 +86,7 @@ WSGI_APPLICATION = "booksproject.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "web1_books"),
+        "NAME": os.environ.get("DB_NAME", "web2_books"),
         "USER": os.environ.get("DB_USER", "postgres"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "autoppia_2025"),
         "HOST": os.environ.get("DB_HOST", "127.0.0.1"),
