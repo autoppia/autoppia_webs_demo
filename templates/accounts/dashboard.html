@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Account</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action active">Dashboard</a>
+                    <a href="{% url 'my_orders' %}" class="list-group-item list-group-item-action">My Orders</a>
+                    <a href="{% url 'edit_profile' %}" class="list-group-item list-group-item-action">Edit Profile</a>
+                    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Dashboard</h5>
+                </div>
+                <div class="card-body">
+                    {% include 'includes/alerts.html' %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h3>{{ orders_count }}</h3>
+                                    <p>Total Orders</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>Personal Information</h5>
+                                    <hr>
+                                    <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                                    <p><strong>Email:</strong> {{ user.email }}</p>
+                                    <p><strong>Phone:</strong> {{ userprofile.phone }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

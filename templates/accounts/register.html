@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 19px;
+            color: #111;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+        .container {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .logo img {
+            width: 103px;
+            height: auto;
+        }
+        .auth-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px 26px;
+        }
+        h1 {
+            font-weight: 400;
+            font-size: 28px;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            padding-left: 2px;
+            padding-bottom: 2px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            height: 31px;
+            padding: 3px 7px;
+            border: 1px solid #a6a6a6;
+            border-radius: 3px;
+            box-shadow: 0 1px 0 rgba(255,255,255,.5), 0 1px 0 rgba(0,0,0,.07) inset;
+            outline: 0;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #e77600;
+            box-shadow: 0 0 3px 2px rgba(228,121,17,.5);
+        }
+        .btn-continue {
+            width: 100%;
+            height: 31px;
+            background: #FFD814;
+            border: 1px solid #FCD200;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px 0 rgba(213,217,217,.5);
+            font-size: 13px;
+        }
+        .btn-continue:hover {
+            background: #F7CA00;
+        }
+        .terms {
+            font-size: 12px;
+            margin-top: 18px;
+        }
+        .terms a {
+            text-decoration: none;
+            color: #0066c0;
+        }
+        .terms a:hover {
+            text-decoration: underline;
+            color: #c45500;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e7e7e7;
+            margin: 25px 0;
+        }
+        .info-icon {
+            color: #0066c0;
+            background-color: #0066c0;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: inline-block;
+            text-align: center;
+            line-height: 14px;
+            margin-right: 5px;
+            position: relative;
+            top: 2px;
+        }
+        .info-icon::after {
+            content: "i";
+            color: white;
+            font-style: italic;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .password-hint {
+            font-size: 12px;
+            color: #111;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+        }
+        .business-section {
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+        .business-section p {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .business-section a, .sign-in-link {
+            text-decoration: none;
+            color: #0066c0;
+        }
+        .business-section a:hover, .sign-in-link:hover {
+            text-decoration: underline;
+            color: #c45500;
+        }
+        .sign-in-section {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .alert {
+            border-radius: 4px;
+            padding: 14px;
+            margin-bottom: 18px;
+            border: 1px solid transparent;
+        }
+        .alert-danger {
+            color: #c40000;
+            background-color: #fff;
+            border-color: #c40000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/amazon-logo.png' %}" alt="amazon" onerror="this.src='https://via.placeholder.com/103x31?text=amazon'">
+            </a>
+        </div>
+        
+        <div class="auth-container">
+            <h1>Create account</h1>
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <form action="{% url 'register' %}" method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="name">Your name</label>
+                    <input type="text" name="name" id="name" placeholder="First and last name" required>
+                    {% if form.first_name.errors or form.last_name.errors %}
+                        <div class="text-danger">
+                            {{ form.first_name.errors }}
+                            {{ form.last_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Mobile number or email</label>
+                    <input type="text" name="email" id="email" required>
+                    {% if form.email.errors %}
+                        <div class="text-danger">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="At least 6 characters" required>
+                    <div class="password-hint">
+                        <span class="info-icon"></span>
+                        Passwords must be at least 6 characters.
+                    </div>
+                    {% if form.password.errors %}
+                        <div class="text-danger">{{ form.password.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Re-enter password</label>
+                    <input type="password" name="confirm_password" id="confirm_password" required>
+                    {% if form.confirm_password.errors %}
+                        <div class="text-danger">{{ form.confirm_password.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn-continue">Continue</button>
+                </div>
+                
+                <div class="terms">
+                    By creating an account, you agree to Amazon's 
+                    <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="business-section">
+                    <p>Buying for work?</p>
+                    <a href="#">Create a free business account</a>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="sign-in-section">
+                    Already have an account? <a href="{% url 'login' %}" class="sign-in-link">Sign in ›</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

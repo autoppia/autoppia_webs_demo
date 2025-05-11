@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Banner Section -->
+<div class="hero-banner">
+    <div class="container-fluid p-0">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://m.media-amazon.com/images/I/61-zRnyAR8L._SR3000,600_.jpg" class="d-block w-100" alt="Prime Banner">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://m.media-amazon.com/images/I/816XeF2RRPL._SX3000_.jpg" class="d-block w-100" alt="Deals Banner">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Product Categories Section -->
+<div class="product-categories py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h3>Pre-loved handbags</h3>
+                    <div class="category-images">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/handbag1.jpg' %}" alt="Louis Vuitton" class="img-fluid">
+                                <p>Louis Vuitton</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/handbag2.jpg' %}" alt="Goyard" class="img-fluid">
+                                <p>Goyard</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/handbag3.jpg' %}" alt="Dior" class="img-fluid">
+                                <p>Dior</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/handbag4.jpg' %}" alt="Gucci" class="img-fluid">
+                                <p>Gucci</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'store' %}" class="btn btn-link">Shop pre-loved handbags</a>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h3>Fresh spring finds</h3>
+                    <div class="category-images">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/jewelry.jpg' %}" alt="Jewelry" class="img-fluid">
+                                <p>Jewelry</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/sandals.jpg' %}" alt="Women's sandals" class="img-fluid">
+                                <p>Women's sandals</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/mens-shoes.jpg' %}" alt="Men's shoes" class="img-fluid">
+                                <p>Men's shoes</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/fragrances.jpg' %}" alt="Fragrances" class="img-fluid">
+                                <p>Fragrances</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'store' %}" class="btn btn-link">Shop Luxury Stores</a>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h3>Spring essentials</h3>
+                    <div class="category-images">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/grocery.jpg' %}" alt="Grocery" class="img-fluid">
+                                <p>Grocery</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/cleaning.jpg' %}" alt="Spring cleaning" class="img-fluid">
+                                <p>Spring cleaning</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/personal-care.jpg' %}" alt="Personal care" class="img-fluid">
+                                <p>Personal care</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/health.jpg' %}" alt="Health & wellness" class="img-fluid">
+                                <p>Health & wellness</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'store' %}" class="btn btn-link">Shop now</a>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="category-card">
+                    <h3>Vacation-ready style</h3>
+                    <div class="category-images">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/swimsuits.jpg' %}" alt="Swimsuits" class="img-fluid">
+                                <p>Swimsuits</p>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <img src="{% static 'images/categories/shoes.jpg' %}" alt="Shoes" class="img-fluid">
+                                <p>Shoes</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/clothing.jpg' %}" alt="Clothing" class="img-fluid">
+                                <p>Clothing</p>
+                            </div>
+                            <div class="col-6">
+                                <img src="{% static 'images/categories/beauty.jpg' %}" alt="Beauty" class="img-fluid">
+                                <p>Beauty</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{% url 'store' %}" class="btn btn-link">Shop Luxury Stores</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<div class="featured-products py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3 mb-4">
+                <div class="card product-card">
+                    <a href="{{ product.get_url }}">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <div class="price mb-2">${{ product.price }}</div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <a href="{% url 'add_cart' product.id %}" class="btn btn-primary mt-2">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

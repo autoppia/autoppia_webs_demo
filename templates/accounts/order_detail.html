@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Account</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action">Dashboard</a>
+                    <a href="{% url 'my_orders' %}" class="list-group-item list-group-item-action active">My Orders</a>
+                    <a href="{% url 'edit_profile' %}" class="list-group-item list-group-item-action">Edit Profile</a>
+                    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Order #{{ order.order_number }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Order Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+                                    <p><strong>Order Status:</strong> {{ order.status }}</p>
+                                    <p><strong>Order Total:</strong> ${{ order.order_total }}</p>
+                                    <p><strong>Tax:</strong> ${{ order.tax }}</p>
+                                    <p><strong>Payment Method:</strong> {{ order.payment.payment_method }}</p>
+                                    <p><strong>Transaction ID:</strong> {{ order.payment.payment_id }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Shipping Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Name:</strong> {{ order.full_name }}</p>
+                                    <p><strong>Phone:</strong> {{ order.phone }}</p>
+                                    <p><strong>Email:</strong> {{ order.email }}</p>
+                                    <p><strong>Address:</strong> {{ order.full_address }}</p>
+                                    <p><strong>City:</strong> {{ order.city }}</p>
+                                    <p><strong>State:</strong> {{ order.state }}</p>
+                                    <p><strong>Country:</strong> {{ order.country }}</p>
+                                    <p><strong>Zip Code:</strong> {{ order.zipcode }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Order Items</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in order_detail %}
+                                        <tr>
+                                            <td>{{ item.product.name }}</td>
+                                            <td>${{ item.product_price }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>${{ item.product_price|floatformat:2|multiply:item.quantity }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
+                                            <td>${{ subtotal }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right"><strong>Tax:</strong></td>
+                                            <td>${{ order.tax }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right"><strong>Grand Total:</strong></td>
+                                            <td>${{ order.order_total }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

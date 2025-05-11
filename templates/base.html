@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Amazon Clone{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <button class="navbar-toggler mr-2" type="button" data-toggle="collapse" data-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'home' %}">
+                        <img src="{% static 'images/amazon-logo.png' %}" alt="Amazon" height="30">
+                    </a>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <div class="location-selector text-white mr-3">
+                        <small>Delivering to</small>
+                        <div><i class="fas fa-map-marker-alt"></i> <span>Update location</span></div>
+                    </div>
+                </div>
+                
+                <form class="form-inline flex-grow-1 mx-3" action="{% url 'search' %}" method="GET">
+                    <div class="input-group w-100">
+                        <div class="input-group-prepend">
+                            <select class="custom-select" id="category-select">
+                                <option selected>All</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="text" class="form-control" name="keyword" placeholder="Search Amazon">
+                        <div class="input-group-append">
+                            <button class="btn btn-warning" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="d-flex align-items-center">
+                    <div class="dropdown mr-3">
+                        <a class="text-white dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown">
+                            <i class="fas fa-globe"></i> EN
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <a class="dropdown-item" href="#">English</a>
+                            <a class="dropdown-item" href="#">Español</a>
+                            <a class="dropdown-item" href="#">Français</a>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown mr-3">
+                        <a class="text-white dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown">
+                            <div>
+                                <small>Hello, {% if user.is_authenticated %}{{ user.first_name }}{% else %}Sign in{% endif %}</small>
+                                <div>Account & Lists</div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="accountDropdown">
+                            {% if user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'dashboard' %}">Your Account</a>
+                            <a class="dropdown-item" href="{% url 'my_orders' %}">Your Orders</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Sign Out</a>
+                            {% else %}
+                            <div class="p-3">
+                                <a href="{% url 'login' %}" class="btn btn-warning btn-sm btn-block">Sign In</a>
+                                <div class="mt-2 text-center">
+                                    New customer? <a href="{% url 'register' %}">Start here</a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mr-3 text-white">
+                        <small>Returns</small>
+                        <div>& Orders</div>
+                    </div>
+                    
+                    <a href="{% url 'cart' %}" class="text-white">
+                        <div class="position-relative">
+                            <i class="fas fa-shopping-cart fa-2x"></i>
+                            <span class="badge badge-warning position-absolute" style="top: -5px; right: -10px;">
+                                {{ cart_count }}
+                            </span>
+                        </div>
+                        <span>Cart</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Secondary Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark-secondary">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-bars"></i> All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Today's Deals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Customer Service</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Registry</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Gift Cards</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sell</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5>Get to Know Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">Careers</a></li>
+                        <li><a href="#" class="text-white-50">Blog</a></li>
+                        <li><a href="#" class="text-white-50">About Amazon</a></li>
+                        <li><a href="#" class="text-white-50">Investor Relations</a></li>
+                        <li><a href="#" class="text-white-50">Amazon Devices</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Make Money with Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">Sell products on Amazon</a></li>
+                        <li><a href="#" class="text-white-50">Sell on Amazon Business</a></li>
+                        <li><a href="#" class="text-white-50">Sell apps on Amazon</a></li>
+                        <li><a href="#" class="text-white-50">Become an Affiliate</a></li>
+                        <li><a href="#" class="text-white-50">Advertise Your Products</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Amazon Payment Products</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">Amazon Business Card</a></li>
+                        <li><a href="#" class="text-white-50">Shop with Points</a></li>
+                        <li><a href="#" class="text-white-50">Reload Your Balance</a></li>
+                        <li><a href="#" class="text-white-50">Amazon Currency Converter</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Let Us Help You</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">Amazon and COVID-19</a></li>
+                        <li><a href="#" class="text-white-50">Your Account</a></li>
+                        <li><a href="#" class="text-white-50">Your Orders</a></li>
+                        <li><a href="#" class="text-white-50">Shipping Rates & Policies</a></li>
+                        <li><a href="#" class="text-white-50">Returns & Replacements</a></li>
+                        <li><a href="#" class="text-white-50">Help</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center pb-3">
+                <img src="{% static 'images/amazon-logo-white.png' %}" alt="Amazon" height="30">
+                <p class="mt-2 text-white-50">&copy; 1996-{% now "Y" %}, Amazon.com, Inc. or its affiliates</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

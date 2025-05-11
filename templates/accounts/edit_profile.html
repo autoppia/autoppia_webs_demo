@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Account</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action">Dashboard</a>
+                    <a href="{% url 'my_orders' %}" class="list-group-item list-group-item-action">My Orders</a>
+                    <a href="{% url 'edit_profile' %}" class="list-group-item list-group-item-action active">Edit Profile</a>
+                    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Edit Profile</h5>
+                </div>
+                <div class="card-body">
+                    {% include 'includes/alerts.html' %}
+                    <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="first_name">First Name</label>
+                                    {{ user_form.first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="last_name">Last Name</label>
+                                    {{ user_form.last_name }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    {{ profile_form.phone }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    {{ user_form.email }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    {{ profile_form.address }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    {{ profile_form.city }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="state">State</label>
+                                    {{ profile_form.state }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    {{ profile_form.country }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="zipcode">Zip Code</label>
+                                    {{ profile_form.zipcode }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="profile_picture">Profile Picture</label>
+                                    {{ profile_form.profile_picture }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-warning">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

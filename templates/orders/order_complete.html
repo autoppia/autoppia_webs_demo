@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="alert alert-success mb-4">
+                <h1><i class="fas fa-check-circle"></i></h1>
+                <h2>Payment Successful!</h2>
+                <p>Thank you for your purchase. Your order has been placed and is being processed.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Order Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+                            <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+                            <p><strong>Payment ID:</strong> {{ payment.payment_id }}</p>
+                            <p><strong>Payment Method:</strong> {{ payment.payment_method }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong> {{ order.full_name }}</p>
+                            <p><strong>Email:</strong> {{ order.email }}</p>
+                            <p><strong>Phone:</strong> {{ order.phone }}</p>
+                            <p><strong>Address:</strong> {{ order.full_address }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in ordered_products %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid mr-3" style="max-width: 60px;">
+                                            <div>
+                                                <h6 class="mb-0">{{ item.product.name }}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>${{ item.product_price }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>${{ item.product_price|floatformat:2|multiply:item.quantity }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Subtotal:</strong></td>
+                                    <td>${{ subtotal }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Tax:</strong></td>
+                                    <td>${{ order.tax }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Grand Total:</strong></td>
+                                    <td>${{ order.order_total }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <a href="{% url 'store' %}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

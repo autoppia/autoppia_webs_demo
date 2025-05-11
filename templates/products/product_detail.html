@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="product-gallery">
+                <div class="main-image mb-3">
+                    <img src="{{ single_product.image.url }}" class="img-fluid" alt="{{ single_product.name }}">
+                </div>
+                {% if product_gallery %}
+                <div class="thumbnail-images">
+                    <div class="row">
+                        {% for item in product_gallery %}
+                        <div class="col-3">
+                            <a href="{{ item.image.url }}" data-lightbox="product-gallery">
+                                <img src="{{ item.image.url }}" class="img-fluid" alt="{{ single_product.name }}">
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="product-details">
+                <h1 class="mb-3">{{ single_product.name }}</h1>
+                <div class="rating mb-3">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span class="ml-2">4.5 (125 reviews)</span>
+                </div>
+                <div class="price mb-3">
+                    <h2>${{ single_product.price }}</h2>
+                </div>
+                <div class="stock mb-3">
+                    {% if single_product.stock <= 0 %}
+                    <span class="badge badge-danger">Out of Stock</span>
+                    {% else %}
+                    <span class="badge badge-success">In Stock</span>
+                    {% endif %}
+                </div>
+                <div class="description mb-4">
+                    <p>{{ single_product.description }}</p>
+                </div>
+                <div class="quantity mb-3">
+                    <div class="input-group" style="width: 150px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button" id="decrease-qty">-</button>
+                        </div>
+                        <input type="text" class="form-control text-center" value="1" id="qty">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="increase-qty">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="actions">
+                    {% if single_product.stock <= 0 %}
+                    <button class="btn btn-danger btn-lg" disabled>Out of Stock</button>
+                    {% else %}
+                    <a href="{% url 'add_cart' single_product.id %}" class="btn btn-primary btn-lg">Add to Cart</a>
+                    {% endif %}
+                    <button class="btn btn-outline-secondary btn-lg ml-2">Add to Wishlist</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="product-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="shipping-tab" data-toggle="tab" href="#shipping" role="tab" aria-controls="shipping" aria-selected="false">Shipping & Returns</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="product-tab-content">
+                        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                            <p>{{ single_product.description }}</p>
+                        </div>
+                        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                            <h4>Customer Reviews</h4>
+                            <div class="review">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="rating mr-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <strong>John Doe</strong>
+                                    <span class="ml-2 text-muted">2 days ago</span>
+                                </div>
+                                <p>Great product! Exactly as described and arrived quickly.</p>
+                            </div>
+                            <hr>
+                            <div class="review">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="rating mr-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <strong>Jane Smith</strong>
+                                    <span class="ml-2 text-muted">1 week ago</span>
+                                </div>
+                                <p>Good quality product but shipping took longer than expected.</p>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+                            <h4>Shipping Information</h4>
+                            <p>We ship to all 50 states and most international locations. Standard shipping takes 3-5 business days.</p>
+                            <h4>Return Policy</h4>
+                            <p>If you're not satisfied with your purchase, you can return it within 30 days for a full refund.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Related Products</h3>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <a href="#">
+                    <img src="{% static 'images/products/product1.jpg' %}" class="card-img-top" alt="Related Product">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Related Product 1</h5>
+                    <div class="price mb-2">$99.99</div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <a href="#">
+                    <img src="{% static 'images/products/product2.jpg' %}" class="card-img-top" alt="Related Product">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Related Product 2</h5>
+                    <div class="price mb-2">$79.99</div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <a href="#">
+                    <img src="{% static 'images/products/product3.jpg' %}" class="card-img-top" alt="Related Product">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Related Product 3</h5>
+                    <div class="price mb-2">$129.99</div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card product-card">
+                <a href="#">
+                    <img src="{% static 'images/products/product4.jpg' %}" class="card-img-top" alt="Related Product">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">Related Product 4</h5>
+                    <div class="price mb-2">$89.99</div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Quantity increment/decrement
+        $('#increase-qty').click(function() {
+            var qty = parseInt($('#qty').val());
+            $('#qty').val(qty + 1);
+        });
+        
+        $('#decrease-qty').click(function() {
+            var qty = parseInt($('#qty').val());
+            if (qty > 1) {
+                $('#qty').val(qty - 1);
+            }
+        });
+    });
+</script>
+{% endblock %}

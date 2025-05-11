@@ -1,0 +1,128 @@
+:root {
+    --amazon-orange: #FF9900;
+    --amazon-dark: #131921;
+    --amazon-dark-secondary: #232F3E;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styles */
+.navbar-dark {
+    background-color: var(--amazon-dark) !important;
+}
+
+.bg-dark-secondary {
+    background-color: var(--amazon-dark-secondary) !important;
+}
+
+.btn-warning {
+    background-color: var(--amazon-orange);
+    border-color: var(--amazon-orange);
+}
+
+.btn-warning:hover {
+    background-color: #e68a00;
+    border-color: #e68a00;
+}
+
+/* Product Card Styles */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+    height: 200px;
+    object-fit: contain;
+    padding: 1rem;
+}
+
+.rating i {
+    color: #ffc107;
+}
+
+/* Category Card Styles */
+.category-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    height: 100%;
+    background-color: white;
+}
+
+.category-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.category-images img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.category-images p {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Hero Banner */
+.hero-banner {
+    margin-bottom: 2rem;
+}
+
+.hero-banner img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* Cart Styles */
+.cart-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1rem 0;
+}
+
+.cart-item img {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+/* Checkout Styles */
+.checkout-form label {
+    font-weight: bold;
+}
+
+/* Order Complete Styles */
+.order-confirmation {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.order-products {
+    margin-top: 2rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .category-card {
+        margin-bottom: 1rem;
+    }
+    
+    .hero-banner img {
+        max-height: 200px;
+    }
+}
