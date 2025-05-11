@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/logger";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function CheckoutPage() {
   const { state } = useCart();
@@ -18,6 +19,8 @@ export default function CheckoutPage() {
   const arrivalText = "Arriving Jul 19, 2024";
 
   return (
+    <>
+    <ToastContainer/>
     <div className="min-h-screen bg-[#fafbfc] w-full pb-16">
       <div className="w-full bg-gradient-to-b from-[#f3f3f3] to-[#ffffff] border-b flex flex-col items-center pt-2 pb-3">
         <div className="flex items-center gap-6">
@@ -79,15 +82,16 @@ export default function CheckoutPage() {
               <div className="border border-[#d5d9d9] rounded-md bg-white p-4 max-w-[600px]">
                 <Button
                   className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold px-8 rounded min-w-[140px] py-2"
-                  onClick={() =>
+                  onClick={() => {
                     logEvent(EVENT_TYPES.PLACE_ORDER, {
                       items: totalItems,
                       totalAmount,
                       tax,
                       shipping,
                       orderTotal,
-                    })
-                  }
+                    });
+                    toast.success("Order placed successfully!");
+                  }}                  
                 >
                   Place your order
                 </Button>
@@ -103,15 +107,16 @@ export default function CheckoutPage() {
           <div className="bg-white border border-[#d5d9d9] shadow-sm rounded-md p-5 pt-6 min-h-[350px] flex flex-col">
             <Button
               className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold w-full mb-2 py-2 rounded"
-              onClick={() =>
+              onClick={() => {
                 logEvent(EVENT_TYPES.PLACE_ORDER, {
                   items: totalItems,
                   totalAmount,
                   tax,
                   shipping,
                   orderTotal,
-                })
-              }
+                });
+                toast.success("Order placed successfully!");
+              }}              
             >
               Place your order
             </Button>
@@ -146,5 +151,6 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+                </>
   );
 }

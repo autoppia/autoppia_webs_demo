@@ -14,10 +14,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { logEvent,EVENT_TYPES } from "@/library/logger";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const router = useRouter();
   const { state } = useCart();
 
   const cartItemCount = state.totalItems;
@@ -66,7 +68,10 @@ export function Header() {
             />
             <Button
               className="rounded-l-none bg-amazon-yellow hover:bg-amazon-darkYellow shadow"
-              onClick={() => logEvent(EVENT_TYPES.SEARCH, { query: searchQuery })}
+              onClick={() => {
+                logEvent(EVENT_TYPES.SEARCH, { query: searchQuery });
+                router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+              }}
             >
               <Search className="h-5 w-5 text-amazon-lightBlue" />
             </Button>
@@ -116,16 +121,18 @@ export function Header() {
 
       {/* Secondary navigation */}
       <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
+        <Link href="/">
         <button
           className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded"
           onClick={() => {
             console.log("🟢 CLICKED ALL BUTTON");
             logEvent(EVENT_TYPES.OPENED_ALL_DROPDOWN);
           }}
-        >
+          >
           <Menu size={18} className="mr-1" />
           <span className="font-bold">All</span>
         </button>
+          </Link>
         <div className="flex gap-4 flex-grow overflow-x-auto no-scrollbar">
           <span className="cursor-default text-gray-300">Rufus</span>
           <span className="cursor-default text-gray-300">
