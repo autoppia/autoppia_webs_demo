@@ -4,7 +4,7 @@ import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";
-import { logEvent, EVENT_TYPES } from "@/library/logger";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
 
 export default function SearchPage() {

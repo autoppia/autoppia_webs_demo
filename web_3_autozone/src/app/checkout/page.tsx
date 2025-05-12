@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { logEvent, EVENT_TYPES } from "@/library/logger";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 import { ToastContainer, toast } from 'react-toastify';
 
 export default function CheckoutPage() {
-  const { state } = useCart();
+  const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
 
   const shipping = totalAmount > 0 ? 0 : 0;
@@ -78,27 +78,6 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               ))}
-
-              <div className="border border-[#d5d9d9] rounded-md bg-white p-4 max-w-[600px]">
-                <Button
-                  className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold px-8 rounded min-w-[140px] py-2"
-                  onClick={() => {
-                    logEvent(EVENT_TYPES.PLACE_ORDER, {
-                      items: totalItems,
-                      totalAmount,
-                      tax,
-                      shipping,
-                      orderTotal,
-                    });
-                    toast.success("Order placed successfully!");
-                  }}                  
-                >
-                  Place your order
-                </Button>
-                <div className="text-[20px] font-semibold text-[#b12704] mt-2">
-                  Order total: ${orderTotal.toFixed(2)}
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -116,6 +95,7 @@ export default function CheckoutPage() {
                   orderTotal,
                 });
                 toast.success("Order placed successfully!");
+                clearCart();
               }}              
             >
               Place your order
@@ -151,6 +131,6 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
-                </>
+    </>
   );
 }

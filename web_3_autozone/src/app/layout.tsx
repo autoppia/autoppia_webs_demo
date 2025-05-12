@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <CartProvider>
-          <NotificationBanner />
+          {/* <NotificationBanner /> */}
           <Header />
           {children}
           <Footer />

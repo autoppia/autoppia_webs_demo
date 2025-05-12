@@ -15,9 +15,9 @@ Clone the repository and use the provided entry script to set up the project.
 Run the following in your terminal:
 
 ```bash
-./entry.sh
+./entrypoint.sh
 
-The entry.sh script does the following:
+The entrypoint.sh script does the following:
 
 Loads nvm and ensures Node.js v20 is installed and used.
 
@@ -40,3 +40,21 @@ State Management: React Context API
 
 Icons: Lucide
 
+🔧 Prerequisites
+Ensure the following are installed before running the project:
+
+Node.js v20+ (managed via nvm recommended)
+
+npm v9+ or yarn (used by entrypoint.sh)
+
+Git (for cloning the repository)
+
+Unix-like shell (e.g. macOS, Linux, or WSL on Windows) – required for entrypoint.sh
+
+Permissions to execute shell scripts (chmod +x entrypoint.sh if needed)
+
+Optional but useful:
+
+VS Code with the TailwindCSS IntelliSense extension
+
+Postman or any HTTP client for testing API routes

@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
-import { logEvent,EVENT_TYPES } from "@/library/logger";
+import { logEvent,EVENT_TYPES } from "@/library/events";
 import { useRouter } from "next/navigation";
 
 export function Header() {
@@ -55,7 +55,7 @@ export function Header() {
         {/* Search */}
         <div className="flex-grow flex mx-1 md:mx-4">
           <div className="w-full flex">
-            <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md" onClick={() => logEvent(EVENT_TYPES.OPENED_ALL_DROPDOWN)}>
+            <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md" >
               <span className="text-xs font-medium text-gray-700">All</span>
               <ChevronDown size={16} className="text-gray-500" />
             </div>
@@ -124,10 +124,6 @@ export function Header() {
         <Link href="/">
         <button
           className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded"
-          onClick={() => {
-            console.log("🟢 CLICKED ALL BUTTON");
-            logEvent(EVENT_TYPES.OPENED_ALL_DROPDOWN);
-          }}
           >
           <Menu size={18} className="mr-1" />
           <span className="font-bold">All</span>

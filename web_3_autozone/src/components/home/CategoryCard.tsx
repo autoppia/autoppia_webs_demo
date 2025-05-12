@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { logEvent,EVENT_TYPES } from "@/library/logger";
+import { logEvent,EVENT_TYPES } from "@/library/events";
 
 interface CategoryItem {
   image: string;

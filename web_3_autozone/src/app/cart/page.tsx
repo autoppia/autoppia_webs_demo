@@ -5,6 +5,17 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
+import { logEvent, EVENT_TYPES } from "@/library/events";
+
+interface CartItem {
+  id: string;
+  title: string;
+  price: string;
+  quantity: number;
+  image: string;
+  brand?: string;
+  color?: string;
+}
 
 export default function CartPage() {
   const { state, removeFromCart, updateQuantity } = useCart();
@@ -14,9 +25,18 @@ export default function CartPage() {
     removeFromCart?.(id);
   };
 
-  const handleUpdateQuantity = (id: string, newQuantity: number) => {
+  const handleUpdateQuantity = (item: CartItem, newQuantity: number) => {
+    const { id, title, quantity } = item;
     if (newQuantity >= 1 && newQuantity <= 10) {
       updateQuantity?.(id, newQuantity);
+      logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
+        product_id: id,
+        product_name: title,
+        previous_quantity: quantity,
+        new_quantity: newQuantity,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
     }
   };
 
@@ -52,7 +72,7 @@ export default function CartPage() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-6">
-                  {items.map((item) => {
+                  {items.map((item: CartItem) => {
                     const itemPrice = Number.parseFloat(item.price.replace(/[^0-9.]/g, ""));
                     const itemTotal = itemPrice * item.quantity;
                     return (
@@ -94,7 +114,7 @@ export default function CartPage() {
                         <div className="w-full md:w-32 flex items-center justify-center md:justify-center mt-2 md:mt-0">
                           <div className="flex items-center border border-gray-300 rounded">
                             <button
-                              onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                              onClick={() => handleUpdateQuantity(item, item.quantity - 1)}
                               className="px-2 py-1 text-gray-600 hover:bg-gray-100"
                               disabled={item.quantity <= 1}
                             >
@@ -102,7 +122,7 @@ export default function CartPage() {
                             </button>
                             <span className="px-3 py-1">{item.quantity}</span>
                             <button
-                              onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                              onClick={() => handleUpdateQuantity(item, item.quantity + 1)}
                               className="px-2 py-1 text-gray-600 hover:bg-gray-100"
                               disabled={item.quantity >= 10}
                             >

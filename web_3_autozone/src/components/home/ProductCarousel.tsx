@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
-import { logEvent,EVENT_TYPES } from "@/library/logger";
+import { logEvent,EVENT_TYPES } from "@/library/events";
 
 
 interface ProductCarouselProps {
