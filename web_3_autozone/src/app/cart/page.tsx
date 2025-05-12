@@ -40,6 +40,21 @@ export default function CartPage() {
     }
   };
 
+  const handleProceedToCheckout = () => {
+    logEvent(EVENT_TYPES.PROCEED_TO_CHECKOUT, {
+      total_items: totalItems,
+      total_amount: totalAmount,
+      products: items.map(item => ({
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        quantity: item.quantity,
+        brand: item.brand,
+        color: item.color,
+      })),
+      created_at: new Date().toISOString(),
+    });
+  };
   return (
     <div className="bg-[#edeff0] min-h-screen py-10">
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-6">
@@ -173,7 +188,7 @@ export default function CartPage() {
                   <label htmlFor="gift" className="text-sm">This order contains a gift</label>
                 </div>
                 <Link href="/checkout">
-                  <Button className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-black rounded-md">
+                  <Button className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-black rounded-md"  onClick={handleProceedToCheckout}>
                     Proceed to checkout
                   </Button>
                 </Link>
@@ -183,6 +198,7 @@ export default function CartPage() {
               <Button
                 className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-black rounded-md"
                 disabled
+                onClick={handleProceedToCheckout}
               >
                 Proceed to checkout
               </Button>

@@ -69,7 +69,7 @@ export function Header() {
             <Button
               className="rounded-l-none bg-amazon-yellow hover:bg-amazon-darkYellow shadow"
               onClick={() => {
-                logEvent(EVENT_TYPES.SEARCH, { query: searchQuery });
+                logEvent(EVENT_TYPES.SEARCH_PRODUCT, { query: searchQuery });
                 router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
               }}
             >
@@ -106,7 +106,7 @@ export function Header() {
           <Link
             href="/cart"
             className="text-gray-700 flex items-end"
-            onClick={() => logEvent(EVENT_TYPES.CART_OPENED)}
+            onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
           >
             <div className="relative">
               <ShoppingCart size={32} />

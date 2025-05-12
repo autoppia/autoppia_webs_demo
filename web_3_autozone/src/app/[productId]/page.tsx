@@ -46,6 +46,10 @@ export default function ProductPage() {
       productId: product.id,
       title: product.title,
       quantity,
+      price: product.price,
+      category: product.category,
+      brand: product.brand,
+      rating: product.rating,
     });
     setAddedToCart(true);
 
@@ -258,10 +262,17 @@ export default function ProductPage() {
             <Button
               className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
               onClick={() => {
-                logEvent(EVENT_TYPES.BUY_NOW, {
+                if (!product) return;
+
+                addToCart(product);
+                logEvent(EVENT_TYPES.CHECKOUT_STARTED, {
                   productId: product.id,
                   title: product.title,
                   quantity,
+                  price: product.price,
+                  category: product.category,
+                  brand: product.brand,
+                  rating: product.rating,
                 });
                 router.push('/checkout');
               }}

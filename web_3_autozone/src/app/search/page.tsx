@@ -23,6 +23,10 @@ export default function SearchPage() {
       productId: product.id,
       title: product.title,
       quantity: 1,
+      price: product.price,
+      category: product.category,
+      brand: product.brand,
+      rating: product.rating,
     });
 
     setAddedToCartId(product.id);

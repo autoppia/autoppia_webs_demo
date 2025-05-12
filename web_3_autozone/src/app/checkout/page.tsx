@@ -87,7 +87,7 @@ export default function CheckoutPage() {
             <Button
               className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold w-full mb-2 py-2 rounded"
               onClick={() => {
-                logEvent(EVENT_TYPES.PLACE_ORDER, {
+                logEvent(EVENT_TYPES.ORDER_COMPLETED, {
                   items: totalItems,
                   totalAmount,
                   tax,
