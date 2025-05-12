@@ -2,7 +2,6 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
-import { logEvent,EVENT_TYPES } from "@/library/logger";
 
 
 export function NotificationBanner() {
@@ -26,7 +25,6 @@ export function NotificationBanner() {
       </div>
       <button
          onClick={() => {
-          logEvent(EVENT_TYPES.CLOSE_BANNER);
           setIsVisible(false);
         }}
         className="absolute top-3 right-4 text-white hover:text-gray-200"
