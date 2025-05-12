@@ -10,7 +10,7 @@ export default function CheckoutPage() {
   const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
 
-  const shipping = totalAmount > 0 ? 0 : 0;
+  const shipping = parseFloat((Math.random() * 5 + 2).toFixed(2)); 
   const tax = parseFloat((totalAmount * 0.08).toFixed(2));
   const orderTotal = totalAmount + tax + shipping;
 

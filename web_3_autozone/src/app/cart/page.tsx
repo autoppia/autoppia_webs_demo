@@ -30,9 +30,13 @@ export default function CartPage() {
     if (newQuantity >= 1 && newQuantity <= 10) {
       updateQuantity?.(id, newQuantity);
       logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
-        product_id: id,
-        product_name: title,
-        previous_quantity: quantity,
+        product_id: item.id,
+        product_name: item.title,
+        price: item.price,
+        brand: item.brand || "generic",
+        category: "utensils", 
+        rating: "8.6",
+        previous_quantity: item.quantity,
         new_quantity: newQuantity,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -51,6 +55,7 @@ export default function CartPage() {
         quantity: item.quantity,
         brand: item.brand,
         color: item.color,
+        category: item.category
       })),
       created_at: new Date().toISOString(),
     });

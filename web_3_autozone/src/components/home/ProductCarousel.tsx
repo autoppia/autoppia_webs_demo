@@ -70,10 +70,12 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
               key={product.id}
               href={`/${product.id}`}
               onClick={() => logEvent(EVENT_TYPES.VIEW_DETAIL, {
-                productId: product.id,
+                section: product.description,
                 title: product.title,
                 price: product.price,
                 category: product.category,
+                rating: product.rating ?? 12,
+                brand: product.brand || "generic",
               })}
               className="flex-none w-[160px] md:w-[200px] group"
             >

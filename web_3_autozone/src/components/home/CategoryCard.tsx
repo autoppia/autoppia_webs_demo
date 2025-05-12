@@ -3,12 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { logEvent,EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 interface CategoryItem {
   image: string;
   title: string;
   link?: string;
+  price?: string;
+  rating?: number;
+  brand?: string;
+  category?: string;
 }
 
 interface CategoryCardProps {
@@ -41,7 +45,10 @@ export function CategoryCard({
         <h2 className="category-title">{title}</h2>
 
         {singleImage ? (
-          <Link href={footerLink?.href || "#"} className="block relative h-60 w-full hover:opacity-90 transition-opacity">
+          <Link
+            href={footerLink?.href || "#"}
+            className="block relative h-60 w-full hover:opacity-90 transition-opacity"
+          >
             <Image
               src={singleImage}
               alt={title}
@@ -58,9 +65,11 @@ export function CategoryCard({
                 onClick={() =>
                   logEvent(EVENT_TYPES.VIEW_DETAIL, {
                     title: item.title,
-                    image: item.image,
-                    link: item.link,
-                    section: title, // comes from props
+                    section: title,
+                    price: item.price || "$0.00",
+                    rating: item.rating ?? 0,
+                    brand: item.brand || "Generic",
+                    category: item.category || title || "Uncategorized",
                   })
                 }
                 className="space-y-2 hover:opacity-90 transition-opacity"
@@ -82,7 +91,10 @@ export function CategoryCard({
 
       {footerLink && (
         <CardFooter className="px-4 pt-0 pb-4">
-          <Link href={footerLink.href} className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+          <Link
+            href={footerLink.href}
+            className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+          >
             {footerLink.text}
           </Link>
         </CardFooter>

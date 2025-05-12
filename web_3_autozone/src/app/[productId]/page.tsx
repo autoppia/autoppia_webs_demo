@@ -244,6 +244,10 @@ export default function ProductPage() {
                   new_quantity: newQty,
                   created_at: new Date().toISOString(),
                   updated_at: new Date().toISOString(),
+                  price: product.price,
+                  category: product.category,
+                  brand: product.brand,
+                  rating: product.rating,
                 });
               }}              
               style={{maxWidth: '170px'}}
