@@ -1,60 +1,56 @@
-# 🛍️ Autozon Demo – Fullstack E-Commerce UI (Next.js)
+# Autozon – Fullstack E-Commerce UI (Next.js)
 
-This is a fullstack e-commerce demo project built with **Next.js**, styled using **TailwindCSS**, and designed to capture rich frontend interaction **event logs** into a backend JSON file (`event-log.json`).  
+This is a fullstack e-commerce project built with **Next.js**, styled using **TailwindCSS**, and designed to capture frontend interaction event logs into a backend JSON file (`event-log.json`).  
 
-It supports both frontend (UI) and backend (API routes) inside the same Next.js app.
+The app integrates both frontend UI and backend API routes within a single Next.js application.
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
-Clone the repository and use the provided entry script to set up the project.
+Clone the repository and use the provided entry script to set up and run the project.
 
-### 📦 Install & Run
+### Installation & Run
 
-Run the following in your terminal:
+In your terminal:
 
 ```bash
 ./entrypoint.sh
 
-The entrypoint.sh script does the following:
 
-Loads nvm and ensures Node.js v20 is installed and used.
+## What `entrypoint.sh` Does
 
-Clears old installs and cache.
+The `entrypoint.sh` script performs the following:
 
-Installs dependencies.
+- Loads `nvm` and ensures **Node.js v20** is installed
+- Clears previous installations and cache
+- Installs project dependencies
+- Starts the development server using `npm run dev`
 
-Starts the dev server with npm run dev.
+---
 
-🧱 Tech Stack
-Framework: Next.js 14
+## Prerequisites
 
-Styling: TailwindCSS
+Ensure the following tools are installed:
 
-Backend: API Routes (Node.js within Next.js)
+- **Node.js v20+** (use [nvm](https://github.com/nvm-sh/nvm) for version management)
+- **npm v9+** or **yarn**
+- **Git**
+- **Unix-like shell** (macOS, Linux, or WSL on Windows)
+- **Permission** to execute scripts (`chmod +x entrypoint.sh`)
 
-Event Logging: Custom logger writes to event-log.json
+**Optional but recommended:**
 
-State Management: React Context API
+- **VS Code** with [TailwindCSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+- **Postman** or any HTTP client for API testing
 
-Icons: Lucide
+---
 
-🔧 Prerequisites
-Ensure the following are installed before running the project:
+## Tech Stack
 
-Node.js v20+ (managed via nvm recommended)
-
-npm v9+ or yarn (used by entrypoint.sh)
-
-Git (for cloning the repository)
-
-Unix-like shell (e.g. macOS, Linux, or WSL on Windows) – required for entrypoint.sh
-
-Permissions to execute shell scripts (chmod +x entrypoint.sh if needed)
-
-Optional but useful:
-
-VS Code with the TailwindCSS IntelliSense extension
-
-Postman or any HTTP client for testing API routes
+- **Framework**: Next.js 14
+- **Styling**: TailwindCSS
+- **Backend**: Node.js API Routes in Next.js
+- **Event Logging**: Writes interaction events to `event-log.json`
+- **State Management**: React Context API
+- **Icons**: Lucide
