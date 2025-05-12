@@ -1,7 +1,7 @@
 
-# Autozon Demo – Fullstack E-Commerce UI (Next.js)
+# Autozon – Fullstack E-Commerce UI (Next.js)
 
-This is a fullstack e-commerce demo project built with **Next.js**, styled using **TailwindCSS**, and designed to capture frontend interaction event logs into a backend JSON file (`event-log.json`).  
+This is a fullstack e-commerce project built with **Next.js**, styled using **TailwindCSS**, and designed to capture frontend interaction event logs into a backend JSON file (`event-log.json`).  
 
 The app integrates both frontend UI and backend API routes within a single Next.js application.
 
