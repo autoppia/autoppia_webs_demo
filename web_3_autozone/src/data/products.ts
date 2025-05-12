@@ -12,7 +12,6 @@ export const products: Product[] = [
     rating: 4.5,
     brand: "SumKea",
     inStock: true,
-    
   },
   {
     id: "kitchen-2",
@@ -196,12 +195,11 @@ export const products: Product[] = [
   },
   {
     id: "home-1",
-    title:
-      "3-Piece 4 Bar 2 Dining Benches, 43.3'' Wood Kitchen Table & Chair Set for Breakfast Nook and Small Space, Grey",
+    title: "Hotpot",
     price: "$99.99",
     image: "/images/homepage_categories/dining.jpg",
     description:
-      "Optimally Sized for Versatile Use: This dining table set measures 43.3 inches in length, 23.6 inches in width, and 29.9 inches in height, perfectly sized to comfortably seat up to 4 people. The compact design makes it an ideal breakfast table for smaller dining areas or kitchens, enhancing its functionality in various home settings.\n\nEngineered for Style and Durability: Crafted from high-quality engineered wood with a melamine veneer, this kitchen & dining room set combines aesthetic appeal with structural integrity. The materials are chosen for their robustness and ease of maintenance, ensuring the set remains a centerpiece in your dining space for years.\n\nHigh-Quality Construction: The table and benches boast a solid steel structure that provides excellent stability and strength. The engineering focuses on creating a reliable and sturdy dining room table set that can support up to 220 lbs on both the table and each bench, accommodating family meals and gatherings securely.\n\nSpace-Saving and Functional Design: Designed with practicality in mind, the two benches of this dining table sets can be neatly tucked under the table when not in use, maximizing the use of space in your dining area. This feature makes it an excellent choice for those with limited space, such as in apartments or smaller homes.\n\nEasy to Assemble and Maintain: Assembly of this breakfast nook table set is straightforward, with clear step-by-step instructions and all necessary tools provided. The surfaces are easy to clean, requiring just a simple wipe down, which helps maintain the set's look and function without extensive upkeep.",
+      "Efficient Multi-Function Cooking: This hotpot appliance is designed for a wide range of cooking needs, including boiling, steaming, simmering, and slow-cooking. Whether you're preparing soup, noodles, or a full hotpot meal, its versatile design delivers consistently delicious results.\n\nGenerous Capacity with Compact Footprint: Featuring a 3-liter capacity, the hotpot is large enough for family meals yet compact enough to fit neatly on most kitchen countertops. It's ideal for shared meals, compact living, or dorm room cooking.\n\nDurable & Safe Construction: Built with food-grade stainless steel and a heat-resistant outer shell, the unit ensures both longevity and safety. The cool-touch handles and anti-slip base add extra convenience and security during use.\n\nIntuitive Temperature Control: Adjustable dual-temperature settings allow precise control over cooking intensity. Easily switch from high heat for rapid boiling to low heat for gentle simmering.\n\nEasy Cleaning & Maintenance: Designed for everyday use, the inner pot features a non-stick coating for hassle-free cleaning.",
     category: "Home",
     rating: 4.7,
     brand: "SumKea",
