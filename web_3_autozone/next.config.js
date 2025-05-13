@@ -18,6 +18,11 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Disable the Next.js dev indicator
+  devIndicators: {
+    buildActivity: false,
+    buildActivityPosition: 'bottom-right'
+  },
   // experimental: {
   //   allowedDevOrigins: ['https://be96-72-255-23-44.ngrok-free.app'], // ← your ngrok public URL
   // },
