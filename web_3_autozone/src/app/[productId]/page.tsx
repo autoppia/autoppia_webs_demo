@@ -7,7 +7,7 @@ import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
-import { logEvent ,EVENT_TYPES} from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
@@ -61,7 +61,7 @@ export default function ProductPage() {
   const renderDescription = (description: string) => {
     if (!description) return null;
 
-    return description.split('\n\n').map((paragraph, idx) => (
+    return description.split("\n\n").map((paragraph, idx) => (
       <p key={`para-${paragraph.substring(0, 10)}-${idx}`} className="mb-4">
         {paragraph}
       </p>
@@ -107,7 +107,9 @@ export default function ProductPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Product not found</h1>
-          <p className="mt-4">The product you are looking for does not exist or has been removed.</p>
+          <p className="mt-4">
+            The product you are looking for does not exist or has been removed.
+          </p>
           <Button className="mt-4" onClick={() => router.push("/")}>
             Return to Home
           </Button>
@@ -120,7 +122,10 @@ export default function ProductPage() {
   const rating = product.rating || 0;
 
   return (
-    <main className="container mx-auto px-2 md:px-4 py-6 bg-white" suppressHydrationWarning>
+    <main
+      className="container mx-auto px-2 md:px-4 py-6 bg-white"
+      suppressHydrationWarning
+    >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Product Image */}
         <div className="md:col-span-1">
@@ -148,14 +153,14 @@ export default function ProductPage() {
 
         {/* Product Details */}
         <div className="md:col-span-1">
-          <h1 className="text-xl md:text-2xl font-medium mb-2">{product.title}</h1>
+          <h1 className="text-xl md:text-2xl font-medium mb-2">
+            {product.title}
+          </h1>
           <div className="text-sm text-blue-600 mb-2">
             Visit the {product.brand} Store
           </div>
 
-          <div className="mb-4">
-            {renderStars(rating)}
-          </div>
+          <div className="mb-4">{renderStars(rating)}</div>
 
           <div className="border-t border-b border-gray-200 py-2 mb-4">
             <div className="flex items-center">
@@ -188,24 +193,32 @@ export default function ProductPage() {
               )}
               {product.dimensions?.depth && (
                 <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">Item Depth</td>
+                  <td className="py-1 font-medium text-gray-500 pr-4">
+                    Item Depth
+                  </td>
                   <td className="py-1">{product.dimensions.depth}</td>
                 </tr>
               )}
               {product.dimensions?.length && (
                 <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">Item dimensions L x W x H</td>
+                  <td className="py-1 font-medium text-gray-500 pr-4">
+                    Item dimensions L x W x H
+                  </td>
                   <td className="py-1">{product.dimensions.length}</td>
                 </tr>
               )}
               {product.careInstructions && (
                 <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">Product Care Instructions</td>
+                  <td className="py-1 font-medium text-gray-500 pr-4">
+                    Product Care Instructions
+                  </td>
                   <td className="py-1">{product.careInstructions}</td>
                 </tr>
               )}
               <tr>
-                <td className="py-1 font-medium text-gray-500 pr-4">Category</td>
+                <td className="py-1 font-medium text-gray-500 pr-4">
+                  Category
+                </td>
                 <td className="py-1">{product.category}</td>
               </tr>
             </tbody>
@@ -217,19 +230,46 @@ export default function ProductPage() {
           <aside className="border border-[#D5D9D9] bg-white rounded-lg shadow-sm p-4 md:sticky md:top-24 min-w-[275px] max-w-xs mx-auto md:mx-0 text-[15px]">
             <div className="mb-2 flex items-center">
               <span className="text-xs font-bold mr-2">Buy new:</span>
-              <span className="ml-auto"><input type="radio" checked readOnly aria-label="selected" /></span>
+              <span className="ml-auto">
+                <input type="radio" checked readOnly aria-label="selected" />
+              </span>
             </div>
-            <div className="text-[28px] font-bold tracking-tight leading-snug mb-2 mt-0">{product.price}</div>
+            <div className="text-[28px] font-bold tracking-tight leading-snug mb-2 mt-0">
+              {product.price}
+            </div>
             <div className="leading-snug text-sm mb-1">
-              <span className="text-[#007185] leading-tight font-medium">FREE delivery <b>{DELIVERY_DATE}</b></span>
-              <span className="block text-[13px] mt-1 mb-0">on orders shipped by Autozon over $35</span>
+              <span className="text-[#007185] leading-tight font-medium">
+                FREE delivery <b>{DELIVERY_DATE}</b>
+              </span>
+              <span className="block text-[13px] mt-1 mb-0">
+                on orders shipped by Autozon over $35
+              </span>
             </div>
             <div className="flex items-center leading-tight gap-1 mt-1 mb-2 text-sm text-[#111]">
-              <svg xmlns="http://www.w3.org/2000/svg" className="inline-block" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2"><circle cx="12" cy="10" r="8"/><circle cx="12" cy="10" r="3"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="inline-block"
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#666"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="10" r="8" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
               <span>Deliver to {DELIVERY_ADDRESS}</span>
             </div>
-            <div className="text-[#007600] font-semibold my-1 text-base">In Stock</div>
-            <label htmlFor="quantity-select" className="mt-2 mb-1 block text-[15px]">Quantity:</label>
+            <div className="text-[#007600] font-semibold my-1 text-base">
+              In Stock
+            </div>
+            <label
+              htmlFor="quantity-select"
+              className="mt-2 mb-1 block text-[15px]"
+            >
+              Quantity:
+            </label>
             <select
               id="quantity-select"
               className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
@@ -249,10 +289,14 @@ export default function ProductPage() {
                   brand: product.brand,
                   rating: product.rating,
                 });
-              }}              
-              style={{maxWidth: '170px'}}
+              }}
+              style={{ maxWidth: "170px" }}
             >
-              {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
             </select>
             <Button
               className="block w-full bg-[#FFD814] hover:bg-[#F7CA00] text-black font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
@@ -278,7 +322,7 @@ export default function ProductPage() {
                   brand: product.brand,
                   rating: product.rating,
                 });
-                router.push('/checkout');
+                router.push("/checkout");
               }}
             >
               Buy Now
@@ -291,38 +335,70 @@ export default function ProductPage() {
               </div>
               <div className="flex items-center py-0.5">
                 <dt className="w-20 font-normal">Sold by</dt>
-                <dd className="flex-1 pl-1"><span className="text-[#007185] hover:underline cursor-pointer">Autozon.com</span></dd>
+                <dd className="flex-1 pl-1">
+                  <span className="text-[#007185] hover:underline cursor-pointer">
+                    Autozon.com
+                  </span>
+                </dd>
               </div>
               <div className="flex items-center py-0.5">
                 <dt className="w-20 font-normal">Returns</dt>
-                <dd className="flex-1 pl-1"><span className="text-[#007185] hover:underline cursor-pointer">30-day refund/replacement</span></dd>
+                <dd className="flex-1 pl-1">
+                  <span className="text-[#007185] hover:underline cursor-pointer">
+                    30-day refund/replacement
+                  </span>
+                </dd>
               </div>
               <div className="flex items-center py-0.5">
                 <dt className="w-20 font-normal">Payment</dt>
-                <dd className="flex-1 pl-1"><span className="text-[#007185] underline">Secure transaction</span></dd>
+                <dd className="flex-1 pl-1">
+                  <span className="text-[#007185] underline">
+                    Secure transaction
+                  </span>
+                </dd>
               </div>
             </dl>
             <div className="mb-2 text-xs text-[#007185] cursor-pointer flex items-center gap-1">
               <span>&#9660;</span> See more
             </div>
             <div className="flex items-center text-sm mb-2 mt-1">
-              <input type="checkbox" className="mr-2 accent-[#017185]" id="gift-receipt" />
-              <label htmlFor="gift-receipt" className="text-xs">Add a gift receipt for easy returns</label>
+              <input
+                type="checkbox"
+                className="mr-2 accent-[#017185]"
+                id="gift-receipt"
+              />
+              <label htmlFor="gift-receipt" className="text-xs">
+                Add a gift receipt for easy returns
+              </label>
             </div>
             <div className="border-t border-[#D5D9D9] pt-3 mt-4">
               <div className="flex items-center mb-2 gap-2">
                 <input type="radio" id="used-like-new" name="used-new-switch" />
-                <label htmlFor="used-like-new" className="text-[13px] text-[#111] font-semibold">Save with Used - Like new:</label>
+                <label
+                  htmlFor="used-like-new"
+                  className="text-[13px] text-[#111] font-semibold"
+                >
+                  Save with Used - Like new:
+                </label>
               </div>
               <div className="mb-1 text-xl font-bold">$10.49</div>
               <div className="mb-1 text-sm">
-                <span className="text-[#007185] font-medium">FREE delivery <b>{DELIVERY_DATE}</b></span><br />
-                <span className="text-[13px]">on orders shipped by Autozon over $35</span>
+                <span className="text-[#007185] font-medium">
+                  FREE delivery <b>{DELIVERY_DATE}</b>
+                </span>
+                <br />
+                <span className="text-[13px]">
+                  on orders shipped by Autozon over $35
+                </span>
               </div>
-              <div className="text-xs mt-1">Ships from <span className="text-[#007185]">Autozon.com</span></div>
+              <div className="text-xs mt-1">
+                Ships from <span className="text-[#007185]">Autozon.com</span>
+              </div>
             </div>
             {addedToCart && (
-              <div className="mt-3 p-2 bg-green-100 text-green-800 rounded text-center text-sm">✓ Added to cart</div>
+              <div className="mt-3 p-2 bg-green-100 text-green-800 rounded text-center text-sm">
+                ✓ Added to cart
+              </div>
             )}
           </aside>
         </div>
@@ -334,8 +410,11 @@ export default function ProductPage() {
           <h2 className="text-xl font-bold mb-4">About This Item</h2>
           <div className="pl-5 text-sm">
             <ul className="list-disc space-y-2">
-              {product.description.split('\n\n').map((paragraph, idx) => (
-                <li key={`bullet-${paragraph.substring(0, 10)}-${idx}`} className="mb-2">
+              {product.description.split("\n\n").map((paragraph, idx) => (
+                <li
+                  key={`bullet-${paragraph.substring(0, 10)}-${idx}`}
+                  className="mb-2"
+                >
                   {paragraph}
                 </li>
               ))}

@@ -36,17 +36,21 @@ export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === sliderImages.length - 1 ? 0 : prev + 1));
+    setCurrentSlide((prev) =>
+      prev === sliderImages.length - 1 ? 0 : prev + 1
+    );
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? sliderImages.length - 1 : prev - 1));
+    setCurrentSlide((prev) =>
+      prev === 0 ? sliderImages.length - 1 : prev - 1
+    );
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 5000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
@@ -76,7 +80,8 @@ export function HeroSlider() {
       <div
         className="absolute bottom-0 left-0 right-0 h-[100px]"
         style={{
-          background: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)"
+          background:
+            "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
         }}
       />
 

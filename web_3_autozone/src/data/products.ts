@@ -113,7 +113,7 @@ export const products: Product[] = [
     id: "kitchen-10",
     title: "Immersion Blender",
     price: "$59.95",
-    image: "/images/homepage_categories/immersion_blender.jpg",
+    image: "/images/homepage_categories/mixer.jpg",
     description:
       "300W immersion blender with 2-speed control and stainless steel blades.",
     category: "Kitchen",
