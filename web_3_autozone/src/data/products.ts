@@ -6,110 +6,120 @@ export const products: Product[] = [
     title: "Espresso Machine",
     price: "$160.00",
     image: "/images/homepage_categories/coffee_machine.jpg",
-    description: "Professional-grade espresso machine with steam wand and programmable settings.",
+    description:
+      "Professional-grade espresso machine with steam wand and programmable settings.",
     category: "Kitchen",
     rating: 4.5,
     brand: "BrewMaster",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-2",
     title: "Air Fryer",
     price: "$89.99",
-    image: "/images/homepage_categories/default.jpg",
-    description: "4.2L capacity air fryer with digital touchscreen and 8 preset cooking functions.",
+    image: "/images/homepage_categories/air_fryer.jpg",
+    description:
+      "4.2L capacity air fryer with digital touchscreen and 8 preset cooking functions.",
     category: "Kitchen",
     rating: 4.7,
     brand: "ChefPlus",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-3",
     title: "Stainless Steel Cookware Set",
     price: "$129.95",
-    image: "/images/homepage_categories/default.jpg",
-    description: "10-piece stainless steel cookware set with induction-compatible bases.",
+    image: "/images/homepage_categories/cookware.jpg",
+    description:
+      "10-piece stainless steel cookware set with induction-compatible bases.",
     category: "Kitchen",
     rating: 4.6,
     brand: "CuisinePro",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-4",
     title: "Smart Blender",
     price: "$75.50",
-    image: "/images/homepage_categories/default.jpg",
-    description: "1200W smart blender with 8-speed settings and pre-programmed smoothie functions.",
+    image: "/images/homepage_categories/blender.jpg",
+    description:
+      "1200W smart blender with 8-speed settings and pre-programmed smoothie functions.",
     category: "Kitchen",
     rating: 4.4,
     brand: "BlendTech",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-5",
     title: "Electric Kettle",
     price: "$32.99",
     image: "/images/homepage_categories/kettles.jpg",
-    description: "1.7L rapid boil kettle with auto shut-off and boil-dry protection.",
+    description:
+      "1.7L rapid boil kettle with auto shut-off and boil-dry protection.",
     category: "Kitchen",
     rating: 4.3,
     brand: "KitchenAid",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-6",
     title: "Food Processor",
     price: "$112.00",
-    image: "/images/homepage_categories/default.jpg",
-    description: "12-cup capacity food processor with 6 interchangeable blades and discs.",
+    image: "/images/homepage_categories/food_processor.jpg",
+    description:
+      "12-cup capacity food processor with 6 interchangeable blades and discs.",
     category: "Kitchen",
     rating: 4.5,
     brand: "Cuisinart",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-7",
     title: "Stand Mixer",
     price: "$249.99",
-    image: "/images/homepage_categories/default.jpg",
-    description: "5-quart stand mixer with 10-speed settings and included attachments.",
+    image: "/images/homepage_categories/mixer.jpg",
+    description:
+      "5-quart stand mixer with 10-speed settings and included attachments.",
     category: "Kitchen",
     rating: 4.8,
     brand: "KitchenAid",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-8",
     title: "Slow Cooker",
     price: "$45.75",
-    image: "/images/homepage_categories/default.jpg",
-    description: "6-quart programmable slow cooker with digital timer and keep-warm function.",
+    image: "/images/homepage_categories/slow_cooker.jpg",
+    description:
+      "6-quart programmable slow cooker with digital timer and keep-warm function.",
     category: "Kitchen",
     rating: 4.4,
     brand: "Crock-Pot",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-9",
     title: "Rice Cooker",
     price: "$39.99",
-    image: "/images/homepage_categories/default.jpg",
-    description: "5-cup rice cooker with steamer basket and automatic keep-warm function.",
+    image: "/images/homepage_categories/rice_cooker.jpg",
+    description:
+      "5-cup rice cooker with steamer basket and automatic keep-warm function.",
     category: "Kitchen",
     rating: 4.2,
     brand: "Aroma",
-    inStock: true
+    inStock: true,
   },
   {
     id: "kitchen-10",
     title: "Immersion Blender",
     price: "$59.95",
-    image: "/images/homepage_categories/default.jpg",
-    description: "300W immersion blender with 2-speed control and stainless steel blades.",
+    image: "/images/homepage_categories/immersion_blender.jpg",
+    description:
+      "300W immersion blender with 2-speed control and stainless steel blades.",
     category: "Kitchen",
     rating: 4.3,
     brand: "Braun",
-    inStock: true
+    inStock: true,
   },
 
   // Electronics (10 items)
@@ -118,66 +128,72 @@ export const products: Product[] = [
     title: "Wireless Earbuds",
     price: "$129.99",
     image: "/images/homepage_categories/default.jpg",
-    description: "True wireless earbuds with active noise cancellation and 24-hour battery life.",
+    description:
+      "True wireless earbuds with active noise cancellation and 24-hour battery life.",
     category: "Electronics",
     rating: 4.7,
     brand: "SoundCore",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-2",
     title: "Smart Watch",
     price: "$199.00",
     image: "/images/homepage_categories/default.jpg",
-    description: "Fitness tracker with heart rate monitor, GPS, and 7-day battery life.",
+    description:
+      "Fitness tracker with heart rate monitor, GPS, and 7-day battery life.",
     category: "Electronics",
     rating: 4.6,
     brand: "FitTech",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-3",
     title: "4K Smart TV",
     price: "$499.99",
     image: "/images/homepage_categories/default.jpg",
-    description: "55-inch 4K UHD smart TV with HDR and built-in streaming apps.",
+    description:
+      "55-inch 4K UHD smart TV with HDR and built-in streaming apps.",
     category: "Electronics",
     rating: 4.8,
     brand: "Sony",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-4",
     title: "Gaming Laptop",
     price: "$1,299.00",
     image: "/images/homepage_categories/default.jpg",
-    description: "15.6-inch gaming laptop with RTX 3060 graphics and 144Hz display.",
+    description:
+      "15.6-inch gaming laptop with RTX 3060 graphics and 144Hz display.",
     category: "Electronics",
     rating: 4.9,
     brand: "ROG",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-5",
     title: "Wireless Router",
     price: "$89.95",
     image: "/images/homepage_categories/default.jpg",
-    description: "Wi-Fi 6 router with dual-band and mesh network compatibility.",
+    description:
+      "Wi-Fi 6 router with dual-band and mesh network compatibility.",
     category: "Electronics",
     rating: 4.5,
     brand: "NetLink",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-6",
     title: "Bluetooth Speaker",
     price: "$79.99",
     image: "/images/homepage_categories/default.jpg",
-    description: "Waterproof portable speaker with 20-hour playtime and deep bass.",
+    description:
+      "Waterproof portable speaker with 20-hour playtime and deep bass.",
     category: "Electronics",
     rating: 4.6,
     brand: "JBL",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-7",
@@ -188,18 +204,19 @@ export const products: Product[] = [
     category: "Electronics",
     rating: 4.4,
     brand: "Apple",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-8",
     title: "Noise Cancelling Headphones",
     price: "$179.95",
     image: "/images/homepage_categories/default.jpg",
-    description: "Over-ear headphones with 30-hour battery life and built-in mic.",
+    description:
+      "Over-ear headphones with 30-hour battery life and built-in mic.",
     category: "Electronics",
     rating: 4.7,
     brand: "Bose",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-9",
@@ -210,18 +227,19 @@ export const products: Product[] = [
     category: "Electronics",
     rating: 4.8,
     brand: "Samsung",
-    inStock: true
+    inStock: true,
   },
   {
     id: "tech-10",
     title: "Smart Thermostat",
     price: "$149.99",
     image: "/images/homepage_categories/default.jpg",
-    description: "Learning thermostat that adapts to your schedule and saves energy.",
+    description:
+      "Learning thermostat that adapts to your schedule and saves energy.",
     category: "Electronics",
     rating: 4.6,
     brand: "Nest",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-1",
@@ -232,18 +250,19 @@ export const products: Product[] = [
     category: "Home",
     rating: 4.7,
     brand: "SleepWell",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-2",
     title: "Sectional Sofa",
     price: "$899.99",
     image: "/images/homepage_categories/default.jpg",
-    description: "L-shaped sectional sofa with reversible chaise and stain-resistant fabric.",
+    description:
+      "L-shaped sectional sofa with reversible chaise and stain-resistant fabric.",
     category: "Home",
     rating: 4.5,
     brand: "FurniComfort",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-3",
@@ -254,18 +273,19 @@ export const products: Product[] = [
     category: "Home",
     rating: 4.3,
     brand: "ModLiving",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-4",
     title: "Dining Table Set",
     price: "$599.00",
     image: "/images/homepage_categories/dining.jpg",
-    description: "5-piece dining set with extendable table and 4 upholstered chairs.",
+    description:
+      "5-piece dining set with extendable table and 4 upholstered chairs.",
     category: "Home",
     rating: 4.6,
     brand: "HomeStyle",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-5",
@@ -276,7 +296,7 @@ export const products: Product[] = [
     category: "Home",
     rating: 4.2,
     brand: "FurniComfort",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-6",
@@ -287,7 +307,7 @@ export const products: Product[] = [
     category: "Home",
     rating: 4.4,
     brand: "RugVista",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-7",
@@ -298,18 +318,19 @@ export const products: Product[] = [
     category: "Home",
     rating: 4.5,
     brand: "HomeStyle",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-8",
     title: "Desk Lamp",
     price: "$29.95",
     image: "/images/homepage_categories/default.jpg",
-    description: "LED desk lamp with adjustable brightness and color temperature.",
+    description:
+      "LED desk lamp with adjustable brightness and color temperature.",
     category: "Home",
     rating: 4.3,
     brand: "BrightTech",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-9",
@@ -320,7 +341,7 @@ export const products: Product[] = [
     category: "Home",
     rating: 4.4,
     brand: "ModLiving",
-    inStock: true
+    inStock: true,
   },
   {
     id: "home-10",
@@ -331,7 +352,7 @@ export const products: Product[] = [
     category: "Home",
     rating: 4.2,
     brand: "CozyHome",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-1",
@@ -342,7 +363,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.6,
     brand: "Gaiam",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-2",
@@ -353,7 +374,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.7,
     brand: "Bowflex",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-3",
@@ -364,7 +385,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.5,
     brand: "TheraBand",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-4",
@@ -375,7 +396,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.4,
     brand: "TriggerPoint",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-5",
@@ -386,7 +407,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.3,
     brand: "CrossRope",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-6",
@@ -397,7 +418,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.5,
     brand: "Withings",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-7",
@@ -408,7 +429,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.7,
     brand: "Nike",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-8",
@@ -419,7 +440,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.6,
     brand: "HydroFlask",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-9",
@@ -430,7 +451,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.8,
     brand: "Theragun",
-    inStock: true
+    inStock: true,
   },
   {
     id: "fitness-10",
@@ -441,7 +462,7 @@ export const products: Product[] = [
     category: "Fitness",
     rating: 4.4,
     brand: "Gaiam",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-1",
@@ -452,7 +473,7 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.6,
     brand: "OutdoorLiving",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-2",
@@ -463,7 +484,7 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.7,
     brand: "Weber",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-3",
@@ -474,7 +495,7 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.5,
     brand: "Eno",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-4",
@@ -485,7 +506,7 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.4,
     brand: "Fiskars",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-5",
@@ -496,7 +517,7 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.6,
     brand: "Brightech",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-6",
@@ -507,7 +528,7 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.7,
     brand: "OutdoorLiving",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-7",
@@ -518,7 +539,7 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.3,
     brand: "GreenThumb",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-8",
@@ -529,30 +550,91 @@ export const products: Product[] = [
     category: "Outdoor",
     rating: 4.5,
     brand: "Coleman",
-    inStock: true
+    inStock: true,
   },
   {
     id: "outdoor-9",
     title: "Cooler",
     price: "$79.95",
-    image: "/images/homepage_categories/default.jpg",
+    image: "/images/homepage_categories/cooler.jpg",
     description: "50-quart rotomolded cooler with 7-day ice retention.",
     category: "Outdoor",
     rating: 4.8,
     brand: "Yeti",
-    inStock: true
+    inStock: true,
   },
   {
-    id: "outdoor-10",
-    title: "Bird Feeder",
-    price: "$24.99",
-    image: "/images/homepage_categories/default.jpg",
-    description: "Squirrel-proof bird feeder with 2.5lb capacity.",
-    category: "Outdoor",
+    id: "tech-10",
+    title: "Drone with 4K Camera",
+    price: "$349.00",
+    image: "/images/homepage_categories/drone.jpg",
+    description:
+      "Foldable drone with GPS stabilization, 4K camera, and 25-minute flight time. Includes carrying case and extra batteries.",
+    category: "Technology",
+    rating: 4.6,
+    brand: "SkyEye",
+    inStock: true,
+  },
+  {
+    id: "tech-11",
+    title: "Bluetooth Speaker",
+    price: "$59.99",
+    image: "/images/homepage_categories/speaker.jpg",
+    description:
+      "Compact waterproof speaker with 360° sound, deep bass, and 15-hour battery life. Perfect for outdoor use.",
+    category: "Technology",
     rating: 4.4,
-    brand: "Perky-Pet",
-    inStock: true
-  }
+    brand: "PulseBoom",
+    inStock: true,
+  },
+  {
+    id: "tech-12",
+    title: "Wireless Charging Pad",
+    price: "$29.95",
+    image: "/images/homepage_categories/charger.jpg",
+    description:
+      "Fast wireless charger with 10W output, anti-slip base, and sleek aluminum finish. Compatible with all Qi devices.",
+    category: "Technology",
+    rating: 4.2,
+    brand: "ChargeMate",
+    inStock: true,
+  },
+  {
+    id: "tech-13",
+    title: "VR Headset",
+    price: "$429.00",
+    image: "/images/homepage_categories/vr.jpg",
+    description:
+      "Standalone VR headset with inside-out tracking, immersive display, and access to a wide library of games and apps.",
+    category: "Technology",
+    rating: 4.7,
+    brand: "VisionX",
+    inStock: true,
+  },
+  {
+    id: "tech-14",
+    title: "Laptop Stand",
+    price: "$42.00",
+    image: "/images/homepage_categories/laptop_stand.jpg",
+    description:
+      "Adjustable aluminum stand improves posture and cooling. Compatible with laptops from 11'' to 17''.",
+    category: "Technology",
+    rating: 4.5,
+    brand: "ErgoDesk",
+    inStock: true,
+  },
+  {
+    id: "tech-15",
+    title: "Dual Monitor Arm",
+    price: "$79.99",
+    image: "/images/homepage_categories/monitor_arm.jpg",
+    description:
+      "Gas-spring dual arm mount supports up to 32'' displays. Full tilt, swivel, and rotation for ergonomic viewing.",
+    category: "Technology",
+    rating: 4.6,
+    brand: "Mountify",
+    inStock: true,
+  },
 ];
 
 export const getProductById = (id: string): Product | undefined => {
