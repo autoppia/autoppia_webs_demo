@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
-import { logEvent,EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useRouter } from "next/navigation";
 
 export function Header() {
@@ -23,7 +23,6 @@ export function Header() {
   const { state } = useCart();
 
   const cartItemCount = state.totalItems;
-
 
   return (
     <header>
@@ -55,7 +54,7 @@ export function Header() {
         {/* Search */}
         <div className="flex-grow flex mx-1 md:mx-4">
           <div className="w-full flex">
-            <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md" >
+            <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md">
               <span className="text-xs font-medium text-gray-700">All</span>
               <ChevronDown size={16} className="text-gray-500" />
             </div>
@@ -64,7 +63,7 @@ export function Header() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Autozon"
-              className="flex-grow rounded-none border-none bg-white shadow-inner focus:bg-white focus-visible:ring-2 focus-visible:ring-amazon-blue px-3 text-gray-800"
+              className="flex-grow rounded-none border bg-white shadow-inner focus:bg-white focus-visible:ring-2 focus-visible:ring-amazon-blue px-3 text-gray-800"
             />
             <Button
               className="rounded-l-none bg-amazon-yellow hover:bg-amazon-darkYellow shadow"
@@ -122,13 +121,11 @@ export function Header() {
       {/* Secondary navigation */}
       <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
         <Link href="/">
-        <button
-          className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded"
-          >
-          <Menu size={18} className="mr-1" />
-          <span className="font-bold">All</span>
-        </button>
-          </Link>
+          <button className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
+            <Menu size={18} className="mr-1" />
+            <span className="font-bold">All</span>
+          </button>
+        </Link>
         <div className="flex gap-4 flex-grow overflow-x-auto no-scrollbar">
           <span className="cursor-default text-gray-300">Rufus</span>
           <span className="cursor-default text-gray-300">

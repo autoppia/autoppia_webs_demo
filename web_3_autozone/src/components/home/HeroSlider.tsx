@@ -17,7 +17,7 @@ const sliderImages = [
   },
   {
     id: 3,
-    url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+    url: "/images/slider/amazon_slider_3.jpg",
     alt: "Kitchen and home essentials",
   },
   {
