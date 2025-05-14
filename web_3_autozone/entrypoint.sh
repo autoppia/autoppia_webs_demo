@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # --- Load Node Version Manager (nvm) ---
 export NVM_DIR="$HOME/.nvm"
 source "$NVM_DIR/nvm.sh"
