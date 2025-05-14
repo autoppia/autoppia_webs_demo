@@ -4,16 +4,15 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { EVENT_TYPES, logEvent } from "@/components/lib/events";
 
-// Demo: Restaurant data lookup by id
 const restaurantImgs: Record<string, string> = {
   "royal-dine": "https://ext.same-assets.com/3952155396/849522504.jpeg",
   "vintage-bites": "https://ext.same-assets.com/3952155396/849522504.jpeg",
   "evening-delight": "https://ext.same-assets.com/3952155396/849522504.jpeg",
   "river-view-cafe": "https://ext.same-assets.com/3952155396/849522504.jpeg",
-  "fancy-lights-bistro":
-    "https://ext.same-assets.com/3952155396/849522504.jpeg",
+  "fancy-lights-bistro": "https://ext.same-assets.com/3952155396/849522504.jpeg",
 };
 
 const restaurantNames: Record<string, string> = {
@@ -25,18 +24,32 @@ const restaurantNames: Record<string, string> = {
 };
 
 export default function Page() {
+  const [searchQuery, setSearchQuery] = useState("");
   const params = useParams();
   const search = useSearchParams();
+
   const restaurantId = params.restaurantId as string;
   const restaurantName = restaurantNames[restaurantId] || restaurantId;
   const imageUrl = restaurantImgs[restaurantId] || restaurantImgs["royal-dine"];
+
   const date = search.get("date") || "Jul 18";
   const time = (params.time as string) || "1:30 PM";
   const people = search.get("people") || "2 people";
 
+  useEffect(() => {
+    logEvent(EVENT_TYPES.PEOPLE_COUNT, { people });
+    logEvent(EVENT_TYPES.DATE_DETAIL, { date });
+    logEvent(EVENT_TYPES.TIME_DETAIL, { time });
+  }, [people, date, time]);
+
+  const handleSearch = () => {
+    if (searchQuery.trim() !== "") {
+      logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: searchQuery });
+    }
+  };
+
   return (
     <main>
-      {/* Nav is in root layout */}
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
@@ -45,21 +58,23 @@ export default function Page() {
                 <span className="font-bold text-white text-lg">DINING-HOURS</span>
               </div>
             </Link>
-            {/* TODO: Location Dropdown/Icon, etc. */}
           </div>
           <div className="flex-1 flex items-center justify-center">
-            {/* TODO: Search + controls */}
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Location, Restaurant, or Cuisine"
               className="rounded p-2 min-w-[250px] border border-gray-300"
             />
-            <button className="ml-2 px-4 py-2 rounded bg-[#c24742] text-white">
+            <button
+              onClick={handleSearch}
+              className="ml-2 px-4 py-2 rounded bg-[#c24742] text-white"
+            >
               Let's go
             </button>
           </div>
           <div className="flex items-center gap-4">
-            {/* TODO: User/profile icon, language, nav links */}
             <Link className="text-sm text-gray-600 hover:text-[#c24742]" href="/help">
               Get help
             </Link>
@@ -69,6 +84,7 @@ export default function Page() {
           </div>
         </div>
       </nav>
+
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
         <h2 className="font-bold text-lg mt-8 mb-4">You’re almost done!</h2>
         <div className="flex items-center gap-3 mb-6">
