@@ -7,29 +7,76 @@ import { products, getProductsByCategory } from "@/data/products";
 
 // Create category links for items
 const kitchenCategories = [
-  { image: "/images/homepage_categories/cooker.jpg", title: "Cooker", link: "/kitchen-2" },
-  { image: "/images/homepage_categories/coffee_machine.jpg", title: "Coffee", link: "/kitchen-1" },
-  { image: "/images/homepage_categories/pots.jpg", title: "Pots and Pans", link: "/kitchen-3" },
-  { image: "/images/homepage_categories/kettles.jpg", title: "Kettles", link: "/kitchen-4" },
+  {
+    image: "/images/homepage_categories/cooker.jpg",
+    title: "Cooker",
+    link: "/kitchen-2",
+  },
+  {
+    image: "/images/homepage_categories/coffee_machine.jpg",
+    title: "Coffee",
+    link: "/kitchen-1",
+  },
+  {
+    image: "/images/homepage_categories/pots.jpg",
+    title: "Pots and Pans",
+    link: "/kitchen-3",
+  },
+  {
+    image: "/images/homepage_categories/kettles.jpg",
+    title: "Kettles",
+    link: "/kitchen-4",
+  },
 ];
 
 const homeEssentials = [
-  { image: "/images/homepage_categories/cleaning.jpg", title: "Cleaning Tools", link: "#" },
-  { image: "/images/homepage_categories/storage.jpg", title: "Home Storage", link: "#" },
-  { image: "/images/homepage_categories/decor.jpg", title: "Home Decor", link: "/home-1" },
-  { image: "/images/homepage_categories/bedding.jpg", title: "Bedding", link: "/home-2" },
+  {
+    image: "/images/homepage_categories/cleaning.jpg",
+    title: "Cleaning Tools",
+    link: "#",
+  },
+  {
+    image: "/images/homepage_categories/storage.jpg",
+    title: "Home Storage",
+    link: "#",
+  },
+  {
+    image: "/images/homepage_categories/decor.jpg",
+    title: "Home Decor",
+    link: "/home-1",
+  },
+  {
+    image: "/images/homepage_categories/bedding.jpg",
+    title: "Bedding",
+    link: "/home-2",
+  },
 ];
 
 const refreshYourSpace = [
-  { image: "/images/homepage_categories/dining.jpg", title: "Dining", link: "/home-1" },
+  {
+    image: "/images/homepage_categories/dining.jpg",
+    title: "Dining",
+    link: "/home-1",
+  },
   { image: "/images/homepage_categories/home.jpg", title: "Home", link: "#" },
-  { image: "/images/homepage_categories/kitchen.jpg", title: "Kitchen", link: "/kitchen-1" },
-  { image: "/images/homepage_categories/health.jpg", title: "Health and Beauty", link: "#" },
+  {
+    image: "/images/homepage_categories/kitchen.jpg",
+    title: "Kitchen",
+    link: "/kitchen-1",
+  },
+  {
+    image: "/images/homepage_categories/health.jpg",
+    title: "Health and Beauty",
+    link: "#",
+  },
 ];
 
 // Get products by category
 const kitchenProducts = getProductsByCategory("Kitchen");
 const techProducts = getProductsByCategory("Technology");
+const HomeProducts = getProductsByCategory("Home");
+const ElectronicProducts = getProductsByCategory("Electronics");
+const FitnessProducts = getProductsByCategory("Fitness");
 
 export default function Home() {
   useEffect(() => {
@@ -55,7 +102,10 @@ export default function Home() {
           <CategoryCard
             title="Top categories in Kitchen appliances"
             items={kitchenCategories}
-            footerLink={{ text: "Explore all products in Kitchen", href: "/kitchen-1" }}
+            footerLink={{
+              text: "Explore all products in Kitchen",
+              href: "/kitchen-1",
+            }}
             columns={2}
           />
           {/* Delivery */}
@@ -112,8 +162,26 @@ export default function Home() {
         </div>
         {/* Product Carousels */}
         <div className="omnizon-container mt-6 space-y-6">
-          <ProductCarousel title="Top sellers in Kitchen" products={kitchenProducts} />
-          <ProductCarousel title="Top sellers in Technology" products={techProducts} />
+          <ProductCarousel
+            title="Top Sellers In Kitchen"
+            products={kitchenProducts}
+          />
+          <ProductCarousel
+            title="Top Sellers In Technology"
+            products={techProducts}
+          />
+          <ProductCarousel
+            title="Top Sellers In Home"
+            products={HomeProducts}
+          />
+          <ProductCarousel
+            title="Top Sellers In Electronics"
+            products={ElectronicProducts}
+          />
+          <ProductCarousel
+            title="Top Sellers In Fitness"
+            products={FitnessProducts}
+          />
         </div>
       </div>
     </main>

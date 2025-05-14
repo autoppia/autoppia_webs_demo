@@ -62,6 +62,12 @@ export function Header() {
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  logEvent(EVENT_TYPES.SEARCH_PRODUCT, { query: searchQuery });
+                  router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+                }
+              }}
               placeholder="Search Autozon"
               className="flex-grow rounded-none border bg-white shadow-inner focus:bg-white focus-visible:ring-2 focus-visible:ring-amazon-blue px-3 text-gray-800"
             />

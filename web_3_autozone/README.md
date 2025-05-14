@@ -1,7 +1,7 @@
 
 # Autozon – Fullstack E-Commerce UI (Next.js)
 
-This is a fullstack e-commerce project built with **Next.js**, styled using **TailwindCSS**, and designed to capture frontend interaction event logs into a backend JSON file (`event-log.json`).  
+This is a fullstack e-commerce website built with **Next.js**, styled using **TailwindCSS**, and designed to capture frontend interaction event logs into a backend JSON file (`event-log.json`).  
 
 The app integrates both frontend UI and backend API routes within a single Next.js application.
 
@@ -29,6 +29,8 @@ The `entrypoint.sh` script performs the following:
 - Starts the development server using `npm run dev`
 
 ---
+## Event-log.json
+- All the events will be stored in the file which is named as event-log.json
 
 ## Prerequisites
 
