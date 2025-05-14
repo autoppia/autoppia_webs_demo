@@ -8,18 +8,18 @@ import { products, getProductsByCategory } from "@/data/products";
 // Create category links for items
 const kitchenCategories = [
   {
-    image: "/images/homepage_categories/cooker.jpg",
-    title: "Cooker",
+    image: "/images/homepage_categories/air_fryer.jpg",
+    title: "Air Fryer",
     link: "/kitchen-2",
   },
   {
     image: "/images/homepage_categories/coffee_machine.jpg",
-    title: "Coffee",
+    title: "Espresso Machine",
     link: "/kitchen-1",
   },
   {
-    image: "/images/homepage_categories/pots.jpg",
-    title: "Pots and Pans",
+    image: "/images/homepage_categories/cookware.jpg",
+    title: "Stainless Steel Cookware Set",
     link: "/kitchen-3",
   },
   {
@@ -33,22 +33,18 @@ const homeEssentials = [
   {
     image: "/images/homepage_categories/cleaning.jpg",
     title: "Cleaning Tools",
-    link: "#",
   },
   {
     image: "/images/homepage_categories/storage.jpg",
     title: "Home Storage",
-    link: "#",
   },
   {
     image: "/images/homepage_categories/decor.jpg",
     title: "Home Decor",
-    link: "/home-1",
   },
   {
     image: "/images/homepage_categories/bedding.jpg",
     title: "Bedding",
-    link: "/home-2",
   },
 ];
 
@@ -56,18 +52,18 @@ const refreshYourSpace = [
   {
     image: "/images/homepage_categories/dining.jpg",
     title: "Dining",
-    link: "/home-1",
   },
-  { image: "/images/homepage_categories/home.jpg", title: "Home", link: "#" },
+  {
+    image: "/images/homepage_categories/home.jpg",
+    title: "Home",
+  },
   {
     image: "/images/homepage_categories/kitchen.jpg",
     title: "Kitchen",
-    link: "/kitchen-1",
   },
   {
     image: "/images/homepage_categories/health.jpg",
     title: "Health and Beauty",
-    link: "#",
   },
 ];
 
@@ -103,8 +99,8 @@ export default function Home() {
             title="Top categories in Kitchen appliances"
             items={kitchenCategories}
             footerLink={{
-              text: "Explore all products in Kitchen",
-              href: "/kitchen-1",
+              text: "Explore all products",
+              href: "#",
             }}
             columns={2}
           />
@@ -119,14 +115,14 @@ export default function Home() {
           <CategoryCard
             title="Shop for your home essentials"
             items={homeEssentials}
-            footerLink={{ text: "Discover more in Home", href: "/home-1" }}
+            footerLink={{ text: "Discover more", href: "#" }}
             columns={2}
           />
           {/* Home Decor */}
           <CategoryCard
             title="Home décor under $50"
             items={[]}
-            footerLink={{ text: "Shop now", href: "/home-1" }}
+            footerLink={{ text: "See more", href: "#" }}
             singleImage="/images/homepage_categories/decor_under.jpg"
           />
 
@@ -145,8 +141,8 @@ export default function Home() {
             <CategoryCard
               title="Get your game on"
               items={[]}
-              footerLink={{ text: "Shop gaming", href: "/tech-1" }}
-              singleImage="/images/homepage_categories/gaming_pc.jpg"
+              footerLink={{ text: "Shop Gaming", href: "/tech-4" }}
+              singleImage="/images/homepage_categories/gaming_laptop.jpg"
             />
           </div>
 
@@ -155,7 +151,7 @@ export default function Home() {
             <CategoryCard
               title="Beauty steals under $25"
               items={[]}
-              footerLink={{ text: "Shop now", href: "#" }}
+              footerLink={{ text: "See More", href: "#" }}
               singleImage="/images/homepage_categories/makeup.jpg"
             />
           </div>

@@ -39,9 +39,9 @@ export const products: Product[] = [
   },
   {
     id: "kitchen-4",
-    title: "Smart Blender",
+    title: "Kettles",
     price: "$75.50",
-    image: "/images/homepage_categories/blender.jpg",
+    image: "/images/homepage_categories/kettles.jpg",
     description:
       "1200W smart blender with 8-speed settings and pre-programmed smoothie functions.",
     category: "Kitchen",

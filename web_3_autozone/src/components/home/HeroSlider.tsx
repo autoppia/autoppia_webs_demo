@@ -12,7 +12,7 @@ const sliderImages = [
   },
   {
     id: 2,
-    url: "/images/slider/amazon_slider_2.jpg",
+    url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
     alt: "Exclusive deals on electronics",
   },
   {
