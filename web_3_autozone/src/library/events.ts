@@ -14,25 +14,24 @@ export const EVENT_TYPES = {
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
 
-// Mock user/agent — replace with actual session/user context if available
-
-export function logEvent(event: EventType, data: any = {}) {
+export function logEvent(eventType: EventType, data: any = {}, extra_headers: Record<string, string> = {}) {
   if (typeof window === "undefined") return;
 
   const user = localStorage.getItem("user");
-  const web_agent_id = localStorage.getItem("web_agent_id");
   const payload = {
-    event,
+    event_name: eventType,
     data,
-    user: user,
-    web_agent_id: web_agent_id,
+    user_id: user,
   };
 
-  console.log("📦 Logging Event:", payload);
+  console.log("📦 Logging Event:", { ...payload, headers: extra_headers });
 
   fetch("/api/log-event", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...extra_headers,
+    },
     body: JSON.stringify(payload),
   });
 }
