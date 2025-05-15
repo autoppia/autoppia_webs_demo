@@ -35,7 +35,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 mt-28">
       <h2 className="text-lg font-bold mb-4">
         Search Results for: <span className="text-blue-600">{query}</span>
       </h2>

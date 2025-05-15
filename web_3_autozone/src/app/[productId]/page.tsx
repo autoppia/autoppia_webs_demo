@@ -123,7 +123,7 @@ export default function ProductPage() {
 
   return (
     <main
-      className="container mx-auto px-2 md:px-4 py-6 bg-white"
+      className="container mx-auto px-2 md:px-4 py-6 bg-white mt-20"
       suppressHydrationWarning
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

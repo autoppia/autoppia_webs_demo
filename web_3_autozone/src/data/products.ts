@@ -443,7 +443,7 @@ export const products: Product[] = [
     inStock: true,
   },
   {
-    id: "tech-10",
+    id: "tech-11",
     title: "Drone with 4K Camera",
     price: "$349.00",
     image: "/images/homepage_categories/drone.jpg",
@@ -455,7 +455,7 @@ export const products: Product[] = [
     inStock: true,
   },
   {
-    id: "tech-11",
+    id: "tech-18",
     title: "Bluetooth Speaker",
     price: "$59.99",
     image: "/images/homepage_categories/speaker.jpg",

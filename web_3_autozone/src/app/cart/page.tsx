@@ -61,7 +61,7 @@ export default function CartPage() {
     });
   };
   return (
-    <div className="bg-[#edeff0] min-h-screen py-10">
+    <div className="bg-[#edeff0] min-h-screen py-10 mt-16">
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-6">
         {/* Cart Section */}
         <div className="flex-1">
