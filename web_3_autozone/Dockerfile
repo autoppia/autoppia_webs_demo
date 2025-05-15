@@ -1,23 +1,23 @@
-# Use Node.js 20 on Alpine
+# Use Node.js 20 base image
 FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files first
+# Copy package.json and lock file
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of your project
+# Copy the rest of the application
 COPY . .
 
-# Make the entrypoint script executable
+# Ensure entrypoint script is executable
 RUN chmod +x ./entrypoint.sh
 
-# Expose the port your app runs on
+# Expose your app port (used in npm run dev -- -p 8002)
 EXPOSE 8002
 
-# Default command (let docker-compose override entrypoint)
-CMD ["npm", "run", "dev", "--", "-p", "8002"]
+# Set the entrypoint
+ENTRYPOINT ["sh", "./entrypoint.sh"]

@@ -5,14 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nextjs_app
+    container_name: web_3_autozone
     ports:
       - "8002:8002"
     volumes:
       - .:/app
-      # Optional: use named volume to avoid conflicts
-      - node_modules:/app/node_modules
-    entrypoint: ["sh", "./entrypoint.sh"]
-
-volumes:
-  node_modules:
+      - /app/node_modules
