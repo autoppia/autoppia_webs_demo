@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { CalendarIcon, ClockIcon, UserIcon, ChevronDownIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
+import { EVENT_TYPES, logEvent } from "@/components/library/events";
+
+
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
 const restaurants = [
@@ -214,6 +217,15 @@ function RestaurantCard({
               href={`/booking/${r.id}/${encodeURIComponent(
                 t
               )}?date=${formattedDate}&people=${people}`}
+              onClick={() =>
+                logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                  restaurantId: r.id,
+                  restaurantName: r.name,
+                  time: t,
+                  date: formattedDate,
+                  people,
+                })
+              }
               passHref
             >
               <Button className="bg-[#c24742] hover:bg-[#a43a32] text-white font-semibold px-3 py-1 rounded-md text-sm" asChild>
@@ -290,7 +302,18 @@ export default function HomePage() {
   const [people, setPeople] = useState(2);
   const [search, setSearch] = useState("");
 
-  function matches(r: typeof restaurants[0]) {
+  const handleDateSelect = (d: Date | undefined) => {
+    setDate(d);
+    if (d) logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearch(value);
+    logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
+  };
+
+  function matches(r: typeof restaurants[0]): boolean {
     const q = search.trim().toLowerCase();
     return (
       !q ||
@@ -299,8 +322,8 @@ export default function HomePage() {
       r.area.toLowerCase().includes(q)
     );
   }
-  const filtered = restaurants.filter(matches);
 
+  const filtered = restaurants.filter(matches);
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const timeOptions = [
     "12:00 PM",
@@ -310,6 +333,7 @@ export default function HomePage() {
     "2:00 PM",
     "2:30 PM",
   ];
+
 
   return (
     <main>
@@ -348,7 +372,7 @@ export default function HomePage() {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
-            <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+            <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
           </PopoverContent>
         </Popover>
         {/* Time Dropdown */}
@@ -362,14 +386,18 @@ export default function HomePage() {
           </PopoverTrigger>
           <PopoverContent className="w-36 p-1">
             {timeOptions.map((t) => (
-              <Button key={t} variant="ghost" className="w-full justify-start" onClick={() => setTime(t)}>
-                {t}
-              </Button>
+           <Button key={t} variant="ghost" className="w-full justify-start" onClick={() => {
+            setTime(t);
+            logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
+          }}>
+           {t}
+         </Button>
+         
             ))}
           </PopoverContent>
         </Popover>
         {/* People Dropdown */}
-        <Popover>
+        <Popover >
           <PopoverTrigger asChild>
             <Button variant="outline" className="flex items-center gap-2 min-w-[120px] justify-start">
               <UserIcon className="h-5 w-5 text-gray-700" />
@@ -378,7 +406,11 @@ export default function HomePage() {
           </PopoverTrigger>
           <PopoverContent className="w-36 p-1">
             {peopleOptions.map((n) => (
-              <Button key={n} variant="ghost" className="w-full justify-start" onClick={() => setPeople(n)}>
+              <Button key={n} variant="ghost" className="w-full justify-start" onClick={() => {
+                setPeople(n);
+                logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
+              }}
+              >
                 {n} {n === 1 ? "person" : "people"}
               </Button>
             ))}
@@ -390,7 +422,7 @@ export default function HomePage() {
           placeholder="Location, Restaurant, or Cuisine"
           className="rounded p-2 min-w-[250px] border border-gray-300 flex-1"
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={handleSearchChange}
         />
         <button className="ml-2 px-5 py-2 rounded text-lg bg-[#c24742] text-white">Let's go</button>
       </section>

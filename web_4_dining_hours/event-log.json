@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "event_name": "BOOK_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "restaurantId": "royal-dine",
+      "restaurantName": "The Royal Dine",
+      "time": "1:30 PM",
+      "date": "2025-05-01",
+      "people": 6
+    },
+    "timestamp": "2025-05-15T07:10:24.023Z"
+  },
+  {
+    "event_name": "BOOK_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "restaurantId": "royal-dine",
+      "restaurantName": "The Royal Dine",
+      "time": "1:30 PM",
+      "date": "2025-05-15",
+      "people": 2
+    },
+    "timestamp": "2025-05-15T07:10:52.676Z"
+  }
+]
