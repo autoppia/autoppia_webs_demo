@@ -15,33 +15,22 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useRouter } from "next/navigation";
-
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
   const { state } = useCart();
-
   const cartItemCount = state.totalItems;
-
   return (
-    <header>
+    <header className="fixed top-0 z-50 w-full">
       {/* Main navigation bar */}
-      <nav className="bg-white px-2 py-2 flex items-center gap-2 md:gap-4 border-b border-gray-200">
+      <nav className="bg-white border-b border-gray-200 px-2 py-2 flex items-center gap-2 md:gap-4">
         {/* Logo */}
         <Link href="/" className="mr-2 flex-shrink-0">
-          <div className="relative h-8 w-28">
-            {/* <Image
-              src="/images/logo/logo.png"
-              alt="Autozon"
-              fill
-              priority
-              className="object-contain"
-            /> */}
-            <h1 className="font-semibold">Autozone</h1>
+          <div className="bg-[#FEBD69] px-3 py-1 rounded flex items-center h-9">
+            <span className="font-bold text-black text-lg">AUTOZONE</span>
           </div>
         </Link>
-
         {/* Deliver to */}
         <div className="text-gray-700 hidden md:flex items-start gap-1 flex-shrink-0">
           <MapPin size={18} className="mt-1 text-gray-400" />
@@ -50,7 +39,6 @@ export function Header() {
             <p className="font-bold">San Francisco</p>
           </div>
         </div>
-
         {/* Search */}
         <div className="flex-grow flex mx-1 md:mx-4">
           <div className="w-full flex">
@@ -82,7 +70,6 @@ export function Header() {
             </Button>
           </div>
         </div>
-
         {/* Nav links */}
         <div className="hidden md:flex items-center gap-3 md:gap-4">
           {/* Language */}
@@ -91,7 +78,6 @@ export function Header() {
             <span className="font-bold">EN</span>
             <ChevronDown size={14} />
           </div>
-
           {/* Account */}
           <div className="text-gray-700 text-xs hidden md:block">
             <div>Hello, user</div>
@@ -100,13 +86,11 @@ export function Header() {
               <ChevronDown size={14} className="ml-1" />
             </div>
           </div>
-
           {/* Returns & Orders */}
           <div className="text-gray-700 text-xs hidden md:block">
             <div>Returns</div>
             <div className="font-bold">& Orders</div>
           </div>
-
           {/* Cart */}
           <Link
             href="/cart"
@@ -123,7 +107,6 @@ export function Header() {
           </Link>
         </div>
       </nav>
-
       {/* Secondary navigation */}
       <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
         <Link href="/">

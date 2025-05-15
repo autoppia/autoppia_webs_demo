@@ -5,7 +5,14 @@ import path from 'path';
 const LOG_PATH = path.join(process.cwd(), 'event-log.json');
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  let body: any;
+
+  try {
+    body = await req.json();
+  } catch (err) {
+    return NextResponse.json({ success: false, error: 'Invalid or empty JSON body' }, { status: 400 });
+  }
+
   const webAgentIdHeader = req.headers.get('X-WebAgent-Id');
 
   const {
