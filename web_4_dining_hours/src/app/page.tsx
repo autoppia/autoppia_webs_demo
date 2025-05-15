@@ -13,8 +13,7 @@ const restaurants = [
   {
     id: "royal-dine",
     name: "The Royal Dine",
-    image:
-      "https://ext.same-assets.com/3952155396/849522504.jpeg",
+    image: "/images/restaurant1.jpg",
     stars: 4,
     reviews: 20,
     cuisine: "French",
@@ -26,8 +25,7 @@ const restaurants = [
   {
     id: "vintage-bites",
     name: "Vintage Bites",
-    image:
-      "https://ext.same-assets.com/3952155396/849522504.jpeg",
+    image: "/images/restaurant2.jpg",
     stars: 4,
     reviews: 20,
     cuisine: "American",
@@ -39,8 +37,7 @@ const restaurants = [
   {
     id: "evening-delight",
     name: "Evening Delight",
-    image:
-      "https://ext.same-assets.com/3952155396/849522504.jpeg",
+    image: "/images/restaurant3.jpg",
     stars: 4,
     reviews: 20,
     cuisine: "Italian",
@@ -52,8 +49,7 @@ const restaurants = [
   {
     id: "river-view-cafe",
     name: "River View Café",
-    image:
-      "https://ext.same-assets.com/3952155396/849522504.jpeg",
+    image: "/images/restaurant4.jpg",
     stars: 4,
     reviews: 20,
     cuisine: "Café",
@@ -65,13 +61,36 @@ const restaurants = [
   {
     id: "fancy-lights-bistro",
     name: "Fancy Lights Bistro",
-    image:
-      "https://ext.same-assets.com/3952155396/849522504.jpeg",
+    image: "/images/restaurant5.jpg",
     stars: 4,
     reviews: 20,
-    cuisine: "Mediterranean",
+    cuisine: "Medi",
     price: "$$$$",
     area: "Hayes Valley",
+    bookings: 24,
+    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
+  },
+  {
+    id: "royal-dined",
+    name: "The Royal Dine",
+    image: "/images/restaurant6.jpg",
+    stars: 4,
+    reviews: 20,
+    cuisine: "French",
+    price: "$$$$",
+    area: "Mission District",
+    bookings: 24,
+    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
+  },
+  {
+    id: "royal-dines",
+    name: "The Royal Dine",
+    image: "/images/restaurant7.jpg",
+    stars: 4,
+    reviews: 20,
+    cuisine: "French",
+    price: "$$$$",
+    area: "Mission District",
     bookings: 24,
     times: ["1:30 PM", "2:00 PM", "2:30 PM"],
   },
@@ -144,14 +163,12 @@ function RestaurantCard({
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2024-07-18";
   return (
     <div className="rounded-xl border shadow-sm bg-white w-[255px] flex-shrink-0 overflow-hidden flex flex-col justify-between">
-      <Link href={`/restaurant/${r.id}`} passHref legacyBehavior>
-        <a>
+      <Link href={`/restaurant/${r.id}`} passHref>
           <img
             src={r.image}
             alt={r.name}
             className="w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition"
           />
-        </a>
       </Link>
       <div className="p-3 flex flex-col gap-1 h-full">
         <div className="font-bold text-lg mb-1">{r.name}</div>
@@ -307,17 +324,7 @@ export default function HomePage() {
             </Link>
             {/* TODO: Location Dropdown/Icon, etc. */}
           </div>
-          <div className="flex-1 flex items-center justify-center">
-            {/* TODO: Search + controls */}
-            <input
-              type="text"
-              placeholder="Location, Restaurant, or Cuisine"
-              className="rounded p-2 min-w-[250px] border border-gray-300"
-            />
-            <button className="ml-2 px-4 py-2 rounded bg-[#c24742] text-white">
-              Let's go
-            </button>
-          </div>
+        
           <div className="flex items-center gap-4">
             {/* TODO: User/profile icon, language, nav links */}
             <Link className="text-sm text-gray-600 hover:text-[#c24742]" href="/help">

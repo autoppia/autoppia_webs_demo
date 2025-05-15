@@ -67,3 +67,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide the floating Next.js dev overlay icon */
+[data-nextjs-toast], .nextjs-toast-override {
+  display: none !important;
+}
+
+.nextjs-portal {
+  display: none !important;
+}
+
