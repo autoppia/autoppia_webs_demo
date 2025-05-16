@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web_4_dining_hours
+    ports:
+      - "8002:8002"
+    volumes:
+      - .:/app
+      - /app/node_modules
