@@ -2,14 +2,23 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { CalendarIcon, ClockIcon, UserIcon, ChevronDownIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  CalendarIcon,
+  ClockIcon,
+  UserIcon,
+  ChevronDownIcon,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-
-
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
 const restaurants = [
@@ -118,7 +127,7 @@ const dinersFavorites = [
     img: "https://ext.same-assets.com/3952155396/849522504.jpeg",
     cuisine: "Italian",
     price: "$$$$",
-    rating: 4.20,
+    rating: 4.2,
     reviews: 20,
     desc: "A warm and inviting restaurant, ideal for romantic dinners or casual evening gatherings.",
     top: false,
@@ -129,7 +138,7 @@ const dinersFavorites = [
     img: "https://ext.same-assets.com/3952155396/849522504.jpeg",
     cuisine: "American",
     price: "$$$$",
-    rating: 4.20,
+    rating: 4.2,
     reviews: 20,
     desc: "Step into a retro-inspired eatery serving up classic dishes with a modern twist. The eclectic decor and hearty menu make it a local favorite.",
     top: false,
@@ -159,25 +168,36 @@ function RestaurantCard({
   date,
   people,
 }: {
-  r: typeof restaurants[0];
+  r: (typeof restaurants)[0];
   date: Date | undefined;
   people: number;
 }) {
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2024-07-18";
   return (
     <div className="rounded-xl border shadow-sm bg-white w-[255px] flex-shrink-0 overflow-hidden flex flex-col justify-between">
-      <Link href={`/restaurant/${r.id}`} passHref>
-          <img
-            src={r.image}
-            alt={r.name}
-            className="w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition"
-          />
+      <Link
+        href={`/restaurant/${r.id}`}
+        passHref
+        onClick={() =>
+          logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+            restaurantId: r.id,
+            restaurantName: r.name,
+          })
+        }
+      >
+        <img
+          src={r.image}
+          alt={r.name}
+          className="w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition"
+        />
       </Link>
       <div className="p-3 flex flex-col gap-1 h-full">
         <div className="font-bold text-lg mb-1">{r.name}</div>
         <div className="flex items-center mb-1">
           <StarRating count={r.stars} />
-          <span className="ml-1 text-gray-600 text-sm">{r.reviews} reviews</span>
+          <span className="ml-1 text-gray-600 text-sm">
+            {r.reviews} reviews
+          </span>
         </div>
         <div className="text-[15px] text-gray-500 mb-1">
           {r.cuisine} . {r.price} . {r.area}
@@ -228,7 +248,10 @@ function RestaurantCard({
               }
               passHref
             >
-              <Button className="bg-[#c24742] hover:bg-[#a43a32] text-white font-semibold px-3 py-1 rounded-md text-sm" asChild>
+              <Button
+                className="bg-[#c24742] hover:bg-[#a43a32] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                asChild
+              >
                 <span>{t}</span>
               </Button>
             </Link>
@@ -304,7 +327,8 @@ export default function HomePage() {
 
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
-    if (d) logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+    if (d)
+      logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -313,7 +337,7 @@ export default function HomePage() {
     logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
   };
 
-  function matches(r: typeof restaurants[0]): boolean {
+  function matches(r: (typeof restaurants)[0]): boolean {
     const q = search.trim().toLowerCase();
     return (
       !q ||
@@ -334,7 +358,6 @@ export default function HomePage() {
     "2:30 PM",
   ];
 
-
   return (
     <main>
       {/* Navigation/Header */}
@@ -343,18 +366,26 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <Link href="/">
               <div className="bg-[#c24742] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">DINING-HOURS</span>
+                <span className="font-bold text-white text-lg">
+                  DINING-HOURS
+                </span>
               </div>
             </Link>
             {/* TODO: Location Dropdown/Icon, etc. */}
           </div>
-        
+
           <div className="flex items-center gap-4">
             {/* TODO: User/profile icon, language, nav links */}
-            <Link className="text-sm text-gray-600 hover:text-[#c24742]" href="/help">
+            <Link
+              className="text-sm text-gray-600 hover:text-[#c24742]"
+              href="/help"
+            >
               Get help
             </Link>
-            <Link className="text-sm text-gray-600 hover:text-[#c24742]" href="/faqs">
+            <Link
+              className="text-sm text-gray-600 hover:text-[#c24742]"
+              href="#"
+            >
               FAQs
             </Link>
           </div>
@@ -366,19 +397,30 @@ export default function HomePage() {
         {/* Date Picker */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2 min-w-[120px] justify-start">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 min-w-[120px] justify-start"
+            >
               <CalendarIcon className="h-5 w-5 text-gray-700" />
               {date ? format(date, "MMM d") : "Pick date"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
-            <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={handleDateSelect}
+              initialFocus
+            />
           </PopoverContent>
         </Popover>
         {/* Time Dropdown */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2 min-w-[120px] justify-start">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 min-w-[120px] justify-start"
+            >
               <ClockIcon className="h-5 w-5 text-gray-700" />
               {time}
               <ChevronDownIcon className="h-4 w-4 text-gray-400" />
@@ -386,30 +428,42 @@ export default function HomePage() {
           </PopoverTrigger>
           <PopoverContent className="w-36 p-1">
             {timeOptions.map((t) => (
-           <Button key={t} variant="ghost" className="w-full justify-start" onClick={() => {
-            setTime(t);
-            logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
-          }}>
-           {t}
-         </Button>
-         
+              <Button
+                key={t}
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  setTime(t);
+                  logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
+                }}
+              >
+                {t}
+              </Button>
             ))}
           </PopoverContent>
         </Popover>
         {/* People Dropdown */}
-        <Popover >
+        <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2 min-w-[120px] justify-start">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 min-w-[120px] justify-start"
+            >
               <UserIcon className="h-5 w-5 text-gray-700" />
-              {people} {people === 1 ? "person" : "people"} <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+              {people} {people === 1 ? "person" : "people"}{" "}
+              <ChevronDownIcon className="h-4 w-4 text-gray-400" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-36 p-1">
             {peopleOptions.map((n) => (
-              <Button key={n} variant="ghost" className="w-full justify-start" onClick={() => {
-                setPeople(n);
-                logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
-              }}
+              <Button
+                key={n}
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  setPeople(n);
+                  logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
+                }}
               >
                 {n} {n === 1 ? "person" : "people"}
               </Button>
@@ -424,12 +478,16 @@ export default function HomePage() {
           value={search}
           onChange={handleSearchChange}
         />
-        <button className="ml-2 px-5 py-2 rounded text-lg bg-[#c24742] text-white">Let's go</button>
+        <button className="ml-2 px-5 py-2 rounded text-lg bg-[#c24742] text-white">
+          Let's go
+        </button>
       </section>
 
       {/* Main Content - Cards, Sections, etc. */}
       <section className="px-4">
-        <h2 className="text-2xl font-bold mb-4 mt-8">Available for lunch now</h2>
+        <h2 className="text-2xl font-bold mb-4 mt-8">
+          Available for lunch now
+        </h2>
         <CardScroller>
           {filtered.map((r) => (
             <RestaurantCard key={r.id} r={r} date={date} people={people} />
@@ -441,14 +499,26 @@ export default function HomePage() {
       <section className="mt-8 rounded-xl bg-[#f7f7f6] border px-4">
         <div className="flex flex-row justify-between items-center mb-1">
           <div>
-            <h2 className="text-2xl md:text-2xl font-bold">Introducing OpenDinning Icons</h2>
-            <div className="text-base text-gray-600 mt-1 mb-3">Book the city's award-winners, hot newcomers, and hard-to-get tables.</div>
+            <h2 className="text-2xl md:text-2xl font-bold">
+              Introducing OpenDinning Icons
+            </h2>
+            <div className="text-base text-gray-600 mt-1 mb-3">
+              Book the city's award-winners, hot newcomers, and hard-to-get
+              tables.
+            </div>
           </div>
-          <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">Explore Icon restaurants</button>
+          <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
+            Explore Icon restaurants
+          </button>
         </div>
         <CardScroller>
           {filtered.map((r) => (
-            <RestaurantCard key={r.id + "-icons"} r={r} date={date} people={people} />
+            <RestaurantCard
+              key={r.id + "-icons"}
+              r={r}
+              date={date}
+              people={people}
+            />
           ))}
         </CardScroller>
       </section>
@@ -458,32 +528,67 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
         <CardScroller>
           {filtered.map((r) => (
-            <RestaurantCard key={r.id + "-award"} r={r} date={date} people={people} />
+            <RestaurantCard
+              key={r.id + "-award"}
+              r={r}
+              date={date}
+              people={people}
+            />
           ))}
         </CardScroller>
       </section>
 
       {/* Diners' Favorite Section */}
       <section className="mt-10 mb-6 px-4">
-        <h2 className="text-2xl font-bold mb-1">Check out diners' favorite restaurants in San Francisco Bay Area</h2>
-        <div className="text-base text-gray-600 mb-6">Diners' Choice Awards are based on where your fellow diners book, dine, and review. Only verified diners get to review restaurants on OpenDinning, so our data doesn't lie.</div>
+        <h2 className="text-2xl font-bold mb-1">
+          Check out diners' favorite restaurants in San Francisco Bay Area
+        </h2>
+        <div className="text-base text-gray-600 mb-6">
+          Diners' Choice Awards are based on where your fellow diners book,
+          dine, and review. Only verified diners get to review restaurants on
+          OpenDinning, so our data doesn't lie.
+        </div>
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left: Large image and description for top pick */}
           <div className="flex-[2] min-w-[270px]">
-            <img className="rounded-lg w-full max-h-60 object-cover mb-2" src={dinersFavorites[0].img} alt={dinersFavorites[0].name} />
+            <img
+              className="rounded-lg w-full max-h-60 object-cover mb-2"
+              src={dinersFavorites[0].img}
+              alt={dinersFavorites[0].name}
+            />
             <div className="font-bold text-lg">{dinersFavorites[0].name}</div>
-            <div className="text-gray-500 text-sm mb-1">Diners top pick · {dinersFavorites[0].cuisine} <StarNumber rating={dinersFavorites[0].rating}/> <span className="text-gray-600">({dinersFavorites[0].reviews})</span></div>
-            <div className="text-gray-700 text-[15px]">{dinersFavorites[0].desc}</div>
+            <div className="text-gray-500 text-sm mb-1">
+              Diners top pick · {dinersFavorites[0].cuisine}{" "}
+              <StarNumber rating={dinersFavorites[0].rating} />{" "}
+              <span className="text-gray-600">
+                ({dinersFavorites[0].reviews})
+              </span>
+            </div>
+            <div className="text-gray-700 text-[15px]">
+              {dinersFavorites[0].desc}
+            </div>
           </div>
           {/* Right: List of other favorite restaurants */}
           <div className="flex flex-1 flex-col gap-3 min-w-56">
-            {dinersFavorites.slice(1).map(r => (
-              <div key={r.id} className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0">
-                <img className="w-24 h-20 rounded-lg object-cover" src={r.img} alt={r.name}/>
+            {dinersFavorites.slice(1).map((r) => (
+              <div
+                key={r.id}
+                className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0"
+              >
+                <img
+                  className="w-24 h-20 rounded-lg object-cover"
+                  src={r.img}
+                  alt={r.name}
+                />
                 <div className="flex-1 flex flex-col">
                   <div className="font-semibold text-lg">{r.name}</div>
-                  <div className="text-gray-500 text-sm mb-1">{r.price} • {r.cuisine} <StarNumber rating={r.rating}/> <span className="text-gray-700">({r.reviews})</span></div>
-                  <div className="text-gray-700 text-[15px] line-clamp-2">{r.desc}</div>
+                  <div className="text-gray-500 text-sm mb-1">
+                    {r.price} • {r.cuisine} <StarNumber rating={r.rating} />{" "}
+                    <span className="text-gray-700">({r.reviews})</span>
+                  </div>
+                  <div className="text-gray-700 text-[15px] line-clamp-2">
+                    {r.desc}
+                  </div>
                 </div>
               </div>
             ))}
