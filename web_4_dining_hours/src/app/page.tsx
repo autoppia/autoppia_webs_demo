@@ -21,92 +21,42 @@ import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
-const restaurants = [
-  {
-    id: "royal-dine",
-    name: "The Royal Dine",
-    image: "/images/restaurant1.jpg",
-    stars: 4,
-    reviews: 20,
-    cuisine: "French",
-    price: "$$$$",
-    area: "Mission District",
-    bookings: 24,
-    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
-  },
-  {
-    id: "vintage-bites",
-    name: "Vintage Bites",
-    image: "/images/restaurant2.jpg",
-    stars: 4,
-    reviews: 20,
-    cuisine: "American",
-    price: "$$$$",
-    area: "SOMA",
-    bookings: 24,
-    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
-  },
-  {
-    id: "evening-delight",
-    name: "Evening Delight",
-    image: "/images/restaurant3.jpg",
-    stars: 4,
-    reviews: 20,
-    cuisine: "Italian",
-    price: "$$$$",
-    area: "North Beach",
-    bookings: 24,
-    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
-  },
-  {
-    id: "river-view-cafe",
-    name: "River View Café",
-    image: "/images/restaurant4.jpg",
-    stars: 4,
-    reviews: 20,
-    cuisine: "Café",
-    price: "$$$$",
-    area: "Embarcadero",
-    bookings: 24,
-    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
-  },
-  {
-    id: "fancy-lights-bistro",
-    name: "Fancy Lights Bistro",
-    image: "/images/restaurant5.jpg",
-    stars: 4,
-    reviews: 20,
-    cuisine: "Medi",
-    price: "$$$$",
-    area: "Hayes Valley",
-    bookings: 24,
-    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
-  },
-  {
-    id: "royal-dined",
-    name: "The Royal Dine",
-    image: "/images/restaurant6.jpg",
-    stars: 4,
-    reviews: 20,
-    cuisine: "French",
-    price: "$$$$",
-    area: "Mission District",
-    bookings: 24,
-    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
-  },
-  {
-    id: "royal-dines",
-    name: "The Royal Dine",
-    image: "/images/restaurant7.jpg",
-    stars: 4,
-    reviews: 20,
-    cuisine: "French",
-    price: "$$$$",
-    area: "Mission District",
-    bookings: 24,
-    times: ["1:30 PM", "2:00 PM", "2:30 PM"],
-  },
+const namePool = [
+  "The Royal Dine", "Vintage Bites", "Evening Delight", "River View Café", "Fancy Lights Bistro",
+  "Urban Palate", "Tandoori House", "Zen Sushi", "El Toro", "Bella Vita",
+  "Coastal Catch", "Harvest Table", "Crimson Spoon", "Golden Lotus", "The Hungry Fork",
+  "Ocean's Plate", "Fire & Spice", "Olive & Vine", "La Bella Cucina", "Sunset Grill",
+  "Noir Brasserie", "Blue Orchid", "Saffron Garden", "Rustic Roots", "Amber Lounge",
+  "Bistro Lumière", "Maple Hearth", "Oak & Ember", "Peppercorn Place", "The Local Dish",
+  "Cedar Grove Café", "Soleil Bistro", "Brickhouse Eats", "Wanderlust Grill", "The Nest",
+  "Cafe Verona", "Midtown Meals", "Ginger & Thyme", "Lavender & Sage", "Hearthstone Inn",
+  "Juniper Table", "The Garden Fork", "Twilight Tapas", "Meadow & Moor", "The Vine",
+  "Ember Flame", "Miso Modern", "The Borough", "Copper Kitchen", "Pine & Poppy"
 ];
+
+const cuisines = ["French", "Italian", "American", "Japanese", "Mexican", "Indian", "Thai", "Café", "Mediterranean"];
+const areas = ["Mission District", "SOMA", "North Beach", "Downtown", "Hayes Valley", "Nob Hill", "Japantown", "Embarcadero", "Marina"];
+
+const restaurants = Array.from({ length: 50 }, (_, i) => {
+  return {
+    id: `restaurant-${i + 1}`,
+    name: namePool[i % namePool.length],
+    image: `/images/restaurant${(i % 19) + 1}.jpg`,
+    stars: 3 + (i % 3),
+    reviews: 10 + (i % 30),
+    cuisine: cuisines[i % cuisines.length],
+    price: "$".repeat(2 + (i % 3)),
+    area: areas[i % areas.length],
+    bookings: 10 + (i % 50),
+    times: ["1:00 PM", "1:30 PM", "2:00 PM"],
+  };
+});
+
+
+// ✅ Split restaurants into unique sets per section
+const lunchRestaurants = restaurants.slice(0, 15);
+const iconRestaurants = restaurants.slice(15, 30);
+const awardRestaurants = restaurants.slice(30, 50);
 
 // Diners' Favorite Data
 const dinersFavorites = [
@@ -291,8 +241,8 @@ function CardScroller({ children }: { children: React.ReactNode }) {
       direction: dir > 0 ? "right" : "left",
       visibleCount: ref.current.children.length,
     });
-  
   };
+
   return (
     <div className="relative w-full">
       {showLeft && (
@@ -495,8 +445,13 @@ export default function HomePage() {
           Available for lunch now
         </h2>
         <CardScroller>
-          {filtered.map((r) => (
-            <RestaurantCard key={r.id} r={r} date={date} people={people} />
+          {lunchRestaurants.map((r) => (
+            <RestaurantCard
+              key={r.id + "-lunch"}
+              r={r}
+              date={date}
+              people={people}
+            />
           ))}
         </CardScroller>
       </section>
@@ -518,9 +473,9 @@ export default function HomePage() {
           </button>
         </div>
         <CardScroller>
-          {filtered.map((r) => (
+          {iconRestaurants.map((r) => (
             <RestaurantCard
-              key={r.id + "-icons"}
+              key={r.id + "-icon"}
               r={r}
               date={date}
               people={people}
@@ -533,7 +488,7 @@ export default function HomePage() {
       <section className="mt-8 px-4">
         <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
         <CardScroller>
-          {filtered.map((r) => (
+          {awardRestaurants.map((r) => (
             <RestaurantCard
               key={r.id + "-award"}
               r={r}
