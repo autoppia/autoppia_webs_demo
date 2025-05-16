@@ -286,6 +286,12 @@ function CardScroller({ children }: { children: React.ReactNode }) {
   const scroll = (dir: number) => {
     if (!ref.current) return;
     ref.current.scrollBy({ left: dir * scrollByAmount, behavior: "smooth" });
+
+    logEvent("SCROLL_VIEW", {
+      direction: dir > 0 ? "right" : "left",
+      visibleCount: ref.current.children.length,
+    });
+  
   };
   return (
     <div className="relative w-full">

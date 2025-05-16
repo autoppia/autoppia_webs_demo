@@ -1,29 +1,24 @@
 [
   {
-    "event_name": "OCCASION_SELECTED",
+    "event_name": "SCROLL_VIEW",
     "web_agent_id": null,
     "user_id": null,
     "data": {
-      "occasion": "anniversary"
+      "direction": "right",
+      "visibleCount": 7,
+      "scrollPosition": 0
     },
-    "timestamp": "2025-05-16T06:48:36.730Z"
+    "timestamp": "2025-05-16T06:58:00.963Z"
   },
   {
-    "event_name": "RESERVATION_COMPLETE",
+    "event_name": "SCROLL_VIEW",
     "web_agent_id": null,
     "user_id": null,
     "data": {
-      "restaurantId": "royal-dine",
-      "date": "Jul 18",
-      "time": "1:30 PM",
-      "people": "2 people",
-      "countryCode": "AR",
-      "countryName": "Argentina",
-      "phoneNumber": "12",
-      "occasion": "anniversary",
-      "specialRequest": "2",
-      "email": "user_name@gmail.com"
+      "direction": "left",
+      "visibleCount": 7,
+      "scrollPosition": 520
     },
-    "timestamp": "2025-05-16T06:48:38.507Z"
+    "timestamp": "2025-05-16T06:58:09.291Z"
   }
 ]
