@@ -8,4 +8,4 @@ rm -rf package-lock.json .next
 npm install
 
 # Run the dev server
-npm run dev -- -p 8002
+npm run dev -- -p 8003

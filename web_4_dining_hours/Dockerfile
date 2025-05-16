@@ -16,8 +16,8 @@ COPY . .
 # Ensure entrypoint script is executable
 RUN chmod +x ./entrypoint.sh
 
-# Expose your app port (used in npm run dev -- -p 8002)
-EXPOSE 8002
+# Expose your app port (used in npm run dev -- -p 8003)
+EXPOSE 8003
 
 # Set the entrypoint
 ENTRYPOINT ["sh", "./entrypoint.sh"]
