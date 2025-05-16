@@ -70,7 +70,7 @@ export default function Page() {
   const [specialRequest, setSpecialRequest] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
-
+  const [email, setEmail] = useState("user_name@gmail.com");
   const params = useParams();
   const search = useSearchParams();
   const restaurantId = params.restaurantId as string;
@@ -94,6 +94,7 @@ export default function Page() {
       phoneNumber,
       occasion,
       specialRequest,
+      email
     });
     setShowToast(true);
     setTimeout(() => setShowToast(false), 4000); // hide after 3s
@@ -205,16 +206,18 @@ export default function Page() {
                 }}
               />
             </div>
-              {phoneError && (
-                <p className="text-red-500 text-sm mt-1 ml-1">
-                  Phone number is required.
-                </p>
-              )}
+            {phoneError && (
+              <p className="text-red-500 text-sm mt-1 ml-1">
+                Phone number is required.
+              </p>
+            )}
           </div>
           <input
             type="email"
-            placeholder="user_name@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="flex-1 border px-3 py-2 rounded min-w-[220px] bg-gray-100 text-gray-800"
+            disabled
           />
         </div>
         <div className="flex gap-2 mb-4 flex-wrap">

@@ -12,6 +12,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import React from "react";
 import Image from "next/image";
+import { EVENT_TYPES, logEvent } from "@/components/library/events";
 
 const restaurantData: Record<string, any> = {
   "royal-dine": {
@@ -72,15 +73,29 @@ export default function RestaurantPage() {
   const [people, setPeople] = useState(2);
   const [date, setDate] = useState(new Date(2024, 6, 18));
   const [time, setTime] = useState("1:00 PM");
-  const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
-  const timeOptions = [
-    "12:00 PM",
-    "12:30 PM",
-    "1:00 PM",
-    "1:30 PM",
-    "2:00 PM",
-    "2:30 PM",
-  ];
+  const [showFullMenu, setShowFullMenu] = useState(false);
+
+  const formattedDate = format(date, "yyyy-MM-dd");
+
+  const handleToggleMenu = () => {
+    const newState = !showFullMenu;
+    setShowFullMenu(newState);
+
+    logEvent(newState ? EVENT_TYPES.VIEW_FULL_MENU : EVENT_TYPES.COLLAPSE_MENU, {
+      restaurantId: id,
+      restaurantName: r.name,
+      action: newState ? "view_full_menu" : "collapse_menu",
+      time,
+      date: formattedDate,
+      people,
+      menu: newState ? [
+        { category: "Mains", items: [
+          { name: "Coq au Vin", price: "$26.00" },
+          { name: "Ratatouille", price: "$20.00" }
+        ] }
+      ] : [],
+    });
+  };
 
   return (
     <main>
@@ -159,45 +174,48 @@ export default function RestaurantPage() {
                 Main Menu
               </button>
             </div>
-            {/* Category: starters */}
-            <div className="font-bold text-lg mb-3 mt-6">starters</div>
-            <div className="flex justify-between mb-2">
-              <span className="font-semibold">Cheese Board</span>
-              <span className="font-bold">$14.00</span>
-              <span className="font-semibold">Smoked Salmon Tartine</span>
-              <span className="font-bold">$12.00</span>
-            </div>
-            <div className="flex justify-between text-gray-600 text-sm mb-2">
-              <span>assorted artisan cheeses</span>
-              <span></span>
-              <span>capers, crème fraîche</span>
-              <span></span>
-            </div>
-            <div className="flex justify-between mb-2">
-              <span className="font-semibold">Escargot</span>
-              <span className="font-bold">$16.00</span>
-              <span></span>
-              <span></span>
-            </div>
-            <div className="flex justify-between text-gray-600 text-sm mb-2">
-              <span>with garlic butter</span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <hr className="my-6" />
-            {/* Category: mains */}
-            <div className="font-bold text-lg mb-3">mains</div>
-            <div className="flex justify-between mb-2">
-              <span className="font-semibold">Coq au Vin</span>
-              <span className="font-bold">$26.00</span>
-              <span className="font-semibold">Ratatouille</span>
-              <span className="font-bold">$20.00</span>
-            </div>
-            <div className="flex justify-center my-7">
-              <button className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50">
-                View full menu
-              </button>
+            <div className="space-y-6">
+              <div>
+                <div className="font-bold text-lg mb-3">Starters</div>
+                <div className="grid grid-cols-2 gap-y-2">
+                  <div>
+                    <div className="font-semibold">Cheese Board</div>
+                    <div className="text-sm text-gray-600">assorted artisan cheeses</div>
+                  </div>
+                  <div className="text-right font-bold">$14.00</div>
+
+                  <div>
+                    <div className="font-semibold">Smoked Salmon Tartine</div>
+                    <div className="text-sm text-gray-600">capers, crème fraîche</div>
+                  </div>
+                  <div className="text-right font-bold">$12.00</div>
+
+                  <div>
+                    <div className="font-semibold">Escargot</div>
+                    <div className="text-sm text-gray-600">with garlic butter</div>
+                  </div>
+                  <div className="text-right font-bold">$16.00</div>
+                </div>
+              </div>
+              {showFullMenu && (
+                <div>
+                  <div className="font-bold text-lg mb-3">Mains</div>
+                  <div className="grid grid-cols-2 gap-y-2">
+                    <div className="font-semibold">Coq au Vin</div>
+                    <div className="text-right font-bold">$26.00</div>
+                    <div className="font-semibold">Ratatouille</div>
+                    <div className="text-right font-bold">$20.00</div>
+                  </div>
+                </div>
+              )}
+              <div className="flex justify-center my-7">
+                <Button
+                  className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
+                  onClick={handleToggleMenu}
+                >
+                  {showFullMenu ? "Collapse menu" : "View full menu"}
+                </Button>
+              </div>
             </div>
           </section>
           {/* Reviews Section */}
