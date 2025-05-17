@@ -37,17 +37,21 @@ const namePool = [
 const cuisines = ["French", "Italian", "American", "Japanese", "Mexican", "Indian", "Thai", "Café", "Mediterranean"];
 const areas = ["Mission District", "SOMA", "North Beach", "Downtown", "Hayes Valley", "Nob Hill", "Japantown", "Embarcadero", "Marina"];
 
+function randomInt(min:any, max:any) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const restaurants = Array.from({ length: 50 }, (_, i) => {
   return {
     id: `restaurant-${i + 1}`,
     name: namePool[i % namePool.length],
     image: `/images/restaurant${(i % 19) + 1}.jpg`,
-    stars: 3 + (i % 3),
-    reviews: 10 + (i % 30),
+    stars: randomInt(3, 5),
+    reviews: randomInt(5, 100),
     cuisine: cuisines[i % cuisines.length],
-    price: "$".repeat(2 + (i % 3)),
+    price: "$".repeat(randomInt(2, 4)),
+    bookings: randomInt(5, 80),
     area: areas[i % areas.length],
-    bookings: 10 + (i % 50),
     times: ["1:00 PM", "1:30 PM", "2:00 PM"],
   };
 });
@@ -244,7 +248,7 @@ function CardScroller({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" suppressHydrationWarning>
       {showLeft && (
         <button
           onClick={() => scroll(-1)}
