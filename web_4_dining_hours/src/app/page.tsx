@@ -37,25 +37,25 @@ const namePool = [
 const cuisines = ["French", "Italian", "American", "Japanese", "Mexican", "Indian", "Thai", "Café", "Mediterranean"];
 const areas = ["Mission District", "SOMA", "North Beach", "Downtown", "Hayes Valley", "Nob Hill", "Japantown", "Embarcadero", "Marina"];
 
-function randomInt(min:any, max:any) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+const staticReviews = [18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48, 60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90, 96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88];
+const staticBookings = [6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92, 94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83, 93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90];
+const staticStars = [3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4];
+const staticPrices = ["$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$"];
 
 const restaurants = Array.from({ length: 50 }, (_, i) => {
   return {
     id: `restaurant-${i + 1}`,
-    name: namePool[i % namePool.length],
+    name: namePool[i],
     image: `/images/restaurant${(i % 19) + 1}.jpg`,
-    stars: randomInt(3, 5),
-    reviews: randomInt(5, 100),
+    stars: staticStars[i],
+    reviews: staticReviews[i],
     cuisine: cuisines[i % cuisines.length],
-    price: "$".repeat(randomInt(2, 4)),
-    bookings: randomInt(5, 80),
+    price: staticPrices[i],
+    bookings: staticBookings[i],
     area: areas[i % areas.length],
     times: ["1:00 PM", "1:30 PM", "2:00 PM"],
   };
 });
-
 
 // ✅ Split restaurants into unique sets per section
 const lunchRestaurants = restaurants.slice(0, 15);
@@ -284,7 +284,10 @@ export default function HomePage() {
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
   const [search, setSearch] = useState("");
-
+  const [dateOpen, setDateOpen] = useState(false);
+  const [timeOpen, setTimeOpen] = useState(false);
+  const [peopleOpen, setPeopleOpen] = useState(false);
+  
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
     if (d)
@@ -355,7 +358,7 @@ export default function HomePage() {
       {/* Controls Bar */}
       <section className="flex flex-wrap items-center gap-4 mt-8 mb-4 px-4">
         {/* Date Picker */}
-        <Popover>
+        <Popover open={dateOpen} onOpenChange={setDateOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
@@ -369,13 +372,17 @@ export default function HomePage() {
             <Calendar
               mode="single"
               selected={date}
-              onSelect={handleDateSelect}
+              onSelect={(d) => {
+                setDate(d);
+                setDateOpen(false); // ✅ close calendar
+                if (d) logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+              }}
               initialFocus
             />
           </PopoverContent>
         </Popover>
         {/* Time Dropdown */}
-        <Popover>
+        <Popover open={timeOpen} onOpenChange={setTimeOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
@@ -394,6 +401,7 @@ export default function HomePage() {
                 className="w-full justify-start"
                 onClick={() => {
                   setTime(t);
+                  setTimeOpen(false); // ✅ close time popover
                   logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
                 }}
               >
@@ -403,7 +411,7 @@ export default function HomePage() {
           </PopoverContent>
         </Popover>
         {/* People Dropdown */}
-        <Popover>
+        <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
@@ -422,6 +430,7 @@ export default function HomePage() {
                 className="w-full justify-start"
                 onClick={() => {
                   setPeople(n);
+                  setPeopleOpen(false); // ✅ close people popover
                   logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
                 }}
               >
@@ -449,7 +458,7 @@ export default function HomePage() {
           Available for lunch now
         </h2>
         <CardScroller>
-          {lunchRestaurants.map((r) => (
+          {filtered.map((r) => (
             <RestaurantCard
               key={r.id + "-lunch"}
               r={r}

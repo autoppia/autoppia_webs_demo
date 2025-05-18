@@ -14,57 +14,61 @@ import React from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 
-const restaurantData: Record<string, any> = {
-  "royal-dine": {
-    name: "The Royal Dine",
-    image: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    rating: 4.2,
-    reviews: 20,
-    price: "$50 to $100",
-    cuisine: "French",
-  },
-  "vintage-bites": {
-    name: "Vintage Bites",
-    image: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    rating: 4.2,
-    reviews: 20,
-    price: "$15 to $25",
-    cuisine: "American",
-    tags: ["cozy", "vintage", "charming"],
-    desc: "Step into a retro-inspired eatery serving up classic dishes with a modern twist. The cozy and nostalgic atmosphere makes it a perfect spot for a trip down memory lane.",
-    photos: [
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1555992336-03a23c5cfeba?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop",
-    ],
-  },
-  "evening-delight": {
-    name: "Evening Delight",
-    image: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    rating: 4.2,
-    reviews: 20,
-    price: "$30 to $60",
-    cuisine: "Italian",
-  },
-  "river-view-cafe": {
-    name: "River View Café",
-    image: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    rating: 4.2,
-    reviews: 20,
-    price: "$20 to $60",
-    cuisine: "Café",
-  },
-  "fancy-lights-bistro": {
-    name: "Fancy Lights Bistro",
-    image: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    rating: 4.33,
-    reviews: 20,
-    price: "$15 to $25",
-    cuisine: "Mediterranean",
-  },
-};
+const restaurantData: Record<string, {
+  name: string;
+  image: string;
+  rating: number;
+  reviews: number;
+  bookings: number;
+  price: string;
+  cuisine: string;
+  tags: string[];
+  desc: string;
+  photos: string[];
+}> = {};
+
+const namePool = [
+  "The Royal Dine", "Vintage Bites", "Evening Delight", "River View Café", "Fancy Lights Bistro",
+  "Urban Palate", "Tandoori House", "Zen Sushi", "El Toro", "Bella Vita",
+  "Coastal Catch", "Harvest Table", "Crimson Spoon", "Golden Lotus", "The Hungry Fork",
+  "Ocean's Plate", "Fire & Spice", "Olive & Vine", "La Bella Cucina", "Sunset Grill",
+  "Noir Brasserie", "Blue Orchid", "Saffron Garden", "Rustic Roots", "Amber Lounge",
+  "Bistro Lumière", "Maple Hearth", "Oak & Ember", "Peppercorn Place", "The Local Dish",
+  "Cedar Grove Café", "Soleil Bistro", "Brickhouse Eats", "Wanderlust Grill", "The Nest",
+  "Cafe Verona", "Midtown Meals", "Ginger & Thyme", "Lavender & Sage", "Hearthstone Inn",
+  "Juniper Table", "The Garden Fork", "Twilight Tapas", "Meadow & Moor", "The Vine",
+  "Ember Flame", "Miso Modern", "The Borough", "Copper Kitchen", "Pine & Poppy"
+];
+
+const cuisines = ["French", "Italian", "American", "Japanese", "Mexican", "Indian", "Thai", "Café", "Mediterranean"];
+const areas = ["Mission District", "SOMA", "North Beach", "Downtown", "Hayes Valley", "Nob Hill", "Japantown", "Embarcadero", "Marina"];
+const staticReviews = [18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48, 60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90, 96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88];
+const staticBookings = [6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92, 94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83, 93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90];
+const staticStars = [3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4];
+const staticPrices = ["$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$"];
+
+const photos = [
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+];
+
+for (let i = 0; i < 50; i++) {
+  const id = `restaurant-${i + 1}`;
+  restaurantData[id] = {
+    name: namePool[i],
+    image: `/images/restaurant${(i % 19) + 1}.jpg`,
+    rating: staticStars[i],
+    reviews: staticReviews[i],
+    bookings: staticBookings[i],
+    price: staticPrices[i],
+    cuisine: cuisines[i % cuisines.length],
+    tags: ["cozy", "modern", "casual"],
+    desc: `Enjoy a delightful experience at ${namePool[i]}, offering a fusion of flavors in the heart of ${areas[i % areas.length]}.`,
+    photos: photos,
+  };
+}
+
 
 export default function RestaurantPage() {
   const params = useParams();
