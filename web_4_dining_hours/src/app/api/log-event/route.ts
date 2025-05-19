@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     };
 
-    // Save to local JSON file
     let logs: any[] = [];
     if (fs.existsSync(LOG_PATH)) {
       logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
@@ -33,14 +32,16 @@ export async function POST(req: NextRequest) {
     logs.push(newEntry);
     fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
 
-    // ✅ Also forward to external backend
+    // ✅ External API expects all fields in JSON body
     const externalPayload = {
-      web_agent_id: webAgentIdHeader,
+      web_agent_id: webAgentIdHeader || null,
       web_url: req.headers.get('referer') || null,
-      data: newEntry,
+      data,
     };
+
     console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
-    await fetch('http://localhost:8080/save_events', {
+
+    await fetch('http://0.0.0.0:8080/save_events', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
