@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch (err) {
-    return NextResponse.json({ success: false, error: 'Invalid or empty JSON body' }, { status: 400 });
+    console.error("Error logging event:", err);
+    return NextResponse.json({ success: false, error: 'Failed to log event.' }, { status: 500 });
   }
 
   const webAgentIdHeader = req.headers.get('X-WebAgent-Id');
@@ -36,6 +37,22 @@ export async function POST(req: NextRequest) {
 
   logs.push(newEntry);
   fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
+  // :white_check_mark: External API expects all fields in JSON body
+  const externalPayload = {
+    web_agent_id: webAgentIdHeader || null,
+    web_url: req.headers.get('referer') || null,
+    data,
+  };
+
+  console.log(":rocket: Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+
+  await fetch('http://0.0.0.0:8080/save_events', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(externalPayload),
+  });
   return NextResponse.json({ success: true });
 }
 
