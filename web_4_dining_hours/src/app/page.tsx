@@ -136,6 +136,9 @@ function RestaurantCard({
           logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
             restaurantId: r.id,
             restaurantName: r.name,
+            cuisine:r.cuisine,
+            area:r.area,
+            reviews:r.reviews
           })
         }
       >
