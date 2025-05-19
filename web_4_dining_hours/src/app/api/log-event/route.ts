@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     };
 
+    // Save to local JSON file
     let logs: any[] = [];
     if (fs.existsSync(LOG_PATH)) {
       logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
@@ -32,8 +33,24 @@ export async function POST(req: NextRequest) {
     logs.push(newEntry);
     fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
 
+    // ✅ Also forward to external backend
+    const externalPayload = {
+      web_agent_id: webAgentIdHeader,
+      web_url: req.headers.get('referer') || null,
+      data: newEntry,
+    };
+    console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+    await fetch('http://localhost:8080/save_events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(externalPayload),
+    });
+
     return NextResponse.json({ success: true });
   } catch (err) {
+    console.error("Error logging event:", err);
     return NextResponse.json({ success: false, error: 'Failed to log event.' }, { status: 500 });
   }
 }
