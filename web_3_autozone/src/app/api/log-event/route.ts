@@ -37,7 +37,6 @@ export async function POST(req: NextRequest) {
 
   logs.push(newEntry);
   fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
-  // :white_check_mark: External API expects all fields in JSON body
   const externalPayload = {
     web_agent_id: webAgentIdHeader || null,
     web_url: req.headers.get('referer') || null,
@@ -46,14 +45,45 @@ export async function POST(req: NextRequest) {
 
   console.log(":rocket: Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
 
-  await fetch('http://0.0.0.0:8080/save_events', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(externalPayload),
-  });
-  return NextResponse.json({ success: true });
+  try {
+    const externalResponse = await fetch('http://app:8080/save_events/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WebAgent-Id': webAgentIdHeader || '',
+      },
+      body: JSON.stringify(externalPayload),
+    });
+
+    // Check if the response status indicates success (e.g., 2xx)
+    if (externalResponse.ok) {
+      console.log(":white_check_mark: Event successfully forwarded to external backend.");
+      return NextResponse.json({
+        success: true,
+        message: "Event logged locally and forwarded successfully."
+      }, { status: 200 });
+
+    } else {
+      // If external API returned a non-2xx status
+      const errorBody = await externalResponse.text(); // or .json() if expecting JSON error details
+      console.error(`:x: Failed to forward event to external backend. Status: ${externalResponse.status}. Body: ${errorBody}`);
+       return NextResponse.json({
+        success: false,
+        error: "Failed to forward event to external backend.",
+        statusCode: externalResponse.status,
+        externalError: errorBody,
+      }, { status: 500 });
+
+    }
+
+  } catch (fetchErr) {
+    console.error(":x: Network error while forwarding event to external backend:", fetchErr);
+    return NextResponse.json({
+      success: false,
+      error: `Network error forwarding event to external backend: ${fetchErr.message}`,
+    }, { status: 500 }); // Use 500 for server-side error
+
+  }
 }
 
 export async function GET() {
