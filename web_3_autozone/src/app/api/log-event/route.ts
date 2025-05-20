@@ -41,14 +41,14 @@ export async function POST(req: NextRequest) {
 
   // ✅ External API expects single event object as `data`
   const externalPayload = {
-    web_agent_id: "88b09cfd-8338-4b0d-8fbb-96449078c770",
-    web_url: req.headers.get('referer') || null,
+    web_agent_id: webAgentIdHeader || null,
+    web_url: req.headers.get('referer'),
     data: newEntry,
   };
 
   console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
 
-  await fetch('http://app:8080/save_events/', {
+  await fetch('http://app:8080/save_events', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
