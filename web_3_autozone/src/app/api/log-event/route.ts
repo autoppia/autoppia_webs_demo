@@ -9,10 +9,19 @@ export async function POST(req: NextRequest) {
   let body: any;
 
   try {
-    body = await req.json();
+    if (!req.headers.get('content-type')?.includes('application/json')) {
+      return NextResponse.json({ success: false, error: 'Invalid Content-Type' }, { status: 400 });
+    }
+
+    const rawText = await req.text();
+    if (!rawText) {
+      return NextResponse.json({ success: false, error: 'Empty request body' }, { status: 400 });
+    }
+
+    body = JSON.parse(rawText);
   } catch (err) {
-    console.error("Error logging event:", err);
-    return NextResponse.json({ success: false, error: 'Failed to log event.' }, { status: 500 });
+    console.error("Error parsing request body:", err);
+    return NextResponse.json({ success: false, error: 'Invalid JSON input' }, { status: 400 });
   }
 
   const webAgentIdHeader = req.headers.get('X-WebAgent-Id');
@@ -39,7 +48,6 @@ export async function POST(req: NextRequest) {
   logs.push(newEntry);
   fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
 
-  // ✅ External API expects single event object as `data`
   const externalPayload = {
     web_agent_id: webAgentIdHeader || null,
     web_url: req.headers.get('referer'),
@@ -58,7 +66,6 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
-
 export async function GET() {
   if (!fs.existsSync(LOG_PATH)) {
     return NextResponse.json({ logs: [] });
