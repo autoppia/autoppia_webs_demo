@@ -9,7 +9,7 @@ class EventName(models.TextChoices):
     BOOK_DETAIL = "BOOK_DETAIL", "Book Detail View"
     SEARCH_BOOK = "SEARCH_BOOK", "Search Book"
     ADD_BOOK = "ADD_BOOK", "Add Book"
-    EDIT_BOOK = "EDIT_BOOK", "Edit BOOK"
+    EDIT_BOOK = "EDIT_BOOK", "Edit Book"
     DELETE_BOOK = "DELETE_BOOK", "Delete Book"
     ADD_COMMENT = "ADD_COMMENT_BOOK", "Add Comment"
     REGISTRATION = "REGISTRATION_BOOK", "User Registration"
@@ -25,7 +25,7 @@ class EventName(models.TextChoices):
 class Event(models.Model):
     """
     Modelo para almacenar distintos tipos de eventos
-    relacionados con películas y acciones de usuario.
+    relacionados con libros y acciones de usuario.
     """
 
     # Campos básicos comunes a todos los eventos
@@ -50,32 +50,32 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.get_event_name_display()} at {self.timestamp}"
 
-    # -------------------- EVENTOS RELACIONADOS CON PELÍCULAS --------------------
+    # -------------------- EVENTOS RELACIONADOS CON LIBROS --------------------
 
     @classmethod
-    def create_book_detail_event(cls, user, web_agent_id, movie):
-        """Factory method para crear un evento de detalles de película."""
+    def create_book_detail_event(cls, user, web_agent_id, book):
+        """Factory method para crear un evento de detalles de libro."""
         event = cls(event_name=EventName.BOOK_DETAIL, user=user, web_agent_id=web_agent_id)
-        genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+        genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
-            "id": movie.id,
-            "name": movie.name,
-            "desc": movie.desc,
-            "year": movie.year,
-            "img": movie.img.url if movie.img else None,
-            "director": movie.director,
-            "duration": movie.duration,
-            "trailer_url": movie.trailer_url,
-            "rating": float(movie.rating),
+            "id": book.id,
+            "name": book.name,
+            "desc": book.desc,
+            "year": book.year,
+            "img": book.img.url if book.img else None,
+            "director": book.director,
+            "duration": book.duration,
+            "trailer_url": book.trailer_url,
+            "rating": float(book.rating),
             "genres": genres,
-            "created_at": movie.created_at.isoformat() if movie.created_at else None,
-            "updated_at": movie.updated_at.isoformat() if movie.updated_at else None,
+            "created_at": book.created_at.isoformat() if book.created_at else None,
+            "updated_at": book.updated_at.isoformat() if book.updated_at else None,
         }
         return event
 
     @classmethod
     def create_search_book_event(cls, user, web_agent_id, query):
-        """Factory method para crear un evento de búsqueda de película."""
+        """Factory method para crear un evento de búsqueda de libro."""
         event = cls(
             event_name=EventName.SEARCH_BOOK,
             user=user,
@@ -87,70 +87,70 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_add_book_event(cls, user, web_agent_id, movie):
-        """Factory method para crear un evento de añadir película."""
+    def create_add_book_event(cls, user, web_agent_id, book):
+        """Factory method para crear un evento de añadir libro."""
         event = cls(event_name=EventName.ADD_BOOK, user=user, web_agent_id=web_agent_id)
-        genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+        genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
-            "id": movie.id,
-            "userId": movie.userId,
-            "name": movie.name,
-            "desc": movie.desc,
-            "year": movie.year,
-            "img": movie.img.url if movie.img else None,
-            "director": movie.director,
-            "duration": movie.duration,
-            "trailer_url": movie.trailer_url,
-            "rating": float(movie.rating),
+            "id": book.id,
+            "userId": book.user.id,
+            "name": book.name,
+            "desc": book.desc,
+            "year": book.year,
+            "img": book.img.url if book.img else None,
+            "director": book.director,
+            "duration": book.duration,
+            "trailer_url": book.trailer_url,
+            "rating": float(book.rating),
             "genres": genres,
-            "created_at": movie.created_at.isoformat() if movie.created_at else None,
-            "updated_at": movie.updated_at.isoformat() if movie.updated_at else None,
+            "created_at": book.created_at.isoformat() if book.created_at else None,
+            "updated_at": book.updated_at.isoformat() if book.updated_at else None,
         }
         return event
 
     @classmethod
-    def create_edit_book_event(cls, user, web_agent_id, movie, previous_values=None, changed_fields=None):
-        """Factory method para crear un evento de editar película."""
+    def create_edit_book_event(cls, user, web_agent_id, book, previous_values=None, changed_fields=None):
+        """Factory method para crear un evento de editar libro."""
         event = cls(event_name=EventName.EDIT_BOOK, user=user, web_agent_id=web_agent_id)
-        genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+        genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
-            "id": movie.id,
-            "userId": movie.userId,
-            "name": movie.name,
-            "desc": movie.desc,
-            "year": movie.year,
-            "img": movie.img.url if movie.img else None,
-            "director": movie.director,
-            "duration": movie.duration,
-            "trailer_url": movie.trailer_url,
-            "rating": float(movie.rating),
+            "id": book.id,
+            "userId": book.user.id,
+            "name": book.name,
+            "desc": book.desc,
+            "year": book.year,
+            "img": book.img.url if book.img else None,
+            "director": book.director,
+            "duration": book.duration,
+            "trailer_url": book.trailer_url,
+            "rating": float(book.rating),
             "genres": genres,
-            "created_at": movie.created_at.isoformat() if movie.created_at else None,
-            "updated_at": movie.updated_at.isoformat() if movie.updated_at else None,
+            "created_at": book.created_at.isoformat() if book.created_at else None,
+            "updated_at": book.updated_at.isoformat() if book.updated_at else None,
             "previous_values": previous_values or {},
             "changed_fields": changed_fields or [],
         }
         return event
 
     @classmethod
-    def create_delete_book_event(cls, user, web_agent_id, movie):
-        """Factory method para crear un evento de eliminar película."""
+    def create_delete_book_event(cls, user, web_agent_id, book):
+        """Factory method para crear un evento de eliminar libro."""
         event = cls(event_name=EventName.DELETE_BOOK, user=user, web_agent_id=web_agent_id)
-        genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
+        genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
-            "id": movie.id,
-            "userId": movie.userId,
-            "name": movie.name,
-            "desc": movie.desc,
-            "year": movie.year,
-            "img": movie.img.url if movie.img else None,
-            "director": movie.director,
-            "duration": movie.duration,
-            "trailer_url": movie.trailer_url,
-            "rating": float(movie.rating),
+            "id": book.id,
+            "userId": book.user.id,
+            "name": book.name,
+            "desc": book.desc,
+            "year": book.year,
+            "img": book.img.url if book.img else None,
+            "director": book.director,
+            "duration": book.duration,
+            "trailer_url": book.trailer_url,
+            "rating": float(book.rating),
             "genres": genres,
-            "created_at": movie.created_at.isoformat() if movie.created_at else None,
-            "updated_at": movie.updated_at.isoformat() if movie.updated_at else None,
+            "created_at": book.created_at.isoformat() if book.created_at else None,
+            "updated_at": book.updated_at.isoformat() if book.updated_at else None,
         }
         return event
 
@@ -185,13 +185,13 @@ class Event(models.Model):
 
     @classmethod
     def create_purchase_book_event(cls, user, web_agent_id, book):
-        """Factory method to purchase a book event"""
+        """Factory method to create a purchase book event"""
         event = cls(event_name=EventName.PURCHASE_BOOK, user=user, web_agent_id=web_agent_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
 
         event.data = {
             "id": book.id,
-            "userId": book.userId,
+            "userId": book.user.id,
             "name": book.name,
             "desc": book.desc,
             "year": book.year,
@@ -215,7 +215,7 @@ class Event(models.Model):
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
             "id": book.id,
-            "userId": book.userId,
+            "userId": book.user.id,
             "name": book.name,
             "desc": book.desc,
             "year": book.year,
@@ -232,7 +232,7 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_add_comment_event(cls, user, web_agent_id, comment, movie):
+    def create_add_comment_event(cls, user, web_agent_id, comment, book):
         """Factory method para crear un evento de añadir comentario."""
         event = cls(event_name=EventName.ADD_COMMENT, user=user, web_agent_id=web_agent_id)
         event.data = {
@@ -241,10 +241,10 @@ class Event(models.Model):
             "content": comment.content,
             "created_at": comment.created_at.isoformat() if comment.created_at else None,
             "book": {
-                "id": movie.id,
-                "name": movie.name,
-                "director": movie.director,
-                "year": movie.year,
+                "id": book.id,
+                "name": book.name,
+                "director": book.director,
+                "year": book.year,
             },
         }
         return event

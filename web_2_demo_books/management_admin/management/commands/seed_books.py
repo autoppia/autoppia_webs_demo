@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.core.files import File
+from django.contrib.auth.models import User
 
 from booksapp.models import Book, Genre, Comment
 from django.apps import apps
@@ -34,9 +35,20 @@ class Command(BaseCommand):
     def _reset_database(self):
         """Fastest way to reset all data"""
         self.stdout.write("Resetting database...")
-        with ThreadPoolExecutor() as executor:
-            for model in apps.get_models():
-                executor.submit(model.objects.all().delete)
+        # Ordenar los modelos para evitar problemas de foreign key
+        models_to_reset = [
+            Comment,
+            Book,
+            Genre,
+        ]
+        
+        for model in models_to_reset:
+            try:
+                count = model.objects.all().delete()[0]
+                self.stdout.write(f"Deleted {count} {model.__name__} objects")
+            except Exception as e:
+                self.stdout.write(self.style.WARNING(f"Could not delete {model.__name__}: {e}"))
+        
         self.stdout.write(self.style.SUCCESS("All tables reset."))
 
     def _create_genres(self):
@@ -56,11 +68,18 @@ class Command(BaseCommand):
         # Prepare all book objects in memory first
         book_objects = []
         image_tasks = []
-
+        
         for index in range(1, 256):
+            try:
+                # Obtener el usuario para cada libro
+                user = User.objects.get(id=index)
+            except User.DoesNotExist:
+                self.stdout.write(self.style.WARNING(f"User with id {index} does not exist. Skipping book creation."))
+                continue
+                
             book_data = books_data[index % 10]
             book = Book(
-                userId=index,
+                user=user,  # Usar el objeto User completo
                 name=book_data["name"],
                 desc=book_data["desc"],
                 year=book_data["year"],
@@ -75,10 +94,12 @@ class Command(BaseCommand):
             # Prepare image path for later processing
             file_name = book_data["img_file"]
             local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
-            image_tasks.append((book, local_path, file_name))
+            image_tasks.append((book, local_path, file_name, index))
 
         # Bulk create all books at once
-        Book.objects.bulk_create(book_objects)
+        if book_objects:
+            Book.objects.bulk_create(book_objects)
+            self.stdout.write(f"Created {len(book_objects)} books")
 
         # Process images in parallel
         self._process_images(image_tasks)
@@ -87,8 +108,17 @@ class Command(BaseCommand):
         all_books = Book.objects.all()
         with ThreadPoolExecutor() as executor:
             for book in all_books:
-                book_data = books_data[book.userId % 10]
-                executor.submit(book.genres.add, *[genres[name] for name in book_data["genres"]])
+                # Usar user.id en lugar de userId
+                book_index = book.user.id % 10
+                book_data = books_data[book_index]
+                
+                genre_objects = []
+                for genre_name in book_data.get("genres", []):
+                    if genre_name in genres:
+                        genre_objects.append(genres[genre_name])
+                
+                if genre_objects:
+                    executor.submit(book.genres.add, *genre_objects)
 
         return list(all_books)
 
@@ -96,11 +126,21 @@ class Command(BaseCommand):
         """Process book images in parallel"""
 
         def process_task(task):
-            book, local_path, file_name = task
-            if os.path.exists(local_path):
-                with open(local_path, "rb") as f:
-                    book.img.save(file_name, File(f))
-                    book.save()
+            book, local_path, file_name, index = task
+            try:
+                # Primero obtener el libro de la base de datos
+                book = Book.objects.get(user_id=index)
+                
+                if os.path.exists(local_path):
+                    with open(local_path, "rb") as f:
+                        book.img.save(file_name, File(f))
+                        book.save()
+                else:
+                    self.stdout.write(self.style.WARNING(f"Image file not found: {local_path}"))
+            except Book.DoesNotExist:
+                self.stdout.write(self.style.WARNING(f"Book for user {index} not found"))
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Error processing image for book {index}: {e}"))
 
         with ThreadPoolExecutor() as executor:
             executor.map(process_task, image_tasks)
@@ -143,5 +183,6 @@ class Command(BaseCommand):
                 comment_objects.append(Comment(movie=book, name=name, content=text, created_at=comment_date))
 
         # Bulk create all comments at once
-        Comment.objects.bulk_create(comment_objects)
-        self.stdout.write(f"Added {len(comment_objects)} comments in bulk.")
+        if comment_objects:
+            Comment.objects.bulk_create(comment_objects)
+            self.stdout.write(f"Added {len(comment_objects)} comments in bulk.")

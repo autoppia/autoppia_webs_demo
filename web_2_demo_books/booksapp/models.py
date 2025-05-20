@@ -13,8 +13,7 @@ class Genre(models.Model):
 
 
 class Book(models.Model):
-    id = models.BigIntegerField(primary_key=True)
-    userId = models.BigIntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="books")
     name = models.CharField(max_length=250)
     desc = models.TextField()
     year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
@@ -69,13 +68,17 @@ class UserProfile(models.Model):
 
 
 class Cart(models.Model):
-    userId = models.BigIntegerField()
-    bookId = models.BigIntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cart_items")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="in_carts")
+
+    class Meta:
+        unique_together = ['user', 'book']
+
+    def __str__(self):
+        return f"{self.user.username}'s cart - {self.book.name}"
 
 
 # Signals para crear/guardar perfiles automáticamente
-
-
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

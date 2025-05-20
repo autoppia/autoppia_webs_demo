@@ -16,7 +16,7 @@ from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
 
 def index(request):
     """
-    Vista principal que muestra la lista de películas con opciones de búsqueda y filtrado.
+    Vista principal que muestra la lista de libros con opciones de búsqueda y filtrado.
     """
     # Obtener todos los géneros para el dropdown de filtro
     all_genres = Genre.objects.all().order_by("name")
@@ -29,12 +29,12 @@ def index(request):
     genre_filter = request.GET.get("genre", "")
     year_filter = request.GET.get("year", "")
 
-    # Comenzar con todas las películas
-    movies = Book.objects.all()
+    # Comenzar con todos los libros
+    books = Book.objects.all()
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
+        books = books.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
 
     from events.models import Event
 
@@ -56,7 +56,7 @@ def index(request):
         try:
             genre_id = int(genre_filter)
             genre_obj = Genre.objects.get(id=genre_id)
-            movies = movies.filter(genres=genre_obj)
+            books = books.filter(genres=genre_obj)
         except (ValueError, Genre.DoesNotExist):
             # ID de género inválido, ignorar filtro
             pass
@@ -66,7 +66,7 @@ def index(request):
         filter_applied = True
         try:
             year_value = int(year_filter)
-            movies = movies.filter(year=year_value)
+            books = books.filter(year=year_value)
         except ValueError:
             # Valor de año inválido, ignorar filtro
             pass
@@ -84,7 +84,7 @@ def index(request):
         filter_event.save()
 
     context = {
-        "movie_list": movies,
+        "book_list": books,
         "search_query": search_query,
         "genres": all_genres,
         "available_years": available_years,
@@ -100,42 +100,45 @@ def about(request):
 
 
 # =============================================================================
-#                            VISTAS DE PELÍCULAS
+#                            VISTAS DE LIBROS
 # =============================================================================
 
 
-def detail(request, movie_id):
+def detail(request, book_id):
     """
-    Vista de detalle de película: muestra información, películas relacionadas y comentarios.
+    Vista de detalle de libro: muestra información, libros relacionados y comentarios.
     Además, registra el evento de visualización de detalle.
     """
-    book = get_object_or_404(Book, id=movie_id)
+    book = get_object_or_404(Book, id=book_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
 
-    # Registrar evento de detalle de película
+    # Registrar evento de detalle de libro
     detail_event = Event.create_book_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, book)
     detail_event.save()
 
-    # Películas relacionadas
-    related_movies = []
+    # Libros relacionados
+    related_books = []
     if book.genres.exists():
-        related_movies = Book.objects.filter(genres__in=book.genres.all()).exclude(id=book.id).distinct()[:4]
+        related_books = Book.objects.filter(genres__in=book.genres.all()).exclude(id=book.id).distinct()[:4]
 
-    if len(related_movies) < 4:
-        more_movies = Book.objects.filter(year=book.year).exclude(id__in=[m.id for m in list(related_movies) + [book]])[: 4 - len(related_movies)]
-        related_movies = list(related_movies) + list(more_movies)
+    if len(related_books) < 4:
+        more_books = Book.objects.filter(year=book.year).exclude(id__in=[m.id for m in list(related_books) + [book]])[: 4 - len(related_books)]
+        related_books = list(related_books) + list(more_books)
 
-    if len(related_movies) < 4:
-        random_movies = Book.objects.exclude(id__in=[m.id for m in list(related_movies) + [book]]).order_by("?")[: 4 - len(related_movies)]
-        related_movies = list(related_movies) + list(random_movies)
+    if len(related_books) < 4:
+        random_books = Book.objects.exclude(id__in=[m.id for m in list(related_books) + [book]]).order_by("?")[: 4 - len(related_books)]
+        related_books = list(related_books) + list(random_books)
 
     comments = Comment.objects.filter(movie=book)
 
-    carts = Cart.objects.filter(userId=request.user.id)
+    if request.user.is_authenticated:
+        carts = Cart.objects.filter(user=request.user)
+    else:
+        carts = []
 
     context = {
-        "movie": book,
-        "related_movies": related_movies,
+        "book": book,
+        "related_books": related_books,
         "comments": comments,
         "carts": len(carts),
     }
@@ -143,20 +146,17 @@ def detail(request, movie_id):
 
 
 def shoppingcart(request):
-    userId = request.user.id
-    carts = Cart.objects.filter(userId=userId)
+    carts = Cart.objects.filter(user=request.user)
     books = []
     for cart in carts:
-        book = Book.objects.filter(id=cart.bookId).first()
-        print(book)
-        books.append(book)
+        books.append(cart.book)
 
-    return render(request, "shoppingcart.html", {"movies": books, "carts": len(carts)})
+    return render(request, "shoppingcart.html", {"books": books, "carts": len(carts)})
 
 
 def mybook(request):
     """
-    Vista principal que muestra la lista de películas con opciones de búsqueda y filtrado.
+    Vista principal que muestra la lista de libros con opciones de búsqueda y filtrado.
     """
     # Obtener todos los géneros para el dropdown de filtro
     all_genres = Genre.objects.all().order_by("name")
@@ -168,13 +168,13 @@ def mybook(request):
     search_query = request.GET.get("search", "")
     genre_filter = request.GET.get("genre", "")
     year_filter = request.GET.get("year", "")
-    print(request.user.id)
-    # Comenzar con todas las películas
-    movies = Book.objects.filter(userId=request.user.id)
+    
+    # Comenzar con todos los libros del usuario actual
+    books = Book.objects.filter(user=request.user)
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
+        books = books.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
 
     from events.models import Event
 
@@ -196,7 +196,7 @@ def mybook(request):
         try:
             genre_id = int(genre_filter)
             genre_obj = Genre.objects.get(id=genre_id)
-            movies = movies.filter(genres=genre_obj)
+            books = books.filter(genres=genre_obj)
         except (ValueError, Genre.DoesNotExist):
             # ID de género inválido, ignorar filtro
             pass
@@ -206,7 +206,7 @@ def mybook(request):
         filter_applied = True
         try:
             year_value = int(year_filter)
-            movies = movies.filter(year=year_value)
+            books = books.filter(year=year_value)
         except ValueError:
             # Valor de año inválido, ignorar filtro
             pass
@@ -224,7 +224,7 @@ def mybook(request):
         filter_event.save()
 
     context = {
-        "movie_list": movies,
+        "book_list": books,
         "search_query": search_query,
         "genres": all_genres,
         "available_years": available_years,
@@ -247,7 +247,7 @@ def payment_success(request, book_id):
         payment_success_event.save()
 
         if request.user.is_authenticated:
-            book_to_delete = Cart.objects.get(userId=request.user.id, bookId=book_id)
+            book_to_delete = Cart.objects.get(user=request.user, book_id=book_id)
             book_to_delete.delete()
         return render(request, "payment_success.html", {"book": book})
 
@@ -255,15 +255,12 @@ def payment_success(request, book_id):
 
 
 def carts_count(request):
-    userId = request.user.id
-    carts = Cart.objects.filter(userId=userId)
-
+    carts = Cart.objects.filter(user=request.user)
     return JsonResponse({"count": len(carts)})
 
 
 def delete_cart(request, id):
-    userId = request.user.id
-    cart = Cart.objects.filter(userId=userId, bookId=id)
+    cart = Cart.objects.filter(user=request.user, book_id=id)
     cart.delete()
 
     messages.success(request, "Book has been deleted from Cart.")
@@ -272,19 +269,23 @@ def delete_cart(request, id):
 
 def add_book(request):
     """
-    Vista para agregar una nueva película y registrar el evento de ADD_FILM.
+    Vista para agregar un nuevo libro y registrar el evento de ADD_BOOK.
     """
     all_genres = Genre.objects.all().order_by("name")
     if request.method == "POST":
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
-            book = form.save()
-            add_film_event = Event.create_add_book_event(
+            book = form.save(commit=False)
+            book.user = request.user  # Asignar el usuario actual al libro
+            book.save()
+            form.save_m2m()  # Guardar las relaciones many-to-many
+            
+            add_book_event = Event.create_add_book_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
-                movie=book,
+                book=book,
             )
-            add_film_event.save()
+            add_book_event.save()
             messages.success(request, "Book added successfully.")
             return redirect("booksapp:index")
         else:
@@ -298,13 +299,13 @@ def add_book(request):
 
 def update_book(request, id):
     """
-    Vista para actualizar una película existente.
-    Registra el evento de EDIT_FILM si se detectan cambios.
+    Vista para actualizar un libro existente.
+    Registra el evento de EDIT_BOOK si se detectan cambios.
     """
     book = get_object_or_404(Book, id=id)
     original_values = {
         "name": book.name,
-        "userId": book.userId,
+        "user": book.user.id,
         "desc": book.desc,
         "year": book.year,
         "director": book.director,
@@ -339,57 +340,56 @@ def update_book(request, id):
                 changed_fields.append("genres")
 
             if changed_fields:
-                edit_film_event = Event.create_edit_book_event(
+                edit_book_event = Event.create_edit_book_event(
                     user=request.user if request.user.is_authenticated else None,
                     web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
-                    movie=updated_book,
+                    book=updated_book,
                     previous_values=original_values,
                     changed_fields=changed_fields,
                 )
-                edit_film_event.save()
+                edit_book_event.save()
                 updated_book.save()
-            messages.success(request, "Movie updated successfully.")
-            return redirect("booksapp:detail", movie_id=id)
+            messages.success(request, "Book updated successfully.")
+            return redirect("booksapp:detail", book_id=id)
         else:
             messages.error(request, "Please correct the errors in the form.")
     else:
         form = BookForm(instance=book)
 
-    return render(request, "edit.html", {"form": form, "movie": book})
+    return render(request, "edit.html", {"form": form, "book": book})
 
 
 def delete_book(request, id):
     """
-    Vista para eliminar una película y registrar el evento de DELETE_FILM.
+    Vista para eliminar un libro y registrar el evento de DELETE_BOOK.
     """
     book = get_object_or_404(Book, id=id)
 
     if request.method == "POST":
-        delete_film_event = Event.create_delete_book_event(
+        delete_book_event = Event.create_delete_book_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
-            movie=book,
+            book=book,
         )
-        delete_film_event.save()
+        delete_book_event.save()
         book.delete()
-        messages.success(request, "Movie deleted successfully.")
+        messages.success(request, "Book deleted successfully.")
         return redirect("/")
-    return render(request, "delete.html", {"movie": book})
+    return render(request, "delete.html", {"book": book})
 
 
 def add_to_cart(request, id):
     if request.method == "GET":
         print("Add the book to the shopping cart.")
-        userId = request.user.id
-        bookId = id
 
-        if Cart.objects.filter(userId=request.user.id, bookId=id).exists():
+        book = Book.objects.get(id=id)
+        
+        if Cart.objects.filter(user=request.user, book=book).exists():
             messages.warning(request, "This book was already added to shopping cart.")
         else:
-            Cart.objects.create(userId=userId, bookId=bookId)
-
+            Cart.objects.create(user=request.user, book=book)
             messages.success(request, "Book added to the shopping cart.")
-        book = Book.objects.get(id=id)
+            
         add_to_cart_event = Event.create_shoppingcart_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
@@ -397,15 +397,15 @@ def add_to_cart(request, id):
         )
         add_to_cart_event.save()
 
-        return redirect("booksapp:detail", movie_id=id)
+        return redirect("booksapp:detail", book_id=id)
 
 
-def add_comment(request, movie_id):
+def add_comment(request, book_id):
     """
-    Vista para agregar un comentario a una película.
+    Vista para agregar un comentario a un libro.
     Registra el evento de añadir comentario y, si la solicitud es AJAX, devuelve una respuesta JSON.
     """
-    book = get_object_or_404(Book, id=movie_id)
+    book = get_object_or_404(Book, id=book_id)
 
     if request.method == "POST":
         name = request.POST.get("name", "")
@@ -440,10 +440,10 @@ def add_comment(request, movie_id):
                 )
 
             messages.success(request, "Your comment has been added successfully!")
-            return redirect("booksapp:detail", movie_id=book.id)
+            return redirect("booksapp:detail", book_id=book.id)
 
     messages.error(request, "There was a problem with your comment.")
-    return redirect("booksapp:detail", movie_id=book.id)
+    return redirect("booksapp:detail", book_id=book.id)
 
 
 def genre_list(request):
@@ -456,11 +456,11 @@ def genre_list(request):
 
 def genre_detail(request, genre_id):
     """
-    Vista que muestra los detalles de un género y las películas asociadas.
+    Vista que muestra los detalles de un género y los libros asociados.
     """
     genre = get_object_or_404(Genre, id=genre_id)
-    movies = Book.objects.filter(genres=genre)
-    context = {"genre": genre, "movies": movies}
+    books = Book.objects.filter(genres=genre)
+    context = {"genre": genre, "books": books}
     return render(request, "genres_detail.html", context)
 
 
@@ -579,9 +579,6 @@ def register_view(request):
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
             register_event = Event.create_registration_event(user, web_agent_id)
             register_event.save()
-            # login(request, user)
-            # login_event = Event.create_login_event(user, web_agent_id)
-            # login_event.save()
             messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect("booksapp:index")
 

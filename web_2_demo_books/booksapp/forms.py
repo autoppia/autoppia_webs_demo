@@ -19,10 +19,9 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ["name", "userId", "desc", "year", "director", "duration", "trailer_url", "rating", "genres"]
+        fields = ["name", "desc", "year", "director", "duration", "trailer_url", "rating", "genres"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter the book name"}),
-            "userId": forms.NumberInput(attrs={"class": "form-control", "placeholder": "Enter the user id"}),
             "desc": forms.Textarea(
                 attrs={
                     "class": "form-control",
@@ -64,11 +63,11 @@ class BookForm(forms.ModelForm):
             "genres": forms.HiddenInput(),  # Hide the ManyToMany field in the form
         }
         labels = {
-            "name": "Movie Title",
-            "userId": "User Id",
+            "name": "Book Title",
+            "user": "User",  # Cambio de "User Id" a "User"
             "desc": "Synopsis",
             "year": "Release Year",
-            "img": "Movie Poster",
+            "img": "Book Poster",
             "director": "Director",
             "duration": "Duration (minutes)",
             "trailer_url": "Trailer URL",
@@ -80,19 +79,14 @@ class BookForm(forms.ModelForm):
     def save(self, commit=True):
         book = super().save(commit=False)
         book.img = None
-        if not book.id:
-            import random
-
-            book.id = random.randint(1000, (2**63 - 1))
-
+        # Eliminamos la generación manual de ID ya que Django lo hace automáticamente
+        
         if commit:
             book.save()
             book.img = self.cleaned_data["img"] or None
             genre = self.cleaned_data["genre"]
             book.genres.add(genre)
         return book
-
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

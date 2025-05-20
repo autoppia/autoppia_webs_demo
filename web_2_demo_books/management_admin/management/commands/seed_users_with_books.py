@@ -409,7 +409,7 @@ class Command(BaseCommand):
                     if book_id in created_user_ids:
                         book = Book(
                             id=book_id,
-                            userId=user_id,
+                            user=user,  # Ahora es una ForeignKey, necesitas pasar el objeto User
                             name=book_data["name"],
                             desc=book_data["desc"],
                             year=book_data["year"],
@@ -566,7 +566,13 @@ class Command(BaseCommand):
     def _set_increment_to_257(self):
         if connection.vendor == "postgresql":
             with connection.cursor() as cursor:
-                cursor.execute("SELECT setval('auth_user_id_seq', 257, false);")  # Set next val to 257
+                # Establecer el próximo ID de usuario en 257
+                cursor.execute("SELECT setval('auth_user_id_seq', 257, false);")
+                # Establecer el próximo ID de libro en 257
+                cursor.execute("SELECT setval('booksapp_book_id_seq', 257, false);")
         elif connection.vendor == "mysql":
             with connection.cursor() as cursor:
+                # Establecer el auto-increment de usuarios en 257
                 cursor.execute("ALTER TABLE auth_user AUTO_INCREMENT = 257;")
+                # Establecer el auto-increment de libros en 257
+                cursor.execute("ALTER TABLE booksapp_book AUTO_INCREMENT = 257;")
