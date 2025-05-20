@@ -6,54 +6,47 @@ import path from 'path';
 const LOG_PATH = path.join(process.cwd(), 'event-log.json');
 
 export async function POST(req: NextRequest) {
+  let body: any;
   try {
-    const body = await req.json();
-    const webAgentIdHeader = req.headers.get('X-WebAgent-Id');
-
-    const {
-      event_name,
-      user_id = null,
-      data = {},
-    } = body;
-
-    const newEntry = {
-      event_name,
-      web_agent_id: webAgentIdHeader || null,
-      user_id,
-      data,
-      timestamp: new Date().toISOString(),
-    };
-
-    let logs: any[] = [];
-    if (fs.existsSync(LOG_PATH)) {
-      logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
-    }
-
-    logs.push(newEntry);
-    fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
-
-    // ✅ External API expects all fields in JSON body
-    const externalPayload = {
-      web_agent_id: webAgentIdHeader || null,
-      web_url: req.headers.get('referer') || null,
-      data,
-    };
-
-    console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
-
-    await fetch('http://0.0.0.0:8080/save_events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(externalPayload),
-    });
-
-    return NextResponse.json({ success: true });
+    body = await req.json();
   } catch (err) {
     console.error("Error logging event:", err);
     return NextResponse.json({ success: false, error: 'Failed to log event.' }, { status: 500 });
   }
+  const webAgentIdHeader = req.headers.get('X-WebAgent-Id');
+  const {
+    event_name,
+    user_id = null,
+    data = {},
+  } = body;
+  const newEntry = {
+    event_name,
+    web_agent_id: webAgentIdHeader || null,
+    user_id,
+    data,
+    timestamp: new Date().toISOString(),
+  };
+  let logs: any[] = [];
+  if (fs.existsSync(LOG_PATH)) {
+    logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
+  }
+  logs.push(newEntry);
+  fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
+  // :white_check_mark: External API expects single event object as `data`
+  const externalPayload = {
+    web_agent_id: "88b09cfd-8338-4b0d-8fbb-96449078c770",
+    web_url: req.headers.get('referer'),
+    data: newEntry,
+  };
+  console.log(":rocket: Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+  await fetch('http://app:8080/save_events', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(externalPayload),
+  });
+  return NextResponse.json({ success: true });
 }
 
 export async function GET() {
