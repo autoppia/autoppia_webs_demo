@@ -4,6 +4,7 @@ import path from 'path';
 
 const LOG_PATH = path.join(process.cwd(), 'event-log.json');
 
+
 export async function POST(req: NextRequest) {
   let body: any;
 
@@ -37,22 +38,24 @@ export async function POST(req: NextRequest) {
 
   logs.push(newEntry);
   fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
-  // :white_check_mark: External API expects all fields in JSON body
+
+  // ✅ External API expects single event object as `data`
   const externalPayload = {
     web_agent_id: webAgentIdHeader || null,
-    web_url: req.headers.get('referer') || null,
-    data,
+    web_url: req.headers.get('referer'),
+    data: newEntry,
   };
 
-  console.log(":rocket: Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+  console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
 
-  await fetch('http://0.0.0.0:8080/save_events', {
+  await fetch('http://localhost:8080/save_events', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(externalPayload),
   });
+
   return NextResponse.json({ success: true });
 }
 
