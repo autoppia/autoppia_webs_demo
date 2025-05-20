@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import Cookies from "js-cookie";
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
 const namePool = [
@@ -126,7 +127,7 @@ function RestaurantCard({
   date: Date | undefined;
   people: number;
 }) {
-  const formattedDate = date ? format(date, "yyyy-MM-dd") : "2024-07-18";
+  const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
   return (
     <div className="rounded-xl border shadow-sm bg-white w-[255px] flex-shrink-0 overflow-hidden flex flex-col justify-between">
       <Link
@@ -283,24 +284,46 @@ function CardScroller({ children }: { children: React.ReactNode }) {
 }
 
 export default function HomePage() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
   const [search, setSearch] = useState("");
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
+  useEffect(() => {
+    const savedDate = Cookies.get("reservation_date");
+    const savedTime = Cookies.get("reservation_time");
+    const savedPeople = Cookies.get("reservation_people");
   
+    if (savedDate) setDate(new Date(savedDate));
+    else setDate(new Date());
+  
+    if (savedTime) setTime(savedTime);
+    if (savedPeople) setPeople(parseInt(savedPeople));
+  }, []);
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
-    if (d)
+    if (d) {
+      Cookies.set("reservation_date", d.toISOString());
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+    }
   };
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
     logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
+  };
+  const handleTimeSelect = (t: string) => {
+    setTime(t);
+    Cookies.set("reservation_time", t);
+    logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
+  };
+
+  const handlePeopleSelect = (n: number) => {
+    setPeople(n);
+    Cookies.set("reservation_people", String(n));
+    logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
   };
 
   function matches(r: (typeof restaurants)[0]): boolean {
@@ -325,7 +348,7 @@ export default function HomePage() {
   ];
 
   return (
-    <main>
+    <main suppressHydrationWarning>
       {/* Navigation/Header */}
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
@@ -376,9 +399,8 @@ export default function HomePage() {
               mode="single"
               selected={date}
               onSelect={(d) => {
-                setDate(d);
-                setDateOpen(false); // ✅ close calendar
-                if (d) logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+                handleDateSelect(d);
+                setDateOpen(false);
               }}
               initialFocus
             />
@@ -392,7 +414,7 @@ export default function HomePage() {
               className="flex items-center gap-2 min-w-[120px] justify-start"
             >
               <ClockIcon className="h-5 w-5 text-gray-700" />
-              {time}
+              {time ? time : "Pick Time"}
               <ChevronDownIcon className="h-4 w-4 text-gray-400" />
             </Button>
           </PopoverTrigger>
@@ -403,9 +425,8 @@ export default function HomePage() {
                 variant="ghost"
                 className="w-full justify-start"
                 onClick={() => {
-                  setTime(t);
-                  setTimeOpen(false); // ✅ close time popover
-                  logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
+                  handleTimeSelect(t);
+                  setTimeOpen(false);
                 }}
               >
                 {t}
@@ -421,7 +442,7 @@ export default function HomePage() {
               className="flex items-center gap-2 min-w-[120px] justify-start"
             >
               <UserIcon className="h-5 w-5 text-gray-700" />
-              {people} {people === 1 ? "person" : "people"}{" "}
+              {people ? people:  "Pick People"} {people === 1 ? "person" : "people"}{" "}
               <ChevronDownIcon className="h-4 w-4 text-gray-400" />
             </Button>
           </PopoverTrigger>
@@ -432,9 +453,8 @@ export default function HomePage() {
                 variant="ghost"
                 className="w-full justify-start"
                 onClick={() => {
-                  setPeople(n);
-                  setPeopleOpen(false); // ✅ close people popover
-                  logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
+                  handlePeopleSelect(n);
+                  setPeopleOpen(false);
                 }}
               >
                 {n} {n === 1 ? "person" : "people"}

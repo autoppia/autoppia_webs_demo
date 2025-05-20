@@ -14,7 +14,9 @@
     "@radix-ui/react-slot": "^1.2.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-   "date-fns": "^2.29.3",
+    "date-fns": "^2.29.3",
+    "dayjs": "^1.11.13",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.475.0",
     "next": "^15.2.0",
     "react": "^18.3.1",
@@ -24,8 +26,9 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@biomejs/biome": "1.9.4",
+    "@eslint/eslintrc": "^3",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",

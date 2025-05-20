@@ -4,8 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import Cookies from "js-cookie";
+import dayjs from "dayjs";
 
 // const restaurantImgs: Record<string, string> = {
 //   "royal-dine": "https://ext.same-assets.com/3952155396/849522504.jpeg",
@@ -112,17 +114,46 @@ for (let i = 0; i < 50; i++) {
     photos,
   };
 }
+
+const reservationTime = Cookies.get("reservation_time");
+const reservationPeople = Cookies.get("reservation_people");
+
 export default function Page() {
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedPeople, setSelectedPeople] = useState("2 people");
-  const [selectedDate, setSelectedDate] = useState("Jul 18");
-  const [selectedTime, setSelectedTime] = useState("1:30 PM");
+  const [date, setDate] = useState<Date | undefined>(undefined);
+const [time, setTime] = useState("1:00 PM");
+const [people, setPeople] = useState(2);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
+  const [reservationTime, setReservationTime] = useState<string | null>(null);
+  const [reservationPeople, setReservationPeople] = useState<string | null>(null);
+  const [formattedDate, setFormattedDate] = useState<string | null>(null);
+  
+  
+  useEffect(() => {
+    const savedDate = Cookies.get("reservation_date");
+    const savedTime = Cookies.get("reservation_time");
+    const savedPeople = Cookies.get("reservation_people");
+  
+    if (savedDate) {
+      const d = new Date(savedDate);
+      setDate(d);
+      setFormattedDate(dayjs(d).format("MMM D"));
+    } else {
+      const now = new Date();
+      setDate(now);
+      setFormattedDate(dayjs(now).format("MMM D"));
+    }
+  
+    if (savedTime) setReservationTime(savedTime);
+    if (savedPeople) setReservationPeople(savedPeople);
+  }, []);
+  
+  
   const [email, setEmail] = useState("user_name@gmail.com");
   const params = useParams();
   const search = useSearchParams();
@@ -138,24 +169,23 @@ export default function Page() {
       setPhoneError(true);
       return;
     }
-
-    setPhoneError(false); // clear on valid submit
+  
+    setPhoneError(false);
     logEvent(EVENT_TYPES.RESERVATION_COMPLETE, {
       restaurantId,
-      date: selectedDate,
-      time: selectedTime,
-      people: selectedPeople,
+      date: formattedDate,
+      time: reservationTime,
+      people: reservationPeople,
       countryCode: selectedCountry.code,
       countryName: selectedCountry.name,
       phoneNumber,
       occasion,
       specialRequest,
-      email
+      email,
     });
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 4000); // hide after 3s
-
-    // Reset form values
+    setTimeout(() => setShowToast(false), 4000);
+  
     setPhoneNumber("");
     setOccasion("");
     setSpecialRequest("");
@@ -163,7 +193,7 @@ export default function Page() {
   };
 
   return (
-    <main>
+    <main suppressHydrationWarning>
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
@@ -215,14 +245,14 @@ export default function Page() {
             <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
-                <p>July 18</p>
+                <p>{formattedDate ? formattedDate : "Select Date"}</p>
               </span>
               <span className="flex items-center gap-1">
                 <ClockIcon className="w-4 h-4 mr-1" />
-                18:00
+                {reservationTime ? reservationTime:"Select Time"}
               </span>
               <span className="flex items-center gap-1">
-                <UserIcon className="w-4 h-4 mr-1" />2 people
+                <UserIcon className="w-4 h-4 mr-1" />{reservationPeople? reservationPeople: "Select"} people
               </span>
             </div>
           </div>

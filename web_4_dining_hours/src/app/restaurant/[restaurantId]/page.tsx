@@ -74,9 +74,9 @@ export default function RestaurantPage() {
   const params = useParams();
   const id = params.restaurantId as string;
   const r = restaurantData[id] || restaurantData["vintage-bites"];
-  const [people, setPeople] = useState(2);
-  const [date, setDate] = useState(new Date(2024, 6, 18));
-  const [time, setTime] = useState("1:00 PM");
+  const [people, setPeople] = useState();
+  const [date, setDate] = useState(new Date());
+  const [time, setTime] = useState();
   const [showFullMenu, setShowFullMenu] = useState(false);
 
   const formattedDate = format(date, "yyyy-MM-dd");
