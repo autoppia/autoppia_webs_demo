@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+# Dining Hours – Fullstack (Next.js)
+
+Dining Hours is a fullstack e-commerce web application built using **Next.js** (App Router), styled with **TailwindCSS**, and equipped with a custom event logging system that captures frontend interactions and writes them to a local file: `event-log.json`.
+
+This version is fully Dockerized, allowing seamless setup and deployment with minimal local dependencies.
+
+---
+## Prerequisites
+
+Ensure the following tools are installed:
+
+- **Node.js v20+** (use [nvm](https://github.com/nvm-sh/nvm) for version management)
+- **npm v9+** or **yarn**
+- **Git**
+- **Unix-like shell** (macOS, Linux, or WSL on Windows)
+- **Permission** to execute scripts (`chmod +x entrypoint.sh`)
+
+**Optional but recommended:**
+
+- **VS Code** with [TailwindCSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+- **Postman** or any HTTP client for API testing
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/autoppia/autoppia_webs_demo.git
+
+cd web_4_dining_hours
 ```
+## Installation & Deployment
+<pre> ```docker-compose up --build ``` </pre>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Incase of any issues with Docker, RUN
+<pre> ```docker-compose down -v ``` </pre>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
+## Event-log.json
+- All the events will be stored in the file which is named as event-log.json
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Entrypoint Script – entrypoint.sh
+This script is executed automatically when the container starts. It:
+- **Removes old build artifacts (.next, package-lock.json)**
+- **Installs dependencies via npm install**
+- **Launches the Next.js dev server on port 8003**
