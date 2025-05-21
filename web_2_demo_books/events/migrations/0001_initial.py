@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -65,15 +64,9 @@ class Migration(migrations.Migration):
             options={
                 "ordering": ["-timestamp"],
                 "indexes": [
-                    models.Index(
-                        fields=["event_name"], name="events_even_event_n_0bdbb0_idx"
-                    ),
-                    models.Index(
-                        fields=["timestamp"], name="events_even_timesta_f18d0e_idx"
-                    ),
-                    models.Index(
-                        fields=["user"], name="events_even_user_id_e71281_idx"
-                    ),
+                    models.Index(fields=["event_name"], name="events_even_event_n_0bdbb0_idx"),
+                    models.Index(fields=["timestamp"], name="events_even_timesta_f18d0e_idx"),
+                    models.Index(fields=["user"], name="events_even_user_id_e71281_idx"),
                 ],
             },
         ),

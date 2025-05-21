@@ -32,7 +32,8 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["id"]  # Or keep ["-created_at"]
+        ordering = ["id"]
+        # ordering=["-created_at"]
 
     def __str__(self):
         return f"{self.name} (ID: {self.id})"
@@ -72,7 +73,7 @@ class Cart(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="in_carts")
 
     class Meta:
-        unique_together = ['user', 'book']
+        unique_together = ["user", "book"]
 
     def __str__(self):
         return f"{self.user.username}'s cart - {self.book.name}"

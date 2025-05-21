@@ -3,12 +3,12 @@
 
 {% block body %}
 <div class="container mt-5">
-    {% for movie in movies %}
+    {% for book in books %}
     <div class="card border-0 shadow mb-4">
         <div class="row no-gutters">
             <div class="col-md-2">
-                {% if movie.img and movie.img.url %}
-                    <img src="{{ movie.img.url }}" class="card-img" alt="{{ movie.name }}" style="height: 250px; object-fit: contain;">
+                {% if book.img and book.img.url %}
+                    <img src="{{ book.img.url }}" class="card-img" alt="{{ book.name }}" style="height: 250px; object-fit: contain;">
                 {% else %}
                     <img src="/media/gallery/default_book.png" class="card-img" alt="No Image" style="height: 250px; object-fit: contain;">
                 {% endif %}
@@ -16,8 +16,8 @@
             <div class="col-md-10">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="card-title">{{ movie.name }}</h1>
-                        <h3 style="font-size: 18px">${{ movie.price }}</h3>
+                        <h1 class="card-title">{{ book.name }}</h1>
+                        <h3 style="font-size: 18px">${{ book.price }}</h3>
                     </div>
 
                     <hr>
@@ -27,7 +27,7 @@
                             <div class="col-md-6">
                                 <p class="text-muted">
                                     <strong><i class="fas fa-file mr-2"></i>Category:</strong>
-                                    {% for genre in movie.genres.all %}
+                                    {% for genre in book.genres.all %}
                                         <span class="badge badge-secondary">{{ genre.name }}</span>
                                     {% empty %}
                                         <span class="text-muted">Not categorized</span>
@@ -37,37 +37,37 @@
                                     <strong><i class="fas fa-star mr-2"></i>Rating:</strong>
                                     <span class="text-warning">
                                         {% for i in "12345" %}
-                                            {% if forloop.counter <= movie.rating|floatformat:"0" %}
+                                            {% if forloop.counter <= book.rating|floatformat:"0" %}
                                                 <i class="fas fa-star"></i>
-                                            {% elif forloop.counter <= movie.rating|add:"0.5"|floatformat:"0" %}
+                                            {% elif forloop.counter <= book.rating|add:"0.5"|floatformat:"0" %}
                                                 <i class="fas fa-star-half-alt"></i>
                                             {% else %}
                                                 <i class="far fa-star"></i>
                                             {% endif %}
                                         {% endfor %}
                                     </span>
-                                    ({{ movie.rating|floatformat:"1" }}/5)
+                                    ({{ book.rating|floatformat:"1" }}/5)
                                 </p>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted">
                                     <strong><i class="fas fa-user mr-2"></i>Author:</strong>
-                                    {{ movie.director|default:"Not specified" }}
+                                    {{ book.director|default:"Not specified" }}
                                 </p>
                                 <p class="text-muted">
                                     <strong><i class="fas fa-file mr-2"></i>Pages:</strong>
-                                    {% if movie.duration %}{{ movie.duration }} pages{% else %}Not specified{% endif %}
+                                    {% if book.duration %}{{ book.duration }} pages{% else %}Not specified{% endif %}
                                 </p>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-12 d-flex">
                                 <button type="button" class="btn btn-success mr-2 btn-buy"
-                                        data-book-id="{{ movie.id }}" data-bs-toggle="modal"
+                                        data-book-id="{{ book.id }}" data-bs-toggle="modal"
                                         data-bs-target="#myModal">
                                     <i class="fas fa-wallet mr-1"></i> Buy
                                 </button>
-                                <a class="btn btn-warning" href="{% url 'booksapp:delete_cart' movie.id %}">
+                                <a class="btn btn-warning" href="{% url 'booksapp:delete_cart' book.id %}">
                                     <i class="fas fa-trash-alt mr-1"></i> Delete
                                 </a>
                             </div>

@@ -168,7 +168,7 @@ def mybook(request):
     search_query = request.GET.get("search", "")
     genre_filter = request.GET.get("genre", "")
     year_filter = request.GET.get("year", "")
-    
+
     # Comenzar con todos los libros del usuario actual
     books = Book.objects.filter(user=request.user)
 
@@ -255,8 +255,11 @@ def payment_success(request, book_id):
 
 
 def carts_count(request):
-    carts = Cart.objects.filter(user=request.user)
-    return JsonResponse({"count": len(carts)})
+    if request.user.is_authenticated:
+        carts = Cart.objects.filter(user=request.user)
+        return JsonResponse({"count": len(carts)})
+    else:
+        return JsonResponse({"count": 0})
 
 
 def delete_cart(request, id):
@@ -279,7 +282,7 @@ def add_book(request):
             book.user = request.user  # Asignar el usuario actual al libro
             book.save()
             form.save_m2m()  # Guardar las relaciones many-to-many
-            
+
             add_book_event = Event.create_add_book_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
@@ -383,13 +386,13 @@ def add_to_cart(request, id):
         print("Add the book to the shopping cart.")
 
         book = Book.objects.get(id=id)
-        
+
         if Cart.objects.filter(user=request.user, book=book).exists():
             messages.warning(request, "This book was already added to shopping cart.")
         else:
             Cart.objects.create(user=request.user, book=book)
             messages.success(request, "Book added to the shopping cart.")
-            
+
         add_to_cart_event = Event.create_shoppingcart_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
@@ -398,6 +401,7 @@ def add_to_cart(request, id):
         add_to_cart_event.save()
 
         return redirect("booksapp:detail", book_id=id)
+    return None
 
 
 def add_comment(request, book_id):
@@ -421,7 +425,7 @@ def add_comment(request, book_id):
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
                 comment=comment,
-                movie=book,
+                book=book,
             )
             add_comment_event.save()
 

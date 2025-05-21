@@ -9,7 +9,7 @@ from typing import List, Dict, Any
 
 from django.conf import settings as django_settings
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.db import transaction, connection
@@ -17,6 +17,9 @@ from django.utils import timezone
 
 from booksapp.models import Book, Genre, UserProfile, Comment
 from ..books_data import BOOKS_DATA, GENRE_NAMES, SAMPLE_COMMENTS
+
+# Get the User model once
+User = get_user_model()
 
 # --- [Ensure BOOKS_DATA has at least 256 entries] ---
 if len(BOOKS_DATA) < 256:
@@ -401,15 +404,17 @@ class Command(BaseCommand):
                 BookGenres = Book.genres.through
 
                 created_user_ids = {user.pk for user in User.objects.filter(username__in=[u.username for u in users_to_create])}
+                user_ids_in_books_data = {book_data["id"] for book_data in books_data if "id" in book_data}
 
+                user_map = {user.id: user for user in User.objects.filter(id__in=list(user_ids_in_books_data))}
                 for book_data in books_data:
                     book_id = book_data.get("id")
-                    user_id = book_id  # Assuming book ID should match user ID
-
                     if book_id in created_user_ids:
+                        associated_user = user_map[book_id]
+
                         book = Book(
                             id=book_id,
-                            user=user,  # Ahora es una ForeignKey, necesitas pasar el objeto User
+                            user=associated_user,
                             name=book_data["name"],
                             desc=book_data["desc"],
                             year=book_data["year"],

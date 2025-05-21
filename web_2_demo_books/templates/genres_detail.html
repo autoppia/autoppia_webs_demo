@@ -3,39 +3,39 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-12 mb-4">
-            <h1 class="display-4">{{ genre.name }} Movies</h1>
-            <p class="lead">Explore all our movies in the {{ genre.name }} category</p>
+            <h1 class="display-4">{{ genre.name }} books</h1>
+            <p class="lead">Explore all our books in the {{ genre.name }} category</p>
             <hr>
         </div>
     </div>
 
     <div class="row">
-        {% for movie in movies %}
+        {% for book in books %}
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100">
                 <div class="card-img-container">
-                    {% if movie.img %}
-                        <img src="{{ movie.img.url }}" class="card-img-top" alt="{{ movie.name }}" style="height: 250px; object-fit: cover;">
+                    {% if book.img %}
+                        <img src="{{ book.img.url }}" class="card-img-top" alt="{{ book.name }}" style="height: 250px; object-fit: cover;">
                     {% else %}
                         <img src="/media/gallery/default_book.png" class="card-img-top" alt="No Image" style="height: 250px; object-fit: cover;">
                     {% endif %}
-                    <div class="movie-year">{{ movie.year }}</div>
+                    <div class="movie-year">{{ book.year }}</div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ movie.name }}</h5>
-                    <p class="card-text movie-desc">{{ movie.desc|truncatechars:100 }}</p>
+                    <h5 class="card-title">{{ book.name }}</h5>
+                    <p class="card-text movie-desc">{{ book.desc|truncatechars:100 }}</p>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
-                    <a href="{% url 'booksapp:detail' movie.id %}" class="btn btn-primary btn-block">View Details</a>
+                    <a href="{% url 'booksapp:detail' book.id %}" class="btn btn-primary btn-block">View Details</a>
                 </div>
             </div>
         </div>
         {% empty %}
         <div class="col-12 text-center">
             <div class="alert alert-info">
-                No movies available in this category.
+                No books available in this category.
             </div>
-            <a href="{% url 'booksapp:add_book' %}" class="btn btn-success mt-3">Add movie</a>
+            <a href="{% url 'booksapp:add_book' %}" class="btn btn-success mt-3">Add Book</a>
         </div>
         {% endfor %}
     </div>

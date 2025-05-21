@@ -6,9 +6,9 @@ app_name = "booksapp"
 urlpatterns = [
     # Main view
     path("", views.index, name="index"),
-    # Movie details
-    path("book/<int:movie_id>/", views.detail, name="detail"),
-    # CRUD operations for movies
+    # book details
+    path("book/<int:book_id>/", views.detail, name="detail"),
+    # CRUD operations for books
     path("add/", views.add_book, name="add_book"),
     path("update/<int:id>", views.update_book, name="update"),
     path("delete_cart/<int:id>", views.delete_cart, name="delete_cart"),
@@ -22,7 +22,7 @@ urlpatterns = [
     path("genre/<int:genre_id>/", views.genre_detail, name="genre_detail"),
     path("payment-success/<int:book_id>/", views.payment_success, name="payment_success"),
     # Comments
-    path("book/<int:movie_id>/comment/", views.add_comment, name="add_comment"),
+    path("book/<int:book_id>/comment/", views.add_comment, name="add_comment"),
     path("contact/", views.contact, name="contact"),
     path("about/", views.about, name="about"),
     # Authentication

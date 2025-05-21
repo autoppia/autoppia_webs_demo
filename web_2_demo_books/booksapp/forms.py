@@ -80,13 +80,15 @@ class BookForm(forms.ModelForm):
         book = super().save(commit=False)
         book.img = None
         # Eliminamos la generación manual de ID ya que Django lo hace automáticamente
-        
+
         if commit:
             book.save()
             book.img = self.cleaned_data["img"] or None
             genre = self.cleaned_data["genre"]
             book.genres.add(genre)
         return book
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

@@ -55,7 +55,7 @@
         {% elif search_query %}
             Showing results for search "{{ search_query }}"
         {% elif selected_genre %}
-            Showing movies in
+            Showing books in
             {% for genre in genres %}
                 {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
             {% endfor %} genre
@@ -65,7 +65,7 @@
     {% endif %}
 
     <div class="row">
-        {% for i in movie_list %}
+        {% for i in book_list %}
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100 shadow-sm">
                 <div class="card-img-container position-relative">
@@ -114,9 +114,9 @@
         </div>
         {% empty %}
         <div class="col-12 text-center py-5">
-            <h3>No movies found</h3>
-            <p>Try changing your search criteria or add a new movie</p>
-            <a href="{% url 'booksapp:add_book' %}" class="btn btn-success">Add movie</a>
+            <h3>No Books found</h3>
+            <p>Try changing your search criteria or add a new book</p>
+            <a href="{% url 'booksapp:add_book' %}" class="btn btn-success">Add books</a>
         </div>
         {% endfor %}
     </div>
