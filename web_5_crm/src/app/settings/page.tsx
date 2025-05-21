@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { User, Mail } from "lucide-react";
 import { logEvent } from "@/library/events";
-import Cookies from "../../../node_modules/@types/js-cookie";
+import Cookies from "js-cookie";
 
 export default function SettingsPage() {
   const [name, setName] = useState("Jennifer Doe");

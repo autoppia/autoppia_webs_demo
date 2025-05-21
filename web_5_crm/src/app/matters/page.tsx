@@ -12,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 const STORAGE_KEY = "matters";
-import Cookies from "../../../node_modules/@types/js-cookie";
+import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 const DEMO_MATTERS = [

@@ -8,7 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
-import Cookies from "../../../../node_modules/@types/js-cookie";
+import Cookies from "js-cookie";
 
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
