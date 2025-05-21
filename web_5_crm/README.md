@@ -47,4 +47,4 @@ cd web_5_crm
 This script is executed automatically when the container starts. It:
 - **Removes old build artifacts (.next, package-lock.json)**
 - **Installs dependencies via npm install**
-- **Launches the Next.js dev server on port 8002**
+- **Launches the Next.js dev server on port 8004**
