@@ -35,6 +35,9 @@ cd web_5_crm
 ## Installation & Deployment
 <pre> ```docker-compose up --build ``` </pre>
 
+## Incase of any issues with Docker, RUN
+<pre> ```docker-compose down -v ``` </pre>
+
 ---
 ## Event-log.json
 - All the events will be stored in the file which is named as event-log.json
