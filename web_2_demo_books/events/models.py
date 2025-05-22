@@ -50,11 +50,11 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.get_event_name_display()} at {self.timestamp}"
 
-    def save(self, *args, **kwargs):
-        if not self.timestamp:
-            self.timestamp = timezone.now()
-        super().save(*args, **kwargs)
-        print(f"Saving event: {self.event_name} with data: {self.data} for user: {self.user} at time: {self.timestamp} with web agent id: {self.web_agent_id}")
+    # def save(self, *args, **kwargs):
+    #     if not self.timestamp:
+    #         self.timestamp = timezone.now()
+    #     super().save(*args, **kwargs)
+    #     print(f"Saving event: {self.event_name} with data: {self.data} for user: {self.user} at time: {self.timestamp} with web agent id: {self.web_agent_id}")
 
     # -------------------- EVENTOS RELACIONADOS CON LIBROS --------------------
 
