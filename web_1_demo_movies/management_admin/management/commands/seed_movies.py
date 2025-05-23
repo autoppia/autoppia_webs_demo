@@ -38,6 +38,8 @@ class Command(BaseCommand):
             "Western",
         ]
 
+        genres_to_create.sort()
+
         genres = {}
         for genre_name in genres_to_create:
             genre, created = Genre.objects.get_or_create(name=genre_name)
