@@ -82,14 +82,24 @@ class BookForm(forms.ModelForm):
         }
         help_texts = {"rating": "Rating between 0 and 5 stars."}
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super().__init__(*args, **kwargs)
+
     def save(self, commit=True):
         book = super().save(commit=False)
-        book.img = None
-        # Eliminamos la generación manual de ID ya que Django lo hace automáticamente
+
+        if self.request and self.request.user.is_authenticated:
+            book.user = self.request.user
+        elif not book.user:  # For updates, ensure we don't overwrite with None
+            pass
+        else:
+            raise ValueError("User must be provided to create or update a book.")
+
+        book.img = self.cleaned_data["img"] or None
 
         if commit:
             book.save()
-            book.img = self.cleaned_data["img"] or None
             genre = self.cleaned_data["genre"]
             book.genres.add(genre)
         return book

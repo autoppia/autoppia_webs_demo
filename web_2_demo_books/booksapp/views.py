@@ -276,10 +276,9 @@ def add_book(request):
     """
     all_genres = Genre.objects.all().order_by("name")
     if request.method == "POST":
-        form = BookForm(request.POST, request.FILES)
+        form = BookForm(request.POST, request.FILES, request=request)
         if form.is_valid():
             book = form.save(commit=False)
-            book.user = request.user
             book.save()
             selected_genre = form.cleaned_data.get("genre")
             book.genres.clear()
@@ -323,7 +322,7 @@ def update_book(request, id):
     }
 
     if request.method == "POST":
-        form = BookForm(request.POST, request.FILES, instance=book)
+        form = BookForm(request.POST, request.FILES, instance=book, request=request)
         if form.is_valid():
             updated_book = form.save()
             changed_fields = []
@@ -355,7 +354,9 @@ def update_book(request, id):
                     changed_fields=changed_fields,
                 )
                 edit_book_event.save()
-                updated_book.save()
+                # Remove these lines, the form now handles the user
+                # updated_book.user = request.user
+                # updated_book.save()
             messages.success(request, "Book updated successfully.")
             return redirect("booksapp:detail", book_id=id)
         else:
