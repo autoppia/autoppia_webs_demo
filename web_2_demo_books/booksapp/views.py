@@ -279,9 +279,13 @@ def add_book(request):
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             book = form.save(commit=False)
-            book.user = request.user  # Asignar el usuario actual al libro
+            book.user = request.user
             book.save()
-            form.save_m2m()  # Guardar las relaciones many-to-many
+            selected_genre = form.cleaned_data.get("genre")
+            book.genres.clear()
+
+            if selected_genre:
+                book.genres.add(selected_genre)
 
             add_book_event = Event.create_add_book_event(
                 user=request.user if request.user.is_authenticated else None,

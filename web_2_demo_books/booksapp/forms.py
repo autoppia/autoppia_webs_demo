@@ -16,10 +16,15 @@ class BookForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control"}),
         label="Genre",
     )
+    user = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.HiddenInput(),
+        required=False,
+    )
 
     class Meta:
         model = Book
-        fields = ["name", "desc", "year", "director", "duration", "trailer_url", "rating", "genres"]
+        fields = ["name", "desc", "year", "director", "duration", "trailer_url", "rating", "genres", "user"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter the book name"}),
             "desc": forms.Textarea(
@@ -61,6 +66,7 @@ class BookForm(forms.ModelForm):
                 }
             ),
             "genres": forms.HiddenInput(),  # Hide the ManyToMany field in the form
+            "user": forms.HiddenInput(),
         }
         labels = {
             "name": "Book Title",
