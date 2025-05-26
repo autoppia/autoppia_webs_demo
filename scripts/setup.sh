@@ -7,7 +7,7 @@ echo "🚀 Setting up web demos..."
 
 # Default ports
 WEB_PORT_DEFAULT=8000
-POSTGRES_PORT_DEFAULT=5432
+POSTGRES_PORT_DEFAULT=5434
 WEB_DEMO="all"
 FORCE_DELETE=false
 
