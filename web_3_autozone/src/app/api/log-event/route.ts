@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 
-const LOG_PATH = path.join(process.cwd(), 'event-log.json');
+// const LOG_PATH = path.join(process.cwd(), 'event-log.json');
 
 
 export async function POST(req: NextRequest) {
@@ -40,13 +40,13 @@ export async function POST(req: NextRequest) {
     timestamp: new Date().toISOString(),
   };
 
-  let logs: any[] = [];
-  if (fs.existsSync(LOG_PATH)) {
-    logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
-  }
-
-  logs.push(newEntry);
-  fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
+  // let logs: any[] = [];
+  // if (fs.existsSync(LOG_PATH)) {
+  //   logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
+  // }
+  //
+  // logs.push(newEntry);
+  // fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
 
   const externalPayload = {
     web_agent_id: webAgentIdHeader || null,
@@ -54,9 +54,9 @@ export async function POST(req: NextRequest) {
     data: newEntry,
   };
 
-  console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+  // console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
 
-  await fetch('http://app:8080/save_events', {
+  await fetch('http://app:8080/save_events/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -67,18 +67,21 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ success: true });
 }
 export async function GET() {
-  if (!fs.existsSync(LOG_PATH)) {
-    return NextResponse.json({ logs: [] });
-  }
+  // if (!fs.existsSync(LOG_PATH)) {
+  //   return NextResponse.json({ logs: [] });
+  // }
+  //
+  // const logs = fs.readFileSync(LOG_PATH, 'utf-8');
+  // return new NextResponse(logs, {
+  //   status: 200,
+  //   headers: { 'Content-Type': 'application/json' },
+  // });
 
-  const logs = fs.readFileSync(LOG_PATH, 'utf-8');
-  return new NextResponse(logs, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return NextResponse.json({ logs: [], message: 'File logging is disabled' });
 }
 
 export async function DELETE() {
-    fs.writeFileSync(LOG_PATH, JSON.stringify([], null, 2)); // Clear the log
-    return NextResponse.json({ success: true, message: 'Event log cleared' });
+    // fs.writeFileSync(LOG_PATH, JSON.stringify([], null, 2)); // Clear the log
+    // return NextResponse.json({ success: true, message: 'Event log cleared' });
+    return NextResponse.json({ success: true, message: 'Event log deletion is disabled' });
   }
