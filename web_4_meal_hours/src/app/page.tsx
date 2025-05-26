@@ -356,7 +356,7 @@ export default function HomePage() {
             <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">
-                  MEAL-HOURS46a758
+                  MEAL-HOURS
                 </span>
               </div>
             </Link>
