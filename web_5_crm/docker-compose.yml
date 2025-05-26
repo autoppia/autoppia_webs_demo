@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: web_5_CRM
     ports:
-      - "8004:8004"
+      - "5003:8004"
     volumes:
       - .:/app
       - /app/node_modules

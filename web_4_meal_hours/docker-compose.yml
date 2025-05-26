@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: web_4_meal_hours
     ports:
-      - "8003:8003"
+      - "5002:8003"
     volumes:
       - .:/app
       - /app/node_modules
