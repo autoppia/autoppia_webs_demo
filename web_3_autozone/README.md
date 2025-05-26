@@ -10,13 +10,15 @@ This version is fully Dockerized, allowing seamless setup and deployment with mi
 
 Ensure the following tools are installed:
 
-- **Node.js v20+** (use [nvm](https://github.com/nvm-sh/nvm) for version management)
-- **npm v9+** or **yarn**
-- **Git**
-- **Unix-like shell** (macOS, Linux, or WSL on Windows)
-- **Permission** to execute scripts (`chmod +x entrypoint.sh`)
+* **Node.js v20+** (recommended: use [nvm](https://github.com/nvm-sh/nvm) for easy version management)
+* **npm v9+** or **Yarn**
+* **Git**
+* **Unix-like shell** (macOS, Linux, or Windows with WSL)
+* **Executable permissions** for shell scripts:
 
-**Optional but recommended:**
+  ```bash
+  chmod +x entrypoint.sh
+  ```
 
 - **VS Code** with [TailwindCSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
 - **Postman** or any HTTP client for API testing
@@ -29,11 +31,14 @@ Ensure the following tools are installed:
 
 ```bash
 git clone https://github.com/autoppia/autoppia_webs_demo.git
-
 cd web_3_autozone
 ```
-## Installation & Deployment
-<pre> ```docker-compose up --build ``` </pre>
+
+### 2. Build & Run with Docker
+
+```bash
+docker-compose down -v && docker-compose up --build
+```
 
 ---
 ## Event-log.json
