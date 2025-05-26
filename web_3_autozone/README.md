@@ -1,7 +1,7 @@
 
 # Autozon – Fullstack E-Commerce (Next.js)
 
-Autozon is a fullstack e-commerce web application built using **Next.js** (App Router), styled with **TailwindCSS**, and equipped with a custom event logging system that captures frontend interactions and writes them to a local file: `event-log.json`.
+Autozon is a fullstack e-commerce web application built using **Next.js** (App Router), styled with **TailwindCSS**, and equipped with a custom event logging system that captures frontend interactions and writes them to a database.
 
 This version is fully Dockerized, allowing seamless setup and deployment with minimal local dependencies.
 
@@ -41,8 +41,6 @@ docker-compose down -v && docker-compose up --build
 ```
 
 ---
-## Event-log.json
-- All the events will be stored in the file which is named as event-log.json
 
 
 ## Entrypoint Script – entrypoint.sh

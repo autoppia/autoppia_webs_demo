@@ -85,7 +85,7 @@ export default function CheckoutPage() {
         <div className="w-full md:w-[320px] flex-shrink-0 mt-8 md:mt-0">
           <div className="bg-white border border-[#d5d9d9] shadow-sm rounded-md p-5 pt-6 min-h-[350px] flex flex-col">
             <Button
-              className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold w-full mb-2 py-2 rounded"
+              className="bg-amazon-yellow hover:bg-amazon-darkYellow text-white font-semibold w-full mb-2 py-2 rounded"
               onClick={() => {
                 logEvent(EVENT_TYPES.ORDER_COMPLETED, {
                   items: totalItems,

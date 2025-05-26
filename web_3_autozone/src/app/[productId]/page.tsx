@@ -299,7 +299,7 @@ export default function ProductPage() {
               ))}
             </select>
             <Button
-              className="block w-full bg-[#FFD814] hover:bg-[#F7CA00] text-black font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
+              className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
               onClick={() => {
                 handleAddToCart();
                 router.push("/cart");

@@ -27,8 +27,8 @@ export function Header() {
       <nav className="bg-white border-b border-gray-200 px-2 py-2 flex items-center gap-2 md:gap-4">
         {/* Logo */}
         <Link href="/" className="mr-2 flex-shrink-0">
-          <div className="bg-[#FEBD69] px-3 py-1 rounded flex items-center h-9">
-            <span className="font-bold text-black text-lg">AUTOZONE</span>
+          <div className="bg-[#17A2B8] px-3 py-1 rounded flex items-center h-9">
+            <span className="font-bold text-white text-lg">AUTOZONE</span>
           </div>
         </Link>
         {/* Deliver to */}
@@ -66,7 +66,7 @@ export function Header() {
                 router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
               }}
             >
-              <Search className="h-5 w-5 text-amazon-lightBlue" />
+              <Search className="h-5 w-5 text-amazon-lightBlue " />
             </Button>
           </div>
         </div>
@@ -99,7 +99,7 @@ export function Header() {
           >
             <div className="relative">
               <ShoppingCart size={32} />
-              <span className="absolute -top-1 right-[10px] text-amazon-orange font-bold">
+              <span className="absolute -top-1 right-[10px] text-amazon-yellow font-bold">
                 {cartItemCount}
               </span>
             </div>

@@ -53,11 +53,11 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         amazon: {
-          blue: "#0073bb",
+          blue: "#1E90FF",
           orange: "#f1b22e",
           lightBlue: "#232f3e",
-          yellow: "#febd69",
-          darkYellow: "#f3a847",
+          yellow: "#17A2B8",
+          darkYellow: "#1E90FF",
         },
       },
       borderRadius: {

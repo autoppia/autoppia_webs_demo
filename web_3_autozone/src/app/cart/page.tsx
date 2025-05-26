@@ -193,7 +193,7 @@ export default function CartPage() {
                   <label htmlFor="gift" className="text-sm">This order contains a gift</label>
                 </div>
                 <Link href="/checkout">
-                  <Button className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-black rounded-md"  onClick={handleProceedToCheckout}>
+                  <Button className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md"  onClick={handleProceedToCheckout}>
                     Proceed to checkout
                   </Button>
                 </Link>
@@ -201,7 +201,7 @@ export default function CartPage() {
             )}
             {items.length === 0 && (
               <Button
-                className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-black rounded-md"
+                className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md"
                 disabled
                 onClick={handleProceedToCheckout}
               >
