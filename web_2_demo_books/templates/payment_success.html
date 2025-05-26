@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block body %}
+<div class="container mt-5" style="height: 500px">
+    <h1 class="text-success" style="text-align:center;"><i class="fas fa-check-circle"></i>&nbsp;Payment was successful!</h1>
+    <div class="d-flex justify-content-center" style="margin-top: 50px">
+        <a class="btn btn-primary" href="{% url 'booksapp:shoppingcart' %}">
+            <i class="fas fa-arrow-left"></i>&nbsp;Go to back
+        </a>
+    </div>
+</div>
+{% endblock %}
