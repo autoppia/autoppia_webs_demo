@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web_4_dining_hours
+    container_name: web_4_meal_hours
     ports:
       - "8003:8003"
     volumes:

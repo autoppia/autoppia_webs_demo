@@ -116,7 +116,7 @@ export default function RestaurantPage() {
           {/* Title & details row */}
           <h1 className="text-4xl font-bold mb-2">{r.name}</h1>
           <div className="flex items-center gap-4 text-lg mb-4">
-            <span className="flex items-center text-[#c24742] text-xl font-semibold">
+            <span className="flex items-center text-[#46a758] text-xl font-semibold">
               {Array.from({ length: 4 }).map((_, i) => (
                 <span key={i}>★</span>
               ))}
@@ -174,7 +174,7 @@ export default function RestaurantPage() {
           <section className="max-w-2xl w-full mb-10">
             <h2 className="text-2xl font-bold mb-3 mt-8">Menu</h2>
             <div className="flex gap-6 border-b mb-5">
-              <button className="border-b-2 border-[#c24742] text-[#c24742] font-semibold px-4 py-2 -mb-px bg-white">
+              <button className="border-b-2 border-[#46a758] text-[#46a758] font-semibold px-4 py-2 -mb-px bg-white">
                 Main Menu
               </button>
             </div>
@@ -239,7 +239,7 @@ export default function RestaurantPage() {
                   <span className="w-5 text-right">{star}</span>
                   <span className="w-20 bg-red-200 h-3 rounded">
                     <span
-                      className={`block h-3 rounded bg-[#c24742]`}
+                      className={`block h-3 rounded bg-[#46a758]`}
                       style={{ width: `${star * 12}%` }}
                     />
                   </span>
@@ -290,7 +290,7 @@ export default function RestaurantPage() {
                     t !== "3:00 PM" ? (
                       <Button
                         key={t}
-                        className="bg-[#c24742] hover:bg-[#a43a32] text-white font-semibold px-4 py-2 text-base"
+                        className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-4 py-2 text-base"
                       >
                         {t}
                       </Button>
@@ -298,7 +298,7 @@ export default function RestaurantPage() {
                       <Button
                         key={t}
                         variant="outline"
-                        className="text-[#c24742] border-[#c24742] px-4 py-2 text-base flex items-center gap-2"
+                        className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
                       >
                         <span>3:00 PM</span>{" "}
                         <span className="ml-2">🔔 Notify me</span>

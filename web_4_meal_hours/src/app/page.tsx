@@ -102,7 +102,7 @@ const dinersFavorites = [
 
 function StarRating({ count }: { count: number }) {
   return (
-    <span className="text-[#c24742] text-xl align-middle mr-1">
+    <span className="text-[#46a758] text-xl align-middle mr-1">
       {Array.from({ length: 5 }).map((_, i) => (
         <span key={i}>{i < count ? "★" : "☆"}</span>
       ))}
@@ -112,7 +112,7 @@ function StarRating({ count }: { count: number }) {
 
 function StarNumber({ rating }: { rating: number }) {
   return (
-    <span className="text-[#c24742] font-bold inline-flex items-center ml-1 mr-1">
+    <span className="text-[#46a758] font-bold inline-flex items-center ml-1 mr-1">
       <span className="text-lg">★</span> {rating.toFixed(2)}
     </span>
   );
@@ -207,7 +207,7 @@ function RestaurantCard({
               passHref
             >
               <Button
-                className="bg-[#c24742] hover:bg-[#a43a32] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
                 asChild
               >
                 <span>{t}</span>
@@ -354,9 +354,9 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
             <Link href="/">
-              <div className="bg-[#c24742] px-3 py-1 rounded flex items-center h-9">
+              <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">
-                  DINING-HOURS
+                  MEAL-HOURS46a758
                 </span>
               </div>
             </Link>
@@ -366,13 +366,13 @@ export default function HomePage() {
           <div className="flex items-center gap-4">
             {/* TODO: User/profile icon, language, nav links */}
             <Link
-              className="text-sm text-gray-600 hover:text-[#c24742]"
+              className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/help"
             >
               Get help
             </Link>
             <Link
-              className="text-sm text-gray-600 hover:text-[#c24742]"
+              className="text-sm text-gray-600 hover:text-[#46a758]"
               href="#"
             >
               FAQs
@@ -470,7 +470,7 @@ export default function HomePage() {
           value={search}
           onChange={handleSearchChange}
         />
-        <button className="ml-2 px-5 py-2 rounded text-lg bg-[#c24742] text-white">
+        <button className="ml-2 px-5 py-2 rounded text-lg bg-[#46a758] text-white">
           Let's go
         </button>
       </section>

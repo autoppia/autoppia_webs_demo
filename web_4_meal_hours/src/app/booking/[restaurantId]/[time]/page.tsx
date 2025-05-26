@@ -198,9 +198,9 @@ const [people, setPeople] = useState(2);
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
             <Link href="/">
-              <div className="bg-[#c24742] px-3 py-1 rounded flex items-center h-9">
+              <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">
-                  DINING-HOURS
+                  MEAL-HOURS
                 </span>
               </div>
             </Link>
@@ -212,19 +212,19 @@ const [people, setPeople] = useState(2);
               className="rounded p-2 min-w-[250px] border border-gray-300"
               disabled
             />
-            <button className="ml-2 px-4 py-2 rounded bg-[#c24742] text-white">
+            <button className="ml-2 px-4 py-2 rounded bg-[#46a758] text-white">
               Let's go
             </button>
           </div>
           <div className="flex items-center gap-4">
             <Link
-              className="text-sm text-gray-600 hover:text-[#c24742]"
+              className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/help"
             >
               Get help
             </Link>
             <Link
-              className="text-sm text-gray-600 hover:text-[#c24742]"
+              className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/faqs"
             >
               FAQs
@@ -333,17 +333,17 @@ const [people, setPeople] = useState(2);
         </div>
         <Button
           onClick={handleReservation}
-          className="w-full bg-[#c24742] hover:bg-[#a43a32] text-white py-6 mt-1 mb-4 text-lg rounded"
+          className="w-full bg-[#46a758] hover:bg-[#a43a32] text-white py-6 mt-1 mb-4 text-lg rounded"
         >
           Complete reservation
         </Button>
         <div className="text-xs text-gray-600 mt-3">
           By clicking “Complete reservation” you agree to the{" "}
-          <Link href="#" className="text-[#c24742] underline">
+          <Link href="#" className="text-[#46a758] underline">
             OpenDinning Terms of Use
           </Link>{" "}
           and{" "}
-          <Link href="#" className="text-[#c24742] underline">
+          <Link href="#" className="text-[#46a758] underline">
             Privacy Policy
           </Link>
           . Message & data rates may apply. You can opt out of receiving text
