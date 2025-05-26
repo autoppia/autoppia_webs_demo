@@ -7,8 +7,8 @@ echo "🚀 Setting up web demos..."
 
 # Default ports
 WEB_PORT_DEFAULT=8000
-POSTGRES_PORT_DEFAULT=5434
-DEMO="all"
+POSTGRES_PORT_DEFAULT=5432
+WEB_DEMO="all"
 FORCE_DELETE=false
 
 # Parse command line arguments
@@ -23,7 +23,7 @@ for ARG in "$@"; do
       shift
       ;;
     --demo=*)
-      DEMO="${ARG#*=}"
+      WEB_DEMO="${ARG#*=}"
       shift
       ;;
     -y|--yes)
@@ -39,7 +39,7 @@ done
 WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 
-echo "Selected demo: $DEMO"
+echo "Selected demo: $WEB_DEMO"
 echo "Using web port: $WEB_PORT"
 echo "Using Postgres port: $POSTGRES_PORT"
 
@@ -107,7 +107,7 @@ EOF
 echo "🔄 Deploying selected demo(s)..."
 cd ..
 
-case "$DEMO" in
+case "$WEB_DEMO" in
   movies)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     ;;
@@ -119,7 +119,7 @@ case "$DEMO" in
     deploy_project "web_2_demo_books" "$((WEB_PORT+1))" "$((POSTGRES_PORT+1))" "books_$((WEB_PORT+1))"
     ;;
   *)
-    echo "❌ Unknown demo type: $DEMO. Use 'movies', 'books', or 'all'."
+    echo "❌ Unknown demo type: $WEB_DEMO. Use 'movies', 'books', or 'all'."
     exit 1
     ;;
 esac
