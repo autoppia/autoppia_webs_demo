@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web_4_meal_hours
+    ports:
+      - "8003:8003"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - app-network
+networks:
+  app-network:
+    external: true
