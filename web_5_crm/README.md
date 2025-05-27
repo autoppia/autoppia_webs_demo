@@ -1,7 +1,7 @@
 
-# Client Matter CRM – Fullstack (Next.js)
+# FirmSync CRM – Fullstack (Next.js)
 
-Client Matter CRM is a fullstack e-commerce web application built using **Next.js** (App Router), styled with **TailwindCSS**, and equipped with a custom event logging system that captures frontend interactions and writes them to a local file: `event-log.json`.
+FirmSync CRM is a fullstack e-commerce web application built using **Next.js** (App Router), styled with **TailwindCSS**, and equipped with a custom event logging system that captures frontend interactions and writes them to a local file: `event-log.json`.
 
 This version is fully Dockerized, allowing seamless setup and deployment with minimal local dependencies.
 

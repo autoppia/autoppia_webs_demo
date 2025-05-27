@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Client CRM",
-  description: "Dashboard client CRM",
+  title: "FirmSync CRM | Smart Client & Case Management Software",
+  description: "FirmSync CRM helps you streamline client communication, manage cases, track tasks, and grow your business with powerful, intuitive CRM tools.",
 };
 
 export default function RootLayout({
@@ -40,7 +40,7 @@ export default function RootLayout({
           }}
         >
           <span className="font-bold text-2xl tracking-tight">
-            Client Matter <span className="text-accent-forest">CRM</span>
+          FirmSync <span className="text-accent-forest">CRM</span>
           </span>
           <div className="flex-1" />
           <div className="flex items-center gap-4">
