@@ -9,7 +9,7 @@ interface EventData {
 }
 
 export default function DashboardPage() {
-  const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, data);
+  const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
 
   return (
     <section>

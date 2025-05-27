@@ -4,8 +4,22 @@ import path from "path";
 
 const LOG_PATH = path.join(process.cwd(), "event-log.json");
 
+type EventLogEntry = {
+  event_name: string;
+  user_id: string | null;
+  data: Record<string, unknown>;
+  web_agent_id: string | null;
+  timestamp: string;
+};
+
+type IncomingEventPayload = {
+  event_name: string;
+  user_id?: string;
+  data?: Record<string, unknown>;
+};
+
 export async function POST(req: NextRequest) {
-  let body: any;
+  let body: IncomingEventPayload;
 
   try {
     if (!req.headers.get("content-type")?.includes("application/json")) {
@@ -36,7 +50,7 @@ export async function POST(req: NextRequest) {
 
   const { event_name, user_id = null, data = {} } = body;
 
-  const newEntry = {
+  const newEntry: EventLogEntry = {
     event_name,
     web_agent_id: webAgentIdHeader || null,
     user_id,
@@ -44,30 +58,35 @@ export async function POST(req: NextRequest) {
     timestamp: new Date().toISOString(),
   };
 
-  let logs: any[] = [];
+  let logs: EventLogEntry[] = [];
   if (fs.existsSync(LOG_PATH)) {
-    logs = JSON.parse(fs.readFileSync(LOG_PATH, "utf-8"));
+    logs = JSON.parse(fs.readFileSync(LOG_PATH, "utf-8")) as EventLogEntry[];
   }
 
   logs.push(newEntry);
   fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
 
   const externalPayload = {
-    web_agent_id: webAgentIdHeader || null,
+    web_agent_id: newEntry.web_agent_id,
     web_url: req.headers.get("referer"),
     data: newEntry,
   };
 
-  await fetch("http://app:8080/save_events", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(externalPayload),
-  });
+  try {
+    await fetch("http://app:8080/save_events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(externalPayload),
+    });
+  } catch (error) {
+    console.error("Failed to forward event to external service:", error);
+  }
 
   return NextResponse.json({ success: true });
 }
+
 export async function GET() {
   if (!fs.existsSync(LOG_PATH)) {
     return NextResponse.json({ logs: [] });
@@ -81,6 +100,6 @@ export async function GET() {
 }
 
 export async function DELETE() {
-  fs.writeFileSync(LOG_PATH, JSON.stringify([], null, 2)); // Clear the log
+  fs.writeFileSync(LOG_PATH, JSON.stringify([], null, 2));
   return NextResponse.json({ success: true, message: "Event log cleared" });
 }

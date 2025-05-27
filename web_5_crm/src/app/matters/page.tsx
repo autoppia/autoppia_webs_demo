@@ -139,7 +139,7 @@ export default function MattersListPage() {
   const deleteSelected = () => {
     const deleted = matters.filter((m) => selected.includes(m.id));
     updateMatters(matters.filter((m) => !selected.includes(m.id)));
-    logEvent(EVENT_TYPES.DELETE_MATTER, deleted);
+    logEvent(EVENT_TYPES.DELETE_MATTER, {deleted});
     setSelected([]);
   };
 
@@ -149,7 +149,7 @@ export default function MattersListPage() {
     );
     const archived = matters.filter((m) => selected.includes(m.id));
     updateMatters(newList);
-    logEvent(EVENT_TYPES.ARCHIVE_MATTER, archived);
+    logEvent(EVENT_TYPES.ARCHIVE_MATTER, {archived});
     setSelected([]);
   };
 
