@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     web_url: req.headers.get('referer'),
     data: newEntry,
   };
-  console.log(":rocket: Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+
   await fetch('http://app:8080/save_events', {
     method: 'POST',
     headers: {

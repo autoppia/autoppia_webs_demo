@@ -58,11 +58,6 @@ export async function POST(req: NextRequest) {
     data: newEntry,
   };
 
-  console.log(
-    "🚀 Forwarding event to external backend:",
-    JSON.stringify(externalPayload, null, 2)
-  );
-
   await fetch("http://app:8080/save_events", {
     method: "POST",
     headers: {
