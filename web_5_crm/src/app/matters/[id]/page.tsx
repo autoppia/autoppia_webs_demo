@@ -56,11 +56,20 @@ const DEMO_MATTERS = [
     description: "Strategic legal counsel for merger assessment.",
   },
 ];
+type Matter = {
+  id: string;
+  name: string;
+  status: string;
+  client: string;
+  updated: string;
+  opened: string;
+  description: string;
+};
 
 export default function MatterDetailPage() {
   const [tab, setTab] = useState("Overview");
   const [summaryOpen, setSummaryOpen] = useState(true);
-  const [customMatters, setCustomMatters] = useState<any[]>([]);
+  const [customMatters, setCustomMatters] = useState<Matter[]>([]);
   const params = useParams();
   const matterId = params?.id as string;
 
