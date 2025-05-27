@@ -64,8 +64,8 @@ export async function GET() {
 //     return NextResponse.json({ error: 'Failed to read logs.' }, { status: 500 });
 //   }
 // }
-  return NextResponse.json({ logs: [] });
-
+  return NextResponse.json({logs: []});
+}
 export async function DELETE() {
   // try {
   //   fs.writeFileSync(LOG_PATH, JSON.stringify([], null, 2));
