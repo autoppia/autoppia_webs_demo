@@ -107,7 +107,6 @@ EOF
 }
 
 echo "🔄 Deploying selected demo(s)..."
-cd ..
 
 case "$WEB_DEMO" in
   movies)
