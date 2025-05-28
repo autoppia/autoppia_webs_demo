@@ -15,9 +15,7 @@ export default function SearchPage() {
   const { addToCart } = useCart();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
 
-  const results = products.filter((p) =>
-    p.title.toLowerCase().includes(query)
-  );
+  const results = products.filter((p) => p.title.toLowerCase().includes(query));
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);
@@ -43,7 +41,21 @@ export default function SearchPage() {
       {results.length === 0 && <p>No products found.</p>}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {results.map((product) => (
-          <Link key={product.id} href={`/${product.id}`} passHref>
+          <Link
+            key={product.id}
+            href={`/${product.id}`}
+            onClick={() =>
+              logEvent(EVENT_TYPES.VIEW_DETAIL, {
+                productId: product.id,
+                title: product.title,
+                price: product.price || "$0.00",
+                rating: product.rating ?? 0,
+                brand: product.brand || "Generic",
+                category: product.category || "Uncategorized",
+              })
+            }
+            passHref
+          >
             <div className="border p-3 rounded bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow">
               <img
                 src={product.image}
@@ -62,7 +74,9 @@ export default function SearchPage() {
                 Add to Cart
               </Button>
               {addedToCartId === product.id && (
-                <p className="text-green-600 text-xs text-center mt-1">✓ Added to cart</p>
+                <p className="text-green-600 text-xs text-center mt-1">
+                  ✓ Added to cart
+                </p>
               )}
             </div>
           </Link>
