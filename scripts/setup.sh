@@ -49,10 +49,12 @@ if ! command -v docker &> /dev/null; then
   exit 1
 fi
 
-# Check if Docker is running (systemd-based check)
-if ! systemctl is-active --quiet docker; then
-  echo "🔄 Starting Docker service..."
-  sudo systemctl start docker
+# Check if Docker is running
+if ! docker info &> /dev/null; then
+  echo "❌ Docker is not running. Please start Docker first."
+  exit 1
+else
+  echo "✅ Docker is running"
 fi
 
 # This function deploys the specified project folder

@@ -3,7 +3,7 @@ FROM python:3.10-slim
 # Evitar archivos .pyc
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV DB_NAME=web3_movies
+ENV DB_NAME=web1_movies
 ENV DB_USER=postgres
 ENV DB_PASSWORD=autoppia_2025
 ENV DB_HOST=db
