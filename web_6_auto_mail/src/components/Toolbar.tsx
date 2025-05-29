@@ -27,7 +27,7 @@ import {
   Grid3X3,
   X,
 } from 'lucide-react';
-
+import { EVENT_TYPES, logEvent } from "@/library/events";
 interface ToolbarProps {
   onMenuClick?: () => void;
 }
@@ -51,6 +51,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
     }
     setSearchQuery(searchValue);
     setIsSearching(false);
+    logEvent(EVENT_TYPES.SEARCH_EMAIL, { query: searchValue });
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,11 +71,12 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
     }
 
     setIsSearching(true);
-
+    
     // Debounced search - update context after user stops typing for 300ms
     const timeout = setTimeout(() => {
       setSearchQuery(value);
       setIsSearching(false);
+      logEvent(EVENT_TYPES.SEARCH_EMAIL, { query: value });
     }, 300);
 
     setSearchTimeout(timeout);
@@ -129,9 +131,9 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
 
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-primary via-primary/80 to-primary/60 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-sm">M</span>
+              <span className="text-white font-bold text-sm">A</span>
             </div>
-            <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">MailFlow</span>
+            <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">AutoMail</span>
           </div>
         </div>
 
@@ -169,12 +171,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
             )}
           </form>
 
-          {/* Search Results Summary */}
-          {searchQuery && (
-            <div className="text-xs text-muted-foreground mt-1 px-3">
-              {filteredEmails.length} result{filteredEmails.length !== 1 ? 's' : ''} for "{searchQuery}"
-            </div>
-          )}
+         
         </div>
 
         {/* Right Section - Controls */}
@@ -228,7 +225,11 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                     <Button
                       variant={theme === 'light' ? 'secondary' : 'ghost'}
                       size="sm"
-                      onClick={() => setTheme('light')}
+                      onClick={() => {
+                        setTheme('light');
+                        logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'light' });
+                      }}
+                      
                     >
                       <Sun className="h-3 w-3" />
                     </Button>
@@ -238,7 +239,10 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                     <Button
                       variant={theme === 'dark' ? 'secondary' : 'ghost'}
                       size="sm"
-                      onClick={() => setTheme('dark')}
+                      onClick={() => {
+                        setTheme('dark');
+                        logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'dark' });
+                      }}                      
                     >
                       <Moon className="h-3 w-3" />
                     </Button>
@@ -248,7 +252,10 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                     <Button
                       variant={theme === 'system' ? 'secondary' : 'ghost'}
                       size="sm"
-                      onClick={() => setTheme('system')}
+                      onClick={() => {
+                        setTheme('system');
+                        logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'system' });
+                      }}                      
                     >
                       <Monitor className="h-3 w-3" />
                     </Button>

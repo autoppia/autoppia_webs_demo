@@ -22,6 +22,7 @@ import {
   userLabels,
   systemLabels,
 } from "@/library/mockData";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface EmailState {
   emails: Email[];
@@ -481,6 +482,11 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
   // Compose actions
   const toggleCompose = useCallback((open?: boolean) => {
     dispatch({ type: "TOGGLE_COMPOSE", payload: open });
+    if (open) {
+      logEvent(EVENT_TYPES.COMPOSE_EMAIL, {
+        action: "opened_compose"
+      });
+    }
   }, []);
 
   const updateComposeData = useCallback((data: Partial<ComposeEmailData>) => {

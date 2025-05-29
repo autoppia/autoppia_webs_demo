@@ -24,6 +24,7 @@ import {
   List,
   Save,
 } from 'lucide-react';
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export function ComposeModal() {
   const {
@@ -52,41 +53,9 @@ export function ComposeModal() {
     }
   };
 
-  const handleCcKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',' || e.key === ' ') {
-      e.preventDefault();
-      if (ccInput.trim()) {
-        const newCc = [...(composeData.cc || []), ccInput.trim()];
-        updateComposeData({ cc: newCc });
-        setCcInput('');
-      }
-    }
-  };
-
-  const handleBccKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',' || e.key === ' ') {
-      e.preventDefault();
-      if (bccInput.trim()) {
-        const newBcc = [...(composeData.bcc || []), bccInput.trim()];
-        updateComposeData({ bcc: newBcc });
-        setBccInput('');
-      }
-    }
-  };
-
   const removeToEmail = (index: number) => {
     const newTo = composeData.to.filter((_, i) => i !== index);
     updateComposeData({ to: newTo });
-  };
-
-  const removeCcEmail = (index: number) => {
-    const newCc = (composeData.cc || []).filter((_, i) => i !== index);
-    updateComposeData({ cc: newCc });
-  };
-
-  const removeBccEmail = (index: number) => {
-    const newBcc = (composeData.bcc || []).filter((_, i) => i !== index);
-    updateComposeData({ bcc: newBcc });
   };
 
   const handleSend = () => {
@@ -105,10 +74,21 @@ export function ComposeModal() {
       updateComposeData({ bcc: [...(composeData.bcc || []), bccInput.trim()] });
     }
 
+    logEvent(EVENT_TYPES.SEND_EMAIL, {
+      to: [...composeData.to, toInput.trim()],
+      subject: composeData.subject || '',
+    });
+  
     sendEmail();
   };
 
   const handleSaveDraft = () => {
+    logEvent(EVENT_TYPES.EMAIL_SAVE_AS_DRAFT, {
+      to: composeData.to,
+      subject: composeData.subject || '',
+      body_length: composeData.body?.length || 0,
+      attachments_count: composeData.attachments?.length || 0,
+    });
     saveDraft();
   };
 
@@ -143,7 +123,7 @@ export function ComposeModal() {
           <div className="px-4 py-3 space-y-3">
             {/* To Field */}
             <div className="flex items-start gap-3">
-              <Label className="text-xs font-medium text-muted-foreground w-8 pt-2">
+              <Label className="text-xs font-medium text-muted-foreground w-4 pt-2">
                 To
               </Label>
               <div className="flex-1 min-h-[36px] border border-border rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/50 bg-background">
@@ -192,7 +172,7 @@ export function ComposeModal() {
 
             {/* Subject */}
             <div className="flex items-center gap-3">
-              <Label className="text-xs font-medium text-muted-foreground w-8">
+              <Label className="text-xs font-medium text-muted-foreground w-10">
                 Subject
               </Label>
               <Input

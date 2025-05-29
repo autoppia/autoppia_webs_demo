@@ -10,6 +10,7 @@ import { useEmail } from "@/contexts/EmailContext";
 import { systemLabels } from "@/library/mockData";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import type { EmailFolder } from "@/types/email";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   Inbox,
   Star,
@@ -19,12 +20,10 @@ import {
   AlertTriangle,
   Trash2,
   Mail,
-  Tag,
   Settings,
   Users,
   MessageSquare,
   PenTool,
-  Plus,
 } from "lucide-react";
 
 interface NavigationItem {
@@ -34,6 +33,16 @@ interface NavigationItem {
   count?: number;
   type: "folder" | "label";
 }
+
+const folderEventMap = {
+  inbox: EVENT_TYPES.INBOX_SIDEBAR_CLICKED,
+  starred: EVENT_TYPES.STARRED_SIDEBAR_CLICKED,
+  sent: EVENT_TYPES.SENT_SIDEBAR_CLICKED,
+  drafts: EVENT_TYPES.DRAFT_SIDEBAR_CLICKED,
+  important: EVENT_TYPES.IMPORTANT_SIDEBAR_CLICKED,
+  trash: EVENT_TYPES.TRASH_SIDEBAR_CLICKED,
+} as const;
+
 
 export function Sidebar() {
   const {
@@ -47,7 +56,6 @@ export function Sidebar() {
     createLabel,
   } = useEmail();
 
-  // Calculate counts for different folders
   const getCounts = () => {
     return {
       inbox: emails.filter(
@@ -89,12 +97,9 @@ export function Sidebar() {
     };
   };
 
-  // Calculate label counts
   const getLabelCounts = () => {
     const labelCounts: Record<string, number> = {};
-
     for (const email of emails) {
-      // Only count emails that are not in trash or spam for custom labels
       const isInTrashOrSpam = email.labels.some((l) =>
         ["spam", "trash"].includes(l.id)
       );
@@ -106,7 +111,6 @@ export function Sidebar() {
         }
       }
     }
-
     return labelCounts;
   };
 
@@ -114,83 +118,35 @@ export function Sidebar() {
   const labelCounts = getLabelCounts();
 
   const navigationItems: NavigationItem[] = [
-    {
-      id: "inbox",
-      label: "Inbox",
-      icon: Inbox,
-      count: counts.inbox,
-      type: "folder",
-    },
-    {
-      id: "starred",
-      label: "Starred",
-      icon: Star,
-      count: counts.starred,
-      type: "folder",
-    },
-    {
-      id: "snoozed",
-      label: "Snoozed",
-      icon: Clock,
-      count: counts.snoozed,
-      type: "folder",
-    },
-    {
-      id: "sent",
-      label: "Sent",
-      icon: Send,
-      count: counts.sent,
-      type: "folder",
-    },
-    {
-      id: "drafts",
-      label: "Drafts",
-      icon: FileText,
-      count: counts.drafts,
-      type: "folder",
-    },
-    {
-      id: "important",
-      label: "Important",
-      icon: AlertTriangle,
-      count: counts.important,
-      type: "folder",
-    },
-    {
-      id: "spam",
-      label: "Spam",
-      icon: Mail,
-      count: counts.spam,
-      type: "folder",
-    },
-    {
-      id: "trash",
-      label: "Trash",
-      icon: Trash2,
-      count: counts.trash,
-      type: "folder",
-    },
+    { id: "inbox", label: "Inbox", icon: Inbox, count: counts.inbox, type: "folder" },
+    { id: "starred", label: "Starred", icon: Star, count: counts.starred, type: "folder" },
+    { id: "snoozed", label: "Snoozed", icon: Clock, count: counts.snoozed, type: "folder" },
+    { id: "sent", label: "Sent", icon: Send, count: counts.sent, type: "folder" },
+    { id: "drafts", label: "Drafts", icon: FileText, count: counts.drafts, type: "folder" },
+    { id: "important", label: "Important", icon: AlertTriangle, count: counts.important, type: "folder" },
+    { id: "spam", label: "Spam", icon: Mail, count: counts.spam, type: "folder" },
+    { id: "trash", label: "Trash", icon: Trash2, count: counts.trash, type: "folder" },
   ];
 
   const handleItemClick = (item: NavigationItem) => {
     if (item.type === "folder") {
       setFilter({ folder: item.id as EmailFolder });
+      if (item.type === "folder" && item.id in folderEventMap) {
+        const eventName = folderEventMap[item.id as keyof typeof folderEventMap];
+        logEvent(eventName, { label: item.label, id: item.id });
+      }         
     } else {
-      // When filtering by label, don't restrict to a specific folder
       setFilter({ folder: "inbox", label: item.id });
     }
   };
 
   const isActive = (item: NavigationItem) => {
-    if (item.type === "folder") {
-      return currentFilter.folder === item.id && !currentFilter.label;
-    }
+    if (item.type === "folder") return currentFilter.folder === item.id && !currentFilter.label;
     return currentFilter.label === item.id;
   };
 
   return (
     <div className="w-64 h-full sidebar-gradient border-r border-border/60 flex flex-col">
-      {/* Compose Button */}
       <div className="p-4">
         <Button
           onClick={() => toggleCompose(true)}
@@ -203,20 +159,15 @@ export function Sidebar() {
       </div>
 
       <ScrollArea className="flex-1 px-2">
-        {/* Main Navigation */}
         <div className="space-y-1 pb-4">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item);
-
             return (
               <Button
                 key={item.id}
                 variant={active ? "secondary" : "ghost"}
-                className={cn(
-                  "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover",
-                  active && "sidebar-item-active"
-                )}
+                className={cn("w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover", active && "sidebar-item-active")}
                 onClick={() => handleItemClick(item)}
               >
                 <Icon className="h-4 w-4" />
@@ -233,7 +184,6 @@ export function Sidebar() {
 
         <Separator className="my-4" />
 
-        {/* User Labels */}
         <div className="space-y-1 pb-4">
           <div className="flex items-center justify-between px-3 py-2">
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -245,16 +195,10 @@ export function Sidebar() {
             <Button
               key={label.id}
               variant={currentFilter.label === label.id ? "secondary" : "ghost"}
-              className={cn(
-                "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover",
-                currentFilter.label === label.id && "sidebar-item-active"
-              )}
+              className={cn("w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover", currentFilter.label === label.id && "sidebar-item-active")}
               onClick={() => setFilter({ folder: "inbox", label: label.id })}
             >
-              <div
-                className="h-3 w-3 rounded-full"
-                style={{ backgroundColor: label.color }}
-              />
+              <div className="h-3 w-3 rounded-full" style={{ backgroundColor: label.color }} />
               <span className="flex-1 text-left">{label.name}</span>
               {labelCounts[label.id] && labelCounts[label.id] > 0 && (
                 <Badge variant="secondary" className="h-5 px-1.5 text-xs">
@@ -267,36 +211,25 @@ export function Sidebar() {
 
         <Separator className="my-4" />
 
-        {/* Quick Actions */}
         <div className="space-y-1 pb-4">
           <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             More
           </div>
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal"
-          >
+          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <Users className="h-4 w-4" />
             Contacts
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal"
-          >
+          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <MessageSquare className="h-4 w-4" />
             Chats
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal"
-          >
+          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <Settings className="h-4 w-4" />
             Settings
           </Button>
         </div>
       </ScrollArea>
 
-      {/* Storage Info */}
       <div className="p-4 border-t border-border">
         <div className="text-xs text-muted-foreground">
           <div className="flex justify-between mb-1">
@@ -304,10 +237,7 @@ export function Sidebar() {
             <span>2.1 GB of 15 GB</span>
           </div>
           <div className="w-full bg-muted rounded-full h-1">
-            <div
-              className="bg-primary h-1 rounded-full"
-              style={{ width: "14%" }}
-            />
+            <div className="bg-primary h-1 rounded-full" style={{ width: "14%" }} />
           </div>
         </div>
       </div>

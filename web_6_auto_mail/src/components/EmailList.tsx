@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import type { Email } from "@/types/email";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   Star,
   Archive,
@@ -94,11 +95,22 @@ export function EmailList() {
     if (!email.isRead) {
       markAsRead(email.id);
     }
+    logEvent(EVENT_TYPES.VIEW_EMAIL, {
+      email_id: email.id,
+      subject: email.subject,
+      from: email.from.email,
+    });
   };
 
   const handleStarClick = (e: React.MouseEvent, email: Email) => {
     e.stopPropagation();
     toggleStar(email.id);
+    logEvent(EVENT_TYPES.STAR_AN_EMAIL, {
+      email_id: email.id,
+      subject: email.subject,
+      from: email.from.email,
+      isStar: email.isStarred,
+    });
   };
 
   const handleCheckboxClick = (e: React.MouseEvent, email: Email) => {

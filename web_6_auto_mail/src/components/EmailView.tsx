@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 // import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useEmail } from "@/contexts/EmailContext";
 import { LabelSelector } from "@/components/LabelSelector";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 // import { format } from 'date-fns';
 import {
   Star,
@@ -50,24 +51,50 @@ export function EmailView() {
 
   const handleStarClick = () => {
     toggleStar(currentEmail.id);
+    logEvent(EVENT_TYPES.STAR_AN_EMAIL, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+      isStar:currentEmail.isStarred
+    });
   };
 
   const handleImportantClick = () => {
     markAsImportant(currentEmail.id, !currentEmail.isImportant);
+    logEvent(EVENT_TYPES.MARK_EMAIL_AS_IMPORTANT, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+    });
   };
 
   const handleDeleteClick = () => {
     moveToTrash([currentEmail.id]);
     setCurrentEmail(null);
+    logEvent(EVENT_TYPES.DELETE_EMAIL, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+    });
   };
 
   const handleMarkAsUnread = () => {
     markAsUnread(currentEmail.id);
+    logEvent(EVENT_TYPES.MARK_AS_UNREAD, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+    });
   };
 
   const handleMarkAsSpam = () => {
     markAsSpam([currentEmail.id]);
     setCurrentEmail(null);
+    logEvent(EVENT_TYPES.MARK_AS_SPAM, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+    });
   };
 
   const formatFileSize = (bytes: number) => {
@@ -122,7 +149,13 @@ export function EmailView() {
               <Trash2 className="h-5 w-5" />
             </Button>
 
+            <Button
+              variant="ghost"
+              size="icon"
+              title="Add Label"
+            >
             <LabelSelector email={currentEmail} />
+            </Button>
 
             <Button variant="ghost" size="icon" title="Snooze">
               <Clock className="h-5 w-5" />

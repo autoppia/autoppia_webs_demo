@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useEmail } from '@/contexts/EmailContext';
 import { Plus } from 'lucide-react';
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 const LABEL_COLORS = [
   '#4285f4', // Blue
@@ -35,6 +36,10 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
   const handleCreate = () => {
     if (labelName.trim()) {
       createLabel(labelName.trim(), selectedColor);
+      logEvent(EVENT_TYPES.CREATE_LABEL, {
+        label_name: labelName.trim(),
+        label_color: selectedColor
+      });  
       setLabelName('');
       setSelectedColor(LABEL_COLORS[0]);
       setOpen(false);

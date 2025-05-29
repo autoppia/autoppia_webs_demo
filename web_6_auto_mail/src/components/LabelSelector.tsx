@@ -15,6 +15,7 @@ import { CreateLabelDialog } from '@/components/CreateLabelDialog';
 import { useEmail } from '@/contexts/EmailContext';
 import { Tag, Plus } from 'lucide-react';
 import type { Email, Label } from '@/types/email';
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface LabelSelectorProps {
   email?: Email;
@@ -66,6 +67,12 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
         } else {
           removeLabelFromEmails(targetEmailIds, label.id);
         }
+        logEvent(EVENT_TYPES.ADD_LABEL, {
+          label_id: label.id,
+          label_name: label.name,
+          email_ids: targetEmailIds,
+          action: checked ? 'added' : 'removed',
+        });
       }
 
       // Close the dropdown
