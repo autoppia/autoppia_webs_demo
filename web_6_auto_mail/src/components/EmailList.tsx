@@ -189,7 +189,7 @@ export function EmailList() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="flex flex-col h-full bg-background" suppressHydrationWarning>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-4">
@@ -379,6 +379,7 @@ function EmailItem({
         isSelected && "email-item-selected"
       )}
       onClick={onClick}
+      suppressHydrationWarning
     >
       {/* Selection Checkbox */}
       <div className="flex items-center">

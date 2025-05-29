@@ -55,7 +55,7 @@ export function EmailView() {
       email_id: currentEmail.id,
       subject: currentEmail.subject,
       from: currentEmail.from.email,
-      isStar:currentEmail.isStarred
+      isStar: currentEmail.isStarred,
     });
   };
 
@@ -104,7 +104,10 @@ export function EmailView() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div
+      className="h-full flex flex-col bg-background"
+      suppressHydrationWarning
+    >
       {/* Top Toolbar */}
       <div className="flex items-center justify-between p-4 toolbar-glass">
         <div className="flex items-center gap-2">
@@ -149,13 +152,9 @@ export function EmailView() {
               <Trash2 className="h-5 w-5" />
             </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              title="Add Label"
-            >
-            <LabelSelector email={currentEmail} />
-            </Button>
+            <div title="Add label">
+              <LabelSelector email={currentEmail} />
+            </div>
 
             <Button variant="ghost" size="icon" title="Snooze">
               <Clock className="h-5 w-5" />

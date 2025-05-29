@@ -18,7 +18,7 @@ export default function GmailPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background" suppressHydrationWarning>
       {/* Top Toolbar */}
       <Toolbar onMenuClick={toggleSidebar} />
 
