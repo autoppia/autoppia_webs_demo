@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AutoDining | Easy Restaurant Reservations & Dining Bookings",
-  description: "Book your favorite restaurants effortlessly with MealHours. Discover top dining spots, reserve tables instantly, and enjoy a seamless restaurant booking experience.",
+  description: "Book your favorite restaurants effortlessly with AutoDining. Discover top dining spots, reserve tables instantly, and enjoy a seamless restaurant booking experience.",
 };
 
 export default function RootLayout({
