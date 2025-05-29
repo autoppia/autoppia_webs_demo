@@ -5,6 +5,14 @@ set -e
 
 echo "🚀 Setting up web demos..."
 
+# Get script directory (where setup.sh is located)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Demos are in the parent directory of scripts/
+DEMOS_DIR="$(dirname "$SCRIPT_DIR")"
+
+echo "📂 Script location: $SCRIPT_DIR"
+echo "📂 Looking for demos in: $DEMOS_DIR"
+
 # Default ports
 WEB_PORT_DEFAULT=8000
 POSTGRES_PORT_DEFAULT=5434
@@ -59,10 +67,13 @@ fi
 
 # This function deploys the specified project folder
 deploy_project() {
-  local project_dir="$1"
+  local project_name="$1"
   local project_web_port="$2"
   local project_postgres_port="$3"
-  local project_name="$4"
+  local compose_project_name="$4"
+  
+  # Use absolute path relative to script location
+  local project_dir="$DEMOS_DIR/$project_name"
 
   if [ -d "$project_dir" ]; then
     echo "📂 Deploying $project_dir..."
@@ -74,20 +85,20 @@ POSTGRES_PORT=$project_postgres_port
 EOF
 
     # Check for existing containers
-    if sudo docker compose -p "$project_name" ps &>/dev/null; then
-      existing_containers=$(sudo docker compose -p "$project_name" ps -q | wc -l)
+    if sudo docker compose -p "$compose_project_name" ps &>/dev/null; then
+      existing_containers=$(sudo docker compose -p "$compose_project_name" ps -q | wc -l)
       if [ "$existing_containers" -gt 0 ]; then
-        echo "⚠️ Detected existing containers for $project_name."
+        echo "⚠️ Detected existing containers for $compose_project_name."
 
         if [ "$FORCE_DELETE" = true ]; then
-          echo "🗑  Force-deleting existing containers for $project_name..."
-          sudo docker compose -p "$project_name" down --volumes
+          echo "🗑  Force-deleting existing containers for $compose_project_name..."
+          sudo docker compose -p "$compose_project_name" down --volumes
         else
-          read -p "Do you want to remove existing containers for $project_name? (y/n) " choice
+          read -p "Do you want to remove existing containers for $compose_project_name? (y/n) " choice
           case "$choice" in
             [Yy]* ) 
               echo "🗑  Removing existing containers..."
-              sudo docker compose -p "$project_name" down --volumes
+              sudo docker compose -p "$compose_project_name" down --volumes
               ;;
             * )
               echo "Skipping removal of existing containers. Deployment may fail if ports are in use."
@@ -97,12 +108,17 @@ EOF
       fi
     fi
 
-    # Spin up containers
+    # Spin up containers (navigate to project directory first)
+    echo "🔧 Starting containers for $project_name..."
     pushd "$project_dir" > /dev/null
-    sudo docker compose -p "$project_name" up -d --build
+    sudo docker compose -p "$compose_project_name" up -d --build
     popd > /dev/null
+    
+    echo "✅ $project_name deployed successfully on port $project_web_port"
   else
     echo "⚠️ Project directory $project_dir not found."
+    echo "Available directories in $DEMOS_DIR:"
+    ls -la "$DEMOS_DIR" || echo "Directory not accessible"
   fi
 }
 
