@@ -3,7 +3,7 @@ set -e
 
 # --- Configuration Variables ---
 NODE_VERSION="v20"
-APP_NAME="mealhours-app"
+APP_NAME="autodining-app"
 APP_PORT="5002"
 APP_HOST="0.0.0.0"
 NVM_INSTALL_SCRIPT="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
