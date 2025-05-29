@@ -6,7 +6,7 @@ import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "../../../../../node_modules/@types/js-cookie";
+import Cookies from 'js-cookie';
 import dayjs from "dayjs";
 
 // const restaurantImgs: Record<string, string> = {

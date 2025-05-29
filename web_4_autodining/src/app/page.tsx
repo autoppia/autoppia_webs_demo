@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "../../node_modules/@types/js-cookie";
+import Cookies from 'js-cookie';
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
 const namePool = [
