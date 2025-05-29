@@ -30,7 +30,7 @@ Ensure the following tools are installed:
 ```bash
 git clone https://github.com/autoppia/autoppia_webs_demo.git
 
-cd web_4_meal_hours
+cd web_4_autodining
 ```
 ## Installation & Deployment
 <pre> ```docker-compose up --build ``` </pre>

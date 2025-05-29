@@ -6,7 +6,7 @@ import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "js-cookie";
+import Cookies from "../../../../../node_modules/@types/js-cookie";
 import dayjs from "dayjs";
 
 // const restaurantImgs: Record<string, string> = {
@@ -200,7 +200,7 @@ const [people, setPeople] = useState(2);
             <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">
-                  MEAL-HOURS
+                  AutoDining
                 </span>
               </div>
             </Link>

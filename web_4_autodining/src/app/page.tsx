@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "js-cookie";
+import Cookies from "../../node_modules/@types/js-cookie";
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
 const namePool = [
@@ -356,7 +356,7 @@ export default function HomePage() {
             <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">
-                  MEAL-HOURS
+                  AutoDining
                 </span>
               </div>
             </Link>
