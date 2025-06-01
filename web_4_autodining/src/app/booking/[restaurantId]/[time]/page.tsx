@@ -9,22 +9,7 @@ import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Cookies from 'js-cookie';
 import dayjs from "dayjs";
 
-// const restaurantImgs: Record<string, string> = {
-//   "royal-dine": "https://ext.same-assets.com/3952155396/849522504.jpeg",
-//   "vintage-bites": "https://ext.same-assets.com/3952155396/849522504.jpeg",
-//   "evening-delight": "https://ext.same-assets.com/3952155396/849522504.jpeg",
-//   "river-view-cafe": "https://ext.same-assets.com/3952155396/849522504.jpeg",
-//   "fancy-lights-bistro":
-//     "https://ext.same-assets.com/3952155396/849522504.jpeg",
-// };
 
-// const restaurantNames: Record<string, string> = {
-//   "royal-dine": "The Royal Dine",
-//   "vintage-bites": "Vintage Bites",
-//   "evening-delight": "Evening Delight",
-//   "river-view-cafe": "River View Café",
-//   "fancy-lights-bistro": "Fancy Lights Bistro",
-// };
 const countries = [
   { code: "AR", name: "Argentina", dial: "+54", flag: "🇦🇷" },
   { code: "AU", name: "Australia", dial: "+61", flag: "🇦🇺" },

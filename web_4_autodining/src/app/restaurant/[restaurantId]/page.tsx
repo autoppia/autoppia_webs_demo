@@ -7,13 +7,19 @@ import {
   ChevronDownIcon,
   ClockIcon,
 } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { format } from "date-fns";
 import React from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-
+import Cookies from 'js-cookie';
 const restaurantData: Record<string, {
   name: string;
   image: string;
@@ -75,11 +81,14 @@ export default function RestaurantPage() {
   const id = params.restaurantId as string;
   const r = restaurantData[id] || restaurantData["vintage-bites"];
   const [people, setPeople] = useState();
-  const [date, setDate] = useState(new Date());
   const [time, setTime] = useState();
   const [showFullMenu, setShowFullMenu] = useState(false);
+  const [peopleOpen, setPeopleOpen] = useState(false);
+  const [dateOpen, setDateOpen] = useState(false);
+const [timeOpen, setTimeOpen] = useState(false);
+const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const formattedDate = format(date, "yyyy-MM-dd");
+   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
   const handleToggleMenu = () => {
     const newState = !showFullMenu;
@@ -100,7 +109,50 @@ export default function RestaurantPage() {
       ] : [],
     });
   };
+  const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
+  const handlePeopleSelect = (n: number) => {
+    setPeople(n);
+    Cookies.set("reservation_people", String(n));
+    logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
+  };
+  const handleTimeSelect = (t: string) => {
+    setTime(t);
+    Cookies.set("reservation_time", t);
+    logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
+  };
+  const timeOptions = [
+    "12:00 PM",
+    "12:30 PM",
+    "1:00 PM",
+    "1:30 PM",
+    "2:00 PM",
+    "2:30 PM",
+  ];
+  function toLocalISO(date: Date): string {
+    const pad = (n: number) => String(n).padStart(2, '0');
 
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    const tzOffset = -date.getTimezoneOffset();
+    const sign = tzOffset >= 0 ? '+' : '-';
+    const offsetHours = pad(Math.floor(Math.abs(tzOffset) / 60));
+    const offsetMinutes = pad(Math.abs(tzOffset) % 60);
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMinutes}`;
+  }
+  const handleDateSelect = (d: Date | undefined) => {
+    setDate(d);
+    if (d) {
+      Cookies.set("reservation_date", d.toISOString());
+      // logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+      logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: toLocalISO(d) });
+    }
+  };
   return (
     <main>
       {/* Banner Image */}
@@ -255,31 +307,84 @@ export default function RestaurantPage() {
           </h2>
           <div className="flex flex-col gap-3">
             {/* People select (demo, not fully interactive) */}
-            <div>
+            <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 min-w-[120px] justify-start"
+            >
+              <UserIcon className="h-5 w-5 text-gray-700" />
+              {people ? people:  "Pick People"} {people === 1 ? "person" : "people"}{" "}
+              <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-36 p-1">
+            {peopleOptions.map((n) => (
               <Button
-                variant="outline"
-                className="w-full justify-start text-left flex items-center"
+                key={n}
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => {
+                  handlePeopleSelect(n);
+                  setPeopleOpen(false);
+                }}
               >
-                <UserIcon className="h-5 w-5 text-gray-700 mr-2" />
-                {people} {people === 1 ? "person" : "people"}{" "}
-                <ChevronDownIcon className="ml-auto h-4 w-4" />
+                {n} {n === 1 ? "person" : "people"}
               </Button>
-            </div>
+            ))}
+          </PopoverContent>
+        </Popover>
             {/* Date/time row */}
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="w-1/2 flex items-center justify-start"
-              >
-                <CalendarIcon className="mr-2" /> {format(date, "MMM d, yyyy")}
-              </Button>
-              <Button
-                variant="outline"
-                className="w-1/2 flex items-center justify-start"
-              >
-                <ClockIcon className="mr-2" /> {time}
-                <ChevronDownIcon className="ml-auto h-4 w-4" />
-              </Button>
+              <Popover open={dateOpen} onOpenChange={setDateOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="flex items-center gap-2 min-w-[120px] justify-start"
+                          >
+                            <CalendarIcon className="h-5 w-5 text-gray-700" />
+                            {date ? format(date, "MMM d") : "Pick date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={(d) => {
+                              handleDateSelect(d);
+                              setDateOpen(false);
+                            }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+             <Popover open={timeOpen} onOpenChange={setTimeOpen}>
+                       <PopoverTrigger asChild>
+                         <Button
+                           variant="outline"
+                           className="flex items-center gap-2 min-w-[120px] justify-start"
+                         >
+                           <ClockIcon className="h-5 w-5 text-gray-700" />
+                           {time ? time : "Pick Time"}
+                           <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                         </Button>
+                       </PopoverTrigger>
+                       <PopoverContent className="w-36 p-1">
+                         {timeOptions.map((t) => (
+                           <Button
+                             key={t}
+                             variant="ghost"
+                             className="w-full justify-start"
+                             onClick={() => {
+                               handleTimeSelect(t);
+                               setTimeOpen(false);
+                             }}
+                           >
+                             {t}
+                           </Button>
+                         ))}
+                       </PopoverContent>
+                     </Popover>
             </div>
             {/* Time slots */}
             <div className="mt-3">
