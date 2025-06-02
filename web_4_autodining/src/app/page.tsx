@@ -19,29 +19,151 @@ import {
 } from "lucide-react";
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
 const namePool = [
-  "The Royal Dine", "Vintage Bites", "Evening Delight", "River View Café", "Fancy Lights Bistro",
-  "Urban Palate", "Tandoori House", "Zen Sushi", "El Toro", "Bella Vita",
-  "Coastal Catch", "Harvest Table", "Crimson Spoon", "Golden Lotus", "The Hungry Fork",
-  "Ocean's Plate", "Fire & Spice", "Olive & Vine", "La Bella Cucina", "Sunset Grill",
-  "Noir Brasserie", "Blue Orchid", "Saffron Garden", "Rustic Roots", "Amber Lounge",
-  "Bistro Lumière", "Maple Hearth", "Oak & Ember", "Peppercorn Place", "The Local Dish",
-  "Cedar Grove Café", "Soleil Bistro", "Brickhouse Eats", "Wanderlust Grill", "The Nest",
-  "Cafe Verona", "Midtown Meals", "Ginger & Thyme", "Lavender & Sage", "Hearthstone Inn",
-  "Juniper Table", "The Garden Fork", "Twilight Tapas", "Meadow & Moor", "The Vine",
-  "Ember Flame", "Miso Modern", "The Borough", "Copper Kitchen", "Pine & Poppy"
+  "The Royal Dine",
+  "Vintage Bites",
+  "Evening Delight",
+  "River View Café",
+  "Fancy Lights Bistro",
+  "Urban Palate",
+  "Tandoori House",
+  "Zen Sushi",
+  "El Toro",
+  "Bella Vita",
+  "Coastal Catch",
+  "Harvest Table",
+  "Crimson Spoon",
+  "Golden Lotus",
+  "The Hungry Fork",
+  "Ocean's Plate",
+  "Fire & Spice",
+  "Olive & Vine",
+  "La Bella Cucina",
+  "Sunset Grill",
+  "Noir Brasserie",
+  "Blue Orchid",
+  "Saffron Garden",
+  "Rustic Roots",
+  "Amber Lounge",
+  "Bistro Lumière",
+  "Maple Hearth",
+  "Oak & Ember",
+  "Peppercorn Place",
+  "The Local Dish",
+  "Cedar Grove Café",
+  "Soleil Bistro",
+  "Brickhouse Eats",
+  "Wanderlust Grill",
+  "The Nest",
+  "Cafe Verona",
+  "Midtown Meals",
+  "Ginger & Thyme",
+  "Lavender & Sage",
+  "Hearthstone Inn",
+  "Juniper Table",
+  "The Garden Fork",
+  "Twilight Tapas",
+  "Meadow & Moor",
+  "The Vine",
+  "Ember Flame",
+  "Miso Modern",
+  "The Borough",
+  "Copper Kitchen",
+  "Pine & Poppy",
 ];
 
-const cuisines = ["French", "Italian", "American", "Japanese", "Mexican", "Indian", "Thai", "Café", "Mediterranean"];
-const areas = ["Mission District", "SOMA", "North Beach", "Downtown", "Hayes Valley", "Nob Hill", "Japantown", "Embarcadero", "Marina"];
+const cuisines = [
+  "French",
+  "Italian",
+  "American",
+  "Japanese",
+  "Mexican",
+  "Indian",
+  "Thai",
+  "Café",
+  "Mediterranean",
+];
+const areas = [
+  "Mission District",
+  "SOMA",
+  "North Beach",
+  "Downtown",
+  "Hayes Valley",
+  "Nob Hill",
+  "Japantown",
+  "Embarcadero",
+  "Marina",
+];
 
-const staticReviews = [18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48, 60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90, 96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88];
-const staticBookings = [6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92, 94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83, 93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90];
-const staticStars = [3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4];
-const staticPrices = ["$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$"];
+const staticReviews = [
+  18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48,
+  60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90,
+  96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88,
+];
+const staticBookings = [
+  6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92,
+  94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83,
+  93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90,
+];
+const staticStars = [
+  3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3,
+  4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4,
+];
+const staticPrices = [
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+];
 
 const restaurants = Array.from({ length: 50 }, (_, i) => {
   return {
@@ -62,43 +184,6 @@ const restaurants = Array.from({ length: 50 }, (_, i) => {
 const lunchRestaurants = restaurants.slice(0, 15);
 const iconRestaurants = restaurants.slice(15, 30);
 const awardRestaurants = restaurants.slice(30, 50);
-
-// Diners' Favorite Data
-const dinersFavorites = [
-  {
-    id: "fancy-lights-bistro",
-    name: "Fancy Lights Bistro",
-    img: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    cuisine: "Mediterranean",
-    price: "$$$$",
-    rating: 4.33,
-    reviews: 20,
-    desc: "This chic bistro features ambient lighting and a stylish interior, paired with an innovative menu of gourmet dishes. Ideal for a trendy night out or an intimate dinner.",
-    top: true,
-  },
-  {
-    id: "evening-delight",
-    name: "Evening Delight",
-    img: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    cuisine: "Italian",
-    price: "$$$$",
-    rating: 4.2,
-    reviews: 20,
-    desc: "A warm and inviting restaurant, ideal for romantic dinners or casual evening gatherings.",
-    top: false,
-  },
-  {
-    id: "vintage-bites",
-    name: "Vintage Bites",
-    img: "https://ext.same-assets.com/3952155396/849522504.jpeg",
-    cuisine: "American",
-    price: "$$$$",
-    rating: 4.2,
-    reviews: 20,
-    desc: "Step into a retro-inspired eatery serving up classic dishes with a modern twist. The eclectic decor and hearty menu make it a local favorite.",
-    top: false,
-  },
-];
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -137,9 +222,9 @@ function RestaurantCard({
           logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
             restaurantId: r.id,
             restaurantName: r.name,
-            cuisine:r.cuisine,
-            area:r.area,
-            reviews:r.reviews
+            cuisine: r.cuisine,
+            area: r.area,
+            reviews: r.reviews,
           })
         }
       >
@@ -295,15 +380,15 @@ export default function HomePage() {
     const savedDate = Cookies.get("reservation_date");
     const savedTime = Cookies.get("reservation_time");
     const savedPeople = Cookies.get("reservation_people");
-  
+
     if (savedDate) setDate(new Date(savedDate));
     else setDate(new Date());
-  
+
     if (savedTime) setTime(savedTime);
     if (savedPeople) setPeople(parseInt(savedPeople));
   }, []);
   function toLocalISO(date: Date): string {
-    const pad = (n: number) => String(n).padStart(2, '0');
+    const pad = (n: number) => String(n).padStart(2, "0");
 
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1);
@@ -313,7 +398,7 @@ export default function HomePage() {
     const seconds = pad(date.getSeconds());
 
     const tzOffset = -date.getTimezoneOffset();
-    const sign = tzOffset >= 0 ? '+' : '-';
+    const sign = tzOffset >= 0 ? "+" : "-";
     const offsetHours = pad(Math.floor(Math.abs(tzOffset) / 60));
     const offsetMinutes = pad(Math.abs(tzOffset) % 60);
 
@@ -373,9 +458,7 @@ export default function HomePage() {
           <div className="flex items-center gap-3">
             <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">
-                  AutoDining
-                </span>
+                <span className="font-bold text-white text-lg">AutoDining</span>
               </div>
             </Link>
             {/* TODO: Location Dropdown/Icon, etc. */}
@@ -460,7 +543,8 @@ export default function HomePage() {
               className="flex items-center gap-2 min-w-[120px] justify-start"
             >
               <UserIcon className="h-5 w-5 text-gray-700" />
-              {people ? people:  "Pick People"} {people === 1 ? "person" : "people"}{" "}
+              {people ? people : "Pick People"}{" "}
+              {people === 1 ? "person" : "people"}{" "}
               <ChevronDownIcon className="h-4 w-4 text-gray-400" />
             </Button>
           </PopoverTrigger>
@@ -563,49 +647,78 @@ export default function HomePage() {
           dine, and review. Only verified diners get to review restaurants on
           OpenDinning, so our data doesn't lie.
         </div>
+
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Left: Large image and description for top pick */}
-          <div className="flex-[2] min-w-[270px]">
-            <img
-              className="rounded-lg w-full max-h-60 object-cover mb-2"
-              src={dinersFavorites[0].img}
-              alt={dinersFavorites[0].name}
-            />
-            <div className="font-bold text-lg">{dinersFavorites[0].name}</div>
-            <div className="text-gray-500 text-sm mb-1">
-              Diners top pick · {dinersFavorites[0].cuisine}{" "}
-              <StarNumber rating={dinersFavorites[0].rating} />{" "}
-              <span className="text-gray-600">
-                ({dinersFavorites[0].reviews})
-              </span>
+          {/* Top pick */}
+          <Link
+            href={`/restaurant/${restaurants[0].id}`}
+            passHref
+            className="flex-[2] min-w-[270px] cursor-pointer group"
+            onClick={() =>
+              logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+                restaurantId: restaurants[0].id,
+                restaurantName: restaurants[0].name,
+                cuisine: restaurants[0].cuisine,
+                area: restaurants[0].area,
+                reviews: restaurants[0].reviews,
+              })
+            }
+          >
+            <div>
+              <img
+                className="rounded-lg w-full max-h-60 object-cover mb-2 group-hover:opacity-90 transition"
+                src={restaurants[0].image}
+                alt={restaurants[0].name}
+              />
+              <div className="font-bold text-lg">{restaurants[0].name}</div>
+              <div className="text-gray-500 text-sm mb-1">
+                Diners top pick · {restaurants[0].cuisine}{" "}
+                <StarNumber rating={restaurants[0].stars} />{" "}
+                <span className="text-gray-600">
+                  ({restaurants[0].reviews})
+                </span>
+              </div>
+              <div className="text-gray-700 text-[15px]">
+                Located in {restaurants[0].area}, {restaurants[0].name} is a
+                favorite for {restaurants[0].cuisine} cuisine lovers.
+              </div>
             </div>
-            <div className="text-gray-700 text-[15px]">
-              {dinersFavorites[0].desc}
-            </div>
-          </div>
-          {/* Right: List of other favorite restaurants */}
+          </Link>
+
+          {/* Next two favorites */}
           <div className="flex flex-1 flex-col gap-3 min-w-56">
-            {dinersFavorites.slice(1).map((r) => (
-              <div
+            {restaurants.slice(1, 3).map((r) => (
+              <Link
                 key={r.id}
-                className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0"
+                href={`/restaurant/${r.id}`}
+                passHref
+                className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0 cursor-pointer group"
+                onClick={() =>
+                  logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+                    restaurantId: r.id,
+                    restaurantName: r.name,
+                    cuisine: r.cuisine,
+                    area: r.area,
+                    reviews: r.reviews,
+                  })
+                }
               >
                 <img
-                  className="w-24 h-20 rounded-lg object-cover"
-                  src={r.img}
+                  className="w-24 h-20 rounded-lg object-cover group-hover:opacity-90 transition"
+                  src={r.image}
                   alt={r.name}
                 />
                 <div className="flex-1 flex flex-col">
                   <div className="font-semibold text-lg">{r.name}</div>
                   <div className="text-gray-500 text-sm mb-1">
-                    {r.price} • {r.cuisine} <StarNumber rating={r.rating} />{" "}
+                    {r.price} • {r.cuisine} <StarNumber rating={r.stars} />{" "}
                     <span className="text-gray-700">({r.reviews})</span>
                   </div>
                   <div className="text-gray-700 text-[15px] line-clamp-2">
-                    {r.desc}
+                    Located in {r.area}, well-rated by {r.reviews} diners.
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

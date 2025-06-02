@@ -19,39 +19,165 @@ import { format } from "date-fns";
 import React from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from 'js-cookie';
-const restaurantData: Record<string, {
-  name: string;
-  image: string;
-  rating: number;
-  reviews: number;
-  bookings: number;
-  price: string;
-  cuisine: string;
-  tags: string[];
-  desc: string;
-  photos: string[];
-}> = {};
+import Cookies from "js-cookie";
+import Link from "next/link";
+const restaurantData: Record<
+  string,
+  {
+    name: string;
+    image: string;
+    rating: number;
+    reviews: number;
+    bookings: number;
+    price: string;
+    cuisine: string;
+    tags: string[];
+    desc: string;
+    photos: string[];
+  }
+> = {};
 
 const namePool = [
-  "The Royal Dine", "Vintage Bites", "Evening Delight", "River View Café", "Fancy Lights Bistro",
-  "Urban Palate", "Tandoori House", "Zen Sushi", "El Toro", "Bella Vita",
-  "Coastal Catch", "Harvest Table", "Crimson Spoon", "Golden Lotus", "The Hungry Fork",
-  "Ocean's Plate", "Fire & Spice", "Olive & Vine", "La Bella Cucina", "Sunset Grill",
-  "Noir Brasserie", "Blue Orchid", "Saffron Garden", "Rustic Roots", "Amber Lounge",
-  "Bistro Lumière", "Maple Hearth", "Oak & Ember", "Peppercorn Place", "The Local Dish",
-  "Cedar Grove Café", "Soleil Bistro", "Brickhouse Eats", "Wanderlust Grill", "The Nest",
-  "Cafe Verona", "Midtown Meals", "Ginger & Thyme", "Lavender & Sage", "Hearthstone Inn",
-  "Juniper Table", "The Garden Fork", "Twilight Tapas", "Meadow & Moor", "The Vine",
-  "Ember Flame", "Miso Modern", "The Borough", "Copper Kitchen", "Pine & Poppy"
+  "The Royal Dine",
+  "Vintage Bites",
+  "Evening Delight",
+  "River View Café",
+  "Fancy Lights Bistro",
+  "Urban Palate",
+  "Tandoori House",
+  "Zen Sushi",
+  "El Toro",
+  "Bella Vita",
+  "Coastal Catch",
+  "Harvest Table",
+  "Crimson Spoon",
+  "Golden Lotus",
+  "The Hungry Fork",
+  "Ocean's Plate",
+  "Fire & Spice",
+  "Olive & Vine",
+  "La Bella Cucina",
+  "Sunset Grill",
+  "Noir Brasserie",
+  "Blue Orchid",
+  "Saffron Garden",
+  "Rustic Roots",
+  "Amber Lounge",
+  "Bistro Lumière",
+  "Maple Hearth",
+  "Oak & Ember",
+  "Peppercorn Place",
+  "The Local Dish",
+  "Cedar Grove Café",
+  "Soleil Bistro",
+  "Brickhouse Eats",
+  "Wanderlust Grill",
+  "The Nest",
+  "Cafe Verona",
+  "Midtown Meals",
+  "Ginger & Thyme",
+  "Lavender & Sage",
+  "Hearthstone Inn",
+  "Juniper Table",
+  "The Garden Fork",
+  "Twilight Tapas",
+  "Meadow & Moor",
+  "The Vine",
+  "Ember Flame",
+  "Miso Modern",
+  "The Borough",
+  "Copper Kitchen",
+  "Pine & Poppy",
 ];
 
-const cuisines = ["French", "Italian", "American", "Japanese", "Mexican", "Indian", "Thai", "Café", "Mediterranean"];
-const areas = ["Mission District", "SOMA", "North Beach", "Downtown", "Hayes Valley", "Nob Hill", "Japantown", "Embarcadero", "Marina"];
-const staticReviews = [18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48, 60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90, 96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88];
-const staticBookings = [6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92, 94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83, 93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90];
-const staticStars = [3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4];
-const staticPrices = ["$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$"];
+const cuisines = [
+  "French",
+  "Italian",
+  "American",
+  "Japanese",
+  "Mexican",
+  "Indian",
+  "Thai",
+  "Café",
+  "Mediterranean",
+];
+const areas = [
+  "Mission District",
+  "SOMA",
+  "North Beach",
+  "Downtown",
+  "Hayes Valley",
+  "Nob Hill",
+  "Japantown",
+  "Embarcadero",
+  "Marina",
+];
+const staticReviews = [
+  18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48,
+  60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90,
+  96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88,
+];
+const staticBookings = [
+  6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92,
+  94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83,
+  93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90,
+];
+const staticStars = [
+  3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3,
+  4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4,
+];
+const staticPrices = [
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+];
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -70,44 +196,55 @@ for (let i = 0; i < 50; i++) {
     price: staticPrices[i],
     cuisine: cuisines[i % cuisines.length],
     tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${namePool[i]}, offering a fusion of flavors in the heart of ${areas[i % areas.length]}.`,
+    desc: `Enjoy a delightful experience at ${
+      namePool[i]
+    }, offering a fusion of flavors in the heart of ${
+      areas[i % areas.length]
+    }.`,
     photos: photos,
   };
 }
-
 
 export default function RestaurantPage() {
   const params = useParams();
   const id = params.restaurantId as string;
   const r = restaurantData[id] || restaurantData["vintage-bites"];
-  const [people, setPeople] = useState();
-  const [time, setTime] = useState();
+  const [people, setPeople] = useState<number | undefined>(undefined);
+  const [time, setTime] = useState<string | undefined>(undefined);
   const [showFullMenu, setShowFullMenu] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
-const [timeOpen, setTimeOpen] = useState(false);
-const [date, setDate] = useState<Date | undefined>(undefined);
+  const [timeOpen, setTimeOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
-   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
+  const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
   const handleToggleMenu = () => {
     const newState = !showFullMenu;
     setShowFullMenu(newState);
 
-    logEvent(newState ? EVENT_TYPES.VIEW_FULL_MENU : EVENT_TYPES.COLLAPSE_MENU, {
-      restaurantId: id,
-      restaurantName: r.name,
-      action: newState ? "view_full_menu" : "collapse_menu",
-      time,
-      date: formattedDate,
-      people,
-      menu: newState ? [
-        { category: "Mains", items: [
-          { name: "Coq au Vin", price: "$26.00" },
-          { name: "Ratatouille", price: "$20.00" }
-        ] }
-      ] : [],
-    });
+    logEvent(
+      newState ? EVENT_TYPES.VIEW_FULL_MENU : EVENT_TYPES.COLLAPSE_MENU,
+      {
+        restaurantId: id,
+        restaurantName: r.name,
+        action: newState ? "view_full_menu" : "collapse_menu",
+        time,
+        date: formattedDate,
+        people,
+        menu: newState
+          ? [
+              {
+                category: "Mains",
+                items: [
+                  { name: "Coq au Vin", price: "$26.00" },
+                  { name: "Ratatouille", price: "$20.00" },
+                ],
+              },
+            ]
+          : [],
+      }
+    );
   };
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const handlePeopleSelect = (n: number) => {
@@ -129,7 +266,7 @@ const [date, setDate] = useState<Date | undefined>(undefined);
     "2:30 PM",
   ];
   function toLocalISO(date: Date): string {
-    const pad = (n: number) => String(n).padStart(2, '0');
+    const pad = (n: number) => String(n).padStart(2, "0");
 
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1);
@@ -139,7 +276,7 @@ const [date, setDate] = useState<Date | undefined>(undefined);
     const seconds = pad(date.getSeconds());
 
     const tzOffset = -date.getTimezoneOffset();
-    const sign = tzOffset >= 0 ? '+' : '-';
+    const sign = tzOffset >= 0 ? "+" : "-";
     const offsetHours = pad(Math.floor(Math.abs(tzOffset) / 60));
     const offsetMinutes = pad(Math.abs(tzOffset) % 60);
 
@@ -236,19 +373,25 @@ const [date, setDate] = useState<Date | undefined>(undefined);
                 <div className="grid grid-cols-2 gap-y-2">
                   <div>
                     <div className="font-semibold">Cheese Board</div>
-                    <div className="text-sm text-gray-600">assorted artisan cheeses</div>
+                    <div className="text-sm text-gray-600">
+                      assorted artisan cheeses
+                    </div>
                   </div>
                   <div className="text-right font-bold">$14.00</div>
 
                   <div>
                     <div className="font-semibold">Smoked Salmon Tartine</div>
-                    <div className="text-sm text-gray-600">capers, crème fraîche</div>
+                    <div className="text-sm text-gray-600">
+                      capers, crème fraîche
+                    </div>
                   </div>
                   <div className="text-right font-bold">$12.00</div>
 
                   <div>
                     <div className="font-semibold">Escargot</div>
-                    <div className="text-sm text-gray-600">with garlic butter</div>
+                    <div className="text-sm text-gray-600">
+                      with garlic butter
+                    </div>
                   </div>
                   <div className="text-right font-bold">$16.00</div>
                 </div>
@@ -308,104 +451,122 @@ const [date, setDate] = useState<Date | undefined>(undefined);
           <div className="flex flex-col gap-3">
             {/* People select (demo, not fully interactive) */}
             <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 min-w-[120px] justify-start"
-            >
-              <UserIcon className="h-5 w-5 text-gray-700" />
-              {people ? people:  "Pick People"} {people === 1 ? "person" : "people"}{" "}
-              <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-36 p-1">
-            {peopleOptions.map((n) => (
-              <Button
-                key={n}
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  handlePeopleSelect(n);
-                  setPeopleOpen(false);
-                }}
-              >
-                {n} {n === 1 ? "person" : "people"}
-              </Button>
-            ))}
-          </PopoverContent>
-        </Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 min-w-[100px] justify-start"
+                >
+                  <UserIcon className="h-5 w-5 text-gray-700" />
+                  {people ? people : "Pick"}{" "}
+                  {people === 1 ? "Person" : "People"}{" "}
+                  <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-30 p-1">
+                {peopleOptions.map((n) => (
+                  <Button
+                    key={n}
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      handlePeopleSelect(n);
+                      setPeopleOpen(false);
+                    }}
+                  >
+                    {n} {n === 1 ? "person" : "people"}
+                  </Button>
+                ))}
+              </PopoverContent>
+            </Popover>
             {/* Date/time row */}
             <div className="flex gap-2">
               <Popover open={dateOpen} onOpenChange={setDateOpen}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className="flex items-center gap-2 min-w-[120px] justify-start"
-                          >
-                            <CalendarIcon className="h-5 w-5 text-gray-700" />
-                            {date ? format(date, "MMM d") : "Pick date"}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                          <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={(d) => {
-                              handleDateSelect(d);
-                              setDateOpen(false);
-                            }}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-             <Popover open={timeOpen} onOpenChange={setTimeOpen}>
-                       <PopoverTrigger asChild>
-                         <Button
-                           variant="outline"
-                           className="flex items-center gap-2 min-w-[120px] justify-start"
-                         >
-                           <ClockIcon className="h-5 w-5 text-gray-700" />
-                           {time ? time : "Pick Time"}
-                           <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-                         </Button>
-                       </PopoverTrigger>
-                       <PopoverContent className="w-36 p-1">
-                         {timeOptions.map((t) => (
-                           <Button
-                             key={t}
-                             variant="ghost"
-                             className="w-full justify-start"
-                             onClick={() => {
-                               handleTimeSelect(t);
-                               setTimeOpen(false);
-                             }}
-                           >
-                             {t}
-                           </Button>
-                         ))}
-                       </PopoverContent>
-                     </Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2 min-w-[120px] justify-start"
+                  >
+                    <CalendarIcon className="h-5 w-5 text-gray-700" />
+                    {date ? format(date, "MMM d") : "Pick date"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(d) => {
+                      handleDateSelect(d);
+                      setDateOpen(false);
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Popover open={timeOpen} onOpenChange={setTimeOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2 min-w-[120px] justify-start"
+                  >
+                    <ClockIcon className="h-5 w-5 text-gray-700" />
+                    {time ? time : "Pick Time"}
+                    <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-36 p-1">
+                  {timeOptions.map((t) => (
+                    <Button
+                      key={t}
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        handleTimeSelect(t);
+                        setTimeOpen(false);
+                      }}
+                    >
+                      {t}
+                    </Button>
+                  ))}
+                </PopoverContent>
+              </Popover>
             </div>
             {/* Time slots */}
             <div className="mt-3">
               <div className="font-semibold mb-2">Select a time</div>
-              <div className="flex flex-wrap gap-2 mb-3">
+              <div className="flex gap-1 mt-2 flex-wrap">
                 {["1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM"].map(
-                  (t, i) =>
+                  (t) =>
                     t !== "3:00 PM" ? (
-                      <Button
+                      <Link
                         key={t}
-                        className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-4 py-2 text-base"
+                        href={`/booking/${id}/${encodeURIComponent(
+                          t
+                        )}?date=${formattedDate}&people=${people ?? ""}`}
+                        onClick={() =>
+                          logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                            restaurantId: id,
+                            restaurantName: r.name,
+                            time: t,
+                            date: formattedDate,
+                            people,
+                          })
+                        }
+                        passHref
                       >
-                        {t}
-                      </Button>
+                        <Button
+                          className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                          asChild
+                        >
+                          <span>{t}</span>
+                        </Button>
+                      </Link>
                     ) : (
                       <Button
                         key={t}
                         variant="outline"
                         className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
                       >
-                        <span>3:00 PM</span>{" "}
+                        <span>3:00 PM</span>
                         <span className="ml-2">🔔 Notify me</span>
                       </Button>
                     )
