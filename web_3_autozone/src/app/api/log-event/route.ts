@@ -56,13 +56,13 @@ export async function POST(req: NextRequest) {
 
   // console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
 
-  // await fetch('http://app:8080/save_events/', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(externalPayload),
-  // });
+  await fetch('http://localhost:8080/save_events/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(externalPayload),
+  });
 
   return NextResponse.json({ success: true });
 }
