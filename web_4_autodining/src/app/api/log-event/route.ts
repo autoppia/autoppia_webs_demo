@@ -26,12 +26,12 @@ export async function POST(req: NextRequest) {
     data,
     timestamp: new Date().toISOString(),
   };
-  // let logs: any[] = [];
-  // if (fs.existsSync(LOG_PATH)) {
-  //   logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
-  // }
-  // logs.push(newEntry);
-  // fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
+  let logs: any[] = [];
+  if (fs.existsSync(LOG_PATH)) {
+    logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
+  }
+  logs.push(newEntry);
+  fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
   // :white_check_mark: External API expects single event object as `data`
   const externalPayload = {
     web_agent_id: webAgentIdHeader || null,

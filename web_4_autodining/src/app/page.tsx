@@ -305,7 +305,7 @@ function RestaurantCard({
   );
 }
 
-function CardScroller({ children }: { children: React.ReactNode }) {
+function CardScroller({ children,title }: { children: React.ReactNode; title: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -333,6 +333,7 @@ function CardScroller({ children }: { children: React.ReactNode }) {
     logEvent("SCROLL_VIEW", {
       direction: dir > 0 ? "right" : "left",
       visibleCount: ref.current.children.length,
+      sectionTitle: title,
     });
   };
 
@@ -582,7 +583,7 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold mb-4 mt-8">
           Available for lunch now
         </h2>
-        <CardScroller>
+        <CardScroller  title="Available for lunch now">
           {filtered.map((r) => (
             <RestaurantCard
               key={r.id + "-lunch"}
@@ -610,7 +611,7 @@ export default function HomePage() {
             Explore Icon restaurants
           </button>
         </div>
-        <CardScroller>
+        <CardScroller  title="Introducing OpenDinning Icons">
           {iconRestaurants.map((r) => (
             <RestaurantCard
               key={r.id + "-icon"}
@@ -625,7 +626,7 @@ export default function HomePage() {
       {/* Award-winning Section */}
       <section className="mt-8 px-4">
         <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
-        <CardScroller>
+        <CardScroller  title="Award-winning">
           {awardRestaurants.map((r) => (
             <RestaurantCard
               key={r.id + "-award"}
