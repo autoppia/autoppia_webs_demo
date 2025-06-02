@@ -338,7 +338,7 @@ function CardScroller({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative w-full" suppressHydrationWarning>
-      {showLeft && (
+      {/*{showLeft && (*/}
         <button
           onClick={() => scroll(-1)}
           className="absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
@@ -347,14 +347,14 @@ function CardScroller({ children }: { children: React.ReactNode }) {
         >
           <ChevronLeft className="h-6 w-6 text-[#444]" />
         </button>
-      )}
+      {/*)}*/}
       <div
         ref={ref}
         className="flex gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-hide pl-1 pr-10"
       >
         {children}
       </div>
-      {showRight && (
+      {/*{showRight && (*/}
         <button
           onClick={() => scroll(1)}
           className="absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
@@ -363,7 +363,7 @@ function CardScroller({ children }: { children: React.ReactNode }) {
         >
           <ChevronRight className="h-6 w-6 text-[#444]" />
         </button>
-      )}
+      {/*)}*/}
     </div>
   );
 }
