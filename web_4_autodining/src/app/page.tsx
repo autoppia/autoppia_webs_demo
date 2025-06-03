@@ -207,10 +207,12 @@ function RestaurantCard({
   r,
   date,
   people,
+  time,
 }: {
   r: (typeof restaurants)[0];
   date: Date | undefined;
   people: number;
+  time: string;
 }) {
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
   return (
@@ -278,13 +280,14 @@ function RestaurantCard({
             <Link
               key={t}
               href={`/booking/${r.id}/${encodeURIComponent(
-                t
-              )}?date=${formattedDate}&people=${people}`}
+                time
+              )}?date=${formattedDate}&people=${people}&time=${encodeURIComponent(time)}`}
               onClick={() =>
                 logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                   restaurantId: r.id,
                   restaurantName: r.name,
                   date: formattedDate,
+                  time: time,
                   people,
                 })
               }
@@ -589,6 +592,7 @@ export default function HomePage() {
               r={r}
               date={date}
               people={people}
+              time={time}
             />
           ))}
         </CardScroller>
@@ -617,6 +621,7 @@ export default function HomePage() {
               r={r}
               date={date}
               people={people}
+              time={time}
             />
           ))}
         </CardScroller>
@@ -631,6 +636,7 @@ export default function HomePage() {
               key={r.id + "-award"}
               r={r}
               date={date}
+              time={time}
               people={people}
             />
           ))}

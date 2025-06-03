@@ -462,7 +462,7 @@ export default function RestaurantPage() {
                   <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-30 p-1">
+              <PopoverContent className="w-32 p-1">
                 {peopleOptions.map((n) => (
                   <Button
                     key={n}
@@ -546,6 +546,7 @@ export default function RestaurantPage() {
                             restaurantId: id,
                             restaurantName: r.name,
                             date: formattedDate,
+                            time:time,
                             people,
                           })
                         }
