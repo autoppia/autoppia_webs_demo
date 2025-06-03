@@ -532,9 +532,8 @@ export default function RestaurantPage() {
             </div>
             {/* Time slots */}
             <div className="mt-3">
-              <div className="font-semibold mb-2">Select a time</div>
               <div className="flex gap-1 mt-2 flex-wrap">
-                {["1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM"].map(
+                {["1:00 PM"].map(
                   (t) =>
                     t !== "3:00 PM" ? (
                       <Link
@@ -546,7 +545,6 @@ export default function RestaurantPage() {
                           logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                             restaurantId: id,
                             restaurantName: r.name,
-                            time: t,
                             date: formattedDate,
                             people,
                           })
@@ -557,7 +555,7 @@ export default function RestaurantPage() {
                           className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
                           asChild
                         >
-                          <span>{t}</span>
+                          <span>Book Restaurant</span>
                         </Button>
                       </Link>
                     ) : (
@@ -572,14 +570,6 @@ export default function RestaurantPage() {
                     )
                 )}
               </div>
-            </div>
-            <div className="mt-4 pt-4 border-t">
-              <Button
-                variant="ghost"
-                className="w-full flex gap-2 items-center justify-center text-base font-semibold"
-              >
-                <span className="text-xl">🍽️</span> Additional sitting options
-              </Button>
             </div>
           </div>
         </div>
