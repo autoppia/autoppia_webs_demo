@@ -176,7 +176,7 @@ const restaurants = Array.from({ length: 50 }, (_, i) => {
     price: staticPrices[i],
     bookings: staticBookings[i],
     area: areas[i % areas.length],
-    times: ["1:00 PM", "1:30 PM", "2:00 PM"],
+    times: ["1:00 PM"],
   };
 });
 
@@ -284,7 +284,6 @@ function RestaurantCard({
                 logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                   restaurantId: r.id,
                   restaurantName: r.name,
-                  time: t,
                   date: formattedDate,
                   people,
                 })
@@ -295,7 +294,7 @@ function RestaurantCard({
                 className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
                 asChild
               >
-                <span>{t}</span>
+                <span>Book Restaurant</span>
               </Button>
             </Link>
           ))}
