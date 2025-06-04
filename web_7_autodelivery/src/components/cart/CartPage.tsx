@@ -161,8 +161,6 @@ export default function CartPage() {
               setMode("delivery");
               logEvent(EVENT_TYPES.DELIVERY_MODE, {
                 mode: "delivery",
-                restaurantId: restaurant?.id,
-                address: form.address,
               });
             }}
             className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${
@@ -179,7 +177,6 @@ export default function CartPage() {
               setMode("pickup");
               logEvent(EVENT_TYPES.PICKUP_MODE, {
                 mode: "pickup",
-                restaurantId: restaurant?.id,
               });
             }}
             className={`px-6 py-2 rounded-full font-bold text-base flex flex-col items-center transition-all ${
