@@ -17,7 +17,7 @@ export default function HeroSection() {
         size="lg"
         className="text-lg px-8 py-2 rounded-full shadow-lg"
       >
-        <Link href="/restaurants">Order Now</Link>
+        <Link href="#">Order Now</Link>
       </Button>
     </section>
   );
