@@ -5,9 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web_6_auto_mail
+    container_name: web_7_auto_delivery
     ports:
-      - "8005:8005"
+      - "8006:8006"
     volumes:
       - .:/app
       - /app/node_modules

@@ -23,7 +23,6 @@ type LoggedEvent = {
 
 export async function POST(req: NextRequest) {
   let body: IncomingEvent;
-
   try {
     body = await req.json();
   } catch (err) {
@@ -59,8 +58,8 @@ export async function POST(req: NextRequest) {
     web_url: req.headers.get('referer'),
     data: newEntry,
   };
-
-  await fetch('http://localhost:8080/save_events/', {
+console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+  await fetch('http://app:8080/save_events', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(externalPayload),

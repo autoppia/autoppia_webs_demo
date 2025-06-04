@@ -4,7 +4,7 @@
 # --- Configuration Variables ---
 NODE_VERSION="v20"
 APP_NAME="automail-app"
-APP_PORT="8005"
+APP_PORT="5004"
 APP_HOST="0.0.0.0"
 NVM_INSTALL_SCRIPT="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
 
