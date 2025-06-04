@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50`}
     >
-      <body className="min-h-screen font-sans bg-zinc-50">
+      <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
         <Navbar />
         {/* Optionally add persistent cart ui/button here */}
         <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">

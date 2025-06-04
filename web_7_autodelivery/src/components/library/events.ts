@@ -19,10 +19,11 @@ export const EVENT_TYPES = {
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
+type JsonPayload = Record<string, unknown>;
 
 export function logEvent(
   eventType: EventType,
-  data: any = {},
+  data: JsonPayload = {},
   extra_headers: Record<string, string> = {}
 ) {
   if (typeof window === "undefined") return;

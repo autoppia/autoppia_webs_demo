@@ -29,7 +29,7 @@ export default function CartNavIcon() {
             viewBox="0 0 24 24"
             strokeWidth={2.0}
             stroke="currentColor"
-            className="h-[1.4em] w-[1.4em]"
+            className="h-[1.6em] w-[1.6em]"
           >
             <path
               strokeLinecap="round"

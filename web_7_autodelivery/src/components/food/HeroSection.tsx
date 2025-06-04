@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="py-10 md:py-10 bg-white rounded-xl shadow-md mb-12 flex flex-col items-center text-center">
+    <section className="py-5 md:py-5 bg-white rounded-xl shadow-md mb-12 flex flex-col items-center text-center">
       <h1 className="text-2xl md:text-4xl font-extrabold mb-4 tracking-tight text-zinc-900">
         Delicious food,
         <br /> delivered to your door

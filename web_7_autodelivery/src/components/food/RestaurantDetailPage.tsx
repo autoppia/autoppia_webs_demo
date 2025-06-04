@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { MenuItem, restaurants } from "@/data/restaurants";
+import { MenuItem, MenuItemSize, restaurants } from "@/data/restaurants";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
@@ -118,13 +118,29 @@ export default function RestaurantDetailPage({
   if (!restaurant)
     return <div className="text-lg text-zinc-500">Restaurant not found.</div>;
 
-  function handleAddToCart(custom: any) {
+  type CartCustomItem = {
+    size?: MenuItemSize;
+    options: string[];
+    preferences?: string;
+    quantity: number;
+  };
+  function handleAddToCart(custom: CartCustomItem) {
     if (modalItem) {
-      addToCart({ ...modalItem, ...custom }, restaurant.id);
+      const transformedOptions =
+        custom.options?.map((label) => ({ label })) ?? [];
+  
+      const payload: MenuItem = {
+        ...modalItem,
+        ...custom,
+        options: transformedOptions,
+      };
+  
+      addToCart(payload, restaurant.id);
       setModalOpen(false);
       setModalItem(null);
     }
   }
+  
 
   return (
     <div className="max-w-5xl mx-auto px-2 sm:px-0">

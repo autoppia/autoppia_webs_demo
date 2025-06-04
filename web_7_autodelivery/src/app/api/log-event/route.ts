@@ -5,34 +5,55 @@ import path from 'path';
 
 const LOG_PATH = path.join(process.cwd(), 'event-log.json');
 
+
+type IncomingEvent = {
+  event_name: string;
+  user_id?: string | null;
+  data?: Record<string, unknown>;
+};
+
+type LoggedEvent = {
+  event_name: string;
+  web_agent_id: string | null;
+  user_id: string | null;
+  data: Record<string, unknown>;
+  timestamp: string;
+};
+
+
 export async function POST(req: NextRequest) {
-  let body: any;
+  let body: IncomingEvent;
+
   try {
     body = await req.json();
   } catch (err) {
     console.error("Error logging event:", err);
     return NextResponse.json({ success: false, error: 'Failed to log event.' }, { status: 500 });
   }
+
   const webAgentIdHeader = req.headers.get('X-WebAgent-Id');
   const {
     event_name,
     user_id = null,
     data = {},
   } = body;
-  const newEntry = {
+
+  const newEntry: LoggedEvent = {
     event_name,
     web_agent_id: webAgentIdHeader || null,
     user_id,
     data,
     timestamp: new Date().toISOString(),
   };
-  let logs: any[] = [];
+
+  let logs: LoggedEvent[] = [];
   if (fs.existsSync(LOG_PATH)) {
-    logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8'));
+    logs = JSON.parse(fs.readFileSync(LOG_PATH, 'utf-8')) as LoggedEvent[];
   }
+
   logs.push(newEntry);
   fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
-  // :white_check_mark: External API expects single event object as `data`
+
   const externalPayload = {
     web_agent_id: webAgentIdHeader || null,
     web_url: req.headers.get('referer'),
@@ -41,13 +62,13 @@ export async function POST(req: NextRequest) {
 
   await fetch('http://localhost:8080/save_events/', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(externalPayload),
   });
+
   return NextResponse.json({ success: true });
 }
+
 
 export async function GET() {
   try {

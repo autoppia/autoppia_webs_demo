@@ -238,7 +238,9 @@ export default function CartPage() {
           <RadioGroup
             className="flex flex-row gap-4 mb-6"
             value={deliveryTime}
-            onValueChange={(v) => setDeliveryTime(v as any)}
+            onValueChange={(v) =>
+              setDeliveryTime(v as "express" | "standard" | "scheduled")
+            }            
           >
             <div
               className={`border rounded-xl px-4 py-3 flex flex-col min-w-[8.5rem] cursor-pointer transition relative ${
