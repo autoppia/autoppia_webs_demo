@@ -133,7 +133,13 @@ if pm2 describe "$PYTHON_APP_NAME" > /dev/null 2>&1; then
 else
   log_message "No existing PM2 process '$PYTHON_APP_NAME' found."
 fi
-cp .env.example .env
+
+if [ ! -f .env ]; then
+  cp .env.example .env || error_exit "Failed to copy .env.example to .env"
+else
+  log_message ".env file already exists. Skipping copy."
+fi
+
 log_message "Starting the Python API with PM2 on port $PYTHON_APP_PORT..."
 pm2 start "$VENV_PYTHON" --name "$PYTHON_APP_NAME" -- -m uvicorn app:app --port "$PYTHON_APP_PORT" --host "$APP_HOST" || error_exit "Failed to start Python API with PM2."
 cd .. || error_exit "Failed to return to parent directory. Is 'python_server' still the current directory?"
