@@ -1,5 +1,33 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Setting Up the Python Server (for Email Support)
+
+To enable email functionality via the Python server, follow these steps:
+
+1. **Create the environment configuration file:**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Update the `.env` file**
+   Open `.env` and replace all placeholder values with your actual configuration, such as:
+
+   * `SMTP_SERVER`
+   * `SMTP_PORT`
+   * `SMTP_USERNAME`
+   * `SMTP_PASSWORD`
+   * `RECEIVER_EMAIL`
+
+3. **Start the application:**
+   Run the following command to build and launch both the Python and frontend services:
+
+   ```bash
+   bash entrypoint.sh
+   ```
+
+> Once the server is running, it will be ready to receive form submissions and send emails via the specified SMTP provider.
+
 ## Getting Started
 
 First, run the development server:
