@@ -6,6 +6,8 @@ NODE_VERSION="v20"
 APP_NAME="autobtlab-app"
 APP_PORT="5006"
 APP_HOST="0.0.0.0"
+PYTHON_APP_NAME="python-api"
+PYTHON_APP_PORT="8000"
 NVM_INSTALL_SCRIPT="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
 
 
@@ -89,6 +91,52 @@ fi
 log_message "Starting the Next.js application with PM2 on port $APP_PORT..."
 # Using 'npm run start' after 'npm run build' is the correct way for Next.js production.
 pm2 start npm --name "$APP_NAME" -- run start -- -p "$APP_PORT" -H "$APP_HOST" || error_exit "Failed to start application with PM2."
+
+
+# --- Python Application Setup and PM2 Management ---
+
+log_message "Navigating to Python server directory..."
+cd python_server || error_exit "Failed to change to python_server directory. Does 'python_server' exist?"
+
+log_message "Ensuring python3-pip and python3-venv are installed..."
+sudo apt update || error_exit "Failed to update apt packages."
+sudo apt install -y python3-pip python3-venv || error_exit "Failed to install python3-pip or python3-venv. Please check your system's package manager."
+
+log_message "Creating Python virtual environment..."
+python3 -m venv venv || error_exit "Failed to create Python virtual environment."
+
+# Define paths to venv executables
+VENV_PYTHON="./venv/bin/python3"
+VENV_PIP="./venv/bin/pip"
+VENV_UVICORN="./venv/bin/uvicorn"
+
+# Verify venv Python exists
+if [ ! -f "$VENV_PYTHON" ]; then
+  error_exit "Virtual environment Python executable not found at $VENV_PYTHON. Venv creation might have failed."
+fi
+
+"$VENV_PIP" install --upgrade pip || error_exit "Failed to upgrade pip in venv."
+
+# Install requirements
+if [ -f "requirements.txt" ]; then
+  log_message "Installing Python dependencies from requirements.txt..."
+  "$VENV_PIP" install -r requirements.txt || error_exit "Failed to install Python dependencies from requirements.txt."
+else
+  log_message "No requirements.txt found in python_server. Skipping Python dependency installation."
+fi
+
+# Check for existing PM2 process for Python app
+log_message "Checking for existing PM2 process '$PYTHON_APP_NAME'..."
+if pm2 describe "$PYTHON_APP_NAME" > /dev/null 2>&1; then
+  log_message "Stopping and deleting existing PM2 process '$PYTHON_APP_NAME'..."
+  pm2 stop "$PYTHON_APP_NAME" && pm2 delete "$PYTHON_APP_NAME" || log_message "Failed to stop/delete Python PM2 process, but continuing."
+else
+  log_message "No existing PM2 process '$PYTHON_APP_NAME' found."
+fi
+
+log_message "Starting the Python API with PM2 on port $PYTHON_APP_PORT..."
+pm2 start "$VENV_PYTHON" --name "$PYTHON_APP_NAME" -- -m uvicorn app:app --port "$PYTHON_APP_PORT" --host "$APP_HOST" || error_exit "Failed to start Python API with PM2."
+cd .. || error_exit "Failed to return to parent directory. Is 'python_server' still the current directory?"
 
 # Save PM2 process list and enable startup on boot
 log_message "Saving PM2 process list and enabling startup on boot..."
