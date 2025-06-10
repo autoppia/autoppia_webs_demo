@@ -57,6 +57,7 @@ export default function ContactForm() {
         throw new Error('Failed to send message')
       }
     } catch (error) {
+      console.log(error)
       setNotification({
         type: 'error',
         message: 'Sorry, there was an error sending your message. Please try again later.'
