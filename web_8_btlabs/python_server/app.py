@@ -7,6 +7,7 @@ from pydantic import BaseModel, EmailStr, Field
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 import os
+
 load_dotenv()
 app = FastAPI()
 
@@ -22,7 +23,7 @@ app.add_middleware(
 SMTP_SERVER = os.getenv("SMTP_SERVER")
 SMTP_PORT = os.getenv("SMTP_PORT")
 SMTP_USERNAME = os.getenv("SMTP_USERNAME")
-SMTP_PASSWORD =os.getenv("SMTP_PASSWORD")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL")
 
 
@@ -61,10 +62,7 @@ def send_email(form: ContactForm):
 async def submit_contact_form(form: ContactForm):
     try:
         send_email(form)
-        return {
-            "success": True,
-            "message": "Your message has been sent successfully."
-        }
+        return {"success": True, "message": "Your message has been sent successfully."}
     except Exception as e:
         print(f"Error sending email: {e}")
         raise HTTPException(status_code=500, detail="Failed to send email.")
