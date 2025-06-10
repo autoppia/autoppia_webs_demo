@@ -11,9 +11,11 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    networks:
-      - app-network
+#    networks:
+#      - app-network
+    network_mode: "host"
+    restart: always
 
-networks:
-  app-network:
-    external: true
+#networks:
+#  app-network:
+#    external: true
