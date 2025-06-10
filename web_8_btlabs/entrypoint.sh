@@ -67,7 +67,7 @@ log_message "NPM version: $(npm -v)"
 
 # Clean build artifacts (but not node_modules)
 log_message "Cleaning build artifacts..."
-rm -rf .next out package-lock.json || log_message "No .next, out, or package-lock.json to remove." # Added 'out' for static exports
+rm -rf .next out package-lock.json || log_message "No .next, out, or package-lock.json to remove."
 
 # Reinstall dependencies
 log_message "Reinstalling Node.js dependencies..."
