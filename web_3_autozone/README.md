@@ -25,6 +25,16 @@ Ensure the following tools are installed:
 
 ---
 
+## Run Using Docker with Database Support
+
+Clone the repo and run Docker to start both the database and web server:
+
+```bash
+bash run_docker_with_db.sh
+```
+
+---
+
 ## Getting Started
 
 ### 1. Clone the Repository
