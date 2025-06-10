@@ -1,5 +1,5 @@
 #!/bin/sh
-# set -e
+set -e
 
 # --- Configuration Variables ---
 NODE_VERSION="v20"
