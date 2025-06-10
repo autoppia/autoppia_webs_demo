@@ -33,7 +33,7 @@ export default function ContactForm() {
     setNotification(null)
 
     try {
-      const response = await fetch('/localhost:8000/contact', {
+      const response = await fetch('http://localhost:8000/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
