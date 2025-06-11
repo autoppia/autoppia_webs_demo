@@ -9,7 +9,7 @@ services:
     ports:
       - "8002:8002"
     volumes:
-      - .:/app
+#      - .:/app
       - /app/node_modules
 #    networks:
 #      - app-network
