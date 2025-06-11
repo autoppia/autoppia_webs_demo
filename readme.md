@@ -118,7 +118,7 @@ Use the setup script with flexible deployment options:
 ./scripts/setup.sh --demo=books --web_port=8001 --postgres_port=5436
 ```
 
-### **📦 Deploy Autozone Demo**
+#### **📦 Deploy Autozone Demo**
 
 ```bash
 ./scripts/setup.sh --demo=autozone
