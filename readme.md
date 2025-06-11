@@ -43,6 +43,10 @@ demo-webs/
 │   ├── docker-compose.yml
 │   ├── Dockerfile
 │   └── application files...
+├── web_3_autozone
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── application files...
 └── scripts/
     ├── install_docker.sh
     ├── setup.sh
@@ -62,10 +66,11 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Default Port Assignments**
 
-| Demo       | Web Port | Database Port | Access URL              |
-| ---------- | -------- | ------------- | ----------------------- |
-| **Movies** | `8000`   | `5435`        | `http://localhost:8000` |
-| **Books**  | `8001`   | `5436`        | `http://localhost:8001` |
+| Demo         | Web Port | Database Port | Access URL              |
+|--------------|----------|--------------|-------------------------|
+| **Movies**   | `8000`   | `5435`       | `http://localhost:8000` |
+| **Books**    | `8001`   | `5436`       | `http://localhost:8001` |
+| **Autozone** | `8002`   | `5433`       | `http://localhost:8002` |
 
 💡 **Auto-increment**: When deploying multiple demos, ports automatically increment to avoid conflicts.
 
