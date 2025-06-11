@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Evitar archivos .pyc
+# Python env flags
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DB_NAME=web2_books
@@ -11,32 +11,26 @@ ENV DB_PORT=5432
 
 WORKDIR /app
 
-# Instalar dependencias del sistema
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential libpq-dev curl sqlite3 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    build-essential libpq-dev curl sqlite3 netcat-openbsd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements e instalar dependencias
+# Install pip dependencies
 COPY requirements.txt .
+RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar archivos del proyecto
+# Copy application code
 COPY . .
 
-# Asegurar que los directorios static y media existan
-# Asegurar que los directorios static y media existan
+# Create static/media dirs
 RUN mkdir -p /app/static /app/media
 
-# Aseguramos que netcat esté instalado para el script de espera de PostgreSQL
-RUN apt-get update && apt-get install -y netcat-openbsd && apt-get clean
-
-# Copiar entrypoint y darle permisos de ejecución
+# Make entrypoint executable
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Exponer puerto
 EXPOSE 8000
 
-# Configurar entrypoint
 ENTRYPOINT ["/entrypoint.sh"]

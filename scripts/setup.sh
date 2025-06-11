@@ -65,6 +65,17 @@ else
   echo "✅ Docker is running"
 fi
 
+deploy_web3() {
+  local project_dir="$DEMOS_DIR/web_3_autozone"
+  if [ -d "$project_dir" ]; then
+    echo "📦 Deploying web_3_autozone..."
+    pushd "$project_dir" > /dev/null
+    bash run_docker_with_db.sh
+    popd > /dev/null
+  else
+    echo "❌ web_3_autozone directory not found at $project_dir"
+  fi
+}
 # This function deploys the specified project folder
 deploy_project() {
   local project_name="$1"
@@ -131,10 +142,15 @@ case "$WEB_DEMO" in
   books)
     deploy_project "web_2_demo_books" "$WEB_PORT" "$POSTGRES_PORT" "books_${WEB_PORT}"
     ;;
+  autozone)
+    deploy_web3
+    ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     deploy_project "web_2_demo_books" "$((WEB_PORT+1))" "$((POSTGRES_PORT+1))" "books_$((WEB_PORT+1))"
+    deploy_web3
     ;;
+
   *)
     echo "❌ Unknown demo type: $WEB_DEMO. Use 'movies', 'books', or 'all'."
     exit 1
