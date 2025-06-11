@@ -67,10 +67,10 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 ### **Default Port Assignments**
 
 | Demo         | Web Port | Database Port | Access URL              |
-|--------------|----------|--------------|-------------------------|
-| **Movies**   | `8000`   | `5435`       | `http://localhost:8000` |
-| **Books**    | `8001`   | `5436`       | `http://localhost:8001` |
-| **Autozone** | `8002`   | `5433`       | `http://localhost:8002` |
+|--------------|----------|---------------|-------------------------|
+| **Movies**   | `8000`   | `5435`        | `http://localhost:8000` |
+| **Books**    | `8001`   | `5436`        | `http://localhost:8001` |
+| **Autozone** | `8002`   | `5433`        | `http://localhost:8002` |
 
 💡 **Auto-increment**: When deploying multiple demos, ports automatically increment to avoid conflicts.
 
@@ -103,6 +103,8 @@ Use the setup script with flexible deployment options:
 ```bash
 ./scripts/setup.sh --demo=all
 ```
+> 💡 **Note**: When using `--demo=all`, the system automatically assigns ports to prevent conflicts.
+
 
 #### **🎬 Deploy Movies Demo**
 
@@ -116,7 +118,18 @@ Use the setup script with flexible deployment options:
 ./scripts/setup.sh --demo=books --web_port=8001 --postgres_port=5436
 ```
 
-> 💡 **Note**: When using `--demo=all`, the system automatically assigns ports to prevent conflicts.
+### **📦 Deploy Autozone Demo**
+
+```bash
+./scripts/setup.sh --demo=autozone
+```
+
+> **Autozone** launches a **standalone Next.js** application and does **not** support custom port flags.
+> 
+> ⚠️ **Note:** Port and DB flags like `--web_port` or `--postgres_port` are **ignored** for this demo.
+
+---
+
 
 #### **Custom Port Configuration**
 
@@ -147,10 +160,11 @@ After successful deployment, access your demo webs:
 
 ### **Default Access URLs**
 
-| Demo Application | URL                     | Description              |
-| ---------------- | ----------------------- | ------------------------ |
-| **Movies Demo**  | `http://localhost:8000` | Movie database interface |
-| **Books Demo**   | `http://localhost:8001` | Book catalog system      |
+| Demo Application  | URL                     | Description              |
+|-------------------|-------------------------|--------------------------|
+| **Movies Demo**   | `http://localhost:8000` | Movie database interface |
+| **Books Demo**    | `http://localhost:8001` | Book catalog system      |
+| **Autozone Demo** | `http://localhost:8002` | Online Shopping for Electronics|
 
 ### **Custom Port Access**
 
