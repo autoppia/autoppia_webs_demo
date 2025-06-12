@@ -32,6 +32,7 @@ docker-compose up --build -d || error_exit "Failed to start root-level Docker co
 # --- Step 2: Clone the repository if it doesn't exist ---
 if [ -d "$TARGET_DIR" ]; then
   log_message "Directory '$TARGET_DIR' already exists. Skipping clone."
+  git -C $TARGET_DIR checkout $BRANCH_NAME
 else
   log_message "Cloning branch '$BRANCH_NAME' from '$REPO_URL'..."
   git clone -b "$BRANCH_NAME" "$REPO_URL" || error_exit "Git clone failed."
