@@ -16,8 +16,8 @@ interface ProductCarouselProps {
 
 export function ProductCarousel({ title, products }: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showLeftButton, setShowLeftButton] = useState(false);
-  const [showRightButton, setShowRightButton] = useState(true);
+  // const [showLeftButton, setShowLeftButton] = useState(false);
+  // const [showRightButton, setShowRightButton] = useState(true);
 
   const scroll = (direction: "left" | "right") => {
     if (!containerRef.current) return;
@@ -34,14 +34,14 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
     });
   
     // Update button visibility after scrolling
-    setTimeout(() => {
-      if (!containerRef.current) return;
-  
-      setShowLeftButton(container.scrollLeft > 0);
-      setShowRightButton(
-        container.scrollLeft < container.scrollWidth - container.clientWidth - 10
-      );
-    }, 300);
+    // setTimeout(() => {
+    //   if (!containerRef.current) return;
+    //
+    //   setShowLeftButton(container.scrollLeft > 0);
+    //   setShowRightButton(
+    //     container.scrollLeft < container.scrollWidth - container.clientWidth - 10
+    //   );
+    // }, 300);
   };
   
 
@@ -50,7 +50,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
       <h2 className="category-title px-4 pt-4">{title}</h2>
 
       <div className="relative">
-        {showLeftButton && (
+        {/*{showLeftButton && (*/}
           <button
             onClick={() => scroll("left")}
             className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
@@ -58,8 +58,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
           >
             <ChevronLeft size={24} />
           </button>
-        )}
-
+        {/*// )}*/}
         <div
           ref={containerRef}
           className="flex overflow-x-auto py-4 px-4 scrollbar-hide scroll-smooth gap-4"
@@ -97,7 +96,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
           ))}
         </div>
 
-        {showRightButton && (
+        {/*{showRightButton && (*/}
           <button
             onClick={() => scroll("right")}
             className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
@@ -105,7 +104,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
           >
             <ChevronRight size={24} />
           </button>
-        )}
+        {/*)}*/}
       </div>
     </Card>
   );
