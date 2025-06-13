@@ -129,7 +129,7 @@ chmod +x ./scripts/setup.sh
 #### **📦 Deploy Autozone Demo**
 
 ```bash
-./scripts/setup.sh --demo=autozone --web_port=8001
+./scripts/setup.sh --demo=autozone --web_port=8002
 ```
 
 > ⚠️ **Note:** Autozone runs a **standalone Next.js** app. It **does not support** the `--postgres_port` flag, which is ignored if provided.
