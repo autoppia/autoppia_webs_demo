@@ -88,11 +88,11 @@ deploy_webs_server() {
       fi
 
       echo "🛑 Stopping and removing existing containers..."
-      sudo docker compose -p "$project_name" down
+      docker compose -p "$project_name" down
     fi
 
     echo "🚀 Starting new deployment for $project_name..."
-    sudo docker compose -p "$project_name" up -d --build
+    docker compose -p "$project_name" up -d --build
 
     popd > /dev/null
   else
@@ -118,18 +118,18 @@ POSTGRES_PORT=$project_postgres_port
 EOF
 
     # Check for existing containers
-    if sudo docker compose -p "$compose_project_name" ps &>/dev/null; then
-      existing_containers=$(sudo docker compose -p "$compose_project_name" ps -q | wc -l)
+    if docker compose -p "$compose_project_name" ps &>/dev/null; then
+      existing_containers=$(docker compose -p "$compose_project_name" ps -q | wc -l)
       if [ "$existing_containers" -gt 0 ]; then
         echo "⚠️ Detected existing containers for $compose_project_name."
 
         if [ "$FORCE_DELETE" = true ]; then
           echo "🗑 Force-deleting existing containers..."
-          sudo docker compose -p "$compose_project_name" down --volumes
+          docker compose -p "$compose_project_name" down --volumes
         else
           read -rp "Remove existing containers for $compose_project_name? (y/n) " choice
           case "$choice" in
-            [Yy]*) echo "🗑 Removing existing containers..."; sudo docker compose -p "$compose_project_name" down --volumes ;;  
+            [Yy]*) echo "🗑 Removing existing containers..."; docker compose -p "$compose_project_name" down --volumes ;;  
             *)     echo "Skipping removal. May fail if ports busy." ;;  
           esac
         fi
@@ -139,7 +139,7 @@ EOF
     # Start containers
     echo "🔧 Starting containers for $project_name..."
     pushd "$project_dir" > /dev/null
-    sudo docker compose -p "$compose_project_name" up -d --build
+    docker compose -p "$compose_project_name" up -d --build
     popd > /dev/null
     echo "✅ $project_name deployed on port $project_web_port"
   else
