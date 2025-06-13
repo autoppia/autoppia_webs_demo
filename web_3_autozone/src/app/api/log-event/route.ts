@@ -56,15 +56,25 @@ export async function POST(req: NextRequest) {
 
   // console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
 
-  await fetch('http://app:8080/save_events/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(externalPayload),
-  });
+  try {
+    const res = await fetch('http://localhost:8080/save_events/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(externalPayload),
+    });
 
-  return NextResponse.json({ success: true });
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("❌ Backend returned error:", res.status, errorText);
+      return NextResponse.json({ success: false, error: `Backend error: ${res.status}` }, { status: 500 });
+    }
+  } catch (err) {
+    console.error("❌ Failed to forward event to backend:", err);
+    return NextResponse.json({ success: false, error: 'Failed to forward event' }, { status: 500 });
+  }
+
 }
 export async function GET() {
   // if (!fs.existsSync(LOG_PATH)) {
