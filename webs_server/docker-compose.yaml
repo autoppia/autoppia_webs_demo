@@ -13,7 +13,7 @@ services:
       POSTGRES_USER: webs_user
       POSTGRES_PASSWORD: autoppia_2025
       POSTGRES_DB: autoppia_db
-      DATABASE_URL: "postgresql://webs_user:autoppia_2025@localhost:5433/autoppia_db"
+      DATABASE_URL: "postgresql://webs_user:autoppia_2025@db:5433/autoppia_db"
       DB_POOL_MIN: 10
       DB_POOL_MAX: 50
       # Minimum response size (in bytes) before applying GZIP compression
@@ -24,7 +24,7 @@ services:
 #    networks:
 #      - app-network
 
-    network_mode: "host"
+#    network_mode: "host"
 
   db:
     image: postgres:13-alpine
@@ -54,7 +54,7 @@ services:
                -c maintenance_work_mem=128MB
                -c random_page_cost=1.1
                -c checkpoint_completion_target=0.9
-    network_mode: "host"
+#    network_mode: "host"
 
 volumes:
   postgres_data:

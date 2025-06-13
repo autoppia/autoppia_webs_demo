@@ -13,9 +13,10 @@ services:
       - /app/node_modules
 #    networks:
 #      - app-network
-    network_mode: "host"
+#    network_mode: "host"
     restart: always
 
 #networks:
 #  app-network:
-#    external: true
+##    external: true
+#    driver: bridge
