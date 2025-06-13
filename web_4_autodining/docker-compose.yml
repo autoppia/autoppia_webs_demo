@@ -7,12 +7,15 @@ services:
       dockerfile: Dockerfile
     container_name: web_4_autodining
     ports:
-      - "5002:8003"
+      - "8003:8003"
     volumes:
-      - .:/app
+#      - .:/app
       - /app/node_modules
-    networks:
-      - app-network
-networks:
-  app-network:
-    external: true
+#    networks:
+#      - app-network
+    network_mode: "host"
+    restart: always
+
+#networks:
+#  app-network:
+#    external: true

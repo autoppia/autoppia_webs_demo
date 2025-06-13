@@ -7,13 +7,15 @@ services:
       dockerfile: Dockerfile
     container_name: web_5_CRM
     ports:
-      - "5003:8004"
+      - "8004:8004"
     volumes:
-      - .:/app
+#      - .:/app
       - /app/node_modules
-    networks:
-      - app-network
+#    networks:
+#      - app-network
+    network_mode: "host"
+    restart: always
 
-networks:
-  app-network:
-    external: true
+#networks:
+#  app-network:
+#    external: true
