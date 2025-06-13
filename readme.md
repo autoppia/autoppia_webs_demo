@@ -43,7 +43,11 @@ demo-webs/
 │   ├── docker-compose.yml
 │   ├── Dockerfile
 │   └── application files...
-├── web_3_autozone
+├── web_3_autozone/
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── application files...
+├── webs_server/
 │   ├── docker-compose.yml
 │   ├── Dockerfile
 │   └── application files...
@@ -121,12 +125,10 @@ Use the setup script with flexible deployment options:
 #### **📦 Deploy Autozone Demo**
 
 ```bash
-./scripts/setup.sh --demo=autozone
+./scripts/setup.sh --demo=autozone --web_port=8001
 ```
 
-> **Autozone** launches a **standalone Next.js** application and does **not** support custom port flags.
-> 
-> ⚠️ **Note:** Port and DB flags like `--web_port` or `--postgres_port` are **ignored** for this demo.
+> ⚠️ **Note:** Autozone runs a **standalone Next.js** app. It **does not support** the `--postgres_port` flag, which is ignored if provided.
 
 ---
 
