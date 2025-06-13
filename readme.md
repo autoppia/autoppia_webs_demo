@@ -102,6 +102,10 @@ chmod +x scripts/install_docker.sh
 
 Use the setup script with flexible deployment options:
 
+#### **Make setup.sh executable**
+```bash 
+chmod +x ./scripts/setup.sh
+```
 #### **🎯 Deploy All Demos** (Recommended)
 
 ```bash
