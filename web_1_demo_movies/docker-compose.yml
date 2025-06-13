@@ -5,12 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # Omit container_name so Docker Compose auto-names it based on the project (-p)
     volumes:
       - .:/app
       - ./static:/app/static
       - ./media:/app/media
-    # Host's port = WEB_PORT; container's port = 8000
     ports:
       - "${WEB_PORT}:8000"
     environment:
@@ -22,19 +20,25 @@ services:
       - DB_PORT=5432
     depends_on:
       - db
+    networks:
+      - web1_net
 
   db:
     image: postgres:latest
-    # Environment variables to create the DB:
     environment:
       - POSTGRES_DB=web1_movies
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=autoppia_2025
-    # Host's port = POSTGRES_PORT; container's port = 5432
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - web1_db_data:/var/lib/postgresql/data
+    networks:
+      - web1_net
 
 volumes:
-  db_data:
+  web1_db_data:
+
+networks:
+  web1_net:
+    driver: bridge

@@ -1,18 +1,16 @@
-version: '3.8'
+version: "3.8"
 
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    # Omit container_name so Docker Compose auto-names it based on the project (-p)
     volumes:
       - .:/app
       - ./static:/app/static
       - ./media:/app/media
-    # Host's port = WEB_PORT; container's port = 8000
     ports:
-      - "${WEB_PORT}:8001"
+      - "${WEB_PORT}:8000" # Cambiado de 8001 a 8000
     environment:
       - DEBUG=0
       - DB_NAME=web2_books
@@ -22,19 +20,25 @@ services:
       - DB_PORT=5432
     depends_on:
       - db
+    networks:
+      - web2_net
 
   db:
     image: postgres:latest
-    # Environment variables to create the DB:
     environment:
       - POSTGRES_DB=web2_books
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=autoppia_2025
-    # Host's port = POSTGRES_PORT; container's port = 5432
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - web2_db_data:/var/lib/postgresql/data
+    networks:
+      - web2_net
 
 volumes:
-  db_data:
+  web2_db_data:
+
+networks:
+  web2_net:
+    driver: bridge

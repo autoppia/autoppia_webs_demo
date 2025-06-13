@@ -1,152 +1,135 @@
 #!/usr/bin/env bash
-# setup.sh - Deploy web demo projects with optional custom ports using .env
-# Before deploying, remove all Docker volumes, images, and prune networks to avoid stale data conflicts.
-
+# setup.sh - Deploy all web demo projects + API (webs_server) with isolation
+#------------------------------------------------------------
 set -euo pipefail
 
 echo "🚀 Setting up web demos..."
+
 # 0. Remove all containers
 echo "[INFO] Removing all containers..."
-docker ps -aq | xargs -r docker rm -f || echo "[WARN] No containers to remove."
+docker ps -aq | xargs -r docker rm -f || true
+
 # 1. Prune Docker environment
-echo "[INFO] Removing all Docker volumes, images and pruning networks..."
-# Remove all volumes
-docker volume rm $(docker volume ls -q) || echo "[WARN] No volumes to remove or failure occurred."
-# Remove all images
-docker rmi $(docker images -q) --force || echo "[WARN] No images to remove or failure occurred."
-# Prune networks
-docker network prune -f || echo "[WARN] Network prune failed or no unused networks."
+echo "[INFO] Pruning volumes, images and networks..."
+docker volume rm $(docker volume ls -q) 2>/dev/null || true
+docker rmi $(docker images -q) --force 2>/dev/null || true
+docker network prune -f || true
 
-echo "[INFO] Docker environment cleaned."
+# 2. Ensure external network for app ↔ front communication
+EXTERNAL_NET="apps_net"
+if ! docker network ls --format '{{.Name}}' | grep -qx "$EXTERNAL_NET"; then
+  echo "[INFO] Creating external network: $EXTERNAL_NET"
+  docker network create "$EXTERNAL_NET"
+else
+  echo "[INFO] External network $EXTERNAL_NET already exists"
+fi
 
-# 2. Determine directories
+# 3. Detect script & demos root
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DEMOS_DIR="$( dirname "$SCRIPT_DIR" )"
+echo "📂 Script directory: $SCRIPT_DIR"
+echo "📂 Demos root:      $DEMOS_DIR"
 
-echo "📂 Script location: $SCRIPT_DIR"
-echo "📂 Looking for demos in: $DEMOS_DIR"
-
-# 3. Default ports and options
+# 4. Default ports & options
 WEB_PORT_DEFAULT=8000
 POSTGRES_PORT_DEFAULT=5434
+WEBS_PORT_DEFAULT=8090
+WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
 
-# 4. Parse arguments
+# 5. Parse args
 for ARG in "$@"; do
   case $ARG in
-    --web_port=*)      WEB_PORT="${ARG#*=}"; shift ;;  
-    --postgres_port=*) POSTGRES_PORT="${ARG#*=}"; shift ;;  
-    --demo=*)          WEB_DEMO="${ARG#*=}"; shift ;;    
-    -y|--yes)          FORCE_DELETE=true; shift ;;       
-    *) ;; # ignore unknown
+    --web_port=*)      WEB_PORT="${ARG#*=}"; shift ;;
+    --postgres_port=*) POSTGRES_PORT="${ARG#*=}"; shift ;;
+    --webs_port=*)     WEBS_PORT="${ARG#*=}"; shift ;;
+    --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}"; shift ;;
+    --demo=*)          WEB_DEMO="${ARG#*=}"; shift ;;
+    -y|--yes)          FORCE_DELETE=true; shift ;;
+    *) ;; 
   esac
 done
 
 WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
+WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
+WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
 
-echo "Selected demo: $WEB_DEMO"
-echo "Using web port: $WEB_PORT"
-echo "Using Postgres port: $POSTGRES_PORT"
+echo "🔣 Configuration:"
+echo "    movies/books base HTTP  →  $WEB_PORT"
+echo "    movies/books Postgres   →  $POSTGRES_PORT"
+echo "    webs_server HTTP        →  $WEBS_PORT"
+echo "    webs_server Postgres    →  $WEBS_PG_PORT"
+echo "    Demo to deploy:         →  $WEB_DEMO"
+echo
 
-# 5. Docker prerequisites
+# 6. Check Docker
 if ! command -v docker &> /dev/null; then
-  echo "❌ Docker not found. Please install Docker first."
+  echo "❌ Docker no instalado."
   exit 1
 fi
-
 if ! docker info &> /dev/null; then
-  echo "❌ Docker is not running. Please start Docker first."
+  echo "❌ Docker daemon no está corriendo."
   exit 1
-else
-  echo "✅ Docker is running"
 fi
+echo "✅ Docker listo."
 
-# 6. Deploy webs_server if needed
-deploy_webs_server() {
-  local project_path="$DEMOS_DIR/webs_server"
-  local project_name="webs_server"
+# 7. Deploy functions
 
-  echo "📂 Deploying $project_name from $project_path..."
-
-  if [ -d "$project_path" ]; then
-    pushd "$project_path" > /dev/null
-
-    # Check if the project is already running
-    local running_containers
-    running_containers=$(docker ps --filter "name=${project_name}" --format "{{.Names}}")
-
-    if [ -n "$running_containers" ]; then
-      echo "⚠️ Docker containers for '$project_name' are already running:"
-      echo "$running_containers"
-      read -p "🔁 Do you want to redeploy (stop and rebuild)? [y/N]: " confirm
-      if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-        echo "🚫 Skipping redeployment of $project_name."
-        popd > /dev/null
-        return
-      fi
-
-      echo "🛑 Stopping and removing existing containers for $project_name..."
-      docker compose -p "$project_name" down --volumes
-    fi
-
-    echo "🚀 Starting new deployment for $project_name..."
-    docker compose -p "$project_name" up -d --build
-
-    popd > /dev/null
-  else
-    echo "❌ webs_server directory not found at $project_path"
-  fi
-}
-
-# This function deploys the specified project folder
 deploy_project() {
-  local project_name="$1"
-  local project_web_port="$2"
-  local project_postgres_port="$3"
-  local compose_project_name="$4"
+  local name="$1"; shift
+  local webp="$1"; shift
+  local pgp="$1"; shift
+  local proj="$1"; shift
 
-  local project_dir="$DEMOS_DIR/$project_name"
+  local dir="$DEMOS_DIR/$name"
+  if [ ! -d "$dir" ]; then
+    echo "⚠️  Directorio no existe: $dir"
+    return
+  fi
 
-  if [ -d "$project_dir" ]; then
-    echo "📂 Deploying $project_dir..."
+  echo "📂 Desplegando $name (HTTP→$webp, DB→$pgp)..."
+  pushd "$dir" > /dev/null
 
-    # Check for existing containers
-    if docker compose -p "$compose_project_name" ps &>/dev/null; then
-      existing_containers=$(docker compose -p "$compose_project_name" ps -q | wc -l)
-      if [ "$existing_containers" -gt 0 ]; then
-        echo "⚠️ Detected existing containers for $compose_project_name."
-
-        if [ "$FORCE_DELETE" = true ]; then
-          echo "🗑 Force-deleting existing containers..."
-          docker compose -p "$compose_project_name" down --volumes
-        else
-          read -rp "Remove existing containers for $compose_project_name? (y/n) " choice
-          case "$choice" in
-            [Yy]*) echo "🗑 Removing existing containers..."; docker compose -p "$compose_project_name" down --volumes ;;  
-            *)     echo "Skipping removal. May fail if ports busy." ;;  
-          esac
-        fi
-      fi
+    # down si hay algo corriendo
+    if docker compose -p "$proj" ps -q | grep -q .; then
+      echo "    [INFO] Borrando contenedores previos..."
+      docker compose -p "$proj" down --volumes
     fi
 
-    # Start containers
-    echo "🔧 Starting containers for $project_name..."
-    pushd "$project_dir" > /dev/null
+    # up
+    WEB_PORT="$webp" POSTGRES_PORT="$pgp" \
+      docker compose -p "$proj" up -d --build
 
-    WEB_PORT="$project_web_port" POSTGRES_PORT="$project_postgres_port" \
-    docker compose -p "$compose_project_name" --env-file /dev/null up -d --build
-
-    popd > /dev/null
-    echo "✅ $project_name deployed on port $project_web_port"
-  else
-    echo "⚠️ Project directory $project_dir not found."
-    echo "Available in $DEMOS_DIR:"; ls -1 "$DEMOS_DIR" || true
-  fi
+  popd > /dev/null
+  echo "✅ $name listo en puerto $webp"
+  echo
 }
 
-# 7. Execute deployments
+deploy_webs_server() {
+  local name="webs_server"
+  local dir="$DEMOS_DIR/$name"
+  if [ ! -d "$dir" ]; then
+    echo "❌ No existe $dir"
+    exit 1
+  fi
+
+  echo "📂 Desplegando $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
+  pushd "$dir" > /dev/null
+
+    docker compose -p "$name" down --volumes || true
+
+    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
+      docker compose -p "$name" up -d --build
+
+  popd > /dev/null
+  echo "✅ $name listo: HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
+  echo
+}
+
+# 8. Execute
+
 case "$WEB_DEMO" in
   movies)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
@@ -165,9 +148,9 @@ case "$WEB_DEMO" in
     deploy_webs_server
     ;;
   *)
-    echo "❌ Unknown demo type: $WEB_DEMO. Use 'movies', 'books', 'autozone', or 'all'."
+    echo "❌ Opción inválida: $WEB_DEMO. Usa 'movies', 'books', 'autozone' o 'all'."
     exit 1
     ;;
 esac
 
-echo "✨ Deployment complete!"
+echo "🎉 ¡Despliegue completado!"

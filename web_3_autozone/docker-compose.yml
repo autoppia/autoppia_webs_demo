@@ -1,22 +1,22 @@
-version: '3.8'
-
 services:
-  nextjs:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web_3_autozone
+    # En producción NO montes tu código: deja que la imagen lleve la build
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules
     ports:
       - "${WEB_PORT}:8002"
-    volumes:
-#      - .:/app
-      - /app/node_modules
-#    networks:
-#      - app-network
-    network_mode: "host"
     restart: always
+    environment:
+      - API_URL=http://app:8080
+      - PORT=8002
+      - NODE_ENV=production
+    networks:
+      - apps_net
 
-#networks:
-#  app-network:
-##    external: true
-#    driver: bridge
+networks:
+  apps_net:
+    external: true
