@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: web_3_autozone
     ports:
-      - "8002:8002"
+      - "${WEB_PORT}:8002"
     volumes:
 #      - .:/app
       - /app/node_modules
