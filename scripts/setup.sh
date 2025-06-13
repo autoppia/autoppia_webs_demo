@@ -112,15 +112,6 @@ deploy_project() {
   if [ -d "$project_dir" ]; then
     echo "📂 Deploying $project_dir..."
 
-    # Create .env file, ensuring POSTGRES_PORT is only added if not empty
-    {
-      echo "WEB_PORT=$project_web_port"
-      if [ -n "$project_postgres_port" ]; then
-        echo "POSTGRES_PORT=$project_postgres_port"
-      fi
-    } > "$project_dir/.env"
-
-
     # Check for existing containers
     if docker compose -p "$compose_project_name" ps &>/dev/null; then
       existing_containers=$(docker compose -p "$compose_project_name" ps -q | wc -l)
@@ -143,7 +134,10 @@ deploy_project() {
     # Start containers
     echo "🔧 Starting containers for $project_name..."
     pushd "$project_dir" > /dev/null
-    docker compose -p "$compose_project_name" up -d --build
+
+    WEB_PORT="$project_web_port" POSTGRES_PORT="$project_postgres_port" \
+    docker compose -p "$compose_project_name" --env-file /dev/null up -d --build
+
     popd > /dev/null
     echo "✅ $project_name deployed on port $project_web_port"
   else
