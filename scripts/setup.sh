@@ -5,7 +5,9 @@
 set -euo pipefail
 
 echo "🚀 Setting up web demos..."
-
+# 0. Remove all containers
+echo "[INFO] Removing all containers..."
+docker ps -aq | xargs -r docker rm -f || echo "[WARN] No containers to remove."
 # 1. Prune Docker environment
 echo "[INFO] Removing all Docker volumes, images and pruning networks..."
 # Remove all volumes
@@ -61,17 +63,43 @@ else
   echo "✅ Docker is running"
 fi
 
-deploy_web3() {
-  local project_dir="$DEMOS_DIR/web_3_autozone"
-  if [ -d "$project_dir" ]; then
-    echo "📦 Deploying web_3_autozone..."
-    pushd "$project_dir" > /dev/null
-    bash run_docker_with_db.sh
+# 6. Deploy webs_server if needed
+deploy_webs_server() {
+  local project_path="$DEMOS_DIR/webs_server"
+  local project_name="webs_server"
+
+  echo "📂 Deploying $project_name from $project_path..."
+
+  if [ -d "$project_path" ]; then
+    pushd "$project_path" > /dev/null
+
+    # Check if the project is already running
+    local running_containers
+    running_containers=$(docker ps --filter "name=${project_name}" --format "{{.Names}}")
+
+    if [ -n "$running_containers" ]; then
+      echo "⚠️ Docker containers for '$project_name' are already running:"
+      echo "$running_containers"
+      read -p "🔁 Do you want to redeploy (stop and rebuild)? [y/N]: " confirm
+      if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        echo "🚫 Skipping redeployment of $project_name."
+        popd > /dev/null
+        return
+      fi
+
+      echo "🛑 Stopping and removing existing containers..."
+      sudo docker compose -p "$project_name" down
+    fi
+
+    echo "🚀 Starting new deployment for $project_name..."
+    sudo docker compose -p "$project_name" up -d --build
+
     popd > /dev/null
   else
-    echo "❌ web_3_autozone directory not found at $project_dir"
+    echo "❌ webs_server directory not found at $project_path"
   fi
 }
+
 # This function deploys the specified project folder
 deploy_project() {
   local project_name="$1"
@@ -129,16 +157,17 @@ case "$WEB_DEMO" in
     deploy_project "web_2_demo_books" "$WEB_PORT" "$POSTGRES_PORT" "books_${WEB_PORT}"
     ;;
   autozone)
-    deploy_web3
+    deploy_project "web_3_autozone" "$WEB_PORT" "$POSTGRES_PORT" "autozone_${WEB_PORT}"
+    deploy_webs_server
     ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     deploy_project "web_2_demo_books" "$((WEB_PORT+1))" "$((POSTGRES_PORT+1))" "books_$((WEB_PORT+1))"
-    deploy_web3
+    deploy_project "web_3_autozone" "$((WEB_PORT+2))" "$((POSTGRES_PORT+2))" "autozone_$((WEB_PORT+2))"
+    deploy_webs_server
     ;;
-
   *)
-    echo "❌ Unknown demo type: $WEB_DEMO. Use 'movies', 'books', or 'all'."
+    echo "❌ Unknown demo type: $WEB_DEMO. Use 'movies', 'books', 'autozone', or 'all'."
     exit 1
     ;;
 esac
