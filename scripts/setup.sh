@@ -87,8 +87,8 @@ deploy_webs_server() {
         return
       fi
 
-      echo "🛑 Stopping and removing existing containers..."
-      docker compose -p "$project_name" down
+      echo "🛑 Stopping and removing existing containers for $project_name..."
+      docker compose -p "$project_name" down --volumes
     fi
 
     echo "🚀 Starting new deployment for $project_name..."
@@ -112,10 +112,14 @@ deploy_project() {
   if [ -d "$project_dir" ]; then
     echo "📂 Deploying $project_dir..."
 
-    cat <<EOF > "$project_dir/.env"
-WEB_PORT=$project_web_port
-POSTGRES_PORT=$project_postgres_port
-EOF
+    # Create .env file, ensuring POSTGRES_PORT is only added if not empty
+    {
+      echo "WEB_PORT=$project_web_port"
+      if [ -n "$project_postgres_port" ]; then
+        echo "POSTGRES_PORT=$project_postgres_port"
+      fi
+    } > "$project_dir/.env"
+
 
     # Check for existing containers
     if docker compose -p "$compose_project_name" ps &>/dev/null; then
@@ -157,13 +161,13 @@ case "$WEB_DEMO" in
     deploy_project "web_2_demo_books" "$WEB_PORT" "$POSTGRES_PORT" "books_${WEB_PORT}"
     ;;
   autozone)
-    deploy_project "web_3_autozone" "$WEB_PORT" "$POSTGRES_PORT" "autozone_${WEB_PORT}"
+    deploy_project "web_3_autozone" "$WEB_PORT" "" "autozone_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     deploy_project "web_2_demo_books" "$((WEB_PORT+1))" "$((POSTGRES_PORT+1))" "books_$((WEB_PORT+1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT+2))" "$((POSTGRES_PORT+2))" "autozone_$((WEB_PORT+2))"
+    deploy_project "web_3_autozone" "$((WEB_PORT+2))" "" "autozone_$((WEB_PORT+2))"
     deploy_webs_server
     ;;
   *)
