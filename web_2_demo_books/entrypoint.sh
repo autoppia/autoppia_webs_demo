@@ -7,4 +7,4 @@ python manage.py migrate --noinput
 python manage.py seed_users_with_books --start=1 --end=256 --prefix="user" --password="PASSWORD"
 
 # 3. Start Gunicorn on port 8001
-exec gunicorn --bind 0.0.0.0:8001 booksproject.wsgi:application
+exec gunicorn --bind 0.0.0.0:8000 booksproject.wsgi:application
