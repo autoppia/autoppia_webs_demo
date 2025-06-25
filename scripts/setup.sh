@@ -141,14 +141,14 @@ case "$WEB_DEMO" in
     deploy_webs_server
     ;;
   autodining)
-    deploy_project "web_3_autodining" "$WEB_PORT" "" "autodining_${WEB_PORT}"
+    deploy_project "web_4_autodining" "$WEB_PORT" "" "autodining_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
     deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    deploy_project "web_3_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
     deploy_webs_server
     ;;
   *)
