@@ -31,26 +31,13 @@ The demo webs are **containerized applications**, each with its own Docker confi
 
 ## 📁 Project Structure
 
-Each web demo is contained in its own directory with complete Docker setup:
-
 ```
 demo-webs/
 ├── web_1_demo_movies/
-│   ├── docker-compose.yml
-│   ├── Dockerfile
-│   └── application files...
 ├── web_2_demo_books/
-│   ├── docker-compose.yml
-│   ├── Dockerfile
-│   └── application files...
 ├── web_3_autozone/
-│   ├── docker-compose.yml
-│   ├── Dockerfile
-│   └── application files...
+├── web_3_autodining/
 ├── webs_server/
-│   ├── docker-compose.yml
-│   ├── Dockerfile
-│   └── application files...
 └── scripts/
     ├── install_docker.sh
     ├── setup.sh
@@ -65,18 +52,18 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Port Structure**
 
-- 🌐 **Web Server Port** (`--web_port`) - Django application
-- 🗄️ **Database Port** (`--postgres_port`) - PostgreSQL database
+* 🌐 **Web Server Port** (`--web_port`) - Django or Next.js application
+* 🗄️ **Database Port** (`--postgres_port`) - PostgreSQL database (if applicable)
 
 ### **Default Port Assignments**
 
-| Demo         | Web Port | Database Port | Access URL              |
-|--------------|----------|---------------|-------------------------|
-| **Movies**   | `8000`   | `5435`        | `http://localhost:8000` |
-| **Books**    | `8001`   | `5436`        | `http://localhost:8001` |
-| **Autozone** | `8002`   | `5433`        | `http://localhost:8002` |
-
-💡 **Auto-increment**: When deploying multiple demos, ports automatically increment to avoid conflicts.
+| Demo         | Web Port | DB Port | Notes                                   |
+|--------------|----------|---------|-----------------------------------------|
+| **Movies**   | 8000     | 5434    | Django + PostgreSQL                     |
+| **Books**    | 8001     | 5435    | Django + PostgreSQL                     |
+| **Autozone** | 8002     | —       | Next.js, no database required           |
+| **Autodining** | 8003   | —       | Next.js, no database required           |
+| **webs_server** | 8090  | 5437    | API service used for event logging      |
 
 ---
 
@@ -103,7 +90,8 @@ chmod +x scripts/install_docker.sh
 Use the setup script with flexible deployment options:
 
 #### **Make setup.sh executable**
-```bash 
+
+```bash
 chmod +x ./scripts/setup.sh
 ```
 #### **🎯 Deploy All Demos** (Recommended)
@@ -132,7 +120,13 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=autozone --web_port=8002
 ```
 
-> ⚠️ **Note:** Autozone runs a **standalone Next.js** app. It **does not support** the `--postgres_port` flag, which is ignored if provided.
+#### **📦 Deploy AutoDining Demo**
+
+```bash
+./scripts/setup.sh --demo=autodining --web_port=8003
+```
+
+> ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
 
 ---
 
@@ -143,6 +137,8 @@ chmod +x ./scripts/setup.sh
 # Custom ports for specific deployment
 ./scripts/setup.sh --demo=movies --web_port=9000 --postgres_port=6000
 ```
+
+---
 
 ### **Step 3: Verify Installation**
 
@@ -166,11 +162,14 @@ After successful deployment, access your demo webs:
 
 ### **Default Access URLs**
 
-| Demo Application  | URL                     | Description              |
-|-------------------|-------------------------|--------------------------|
-| **Movies Demo**   | `http://localhost:8000` | Movie database interface |
-| **Books Demo**    | `http://localhost:8001` | Book catalog system      |
-| **Autozone Demo** | `http://localhost:8002` | Online Shopping for Electronics|
+| Demo Application    | URL                     | Description                     |
+| ------------------- | ----------------------- | ------------------------------- |
+| **Movies Demo**     | `http://localhost:8000` | Movie database interface        |
+| **Books Demo**      | `http://localhost:8001` | Book catalog system             |
+| **Autozone Demo**   | `http://localhost:8002` | Online Shopping for Electronics |
+| **Autodining Demo** | `http://localhost:8003` | Restaurant Reservation UI       |
+
+---
 
 ### **Custom Port Access**
 
