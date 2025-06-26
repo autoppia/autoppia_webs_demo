@@ -86,17 +86,23 @@ export default function CheckoutPage() {
           <div className="bg-white border border-[#d5d9d9] shadow-sm rounded-md p-5 pt-6 min-h-[350px] flex flex-col">
             <Button
               className="bg-amazon-yellow hover:bg-amazon-darkYellow text-white font-semibold w-full mb-2 py-2 rounded"
-              onClick={() => {
-                logEvent(EVENT_TYPES.ORDER_COMPLETED, {
-                  items: totalItems,
-                  totalAmount,
-                  tax,
-                  shipping,
-                  orderTotal,
-                });
-                toast.success("Order placed successfully!");
-                clearCart();
-              }}              
+            onClick={() => {
+              logEvent(EVENT_TYPES.ORDER_COMPLETED, {
+                items: items.map(item => ({
+                  id: item.id,
+                  title: item.title,
+                  quantity: item.quantity,
+                  price: `${item.price}`
+                })),
+                totalItems,
+                totalAmount: totalAmount.toFixed(2),
+                tax: tax.toFixed(2),
+                shipping: shipping.toFixed(2),
+                orderTotal: orderTotal.toFixed(2)
+              });
+              toast.success("Order placed successfully!");
+              clearCart();
+            }}
             >
               Place your order
             </Button>

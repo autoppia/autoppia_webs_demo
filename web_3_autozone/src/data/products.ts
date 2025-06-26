@@ -43,7 +43,7 @@ export const products: Product[] = [
     price: "$75.50",
     image: "/images/homepage_categories/kettles.jpg",
     description:
-      "1200W kettles with 8-speed settings and pre-programmed smoothie functions.",
+      "1200W electric kettles with fast boiling, temperature control, and auto shut-off for safety.",
     category: "Kitchen",
     rating: 4.4,
     brand: "BlendTech",
@@ -456,7 +456,7 @@ export const products: Product[] = [
   },
   {
     id: "tech-18",
-    title: "Bluetooth Speaker",
+    title: "Portable Bluetooth Speaker",
     price: "$59.99",
     image: "/images/homepage_categories/speaker.jpg",
     description:
