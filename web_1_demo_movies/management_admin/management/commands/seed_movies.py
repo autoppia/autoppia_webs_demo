@@ -13,11 +13,13 @@ class Command(BaseCommand):
     help = "Resets ALL tables and then seeds the database with initial movies, genres, and comments"
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS("Starting to seed the database..."))
+        self.stdout.write(self.style.SUCCESS(
+            "Starting to seed the database..."))
         all_models = apps.get_models()
         for model in all_models:
             model.objects.all().delete()
-        self.stdout.write(self.style.SUCCESS("All tables have been reset (all records deleted)."))
+        self.stdout.write(self.style.SUCCESS(
+            "All tables have been reset (all records deleted)."))
         # Create genres
         genres_to_create = [
             "Action",
@@ -137,7 +139,7 @@ class Command(BaseCommand):
                 "name": "The Matrix",
                 "desc": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
                 "year": 1999,
-                "director": "Lana Wachowski, Lilly Wachowski",
+                "director": "Lana Wachowski",
                 "cast": "Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss",
                 "duration": 136,
                 "trailer_url": "https://www.youtube.com/watch?v=vKQi3bBA1y8",
@@ -281,9 +283,11 @@ class Command(BaseCommand):
             if auto_confirm:
                 Comment.objects.all().delete()
                 Movie.objects.all().delete()
-                self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
+                self.stdout.write(self.style.SUCCESS(
+                    "All existing movies and comments deleted."))
             else:
-                self.stdout.write(self.style.WARNING("Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
+                self.stdout.write(self.style.WARNING(
+                    "Movies already exist in the database. Do you want to delete all existing movies and comments? (yes/no)"))
                 confirm = input()
                 if confirm.lower() != "yes":
                     self.stdout.write(self.style.SUCCESS("Seeding cancelled."))
@@ -291,7 +295,8 @@ class Command(BaseCommand):
                 else:
                     Comment.objects.all().delete()
                     Movie.objects.all().delete()
-                    self.stdout.write(self.style.SUCCESS("All existing movies and comments deleted."))
+                    self.stdout.write(self.style.SUCCESS(
+                        "All existing movies and comments deleted."))
 
         # Create movies
         created_movies = []
@@ -301,7 +306,8 @@ class Command(BaseCommand):
                 file_name = movie_data["img_file"]
 
                 # Ruta absoluta hasta donde está tu imagen en media/gallery
-                local_path = os.path.join(settings.MEDIA_ROOT, "gallery", file_name)
+                local_path = os.path.join(
+                    settings.MEDIA_ROOT, "gallery", file_name)
 
                 # Creamos la instancia del Movie
                 movie = Movie(
@@ -321,9 +327,11 @@ class Command(BaseCommand):
                     # Ajusta la ruta relativa para que Django la maneje
                     movie.img = f"gallery/{file_name}"
                     movie.save()
-                    self.stdout.write(self.style.SUCCESS(f"Using local image: Movie '{movie_data['name']}'"))
+                    self.stdout.write(self.style.SUCCESS(
+                        f"Using local image: Movie '{movie_data['name']}'"))
                 else:
-                    self.stdout.write(self.style.WARNING(f"Image not found for '{movie_data['name']}': {local_path}"))
+                    self.stdout.write(self.style.WARNING(
+                        f"Image not found for '{movie_data['name']}': {local_path}"))
 
                 # Añadimos géneros
                 for genre_name in movie_data["genres"]:
@@ -333,7 +341,8 @@ class Command(BaseCommand):
                 created_movies.append(movie)
 
             except Exception as e:
-                self.stdout.write(self.style.ERROR(f"Error creating movie {movie_data['name']}: {e}"))
+                self.stdout.write(self.style.ERROR(
+                    f"Error creating movie {movie_data['name']}: {e}"))
 
         # Add comments to movies
         self.stdout.write(self.style.SUCCESS("Adding comments to movies..."))
@@ -356,14 +365,18 @@ class Command(BaseCommand):
 
             # Generate comments with different sentiment distributions based on rating
             if movie.rating >= 4.5:
-                sentiment_weights = [0.8, 0.15, 0.05]  # 80% positive, 15% mixed, 5% critical
+                # 80% positive, 15% mixed, 5% critical
+                sentiment_weights = [0.8, 0.15, 0.05]
             elif movie.rating >= 4.0:
-                sentiment_weights = [0.6, 0.3, 0.1]  # 60% positive, 30% mixed, 10% critical
+                # 60% positive, 30% mixed, 10% critical
+                sentiment_weights = [0.6, 0.3, 0.1]
             else:
-                sentiment_weights = [0.4, 0.4, 0.2]  # 40% positive, 40% mixed, 20% critical
+                # 40% positive, 40% mixed, 20% critical
+                sentiment_weights = [0.4, 0.4, 0.2]
 
             for _ in range(num_comments):
-                sentiment = random.choices(["positive", "mixed", "critical"], weights=sentiment_weights, k=1)[0]
+                sentiment = random.choices(
+                    ["positive", "mixed", "critical"], weights=sentiment_weights, k=1)[0]
 
                 if sentiment == "positive":
                     comment_text = random.choice(positive_comments)
@@ -385,8 +398,11 @@ class Command(BaseCommand):
                     commenter_name = random.choice(female_names)
                     # avatar_file = f"gallery/people/{random.choice(female_avatars)}"
 
-                Comment.objects.create(movie=movie, name=commenter_name, content=comment_text, created_at=comment_date)
+                Comment.objects.create(
+                    movie=movie, name=commenter_name, content=comment_text, created_at=comment_date)
 
-            self.stdout.write(f"Added {num_comments} comments to '{movie.name}'")
+            self.stdout.write(
+                f"Added {num_comments} comments to '{movie.name}'")
 
-        self.stdout.write(self.style.SUCCESS("Database seeding completed successfully!"))
+        self.stdout.write(self.style.SUCCESS(
+            "Database seeding completed successfully!"))
