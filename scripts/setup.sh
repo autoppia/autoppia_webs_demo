@@ -41,12 +41,12 @@ FORCE_DELETE=false
 # 5. Parse args
 for ARG in "$@"; do
   case $ARG in
-    --web_port=*)      WEB_PORT="${ARG#*=}"; shift ;;
-    --postgres_port=*) POSTGRES_PORT="${ARG#*=}"; shift ;;
-    --webs_port=*)     WEBS_PORT="${ARG#*=}"; shift ;;
-    --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}"; shift ;;
-    --demo=*)          WEB_DEMO="${ARG#*=}"; shift ;;
-    -y|--yes)          FORCE_DELETE=true; shift ;;
+    --web_port=*)      WEB_PORT="${ARG#*=}" ;;
+    --postgres_port=*) POSTGRES_PORT="${ARG#*=}" ;;
+    --webs_port=*)     WEBS_PORT="${ARG#*=}" ;;
+    --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
+    --demo=*)          WEB_DEMO="${ARG#*=}" ;;
+    -y|--yes)          FORCE_DELETE=true ;;
     *) ;; 
   esac
 done
@@ -66,14 +66,14 @@ echo
 
 # 6. Check Docker
 if ! command -v docker &> /dev/null; then
-  echo "❌ Docker no instalado."
+  echo "❌ Docker not installed."
   exit 1
 fi
 if ! docker info &> /dev/null; then
-  echo "❌ Docker daemon no está corriendo."
+  echo "❌ Docker daemon not running."
   exit 1
 fi
-echo "✅ Docker listo."
+echo "✅ Docker is ready."
 
 # 7. Deploy functions
 
@@ -85,16 +85,15 @@ deploy_project() {
 
   local dir="$DEMOS_DIR/$name"
   if [ ! -d "$dir" ]; then
-    echo "⚠️  Directorio no existe: $dir"
+    echo "⚠️  Directory does not exist: $dir"
     return
   fi
 
-  echo "📂 Desplegando $name (HTTP→$webp, DB→$pgp)..."
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp)..."
   pushd "$dir" > /dev/null
 
-    # down si hay algo corriendo
     if docker compose -p "$proj" ps -q | grep -q .; then
-      echo "    [INFO] Borrando contenedores previos..."
+      echo "    [INFO] Removing previous containers..."
       docker compose -p "$proj" down --volumes
     fi
 
@@ -103,7 +102,7 @@ deploy_project() {
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
-  echo "✅ $name listo en puerto $webp"
+  echo "✅ $name is running on port $webp"
   echo
 }
 
@@ -111,11 +110,11 @@ deploy_webs_server() {
   local name="webs_server"
   local dir="$DEMOS_DIR/$name"
   if [ ! -d "$dir" ]; then
-    echo "❌ No existe $dir"
+    echo "❌ Directory not found: $dir"
     exit 1
   fi
 
-  echo "📂 Desplegando $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
+  echo "📂 Deploying $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
   pushd "$dir" > /dev/null
 
     docker compose -p "$name" down --volumes || true
@@ -124,7 +123,7 @@ deploy_webs_server() {
       docker compose -p "$name" up -d --build
 
   popd > /dev/null
-  echo "✅ $name listo: HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
+  echo "✅ $name is running on HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
   echo
 }
 
@@ -141,16 +140,21 @@ case "$WEB_DEMO" in
     deploy_project "web_3_autozone" "$WEB_PORT" "" "autozone_${WEB_PORT}"
     deploy_webs_server
     ;;
+  autodining)
+    deploy_project "web_4_autodining" "$WEB_PORT" "" "autodining_${WEB_PORT}"
+    deploy_webs_server
+    ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
-    deploy_project "web_2_demo_books" "$((WEB_PORT+1))" "$((POSTGRES_PORT+1))" "books_$((WEB_PORT+1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT+2))" "" "autozone_$((WEB_PORT+2))"
+    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
+    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
     deploy_webs_server
     ;;
   *)
-    echo "❌ Opción inválida: $WEB_DEMO. Usa 'movies', 'books', 'autozone' o 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', or 'all'."
     exit 1
     ;;
 esac
 
-echo "🎉 ¡Despliegue completado!"
+echo "🎉 Deployment complete!"
