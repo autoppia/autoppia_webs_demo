@@ -1,0 +1,929 @@
+[
+  {
+    "event_name": "POST_A_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "button",
+      "page": "home"
+    },
+    "timestamp": "2025-07-03T11:30:36.795Z"
+  },
+  {
+    "event_name": "WRITE_JOB_TITLE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "m",
+      "step": 1
+    },
+    "timestamp": "2025-07-03T11:30:50.264Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 1,
+      "buttonText": "Next: Skills",
+      "title": "m"
+    },
+    "timestamp": "2025-07-03T11:31:03.320Z"
+  },
+  {
+    "event_name": "SEARCH_SKILL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "j",
+      "timestamp": 1751542273053
+    },
+    "timestamp": "2025-07-03T11:31:13.163Z"
+  },
+  {
+    "event_name": "ADD_SKILL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "skill": "TypeScript",
+      "method": "popular_skill"
+    },
+    "timestamp": "2025-07-03T11:31:36.277Z"
+  },
+  {
+    "event_name": "REMOVE_SKILL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "skill": "JavaScript",
+      "timestamp": 1751542297618
+    },
+    "timestamp": "2025-07-03T11:31:37.757Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 2,
+      "buttonText": "Next: Scope",
+      "skills": [
+        "TypeScript"
+      ]
+    },
+    "timestamp": "2025-07-03T11:31:50.872Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 3,
+      "buttonText": "Next: Budget",
+      "scope": "Large",
+      "duration": "More than 6 months"
+    },
+    "timestamp": "2025-07-03T11:32:04.394Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 4,
+      "buttonText": "Next: Description",
+      "budgetType": "hourly",
+      "rateFrom": "2",
+      "rateTo": "2"
+    },
+    "timestamp": "2025-07-03T11:32:16.003Z"
+  },
+  {
+    "event_name": "ATTACH_FILE_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "filename": "Screenshot from 2025-06-30 17-50-49.png",
+      "size": 174934,
+      "type": "image/png",
+      "timestamp": 1751542344270
+    },
+    "timestamp": "2025-07-03T11:32:24.319Z"
+  },
+  {
+    "event_name": "SUBMIT_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "m",
+      "skills": [
+        "TypeScript"
+      ],
+      "scope": "Large",
+      "duration": "More than 6 months",
+      "budgetType": "hourly",
+      "rateFrom": "2",
+      "rateTo": "2",
+      "description": "e"
+    },
+    "timestamp": "2025-07-03T11:32:57.895Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1751542390082
+    },
+    "timestamp": "2025-07-03T11:33:10.247Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "timestamp": 1751542403155
+    },
+    "timestamp": "2025-07-03T11:33:23.254Z"
+  },
+  {
+    "event_name": "SELECT_HIRING_TEAM",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "team": "Google",
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r"
+    },
+    "timestamp": "2025-07-03T11:33:45.165Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:33:50.016Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:35:20.622Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1751542533039
+    },
+    "timestamp": "2025-07-03T11:35:33.206Z"
+  },
+  {
+    "event_name": "POST_A_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "button",
+      "page": "home"
+    },
+    "timestamp": "2025-07-03T11:35:58.288Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 1,
+      "buttonText": "Next: Skills",
+      "title": ""
+    },
+    "timestamp": "2025-07-03T11:36:00.616Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 2,
+      "buttonText": "Next: Scope",
+      "skills": []
+    },
+    "timestamp": "2025-07-03T11:36:01.161Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 3,
+      "buttonText": "Next: Budget",
+      "scope": "",
+      "duration": ""
+    },
+    "timestamp": "2025-07-03T11:36:01.790Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 4,
+      "buttonText": "Next: Description",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": ""
+    },
+    "timestamp": "2025-07-03T11:36:03.319Z"
+  },
+  {
+    "event_name": "SUBMIT_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "",
+      "skills": [],
+      "scope": "",
+      "duration": "",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": "",
+      "description": ""
+    },
+    "timestamp": "2025-07-03T11:36:04.823Z"
+  },
+  {
+    "event_name": "POST_A_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "button",
+      "page": "home"
+    },
+    "timestamp": "2025-07-03T11:36:47.035Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 1,
+      "buttonText": "Next: Skills",
+      "title": ""
+    },
+    "timestamp": "2025-07-03T11:36:50.484Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 2,
+      "buttonText": "Next: Scope",
+      "skills": []
+    },
+    "timestamp": "2025-07-03T11:36:51.015Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 3,
+      "buttonText": "Next: Budget",
+      "scope": "",
+      "duration": ""
+    },
+    "timestamp": "2025-07-03T11:36:51.677Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 4,
+      "buttonText": "Next: Description",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": ""
+    },
+    "timestamp": "2025-07-03T11:36:52.637Z"
+  },
+  {
+    "event_name": "POST_A_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "button",
+      "page": "home"
+    },
+    "timestamp": "2025-07-03T11:39:15.004Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 1,
+      "buttonText": "Next: Skills",
+      "title": ""
+    },
+    "timestamp": "2025-07-03T11:39:16.212Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 2,
+      "buttonText": "Next: Scope",
+      "skills": []
+    },
+    "timestamp": "2025-07-03T11:39:16.377Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 3,
+      "buttonText": "Next: Budget",
+      "scope": "",
+      "duration": ""
+    },
+    "timestamp": "2025-07-03T11:39:16.610Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 4,
+      "buttonText": "Next: Description",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": ""
+    },
+    "timestamp": "2025-07-03T11:39:17.197Z"
+  },
+  {
+    "event_name": "SUBMIT_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "",
+      "skills": [],
+      "scope": "",
+      "duration": "",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": "",
+      "description": ""
+    },
+    "timestamp": "2025-07-03T11:39:17.768Z"
+  },
+  {
+    "event_name": "CLOSE_POST_A_JOB_WINDOW",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "",
+      "skills": [],
+      "scope": "",
+      "duration": "",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": "",
+      "description": ""
+    },
+    "timestamp": "2025-07-03T11:39:26.319Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1751542769362
+    },
+    "timestamp": "2025-07-03T11:39:29.492Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia"
+    },
+    "timestamp": "2025-07-03T11:39:31.578Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:40:52.086Z"
+  },
+  {
+    "event_name": "POST_A_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "button",
+      "page": "home"
+    },
+    "timestamp": "2025-07-03T11:45:07.080Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 1,
+      "buttonText": "Next: Skills",
+      "title": ""
+    },
+    "timestamp": "2025-07-03T11:45:08.954Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 2,
+      "buttonText": "Next: Scope",
+      "skills": []
+    },
+    "timestamp": "2025-07-03T11:45:09.514Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 3,
+      "buttonText": "Next: Budget",
+      "scope": "",
+      "duration": ""
+    },
+    "timestamp": "2025-07-03T11:45:10.038Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 4,
+      "buttonText": "Next: Description",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": ""
+    },
+    "timestamp": "2025-07-03T11:45:10.534Z"
+  },
+  {
+    "event_name": "CLOSE_POST_A_JOB_WINDOW",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "",
+      "skills": [],
+      "scope": "",
+      "duration": "",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": "",
+      "description": ""
+    },
+    "timestamp": "2025-07-03T11:45:13.117Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1751543116307
+    },
+    "timestamp": "2025-07-03T11:45:16.331Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia"
+    },
+    "timestamp": "2025-07-03T11:45:19.456Z"
+  },
+  {
+    "event_name": "SELECT_HIRING_TEAM",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "team": "Apple",
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r"
+    },
+    "timestamp": "2025-07-03T11:45:22.529Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:45:24.556Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:46:42.797Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1751543255005
+    },
+    "timestamp": "2025-07-03T11:47:37.487Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia"
+    },
+    "timestamp": "2025-07-03T11:47:41.733Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:47:46.230Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:48:10.319Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:48:12.792Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1751543323040
+    },
+    "timestamp": "2025-07-03T11:48:45.434Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia"
+    },
+    "timestamp": "2025-07-03T11:48:49.513Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full-stack developer",
+      "country": "Mosquera, Colombia",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "Never",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-07-03T11:48:54.382Z"
+  },
+  {
+    "event_name": "CANCEL_HIRE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "Button": "Cancel"
+    },
+    "timestamp": "2025-07-03T11:49:41.649Z"
+  },
+  {
+    "event_name": "CANCEL_HIRE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "Button": "Cancel"
+    },
+    "timestamp": "2025-07-03T11:49:42.291Z"
+  },
+  {
+    "event_name": "POST_A_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "button",
+      "page": "home"
+    },
+    "timestamp": "2025-07-03T11:49:44.328Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 1,
+      "buttonText": "Next: Skills",
+      "title": ""
+    },
+    "timestamp": "2025-07-03T11:49:45.423Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 2,
+      "buttonText": "Next: Scope",
+      "skills": []
+    },
+    "timestamp": "2025-07-03T11:49:45.597Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 3,
+      "buttonText": "Next: Budget",
+      "scope": "",
+      "duration": ""
+    },
+    "timestamp": "2025-07-03T11:49:45.773Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 4,
+      "buttonText": "Next: Description",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": ""
+    },
+    "timestamp": "2025-07-03T11:49:45.951Z"
+  },
+  {
+    "event_name": "SUBMIT_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "",
+      "skills": [],
+      "scope": "",
+      "duration": "",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": "",
+      "description": ""
+    },
+    "timestamp": "2025-07-03T11:49:46.190Z"
+  },
+  {
+    "event_name": "POST_A_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "button",
+      "page": "home"
+    },
+    "timestamp": "2025-07-03T11:49:48.066Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 1,
+      "buttonText": "Next: Skills",
+      "title": ""
+    },
+    "timestamp": "2025-07-03T11:49:49.959Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 2,
+      "buttonText": "Next: Scope",
+      "skills": []
+    },
+    "timestamp": "2025-07-03T11:49:50.195Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 3,
+      "buttonText": "Next: Budget",
+      "scope": "",
+      "duration": ""
+    },
+    "timestamp": "2025-07-03T11:49:50.571Z"
+  },
+  {
+    "event_name": "NEXT_SKILLS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 4,
+      "buttonText": "Next: Description",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": ""
+    },
+    "timestamp": "2025-07-03T11:49:51.025Z"
+  },
+  {
+    "event_name": "SUBMIT_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "",
+      "skills": [],
+      "scope": "",
+      "duration": "",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": "",
+      "description": ""
+    },
+    "timestamp": "2025-07-03T11:49:55.659Z"
+  },
+  {
+    "event_name": "SUBMIT_JOB",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 5,
+      "title": "",
+      "skills": [],
+      "scope": "",
+      "duration": "",
+      "budgetType": "hourly",
+      "rateFrom": "",
+      "rateTo": "",
+      "description": ""
+    },
+    "timestamp": "2025-07-03T11:50:01.585Z"
+  }
+]
