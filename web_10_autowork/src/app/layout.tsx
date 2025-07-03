@@ -18,18 +18,22 @@ const sidebarLinks = [
   {
     label: "Jobs",
     icon: "https://ext.same-assets.com/1836270417/794014782.svg",
+    onclick:"/"
   },
   {
     label: "Talent",
     icon: "https://ext.same-assets.com/1836270417/1421870143.svg",
+      onclick:"/"
   },
   {
     label: "Reports",
     icon: "https://ext.same-assets.com/1836270417/3460757120.svg",
+      onclick:"/"
   },
   {
     label: "Messages",
     icon: "https://ext.same-assets.com/1836270417/236507066.svg",
+      onclick:"/"
   },
 ];
 const topIcons = [
@@ -68,7 +72,7 @@ export default function RootLayout({
               {sidebarLinks.map((link) => (
                 <a
                   key={link.label}
-                  href="#"
+                  href="/"
                   className="flex items-center gap-4 px-3 py-2 rounded-lg transition bg-transparent hover:bg-[#e6f9fb] text-base hover:text-[#08b4ce]"
                 >
                   <img src={link.icon} alt="" className="w-5 h-8" />{" "}

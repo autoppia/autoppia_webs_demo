@@ -29,11 +29,11 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
   return (
     <>
       <ToastContainer />
-      <main className="px-10 py-12">
+      <main className="px-40 py-12">
         <h1 className="text-5xl font-extrabold text-[#253037] mb-8">
           Send an offer
         </h1>
-        <div className="bg-[#fafbfc] p-4 rounded-lg border mb-10 flex items-center">
+        <div className="bg-[#fafbfc] p-4 rounded-lg border mb-10 flex items-center w-[50%]">
           <svg
             className="inline-block mr-3 w-7 h-7 text-[#08b4ce]"
             fill="none"
@@ -291,7 +291,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
             </div>
           </form>
           {/* Right: Expert summary */}
-          <div className="md:w-96 shrink-0 border rounded-2xl bg-white flex flex-col items-center py-9 px-7 mt-10 md:mt-0">
+          <div className="md:w-96 shrink-0 border rounded-2xl bg-white flex flex-col items-center py-9 px-7 mt-10 md:mt-0 h-96">
             <div className="relative mb-4">
               <img
                 src={expert.avatar}
