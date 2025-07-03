@@ -257,6 +257,7 @@ const [people, setPeople] = useState(2);
                   logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
                     countryCode: country.code,
                     countryName: country.name,
+                    restaurantName: data.name,
                   });
                 }}
               >
