@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,14 +71,14 @@ export default function RootLayout({
             </div>
             <nav className="flex flex-col gap-3 ">
               {sidebarLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
                   href="/"
                   className="flex items-center gap-4 px-3 py-2 rounded-lg transition bg-transparent hover:bg-[#e6f9fb] text-base hover:text-[#08b4ce]"
                 >
                   <img src={link.icon} alt="" className="w-5 h-8" />{" "}
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
           </aside>
