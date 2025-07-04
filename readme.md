@@ -37,6 +37,7 @@ demo-webs/
 ├── web_2_demo_books/
 ├── web_3_autozone/
 ├── web_3_autodining/
+├── web_4_autocrm/
 ├── webs_server/
 └── scripts/
     ├── install_docker.sh
@@ -57,13 +58,14 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Default Port Assignments**
 
-| Demo         | Web Port | DB Port | Notes                                   |
-|--------------|----------|---------|-----------------------------------------|
-| **Movies**   | 8000     | 5434    | Django + PostgreSQL                     |
-| **Books**    | 8001     | 5435    | Django + PostgreSQL                     |
-| **Autozone** | 8002     | —       | Next.js, no database required           |
-| **Autodining** | 8003   | —       | Next.js, no database required           |
-| **webs_server** | 8090  | 5437    | API service used for event logging      |
+| Demo            | Web Port | DB Port | Notes                                   |
+|-----------------|----------|---------|-----------------------------------------|
+| **Movies**      | 8000     | 5434    | Django + PostgreSQL                     |
+| **Books**       | 8001     | 5435    | Django + PostgreSQL                     |
+| **AutoZone**    | 8002     | —       | Next.js, no database required           |
+| **AutoDining**  | 8003     | —       | Next.js, no database required           |
+| **AutoCRM**     | 8004     | —       | Next.js, no database required           |
+| **webs_server** | 8090     | 5437    | API service used for event logging      |
 
 ---
 
@@ -114,7 +116,7 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=books --web_port=8001 --postgres_port=5436
 ```
 
-#### **📦 Deploy Autozone Demo**
+#### **📦 Deploy AutoZone Demo**
 
 ```bash
 ./scripts/setup.sh --demo=autozone --web_port=8002
@@ -124,6 +126,12 @@ chmod +x ./scripts/setup.sh
 
 ```bash
 ./scripts/setup.sh --demo=autodining --web_port=8003
+```
+
+#### **📦 Deploy AutoCRM Demo**
+
+```bash
+./scripts/setup.sh --demo=autocrm --web_port=8004
 ```
 
 > ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
@@ -163,11 +171,12 @@ After successful deployment, access your demo webs:
 ### **Default Access URLs**
 
 | Demo Application    | URL                     | Description                     |
-| ------------------- | ----------------------- | ------------------------------- |
+|---------------------|-------------------------|---------------------------------|
 | **Movies Demo**     | `http://localhost:8000` | Movie database interface        |
 | **Books Demo**      | `http://localhost:8001` | Book catalog system             |
 | **Autozone Demo**   | `http://localhost:8002` | Online Shopping for Electronics |
 | **Autodining Demo** | `http://localhost:8003` | Restaurant Reservation UI       |
+| **AutoCRM Demo**    | `http://localhost:8004` | Customer Relation Management UI |
 
 ---
 
