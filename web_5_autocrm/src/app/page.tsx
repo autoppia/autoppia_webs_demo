@@ -25,7 +25,7 @@ export default function DashboardPage() {
             <span className="font-semibold text-zinc-600 text-lg">Active Matters</span>
             <Briefcase className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">24</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">41</span>
           <span className="text-sm text-zinc-400">Matters currently open</span>
         </Link>
 
@@ -39,7 +39,7 @@ export default function DashboardPage() {
             <span className="font-semibold text-zinc-600 text-lg">Clients</span>
             <Users className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">112</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">44</span>
           <span className="text-sm text-zinc-400">Total clients</span>
         </Link>
 
@@ -67,7 +67,7 @@ export default function DashboardPage() {
             <span className="font-semibold text-zinc-600 text-lg">Documents</span>
             <FileText className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">89</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">50</span>
           <span className="text-sm text-zinc-400">Files managed</span>
         </Link>
 
