@@ -81,7 +81,7 @@ export default function DashboardPage() {
             <span className="font-semibold text-zinc-600 text-lg">Time Tracked</span>
             <Clock className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">148</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">36</span>
           <span className="text-sm text-zinc-400">Billable hours</span>
         </Link>
 
