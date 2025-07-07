@@ -1,132 +1,227 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block body %}
+{% extends 'base.html' %} {% load static %} {% block body %}
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"><i class="fas fa-plus-circle mr-2"></i>Add New Book</h3>
-                </div>
-                <div class="card-body">
-                    {% if request.user.is_authenticated %}
-                        <form method="POST" enctype="multipart/form-data" class="movie-form">
-                            {% csrf_token %}
-
-                            <div class="form-group">
-                                <label for="name"><i class="fas fa-book mr-1"></i> Book Name</label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter book name" required>
-                            </div>
-                            <div class="form-group" style="display: none">
-                                <label for="name"><i class="fas fa-book mr-1"></i> User Id</label>
-                                <input type="number" id="userId" name="userId" class="form-control" placeholder="User Id" required value="{{ user.id }}">
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="year"><i class="fas fa-calendar-alt mr-1"></i> Year</label>
-                                        <input type="number" id="year" name="year" class="form-control" placeholder="Release year" min="1900" max="2025" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="duration"><i class="fas fa-file mr-1"></i> Total (pages)</label>
-                                        <input type="number" id="duration" name="duration" class="form-control" placeholder="Total pages" min="1">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="director"><i class="fas fa-user mr-1"></i> Author</label>
-                                        <input type="text" id="director" name="director" class="form-control" placeholder="Author's name">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="rating"><i class="fas fa-star mr-1"></i> Rating</label>
-                                        <input type="number" id="rating" name="rating" class="form-control" placeholder="Rating" min="0" max="5" step="0.1" required>
-                                        <div class="form-text small text-muted">Rating from 0 to 5 stars</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="genre"><i class="fas fa-tags mr-1"></i> Categories</label>
-                                <select id="genre" name="genre" class="form-control">
-                                    {% for genre in genres %}
-                                    <option value="{{ genre.id }}">{{ genre.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="desc"><i class="fas fa-info-circle mr-1"></i> Description</label>
-                                <textarea id="desc" name="desc" class="form-control" rows="4" placeholder="Write a brief introduction about the book" required></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="trailer"><i class="fab fa-youtube mr-1"></i> URL of the book</label>
-                                <input type="url" id="trailer" name="trailer" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="img"><i class="fas fa-image mr-1"></i> Book Poster (Optional)</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="img" name="img" accept="image/*">
-                                    <label class="custom-file-label" for="img">Choose file</label>
-                                </div>
-                                <small class="form-text text-muted">Accepted formats: JPG, PNG. Maximum size: 5MB.</small>
-                            </div>
-
-                            <div class="form-group" id="imagePreview" style="display: none;">
-                                <label>Preview:</label>
-                                <img id="preview" src="#" alt="Preview" class="img-fluid mt-2 img-thumbnail" style="max-height: 300px;">
-                            </div>
-
-                            <div class="form-group text-center mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-save mr-2"></i>Save Book
-                                </button>
-                                <a href="{% url 'booksapp:index' %}" class="btn btn-secondary btn-lg ml-2">
-                                    <i class="fas fa-times mr-2"></i>Cancel
-                                </a>
-                            </div>
-                        </form>
-                    {% else %}
-                        <p>You must be logged in to add books.</p>
-                        <a href="{% url 'booksapp:login' %}">Log In</a> or <a href="{% url 'booksapp:register' %}">Register</a>
-                    {% endif %}
-                </div>
-            </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">
+            <i class="fas fa-plus-circle mr-2"></i>Add New Book
+          </h3>
         </div>
+        <div class="card-body">
+          {% if request.user.is_authenticated %}
+          <form method="POST" enctype="multipart/form-data" class="movie-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="name"
+                ><i class="fas fa-book mr-1"></i> Book Name</label
+              >
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-control"
+                placeholder="Enter book name"
+                required
+              />
+            </div>
+            <div class="form-group" style="display: none">
+              <label for="name"><i class="fas fa-book mr-1"></i> User Id</label>
+              <input
+                type="number"
+                id="userId"
+                name="userId"
+                class="form-control"
+                placeholder="User Id"
+                required
+                value="{{ user.id }}"
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="year"
+                    ><i class="fas fa-calendar-alt mr-1"></i> Year</label
+                  >
+                  <input
+                    type="number"
+                    id="year"
+                    name="year"
+                    class="form-control"
+                    placeholder="Release year"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="duration"
+                    ><i class="fas fa-file mr-1"></i> Total (pages)</label
+                  >
+                  <input
+                    type="number"
+                    id="duration"
+                    name="duration"
+                    class="form-control"
+                    placeholder="Total pages"
+                    min="1"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="director"
+                    ><i class="fas fa-user mr-1"></i> Author</label
+                  >
+                  <input
+                    type="text"
+                    id="director"
+                    name="director"
+                    class="form-control"
+                    placeholder="Author's name"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="rating"
+                    ><i class="fas fa-star mr-1"></i> Rating</label
+                  >
+                  <input
+                    type="number"
+                    id="rating"
+                    name="rating"
+                    class="form-control"
+                    placeholder="Rating"
+                    min="0"
+                    max="5"
+                    step="0.1"
+                    required
+                  />
+                  <div class="form-text small text-muted">
+                    Rating from 0 to 5 stars
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="genre"
+                ><i class="fas fa-tags mr-1"></i> Categories</label
+              >
+              <select id="genre" name="genre" class="form-control">
+                {% for genre in genres %}
+                <option value="{{ genre.id }}">{{ genre.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="desc"
+                ><i class="fas fa-info-circle mr-1"></i> Description</label
+              >
+              <textarea
+                id="desc"
+                name="desc"
+                class="form-control"
+                rows="4"
+                placeholder="Write a brief introduction about the book"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="trailer"
+                ><i class="fab fa-youtube mr-1"></i> URL of the book</label
+              >
+              <input
+                type="url"
+                id="trailer"
+                name="trailer"
+                class="form-control"
+                placeholder="https://www.youtube.com/watch?v=..."
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="img"
+                ><i class="fas fa-image mr-1"></i> Book Poster (Optional)</label
+              >
+              <div class="custom-file">
+                <input
+                  type="file"
+                  class="custom-file-input"
+                  id="img"
+                  name="img"
+                  accept="image/*"
+                />
+                <label class="custom-file-label" for="img">Choose file</label>
+              </div>
+              <small class="form-text text-muted"
+                >Accepted formats: JPG, PNG. Maximum size: 5MB.</small
+              >
+            </div>
+
+            <div class="form-group" id="imagePreview" style="display: none">
+              <label>Preview:</label>
+              <img
+                id="preview"
+                src="#"
+                alt="Preview"
+                class="img-fluid mt-2 img-thumbnail"
+                style="max-height: 300px"
+              />
+            </div>
+
+            <div class="form-group text-center mt-4">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-save mr-2"></i>Save Book
+              </button>
+              <a
+                href="{% url 'booksapp:index' %}"
+                class="btn btn-secondary btn-lg ml-2"
+              >
+                <i class="fas fa-times mr-2"></i>Cancel
+              </a>
+            </div>
+          </form>
+          {% else %}
+          <p>You must be logged in to add books.</p>
+          <a href="{% url 'booksapp:login' %}">Log In</a> or
+          <a href="{% url 'booksapp:register' %}">Register</a>
+          {% endif %}
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <script>
-    // Script to show image preview
-    document.getElementById('img').addEventListener('change', function(e) {
-        var file = e.target.files[0];
-        var preview = document.getElementById('preview');
-        var imagePreview = document.getElementById('imagePreview');
-        var label = document.querySelector('.custom-file-label');
+  // Script to show image preview
+  document.getElementById("img").addEventListener("change", function (e) {
+    var file = e.target.files[0];
+    var preview = document.getElementById("preview");
+    var imagePreview = document.getElementById("imagePreview");
+    var label = document.querySelector(".custom-file-label");
 
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                imagePreview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-            label.textContent = file.name;
-        } else {
-            imagePreview.style.display = 'none';
-            preview.src = '#';
-            label.textContent = "Choose file";
-        }
-    });
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        imagePreview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+      label.textContent = file.name;
+    } else {
+      imagePreview.style.display = "none";
+      preview.src = "#";
+      label.textContent = "Choose file";
+    }
+  });
 </script>
 {% endblock %}

@@ -13,13 +13,16 @@ class Genre(models.Model):
 
 
 class Book(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="books")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="books")
     name = models.CharField(max_length=250)
     desc = models.TextField()
-    year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
+    year = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(9999)])
     img = models.ImageField(upload_to="gallery", blank=True, null=True)
     director = models.CharField(max_length=250, blank=True, null=True)
-    duration = models.IntegerField(blank=True, null=True, help_text="Duration in minutes")
+    duration = models.IntegerField(
+        blank=True, null=True, help_text="Duration in minutes")
     trailer_url = models.URLField(blank=True, null=True)
     rating = models.FloatField(
         default=0.0,
@@ -43,11 +46,13 @@ class Book(models.Model):
 
 
 class Comment(models.Model):
-    movie = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="comments")
+    movie = models.ForeignKey(
+        Book, on_delete=models.CASCADE, related_name="comments")
     name = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    avatar = models.ImageField(upload_to="gallery/avatars", blank=True, null=True)
+    avatar = models.ImageField(
+        upload_to="gallery/avatars", blank=True, null=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -57,11 +62,15 @@ class Comment(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="profile")
     bio = models.TextField(max_length=500, blank=True, null=True)
-    profile_pic = models.ImageField(upload_to="gallery/profiles", blank=True, null=True)
-    favorite_genres = models.ManyToManyField(Genre, blank=True, related_name="user_favorites")
-    website = models.URLField(blank=True, null=True, help_text="Please include http:// or https://")
+    profile_pic = models.ImageField(
+        upload_to="gallery/profiles", blank=True, null=True)
+    favorite_genres = models.ManyToManyField(
+        Genre, blank=True, related_name="user_favorites")
+    website = models.URLField(blank=True, null=True,
+                              help_text="Please include http:// or https://")
     location = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
@@ -69,8 +78,10 @@ class UserProfile(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="cart_items")
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="in_carts")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="cart_items")
+    book = models.ForeignKey(
+        Book, on_delete=models.CASCADE, related_name="in_carts")
 
     class Meta:
         unique_together = ["user", "book"]
