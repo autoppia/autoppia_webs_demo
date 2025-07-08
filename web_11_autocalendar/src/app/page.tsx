@@ -299,6 +299,16 @@ export default function Home() {
 
   function handleModalSave(e: React.FormEvent) {
     e.preventDefault();
+    logEvent(EVENT_TYPES.ADD_EVENT, {
+      source: "event-modal",
+      title: eventModal.label,
+      calendar: eventModal.calendar,
+      date: eventModal.date,
+      startTime: eventModal.startTime,
+      endTime: eventModal.endTime,
+      color: eventModal.color,
+      isEditing: !!eventModal.editing,
+    });
     const dstr = eventModal.date ?? viewDate.toISOString().split("T")[0];
     const newEv: Event = {
       id: eventModal.editing ?? Math.random().toString(36).slice(2),
@@ -367,6 +377,11 @@ export default function Home() {
     topLabel = `${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
 
   function onMonthCellClick(date: Date) {
+    logEvent(EVENT_TYPES.CELL_CLCIKED, {
+      source: "month-view",
+      date: date.toISOString(),
+      view: "Month",
+    });
     setEventModal({
       open: true,
       editing: null,
@@ -384,6 +399,12 @@ export default function Home() {
   }
 
   function onWeekHourCellClick(date: Date, hour: number) {
+    logEvent(EVENT_TYPES.CELL_CLCIKED, {
+      source: `${currentView.toLowerCase()}-view`,
+      date: date.toISOString(),
+      hour,
+      view: currentView,
+    });
     setEventModal({
       open: true,
       editing: null,
@@ -1139,7 +1160,18 @@ export default function Home() {
                 </Button>
               )}
               <DialogClose asChild>
-                <Button variant="outline" type="button">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, {
+                      source: "event-modal",
+                      date: eventModal.date,
+                      reason: "User clicked cancel button",
+                      title: eventModal.label,
+                    });
+                  }}
+                >
                   Cancel
                 </Button>
               </DialogClose>
