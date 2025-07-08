@@ -463,7 +463,7 @@ export default function Home() {
     <main className="flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f]">
       <aside className="w-[260px] bg-white border-r border-[#e5e5e5] flex flex-col pt-0 pb-2 px-0 shadow z-10 min-h-screen select-none relative">
         <div className="flex items-center justify-center gap-1 h-[64px] pt-0">
-          <div className="bg-[#1976d2] px-5 py-5 rounded flex items-center h-9">
+          <div className="bg-[#1976d2] px-14 py-6 rounded flex items-center h-9">
             <span className="font-bold text-white text-lg">AutoCalendar</span>
           </div>
         </div>
@@ -630,7 +630,13 @@ export default function Home() {
               Add new calendar
             </span>
             <button
-              onClick={() => setAddCalOpen(true)}
+              onClick={() => {
+                logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
+                  source: "calendar-sidebar",
+                  action: "open_add_calendar_modal",
+                });
+                setAddCalOpen(true);
+              }}
               type="button"
               tabIndex={0}
               aria-label="Add calendar"
@@ -667,6 +673,12 @@ export default function Home() {
                         (myCalendars.length + addCalColorIdx) %
                           INIT_COLORS.length
                       ];
+                    // Log the CREATE_CALENDAR event
+                    logEvent(EVENT_TYPES.CREATE_CALENDAR, {
+                      name: addCalName,
+                      description: addCalDesc,
+                      color,
+                    });
                     setMyCalendars((cals) => [
                       ...cals,
                       { name: addCalName, enabled: true, color },
