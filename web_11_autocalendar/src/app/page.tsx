@@ -425,10 +425,10 @@ export default function Home() {
     setViewDate(today);
     setMiniCalMonth(today.getMonth());
     setMiniCalYear(today.getFullYear());
-     logEvent(EVENT_TYPES.SELECT_TODAY, {
-    source: "mini-calendar",
-    selectedDate: today.toISOString(),
-  });
+    logEvent(EVENT_TYPES.SELECT_TODAY, {
+      source: "mini-calendar",
+      selectedDate: today.toISOString(),
+    });
   }
 
   function handleWeekNav(dir: "prev" | "next") {
@@ -736,6 +736,21 @@ export default function Home() {
                   {VIEW_OPTIONS.map((opt) => (
                     <button
                       onClick={() => {
+                        // Log event first
+                        logEvent(
+                          {
+                            Day: EVENT_TYPES.SELECT_DAY,
+                            "5 days": EVENT_TYPES.SELECT_FIVE_DAYS,
+                            Week: EVENT_TYPES.SELECT_WEEK,
+                            Month: EVENT_TYPES.SELECT_MONTH,
+                          }[opt],
+                          {
+                            source: "calendar-view-dropdown",
+                            selectedView: opt,
+                          }
+                        );
+
+                        // Then update view
                         setCurrentView(opt);
                         setViewDropdown(false);
                       }}
