@@ -11,7 +11,7 @@ export const EVENT_TYPES = {
   CANCEL_ADD_EVENT: "CANCEL_ADD_EVENT", //done 
   ADD_NEW_CALENDAR: "ADD_NEW_CALENDAR", //done 
   CREATE_CALENDAR: "CREATE_CALENDAR", //done
-  CHOOSE_CALENDAR:"CHOOSE_CALENDAR"
+  CHOOSE_CALENDAR:"CHOOSE_CALENDAR" //done
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];

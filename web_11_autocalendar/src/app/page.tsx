@@ -602,13 +602,21 @@ export default function Home() {
                     <input
                       type="checkbox"
                       checked={cal.enabled}
-                      onChange={() =>
+                      onChange={() => {
+                        // Log event before updating state
+                        logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
+                          calendarName: cal.name,
+                          selected: !cal.enabled,
+                          color: cal.color,
+                        });
+
+                        // Update calendar state
                         setMyCalendars((cals) =>
                           cals.map((c, i) =>
                             i === idx ? { ...c, enabled: !c.enabled } : c
                           )
-                        )
-                      }
+                        );
+                      }}
                       className="appearance-none w-3 h-3 rounded-sm cursor-pointer"
                       style={{
                         background: cal.enabled ? cal.color : "#fff",
