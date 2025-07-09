@@ -1,202 +1,471 @@
-import { faker } from '@faker-js/faker';
-import type { Email, Label, EmailCategory, EmailFolder } from '@/types/email';
+import type { Email, Label, EmailCategory, EmailFolder } from "@/types/email";
 
 // Predefined system labels
 export const systemLabels: Label[] = [
-  { id: 'inbox', name: 'Inbox', color: '#1a73e8', type: 'system' },
-  { id: 'starred', name: 'Starred', color: '#f9ab00', type: 'system' },
-  { id: 'snoozed', name: 'Snoozed', color: '#ea4335', type: 'system' },
-  { id: 'sent', name: 'Sent', color: '#34a853', type: 'system' },
-  { id: 'drafts', name: 'Drafts', color: '#9aa0a6', type: 'system' },
-  { id: 'spam', name: 'Spam', color: '#ea4335', type: 'system' },
-  { id: 'trash', name: 'Trash', color: '#5f6368', type: 'system' },
-  { id: 'important', name: 'Important', color: '#fbbc04', type: 'system' },
+  { id: "inbox", name: "Inbox", color: "#1a73e8", type: "system" },
+  { id: "starred", name: "Starred", color: "#f9ab00", type: "system" },
+  { id: "snoozed", name: "Snoozed", color: "#ea4335", type: "system" },
+  { id: "sent", name: "Sent", color: "#34a853", type: "system" },
+  { id: "drafts", name: "Drafts", color: "#9aa0a6", type: "system" },
+  { id: "spam", name: "Spam", color: "#ea4335", type: "system" },
+  { id: "trash", name: "Trash", color: "#5f6368", type: "system" },
+  { id: "important", name: "Important", color: "#fbbc04", type: "system" },
 ];
 
 // Custom user labels - only Work and Personal by default
 export const userLabels: Label[] = [
-  { id: 'work', name: 'Work', color: '#4285f4', type: 'user' },
-  { id: 'personal', name: 'Personal', color: '#0f9d58', type: 'user' },
+  { id: "work", name: "Work", color: "#4285f4", type: "user" },
+  { id: "personal", name: "Personal", color: "#0f9d58", type: "user" },
 ];
 
 const categories: EmailCategory[] = [
-  'primary',
-  'social',
-  'promotions',
-  'updates',
-  'forums',
-  'support',
+  "primary",
+  "social",
+  "promotions",
+  "updates",
+  "forums",
+  "support",
 ];
 
-const emailDomains = [
-  'gmail.com',
-  'outlook.com',
-  'yahoo.com',
-  'company.com',
-  'startup.io',
-  'tech.org',
-];
-
-function generateEmailAddress(): { name: string; email: string; avatar?: string } {
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  const domain = faker.helpers.arrayElement(emailDomains);
-
-  return {
-    name: `${firstName} ${lastName}`,
-    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${domain}`,
-    avatar: faker.image.avatar(),
-  };
-}
-
-function generateEmailSubject(category: EmailCategory): string {
-  const subjects = {
-    primary: [
-      'Meeting scheduled for tomorrow',
-      'Quick question about the project',
-      'Follow up on our conversation',
-      'Important update regarding your account',
-      'Invoice for recent services',
-      'Thank you for your business',
-    ],
-    social: [
-      'John Doe tagged you in a photo',
-      'Your friend is now on this platform',
-      'New message from your network',
-      'Someone viewed your profile',
-      'Invitation to connect',
-      'Weekly activity summary',
-    ],
-    promotions: [
-      '50% OFF Everything - Limited Time Only!',
-      'Exclusive deal just for you',
-      'Flash Sale: 24 hours only',
-      'Your cart is waiting for you',
-      'New arrivals you might like',
-      'Free shipping on orders over $50',
-    ],
-    updates: [
-      'Your order has been shipped',
-      'Security alert for your account',
-      'New features available',
-      'System maintenance scheduled',
-      'Password change confirmation',
-      'Account activity summary',
-    ],
-    forums: [
-      'New reply to your post',
-      'Weekly digest from the community',
-      'Trending topics this week',
-      'Someone mentioned you',
-      'New discussion in your group',
-      'Monthly forum newsletter',
-    ],
-    support: [
-      'Your support ticket has been updated',
-      'How was your experience with us?',
-      'Solution to your recent inquiry',
-      'Follow-up on your support case',
-      'Knowledge base article you requested',
-      'Customer service survey',
-    ],
-  };
-
-  return faker.helpers.arrayElement(subjects[category]);
-}
-
-function generateEmailBody(subject: string): { body: string; snippet: string } {
-  const paragraphs = faker.helpers.arrayElements([
-    faker.lorem.paragraph(3),
-    faker.lorem.paragraph(2),
-    faker.lorem.paragraph(4),
-    faker.lorem.paragraph(1),
-  ], { min: 1, max: 3 });
-
-  const body = `Dear ${faker.person.firstName()},\n\n${paragraphs.join('\n\n')}\n\nBest regards,\n${faker.person.fullName()}`;
-  const snippet = `${paragraphs[0].substring(0, 120)}...`;
-
-  return { body, snippet };
-}
-
-export function generateMockEmail(overrides?: Partial<Email>): Email {
-  const category = faker.helpers.arrayElement(categories);
-  const subject = generateEmailSubject(category);
-  const { body, snippet } = generateEmailBody(subject);
-  const from = generateEmailAddress();
-
-  // Generate 1-3 recipients
-  const toCount = faker.helpers.arrayElement([1, 1, 1, 2, 3]); // Most emails have 1 recipient
-  const to = Array.from({ length: toCount }, () => generateEmailAddress());
-
-  // Occasionally add CC recipients
-  const cc = faker.datatype.boolean(0.2)
-    ? Array.from({ length: faker.number.int({ min: 1, max: 2 }) }, () => generateEmailAddress())
-    : undefined;
-
-  // Assign some random labels to emails
-  const emailLabels: Label[] = [];
-
-  // 30% chance of having a Work label
-  if (faker.datatype.boolean(0.3)) {
-    emailLabels.push(userLabels[0]); // Work label
-  }
-
-  // 20% chance of having a Personal label
-  if (faker.datatype.boolean(0.2)) {
-    emailLabels.push(userLabels[1]); // Personal label
-  }
-
-  const timestamp = faker.date.between({
-    from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-    to: new Date(),
-  });
-
-  return {
-    id: faker.string.uuid(),
-    from,
-    to,
-    cc,
-    subject,
-    body,
-    snippet,
-    timestamp,
-    isRead: faker.datatype.boolean(0.7), // 70% chance of being read
-    isStarred: faker.datatype.boolean(0.15), // 15% chance of being starred
-    isSnoozed: faker.datatype.boolean(0.05), // 5% chance of being snoozed
-    isDraft: false,
-    isImportant: faker.datatype.boolean(0.1), // 10% chance of being important
-    labels: emailLabels,
-    category,
-    threadId: faker.string.uuid(),
-    attachments: faker.datatype.boolean(0.2) // 20% chance of having attachments
-      ? Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
-          id: faker.string.uuid(),
-          name: faker.system.fileName(),
-          size: faker.number.int({ min: 1024, max: 5242880 }), // 1KB to 5MB
-          type: faker.helpers.arrayElement(['application/pdf', 'image/jpeg', 'image/png', 'application/docx']),
-          url: faker.internet.url(),
-        }))
-      : undefined,
-    ...overrides,
-  };
-}
-
-export function generateMockEmails(count = 50): Email[] {
-  return Array.from({ length: count }, () => generateMockEmail());
-}
-
-// Generate some draft emails
-export function generateDraftEmails(count = 3): Email[] {
-  return Array.from({ length: count }, () =>
-    generateMockEmail({
-      isDraft: true,
-      isRead: false,
+// Fixed dataset of 20 emails
+export function generateMockEmails(count = 20): Email[] {
+  const emails: Email[] = [
+    // Inbox emails (8)
+    {
+      id: "email1",
       from: {
-        name: 'Me',
-        email: 'me@gmail.com',
-        avatar: faker.image.avatar(),
+        name: "Alice Smith",
+        email: "alice.smith@company.com",
+        avatar: "https://example.com/avatars/alice.jpg",
       },
-      timestamp: faker.date.recent({ days: 7 }),
-    })
-  );
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Project Kickoff Meeting",
+      body: "Dear Me,\n\nLooking forward to our project kickoff meeting next week. Please review the attached agenda.\n\nBest,\nAlice",
+      snippet: "Looking forward to our project kickoff meeting next week...",
+      timestamp: new Date("2025-07-08T10:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: true,
+      labels: [{ id: "work", name: "Work", color: "#4285f4", type: "user" }],
+      category: "primary",
+      threadId: "thread1",
+      attachments: [
+        {
+          id: "attach1",
+          name: "agenda.pdf",
+          size: 1048576,
+          type: "application/pdf",
+          url: "https://example.com/agenda.pdf",
+        },
+      ],
+    },
+    {
+      id: "email2",
+      from: {
+        name: "Bob Johnson",
+        email: "bob.johnson@tech.org",
+        avatar: "https://example.com/avatars/bob.jpg",
+      },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Lunch Plans",
+      body: "Hey,\n\nWant to grab lunch this Friday? Let me know what works for you!\n\nCheers,\nBob",
+      snippet: "Want to grab lunch this Friday?...",
+      timestamp: new Date("2025-07-07T12:30:00Z"),
+      isRead: false,
+      isStarred: true,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [
+        { id: "personal", name: "Personal", color: "#0f9d58", type: "user" },
+      ],
+      category: "social",
+      threadId: "thread2",
+    },
+    {
+      id: "email3",
+      from: { name: "Carol White", email: "carol.white@outlook.com" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Newsletter Subscription",
+      body: "Dear Me,\n\nThank you for subscribing to our newsletter! Here are the latest updates.\n\nBest,\nCarol",
+      snippet: "Thank you for subscribing to our newsletter!...",
+      timestamp: new Date("2025-07-06T09:15:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [],
+      category: "promotions",
+      threadId: "thread3",
+    },
+    {
+      id: "email4",
+      from: { name: "David Brown", email: "david.brown@company.com" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Q2 Report Feedback",
+      body: "Hi,\n\nPlease review the Q2 report and share your feedback by EOD.\n\nThanks,\nDavid",
+      snippet: "Please review the Q2 report and share your feedback...",
+      timestamp: new Date("2025-07-05T14:20:00Z"),
+      isRead: false,
+      isStarred: false,
+      isSnoozed: true,
+      isDraft: false,
+      isImportant: true,
+      labels: [{ id: "work", name: "Work", color: "#4285f4", type: "user" }],
+      category: "primary",
+      threadId: "thread4",
+    },
+    {
+      id: "email5",
+      from: { name: "Emma Davis", email: "emma.davis@yahoo.com" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Community Forum Update",
+      body: "Hello,\n\nThere’s a new reply to your post in the community forum.\n\nRegards,\nEmma",
+      snippet: "There’s a new reply to your post in the community forum...",
+      timestamp: new Date("2025-07-04T11:45:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [],
+      category: "forums",
+      threadId: "thread5",
+    },
+    {
+      id: "email6",
+      from: { name: "Frank Wilson", email: "frank.wilson@startup.io" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Support Ticket #1234",
+      body: "Dear Me,\n\nYour support ticket has been resolved. Please let us know if you need further assistance.\n\nBest,\nFrank",
+      snippet: "Your support ticket has been resolved...",
+      timestamp: new Date("2025-07-03T16:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [],
+      category: "support",
+      threadId: "thread6",
+    },
+    {
+      id: "email7",
+      from: { name: "Grace Lee", email: "grace.lee@company.com" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Team Outing Plan",
+      body: "Hi,\n\nWe’re planning a team outing next month. Please share your availability.\n\nThanks,\nGrace",
+      snippet: "We’re planning a team outing next month...",
+      timestamp: new Date("2025-07-02T13:10:00Z"),
+      isRead: false,
+      isStarred: true,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [{ id: "work", name: "Work", color: "#4285f4", type: "user" }],
+      category: "primary",
+      threadId: "thread7",
+    },
+    {
+      id: "email8",
+      from: { name: "Henry Moore", email: "henry.moore@tech.org" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Exclusive Offer: 20% Off",
+      body: "Dear Customer,\n\nEnjoy 20% off your next purchase with code SAVE20.\n\nBest,\nHenry",
+      snippet: "Enjoy 20% off your next purchase with code SAVE20...",
+      timestamp: new Date("2025-07-01T08:50:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [],
+      category: "promotions",
+      threadId: "thread8",
+    },
+
+    // Sent emails (5)
+    {
+      id: "email9",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Alice Smith", email: "alice.smith@company.com" }],
+      subject: "Re: Project Kickoff Meeting",
+      body: "Hi Alice,\n\nThanks for the agenda. I’ll review and get back to you.\n\nBest,\nMe",
+      snippet: "Thanks for the agenda. I’ll review and get back to you...",
+      timestamp: new Date("2025-07-08T11:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [{ id: "sent", name: "Sent", color: "#34a853", type: "system" }],
+      category: "primary",
+      threadId: "thread1",
+    },
+    {
+      id: "email10",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Bob Johnson", email: "bob.johnson@tech.org" }],
+      subject: "Re: Lunch Plans",
+      body: "Hey Bob,\n\nFriday works for me! Let’s meet at noon.\n\nCheers,\nMe",
+      snippet: "Friday works for me! Let’s meet at noon...",
+      timestamp: new Date("2025-07-07T13:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [
+        { id: "sent", name: "Sent", color: "#34a853", type: "system" },
+        { id: "personal", name: "Personal", color: "#0f9d58", type: "user" },
+      ],
+      category: "social",
+      threadId: "thread2",
+    },
+    {
+      id: "email11",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "David Brown", email: "david.brown@company.com" }],
+      subject: "Re: Q2 Report Feedback",
+      body: "Hi David,\n\nI’ve added comments to the Q2 report. Let me know if you need more details.\n\nThanks,\nMe",
+      snippet: "I’ve added comments to the Q2 report...",
+      timestamp: new Date("2025-07-05T15:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: true,
+      labels: [
+        { id: "sent", name: "Sent", color: "#34a853", type: "system" },
+        { id: "work", name: "Work", color: "#4285f4", type: "user" },
+      ],
+      category: "primary",
+      threadId: "thread4",
+    },
+    {
+      id: "email12",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Grace Lee", email: "grace.lee@company.com" }],
+      subject: "Re: Team Outing Plan",
+      body: "Hi Grace,\n\nI’m available on the 15th. Let me know the details!\n\nThanks,\nMe",
+      snippet: "I’m available on the 15th...",
+      timestamp: new Date("2025-07-02T14:00:00Z"),
+      isRead: true,
+      isStarred: true,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [
+        { id: "sent", name: "Sent", color: "#34a853", type: "system" },
+        { id: "work", name: "Work", color: "#4285f4", type: "user" },
+      ],
+      category: "primary",
+      threadId: "thread7",
+    },
+    {
+      id: "email13",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Henry Moore", email: "henry.moore@tech.org" }],
+      subject: "Re: Exclusive Offer",
+      body: "Hi Henry,\n\nThanks for the offer! I’ll use the code this weekend.\n\nBest,\nMe",
+      snippet: "Thanks for the offer! I’ll use the code this weekend...",
+      timestamp: new Date("2025-07-01T09:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [{ id: "sent", name: "Sent", color: "#34a853", type: "system" }],
+      category: "promotions",
+      threadId: "thread8",
+    },
+
+    // Draft emails (3)
+    {
+      id: "email14",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Alice Smith", email: "alice.smith@company.com" }],
+      subject: "Draft: Project Update",
+      body: "Hi Alice,\n\nHere’s the latest project update...\n\nBest,\nMe",
+      snippet: "Here’s the latest project update...",
+      timestamp: new Date("2025-07-07T10:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: true,
+      isImportant: false,
+      labels: [
+        { id: "drafts", name: "Drafts", color: "#9aa0a6", type: "system" },
+      ],
+      category: "primary",
+      threadId: "thread14",
+    },
+    {
+      id: "email15",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Bob Johnson", email: "bob.johnson@tech.org" }],
+      subject: "(no subject)",
+      body: "Hey Bob,\n\nJust checking in...\n\nCheers,\nMe",
+      snippet: "Just checking in...",
+      timestamp: new Date("2025-07-06T12:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: true,
+      isImportant: false,
+      labels: [
+        { id: "drafts", name: "Drafts", color: "#9aa0a6", type: "system" },
+        { id: "personal", name: "Personal", color: "#0f9d58", type: "user" },
+      ],
+      category: "social",
+      threadId: "thread15",
+    },
+    {
+      id: "email16",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Carol White", email: "carol.white@outlook.com" }],
+      subject: "Draft: Feedback",
+      body: "Hi Carol,\n\nI have some feedback on the newsletter...\n\nBest,\nMe",
+      snippet: "I have some feedback on the newsletter...",
+      timestamp: new Date("2025-07-05T09:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: true,
+      isImportant: false,
+      labels: [
+        { id: "drafts", name: "Drafts", color: "#9aa0a6", type: "system" },
+      ],
+      category: "promotions",
+      threadId: "thread16",
+    },
+
+    // Spam emails (2)
+    {
+      id: "email17",
+      from: { name: "Unknown Sender", email: "spam@unknown.com" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Win a Free Vacation!",
+      body: "Congratulations! You’ve won a free vacation. Click here to claim.\n\nBest,\nUnknown Sender",
+      snippet: "Congratulations! You’ve won a free vacation...",
+      timestamp: new Date("2025-07-04T08:00:00Z"),
+      isRead: false,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [{ id: "spam", name: "Spam", color: "#ea4335", type: "system" }],
+      category: "promotions",
+      threadId: "thread17",
+    },
+    {
+      id: "email18",
+      from: { name: "Promo Bot", email: "promo.bot@scam.com" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Amazing Deal Awaits!",
+      body: "Don’t miss this amazing deal! Click now to save big.\n\nBest,\nPromo Bot",
+      snippet: "Don’t miss this amazing deal...",
+      timestamp: new Date("2025-07-03T07:00:00Z"),
+      isRead: false,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [{ id: "spam", name: "Spam", color: "#ea4335", type: "system" }],
+      category: "promotions",
+      threadId: "thread18",
+    },
+
+    // Trash emails (2)
+    {
+      id: "email19",
+      from: { name: "Old Contact", email: "old.contact@yahoo.com" },
+      to: [{ name: "Me", email: "me@gmail.com" }],
+      subject: "Old Email",
+      body: "This is an old email moved to trash.\n\nBest,\nOld Contact",
+      snippet: "This is an old email moved to trash...",
+      timestamp: new Date("2025-06-30T10:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [
+        { id: "trash", name: "Trash", color: "#5f6368", type: "system" },
+      ],
+      category: "primary",
+      threadId: "thread19",
+    },
+    {
+      id: "email20",
+      from: {
+        name: "Me",
+        email: "me@gmail.com",
+        avatar: "https://example.com/avatars/me.jpg",
+      },
+      to: [{ name: "Deleted User", email: "deleted.user@company.com" }],
+      subject: "Re: Old Project",
+      body: "Hi,\n\nThis email was moved to trash.\n\nBest,\nMe",
+      snippet: "This email was moved to trash...",
+      timestamp: new Date("2025-06-29T15:00:00Z"),
+      isRead: true,
+      isStarred: false,
+      isSnoozed: false,
+      isDraft: false,
+      isImportant: false,
+      labels: [
+        { id: "trash", name: "Trash", color: "#5f6368", type: "system" },
+        { id: "sent", name: "Sent", color: "#34a853", type: "system" },
+      ],
+      category: "primary",
+      threadId: "thread20",
+    },
+  ];
+
+  return emails.slice(0, count);
+}
+
+// Generate draft emails (subset of the fixed dataset)
+export function generateDraftEmails(count = 3): Email[] {
+  const drafts = [
+    generateMockEmails().find((email) => email.id === "email14")!,
+    generateMockEmails().find((email) => email.id === "email15")!,
+    generateMockEmails().find((email) => email.id === "email16")!,
+  ];
+  return drafts.slice(0, count);
 }
