@@ -17,7 +17,7 @@ COPY . .
 RUN chmod +x ./entrypoint.sh
 
 # Expose your app port (used in npm run dev -- -p 8004)
-EXPOSE 8004
+EXPOSE 9000
 
 # Set the entrypoint
 ENTRYPOINT ["sh", "./entrypoint.sh"]
