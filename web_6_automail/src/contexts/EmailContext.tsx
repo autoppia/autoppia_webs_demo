@@ -252,6 +252,7 @@ function emailReducer(state: EmailState, action: EmailAction): EmailState {
         currentFilter: action.payload,
         selectedEmails: [],
         currentPage: 1,
+        currentEmail: null,
       };
 
     case "SET_SEARCH_QUERY":
@@ -484,7 +485,7 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "TOGGLE_COMPOSE", payload: open });
     if (open) {
       logEvent(EVENT_TYPES.COMPOSE_EMAIL, {
-        action: "opened_compose"
+        action: "opened_compose",
       });
     }
   }, []);
