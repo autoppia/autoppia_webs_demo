@@ -252,6 +252,7 @@ function emailReducer(state: EmailState, action: EmailAction): EmailState {
         currentFilter: action.payload,
         selectedEmails: [],
         currentPage: 1,
+        currentEmail: null,
       };
 
     case "SET_SEARCH_QUERY":
