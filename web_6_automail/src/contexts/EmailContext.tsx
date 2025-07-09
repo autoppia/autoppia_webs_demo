@@ -341,7 +341,7 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (state.emails.length === 0) {
       // Generate only 10 emails for inbox - no other folder emails
-      const mockEmails = generateMockEmails(10);
+      const mockEmails = generateMockEmails(50);
       dispatch({ type: "SET_EMAILS", payload: mockEmails });
     }
   }, [state.emails.length]);
