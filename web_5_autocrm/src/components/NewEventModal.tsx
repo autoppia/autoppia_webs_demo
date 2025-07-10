@@ -11,6 +11,13 @@ export type CalendarEvent = {
   color: EventColor;
 };
 
+const COLOR_MAP: Record<string, EventColor> = {
+  "Matter/Event": "forest",
+  "Internal": "indigo",
+  "Filing": "blue",
+  "Other": "zinc",
+};
+
 type NewEventModalProps = {
   date: string;
   onClose: () => void;
@@ -20,19 +27,28 @@ type NewEventModalProps = {
 export function NewEventModal({ date, onClose, onSave }: NewEventModalProps) {
   const [label, setLabel] = useState("");
   const [time, setTime] = useState("09:00");
-  const [color, setColor] = useState<CalendarEvent["color"]>("forest");
+  const [color, setColor] = useState("Matter/Event");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const mappedColor = COLOR_MAP[color] || "forest";
 
     const newEvent: CalendarEvent = {
       id: Date.now(),
       date,
       label,
       time,
+      color: mappedColor,
+    };
+    const eventToTrigger = {
+      id: Date.now(),
+      date,
+      label,
+      time,
       color,
     };
-    logEvent(EVENT_TYPES.NEW_CALENDAR_EVENT_ADDED, newEvent); // ✅ Emit event
+    logEvent(EVENT_TYPES.NEW_CALENDAR_EVENT_ADDED, eventToTrigger);
     onSave(newEvent);
     onClose();
   };
@@ -59,13 +75,13 @@ export function NewEventModal({ date, onClose, onSave }: NewEventModalProps) {
         />
         <select
           value={color}
-          onChange={(e) => setColor(e.target.value as CalendarEvent["color"])}
+          onChange={(e) => setColor(e.target.value)}
           className="border px-3 py-2 rounded"
         >
-          <option value="forest">Matter/Event</option>
-          <option value="indigo">Internal</option>
-          <option value="blue">Filing</option>
-          <option value="zinc">Other</option>
+        <option value="Matter/Event">Matter/Event</option>
+        <option value="Internal">Internal</option>
+        <option value="Filing">Filing</option>
+        <option value="Other">Other</option>
         </select>
         <div className="flex justify-end gap-3">
           <button
