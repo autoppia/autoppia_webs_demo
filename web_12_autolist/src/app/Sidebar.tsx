@@ -1,4 +1,5 @@
 "use client";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   UserOutlined,
   PlusOutlined,
@@ -43,7 +44,13 @@ export default function Sidebar({
         {/* Navigation */}
         <ul className="mb-4">
           <li
-            onClick={() => onSelect && onSelect("inbox")}
+            onClick={() => {
+              logEvent(EVENT_TYPES.CHECK_SIDEBAR_INBOX_CLICKED, {
+                label: "Inbox",
+                count: inboxCount,
+              });
+           if (onSelect) onSelect("inbox");
+            }}
             className={`flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
               selected === "inbox"
                 ? "bg-[#faece5] text-[#d1453b] font-bold"
@@ -64,7 +71,13 @@ export default function Sidebar({
                 ? "bg-[#faece5] text-[#d1453b] font-bold"
                 : "text-black hover:bg-gray-100")
             }
-            onClick={() => onSelect && onSelect("today")}
+            onClick={() => {
+              logEvent(EVENT_TYPES.CHECK_SIDEBAR_TODAY_CLICKED, {
+                label: "Today",
+                count: todayCount,
+              });
+            if (onSelect) onSelect("today");
+            }}
           >
             {" "}
             <CalendarOutlined /> <span className="flex-1">Today</span>{" "}
@@ -73,7 +86,13 @@ export default function Sidebar({
             </span>
           </li>
           <li
-            onClick={() => onSelect && onSelect("completed")}
+            onClick={() => {
+              logEvent(EVENT_TYPES.CHECK_SIDEBAR_COMPLETE_CLICKED, {
+                label: "Completed",
+                count: completedCount,
+              });
+               if (onSelect) onSelect("completed");
+            }}
             className={`flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
               selected === "completed"
                 ? "bg-[#faece5] text-[#d1453b] font-bold"

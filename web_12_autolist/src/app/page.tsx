@@ -17,6 +17,7 @@ import { Calendar, Popover, Modal } from "antd";
 import { useState, useRef, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import Navbar from "./components/Navbar";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 type Task = {
   id: string;
@@ -116,6 +117,10 @@ function AddTaskCard({
           key={p.key}
           type="button"
           onClick={() => {
+            logEvent(EVENT_TYPES.SELECT_PRIORITY, {
+              priority: p.key,
+              label: p.label,
+            });
             setSelectedPriority(p.key);
             setPriorityPopoverOpen(false);
           }}
@@ -237,6 +242,10 @@ function AddTaskCard({
             className="flex items-center w-full px-4 py-2 text-[15px] hover:bg-gray-50 cursor-pointer"
             type="button"
             onClick={() => {
+              logEvent(EVENT_TYPES.SELECT_DATE, {
+                selectedDate: q.value.toISOString(),
+                quickOption: q.key,
+              });
               setSelectedDate(q.value);
               if (document.activeElement) {
                 (document.activeElement as HTMLElement).blur();
@@ -258,6 +267,10 @@ function AddTaskCard({
           fullscreen={false}
           value={selectedDate || dayjs()}
           onSelect={(d) => {
+            logEvent(EVENT_TYPES.SELECT_DATE, {
+              selectedDate: d.toISOString(),
+              wasPreviouslySelected: !!selectedDate,
+            });
             setSelectedDate(d);
             if (document.activeElement) {
               (document.activeElement as HTMLElement).blur();
@@ -301,7 +314,7 @@ function AddTaskCard({
             onChange={(e) => setName(e.target.value)}
           />
           <input
-            className="w-full text-base border-0 outline-none focus:ring-0 bg-transparent text-gray-700 placeholder-gray-400 mt-1 mb-3"
+            className="w-full text-base border-0 outline-none focus:ring-0 bg-transparent text-gray-700 placeholder-gray-400 mt-1 mb-3 py-5"
             placeholder="Description"
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
@@ -335,7 +348,7 @@ function AddTaskCard({
               overlayClassName="!p-0"
             >
               <button
-                className="text-gray-600 hover:bg-gray-50 transition px-2 py-1 text-sm font-medium rounded border border-gray-200 flex items-center"
+                className="text-gray-600 hover:bg-gray-50 transition px-2 py-1 text-md font-medium rounded border border-gray-200 flex items-center"
                 type="button"
               >
                 <FlagOutlined
@@ -355,31 +368,40 @@ function AddTaskCard({
                 Priority
               </button>
             </Popover>
-            <button className="text-gray-600 hover:bg-gray-50 transition px-2 py-1 text-sm font-medium rounded border border-gray-200 flex items-center">
-              <BellOutlined className="mr-1" style={{ fontSize: 16 }} />
-              Reminders
-            </button>
-            <button className="text-gray-600 hover:bg-gray-50 transition px-2 py-1 w-8 h-8 rounded border border-gray-200 flex items-center justify-center">
-              <MoreOutlined style={{ fontSize: 16 }} />
-            </button>
           </div>
         </div>
         <div className="flex items-center justify-between px-4 py-3 bg-[#fbfaf9] border-t border-gray-100">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          <div className="flex items-center gap-2 text-md font-medium text-gray-700">
             <InboxOutlined style={{ fontSize: 16 }} /> Inbox{" "}
             <DownOutlined style={{ fontSize: 11 }} className="ml-0.5" />
           </div>
           <div className="flex gap-2">
             <button
-              onClick={onCancel}
+              onClick={() => {
+                logEvent(EVENT_TYPES.CANCEL_TASK, {
+                  currentName: name,
+                  currentDescription: desc,
+                  selectedDate: selectedDate?.toISOString() ?? null,
+                  priority: selectedPriority,
+                  isEditing: !!editingTask,
+                });
+                onCancel();
+              }}
               className="text-gray-700 bg-white border border-gray-200 px-5 py-1.5 rounded font-semibold hover:bg-gray-50"
             >
               Cancel
             </button>
             <button
-              className="bg-[#d1453b] hover:bg-[#ef7363] text-white px-6 py-1.5 rounded font-semibold" 
+              className="bg-[#d1453b] hover:bg-[#ef7363] text-white px-6 py-1.5 rounded font-semibold"
               onClick={() => {
                 if (!name.trim()) return;
+                logEvent(EVENT_TYPES.ADD, {
+                  action: editingTask ? "Save changes" : "Add",
+                  name: name.trim(),
+                  description: desc.trim(),
+                  date: selectedDate?.toISOString() ?? null,
+                  priority: selectedPriority,
+                });
                 onAdd({
                   name: name.trim(),
                   description: desc.trim(),
@@ -394,7 +416,7 @@ function AddTaskCard({
               }}
               disabled={!name.trim()}
             >
-              {editingTask ? "Save changes" : "Add task"}
+              {editingTask ? "Save changes" : "Add"}
             </button>
           </div>
         </div>
@@ -699,7 +721,12 @@ export default function Home() {
                 </div>
                 <button
                   className="flex items-center gap-2 bg-[#d1453b] hover:bg-[#c0342f] text-white font-semibold px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fdede7] focus:ring-offset-2 shadow transition"
-                  onClick={() => setShowForm(true)}
+                  onClick={() => {
+                    logEvent(EVENT_TYPES.ADD_TASK, {
+                      source: "inbox_cta_button",
+                    });
+                    setShowForm(true);
+                  }}
                 >
                   <PlusOutlined /> Add task
                 </button>
@@ -715,7 +742,14 @@ export default function Home() {
                     <button
                       className="w-6 h-6 min-w-[24px] min-h-[24px] rounded-full border-2 border-gray-400 flex items-center justify-center hover:border-[#d1453b] mt-2"
                       aria-label="Mark complete"
-                      onClick={() => handleCompleteTask(task.id)}
+                      onClick={() => {
+                        logEvent(EVENT_TYPES.COMPLETE_TASK, {
+                          taskId: task.id,
+                          name: task.name,
+                          completedAt: new Date().toISOString(),
+                        });
+                        handleCompleteTask(task.id);
+                      }}
                     >
                       <span className="w-4 h-4 block rounded-full"></span>
                     </button>
@@ -772,14 +806,30 @@ export default function Home() {
                     <div className="flex gap-2 ml-2 mt-1">
                       <button
                         className="p-1 px-2 rounded border border-gray-200 hover:bg-orange-50"
-                        onClick={() => handleEditTask(task.id)}
+                        onClick={() => {
+                          logEvent(EVENT_TYPES.EDIT_TASK_MODAL_OPENED, {
+                            taskId: task.id,
+                            name: task.name,
+                            description: task.description,
+                            date: task.date?.toISOString() ?? null,
+                            priority: task.priority,
+                          });
+                          handleEditTask(task.id);
+                        }}
                         title="Edit"
                       >
                         <EditOutlined />
                       </button>
                       <button
                         className="p-1 px-2 rounded border border-gray-200 hover:bg-red-50"
-                        onClick={() => handleDeleteTask(task.id)}
+                        onClick={() => {
+                          logEvent(EVENT_TYPES.DELETE_TASK, {
+                            taskId: task.id,
+                            name: task.name,
+                            deletedAt: new Date().toISOString(),
+                          });
+                          handleDeleteTask(task.id);
+                        }}
                         title="Delete"
                       >
                         <DeleteOutlined />

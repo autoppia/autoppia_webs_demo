@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     web_url: req.headers.get("referer"),
     data: newEntry,
   };
-// console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
+console.log("🚀 Forwarding event to external backend:", JSON.stringify(externalPayload, null, 2));
   try {
     await fetch("http://app:8080/save_events", {
       method: "POST",
