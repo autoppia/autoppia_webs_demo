@@ -106,12 +106,14 @@ function usePersistedEvents() {
           const start = ev.start ?? 9;
           const end = ev.end ?? 10;
           // Validate and convert startTime/endTime
-          const startTime: [number, number] = Array.isArray(ev.startTime) && ev.startTime.length === 2
-            ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
-            : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
-          const endTime: [number, number] = Array.isArray(ev.endTime) && ev.endTime.length === 2
-            ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
-            : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
+          const startTime: [number, number] =
+            Array.isArray(ev.startTime) && ev.startTime.length === 2
+              ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
+              : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
+          const endTime: [number, number] =
+            Array.isArray(ev.endTime) && ev.endTime.length === 2
+              ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
+              : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
           return {
             id: ev.id ?? Math.random().toString(36).slice(2),
             date: ev.date ?? new Date().toISOString().split("T")[0],
@@ -124,10 +126,16 @@ function usePersistedEvents() {
             endTime,
           };
         })
-        .filter((ev) => Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0]));
+        .filter(
+          (ev) =>
+            Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
+        );
       if (evs.length !== validEvents.length) {
         // Save cleaned events if some were invalid
-        window.localStorage.setItem("gocal_events", JSON.stringify(validEvents));
+        window.localStorage.setItem(
+          "gocal_events",
+          JSON.stringify(validEvents)
+        );
       }
       return validEvents;
     } catch (error) {
@@ -208,13 +216,17 @@ function weekRangeLabel(week: Date[]) {
     end = week[week.length - 1];
   if (start.getMonth() === end.getMonth())
     return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${end.getDate()}`;
-  return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${MONTHS[end.getMonth()]} ${end.getDate()}`;
+  return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${
+    MONTHS[end.getMonth()]
+  } ${end.getDate()}`;
 }
 
 export default function Home() {
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
-    const nowInPKT = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Karachi" }));
+    const nowInPKT = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Karachi" })
+    );
     nowInPKT.setHours(0, 0, 0, 0);
     return nowInPKT;
   });
@@ -246,102 +258,121 @@ export default function Home() {
     date: null,
   });
 
-  const viewedWeek = useMemo(() => getWeekDates(viewDate).slice(1, 6), [viewDate]);
-  const miniCalMatrix = useMemo(() => getMonthMatrix(miniCalYear, miniCalMonth), [miniCalYear, miniCalMonth]);
+  const viewedWeek = useMemo(
+    () => getWeekDates(viewDate).slice(1, 6),
+    [viewDate]
+  );
+  const miniCalMatrix = useMemo(
+    () => getMonthMatrix(miniCalYear, miniCalMonth),
+    [miniCalYear, miniCalMonth]
+  );
   const filteredEvents = useMemo(
-    () => events.filter((ev) => myCalendars.find((c) => c.name === ev.calendar && c.enabled)),
+    () =>
+      events.filter((ev) =>
+        myCalendars.find((c) => c.name === ev.calendar && c.enabled)
+      ),
     [events, myCalendars]
   );
 
-function usePersistedEvents() {
-  const [state, setState] = useState<Event[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const stored = window.localStorage.getItem("gocal_events");
-      if (!stored) return [];
-      const evs = JSON.parse(stored) as RawEvent[];
-      const validEvents = evs
-        .map((ev) => {
-          const start = ev.start ?? 9;
-          const end = ev.end ?? 10;
-          // Validate and convert startTime/endTime
-          const startTime: [number, number] = Array.isArray(ev.startTime) && ev.startTime.length === 2
-            ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
-            : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
-          const endTime: [number, number] = Array.isArray(ev.endTime) && ev.endTime.length === 2
-            ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
-            : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
-          return {
-            id: ev.id ?? Math.random().toString(36).slice(2),
-            date: ev.date ?? new Date().toISOString().split("T")[0],
-            start,
-            end,
-            label: ev.label ?? "",
-            calendar: ev.calendar ?? "Work",
-            color: ev.color ?? calendarColors.Work,
-            startTime,
-            endTime,
-          };
-        })
-        .filter((ev) => Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0]));
-      if (evs.length !== validEvents.length) {
-        // Save cleaned events if some were invalid
-        window.localStorage.setItem("gocal_events", JSON.stringify(validEvents));
+  function usePersistedEvents() {
+    const [state, setState] = useState<Event[]>(() => {
+      if (typeof window === "undefined") return [];
+      try {
+        const stored = window.localStorage.getItem("gocal_events");
+        if (!stored) return [];
+        const evs = JSON.parse(stored) as RawEvent[];
+        const validEvents = evs
+          .map((ev) => {
+            const start = ev.start ?? 9;
+            const end = ev.end ?? 10;
+            // Validate and convert startTime/endTime
+            const startTime: [number, number] =
+              Array.isArray(ev.startTime) && ev.startTime.length === 2
+                ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
+                : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
+            const endTime: [number, number] =
+              Array.isArray(ev.endTime) && ev.endTime.length === 2
+                ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
+                : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
+            return {
+              id: ev.id ?? Math.random().toString(36).slice(2),
+              date: ev.date ?? new Date().toISOString().split("T")[0],
+              start,
+              end,
+              label: ev.label ?? "",
+              calendar: ev.calendar ?? "Work",
+              color: ev.color ?? calendarColors.Work,
+              startTime,
+              endTime,
+            };
+          })
+          .filter(
+            (ev) =>
+              Number.isInteger(ev.startTime[0]) &&
+              Number.isInteger(ev.endTime[0])
+          );
+        if (evs.length !== validEvents.length) {
+          // Save cleaned events if some were invalid
+          window.localStorage.setItem(
+            "gocal_events",
+            JSON.stringify(validEvents)
+          );
+        }
+        return validEvents;
+      } catch (error) {
+        console.error("Error parsing localStorage events:", error);
+        // Clear corrupted localStorage and return empty array
+        window.localStorage.removeItem("gocal_events");
+        return [];
       }
-      return validEvents;
-    } catch (error) {
-      console.error("Error parsing localStorage events:", error);
-      // Clear corrupted localStorage and return empty array
-      window.localStorage.removeItem("gocal_events");
-      return [];
-    }
-  });
+    });
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("gocal_events", JSON.stringify(state));
-    }
-  }, [state]);
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("gocal_events", JSON.stringify(state));
+      }
+    }, [state]);
 
-  return [state, setState] as const;
-}
+    return [state, setState] as const;
+  }
 
-function openEventModal({
-  day,
-  start,
-  end,
-  startMinutes = 0,
-  endMinutes = 0,
-}: {
-  day: number | null;
-  start: number | null;
-  end: number | null;
-  startMinutes?: number;
-  endMinutes?: number;
-}) {
-  const baseDay = day !== null ? viewedWeek[day] : viewDate;
-  const startHour = start !== null ? Math.floor(start) : 9;
-  const startMins = start !== null && start % 1 === 0.5 ? 30 : startMinutes;
-  const endHour = end !== null ? Math.floor(end) : startHour + 1;
-  const endMins = end !== null && end % 1 === 0.5 ? 30 : endMinutes;
-  setEventModal({
-    open: true,
-    editing: null,
-    calendar: "Work",
-    label: "",
-    color: myCalendars.find((cal) => cal.name === "Work")?.color ?? "#2196F3",
-    day,
-    start: startHour + startMins / 60,
-    end: endHour + endMins / 60,
-    startTime: [startHour, startMins],
-    endTime: [endHour, endMins],
-    id: null,
-    date: baseDay.toISOString().split("T")[0],
-  });
-}
+  function openEventModal({
+    date,
+    start,
+    end,
+    startMinutes = 0,
+    endMinutes = 0,
+  }: {
+    date: Date; // Explicitly pass the date
+    start: number | null;
+    end: number | null;
+    startMinutes?: number;
+    endMinutes?: number;
+  }) {
+    const startHour = start !== null ? Math.floor(start) : 9;
+    const startMins = start !== null && start % 1 === 0.5 ? 30 : startMinutes;
+    const endHour = end !== null ? Math.floor(end) : startHour + 1;
+    const endMins = end !== null && end % 1 === 0.5 ? 30 : endMinutes;
+    setEventModal({
+      open: true,
+      editing: null,
+      calendar: "Work",
+      label: "",
+      color: myCalendars.find((cal) => cal.name === "Work")?.color ?? "#2196F3",
+      day: null, // No longer needed
+      start: startHour + startMins / 60,
+      end: endHour + endMins / 60,
+      startTime: [startHour, startMins],
+      endTime: [endHour, endMins],
+      id: null,
+      date: date.toISOString().split("T")[0], // Use the provided date
+    });
+  }
 
   function openEditEventModal(ev: Event) {
-    const idx = viewedWeek.findIndex((day) => day.toISOString().split("T")[0] === ev.date);
+    const idx = viewedWeek.findIndex(
+      (day) => day.toISOString().split("T")[0] === ev.date
+    );
     setEventModal({
       open: true,
       editing: ev.id,
@@ -358,10 +389,15 @@ function openEventModal({
     });
   }
 
-  function handleModalField<K extends keyof EventModalState>(field: K, val: EventModalState[K]) {
+  function handleModalField<K extends keyof EventModalState>(
+    field: K,
+    val: EventModalState[K]
+  ) {
     if (field === "calendar") {
       const calendarValue = val as string;
-      const color = myCalendars.find((cal) => cal.name === calendarValue)?.color ?? calendarColors.Work;
+      const color =
+        myCalendars.find((cal) => cal.name === calendarValue)?.color ??
+        calendarColors.Work;
       setEventModal((e) => ({ ...e, calendar: calendarValue, color }));
     } else {
       setEventModal((e) => ({ ...e, [field]: val }));
@@ -397,7 +433,8 @@ function openEventModal({
       endTime: eventModal.endTime,
     };
     setEvents((evts) => {
-      if (eventModal.editing) return evts.map((ev) => (ev.id === eventModal.editing ? newEv : ev));
+      if (eventModal.editing)
+        return evts.map((ev) => (ev.id === eventModal.editing ? newEv : ev));
       return [...evts, newEv];
     });
     onModalClose();
@@ -415,7 +452,13 @@ function openEventModal({
       hour,
       view: currentView,
     });
-    openEventModal({ day: null, start: hour, end: hour + 0.5, startMinutes: 0, endMinutes: 30 });
+    openEventModal({
+      date,
+      start: hour,
+      end: hour + 0.5,
+      startMinutes: 0,
+      endMinutes: 30,
+    });
   }
 
   function onMonthCellClick(date: Date) {
@@ -424,7 +467,13 @@ function openEventModal({
       date: date.toISOString(),
       view: "Month",
     });
-    openEventModal({ day: null, start: 9, end: 9.5, startMinutes: 0, endMinutes: 30 });
+    openEventModal({
+      date,
+      start: 9,
+      end: 9.5,
+      startMinutes: 0,
+      endMinutes: 30,
+    });
   }
 
   function handleMiniCalDayClick(d: Date) {
@@ -434,14 +483,19 @@ function openEventModal({
   }
 
   function handleMiniCalNav(dir: "prev" | "next") {
-    const next = dir === "next" ? addMonths(new Date(miniCalYear, miniCalMonth, 1), 1) : subMonths(new Date(miniCalYear, miniCalMonth, 1), 1);
+    const next =
+      dir === "next"
+        ? addMonths(new Date(miniCalYear, miniCalMonth, 1), 1)
+        : subMonths(new Date(miniCalYear, miniCalMonth, 1), 1);
     setMiniCalMonth(next.getMonth());
     setMiniCalYear(next.getFullYear());
   }
 
   function handleSetToday() {
     const today = new Date();
-    const todayInPKT = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Karachi" }));
+    const todayInPKT = new Date(
+      today.toLocaleString("en-US", { timeZone: "Asia/Karachi" })
+    );
     todayInPKT.setHours(0, 0, 0, 0);
     setViewDate(todayInPKT);
     setMiniCalMonth(todayInPKT.getMonth());
@@ -470,8 +524,12 @@ function openEventModal({
   }, [currentView, viewDate]);
 
   const topLabel = useMemo(() => {
-    if (currentView === "Day") return `${DAYS[viewDate.getDay()]}, ${MONTHS[viewDate.getMonth()]} ${viewDate.getDate()}`;
-    if (currentView === "5 days" || currentView === "Week") return weekRangeLabel(mainGridDates);
+    if (currentView === "Day")
+      return `${DAYS[viewDate.getDay()]}, ${
+        MONTHS[viewDate.getMonth()]
+      } ${viewDate.getDate()}`;
+    if (currentView === "5 days" || currentView === "Week")
+      return weekRangeLabel(mainGridDates);
     return `${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
   }, [currentView, viewDate, mainGridDates]);
 
@@ -486,7 +544,15 @@ function openEventModal({
         <div className="flex flex-row items-center px-4 mt-2 mb-4">
           <button
             className="bg-white shadow-md rounded-2xl h-[44px] w-full flex items-center px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition"
-            onClick={() => openEventModal({ day: null, start: 9, end: 9.5, startMinutes: 0, endMinutes: 30 })}
+            onClick={() =>
+              openEventModal({
+                date: viewDate,
+                start: 9,
+                end: 9.5,
+                startMinutes: 0,
+                endMinutes: 30,
+              })
+            }
             aria-label="Create new event"
           >
             <span className="text-[#1976d2] flex items-center">
@@ -535,7 +601,9 @@ function openEventModal({
             >
               ‹
             </button>
-            <span className="mx-2">{MONTHS[miniCalMonth]} {miniCalYear}</span>
+            <span className="mx-2">
+              {MONTHS[miniCalMonth]} {miniCalYear}
+            </span>
             <button
               onClick={() => handleMiniCalNav("next")}
               className="p-1 text-gray-500 hover:bg-gray-100 rounded"
@@ -570,7 +638,15 @@ function openEventModal({
                       key={di}
                       onClick={() => handleMiniCalDayClick(d)}
                       className={`h-7 w-7 mx-auto flex items-center justify-center rounded-full text-base select-none border-none
-                        ${isSel ? "bg-[#1976d2] text-white" : isTod ? "bg-blue-200 text-blue-900 font-bold" : inMonth ? "text-[#383e4d] hover:bg-gray-100" : "text-gray-300"}`}
+                        ${
+                          isSel
+                            ? "bg-[#1976d2] text-white"
+                            : isTod
+                            ? "bg-blue-200 text-blue-900 font-bold"
+                            : inMonth
+                            ? "text-[#383e4d] hover:bg-gray-100"
+                            : "text-gray-300"
+                        }`}
                       aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
                     >
                       {d.getDate()}
@@ -590,7 +666,9 @@ function openEventModal({
           >
             <span>My calendars</span>
             <svg
-              className={`transition ${myCalExpanded ? "rotate-0" : "-rotate-90"}`}
+              className={`transition ${
+                myCalExpanded ? "rotate-0" : "-rotate-90"
+              }`}
               width="18"
               height="18"
               fill="none"
@@ -603,7 +681,10 @@ function openEventModal({
           {myCalExpanded && (
             <div className="flex flex-col gap-2 pl-1 mt-2">
               {myCalendars.map((cal, idx) => (
-                <label key={cal.name} className="flex items-center gap-2 cursor-pointer">
+                <label
+                  key={cal.name}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     checked={cal.enabled}
@@ -614,7 +695,9 @@ function openEventModal({
                         color: cal.color,
                       });
                       setMyCalendars((cals) =>
-                        cals.map((c, i) => (i === idx ? { ...c, enabled: !c.enabled } : c))
+                        cals.map((c, i) =>
+                          i === idx ? { ...c, enabled: !c.enabled } : c
+                        )
                       );
                     }}
                     className="appearance-none w-4 h-4 rounded-sm cursor-pointer border-2"
@@ -624,14 +707,19 @@ function openEventModal({
                     }}
                     aria-label={`Toggle ${cal.name} calendar`}
                   />
-                  <span className="w-2 h-2 rounded-sm" style={{ background: cal.color }} />
+                  <span
+                    className="w-2 h-2 rounded-sm"
+                    style={{ background: cal.color }}
+                  />
                   {cal.name}
                 </label>
               ))}
             </div>
           )}
           <div className="flex items-center gap-2 mt-4 mb-1">
-            <span className="text-[15px] text-[#2d2d36] font-medium select-none">Add new calendar</span>
+            <span className="text-[15px] text-[#2d2d36] font-medium select-none">
+              Add new calendar
+            </span>
             <button
               onClick={() => {
                 logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
@@ -644,7 +732,14 @@ function openEventModal({
               aria-label="Add new calendar"
               className="flex items-center justify-center p-0 w-6 h-6 rounded-full border-[#222] text-[#222] hover:bg-gray-100 transition"
             >
-              <svg width="20" height="20" fill="none" stroke="#222" strokeWidth="2" viewBox="0 0 24 24">
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="#222"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
                 <circle cx="12" cy="12" r="9" />
                 <line x1="12" y1="8" x2="12" y2="16" />
                 <line x1="8" y1="12" x2="16" y2="12" />
@@ -655,19 +750,28 @@ function openEventModal({
           <Dialog open={addCalOpen} onOpenChange={setAddCalOpen}>
             <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">Create new calendar</DialogTitle>
+                <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">
+                  Create new calendar
+                </DialogTitle>
               </DialogHeader>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   if (addCalName.trim()) {
-                    const color = INIT_COLORS[(myCalendars.length + addCalColorIdx) % INIT_COLORS.length];
+                    const color =
+                      INIT_COLORS[
+                        (myCalendars.length + addCalColorIdx) %
+                          INIT_COLORS.length
+                      ];
                     logEvent(EVENT_TYPES.CREATE_CALENDAR, {
                       name: addCalName,
                       description: addCalDesc,
                       color,
                     });
-                    setMyCalendars((cals) => [...cals, { name: addCalName, enabled: true, color }]);
+                    setMyCalendars((cals) => [
+                      ...cals,
+                      { name: addCalName, enabled: true, color },
+                    ]);
                     setAddCalColorIdx((idx) => idx + 1);
                     setAddCalName("");
                     setAddCalDesc("");
@@ -692,9 +796,14 @@ function openEventModal({
                 <div>
                   <span className="text-xs text-gray-400">Owner</span>
                   <br />
-                  <span className="text-sm mt-0.5 font-medium">Tomas Abraham</span>
+                  <span className="text-sm mt-0.5 font-medium">
+                    Tomas Abraham
+                  </span>
                 </div>
-                <Button className="mt-1 bg-[#1976d2] hover:bg-[#1660b2] px-6 py-2" type="submit">
+                <Button
+                  className="mt-1 bg-[#1976d2] hover:bg-[#1660b2] px-6 py-2"
+                  type="submit"
+                >
                   Create calendar
                 </Button>
               </form>
@@ -737,7 +846,14 @@ function openEventModal({
                 aria-label="Select calendar view"
               >
                 {currentView}
-                <svg width="18" height="18" fill="none" stroke="#444" strokeWidth="2" viewBox="0 0 24 24">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="#444"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
                   <polyline points="6 9 12 15 18 9" />
                 </svg>
               </button>
@@ -762,7 +878,9 @@ function openEventModal({
                         setCurrentView(opt);
                         setViewDropdown(false);
                       }}
-                      className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] ${opt === currentView ? "font-semibold bg-[#f3f7fa]" : ""}`}
+                      className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] ${
+                        opt === currentView ? "font-semibold bg-[#f3f7fa]" : ""
+                      }`}
                       aria-label={`Select ${opt} view`}
                     >
                       {opt}
@@ -771,7 +889,10 @@ function openEventModal({
                 </div>
               )}
             </div>
-            <button className="rounded-full hover:ring-2 hover:ring-blue-200 ml-1" aria-label="User profile">
+            <button
+              className="rounded-full hover:ring-2 hover:ring-blue-200 ml-1"
+              aria-label="User profile"
+            >
               <Image
                 src="https://ui-avatars.com/api/?name=John+Doe&background=random&size=128"
                 alt="Profile picture"
@@ -782,37 +903,60 @@ function openEventModal({
             </button>
           </div>
         </nav>
-        <div className="flex-1 w-full overflow-auto relative bg-white select-none" style={{ minHeight: "500px" }}>
+        <div
+          className="flex-1 w-full overflow-auto relative bg-white select-none"
+          style={{ minHeight: "500px" }}
+        >
           {currentView === "Month" && (
             <div className="w-full">
               <div className="grid grid-cols-7 border-b border-[#e5e5e5] bg-white sticky top-0">
                 {DAYS.map((d) => (
-                  <div key={d} className="py-2 px-1 text-center text-xs font-semibold text-gray-500">
+                  <div
+                    key={d}
+                    className="py-2 px-1 text-center text-xs font-semibold text-gray-500"
+                  >
                     {d}
                   </div>
                 ))}
               </div>
               <div>
                 {[...Array(6)].map((_, rowIdx) => (
-                  <div key={rowIdx} className="grid grid-cols-7 h-[90px] border-b border-[#e5e5e5]">
+                  <div
+                    key={rowIdx}
+                    className="grid grid-cols-7 h-[90px] border-b border-[#e5e5e5]"
+                  >
                     {[...Array(7)].map((_, colIdx) => {
                       const idx = rowIdx * 7 + colIdx;
                       const d = mainGridDates[idx];
                       const isOut = d.getMonth() !== viewDate.getMonth();
                       const isTod = isToday(d);
-                      const evs = filteredEvents.filter((ev) => ev.date === d.toISOString().split("T")[0]);
+                      const evs = filteredEvents.filter(
+                        (ev) => ev.date === d.toISOString().split("T")[0]
+                      );
                       return (
                         <div
                           key={colIdx}
                           onClick={() => onMonthCellClick(d)}
-                          className={`border-r border-[#e5e5e5] relative px-1 pt-1 h-full align-top cursor-pointer ${isOut ? "bg-[#ededed]" : ""}`}
-                          style={{ color: isOut ? "#bdbdbd" : "#222", fontSize: "17px" }}
+                          className={`border-r border-[#e5e5e5] relative px-1 pt-1 h-full align-top cursor-pointer ${
+                            isOut ? "bg-[#ededed]" : ""
+                          }`}
+                          style={{
+                            color: isOut ? "#bdbdbd" : "#222",
+                            fontSize: "17px",
+                          }}
                           role="button"
                           aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
                         >
                           <div
-                            className={`absolute left-1.5 top-1 text-center ${isTod ? "text-white bg-[#1976d2] rounded-full w-6 h-6 flex items-center justify-center font-bold" : ""}`}
-                            style={{ fontSize: "1rem", background: isTod ? "#1976d2" : "none" }}
+                            className={`absolute left-1.5 top-1 text-center ${
+                              isTod
+                                ? "text-white bg-[#1976d2] rounded-full w-6 h-6 flex items-center justify-center font-bold"
+                                : ""
+                            }`}
+                            style={{
+                              fontSize: "1rem",
+                              background: isTod ? "#1976d2" : "none",
+                            }}
                           >
                             {d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()}
                           </div>
@@ -820,7 +964,11 @@ function openEventModal({
                             {evs.slice(0, 3).map((ev) => (
                               <button
                                 key={ev.id}
-                                style={{ background: ev.color, color: "#fff", fontSize: "11px" }}
+                                style={{
+                                  background: ev.color,
+                                  color: "#fff",
+                                  fontSize: "11px",
+                                }}
                                 className="rounded px-2 py-0.5 text-xs block cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -831,7 +979,11 @@ function openEventModal({
                                 {ev.label}
                               </button>
                             ))}
-                            {evs.length > 3 && <span className="text-xs text-gray-400">+{evs.length - 3} more</span>}
+                            {evs.length > 3 && (
+                              <span className="text-xs text-gray-400">
+                                +{evs.length - 3} more
+                              </span>
+                            )}
                           </div>
                         </div>
                       );
@@ -841,81 +993,125 @@ function openEventModal({
               </div>
             </div>
           )}
-          {(currentView === "Week" || currentView === "5 days" || currentView === "Day") && (
+          {(currentView === "Week" ||
+            currentView === "5 days" ||
+            currentView === "Day") && (
             <>
               <div className="flex w-full bg-white border-b border-[#e5e5e5] sticky top-0 min-w-[550px]">
                 <div className="w-14 flex-shrink-0" />
-              {mainGridDates.map((d) => (
-            <div key={d.toISOString()} className="flex-1 px-2 text-center border-r border-[#e5e5e5] pt-3 pb-2">
-              <div className="text-xs text-gray-500 mb-1">{DAYS[d.getDay()]}</div>
-              <div className="text-[22px] font-normal">{d.getDate()}</div>
-            </div>
-          ))}
-        </div>
-        <div className="flex w-full min-w-[550px]">
-          <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
-            {HOURS.map((hr) => (
-              <div key={hr} className="h-14 text-xs text-gray-400 w-12 pr-1">
-                {hr === 0 ? "12 AM" : hr < 12 ? `${hr} AM` : hr === 12 ? "12 PM" : `${hr - 12} PM`}
-              </div>
-            ))}
-          </div>
-          {mainGridDates.map((d, dayIdx) => (
-            <div key={d.toISOString()} className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative">
-              {HOURS.map((hrIdx) => (
-                <div
-                  key={`cell-${dayIdx}-${hrIdx}`}
-                  className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
-                  onClick={() => onWeekHourCellClick(d, hrIdx)}
-                  role="button"
-                  aria-label={`Add event on ${format(d, "MMMM d, yyyy")} at ${hrIdx}:00`}
-                />
-              ))}
-              {filteredEvents
-                .filter((ev) => ev.date === d.toISOString().split("T")[0])
-                .map((ev) => {
-                  // Debugging log to verify endTime values
-                  console.log(`Event ${ev.label}: startTime=${ev.startTime}, endTime=${ev.endTime}`);
-                  return (
-                    <button
-                      key={ev.id}
-                      className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
-                      style={{
-                        top: `${ev.start * 56 + 24}px`,
-                        height: `${(ev.end - ev.start) * 56 - 4}px`,
-                        background: ev.color,
-                        zIndex: 2,
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openEditEventModal(ev);
-                      }}
-                      aria-label={`Edit event: ${ev.label} from ${formatTime(ev.startTime)} to ${formatTime(ev.endTime)}`}
-                    >
-                      {ev.label} ({formatTime(ev.startTime)} - {formatTime(ev.endTime)})
-                    </button>
-                  );
-                })}
-                </div>
-          ))}
+                {mainGridDates.map((d) => (
+                  <div
+                    key={d.toISOString()}
+                    className="flex-1 px-2 text-center border-r border-[#e5e5e5] pt-3 pb-2"
+                  >
+                    <div className="text-xs text-gray-500 mb-1">
+                      {DAYS[d.getDay()]}
+                    </div>
+                    <div className="text-[22px] font-normal">{d.getDate()}</div>
+                  </div>
+                ))}
               </div>
               <div className="flex w-full min-w-[550px]">
                 <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
                   {HOURS.map((hr) => (
-                    <div key={hr} className="h-14 text-xs text-gray-400 w-12 pr-1">
-                      {hr === 0 ? "12 AM" : hr < 12 ? `${hr} AM` : hr === 12 ? "12 PM" : `${hr - 12} PM`}
+                    <div
+                      key={hr}
+                      className="h-14 text-xs text-gray-400 w-12 pr-1"
+                    >
+                      {hr === 0
+                        ? "12 AM"
+                        : hr < 12
+                        ? `${hr} AM`
+                        : hr === 12
+                        ? "12 PM"
+                        : `${hr - 12} PM`}
                     </div>
                   ))}
                 </div>
                 {mainGridDates.map((d, dayIdx) => (
-                  <div key={d.toISOString()} className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative">
+                  <div
+                    key={d.toISOString()}
+                    className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative"
+                  >
                     {HOURS.map((hrIdx) => (
                       <div
                         key={`cell-${dayIdx}-${hrIdx}`}
                         className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
                         onClick={() => onWeekHourCellClick(d, hrIdx)}
                         role="button"
-                        aria-label={`Add event on ${format(d, "MMMM d, yyyy")} at ${hrIdx}:00`}
+                        aria-label={`Add event on ${format(
+                          d,
+                          "MMMM d, yyyy"
+                        )} at ${hrIdx}:00`}
+                      />
+                    ))}
+                    {filteredEvents
+                      .filter((ev) => ev.date === d.toISOString().split("T")[0])
+                      .map((ev) => {
+                        // Debugging log to verify endTime values
+                        console.log(
+                          `Event ${ev.label}: startTime=${ev.startTime}, endTime=${ev.endTime}`
+                        );
+                        return (
+                          <button
+                            key={ev.id}
+                            className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
+                            style={{
+                              top: `${ev.start * 56 + 24}px`,
+                              height: `${(ev.end - ev.start) * 56 - 4}px`,
+                              background: ev.color,
+                              zIndex: 2,
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEditEventModal(ev);
+                            }}
+                            aria-label={`Edit event: ${
+                              ev.label
+                            } from ${formatTime(ev.startTime)} to ${formatTime(
+                              ev.endTime
+                            )}`}
+                          >
+                            {ev.label} ({formatTime(ev.startTime)} -{" "}
+                            {formatTime(ev.endTime)})
+                          </button>
+                        );
+                      })}
+                  </div>
+                ))}
+              </div>
+              <div className="flex w-full min-w-[550px]">
+                <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
+                  {HOURS.map((hr) => (
+                    <div
+                      key={hr}
+                      className="h-14 text-xs text-gray-400 w-12 pr-1"
+                    >
+                      {hr === 0
+                        ? "12 AM"
+                        : hr < 12
+                        ? `${hr} AM`
+                        : hr === 12
+                        ? "12 PM"
+                        : `${hr - 12} PM`}
+                    </div>
+                  ))}
+                </div>
+                {mainGridDates.map((d, dayIdx) => (
+                  <div
+                    key={d.toISOString()}
+                    className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative"
+                  >
+                    {HOURS.map((hrIdx) => (
+                      <div
+                        key={`cell-${dayIdx}-${hrIdx}`}
+                        className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
+                        onClick={() => onWeekHourCellClick(d, hrIdx)}
+                        role="button"
+                        aria-label={`Add event on ${format(
+                          d,
+                          "MMMM d, yyyy"
+                        )} at ${hrIdx}:00`}
                       />
                     ))}
                     {filteredEvents
@@ -934,9 +1130,14 @@ function openEventModal({
                             e.stopPropagation();
                             openEditEventModal(ev);
                           }}
-                          aria-label={`Edit event: ${ev.label} from ${formatTime(ev.startTime)} to ${formatTime(ev.endTime)}`}
+                          aria-label={`Edit event: ${
+                            ev.label
+                          } from ${formatTime(ev.startTime)} to ${formatTime(
+                            ev.endTime
+                          )}`}
                         >
-                          {ev.label} ({formatTime(ev.startTime)} - {formatTime(ev.endTime)})
+                          {ev.label} ({formatTime(ev.startTime)} -{" "}
+                          {formatTime(ev.endTime)})
                         </button>
                       ))}
                   </div>
@@ -950,7 +1151,9 @@ function openEventModal({
         <DialogContent className="max-w-xl">
           <form onSubmit={handleModalSave} className="space-y-5">
             <DialogHeader>
-              <DialogTitle>{eventModal.editing ? "Edit event" : "Add event"}</DialogTitle>
+              <DialogTitle>
+                {eventModal.editing ? "Edit event" : "Add event"}
+              </DialogTitle>
             </DialogHeader>
             <div className="flex flex-col mb-2">
               <Label htmlFor="calendar-select">Calendar</Label>
@@ -989,13 +1192,22 @@ function openEventModal({
                     className="px-3 py-2 border rounded w-full"
                     value={eventModal.startTime[0]}
                     onChange={(e) =>
-                      handleModalField("startTime", [parseInt(e.target.value), eventModal.startTime[1]])
+                      handleModalField("startTime", [
+                        parseInt(e.target.value),
+                        eventModal.startTime[1],
+                      ])
                     }
                     aria-label="Start time hour"
                   >
                     {HOURS.map((hour) => (
                       <option key={hour} value={hour}>
-                        {hour === 0 ? "12 AM" : hour < 12 ? `${hour} AM` : hour === 12 ? "12 PM" : `${hour - 12} PM`}
+                        {hour === 0
+                          ? "12 AM"
+                          : hour < 12
+                          ? `${hour} AM`
+                          : hour === 12
+                          ? "12 PM"
+                          : `${hour - 12} PM`}
                       </option>
                     ))}
                   </select>
@@ -1003,7 +1215,10 @@ function openEventModal({
                     className="px-3 py-2 border rounded w-20"
                     value={eventModal.startTime[1]}
                     onChange={(e) =>
-                      handleModalField("startTime", [eventModal.startTime[0], parseInt(e.target.value)])
+                      handleModalField("startTime", [
+                        eventModal.startTime[0],
+                        parseInt(e.target.value),
+                      ])
                     }
                     aria-label="Start time minute"
                   >
@@ -1023,13 +1238,22 @@ function openEventModal({
                     className="px-3 py-2 border rounded w-full"
                     value={eventModal.endTime[0]}
                     onChange={(e) =>
-                      handleModalField("endTime", [parseInt(e.target.value), eventModal.endTime[1]])
+                      handleModalField("endTime", [
+                        parseInt(e.target.value),
+                        eventModal.endTime[1],
+                      ])
                     }
                     aria-label="End time hour"
                   >
                     {HOURS.map((hour) => (
                       <option key={hour} value={hour}>
-                        {hour === 0 ? "12 AM" : hour < 12 ? `${hour} AM` : hour === 12 ? "12 PM" : `${hour - 12} PM`}
+                        {hour === 0
+                          ? "12 AM"
+                          : hour < 12
+                          ? `${hour} AM`
+                          : hour === 12
+                          ? "12 PM"
+                          : `${hour - 12} PM`}
                       </option>
                     ))}
                   </select>
@@ -1037,7 +1261,10 @@ function openEventModal({
                     className="px-3 py-2 border rounded w-20"
                     value={eventModal.endTime[1]}
                     onChange={(e) =>
-                      handleModalField("endTime", [eventModal.endTime[0], parseInt(e.target.value)])
+                      handleModalField("endTime", [
+                        eventModal.endTime[0],
+                        parseInt(e.target.value),
+                      ])
                     }
                     aria-label="End time minute"
                   >
@@ -1055,7 +1282,8 @@ function openEventModal({
                 {eventModal.date
                   ? format(parseISO(eventModal.date), "EEE, MMMM d")
                   : format(viewDate, "EEE, MMMM d")}
-                , {formatTime(eventModal.startTime)} – {formatTime(eventModal.endTime)}
+                , {formatTime(eventModal.startTime)} –{" "}
+                {formatTime(eventModal.endTime)}
               </div>
             </div>
             <DialogFooter>
@@ -1063,7 +1291,11 @@ function openEventModal({
                 Save
               </Button>
               {eventModal.editing && (
-                <Button variant="destructive" type="button" onClick={handleEventDelete}>
+                <Button
+                  variant="destructive"
+                  type="button"
+                  onClick={handleEventDelete}
+                >
                   Delete
                 </Button>
               )}
