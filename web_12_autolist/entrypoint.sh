@@ -4,7 +4,7 @@ set -e
 # --- Configuration Variables ---
 NODE_VERSION="v20"
 APP_NAME="autolist-app"
-APP_PORT="9001"
+APP_PORT="5010"
 APP_HOST="0.0.0.0"
 NVM_INSTALL_SCRIPT="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
 
