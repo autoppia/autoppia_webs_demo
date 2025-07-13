@@ -8,6 +8,8 @@ import {
   ClockIcon,
 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
+import { useEffect } from "react";
+
 import {
   Popover,
   PopoverContent,
@@ -216,7 +218,17 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
-
+  useEffect(() => {
+    if (!r) return; // evita enviar si aún no hay datos
+    logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+      restaurantId: id,
+      restaurantName: r.name,
+      cuisine: r.cuisine,
+      area: "test",
+      reviews: r.reviews,
+      rating: r.rating,
+    });
+  }, [id]);
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
   const handleToggleMenu = () => {
@@ -533,42 +545,41 @@ export default function RestaurantPage() {
             {/* Time slots */}
             <div className="mt-3">
               <div className="flex gap-1 mt-2 flex-wrap">
-                {["1:00 PM"].map(
-                  (t) =>
-                    t !== "3:00 PM" ? (
-                      <Link
-                        key={t}
-                        href={`/booking/${id}/${encodeURIComponent(
-                          t
-                        )}?date=${formattedDate}&people=${people ?? ""}`}
-                        onClick={() =>
-                          logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                            restaurantId: id,
-                            restaurantName: r.name,
-                            date: formattedDate,
-                            time:time,
-                            people,
-                          })
-                        }
-                        passHref
-                      >
-                        <Button
-                          className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
-                          asChild
-                        >
-                          <span>Book Restaurant</span>
-                        </Button>
-                      </Link>
-                    ) : (
+                {["1:00 PM"].map((t) =>
+                  t !== "3:00 PM" ? (
+                    <Link
+                      key={t}
+                      href={`/booking/${id}/${encodeURIComponent(
+                        t
+                      )}?date=${formattedDate}&people=${people ?? ""}`}
+                      onClick={() =>
+                        logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                          restaurantId: id,
+                          restaurantName: r.name,
+                          date: formattedDate,
+                          time: time,
+                          people,
+                        })
+                      }
+                      passHref
+                    >
                       <Button
-                        key={t}
-                        variant="outline"
-                        className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
+                        className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                        asChild
                       >
-                        <span>3:00 PM</span>
-                        <span className="ml-2">🔔 Notify me</span>
+                        <span>Book Restaurant</span>
                       </Button>
-                    )
+                    </Link>
+                  ) : (
+                    <Button
+                      key={t}
+                      variant="outline"
+                      className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
+                    >
+                      <span>3:00 PM</span>
+                      <span className="ml-2">🔔 Notify me</span>
+                    </Button>
+                  )
                 )}
               </div>
             </div>
