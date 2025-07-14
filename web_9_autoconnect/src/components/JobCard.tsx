@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import type { Job } from "@/library/mockData";
+import type { Job } from "@/library/data";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 

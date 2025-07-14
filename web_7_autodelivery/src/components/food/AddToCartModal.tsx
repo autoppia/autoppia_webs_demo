@@ -19,7 +19,7 @@ import {
   type MenuItem,
   type MenuItemSize,
   type MenuItemOption,
-} from "@/data/restaurants";
+} from "@/components/library/data";
 import { EVENT_TYPES, logEvent } from "../library/events";
 
 export type AddToCartModalProps = {

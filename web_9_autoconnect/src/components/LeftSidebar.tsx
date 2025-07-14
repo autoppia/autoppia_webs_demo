@@ -1,5 +1,5 @@
 import Avatar from "@/components/Avatar";
-import { mockUsers } from "@/library/mockData";
+import { mockUsers } from "@/library/data";
 
 const currentUser = mockUsers[2];
 

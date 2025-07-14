@@ -3,12 +3,13 @@ export const dynamicParams = false;
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { experts, getExpert } from "../experts";
+import {  getExpert } from "../experts";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import HireButton from "@/app/components/HireButton";
+import { expertsInWork } from "@/library/data";
 
 export function generateStaticParams() {
-  return experts.map((e) => ({ slug: e.slug }));
+  return expertsInWork.map((e) => ({ slug: e.slug }));
 }
 
 export default async function ExpertProfile({

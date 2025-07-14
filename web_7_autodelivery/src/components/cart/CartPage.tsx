@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { useHasHydrated } from "@/hooks/use-hydrated";
-import { restaurants } from "@/data/restaurants";
+import { restaurants } from "@/components/library/data";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar, Clock, Home, Phone, Gift, ChevronRight } from "lucide-react";
 import { useRef } from "react";

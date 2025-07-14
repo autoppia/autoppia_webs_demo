@@ -1,4 +1,4 @@
-import { testimonials } from '@/data/testimonials';
+import { testimonials } from '@/components/library/data';
 import Image from 'next/image';
 
 export default function TestimonialsSection() {

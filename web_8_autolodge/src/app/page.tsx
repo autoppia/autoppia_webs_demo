@@ -6,19 +6,8 @@ import { PropertyCard } from "@/components/PropertyCard";
 import * as React from "react";
 import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { PROPERTIESS } from "@/library/data";
 
-interface Property {
-  image: string;
-  title: string;
-  location: string;
-  rating: number;
-  dates: string;
-  datesFrom: string; // Raw string, will be parsed
-  datesTo: string;
-  price: string;
-  maxGuests: number;
-  id: number;
-}
 
 export default function Home() {
   // Range state: { from, to }
@@ -59,153 +48,7 @@ export default function Home() {
     return str;
   };
 
-  const PROPERTIES: Property[] = [
-    {
-      image: "/images/image.png",
-      title: "Cabin in the woods",
-      location: "Asheville",
-      rating: 4.0,
-      dates: "Jul 12 - Jul 16",
-      datesFrom: "2025-07-12",
-      datesTo: "2025-07-16",
-      price: "$127.00 USD",
-      maxGuests: 2,
-      id: 1,
-    },
-    {
-      image: "/images/hotel1.png",
-      title: "Lake House Retreat",
-      location: "Kelowna",
-      rating: 4.3,
-      dates: "Jul 18 - Jul 24",
-      datesFrom: "2025-07-18",
-      datesTo: "2025-07-24",
-      price: "$571.00 USD",
-      maxGuests: 6,
-      id: 2,
-    },
-    {
-      image: "images/hotel2.png",
-      title: "Mountain Escape",
-      location: "Zermatt",
-      rating: 4.34,
-      dates: "Jul 28 - Aug 10",
-      datesFrom: "2025-07-28",
-      datesTo: "2025-08-10",
-      price: "$960.00 USD",
-      maxGuests: 4,
-      id: 3,
-    },
-    {
-      image: "images/hotel3.png",
-      title: "Parisian Getaway",
-      location: "Paris",
-      rating: 4.33,
-      dates: "Aug 15 - Aug 22",
-      datesFrom: "2025-08-15",
-      datesTo: "2025-08-22",
-      price: "$268.00 USD",
-      maxGuests: 2,
-      id: 4,
-    },
-    {
-      image: "images/hotel4.png",
-      title: "Cozy Beach House",
-      location: "Byron Bay",
-      rating: 4.31,
-      dates: "Jul 20 - Jul 30",
-      datesFrom: "2025-07-20",
-      datesTo: "2025-07-30",
-      price: "$969.00 USD",
-      maxGuests: 8,
-      id: 5,
-    },
-    {
-      image: "images/hotel5.png",
-      title: "Countryside Retreat",
-      location: "Cotswolds",
-      rating: 4.43,
-      dates: "Sep 1 - Sep 7",
-      datesFrom: "2025-09-01",
-      datesTo: "2025-09-07",
-      price: "$211.00 USD",
-      maxGuests: 4,
-      id: 6,
-    },
-    {
-      image: "images/hotel6.png",
-      title: "Garden Oasis",
-      location: "Amsterdam",
-      rating: 4.32,
-      dates: "Jul 15 - Jul 19",
-      datesFrom: "2025-07-15",
-      datesTo: "2025-07-19",
-      price: "$537.00 USD",
-      maxGuests: 3,
-      id: 7,
-    },
-    {
-      image: "images/hotel7.png",
-      title: "Modern City Apartment",
-      location: "New York",
-      rating: 4.27,
-      dates: "Jul 25 - Jul 28",
-      datesFrom: "2025-07-25",
-      datesTo: "2025-07-28",
-      price: "$258.00 USD",
-      maxGuests: 2,
-      id: 8,
-    },
-    {
-      image: "/images/hotel8.png",
-      title: "Seaside Villa",
-      location: "Mykonos",
-      rating: 4.72,
-      dates: "Aug 5 - Aug 12",
-      datesFrom: "2025-08-05",
-      datesTo: "2025-08-12",
-      price: "$685.00 USD",
-      maxGuests: 6,
-      id: 9,
-    },
-    {
-      image: "/images/hotel9.png",
-      title: "Tokyo Highrise",
-      location: "Tokyo",
-      rating: 4.58,
-      dates: "Sep 1 - Sep 6",
-      datesFrom: "2025-09-01",
-      datesTo: "2025-09-06",
-      price: "$312.00 USD",
-      maxGuests: 2,
-      id: 10,
-    },
-    {
-      image: "/images/hotel10.png",
-      title: "Moroccan Riad",
-      location: "Marrakech",
-      rating: 4.81,
-      dates: "Oct 10 - Oct 18",
-      datesFrom: "2025-10-10",
-      datesTo: "2025-10-18",
-      price: "$432.00 USD",
-      maxGuests: 4,
-      id: 11,
-    },
-    {
-      image: "/images/hotel11.png",
-      title: "Nordic Glass Cabin",
-      location: "Lapland",
-      rating: 4.76,
-      dates: "Dec 20 - Dec 27",
-      datesFrom: "2025-12-20",
-      datesTo: "2025-12-27",
-      price: "$490.00 USD",
-      maxGuests: 2,
-      id: 12,
-    }
-        
-  ];
+ 
 
   // Filtering logic
   const totalSelectedGuests = guests.adults + guests.children;
@@ -230,7 +73,7 @@ export default function Home() {
     return selFrom >= from && lastBookedNight <= to;
   }
 
-  const filtered = PROPERTIES.filter((card) => {
+  const filtered = PROPERTIESS.filter((card) => {
     if (committedSearch.trim()) {
       const term = committedSearch.toLowerCase();
       if (

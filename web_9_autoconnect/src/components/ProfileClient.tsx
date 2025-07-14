@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { mockUsers, mockPosts } from "@/library/mockData";
+import { mockUsers, mockPosts } from "@/library/data";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";

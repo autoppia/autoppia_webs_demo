@@ -1,6 +1,6 @@
 "use client";
 import Avatar from "./Avatar";
-import type { Post as PostType } from "@/library/mockData";
+import type { Post as PostType } from "@/library/data";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";

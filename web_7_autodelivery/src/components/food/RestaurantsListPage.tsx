@@ -1,5 +1,5 @@
 "use client";
-import { restaurants } from '@/data/restaurants';
+import { restaurants } from '@/components/library/data';
 import RestaurantCard from './RestaurantCard';
 import { Input } from "@/components/ui/input";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
