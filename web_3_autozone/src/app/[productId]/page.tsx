@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getProductById } from "@/data/products";
+import { getProductById } from "@/data/dataset";
 import { type Product, useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { products } from "@/data/products";
+import { products } from "@/data/dataset";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";

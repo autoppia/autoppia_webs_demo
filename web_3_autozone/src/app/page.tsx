@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
-import { products, getProductsByCategory } from "@/data/products";
+import { products, getProductsByCategory } from "@/data/dataset";
 
 // Create category links for items
 const kitchenCategories = [
