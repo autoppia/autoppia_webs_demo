@@ -6,7 +6,7 @@ import { PropertyCard } from "@/components/PropertyCard";
 import * as React from "react";
 import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { PROPERTIESS } from "@/library/data";
+import { PROPERTIESS } from "@/library/dataset";
 
 
 export default function Home() {

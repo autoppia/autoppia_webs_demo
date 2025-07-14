@@ -4,7 +4,7 @@ import {
   mockPosts as defaultPosts,
   mockUsers,
   type Post as PostType,
-} from "@/library/data";
+} from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import LeftSidebar from "@/components/LeftSidebar";

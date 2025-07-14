@@ -3,7 +3,7 @@ import HeroSection from '@/components/food/HeroSection';
 import FeaturedRestaurantsGrid from '@/components/food/FeaturedRestaurantsGrid';
 import TestimonialsSection from '@/components/food/TestimonialsSection';
 import { useSearchStore } from '@/store/search-store';
-import { restaurants } from '@/components/library/data';
+import { restaurants } from '@/components/library/dataset';
 import RestaurantCard from '@/components/food/RestaurantCard';
 
 export default function HomePage() {

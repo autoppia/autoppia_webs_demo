@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { MenuItem, MenuItemSize, restaurants } from "@/components/library/data";
+import { MenuItem, MenuItemSize, restaurants } from "@/components/library/dataset";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";

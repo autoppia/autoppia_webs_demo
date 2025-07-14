@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useRef } from "react";
-import { PROPERS } from "@/library/data";
+import { PROPERS } from "@/library/dataset";
 
 
 function toStartOfDay(date: Date) {

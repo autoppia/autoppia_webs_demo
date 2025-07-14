@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import HireFormClient from "./HireFormClient";
-import { expertsInWork } from "@/library/data";
+import { expertsInWork } from "@/library/dataset";
 
 // ✅ Make sure this export is here for static generation
 export const dynamicParams = false;

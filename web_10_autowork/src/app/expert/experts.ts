@@ -1,4 +1,4 @@
-import { expertsInWork } from "@/library/data";
+import { expertsInWork } from "@/library/dataset";
 
 
 export function getExpert(slug: string) {

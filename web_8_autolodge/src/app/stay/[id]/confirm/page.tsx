@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import { useState, useEffect } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { PROPERTIES } from "@/library/data";
+import { PROPERTIES } from "@/library/dataset";
 import { useRef } from "react";
 
 function toStartOfDay(date: Date): Date {

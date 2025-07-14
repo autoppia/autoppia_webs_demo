@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { MenuItem } from '@/components/library/data';
+import type { MenuItem } from '@/components/library/dataset';
 
 export type CartItem = MenuItem & { restaurantId: string; quantity: number; };
 

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { mockUsers } from "@/library/data";
+import { mockUsers } from "@/library/dataset";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";

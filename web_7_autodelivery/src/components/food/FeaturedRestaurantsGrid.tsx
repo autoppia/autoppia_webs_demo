@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { restaurants } from "@/components/library/data";
+import { restaurants } from "@/components/library/dataset";
 import RestaurantCard from "./RestaurantCard";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 

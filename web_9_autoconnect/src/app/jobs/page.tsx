@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { mockJobs } from "@/library/data";
+import { mockJobs } from "@/library/dataset";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 
