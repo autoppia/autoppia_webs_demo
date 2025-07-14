@@ -2,45 +2,8 @@
 import React, { useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { DEMO_LOGS } from "@/library/dataset";
 
-const DEMO_LOGS = [
-  { id: 1, matter: "Estate Planning", client: "Smith & Co.", date: "2025-05-19", hours: 2, description: "Consultation", status: "Billable" },
-  { id: 2, matter: "IP Filing", client: "Acme Biotech", date: "2025-05-18", hours: 1.5, description: "Draft application", status: "Billed" },
-  { id: 3, matter: "M&A Advice", client: "Peak Ventures", date: "2025-05-16", hours: 3, description: "Negotiation call", status: "Billable" },
-  { id: 4, matter: "Trademark Filing", client: "OmniCorp", date: "2025-05-15", hours: 2.5, description: "Prepare documents", status: "Billed" },
-  { id: 5, matter: "NDA Review", client: "FutureTech", date: "2025-05-14", hours: 1.2, description: "Review clauses", status: "Billable" },
-  { id: 6, matter: "Shareholder Dispute", client: "Union Legal", date: "2025-05-13", hours: 4, description: "Strategy meeting", status: "Billable" },
-  { id: 7, matter: "Franchise Agreement", client: "TasteBuds Inc.", date: "2025-05-12", hours: 2.75, description: "Legal drafting", status: "Billed" },
-  { id: 8, matter: "Employment Contract", client: "NextGen Solutions", date: "2025-05-11", hours: 1, description: "HR consultation", status: "Billable" },
-  { id: 9, matter: "Investor Due Diligence", client: "CapitalCore", date: "2025-05-10", hours: 3.3, description: "Risk assessment", status: "Billed" },
-  { id: 10, matter: "Corporate Compliance", client: "SecureCom", date: "2025-05-09", hours: 2.1, description: "Documentation check", status: "Billable" },
-  { id: 11, matter: "Patent Filing", client: "Innovatek", date: "2025-05-08", hours: 2, description: "Patent search", status: "Billed" },
-  { id: 12, matter: "Business Sale", client: "QuickMart", date: "2025-05-07", hours: 5, description: "Contract review", status: "Billable" },
-  { id: 13, matter: "Internal Audit", client: "GreenFields", date: "2025-05-06", hours: 3.5, description: "Financial review", status: "Billed" },
-  { id: 14, matter: "Trademark Renewal", client: "LabelLine", date: "2025-05-05", hours: 0.8, description: "Online filing", status: "Billable" },
-  { id: 15, matter: "Merger Strategy", client: "AlphaGroup", date: "2025-05-04", hours: 4.2, description: "Planning call", status: "Billable" },
-  { id: 16, matter: "Copyright Dispute", client: "PixelPlay", date: "2025-05-03", hours: 2.9, description: "Case analysis", status: "Billed" },
-  { id: 17, matter: "IP Agreement", client: "MindShift", date: "2025-05-02", hours: 1.1, description: "Client call", status: "Billable" },
-  { id: 18, matter: "SaaS Contract", client: "CloudNest", date: "2025-05-01", hours: 2.6, description: "Contract draft", status: "Billable" },
-  { id: 19, matter: "Annual Return Filing", client: "NovaLabs", date: "2025-04-30", hours: 3.4, description: "Compliance filing", status: "Billed" },
-  { id: 20, matter: "Legal Memo", client: "Visionary Ltd.", date: "2025-04-29", hours: 1.8, description: "Drafting memo", status: "Billable" },
-  { id: 21, matter: "Founder Agreement", client: "CoreConnect", date: "2025-04-28", hours: 2.7, description: "Review terms", status: "Billable" },
-  { id: 22, matter: "Funding Round", client: "BuildRight", date: "2025-04-27", hours: 4.6, description: "Legal prep", status: "Billed" },
-  { id: 23, matter: "Property Lease", client: "UrbanSpace", date: "2025-04-26", hours: 2.9, description: "Lease review", status: "Billable" },
-  { id: 24, matter: "Board Meeting", client: "SteelRock", date: "2025-04-25", hours: 1.3, description: "Meeting notes", status: "Billed" },
-  { id: 25, matter: "Tax Advisory", client: "EcoFinance", date: "2025-04-24", hours: 2.5, description: "Tax analysis", status: "Billable" },
-  { id: 26, matter: "Startup Incorporation", client: "BrightStart", date: "2025-04-23", hours: 3.7, description: "Setup docs", status: "Billable" },
-  { id: 27, matter: "Product Licensing", client: "SoftBridge", date: "2025-04-22", hours: 2.2, description: "Review contract", status: "Billed" },
-  { id: 28, matter: "Compliance Review", client: "MetaSolutions", date: "2025-04-21", hours: 1.9, description: "Checklist audit", status: "Billable" },
-  { id: 29, matter: "Trademark Filing", client: "GlobalReach", date: "2025-04-20", hours: 0.9, description: "Filing form", status: "Billable" },
-  { id: 30, matter: "Business Valuation", client: "TrueNorth", date: "2025-04-19", hours: 4.5, description: "Valuation call", status: "Billed" },
-  { id: 31, matter: "Policy Drafting", client: "SafeHaven", date: "2025-04-18", hours: 3.2, description: "Drafting policy", status: "Billable" },
-  { id: 32, matter: "Court Filing", client: "Delta Law", date: "2025-04-17", hours: 2.8, description: "File case", status: "Billed" },
-  { id: 33, matter: "Contract Dispute", client: "ZenithCorp", date: "2025-04-16", hours: 1.4, description: "Client discussion", status: "Billable" },
-  { id: 34, matter: "Risk Assessment", client: "ArmorX", date: "2025-04-15", hours: 3, description: "Review & report", status: "Billable" },
-  { id: 35, matter: "Startup Pitch Deck", client: "LaunchLeap", date: "2025-04-14", hours: 2.3, description: "Legal feedback", status: "Billed" },
-  { id: 36, matter: "Non-Compete Review", client: "RevoTech", date: "2025-04-13", hours: 1.7, description: "Review & advise", status: "Billable" },
-];
 
 export default function BillingPage() {
   const [timerActive, setTimerActive] = useState(false);
@@ -65,9 +28,9 @@ export default function BillingPage() {
     setTimerActive(true);
     setTimerSec(0);
     setTab("Logs");
-    // logEvent(EVENT_TYPES.TIMER_STARTED, {
-    //   startedAt: new Date().toISOString(),
-    // });
+    logEvent(EVENT_TYPES.TIMER_STARTED, {
+      startedAt: new Date().toISOString(),
+    });
   }
 
   function stopTimer() {
@@ -83,7 +46,7 @@ export default function BillingPage() {
         status: "Billable",
       };
       setLogs([entry, ...logs]);
-      // logEvent(EVENT_TYPES.TIMER_STOPPED, { duration: timerSec, ...entry });
+      logEvent(EVENT_TYPES.TIMER_STOPPED, { duration: timerSec, ...entry });
     }
   }
 

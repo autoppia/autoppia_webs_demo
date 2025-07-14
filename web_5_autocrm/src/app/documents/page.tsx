@@ -2,59 +2,9 @@
 import { useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { DEMO_FILES } from "@/library/dataset";
 
-const DEMO_FILES = [
-  { id: 1, name: "Retainer-Agreement.pdf", size: "234 KB", version: "v2", updated: "Today", status: "Signed" },
-  { id: 2, name: "Client-Onboarding.docx", size: "82 KB", version: "v1", updated: "This week", status: "Draft" },
-  { id: 3, name: "Patent-Application.pdf", size: "1.3 MB", version: "v4", updated: "Last month", status: "Submitted" },
-  { id: 4, name: "NDA-Sample.docx", size: "98 KB", version: "v1", updated: "Yesterday", status: "Draft" },
-  { id: 5, name: "Incorporation-Certificate.pdf", size: "512 KB", version: "v1", updated: "Today", status: "Signed" },
-  { id: 6, name: "Trademark-Form.pdf", size: "312 KB", version: "v3", updated: "2 days ago", status: "Submitted" },
-  { id: 7, name: "HR-Policy.pdf", size: "1.1 MB", version: "v2", updated: "Last week", status: "Draft" },
-  { id: 8, name: "Board-Meeting-Minutes.docx", size: "120 KB", version: "v1", updated: "Today", status: "Signed" },
-  { id: 9, name: "Franchise-Agreement.pdf", size: "842 KB", version: "v5", updated: "2 weeks ago", status: "Submitted" },
-  { id: 10, name: "Employment-Contract.pdf", size: "314 KB", version: "v1", updated: "Yesterday", status: "Draft" },
-  { id: 11, name: "Company-Profile.docx", size: "230 KB", version: "v1", updated: "Today", status: "Signed" },
-  { id: 12, name: "Merger-Details.pdf", size: "1.5 MB", version: "v2", updated: "This week", status: "Submitted" },
-  { id: 13, name: "Sales-Contract.pdf", size: "725 KB", version: "v4", updated: "3 days ago", status: "Draft" },
-  { id: 14, name: "Asset-Transfer.pdf", size: "900 KB", version: "v2", updated: "Today", status: "Signed" },
-  { id: 15, name: "Due-Diligence-Checklist.docx", size: "88 KB", version: "v1", updated: "2 weeks ago", status: "Submitted" },
-  { id: 16, name: "Vendor-Agreement.pdf", size: "1.0 MB", version: "v3", updated: "Yesterday", status: "Draft" },
-  { id: 17, name: "Shareholders-Resolution.pdf", size: "670 KB", version: "v2", updated: "Today", status: "Signed" },
-  { id: 18, name: "Licensing-Contract.docx", size: "110 KB", version: "v1", updated: "Last month", status: "Submitted" },
-  { id: 19, name: "GDPR-Compliance.pdf", size: "743 KB", version: "v1", updated: "3 days ago", status: "Draft" },
-  { id: 20, name: "Investment-Agreement.pdf", size: "1.4 MB", version: "v3", updated: "2 days ago", status: "Submitted" },
-  { id: 21, name: "Case-Evidence.pdf", size: "2.3 MB", version: "v1", updated: "Today", status: "Signed" },
-  { id: 22, name: "Audit-Report.docx", size: "175 KB", version: "v2", updated: "Yesterday", status: "Draft" },
-  { id: 23, name: "Letter-of-Intent.pdf", size: "300 KB", version: "v1", updated: "2 weeks ago", status: "Submitted" },
-  { id: 24, name: "Confidentiality-Agreement.pdf", size: "210 KB", version: "v2", updated: "This week", status: "Signed" },
-  { id: 25, name: "Service-Agreement.docx", size: "85 KB", version: "v1", updated: "Today", status: "Draft" },
-  { id: 26, name: "IPO-Filing.pdf", size: "3.1 MB", version: "v5", updated: "Last week", status: "Submitted" },
-  { id: 27, name: "Tax-Declaration.pdf", size: "600 KB", version: "v2", updated: "Today", status: "Signed" },
-  { id: 28, name: "Case-Notes.docx", size: "90 KB", version: "v1", updated: "Yesterday", status: "Draft" },
-  { id: 29, name: "Settlement-Agreement.pdf", size: "540 KB", version: "v3", updated: "2 days ago", status: "Signed" },
-  { id: 30, name: "Legal-Memo.docx", size: "67 KB", version: "v1", updated: "3 days ago", status: "Draft" },
-  { id: 31, name: "Client-Review.pdf", size: "478 KB", version: "v2", updated: "Today", status: "Submitted" },
-  { id: 32, name: "Litigation-Plan.pdf", size: "1.2 MB", version: "v4", updated: "Last month", status: "Signed" },
-  { id: 33, name: "Evidence-Submission.docx", size: "138 KB", version: "v1", updated: "Yesterday", status: "Draft" },
-  { id: 34, name: "Risk-Assessment.pdf", size: "888 KB", version: "v2", updated: "Today", status: "Submitted" },
-  { id: 35, name: "Annual-Report.pdf", size: "2.5 MB", version: "v3", updated: "This week", status: "Signed" },
-  { id: 36, name: "Compliance-Checklist.docx", size: "112 KB", version: "v1", updated: "Yesterday", status: "Draft" },
-  { id: 37, name: "Contract-Amendment.pdf", size: "432 KB", version: "v3", updated: "3 days ago", status: "Submitted" },
-  { id: 38, name: "Digital-Signature-Policy.pdf", size: "375 KB", version: "v1", updated: "Today", status: "Signed" },
-  { id: 39, name: "Court-Notice.pdf", size: "540 KB", version: "v1", updated: "Last week", status: "Draft" },
-  { id: 40, name: "Power-of-Attorney.pdf", size: "680 KB", version: "v2", updated: "Yesterday", status: "Submitted" },
-  { id: 41, name: "Bank-Authorization.pdf", size: "320 KB", version: "v1", updated: "Today", status: "Signed" },
-  { id: 42, name: "Non-Compete-Agreement.pdf", size: "490 KB", version: "v1", updated: "2 weeks ago", status: "Draft" },
-  { id: 43, name: "Proposal-Summary.pdf", size: "980 KB", version: "v1", updated: "Today", status: "Submitted" },
-  { id: 44, name: "Meeting-Notes.docx", size: "95 KB", version: "v1", updated: "Yesterday", status: "Draft" },
-  { id: 45, name: "Legal-Advisory.pdf", size: "660 KB", version: "v2", updated: "2 days ago", status: "Signed" },
-  { id: 46, name: "Witness-Statement.pdf", size: "720 KB", version: "v1", updated: "Today", status: "Submitted" },
-  { id: 47, name: "Billing-Invoice.pdf", size: "330 KB", version: "v1", updated: "Yesterday", status: "Signed" },
-  { id: 48, name: "Court-Filing.pdf", size: "940 KB", version: "v3", updated: "This week", status: "Draft" },
-  { id: 49, name: "Expert-Testimony.pdf", size: "1.7 MB", version: "v2", updated: "Today", status: "Submitted" },
-  { id: 50, name: "Case-Summary.docx", size: "76 KB", version: "v1", updated: "Yesterday", status: "Draft" },
-];
+
 
 export default function DocumentsPage() {
   const [files, setFiles] = useState(DEMO_FILES);

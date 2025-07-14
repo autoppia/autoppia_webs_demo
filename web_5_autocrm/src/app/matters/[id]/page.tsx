@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Cookies from "js-cookie";
+import { DEMO_MATTERSS } from "@/library/dataset";
 
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
@@ -17,45 +18,8 @@ const TABS = [
   { name: "Activity", icon: <Clock className="w-5 h-5 mr-1" /> },
 ];
 
-const DEMO_MATTERS = [
-  {
-    id: "MAT-0012",
-    name: "Estate Planning",
-    status: "Active",
-    client: "Smith & Co.",
-    updated: "Today",
-    opened: "April 8, 2024",
-    description:
-      "Wills, trusts, powers of attorney. Review client docs and manage billables.",
-  },
-  {
-    id: "MAT-0011",
-    name: "Contract Review",
-    status: "Archived",
-    client: "Jones Legal",
-    updated: "2 days ago",
-    opened: "March 14, 2024",
-    description: "Review and finalize commercial agreements.",
-  },
-  {
-    id: "MAT-0009",
-    name: "IP Filing",
-    status: "Active",
-    client: "Acme Biotech",
-    updated: "Last week",
-    opened: "Feb 2, 2024",
-    description: "Manage patent filing and related IP documentation.",
-  },
-  {
-    id: "MAT-0005",
-    name: "M&A Advice",
-    status: "On Hold",
-    client: "Peak Ventures",
-    updated: "Yesterday",
-    opened: "Jan 20, 2024",
-    description: "Strategic legal counsel for merger assessment.",
-  },
-];
+
+
 type Matter = {
   id: string;
   name: string;
@@ -81,7 +45,7 @@ export default function MatterDetailPage() {
 
   const summary = useMemo(() => {
     return (
-      [...customMatters, ...DEMO_MATTERS].find((m) => m.id === matterId) ?? {
+      [...customMatters, ...DEMO_MATTERSS].find((m) => m.id === matterId) ?? {
         id: matterId,
         name: "Matter Not Found",
         status: "Unknown",
