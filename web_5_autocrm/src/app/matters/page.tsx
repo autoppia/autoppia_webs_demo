@@ -14,37 +14,9 @@ import {
 const STORAGE_KEY = "matters";
 import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { DEMO_MATTERS } from "@/library/dataset";
 
-const DEMO_MATTERS = [
-  {
-    id: "MAT-0012",
-    name: "Estate Planning",
-    status: "Active",
-    client: "Smith & Co.",
-    updated: "Today",
-  },
-  {
-    id: "MAT-0011",
-    name: "Contract Review",
-    status: "Archived",
-    client: "Jones Legal",
-    updated: "2 days ago",
-  },
-  {
-    id: "MAT-0009",
-    name: "IP Filing",
-    status: "Active",
-    client: "Acme Biotech",
-    updated: "Last week",
-  },
-  {
-    id: "MAT-0005",
-    name: "M&A Advice",
-    status: "On Hold",
-    client: "Peak Ventures",
-    updated: "Yesterday",
-  },
-];
+
 
 function statusPill(status: string) {
   let color = "bg-accent-forest/10 text-accent-forest";

@@ -2,36 +2,8 @@
 import React, { useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { DEMO_LOGS } from "@/library/dataset";
 
-const DEMO_LOGS = [
-  {
-    id: 1,
-    matter: "Estate Planning",
-    client: "Smith & Co.",
-    date: "2025-05-19",
-    hours: 2,
-    description: "Consultation",
-    status: "Billable",
-  },
-  {
-    id: 2,
-    matter: "IP Filing",
-    client: "Acme Biotech",
-    date: "2025-05-18",
-    hours: 1.5,
-    description: "Draft application",
-    status: "Billed",
-  },
-  {
-    id: 3,
-    matter: "M&A Advice",
-    client: "Peak Ventures",
-    date: "2025-05-16",
-    hours: 3,
-    description: "Negotiation call",
-    status: "Billable",
-  },
-];
 
 export default function BillingPage() {
   const [timerActive, setTimerActive] = useState(false);

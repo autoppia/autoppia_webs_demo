@@ -2,33 +2,9 @@
 import { useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { DEMO_FILES } from "@/library/dataset";
 
-const DEMO_FILES = [
-  {
-    id: 1,
-    name: "Retainer-Agreement.pdf",
-    size: "234 KB",
-    version: "v2",
-    updated: "Today",
-    status: "Signed",
-  },
-  {
-    id: 2,
-    name: "Client-Onboarding.docx",
-    size: "82 KB",
-    version: "v1",
-    updated: "This week",
-    status: "Draft",
-  },
-  {
-    id: 3,
-    name: "Patent-Application.pdf",
-    size: "1.3 MB",
-    version: "v4",
-    updated: "Last month",
-    status: "Submitted",
-  },
-];
+
 
 export default function DocumentsPage() {
   const [files, setFiles] = useState(DEMO_FILES);

@@ -7,57 +7,9 @@ import {
   Clock,
 } from "lucide-react";
 import { NewEventModal } from "@/components/NewEventModal";
+import { CalendarEvent, COLORS, EVENTS } from "@/library/dataset";
 
-const EVENTS: CalendarEvent[] = [
-  {
-    id: 1,
-    date: "2025-05-06",
-    label: "Smith Matter: Signing",
-    time: "11:00am",
-    color: "forest",
-  },
-  {
-    id: 2,
-    date: "2025-05-07",
-    label: "Internal Review",
-    time: "2:30pm",
-    color: "indigo",
-  },
-  {
-    id: 3,
-    date: "2025-05-13",
-    label: "Court Filing",
-    time: "9:00am",
-    color: "blue",
-  },
-  {
-    id: 4,
-    date: "2025-05-18",
-    label: "Client Call – Jessica",
-    time: "2:00pm",
-    color: "forest",
-  },
-  {
-    id: 5,
-    date: "2025-05-18",
-    label: "M&A: Docs Due",
-    time: "5:00pm",
-    color: "indigo",
-  },
-  {
-    id: 6,
-    date: "2025-05-22",
-    label: "Staff Meeting",
-    time: "1:30pm",
-    color: "zinc",
-  },
-];
-const COLORS = {
-  forest: "bg-accent-forest/20 text-accent-forest border-accent-forest/40",
-  indigo: "bg-accent-indigo/20 text-accent-indigo border-accent-indigo/40",
-  blue: "bg-blue-100 text-blue-700 border-blue-300",
-  zinc: "bg-zinc-200 text-zinc-700 border-zinc-300",
-};
+
 function getMonthMatrix(year: number, month: number) {
   // returns [[date, ...], ...weeks] covering 6 weeks
   const matrix = [];
@@ -77,14 +29,8 @@ function getMonthMatrix(year: number, month: number) {
 function pad(num: number) {
   return num.toString().padStart(2, "0");
 }
-type EventColor = keyof typeof COLORS;
-type CalendarEvent = {
-  id: number;
-  date: string;
-  label: string;
-  time: string;
-  color: EventColor;
-};
+
+
 
 export default function CalendarPage() {
   const today = new Date();

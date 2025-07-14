@@ -3,45 +3,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { clients } from "@/library/dataset";
 
-const clients = [
-  {
-    id: "CL-101",
-    name: "Smith & Co.",
-    email: "team@smithco.com",
-    matters: 3,
-    avatar: "",
-    status: "Active",
-    last: "3d ago",
-  },
-  {
-    id: "CL-098",
-    name: "Jessica Brown",
-    email: "jbrown@samplemail.com",
-    matters: 1,
-    avatar: "",
-    status: "Active",
-    last: "5d ago",
-  },
-  {
-    id: "CL-092",
-    name: "Acme Biotech",
-    email: "legal@acmebio.com",
-    matters: 2,
-    avatar: "",
-    status: "On Hold",
-    last: "2w ago",
-  },
-  {
-    id: "CL-086",
-    name: "Peak Ventures",
-    email: "peak@ventures.com",
-    matters: 4,
-    avatar: "",
-    status: "Active",
-    last: "1mo ago",
-  },
-];
+
 
 function getInitials(name: string) {
   return name
