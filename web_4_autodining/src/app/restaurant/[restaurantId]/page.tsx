@@ -21,6 +21,14 @@ import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { RestaurantsData } from "@/components/library/dataset";
+
+const photos = [
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+];
+
 const restaurantData: Record<
   string,
   {
@@ -37,178 +45,27 @@ const restaurantData: Record<
   }
 > = {};
 
-const namePool = [
-  "The Royal Dine",
-  "Vintage Bites",
-  "Evening Delight",
-  "River View Café",
-  "Fancy Lights Bistro",
-  "Urban Palate",
-  "Tandoori House",
-  "Zen Sushi",
-  "El Toro",
-  "Bella Vita",
-  "Coastal Catch",
-  "Harvest Table",
-  "Crimson Spoon",
-  "Golden Lotus",
-  "The Hungry Fork",
-  "Ocean's Plate",
-  "Fire & Spice",
-  "Olive & Vine",
-  "La Bella Cucina",
-  "Sunset Grill",
-  "Noir Brasserie",
-  "Blue Orchid",
-  "Saffron Garden",
-  "Rustic Roots",
-  "Amber Lounge",
-  "Bistro Lumière",
-  "Maple Hearth",
-  "Oak & Ember",
-  "Peppercorn Place",
-  "The Local Dish",
-  "Cedar Grove Café",
-  "Soleil Bistro",
-  "Brickhouse Eats",
-  "Wanderlust Grill",
-  "The Nest",
-  "Cafe Verona",
-  "Midtown Meals",
-  "Ginger & Thyme",
-  "Lavender & Sage",
-  "Hearthstone Inn",
-  "Juniper Table",
-  "The Garden Fork",
-  "Twilight Tapas",
-  "Meadow & Moor",
-  "The Vine",
-  "Ember Flame",
-  "Miso Modern",
-  "The Borough",
-  "Copper Kitchen",
-  "Pine & Poppy",
-];
-
-const cuisines = [
-  "French",
-  "Italian",
-  "American",
-  "Japanese",
-  "Mexican",
-  "Indian",
-  "Thai",
-  "Café",
-  "Mediterranean",
-];
-const areas = [
-  "Mission District",
-  "SOMA",
-  "North Beach",
-  "Downtown",
-  "Hayes Valley",
-  "Nob Hill",
-  "Japantown",
-  "Embarcadero",
-  "Marina",
-];
-const staticReviews = [
-  18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48,
-  60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90,
-  96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88,
-];
-const staticBookings = [
-  6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92,
-  94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83,
-  93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90,
-];
-const staticStars = [
-  3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3,
-  4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4,
-];
-const staticPrices = [
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-];
-
-const photos = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
-  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
-];
-
-for (let i = 0; i < 50; i++) {
-  const id = `restaurant-${i + 1}`;
+// Populate restaurantData from jsonData
+RestaurantsData.forEach((item, index) => {
+  const id = `restaurant-${item.id}`;
   restaurantData[id] = {
-    name: namePool[i],
-    image: `/images/restaurant${(i % 19) + 1}.jpg`,
-    rating: staticStars[i],
-    reviews: staticReviews[i],
-    bookings: staticBookings[i],
-    price: staticPrices[i],
-    cuisine: cuisines[i % cuisines.length],
+    name: item.namepool,
+    image: `/images/restaurant${(index % 19) + 1}.jpg`,
+    rating: item.staticStars,
+    reviews: item.staticReviews,
+    bookings: item.staticBookings,
+    price: item.staticPrices,
+    cuisine: item.cuisine,
     tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${
-      namePool[i]
-    }, offering a fusion of flavors in the heart of ${
-      areas[i % areas.length]
-    }.`,
-    photos: photos,
+    desc: `Enjoy a delightful experience at ${item.namepool}, offering a fusion of flavors in the heart of ${item.area}.`,
+    photos,
   };
-}
+});
 
 export default function RestaurantPage() {
   const params = useParams();
   const id = params.restaurantId as string;
-  const r = restaurantData[id] || restaurantData["vintage-bites"];
+  const r = restaurantData[id] || restaurantData["restaurant-1"]; // Updated fallback to restaurant-1
   const [people, setPeople] = useState<number | undefined>(undefined);
   const [time, setTime] = useState<string | undefined>(undefined);
   const [showFullMenu, setShowFullMenu] = useState(false);
@@ -246,17 +103,20 @@ export default function RestaurantPage() {
       }
     );
   };
+
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
     Cookies.set("reservation_people", String(n));
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
   };
+
   const handleTimeSelect = (t: string) => {
     setTime(t);
     Cookies.set("reservation_time", t);
     logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
   };
+
   const timeOptions = [
     "12:00 PM",
     "12:30 PM",
@@ -265,6 +125,7 @@ export default function RestaurantPage() {
     "2:00 PM",
     "2:30 PM",
   ];
+
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -282,14 +143,15 @@ export default function RestaurantPage() {
 
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMinutes}`;
   }
+
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
     if (d) {
-      Cookies.set("reservation_date", d.toISOString());
-      // logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+      Cookies.set("reservation_date", toLocalISO(d));
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: toLocalISO(d) });
     }
   };
+
   return (
     <main>
       {/* Banner Image */}
@@ -306,15 +168,12 @@ export default function RestaurantPage() {
           <h1 className="text-4xl font-bold mb-2">{r.name}</h1>
           <div className="flex items-center gap-4 text-lg mb-4">
             <span className="flex items-center text-[#46a758] text-xl font-semibold">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <span key={i}>★</span>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i}>{i < (r.rating || 0) ? "★" : <span className="text-gray-300">★</span>}</span>
               ))}
-              <span className="text-gray-300">★</span>
             </span>
             <span className="text-base flex items-center gap-2">
-              <span className="font-bold">
-                {r.rating?.toFixed(2) ?? "4.20"}
-              </span>{" "}
+              <span className="font-bold">{r.rating?.toFixed(1) ?? "4.0"}</span>{" "}
               <span className="text-gray-700">{r.reviews ?? 20} Reviews</span>
             </span>
             <span className="text-base flex items-center gap-2">
@@ -420,14 +279,14 @@ export default function RestaurantPage() {
           {/* Reviews Section */}
           <section className="max-w-2xl w-full mb-10">
             <h2 className="text-2xl font-bold mb-5 mt-10">
-              What 20 people are saying
+              What {r.reviews} people are saying
             </h2>
             <div className="font-bold mb-2">Overall ratings and reviews</div>
             <div className="mb-4 text-gray-700">
               Reviews can only be made by diners who have booked through
               OpenDinning and dined at this restaurant.
             </div>
-            {/* Ratings bar chart (simplified) */}
+            {/* Ratings bar chart */}
             <div className="mb-6 space-y-1">
               {[5, 4, 3, 2, 1].map((star) => (
                 <div key={star} className="flex items-center gap-2">
@@ -435,7 +294,7 @@ export default function RestaurantPage() {
                   <span className="w-20 bg-red-200 h-3 rounded">
                     <span
                       className={`block h-3 rounded bg-[#46a758]`}
-                      style={{ width: `${star * 12}%` }}
+                      style={{ width: `${star === r.rating ? 100 : star < r.rating ? 80 : 10}%` }}
                     />
                   </span>
                 </div>
@@ -443,13 +302,13 @@ export default function RestaurantPage() {
             </div>
           </section>
         </div>
-        {/* Reservation Box - now more detailed per screenshot */}
+        {/* Reservation Box */}
         <div className="rounded-xl border bg-white shadow-sm p-6 w-full max-w-sm mt-[-120px] md:mt-16 self-start">
           <h2 className="font-bold text-lg mb-2 text-center">
             Make a reservation
           </h2>
           <div className="flex flex-col gap-3">
-            {/* People select (demo, not fully interactive) */}
+            {/* People select */}
             <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -546,7 +405,7 @@ export default function RestaurantPage() {
                             restaurantId: id,
                             restaurantName: r.name,
                             date: formattedDate,
-                            time:time,
+                            time: t,
                             people,
                           })
                         }

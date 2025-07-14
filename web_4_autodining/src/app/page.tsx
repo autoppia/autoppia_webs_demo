@@ -20,167 +20,23 @@ import {
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Cookies from "js-cookie";
+import { RestaurantsData } from "@/components/library/dataset";
 
-// Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
-const namePool = [
-  "The Royal Dine",
-  "Vintage Bites",
-  "Evening Delight",
-  "River View Café",
-  "Fancy Lights Bistro",
-  "Urban Palate",
-  "Tandoori House",
-  "Zen Sushi",
-  "El Toro",
-  "Bella Vita",
-  "Coastal Catch",
-  "Harvest Table",
-  "Crimson Spoon",
-  "Golden Lotus",
-  "The Hungry Fork",
-  "Ocean's Plate",
-  "Fire & Spice",
-  "Olive & Vine",
-  "La Bella Cucina",
-  "Sunset Grill",
-  "Noir Brasserie",
-  "Blue Orchid",
-  "Saffron Garden",
-  "Rustic Roots",
-  "Amber Lounge",
-  "Bistro Lumière",
-  "Maple Hearth",
-  "Oak & Ember",
-  "Peppercorn Place",
-  "The Local Dish",
-  "Cedar Grove Café",
-  "Soleil Bistro",
-  "Brickhouse Eats",
-  "Wanderlust Grill",
-  "The Nest",
-  "Cafe Verona",
-  "Midtown Meals",
-  "Ginger & Thyme",
-  "Lavender & Sage",
-  "Hearthstone Inn",
-  "Juniper Table",
-  "The Garden Fork",
-  "Twilight Tapas",
-  "Meadow & Moor",
-  "The Vine",
-  "Ember Flame",
-  "Miso Modern",
-  "The Borough",
-  "Copper Kitchen",
-  "Pine & Poppy",
-];
+// Create restaurants array from jsonData
+const restaurants = RestaurantsData.map((item, index) => ({
+  id: `restaurant-${item.id}`,
+  name: item.namepool,
+  image: `/images/restaurant${(index % 19) + 1}.jpg`,
+  stars: item.staticStars,
+  reviews: item.staticReviews,
+  cuisine: item.cuisine,
+  price: item.staticPrices,
+  bookings: item.staticBookings,
+  area: item.area,
+  times: ["1:00 PM"],
+}));
 
-const cuisines = [
-  "French",
-  "Italian",
-  "American",
-  "Japanese",
-  "Mexican",
-  "Indian",
-  "Thai",
-  "Café",
-  "Mediterranean",
-];
-const areas = [
-  "Mission District",
-  "SOMA",
-  "North Beach",
-  "Downtown",
-  "Hayes Valley",
-  "Nob Hill",
-  "Japantown",
-  "Embarcadero",
-  "Marina",
-];
-
-const staticReviews = [
-  18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48,
-  60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90,
-  96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88,
-];
-const staticBookings = [
-  6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92,
-  94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83,
-  93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90,
-];
-const staticStars = [
-  3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3,
-  4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4,
-];
-const staticPrices = [
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-];
-
-const restaurants = Array.from({ length: 50 }, (_, i) => {
-  return {
-    id: `restaurant-${i + 1}`,
-    name: namePool[i],
-    image: `/images/restaurant${(i % 19) + 1}.jpg`,
-    stars: staticStars[i],
-    reviews: staticReviews[i],
-    cuisine: cuisines[i % cuisines.length],
-    price: staticPrices[i],
-    bookings: staticBookings[i],
-    area: areas[i % areas.length],
-    times: ["1:00 PM"],
-  };
-});
-
-// ✅ Split restaurants into unique sets per section
+// Split restaurants into unique sets per section
 const lunchRestaurants = restaurants.slice(0, 15);
 const iconRestaurants = restaurants.slice(15, 30);
 const awardRestaurants = restaurants.slice(30, 50);
@@ -198,7 +54,7 @@ function StarRating({ count }: { count: number }) {
 function StarNumber({ rating }: { rating: number }) {
   return (
     <span className="text-[#46a758] font-bold inline-flex items-center ml-1 mr-1">
-      <span className="text-lg">★</span> {rating.toFixed(2)}
+      <span className="text-lg">★</span> {rating.toFixed(1)}
     </span>
   );
 }
@@ -280,14 +136,14 @@ function RestaurantCard({
             <Link
               key={t}
               href={`/booking/${r.id}/${encodeURIComponent(
-                time
-              )}?date=${formattedDate}&people=${people}&time=${encodeURIComponent(time)}`}
+                t
+              )}?date=${formattedDate}&people=${people}&time=${encodeURIComponent(t)}`}
               onClick={() =>
                 logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                   restaurantId: r.id,
                   restaurantName: r.name,
                   date: formattedDate,
-                  time: time,
+                  time: t,
                   people,
                 })
               }
@@ -307,7 +163,7 @@ function RestaurantCard({
   );
 }
 
-function CardScroller({ children,title }: { children: React.ReactNode; title: string }) {
+function CardScroller({ children, title }: { children: React.ReactNode; title: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -327,6 +183,7 @@ function CardScroller({ children,title }: { children: React.ReactNode; title: st
       window.removeEventListener("resize", check);
     };
   }, []);
+
   const scrollByAmount = 260 * 2; // scroll by two cards at a time
   const scroll = (dir: number) => {
     if (!ref.current) return;
@@ -341,7 +198,7 @@ function CardScroller({ children,title }: { children: React.ReactNode; title: st
 
   return (
     <div className="relative w-full" suppressHydrationWarning>
-      {/*{showLeft && (*/}
+      {showLeft && (
         <button
           onClick={() => scroll(-1)}
           className="absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
@@ -350,14 +207,14 @@ function CardScroller({ children,title }: { children: React.ReactNode; title: st
         >
           <ChevronLeft className="h-6 w-6 text-[#444]" />
         </button>
-      {/*)}*/}
+      )}
       <div
         ref={ref}
         className="flex gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-hide pl-1 pr-10"
       >
         {children}
       </div>
-      {/*{showRight && (*/}
+      {showRight && (
         <button
           onClick={() => scroll(1)}
           className="absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
@@ -366,7 +223,7 @@ function CardScroller({ children,title }: { children: React.ReactNode; title: st
         >
           <ChevronRight className="h-6 w-6 text-[#444]" />
         </button>
-      {/*)}*/}
+      )}
     </div>
   );
 }
@@ -379,6 +236,7 @@ export default function HomePage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
+
   useEffect(() => {
     const savedDate = Cookies.get("reservation_date");
     const savedTime = Cookies.get("reservation_time");
@@ -390,6 +248,7 @@ export default function HomePage() {
     if (savedTime) setTime(savedTime);
     if (savedPeople) setPeople(parseInt(savedPeople));
   }, []);
+
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -407,19 +266,21 @@ export default function HomePage() {
 
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${sign}${offsetHours}:${offsetMinutes}`;
   }
+
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
     if (d) {
-      Cookies.set("reservation_date", d.toISOString());
-      // logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
+      Cookies.set("reservation_date", toLocalISO(d));
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: toLocalISO(d) });
     }
   };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
     logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
   };
+
   const handleTimeSelect = (t: string) => {
     setTime(t);
     Cookies.set("reservation_time", t);
@@ -468,7 +329,6 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-center gap-4">
-            {/* TODO: User/profile icon, language, nav links */}
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/help"
@@ -567,7 +427,7 @@ export default function HomePage() {
             ))}
           </PopoverContent>
         </Popover>
-        {/* Search box & button, as in screenshot */}
+        {/* Search box & button */}
         <input
           type="text"
           placeholder="Location, Restaurant, or Cuisine"
@@ -585,7 +445,7 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold mb-4 mt-8">
           Available for lunch now
         </h2>
-        <CardScroller  title="Available for lunch now">
+        <CardScroller title="Available for lunch now">
           {filtered.map((r) => (
             <RestaurantCard
               key={r.id + "-lunch"}
@@ -614,7 +474,7 @@ export default function HomePage() {
             Explore Icon restaurants
           </button>
         </div>
-        <CardScroller  title="Introducing OpenDinning Icons">
+        <CardScroller title="Introducing OpenDinning Icons">
           {iconRestaurants.map((r) => (
             <RestaurantCard
               key={r.id + "-icon"}
@@ -630,7 +490,7 @@ export default function HomePage() {
       {/* Award-winning Section */}
       <section className="mt-8 px-4">
         <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
-        <CardScroller  title="Award-winning">
+        <CardScroller title="Award-winning">
           {awardRestaurants.map((r) => (
             <RestaurantCard
               key={r.id + "-award"}
