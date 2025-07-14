@@ -21,7 +21,7 @@ import {
   generateDraftEmails,
   userLabels,
   systemLabels,
-} from "@/library/mockData";
+} from "@/library/dataset";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface EmailState {
@@ -341,7 +341,7 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (state.emails.length === 0) {
       // Generate only 10 emails for inbox - no other folder emails
-      const mockEmails = generateMockEmails(10);
+      const mockEmails = generateMockEmails(50);
       dispatch({ type: "SET_EMAILS", payload: mockEmails });
     }
   }, [state.emails.length]);
@@ -485,7 +485,7 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "TOGGLE_COMPOSE", payload: open });
     if (open) {
       logEvent(EVENT_TYPES.COMPOSE_EMAIL, {
-        action: "opened_compose"
+        action: "opened_compose",
       });
     }
   }, []);
