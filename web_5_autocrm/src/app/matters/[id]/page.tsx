@@ -9,16 +9,14 @@ import {
 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Cookies from "js-cookie";
+import {EVENT_TYPES, logEvent} from "@/library/events";
 import { DEMO_MATTERSS } from "@/library/dataset";
-
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
   { name: "Documents", icon: <FileText className="w-5 h-5 mr-1" /> },
   { name: "Billing", icon: <DollarSign className="w-5 h-5 mr-1" /> },
   { name: "Activity", icon: <Clock className="w-5 h-5 mr-1" /> },
 ];
-
-
 
 type Matter = {
   id: string;
@@ -35,6 +33,7 @@ export default function MatterDetailPage() {
   const [tab, setTab] = useState("Overview");
   const [summaryOpen, setSummaryOpen] = useState(true);
   const [customMatters, setCustomMatters] = useState<Matter[]>([]);
+  const [currentMatter, setCurrentMatter] = useState<Matter | null>(null);
   const params = useParams();
   const matterId = params?.id as string;
 
@@ -43,19 +42,28 @@ export default function MatterDetailPage() {
     if (cookie) setCustomMatters(JSON.parse(cookie));
   }, []);
 
-  const summary = useMemo(() => {
-    return (
-      [...customMatters, ...DEMO_MATTERSS].find((m) => m.id === matterId) ?? {
-        id: matterId,
-        name: "Matter Not Found",
-        status: "Unknown",
-        client: "-",
-        updated: "-",
-        opened: "-",
-        description: "This matter could not be found. Please check the ID.",
-      }
-    );
+  useEffect(() => {
+    if (!matterId) return;
+
+    const allMatters = [...customMatters, ...DEMO_MATTERSS];
+    const matter = allMatters.find((m) => m.id === matterId);
+    if (matter) {
+      setCurrentMatter(matter);
+      logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, matter);
+    } else {
+      console.warn(`Matter with ID ${matterId} not found.`);
+      setCurrentMatter(null);
+    }
   }, [matterId, customMatters]);
+
+  // If the matter is not found or still loading, you might want to show a loading state or an error
+  if (!currentMatter) {
+    return (
+      <section className="flex justify-center items-center h-screen">
+        <p className="text-zinc-500">Loading matter details or matter not found...</p>
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col lg:flex-row gap-10">
@@ -64,7 +72,7 @@ export default function MatterDetailPage() {
         <div className="bg-white rounded-2xl shadow-card p-8 flex flex-col gap-4 mb-6 border border-zinc-100">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-xl text-[#1A1A1A]">
-              {summary.name}
+              {currentMatter.name}
             </span>
             <button
               aria-label="collapse"
@@ -82,26 +90,26 @@ export default function MatterDetailPage() {
             <>
               <div className="flex items-center gap-3 mb-2">
                 <span className="inline-block px-3 py-1 bg-accent-forest/10 text-accent-forest rounded-2xl text-xs font-medium">
-                  {summary.status}
+                  {currentMatter.status}
                 </span>
                 <span className="text-xs text-zinc-400 font-mono">
-                  {summary.id}
+                  {currentMatter.id}
                 </span>
               </div>
               <dl className="text-sm text-zinc-500 font-medium space-y-1">
                 <div>
                   <dt className="inline">Client: </dt>
                   <dd className="inline text-zinc-700 font-semibold ml-1">
-                    {summary.client}
+                    {currentMatter.client}
                   </dd>
                 </div>
                 <div>
                   <dt className="inline">Last updated: </dt>
-                  <dd className="inline ml-1">{summary.updated}</dd>
+                  <dd className="inline ml-1">{currentMatter.updated}</dd>
                 </div>
               </dl>
               <p className="text-zinc-600 mt-3 font-normal text-sm leading-relaxed">
-                {summary.description}
+                {currentMatter.description}
               </p>
             </>
           )}

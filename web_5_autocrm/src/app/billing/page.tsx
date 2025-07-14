@@ -28,9 +28,9 @@ export default function BillingPage() {
     setTimerActive(true);
     setTimerSec(0);
     setTab("Logs");
-    logEvent(EVENT_TYPES.TIMER_STARTED, {
-      startedAt: new Date().toISOString(),
-    });
+    // logEvent(EVENT_TYPES.TIMER_STARTED, {
+    //   startedAt: new Date().toISOString(),
+    // });
   }
 
   function stopTimer() {
@@ -46,7 +46,7 @@ export default function BillingPage() {
         status: "Billable",
       };
       setLogs([entry, ...logs]);
-      logEvent(EVENT_TYPES.TIMER_STOPPED, { duration: timerSec, ...entry });
+      // logEvent(EVENT_TYPES.TIMER_STOPPED, { duration: timerSec, ...entry });
     }
   }
 
