@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h1 class="display-4">Books Categories</h1>
+            <p class="lead">Explore our collection by categories</p>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for genre in genres %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow genre-card">
+                <div class="card-body text-center">
+                    <h3 class="card-title">{{ genre.name }}</h3>
+                    <p class="card-text text-muted">{{ genre.movies.count }} books</p>
+                    <a href="{% url 'booksapp:genre_detail' genre.id %}" class="btn btn-primary">View books</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <div class="alert alert-info">
+                No categories available.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
