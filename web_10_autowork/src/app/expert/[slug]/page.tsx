@@ -70,7 +70,7 @@ export default async function ExpertProfile({
             </button>
             <HireButton expert={expert} />
             <Link
-              href={`/messages/${expert.slug}`}
+              href={`#`}
               passHref
               className="px-7 py-2 rounded-full border-2 border-[#08b4ce] text-[#08b4ce] bg-white text-lg ml-1 font-semibold hover:bg-[#e6f9fb]"
             >
