@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # En producción NO montes tu código: deja que la imagen lleve la build
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules
+    ports:
+      - "${WEB_PORT}:8002"
+    restart: always
+    environment:
+      - API_URL=http://app:8080
+      - PORT=8002
+      - NODE_ENV=production
+    networks:
+      - apps_net
+
+networks:
+  apps_net:
+    external: true

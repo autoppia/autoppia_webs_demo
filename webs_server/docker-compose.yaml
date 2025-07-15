@@ -1,0 +1,64 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${WEB_PORT}:8080"
+    environment:
+      # ======== Core Settings ========
+      LOG_LEVEL: info
+      # ======== Server Settings ========
+      HOST: 0.0.0.0
+      PORT: 8080
+
+      # ======== Database ========
+      POSTGRES_USER: webs_user
+      POSTGRES_PASSWORD: autoppia_2025
+      POSTGRES_DB: autoppia_db
+      DB_HOST: db
+      DB_PORT: 5432
+      DATABASE_URL: "postgresql://webs_user:autoppia_2025@db:5432/autoppia_db"
+      DB_POOL_MIN: 10
+      DB_POOL_MAX: 50
+
+      # Minimum response size (in bytes) before applying GZIP compression
+      GZIP_MIN_SIZE: 1000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - apps_net
+
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: webs_user
+      POSTGRES_PASSWORD: autoppia_2025
+      POSTGRES_DB: autoppia_db
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - webs_postgres_data:/var/lib/postgresql/data
+      - ./postgres/initdb.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webs_user -d autoppia_db -p 5432"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    command: >
+      postgres
+        -c max_connections=200
+        -c shared_buffers=512MB
+        -c work_mem=32MB
+        -c effective_cache_size=1536MB
+        -c maintenance_work_mem=128MB
+        -c random_page_cost=1.1
+        -c checkpoint_completion_target=0.9
+    networks:
+      - apps_net
+
+volumes:
+  webs_postgres_data:
+
+networks:
+  apps_net:
+    external: true

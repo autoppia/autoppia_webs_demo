@@ -1,0 +1,42 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
+    ports:
+      - "${WEB_PORT}:8000" # Cambiado de 8001 a 8000
+    environment:
+      - DEBUG=0
+      - DB_NAME=web2_books
+      - DB_USER=postgres
+      - DB_PASSWORD=autoppia_2025
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+    networks:
+      - web2_net
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=web2_books
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=autoppia_2025
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - web2_db_data:/var/lib/postgresql/data
+    networks:
+      - web2_net
+
+volumes:
+  web2_db_data:
+
+networks:
+  web2_net:
+    driver: bridge
