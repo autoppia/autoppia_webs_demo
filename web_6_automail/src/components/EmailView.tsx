@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import { useEffect } from "react";
 import { cn } from "@/library/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -103,6 +103,15 @@ export function EmailView() {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
+  useEffect(() => {
+    if (currentEmail) {
+      logEvent(EVENT_TYPES.VIEW_EMAIL, {
+        email_id: currentEmail.id,
+        subject: currentEmail.subject,
+        from: currentEmail.from.email,
+      });
+    }
+  }, [currentEmail]);
   return (
     <div
       className="h-full flex flex-col bg-background"
