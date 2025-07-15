@@ -10,7 +10,7 @@ import {
 import React, { useState, useMemo, useEffect } from "react";
 import Cookies from "js-cookie";
 import {EVENT_TYPES, logEvent} from "@/library/events";
-import { DEMO_MATTERSS } from "@/library/dataset";
+import { DEMO_MATTERS } from "@/library/dataset";
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
   { name: "Documents", icon: <FileText className="w-5 h-5 mr-1" /> },
@@ -24,8 +24,8 @@ type Matter = {
   status: string;
   client: string;
   updated: string;
-  opened: string;
-  description: string;
+  // opened: string;
+  // description: string;
 };
 
 export default function MatterDetailPage() {
@@ -45,7 +45,7 @@ export default function MatterDetailPage() {
   useEffect(() => {
     if (!matterId) return;
 
-    const allMatters = [...customMatters, ...DEMO_MATTERSS];
+    const allMatters = [...customMatters, ...DEMO_MATTERS];
     const matter = allMatters.find((m) => m.id === matterId);
     if (matter) {
       setCurrentMatter(matter);
@@ -108,9 +108,9 @@ export default function MatterDetailPage() {
                   <dd className="inline ml-1">{currentMatter.updated}</dd>
                 </div>
               </dl>
-              <p className="text-zinc-600 mt-3 font-normal text-sm leading-relaxed">
-                {currentMatter.description}
-              </p>
+              {/*<p className="text-zinc-600 mt-3 font-normal text-sm leading-relaxed">*/}
+              {/*  {currentMatter.description}*/}
+              {/*</p>*/}
             </>
           )}
         </div>
