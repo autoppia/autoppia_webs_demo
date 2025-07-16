@@ -6,9 +6,8 @@ import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import dayjs from "dayjs";
-
 
 const countries = [
   { code: "AR", name: "Argentina", dial: "+54", flag: "🇦🇷" },
@@ -52,37 +51,162 @@ const photos = [
 ];
 
 const namePool = [
-  "The Royal Dine", "Vintage Bites", "Evening Delight", "River View Café", "Fancy Lights Bistro",
-  "Urban Palate", "Tandoori House", "Zen Sushi", "El Toro", "Bella Vita",
-  "Coastal Catch", "Harvest Table", "Crimson Spoon", "Golden Lotus", "The Hungry Fork",
-  "Ocean's Plate", "Fire & Spice", "Olive & Vine", "La Bella Cucina", "Sunset Grill",
-  "Noir Brasserie", "Blue Orchid", "Saffron Garden", "Rustic Roots", "Amber Lounge",
-  "Bistro Lumière", "Maple Hearth", "Oak & Ember", "Peppercorn Place", "The Local Dish",
-  "Cedar Grove Café", "Soleil Bistro", "Brickhouse Eats", "Wanderlust Grill", "The Nest",
-  "Cafe Verona", "Midtown Meals", "Ginger & Thyme", "Lavender & Sage", "Hearthstone Inn",
-  "Juniper Table", "The Garden Fork", "Twilight Tapas", "Meadow & Moor", "The Vine",
-  "Ember Flame", "Miso Modern", "The Borough", "Copper Kitchen", "Pine & Poppy"
+  "The Royal Dine",
+  "Vintage Bites",
+  "Evening Delight",
+  "River View Café",
+  "Fancy Lights Bistro",
+  "Urban Palate",
+  "Tandoori House",
+  "Zen Sushi",
+  "El Toro",
+  "Bella Vita",
+  "Coastal Catch",
+  "Harvest Table",
+  "Crimson Spoon",
+  "Golden Lotus",
+  "The Hungry Fork",
+  "Ocean's Plate",
+  "Fire & Spice",
+  "Olive & Vine",
+  "La Bella Cucina",
+  "Sunset Grill",
+  "Noir Brasserie",
+  "Blue Orchid",
+  "Saffron Garden",
+  "Rustic Roots",
+  "Amber Lounge",
+  "Bistro Lumière",
+  "Maple Hearth",
+  "Oak & Ember",
+  "Peppercorn Place",
+  "The Local Dish",
+  "Cedar Grove Café",
+  "Soleil Bistro",
+  "Brickhouse Eats",
+  "Wanderlust Grill",
+  "The Nest",
+  "Cafe Verona",
+  "Midtown Meals",
+  "Ginger & Thyme",
+  "Lavender & Sage",
+  "Hearthstone Inn",
+  "Juniper Table",
+  "The Garden Fork",
+  "Twilight Tapas",
+  "Meadow & Moor",
+  "The Vine",
+  "Ember Flame",
+  "Miso Modern",
+  "The Borough",
+  "Copper Kitchen",
+  "Pine & Poppy",
 ];
 
-const cuisines = ["French", "Italian", "American", "Japanese", "Mexican", "Indian", "Thai", "Café", "Mediterranean"];
-const areas = ["Mission District", "SOMA", "North Beach", "Downtown", "Hayes Valley", "Nob Hill", "Japantown", "Embarcadero", "Marina"];
-const staticReviews = [18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48, 60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90, 96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88];
-const staticBookings = [6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92, 94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83, 93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90];
-const staticStars = [3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4];
-const staticPrices = ["$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$", "$$$$", "$$", "$$$"];
+const cuisines = [
+  "French",
+  "Italian",
+  "American",
+  "Japanese",
+  "Mexican",
+  "Indian",
+  "Thai",
+  "Café",
+  "Mediterranean",
+];
+const areas = [
+  "Mission District",
+  "SOMA",
+  "North Beach",
+  "Downtown",
+  "Hayes Valley",
+  "Nob Hill",
+  "Japantown",
+  "Embarcadero",
+  "Marina",
+];
+const staticReviews = [
+  18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48,
+  60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90,
+  96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88,
+];
+const staticBookings = [
+  6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92,
+  94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83,
+  93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90,
+];
+const staticStars = [
+  3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3,
+  4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4,
+];
+const staticPrices = [
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+  "$$$$",
+  "$$",
+  "$$$",
+];
 
-const restaurantData: Record<string, {
-  name: string;
-  image: string;
-  rating: number;
-  reviews: number;
-  bookings: number;
-  price: string;
-  cuisine: string;
-  tags: string[];
-  desc: string;
-  photos: string[];
-}> = {};
+const restaurantData: Record<
+  string,
+  {
+    name: string;
+    image: string;
+    rating: number;
+    reviews: number;
+    bookings: number;
+    price: string;
+    cuisine: string;
+    tags: string[];
+    desc: string;
+    photos: string[];
+  }
+> = {};
 
 for (let i = 0; i < 50; i++) {
   const id = `restaurant-${i + 1}`;
@@ -95,7 +219,11 @@ for (let i = 0; i < 50; i++) {
     price: staticPrices[i],
     cuisine: cuisines[i % cuisines.length],
     tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${namePool[i]}, offering a fusion of flavors in the heart of ${areas[i % areas.length]}.`,
+    desc: `Enjoy a delightful experience at ${
+      namePool[i]
+    }, offering a fusion of flavors in the heart of ${
+      areas[i % areas.length]
+    }.`,
     photos,
   };
 }
@@ -107,23 +235,24 @@ export default function Page() {
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [date, setDate] = useState<Date | undefined>(undefined);
-const [time, setTime] = useState("1:00 PM");
-const [people, setPeople] = useState(2);
+  const [time, setTime] = useState("1:00 PM");
+  const [people, setPeople] = useState(2);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [reservationTime, setReservationTime] = useState<string | null>(null);
-  const [reservationPeople, setReservationPeople] = useState<string | null>(null);
+  const [reservationPeople, setReservationPeople] = useState<string | null>(
+    null
+  );
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
-  
-  
+
   useEffect(() => {
     const savedDate = Cookies.get("reservation_date");
     const savedTime = Cookies.get("reservation_time");
     const savedPeople = Cookies.get("reservation_people");
-  
+
     if (savedDate) {
       const d = new Date(savedDate);
       setDate(d);
@@ -133,28 +262,39 @@ const [people, setPeople] = useState(2);
       setDate(now);
       setFormattedDate(dayjs(now).format("MMM D"));
     }
-  
+
     if (savedTime) setReservationTime(savedTime);
     if (savedPeople) setReservationPeople(savedPeople);
   }, []);
-  
-  
+
   const [email, setEmail] = useState("user_name@gmail.com");
   const params = useParams();
   const search = useSearchParams();
+
   const restaurantId = params.restaurantId as string;
   // const restaurantName = restaurantNames[restaurantId] || restaurantId;
   // const imageUrl = restaurantImgs[restaurantId] || restaurantImgs["royal-dine"];
   const data = restaurantData[restaurantId] || restaurantData["restaurant-1"];
+  useEffect(() => {
+    if (!params.time) return; // seguridad
+    const timeFromPath = decodeURIComponent(params.time as string);
 
-
+    logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+      restaurantId,
+      restaurantName: data.name,
+      time: timeFromPath,
+      date: search.get("date") ?? undefined,
+      people: search.get("people") ?? undefined,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleReservation = () => {
     if (!phoneNumber.trim()) {
       setPhoneError(true);
       return;
     }
-  
+
     setPhoneError(false);
     logEvent(EVENT_TYPES.RESERVATION_COMPLETE, {
       restaurantId,
@@ -170,7 +310,7 @@ const [people, setPeople] = useState(2);
     });
     setShowToast(true);
     setTimeout(() => setShowToast(false), 4000);
-  
+
     setPhoneNumber("");
     setOccasion("");
     setSpecialRequest("");
@@ -184,9 +324,7 @@ const [people, setPeople] = useState(2);
           <div className="flex items-center gap-3">
             <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">
-                  AutoDining
-                </span>
+                <span className="font-bold text-white text-lg">AutoDining</span>
               </div>
             </Link>
           </div>
@@ -221,8 +359,8 @@ const [people, setPeople] = useState(2);
         <h2 className="font-bold text-lg mt-8 mb-4">You’re almost done!</h2>
         <div className="flex items-center gap-3 mb-6">
           <img
-               src={data.image}
-               alt={data.name}
+            src={data.image}
+            alt={data.name}
             className="w-16 h-16 rounded-lg object-cover border"
           />
           <div className="flex flex-col gap-[2px]">
@@ -234,10 +372,11 @@ const [people, setPeople] = useState(2);
               </span>
               <span className="flex items-center gap-1">
                 <ClockIcon className="w-4 h-4 mr-1" />
-                {reservationTime ? reservationTime:"Select Time"}
+                {reservationTime ? reservationTime : "Select Time"}
               </span>
               <span className="flex items-center gap-1">
-                <UserIcon className="w-4 h-4 mr-1" />{reservationPeople? reservationPeople: "Select"} people
+                <UserIcon className="w-4 h-4 mr-1" />
+                {reservationPeople ? reservationPeople : "Select"} people
               </span>
             </div>
           </div>
