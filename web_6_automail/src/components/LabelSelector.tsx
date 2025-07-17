@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { useState } from 'react';
+import type React from "react";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { CreateLabelDialog } from '@/components/CreateLabelDialog';
-import { useEmail } from '@/contexts/EmailContext';
-import { Tag, Plus } from 'lucide-react';
-import type { Email, Label } from '@/types/email';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CreateLabelDialog } from "@/components/CreateLabelDialog";
+import { useEmail } from "@/contexts/EmailContext";
+import { Tag, Plus } from "lucide-react";
+import type { Email, Label } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface LabelSelectorProps {
@@ -23,17 +23,29 @@ interface LabelSelectorProps {
   trigger?: React.ReactNode;
 }
 
-export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) {
-  const { getAllLabels, addLabelToEmails, removeLabelFromEmails, setFilter, setCurrentEmail } = useEmail();
+export function LabelSelector({
+  email,
+  emailIds,
+  trigger,
+}: LabelSelectorProps) {
+  const {
+    getAllLabels,
+    addLabelToEmails,
+    removeLabelFromEmails,
+    setFilter,
+    setCurrentEmail,
+  } = useEmail();
   const [open, setOpen] = useState(false);
-  const [optimisticStates, setOptimisticStates] = useState<Record<string, boolean>>({});
+  const [optimisticStates, setOptimisticStates] = useState<
+    Record<string, boolean>
+  >({});
 
   const allLabels = getAllLabels();
 
   // Only allow user labels and a couple of system labels
-  const assignableLabels = allLabels.filter(label =>
-    label.type === 'user' ||
-    ['starred', 'important'].includes(label.id)
+  const assignableLabels = allLabels.filter(
+    (label) =>
+      label.type === "user" || ["starred", "important"].includes(label.id)
   );
 
   const targetEmailIds = emailIds || (email ? [email.id] : []);
@@ -47,7 +59,7 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
 
     if (email) {
       // Single email case
-      return currentLabels.some(l => l.id === label.id);
+      return currentLabels.some((l) => l.id === label.id);
     }
     // For bulk operations, we don't track checked state
     return false;
@@ -56,9 +68,9 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
   const handleLabelToggle = (label: Label, checked: boolean) => {
     try {
       // Set optimistic state for immediate feedback
-      setOptimisticStates(prev => ({
+      setOptimisticStates((prev) => ({
         ...prev,
-        [label.id]: checked
+        [label.id]: checked,
       }));
 
       if (targetEmailIds.length > 0) {
@@ -67,12 +79,22 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
         } else {
           removeLabelFromEmails(targetEmailIds, label.id);
         }
-        logEvent(EVENT_TYPES.ADD_LABEL, {
+
+        // Log differently based on single email vs. bulk operation
+        const logData = {
           label_id: label.id,
           label_name: label.name,
-          email_ids: targetEmailIds,
-          action: checked ? 'added' : 'removed',
-        });
+          action: checked ? "added" : "removed",
+          ...(email
+            ? {
+                emails: [
+                  { subject: email.subject || "", body: email.body || "" },
+                ],
+              }
+            : { email_ids: targetEmailIds }),
+        };
+
+        logEvent(EVENT_TYPES.ADD_LABEL, logData);
       }
 
       // Close the dropdown
@@ -81,21 +103,21 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
       // Navigate back to inbox after applying label
       setTimeout(() => {
         setCurrentEmail(null); // Close email view if open
-        setFilter({ folder: 'inbox' }); // Return to inbox
+        setFilter({ folder: "inbox" }); // Return to inbox
 
         // Clear optimistic state
-        setOptimisticStates(prev => {
+        setOptimisticStates((prev) => {
           const newStates = { ...prev };
           delete newStates[label.id];
           return newStates;
         });
       }, 100);
     } catch (error) {
-      console.error('Error toggling label:', error);
+      console.error("Error toggling label:", error);
       // Revert optimistic state on error
-      setOptimisticStates(prev => ({
+      setOptimisticStates((prev) => ({
         ...prev,
-        [label.id]: !checked
+        [label.id]: !checked,
       }));
     }
   };
@@ -117,7 +139,7 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <div className="px-2 py-1.5 text-sm font-medium">
-          {emailIds ? `Label ${emailIds.length} emails` : 'Label email'}
+          {emailIds ? `Label ${emailIds.length} emails` : "Label email"}
         </div>
         <DropdownMenuSeparator />
 
@@ -129,7 +151,9 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
           >
             <Checkbox
               checked={isLabelApplied(label)}
-              onCheckedChange={(checked) => handleLabelToggle(label, checked as boolean)}
+              onCheckedChange={(checked) =>
+                handleLabelToggle(label, checked as boolean)
+              }
             />
             <div
               className="h-3 w-3 rounded-full flex-shrink-0"
@@ -144,7 +168,11 @@ export function LabelSelector({ email, emailIds, trigger }: LabelSelectorProps) 
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <CreateLabelDialog
             trigger={
-              <Button variant="ghost" size="sm" className="w-full justify-start gap-2 h-auto p-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start gap-2 h-auto p-0"
+              >
                 <Plus className="h-3 w-3" />
                 Create new label
               </Button>

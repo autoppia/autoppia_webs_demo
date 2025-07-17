@@ -65,6 +65,7 @@ export function EmailView() {
       email_id: currentEmail.id,
       subject: currentEmail.subject,
       from: currentEmail.from.email,
+      is_important: !currentEmail.isImportant,
     });
   };
 
@@ -84,6 +85,7 @@ export function EmailView() {
       email_id: currentEmail.id,
       subject: currentEmail.subject,
       from: currentEmail.from.email,
+      is_read: false,
     });
   };
 
@@ -94,6 +96,7 @@ export function EmailView() {
       email_id: currentEmail.id,
       subject: currentEmail.subject,
       from: currentEmail.from.email,
+      is_spam: true,
     });
   };
 

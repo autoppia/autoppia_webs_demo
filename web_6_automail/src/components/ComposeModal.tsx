@@ -1,15 +1,20 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { useEmail } from '@/contexts/EmailContext';
+import type React from "react";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { useEmail } from "@/contexts/EmailContext";
 import {
   Send,
   Paperclip,
@@ -23,7 +28,7 @@ import {
   Link,
   List,
   Save,
-} from 'lucide-react';
+} from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export function ComposeModal() {
@@ -38,17 +43,17 @@ export function ComposeModal() {
 
   const [showCc, setShowCc] = useState(false);
   const [showBcc, setShowBcc] = useState(false);
-  const [toInput, setToInput] = useState('');
-  const [ccInput, setCcInput] = useState('');
-  const [bccInput, setBccInput] = useState('');
+  const [toInput, setToInput] = useState("");
+  const [ccInput, setCcInput] = useState("");
+  const [bccInput, setBccInput] = useState("");
 
   const handleToKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === "," || e.key === " ") {
       e.preventDefault();
       if (toInput.trim()) {
         const newTo = [...composeData.to, toInput.trim()];
         updateComposeData({ to: newTo });
-        setToInput('');
+        setToInput("");
       }
     }
   };
@@ -60,7 +65,7 @@ export function ComposeModal() {
 
   const handleSend = () => {
     if (composeData.to.length === 0 && !toInput.trim()) {
-      alert('Please add at least one recipient');
+      alert("Please add at least one recipient");
       return;
     }
 
@@ -76,18 +81,18 @@ export function ComposeModal() {
 
     logEvent(EVENT_TYPES.SEND_EMAIL, {
       to: [...composeData.to, toInput.trim()],
-      subject: composeData.subject || '',
+      subject: composeData.subject || "",
+      body: composeData.body || "",
     });
-  
+
     sendEmail();
   };
 
   const handleSaveDraft = () => {
     logEvent(EVENT_TYPES.EMAIL_SAVE_AS_DRAFT, {
       to: composeData.to,
-      subject: composeData.subject || '',
-      body_length: composeData.body?.length || 0,
-      attachments_count: composeData.attachments?.length || 0,
+      subject: composeData.subject || "",
+      body: composeData.body || "",
     });
     saveDraft();
   };
@@ -99,7 +104,9 @@ export function ComposeModal() {
       <DialogContent className="max-w-2xl max-h-[80vh] p-0 gap-0 compose-modal">
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b border-border/50">
-          <DialogTitle className="text-base font-semibold text-foreground">New Message</DialogTitle>
+          <DialogTitle className="text-base font-semibold text-foreground">
+            New Message
+          </DialogTitle>
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" className="h-6 w-6">
               <Minus className="h-3 w-3" />
@@ -129,7 +136,11 @@ export function ComposeModal() {
               <div className="flex-1 min-h-[36px] border border-border rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/50 bg-background">
                 <div className="flex flex-wrap gap-1 items-center">
                   {composeData.to.map((email, index) => (
-                    <Badge key={`to-${email}`} variant="secondary" className="gap-1 px-1.5 py-0.5 text-xs">
+                    <Badge
+                      key={`to-${email}`}
+                      variant="secondary"
+                      className="gap-1 px-1.5 py-0.5 text-xs"
+                    >
                       {email}
                       <Button
                         variant="ghost"
@@ -145,7 +156,9 @@ export function ComposeModal() {
                     value={toInput}
                     onChange={(e) => setToInput(e.target.value)}
                     onKeyDown={handleToKeyDown}
-                    placeholder={composeData.to.length === 0 ? "Recipients" : ""}
+                    placeholder={
+                      composeData.to.length === 0 ? "Recipients" : ""
+                    }
                     className="border-0 shadow-none focus-visible:ring-0 h-auto p-0 flex-1 min-w-[120px] bg-transparent"
                   />
                 </div>
@@ -240,7 +253,11 @@ export function ComposeModal() {
               </div>
             </div>
 
-            <Button variant="ghost" onClick={handleSaveDraft} className="h-8 px-3 text-sm">
+            <Button
+              variant="ghost"
+              onClick={handleSaveDraft}
+              className="h-8 px-3 text-sm"
+            >
               <Save className="h-3 w-3 mr-1" />
               Save Draft
             </Button>

@@ -109,7 +109,7 @@ export function EmailList() {
       email_id: email.id,
       subject: email.subject,
       from: email.from.email,
-      isStar: email.isStarred,
+      is_star: !email.isStarred,
     });
   };
 
@@ -189,7 +189,10 @@ export function EmailList() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background" suppressHydrationWarning>
+    <div
+      className="flex flex-col h-full bg-background"
+      suppressHydrationWarning
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-4">
