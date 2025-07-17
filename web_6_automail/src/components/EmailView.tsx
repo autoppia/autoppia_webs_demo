@@ -64,7 +64,7 @@ export function EmailView() {
       email_id: currentEmail.id,
       subject: currentEmail.subject,
       from: currentEmail.from.email,
-      isStar: currentEmail.isStarred,
+      is_star: !email.isStarred,
     });
   };
 
@@ -114,7 +114,6 @@ export function EmailView() {
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
-
 
   return (
     <div
