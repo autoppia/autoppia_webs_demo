@@ -19,7 +19,6 @@ import { format } from "date-fns";
 import React from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "js-cookie";
 import Link from "next/link";
 const restaurantData: Record<
   string,
@@ -249,12 +248,10 @@ export default function RestaurantPage() {
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
-    Cookies.set("reservation_people", String(n));
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
   };
   const handleTimeSelect = (t: string) => {
     setTime(t);
-    Cookies.set("reservation_time", t);
     logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
   };
   const timeOptions = [
@@ -285,7 +282,6 @@ export default function RestaurantPage() {
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
     if (d) {
-      Cookies.set("reservation_date", d.toISOString());
       // logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: toLocalISO(d) });
     }
@@ -533,42 +529,41 @@ export default function RestaurantPage() {
             {/* Time slots */}
             <div className="mt-3">
               <div className="flex gap-1 mt-2 flex-wrap">
-                {["1:00 PM"].map(
-                  (t) =>
-                    t !== "3:00 PM" ? (
-                      <Link
-                        key={t}
-                        href={`/booking/${id}/${encodeURIComponent(
-                          t
-                        )}?date=${formattedDate}&people=${people ?? ""}`}
-                        onClick={() =>
-                          logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                            restaurantId: id,
-                            restaurantName: r.name,
-                            date: formattedDate,
-                            time:time,
-                            people,
-                          })
-                        }
-                        passHref
-                      >
-                        <Button
-                          className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
-                          asChild
-                        >
-                          <span>Book Restaurant</span>
-                        </Button>
-                      </Link>
-                    ) : (
-                      <Button
-                        key={t}
-                        variant="outline"
-                        className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
-                      >
-                        <span>3:00 PM</span>
-                        <span className="ml-2">🔔 Notify me</span>
-                      </Button>
-                    )
+                {time === "3:00 PM" ? (
+                  <Button
+                    variant="outline"
+                    className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
+                  >
+                    <span>{time}</span>
+                    <span className="ml-2">🔔 Notify me</span>
+                  </Button>
+                ) : time ? (
+                  <Link
+                    href={`/booking/${id}/${encodeURIComponent(
+                      time
+                    )}?date=${formattedDate}&people=${people ?? ""}`}
+                    onClick={() =>
+                      logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                        restaurantId: id,
+                        restaurantName: r.name,
+                        date: formattedDate,
+                        time,
+                        people,
+                      })
+                    }
+                    passHref
+                  >
+                    <Button
+                      className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                      asChild
+                    >
+                      <span>Book Restaurant</span>
+                    </Button>
+                  </Link>
+                ) : (
+                  <div className="text-gray-500 text-sm mt-2">
+                    Please select a time
+                  </div>
                 )}
               </div>
             </div>

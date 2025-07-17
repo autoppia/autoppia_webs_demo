@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "js-cookie";
 
 // Demo restaurant data (with Unsplash/same-assets URLs or replaced with stock for now)
 const namePool = [
@@ -385,21 +384,6 @@ export default function HomePage() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
 
-  // useEffect(() => {
-  //   const savedDate = Cookies.get("reservation_date");
-  //   console.log("Cookie reservation_date:", savedDate); // Debug cookie value
-
-  //   if (savedDate) {
-  //     const parsedDate = parseISO(savedDate);
-  //     if (isValid(parsedDate)) {
-  //       setDate(parsedDate);
-  //     } else {
-  //       console.warn("Invalid cookie date, using current date:", savedDate);
-  //       setDate(new Date());
-  //     }
-  //   }
-  // }, []);
-
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -422,7 +406,6 @@ export default function HomePage() {
     setDate(d);
     if (d) {
       const isoDate = toLocalISO(d);
-      Cookies.set("reservation_date", isoDate);
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: isoDate });
     }
   };
@@ -435,13 +418,11 @@ export default function HomePage() {
 
   const handleTimeSelect = (t: string) => {
     setTime(t);
-    Cookies.set("reservation_time", t);
     logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
   };
 
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
-    Cookies.set("reservation_people", String(n));
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
   };
 
