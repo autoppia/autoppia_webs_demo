@@ -38,6 +38,7 @@ demo-webs/
 ├── web_3_autozone/
 ├── web_4_autodining/
 ├── web_5_autocrm/
+├── web_6_automail/
 ├── webs_server/
 └── scripts/
     ├── install_docker.sh
@@ -65,6 +66,7 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 | **AutoZone**    | 8002     | —       | Next.js, no database required           |
 | **AutoDining**  | 8003     | —       | Next.js, no database required           |
 | **AutoCRM**     | 8004     | —       | Next.js, no database required           |
+| **AutoMail**    | 8005     | —       | Next.js, no database required           |
 | **webs_server** | 8090     | 5437    | API service used for event logging      |
 
 ---
@@ -134,6 +136,12 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=autocrm --web_port=8004
 ```
 
+#### **📦 Deploy AutoMail Demo**
+
+```bash
+./scripts/setup.sh --demo=automail --web_port=8005
+```
+
 > ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
 
 ---
@@ -177,6 +185,7 @@ After successful deployment, access your demo webs:
 | **Autozone Demo**   | `http://localhost:8002` | Online Shopping for Electronics |
 | **Autodining Demo** | `http://localhost:8003` | Restaurant Reservation UI       |
 | **AutoCRM Demo**    | `http://localhost:8004` | Customer Relation Management UI |
+| **AutoMail Demo**   | `http://localhost:8005` | Modern Email Client UI          |
 
 ---
 

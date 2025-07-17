@@ -6,7 +6,6 @@ import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "js-cookie";
 import dayjs from "dayjs";
 
 const countries = [
@@ -228,15 +227,20 @@ for (let i = 0; i < 50; i++) {
   };
 }
 
-const reservationTime = Cookies.get("reservation_time");
-const reservationPeople = Cookies.get("reservation_people");
-
 export default function Page() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+
+  const restaurantId = params.restaurantId as string;
+  const reservationTimeParam = decodeURIComponent(params.time as string);
+  const reservationPeopleParam = searchParams.get("people");
+  const reservationDateParam = searchParams.get("date");
+
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [time, setTime] = useState("1:00 PM");
-  const [people, setPeople] = useState(2);
+  const [date, setDate] = useState<Date | undefined>();
+  const [time, setTime] = useState(reservationTimeParam || "1:00 PM");
+  const [people, setPeople] = useState(parseInt(reservationPeopleParam || "2"));
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
@@ -247,38 +251,24 @@ export default function Page() {
     null
   );
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
+  const [email, setEmail] = useState("user_name@gmail.com");
 
   useEffect(() => {
-    const savedDate = Cookies.get("reservation_date");
-    const savedTime = Cookies.get("reservation_time");
-    const savedPeople = Cookies.get("reservation_people");
-
-    if (savedDate) {
-      const d = new Date(savedDate);
+    if (reservationDateParam) {
+      const d = new Date(reservationDateParam);
       setDate(d);
       setFormattedDate(dayjs(d).format("MMM D"));
-    } else {
-      const now = new Date();
-      setDate(now);
-      setFormattedDate(dayjs(now).format("MMM D"));
     }
 
-    if (savedTime) setReservationTime(savedTime);
-    if (savedPeople) setReservationPeople(savedPeople);
-  }, []);
+    if (reservationTimeParam) setReservationTime(reservationTimeParam);
+    if (reservationPeopleParam) setReservationPeople(reservationPeopleParam);
+  }, [reservationDateParam, reservationTimeParam, reservationPeopleParam]);
 
-  const [email, setEmail] = useState("user_name@gmail.com");
-  const params = useParams();
-  const search = useSearchParams();
-
-  const restaurantId = params.restaurantId as string;
-  // const restaurantName = restaurantNames[restaurantId] || restaurantId;
-  // const imageUrl = restaurantImgs[restaurantId] || restaurantImgs["royal-dine"];
   const data = restaurantData[restaurantId] || restaurantData["restaurant-1"];
   useEffect(() => {
     if (!params.time) return; // seguridad
     const timeFromPath = decodeURIComponent(params.time as string);
-
+    // FIX
     logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
       restaurantId,
       restaurantName: data.name,
