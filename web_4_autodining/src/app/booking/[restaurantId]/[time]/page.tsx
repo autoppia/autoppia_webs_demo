@@ -86,19 +86,6 @@ export default function Page() {
   }, [reservationDateParam, reservationTimeParam, reservationPeopleParam]);
 
   const data = restaurantData[restaurantId] || restaurantData["restaurant-1"];
-  useEffect(() => {
-    if (!params.time) return; // seguridad
-    const timeFromPath = decodeURIComponent(params.time as string);
-    // FIX
-    logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-      restaurantId,
-      restaurantName: data.name,
-      time: timeFromPath,
-      date: search.get("date") ?? undefined,
-      people: search.get("people") ?? undefined,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleReservation = () => {
     if (!phoneNumber.trim()) {
