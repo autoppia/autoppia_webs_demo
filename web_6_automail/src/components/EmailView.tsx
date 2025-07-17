@@ -64,7 +64,7 @@ export function EmailView() {
       email_id: currentEmail.id,
       subject: currentEmail.subject,
       from: currentEmail.from.email,
-      is_star: !email.isStarred,
+      isStar: !currentEmail.isStarred,
     });
   };
 
