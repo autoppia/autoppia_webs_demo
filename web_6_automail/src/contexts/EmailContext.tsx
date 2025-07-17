@@ -21,7 +21,7 @@ import {
   generateDraftEmails,
   userLabels,
   systemLabels,
-} from "@/library/mockData";
+} from "@/library/dataset";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface EmailState {

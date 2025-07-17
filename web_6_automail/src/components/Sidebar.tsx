@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
-import { systemLabels } from "@/library/mockData";
+import { systemLabels } from "@/library/dataset";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import type { EmailFolder } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
