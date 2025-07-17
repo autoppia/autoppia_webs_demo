@@ -566,11 +566,12 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
           email.labels.some((l) => l.id === state.currentFilter.label) &&
           !email.labels.some((l) => ["spam", "trash"].includes(l.id))
       );
-    } else {
-      // Filter by folder only if no label filter is active
+    }
+    // Apply all other filters in combination
+    // Folder filter
+    if (state.currentFilter.folder) {
       switch (state.currentFilter.folder) {
         case "inbox":
-          // Inbox shows emails that are not in trash, spam, sent, or drafts
           filtered = filtered.filter(
             (email) =>
               !email.isDraft &&
@@ -581,7 +582,6 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
           );
           break;
         case "starred":
-          // Starred emails that are not in trash or spam
           filtered = filtered.filter(
             (email) =>
               email.isStarred &&
@@ -589,7 +589,6 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
           );
           break;
         case "snoozed":
-          // Snoozed emails that are not in trash or spam
           filtered = filtered.filter(
             (email) =>
               email.isSnoozed &&
@@ -597,7 +596,6 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
           );
           break;
         case "sent":
-          // Emails sent by the user that are not in trash
           filtered = filtered.filter(
             (email) =>
               email.from.email === "me@gmail.com" &&
@@ -606,7 +604,6 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
           );
           break;
         case "drafts":
-          // Draft emails that are not in trash
           filtered = filtered.filter(
             (email) =>
               email.isDraft &&
@@ -614,7 +611,6 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
           );
           break;
         case "important":
-          // Important emails that are not in trash or spam
           filtered = filtered.filter(
             (email) =>
               email.isImportant &&
@@ -622,99 +618,89 @@ export function EmailProvider({ children }: { children: React.ReactNode }) {
           );
           break;
         case "spam":
-          // Only emails marked as spam
           filtered = filtered.filter((email) =>
             email.labels.some((l) => l.id === "spam")
           );
           break;
         case "trash":
-          // Only emails marked as trash
           filtered = filtered.filter((email) =>
             email.labels.some((l) => l.id === "trash")
           );
           break;
       }
     }
-
-    // Filter by category
+    // Category filter
     if (state.currentFilter.category) {
       filtered = filtered.filter(
         (email) => email.category === state.currentFilter.category
       );
     }
-
-    // Filter by read status
+    // Read status filter
     if (typeof state.currentFilter.isRead === "boolean") {
       filtered = filtered.filter(
         (email) => email.isRead === state.currentFilter.isRead
       );
     }
-
-    // Filter by starred status
+    // Starred status filter
     if (typeof state.currentFilter.isStarred === "boolean") {
       filtered = filtered.filter(
         (email) => email.isStarred === state.currentFilter.isStarred
       );
     }
-
-    // Filter by search query
+    // Search query filter (multi-token, already supports AND logic)
     if (state.searchQuery) {
-      const query = state.searchQuery.toLowerCase().trim();
-
-      // Support advanced search operators
-      if (query.startsWith("from:")) {
-        const fromQuery = query.replace("from:", "").trim();
-        filtered = filtered.filter(
-          (email) =>
-            email.from.name.toLowerCase().includes(fromQuery) ||
-            email.from.email.toLowerCase().includes(fromQuery)
-        );
-      } else if (query.startsWith("to:")) {
-        const toQuery = query.replace("to:", "").trim();
-        filtered = filtered.filter((email) =>
-          email.to.some(
-            (recipient) =>
-              recipient.name.toLowerCase().includes(toQuery) ||
-              recipient.email.toLowerCase().includes(toQuery)
-          )
-        );
-      } else if (query.startsWith("subject:")) {
-        const subjectQuery = query.replace("subject:", "").trim();
-        filtered = filtered.filter((email) =>
-          email.subject.toLowerCase().includes(subjectQuery)
-        );
-      } else if (query.startsWith("has:attachment")) {
-        filtered = filtered.filter(
-          (email) => email.attachments && email.attachments.length > 0
-        );
-      } else if (query.startsWith("is:unread")) {
-        filtered = filtered.filter((email) => !email.isRead);
-      } else if (query.startsWith("is:read")) {
-        filtered = filtered.filter((email) => email.isRead);
-      } else if (query.startsWith("is:starred")) {
-        filtered = filtered.filter((email) => email.isStarred);
-      } else if (query.startsWith("is:important")) {
-        filtered = filtered.filter((email) => email.isImportant);
-      } else {
-        // General search across multiple fields
-        filtered = filtered.filter(
-          (email) =>
-            email.subject.toLowerCase().includes(query) ||
-            email.from.name.toLowerCase().includes(query) ||
-            email.from.email.toLowerCase().includes(query) ||
-            email.body.toLowerCase().includes(query) ||
-            email.to.some(
+      const tokens = state.searchQuery
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+      filtered = filtered.filter((email) => {
+        return tokens.every((token) => {
+          if (token.startsWith("from:")) {
+            const fromQuery = token.replace("from:", "").trim();
+            return (
+              email.from.name.toLowerCase().includes(fromQuery) ||
+              email.from.email.toLowerCase().includes(fromQuery)
+            );
+          } else if (token.startsWith("to:")) {
+            const toQuery = token.replace("to:", "").trim();
+            return email.to.some(
               (recipient) =>
-                recipient.name.toLowerCase().includes(query) ||
-                recipient.email.toLowerCase().includes(query)
-            ) ||
-            email.labels.some((label) =>
-              label.name.toLowerCase().includes(query)
-            )
-        );
-      }
+                recipient.name.toLowerCase().includes(toQuery) ||
+                recipient.email.toLowerCase().includes(toQuery)
+            );
+          } else if (token.startsWith("subject:")) {
+            const subjectQuery = token.replace("subject:", "").trim();
+            return email.subject.toLowerCase().includes(subjectQuery);
+          } else if (token === "has:attachment") {
+            return email.attachments && email.attachments.length > 0;
+          } else if (token === "is:unread") {
+            return !email.isRead;
+          } else if (token === "is:read") {
+            return email.isRead;
+          } else if (token === "is:starred") {
+            return email.isStarred;
+          } else if (token === "is:important") {
+            return email.isImportant;
+          } else {
+            // General search across multiple fields
+            return (
+              email.subject.toLowerCase().includes(token) ||
+              email.from.name.toLowerCase().includes(token) ||
+              email.from.email.toLowerCase().includes(token) ||
+              email.body.toLowerCase().includes(token) ||
+              email.to.some(
+                (recipient) =>
+                  recipient.name.toLowerCase().includes(token) ||
+                  recipient.email.toLowerCase().includes(token)
+              ) ||
+              email.labels.some((label) =>
+                label.name.toLowerCase().includes(token)
+              )
+            );
+          }
+        });
+      });
     }
-
     // Sort by timestamp (newest first)
     return filtered.sort(
       (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
