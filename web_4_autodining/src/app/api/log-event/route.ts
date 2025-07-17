@@ -196,3 +196,4 @@ export async function DELETE() {
   fs.writeFileSync(LOG_PATH, JSON.stringify([], null, 2));
   return NextResponse.json({ success: true, message: "Event log cleared" });
 }
+
