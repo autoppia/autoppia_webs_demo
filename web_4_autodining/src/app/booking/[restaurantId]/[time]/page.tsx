@@ -7,190 +7,15 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import dayjs from "dayjs";
+import { countries, RestaurantsData } from "@/components/library/dataset";
 
-const countries = [
-  { code: "AR", name: "Argentina", dial: "+54", flag: "🇦🇷" },
-  { code: "AU", name: "Australia", dial: "+61", flag: "🇦🇺" },
-  { code: "BD", name: "Bangladesh", dial: "+880", flag: "🇧🇩" },
-  { code: "BR", name: "Brazil", dial: "+55", flag: "🇧🇷" },
-  { code: "CA", name: "Canada", dial: "+1", flag: "🇨🇦" },
-  { code: "CN", name: "China", dial: "+86", flag: "🇨🇳" },
-  { code: "EG", name: "Egypt", dial: "+20", flag: "🇪🇬" },
-  { code: "FR", name: "France", dial: "+33", flag: "🇫🇷" },
-  { code: "DE", name: "Germany", dial: "+49", flag: "🇩🇪" },
-  { code: "IN", name: "India", dial: "+91", flag: "🇮🇳" },
-  { code: "ID", name: "Indonesia", dial: "+62", flag: "🇮🇩" },
-  { code: "IT", name: "Italy", dial: "+39", flag: "🇮🇹" },
-  { code: "JP", name: "Japan", dial: "+81", flag: "🇯🇵" },
-  { code: "MX", name: "Mexico", dial: "+52", flag: "🇲🇽" },
-  { code: "MY", name: "Malaysia", dial: "+60", flag: "🇲🇾" },
-  { code: "NG", name: "Nigeria", dial: "+234", flag: "🇳🇬" },
-  { code: "NL", name: "Netherlands", dial: "+31", flag: "🇳🇱" },
-  { code: "PK", name: "Pakistan", dial: "+92", flag: "🇵🇰" },
-  { code: "PH", name: "Philippines", dial: "+63", flag: "🇵🇭" },
-  { code: "PL", name: "Poland", dial: "+48", flag: "🇵🇱" },
-  { code: "RU", name: "Russia", dial: "+7", flag: "🇷🇺" },
-  { code: "SA", name: "Saudi Arabia", dial: "+966", flag: "🇸🇦" },
-  { code: "ZA", name: "South Africa", dial: "+27", flag: "🇿🇦" },
-  { code: "KR", name: "South Korea", dial: "+82", flag: "🇰🇷" },
-  { code: "ES", name: "Spain", dial: "+34", flag: "🇪🇸" },
-  { code: "SE", name: "Sweden", dial: "+46", flag: "🇸🇪" },
-  { code: "CH", name: "Switzerland", dial: "+41", flag: "🇨🇭" },
-  { code: "TH", name: "Thailand", dial: "+66", flag: "🇹🇭" },
-  { code: "TR", name: "Turkey", dial: "+90", flag: "🇹🇷" },
-  { code: "AE", name: "United Arab Emirates", dial: "+971", flag: "🇦🇪" },
-  { code: "GB", name: "United Kingdom", dial: "+44", flag: "🇬🇧" },
-  { code: "US", name: "United States", dial: "+1", flag: "🇺🇸" },
-  { code: "VN", name: "Vietnam", dial: "+84", flag: "🇻🇳" },
-];
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
   "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
   "https://images.unsplash.com/photo-1551218808-94e220e084d2",
 ];
 
-const namePool = [
-  "The Royal Dine",
-  "Vintage Bites",
-  "Evening Delight",
-  "River View Café",
-  "Fancy Lights Bistro",
-  "Urban Palate",
-  "Tandoori House",
-  "Zen Sushi",
-  "El Toro",
-  "Bella Vita",
-  "Coastal Catch",
-  "Harvest Table",
-  "Crimson Spoon",
-  "Golden Lotus",
-  "The Hungry Fork",
-  "Ocean's Plate",
-  "Fire & Spice",
-  "Olive & Vine",
-  "La Bella Cucina",
-  "Sunset Grill",
-  "Noir Brasserie",
-  "Blue Orchid",
-  "Saffron Garden",
-  "Rustic Roots",
-  "Amber Lounge",
-  "Bistro Lumière",
-  "Maple Hearth",
-  "Oak & Ember",
-  "Peppercorn Place",
-  "The Local Dish",
-  "Cedar Grove Café",
-  "Soleil Bistro",
-  "Brickhouse Eats",
-  "Wanderlust Grill",
-  "The Nest",
-  "Cafe Verona",
-  "Midtown Meals",
-  "Ginger & Thyme",
-  "Lavender & Sage",
-  "Hearthstone Inn",
-  "Juniper Table",
-  "The Garden Fork",
-  "Twilight Tapas",
-  "Meadow & Moor",
-  "The Vine",
-  "Ember Flame",
-  "Miso Modern",
-  "The Borough",
-  "Copper Kitchen",
-  "Pine & Poppy",
-];
-
-const cuisines = [
-  "French",
-  "Italian",
-  "American",
-  "Japanese",
-  "Mexican",
-  "Indian",
-  "Thai",
-  "Café",
-  "Mediterranean",
-];
-const areas = [
-  "Mission District",
-  "SOMA",
-  "North Beach",
-  "Downtown",
-  "Hayes Valley",
-  "Nob Hill",
-  "Japantown",
-  "Embarcadero",
-  "Marina",
-];
-const staticReviews = [
-  18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48,
-  60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90,
-  96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88,
-];
-const staticBookings = [
-  6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92,
-  94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83,
-  93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90,
-];
-const staticStars = [
-  3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3,
-  4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4,
-];
-const staticPrices = [
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-];
-
+// Define the new restaurant data from the JSON structure
 const restaurantData: Record<
   string,
   {
@@ -207,26 +32,22 @@ const restaurantData: Record<
   }
 > = {};
 
-for (let i = 0; i < 50; i++) {
-  const id = `restaurant-${i + 1}`;
+// Populate restaurantData from jsonData
+RestaurantsData.forEach((item, index) => {
+  const id = `restaurant-${item.id}`;
   restaurantData[id] = {
-    name: namePool[i],
-    image: `/images/restaurant${(i % 19) + 1}.jpg`,
-    rating: staticStars[i],
-    reviews: staticReviews[i],
-    bookings: staticBookings[i],
-    price: staticPrices[i],
-    cuisine: cuisines[i % cuisines.length],
+    name: item.namepool,
+    image: `/images/restaurant${(index % 19) + 1}.jpg`,
+    rating: item.staticStars,
+    reviews: item.staticReviews,
+    bookings: item.staticBookings,
+    price: item.staticPrices,
+    cuisine: item.cuisine,
     tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${
-      namePool[i]
-    }, offering a fusion of flavors in the heart of ${
-      areas[i % areas.length]
-    }.`,
+    desc: `Enjoy a delightful experience at ${item.namepool}, offering a fusion of flavors in the heart of ${item.area}.`,
     photos,
   };
-}
-
+});
 export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -448,7 +269,7 @@ export default function Page() {
         </div>
         <Button
           onClick={handleReservation}
-          className="w-full bg-[#46a758] hover:bg-[#a43a32] text-white py-6 mt-1 mb-4 text-lg rounded"
+          className="w-full bg-[#46a758] hover:bg-[#54ce68] text-white py-6 mt-1 mb-4 text-lg rounded"
         >
           Complete reservation
         </Button>
