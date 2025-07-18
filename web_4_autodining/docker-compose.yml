@@ -1,19 +1,17 @@
-version: '3.8'
-
 services:
-  nextjs:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web_4_auto_dining
     ports:
-      - "8003:8003"
-    volumes:
-      - .:/app
-      - /app/node_modules
+      - "${WEB_PORT}:8003"
+    restart: always
+    environment:
+      - API_URL=http://app:8080
+      - PORT=8003
+      - NODE_ENV=production
     networks:
-      - app-network
-
+      - apps_net
 networks:
-  app-network:
+  apps_net:
     external: true

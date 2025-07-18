@@ -8,13 +8,11 @@ import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import dayjs from "dayjs";
 import { countries, RestaurantsData } from "@/components/library/dataset";
-
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
   "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
   "https://images.unsplash.com/photo-1551218808-94e220e084d2",
 ];
-
 // Define the new restaurant data from the JSON structure
 const restaurantData: Record<
   string,
@@ -31,7 +29,6 @@ const restaurantData: Record<
     photos: string[];
   }
 > = {};
-
 // Populate restaurantData from jsonData
 RestaurantsData.forEach((item, index) => {
   const id = `restaurant-${item.id}`;
@@ -51,12 +48,10 @@ RestaurantsData.forEach((item, index) => {
 export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
-
   const restaurantId = params.restaurantId as string;
   const reservationTimeParam = decodeURIComponent(params.time as string);
   const reservationPeopleParam = searchParams.get("people");
   const reservationDateParam = searchParams.get("date");
-
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [date, setDate] = useState<Date | undefined>();
@@ -73,26 +68,34 @@ export default function Page() {
   );
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [email, setEmail] = useState("user_name@gmail.com");
-
+  const data = restaurantData[restaurantId] || restaurantData["restaurant-1"];
+  useEffect(() => {
+    const computedFormattedDate = reservationDateParam
+      ? dayjs(new Date(reservationDateParam)).format("MMM D")
+      : null;
+    const eventPayload = {
+      restaurantId: restaurantId,
+      restaurantName: data.name,
+      date: computedFormattedDate, // Use computed date
+      time: reservationTime || time,
+      people: reservationPeople || people,
+    };
+    logEvent(EVENT_TYPES.BOOK_RESTAURANT, eventPayload);
+  }, []); // Empty dependency array ensures this runs only on mount
   useEffect(() => {
     if (reservationDateParam) {
       const d = new Date(reservationDateParam);
       setDate(d);
       setFormattedDate(dayjs(d).format("MMM D"));
     }
-
     if (reservationTimeParam) setReservationTime(reservationTimeParam);
     if (reservationPeopleParam) setReservationPeople(reservationPeopleParam);
   }, [reservationDateParam, reservationTimeParam, reservationPeopleParam]);
-
-  const data = restaurantData[restaurantId] || restaurantData["restaurant-1"];
-
   const handleReservation = () => {
     if (!phoneNumber.trim()) {
       setPhoneError(true);
       return;
     }
-
     setPhoneError(false);
     logEvent(EVENT_TYPES.RESERVATION_COMPLETE, {
       restaurantId,
@@ -108,13 +111,11 @@ export default function Page() {
     });
     setShowToast(true);
     setTimeout(() => setShowToast(false), 4000);
-
     setPhoneNumber("");
     setOccasion("");
     setSpecialRequest("");
     setSelectedCountry(countries[0]);
   };
-
   return (
     <main suppressHydrationWarning>
       <nav className="w-full border-b bg-white sticky top-0 z-10">
