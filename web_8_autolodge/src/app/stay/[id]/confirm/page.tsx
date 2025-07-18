@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import { useState, useEffect } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { PROPERTIES } from "@/library/dataset";
+import { REGION_HOTELS } from "@/library/dataset";
 import { useRef } from "react";
 
 function toStartOfDay(date: Date): Date {
@@ -18,7 +18,7 @@ export default function ConfirmPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
-  const prop = PROPERTIES[Number(params.id)] ?? PROPERTIES[0];
+  const prop = REGION_HOTELS[Number(params.id)] ?? REGION_HOTELS[0];
   const stayFrom = new Date(prop.datesFrom);
   const stayTo = new Date(prop.datesTo);
   // Load selection from search params (or defaults)
@@ -201,7 +201,6 @@ export default function ConfirmPage() {
                   </div>
                 )}
               </div>
-              
             </div>
             <hr className="my-6" />
           </section>
@@ -482,9 +481,9 @@ export default function ConfirmPage() {
                 serviceFee,
                 total,
                 paymentMethod: "credit_card",
-                cardNumber,      
-                expiration: exp, 
-                cvv,            
+                cardNumber,
+                expiration: exp,
+                cvv,
                 country,
                 source: "confirmation_page",
               });

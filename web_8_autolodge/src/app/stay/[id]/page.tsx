@@ -13,8 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useRef } from "react";
-import { PROPERS } from "@/library/dataset";
-
+import { FEATURED_HOTELS } from "@/library/dataset";
 
 function toStartOfDay(date: Date) {
   if (!date) return date;
@@ -28,7 +27,7 @@ export default function PropertyDetail() {
   const didTrack = useRef(false);
   const params = useParams<{ id: string }>();
   const { id } = params;
-  const prop = PROPERS[Number(id)] ?? PROPERS[0];
+  const prop = FEATURED_HOTELS[Number(id)] ?? FEATURED_HOTELS[0];
   const stayFrom = new Date(prop.datesFrom);
   const stayTo = new Date(prop.datesTo);
   const availableDates = useMemo(

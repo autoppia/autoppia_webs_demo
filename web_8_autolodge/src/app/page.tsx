@@ -6,8 +6,8 @@ import { PropertyCard } from "@/components/PropertyCard";
 import * as React from "react";
 import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { PROPERTIESS } from "@/library/dataset";
-
+import { DASHBOARD_HOTELS } from "@/library/dataset";
+import Image from "next/image";
 
 export default function Home() {
   // Range state: { from, to }
@@ -48,8 +48,6 @@ export default function Home() {
     return str;
   };
 
- 
-
   // Filtering logic
   const totalSelectedGuests = guests.adults + guests.children;
 
@@ -73,7 +71,7 @@ export default function Home() {
     return selFrom >= from && lastBookedNight <= to;
   }
 
-  const filtered = PROPERTIESS.filter((card) => {
+  const filtered = DASHBOARD_HOTELS.filter((card) => {
     if (committedSearch.trim()) {
       const term = committedSearch.toLowerCase();
       if (

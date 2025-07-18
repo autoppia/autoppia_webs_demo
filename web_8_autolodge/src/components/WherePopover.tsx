@@ -11,38 +11,38 @@ const RECENT_SEARCHES = [
   {
     country: "Asheville",
     text: "Jul 12 - Jul 16 | 2 Guests",
-    image: "/images/image.png", // changed from img to image
+    image: "/images/hotel1.jpg", // changed from img to image
   },
   {
     country: "Paris",
     text: "Aug 15 - Aug 22 | 2 Guests",
-    image: "/images/hotel1.png",
+    image: "/images/hotel2.jpg",
   },
   {
     country: "Kelowna",
     text: "Jul 18 - Jul 24 | 6 Guests",
-    image: "/images/hotel2.png",
+    image: "/images/hotel3.jpg",
   },
   {
     country: "Zermatt",
     text: "Jul 28 - Aug 10 | 4 Guests",
-    image: "/images/hotel3.png",
+    image: "/images/hotel4.jpg",
   },
 ];
 
 const REGIONS = [
   {
     label: "I'm flexible",
-    img: "images/hotel7.png",
+    img: "images/hotel1.jpg",
   },
-  { label: "Asheville", img: "images/image.png" },
-  { label: "Kelowna", img: "images/hotel1.png" },
-  { label: "Zermatt", img: "images/hotel2.png" },
-  { label: "Paris", img: "images/hotel3.png" },
-  { label: "Byron Bay", img: "images/hotel4.png" },
-  { label: "Cotswolds", img: "images/hotel5.png" },
-  { label: "Amsterdam", img: "images/hotel6.png" },
-  { label: "New York", img: "images/hotel7.png" },
+  { label: "Asheville", img: "images/hotel5.jpg" },
+  { label: "Kelowna", img: "images/hotel6.jpg" },
+  { label: "Zermatt", img: "images/hotel7.jpg" },
+  { label: "Paris", img: "images/hotel8.jpg" },
+  { label: "Byron Bay", img: "images/hotel9.png" },
+  { label: "Cotswolds", img: "images/hotel10.png" },
+  { label: "Amsterdam", img: "images/hotel11.png" },
+  { label: "New York", img: "images/hotel12.png" },
 ];
 
 export function WherePopover({
