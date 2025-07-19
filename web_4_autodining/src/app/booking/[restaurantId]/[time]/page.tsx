@@ -1,19 +1,22 @@
 "use client";
+
 import { useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import dayjs from "dayjs";
 import { countries, RestaurantsData } from "@/components/library/dataset";
+
+/* ────────────── imágenes de ejemplo ─────────────── */
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
   "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
   "https://images.unsplash.com/photo-1551218808-94e220e084d2",
 ];
-// Define the new restaurant data from the JSON structure
+
+/* ────────────── normaliza RestaurantsData a un map ─────────────── */
 const restaurantData: Record<
   string,
   {
@@ -29,10 +32,9 @@ const restaurantData: Record<
     photos: string[];
   }
 > = {};
-// Populate restaurantData from jsonData
+
 RestaurantsData.forEach((item, index) => {
-  const id = `restaurant-${item.id}`;
-  restaurantData[id] = {
+  restaurantData[`restaurant-${item.id}`] = {
     name: item.namepool,
     image: `/images/restaurant${(index % 19) + 1}.jpg`,
     rating: item.staticStars,
@@ -45,61 +47,80 @@ RestaurantsData.forEach((item, index) => {
     photos,
   };
 });
+
 export default function Page() {
+  /* ─────────────────────────── URL params ─────────────────────────── */
   const params = useParams();
   const searchParams = useSearchParams();
+
   const restaurantId = params.restaurantId as string;
   const reservationTimeParam = decodeURIComponent(params.time as string);
   const reservationPeopleParam = searchParams.get("people");
   const reservationDateParam = searchParams.get("date");
+
+  /* ─────────────────────────── estado ─────────────────────────────── */
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [date, setDate] = useState<Date | undefined>();
+  const [formattedDate, setFormattedDate] = useState<string | null>(null); // “Jul 27”
+  const [fullDate, setFullDate] = useState<string | null>(null); // “2025‑07‑27”
   const [time, setTime] = useState(reservationTimeParam || "1:00 PM");
-  const [people, setPeople] = useState(parseInt(reservationPeopleParam || "2"));
+  const [people, setPeople] = useState(
+    parseInt(reservationPeopleParam || "2", 10)
+  );
+  const [reservationTime, setReservationTime] = useState<string | null>(null);
+  const [reservationPeople, setReservationPeople] = useState<string | null>(
+    null
+  );
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
-  const [reservationTime, setReservationTime] = useState<string | null>(null);
-  const [reservationPeople, setReservationPeople] = useState<string | null>(
-    null
-  );
-  const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [email, setEmail] = useState("user_name@gmail.com");
-  const data = restaurantData[restaurantId] || restaurantData["restaurant-1"];
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const data = restaurantData[restaurantId] ?? restaurantData["restaurant-1"];
+
+  /* ────────────── BOOK_RESTAURANT (solo al montar) ─────────────── */
   useEffect(() => {
-    const computedFormattedDate = reservationDateParam
-      ? dayjs(new Date(reservationDateParam)).format("MMM D")
+    const computedFullDate = reservationDateParam
+      ? dayjs(reservationDateParam).format("YYYY-MM-DD") // “2025‑07‑27”
       : null;
-    const eventPayload = {
-      restaurantId: restaurantId,
+
+    logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+      restaurantId,
       restaurantName: data.name,
-      date: computedFormattedDate, // Use computed date
+      date: computedFullDate, // ⬅️ envía la fecha completa
       time: reservationTime || time,
       people: reservationPeople || people,
-    };
-    logEvent(EVENT_TYPES.BOOK_RESTAURANT, eventPayload);
-  }, []); // Empty dependency array ensures this runs only on mount
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // solo al primer render
+
+  /* ───────────── sincroniza query‑params con estado ────────────── */
   useEffect(() => {
     if (reservationDateParam) {
       const d = new Date(reservationDateParam);
       setDate(d);
-      setFormattedDate(dayjs(d).format("MMM D"));
+      setFormattedDate(dayjs(d).format("MMM D")); // “Jul 27”
+      setFullDate(dayjs(d).format("YYYY-MM-DD")); // “2025‑07‑27”
     }
+
     if (reservationTimeParam) setReservationTime(reservationTimeParam);
     if (reservationPeopleParam) setReservationPeople(reservationPeopleParam);
   }, [reservationDateParam, reservationTimeParam, reservationPeopleParam]);
+
+  /* ──────────────── manejador de reserva ──────────────── */
   const handleReservation = () => {
     if (!phoneNumber.trim()) {
       setPhoneError(true);
       return;
     }
     setPhoneError(false);
+
     logEvent(EVENT_TYPES.RESERVATION_COMPLETE, {
       restaurantId,
-      date: formattedDate,
+      date: fullDate, // ⬅️ envía la “YYYY‑MM‑DD”
       time: reservationTime,
       people: reservationPeople,
       countryCode: selectedCountry.code,
@@ -109,15 +130,21 @@ export default function Page() {
       specialRequest,
       email,
     });
+
     setShowToast(true);
     setTimeout(() => setShowToast(false), 4000);
+
+    // limpia campos de formulario
     setPhoneNumber("");
     setOccasion("");
     setSpecialRequest("");
     setSelectedCountry(countries[0]);
   };
+
+  /* ─────────────────────────── JSX ─────────────────────────── */
   return (
     <main suppressHydrationWarning>
+      {/* ─────────── Navbar ─────────── */}
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
@@ -127,6 +154,7 @@ export default function Page() {
               </div>
             </Link>
           </div>
+
           <div className="flex-1 flex items-center justify-center">
             <input
               type="text"
@@ -138,6 +166,7 @@ export default function Page() {
               Let's go
             </button>
           </div>
+
           <div className="flex items-center gap-4">
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
@@ -154,34 +183,43 @@ export default function Page() {
           </div>
         </div>
       </nav>
+
+      {/* ─────────── Contenido principal ─────────── */}
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
+        {/* resumen reserva */}
         <h2 className="font-bold text-lg mt-8 mb-4">You’re almost done!</h2>
         <div className="flex items-center gap-3 mb-6">
+          {/* foto restaurante */}
           <img
             src={data.image}
             alt={data.name}
             className="w-16 h-16 rounded-lg object-cover border"
           />
+
+          {/* detalles */}
           <div className="flex flex-col gap-[2px]">
             <span className="font-bold text-2xl">{data.name}</span>
             <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
-                <p>{formattedDate ? formattedDate : "Select Date"}</p>
+                {formattedDate ?? "Select Date"}
               </span>
               <span className="flex items-center gap-1">
                 <ClockIcon className="w-4 h-4 mr-1" />
-                {reservationTime ? reservationTime : "Select Time"}
+                {reservationTime ?? "Select Time"}
               </span>
               <span className="flex items-center gap-1">
                 <UserIcon className="w-4 h-4 mr-1" />
-                {reservationPeople ? reservationPeople : "Select"} people
+                {reservationPeople ?? "Select"} people
               </span>
             </div>
           </div>
         </div>
+
+        {/* diner details */}
         <h3 className="font-semibold text-lg mb-2 mt-4">Diner details</h3>
         <div className="flex gap-2 mb-3 flex-wrap">
+          {/* teléfono */}
           <div className="flex-1 min-w-[220px]">
             <div className="flex items-center space-x-2">
               <select
@@ -222,6 +260,8 @@ export default function Page() {
               </p>
             )}
           </div>
+
+          {/* email */}
           <input
             type="email"
             value={email}
@@ -230,6 +270,8 @@ export default function Page() {
             disabled
           />
         </div>
+
+        {/* occasion + special request */}
         <div className="flex gap-2 mb-4 flex-wrap">
           <select
             className="flex-1 border rounded px-3 py-2 bg-white min-w-[220px]"
@@ -255,12 +297,16 @@ export default function Page() {
             onChange={(e) => setSpecialRequest(e.target.value)}
           />
         </div>
+
+        {/* botón reserva */}
         <Button
           onClick={handleReservation}
           className="w-full bg-[#46a758] hover:bg-[#54ce68] text-white py-6 mt-1 mb-4 text-lg rounded"
         >
           Complete reservation
         </Button>
+
+        {/* legal */}
         <div className="text-xs text-gray-600 mt-3">
           By clicking “Complete reservation” you agree to the{" "}
           <Link href="#" className="text-[#46a758] underline">
@@ -270,10 +316,13 @@ export default function Page() {
           <Link href="#" className="text-[#46a758] underline">
             Privacy Policy
           </Link>
-          . Message & data rates may apply. You can opt out of receiving text
-          messages at any time in your account settings or by replying STOP.
+          . Message &amp; data rates may apply. You can opt out of receiving
+          text messages at any time in your account settings or by replying
+          STOP.
         </div>
       </div>
+
+      {/* toast */}
       {showToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-20 py-5 rounded shadow-lg z-50">
           Reservation completed successfully!
