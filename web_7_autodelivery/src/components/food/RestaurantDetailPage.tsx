@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MenuItem, MenuItemSize, restaurants } from "@/data/restaurants";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
@@ -108,6 +108,19 @@ export default function RestaurantDetailPage({
   const restaurant = useMemo(() => {
     return restaurants.find((r) => r.id === restaurantId)!;
   }, [restaurantId]);
+  useEffect(() => {
+    if (restaurant) {
+      const eventPayload = {
+        id: restaurant.id,
+        name: restaurant.name,
+        cuisine: restaurant.cuisine,
+        rating: restaurant.rating,
+      };
+
+      logEvent(EVENT_TYPES.VIEW_RESTAURANT, eventPayload);
+      console.log("VIEW_RESTAURANT event triggered:", eventPayload);
+    }
+  }, [restaurant]);
   const addToCart = useCartStore((state) => state.addToCart);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalItem, setModalItem] = useState<MenuItem | null>(null);
@@ -128,19 +141,18 @@ export default function RestaurantDetailPage({
     if (modalItem) {
       const transformedOptions =
         custom.options?.map((label) => ({ label })) ?? [];
-  
+
       const payload: MenuItem = {
         ...modalItem,
         ...custom,
         options: transformedOptions,
       };
-  
+
       addToCart(payload, restaurant.id);
       setModalOpen(false);
       setModalItem(null);
     }
   }
-  
 
   return (
     <div className="max-w-5xl mx-auto px-2 sm:px-0">
