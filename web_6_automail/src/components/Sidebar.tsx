@@ -7,10 +7,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
-import { systemLabels } from "@/library/dataset";
+// import { systemLabels } from "@/library/dataset";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import type { EmailFolder } from "@/types/email";
-import { EVENT_TYPES, logEvent } from "@/library/events";
+// import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   Inbox,
   Star,
@@ -34,14 +34,14 @@ interface NavigationItem {
   type: "folder" | "label";
 }
 
-const folderEventMap = {
-  inbox: EVENT_TYPES.INBOX_SIDEBAR_CLICKED,
-  starred: EVENT_TYPES.STARRED_SIDEBAR_CLICKED,
-  sent: EVENT_TYPES.SENT_SIDEBAR_CLICKED,
-  drafts: EVENT_TYPES.DRAFT_SIDEBAR_CLICKED,
-  important: EVENT_TYPES.IMPORTANT_SIDEBAR_CLICKED,
-  trash: EVENT_TYPES.TRASH_SIDEBAR_CLICKED,
-} as const;
+// const folderEventMap = {
+//   inbox: EVENT_TYPES.INBOX_SIDEBAR_CLICKED,
+//   starred: EVENT_TYPES.STARRED_SIDEBAR_CLICKED,
+//   sent: EVENT_TYPES.SENT_SIDEBAR_CLICKED,
+//   drafts: EVENT_TYPES.DRAFT_SIDEBAR_CLICKED,
+//   important: EVENT_TYPES.IMPORTANT_SIDEBAR_CLICKED,
+//   trash: EVENT_TYPES.TRASH_SIDEBAR_CLICKED,
+// } as const;
 
 
 export function Sidebar() {
@@ -131,10 +131,10 @@ export function Sidebar() {
   const handleItemClick = (item: NavigationItem) => {
     if (item.type === "folder") {
       setFilter({ folder: item.id as EmailFolder });
-      if (item.type === "folder" && item.id in folderEventMap) {
-        const eventName = folderEventMap[item.id as keyof typeof folderEventMap];
-        logEvent(eventName, { label: item.label, id: item.id });
-      }         
+      // if (item.type === "folder" && item.id in folderEventMap) {
+      //   const eventName = folderEventMap[item.id as keyof typeof folderEventMap];
+      //   logEvent(eventName, { label: item.label, id: item.id });
+      // }
     } else {
       setFilter({ folder: "inbox", label: item.id });
     }
