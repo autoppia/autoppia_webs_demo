@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mockUsers, mockPosts } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
@@ -33,6 +33,19 @@ export default function ProfileClient({ username }: { username: string }) {
     setConnectState("pending");
     setTimeout(() => setConnectState("connected"), 1000);
   };
+  useEffect(() => {
+    if (user) {
+      const payload = {
+        username: user.username,
+        name: user.name,
+        timestamp: new Date().toISOString(),
+        source: "post_header_avatar",
+      };
+
+      console.log("📣 VIEW_USER_PROFILE event:", payload);
+      logEvent(EVENT_TYPES.VIEW_USER_PROFILE, payload);
+    }
+  }, [user]);
 
   return (
     <section>
