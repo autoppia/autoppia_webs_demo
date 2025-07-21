@@ -84,6 +84,7 @@ export default function Page() {
     bookings: data.bookings,
     price: data.price,
     cuisine: data.cuisine,
+    desc: data.desc,
   };
 
   useEffect(() => {
