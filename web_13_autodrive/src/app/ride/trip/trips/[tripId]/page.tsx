@@ -2,6 +2,7 @@
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import RideNavbar from "../../../../../components/RideNavbar";
+import { EVENT_TYPES, logEvent } from "@/library/event";
 
 const rides = [
   {
@@ -80,6 +81,15 @@ export default function TripDetailsPage() {
     }
     router.push("/ride/trip/trips");
   }
+
+  // On page load or when trip details are shown:
+  useEffect(() => {
+    console.log("Logging TRIP_DETAILS", { tripId });
+    logEvent(EVENT_TYPES.TRIP_DETAILS, { tripId });
+  }, [tripId]);
+  // When cancel reservation is confirmed:
+  console.log("Logging CANCEL_RESERVATION", { tripId });
+  logEvent(EVENT_TYPES.CANCEL_RESERVATION, { tripId });
 
   const rideIcon = rides[activeTrip.rideIndex]?.icon ?? "";
 

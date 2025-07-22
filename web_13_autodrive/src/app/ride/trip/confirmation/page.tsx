@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RideNavbar from "../../../../components/RideNavbar";
+import { EVENT_TYPES, logEvent } from "@/library/event";
 
 const rides = [
   {

@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RideNavbar from "../../../../components/RideNavbar";
+import { EVENT_TYPES, logEvent } from "@/library/event";
 
 function getTimeSlotsForDate(dateStr: string) {
   const results = [];
@@ -93,6 +94,8 @@ export default function PickupNowPage() {
       sessionStorage.setItem("ud_pickuptime", time);
     }
     router.push("/ride/trip");
+    console.log("Logging NEXT_PICKUP", { date, time });
+    logEvent(EVENT_TYPES.NEXT_PICKUP, { date, time });
   };
   const handleRemove = () => {
     setDate(new Date().toISOString().slice(0, 10));
@@ -165,6 +168,8 @@ export default function PickupNowPage() {
                 onChange={(e) => {
                   setDate(e.target.value);
                   setTime("");
+                  console.log("Logging SELECT_DATE", { date: e.target.value });
+                  logEvent(EVENT_TYPES.SELECT_DATE, { date: e.target.value });
                 }}
                 disabled={!isMounted}
               />
@@ -239,6 +244,8 @@ export default function PickupNowPage() {
                     onClick={() => {
                       setTime(slot.value);
                       setShowSlotPanel(false);
+                      console.log("Logging SELECT_TIME", { time: slot.value });
+                      logEvent(EVENT_TYPES.SELECT_TIME, { time: slot.value });
                     }}
                     className={`block w-full text-left px-6 py-3 text-base font-medium hover:bg-[#e6f6fc] ${
                       time === slot.value

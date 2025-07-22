@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { EVENT_TYPES, logEvent } from "@/library/event";
 
 const SUGGESTIONS = [
   "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
@@ -38,6 +39,8 @@ function AutocompleteInput({
           onChange={(e) => {
             setValue(e.target.value);
             setShow(true);
+            console.log("Logging ENTER_LOCATION", { value: e.target.value });
+            logEvent(EVENT_TYPES.ENTER_LOCATION, { value: e.target.value });
           }}
           onFocus={() => setShow(true)}
           onBlur={() => setTimeout(() => setShow(false), 120)}
@@ -360,6 +363,8 @@ function HomePage() {
             <button
               className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition"
               onClick={() => {
+                console.log("Logging SEE_PRICES", { location, destination });
+                logEvent(EVENT_TYPES.SEE_PRICES, { location, destination });
                 if (typeof window !== "undefined") {
                   window.sessionStorage.setItem("__ud_pickup", location);
                   window.sessionStorage.setItem("__ud_dropoff", destination);
