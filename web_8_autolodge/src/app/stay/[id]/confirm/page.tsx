@@ -120,6 +120,16 @@ export default function ConfirmPage() {
   const showCvvError = hasTriedSubmit && !cvvFilled;
   const showZipError = hasTriedSubmit && !zipFilled;
   const showCountryError = hasTriedSubmit && !countryFilled;
+  useEffect(() => {
+    if (dateRange.from && dateRange.to && guests && params.id) {
+      logEvent(EVENT_TYPES.RESERVE_HOTEL, {
+        id: params.id,
+        checkin: dateRange.from,
+        checkout: dateRange.to,
+        guests,
+      });
+    }
+  }, []); // empty deps = run once on mount
 
   return (
     <div className="w-full" style={{ marginTop: "38px" }}>
