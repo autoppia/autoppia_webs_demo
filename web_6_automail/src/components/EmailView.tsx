@@ -36,14 +36,14 @@ export function EmailView() {
     moveToTrash,
   } = useEmail();
 
-  useEffect(() => {
-    if (!currentEmail) return;
-    logEvent(EVENT_TYPES.VIEW_EMAIL, {
-      email_id: currentEmail.id,
-      subject: currentEmail.subject,
-      from: currentEmail.from.email,
-    });
-  }, [currentEmail]);
+  // useEffect(() => {
+  //   if (!currentEmail) return;
+  //   logEvent(EVENT_TYPES.VIEW_EMAIL, {
+  //     email_id: currentEmail.id,
+  //     subject: currentEmail.subject,
+  //     from: currentEmail.from.email,
+  //   });
+  // }, [currentEmail]);
 
   if (!currentEmail) {
     return null;
