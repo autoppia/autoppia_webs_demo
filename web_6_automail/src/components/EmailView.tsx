@@ -5,12 +5,9 @@ import { cn } from "@/library/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useEmail } from "@/contexts/EmailContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-// import { format } from 'date-fns';
 import {
   Star,
   Reply,
@@ -25,8 +22,6 @@ import {
   ArrowLeft,
   Info,
   Clock,
-  Tag,
-  MailOpen,
   Mail,
 } from "lucide-react";
 
@@ -138,6 +133,7 @@ export function EmailView() {
             </Button>
 
             <Button
+              id="spam-button"
               variant="ghost"
               size="icon"
               onClick={handleMarkAsSpam}
@@ -147,6 +143,7 @@ export function EmailView() {
             </Button>
 
             <Button
+              id="unread-button"
               variant="ghost"
               size="icon"
               onClick={handleMarkAsUnread}
@@ -156,6 +153,7 @@ export function EmailView() {
             </Button>
 
             <Button
+              id="delete-button"
               variant="ghost"
               size="icon"
               onClick={handleDeleteClick}
@@ -168,11 +166,12 @@ export function EmailView() {
               <LabelSelector email={currentEmail} />
             </div>
 
-            <Button variant="ghost" size="icon" title="Snooze">
+            <Button id="snooze-button" variant="ghost" size="icon" title="Snooze">
               <Clock className="h-5 w-5" />
             </Button>
 
             <Button
+              id="star-button"
               variant="ghost"
               size="icon"
               onClick={handleStarClick}
@@ -187,6 +186,7 @@ export function EmailView() {
             </Button>
 
             <Button
+              id="important-button"
               variant="ghost"
               size="icon"
               onClick={handleImportantClick}
@@ -208,7 +208,7 @@ export function EmailView() {
 
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">1 of 50</span>
-          <Button variant="ghost" size="icon">
+          <Button id="more-toolbar-button" variant="ghost" size="icon">
             <MoreVertical className="h-5 w-5" />
           </Button>
         </div>
@@ -356,15 +356,15 @@ export function EmailView() {
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-6 border-t border-border">
-            <Button>
+            <Button id="reply-button">
               <Reply className="h-4 w-4 mr-2" />
               Reply
             </Button>
-            <Button variant="outline">
+            <Button id="reply-all-button" variant="outline">
               <ReplyAll className="h-4 w-4 mr-2" />
               Reply All
             </Button>
-            <Button variant="outline">
+            <Button id="forward-button" variant="outline">
               <Forward className="h-4 w-4 mr-2" />
               Forward
             </Button>

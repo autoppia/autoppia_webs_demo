@@ -43,7 +43,6 @@ interface NavigationItem {
 //   trash: EVENT_TYPES.TRASH_SIDEBAR_CLICKED,
 // } as const;
 
-
 export function Sidebar() {
   const {
     currentFilter,
@@ -215,15 +214,15 @@ export function Sidebar() {
           <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             More
           </div>
-          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
+          <Button id="contacts-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <Users className="h-4 w-4" />
             Contacts
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
+          <Button id="chats-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <MessageSquare className="h-4 w-4" />
             Chats
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
+          <Button id="settings-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <Settings className="h-4 w-4" />
             Settings
           </Button>

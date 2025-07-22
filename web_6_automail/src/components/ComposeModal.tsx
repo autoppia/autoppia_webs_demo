@@ -123,13 +123,14 @@ export function ComposeModal() {
             New Message
           </DialogTitle>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button id="compose-minimize-button" variant="ghost" size="icon" className="h-6 w-6">
               <Minus className="h-3 w-3" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button id="compose-maximize-button" variant="ghost" size="icon" className="h-6 w-6">
               <Square className="h-3 w-3" />
             </Button>
             <Button
+              id="compose-close-button"
               variant="ghost"
               size="icon"
               className="h-6 w-6"
@@ -168,6 +169,7 @@ export function ComposeModal() {
                     </Badge>
                   ))}
                   <Input
+                    id="compose-to-input"
                     value={toInput}
                     onChange={(e) => setToInput(e.target.value)}
                     onKeyDown={handleToKeyDown}
@@ -204,6 +206,7 @@ export function ComposeModal() {
                 Subject
               </Label>
               <Input
+                id="compose-subject-input"
                 value={composeData.subject}
                 onChange={(e) => updateComposeData({ subject: e.target.value })}
                 placeholder="Subject"
@@ -239,6 +242,7 @@ export function ComposeModal() {
           {/* Message Body */}
           <div className="flex-1 px-4 py-3">
             <Textarea
+              id="compose-body-textarea"
               value={composeData.body}
               onChange={(e) => updateComposeData({ body: e.target.value })}
               placeholder="Compose your message..."
@@ -250,6 +254,7 @@ export function ComposeModal() {
           <div className="flex items-center justify-between px-4 py-3 border-t border-border/50 bg-muted/20">
             <div className="flex items-center gap-2">
               <Button
+                id="compose-send-button"
                 onClick={handleSend}
                 disabled={!canSend}
                 className="btn-primary-gradient h-8 px-4"
@@ -269,6 +274,7 @@ export function ComposeModal() {
             </div>
 
             <Button
+              id="compose-save-draft-button"
               variant="ghost"
               onClick={handleSaveDraft}
               className="h-8 px-3 text-sm"
