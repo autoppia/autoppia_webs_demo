@@ -79,10 +79,10 @@ export async function POST(req: NextRequest) {
 
   const endTime = Date.now();
   const elapsedMs = endTime - startTime;
-  console.log(`POST /api/log-event took ${elapsedMs}ms`);
+  process.stdout.write(`POST /api/log-event took ${elapsedMs}ms\n`);
 
   // 4) Responder éxito
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true, elapsedMs });
 }
 
 export async function GET() {
