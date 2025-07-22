@@ -89,8 +89,20 @@ export function ComposeModal() {
   };
 
   const handleSaveDraft = () => {
+    // Only include the uncommitted toInput, ccInput, and bccInput in the event, do not update composeData arrays
+    const allTo = toInput.trim()
+      ? [...composeData.to, toInput.trim()]
+      : composeData.to;
+    const allCc = ccInput.trim()
+      ? [...(composeData.cc || []), ccInput.trim()]
+      : composeData.cc || [];
+    const allBcc = bccInput.trim()
+      ? [...(composeData.bcc || []), bccInput.trim()]
+      : composeData.bcc || [];
     logEvent(EVENT_TYPES.EMAIL_SAVE_AS_DRAFT, {
-      to: composeData.to,
+      to: allTo,
+      cc: allCc,
+      bcc: allBcc,
       subject: composeData.subject || "",
       body: composeData.body || "",
     });
@@ -100,7 +112,10 @@ export function ComposeModal() {
   const canSend = composeData.to.length > 0 || toInput.trim();
 
   return (
-    <Dialog open={isComposeOpen} onOpenChange={(open) => toggleCompose(open)}>
+    <Dialog
+      open={isComposeOpen}
+      onOpenChange={(open: boolean) => toggleCompose(open)}
+    >
       <DialogContent className="max-w-2xl max-h-[80vh] p-0 gap-0 compose-modal">
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b border-border/50">
