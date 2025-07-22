@@ -13,6 +13,10 @@ function toStartOfDay(date: Date): Date {
   return d;
 }
 
+function toUtcIsoWithTimezone(date: Date) {
+  return date.toISOString().replace("Z", "+00:00");
+}
+
 export default function ConfirmPage() {
   const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -33,8 +37,8 @@ export default function ConfirmPage() {
     from: Date | null;
     to: Date | null;
   }>({
-    from: urlCheckin ? parseISO(urlCheckin) : stayFrom,
-    to: urlCheckout ? parseISO(urlCheckout) : stayTo,
+    from: urlCheckin ? new Date(urlCheckin) : stayFrom,
+    to: urlCheckout ? new Date(urlCheckout) : stayTo,
   });
   const [guests, setGuests] = useState(Number(urlGuests) || 1);
   const [prevGuests, setPrevGuests] = useState(1);
@@ -122,7 +126,7 @@ export default function ConfirmPage() {
       <button
         className="flex items-center gap-2 text-neutral-700 text-base font-medium hover:underline focus:underline focus:outline-none transition cursor-pointer mb-7 px-0 py-0"
         onClick={() => {
-          logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS);
+          logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, { hotel: prop });
           router.push("/");
         }}
         type="button"
@@ -185,9 +189,14 @@ export default function ConfirmPage() {
                             to: range.to ?? null,
                           });
                           logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
-                            checkin: range.from,
-                            checkout: range.to,
+                            checkin: range.from
+                              ? toUtcIsoWithTimezone(range.from)
+                              : null,
+                            checkout: range.to
+                              ? toUtcIsoWithTimezone(range.to)
+                              : null,
                             source: "calendar_picker",
+                            hotel: prop, // Pass the whole hotel object
                           });
                           setDateOpen(false);
                           pushWith({
@@ -385,6 +394,7 @@ export default function ConfirmPage() {
                     message: hostMessage.trim(),
                     hostName: prop.host.name,
                     source: "message_host_section",
+                    hotel: prop, // Pass the whole hotel object
                   });
 
                   showToast(" ✅ Message sent.");
@@ -470,8 +480,8 @@ export default function ConfirmPage() {
                 return; // Don't proceed if any field is incomplete
               }
               logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
-                checkin: dateRange.from,
-                checkout: dateRange.to,
+                checkin: dateRange.from ? dateRange.from.toISOString() : null,
+                checkout: dateRange.to ? dateRange.to.toISOString() : null,
                 guests,
                 listingTitle: prop.title,
                 pricePerNight: prop.price,
@@ -486,6 +496,7 @@ export default function ConfirmPage() {
                 cvv,
                 country,
                 source: "confirmation_page",
+                hotel: prop, // Pass the whole hotel object
               });
 
               showToast("✅ Reservation complete! Thank you! 🙏");

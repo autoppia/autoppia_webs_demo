@@ -22,6 +22,10 @@ function toStartOfDay(date: Date) {
   return d;
 }
 
+function toUtcIsoWithTimezone(date: Date) {
+  return date.toISOString().replace("Z", "+00:00");
+}
+
 export default function PropertyDetail() {
   const router = useRouter();
   const didTrack = useRef(false);
@@ -189,11 +193,13 @@ export default function PropertyDetail() {
                 logEvent(EVENT_TYPES.INCREASE_NUMBER_OF_GUESTS, {
                   from: guests,
                   to: value,
+                  hotel: prop, // Pass the whole hotel object
                 });
               } else if (value < guests) {
                 logEvent(EVENT_TYPES.DECREASE_NUMBER_OF_GUESTS, {
                   from: guests,
                   to: value,
+                  hotel: prop, // Pass the whole hotel object
                 });
               }
               setGuests(value);
@@ -204,24 +210,29 @@ export default function PropertyDetail() {
           <button
             className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
             onClick={async () => {
-              const checkin = format(selected.from!, "yyyy-MM-dd");
-              const checkout = format(selected.to!, "yyyy-MM-dd");
+              const checkinDate = selected.from!;
+              const checkoutDate = selected.to!;
 
-              console.log("🔔 Reserve clicked", { checkin, checkout, guests });
+              console.log("🔔 Reserve clicked", {
+                checkin: checkinDate,
+                checkout: checkoutDate,
+                guests,
+              });
 
               try {
                 await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
                   id,
-                  checkin,
-                  checkout,
+                  checkin: toUtcIsoWithTimezone(checkinDate),
+                  checkout: toUtcIsoWithTimezone(checkoutDate),
                   guests,
+                  hotel: prop,
                 });
               } catch (err) {
                 console.error("❌ logEvent failed", err);
               }
 
               router.push(
-                `/stay/${params.id}/confirm?checkin=${checkin}&checkout=${checkout}&guests=${guests}`
+                `/stay/${params.id}/confirm?checkin=${checkinDate}&checkout=${checkoutDate}&guests=${guests}`
               );
             }}
           >
