@@ -123,6 +123,7 @@ export default function PropertyDetail() {
         <hr className="my-4" />
         <div className="mb-4 flex items-center gap-3">
           <Image
+            id="hostAvatar"
             src={prop.host.avatar}
             alt={prop.host.name}
             width={54}
@@ -130,7 +131,7 @@ export default function PropertyDetail() {
             className="rounded-full border"
           />
           <div>
-            <div className="font-medium text-neutral-800">
+            <div id="hostName" className="font-medium text-neutral-800">
               Hosted by {prop.host.name}
             </div>
             <div className="text-neutral-500 text-sm">
@@ -141,7 +142,7 @@ export default function PropertyDetail() {
         <hr className="my-3" />
         <div className="flex flex-col gap-7 mt-4">
           {prop.amenities?.map((f, i) => (
-            <div className="flex items-start gap-4" key={f.title}>
+            <div className="flex items-start gap-4" key={f.title} id={`amenity-${i}`}>
               <span className="text-2xl pt-1">{f.icon}</span>
               <div>
                 <div className="font-semibold text-neutral-900 text-[17px]">
@@ -155,14 +156,14 @@ export default function PropertyDetail() {
       </div>
       {/* Sidebar/summary */}
       <div className="w-[350px] min-w-[300px] bg-white shadow-md rounded-2xl border flex flex-col p-6 sticky top-8 h-fit">
-        <div className="text-2xl font-bold mb-1">
+        <div id="pricePerNight" className="text-2xl font-bold mb-1">
           ${prop.price.toFixed(2)}{" "}
           <span className="text-base text-neutral-600 font-medium">
             USD <span className="font-normal">night</span>
           </span>
         </div>
         <div className="flex gap-3 mt-3 mb-4">
-          <div className="flex-1 border rounded-md px-3 py-2">
+          <div id="checkIn" className="flex-1 border rounded-md px-3 py-2">
             <div className="text-xs text-neutral-500 font-semibold">
               CHECK-IN
             </div>
@@ -170,7 +171,7 @@ export default function PropertyDetail() {
               {selected.from ? format(selected.from, "MM/dd/yyyy") : "–"}
             </div>
           </div>
-          <div className="flex-1 border rounded-md px-3 py-2">
+          <div id="checkOut" className="flex-1 border rounded-md px-3 py-2">
             <div className="text-xs text-neutral-500 font-semibold">
               CHECK-OUT
             </div>
@@ -182,6 +183,7 @@ export default function PropertyDetail() {
         <div className="border rounded-md px-3 py-2 mb-3">
           <div className="text-xs text-neutral-500 font-semibold">GUESTS</div>
           <input
+            id="guestsCount"
             className="bg-transparent text-[15px] w-full p-0 border-none outline-none"
             value={guests}
             type="number"
@@ -208,6 +210,7 @@ export default function PropertyDetail() {
         </div>
         {selected.from && selected.to && (
           <button
+            id="reserveButton"
             className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
             onClick={async () => {
               const checkinDate = selected.from!;
@@ -241,6 +244,7 @@ export default function PropertyDetail() {
         )}
         {(!selected.from || !selected.to) && (
           <button
+            id="checkAvailabilityButton"
             disabled
             className="rounded-lg w-full py-3 text-neutral-400 font-semibold text-base bg-neutral-100 mb-3 shadow cursor-not-allowed"
           >

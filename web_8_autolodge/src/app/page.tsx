@@ -111,7 +111,7 @@ export default function Home() {
         <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
           {/* Where */}
           <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <div className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
+            <div id="searchField" className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Where
               </span>
@@ -144,7 +144,7 @@ export default function Home() {
             selectedRange={dateRange}
             setSelectedRange={setDateRange}
           >
-            <div className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
+            <div id="checkInField" className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Check in
               </span>
@@ -174,7 +174,7 @@ export default function Home() {
             selectedRange={dateRange}
             setSelectedRange={setDateRange}
           >
-            <div className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all">
+            <div id="checkOutField" className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all">
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Check out
               </span>
@@ -185,7 +185,7 @@ export default function Home() {
           </DateRangePopover>
           {/* Who */}
           <GuestSelectorPopover counts={guests} setCounts={setGuests}>
-            <div className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
+            <div id="guestsField" className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Who
               </span>
@@ -213,6 +213,7 @@ export default function Home() {
           </GuestSelectorPopover>
           {/* Search button */}
           <button
+            id="searchButton"
             className="ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
             onClick={() => {
               setCommittedSearch(searchTerm);
@@ -252,7 +253,7 @@ export default function Home() {
       {/* Results grid placeholder */}
       <section className="w-full flex flex-col items-center mt-8">
         {filtered.length === 0 ? (
-          <div className="text-neutral-400 font-semibold text-lg mt-12">
+          <div id="noResults" className="text-neutral-400 font-semibold text-lg mt-12">
             No results found.
           </div>
         ) : (

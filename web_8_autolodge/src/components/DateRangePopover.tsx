@@ -73,8 +73,9 @@ export function DateRangePopover({
   const today = new Date();
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverTrigger asChild>{React.cloneElement(children as React.ReactElement, { id: "dateRangePopoverTrigger" })}</PopoverTrigger>
       <PopoverContent
+        id="dateRangePopoverContent"
         sideOffset={12}
         align="start"
         className="w-[520px] p-6 bg-white rounded-3xl border shadow-xl"
@@ -83,6 +84,7 @@ export function DateRangePopover({
           <div className="flex flex-row gap-8">
             {/* First month */}
             <Calendar
+              id="dateRangeCalendar"
               mode="range"
               numberOfMonths={2}
               selected={{

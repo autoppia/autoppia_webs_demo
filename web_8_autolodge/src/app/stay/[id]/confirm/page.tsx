@@ -258,6 +258,7 @@ export default function ConfirmPage() {
                     Card number
                   </label>
                   <input
+                    id="cardNumber"
                     type="text"
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
@@ -284,6 +285,7 @@ export default function ConfirmPage() {
                       Expiration
                     </label>
                     <input
+                      id="exp"
                       type="text"
                       value={exp}
                       placeholder="MM / YY"
@@ -305,6 +307,7 @@ export default function ConfirmPage() {
                       CVV
                     </label>
                     <input
+                      id="cvv"
                       type="text"
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
@@ -327,6 +330,7 @@ export default function ConfirmPage() {
                     ZIP code
                   </label>
                   <input
+                    id="zip"
                     type="text"
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
@@ -348,6 +352,7 @@ export default function ConfirmPage() {
                     Country/region
                   </label>
                   <select
+                    id="country"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                     className="w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200"
