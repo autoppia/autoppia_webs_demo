@@ -79,6 +79,7 @@ export default function PropertyDetail() {
         title: prop.title,
         location: prop.location,
         rating: prop.rating,
+        reviews: prop.reviews,
         price: prop.price,
         dates: { from: prop.datesFrom, to: prop.datesTo },
         guests: prop.guests,
@@ -235,7 +236,7 @@ export default function PropertyDetail() {
               }
 
               router.push(
-                `/stay/${params.id}/confirm?checkin=${checkinDate}&checkout=${checkoutDate}&guests=${guests}`
+                `/stay/${params.id}/confirm?checkin=${encodeURIComponent(toUtcIsoWithTimezone(checkinDate))}&checkout=${encodeURIComponent(toUtcIsoWithTimezone(checkoutDate))}&guests=${guests}`
               );
             }}
           >

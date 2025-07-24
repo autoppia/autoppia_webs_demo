@@ -37,8 +37,8 @@ export default function ConfirmPage() {
     from: Date | null;
     to: Date | null;
   }>({
-    from: urlCheckin ? new Date(urlCheckin) : stayFrom,
-    to: urlCheckout ? new Date(urlCheckout) : stayTo,
+    from: urlCheckin ? new Date(urlCheckin) : toStartOfDay(stayFrom),
+    to: urlCheckout ? new Date(urlCheckout) : toStartOfDay(stayTo),
   });
   const [guests, setGuests] = useState(Number(urlGuests) || 1);
   const [prevGuests, setPrevGuests] = useState(1);
@@ -69,8 +69,8 @@ export default function ConfirmPage() {
     const search = [];
     const f = newVals.checkin || dateRange.from;
     const t = newVals.checkout || dateRange.to;
-    if (f) search.push(`checkin=${format(f, "yyyy-MM-dd")}`);
-    if (t) search.push(`checkout=${format(t, "yyyy-MM-dd")}`);
+    if (f) search.push(`checkin=${toUtcIsoWithTimezone(f)}`);
+    if (t) search.push(`checkout=${toUtcIsoWithTimezone(t)}`);
     search.push(`guests=${newVals.guests ?? guests}`);
     router.replace(`/stay/${params.id}/confirm?` + search.join("&"));
   }
@@ -124,8 +124,8 @@ export default function ConfirmPage() {
     if (dateRange.from && dateRange.to && guests && params.id) {
       logEvent(EVENT_TYPES.RESERVE_HOTEL, {
         id: params.id,
-        checkin: dateRange.from,
-        checkout: dateRange.to,
+        checkin: toUtcIsoWithTimezone(dateRange.from),
+        checkout: toUtcIsoWithTimezone(dateRange.to),
         guests,
       });
     }
@@ -497,8 +497,8 @@ export default function ConfirmPage() {
                 return; // Don't proceed if any field is incomplete
               }
               logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
-                checkin: dateRange.from ? dateRange.from.toISOString() : null,
-                checkout: dateRange.to ? dateRange.to.toISOString() : null,
+                checkin: dateRange.from ? toUtcIsoWithTimezone(dateRange.from) : null,
+                checkout: dateRange.to ? toUtcIsoWithTimezone(dateRange.to) : null,
                 guests,
                 listingTitle: prop.title,
                 pricePerNight: prop.price,
