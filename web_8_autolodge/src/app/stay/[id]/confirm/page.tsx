@@ -396,6 +396,7 @@ export default function ConfirmPage() {
               </div>
             </div>
             <textarea
+                id="host-message-input"
               value={hostMessage}
               onChange={(e) => setHostMessage(e.target.value)}
               rows={4}
@@ -403,6 +404,7 @@ export default function ConfirmPage() {
               className="w-full border rounded-lg px-3 py-3 text-[16px] bg-white mb-3 resize-none"
             />
             <button
+                id="send-host-message-btn"
               onClick={() => {
                 if (hostMessage.trim() !== "") {
                   logEvent(EVENT_TYPES.MESSAGE_HOST, {
