@@ -173,6 +173,7 @@ export default function ConfirmPage() {
                     setDateOpen((x) => !x);
                     setGuestsOpen(false);
                   }}
+                  id="edit-dates-btn"
                   className="ml-2 text-[#ff5a5f] text-base font-medium hover:underline focus:underline focus:outline-none px-1"
                 >
                   Edit
@@ -498,7 +499,6 @@ export default function ConfirmPage() {
               }
               logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
                 checkin: dateRange.from ? toUtcIsoWithTimezone(dateRange.from) : null,
-                checkout: dateRange.to ? toUtcIsoWithTimezone(dateRange.to) : null,
                 guests,
                 listingTitle: prop.title,
                 pricePerNight: prop.price,
