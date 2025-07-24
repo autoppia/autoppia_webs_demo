@@ -9,40 +9,40 @@ import Image from "next/image";
 // Example static data
 const RECENT_SEARCHES = [
   {
-    country: "Asheville",
+    country: "Barcelona",
     text: "Jul 12 - Jul 16 | 2 Guests",
-    image: "/images/hotel1.jpg", // changed from img to image
+    image: "/images/hotel1.jpeg", // changed from img to image
   },
   {
-    country: "Paris",
+    country: "Lisbon",
     text: "Aug 15 - Aug 22 | 2 Guests",
-    image: "/images/hotel2.jpg",
+    image: "/images/hotel2.jpeg",
   },
   {
-    country: "Kelowna",
+    country: "Bali",
     text: "Jul 18 - Jul 24 | 6 Guests",
-    image: "/images/hotel3.jpg",
+    image: "/images/hotel3.png",
   },
   {
-    country: "Zermatt",
+    country: "Rome",
     text: "Jul 28 - Aug 10 | 4 Guests",
-    image: "/images/hotel4.jpg",
+    image: "/images/hotel4.png",
   },
 ];
 
 const REGIONS = [
   {
     label: "I'm flexible",
-    img: "images/hotel1.jpg",
+    img: "images/hotel1.jpeg",
   },
-  { label: "Asheville", img: "images/hotel5.jpg" },
-  { label: "Kelowna", img: "images/hotel6.jpg" },
-  { label: "Zermatt", img: "images/hotel7.jpg" },
-  { label: "Paris", img: "images/hotel8.jpg" },
-  { label: "Byron Bay", img: "images/hotel9.png" },
-  { label: "Cotswolds", img: "images/hotel10.png" },
+  { label: "Bali", img: "images/hotel5.png" },
+  { label: "Kyoto", img: "images/hotel6.png" },
+  { label: "Berlin", img: "images/hotel7.jpg" },
+  { label: "Cape Town", img: "images/hotel8.jpg" },
+  { label: "Queenstown", img: "images/hotel9.jpg" },
+  { label: "Reykjavík", img: "images/hotel10.jpg" },
   { label: "Amsterdam", img: "images/hotel11.png" },
-  { label: "New York", img: "images/hotel12.png" },
+  { label: "Florence", img: "images/hotel12.png" },
 ];
 
 export function WherePopover({

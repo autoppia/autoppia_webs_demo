@@ -2,25 +2,28 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-export type PropertyCardProps = {
-  image: string;
-  title: string;
-  location: string;
-  rating: number;
-  dates: string;
-  price: string;
-  id?: number; // index in PROPERTIES
-};
+function formatDateRange(datesFrom: string, datesTo: string) {
+  const fromDate = new Date(datesFrom);
+  const toDate = new Date(datesTo);
+
+  const options: any = { month: "short", day: "numeric" };
+
+  const fromFormatted = fromDate.toLocaleDateString("en-US", options);
+  const toFormatted = toDate.toLocaleDateString("en-US", options);
+
+  return `${fromFormatted} - ${toFormatted}`;
+}
 
 export function PropertyCard({
   image,
   title,
   location,
   rating,
-  dates,
   price,
   id,
-}: PropertyCardProps) {
+  datesFrom,
+  datesTo,
+}: any) {
   return (
     <Link href={`/stay/${id}`} className="block">
       <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
@@ -30,6 +33,7 @@ export function PropertyCard({
             alt={title}
             width={100}
             height={100}
+            quality={30}
             className="w-full h-full object-cover group-hover:scale-105 transition"
           />
           <button className="absolute top-3 right-3 p-2 bg-white/80 rounded-full z-10 border border-neutral-200 hover:bg-white">
@@ -72,9 +76,11 @@ export function PropertyCard({
             {title}
           </div>
           <div className="text-xs text-neutral-500">{location}</div>
-          <div className="text-xs text-neutral-500 -mt-1">{dates}</div>
+          <div className="text-xs text-neutral-500 -mt-1">
+            {formatDateRange(datesFrom, datesTo)}
+          </div>
           <div className="flex items-center gap-1 mt-1">
-            <span className="font-semibold text-neutral-800">{price}</span>
+            <span className="font-semibold text-neutral-800">${price}</span>
             <span className="text-xs text-neutral-500">night</span>
           </div>
         </div>

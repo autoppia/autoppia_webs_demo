@@ -104,14 +104,32 @@ export default function Home() {
     return true;
   });
 
+  const itemsPerPage = 8;
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+
+  const paginatedResults = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  React.useEffect(() => {
+    // Reset to first page when filters change
+    setCurrentPage(1);
+  }, [committedSearch, dateRange, guests]);
+
   return (
-    <div className="flex flex-col w-full items-center mt-4">
+    <div className="flex flex-col w-full items-center mt-4 pb-8">
       {/* Search/Filter Bar */}
       <section className="w-full flex justify-center">
         <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
           {/* Where */}
           <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <div id="searchField" className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
+            <div
+              id="searchField"
+              className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Where
               </span>
@@ -144,7 +162,10 @@ export default function Home() {
             selectedRange={dateRange}
             setSelectedRange={setDateRange}
           >
-            <div id="checkInField" className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
+            <div
+              id="checkInField"
+              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Check in
               </span>
@@ -174,7 +195,10 @@ export default function Home() {
             selectedRange={dateRange}
             setSelectedRange={setDateRange}
           >
-            <div id="checkOutField" className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all">
+            <div
+              id="checkOutField"
+              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Check out
               </span>
@@ -185,7 +209,10 @@ export default function Home() {
           </DateRangePopover>
           {/* Who */}
           <GuestSelectorPopover counts={guests} setCounts={setGuests}>
-            <div id="guestsField" className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative">
+            <div
+              id="guestsField"
+              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 Who
               </span>
@@ -251,19 +278,53 @@ export default function Home() {
       </section>
 
       {/* Results grid placeholder */}
-      <section className="w-full flex flex-col items-center mt-8">
-        {filtered.length === 0 ? (
-          <div id="noResults" className="text-neutral-400 font-semibold text-lg mt-12">
+      <section className="w-full flex flex-col items-center mt-8 pb-8">
+        {paginatedResults.length === 0 ? (
+          <div
+            id="noResults"
+            className="text-neutral-400 font-semibold text-lg mt-12"
+          >
             No results found.
           </div>
         ) : (
           <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-            {filtered.map((prop, i) => (
-              <PropertyCard key={i + prop.title} {...prop} id={i} />
+            {paginatedResults.map((prop, i) => (
+              <PropertyCard key={i + prop.title} {...prop} />
             ))}
           </div>
         )}
       </section>
+      {totalPages > 1 && (
+        <div className="flex mt-6 gap-2 items-center justify-center">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 rounded border disabled:opacity-50"
+          >
+            Prev
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => setCurrentPage(index + 1)}
+              className={`px-3 py-1 rounded border ${
+                currentPage === index + 1 ? "bg-gray-300" : ""
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+            }
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 rounded border disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
