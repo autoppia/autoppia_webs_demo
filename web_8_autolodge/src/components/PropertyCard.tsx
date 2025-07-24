@@ -6,7 +6,7 @@ function formatDateRange(datesFrom: string, datesTo: string) {
   const fromDate = new Date(datesFrom);
   const toDate = new Date(datesTo);
 
-  const options: any = { month: "short", day: "numeric" };
+  const options: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
 
   const fromFormatted = fromDate.toLocaleDateString("en-US", options);
   const toFormatted = toDate.toLocaleDateString("en-US", options);
@@ -23,6 +23,7 @@ export function PropertyCard({
   id,
   datesFrom,
   datesTo,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any) {
   return (
     <Link href={`/stay/${id}`} className="block">
