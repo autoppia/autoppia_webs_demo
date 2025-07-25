@@ -228,7 +228,7 @@ export default function PropertyDetail() {
                   id,
                   checkin: toUtcIsoWithTimezone(checkinDate),
                   checkout: toUtcIsoWithTimezone(checkoutDate),
-                  guests,
+                  guests_set: guests,
                   hotel: prop,
                 });
               } catch (err) {
