@@ -492,6 +492,7 @@ export default function ConfirmPage() {
           </div>
           <button
             className="mt-7 rounded-lg w-full py-4 text-white font-semibold text-[18px] bg-[#616882] hover:bg-[#7d87aa] transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+            id="confirm-and-pay-btn"
             onClick={() => {
               setHasTriedSubmit(true);
 
