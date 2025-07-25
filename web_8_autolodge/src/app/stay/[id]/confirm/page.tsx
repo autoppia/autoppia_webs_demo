@@ -137,7 +137,7 @@ export default function ConfirmPage() {
       <button
         className="flex items-center gap-2 text-neutral-700 text-base font-medium hover:underline focus:underline focus:outline-none transition cursor-pointer mb-7 px-0 py-0"
         onClick={() => {
-          logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, { hotel: prop });
+          // logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, { hotel: prop });
           router.push("/");
         }}
         type="button"
@@ -398,7 +398,7 @@ export default function ConfirmPage() {
               </div>
             </div>
             <textarea
-                id="host-message-input"
+              id="host-message-input"
               value={hostMessage}
               onChange={(e) => setHostMessage(e.target.value)}
               rows={4}
@@ -406,7 +406,7 @@ export default function ConfirmPage() {
               className="w-full border rounded-lg px-3 py-3 text-[16px] bg-white mb-3 resize-none"
             />
             <button
-                id="send-host-message-btn"
+              id="send-host-message-btn"
               onClick={() => {
                 if (hostMessage.trim() !== "") {
                   logEvent(EVENT_TYPES.MESSAGE_HOST, {
@@ -500,7 +500,12 @@ export default function ConfirmPage() {
                 return; // Don't proceed if any field is incomplete
               }
               logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
-                checkin: dateRange.from ? toUtcIsoWithTimezone(dateRange.from) : null,
+                checkin: dateRange.from
+                  ? toUtcIsoWithTimezone(dateRange.from)
+                  : null,
+                checkout: dateRange.to
+                  ? toUtcIsoWithTimezone(dateRange.to)
+                  : null,
                 guests,
                 listingTitle: prop.title,
                 pricePerNight: prop.price,
