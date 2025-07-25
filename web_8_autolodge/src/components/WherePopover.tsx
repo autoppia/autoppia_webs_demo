@@ -61,7 +61,7 @@ export function WherePopover({
   React.useEffect(() => setInput(searchTerm), [searchTerm]);
 
   const commit = (val: string) => {
-    setSearchTerm(val);
+    setSearchTerm(val === "I'm flexible" ? "" : val);
     setOpen(false);
   };
 

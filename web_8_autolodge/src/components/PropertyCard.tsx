@@ -6,7 +6,10 @@ function formatDateRange(datesFrom: string, datesTo: string) {
   const fromDate = new Date(datesFrom);
   const toDate = new Date(datesTo);
 
-  const options: Intl.DateTimeFormatOptions = { month: "short", day: "numeric" };
+  const options: Intl.DateTimeFormatOptions = {
+    month: "short",
+    day: "numeric",
+  };
 
   const fromFormatted = fromDate.toLocaleDateString("en-US", options);
   const toFormatted = toDate.toLocaleDateString("en-US", options);
@@ -23,8 +26,16 @@ export function PropertyCard({
   id,
   datesFrom,
   datesTo,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-}: any) {
+}: {
+  image: string;
+  title: string;
+  location: string;
+  rating: number;
+  price: number;
+  id: number;
+  datesFrom: string;
+  datesTo: string;
+}) {
   return (
     <Link href={`/stay/${id}`} className="block">
       <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
@@ -37,7 +48,7 @@ export function PropertyCard({
             quality={30}
             className="w-full h-full object-cover group-hover:scale-105 transition"
           />
-          <button className="absolute top-3 right-3 p-2 bg-white/80 rounded-full z-10 border border-neutral-200 hover:bg-white">
+          {/* <button className="absolute top-3 right-3 p-2 bg-white/80 rounded-full z-10 border border-neutral-200 hover:bg-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -54,7 +65,7 @@ export function PropertyCard({
                 d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
               />
             </svg>
-          </button>
+          </button> */}
         </div>
         <div className="p-4 flex flex-col gap-1 pb-2">
           <div className="flex items-center gap-1">

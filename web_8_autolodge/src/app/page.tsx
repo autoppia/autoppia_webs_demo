@@ -120,7 +120,7 @@ export default function Home() {
   }, [committedSearch, dateRange, guests]);
 
   return (
-    <div className="flex flex-col w-full items-center mt-4 pb-8">
+    <div className="flex flex-col w-full items-center mt-4 pb-12">
       {/* Search/Filter Bar */}
       <section className="w-full flex justify-center">
         <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
@@ -147,9 +147,9 @@ export default function Home() {
                     e.stopPropagation();
                     setSearchTerm("");
                     setCommittedSearch("");
-                    logEvent(EVENT_TYPES.SEARCH_CLEARED, {
-                      source: "location",
-                    });
+                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, {
+                    //   source: "location",
+                    // });
                   }}
                 >
                   ×
@@ -182,7 +182,7 @@ export default function Home() {
                   onClick={(e) => {
                     e.stopPropagation();
                     setDateRange({ from: null, to: null });
-                    logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "date" });
+                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "date" });
                   }}
                 >
                   ×
@@ -230,7 +230,7 @@ export default function Home() {
                   onClick={(e) => {
                     e.stopPropagation();
                     setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
-                    logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "guests" });
+                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "guests" });
                   }}
                 >
                   ×
@@ -290,7 +290,7 @@ export default function Home() {
       </section>
 
       {/* Results grid placeholder */}
-      <section className="w-full flex flex-col items-center mt-8 pb-8">
+      <section className="w-full flex flex-col items-center mt-8">
         {paginatedResults.length === 0 ? (
           <div
             id="noResults"
