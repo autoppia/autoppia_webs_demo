@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import { useState, useEffect } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { REGION_HOTELS } from "@/library/dataset";
+import { DASHBOARD_HOTELS } from "@/library/dataset";
 import { useRef } from "react";
 
 function toStartOfDay(date: Date): Date {
@@ -22,7 +22,7 @@ export default function ConfirmPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
-  const prop = REGION_HOTELS[Number(params.id)] ?? REGION_HOTELS[0];
+  const prop = DASHBOARD_HOTELS[Number(params.id)] ?? DASHBOARD_HOTELS[0];
   const stayFrom = new Date(prop.datesFrom);
   const stayTo = new Date(prop.datesTo);
   // Load selection from search params (or defaults)
@@ -127,6 +127,7 @@ export default function ConfirmPage() {
         checkin: toUtcIsoWithTimezone(dateRange.from),
         checkout: toUtcIsoWithTimezone(dateRange.to),
         guests,
+        hotel: prop,
       });
     }
   }, []); // empty deps = run once on mount
