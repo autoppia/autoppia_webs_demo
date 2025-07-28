@@ -247,8 +247,20 @@ export default function Home() {
               logEvent(EVENT_TYPES.SEARCH_HOTEL, {
                 searchTerm,
                 dateRange: {
-                  from: dateRange.from?.toISOString() ?? null,
-                  to: dateRange.to?.toISOString() ?? null,
+                  from: dateRange.from
+                    ? (() => {
+                        const fromDate = new Date(dateRange.from);
+                        fromDate.setDate(fromDate.getDate() + 1);
+                        return fromDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
+                      })()
+                    : null,
+                  to: dateRange.to
+                    ? (() => {
+                        const toDate = new Date(dateRange.to);
+                        toDate.setDate(toDate.getDate() + 1);
+                        return toDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
+                      })()
+                    : null,
                 },
                 guests: {
                   adults: guests.adults,
