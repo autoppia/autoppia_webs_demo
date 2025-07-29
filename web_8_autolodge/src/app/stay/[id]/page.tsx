@@ -210,14 +210,10 @@ export default function PropertyDetail() {
               const newState = !isWishlisted;
               setIsWishlisted(newState);
 
+              if(newState) {
+
               logEvent(
-<<<<<<< HEAD
                   EVENT_TYPES.ADD_TO_WISHLIST,
-=======
-                newState
-                  ? EVENT_TYPES.ADD_TO_WISHLIST
-                  : EVENT_TYPES.REMOVE_FROM_WISHLIST,
->>>>>>> 1e13c5f7 (Added Share hotel event, add to wishlist and remove from wishlist event)
                 {
                   title: prop.title,
                   location: prop.location,
@@ -230,6 +226,7 @@ export default function PropertyDetail() {
                   amenities: prop.amenities?.map((a) => a.title),
                 }
               );
+               }
 
               setToastMessage(
                 newState ? "Added to wishlist ❤️" : "Removed from wishlist 💔"
