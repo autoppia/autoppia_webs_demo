@@ -212,8 +212,8 @@ export default function PropertyDetail() {
 
               logEvent(
                 newState
-                  ? EVENT_TYPES.ADD_TO_WISHLIST
-                  : EVENT_TYPES.REMOVE_FROM_WISHLIST,
+                  ? EVENT_TYPES.ADD_TO_WISHLIST,
+                  // : EVENT_TYPES.REMOVE_FROM_WISHLIST,
                 {
                   title: prop.title,
                   location: prop.location,
