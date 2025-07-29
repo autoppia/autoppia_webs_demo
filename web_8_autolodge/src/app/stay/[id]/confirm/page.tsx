@@ -169,7 +169,17 @@ export default function ConfirmPage() {
                 </div>
                 <button
                   onClick={() => {
-                    setDateOpen((x) => !x);
+                    setDateOpen((x) => {
+                      const willOpen = !x;
+
+                      if (willOpen) {
+                        // Clear previous selection when opening
+                        setDateRange({ from: null, to: null });
+                      }
+
+                      return willOpen;
+                    });
+
                     setGuestsOpen(false);
                   }}
                   id="edit-dates-btn"
@@ -189,29 +199,27 @@ export default function ConfirmPage() {
                       }}
                       mode="range"
                       onSelect={(range) => {
-                        if (
-                          range &&
-                          (range.from !== dateRange.from ||
-                            range.to !== dateRange.to)
-                        ) {
-                          setDateRange({
-                            from: range.from ?? null,
-                            to: range.to ?? null,
-                          });
+                        if (!range) return;
+
+                        const { from, to } = range;
+
+                        // Set partial range to allow selecting end date later
+                        setDateRange({ from: from ?? null, to: to ?? null });
+
+                        // Only proceed when both start and end dates are selected
+                        if (from && to) {
                           logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
-                            checkin: range.from
-                              ? toUtcIsoWithTimezone(range.from)
-                              : null,
-                            checkout: range.to
-                              ? toUtcIsoWithTimezone(range.to)
-                              : null,
+                            checkin: toUtcIsoWithTimezone(from),
+                            checkout: toUtcIsoWithTimezone(to),
                             source: "calendar_picker",
-                            hotel: prop, // Pass the whole hotel object
+                            hotel: prop,
                           });
+
                           setDateOpen(false);
+
                           pushWith({
-                            checkin: range.from!,
-                            checkout: range.to!,
+                            checkin: from,
+                            checkout: to,
                           });
                         }
                       }}
