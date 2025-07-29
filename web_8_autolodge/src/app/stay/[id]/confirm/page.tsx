@@ -135,7 +135,7 @@ export default function ConfirmPage() {
       <button
         className="flex items-center gap-2 text-neutral-700 text-base font-medium hover:underline focus:underline focus:outline-none transition cursor-pointer mb-7 px-0 py-0"
         onClick={() => {
-          logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, { hotel: prop });
+          // logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, { hotel: prop });
           router.push("/");
         }}
         type="button"

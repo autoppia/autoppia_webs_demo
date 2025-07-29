@@ -211,7 +211,13 @@ export default function PropertyDetail() {
               setIsWishlisted(newState);
 
               logEvent(
+<<<<<<< HEAD
                   EVENT_TYPES.ADD_TO_WISHLIST,
+=======
+                newState
+                  ? EVENT_TYPES.ADD_TO_WISHLIST
+                  : EVENT_TYPES.REMOVE_FROM_WISHLIST,
+>>>>>>> 1e13c5f7 (Added Share hotel event, add to wishlist and remove from wishlist event)
                 {
                   title: prop.title,
                   location: prop.location,
