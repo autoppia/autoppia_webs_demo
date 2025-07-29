@@ -367,8 +367,6 @@ export default function PropertyDetail() {
               try {
                 await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
                   id,
-                  checkin: toUtcIsoWithTimezone(checkinDate),
-                  checkout: toUtcIsoWithTimezone(checkoutDate),
                   guests_set: guests,
                   hotel: prop,
                 });

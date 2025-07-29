@@ -124,9 +124,7 @@ export default function ConfirmPage() {
     if (dateRange.from && dateRange.to && guests && params.id) {
       logEvent(EVENT_TYPES.RESERVE_HOTEL, {
         id: params.id,
-        checkin: toUtcIsoWithTimezone(dateRange.from),
-        checkout: toUtcIsoWithTimezone(dateRange.to),
-        guests,
+        guests_set: guests,
         hotel: prop,
       });
     }
