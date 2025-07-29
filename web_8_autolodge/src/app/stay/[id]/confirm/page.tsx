@@ -506,26 +506,26 @@ export default function ConfirmPage() {
                 return; // Don't proceed if any field is incomplete
               }
               logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
-                checkin: dateRange.from
-                  ? toUtcIsoWithTimezone(dateRange.from)
-                  : null,
-                checkout: dateRange.to
-                  ? toUtcIsoWithTimezone(dateRange.to)
-                  : null,
-                guests,
-                listingTitle: prop.title,
-                pricePerNight: prop.price,
+                // checkin: dateRange.from
+                //   ? toUtcIsoWithTimezone(dateRange.from)
+                //   : null,
+                // checkout: dateRange.to
+                //   ? toUtcIsoWithTimezone(dateRange.to)
+                //   : null,
+                guests_set: guests,
+                // listingTitle: prop.title,
+                // pricePerNight: prop.price,
                 nights,
                 priceSubtotal,
                 cleaningFee,
                 serviceFee,
                 total,
-                paymentMethod: "credit_card",
+                // paymentMethod: "credit_card",
                 cardNumber,
                 expiration: exp,
                 cvv,
                 country,
-                source: "confirmation_page",
+                // source: "confirmation_page",
                 hotel: prop, // Pass the whole hotel object
               });
 
