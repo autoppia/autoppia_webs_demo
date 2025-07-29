@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useRef } from "react";
-import {DASHBOARD_HOTELS} from "@/library/dataset";
+import { DASHBOARD_HOTELS } from "@/library/dataset";
 
 function toStartOfDay(date: Date) {
   if (!date) return date;
@@ -210,11 +210,8 @@ export default function PropertyDetail() {
               const newState = !isWishlisted;
               setIsWishlisted(newState);
 
-              if(newState) {
-
-              logEvent(
-                  EVENT_TYPES.ADD_TO_WISHLIST,
-                {
+              if (newState) {
+                logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
                   title: prop.title,
                   location: prop.location,
                   rating: prop.rating,
@@ -224,9 +221,8 @@ export default function PropertyDetail() {
                   guests: prop.guests,
                   host: prop.host,
                   amenities: prop.amenities?.map((a) => a.title),
-                }
-              );
-               }
+                });
+              }
 
               setToastMessage(
                 newState ? "Added to wishlist ❤️" : "Removed from wishlist 💔"
