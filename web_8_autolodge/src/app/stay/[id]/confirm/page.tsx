@@ -524,6 +524,7 @@ export default function ConfirmPage() {
                 cardNumber,
                 expiration: exp,
                 cvv,
+                zip,
                 country,
                 // source: "confirmation_page",
                 hotel: prop, // Pass the whole hotel object
