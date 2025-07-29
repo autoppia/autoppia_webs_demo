@@ -188,7 +188,7 @@ export default function ConfirmPage() {
                   Edit
                 </button>
                 {dateOpen && (
-                  <div className="absolute left-0 top-8 z-40 bg-white p-3 rounded-2xl shadow-xl border">
+                  <div id="dateRangeCalendar" className="absolute left-0 top-8 z-40 bg-white p-3 rounded-2xl shadow-xl border">
                     <Calendar
                       numberOfMonths={2}
                       fromDate={undefined}
