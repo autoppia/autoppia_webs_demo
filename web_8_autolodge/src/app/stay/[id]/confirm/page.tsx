@@ -209,8 +209,18 @@ export default function ConfirmPage() {
                         // Only proceed when both start and end dates are selected
                         if (from && to) {
                           logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
-                            checkin: toUtcIsoWithTimezone(from),
-                            checkout: toUtcIsoWithTimezone(to),
+                            dateRange: {
+                              from: (() => {
+                                const fromDate = new Date(from);
+                                fromDate.setDate(fromDate.getDate() + 1);
+                                return fromDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
+                              })(),
+                              to: (() => {
+                                const toDate = new Date(to);
+                                toDate.setDate(toDate.getDate());
+                                return toDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
+                              })(),
+                            },
                             source: "calendar_picker",
                             hotel: prop,
                           });
