@@ -217,7 +217,7 @@ export default function ConfirmPage() {
                               })(),
                               to: (() => {
                                 const toDate = new Date(to);
-                                toDate.setDate(toDate.getDate());
+                                toDate.setDate(toDate.getDate()+1);
                                 return toDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
                               })(),
                             },
