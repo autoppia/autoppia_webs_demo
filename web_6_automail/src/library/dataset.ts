@@ -28,8 +28,11 @@ const categories: EmailCategory[] = [
 ];
 
 // Fixed dataset of 20 emails
-export function generateMockEmails(count = 20): Email[] {
-  const emails: Email[] = [
+// export function generateMockEmails(count = 20): Email[] {
+//
+//   return emails.slice(0, count);
+// }
+const emails: Email[] = [
     // Inbox emails (8)
     {
       id: "email1",
@@ -1493,16 +1496,13 @@ export function generateMockEmails(count = 20): Email[] {
       threadId: "thread20",
     },
   ];
-
-  return emails.slice(0, count);
-}
-
-// Generate draft emails (subset of the fixed dataset)
-export function generateDraftEmails(count = 3): Email[] {
-  const drafts = [
-    generateMockEmails().find((email) => email.id === "email14")!,
-    generateMockEmails().find((email) => email.id === "email15")!,
-    generateMockEmails().find((email) => email.id === "email16")!,
-  ];
-  return drafts.slice(0, count);
-}
+export { emails };
+// // Generate draft emails (subset of the fixed dataset)
+// export function generateDraftEmails(count = 3): Email[] {
+//   const drafts = [
+//     generateMockEmails().find((email) => email.id === "email14")!,
+//     generateMockEmails().find((email) => email.id === "email15")!,
+//     generateMockEmails().find((email) => email.id === "email16")!,
+//   ];
+//   return drafts.slice(0, count);
+// }
