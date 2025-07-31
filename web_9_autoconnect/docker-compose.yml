@@ -1,19 +1,18 @@
-version: '3.8'
-
 services:
-  nextjs:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web_9_auto_connect
     ports:
-      - "8008:8008"
-    volumes:
-      - .:/app
-      - /app/node_modules
+      - "${WEB_PORT}:8008"
+    restart: always
+    environment:
+      - API_URL=http://app:8080
+      - PORT=8008
+      - NODE_ENV=production
     networks:
-      - app-network
+      - apps_net
 
 networks:
-  app-network:
+  apps_net:
     external: true
