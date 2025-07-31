@@ -6,8 +6,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
-import { logEvent,EVENT_TYPES } from "@/library/events";
-
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 interface ProductCarouselProps {
   title: string;
@@ -21,18 +20,21 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
 
   const scroll = (direction: "left" | "right") => {
     if (!containerRef.current) return;
-  
+
     const container = containerRef.current;
     const scrollAmount = container.clientWidth * 0.8;
-  
-    container.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
-  
+
+    container.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+
     // ✅ Log the event
     logEvent(EVENT_TYPES.SCROLL_CAROUSEL, {
       direction: direction.toUpperCase(),
       title,
     });
-  
+
     // Update button visibility after scrolling
     // setTimeout(() => {
     //   if (!containerRef.current) return;
@@ -43,7 +45,6 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
     //   );
     // }, 300);
   };
-  
 
   return (
     <Card className="category-card relative">
@@ -51,13 +52,13 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
 
       <div className="relative">
         {/*{showLeftButton && (*/}
-          <button
-            onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft size={24} />
-          </button>
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft size={24} />
+        </button>
         {/*// )}*/}
         <div
           ref={containerRef}
@@ -68,14 +69,16 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
             <Link
               key={product.id}
               href={`/${product.id}`}
-              onClick={() => logEvent(EVENT_TYPES.VIEW_DETAIL, {
-                section: product.description,
-                title: product.title,
-                price: product.price,
-                category: product.category,
-                rating: product.rating ?? 12,
-                brand: product.brand || "generic",
-              })}
+              onClick={() =>
+                logEvent(EVENT_TYPES.VIEW_DETAIL, {
+                  section: product.description,
+                  title: product.title,
+                  price: product.price,
+                  category: product.category,
+                  rating: product.rating ?? 12,
+                  brand: product.brand || "generic",
+                })
+              }
               className="flex-none w-[160px] md:w-[200px] group"
             >
               <div className="relative h-48 w-full bg-gray-100">
@@ -87,7 +90,9 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                 />
               </div>
               {product.title && (
-                <div className="mt-2 text-sm truncate group-hover:text-blue-600">{product.title}</div>
+                <div className="mt-2 text-sm truncate group-hover:text-blue-600">
+                  {product.title}
+                </div>
               )}
               {product.price && (
                 <div className="text-sm font-bold">{product.price}</div>
@@ -96,15 +101,13 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
           ))}
         </div>
 
-        {/*{showRightButton && (*/}
-          <button
-            onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-            aria-label="Scroll right"
-          >
-            <ChevronRight size={24} />
-          </button>
-        {/*)}*/}
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
+          aria-label="Scroll right"
+        >
+          <ChevronRight size={24} />
+        </button>
       </div>
     </Card>
   );

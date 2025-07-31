@@ -129,4 +129,6 @@ cython_debug/
 .idea/
 
 web_3_autozone/.next/
+web_4_autodining/.next/
 web_3_autozone/node_modules/
+web_4_autodining/node_modules

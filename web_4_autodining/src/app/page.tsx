@@ -20,6 +20,7 @@ import {
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { RestaurantsData } from "@/components/library/dataset";
+import { useSearchParams } from "next/navigation";
 
 // Create restaurants array from jsonData
 const restaurants = RestaurantsData.map((item, index) => ({
@@ -62,11 +63,13 @@ function RestaurantCard({
   date,
   people,
   time,
+  moveBtnVal,
 }: {
   r: (typeof restaurants)[0];
   date: Date | undefined;
   people: number;
   time: string;
+  moveBtnVal: number;
 }) {
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
   return (
@@ -129,7 +132,10 @@ function RestaurantCard({
           </svg>
           Booked {r.bookings} times today
         </div>
-        <div className="flex gap-1 mt-2">
+        <div
+          style={{ marginLeft: `${moveBtnVal}px` }}
+          className="flex gap-1 mt-2"
+        >
           {r.times.map((t) => (
             <Link
               key={t}
@@ -231,6 +237,8 @@ function CardScroller({
 }
 
 export default function HomePage() {
+  const searchParams = useSearchParams();
+  const seed = searchParams.get("seed");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
@@ -238,6 +246,40 @@ export default function HomePage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
+
+  const [moveBookBtn, setMoveBookBtn] = useState(Number);
+  const [moveCompleteBar, setMoveCompleteBar] = useState(Number);
+  const [moveAutoDiningBtn, setMoveAutoDiningBtn] = useState(Number);
+  const [moveSection, setMoveSection] = useState(Number);
+
+  useEffect(() => {
+    const seedFunction = () => {
+      if (seed == null) {
+        return;
+      }
+
+      let convertNum = parseInt(seed);
+
+      if (isNaN(convertNum)) {
+        return;
+      }
+
+      if (convertNum > 10) {
+        convertNum = 10;
+      }
+
+      const btnValue = 5 * convertNum;
+      const barValue = 10 * convertNum;
+      const secValue = 15 * convertNum;
+
+      setMoveBookBtn(btnValue);
+      setMoveCompleteBar(barValue);
+      setMoveAutoDiningBtn(btnValue);
+      setMoveSection(secValue);
+    };
+
+    seedFunction();
+  }, [seed]);
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -307,7 +349,12 @@ export default function HomePage() {
       {/* Navigation/Header */}
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
-          <div className="flex items-center gap-3">
+          <div
+            style={{
+              marginLeft: `${moveAutoDiningBtn}px`,
+            }}
+            className="flex items-center gap-3"
+          >
             <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">AutoDining</span>
@@ -333,7 +380,12 @@ export default function HomePage() {
       </nav>
 
       {/* Controls Bar */}
-      <section className="flex flex-wrap items-center gap-4 mt-8 mb-4 px-4">
+      <section
+        style={{
+          marginTop: `${moveCompleteBar ? moveCompleteBar : "32"}px`,
+        }}
+        className="flex flex-wrap items-center gap-4 mt-8 mb-4 px-4"
+      >
         {/* Date Picker */}
         <Popover open={dateOpen} onOpenChange={setDateOpen}>
           <PopoverTrigger asChild>
@@ -428,7 +480,12 @@ export default function HomePage() {
       </section>
 
       {/* Main Content - Cards, Sections, etc. */}
-      <section className="px-4">
+      <section
+        style={{
+          marginTop: `${moveSection ? moveSection : "32"}px`,
+        }}
+        className="px-4"
+      >
         <h2 className="text-2xl font-bold mb-4 mt-8">
           Available for lunch now
         </h2>
@@ -440,13 +497,19 @@ export default function HomePage() {
               date={date}
               people={people}
               time={time}
+              moveBtnVal={moveBookBtn}
             />
           ))}
         </CardScroller>
       </section>
 
       {/* Introducing OpenDinning Icons Section */}
-      <section className="mt-8 rounded-xl bg-[#f7f7f6] border px-4">
+      <section
+        style={{
+          marginTop: `${moveSection ? moveSection : "32"}px`,
+        }}
+        className="mt-8 rounded-xl bg-[#f7f7f6] border px-4"
+      >
         <div className="flex flex-row justify-between items-center mb-1">
           <div>
             <h2 className="text-2xl md:text-2xl font-bold">
@@ -469,13 +532,19 @@ export default function HomePage() {
               date={date}
               people={people}
               time={time}
+              moveBtnVal={moveBookBtn}
             />
           ))}
         </CardScroller>
       </section>
 
       {/* Award-winning Section */}
-      <section className="mt-8 px-4">
+      <section
+        style={{
+          marginTop: `${moveSection ? moveSection : "32"}px`,
+        }}
+        className="mt-8 px-4"
+      >
         <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
         <CardScroller title="Award-winning">
           {awardRestaurants.map((r) => (
@@ -485,13 +554,19 @@ export default function HomePage() {
               date={date}
               time={time}
               people={people}
+              moveBtnVal={moveBookBtn}
             />
           ))}
         </CardScroller>
       </section>
 
       {/* Diners' Favorite Section */}
-      <section className="mt-10 mb-6 px-4">
+      <section
+        style={{
+          marginTop: `${moveSection ? moveSection : "32"}px`,
+        }}
+        className="mt-10 mb-6 px-4"
+      >
         <h2 className="text-2xl font-bold mb-1">
           Check out diners' favorite restaurants in San Francisco Bay Area
         </h2>

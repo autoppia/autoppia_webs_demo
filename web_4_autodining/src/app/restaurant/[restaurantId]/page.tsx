@@ -14,13 +14,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import React from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Link from "next/link";
 import { RestaurantsData } from "@/components/library/dataset";
+import { useSearchParams } from "next/navigation";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -62,6 +63,8 @@ RestaurantsData.forEach((item, index) => {
 });
 export default function RestaurantPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const seed = searchParams.get("seed");
   const id = params.restaurantId as string;
   const r = restaurantData[id] || restaurantData["vintage-bites"];
   const [people, setPeople] = useState<number | undefined>(undefined);
@@ -71,6 +74,35 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
+
+  const [moveMenuBtn, setMoveMenuBtn] = useState(Number);
+  const [moveReservation, setMoveReservation] = useState(Number);
+
+  useEffect(() => {
+    const seedFunction = () => {
+      if (seed == null) {
+        return;
+      }
+
+      let convertNum = parseInt(seed);
+
+      if (isNaN(convertNum)) {
+        return;
+      }
+
+      if (convertNum > 10) {
+        convertNum = 10;
+      }
+
+      const btnValue = 50 * convertNum;
+      const reservationValue = 5 * convertNum;
+
+      setMoveMenuBtn(btnValue);
+      setMoveReservation(reservationValue);
+    };
+
+    seedFunction();
+  }, [seed]);
 
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
@@ -259,7 +291,12 @@ export default function RestaurantPage() {
                   </div>
                 </div>
               )}
-              <div className="flex justify-center my-7">
+              <div
+                style={{
+                  marginLeft: `${moveMenuBtn}px`,
+                }}
+                className="flex justify-center my-7"
+              >
                 <Button
                   className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
                   onClick={handleToggleMenu}
@@ -302,36 +339,47 @@ export default function RestaurantPage() {
           </h2>
           <div className="flex flex-col gap-3">
             {/* People select (demo, not fully interactive) */}
-            <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="flex items-center gap-2 min-w-[100px] justify-start"
-                >
-                  <UserIcon className="h-5 w-5 text-gray-700" />
-                  {people ? people : "Pick"}{" "}
-                  {people === 1 ? "Person" : "People"}{" "}
-                  <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-32 p-1">
-                {peopleOptions.map((n) => (
+            <div
+              style={{
+                marginLeft: `${moveReservation}px`,
+              }}
+            >
+              <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
+                <PopoverTrigger asChild>
                   <Button
-                    key={n}
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      handlePeopleSelect(n);
-                      setPeopleOpen(false);
-                    }}
+                    variant="outline"
+                    className="flex items-center gap-2 min-w-[100px] justify-start"
                   >
-                    {n} {n === 1 ? "person" : "people"}
+                    <UserIcon className="h-5 w-5 text-gray-700" />
+                    {people ? people : "Pick"}{" "}
+                    {people === 1 ? "Person" : "People"}{" "}
+                    <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                   </Button>
-                ))}
-              </PopoverContent>
-            </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-32 p-1">
+                  {peopleOptions.map((n) => (
+                    <Button
+                      key={n}
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        handlePeopleSelect(n);
+                        setPeopleOpen(false);
+                      }}
+                    >
+                      {n} {n === 1 ? "person" : "people"}
+                    </Button>
+                  ))}
+                </PopoverContent>
+              </Popover>
+            </div>
             {/* Date/time row */}
-            <div className="flex gap-2">
+            <div
+              className="flex gap-2"
+              style={{
+                marginLeft: `${moveReservation}px`,
+              }}
+            >
               <Popover open={dateOpen} onOpenChange={setDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -395,6 +443,9 @@ export default function RestaurantPage() {
                   </Button>
                 ) : time ? (
                   <Link
+                    style={{
+                      marginLeft: `${moveReservation}px`,
+                    }}
                     href={`/booking/${id}/${encodeURIComponent(
                       time
                     )}?date=${formattedDate}&people=${people ?? ""}`}
