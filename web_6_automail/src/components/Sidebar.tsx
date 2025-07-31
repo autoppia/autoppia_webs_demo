@@ -164,6 +164,7 @@ export function Sidebar() {
             const active = isActive(item);
             return (
               <Button
+                id={item.id}
                 key={item.id}
                 variant={active ? "secondary" : "ghost"}
                 className={cn("w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover", active && "sidebar-item-active")}
