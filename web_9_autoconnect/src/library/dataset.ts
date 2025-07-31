@@ -47,13 +47,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     bio: "Software Engineer passionate about building products.",
     title: "Software Engineer",
-    about: `Hello, I'm John! I specialize in frontend engineering and building delightful web experiences for users. I love JavaScript, React, and solving interesting UI problems. Always looking for new tech to learn!\n\nBS in Computer Science from MIT, 2017.`,
+    about: "Hello, I'm John! I specialize in frontend engineering and building delightful web experiences for users. I love JavaScript, React, and solving interesting UI problems. Always looking for new tech to learn!\n\nBS in Computer Science from MIT, 2017.",
     experience: [
       {
         title: "Software Engineer",
         company: "Google",
         logo: "https://logo.clearbit.com/google.com",
-        duration: "Sep 2018 – Present • 5 yrs 9 mos",
+        duration: "Sep 2018 - Present • 5 yrs 9 mos",
         location: "Mountain View, California",
         description:
           "Working on scalable dashboards for Google Cloud platform. Building performant UIs in React, collaborating with cross-functional teams.",
@@ -62,7 +62,7 @@ export const mockUsers: User[] = [
         title: "Frontend Engineer (Intern)",
         company: "Dropbox",
         logo: "https://logo.clearbit.com/dropbox.com",
-        duration: "May 2018 – Aug 2018 • 4 mos",
+        duration: "May 2018 - Aug 2018 • 4 mos",
         location: "San Francisco, California",
         description:
           "Created new onboarding flows and improved user activation in the Dropbox web app as an intern.",
@@ -75,13 +75,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
     bio: "Product Manager & startup enthusiast.",
     title: "Product Manager",
-    about: `Hello, I'm Jane! I am passionate about software engineering and have a strong background in developing innovative solutions. I enjoy working in collaborative environments and am always eager to learn new technologies and improve my skills.\n\nI graduated from Stanford University in 2018 with a B.S. in Computer Science. During my time at Stanford, I had the opportunity to intern at several top companies, gaining valuable experience and insights into the tech industry.`,
+    about: "Hello, I'm Jane! I am passionate about software engineering and have a strong background in developing innovative solutions. I enjoy working in collaborative environments and am always eager to learn new technologies and improve my skills.\n\nI graduated from Stanford University in 2018 with a B.S. in Computer Science. During my time at Stanford, I had the opportunity to intern at several top companies, gaining valuable experience and insights into the tech industry.",
     experience: [
       {
         title: "Product Manager",
         company: "Innovate Ltd",
         logo: "https://logo.clearbit.com/microsoft.com",
-        duration: "Jul 2018 – Present • 5 yrs 11 mos",
+        duration: "Jul 2018 - Present • 5 yrs 11 mos",
         location: "Redmond, Washington",
         description:
           "As a Product Manager at Innovate, I coordinate cross-functional teams to launch new features, lead product demos and deliver high-quality user experiences.",
@@ -90,7 +90,7 @@ export const mockUsers: User[] = [
         title: "Software Development Intern",
         company: "Amazon",
         logo: "https://logo.clearbit.com/amazon.com",
-        duration: "Jun 2017 – Aug 2017 • 3 mos",
+        duration: "Jun 2017 - Aug 2017 • 3 mos",
         location: "Seattle, Washington",
         description:
           "During my internship at Amazon, I worked on projects to improve internal tools, gaining hands-on experience in agile development, API design, and project management.",
@@ -103,13 +103,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/men/76.jpg",
     bio: "Designer focused on usability and delight.",
     title: "UI/UX Designer",
-    about: `Hello, I'm Alex! I design thoughtful and accessible interfaces for modern web products. I believe great design is both beautiful and invisible.\n\nBA in Digital Design from NYU, 2016.`,
+    about: "Hello, I'm Alex! I design thoughtful and accessible interfaces for modern web products. I believe great design is both beautiful and invisible.\n\nBA in Digital Design from NYU, 2016.",
     experience: [
       {
         title: "Senior Designer",
         company: "Pixel Perfect",
         logo: "https://logo.clearbit.com/behance.net",
-        duration: "Jan 2020 – Present • 4 yrs 5 mos",
+        duration: "Jan 2020 - Present • 4 yrs 5 mos",
         location: "Los Angeles, CA",
         description:
           "Leading design for web and mobile apps for clients in e-commerce and tech. I drive design systems and user-centered workflows.",
@@ -118,7 +118,7 @@ export const mockUsers: User[] = [
         title: "Design Intern",
         company: "Adobe",
         logo: "https://logo.clearbit.com/adobe.com",
-        duration: "Jun 2015 – Aug 2015 • 3 mos",
+        duration: "Jun 2015 - Aug 2015 • 3 mos",
         location: "San Jose, CA",
         description:
           "Contributed to Adobe XD prototyping library and participated in usability research for UI patterns.",
@@ -131,13 +131,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/women/45.jpg",
     bio: "Marketing strategist with a love for branding and storytelling.",
     title: "Marketing Lead",
-    about: `Hi, I’m Sarah! I help startups and enterprises build strong brand presence through creative strategy and digital marketing.\n\nMBA from Wharton School, 2016.`,
+    about: "Hi, I'm Sarah! I help startups and enterprises build strong brand presence through creative strategy and digital marketing.\n\nMBA from Wharton School, 2016.",
     experience: [
       {
         title: "Head of Marketing",
         company: "BrandSphere",
         logo: "https://logo.clearbit.com/brandsphere.com",
-        duration: "Feb 2019 – Present • 5 yrs 4 mos",
+        duration: "Feb 2019 - Present • 5 yrs 4 mos",
         location: "New York, NY",
         description:
           "Lead digital marketing efforts, overseeing brand campaigns, social media and content strategy. Managed a team of 10.",
@@ -150,13 +150,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/men/83.jpg",
     bio: "DevOps engineer passionate about cloud infra & CI/CD pipelines.",
     title: "DevOps Engineer",
-    about: `I'm Michael, and I architect scalable DevOps solutions to accelerate product delivery. Love automating everything.\n\nAWS Certified DevOps Engineer, Kubernetes enthusiast.`,
+    about: "I'm Michael, and I architect scalable DevOps solutions to accelerate product delivery. Love automating everything.\n\nAWS Certified DevOps Engineer, Kubernetes enthusiast.",
     experience: [
       {
         title: "DevOps Engineer",
         company: "CloudNetics",
         logo: "https://logo.clearbit.com/cloudnetics.com",
-        duration: "Mar 2020 – Present • 4 yrs 3 mos",
+        duration: "Mar 2020 - Present • 4 yrs 3 mos",
         location: "Remote",
         description:
           "Implemented CI/CD workflows, infrastructure-as-code with Terraform, and monitoring with Prometheus and Grafana.",
@@ -169,13 +169,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/women/34.jpg",
     bio: "HR professional helping build great cultures and teams.",
     title: "HR Manager",
-    about: `Hi there! I'm Nina. I thrive on connecting people, fostering inclusive workplace environments, and scaling teams.\n\nCertified SHRM-CP.`,
+    about: "Hi there! I'm Nina. I thrive on connecting people, fostering inclusive workplace environments, and scaling teams.\n\nCertified SHRM-CP.",
     experience: [
       {
         title: "HR Manager",
         company: "PeopleFirst",
         logo: "https://logo.clearbit.com/peoplefirst.com",
-        duration: "Jan 2021 – Present • 3 yrs 5 mos",
+        duration: "Jan 2021 - Present • 3 yrs 5 mos",
         location: "Austin, TX",
         description:
           "Manage recruitment, employee relations, and performance management for a fast-growing tech company.",
@@ -188,13 +188,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/men/41.jpg",
     bio: "AI/ML researcher turning theory into products.",
     title: "Machine Learning Scientist",
-    about: `I’m David, currently working on foundation models, LLMs, and graph neural networks. I publish regularly and enjoy prototyping AI solutions.\n\nPhD, Computer Science – Carnegie Mellon University.`,
+    about: "I'm David, currently working on foundation models, LLMs, and graph neural networks. I publish regularly and enjoy prototyping AI solutions.\n\nPhD, Computer Science - Carnegie Mellon University.",
     experience: [
       {
         title: "ML Scientist",
         company: "NeuroTech AI",
         logo: "https://logo.clearbit.com/neurotech.ai",
-        duration: "Aug 2020 – Present • 3 yrs 10 mos",
+        duration: "Aug 2020 - Present • 3 yrs 10 mos",
         location: "Palo Alto, CA",
         description:
           "Design and train deep learning models for NLP and CV use cases. Co-authored 5 research papers.",
@@ -207,13 +207,13 @@ export const mockUsers: User[] = [
     avatar: "https://randomuser.me/api/portraits/women/52.jpg",
     bio: "Entrepreneur. Speaker. Creative mind.",
     title: "Startup Founder",
-    about: `Founder of a VC-backed SaaS startup focused on productivity tools for remote teams. Previously built and sold a design consultancy.\n\nPassionate about tech, design, and empowering women in entrepreneurship.`,
+    about: "Founder of a VC-backed SaaS startup focused on productivity tools for remote teams. Previously built and sold a design consultancy.\n\nPassionate about tech, design, and empowering women in entrepreneurship.",
     experience: [
       {
         title: "Founder & CEO",
         company: "RemoteWorks",
         logo: "https://logo.clearbit.com/remoteworks.com",
-        duration: "May 2019 – Present • 5 yrs 1 mo",
+        duration: "May 2019 - Present • 5 yrs 1 mo",
         location: "San Francisco, CA",
         description:
           "Leading product, growth and team operations at a remote-first startup. Raised $2.5M seed funding.",
