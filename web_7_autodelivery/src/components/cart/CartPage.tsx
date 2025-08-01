@@ -392,6 +392,15 @@ export default function CartPage() {
                               logEvent(EVENT_TYPES.ADDRESS_ADDED, {
                                 address: customAddress.trim(),
                                 mode: "delivery",
+                                restaurantId: restaurant?.id || "unknown",
+                                restaurantName: restaurant?.name || "Unknown Restaurant",
+                                items: items.map(item => ({
+                                  itemId: item.id,
+                                  itemName: item.name,
+                                  quantity: item.quantity,
+                                  price: item.price
+                                })),
+                                cartTotal: getTotal()
                               });
                               setIsAddressModalOpen(false);
                             }
@@ -532,10 +541,19 @@ export default function CartPage() {
                             logEvent(EVENT_TYPES.ADDRESS_ADDED, {
                               address: customAddress.trim(),
                               mode: "pickup",
-                            });
-                            setIsPickupInfoModalOpen(false);
-                          }
-                        }}
+                              restaurantId: restaurant?.id || "unknown",
+                              restaurantName: restaurant?.name || "Unknown Restaurant",
+                              items: items.map(item => ({
+                                itemId: item.id,
+                                itemName: item.name,
+                                quantity: item.quantity,
+                                price: item.price
+                              })),
+                              cartTotal: getTotal()
+                              });
+                              setIsPickupInfoModalOpen(false);
+                            }
+                          }}
                       >
                         Save Address
                       </Button>
