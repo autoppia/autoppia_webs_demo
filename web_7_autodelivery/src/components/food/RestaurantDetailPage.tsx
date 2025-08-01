@@ -223,8 +223,14 @@ export default function RestaurantDetailPage({
                     itemName: item.name,
                     itemPrice: item.price,
                   });
+                  const itemWithRestaurant = {
+                    ...item,
+                    restaurantId: restaurant.id,
+                    restaurantName: restaurant.name
+                  };
+
                   setModalOpen(true);
-                  setModalItem(item);
+                  setModalItem(itemWithRestaurant);
                 }}
               >
                 Add to Cart

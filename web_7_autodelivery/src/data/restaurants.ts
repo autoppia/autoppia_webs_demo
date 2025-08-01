@@ -11,15 +11,16 @@ export type MenuItemOption = {
 };
 
 export type MenuItem = {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    sizes?: MenuItemSize[];
-    options?: MenuItemOption[];
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  sizes?: MenuItemSize[];
+  options?: MenuItemOption[];
+  restaurantId?: string;
+  restaurantName?: string;
 };
-
 export type Review = {
     author: string;
     rating: number;

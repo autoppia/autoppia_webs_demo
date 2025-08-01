@@ -67,7 +67,7 @@ export function AddToCartModal({
   }
 
   function handleAdd() {
-    logEvent(EVENT_TYPES.ADD_TO_CART, {
+    logEvent(EVENT_TYPES.ADD_TO_CART_MENU_ITEM, {
       itemId: item.id,
       itemName: item.name,
       basePrice: item.price,
@@ -77,6 +77,8 @@ export function AddToCartModal({
       preferences,
       quantity: qty,
       totalPrice: price,
+      restaurantId: item.restaurantId || "unknown",
+      restaurantName: item.restaurantName || "Unknown Restaurant",
     });
     onAdd({ size, options: checkedOptions, preferences, quantity: qty });
     onOpenChange(false);
