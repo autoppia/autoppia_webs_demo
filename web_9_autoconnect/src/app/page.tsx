@@ -58,6 +58,8 @@ export default function HomePage() {
             postId,
             userName: currentUser.name,
             action: liked ? "liked" : "unliked",
+            posterContent: p.content,
+            posterName: p.user.name,
           });
 
           return updatedPost;
@@ -75,14 +77,16 @@ export default function HomePage() {
       timestamp: new Date().toISOString(),
     };
 
-    setPosts((ps) =>
-      ps.map((p) =>
-        p.id === postId
-          ? {
-              ...p,
-              comments: [...p.comments, comment],
-            }
-          : p
+  const post = posts.find((p) => p.id === postId);
+
+  setPosts((ps) =>
+    ps.map((p) =>
+      p.id === postId
+        ? {
+            ...p,
+            comments: [...p.comments, comment],
+          }
+        : p
       )
     );
 
@@ -91,6 +95,8 @@ export default function HomePage() {
       commentId: comment.id,
       userName: currentUser.name,
       commentText: text,
+      posterName: post?.user.name,
+      posterContent: post?.content,
     });
   }
 
