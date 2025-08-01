@@ -37,7 +37,14 @@ export default function PropertyDetail() {
   const didTrack = useRef(false);
   const params = useParams<{ id: string }>();
   const { id } = params;
-  const prop = DASHBOARD_HOTELS[Number(id)] ?? DASHBOARD_HOTELS[0];
+  const prop = useMemo(() => {
+    const numId = Number(id);
+    const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
+    if (!hotel && !isNaN(numId)) {
+      return DASHBOARD_HOTELS[numId] ?? DASHBOARD_HOTELS[0];
+    }
+    return hotel ?? DASHBOARD_HOTELS[0];
+  }, [id]);
   const stayFrom = new Date(prop.datesFrom);
   const stayTo = new Date(prop.datesTo);
   const availableDates = useMemo(
