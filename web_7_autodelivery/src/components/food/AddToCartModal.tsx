@@ -214,6 +214,7 @@ export function AddToCartModal({
               <Button
                 className="ml-auto px-6 py-2.5 text-lg rounded-full font-bold bg-orange-500 hover:bg-orange-600"
                 onClick={handleAdd}
+                id="add-to-cart-confirm"
               >
                 Add to cart ${price.toFixed(2)}
               </Button>

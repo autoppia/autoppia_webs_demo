@@ -215,6 +215,7 @@ export default function RestaurantDetailPage({
               </span>
               <Button
                 size="sm"
+                id="add-to-cart-modal-btn"
                 onClick={() => {
                   logEvent(EVENT_TYPES.ADD_TO_CART_MODAL_OPEN, {
                     restaurantId: restaurant.id,
