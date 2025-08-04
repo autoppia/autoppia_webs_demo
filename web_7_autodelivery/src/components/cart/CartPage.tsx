@@ -31,7 +31,14 @@ export default function CartPage() {
   ];
   const [customAddress, setCustomAddress] = useState(form.address);
   const [isDropoffModalOpen, setIsDropoffModalOpen] = useState(false);
-  const dropoffOptions = ["Leave it at my door", "Hand it to me"];
+  const dropoffOptions = [
+    "Leave it at my door",
+    "Hand it to me",
+    "Meet outside",
+    "Meet in the lobby",
+    "Call upon arrival",
+    "Text when arriving"
+  ];
   const [selectedDropoff, setSelectedDropoff] = useState("Leave it at my door");
   const [isPickupInfoModalOpen, setIsPickupInfoModalOpen] = useState(false);
   // MODE State
@@ -83,12 +90,14 @@ export default function CartPage() {
     editing,
     setEditing,
     className,
+    id,
   }: {
     value: string;
     onChange: (v: string) => void;
     editing: boolean;
     setEditing: (edit: boolean) => void;
     className?: string;
+    id?: string;
   }) {
     const [tmp, setTmp] = useState(value);
     React.useEffect(() => {
@@ -96,6 +105,7 @@ export default function CartPage() {
     }, [value]);
     return editing ? (
       <input
+        id={id ? `${id}-input` : undefined}
         className={
           "border-b outline-none w-auto font-mono py-0.5 px-1 bg-zinc-50 " +
           (className || "")
@@ -116,6 +126,7 @@ export default function CartPage() {
       />
     ) : (
       <span
+        id={id}
         className={"cursor-pointer hover:underline " + (className || "")}
         tabIndex={0}
         onClick={() => setEditing(true)}
@@ -153,10 +164,11 @@ export default function CartPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 px-4">
-      <div className="flex justify-center mb-7 mt-2">
+    <div id="cart-page-container" className="max-w-3xl mx-auto mt-8 px-4">
+      <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
+            id="delivery-mode-button"
             onClick={() => {
               setMode("delivery");
               logEvent(EVENT_TYPES.DELIVERY_MODE, {
@@ -173,6 +185,7 @@ export default function CartPage() {
             Delivery
           </button>
           <button
+            id="pickup-mode-button"
             onClick={() => {
               setMode("pickup");
               logEvent(EVENT_TYPES.PICKUP_MODE, {
@@ -190,15 +203,16 @@ export default function CartPage() {
           </button>
         </div>
       </div>
-      <div className="bg-white rounded-2xl shadow-lg py-6 px-4 mb-8">
+      <div id="delivery-options-container" className="bg-white rounded-2xl shadow-lg py-6 px-4 mb-8">
         <div className="flex items-center gap-2 mb-5">
           <Clock className="w-5 h-5 text-zinc-500" />
           <span className="text-base font-semibold">
             {mode === "delivery" ? "Delivery Time" : "Pickup Time"}
           </span>
-          <span className="ml-auto text-sm font-normal text-zinc-400">
+          <span id="selected-time-display" className="ml-auto text-sm font-normal text-zinc-400">
             {mode === "pickup" ? (
               <EditableTime
+                id="pickup-time-edit"
                 value={pickupTime}
                 onChange={setPickupTime}
                 editing={editing.field === "pickup"}
@@ -208,6 +222,7 @@ export default function CartPage() {
               />
             ) : deliveryTime === "express" ? (
               <EditableTime
+                id="express-time-edit"
                 value={expressTime}
                 onChange={setExpressTime}
                 editing={editing.field === "express"}
@@ -217,6 +232,7 @@ export default function CartPage() {
               />
             ) : deliveryTime === "standard" ? (
               <EditableTime
+                id="standard-time-edit"
                 value={standardTime}
                 onChange={setStandardTime}
                 editing={editing.field === "standard"}
@@ -233,11 +249,12 @@ export default function CartPage() {
         </div>
         {mode === "delivery" ? (
           <RadioGroup
+            id="delivery-time-options"
             className="flex flex-row gap-4 mb-6"
             value={deliveryTime}
             onValueChange={(v) =>
               setDeliveryTime(v as "express" | "standard" | "scheduled")
-            }            
+            }
           >
             <div
               className={`border rounded-xl px-4 py-3 flex flex-col min-w-[8.5rem] cursor-pointer transition relative ${
@@ -247,13 +264,14 @@ export default function CartPage() {
               }`}
             >
               <RadioGroupItem
+                id="express-delivery-option"
                 value="express"
-                id="express"
                 className="absolute top-3 right-3 focus-visible:outline-none"
               />
               <div className="font-bold text-zinc-900 mb-0.5">Express</div>
               <div className="text-xs text-zinc-500">
                 <EditableTime
+                  id="express-time-display"
                   value={expressTime}
                   onChange={setExpressTime}
                   editing={editing.field === "express"}
@@ -274,13 +292,14 @@ export default function CartPage() {
               }`}
             >
               <RadioGroupItem
+                id="standard-delivery-option"
                 value="standard"
-                id="standard"
                 className="absolute top-3 right-3 focus-visible:outline-none"
               />
               <div className="font-bold text-zinc-900 mb-0.5">Standard</div>
               <div className="text-xs text-zinc-500">
                 <EditableTime
+                  id="standard-time-display"
                   value={standardTime}
                   onChange={setStandardTime}
                   editing={editing.field === "standard"}
@@ -298,8 +317,8 @@ export default function CartPage() {
               }`}
             >
               <RadioGroupItem
+                id="scheduled-delivery-option"
                 value="scheduled"
-                id="scheduled"
                 className="absolute top-3 right-[3px] focus-visible:outline-none"
               />
               <div className="font-bold text-zinc-900 mb-0.5">
@@ -308,6 +327,7 @@ export default function CartPage() {
               <div className="text-xs text-zinc-400">
                 {deliveryTime === "scheduled" ? (
                   <input
+                    id="scheduled-time-input"
                     className="border-b outline-none w-auto py-0.5 px-1 bg-zinc-50"
                     value={scheduledInput}
                     onChange={(e) => setScheduledInput(e.target.value)}
@@ -323,6 +343,7 @@ export default function CartPage() {
           <div className="py-2 pl-1 text-sm">
             <span className="font-semibold">Pickup Time: </span>
             <EditableTime
+              id="pickup-time-display"
               value={pickupTime}
               onChange={setPickupTime}
               editing={editing.field === "pickup"}
@@ -332,12 +353,13 @@ export default function CartPage() {
             />
           </div>
         )}
-        <div className="divide-y divide-zinc-200 mt-3">
+        <div id="delivery-details" className="divide-y divide-zinc-200 mt-3">
           {mode === "delivery" ? (
             <>
-              <div className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
+              <div id="address-section" className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
                 <Home className="w-5 h-5 text-zinc-500" />
                 <div
+                  id="address-selector"
                   className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                   onClick={() => {
                     setCustomAddress(form.address);
@@ -359,9 +381,10 @@ export default function CartPage() {
                     <DialogHeader>
                       <DialogTitle>Select a Delivery Address</DialogTitle>
                     </DialogHeader>
-                    <div className="flex flex-col gap-2 mt-2">
+                    <div id="address-options" className="flex flex-col gap-2 mt-2">
                       {predefinedAddresses.map((addr) => (
                         <button
+                          id={`address-option-${addr.substring(0, 5).replace(/\s+/g, '-')}`}
                           key={addr}
                           onClick={() => {
                             setForm((f) => ({ ...f, address: addr }));
@@ -372,16 +395,18 @@ export default function CartPage() {
                           {addr}
                         </button>
                       ))}
-                      <div className="mt-4">
+                      <div id="custom-address-section" className="mt-4">
                         <label className="text-sm font-medium">
                           Custom Address
                         </label>
                         <Input
+                          id="custom-address-input"
                           value={customAddress}
                           onChange={(e) => setCustomAddress(e.target.value)}
                           placeholder="Type your address"
                         />
                         <Button
+                          id="save-address-button"
                           className="mt-2 w-full"
                           onClick={() => {
                             if (customAddress.trim()) {
@@ -413,9 +438,10 @@ export default function CartPage() {
                   </DialogContent>
                 </Dialog>
               </div>
-              <div className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
+              <div id="dropoff-section" className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
                 <Home className="w-5 h-5 text-zinc-500 mt-3" />
                 <div
+                  id="dropoff-preferences-selector"
                   className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                   onClick={() => setIsDropoffModalOpen(true)}
                 >
@@ -424,7 +450,7 @@ export default function CartPage() {
                       {selectedDropoff}
                     </span>
                     {selectedDropoff === "Leave it at my door" && (
-                      <span className="block text-xs text-zinc-500">
+                      <span id="dropoff-instructions" className="block text-xs text-zinc-500">
                         Please ring the bell and drop off at the door, thank
                         you. Its around the corner on the ground floor
                       </span>
@@ -440,9 +466,10 @@ export default function CartPage() {
                     <DialogHeader>
                       <DialogTitle>Select Drop-off Preference</DialogTitle>
                     </DialogHeader>
-                    <div className="flex flex-col gap-3 mt-3">
+                    <div id="dropoff-options" className="flex flex-col gap-3 mt-3">
                       {dropoffOptions.map((option) => (
                         <button
+                          id={`dropoff-option-${option.toLowerCase().replace(/\s+/g, '-')}`}
                           key={option}
                           onClick={() => {
                             setSelectedDropoff(option);
@@ -461,6 +488,7 @@ export default function CartPage() {
                 </Dialog>
               </div>
               <div
+                id="contact-number-selector"
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                 onClick={() =>
                   formRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -476,6 +504,7 @@ export default function CartPage() {
           ) : (
             <>
               <div
+                id="pickup-address-selector"
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                 onClick={() => setIsPickupInfoModalOpen(true)}
               >
@@ -489,6 +518,7 @@ export default function CartPage() {
                 <ChevronRight className="w-4 h-4 text-zinc-400" />
               </div>
               <div
+                id="pickup-contact-number-selector"
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                 onClick={() =>
                   formRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -508,9 +538,10 @@ export default function CartPage() {
                   <DialogHeader>
                     <DialogTitle>Select a Pickup Address</DialogTitle>
                   </DialogHeader>
-                  <div className="flex flex-col gap-2 mt-2">
+                  <div id="pickup-address-options" className="flex flex-col gap-2 mt-2">
                     {predefinedAddresses.map((addr) => (
                       <button
+                        id={`pickup-address-option-${addr.substring(0, 5).replace(/\s+/g, '-')}`}
                         key={addr}
                         onClick={() => {
                           setForm((f) => ({ ...f, address: addr }));
@@ -521,16 +552,18 @@ export default function CartPage() {
                         {addr}
                       </button>
                     ))}
-                    <div className="mt-4">
+                    <div id="pickup-custom-address-section" className="mt-4">
                       <label className="text-sm font-medium">
                         Custom Address
                       </label>
                       <Input
+                        id="pickup-custom-address-input"
                         value={customAddress}
                         onChange={(e) => setCustomAddress(e.target.value)}
                         placeholder="Type your address"
                       />
                       <Button
+                        id="save-pickup-address-button"
                         className="mt-2 w-full"
                         onClick={() => {
                           if (customAddress.trim()) {
@@ -566,32 +599,35 @@ export default function CartPage() {
         </div>
       </div>
       {orderSuccess ? (
-        <div className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-8 text-center text-xl font-semibold shadow">
+        <div id="order-success-message" className="bg-green-50 border border-green-200 text-green-800 rounded-lg p-8 text-center text-xl font-semibold shadow">
           ✅ Order placed! Thank you for ordering 🙏
           <br />
           We'll deliver your meal soon.
         </div>
       ) : (
         <>
-          <div className="rounded-xl bg-white shadow p-4 mb-8">
+          <div id="cart-items-container" className="rounded-xl bg-white shadow p-4 mb-8">
             {items.map((item) => (
               <div
+                id={`cart-item-${item.id}`}
                 key={item.id}
                 className="flex flex-col md:flex-row items-center gap-4 py-3 border-b last:border-b-0"
               >
                 <img
+                  id={`item-image-${item.id}`}
                   src={item.image}
                   alt={item.name}
                   className="w-16 h-16 rounded-lg object-cover border"
                 />
                 <div className="flex-1">
-                  <div className="font-semibold">{item.name}</div>
-                  <div className="text-zinc-500 text-sm">
+                  <div id={`item-name-${item.id}`} className="font-semibold">{item.name}</div>
+                  <div id={`item-price-${item.id}`} className="text-zinc-500 text-sm">
                     ${item.price.toFixed(2)} • {item.quantity}x
                   </div>
                 </div>
                 <div className="flex gap-2 items-center">
                   <Button
+                    id={`decrement-${item.id}`}
                     size="icon"
                     variant="outline"
                     onClick={() => {
@@ -606,8 +642,9 @@ export default function CartPage() {
                   >
                     -
                   </Button>
-                  <span className="px-2 font-bold">{item.quantity}</span>
+                  <span id={`quantity-${item.id}`} className="px-2 font-bold">{item.quantity}</span>
                   <Button
+                    id={`increment-${item.id}`}
                     size="icon"
                     variant="outline"
                     onClick={() => {
@@ -623,6 +660,7 @@ export default function CartPage() {
                   </Button>
                 </div>
                 <Button
+                  id={`remove-${item.id}`}
                   size="icon"
                   variant="destructive"
                   onClick={() => {
@@ -641,20 +679,22 @@ export default function CartPage() {
                 </Button>
               </div>
             ))}
-            <div className="flex justify-end text-lg font-bold pt-4">
+            <div id="cart-total" className="flex justify-end text-lg font-bold pt-4">
               Total:{" "}
-              <span className="text-green-700 ml-2">
+              <span id="total-amount" className="text-green-700 ml-2">
                 ${getTotal().toFixed(2)}
               </span>
             </div>
           </div>
           <form
+            id="order-form"
             ref={formRef}
             onSubmit={handleSubmit}
             className="bg-white rounded-xl shadow p-6 max-w-lg mx-auto flex flex-col gap-4"
           >
             <h2 className="font-semibold text-xl mb-2">Delivery Information</h2>
             <Input
+              id="customer-name-input"
               required
               name="name"
               placeholder="Your Name"
@@ -662,6 +702,7 @@ export default function CartPage() {
               onChange={handleChange}
             />
             <Input
+              id="delivery-address-input"
               required
               name="address"
               placeholder="Delivery Address"
@@ -669,6 +710,7 @@ export default function CartPage() {
               onChange={handleChange}
             />
             <Input
+              id="contact-phone-input"
               required
               name="phone"
               placeholder="Contact Number"
@@ -676,6 +718,7 @@ export default function CartPage() {
               onChange={handleChange}
             />
             <Button
+              id="place-order-button"
               size="lg"
               className="mt-3"
               type="submit"
