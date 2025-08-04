@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
   fs.writeFileSync(LOG_PATH, JSON.stringify(logs, null, 2));
 
   const externalPayload = {
-    web_agent_id: '88b09cfd-8338-4b0d-8fbb-96449078c770',
+    web_agent_id: webAgentIdHeader || null,
     web_url: req.headers.get("referer"),
     data: newEntry,
   };
