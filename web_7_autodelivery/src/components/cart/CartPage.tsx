@@ -486,7 +486,20 @@ export default function CartPage() {
                           onClick={() => {
                             setSelectedDropoff(option);
                             logEvent(EVENT_TYPES.DROPOFF_PREFERENCE, {
-                              preference: option,
+                              selectedPreference: option,
+                              address: form.address,
+                              name: form.name,
+                              phone: form.phone,
+                              mode,
+                              restaurantId: restaurant?.id || "unknown",
+                              restaurantName: restaurant?.name || "Unknown Restaurant",
+                              items: items.map(item => ({
+                                itemId: item.id,
+                                itemName: item.name,
+                                quantity: item.quantity,
+                                price: item.price
+                              })),
+                              cartTotal: getTotal()
                             });
                             setIsDropoffModalOpen(false);
                           }}
