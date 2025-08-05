@@ -2,6 +2,7 @@
 import { useState } from "react";
 import type { Job } from "@/library/dataset";
 import Image from "next/image";
+import Link from "next/link";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function JobCard({
@@ -13,7 +14,10 @@ export default function JobCard({
 }) {
   const [applied, setApplied] = useState<"none" | "pending" | "done">("none");
 
-  const handleApply = () => {
+  const handleApply = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     if (applied !== "none") return;
 
     logEvent(EVENT_TYPES.APPLY_FOR_JOB, {
@@ -29,7 +33,10 @@ export default function JobCard({
   };
 
   return (
-    <div className="flex items-center gap-4 bg-white rounded shadow p-4 w-full">
+    <Link
+      href={`/jobs/${job.id}`}
+      className="flex items-center gap-4 bg-white rounded shadow p-4 w-full hover:shadow-md transition-shadow cursor-pointer"
+    >
       <Image
         src={job.logo}
         alt={job.company}
@@ -38,11 +45,16 @@ export default function JobCard({
         className="rounded-md bg-gray-100"
       />
       <div className="flex-1">
-        <div className="font-bold text-blue-800 text-lg leading-tight">
+        <div className="font-bold text-blue-800 text-lg leading-tight hover:text-blue-600">
           {job.title}
         </div>
         <div className="text-gray-700 font-medium">{job.company}</div>
         <div className="text-sm text-gray-500">{job.location}</div>
+        {job.salary && (
+          <div className="text-sm text-green-600 font-medium mt-1">
+            {job.salary}
+          </div>
+        )}
       </div>
       <button
         className={`px-4 py-1.5 rounded-full font-semibold transition ${
@@ -61,6 +73,6 @@ export default function JobCard({
           ? "Pending..."
           : "Applied"}
       </button>
-    </div>
+    </Link>
   );
 }

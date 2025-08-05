@@ -127,3 +127,12 @@ cython_debug/
 
 # PyCharm
 .idea/
+
+
+# Node Modules
+web_9_autoconnect/node_modules
+web_9_autoconnect/.next
+web_3_autozone/node_modules
+web_3_autozone/.next
+web_8_autolodge/node_modules
+web_8_autolodge/.next
