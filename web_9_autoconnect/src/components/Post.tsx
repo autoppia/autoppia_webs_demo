@@ -76,33 +76,33 @@ export default function Post({
           />
         </div>
       )}
-      <div className="flex gap-4 items-center text-gray-500 text-sm mb-2">
-        <button
-          className={`flex items-center gap-1 group ${
-            post.liked ? "text-blue-600 font-bold" : "hover:text-blue-600"
-          }`}
-          onClick={(e) => {
-            e.preventDefault(); // ✅ Prevent bubbling if inside a form
-            onLike(post.id); // ✅ Only trigger once
-          }}
+    <div className="flex gap-4 items-center text-gray-500 text-sm mb-2">
+      <button
+        className={`like-btn flex items-center gap-1 group ${
+          post.liked ? "text-blue-600 font-bold" : "hover:text-blue-600"
+        }`}
+        onClick={(e) => {
+          e.preventDefault();
+          onLike(post.id);
+        }}
+      >
+        <svg
+          width="18"
+          height="18"
+          fill="none"
+          viewBox="0 0 24 24"
+          className="inline"
         >
-          <svg
-            width="18"
-            height="18"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="inline"
-          >
-            <path
-              fill="currentColor"
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </svg>
-          {post.likes}
-        </button>
-        <span>Comments: {post.comments.length}</span>
-      </div>
-      <div className="pl-2 space-y-2">
+          <path
+            fill="currentColor"
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          />
+        </svg>
+        {post.likes}
+      </button>
+      <span>Comments: {post.comments.length}</span>
+    </div>
+    <div className="pl-2 space-y-2">
         {post.comments.map((c) => (
           <div key={c.id} className="flex gap-2 items-start text-[13px]">
             <Avatar src={c.user.avatar} alt={c.user.name} size={24} />
