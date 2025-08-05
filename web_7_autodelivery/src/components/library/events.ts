@@ -15,7 +15,12 @@ export const EVENT_TYPES = {
   DELIVERY_MODE: "DELIVERY_MODE", 
   PICKUP_MODE: "PICKUP_MODE", 
   PLACE_ORDER: "PLACE_ORDER", 
-  DELETE_REVIEW: "DELETE_REVIEW",  
+  DELETE_REVIEW: "DELETE_REVIEW",
+  QUICK_ORDER_STARTED: "QUICK_ORDER_STARTED",
+  VIEW_ALL_RESTAURANTS: "VIEW_ALL_RESTAURANTS",
+  VIEW_CART: "VIEW_CART",
+  QUICK_ORDER_MODAL_OPEN: "QUICK_ORDER_MODAL_OPEN",
+  QUICK_REORDER: "QUICK_REORDER",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
@@ -28,9 +33,14 @@ export function logEvent(
 ) {
   if (typeof window === "undefined") return;
 
-  let user = localStorage.getItem("user");
-  if (user === "null") {
-    user = null;
+  let user = null;
+  try {
+    user = localStorage.getItem("user");
+    if (user === "null") {
+      user = null;
+    }
+  } catch (error) {
+    console.error("Error accessing localStorage:", error);
   }
 
   const payload = {

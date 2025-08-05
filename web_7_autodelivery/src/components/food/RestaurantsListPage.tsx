@@ -42,23 +42,23 @@ export default function RestaurantsListPage() {
           onChange={e => setSearch(e.target.value)}
           className="max-w-xs"
         />
-        <Select value={cuisine} onValueChange={v => setCuisine(v)}>
+        <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="All cuisines" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem key="" value="">All cuisines</SelectItem>
+            <SelectItem key="all" value="all">All cuisines</SelectItem>
             {cuisineOptions.map(opt => (
               <SelectItem key={opt} value={opt}>{opt}</SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <Select value={rating} onValueChange={v => setRating(v)}>
+        <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
           <SelectTrigger className="w-32">
             <SelectValue placeholder="All ratings" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem key="" value="">All ratings</SelectItem>
+            <SelectItem key="all" value="all">All ratings</SelectItem>
             {ratingOptions.map(opt => (
               <SelectItem key={opt} value={opt.toString()}>{opt}+</SelectItem>
             ))}

@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import { EVENT_TYPES, logEvent } from "@/components/library/events";
 
 interface RestaurantCardProps {
   id: string;
@@ -12,8 +13,40 @@ interface RestaurantCardProps {
 }
 
 export default function RestaurantCard({ id, name, image, cuisine, rating, description }: RestaurantCardProps) {
+  const handleClick = () => {
+    // Log the event
+    logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+      id,
+      name,
+      cuisine,
+      rating,
+    });
+
+    // Save to recent restaurants
+    if (typeof window !== "undefined") {
+      try {
+        const recent = localStorage.getItem("recent-restaurants");
+        let recentIds = recent ? JSON.parse(recent) : [];
+        
+        // Remove if already exists and add to front
+        recentIds = recentIds.filter((restId: string) => restId !== id);
+        recentIds.unshift(id);
+        
+        // Keep only last 10
+        recentIds = recentIds.slice(0, 10);
+        
+        localStorage.setItem("recent-restaurants", JSON.stringify(recentIds));
+      } catch (error) {
+        console.error("Error saving recent restaurant:", error);
+      }
+    }
+  };
+
   return (
-    <Link href={`/restaurants/${id}`}>
+    <Link 
+      href={`/restaurants/${id}`}
+      onClick={handleClick}
+    >
       <Card className="hover:shadow-xl transition-shadow duration-200 cursor-pointer">
         <div className="relative w-full h-48 rounded-t-xl overflow-hidden">
           <Image src={image} alt={name} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 400px"/>

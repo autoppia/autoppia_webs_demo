@@ -1,0 +1,803 @@
+[
+  {
+    "event_name": "JOBS_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Jobs"
+    },
+    "timestamp": "2025-08-05T06:57:20.163Z"
+  },
+  {
+    "event_name": "JOBS_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Jobs"
+    },
+    "timestamp": "2025-08-05T06:57:20.197Z"
+  },
+  {
+    "event_name": "JOBS_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Jobs"
+    },
+    "timestamp": "2025-08-05T06:57:20.222Z"
+  },
+  {
+    "event_name": "APPLY_FOR_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote"
+    },
+    "timestamp": "2025-08-05T06:57:24.510Z"
+  },
+  {
+    "event_name": "JOBS_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Jobs"
+    },
+    "timestamp": "2025-08-05T06:57:54.593Z"
+  },
+  {
+    "event_name": "PROFILE_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Profile",
+      "username": "alexsmith"
+    },
+    "timestamp": "2025-08-05T07:04:17.708Z"
+  },
+  {
+    "event_name": "PROFILE_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Profile",
+      "username": "alexsmith"
+    },
+    "timestamp": "2025-08-05T07:04:21.007Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "alexsmith",
+      "name": "Alex Smith",
+      "timestamp": "2025-08-05T07:04:22.480Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:04:22.628Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "alexsmith",
+      "name": "Alex Smith",
+      "timestamp": "2025-08-05T07:04:22.483Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:04:22.642Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "alexsmith",
+      "name": "Alex Smith",
+      "timestamp": "2025-08-05T07:10:10.802Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:10:11.244Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "alexsmith",
+      "name": "Alex Smith",
+      "timestamp": "2025-08-05T07:11:55.309Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:11:55.474Z"
+  },
+  {
+    "event_name": "JOBS_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Jobs"
+    },
+    "timestamp": "2025-08-05T07:11:57.454Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:12:05.250Z"
+    },
+    "timestamp": "2025-08-05T07:12:05.399Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:12:05.252Z"
+    },
+    "timestamp": "2025-08-05T07:12:05.408Z"
+  },
+  {
+    "event_name": "APPLY_FOR_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote"
+    },
+    "timestamp": "2025-08-05T07:12:22.162Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j4",
+      "jobTitle": "UI/UX Designer",
+      "company": "Pixel Perfect",
+      "location": "Los Angeles, CA",
+      "timestamp": "2025-08-05T07:12:30.360Z"
+    },
+    "timestamp": "2025-08-05T07:12:30.479Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j4",
+      "jobTitle": "UI/UX Designer",
+      "company": "Pixel Perfect",
+      "location": "Los Angeles, CA",
+      "timestamp": "2025-08-05T07:12:30.361Z"
+    },
+    "timestamp": "2025-08-05T07:12:30.815Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:13:28.700Z"
+    },
+    "timestamp": "2025-08-05T07:13:28.829Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:13:28.702Z"
+    },
+    "timestamp": "2025-08-05T07:13:28.841Z"
+  },
+  {
+    "event_name": "APPLY_FOR_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote"
+    },
+    "timestamp": "2025-08-05T07:13:32.229Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j2",
+      "jobTitle": "Product Designer",
+      "company": "Creative Studio",
+      "location": "New York, NY",
+      "timestamp": "2025-08-05T07:13:39.400Z"
+    },
+    "timestamp": "2025-08-05T07:13:39.525Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j2",
+      "jobTitle": "Product Designer",
+      "company": "Creative Studio",
+      "location": "New York, NY",
+      "timestamp": "2025-08-05T07:13:39.401Z"
+    },
+    "timestamp": "2025-08-05T07:13:39.841Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j5",
+      "jobTitle": "Backend Engineer",
+      "company": "DataStream Inc.",
+      "location": "Boston, MA",
+      "timestamp": "2025-08-05T07:13:45.833Z"
+    },
+    "timestamp": "2025-08-05T07:13:45.986Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j5",
+      "jobTitle": "Backend Engineer",
+      "company": "DataStream Inc.",
+      "location": "Boston, MA",
+      "timestamp": "2025-08-05T07:13:45.836Z"
+    },
+    "timestamp": "2025-08-05T07:13:45.998Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j2",
+      "jobTitle": "Product Designer",
+      "company": "Creative Studio",
+      "location": "New York, NY",
+      "timestamp": "2025-08-05T07:14:20.867Z"
+    },
+    "timestamp": "2025-08-05T07:14:21.312Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j2",
+      "jobTitle": "Product Designer",
+      "company": "Creative Studio",
+      "location": "New York, NY",
+      "timestamp": "2025-08-05T07:14:20.868Z"
+    },
+    "timestamp": "2025-08-05T07:14:21.332Z"
+  },
+  {
+    "event_name": "JOBS_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Jobs"
+    },
+    "timestamp": "2025-08-05T07:14:36.494Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "fr",
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:14:40.157Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "pr",
+      "resultCount": 3
+    },
+    "timestamp": "2025-08-05T07:14:42.819Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "cr",
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:14:47.226Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "14",
+      "resultCount": 0
+    },
+    "timestamp": "2025-08-05T07:15:05.580Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "15",
+      "resultCount": 0
+    },
+    "timestamp": "2025-08-05T07:15:07.431Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "150",
+      "resultCount": 0
+    },
+    "timestamp": "2025-08-05T07:15:08.066Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "1500",
+      "resultCount": 0
+    },
+    "timestamp": "2025-08-05T07:15:08.136Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "150",
+      "resultCount": 0
+    },
+    "timestamp": "2025-08-05T07:15:08.870Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "15",
+      "resultCount": 0
+    },
+    "timestamp": "2025-08-05T07:15:08.881Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:15:44.000Z"
+    },
+    "timestamp": "2025-08-05T07:15:44.108Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:15:44.001Z"
+    },
+    "timestamp": "2025-08-05T07:15:44.426Z"
+  },
+  {
+    "event_name": "HOME_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Home"
+    },
+    "timestamp": "2025-08-05T07:16:25.758Z"
+  },
+  {
+    "event_name": "PROFILE_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Profile",
+      "username": "alexsmith"
+    },
+    "timestamp": "2025-08-05T07:17:09.478Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "alexsmith",
+      "name": "Alex Smith",
+      "timestamp": "2025-08-05T07:17:10.000Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:17:10.108Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "alexsmith",
+      "name": "Alex Smith",
+      "timestamp": "2025-08-05T07:17:10.001Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:17:10.416Z"
+  },
+  {
+    "event_name": "HOME_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Home"
+    },
+    "timestamp": "2025-08-05T07:17:26.184Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "johndoe",
+      "name": "John Doe",
+      "timestamp": "2025-08-05T07:17:29.319Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:17:29.439Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "johndoe",
+      "name": "John Doe",
+      "timestamp": "2025-08-05T07:17:29.593Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:17:29.719Z"
+  },
+  {
+    "event_name": "VIEW_USER_PROFILE",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "username": "johndoe",
+      "name": "John Doe",
+      "timestamp": "2025-08-05T07:17:29.595Z",
+      "source": "post_header_avatar"
+    },
+    "timestamp": "2025-08-05T07:17:29.726Z"
+  },
+  {
+    "event_name": "JOBS_NAVBAR",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "label": "Jobs"
+    },
+    "timestamp": "2025-08-05T07:17:39.004Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j3",
+      "jobTitle": "Marketing Specialist",
+      "company": "Startup Hub",
+      "location": "San Francisco, CA",
+      "timestamp": "2025-08-05T07:23:07.662Z"
+    },
+    "timestamp": "2025-08-05T07:23:07.794Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j3",
+      "jobTitle": "Marketing Specialist",
+      "company": "Startup Hub",
+      "location": "San Francisco, CA",
+      "timestamp": "2025-08-05T07:23:07.665Z"
+    },
+    "timestamp": "2025-08-05T07:23:07.815Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "pr",
+      "filters": {
+        "search": "p",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:23:22.990Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "me",
+      "filters": {
+        "search": "m",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:23:26.257Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "med",
+      "filters": {
+        "search": "me",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:23:26.866Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "me",
+      "filters": {
+        "search": "med",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:23:27.717Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:23:33.922Z"
+    },
+    "timestamp": "2025-08-05T07:23:34.099Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j1",
+      "jobTitle": "Senior Frontend Developer",
+      "company": "Tech Innovations",
+      "location": "Remote",
+      "timestamp": "2025-08-05T07:23:33.924Z"
+    },
+    "timestamp": "2025-08-05T07:23:34.119Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j3",
+      "jobTitle": "Marketing Specialist",
+      "company": "Startup Hub",
+      "location": "San Francisco, CA",
+      "timestamp": "2025-08-05T07:35:05.975Z"
+    },
+    "timestamp": "2025-08-05T07:35:06.117Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j3",
+      "jobTitle": "Marketing Specialist",
+      "company": "Startup Hub",
+      "location": "San Francisco, CA",
+      "timestamp": "2025-08-05T07:35:05.977Z"
+    },
+    "timestamp": "2025-08-05T07:35:06.129Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j4",
+      "jobTitle": "UI/UX Designer",
+      "company": "Pixel Perfect",
+      "location": "Los Angeles, CA",
+      "timestamp": "2025-08-05T07:38:07.564Z"
+    },
+    "timestamp": "2025-08-05T07:38:07.698Z"
+  },
+  {
+    "event_name": "VIEW_JOB",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "jobId": "j4",
+      "jobTitle": "UI/UX Designer",
+      "company": "Pixel Perfect",
+      "location": "Los Angeles, CA",
+      "timestamp": "2025-08-05T07:38:07.566Z"
+    },
+    "timestamp": "2025-08-05T07:38:07.712Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "cr",
+      "filters": {
+        "search": "c",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 2
+    },
+    "timestamp": "2025-08-05T07:39:04.484Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "co",
+      "filters": {
+        "search": "c",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 2
+    },
+    "timestamp": "2025-08-05T07:39:09.293Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "con",
+      "filters": {
+        "search": "co",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:39:09.436Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "cont",
+      "filters": {
+        "search": "con",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:39:10.212Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "con",
+      "filters": {
+        "search": "cont",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:39:13.682Z"
+  },
+  {
+    "event_name": "SEARCH_JOBS",
+    "web_agent_id": null,
+    "user_id": "{\"id\":\"6890be9039e8054d026a33a2\",\"fullName\":\"Tayyab Cheema\",\"email\":\"tayyab.cheema@rev9solutions.com\",\"subscriptionId\":\"79caae2e-a3d0-4716-8f81-a117cc8113fc\",\"subscriptionStatus\":\"active\",\"subscriptionPlan\":\"basic\",\"subscriptionProductId\":\"9e28204e-16fe-48ad-ad17-5f236b345f90\"}",
+    "data": {
+      "query": "co",
+      "filters": {
+        "search": "con",
+        "experience": "3+ years",
+        "salary": "",
+        "location": "",
+        "remote": false
+      },
+      "resultCount": 1
+    },
+    "timestamp": "2025-08-05T07:39:13.839Z"
+  }
+]
