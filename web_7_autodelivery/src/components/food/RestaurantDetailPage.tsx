@@ -37,9 +37,11 @@ type Review = {
 function ReviewsSection({
   reviews,
   isAdmin,
+  restaurant,
 }: {
   reviews: Review[];
   isAdmin?: boolean;
+  restaurant: typeof restaurants[number];
 }) {
   const [localReviews, setLocalReviews] = useState(reviews);
   const handleDelete = (idx: number) => {
@@ -50,6 +52,10 @@ function ReviewsSection({
       rating: deleted.rating,
       comment: deleted.comment,
       date: deleted.date,
+      restaurantId: restaurant.id,
+      restaurantName: restaurant.name,
+      cuisine: restaurant.cuisine,
+      restaurantRating: restaurant.rating,
     });
 
     setLocalReviews((r) => r.filter((_, i) => i !== idx));
@@ -253,7 +259,7 @@ export default function RestaurantDetailPage({
         />
       )}
       {/* Reviews section */}
-      <ReviewsSection reviews={restaurant.reviews} isAdmin={isAdmin} />
+      <ReviewsSection reviews={restaurant.reviews} isAdmin={isAdmin} restaurant={restaurant} />
       {/* Floating Cart Access here! */}
       <CartFab />
     </div>
