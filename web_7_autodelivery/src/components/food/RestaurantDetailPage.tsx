@@ -56,6 +56,7 @@ function ReviewsSection({
       restaurantName: restaurant.name,
       cuisine: restaurant.cuisine,
       restaurantRating: restaurant.rating,
+      restaurantDescription: restaurant.description,
     });
 
     setLocalReviews((r) => r.filter((_, i) => i !== idx));
