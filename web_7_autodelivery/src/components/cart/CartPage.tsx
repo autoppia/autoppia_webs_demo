@@ -67,7 +67,19 @@ export default function CartPage() {
     field: "express" | "standard" | "scheduled" | "pickup" | null;
   }>({ field: null });
   const [scheduledInput, setScheduledInput] = useState("");
-
+  React.useEffect(() => {
+    if (hydrated && items.length > 0) {
+      logEvent(EVENT_TYPES.OPEN_CHECKOUT_PAGE, {
+        itemCount: items.reduce((acc: number, i: { quantity: number }) => acc + i.quantity, 0),
+        items: items.map((item: { id: string; name: string; quantity: number; price: number }) => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      });
+    }
+  }, [hydrated, items]);
   if (!hydrated) {
     return (
       <div className="flex justify-center py-16">
