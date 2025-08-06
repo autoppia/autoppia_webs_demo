@@ -693,11 +693,20 @@ export default function CartPage() {
                     const remainingItems = items.filter(
                       (i) => i.id !== item.id
                     );
-                    if (remainingItems.length === 0) {
-                      logEvent(EVENT_TYPES.EMPTY_CART, {
-                        message: "All items removed from cart",
+                    logEvent(EVENT_TYPES.EMPTY_CART, {
+                        itemId: item.id,
+                        itemName: item.name,
+                        price: item.price,
+                        quantity: item.quantity,
+                        restaurantId: item.restaurantId,
+                        restaurantName: restaurant?.name || "Unknown Restaurant",
+                        cartTotal: getTotal(),
                       });
-                    }
+                    // if (remainingItems.length === 0) {
+                    //   logEvent(EVENT_TYPES.EMPTY_CART, {
+                    //     message: "All items removed from cart",
+                    //   });
+                    // }
                   }}
                 >
                   ×
