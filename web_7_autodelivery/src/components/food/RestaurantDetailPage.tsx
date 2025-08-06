@@ -125,7 +125,6 @@ export default function RestaurantDetailPage({
       };
 
       logEvent(EVENT_TYPES.VIEW_RESTAURANT, eventPayload);
-      console.log("VIEW_RESTAURANT event triggered:", eventPayload);
     }
   }, [restaurant]);
   const addToCart = useCartStore((state) => state.addToCart);
@@ -155,7 +154,7 @@ export default function RestaurantDetailPage({
         options: transformedOptions,
       };
 
-      addToCart(payload, restaurant.id);
+      addToCart(payload, restaurant.id, custom.quantity);
       setModalOpen(false);
       setModalItem(null);
     }
