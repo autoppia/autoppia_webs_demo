@@ -494,8 +494,8 @@ export default function CartPage() {
                               restaurantId: restaurant?.id || "unknown",
                               restaurantName: restaurant?.name || "Unknown Restaurant",
                               items: items.map(item => ({
-                                itemId: item.id,
-                                itemName: item.name,
+                                id: item.id,
+                                name: item.name,
                                 quantity: item.quantity,
                                 price: item.price
                               })),
