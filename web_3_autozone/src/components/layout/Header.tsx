@@ -95,7 +95,6 @@ export function Header() {
           <Link
             href="/cart"
             className="text-gray-700 flex items-end"
-            onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
           >
             <div className="relative">
               <ShoppingCart size={32} />

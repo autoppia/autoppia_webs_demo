@@ -8,9 +8,6 @@ export default function HeroSection() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleOrderNowClick = () => {
-    logEvent(EVENT_TYPES.QUICK_ORDER_MODAL_OPEN, {
-      source: "hero_section"
-    });
     setModalOpen(true);
   };
 

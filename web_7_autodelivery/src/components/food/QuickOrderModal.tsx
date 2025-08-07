@@ -310,7 +310,6 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
               variant="outline"
               size="sm"
               onClick={() => {
-                logEvent(EVENT_TYPES.VIEW_CART, { source: "quick_order_modal" });
                 onOpenChange(false);
                 window.location.href = "/cart";
               }}
