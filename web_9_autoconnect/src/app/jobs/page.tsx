@@ -114,17 +114,25 @@ export default function JobsPage() {
     });
   }, [filters]);
 
+  function triggerSearchEvent() {
+    const query = filters.search.trim();
+    logEvent(EVENT_TYPES.SEARCH_JOBS, {
+      query,
+      filters,
+      resultCount: filteredJobs.length,
+    });
+  }
   function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     setFilters((prev) => ({ ...prev, search: val }));
 
-    if (val.trim().length >= 2) {
-      logEvent(EVENT_TYPES.SEARCH_JOBS, {
-        query: val.trim(),
-        filters: filters,
-        resultCount: filteredJobs.length,
-      });
-    }
+    // if (val.trim().length >= 2) {
+    //   logEvent(EVENT_TYPES.SEARCH_JOBS, {
+    //     query: val.trim(),
+    //     filters: filters,
+    //     resultCount: filteredJobs.length,
+    //   });
+    // }
   }
 
   function handleFilterChange(
@@ -249,7 +257,16 @@ export default function JobsPage() {
           </div>
         </div>
       </div>
-
+       {/* Search Button */}
+      <div className="mt-4 flex justify-end">
+        <button
+            id="search-job-btn"
+            onClick={triggerSearchEvent}
+            className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
+         >
+          Search
+        </button>
+      </div>
       {/* Results Count */}
       <div className="mb-4">
         <p className="text-gray-600">
@@ -270,6 +287,8 @@ export default function JobsPage() {
           filteredJobs.map((job) => <JobCard key={job.id} job={job} />)
         )}
       </div>
+
+
     </section>
   );
 }
