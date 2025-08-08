@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -20,6 +20,7 @@ import {
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { RestaurantsData } from "@/components/library/dataset";
+import { useSearchParams } from "next/navigation";
 
 // Create restaurants array from jsonData
 const restaurants = RestaurantsData.map((item, index) => ({
@@ -63,12 +64,52 @@ function RestaurantCard({
   people,
   time,
 }: {
-  r: (typeof restaurants)[0];
+  r: {
+    id: string;
+    name: string;
+    cuisine: string;
+    area: string;
+    reviews: number;
+    stars: number;
+    price: string;
+    bookings: number;
+    image: string;
+    times: string[];
+  };
   date: Date | undefined;
   people: number;
   time: string;
 }) {
+  const searchParams = useSearchParams();
+  const seedParam = searchParams?.get("seed");
+  const seed = Number(seedParam) || 0;
+
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
+
+  // Seed-based layout variation
+  const getLayoutFromSeed = (seed: number) => {
+    const justifyOptions = [
+      "flex-start",
+      "center",
+      "flex-end",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ];
+    const marginTopOptions = [0, 4, 8, 12, 16];
+    const wrapOptions = [true, false, false, true, false];
+
+    const index = seed % 5;
+
+    return {
+      justify: justifyOptions[index],
+      marginTop: marginTopOptions[index],
+      wrap: wrapOptions[index],
+    };
+  };
+
+  const layout = getLayoutFromSeed(seed);
+
   return (
     <div className="rounded-xl border shadow-sm bg-white w-[255px] flex-shrink-0 overflow-hidden flex flex-col justify-between">
       <Link
@@ -90,6 +131,7 @@ function RestaurantCard({
           className="w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition"
         />
       </Link>
+
       <div className="p-3 flex flex-col gap-1 h-full">
         <div className="font-bold text-lg mb-1">{r.name}</div>
         <div className="flex items-center mb-1">
@@ -129,37 +171,121 @@ function RestaurantCard({
           </svg>
           Booked {r.bookings} times today
         </div>
-        <div className="flex gap-1 mt-2">
-          {r.times.map((t) => (
-            <Link
-              key={t}
-              href={`/booking/${r.id}/${encodeURIComponent(
-                time
-              )}?date=${formattedDate}&people=${people}`}
-              onClick={() =>
-                logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                  restaurantId: r.id,
-                  restaurantName: r.name,
-                  date: formattedDate,
-                  time: time,
-                  people,
-                })
-              }
-              passHref
+
+        {/* Button layout with seed-based randomness */}
+        {layout.wrap ? (
+          <div
+            className="mt-2"
+            style={{ marginTop: layout.marginTop }}
+            data-testid={`book-wrapper-${seed}`}
+          >
+            <div
+              className="flex gap-1"
+              style={{ justifyContent: layout.justify }}
             >
-              <Button
-                className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
-                asChild
+              {r.times.map((t) => (
+                <Link
+                  key={t}
+                  href={`/booking/${r.id}/${encodeURIComponent(
+                    time
+                  )}?date=${formattedDate}&people=${people}`}
+                  onClick={() =>
+                    logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                      restaurantId: r.id,
+                      restaurantName: r.name,
+                      date: formattedDate,
+                      time: time,
+                      people,
+                    })
+                  }
+                  passHref
+                >
+                  <Button
+                    className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                    asChild
+                  >
+                    <span>Book Restaurant</span>
+                  </Button>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div
+            className="flex gap-1 mt-2"
+            style={{
+              justifyContent: layout.justify,
+              marginTop: layout.marginTop,
+            }}
+          >
+            {r.times.map((t) => (
+              <Link
+                key={t}
+                href={`/booking/${r.id}/${encodeURIComponent(
+                  time
+                )}?date=${formattedDate}&people=${people}`}
+                onClick={() =>
+                  logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                    restaurantId: r.id,
+                    restaurantName: r.name,
+                    date: formattedDate,
+                    time: time,
+                    people,
+                  })
+                }
+                passHref
               >
-                <span>Book Restaurant</span>
-              </Button>
-            </Link>
-          ))}
-        </div>
+                <Button
+                  className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                  asChild
+                >
+                  <span>Book Restaurant</span>
+                </Button>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
+const getLayoutVariant = (seed: number) => {
+  const marginMap = [2, 4, 6, 8, 10, 12, 14, 16, 20, 24];
+  const wrapMap = [
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+  ];
+  const chevronOffsetMap = [-10, -5, 0, 5, 10, -8, 4, -3, 7, -6]; // px
+  const chevronWrapMap = [
+    true,
+    false,
+    false,
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+    true,
+  ];
+
+  const index = (seed - 1) % 10;
+  return {
+    marginTop: marginMap[index],
+    wrapButton: wrapMap[index],
+    chevronOffset: chevronOffsetMap[index],
+    wrapChevron: chevronWrapMap[index],
+  };
+};
 
 function CardScroller({
   children,
@@ -171,6 +297,13 @@ function CardScroller({
   const ref = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
+
+  const searchParams = useSearchParams();
+  const seed = parseInt(searchParams.get("seed") || "1", 10);
+  const { marginTop, wrapButton, wrapChevron, chevronOffset } = useMemo(
+    () => getLayoutVariant(seed),
+    [seed]
+  );
 
   useEffect(() => {
     function check() {
@@ -202,28 +335,71 @@ function CardScroller({
 
   return (
     <div className="relative w-full" suppressHydrationWarning>
-      <button
-        onClick={() => scroll(-1)}
-        className="absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
-        style={{ marginLeft: -24 }}
-        aria-label="Scroll left"
-      >
-        <ChevronLeft className="h-6 w-6 text-[#444]" />
-      </button>
+      {/* Left Chevron */}
+      {wrapChevron ? (
+        <div data-testid={`chevron-left-wrapper-${seed}`}>
+          <button
+            onClick={() => scroll(-1)}
+            className="absolute z-10 left-0 bg-white border shadow rounded-full p-2 flex items-center justify-center"
+            style={{
+              top: `calc(50% + ${chevronOffset}px)`,
+              marginLeft: -24,
+            }}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="h-6 w-6 text-[#444]" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => scroll(-1)}
+          className="absolute z-10 left-0 bg-white border shadow rounded-full p-2 flex items-center justify-center"
+          style={{
+            top: `calc(50% + ${chevronOffset}px)`,
+            marginLeft: -24,
+          }}
+          aria-label="Scroll left"
+        >
+          <ChevronLeft className="h-6 w-6 text-[#444]" />
+        </button>
+      )}
+
+      {/* Scrollable Content */}
       <div
         ref={ref}
         className="flex gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-hide pl-1 pr-10"
       >
         {children}
       </div>
-      <button
-        onClick={() => scroll(1)}
-        className="absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
-        style={{ marginRight: -24 }}
-        aria-label="Scroll right"
-      >
-        <ChevronRight className="h-6 w-6 text-[#444]" />
-      </button>
+
+      {/* Right Chevron */}
+      {wrapChevron ? (
+        <div data-testid={`chevron-right-wrapper-${seed}`}>
+          <button
+            onClick={() => scroll(1)}
+            className="absolute z-10 right-0 bg-white border shadow rounded-full p-2 flex items-center justify-center"
+            style={{
+              top: `calc(50% + ${chevronOffset}px)`,
+              marginRight: -24,
+            }}
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="h-6 w-6 text-[#444]" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => scroll(1)}
+          className="absolute z-10 right-0 bg-white border shadow rounded-full p-2 flex items-center justify-center"
+          style={{
+            top: `calc(50% + ${chevronOffset}px)`,
+            marginRight: -24,
+          }}
+          aria-label="Scroll right"
+        >
+          <ChevronRight className="h-6 w-6 text-[#444]" />
+        </button>
+      )}
     </div>
   );
 }
@@ -236,6 +412,13 @@ export default function HomePage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
+
+  const searchParams = useSearchParams();
+  const seed = parseInt(searchParams.get("seed") || "1", 10);
+  const { marginTop, wrapButton } = useMemo(
+    () => getLayoutVariant(seed),
+    [seed]
+  );
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -331,7 +514,9 @@ export default function HomePage() {
       </nav>
 
       {/* Controls Bar */}
-      <section className="flex flex-wrap items-center gap-4 mt-8 mb-4 px-4">
+      <section
+        className={`flex flex-wrap items-center gap-4 mb-4 px-4 mt-${marginTop}`}
+      >
         {/* Date Picker */}
         <Popover open={dateOpen} onOpenChange={setDateOpen}>
           <PopoverTrigger asChild>
@@ -420,160 +605,336 @@ export default function HomePage() {
           value={search}
           onChange={handleSearchChange}
         />
-        <button className="ml-2 px-5 py-2 rounded text-lg bg-[#46a758] text-white">
-          Let's go
-        </button>
+        {wrapButton ? (
+          <div className="ml-2" data-testid={`wrapper-${seed}`}>
+            <button
+              className="px-5 py-2 rounded text-lg bg-[#46a758] text-white"
+              data-testid={`lets-go-${seed}`}
+            >
+              Let's go
+            </button>
+          </div>
+        ) : (
+          <button
+            className="ml-2 px-5 py-2 rounded text-lg bg-[#46a758] text-white"
+            data-testid={`lets-go-${seed}`}
+          >
+            Let's go
+          </button>
+        )}
       </section>
 
       {/* Main Content - Cards, Sections, etc. */}
-      <section className="px-4">
-        <h2 className="text-2xl font-bold mb-4 mt-8">
-          Available for lunch now
-        </h2>
-        <CardScroller title="Available for lunch now">
-          {filtered.map((r) => (
-            <RestaurantCard
-              key={r.id + "-lunch"}
-              r={r}
-              date={date}
-              people={people}
-              time={time}
-            />
-          ))}
-        </CardScroller>
-      </section>
+      {wrapButton ? (
+        <div data-testid={`section-wrapper-${seed}`}>
+          <section className={`px-4 mt-${marginTop}`}>
+            <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
+            <CardScroller title="Available for lunch now">
+              {filtered.map((r) => (
+                <RestaurantCard
+                  key={r.id + "-lunch"}
+                  r={r}
+                  date={date}
+                  people={people}
+                  time={time}
+                />
+              ))}
+            </CardScroller>
+          </section>
+        </div>
+      ) : (
+        <section className={`px-4 mt-${marginTop}`}>
+          <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
+          <CardScroller title="Available for lunch now">
+            {filtered.map((r) => (
+              <RestaurantCard
+                key={r.id + "-lunch"}
+                r={r}
+                date={date}
+                people={people}
+                time={time}
+              />
+            ))}
+          </CardScroller>
+        </section>
+      )}
 
       {/* Introducing OpenDinning Icons Section */}
-      <section className="mt-8 rounded-xl bg-[#f7f7f6] border px-4">
-        <div className="flex flex-row justify-between items-center mb-1">
-          <div>
-            <h2 className="text-2xl md:text-2xl font-bold">
-              Introducing OpenDinning Icons
-            </h2>
-            <div className="text-base text-gray-600 mt-1 mb-3">
-              Book the city's award-winners, hot newcomers, and hard-to-get
-              tables.
+      {wrapButton ? (
+        <div data-testid={`icon-section-wrapper-${seed}`}>
+          <section
+            className={`mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+          >
+            <div className="flex flex-row justify-between items-center mb-1">
+              <div>
+                <h2 className="text-2xl md:text-2xl font-bold">
+                  Introducing OpenDinning Icons
+                </h2>
+                <div className="text-base text-gray-600 mt-1 mb-3">
+                  Book the city's award-winners, hot newcomers, and hard-to-get
+                  tables.
+                </div>
+              </div>
+              <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
+                Explore Icon restaurants
+              </button>
             </div>
-          </div>
-          <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
-            Explore Icon restaurants
-          </button>
+            <CardScroller title="Introducing OpenDinning Icons">
+              {iconRestaurants.map((r) => (
+                <RestaurantCard
+                  key={r.id + "-icon"}
+                  r={r}
+                  date={date}
+                  people={people}
+                  time={time}
+                />
+              ))}
+            </CardScroller>
+          </section>
         </div>
-        <CardScroller title="Introducing OpenDinning Icons">
-          {iconRestaurants.map((r) => (
-            <RestaurantCard
-              key={r.id + "-icon"}
-              r={r}
-              date={date}
-              people={people}
-              time={time}
-            />
-          ))}
-        </CardScroller>
-      </section>
+      ) : (
+        <section
+          className={`mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+        >
+          <div className="flex flex-row justify-between items-center mb-1">
+            <div>
+              <h2 className="text-2xl md:text-2xl font-bold">
+                Introducing OpenDinning Icons
+              </h2>
+              <div className="text-base text-gray-600 mt-1 mb-3">
+                Book the city's award-winners, hot newcomers, and hard-to-get
+                tables.
+              </div>
+            </div>
+            <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
+              Explore Icon restaurants
+            </button>
+          </div>
+          <CardScroller title="Introducing OpenDinning Icons">
+            {iconRestaurants.map((r) => (
+              <RestaurantCard
+                key={r.id + "-icon"}
+                r={r}
+                date={date}
+                people={people}
+                time={time}
+              />
+            ))}
+          </CardScroller>
+        </section>
+      )}
 
       {/* Award-winning Section */}
-      <section className="mt-8 px-4">
-        <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
-        <CardScroller title="Award-winning">
-          {awardRestaurants.map((r) => (
-            <RestaurantCard
-              key={r.id + "-award"}
-              r={r}
-              date={date}
-              time={time}
-              people={people}
-            />
-          ))}
-        </CardScroller>
-      </section>
+      {wrapButton ? (
+        <div data-testid={`award-section-wrapper-${seed}`}>
+          <section className={`mt-${marginTop} px-4`}>
+            <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
+            <CardScroller title="Award-winning">
+              {awardRestaurants.map((r) => (
+                <RestaurantCard
+                  key={r.id + "-award"}
+                  r={r}
+                  date={date}
+                  time={time}
+                  people={people}
+                />
+              ))}
+            </CardScroller>
+          </section>
+        </div>
+      ) : (
+        <section className={`mt-${marginTop} px-4`}>
+          <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
+          <CardScroller title="Award-winning">
+            {awardRestaurants.map((r) => (
+              <RestaurantCard
+                key={r.id + "-award"}
+                r={r}
+                date={date}
+                time={time}
+                people={people}
+              />
+            ))}
+          </CardScroller>
+        </section>
+      )}
 
       {/* Diners' Favorite Section */}
-      <section className="mt-10 mb-6 px-4">
-        <h2 className="text-2xl font-bold mb-1">
-          Check out diners' favorite restaurants in San Francisco Bay Area
-        </h2>
-        <div className="text-base text-gray-600 mb-6">
-          Diners' Choice Awards are based on where your fellow diners book,
-          dine, and review. Only verified diners get to review restaurants on
-          OpenDinning, so our data doesn't lie.
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Top pick */}
-          <Link
-            href={`/restaurant/${restaurants[0].id}`}
-            passHref
-            className="flex-[2] min-w-[270px] cursor-pointer group"
-            onClick={() =>
-              logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
-                restaurantId: restaurants[0].id,
-                restaurantName: restaurants[0].name,
-                cuisine: restaurants[0].cuisine,
-                area: restaurants[0].area,
-                reviews: restaurants[0].reviews,
-              })
-            }
-          >
-            <div>
-              <img
-                className="rounded-lg w-full max-h-60 object-cover mb-2 group-hover:opacity-90 transition"
-                src={restaurants[0].image}
-                alt={restaurants[0].name}
-              />
-              <div className="font-bold text-lg">{restaurants[0].name}</div>
-              <div className="text-gray-500 text-sm mb-1">
-                Diners top pick · {restaurants[0].cuisine}{" "}
-                <StarNumber rating={restaurants[0].stars} />{" "}
-                <span className="text-gray-600">
-                  ({restaurants[0].reviews})
-                </span>
-              </div>
-              <div className="text-gray-700 text-[15px]">
-                Located in {restaurants[0].area}, {restaurants[0].name} is a
-                favorite for {restaurants[0].cuisine} cuisine lovers.
-              </div>
+      {wrapButton ? (
+        <div data-testid={`diners-choice-wrapper-${seed}`}>
+          <section className={`mt-${marginTop} mb-6 px-4`}>
+            <h2 className="text-2xl font-bold mb-1">
+              Check out diners' favorite restaurants in San Francisco Bay Area
+            </h2>
+            <div className="text-base text-gray-600 mb-6">
+              Diners' Choice Awards are based on where your fellow diners book,
+              dine, and review. Only verified diners get to review restaurants
+              on OpenDinning, so our data doesn't lie.
             </div>
-          </Link>
 
-          {/* Next two favorites */}
-          <div className="flex flex-1 flex-col gap-3 min-w-56">
-            {restaurants.slice(1, 3).map((r) => (
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Top pick */}
               <Link
-                key={r.id}
-                href={`/restaurant/${r.id}`}
+                href={`/restaurant/${restaurants[0].id}`}
                 passHref
-                className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0 cursor-pointer group"
+                className="flex-[2] min-w-[270px] cursor-pointer group"
                 onClick={() =>
                   logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
-                    restaurantId: r.id,
-                    restaurantName: r.name,
-                    cuisine: r.cuisine,
-                    area: r.area,
-                    reviews: r.reviews,
+                    restaurantId: restaurants[0].id,
+                    restaurantName: restaurants[0].name,
+                    cuisine: restaurants[0].cuisine,
+                    area: restaurants[0].area,
+                    reviews: restaurants[0].reviews,
                   })
                 }
               >
-                <img
-                  className="w-24 h-20 rounded-lg object-cover group-hover:opacity-90 transition"
-                  src={r.image}
-                  alt={r.name}
-                />
-                <div className="flex-1 flex flex-col">
-                  <div className="font-semibold text-lg">{r.name}</div>
+                <div>
+                  <img
+                    className="rounded-lg w-full max-h-60 object-cover mb-2 group-hover:opacity-90 transition"
+                    src={restaurants[0].image}
+                    alt={restaurants[0].name}
+                  />
+                  <div className="font-bold text-lg">{restaurants[0].name}</div>
                   <div className="text-gray-500 text-sm mb-1">
-                    {r.price} • {r.cuisine} <StarNumber rating={r.stars} />{" "}
-                    <span className="text-gray-700">({r.reviews})</span>
+                    Diners top pick · {restaurants[0].cuisine}{" "}
+                    <StarNumber rating={restaurants[0].stars} />{" "}
+                    <span className="text-gray-600">
+                      ({restaurants[0].reviews})
+                    </span>
                   </div>
-                  <div className="text-gray-700 text-[15px] line-clamp-2">
-                    Located in {r.area}, well-rated by {r.reviews} diners.
+                  <div className="text-gray-700 text-[15px]">
+                    Located in {restaurants[0].area}, {restaurants[0].name} is a
+                    favorite for {restaurants[0].cuisine} cuisine lovers.
                   </div>
                 </div>
               </Link>
-            ))}
-          </div>
+
+              {/* Next two favorites */}
+              <div className="flex flex-1 flex-col gap-3 min-w-56">
+                {restaurants.slice(1, 3).map((r) => (
+                  <Link
+                    key={r.id}
+                    href={`/restaurant/${r.id}`}
+                    passHref
+                    className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0 cursor-pointer group"
+                    onClick={() =>
+                      logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+                        restaurantId: r.id,
+                        restaurantName: r.name,
+                        cuisine: r.cuisine,
+                        area: r.area,
+                        reviews: r.reviews,
+                      })
+                    }
+                  >
+                    <img
+                      className="w-24 h-20 rounded-lg object-cover group-hover:opacity-90 transition"
+                      src={r.image}
+                      alt={r.name}
+                    />
+                    <div className="flex-1 flex flex-col">
+                      <div className="font-semibold text-lg">{r.name}</div>
+                      <div className="text-gray-500 text-sm mb-1">
+                        {r.price} • {r.cuisine} <StarNumber rating={r.stars} />{" "}
+                        <span className="text-gray-700">({r.reviews})</span>
+                      </div>
+                      <div className="text-gray-700 text-[15px] line-clamp-2">
+                        Located in {r.area}, well-rated by {r.reviews} diners.
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
+      ) : (
+        <section className={`mt-${marginTop} mb-6 px-4`}>
+          <h2 className="text-2xl font-bold mb-1">
+            Check out diners' favorite restaurants in San Francisco Bay Area
+          </h2>
+          <div className="text-base text-gray-600 mb-6">
+            Diners' Choice Awards are based on where your fellow diners book,
+            dine, and review. Only verified diners get to review restaurants on
+            OpenDinning, so our data doesn't lie.
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Top pick */}
+            <Link
+              href={`/restaurant/${restaurants[0].id}`}
+              passHref
+              className="flex-[2] min-w-[270px] cursor-pointer group"
+              onClick={() =>
+                logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+                  restaurantId: restaurants[0].id,
+                  restaurantName: restaurants[0].name,
+                  cuisine: restaurants[0].cuisine,
+                  area: restaurants[0].area,
+                  reviews: restaurants[0].reviews,
+                })
+              }
+            >
+              <div>
+                <img
+                  className="rounded-lg w-full max-h-60 object-cover mb-2 group-hover:opacity-90 transition"
+                  src={restaurants[0].image}
+                  alt={restaurants[0].name}
+                />
+                <div className="font-bold text-lg">{restaurants[0].name}</div>
+                <div className="text-gray-500 text-sm mb-1">
+                  Diners top pick · {restaurants[0].cuisine}{" "}
+                  <StarNumber rating={restaurants[0].stars} />{" "}
+                  <span className="text-gray-600">
+                    ({restaurants[0].reviews})
+                  </span>
+                </div>
+                <div className="text-gray-700 text-[15px]">
+                  Located in {restaurants[0].area}, {restaurants[0].name} is a
+                  favorite for {restaurants[0].cuisine} cuisine lovers.
+                </div>
+              </div>
+            </Link>
+
+            {/* Next two favorites */}
+            <div className="flex flex-1 flex-col gap-3 min-w-56">
+              {restaurants.slice(1, 3).map((r) => (
+                <Link
+                  key={r.id}
+                  href={`/restaurant/${r.id}`}
+                  passHref
+                  className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0 cursor-pointer group"
+                  onClick={() =>
+                    logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+                      restaurantId: r.id,
+                      restaurantName: r.name,
+                      cuisine: r.cuisine,
+                      area: r.area,
+                      reviews: r.reviews,
+                    })
+                  }
+                >
+                  <img
+                    className="w-24 h-20 rounded-lg object-cover group-hover:opacity-90 transition"
+                    src={r.image}
+                    alt={r.name}
+                  />
+                  <div className="flex-1 flex flex-col">
+                    <div className="font-semibold text-lg">{r.name}</div>
+                    <div className="text-gray-500 text-sm mb-1">
+                      {r.price} • {r.cuisine} <StarNumber rating={r.stars} />{" "}
+                      <span className="text-gray-700">({r.reviews})</span>
+                    </div>
+                    <div className="text-gray-700 text-[15px] line-clamp-2">
+                      Located in {r.area}, well-rated by {r.reviews} diners.
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   CalendarIcon,
   Star,
@@ -71,6 +71,33 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
+
+  const searchParams = useSearchParams();
+  const seed = Number(searchParams?.get("seed") ?? "0");
+
+  const getLayoutFromSeed = (seed: number) => {
+    const justifyOptions = [
+      "flex-start",
+      "center",
+      "flex-end",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ];
+    const marginTopOptions = [0, 4, 8, 12, 16];
+    const wrapOptions = [true, false, false, true, false];
+
+    const index = seed % 5;
+
+    return {
+      justify: justifyOptions[index],
+      marginTop: marginTopOptions[index],
+      wrap: wrapOptions[index],
+    };
+  };
+
+  const layout = getLayoutFromSeed(seed);
+
   useEffect(() => {
     if (!r) return; // evita enviar si aún no hay datos
     logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
@@ -160,6 +187,8 @@ export default function RestaurantPage() {
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: toLocalISO(d) });
     }
   };
+
+  const wrapperClass = `flex justify-${layout.justify} mt-${layout.marginTop} mb-7 flex-wrap`;
   return (
     <main>
       {/* Banner Image */}
@@ -278,12 +307,26 @@ export default function RestaurantPage() {
                 </div>
               )}
               <div className="flex justify-center my-7">
-                <Button
-                  className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
-                  onClick={handleToggleMenu}
-                >
-                  {showFullMenu ? "Collapse menu" : "View full menu"}
-                </Button>
+                {layout.wrap ? (
+                  <div className={wrapperClass}>
+                    {" "}
+                    <Button
+                      className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
+                      onClick={handleToggleMenu}
+                    >
+                      {showFullMenu ? "Collapse menu" : "View full menu"}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className={wrapperClass.replace("flex-wrap", "")}>
+                    <Button
+                      className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
+                      onClick={handleToggleMenu}
+                    >
+                      {showFullMenu ? "Collapse menu" : "View full menu"}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -402,8 +445,14 @@ export default function RestaurantPage() {
             </div>
             {/* Time slots */}
             <div className="mt-3">
-              <div className="flex gap-1 mt-2 flex-wrap">
-                {time === "3:00 PM" ? (
+              {time === "3:00 PM" ? (
+                <div
+                  className="flex gap-1 mt-2"
+                  style={{
+                    justifyContent: layout.justify,
+                    marginTop: layout.marginTop,
+                  }}
+                >
                   <Button
                     variant="outline"
                     className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
@@ -411,41 +460,91 @@ export default function RestaurantPage() {
                     <span>{time}</span>
                     <span className="ml-2">🔔 Notify me</span>
                   </Button>
-                ) : time ? (
-                  <Link
-                    href={`/booking/${id}/${encodeURIComponent(
-                      time
-                    )}?date=${formattedDate}&people=${people ?? ""}`}
-                    onClick={() =>
-                      logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                        restaurantId: id,
-                        restaurantName: r.name,
-                        cuisine: r.cuisine,
-                        desc: r.desc,
-                        area: "test",
-                        reviews: r.reviews,
-                        bookings: r.bookings,
-                        rating: r.rating,
-                        date: formattedDate,
-                        time,
-                        people,
-                      })
-                    }
-                    passHref
+                </div>
+              ) : time ? (
+                layout.wrap ? (
+                  <div
+                    className="mt-2"
+                    style={{ marginTop: layout.marginTop }}
+                    data-testid={`book-btn-wrapper-${seed}`}
                   >
-                    <Button
-                      className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
-                      asChild
+                    <div
+                      className="flex gap-1"
+                      style={{ justifyContent: layout.justify }}
                     >
-                      <span>Book Restaurant</span>
-                    </Button>
-                  </Link>
-                ) : (
-                  <div className="text-gray-500 text-sm mt-2">
-                    Please select a time
+                      <Link
+                        href={`/booking/${id}/${encodeURIComponent(
+                          time
+                        )}?date=${formattedDate}&people=${people ?? ""}`}
+                        onClick={() =>
+                          logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                            restaurantId: id,
+                            restaurantName: r.name,
+                            cuisine: r.cuisine,
+                            desc: r.desc,
+                            area: "test",
+                            reviews: r.reviews,
+                            bookings: r.bookings,
+                            rating: r.rating,
+                            date: formattedDate,
+                            time,
+                            people,
+                          })
+                        }
+                        passHref
+                      >
+                        <Button
+                          className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                          asChild
+                        >
+                          <span>Book Restaurant</span>
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                )}
-              </div>
+                ) : (
+                  <div
+                    className="flex gap-1 mt-2"
+                    style={{
+                      justifyContent: layout.justify,
+                      marginTop: layout.marginTop,
+                    }}
+                  >
+                    <Link
+                      href={`/booking/${id}/${encodeURIComponent(
+                        time
+                      )}?date=${formattedDate}&people=${people ?? ""}`}
+                      onClick={() =>
+                        logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                          restaurantId: id,
+                          restaurantName: r.name,
+                          cuisine: r.cuisine,
+                          desc: r.desc,
+                          area: "test",
+                          reviews: r.reviews,
+                          bookings: r.bookings,
+                          rating: r.rating,
+                          date: formattedDate,
+                          time,
+                          people,
+                        })
+                      }
+                      passHref
+                    >
+                      <Button
+                        className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                        asChild
+                      >
+                        <span>Book Restaurant</span>
+                      </Button>
+                    </Link>
+                  </div>
+                )
+              ) : (
+                <div className="text-gray-500 text-sm mt-2">
+                  Please select a time
+                </div>
+              )}
             </div>
           </div>
         </div>
