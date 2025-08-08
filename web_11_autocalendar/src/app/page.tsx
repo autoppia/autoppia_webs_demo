@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
-import { useState, useRef } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -15,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   addDays,
   startOfWeek,
@@ -46,7 +46,8 @@ const INIT_COLORS = [
   "#00ACC1",
   "#F4511E",
 ];
-const HOURS = Array.from({ length: 17 }, (_, i) => i);
+const HOURS = Array.from({ length: 24 }, (_, i) => i);
+const MINUTES = [0, 30];
 
 interface Event {
   id: string;
@@ -56,6 +57,8 @@ interface Event {
   label: string;
   calendar: string;
   color: string;
+  startTime: [number, number];
+  endTime: [number, number];
 }
 
 interface EventModalState {
@@ -70,8 +73,9 @@ interface EventModalState {
   id: string | null;
   startTime: [number, number];
   endTime: [number, number];
-  date: string | null; // Added date property
+  date: string | null;
 }
+
 interface RawEvent {
   id?: string;
   date?: string;
@@ -84,34 +88,65 @@ interface RawEvent {
   endTime?: [number, number];
 }
 
+interface Calendar {
+  name: string;
+  enabled: boolean;
+  color: string;
+}
+
 function usePersistedEvents() {
   const [state, setState] = useState<Event[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const stored = window.localStorage.getItem("gocal_events");
-        if (!stored) return [];
-        const evs = JSON.parse(stored);
-        return evs.map((ev: RawEvent) => ({
-          id: ev.id ?? Math.random().toString(36).slice(2),
-          date: ev.date ?? new Date().toISOString().split("T")[0],
-          start: ev.start ?? 9,
-          end: ev.end ?? 10,
-          label: ev.label ?? "",
-          calendar: ev.calendar ?? "Work",
-          color: ev.color ?? calendarColors.Work,
-          startTime: Array.isArray(ev.startTime)
-            ? ev.startTime
-            : [ev.start || 9, 0],
-          endTime: Array.isArray(ev.endTime) ? ev.endTime : [ev.end || 10, 0],
-        }));
-      } catch {
-        return [];
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = window.localStorage.getItem("gocal_events");
+      if (!stored) return [];
+      const evs = JSON.parse(stored) as RawEvent[];
+      const validEvents = evs
+        .map((ev) => {
+          const start = ev.start ?? 9;
+          const end = ev.end ?? 10;
+          // Validate and convert startTime/endTime
+          const startTime: [number, number] =
+            Array.isArray(ev.startTime) && ev.startTime.length === 2
+              ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
+              : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
+          const endTime: [number, number] =
+            Array.isArray(ev.endTime) && ev.endTime.length === 2
+              ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
+              : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
+          return {
+            id: ev.id ?? Math.random().toString(36).slice(2),
+            date: ev.date ?? new Date().toISOString().split("T")[0],
+            start,
+            end,
+            label: ev.label ?? "",
+            calendar: ev.calendar ?? "Work",
+            color: ev.color ?? calendarColors.Work,
+            startTime,
+            endTime,
+          };
+        })
+        .filter(
+          (ev) =>
+            Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
+        );
+      if (evs.length !== validEvents.length) {
+        // Save cleaned events if some were invalid
+        window.localStorage.setItem(
+          "gocal_events",
+          JSON.stringify(validEvents)
+        );
       }
+      return validEvents;
+    } catch (error) {
+      console.error("Error parsing localStorage events:", error);
+      // Clear corrupted localStorage and return empty array
+      window.localStorage.removeItem("gocal_events");
+      return [];
     }
-    return [];
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window !== "undefined") {
       window.localStorage.setItem("gocal_events", JSON.stringify(state));
     }
@@ -124,13 +159,9 @@ const weekDates = [15, 16, 17, 18, 19];
 const getDayLabel = (dayIdx: number) =>
   `${weekDaysFull[dayIdx]}, July ${weekDates[dayIdx]}`;
 const pad2 = (x: number) => (x < 10 ? `0${x}` : `${x}`);
-function formatTime(hhmm: [number, number] | number) {
-  const arr = Array.isArray(hhmm)
-    ? hhmm
-    : typeof hhmm === "number"
-    ? [hhmm, 0]
-    : [0, 0];
-  const [h, m] = arr;
+
+function formatTime(hhmm: [number, number]) {
+  const [h, m] = hhmm;
   const ap = h < 12 ? "am" : "pm";
   const disp = h === 0 ? 12 : h <= 12 ? h : h - 12;
   return `${disp}:${pad2(m)} ${ap}`;
@@ -185,39 +216,33 @@ function weekRangeLabel(week: Date[]) {
     end = week[week.length - 1];
   if (start.getMonth() === end.getMonth())
     return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${end.getDate()}`;
-  else
-    return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${
-      MONTHS[end.getMonth()]
-    } ${end.getDate()}`;
+  return `${MONTHS[start.getMonth()]} ${start.getDate()} – ${
+    MONTHS[end.getMonth()]
+  } ${end.getDate()}`;
 }
 
 export default function Home() {
-  const [selectedDay, setSelectedDay] = useState(18);
+  const [viewDate, setViewDate] = useState(() => {
+    const now = new Date();
+    const nowInPKT = new Date(
+      now.toLocaleString("en-US", { timeZone: "Asia/Karachi" })
+    );
+    nowInPKT.setHours(0, 0, 0, 0);
+    return nowInPKT;
+  });
   const [myCalExpanded, setMyCalExpanded] = useState(true);
   const [viewDropdown, setViewDropdown] = useState(false);
   const [events, setEvents] = usePersistedEvents();
-  const [draftEv, setDraftEv] = useState(null);
-  const dragAnchor = useRef(null);
-  const todayCol = 3,
-    nowHour = 11;
-  const [viewDate, setViewDate] = useState(() => {
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    return now;
-  });
-  const viewedWeek = getWeekDates(viewDate).slice(1, 6);
-  const [miniCalMonth, setMiniCalMonth] = useState(() => viewDate.getMonth());
-  const [miniCalYear, setMiniCalYear] = useState(() => viewDate.getFullYear());
-  const miniCalMatrix = getMonthMatrix(miniCalYear, miniCalMonth);
+  const [miniCalMonth, setMiniCalMonth] = useState(viewDate.getMonth());
+  const [miniCalYear, setMiniCalYear] = useState(viewDate.getFullYear());
   const [addCalOpen, setAddCalOpen] = useState(false);
   const [addCalName, setAddCalName] = useState("");
   const [addCalDesc, setAddCalDesc] = useState("");
-  const [myCalendars, setMyCalendars] = useState([
+  const [addCalColorIdx, setAddCalColorIdx] = useState(0);
+  const [myCalendars, setMyCalendars] = useState<Calendar[]>([
     { name: "Work", enabled: true, color: "#2196F3" },
     { name: "Family", enabled: true, color: "#E53935" },
   ]);
-  const [addCalColorIdx, setAddCalColorIdx] = useState(0);
-
   const [eventModal, setEventModal] = useState<EventModalState>({
     open: false,
     editing: null,
@@ -233,29 +258,114 @@ export default function Home() {
     date: null,
   });
 
+  const viewedWeek = useMemo(
+    () => getWeekDates(viewDate).slice(1, 6),
+    [viewDate]
+  );
+  const miniCalMatrix = useMemo(
+    () => getMonthMatrix(miniCalYear, miniCalMonth),
+    [miniCalYear, miniCalMonth]
+  );
+  const filteredEvents = useMemo(
+    () =>
+      events.filter((ev) =>
+        myCalendars.find((c) => c.name === ev.calendar && c.enabled)
+      ),
+    [events, myCalendars]
+  );
+
+  function usePersistedEvents() {
+    const [state, setState] = useState<Event[]>(() => {
+      if (typeof window === "undefined") return [];
+      try {
+        const stored = window.localStorage.getItem("gocal_events");
+        if (!stored) return [];
+        const evs = JSON.parse(stored) as RawEvent[];
+        const validEvents = evs
+          .map((ev) => {
+            const start = ev.start ?? 9;
+            const end = ev.end ?? 10;
+            // Validate and convert startTime/endTime
+            const startTime: [number, number] =
+              Array.isArray(ev.startTime) && ev.startTime.length === 2
+                ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
+                : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
+            const endTime: [number, number] =
+              Array.isArray(ev.endTime) && ev.endTime.length === 2
+                ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
+                : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
+            return {
+              id: ev.id ?? Math.random().toString(36).slice(2),
+              date: ev.date ?? new Date().toISOString().split("T")[0],
+              start,
+              end,
+              label: ev.label ?? "",
+              calendar: ev.calendar ?? "Work",
+              color: ev.color ?? calendarColors.Work,
+              startTime,
+              endTime,
+            };
+          })
+          .filter(
+            (ev) =>
+              Number.isInteger(ev.startTime[0]) &&
+              Number.isInteger(ev.endTime[0])
+          );
+        if (evs.length !== validEvents.length) {
+          // Save cleaned events if some were invalid
+          window.localStorage.setItem(
+            "gocal_events",
+            JSON.stringify(validEvents)
+          );
+        }
+        return validEvents;
+      } catch (error) {
+        console.error("Error parsing localStorage events:", error);
+        // Clear corrupted localStorage and return empty array
+        window.localStorage.removeItem("gocal_events");
+        return [];
+      }
+    });
+
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("gocal_events", JSON.stringify(state));
+      }
+    }, [state]);
+
+    return [state, setState] as const;
+  }
+
   function openEventModal({
-    day,
+    date,
     start,
     end,
+    startMinutes = 0,
+    endMinutes = 0,
   }: {
-    day: number | null;
+    date: Date; // Explicitly pass the date
     start: number | null;
     end: number | null;
+    startMinutes?: number;
+    endMinutes?: number;
   }) {
-    const baseDay = day !== null ? viewedWeek[day] : viewDate;
+    const startHour = start !== null ? Math.floor(start) : 9;
+    const startMins = start !== null && start % 1 === 0.5 ? 30 : startMinutes;
+    const endHour = end !== null ? Math.floor(end) : startHour + 1;
+    const endMins = end !== null && end % 1 === 0.5 ? 30 : endMinutes;
     setEventModal({
       open: true,
       editing: null,
       calendar: "Work",
       label: "",
-      color: "#2196F3",
-      day,
-      start,
-      end,
-      startTime: [start ?? 9, 0],
-      endTime: [end ?? 10, 0],
+      color: myCalendars.find((cal) => cal.name === "Work")?.color ?? "#2196F3",
+      day: null, // No longer needed
+      start: startHour + startMins / 60,
+      end: endHour + endMins / 60,
+      startTime: [startHour, startMins],
+      endTime: [endHour, endMins],
       id: null,
-      date: baseDay.toISOString().split("T")[0],
+      date: date.toISOString().split("T")[0], // Use the provided date
     });
   }
 
@@ -272,18 +382,19 @@ export default function Home() {
       day: idx >= 0 ? idx : null,
       start: ev.start,
       end: ev.end,
-      startTime: [ev.start ?? 9, 0],
-      endTime: [ev.end ?? 10, 0],
+      startTime: ev.startTime,
+      endTime: ev.endTime,
       id: ev.id,
       date: ev.date,
     });
   }
+
   function handleModalField<K extends keyof EventModalState>(
     field: K,
     val: EventModalState[K]
   ) {
     if (field === "calendar") {
-      const calendarValue = val as string; // Type assertion: val is string when field is 'calendar'
+      const calendarValue = val as string;
       const color =
         myCalendars.find((cal) => cal.name === calendarValue)?.color ??
         calendarColors.Work;
@@ -292,110 +403,76 @@ export default function Home() {
       setEventModal((e) => ({ ...e, [field]: val }));
     }
   }
+
   function onModalClose() {
     setEventModal((e) => ({ ...e, open: false }));
   }
 
-  function handleModalSave(e: React.FormEvent) {
+  function handleModalSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    logEvent(EVENT_TYPES.ADD_EVENT, {
+      source: "event-modal",
+      title: eventModal.label,
+      calendar: eventModal.calendar,
+      date: eventModal.date,
+      startTime: eventModal.startTime,
+      endTime: eventModal.endTime,
+      color: eventModal.color,
+      isEditing: !!eventModal.editing,
+    });
     const dstr = eventModal.date ?? viewDate.toISOString().split("T")[0];
     const newEv: Event = {
       id: eventModal.editing ?? Math.random().toString(36).slice(2),
       date: dstr,
-      start: eventModal.startTime[0],
-      end: eventModal.endTime[0],
+      start: eventModal.startTime[0] + eventModal.startTime[1] / 60,
+      end: eventModal.endTime[0] + eventModal.endTime[1] / 60,
       label: eventModal.label,
       calendar: eventModal.calendar,
       color: eventModal.color,
+      startTime: eventModal.startTime,
+      endTime: eventModal.endTime,
     };
     setEvents((evts) => {
       if (eventModal.editing)
         return evts.map((ev) => (ev.id === eventModal.editing ? newEv : ev));
-      else return [...evts, newEv];
+      return [...evts, newEv];
     });
-    setEventModal((e) => ({ ...e, open: false }));
+    onModalClose();
   }
 
   function handleEventDelete() {
     setEvents((evts) => evts.filter((ev) => ev.id !== eventModal.id));
-    setEventModal((e) => ({ ...e, open: false }));
-  }
-
-  function onGridMouseDown(e: React.MouseEvent, dayIdx: number, hrIdx: number) {
-    openEventModal({ day: dayIdx, start: hrIdx, end: hrIdx + 1 });
-  }
-
-  function onGridMouseEnter(
-    e: React.MouseEvent,
-    dayIdx: number,
-    hrIdx: number
-  ) {}
-
-  function onGridMouseUp(e: React.MouseEvent) {
-    dragAnchor.current = null;
-  }
-
-  const VIEW_OPTIONS = ["Day", "5 days", "Week", "Month"];
-  const [currentView, setCurrentView] = useState("5 days");
-
-  function getMainGridDates(view: string) {
-    if (view === "Day") {
-      return [viewDate];
-    }
-    if (view === "5 days") {
-      return getWeekDates(viewDate).slice(1, 6);
-    }
-    if (view === "Week") {
-      return getWeekDates(viewDate);
-    }
-    const first = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
-    const matrix = getMonthMatrix(viewDate.getFullYear(), viewDate.getMonth());
-    return matrix.flat();
-  }
-
-  const mainGridDates = getMainGridDates(currentView);
-
-  let topLabel = "";
-  if (currentView === "Day")
-    topLabel = `${DAYS[viewDate.getDay()]}, ${
-      MONTHS[viewDate.getMonth()]
-    } ${viewDate.getDate()}`;
-  else if (currentView === "5 days" || currentView === "Week")
-    topLabel = weekRangeLabel(getMainGridDates(currentView));
-  else if (currentView === "Month")
-    topLabel = `${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
-
-  function onMonthCellClick(date: Date) {
-    setEventModal({
-      open: true,
-      editing: null,
-      calendar: "Work",
-      label: "",
-      color: "#2196F3",
-      day: null,
-      start: 9,
-      end: 10,
-      startTime: [9, 0],
-      endTime: [10, 0],
-      id: null,
-      date: date.toISOString().split("T")[0],
-    });
+    onModalClose();
   }
 
   function onWeekHourCellClick(date: Date, hour: number) {
-    setEventModal({
-      open: true,
-      editing: null,
-      calendar: "Work",
-      label: "",
-      color: "#2196F3",
-      day: null,
+    logEvent(EVENT_TYPES.CELL_CLCIKED, {
+      source: `${currentView.toLowerCase()}-view`,
+      date: date.toISOString(),
+      hour,
+      view: currentView,
+    });
+    openEventModal({
+      date,
       start: hour,
-      end: hour + 1,
-      startTime: [hour, 0],
-      endTime: [hour + 1, 0],
-      id: null,
-      date: date.toISOString().split("T")[0],
+      end: hour + 0.5,
+      startMinutes: 0,
+      endMinutes: 30,
+    });
+  }
+
+  function onMonthCellClick(date: Date) {
+    logEvent(EVENT_TYPES.CELL_CLCIKED, {
+      source: "month-view",
+      date: date.toISOString(),
+      view: "Month",
+    });
+    openEventModal({
+      date,
+      start: 9,
+      end: 9.5,
+      startMinutes: 0,
+      endMinutes: 30,
     });
   }
 
@@ -414,16 +491,19 @@ export default function Home() {
     setMiniCalYear(next.getFullYear());
   }
 
-  const filteredEvents = events.filter((ev) =>
-    myCalendars.find((c) => c.name === ev.calendar && c.enabled)
-  );
-
   function handleSetToday() {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    setViewDate(today);
-    setMiniCalMonth(today.getMonth());
-    setMiniCalYear(today.getFullYear());
+    const todayInPKT = new Date(
+      today.toLocaleString("en-US", { timeZone: "Asia/Karachi" })
+    );
+    todayInPKT.setHours(0, 0, 0, 0);
+    setViewDate(todayInPKT);
+    setMiniCalMonth(todayInPKT.getMonth());
+    setMiniCalYear(todayInPKT.getFullYear());
+    logEvent(EVENT_TYPES.SELECT_TODAY, {
+      source: "mini-calendar",
+      selectedDate: todayInPKT.toISOString(),
+    });
   }
 
   function handleWeekNav(dir: "prev" | "next") {
@@ -433,16 +513,48 @@ export default function Home() {
     setMiniCalYear(next.getFullYear());
   }
 
+  const VIEW_OPTIONS = ["Day", "5 days", "Week", "Month"];
+  const [currentView, setCurrentView] = useState("5 days");
+
+  const mainGridDates = useMemo(() => {
+    if (currentView === "Day") return [viewDate];
+    if (currentView === "5 days") return getWeekDates(viewDate).slice(1, 6);
+    if (currentView === "Week") return getWeekDates(viewDate);
+    return getMonthMatrix(viewDate.getFullYear(), viewDate.getMonth()).flat();
+  }, [currentView, viewDate]);
+
+  const topLabel = useMemo(() => {
+    if (currentView === "Day")
+      return `${DAYS[viewDate.getDay()]}, ${
+        MONTHS[viewDate.getMonth()]
+      } ${viewDate.getDate()}`;
+    if (currentView === "5 days" || currentView === "Week")
+      return weekRangeLabel(mainGridDates);
+    return `${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
+  }, [currentView, viewDate, mainGridDates]);
+
   return (
     <main className="flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f]">
-      <aside className="w-[260px] bg-white border-r border-[#e5e5e5] flex flex-col pt-0 pb-2 px-0 shadow z-10 min-h-screen select-none relative">
-        <div className="flex items-center justify-center gap-1 h-[64px] pt-0">
-          <div className="bg-[#6573af] px-5 py-5 rounded flex items-center h-9">
+      <aside className="w-[260px] bg-white border-r border-[#e5e5e5] flex flex-col pt-0 pb-2 px-0 shadow z-10 min-h-screen select-none">
+        <div className="flex items-center justify-center gap-1 h-[64px]">
+          <div className="bg-[#1976d2] px-14 py-6 rounded flex items-center h-9">
             <span className="font-bold text-white text-lg">AutoCalendar</span>
           </div>
         </div>
         <div className="flex flex-row items-center px-4 mt-2 mb-4">
-          <button className="bg-white shadow-md rounded-2xl h-[44px] w-full flex items-center px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition">
+          <button
+            className="bg-white shadow-md rounded-2xl h-[44px] w-full flex items-center px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition"
+            onClick={() =>
+              openEventModal({
+                date: viewDate,
+                start: 9,
+                end: 9.5,
+                startMinutes: 0,
+                endMinutes: 30,
+              })
+            }
+            aria-label="Create new event"
+          >
             <span className="text-[#1976d2] flex items-center">
               <svg
                 width="24"
@@ -478,12 +590,14 @@ export default function Home() {
             <button
               onClick={() => setMiniCalYear((y) => y - 1)}
               className="p-1 text-gray-500 hover:bg-gray-100 rounded"
+              aria-label="Previous year"
             >
               «
             </button>
             <button
               onClick={() => handleMiniCalNav("prev")}
               className="p-1 text-gray-500 hover:bg-gray-100 rounded"
+              aria-label="Previous month"
             >
               ‹
             </button>
@@ -493,12 +607,14 @@ export default function Home() {
             <button
               onClick={() => handleMiniCalNav("next")}
               className="p-1 text-gray-500 hover:bg-gray-100 rounded"
+              aria-label="Next month"
             >
               ›
             </button>
             <button
               onClick={() => setMiniCalYear((y) => y + 1)}
               className="p-1 text-gray-500 hover:bg-gray-100 rounded"
+              aria-label="Next year"
             >
               »
             </button>
@@ -531,6 +647,7 @@ export default function Home() {
                             ? "text-[#383e4d] hover:bg-gray-100"
                             : "text-gray-300"
                         }`}
+                      aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
                     >
                       {d.getDate()}
                     </button>
@@ -544,10 +661,12 @@ export default function Home() {
           <button
             onClick={() => setMyCalExpanded((v) => !v)}
             className="flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group"
+            aria-expanded={myCalExpanded}
+            aria-label="Toggle my calendars"
           >
             <span>My calendars</span>
             <svg
-              className={`transition ml-1 ${
+              className={`transition ${
                 myCalExpanded ? "rotate-0" : "-rotate-90"
               }`}
               width="18"
@@ -566,30 +685,28 @@ export default function Home() {
                   key={cal.name}
                   className="flex items-center gap-2 cursor-pointer"
                 >
-                  <span
-                    className="w-4 h-4 rounded-sm border-2 flex items-center justify-center mr-1 transition-colors"
+                  <input
+                    type="checkbox"
+                    checked={cal.enabled}
+                    onChange={() => {
+                      logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
+                        calendarName: cal.name,
+                        selected: !cal.enabled,
+                        color: cal.color,
+                      });
+                      setMyCalendars((cals) =>
+                        cals.map((c, i) =>
+                          i === idx ? { ...c, enabled: !c.enabled } : c
+                        )
+                      );
+                    }}
+                    className="appearance-none w-4 h-4 rounded-sm cursor-pointer border-2"
                     style={{
                       borderColor: cal.color,
                       background: cal.enabled ? cal.color : "#fff",
                     }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={cal.enabled}
-                      onChange={() =>
-                        setMyCalendars((cals) =>
-                          cals.map((c, i) =>
-                            i === idx ? { ...c, enabled: !c.enabled } : c
-                          )
-                        )
-                      }
-                      className="appearance-none w-3 h-3 rounded-sm cursor-pointer"
-                      style={{
-                        background: cal.enabled ? cal.color : "#fff",
-                        border: "none",
-                      }}
-                    />
-                  </span>
+                    aria-label={`Toggle ${cal.name} calendar`}
+                  />
                   <span
                     className="w-2 h-2 rounded-sm"
                     style={{ background: cal.color }}
@@ -604,15 +721,20 @@ export default function Home() {
               Add new calendar
             </span>
             <button
-              onClick={() => setAddCalOpen(true)}
+              onClick={() => {
+                logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
+                  source: "calendar-sidebar",
+                  action: "open_add_calendar_modal",
+                });
+                setAddCalOpen(true);
+              }}
               type="button"
-              tabIndex={0}
-              aria-label="Add calendar"
-              className="flex items-center justify-center p-0 w-6 h-6 rounded-full  border-[#222] text-[#222] hover:bg-gray-100 transition mr-2"
+              aria-label="Add new calendar"
+              className="flex items-center justify-center p-0 w-6 h-6 rounded-full border-[#222] text-[#222] hover:bg-gray-100 transition"
             >
               <svg
-                width="30"
-                height="30"
+                width="20"
+                height="20"
                 fill="none"
                 stroke="#222"
                 strokeWidth="2"
@@ -641,6 +763,11 @@ export default function Home() {
                         (myCalendars.length + addCalColorIdx) %
                           INIT_COLORS.length
                       ];
+                    logEvent(EVENT_TYPES.CREATE_CALENDAR, {
+                      name: addCalName,
+                      description: addCalDesc,
+                      color,
+                    });
                     setMyCalendars((cals) => [
                       ...cals,
                       { name: addCalName, enabled: true, color },
@@ -690,22 +817,24 @@ export default function Home() {
             <button
               className="border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] font-medium shadow-sm hover:bg-[#f5f5f5]"
               onClick={handleSetToday}
+              aria-label="Go to today"
             >
               Today
             </button>
             <button
-              className="rounded-full hover:bg-gray-100 p-4 text-3xl ml-2 text-black"
+              className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
               onClick={() => handleWeekNav("prev")}
+              aria-label="Previous week"
             >
               ‹
             </button>
             <button
               className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
               onClick={() => handleWeekNav("next")}
+              aria-label="Next week"
             >
               ›
             </button>
-
             <span className="text-[22px] font-normal ml-3">{topLabel}</span>
           </div>
           <div className="flex items-center gap-2">
@@ -713,6 +842,8 @@ export default function Home() {
               <button
                 onClick={() => setViewDropdown((v) => !v)}
                 className="border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] min-w-[68px] font-normal text-[#383e4d] shadow-sm hover:bg-[#f5f5f5] flex items-center gap-1"
+                aria-expanded={viewDropdown}
+                aria-label="Select calendar view"
               >
                 {currentView}
                 <svg
@@ -730,14 +861,27 @@ export default function Home() {
                 <div className="absolute mt-1 right-0 z-50 bg-white shadow-lg border border-[#e5e5e5] rounded min-w-[130px]">
                   {VIEW_OPTIONS.map((opt) => (
                     <button
+                      key={opt}
                       onClick={() => {
+                        logEvent(
+                          {
+                            Day: EVENT_TYPES.SELECT_DAY,
+                            "5 days": EVENT_TYPES.SELECT_FIVE_DAYS,
+                            Week: EVENT_TYPES.SELECT_WEEK,
+                            Month: EVENT_TYPES.SELECT_MONTH,
+                          }[opt],
+                          {
+                            source: "calendar-view-dropdown",
+                            selectedView: opt,
+                          }
+                        );
                         setCurrentView(opt);
                         setViewDropdown(false);
                       }}
-                      key={opt}
-                      className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] z-50 ${
+                      className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] ${
                         opt === currentView ? "font-semibold bg-[#f3f7fa]" : ""
                       }`}
+                      aria-label={`Select ${opt} view`}
                     >
                       {opt}
                     </button>
@@ -745,11 +889,16 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <button className="rounded-full hover:ring-2 hover:ring-blue-200 ml-1">
-              <img
+            <button
+              className="rounded-full hover:ring-2 hover:ring-blue-200 ml-1"
+              aria-label="User profile"
+            >
+              <Image
                 src="https://ui-avatars.com/api/?name=John+Doe&background=random&size=128"
-                alt="profile"
-                className="w-9 h-9 rounded-full object-cover border border-[#dedede]"
+                alt="Profile picture"
+                width={36}
+                height={36}
+                className="rounded-full object-cover border border-[#dedede]"
               />
             </button>
           </div>
@@ -795,6 +944,8 @@ export default function Home() {
                             color: isOut ? "#bdbdbd" : "#222",
                             fontSize: "17px",
                           }}
+                          role="button"
+                          aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
                         >
                           <div
                             className={`absolute left-1.5 top-1 text-center ${
@@ -804,7 +955,6 @@ export default function Home() {
                             }`}
                             style={{
                               fontSize: "1rem",
-                              padding: isTod ? "0" : "",
                               background: isTod ? "#1976d2" : "none",
                             }}
                           >
@@ -812,7 +962,7 @@ export default function Home() {
                           </div>
                           <div className="mt-7 flex flex-col gap-0.5">
                             {evs.slice(0, 3).map((ev) => (
-                              <span
+                              <button
                                 key={ev.id}
                                 style={{
                                   background: ev.color,
@@ -824,9 +974,10 @@ export default function Home() {
                                   e.stopPropagation();
                                   openEditEventModal(ev);
                                 }}
+                                aria-label={`Edit event: ${ev.label}`}
                               >
                                 {ev.label}
-                              </span>
+                              </button>
                             ))}
                             {evs.length > 3 && (
                               <span className="text-xs text-gray-400">
@@ -842,14 +993,13 @@ export default function Home() {
               </div>
             </div>
           )}
-          {currentView === "Week" && (
+          {(currentView === "Week" ||
+            currentView === "5 days" ||
+            currentView === "Day") && (
             <>
-              <div
-                className="flex w-full bg-white border-b border-[#e5e5e5] sticky top-0"
-                style={{ minWidth: 720 }}
-              >
+              <div className="flex w-full bg-white border-b border-[#e5e5e5] sticky top-0 min-w-[550px]">
                 <div className="w-14 flex-shrink-0" />
-                {mainGridDates.map((d, i) => (
+                {mainGridDates.map((d) => (
                   <div
                     key={d.toISOString()}
                     className="flex-1 px-2 text-center border-r border-[#e5e5e5] pt-3 pb-2"
@@ -861,9 +1011,9 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className="flex w-full" style={{ minWidth: 720 }}>
+              <div className="flex w-full min-w-[550px]">
                 <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
-                  {[...Array(24)].map((_, hr) => (
+                  {HOURS.map((hr) => (
                     <div
                       key={hr}
                       className="h-14 text-xs text-gray-400 w-12 pr-1"
@@ -881,63 +1031,58 @@ export default function Home() {
                 {mainGridDates.map((d, dayIdx) => (
                   <div
                     key={d.toISOString()}
-                    className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none"
+                    className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative"
                   >
-                    {[...Array(24)].map((_, hrIdx) => (
+                    {HOURS.map((hrIdx) => (
                       <div
-                        key={"cell" + dayIdx + "-" + hrIdx}
+                        key={`cell-${dayIdx}-${hrIdx}`}
                         className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
                         onClick={() => onWeekHourCellClick(d, hrIdx)}
+                        role="button"
+                        aria-label={`Add event on ${format(
+                          d,
+                          "MMMM d, yyyy"
+                        )} at ${hrIdx}:00`}
                       />
                     ))}
                     {filteredEvents
                       .filter((ev) => ev.date === d.toISOString().split("T")[0])
-                      .map((ev) => (
-                        <div
-                          key={ev.id}
-                          className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
-                          style={{
-                            top: `${ev.start * 56 + 38}px`,
-                            height: `${(ev.end - ev.start) * 56 - 6}px`,
-
-                            background: ev.color,
-                            zIndex: 2,
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openEditEventModal(ev);
-                          }}
-                        >
-                          {ev.label}
-                        </div>
-                      ))}
+                      .map((ev) => {
+                        // Debugging log to verify endTime values
+                        console.log(
+                          `Event ${ev.label}: startTime=${ev.startTime}, endTime=${ev.endTime}`
+                        );
+                        return (
+                          <button
+                            key={ev.id}
+                            className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
+                            style={{
+                              top: `${ev.start * 56 + 24}px`,
+                              height: `${(ev.end - ev.start) * 56 - 4}px`,
+                              background: ev.color,
+                              zIndex: 2,
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEditEventModal(ev);
+                            }}
+                            aria-label={`Edit event: ${
+                              ev.label
+                            } from ${formatTime(ev.startTime)} to ${formatTime(
+                              ev.endTime
+                            )}`}
+                          >
+                            {ev.label} ({formatTime(ev.startTime)} -{" "}
+                            {formatTime(ev.endTime)})
+                          </button>
+                        );
+                      })}
                   </div>
                 ))}
               </div>
-            </>
-          )}
-          {currentView === "5 days" && (
-            <>
-              <div
-                className="flex w-full bg-white border-b border-[#e5e5e5] sticky top-0"
-                style={{ minWidth: 550 }}
-              >
-                <div className="w-14 flex-shrink-0" />
-                {mainGridDates.map((d, i) => (
-                  <div
-                    key={d.toISOString()}
-                    className="flex-1 px-2 text-center border-r border-[#e5e5e5] pt-3 pb-2"
-                  >
-                    <div className="text-xs text-gray-500 mb-1">
-                      {DAYS[d.getDay()]}
-                    </div>
-                    <div className="text-[22px] font-normal">{d.getDate()}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex w-full" style={{ minWidth: 550 }}>
+              <div className="flex w-full min-w-[550px]">
                 <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
-                  {[...Array(24)].map((_, hr) => (
+                  {HOURS.map((hr) => (
                     <div
                       key={hr}
                       className="h-14 text-xs text-gray-400 w-12 pr-1"
@@ -955,24 +1100,29 @@ export default function Home() {
                 {mainGridDates.map((d, dayIdx) => (
                   <div
                     key={d.toISOString()}
-                    className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none"
+                    className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative"
                   >
-                    {[...Array(24)].map((_, hrIdx) => (
+                    {HOURS.map((hrIdx) => (
                       <div
-                        key={"cell" + dayIdx + "-" + hrIdx}
+                        key={`cell-${dayIdx}-${hrIdx}`}
                         className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
                         onClick={() => onWeekHourCellClick(d, hrIdx)}
+                        role="button"
+                        aria-label={`Add event on ${format(
+                          d,
+                          "MMMM d, yyyy"
+                        )} at ${hrIdx}:00`}
                       />
                     ))}
                     {filteredEvents
                       .filter((ev) => ev.date === d.toISOString().split("T")[0])
                       .map((ev) => (
-                        <div
+                        <button
                           key={ev.id}
                           className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
                           style={{
-                            top: `${ev.start * 56 + 78}px`,
-                            height: `${(ev.end - ev.start) * 56 - 6}px`,
+                            top: `${ev.start * 56 + 24}px`,
+                            height: `${(ev.end - ev.start) * 56 - 4}px`,
                             background: ev.color,
                             zIndex: 2,
                           }}
@@ -980,92 +1130,37 @@ export default function Home() {
                             e.stopPropagation();
                             openEditEventModal(ev);
                           }}
+                          aria-label={`Edit event: ${
+                            ev.label
+                          } from ${formatTime(ev.startTime)} to ${formatTime(
+                            ev.endTime
+                          )}`}
                         >
-                          {ev.label}
-                        </div>
+                          {ev.label} ({formatTime(ev.startTime)} -{" "}
+                          {formatTime(ev.endTime)})
+                        </button>
                       ))}
                   </div>
                 ))}
-              </div>
-            </>
-          )}
-          {currentView === "Day" && (
-            <>
-              <div className="flex w-full bg-white border-b border-[#e5e5e5] sticky top-0">
-                <div className="w-14 flex-shrink-0" />
-                <div className="flex-1 px-2 text-center pt-3 pb-2">
-                  <div className="text-xs text-gray-500 mb-1">
-                    {DAYS[viewDate.getDay()]}
-                  </div>
-                  <div className="text-[22px] font-normal">
-                    {viewDate.getDate()}
-                  </div>
-                </div>
-              </div>
-              <div className="flex w-full">
-                <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
-                  {[...Array(24)].map((_, hr) => (
-                    <div
-                      key={hr}
-                      className="h-14 text-xs text-gray-400 w-12 pr-1"
-                    >
-                      {hr === 0
-                        ? "12 AM"
-                        : hr < 12
-                        ? `${hr} AM`
-                        : hr === 12
-                        ? "12 PM"
-                        : `${hr - 12} PM`}
-                    </div>
-                  ))}
-                </div>
-                <div className="flex-1 flex flex-col">
-                  {[...Array(24)].map((_, hrIdx) => (
-                    <div
-                      key={"cell-day-" + hrIdx}
-                      className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
-                      onClick={() => onWeekHourCellClick(viewDate, hrIdx)}
-                    />
-                  ))}
-                  {filteredEvents
-                    .filter(
-                      (ev) => ev.date === viewDate.toISOString().split("T")[0]
-                    )
-                    .map((ev) => (
-                      <div
-                        key={ev.id}
-                        className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
-                        style={{
-                          top: `${ev.start * 56 + 34}px`,
-                          height: `30px`,
-                          background: ev.color,
-                          zIndex: 2,
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openEditEventModal(ev);
-                        }}
-                      >
-                        {ev.label}
-                      </div>
-                    ))}
-                </div>
               </div>
             </>
           )}
         </div>
       </section>
-      <Dialog
-        open={eventModal.open}
-        onOpenChange={(v) => (v ? null : onModalClose())}
-      >
+      <Dialog open={eventModal.open} onOpenChange={onModalClose}>
         <DialogContent className="max-w-xl">
           <form onSubmit={handleModalSave} className="space-y-5">
+            <DialogHeader>
+              <DialogTitle>
+                {eventModal.editing ? "Edit event" : "Add event"}
+              </DialogTitle>
+            </DialogHeader>
             <div className="flex flex-col mb-2">
-              <Label>Calendar</Label>
+              <Label htmlFor="calendar-select">Calendar</Label>
               <select
+                id="calendar-select"
                 className="px-3 py-2 border rounded w-full mt-1"
-                value={eventModal.calendar || "Work"}
+                value={eventModal.calendar}
                 onChange={(e) => handleModalField("calendar", e.target.value)}
                 required
               >
@@ -1076,31 +1171,117 @@ export default function Home() {
                 ))}
               </select>
             </div>
-            <DialogHeader>
-              <DialogTitle>
-                {eventModal.editing ? "Edit event" : "Add event"}
-              </DialogTitle>
-            </DialogHeader>
             <div>
-              <Label>Title</Label>
+              <Label htmlFor="event-title">Title</Label>
               <Input
+                id="event-title"
                 value={eventModal.label}
                 onChange={(e) => handleModalField("label", e.target.value)}
                 required
                 autoFocus
                 maxLength={80}
+                aria-required="true"
               />
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <Label htmlFor="start-time-hour">Start Time</Label>
+                <div className="flex gap-2 mt-1">
+                  <select
+                    id="start-time-hour"
+                    className="px-3 py-2 border rounded w-full"
+                    value={eventModal.startTime[0]}
+                    onChange={(e) =>
+                      handleModalField("startTime", [
+                        parseInt(e.target.value),
+                        eventModal.startTime[1],
+                      ])
+                    }
+                    aria-label="Start time hour"
+                  >
+                    {HOURS.map((hour) => (
+                      <option key={hour} value={hour}>
+                        {hour === 0
+                          ? "12 AM"
+                          : hour < 12
+                          ? `${hour} AM`
+                          : hour === 12
+                          ? "12 PM"
+                          : `${hour - 12} PM`}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    className="px-3 py-2 border rounded w-20"
+                    value={eventModal.startTime[1]}
+                    onChange={(e) =>
+                      handleModalField("startTime", [
+                        eventModal.startTime[0],
+                        parseInt(e.target.value),
+                      ])
+                    }
+                    aria-label="Start time minute"
+                  >
+                    {MINUTES.map((minute) => (
+                      <option key={minute} value={minute}>
+                        {pad2(minute)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex-1">
+                <Label htmlFor="end-time-hour">End Time</Label>
+                <div className="flex gap-2 mt-1">
+                  <select
+                    id="end-time-hour"
+                    className="px-3 py-2 border rounded w-full"
+                    value={eventModal.endTime[0]}
+                    onChange={(e) =>
+                      handleModalField("endTime", [
+                        parseInt(e.target.value),
+                        eventModal.endTime[1],
+                      ])
+                    }
+                    aria-label="End time hour"
+                  >
+                    {HOURS.map((hour) => (
+                      <option key={hour} value={hour}>
+                        {hour === 0
+                          ? "12 AM"
+                          : hour < 12
+                          ? `${hour} AM`
+                          : hour === 12
+                          ? "12 PM"
+                          : `${hour - 12} PM`}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    className="px-3 py-2 border rounded w-20"
+                    value={eventModal.endTime[1]}
+                    onChange={(e) =>
+                      handleModalField("endTime", [
+                        eventModal.endTime[0],
+                        parseInt(e.target.value),
+                      ])
+                    }
+                    aria-label="End time minute"
+                  >
+                    {MINUTES.map((minute) => (
+                      <option key={minute} value={minute}>
+                        {pad2(minute)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
             <div>
               <div className="mb-1 font-medium text-sm">
-                {eventModal.day !== null
-                  ? getDayLabel(+eventModal.day)
-                  : format(
-                      parseISO(
-                        eventModal.date || viewDate.toISOString().split("T")[0]
-                      ),
-                      "EEE, MMMM d"
-                    )}
+                {eventModal.date
+                  ? format(parseISO(eventModal.date), "EEE, MMMM d")
+                  : format(viewDate, "EEE, MMMM d")}
                 , {formatTime(eventModal.startTime)} –{" "}
                 {formatTime(eventModal.endTime)}
               </div>
@@ -1119,7 +1300,18 @@ export default function Home() {
                 </Button>
               )}
               <DialogClose asChild>
-                <Button variant="outline" type="button">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, {
+                      source: "event-modal",
+                      date: eventModal.date,
+                      reason: "User clicked cancel button",
+                      title: eventModal.label,
+                    });
+                  }}
+                >
                   Cancel
                 </Button>
               </DialogClose>
