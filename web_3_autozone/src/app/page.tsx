@@ -4,6 +4,7 @@ import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { products, getProductsByCategory } from "@/data/products";
+import { useSearchParams } from "next/navigation";
 
 // Create category links for items
 const kitchenCategories = [
@@ -75,6 +76,9 @@ const ElectronicProducts = getProductsByCategory("Electronics");
 const FitnessProducts = getProductsByCategory("Fitness");
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const seed = Number(searchParams.get("seed") ?? "1");
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
@@ -103,6 +107,7 @@ export default function Home() {
               href: "#",
             }}
             columns={2}
+            seed={seed}
           />
           {/* Delivery */}
           <CategoryCard
@@ -110,6 +115,7 @@ export default function Home() {
             items={[]}
             footerLink={{ text: "Learn more", href: "#" }}
             singleImage="/images/homepage_categories/delivery_5.jpg"
+            seed={seed}
           />
           {/* Home Essentials */}
           <CategoryCard
@@ -117,6 +123,7 @@ export default function Home() {
             items={homeEssentials}
             footerLink={{ text: "Discover more", href: "#" }}
             columns={2}
+            seed={seed}
           />
           {/* Home Decor */}
           <CategoryCard
@@ -124,6 +131,7 @@ export default function Home() {
             items={[]}
             footerLink={{ text: "See more", href: "#" }}
             singleImage="/images/homepage_categories/decor_under.jpg"
+            seed={seed}
           />
 
           {/* Refresh Your Space */}
@@ -133,6 +141,7 @@ export default function Home() {
               items={refreshYourSpace}
               footerLink={{ text: "See more", href: "#" }}
               columns={4}
+              seed={seed}
             />
           </div>
 
@@ -143,6 +152,7 @@ export default function Home() {
               items={[]}
               footerLink={{ text: "Shop Gaming", href: "/tech-4" }}
               singleImage="/images/homepage_categories/gaming_laptop.jpg"
+              seed={seed}
             />
           </div>
 
@@ -153,6 +163,7 @@ export default function Home() {
               items={[]}
               footerLink={{ text: "See More", href: "#" }}
               singleImage="/images/homepage_categories/makeup.jpg"
+              seed={seed}
             />
           </div>
         </div>
@@ -161,22 +172,27 @@ export default function Home() {
           <ProductCarousel
             title="Top Sellers In Kitchen"
             products={kitchenProducts}
+            seed={seed}
           />
           <ProductCarousel
             title="Top Sellers In Technology"
             products={techProducts}
+            seed={seed}
           />
           <ProductCarousel
             title="Top Sellers In Home"
             products={HomeProducts}
+            seed={seed}
           />
           <ProductCarousel
             title="Top Sellers In Electronics"
             products={ElectronicProducts}
+            seed={seed}
           />
           <ProductCarousel
             title="Top Sellers In Fitness"
             products={FitnessProducts}
+            seed={seed}
           />
         </div>
       </div>

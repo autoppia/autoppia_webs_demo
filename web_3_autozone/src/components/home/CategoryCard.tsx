@@ -24,7 +24,19 @@ interface CategoryCardProps {
   };
   columns?: 2 | 3 | 4;
   singleImage?: string;
+  seed: number;
 }
+
+const getCardShiftClasses = (seed: number = 1) => {
+  const marginLeftRightOptions = ["ml-0", "ml-2", "ml-4", "mr-2", "mr-4"];
+  const marginTopOptions = ["mt-2", "mt-12", "mt-4", "mt-16", "mt-24"];
+  const index = seed % marginLeftRightOptions.length;
+
+  return {
+    horizontal: marginLeftRightOptions[index],
+    vertical: marginTopOptions[index],
+  };
+};
 
 export function CategoryCard({
   title,
@@ -32,6 +44,7 @@ export function CategoryCard({
   footerLink,
   columns = 2,
   singleImage,
+  seed = 1,
 }: CategoryCardProps) {
   const gridCols = {
     2: "grid-cols-2",
@@ -39,8 +52,10 @@ export function CategoryCard({
     4: "grid-cols-2 md:grid-cols-4",
   };
 
+  const { horizontal, vertical } = getCardShiftClasses(seed);
+
   return (
-    <Card className="category-card">
+    <Card className={`category-card ${horizontal} ${vertical}`}>
       <CardContent className="p-4">
         <h2 className="category-title">{title}</h2>
 

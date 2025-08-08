@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSearchParams } from "next/navigation";
 
 interface CartItem {
   id: string;
@@ -21,8 +22,16 @@ export default function CartPage() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
 
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q")?.toLowerCase() || "1";
+
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
+  };
+
+  const getTopMarginClass = () => {
+    const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
+    return margins[Math.floor(Math.random() * margins.length)];
   };
 
   const handleUpdateQuantity = (item: CartItem, newQuantity: number) => {
@@ -34,7 +43,7 @@ export default function CartPage() {
         product_name: item.title,
         price: item.price,
         brand: item.brand || "generic",
-        category: "utensils", 
+        category: "utensils",
         rating: "8.6",
         previous_quantity: item.quantity,
         new_quantity: newQuantity,
@@ -48,14 +57,14 @@ export default function CartPage() {
     logEvent(EVENT_TYPES.PROCEED_TO_CHECKOUT, {
       total_items: totalItems,
       total_amount: totalAmount,
-      products: items.map(item => ({
+      products: items.map((item) => ({
         id: item.id,
         title: item.title,
         price: item.price,
         quantity: item.quantity,
         brand: item.brand,
         color: item.color,
-        category: item.category
+        category: item.category,
       })),
       created_at: new Date().toISOString(),
     });
@@ -66,7 +75,9 @@ export default function CartPage() {
         {/* Cart Section */}
         <div className="flex-1">
           <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200">
-            <h1 className="text-2xl md:text-3xl font-semibold leading-tight mb-4">Shopping Cart</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold leading-tight mb-4">
+              Shopping Cart
+            </h1>
             {items.length > 0 && (
               <div className="hidden md:flex items-center border-b border-gray-200 pb-2 font-medium text-gray-700">
                 <div className="flex-1">Product</div>
@@ -82,7 +93,9 @@ export default function CartPage() {
                 <div className="text-center p-8 text-lg text-gray-500">
                   <p className="mb-2">Your Autozon Cart is empty</p>
                   <p className="mb-4 text-base text-gray-400">
-                    Your shopping cart is waiting. Give it purpose – fill it with groceries, clothing, household supplies, electronics, and more.
+                    Your shopping cart is waiting. Give it purpose – fill it
+                    with groceries, clothing, household supplies, electronics,
+                    and more.
                   </p>
                   <Link href="/">
                     <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
@@ -93,7 +106,9 @@ export default function CartPage() {
               ) : (
                 <div className="flex flex-col gap-6">
                   {items.map((item: CartItem) => {
-                    const itemPrice = Number.parseFloat(item.price.replace(/[^0-9.]/g, ""));
+                    const itemPrice = Number.parseFloat(
+                      item.price.replace(/[^0-9.]/g, "")
+                    );
                     const itemTotal = itemPrice * item.quantity;
                     return (
                       <div
@@ -122,7 +137,9 @@ export default function CartPage() {
                             {item.brand && `Brand: ${item.brand}`}
                             {item.color && `, Color: ${item.color}`}
                           </div>
-                          <div className="text-green-600 text-sm mt-1">In Stock</div>
+                          <div className="text-green-600 text-sm mt-1">
+                            In Stock
+                          </div>
                           <button
                             onClick={() => handleRemoveItem(item.id)}
                             className="text-xs text-blue-500 hover:text-blue-700 hover:underline mt-2 flex items-center w-fit"
@@ -134,7 +151,9 @@ export default function CartPage() {
                         <div className="w-full md:w-32 flex items-center justify-center md:justify-center mt-2 md:mt-0">
                           <div className="flex items-center border border-gray-300 rounded">
                             <button
-                              onClick={() => handleUpdateQuantity(item, item.quantity - 1)}
+                              onClick={() =>
+                                handleUpdateQuantity(item, item.quantity - 1)
+                              }
                               className="px-2 py-1 text-gray-600 hover:bg-gray-100"
                               disabled={item.quantity <= 1}
                             >
@@ -142,7 +161,9 @@ export default function CartPage() {
                             </button>
                             <span className="px-3 py-1">{item.quantity}</span>
                             <button
-                              onClick={() => handleUpdateQuantity(item, item.quantity + 1)}
+                              onClick={() =>
+                                handleUpdateQuantity(item, item.quantity + 1)
+                              }
                               className="px-2 py-1 text-gray-600 hover:bg-gray-100"
                               disabled={item.quantity >= 10}
                             >
@@ -152,11 +173,15 @@ export default function CartPage() {
                         </div>
                         {/* Price */}
                         <div className="w-full md:w-32 text-right mt-2 md:mt-0">
-                          <span className="font-medium">${itemPrice.toFixed(2)}</span>
+                          <span className="font-medium">
+                            ${itemPrice.toFixed(2)}
+                          </span>
                         </div>
                         {/* Total */}
                         <div className="w-full md:w-32 text-right mt-2 md:mt-0">
-                          <span className="font-medium">${itemTotal.toFixed(2)}</span>
+                          <span className="font-medium">
+                            ${itemTotal.toFixed(2)}
+                          </span>
                         </div>
                       </div>
                     );
@@ -170,30 +195,37 @@ export default function CartPage() {
                 <span className="font-medium text-right">
                   Subtotal ({totalItems} items):
                 </span>
-                <span className="ml-2 font-bold text-right">${totalAmount.toFixed(2)}</span>
+                <span className="ml-2 font-bold text-right">
+                  ${totalAmount.toFixed(2)}
+                </span>
               </div>
             )}
           </div>
         </div>
         {/* Order Summary Side Box */}
-        <div className="w-full md:w-80">
+        <div className={`w-full md:w-80 ${getTopMarginClass()}`}>
           <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200 flex flex-col gap-4">
             <div className="text-md md:text-lg text-gray-700">
-              Subtotal (
-              <span>{totalItems}</span> items):
+              Subtotal (<span>{totalItems}</span> items):
               <span className="font-bold ml-1">${totalAmount.toFixed(2)}</span>
             </div>
             {items.length > 0 && (
               <>
                 <div className="text-green-700 text-sm mb-2">
-                  Your order qualifies for <span className="font-semibold">FREE Delivery</span>
+                  Your order qualifies for{" "}
+                  <span className="font-semibold">FREE Delivery</span>
                 </div>
                 <div className="flex items-center mb-2">
                   <input type="checkbox" className="rounded mr-2" id="gift" />
-                  <label htmlFor="gift" className="text-sm">This order contains a gift</label>
+                  <label htmlFor="gift" className="text-sm">
+                    This order contains a gift
+                  </label>
                 </div>
                 <Link href="/checkout">
-                  <Button className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md"  onClick={handleProceedToCheckout}>
+                  <Button
+                    className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
+                    onClick={handleProceedToCheckout}
+                  >
                     Proceed to checkout
                   </Button>
                 </Link>
@@ -201,7 +233,7 @@ export default function CartPage() {
             )}
             {items.length === 0 && (
               <Button
-                className="w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md"
+                className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
                 disabled
                 onClick={handleProceedToCheckout}
               >

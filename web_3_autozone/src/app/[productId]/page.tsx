@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductById } from "@/data/products";
@@ -17,17 +17,26 @@ const FREE_DELIVERY_LINE = `FREE delivery ${DELIVERY_DATE} on orders shipped by 
 export default function ProductPage() {
   const router = useRouter();
   const { productId } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const searchParams = useSearchParams();
+
+  const seed = useMemo(() => {
+    const s = searchParams.get("seed") ?? "1";
+    return s ? parseInt(s) : Math.floor(Math.random() * 1000);
+  }, [searchParams]);
+
+  const order = seed % 3;
+
   useEffect(() => {
     setIsLoading(true);
 
     if (typeof productId === "string") {
-      const foundProduct = getProductById(productId);
+      const foundProduct: any = getProductById(productId);
       if (foundProduct) {
         setProduct(foundProduct);
       }
@@ -35,6 +44,84 @@ export default function ProductPage() {
 
     setIsLoading(false);
   }, [productId]);
+
+  const quantityInput = (
+    <>
+      <label htmlFor="quantity-select" className="mt-2 mb-1 block text-[15px]">
+        Quantity:
+      </label>
+      <select
+        id="quantity-select"
+        className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
+        value={quantity}
+        onChange={(e) => {
+          const newQty = Number.parseInt(e.target.value);
+          setQuantity(newQty);
+          logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
+            product_id: product.id,
+            product_name: product.title,
+            previous_quantity: quantity,
+            new_quantity: newQty,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            price: product.price,
+            category: product.category,
+            brand: product.brand,
+            rating: product.rating,
+          });
+        }}
+        style={{ maxWidth: "170px" }}
+      >
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+          <option key={n} value={n}>
+            {n}
+          </option>
+        ))}
+      </select>
+    </>
+  );
+
+  const addToCartButton = (
+    <Button
+      className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
+      onClick={() => {
+        handleAddToCart();
+        router.push("/cart");
+      }}
+    >
+      Add to Cart
+    </Button>
+  );
+
+  const buyNowButton = (
+    <Button
+      className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
+      onClick={() => {
+        if (!product) return;
+
+        addToCart(product);
+        logEvent(EVENT_TYPES.CHECKOUT_STARTED, {
+          productId: product.id,
+          title: product.title,
+          quantity,
+          price: product.price,
+          category: product.category,
+          brand: product.brand,
+          rating: product.rating,
+        });
+        router.push("/checkout");
+      }}
+    >
+      Buy Now
+    </Button>
+  );
+
+  // Predefined orders
+  const layouts = [
+    [quantityInput, addToCartButton, buyNowButton],
+    [buyNowButton, quantityInput, addToCartButton],
+    [addToCartButton, buyNowButton, quantityInput],
+  ];
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -264,69 +351,9 @@ export default function ProductPage() {
             <div className="text-[#007600] font-semibold my-1 text-base">
               In Stock
             </div>
-            <label
-              htmlFor="quantity-select"
-              className="mt-2 mb-1 block text-[15px]"
-            >
-              Quantity:
-            </label>
-            <select
-              id="quantity-select"
-              className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
-              value={quantity}
-              onChange={(e) => {
-                const newQty = Number.parseInt(e.target.value);
-                setQuantity(newQty);
-                logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
-                  product_id: product.id,
-                  product_name: product.title,
-                  previous_quantity: quantity,
-                  new_quantity: newQty,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                  price: product.price,
-                  category: product.category,
-                  brand: product.brand,
-                  rating: product.rating,
-                });
-              }}
-              style={{ maxWidth: "170px" }}
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-            <Button
-              className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
-              onClick={() => {
-                handleAddToCart();
-                router.push("/cart");
-              }}
-            >
-              Add to Cart
-            </Button>
-            <Button
-              className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
-              onClick={() => {
-                if (!product) return;
-
-                addToCart(product);
-                logEvent(EVENT_TYPES.CHECKOUT_STARTED, {
-                  productId: product.id,
-                  title: product.title,
-                  quantity,
-                  price: product.price,
-                  category: product.category,
-                  brand: product.brand,
-                  rating: product.rating,
-                });
-                router.push("/checkout");
-              }}
-            >
-              Buy Now
-            </Button>
+            {layouts[order].map((element, index) => (
+              <div key={index}>{element}</div>
+            ))}
 
             <dl className="text-xs text-gray-700 mb-2 mt-2 leading-5 border-t border-b py-3 border-[#D5D9D9]">
               <div className="flex items-center py-0.5">

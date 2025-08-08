@@ -9,9 +9,14 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+const getTopMarginClass = () => {
+  const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
+  return margins[Math.floor(Math.random() * margins.length)];
+};
+
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const query = searchParams.get("q")?.toLowerCase() || "";
+  const query = searchParams.get("q")?.toLowerCase() || "1";
   const { addToCart } = useCart();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
 
@@ -39,8 +44,12 @@ export default function SearchPage() {
         Search Results for: <span className="text-blue-600">{query}</span>
       </h2>
       {results.length === 0 && <p>No products found.</p>}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {results.map((product) => (
+
+      {/* Add top margin to shift the whole grid block */}
+      <div
+        className={`grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 ${getTopMarginClass()}`}
+      >
+        {results.map((product, index) => (
           <Link
             key={product.id}
             href={`/${product.id}`}
@@ -55,6 +64,7 @@ export default function SearchPage() {
               })
             }
             passHref
+            className={getTopMarginClass()}
           >
             <div className="border p-3 rounded bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow">
               <img
