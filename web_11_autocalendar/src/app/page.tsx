@@ -441,6 +441,13 @@ export default function Home() {
   }
 
   function handleEventDelete() {
+    logEvent(EVENT_TYPES.DELETE_EVENT, {
+      source: "event-modal",
+      eventId: eventModal.id,
+      eventTitle: eventModal.label,
+      calendar: eventModal.calendar,
+      date: eventModal.date,
+    });
     setEvents((evts) => evts.filter((ev) => ev.id !== eventModal.id));
     onModalClose();
   }
