@@ -171,7 +171,7 @@ export const expertsInWork = [
       price: "$500",
       rate: "$50/hr",
       time: "10 hours",
-      dates: "Jun 16, 2024 – Jun 17, 2024",
+      dates: "Jun 16, 2024 - Jun 17, 2024",
     },
   },
   {
@@ -192,7 +192,7 @@ export const expertsInWork = [
       price: "$250",
       rate: "$35/hr",
       time: "8 hours",
-      dates: "Jun 1, 2025 – Jun 5, 2025",
+      dates: "Jun 1, 2025 - Jun 5, 2025",
     },
   },
   {
@@ -204,7 +204,7 @@ export const expertsInWork = [
     stats: { earnings: "$4k+", jobs: 95, hours: 300 },
     about:
       "Experienced UI/UX designer with a focus on crafting user-centered digital experiences. I help businesses create beautiful and usable interfaces. Passionate about accessibility, responsive design, and Figma prototyping.",
-    hoursPerWeek: "20–30 hrs/week",
+    hoursPerWeek: "20-30 hrs/week",
     languages: ["English: Fluent", "Spanish: Native"],
     lastReview: {
       title: "Figma design for mobile app",
@@ -213,7 +213,7 @@ export const expertsInWork = [
       price: "$720",
       rate: "$40/hr",
       time: "18 hours",
-      dates: "May 3, 2025 – May 10, 2025",
+      dates: "May 3, 2025 - May 10, 2025",
     },
   },
   {
@@ -234,7 +234,7 @@ export const expertsInWork = [
       price: "$1,000",
       rate: "$70/hr",
       time: "15 hours",
-      dates: "Apr 20, 2025 – Apr 25, 2025",
+      dates: "Apr 20, 2025 - Apr 25, 2025",
     },
   },
 ];
