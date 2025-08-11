@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 interface CartItem {
   id: string;
@@ -18,7 +19,7 @@ interface CartItem {
   color?: string;
 }
 
-export default function CartPage() {
+function CartContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
 
@@ -244,5 +245,13 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CartPage() {
+  return (
+    <Suspense fallback={<div className="bg-[#edeff0] min-h-screen py-10 mt-16 flex items-center justify-center">Loading cart...</div>}>
+      <CartContent />
+    </Suspense>
   );
 }

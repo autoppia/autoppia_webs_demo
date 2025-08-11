@@ -5,6 +5,7 @@ import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { products, getProductsByCategory } from "@/data/products";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 // Create category links for items
 const kitchenCategories = [
@@ -75,7 +76,7 @@ const HomeProducts = getProductsByCategory("Home");
 const ElectronicProducts = getProductsByCategory("Electronics");
 const FitnessProducts = getProductsByCategory("Fitness");
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const seed = Number(searchParams.get("seed") ?? "1");
 
@@ -91,6 +92,7 @@ export default function Home() {
     if (userId) localStorage.setItem("user", userId);
     else localStorage.setItem("user", "null");
   }, []);
+
   return (
     <main className="min-h-screen bg-gray-100">
       {/* Hero Slider */}
@@ -197,5 +199,13 @@ export default function Home() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }

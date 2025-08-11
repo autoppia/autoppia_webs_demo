@@ -8,13 +8,14 @@ import { Button } from "@/components/ui/button";
 import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { Suspense } from "react";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
 const DELIVERY_ADDRESS = "Daly City 94016";
 const FREE_DELIVERY_LINE = `FREE delivery ${DELIVERY_DATE} on orders shipped by Autozon over $35`;
 
-export default function ProductPage() {
+function ProductContent() {
   const router = useRouter();
   const { productId } = useParams();
   const [product, setProduct] = useState<any>(null);
@@ -450,5 +451,13 @@ export default function ProductPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function ProductPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading product...</div>}>
+      <ProductContent />
+    </Suspense>
   );
 }
