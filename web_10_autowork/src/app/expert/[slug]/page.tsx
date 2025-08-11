@@ -6,10 +6,10 @@ import Link from "next/link";
 import {  getExpert } from "../experts";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import HireButton from "@/app/components/HireButton";
-import { expertsInWork } from "@/library/dataset";
+import { experts } from "@/library/dataset";
 
 export function generateStaticParams() {
-  return expertsInWork.map((e) => ({ slug: e.slug }));
+  return experts.map((e) => ({ slug: e.slug }));
 }
 
 export default async function ExpertProfile({
