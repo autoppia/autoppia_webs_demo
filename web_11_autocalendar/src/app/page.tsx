@@ -59,6 +59,17 @@ interface Event {
   color: string;
   startTime: [number, number];
   endTime: [number, number];
+  // New fields
+  description?: string;
+  location?: string;
+  allDay?: boolean;
+  recurrence?: "none" | "daily" | "weekly" | "monthly";
+  recurrenceEndDate?: string | null; // ISO date string
+  attendees?: string[];
+  reminders?: number[]; // minutes before
+  busy?: boolean;
+  visibility?: "default" | "private" | "public";
+  meetingLink?: string;
 }
 
 interface EventModalState {
@@ -74,6 +85,20 @@ interface EventModalState {
   startTime: [number, number];
   endTime: [number, number];
   date: string | null;
+  // New fields for modal
+  description: string;
+  location: string;
+  allDay: boolean;
+  recurrence: "none" | "daily" | "weekly" | "monthly";
+  recurrenceEndDate: string | null;
+  attendees: string[];
+  attendeesInput: string;
+  reminders: number[];
+  reminderToAdd: number; // minutes
+  busy: boolean;
+  visibility: "default" | "private" | "public";
+  meetingLink: string;
+  step: number; // 0: Details, 1: People, 2: Options
 }
 
 interface RawEvent {
@@ -86,6 +111,17 @@ interface RawEvent {
   color?: string;
   startTime?: [number, number];
   endTime?: [number, number];
+  // New persisted optional fields
+  description?: string;
+  location?: string;
+  allDay?: boolean;
+  recurrence?: "none" | "daily" | "weekly" | "monthly";
+  recurrenceEndDate?: string | null;
+  attendees?: string[];
+  reminders?: number[];
+  busy?: boolean;
+  visibility?: "default" | "private" | "public";
+  meetingLink?: string;
 }
 
 interface Calendar {
@@ -105,7 +141,6 @@ function usePersistedEvents() {
         .map((ev) => {
           const start = ev.start ?? 9;
           const end = ev.end ?? 10;
-          // Validate and convert startTime/endTime
           const startTime: [number, number] =
             Array.isArray(ev.startTime) && ev.startTime.length === 2
               ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
@@ -124,14 +159,23 @@ function usePersistedEvents() {
             color: ev.color ?? calendarColors.Work,
             startTime,
             endTime,
-          };
+            description: ev.description ?? "",
+            location: ev.location ?? "",
+            allDay: ev.allDay ?? false,
+            recurrence: ev.recurrence ?? "none",
+            recurrenceEndDate: ev.recurrenceEndDate ?? null,
+            attendees: Array.isArray(ev.attendees) ? ev.attendees : [],
+            reminders: Array.isArray(ev.reminders) ? ev.reminders : [],
+            busy: ev.busy ?? true,
+            visibility: ev.visibility ?? "default",
+            meetingLink: ev.meetingLink ?? "",
+          } as Event;
         })
         .filter(
           (ev) =>
             Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
         );
       if (evs.length !== validEvents.length) {
-        // Save cleaned events if some were invalid
         window.localStorage.setItem(
           "gocal_events",
           JSON.stringify(validEvents)
@@ -140,7 +184,6 @@ function usePersistedEvents() {
       return validEvents;
     } catch (error) {
       console.error("Error parsing localStorage events:", error);
-      // Clear corrupted localStorage and return empty array
       window.localStorage.removeItem("gocal_events");
       return [];
     }
@@ -221,6 +264,80 @@ function weekRangeLabel(week: Date[]) {
   } ${end.getDate()}`;
 }
 
+// Expand recurring events into individual occurrences within a given range
+function expandRecurringEvents(
+  baseEvents: Event[],
+  rangeStart: Date,
+  rangeEnd: Date
+): Event[] {
+  const results: Event[] = [];
+  const clampToDate = (d: Date) => {
+    const c = new Date(d);
+    c.setHours(0, 0, 0, 0);
+    return c;
+  };
+
+  const start = clampToDate(rangeStart);
+  const end = clampToDate(rangeEnd);
+
+  for (const ev of baseEvents) {
+    const evDate = clampToDate(new Date(ev.date));
+    const recEnd = ev.recurrenceEndDate
+      ? clampToDate(new Date(ev.recurrenceEndDate))
+      : evDate;
+    const last = recEnd < end ? recEnd : end;
+
+    const pushOccurrence = (d: Date) => {
+      const iso = d.toISOString().split("T")[0];
+      results.push({ ...ev, date: iso });
+    };
+
+    if (!ev.recurrence || ev.recurrence === "none") {
+      if (evDate >= start && evDate <= end) pushOccurrence(evDate);
+      continue;
+    }
+
+    if (ev.recurrence === "daily") {
+      let cur = new Date(evDate);
+      while (cur <= last) {
+        if (cur >= start) pushOccurrence(cur);
+        cur.setDate(cur.getDate() + 1);
+      }
+      continue;
+    }
+
+    if (ev.recurrence === "weekly") {
+      let cur = new Date(evDate);
+      while (cur <= last) {
+        if (cur >= start) pushOccurrence(cur);
+        cur.setDate(cur.getDate() + 7);
+      }
+      continue;
+    }
+
+    if (ev.recurrence === "monthly") {
+      let cur = new Date(evDate);
+      const origDay = evDate.getDate();
+      while (cur <= last) {
+        if (cur >= start) pushOccurrence(cur);
+        const nextMonth = new Date(cur);
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        // Clamp day to valid range of the next month
+        const lastDayNextMonth = new Date(
+          nextMonth.getFullYear(),
+          nextMonth.getMonth() + 1,
+          0
+        ).getDate();
+        nextMonth.setDate(Math.min(origDay, lastDayNextMonth));
+        cur = nextMonth;
+      }
+      continue;
+    }
+  }
+
+  return results;
+}
+
 export default function Home() {
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
@@ -256,7 +373,52 @@ export default function Home() {
     startTime: [9, 0],
     endTime: [10, 0],
     date: null,
+    description: "",
+    location: "",
+    allDay: false,
+    recurrence: "none",
+    recurrenceEndDate: null,
+    attendees: [],
+    attendeesInput: "",
+    reminders: [],
+    reminderToAdd: 30,
+    busy: true,
+    visibility: "default",
+    meetingLink: "",
+    step: 0,
   });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [hasOpenedSearch, setHasOpenedSearch] = useState(false);
+
+  useEffect(() => {
+    if (!hasOpenedSearch && searchQuery === "") return;
+      if (!hasOpenedSearch) {
+    setHasOpenedSearch(true);
+  }
+}, [searchQuery, hasOpenedSearch]);
+
+  // Debounce search query change logging
+  useEffect(() => {
+    if (!hasOpenedSearch) return;
+      const handle = setTimeout(() => {
+    // intentionally no per-keystroke logging
+  }, 400);
+    return () => clearTimeout(handle);
+  }, [searchQuery, hasOpenedSearch]);
+
+  function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      logEvent(EVENT_TYPES.SEARCH_SUBMIT, { query: searchQuery });
+    }
+  }
+
+  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const q = e.target.value;
+    setSearchQuery(q);
+      if (q === "") {
+    // clear event removed
+  }
+  }
 
   const viewedWeek = useMemo(
     () => getWeekDates(viewDate).slice(1, 6),
@@ -274,67 +436,38 @@ export default function Home() {
     [events, myCalendars]
   );
 
-  function usePersistedEvents() {
-    const [state, setState] = useState<Event[]>(() => {
-      if (typeof window === "undefined") return [];
-      try {
-        const stored = window.localStorage.getItem("gocal_events");
-        if (!stored) return [];
-        const evs = JSON.parse(stored) as RawEvent[];
-        const validEvents = evs
-          .map((ev) => {
-            const start = ev.start ?? 9;
-            const end = ev.end ?? 10;
-            // Validate and convert startTime/endTime
-            const startTime: [number, number] =
-              Array.isArray(ev.startTime) && ev.startTime.length === 2
-                ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
-                : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
-            const endTime: [number, number] =
-              Array.isArray(ev.endTime) && ev.endTime.length === 2
-                ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
-                : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
-            return {
-              id: ev.id ?? Math.random().toString(36).slice(2),
-              date: ev.date ?? new Date().toISOString().split("T")[0],
-              start,
-              end,
-              label: ev.label ?? "",
-              calendar: ev.calendar ?? "Work",
-              color: ev.color ?? calendarColors.Work,
-              startTime,
-              endTime,
-            };
-          })
-          .filter(
-            (ev) =>
-              Number.isInteger(ev.startTime[0]) &&
-              Number.isInteger(ev.endTime[0])
-          );
-        if (evs.length !== validEvents.length) {
-          // Save cleaned events if some were invalid
-          window.localStorage.setItem(
-            "gocal_events",
-            JSON.stringify(validEvents)
-          );
-        }
-        return validEvents;
-      } catch (error) {
-        console.error("Error parsing localStorage events:", error);
-        // Clear corrupted localStorage and return empty array
-        window.localStorage.removeItem("gocal_events");
-        return [];
-      }
-    });
+  const VIEW_OPTIONS = ["Day", "5 days", "Week", "Month"];
+  const [currentView, setCurrentView] = useState("5 days");
 
-    useEffect(() => {
-      if (typeof window !== "undefined") {
-        window.localStorage.setItem("gocal_events", JSON.stringify(state));
-      }
-    }, [state]);
+  // Determine the visible date range
+  const [rangeStart, rangeEnd] = useMemo(() => {
+    const dates = (() => {
+      const view = currentView;
+      if (view === "Day") return [new Date(viewDate)];
+      if (view === "5 days") return getWeekDates(viewDate).slice(1, 6);
+      if (view === "Week") return getWeekDates(viewDate);
+      return getMonthMatrix(viewDate.getFullYear(), viewDate.getMonth()).flat();
+    })();
+    const start = new Date(dates[0]);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(dates[dates.length - 1]);
+    end.setHours(23, 59, 59, 999);
+    return [start, end] as const;
+  }, [viewDate, currentView]);
 
-    return [state, setState] as const;
-  }
+  const expandedEvents = useMemo(() => {
+    const base = filteredEvents;
+    const expanded = expandRecurringEvents(base, rangeStart, rangeEnd);
+    if (!searchQuery.trim()) return expanded;
+    const q = searchQuery.toLowerCase();
+    return expanded.filter(
+      (e) =>
+        e.label.toLowerCase().includes(q) ||
+        (e.location ?? "").toLowerCase().includes(q)
+    );
+  }, [filteredEvents, rangeStart, rangeEnd, searchQuery]);
+
+
 
   function openEventModal({
     date,
@@ -353,40 +486,70 @@ export default function Home() {
     const startMins = start !== null && start % 1 === 0.5 ? 30 : startMinutes;
     const endHour = end !== null ? Math.floor(end) : startHour + 1;
     const endMins = end !== null && end % 1 === 0.5 ? 30 : endMinutes;
+    const isoDate = date.toISOString().split("T")[0];
     setEventModal({
       open: true,
       editing: null,
       calendar: "Work",
       label: "",
       color: myCalendars.find((cal) => cal.name === "Work")?.color ?? "#2196F3",
-      day: null, // No longer needed
+      day: null,
       start: startHour + startMins / 60,
       end: endHour + endMins / 60,
       startTime: [startHour, startMins],
       endTime: [endHour, endMins],
       id: null,
-      date: date.toISOString().split("T")[0], // Use the provided date
+      date: isoDate,
+      description: "",
+      location: "",
+      allDay: false,
+      recurrence: "none",
+      recurrenceEndDate: isoDate,
+      attendees: [],
+      attendeesInput: "",
+      reminders: [],
+      reminderToAdd: 30,
+      busy: true,
+      visibility: "default",
+      meetingLink: "",
+      step: 0,
     });
+    logEvent(EVENT_TYPES.EVENT_WIZARD_OPEN, { step: 0, source: "event-modal" });
   }
 
   function openEditEventModal(ev: Event) {
+    const base = events.find((e) => e.id === ev.id) ?? ev;
     const idx = viewedWeek.findIndex(
-      (day) => day.toISOString().split("T")[0] === ev.date
+      (day) => day.toISOString().split("T")[0] === base.date
     );
     setEventModal({
       open: true,
-      editing: ev.id,
-      calendar: ev.calendar,
-      label: ev.label,
-      color: ev.color,
+      editing: base.id,
+      calendar: base.calendar,
+      label: base.label,
+      color: base.color,
       day: idx >= 0 ? idx : null,
-      start: ev.start,
-      end: ev.end,
-      startTime: ev.startTime,
-      endTime: ev.endTime,
-      id: ev.id,
-      date: ev.date,
+      start: base.start,
+      end: base.end,
+      startTime: base.startTime,
+      endTime: base.endTime,
+      id: base.id,
+      date: base.date,
+      description: base.description ?? "",
+      location: base.location ?? "",
+      allDay: base.allDay ?? false,
+      recurrence: base.recurrence ?? "none",
+      recurrenceEndDate: base.recurrenceEndDate ?? base.date,
+      attendees: Array.isArray(base.attendees) ? base.attendees : [],
+      attendeesInput: "",
+      reminders: Array.isArray(base.reminders) ? base.reminders : [],
+      reminderToAdd: 30,
+      busy: base.busy ?? true,
+      visibility: base.visibility ?? "default",
+      meetingLink: base.meetingLink ?? "",
+      step: 0,
     });
+    logEvent(EVENT_TYPES.EVENT_WIZARD_OPEN, { step: 0, source: "event-modal" });
   }
 
   function handleModalField<K extends keyof EventModalState>(
@@ -399,9 +562,67 @@ export default function Home() {
         myCalendars.find((cal) => cal.name === calendarValue)?.color ??
         calendarColors.Work;
       setEventModal((e) => ({ ...e, calendar: calendarValue, color }));
+    } else if (field === "allDay") {
+      const isAllDay = Boolean(val);
+      setEventModal((e) => ({
+        ...e,
+        allDay: isAllDay,
+      }));
     } else {
       setEventModal((e) => ({ ...e, [field]: val }));
     }
+  }
+
+  function addAttendee() {
+    const email = eventModal.attendeesInput.trim();
+    if (!email) return;
+    logEvent(EVENT_TYPES.EVENT_ADD_ATTENDEE, { email });
+    setEventModal((e) => ({
+      ...e,
+      attendees: [...e.attendees, email],
+      attendeesInput: "",
+    }));
+  }
+
+  function removeAttendee(email: string) {
+    logEvent(EVENT_TYPES.EVENT_REMOVE_ATTENDEE, { email });
+    setEventModal((e) => ({
+      ...e,
+      attendees: e.attendees.filter((a) => a !== email),
+    }));
+  }
+
+  const REMINDER_OPTIONS = [5, 10, 15, 30, 60, 120, 1440];
+
+  function addReminder() {
+    const minutes = eventModal.reminderToAdd;
+    logEvent(EVENT_TYPES.EVENT_ADD_REMINDER, { minutes });
+    setEventModal((e) => ({ ...e, reminders: [...e.reminders, minutes] }));
+  }
+
+  function removeReminder(idx: number) {
+    const minutes = eventModal.reminders[idx];
+    logEvent(EVENT_TYPES.EVENT_REMOVE_REMINDER, { minutes, idx });
+    setEventModal((e) => ({
+      ...e,
+      reminders: e.reminders.filter((_, i) => i !== idx),
+    }));
+  }
+
+  function goNextStep() {
+    setEventModal((e) => {
+      const next = Math.min(e.step + 1, 2);
+      logEvent(EVENT_TYPES.EVENT_WIZARD_NEXT, { from: e.step, to: next });
+      return { ...e, step: next };
+    });
+  }
+
+  function goPrevStep() {
+    setEventModal((e) => {
+      const prev = Math.max(e.step - 1, 0);
+      logEvent(EVENT_TYPES.EVENT_WIZARD_PREV, { from: e.step, to: prev });
+      return { ...e, step: prev };
+    });
   }
 
   function onModalClose() {
@@ -419,18 +640,43 @@ export default function Home() {
       endTime: eventModal.endTime,
       color: eventModal.color,
       isEditing: !!eventModal.editing,
+      allDay: eventModal.allDay,
+      recurrence: eventModal.recurrence,
+      attendees: eventModal.attendees.length,
+      reminders: eventModal.reminders,
+      busy: eventModal.busy,
+      visibility: eventModal.visibility,
     });
     const dstr = eventModal.date ?? viewDate.toISOString().split("T")[0];
+
+    const isAllDay = eventModal.allDay;
+    const startNum = isAllDay
+      ? 0
+      : eventModal.startTime[0] + eventModal.startTime[1] / 60;
+    const endNum = isAllDay
+      ? 24
+      : eventModal.endTime[0] + eventModal.endTime[1] / 60;
+
     const newEv: Event = {
       id: eventModal.editing ?? Math.random().toString(36).slice(2),
       date: dstr,
-      start: eventModal.startTime[0] + eventModal.startTime[1] / 60,
-      end: eventModal.endTime[0] + eventModal.endTime[1] / 60,
+      start: startNum,
+      end: endNum,
       label: eventModal.label,
       calendar: eventModal.calendar,
       color: eventModal.color,
-      startTime: eventModal.startTime,
-      endTime: eventModal.endTime,
+      startTime: isAllDay ? [0, 0] : eventModal.startTime,
+      endTime: isAllDay ? [23, 30] : eventModal.endTime,
+      description: eventModal.description,
+      location: eventModal.location,
+      allDay: isAllDay,
+      recurrence: eventModal.recurrence,
+      recurrenceEndDate: eventModal.recurrenceEndDate,
+      attendees: eventModal.attendees,
+      reminders: eventModal.reminders,
+      busy: eventModal.busy,
+      visibility: eventModal.visibility,
+      meetingLink: eventModal.meetingLink,
     };
     setEvents((evts) => {
       if (eventModal.editing)
@@ -520,9 +766,6 @@ export default function Home() {
     setMiniCalYear(next.getFullYear());
   }
 
-  const VIEW_OPTIONS = ["Day", "5 days", "Week", "Month"];
-  const [currentView, setCurrentView] = useState("5 days");
-
   const mainGridDates = useMemo(() => {
     if (currentView === "Day") return [viewDate];
     if (currentView === "5 days") return getWeekDates(viewDate).slice(1, 6);
@@ -539,6 +782,16 @@ export default function Home() {
       return weekRangeLabel(mainGridDates);
     return `${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
   }, [currentView, viewDate, mainGridDates]);
+
+  // Derived lists
+  const allDayEvents = useMemo(
+    () => expandedEvents.filter((ev) => ev.allDay),
+    [expandedEvents]
+  );
+  const timedEvents = useMemo(
+    () => expandedEvents.filter((ev) => !ev.allDay),
+    [expandedEvents]
+  );
 
   return (
     <main className="flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f]">
@@ -656,7 +909,7 @@ export default function Home() {
                         }`}
                       aria-label={`Select ${format(d, "MMMM d, yyyy")}`}
                     >
-                      {d.getDate()}
+                      {d.getDate() < 10 ? `0${d.getDate()}` : d.getDate()}
                     </button>
                   );
                 })}
@@ -845,6 +1098,21 @@ export default function Home() {
             <span className="text-[22px] font-normal ml-3">{topLabel}</span>
           </div>
           <div className="flex items-center gap-2">
+            <div className="hidden md:block">
+              <Input
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="Search events"
+                className="w-[240px]"
+                aria-label="Search events"
+                onFocus={() => {
+      if (!hasOpenedSearch) {
+        setHasOpenedSearch(true);
+      }
+    }}
+              />
+            </div>
             <div className="relative">
               <button
                 onClick={() => setViewDropdown((v) => !v)}
@@ -937,7 +1205,7 @@ export default function Home() {
                       const d = mainGridDates[idx];
                       const isOut = d.getMonth() !== viewDate.getMonth();
                       const isTod = isToday(d);
-                      const evs = filteredEvents.filter(
+                      const evs = expandedEvents.filter(
                         (ev) => ev.date === d.toISOString().split("T")[0]
                       );
                       return (
@@ -970,7 +1238,7 @@ export default function Home() {
                           <div className="mt-7 flex flex-col gap-0.5">
                             {evs.slice(0, 3).map((ev) => (
                               <button
-                                key={ev.id}
+                                key={ev.id + ev.date}
                                 style={{
                                   background: ev.color,
                                   color: "#fff",
@@ -1018,6 +1286,36 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+              {/* All-day row */}
+              <div className="flex w-full min-w-[550px] border-b border-[#e5e5e5] bg-[#fafafa]">
+                <div className="w-14 flex items-center justify-end pr-2 text-xs text-gray-500 flex-shrink-0">
+                  All-day
+                </div>
+                {mainGridDates.map((d) => {
+                  const iso = d.toISOString().split("T")[0];
+                  const dayEvents = allDayEvents.filter((ev) => ev.date === iso);
+                  return (
+                    <div
+                      key={`allday-${iso}`}
+                      className="flex-1 min-h-[44px] border-r border-[#e5e5e5] p-1 flex flex-wrap gap-1 items-start"
+                    >
+                      {dayEvents.map((ev) => (
+                        <button
+                          key={ev.id + ev.date}
+                          className="px-2 py-0.5 rounded text-white text-xs font-medium"
+                          style={{ background: ev.color }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEditEventModal(ev);
+                          }}
+                        >
+                          {ev.label}
+                        </button>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
               <div className="flex w-full min-w-[550px]">
                 <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
                   {HOURS.map((hr) => (
@@ -1052,16 +1350,12 @@ export default function Home() {
                         )} at ${hrIdx}:00`}
                       />
                     ))}
-                    {filteredEvents
+                    {timedEvents
                       .filter((ev) => ev.date === d.toISOString().split("T")[0])
                       .map((ev) => {
-                        // Debugging log to verify endTime values
-                        console.log(
-                          `Event ${ev.label}: startTime=${ev.startTime}, endTime=${ev.endTime}`
-                        );
                         return (
                           <button
-                            key={ev.id}
+                            key={ev.id + ev.date}
                             className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
                             style={{
                               top: `${ev.start * 56 + 24}px`,
@@ -1079,74 +1373,12 @@ export default function Home() {
                               ev.endTime
                             )}`}
                           >
-                            {ev.label} ({formatTime(ev.startTime)} -{" "}
-                            {formatTime(ev.endTime)})
+                            {ev.label} ({formatTime(ev.startTime)} - {formatTime(
+                              ev.endTime
+                            )})
                           </button>
                         );
                       })}
-                  </div>
-                ))}
-              </div>
-              <div className="flex w-full min-w-[550px]">
-                <div className="w-14 flex flex-col items-end pt-2 flex-shrink-0 select-none">
-                  {HOURS.map((hr) => (
-                    <div
-                      key={hr}
-                      className="h-14 text-xs text-gray-400 w-12 pr-1"
-                    >
-                      {hr === 0
-                        ? "12 AM"
-                        : hr < 12
-                        ? `${hr} AM`
-                        : hr === 12
-                        ? "12 PM"
-                        : `${hr - 12} PM`}
-                    </div>
-                  ))}
-                </div>
-                {mainGridDates.map((d, dayIdx) => (
-                  <div
-                    key={d.toISOString()}
-                    className="flex-1 flex flex-col border-r border-[#e5e5e5] last:border-none relative"
-                  >
-                    {HOURS.map((hrIdx) => (
-                      <div
-                        key={`cell-${dayIdx}-${hrIdx}`}
-                        className="h-14 border-b border-[#ededed] bg-white cursor-pointer"
-                        onClick={() => onWeekHourCellClick(d, hrIdx)}
-                        role="button"
-                        aria-label={`Add event on ${format(
-                          d,
-                          "MMMM d, yyyy"
-                        )} at ${hrIdx}:00`}
-                      />
-                    ))}
-                    {filteredEvents
-                      .filter((ev) => ev.date === d.toISOString().split("T")[0])
-                      .map((ev) => (
-                        <button
-                          key={ev.id}
-                          className="absolute left-0 right-0 ml-2 mr-2 rounded px-1 py-0.5 text-xs text-white font-medium shadow"
-                          style={{
-                            top: `${ev.start * 56 + 24}px`,
-                            height: `${(ev.end - ev.start) * 56 - 4}px`,
-                            background: ev.color,
-                            zIndex: 2,
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openEditEventModal(ev);
-                          }}
-                          aria-label={`Edit event: ${
-                            ev.label
-                          } from ${formatTime(ev.startTime)} to ${formatTime(
-                            ev.endTime
-                          )}`}
-                        >
-                          {ev.label} ({formatTime(ev.startTime)} -{" "}
-                          {formatTime(ev.endTime)})
-                        </button>
-                      ))}
                   </div>
                 ))}
               </div>
@@ -1162,142 +1394,374 @@ export default function Home() {
                 {eventModal.editing ? "Edit event" : "Add event"}
               </DialogTitle>
             </DialogHeader>
-            <div className="flex flex-col mb-2">
-              <Label htmlFor="calendar-select">Calendar</Label>
-              <select
-                id="calendar-select"
-                className="px-3 py-2 border rounded w-full mt-1"
-                value={eventModal.calendar}
-                onChange={(e) => handleModalField("calendar", e.target.value)}
-                required
-              >
-                {myCalendars.map((cal) => (
-                  <option key={cal.name} value={cal.name}>
-                    {cal.name}
-                  </option>
-                ))}
-              </select>
+
+            {/* Stepper */}
+            <div className="flex items-center gap-2 text-sm">
+              {[
+                { label: "Details", idx: 0 },
+                { label: "People", idx: 1 },
+                { label: "Options", idx: 2 },
+              ].map((s) => (
+                <button
+                  type="button"
+                  key={s.idx}
+                  onClick={() => setEventModal((e) => ({ ...e, step: s.idx }))}
+                  className={`px-3 py-1 rounded border ${
+                    eventModal.step === s.idx
+                      ? "bg-[#1976d2] text-white border-[#1976d2]"
+                      : "bg-white text-[#383e4d] border-[#e5e5e5]"
+                  }`}
+                  aria-label={`Go to ${s.label} step`}
+                >
+                  {s.label}
+                </button>
+              ))}
             </div>
-            <div>
-              <Label htmlFor="event-title">Title</Label>
-              <Input
-                id="event-title"
-                value={eventModal.label}
-                onChange={(e) => handleModalField("label", e.target.value)}
-                required
-                autoFocus
-                maxLength={80}
-                aria-required="true"
-              />
-            </div>
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <Label htmlFor="start-time-hour">Start Time</Label>
-                <div className="flex gap-2 mt-1">
+
+            {/* Step 0: Details */}
+            {eventModal.step === 0 && (
+              <div className="space-y-5">
+                <div className="flex flex-col mb-2">
+                  <Label htmlFor="calendar-select">Calendar</Label>
                   <select
-                    id="start-time-hour"
-                    className="px-3 py-2 border rounded w-full"
-                    value={eventModal.startTime[0]}
-                    onChange={(e) =>
-                      handleModalField("startTime", [
-                        parseInt(e.target.value),
-                        eventModal.startTime[1],
-                      ])
-                    }
-                    aria-label="Start time hour"
+                    id="calendar-select"
+                    className="px-3 py-2 border rounded w-full mt-1"
+                    value={eventModal.calendar}
+                    onChange={(e) => handleModalField("calendar", e.target.value)}
+                    required
                   >
-                    {HOURS.map((hour) => (
-                      <option key={hour} value={hour}>
-                        {hour === 0
-                          ? "12 AM"
-                          : hour < 12
-                          ? `${hour} AM`
-                          : hour === 12
-                          ? "12 PM"
-                          : `${hour - 12} PM`}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    className="px-3 py-2 border rounded w-20"
-                    value={eventModal.startTime[1]}
-                    onChange={(e) =>
-                      handleModalField("startTime", [
-                        eventModal.startTime[0],
-                        parseInt(e.target.value),
-                      ])
-                    }
-                    aria-label="Start time minute"
-                  >
-                    {MINUTES.map((minute) => (
-                      <option key={minute} value={minute}>
-                        {pad2(minute)}
+                    {myCalendars.map((cal) => (
+                      <option key={cal.name} value={cal.name}>
+                        {cal.name}
                       </option>
                     ))}
                   </select>
                 </div>
-              </div>
-              <div className="flex-1">
-                <Label htmlFor="end-time-hour">End Time</Label>
-                <div className="flex gap-2 mt-1">
-                  <select
-                    id="end-time-hour"
-                    className="px-3 py-2 border rounded w-full"
-                    value={eventModal.endTime[0]}
-                    onChange={(e) =>
-                      handleModalField("endTime", [
-                        parseInt(e.target.value),
-                        eventModal.endTime[1],
-                      ])
-                    }
-                    aria-label="End time hour"
-                  >
-                    {HOURS.map((hour) => (
-                      <option key={hour} value={hour}>
-                        {hour === 0
-                          ? "12 AM"
-                          : hour < 12
-                          ? `${hour} AM`
-                          : hour === 12
-                          ? "12 PM"
-                          : `${hour - 12} PM`}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    className="px-3 py-2 border rounded w-20"
-                    value={eventModal.endTime[1]}
-                    onChange={(e) =>
-                      handleModalField("endTime", [
-                        eventModal.endTime[0],
-                        parseInt(e.target.value),
-                      ])
-                    }
-                    aria-label="End time minute"
-                  >
-                    {MINUTES.map((minute) => (
-                      <option key={minute} value={minute}>
-                        {pad2(minute)}
-                      </option>
-                    ))}
-                  </select>
+                <div>
+                  <Label htmlFor="event-title">Title</Label>
+                  <Input
+                    id="event-title"
+                    value={eventModal.label}
+                    onChange={(e) => handleModalField("label", e.target.value)}
+                    required
+                    autoFocus
+                    maxLength={80}
+                    aria-required="true"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="event-date">Date</Label>
+                    <Input
+                      id="event-date"
+                      type="date"
+                      value={eventModal.date ?? viewDate.toISOString().split("T")[0]}
+                      onChange={(e) => handleModalField("date", e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="event-location">Location</Label>
+                    <Input
+                      id="event-location"
+                      value={eventModal.location}
+                      onChange={(e) => handleModalField("location", e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="allday"
+                    type="checkbox"
+                    checked={eventModal.allDay}
+                    onChange={(e) => handleModalField("allDay", e.target.checked as any)}
+                  />
+                  <Label htmlFor="allday">All day</Label>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-1 opacity-100">
+                    <Label htmlFor="start-time-hour">Start Time</Label>
+                    <div className="flex gap-2 mt-1">
+                      <select
+                        id="start-time-hour"
+                        className="px-3 py-2 border rounded w-full"
+                        value={eventModal.startTime[0]}
+                        onChange={(e) =>
+                          handleModalField("startTime", [
+                            parseInt(e.target.value),
+                            eventModal.startTime[1],
+                          ])
+                        }
+                        aria-label="Start time hour"
+                        disabled={eventModal.allDay}
+                      >
+                        {HOURS.map((hour) => (
+                          <option key={hour} value={hour}>
+                            {hour === 0
+                              ? "12 AM"
+                              : hour < 12
+                              ? `${hour} AM`
+                              : hour === 12
+                              ? "12 PM"
+                              : `${hour - 12} PM`}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        className="px-3 py-2 border rounded w-20"
+                        value={eventModal.startTime[1]}
+                        onChange={(e) =>
+                          handleModalField("startTime", [
+                            eventModal.startTime[0],
+                            parseInt(e.target.value),
+                          ])
+                        }
+                        aria-label="Start time minute"
+                        disabled={eventModal.allDay}
+                      >
+                        {MINUTES.map((minute) => (
+                          <option key={minute} value={minute}>
+                            {pad2(minute)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <Label htmlFor="end-time-hour">End Time</Label>
+                    <div className="flex gap-2 mt-1">
+                      <select
+                        id="end-time-hour"
+                        className="px-3 py-2 border rounded w-full"
+                        value={eventModal.endTime[0]}
+                        onChange={(e) =>
+                          handleModalField("endTime", [
+                            parseInt(e.target.value),
+                            eventModal.endTime[1],
+                          ])
+                        }
+                        aria-label="End time hour"
+                        disabled={eventModal.allDay}
+                      >
+                        {HOURS.map((hour) => (
+                          <option key={hour} value={hour}>
+                            {hour === 0
+                              ? "12 AM"
+                              : hour < 12
+                              ? `${hour} AM`
+                              : hour === 12
+                              ? "12 PM"
+                              : `${hour - 12} PM`}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        className="px-3 py-2 border rounded w-20"
+                        value={eventModal.endTime[1]}
+                        onChange={(e) =>
+                          handleModalField("endTime", [
+                            eventModal.endTime[0],
+                            parseInt(e.target.value),
+                          ])
+                        }
+                        aria-label="End time minute"
+                        disabled={eventModal.allDay}
+                      >
+                        {MINUTES.map((minute) => (
+                          <option key={minute} value={minute}>
+                            {pad2(minute)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="recurrence">Repeat</Label>
+                    <select
+                      id="recurrence"
+                      className="px-3 py-2 border rounded w-full mt-1"
+                      value={eventModal.recurrence}
+                      onChange={(e) =>
+                        handleModalField(
+                          "recurrence",
+                          e.target.value as EventModalState["recurrence"]
+                        )
+                      }
+                    >
+                      <option value="none">Does not repeat</option>
+                      <option value="daily">Daily</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                  </div>
+                  <div>
+                    <Label htmlFor="recurrence-end">Repeat until</Label>
+                    <Input
+                      id="recurrence-end"
+                      type="date"
+                      value={
+                        eventModal.recurrenceEndDate ??
+                        eventModal.date ??
+                        viewDate.toISOString().split("T")[0]
+                      }
+                      onChange={(e) =>
+                        handleModalField("recurrenceEndDate", e.target.value)
+                      }
+                      disabled={eventModal.recurrence === "none"}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div>
-              <div className="mb-1 font-medium text-sm">
-                {eventModal.date
-                  ? format(parseISO(eventModal.date), "EEE, MMMM d")
-                  : format(viewDate, "EEE, MMMM d")}
-                , {formatTime(eventModal.startTime)} –{" "}
-                {formatTime(eventModal.endTime)}
+            )}
+
+            {/* Step 1: People */}
+            {eventModal.step === 1 && (
+              <div className="space-y-5">
+                <div>
+                  <Label htmlFor="attendee">Add attendee (email)</Label>
+                  <div className="flex gap-2 mt-1">
+                    <Input
+                      id="attendee"
+                      value={eventModal.attendeesInput}
+                      onChange={(e) => handleModalField("attendeesInput", e.target.value)}
+                      placeholder="name@example.com"
+                    />
+                    <Button type="button" onClick={addAttendee}>
+                      Add
+                    </Button>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {eventModal.attendees.map((email) => (
+                      <span
+                        key={email}
+                        className="inline-flex items-center gap-2 px-2 py-1 rounded bg-[#f3f7fa] border border-[#e5e5e5] text-sm"
+                      >
+                        {email}
+                        <button
+                          type="button"
+                          className="text-red-600"
+                          onClick={() => removeAttendee(email)}
+                          aria-label={`Remove ${email}`}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Step 2: Options */}
+            {eventModal.step === 2 && (
+              <div className="space-y-5">
+                <div>
+                  <Label htmlFor="meeting-link">Meeting link</Label>
+                  <Input
+                    id="meeting-link"
+                    value={eventModal.meetingLink}
+                    onChange={(e) => handleModalField("meetingLink", e.target.value)}
+                    placeholder="https://..."
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="event-description">Description</Label>
+                  <Textarea
+                    id="event-description"
+                    value={eventModal.description}
+                    onChange={(e) => handleModalField("description", e.target.value)}
+                    className="min-h-[80px]"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="busy"
+                    type="checkbox"
+                    checked={eventModal.busy}
+                    onChange={(e) => handleModalField("busy", e.target.checked as any)}
+                  />
+                  <Label htmlFor="busy">Mark as busy</Label>
+                </div>
+                <div>
+                  <Label htmlFor="visibility">Visibility</Label>
+                  <select
+                    id="visibility"
+                    className="px-3 py-2 border rounded w-full mt-1"
+                    value={eventModal.visibility}
+                    onChange={(e) =>
+                      handleModalField(
+                        "visibility",
+                        e.target.value as EventModalState["visibility"]
+                      )
+                    }
+                  >
+                    <option value="default">Default</option>
+                    <option value="private">Private</option>
+                    <option value="public">Public</option>
+                  </select>
+                </div>
+                <div>
+                  <Label>Reminders</Label>
+                  <div className="flex gap-2 mt-1">
+                    <select
+                      className="px-3 py-2 border rounded"
+                      value={eventModal.reminderToAdd}
+                      onChange={(e) =>
+                        handleModalField("reminderToAdd", parseInt(e.target.value) as any)
+                      }
+                    >
+                      {REMINDER_OPTIONS.map((m) => (
+                        <option key={m} value={m}>
+                          {m >= 60
+                            ? `${Math.round(m / 60)}h before`
+                            : `${m}m before`}
+                        </option>
+                      ))}
+                    </select>
+                    <Button type="button" onClick={addReminder}>
+                      Add reminder
+                    </Button>
+                  </div>
+                  <ul className="mt-2 space-y-2">
+                    {eventModal.reminders.map((m, i) => (
+                      <li key={`${m}-${i}`} className="flex items-center gap-2">
+                        <span className="text-sm text-gray-600">
+                          {m >= 60 ? `${Math.round(m / 60)}h` : `${m}m`} before
+                        </span>
+                        <button
+                          type="button"
+                          className="text-red-600"
+                          onClick={() => removeReminder(i)}
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
             <DialogFooter>
-              <Button variant="default" type="submit">
-                Save
-              </Button>
-              {eventModal.editing && (
+              <div className="flex-1" />
+              {eventModal.step > 0 && (
+                <Button type="button" variant="outline" onClick={goPrevStep}>
+                  Back
+                </Button>
+              )}
+              {eventModal.step < 2 && (
+                <Button type="button" onClick={goNextStep}>
+                  Next
+                </Button>
+              )}
+              {eventModal.step === 2 && (
+                <Button variant="default" type="submit">
+                  Save
+                </Button>
+              )}
+              {eventModal.editing && eventModal.step === 2 && (
                 <Button
                   variant="destructive"
                   type="button"
