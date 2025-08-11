@@ -1,0 +1,913 @@
+[
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Work",
+      "selected": false,
+      "color": "#2196F3"
+    },
+    "timestamp": "2025-08-11T11:27:52.051Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Family",
+      "selected": false,
+      "color": "#E53935"
+    },
+    "timestamp": "2025-08-11T11:27:52.080Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Work",
+      "selected": true,
+      "color": "#2196F3"
+    },
+    "timestamp": "2025-08-11T11:27:52.351Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Family",
+      "selected": true,
+      "color": "#E53935"
+    },
+    "timestamp": "2025-08-11T11:27:53.056Z"
+  },
+  {
+    "event_name": "SELECT_WEEK",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "Week"
+    },
+    "timestamp": "2025-08-11T11:27:58.895Z"
+  },
+  {
+    "event_name": "SELECT_FIVE_DAYS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "5 days"
+    },
+    "timestamp": "2025-08-11T11:28:00.462Z"
+  },
+  {
+    "event_name": "SELECT_MONTH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "Month"
+    },
+    "timestamp": "2025-08-11T11:28:01.684Z"
+  },
+  {
+    "event_name": "SELECT_DAY",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "Day"
+    },
+    "timestamp": "2025-08-11T11:28:03.057Z"
+  },
+  {
+    "event_name": "SELECT_MONTH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "Month"
+    },
+    "timestamp": "2025-08-11T11:28:07.685Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-10",
+      "reason": "User clicked cancel button",
+      "title": ""
+    },
+    "timestamp": "2025-08-11T11:49:49.170Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Work",
+      "selected": false,
+      "color": "#2196F3"
+    },
+    "timestamp": "2025-08-11T11:52:31.730Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Family",
+      "selected": false,
+      "color": "#E53935"
+    },
+    "timestamp": "2025-08-11T11:52:35.852Z"
+  },
+  {
+    "event_name": "CELL_CLCIKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "5 days-view",
+      "date": "2025-08-12T19:00:00.000Z",
+      "hour": 1,
+      "view": "5 days"
+    },
+    "timestamp": "2025-08-11T11:52:38.410Z"
+  },
+  {
+    "event_name": "ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "title": "t",
+      "calendar": "Work",
+      "date": "2025-08-12",
+      "startTime": [
+        1,
+        0
+      ],
+      "endTime": [
+        1,
+        30
+      ],
+      "color": "#2196F3",
+      "isEditing": false,
+      "allDay": true,
+      "recurrence": "none"
+    },
+    "timestamp": "2025-08-11T11:53:00.601Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-10",
+      "reason": "User clicked cancel button",
+      "title": ""
+    },
+    "timestamp": "2025-08-11T11:53:11.355Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-10",
+      "reason": "User clicked cancel button",
+      "title": ""
+    },
+    "timestamp": "2025-08-11T11:59:36.431Z"
+  },
+  {
+    "event_name": "CELL_CLCIKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "5 days-view",
+      "date": "2025-08-12T19:00:00.000Z",
+      "hour": 1,
+      "view": "5 days"
+    },
+    "timestamp": "2025-08-11T12:00:01.255Z"
+  },
+  {
+    "event_name": "ADD_NEW_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-sidebar",
+      "action": "open_add_calendar_modal"
+    },
+    "timestamp": "2025-08-11T12:00:20.080Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-10",
+      "reason": "User clicked cancel button",
+      "title": ""
+    },
+    "timestamp": "2025-08-11T12:01:22.671Z"
+  },
+  {
+    "event_name": "ADD_NEW_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-sidebar",
+      "action": "open_add_calendar_modal"
+    },
+    "timestamp": "2025-08-11T12:01:48.496Z"
+  },
+  {
+    "event_name": "CELL_CLCIKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "5 days-view",
+      "date": "2025-08-12T19:00:00.000Z",
+      "hour": 1,
+      "view": "5 days"
+    },
+    "timestamp": "2025-08-11T12:01:59.540Z"
+  },
+  {
+    "event_name": "CELL_CLCIKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "5 days-view",
+      "date": "2025-08-26T19:00:00.000Z",
+      "hour": 2,
+      "view": "5 days"
+    },
+    "timestamp": "2025-08-11T12:03:25.519Z"
+  },
+  {
+    "event_name": "SELECT_WEEK",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "Week"
+    },
+    "timestamp": "2025-08-11T12:04:06.530Z"
+  },
+  {
+    "event_name": "SELECT_DAY",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "Day"
+    },
+    "timestamp": "2025-08-11T12:04:13.405Z"
+  },
+  {
+    "event_name": "CELL_CLCIKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "day-view",
+      "date": "2025-08-29T19:00:00.000Z",
+      "hour": 1,
+      "view": "Day"
+    },
+    "timestamp": "2025-08-11T12:04:18.812Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-29",
+      "reason": "User clicked cancel button",
+      "title": ""
+    },
+    "timestamp": "2025-08-11T12:04:21.680Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:16:32.926Z"
+  },
+  {
+    "event_name": "EVENT_ADD_REMINDER",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "minutes": 30
+    },
+    "timestamp": "2025-08-11T12:16:45.291Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-12",
+      "reason": "User clicked cancel button",
+      "title": "t"
+    },
+    "timestamp": "2025-08-11T12:16:48.314Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:16:55.242Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:17:02.907Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:17:02.917Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:17:07.839Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:17:07.859Z"
+  },
+  {
+    "event_name": "ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "title": "t",
+      "calendar": "Work",
+      "date": "2025-08-12",
+      "startTime": [
+        0,
+        0
+      ],
+      "endTime": [
+        23,
+        30
+      ],
+      "color": "#2196F3",
+      "isEditing": true,
+      "allDay": true,
+      "recurrence": "daily",
+      "attendees": 0,
+      "reminders": [],
+      "busy": true,
+      "visibility": "default"
+    },
+    "timestamp": "2025-08-11T12:17:14.209Z"
+  },
+  {
+    "event_name": "SEARCH_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "navbar"
+    },
+    "timestamp": "2025-08-11T12:20:24.362Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "",
+      "length": 0
+    },
+    "timestamp": "2025-08-11T12:20:24.659Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "y",
+      "length": 1
+    },
+    "timestamp": "2025-08-11T12:20:28.353Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "yy",
+      "length": 2
+    },
+    "timestamp": "2025-08-11T12:20:29.082Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "yy"
+    },
+    "timestamp": "2025-08-11T12:20:30.584Z"
+  },
+  {
+    "event_name": "SEARCH_CLEAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "navbar"
+    },
+    "timestamp": "2025-08-11T12:20:34.920Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "",
+      "length": 0
+    },
+    "timestamp": "2025-08-11T12:20:35.568Z"
+  },
+  {
+    "event_name": "SELECT_TODAY",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "mini-calendar",
+      "selectedDate": "2025-08-10T19:00:00.000Z"
+    },
+    "timestamp": "2025-08-11T12:43:23.272Z"
+  },
+  {
+    "event_name": "SELECT_DAY",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "calendar-view-dropdown",
+      "selectedView": "Day"
+    },
+    "timestamp": "2025-08-11T12:43:25.533Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "t",
+      "length": 1
+    },
+    "timestamp": "2025-08-11T12:43:30.186Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "ty",
+      "length": 2
+    },
+    "timestamp": "2025-08-11T12:43:32.418Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tyt",
+      "length": 3
+    },
+    "timestamp": "2025-08-11T12:43:33.730Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tyt"
+    },
+    "timestamp": "2025-08-11T12:43:34.911Z"
+  },
+  {
+    "event_name": "SEARCH_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "navbar"
+    },
+    "timestamp": "2025-08-11T12:43:46.084Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "",
+      "length": 0
+    },
+    "timestamp": "2025-08-11T12:43:46.285Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "t",
+      "length": 1
+    },
+    "timestamp": "2025-08-11T12:46:03.762Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tyu",
+      "length": 3
+    },
+    "timestamp": "2025-08-11T12:46:06.840Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tyu"
+    },
+    "timestamp": "2025-08-11T12:46:08.048Z"
+  },
+  {
+    "event_name": "SEARCH_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "navbar"
+    },
+    "timestamp": "2025-08-11T12:46:17.711Z"
+  },
+  {
+    "event_name": "SEARCH_QUERY_CHANGED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "",
+      "length": 0
+    },
+    "timestamp": "2025-08-11T12:46:18.210Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:46:29.037Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:46:39.370Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:46:39.382Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:46:45.664Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:46:45.687Z"
+  },
+  {
+    "event_name": "ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "title": "t",
+      "calendar": "Work",
+      "date": "2025-08-12",
+      "startTime": [
+        0,
+        0
+      ],
+      "endTime": [
+        23,
+        30
+      ],
+      "color": "#2196F3",
+      "isEditing": true,
+      "allDay": true,
+      "recurrence": "daily",
+      "attendees": 0,
+      "reminders": [],
+      "busy": true,
+      "visibility": "default"
+    },
+    "timestamp": "2025-08-11T12:46:50.546Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:47:01.585Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:47:11.325Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:47:18.158Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:47:18.192Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:47:21.192Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:47:21.272Z"
+  },
+  {
+    "event_name": "ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "title": "t",
+      "calendar": "Work",
+      "date": "2025-08-12",
+      "startTime": [
+        0,
+        0
+      ],
+      "endTime": [
+        23,
+        30
+      ],
+      "color": "#2196F3",
+      "isEditing": true,
+      "allDay": true,
+      "recurrence": "daily",
+      "attendees": 0,
+      "reminders": [],
+      "busy": true,
+      "visibility": "default"
+    },
+    "timestamp": "2025-08-11T12:47:23.056Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:47:58.598Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:48:01.168Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 0,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:48:01.181Z"
+  },
+  {
+    "event_name": "EVENT_ADD_ATTENDEE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "email": "tayyab@gmail.com"
+    },
+    "timestamp": "2025-08-11T12:48:14.351Z"
+  },
+  {
+    "event_name": "EVENT_REMOVE_ATTENDEE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "email": "tayyab@gmail.com"
+    },
+    "timestamp": "2025-08-11T12:48:18.023Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:48:40.370Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-10",
+      "reason": "User clicked cancel button",
+      "title": ""
+    },
+    "timestamp": "2025-08-11T12:48:46.956Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:48:58.738Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_PREV",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 2,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:49:41.904Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_PREV",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 2,
+      "to": 1
+    },
+    "timestamp": "2025-08-11T12:49:42.157Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:49:46.832Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_NEXT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "from": 1,
+      "to": 2
+    },
+    "timestamp": "2025-08-11T12:49:46.842Z"
+  },
+  {
+    "event_name": "DELETE_ADDED_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "eventId": "a5xc684sor",
+      "eventTitle": "t",
+      "calendar": "Work",
+      "date": "2025-08-12"
+    },
+    "timestamp": "2025-08-11T12:49:49.578Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-11T12:56:12.138Z"
+  }
+]
