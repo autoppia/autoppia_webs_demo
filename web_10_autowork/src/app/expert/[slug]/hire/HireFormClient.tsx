@@ -23,6 +23,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
   const handleCancel = () => {
     logEvent(EVENT_TYPES.CANCEL_HIRE, {
       Button: "Cancel",
+      expert
     });
     route.push("/");
   };
