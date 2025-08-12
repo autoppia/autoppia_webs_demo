@@ -298,7 +298,7 @@ function expandRecurringEvents(
     }
 
     if (ev.recurrence === "daily") {
-      let cur = new Date(evDate);
+      const cur = new Date(evDate);
       while (cur <= last) {
         if (cur >= start) pushOccurrence(cur);
         cur.setDate(cur.getDate() + 1);
@@ -307,7 +307,7 @@ function expandRecurringEvents(
     }
 
     if (ev.recurrence === "weekly") {
-      let cur = new Date(evDate);
+      const cur = new Date(evDate);
       while (cur <= last) {
         if (cur >= start) pushOccurrence(cur);
         cur.setDate(cur.getDate() + 7);
@@ -1474,7 +1474,7 @@ export default function Home() {
                     id="allday"
                     type="checkbox"
                     checked={eventModal.allDay}
-                    onChange={(e) => handleModalField("allDay", e.target.checked as any)}
+                    onChange={(e) => handleModalField("allDay", e.target.checked)}
                   />
                   <Label htmlFor="allday">All day</Label>
                 </div>
@@ -1680,7 +1680,7 @@ export default function Home() {
                     id="busy"
                     type="checkbox"
                     checked={eventModal.busy}
-                    onChange={(e) => handleModalField("busy", e.target.checked as any)}
+                    onChange={(e) => handleModalField("busy", e.target.checked)}
                   />
                   <Label htmlFor="busy">Mark as busy</Label>
                 </div>
@@ -1709,7 +1709,7 @@ export default function Home() {
                       className="px-3 py-2 border rounded"
                       value={eventModal.reminderToAdd}
                       onChange={(e) =>
-                        handleModalField("reminderToAdd", parseInt(e.target.value) as any)
+                        handleModalField("reminderToAdd", parseInt(e.target.value))
                       }
                     >
                       {REMINDER_OPTIONS.map((m) => (
