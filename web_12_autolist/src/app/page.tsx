@@ -746,6 +746,9 @@ export default function Home() {
                         logEvent(EVENT_TYPES.COMPLETE_TASK, {
                           taskId: task.id,
                           name: task.name,
+                          description: task.description,
+                          date: task.date?.toISOString() ?? null,
+                          priority: task.priority,
                           completedAt: new Date().toISOString(),
                         });
                         handleCompleteTask(task.id);
@@ -826,6 +829,9 @@ export default function Home() {
                           logEvent(EVENT_TYPES.DELETE_TASK, {
                             taskId: task.id,
                             name: task.name,
+                            description: task.description,
+                            date: task.date?.toISOString() ?? null,
+                            priority: task.priority,
                             deletedAt: new Date().toISOString(),
                           });
                           handleDeleteTask(task.id);
