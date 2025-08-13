@@ -132,10 +132,76 @@ interface Calendar {
 
 function usePersistedEvents() {
   const [state, setState] = useState<Event[]>(() => {
-    if (typeof window === "undefined") return [];
+    // Add more default events for search demo
+    const defaultEvents: Event[] = [
+      {
+        id: "1",
+        date: "2025-08-15",
+        start: 9,
+        end: 10,
+        label: "Team Meeting",
+        calendar: "Work",
+        color: "#2196F3",
+        startTime: [9, 0],
+        endTime: [10, 0],
+        description: "Weekly sync with team.",
+        location: "Zoom",
+        allDay: false,
+        recurrence: "weekly",
+        recurrenceEndDate: "2025-12-31",
+        attendees: ["alice@example.com", "bob@example.com"],
+        reminders: [30],
+        busy: true,
+        visibility: "default",
+        meetingLink: "https://zoom.us/j/123456789",
+      },
+      {
+        id: "2",
+        date: "2025-08-16",
+        start: 14,
+        end: 15,
+        label: "Doctor Appointment",
+        calendar: "Personal",
+        color: "#E53935",
+        startTime: [14, 0],
+        endTime: [15, 0],
+        description: "Annual checkup.",
+        location: "Clinic",
+        allDay: false,
+        recurrence: "none",
+        recurrenceEndDate: "2025-08-16",
+        attendees: [],
+        reminders: [60],
+        busy: false,
+        visibility: "private",
+        meetingLink: "",
+      },
+      {
+        id: "3",
+        date: "2025-08-17",
+        start: 11,
+        end: 12,
+        label: "Project Demo",
+        calendar: "Work",
+        color: "#2196F3",
+        startTime: [11, 0],
+        endTime: [12, 0],
+        description: "Demo for client.",
+        location: "Office",
+        allDay: false,
+        recurrence: "none",
+        recurrenceEndDate: "2025-08-17",
+        attendees: ["client@example.com"],
+        reminders: [15],
+        busy: true,
+        visibility: "public",
+        meetingLink: "https://meet.google.com/abc-defg-hij",
+      },
+    ];
+    if (typeof window === "undefined") return defaultEvents;
     try {
       const stored = window.localStorage.getItem("gocal_events");
-      if (!stored) return [];
+      if (!stored) return defaultEvents;
       const evs = JSON.parse(stored) as RawEvent[];
       const validEvents = evs
         .map((ev) => {
@@ -181,11 +247,11 @@ function usePersistedEvents() {
           JSON.stringify(validEvents)
         );
       }
-      return validEvents;
+      return validEvents.length > 0 ? validEvents : defaultEvents;
     } catch (error) {
       console.error("Error parsing localStorage events:", error);
       window.localStorage.removeItem("gocal_events");
-      return [];
+      return defaultEvents;
     }
   });
 
@@ -389,6 +455,7 @@ export default function Home() {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [hasOpenedSearch, setHasOpenedSearch] = useState(false);
+  const [submittedSearch, setSubmittedSearch] = useState("");
 
   useEffect(() => {
     if (!hasOpenedSearch && searchQuery === "") return;
@@ -409,6 +476,7 @@ export default function Home() {
   function handleSearchKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       logEvent(EVENT_TYPES.SEARCH_SUBMIT, { query: searchQuery });
+      setSubmittedSearch(searchQuery);
     }
   }
 
@@ -458,14 +526,14 @@ export default function Home() {
   const expandedEvents = useMemo(() => {
     const base = filteredEvents;
     const expanded = expandRecurringEvents(base, rangeStart, rangeEnd);
-    if (!searchQuery.trim()) return expanded;
-    const q = searchQuery.toLowerCase();
+    if (!submittedSearch.trim()) return expanded;
+    const q = submittedSearch.toLowerCase();
     return expanded.filter(
       (e) =>
         e.label.toLowerCase().includes(q) ||
         (e.location ?? "").toLowerCase().includes(q)
     );
-  }, [filteredEvents, rangeStart, rangeEnd, searchQuery]);
+  }, [filteredEvents, rangeStart, rangeEnd, submittedSearch]);
 
 
 
@@ -576,6 +644,12 @@ export default function Home() {
   function addAttendee() {
     const email = eventModal.attendeesInput.trim();
     if (!email) return;
+    // Simple email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
     logEvent(EVENT_TYPES.EVENT_ADD_ATTENDEE, { email });
     setEventModal((e) => ({
       ...e,
@@ -612,7 +686,7 @@ export default function Home() {
   function goNextStep() {
     setEventModal((e) => {
       const next = Math.min(e.step + 1, 2);
-      logEvent(EVENT_TYPES.EVENT_WIZARD_NEXT, { from: e.step, to: next });
+      // No event logging for next step
       return { ...e, step: next };
     });
   }
@@ -620,7 +694,7 @@ export default function Home() {
   function goPrevStep() {
     setEventModal((e) => {
       const prev = Math.max(e.step - 1, 0);
-      logEvent(EVENT_TYPES.EVENT_WIZARD_PREV, { from: e.step, to: prev });
+      // No event logging for prev step
       return { ...e, step: prev };
     });
   }
@@ -631,6 +705,57 @@ export default function Home() {
 
   function handleModalSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // --- Full Form Validation ---
+    // Required fields
+    if (!eventModal.label || eventModal.label.trim() === "") {
+      alert("Event title is required.");
+      return;
+    }
+    if (!eventModal.calendar || eventModal.calendar.trim() === "") {
+      alert("Calendar is required.");
+      return;
+    }
+    if (!eventModal.date || eventModal.date.trim() === "") {
+      alert("Date is required.");
+      return;
+    }
+    // Validate date
+    if (isNaN(Date.parse(eventModal.date))) {
+      alert("Please enter a valid date.");
+      return;
+    }
+    // Validate time (if not all day)
+    if (!eventModal.allDay) {
+      const [sh, sm] = eventModal.startTime;
+      const [eh, em] = eventModal.endTime;
+      if (
+        sh < 0 || sh > 23 || sm < 0 || sm > 59 ||
+        eh < 0 || eh > 23 || em < 0 || em > 59
+      ) {
+        alert("Please enter a valid start and end time.");
+        return;
+      }
+      if (sh > eh || (sh === eh && sm >= em)) {
+        alert("End time must be after start time.");
+        return;
+      }
+    }
+    // Validate attendees (if any)
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    for (const email of eventModal.attendees) {
+      if (!emailPattern.test(email)) {
+        alert(`Invalid attendee email: ${email}`);
+        return;
+      }
+    }
+    // Validate meeting link if present
+    if (eventModal.meetingLink && eventModal.meetingLink.trim() !== "") {
+      const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/i;
+      if (!urlPattern.test(eventModal.meetingLink.trim())) {
+        alert("Please enter a valid meeting URL (starting with http(s)://)");
+        return;
+      }
+    }
     logEvent(EVENT_TYPES.ADD_EVENT, {
       source: "event-modal",
       title: eventModal.label,
