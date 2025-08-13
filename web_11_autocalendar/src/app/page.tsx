@@ -705,6 +705,7 @@ export default function Home() {
 
   function handleModalSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+<<<<<<< HEAD
     // --- Full Form Validation ---
     // Required fields
     if (!eventModal.label || eventModal.label.trim() === "") {
@@ -757,6 +758,9 @@ export default function Home() {
       }
     }
     logEvent(EVENT_TYPES.ADD_EVENT, {
+=======
+    const eventData = {
+>>>>>>> 96644e06842ea7a56aca8959aaff37c0a5cb34c3
       source: "event-modal",
       title: eventModal.label,
       calendar: eventModal.calendar,
@@ -767,11 +771,15 @@ export default function Home() {
       isEditing: !!eventModal.editing,
       allDay: eventModal.allDay,
       recurrence: eventModal.recurrence,
-      attendees: eventModal.attendees.length,
+      attendees: eventModal.attendees,
       reminders: eventModal.reminders,
       busy: eventModal.busy,
       visibility: eventModal.visibility,
-    });
+      location: eventModal.location,
+      description: eventModal.description,
+      meetingLink: eventModal.meetingLink,
+    };
+    logEvent(EVENT_TYPES.ADD_EVENT, eventData);
     const dstr = eventModal.date ?? viewDate.toISOString().split("T")[0];
 
     const isAllDay = eventModal.allDay;
@@ -812,13 +820,27 @@ export default function Home() {
   }
 
   function handleEventDelete() {
-    logEvent(EVENT_TYPES.DELETE_EVENT, {
+    const eventData = {
       source: "event-modal",
       eventId: eventModal.id,
-      eventTitle: eventModal.label,
+      title: eventModal.label,
       calendar: eventModal.calendar,
       date: eventModal.date,
-    });
+      startTime: eventModal.startTime,
+      endTime: eventModal.endTime,
+      color: eventModal.color,
+      isEditing: !!eventModal.editing,
+      allDay: eventModal.allDay,
+      recurrence: eventModal.recurrence,
+      attendees: eventModal.attendees,
+      reminders: eventModal.reminders,
+      busy: eventModal.busy,
+      visibility: eventModal.visibility,
+      location: eventModal.location,
+      description: eventModal.description,
+      meetingLink: eventModal.meetingLink,
+    };
+    logEvent(EVENT_TYPES.DELETE_EVENT, eventData);
     setEvents((evts) => evts.filter((ev) => ev.id !== eventModal.id));
     onModalClose();
   }
@@ -1900,12 +1922,28 @@ export default function Home() {
                   variant="outline"
                   type="button"
                   onClick={() => {
-                    logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, {
+                    const eventData = {
                       source: "event-modal",
-                      date: eventModal.date,
                       reason: "User clicked cancel button",
+                      eventId: eventModal.id,
                       title: eventModal.label,
-                    });
+                      calendar: eventModal.calendar,
+                      date: eventModal.date,
+                      startTime: eventModal.startTime,
+                      endTime: eventModal.endTime,
+                      color: eventModal.color,
+                      isEditing: !!eventModal.editing,
+                      allDay: eventModal.allDay,
+                      recurrence: eventModal.recurrence,
+                      attendees: eventModal.attendees,
+                      reminders: eventModal.reminders,
+                      busy: eventModal.busy,
+                      visibility: eventModal.visibility,
+                      location: eventModal.location,
+                      description: eventModal.description,
+                      meetingLink: eventModal.meetingLink,
+                    };
+                    logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, eventData);
                   }}
                 >
                   Cancel
