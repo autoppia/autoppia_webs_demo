@@ -4,13 +4,15 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {  getExpert } from "../experts";
-import { EVENT_TYPES, logEvent } from "@/library/events";
+import BookConsultationLogger from "./BookConsultationLogger";
 import HireButton from "@/app/components/HireButton";
 import { experts } from "@/library/dataset";
 
 export function generateStaticParams() {
   return experts.map((e) => ({ slug: e.slug }));
 }
+
+
 
 export default async function ExpertProfile({
   params,
@@ -23,6 +25,8 @@ export default async function ExpertProfile({
 
   return (
     <main className="max-w-6xl mx-auto px-5 py-5">
+      {/* Client component for event logging */}
+      <BookConsultationLogger expert={expert} />
       <div className="bg-white rounded-2xl shadow border border-gray-100 p-8 flex flex-col gap-5">
         <div className="flex items-center gap-4 mb-6">
           <img
