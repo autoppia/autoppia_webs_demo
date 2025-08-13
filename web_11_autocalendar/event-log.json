@@ -909,5 +909,126 @@
       "source": "event-modal"
     },
     "timestamp": "2025-08-11T12:56:12.138Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayyab"
+    },
+    "timestamp": "2025-08-13T05:03:58.850Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "team meeting"
+    },
+    "timestamp": "2025-08-13T05:04:12.463Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayyab"
+    },
+    "timestamp": "2025-08-13T05:04:36.603Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayyab"
+    },
+    "timestamp": "2025-08-13T05:04:38.543Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "team"
+    },
+    "timestamp": "2025-08-13T05:04:52.004Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayyab"
+    },
+    "timestamp": "2025-08-13T05:11:12.146Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "team meeting"
+    },
+    "timestamp": "2025-08-13T05:11:22.866Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-13T05:12:09.518Z"
+  },
+  {
+    "event_name": "EVENT_ADD_ATTENDEE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "email": "tayyab"
+    },
+    "timestamp": "2025-08-13T05:13:18.627Z"
+  },
+  {
+    "event_name": "EVENT_REMOVE_ATTENDEE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "email": "tayyab"
+    },
+    "timestamp": "2025-08-13T05:13:22.864Z"
+  },
+  {
+    "event_name": "EVENT_REMOVE_ATTENDEE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "email": "bob@example.com"
+    },
+    "timestamp": "2025-08-13T05:13:24.148Z"
+  },
+  {
+    "event_name": "EVENT_REMOVE_ATTENDEE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "email": "alice@example.com"
+    },
+    "timestamp": "2025-08-13T05:13:25.461Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "date": "2025-08-15",
+      "reason": "User clicked cancel button",
+      "title": "Team Meeting"
+    },
+    "timestamp": "2025-08-13T05:18:00.624Z"
   }
 ]
