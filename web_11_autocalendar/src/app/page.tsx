@@ -535,8 +535,28 @@ export default function Home() {
       meetingLink: "",
       step: 0,
     });
-    logEvent(EVENT_TYPES.EVENT_WIZARD_OPEN, { step: 0, source: "event-modal" });
-  }
+    // Log all event attributes for new event creation
+    logEvent(EVENT_TYPES.EVENT_WIZARD_OPEN, {
+      source: "event-modal",
+      isEditing: false,
+      eventId: null,
+      calendar: "Work",
+      title: "",
+      color: myCalendars.find((cal) => cal.name === "Work")?.color ?? "#2196F3",
+      date: isoDate,
+      startTime: [startHour, startMins],
+      endTime: [endHour, endMins],
+      description: "",
+      location: "",
+      allDay: false,
+      recurrence: "none",
+      recurrenceEndDate: isoDate,
+      attendees: [],
+      reminders: [],
+      busy: true,
+      visibility: "default",
+      meetingLink: ""
+    });  }
 
   function openEditEventModal(ev: Event) {
     const base = events.find((e) => e.id === ev.id) ?? ev;
@@ -570,7 +590,28 @@ export default function Home() {
       meetingLink: base.meetingLink ?? "",
       step: 0,
     });
-    logEvent(EVENT_TYPES.EVENT_WIZARD_OPEN, { step: 0, source: "event-modal" });
+    // Log all event attributes for event editing
+    logEvent(EVENT_TYPES.EVENT_WIZARD_OPEN, {
+      source: "event-modal",
+      isEditing: true,
+      eventId: base.id,
+      calendar: base.calendar,
+      title: base.label,
+      color: base.color,
+      date: base.date,
+      startTime: base.startTime,
+      endTime: base.endTime,
+      description: base.description ?? "",
+      location: base.location ?? "",
+      allDay: base.allDay ?? false,
+      recurrence: base.recurrence ?? "none",
+      recurrenceEndDate: base.recurrenceEndDate ?? base.date,
+      attendees: Array.isArray(base.attendees) ? base.attendees : [],
+      reminders: Array.isArray(base.reminders) ? base.reminders : [],
+      busy: base.busy ?? true,
+      visibility: base.visibility ?? "default",
+      meetingLink: base.meetingLink ?? ""
+    });
   }
 
   function handleModalField<K extends keyof EventModalState>(
