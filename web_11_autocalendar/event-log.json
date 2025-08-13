@@ -1030,5 +1030,121 @@
       "title": "Team Meeting"
     },
     "timestamp": "2025-08-13T05:18:00.624Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayyab"
+    },
+    "timestamp": "2025-08-13T05:44:37.108Z"
+  },
+  {
+    "event_name": "SEARCH_SUBMIT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "team meeting"
+    },
+    "timestamp": "2025-08-13T05:44:41.521Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "step": 0,
+      "source": "event-modal"
+    },
+    "timestamp": "2025-08-13T05:44:45.595Z"
+  },
+  {
+    "event_name": "EVENT_REMOVE_ATTENDEE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "email": "bob@example.com"
+    },
+    "timestamp": "2025-08-13T05:44:59.330Z"
+  },
+  {
+    "event_name": "ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "title": "Team Meeting",
+      "calendar": "Work",
+      "date": "2025-08-15",
+      "startTime": [
+        9,
+        0
+      ],
+      "endTime": [
+        10,
+        0
+      ],
+      "color": "#2196F3",
+      "isEditing": true,
+      "allDay": false,
+      "recurrence": "weekly",
+      "attendees": [
+        "alice@example.com"
+      ],
+      "reminders": [
+        30
+      ],
+      "busy": true,
+      "visibility": "default",
+      "location": "Zoom",
+      "description": "Weekly sync with team.",
+      "meetingLink": "https://zoom.us/j/123"
+    },
+    "timestamp": "2025-08-13T05:45:08.611Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Work",
+      "selected": false,
+      "color": "#2196F3"
+    },
+    "timestamp": "2025-08-13T05:45:15.788Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Family",
+      "selected": false,
+      "color": "#E53935"
+    },
+    "timestamp": "2025-08-13T05:45:18.398Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Work",
+      "selected": true,
+      "color": "#2196F3"
+    },
+    "timestamp": "2025-08-13T05:45:20.601Z"
+  },
+  {
+    "event_name": "CHOOSE_CALENDAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "calendarName": "Family",
+      "selected": true,
+      "color": "#E53935"
+    },
+    "timestamp": "2025-08-13T05:45:20.924Z"
   }
 ]
