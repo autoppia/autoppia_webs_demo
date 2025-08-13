@@ -705,7 +705,7 @@ export default function Home() {
 
   function handleModalSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-<<<<<<< HEAD
+
     // --- Full Form Validation ---
     // Required fields
     if (!eventModal.label || eventModal.label.trim() === "") {
@@ -757,10 +757,7 @@ export default function Home() {
         return;
       }
     }
-    logEvent(EVENT_TYPES.ADD_EVENT, {
-=======
     const eventData = {
->>>>>>> 96644e06842ea7a56aca8959aaff37c0a5cb34c3
       source: "event-modal",
       title: eventModal.label,
       calendar: eventModal.calendar,
