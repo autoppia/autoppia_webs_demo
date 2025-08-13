@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { EVENTS_DATASET } from "@/library/dataset";
 import {
   addDays,
   startOfWeek,
@@ -131,129 +132,61 @@ interface Calendar {
 }
 
 function usePersistedEvents() {
-  const [state, setState] = useState<Event[]>(() => {
-    // Add more default events for search demo
-    const defaultEvents: Event[] = [
-      {
-        id: "1",
-        date: "2025-08-15",
-        start: 9,
-        end: 10,
-        label: "Team Meeting",
-        calendar: "Work",
-        color: "#2196F3",
-        startTime: [9, 0],
-        endTime: [10, 0],
-        description: "Weekly sync with team.",
-        location: "Zoom",
-        allDay: false,
-        recurrence: "weekly",
-        recurrenceEndDate: "2025-12-31",
-        attendees: ["alice@example.com", "bob@example.com"],
-        reminders: [30],
-        busy: true,
-        visibility: "default",
-        meetingLink: "https://zoom.us/j/123456789",
-      },
-      {
-        id: "2",
-        date: "2025-08-16",
-        start: 14,
-        end: 15,
-        label: "Doctor Appointment",
-        calendar: "Personal",
-        color: "#E53935",
-        startTime: [14, 0],
-        endTime: [15, 0],
-        description: "Annual checkup.",
-        location: "Clinic",
-        allDay: false,
-        recurrence: "none",
-        recurrenceEndDate: "2025-08-16",
-        attendees: [],
-        reminders: [60],
-        busy: false,
-        visibility: "private",
-        meetingLink: "",
-      },
-      {
-        id: "3",
-        date: "2025-08-17",
-        start: 11,
-        end: 12,
-        label: "Project Demo",
-        calendar: "Work",
-        color: "#2196F3",
-        startTime: [11, 0],
-        endTime: [12, 0],
-        description: "Demo for client.",
-        location: "Office",
-        allDay: false,
-        recurrence: "none",
-        recurrenceEndDate: "2025-08-17",
-        attendees: ["client@example.com"],
-        reminders: [15],
-        busy: true,
-        visibility: "public",
-        meetingLink: "https://meet.google.com/abc-defg-hij",
-      },
-    ];
-    if (typeof window === "undefined") return defaultEvents;
+  // SSR-safe: initialize with EVENTS_DATASET, then hydrate from localStorage on client
+  const [state, setState] = useState<Event[]>(EVENTS_DATASET as Event[]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     try {
       const stored = window.localStorage.getItem("gocal_events");
-      if (!stored) return defaultEvents;
-      const evs = JSON.parse(stored) as RawEvent[];
-      const validEvents = evs
-        .map((ev) => {
-          const start = ev.start ?? 9;
-          const end = ev.end ?? 10;
-          const startTime: [number, number] =
-            Array.isArray(ev.startTime) && ev.startTime.length === 2
-              ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
-              : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
-          const endTime: [number, number] =
-            Array.isArray(ev.endTime) && ev.endTime.length === 2
-              ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
-              : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
-          return {
-            id: ev.id ?? Math.random().toString(36).slice(2),
-            date: ev.date ?? new Date().toISOString().split("T")[0],
-            start,
-            end,
-            label: ev.label ?? "",
-            calendar: ev.calendar ?? "Work",
-            color: ev.color ?? calendarColors.Work,
-            startTime,
-            endTime,
-            description: ev.description ?? "",
-            location: ev.location ?? "",
-            allDay: ev.allDay ?? false,
-            recurrence: ev.recurrence ?? "none",
-            recurrenceEndDate: ev.recurrenceEndDate ?? null,
-            attendees: Array.isArray(ev.attendees) ? ev.attendees : [],
-            reminders: Array.isArray(ev.reminders) ? ev.reminders : [],
-            busy: ev.busy ?? true,
-            visibility: ev.visibility ?? "default",
-            meetingLink: ev.meetingLink ?? "",
-          } as Event;
-        })
-        .filter(
-          (ev) =>
-            Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
-        );
-      if (evs.length !== validEvents.length) {
-        window.localStorage.setItem(
-          "gocal_events",
-          JSON.stringify(validEvents)
-        );
+      if (stored) {
+        const evs = JSON.parse(stored) as RawEvent[];
+        const validEvents = evs
+          .map((ev) => {
+            const start = ev.start ?? 9;
+            const end = ev.end ?? 10;
+            const startTime: [number, number] =
+              Array.isArray(ev.startTime) && ev.startTime.length === 2
+                ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
+                : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
+            const endTime: [number, number] =
+              Array.isArray(ev.endTime) && ev.endTime.length === 2
+                ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
+                : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
+            return {
+              id: ev.id ?? Math.random().toString(36).slice(2),
+              date: ev.date ?? new Date().toISOString().split("T")[0],
+              start,
+              end,
+              label: ev.label ?? "",
+              calendar: ev.calendar ?? "Work",
+              color: ev.color ?? calendarColors.Work,
+              startTime,
+              endTime,
+              description: ev.description ?? "",
+              location: ev.location ?? "",
+              allDay: ev.allDay ?? false,
+              recurrence: ev.recurrence ?? "none",
+              recurrenceEndDate: ev.recurrenceEndDate ?? null,
+              attendees: Array.isArray(ev.attendees) ? ev.attendees : [],
+              reminders: Array.isArray(ev.reminders) ? ev.reminders : [],
+              busy: ev.busy ?? true,
+              visibility: ev.visibility ?? "default",
+              meetingLink: ev.meetingLink ?? "",
+            } as Event;
+          })
+          .filter(
+            (ev) =>
+              Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
+          );
+        setState(validEvents.length > 0 ? validEvents : EVENTS_DATASET as Event[]);
       }
-      return validEvents.length > 0 ? validEvents : defaultEvents;
     } catch (error) {
       console.error("Error parsing localStorage events:", error);
       window.localStorage.removeItem("gocal_events");
-      return defaultEvents;
+      setState(EVENTS_DATASET as Event[]);
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -422,10 +355,15 @@ export default function Home() {
   const [addCalName, setAddCalName] = useState("");
   const [addCalDesc, setAddCalDesc] = useState("");
   const [addCalColorIdx, setAddCalColorIdx] = useState(0);
-  const [myCalendars, setMyCalendars] = useState<Calendar[]>([
-    { name: "Work", enabled: true, color: "#2196F3" },
-    { name: "Family", enabled: true, color: "#E53935" },
-  ]);
+  // Dynamically generate all calendar types from EVENTS_DATASET, enabled by default
+  const uniqueCalendars = Array.from(
+    new Map(
+      EVENTS_DATASET.map((ev) => [ev.calendar, ev.color])
+    ).entries()
+  );
+  const [myCalendars, setMyCalendars] = useState<Calendar[]>(
+    uniqueCalendars.map(([name, color]) => ({ name, enabled: true, color }))
+  );
   const [eventModal, setEventModal] = useState<EventModalState>({
     open: false,
     editing: null,
@@ -456,6 +394,8 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [hasOpenedSearch, setHasOpenedSearch] = useState(false);
   const [submittedSearch, setSubmittedSearch] = useState("");
+  const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<typeof EVENTS_DATASET>([]);
 
   useEffect(() => {
     if (!hasOpenedSearch && searchQuery === "") return;
@@ -477,6 +417,19 @@ export default function Home() {
     if (e.key === "Enter") {
       logEvent(EVENT_TYPES.SEARCH_SUBMIT, { query: searchQuery });
       setSubmittedSearch(searchQuery);
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const results = EVENTS_DATASET.filter(
+          (e) =>
+            e.label.toLowerCase().includes(q) ||
+            (e.location ?? "").toLowerCase().includes(q)
+        );
+        setSearchResults(results);
+        setSearchDropdownOpen(true);
+      } else {
+        setSearchResults([]);
+        setSearchDropdownOpen(false);
+      }
     }
   }
 
@@ -1242,19 +1195,37 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-2">
             <div className="hidden md:block">
-              <Input
-                value={searchQuery}
-                onChange={handleSearchChange}
-                onKeyDown={handleSearchKeyDown}
-                placeholder="Search events"
-                className="w-[240px]"
-                aria-label="Search events"
-                onFocus={() => {
-      if (!hasOpenedSearch) {
-        setHasOpenedSearch(true);
-      }
-    }}
-              />
+                <Input
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    onKeyDown={handleSearchKeyDown}
+                    placeholder="Search events"
+                    className="w-[240px]"
+                    aria-label="Search events"
+                    onFocus={() => {
+                      if (!hasOpenedSearch) {
+                        setHasOpenedSearch(true);
+                      }
+                    }}
+                  />
+                  {/* Search Results Dropdown - moved here for correct placement */}
+                  {searchDropdownOpen && searchResults.length > 0 && (
+                    <div className="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-50 max-h-64 overflow-auto">
+                      {searchResults.map((ev) => (
+                        <div
+                          key={ev.id}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            openEditEventModal(ev);
+                            setSearchDropdownOpen(false);
+                          }}
+                        >
+                          <div className="font-semibold text-sm">{ev.label}</div>
+                          <div className="text-xs text-gray-500">{ev.date} | {ev.location}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
             </div>
             <div className="relative">
               <button
@@ -1527,6 +1498,8 @@ export default function Home() {
               </div>
             </>
           )}
+          {/* Search Results Dropdown */}
+
         </div>
       </section>
       <Dialog open={eventModal.open} onOpenChange={onModalClose}>
