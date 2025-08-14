@@ -1,9 +1,12 @@
 import { UserOutlined, DownOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
 import { useState } from "react";
+import { logEvent, EVENT_TYPES } from "@/library/events";
+import CreateTeamModal from "./CreateTeamModal";
 
 export default function Navbar() {
   const [profilePopoverOpen, setProfilePopoverOpen] = useState(false);
+  const [createTeamModalOpen, setCreateTeamModalOpen] = useState(false);
 
   const profilePanel = (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 min-w-[200px] py-2 px-0 mt-2">
@@ -11,6 +14,9 @@ export default function Navbar() {
         className="flex items-center w-full px-4 py-2 text-[15px] hover:bg-gray-50 cursor-pointer"
         onClick={() => {
           setProfilePopoverOpen(false);
+          logEvent(EVENT_TYPES.PROFILE_CLICKED, {
+            timestamp: Date.now()
+          });
           // Add profile page navigation logic here
         }}
       >
@@ -20,6 +26,9 @@ export default function Navbar() {
         className="flex items-center w-full px-4 py-2 text-[15px] hover:bg-gray-50 cursor-pointer"
         onClick={() => {
           setProfilePopoverOpen(false);
+          logEvent(EVENT_TYPES.SETTINGS_CLICKED, {
+            timestamp: Date.now()
+          });
           // Add settings page navigation logic here
         }}
       >
@@ -29,6 +38,9 @@ export default function Navbar() {
         className="flex items-center w-full px-4 py-2 text-[15px] hover:bg-gray-50 cursor-pointer"
         onClick={() => {
           setProfilePopoverOpen(false);
+          logEvent(EVENT_TYPES.LOGOUT_CLICKED, {
+            timestamp: Date.now()
+          });
           // Add logout logic here
         }}
       >
@@ -46,7 +58,9 @@ export default function Navbar() {
               <button
                 className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
                 onClick={() => {
-                  // Add navigation to inbox
+                  logEvent(EVENT_TYPES.UPCOMING_CLICKED, {
+                    timestamp: Date.now()
+                  });
                 }}
               >
                 Upcoming
@@ -54,7 +68,9 @@ export default function Navbar() {
               <button
                 className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
                 onClick={() => {
-                  // Add navigation to today
+                  logEvent(EVENT_TYPES.DRAFT_CLICKED, {
+                    timestamp: Date.now()
+                  });
                 }}
               >
                 Drafts
@@ -62,10 +78,23 @@ export default function Navbar() {
               <button
                 className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
                 onClick={() => {
-                  // Add navigation to completed
+                  logEvent(EVENT_TYPES.MORE_MENU_CLICKED, {
+                    timestamp: Date.now()
+                  });
                 }}
               >
                 More
+              </button>
+              <button
+                className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
+                onClick={() => {
+                  logEvent(EVENT_TYPES.ADD_TEAM_CLICKED, {
+                    timestamp: Date.now()
+                  });
+                  setCreateTeamModalOpen(true);
+                }}
+              >
+                Add Team
               </button>
             </div>
           </div>
@@ -91,6 +120,15 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+      <CreateTeamModal
+        open={createTeamModalOpen}
+        onCancel={() => setCreateTeamModalOpen(false)}
+        onOk={(values) => {
+          // Handle team creation here
+          console.log('Team created:', values);
+          setCreateTeamModalOpen(false);
+        }}
+      />
     </nav>
   );
 }
