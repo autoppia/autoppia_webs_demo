@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import HireFormClient from "./HireFormClient";
 import { experts } from "@/library/dataset";
+import HireButtonLogger from "./HireButtonLogger";
 
 // ✅ Make sure this export is here for static generation
 export const dynamicParams = false;
@@ -19,5 +20,10 @@ export default async function HireExpertPage({
 
   if (!expert) return notFound();
 
-  return <HireFormClient expert={expert} />;
+  return (
+    <>
+      <HireButtonLogger expert={expert} />
+      <HireFormClient expert={expert} />
+    </>
+  );
 }
