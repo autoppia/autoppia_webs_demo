@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { clients } from "@/library/dataset";
+import { DynamicButton } from "@/components/DynamicButton";
+import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
+import { DynamicElement } from "@/components/DynamicElement";
 
 
 
@@ -37,11 +40,14 @@ export default function ClientsDirectory() {
   };
 
   return (
-    <section>
-      <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
-        Clients Directory
-      </h1>
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-0 mb-10">
+    <DynamicContainer index={0}>
+      <DynamicElement elementType="header" index={0}>
+        <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
+          Clients Directory
+        </h1>
+      </DynamicElement>
+      
+      <DynamicElement elementType="section" index={1} className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-0 mb-10">
         <div className="w-full md:w-96 relative">
           <span className="absolute left-4 top-3.5 text-zinc-400 pointer-events-none">
             <Search className="w-5 h-5" />
@@ -54,11 +60,15 @@ export default function ClientsDirectory() {
             aria-label="Search clients"
           />
         </div>
-        <button className="flex-shrink-0 flex items-center gap-2 px-5 h-12 ml-0 md:ml-4 font-medium rounded-2xl bg-white border border-zinc-200 text-zinc-700 shadow-sm hover:bg-zinc-50 transition">
+        <DynamicButton
+          eventType="SEARCH_CLIENT"
+          index={0}
+          className="flex-shrink-0 flex items-center gap-2 px-5 h-12 ml-0 md:ml-4 font-medium rounded-2xl bg-white border border-zinc-200 text-zinc-700 shadow-sm hover:bg-zinc-50 transition"
+        >
           <Filter className="w-4 h-4" /> Filter
-        </button>
-      </div>
-      <div className="rounded-2xl bg-white shadow-card border border-zinc-100">
+        </DynamicButton>
+      </DynamicElement>
+      <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
         <div
           className="hidden md:grid grid-cols-7 px-10 pt-6 pb-2 text-zinc-500 text-xs uppercase tracking-wide select-none"
           style={{ letterSpacing: "0.08em" }}
@@ -75,9 +85,10 @@ export default function ClientsDirectory() {
               No clients found.
             </div>
           )}
-          {filtered.map((c) => (
-            <div
+          {filtered.map((c, index) => (
+            <DynamicItem
               key={c.id}
+              index={index}
               onClick={() => handleClientClick(c)}
               className="group flex flex-col md:grid md:grid-cols-7 items-center px-5 py-3 md:px-10 md:py-4 gap-3 md:gap-0 hover:bg-accent-forest/5 transition cursor-pointer"
             >
@@ -111,10 +122,10 @@ export default function ClientsDirectory() {
               <div className="ml-auto">
                 <ChevronRight className="w-6 h-6 text-zinc-300 group-hover:text-accent-forest transition" />
               </div>
-            </div>
+            </DynamicItem>
           ))}
         </div>
-      </div>
-    </section>
+      </DynamicElement>
+    </DynamicContainer>
   );
 }

@@ -3,6 +3,9 @@ import { useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_FILES } from "@/library/dataset";
+import { DynamicButton } from "@/components/DynamicButton";
+import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
+import { DynamicElement } from "@/components/DynamicElement";
 
 
 
@@ -60,16 +63,21 @@ export default function DocumentsPage() {
   };
 
   return (
-    <section>
-      <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
-        Documents
-        <span className="ml-2 text-base font-medium text-zinc-400 align-middle">
-          (Demo)
-        </span>
-      </h1>
-      <div
+    <DynamicContainer index={0}>
+      <DynamicElement elementType="header" index={0}>
+        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
+          Documents
+          <span className="ml-2 text-base font-medium text-zinc-400 align-middle">
+            (Demo)
+          </span>
+        </h1>
+      </DynamicElement>
+      
+      <DynamicElement
+        elementType="section"
+        index={1}
         className="mb-10 p-8 rounded-2xl border-2 border-dashed border-accent-forest/40 bg-accent-forest/5 flex flex-col items-center justify-center cursor-pointer hover:bg-accent-forest/10 transition gap-4"
-        onDragOver={(e) => e.preventDefault()}
+        onDragOver={(e: React.DragEvent<HTMLDivElement>) => e.preventDefault()}
         onDrop={onDrop}
         onClick={() => fileInput.current && fileInput.current.click()}
         style={{ minHeight: 140 }}
@@ -86,11 +94,13 @@ export default function DocumentsPage() {
           onChange={onUpload}
           className="hidden"
         />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {files.map((file) => (
-          <div
+      </DynamicElement>
+      
+      <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {files.map((file, index) => (
+          <DynamicItem
             key={file.id}
+            index={index}
             className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition"
           >
             <div className="flex items-center gap-3 mb-2">
@@ -123,22 +133,25 @@ export default function DocumentsPage() {
                 <CheckCircle className="w-4 h-4 text-accent-forest ml-1" />
               )}
             </div>
-            <button
+            <DynamicButton
+              eventType="DOCUMENT_DELETED"
+              index={index}
               onClick={() => deleteFile(file.id)}
               className="absolute right-5 top-5 text-zinc-400 rounded-full hover:bg-zinc-100 p-2 opacity-70 group-hover:opacity-100 transition"
               title="Delete"
             >
               <Trash2 className="w-5 h-5" />
-            </button>
-          </div>
+            </DynamicButton>
+          </DynamicItem>
         ))}
-      </div>
-      <div className="mt-12 text-center text-zinc-400 text-sm">
+      </DynamicElement>
+      
+      <DynamicElement elementType="section" index={3} className="mt-12 text-center text-zinc-400 text-sm">
         <span>
           <span className="font-semibold text-accent-forest">Premium</span>{" "}
           features: e-sign, versioning, secure sharing, and more coming soon.
         </span>
-      </div>
-    </section>
+      </DynamicElement>
+    </DynamicContainer>
   );
 }

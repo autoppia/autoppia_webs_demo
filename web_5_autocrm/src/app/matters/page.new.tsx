@@ -120,7 +120,6 @@ export default function MattersListPage() {
           <h1 className="text-3xl font-bold">Matters</h1>
           <DynamicButton
             eventType="ADD_NEW_MATTER"
-            index={0}
             onClick={() => setOpenNew(true)}
             className="bg-accent-forest text-white hover:bg-accent-forest/90"
           >
@@ -130,10 +129,9 @@ export default function MattersListPage() {
 
         {/* Matter List */}
         <div className="grid gap-4">
-          {matters.map((matter, index) => (
+          {matters.map((matter) => (
             <DynamicItem
               key={matter.id}
-              index={index}
               className={`relative ${
                 isSelected(matter.id) ? "ring-2 ring-accent-forest/30" : ""
               }`}
@@ -175,7 +173,6 @@ export default function MattersListPage() {
           <div className="flex justify-end gap-2 mt-4">
             <DynamicButton
               eventType="ARCHIVE_MATTER"
-              index={0}
               onClick={archiveSelected}
               variant="outline"
             >
@@ -183,7 +180,6 @@ export default function MattersListPage() {
             </DynamicButton>
             <DynamicButton
               eventType="DELETE_MATTER"
-              index={1}
               onClick={deleteSelected}
               variant="outline"
               className="text-red-600 hover:bg-red-50"
@@ -258,7 +254,6 @@ export default function MattersListPage() {
 
                 <DynamicButton
                   eventType="ADD_NEW_MATTER"
-                  index={1}
                   type="submit"
                   className="w-full bg-accent-forest text-white hover:bg-accent-forest/90"
                 >
