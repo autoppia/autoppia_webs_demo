@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
+import { LayoutProvider } from "@/contexts/LayoutContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
       <head />
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
-          <EmailProvider>{children}</EmailProvider>
+          <EmailProvider>
+            <LayoutProvider>{children}</LayoutProvider>
+          </EmailProvider>
         </ThemeProvider>
       </body>
     </html>

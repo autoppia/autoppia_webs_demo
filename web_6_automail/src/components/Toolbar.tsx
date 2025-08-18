@@ -14,6 +14,8 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { useEmail } from '@/contexts/EmailContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLayout } from '@/contexts/LayoutContext';
+import { cn } from '@/library/utils';
 import {
   Search,
   Menu,
@@ -33,6 +35,7 @@ interface ToolbarProps {
 }
 
 export function Toolbar({ onMenuClick }: ToolbarProps) {
+  const { currentVariant } = useLayout();
   const { searchQuery, setSearchQuery, filteredEmails } = useEmail();
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [searchValue, setSearchValue] = useState(searchQuery);
@@ -116,7 +119,18 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
   };
 
   return (
-    <div className="h-16 toolbar-glass">
+    <div className={cn(
+      "h-16 toolbar-glass",
+      currentVariant.id === 2 && "search-container",
+      currentVariant.id === 3 && "search-header",
+      currentVariant.id === 4 && "toolbar-header",
+      currentVariant.id === 5 && "search-wrapper",
+      currentVariant.id === 6 && "bottom-toolbar",
+      currentVariant.id === 7 && "dashboard-header",
+      currentVariant.id === 8 && "mobile-header",
+      currentVariant.id === 9 && "terminal-header",
+      currentVariant.id === 10 && "magazine-header"
+    )}>
       <div className="flex items-center justify-between h-full px-4 gap-4">
         {/* Left Section - Menu and Logo */}
         <div className="flex items-center gap-4">
@@ -147,7 +161,18 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
               value={searchValue}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
-              className="pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring"
+              className={cn(
+                "pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring",
+                currentVariant.id === 2 && "search-field",
+                currentVariant.id === 3 && "header-search",
+                currentVariant.id === 4 && "search-element",
+                currentVariant.id === 5 && "search-field",
+                currentVariant.id === 6 && "bottom-search",
+                currentVariant.id === 7 && "header-search",
+                currentVariant.id === 8 && "header-search",
+                currentVariant.id === 9 && "header-search",
+                currentVariant.id === 10 && "header-search"
+              )}
             />
 
             {/* Clear Search Button */}
@@ -214,7 +239,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
               <DropdownMenuSeparator />
 
               {/* Theme Selection */}
-              <div className="p-2">
+              <div className="p-2" data-testid="theme-toggle">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">Theme</span>
                   {getThemeIcon()}
@@ -230,7 +255,17 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                         setTheme('light');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'light' });
                       }}
-                      
+                      className={cn(
+                        currentVariant.id === 2 && "theme-toggle",
+                        currentVariant.id === 3 && "theme-btn",
+                        currentVariant.id === 4 && "theme-element",
+                        currentVariant.id === 5 && "header-theme",
+                        currentVariant.id === 6 && "bottom-theme",
+                        currentVariant.id === 7 && "header-theme",
+                        currentVariant.id === 8 && "header-theme",
+                        currentVariant.id === 9 && "header-theme",
+                        currentVariant.id === 10 && "header-theme"
+                      )}
                     >
                       <Sun className="h-3 w-3" />
                     </Button>
@@ -244,7 +279,18 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                       onClick={() => {
                         setTheme('dark');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'dark' });
-                      }}                      
+                      }}
+                      className={cn(
+                        currentVariant.id === 2 && "theme-toggle",
+                        currentVariant.id === 3 && "theme-btn",
+                        currentVariant.id === 4 && "theme-element",
+                        currentVariant.id === 5 && "header-theme",
+                        currentVariant.id === 6 && "bottom-theme",
+                        currentVariant.id === 7 && "header-theme",
+                        currentVariant.id === 8 && "header-theme",
+                        currentVariant.id === 9 && "header-theme",
+                        currentVariant.id === 10 && "header-theme"
+                      )}
                     >
                       <Moon className="h-3 w-3" />
                     </Button>
@@ -258,7 +304,18 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                       onClick={() => {
                         setTheme('system');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'system' });
-                      }}                      
+                      }}
+                      className={cn(
+                        currentVariant.id === 2 && "theme-toggle",
+                        currentVariant.id === 3 && "theme-btn",
+                        currentVariant.id === 4 && "theme-element",
+                        currentVariant.id === 5 && "header-theme",
+                        currentVariant.id === 6 && "bottom-theme",
+                        currentVariant.id === 7 && "header-theme",
+                        currentVariant.id === 8 && "header-theme",
+                        currentVariant.id === 9 && "header-theme",
+                        currentVariant.id === 10 && "header-theme"
+                      )}
                     >
                       <Monitor className="h-3 w-3" />
                     </Button>

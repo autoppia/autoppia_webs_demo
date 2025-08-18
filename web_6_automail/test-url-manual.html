@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Parameter Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .url-display {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-family: monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Parameter Test</h1>
+        
+        <div class="info">
+            <h3>Current URL Information:</h3>
+            <div class="url-display" id="current-url"></div>
+            <div id="url-info"></div>
+        </div>
+
+        <div class="info">
+            <h3>Manual URL Tests:</h3>
+            <button class="button" onclick="setUrlWithSeed(1)">Set URL with ?seed=1</button>
+            <button class="button" onclick="setUrlWithSeed(5)">Set URL with ?seed=5</button>
+            <button class="button" onclick="setUrlWithSeed(10)">Set URL with ?seed=10</button>
+            <button class="button" onclick="setUrlWithoutSeed()">Set URL without seed</button>
+            <button class="button" onclick="addSeedToUrl(3)">Add ?seed=3 to current URL</button>
+        </div>
+
+        <div class="info">
+            <h3>Navigation Tests:</h3>
+            <button class="button" onclick="navigateToApp()">Navigate to AutoMail App</button>
+            <button class="button" onclick="navigateToAppWithSeed(7)">Navigate to App with ?seed=7</button>
+        </div>
+
+        <div class="info">
+            <h3>URL Manipulation:</h3>
+            <input type="number" id="seed-input" placeholder="Enter seed (1-10)" min="1" max="10" value="1">
+            <button class="button" onclick="setCustomSeed()">Set Custom Seed</button>
+        </div>
+    </div>
+
+    <script>
+        function updateDisplay() {
+            const currentUrl = window.location.href;
+            const urlParams = new URLSearchParams(window.location.search);
+            const seedParam = urlParams.get('seed');
+            
+            document.getElementById('current-url').textContent = currentUrl;
+            
+            let info = '';
+            if (seedParam) {
+                info = `Seed parameter: ${seedParam} (Variant ${seedParam})`;
+            } else {
+                info = 'No seed parameter (Default variant)';
+            }
+            document.getElementById('url-info').textContent = info;
+        }
+
+        function setUrlWithSeed(seed) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('seed', seed.toString());
+            window.history.pushState({}, '', url.toString());
+            updateDisplay();
+        }
+
+        function setUrlWithoutSeed() {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('seed');
+            window.history.pushState({}, '', url.toString());
+            updateDisplay();
+        }
+
+        function addSeedToUrl(seed) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('seed', seed.toString());
+            window.history.pushState({}, '', url.toString());
+            updateDisplay();
+        }
+
+        function navigateToApp() {
+            window.open('http://localhost:3000/', '_blank');
+        }
+
+        function navigateToAppWithSeed(seed) {
+            window.open(`http://localhost:3000/?seed=${seed}`, '_blank');
+        }
+
+        function setCustomSeed() {
+            const seed = document.getElementById('seed-input').value;
+            if (seed >= 1 && seed <= 10) {
+                setUrlWithSeed(parseInt(seed));
+            } else {
+                alert('Please enter a seed between 1 and 10');
+            }
+        }
+
+        // Update display on page load
+        updateDisplay();
+
+        // Listen for URL changes
+        window.addEventListener('popstate', updateDisplay);
+    </script>
+</body>
+</html> 

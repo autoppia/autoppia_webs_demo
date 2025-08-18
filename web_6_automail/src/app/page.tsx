@@ -1,65 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
-import { cn } from "@/library/utils";
-import { Toolbar } from "@/components/Toolbar";
-import { Sidebar } from "@/components/Sidebar";
-import { EmailList } from "@/components/EmailList";
-import { EmailView } from "@/components/EmailView";
-import { ComposeModal } from "@/components/ComposeModal";
-import { useEmail } from "@/contexts/EmailContext";
+import React from "react";
+import { DynamicLayout } from "@/components/DynamicLayout";
+import { LayoutTestPanel } from "@/components/LayoutTestPanel";
+import { SeedTestPanel } from "@/components/SeedTestPanel";
+import { useLayout } from "@/contexts/LayoutContext";
 
 export default function GmailPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { currentEmail } = useEmail();
+  const { currentVariant, seed, setSeed } = useLayout();
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+  const handleSeedChange = (newSeed: number) => {
+    console.log('GmailPage: Button clicked for seed:', newSeed);
+    setSeed(newSeed);
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background" suppressHydrationWarning>
-      {/* Top Toolbar */}
-      <Toolbar onMenuClick={toggleSidebar} />
-
-      {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <div
-          className={cn(
-            "fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0",
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          )}
-        >
-          <Sidebar />
-        </div>
-
-        {/* Sidebar Overlay (Mobile) */}
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-
-        {/* Main Content Area */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Show full-screen email view when email is selected */}
-          {currentEmail ? (
-            <div className="flex-1">
-              <EmailView />
-            </div>
-          ) : (
-            /* Email List takes full width when no email selected */
-            <div className="flex-1">
-              <EmailList />
-            </div>
-          )}
+    <>
+      {/* Layout Variant Indicator - for debugging */}
+      <div className="fixed top-2 right-2 z-50 bg-black/80 text-white px-2 py-1 rounded text-xs">
+        Variant {currentVariant.id}: {currentVariant.name} (Seed: {seed}{seed === 1 ? ' - default' : ''})
+      </div>
+      
+      {/* Seed Controls - for testing */}
+      <div className="fixed top-2 left-2 z-50 bg-black/80 text-white px-2 py-1 rounded text-xs">
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((s) => (
+            <button
+              key={s}
+              onClick={() => handleSeedChange(s)}
+              className={`px-1 rounded ${seed === s ? 'bg-white text-black' : 'hover:bg-white/20'}`}
+            >
+              {s}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Compose Modal */}
-      <ComposeModal />
-    </div>
+      <DynamicLayout key={seed} />
+      
+      {/* Layout Test Panel */}
+      <LayoutTestPanel />
+      
+      {/* Seed Test Panel */}
+      <SeedTestPanel />
+    </>
   );
 }
