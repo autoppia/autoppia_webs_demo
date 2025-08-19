@@ -894,17 +894,17 @@ export default function Home() {
                   .replace(/\s+/g, "-")
                   .replace(/\./g, "")}`}
                 passHref
-                onClick={() =>
-                  logEvent(EVENT_TYPES.BOOK_A_CONSULTATION, {
-                    expertName: expert.name,
-                    role: expert.role,
-                    rate: expert.rate,
-                    country: expert.country,
-                    rating: expert.rating,
-                    jobs: expert.jobs,
-                    timestamp: Date.now(),
-                  })
-                }
+                // onClick={() =>
+                //   logEvent(EVENT_TYPES.BOOK_A_CONSULTATION, {
+                //     expertName: expert.name,
+                //     role: expert.role,
+                //     rate: expert.rate,
+                //     country: expert.country,
+                //     rating: expert.rating,
+                //     jobs: expert.jobs,
+                //     timestamp: Date.now(),
+                //   })
+                // }
                 className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
               >
                 Book a consultation
