@@ -21,6 +21,7 @@ import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Link from "next/link";
 import { RestaurantsData } from "@/components/library/dataset";
+import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -73,30 +74,19 @@ export default function RestaurantPage() {
   const [date, setDate] = useState<Date | undefined>(undefined);
 
   const searchParams = useSearchParams();
-  const seed = Number(searchParams?.get("seed") ?? "0");
+  const seed = Number(searchParams?.get("seed") ?? "1");
 
-  const getLayoutFromSeed = (seed: number) => {
-    const justifyOptions = [
-      "flex-start",
-      "center",
-      "flex-end",
-      "space-between",
-      "space-around",
-      "space-evenly",
-    ];
-    const marginTopOptions = [0, 4, 8, 12, 16];
-    const wrapOptions = [true, false, false, true, false];
-
-    const index = seed % 5;
-
-    return {
-      justify: justifyOptions[index],
-      marginTop: marginTopOptions[index],
-      wrap: wrapOptions[index],
-    };
+  // Use seed-based variations
+  const bookButtonVariation = useSeedVariation("bookButton");
+  const dropdownVariation = useSeedVariation("dropdown");
+  const imageContainerVariation = useSeedVariation("imageContainer");
+  
+  // Create layout based on seed
+  const layout = {
+    wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
+    justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
+    marginTop: [0, 4, 8, 12, 16][seed % 5],
   };
-
-  const layout = getLayoutFromSeed(seed);
 
   useEffect(() => {
     if (!r) return; // evita enviar si aún no hay datos
@@ -192,7 +182,7 @@ export default function RestaurantPage() {
   return (
     <main>
       {/* Banner Image */}
-      <div className="w-full h-[340px] bg-gray-200 relative">
+      <div className={`w-full h-[340px] bg-gray-200 ${imageContainerVariation.position} ${imageContainerVariation.className}`} data-testid={imageContainerVariation.dataTestId}>
         <div className="relative w-full h-full">
           <Image src={r.image} alt={r.name} fill className="object-cover" />
         </div>
@@ -494,7 +484,8 @@ export default function RestaurantPage() {
                         passHref
                       >
                         <Button
-                          className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                          className={`${bookButtonVariation.className} font-semibold text-sm`}
+                          data-testid={bookButtonVariation.dataTestId}
                           asChild
                         >
                           <span>Book Restaurant</span>
@@ -532,7 +523,8 @@ export default function RestaurantPage() {
                       passHref
                     >
                       <Button
-                        className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                        className={`${bookButtonVariation.className} font-semibold text-sm`}
+                        data-testid={bookButtonVariation.dataTestId}
                         asChild
                       >
                         <span>Book Restaurant</span>

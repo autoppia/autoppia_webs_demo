@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import dayjs from "dayjs";
 import { countries, RestaurantsData } from "@/components/library/dataset";
+import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -76,24 +77,20 @@ export default function Page() {
 
   const data = restaurantData[restaurantId] ?? restaurantData["restaurant-1"];
 
-  const seed = Number(searchParams?.get("seed") ?? "0");
+  const seed = Number(searchParams?.get("seed") ?? "1");
 
-  const getLayoutFromSeed = (seed: number) => {
-    const gapOptions = [4, 3, 2, 1, 6];
-    const mbOptions = [2, 4, 6, 3, 1];
-    const mtOptions = [2, 4, 6, 3, 1];
-    const wrapOptions = [true, false, false, true, false];
-    const wrap = wrapOptions[seed % wrapOptions.length];
-
-    return {
-      gap: gapOptions[seed % gapOptions.length],
-      marginTop: mtOptions[seed % mtOptions.length],
-      marginBottom: mbOptions[seed % mbOptions.length],
-      wrap,
-    };
+  // Create layout based on seed
+  const layout = {
+    wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
+    justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
+    marginTop: [0, 4, 8, 12, 16][seed % 5],
+    marginBottom: [0, 4, 8, 12, 16][seed % 5],
+    gap: [2, 3, 4, 5, 6][seed % 5],
   };
 
-  const layout = getLayoutFromSeed(seed);
+  // Use seed-based variations
+  const formVariation = useSeedVariation("form");
+  const bookButtonVariation = useSeedVariation("bookButton");
 
   const restaurantInfo = {
     restaurantId,
@@ -222,6 +219,7 @@ export default function Page() {
         </div>
 
         <h3 className="font-semibold text-lg mb-2 mt-4">Diner details</h3>
+        <div className={formVariation.className} data-testid={formVariation.dataTestId}>
         {layout.wrap ? (
           <div className="w-full" data-testid={`input-wrapper-${seed}`}>
             <div
@@ -403,6 +401,7 @@ export default function Page() {
             />
           </div>
         )}
+        </div>
 
         {layout.wrap ? (
           <div
@@ -411,7 +410,8 @@ export default function Page() {
           >
             <Button
               onClick={handleReservation}
-              className={`w-full bg-[#46a758] hover:bg-[#54ce68] text-white py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+              className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+              data-testid={bookButtonVariation.dataTestId}
             >
               Complete reservation
             </Button>
@@ -419,7 +419,8 @@ export default function Page() {
         ) : (
           <Button
             onClick={handleReservation}
-            className={`w-full bg-[#46a758] hover:bg-[#54ce68] text-white py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+            className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+            data-testid={bookButtonVariation.dataTestId}
           >
             Complete reservation
           </Button>
