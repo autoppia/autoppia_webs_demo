@@ -11,6 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import React from "react";
+import { useSeedLayout } from "@/hooks/use-seed-layout";
 
 interface PaginatedRestaurantsGridProps {
   filteredRestaurants?: typeof restaurants;
@@ -23,6 +24,7 @@ export default function PaginatedRestaurantsGrid({
 }: PaginatedRestaurantsGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const restaurantsPerPage = 12;
+  const layout = useSeedLayout();
   
   // Calculate pagination
   const totalPages = Math.ceil(filteredRestaurants.length / restaurantsPerPage);
@@ -80,7 +82,7 @@ export default function PaginatedRestaurantsGrid({
       </div>
 
       {/* Restaurants Grid */}
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 max-w-6xl mx-auto mb-8">
+      <div className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 max-w-6xl mx-auto mb-8 ${layout.restaurantCards.gridClass}`}>
         {currentRestaurants.map((r) => (
           <RestaurantCard
             key={r.id}

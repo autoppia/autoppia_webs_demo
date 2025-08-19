@@ -21,6 +21,7 @@ import {
   type MenuItemOption,
 } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "../library/events";
+import { useSeedLayout } from "@/hooks/use-seed-layout";
 
 export type AddToCartModalProps = {
   open: boolean;
@@ -46,6 +47,7 @@ export function AddToCartModal({
   const [checkedOptions, setCheckedOptions] = React.useState<string[]>([]);
   const [preferences, setPreferences] = React.useState("");
   const [qty, setQty] = React.useState(1);
+  const layout = useSeedLayout();
 
   React.useEffect(() => {
     setSize(item.sizes?.[0]);
@@ -86,10 +88,10 @@ export function AddToCartModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl rounded-2xl px-0 sm:px-0 p-0">
-        <div className="max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="px-6 pt-6 pb-0">
-            <DialogTitle>{item.name}</DialogTitle>
+      <DialogContent className={`max-w-xl rounded-2xl px-0 sm:px-0 p-0 ${layout.modal.containerClass}`}>
+        <div className={`max-h-[90vh] overflow-y-auto ${layout.modal.contentClass}`}>
+          <DialogHeader className={`px-6 pt-6 pb-0 ${layout.modal.headerClass}`}>
+            <DialogTitle className={layout.modal.headerClass}>{item.name}</DialogTitle>
           </DialogHeader>
           <div className="px-6 flex gap-3 items-center mb-2">
             <div className="rounded-xl overflow-hidden w-16 h-16 relative">
