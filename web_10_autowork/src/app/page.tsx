@@ -688,7 +688,7 @@ function PostJobWizard({
             });
             close();
           }}
-          className="absolute top-4 right-4 text-xl text-[#253037] font-bold"
+          className="absolute top-4 right-4 text-xl text-[#253037] font-bold" id="close-post-job-btn"
         >
           ×
         </button>
