@@ -1402,6 +1402,13 @@ export default function Home() {
                                 className="rounded px-2 py-0.5 text-xs block cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation();
+                                  logEvent(EVENT_TYPES.CELL_CLICKED, {
+                                    source: "month-view",
+                                    date: d.getFullYear() + '-' +
+                                          String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                                          String(d.getDate()).padStart(2, '0'),
+                                    view: "Month",
+                                   });
                                   openEditEventModal(ev);
                                 }}
                                 aria-label={`Edit event: ${ev.label}`}
@@ -1520,6 +1527,15 @@ export default function Home() {
                             }}
                             onClick={(e) => {
                               e.stopPropagation();
+                              logEvent(EVENT_TYPES.CELL_CLICKED, {
+                                source: `${currentView.toLowerCase()}-view`,
+                                date: d.getFullYear() + '-' +
+                                      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                                      String(d.getDate()).padStart(2, '0'),
+                                hour: Math.floor(ev.start),
+                                view: currentView,
+                              });
+
                               openEditEventModal(ev);
                             }}
                             aria-label={`Edit event: ${
