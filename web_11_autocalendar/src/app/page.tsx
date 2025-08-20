@@ -507,7 +507,7 @@ export default function Home() {
     const startMins = start !== null && start % 1 === 0.5 ? 30 : startMinutes;
     const endHour = end !== null ? Math.floor(end) : startHour + 1;
     const endMins = end !== null && end % 1 === 0.5 ? 30 : endMinutes;
-    const isoDate = date.toISOString().split("T")[0];
+    const isoDate = format(date, "yyyy-MM-dd");
     setEventModal({
       open: true,
       editing: null,
