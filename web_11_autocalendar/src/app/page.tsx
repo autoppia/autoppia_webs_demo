@@ -838,7 +838,7 @@ export default function Home() {
   function onWeekHourCellClick(date: Date, hour: number) {
     logEvent(EVENT_TYPES.CELL_CLICKED, {
       source: `${currentView.toLowerCase()}-view`,
-      date: date.toISOString(),
+      date: format(date, 'yyyy-MM-dd'),
       hour,
       view: currentView,
     });
@@ -854,7 +854,7 @@ export default function Home() {
   function onMonthCellClick(date: Date) {
     logEvent(EVENT_TYPES.CELL_CLICKED, {
       source: "month-view",
-      date: date.toISOString(),
+      date: format(date, 'yyyy-MM-dd'),
       view: "Month",
     });
     openEventModal({
