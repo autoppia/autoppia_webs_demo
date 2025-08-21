@@ -136,6 +136,13 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 { value: 'john@example.com', label: 'John Doe' },
                 { value: 'jane@example.com', label: 'Jane Smith' },
                 { value: 'bob@example.com', label: 'Bob Johnson' },
+                { value: 'alice@example.com', label: 'Alice Williams' },
+                { value: 'michael@example.com', label: 'Michael Brown' },
+                { value: 'emily@example.com', label: 'Emily Davis' },
+                { value: 'david@example.com', label: 'David Wilson' },
+                { value: 'sophia@example.com', label: 'Sophia Martinez' },
+                { value: 'li@example.com', label: 'Li Wei' },
+                { value: 'fatima@example.com', label: 'Fatima Al-Farsi' },
               ]}
             />
           </Form.Item>
@@ -158,7 +165,12 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 }}
                 options={[
                   { value: 'admin', label: 'Admin' },
-                  { value: 'member', label: 'Member' }
+                  { value: 'member', label: 'Member' },
+                  { value: 'viewer', label: 'Viewer' },
+                  { value: 'developer', label: 'Developer' },
+                  { value: 'designer', label: 'Designer' },
+                  { value: 'tester', label: 'Tester' },
+                  { value: 'product_manager', label: 'Product Manager' },
                 ]}
               />
             </Form.Item>
