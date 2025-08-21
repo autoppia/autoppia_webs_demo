@@ -1,0 +1,544 @@
+[
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:37:33.269Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:37:34.253Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:09.971Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:10.017Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:10.083Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:13.145Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.243Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.605Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.685Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.783Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:16.670Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:16.857Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:17.824Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:18.128Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:20.124Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:20.525Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:33.388Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:18.525Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:18.977Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:19.493Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:23.474Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:23.518Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:21.958Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:22.198Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:22.845Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:23.056Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:23.576Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "3",
+      "title": "Riverside Zen Cottage",
+      "location": "Kyoto, Japan",
+      "rating": 4.8,
+      "reviews": 163,
+      "price": 142,
+      "dates": {
+        "from": "2025-03-09",
+        "to": "2025-07-16"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Aiko",
+        "since": 6,
+        "avatar": "https://randomuser.me/api/portraits/women/33.jpg"
+      },
+      "amenities": [
+        "Tatami workspace",
+        "Near Gion District",
+        "Traditional style"
+      ]
+    },
+    "timestamp": "2025-08-21T04:03:32.980Z"
+  }
+]
