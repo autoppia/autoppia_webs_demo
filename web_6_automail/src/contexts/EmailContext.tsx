@@ -17,10 +17,11 @@ import type {
   Label,
 } from "@/types/email";
 import {
-  generateMockEmails,
-  generateDraftEmails,
-  userLabels,
-  systemLabels,
+    // generateMockEmails,
+    // generateDraftEmails,
+    userLabels,
+    systemLabels,
+    emails,
 } from "@/library/dataset";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
@@ -92,195 +93,195 @@ const initialState: EmailState = {
 };
 
 function emailReducer(state: EmailState, action: EmailAction): EmailState {
-  switch (action.type) {
-    case "SET_EMAILS":
-      return { ...state, emails: action.payload };
+    switch (action.type) {
+        case "SET_EMAILS":
+            return {...state, emails: action.payload};
 
-    case "ADD_EMAIL":
-      return { ...state, emails: [action.payload, ...state.emails] };
+        case "ADD_EMAIL":
+            return {...state, emails: [action.payload, ...state.emails]};
 
-    case "UPDATE_EMAIL":
-      return {
-        ...state,
-        emails: state.emails.map((email) =>
-          email.id === action.payload.id
-            ? { ...email, ...action.payload.updates }
-            : email
-        ),
-        currentEmail:
-          state.currentEmail?.id === action.payload.id
-            ? { ...state.currentEmail, ...action.payload.updates }
-            : state.currentEmail,
-      };
-
-    case "DELETE_EMAIL":
-      return {
-        ...state,
-        emails: state.emails.filter((email) => email.id !== action.payload),
-        selectedEmails: state.selectedEmails.filter(
-          (id) => id !== action.payload
-        ),
-        currentEmail:
-          state.currentEmail?.id === action.payload ? null : state.currentEmail,
-      };
-
-    case "MOVE_TO_TRASH":
-      return {
-        ...state,
-        emails: state.emails.map((email) =>
-          action.payload.includes(email.id)
-            ? {
-                ...email,
-                labels: [
-                  ...email.labels.filter((l) => l.id !== "trash"),
-                  {
-                    id: "trash",
-                    name: "Trash",
-                    color: "#5f6368",
-                    type: "system",
-                  },
-                ],
-              }
-            : email
-        ),
-        selectedEmails: [],
-      };
-
-    case "MOVE_TO_SPAM":
-      return {
-        ...state,
-        emails: state.emails.map((email) =>
-          action.payload.includes(email.id)
-            ? {
-                ...email,
-                labels: [
-                  ...email.labels.filter((l) => l.id !== "spam"),
-                  {
-                    id: "spam",
-                    name: "Spam",
-                    color: "#ea4335",
-                    type: "system",
-                  },
-                ],
-              }
-            : email
-        ),
-        selectedEmails: [],
-      };
-
-    case "ADD_LABEL_TO_EMAILS":
-      return {
-        ...state,
-        emails: state.emails.map((email) =>
-          action.payload.emailIds.includes(email.id)
-            ? {
-                ...email,
-                labels: [
-                  ...email.labels.filter(
-                    (l) => l.id !== action.payload.label.id
-                  ),
-                  action.payload.label,
-                ],
-              }
-            : email
-        ),
-      };
-
-    case "REMOVE_LABEL_FROM_EMAILS":
-      return {
-        ...state,
-        emails: state.emails.map((email) =>
-          action.payload.emailIds.includes(email.id)
-            ? {
-                ...email,
-                labels: email.labels.filter(
-                  (l) => l.id !== action.payload.labelId
+        case "UPDATE_EMAIL":
+            return {
+                ...state,
+                emails: state.emails.map((email) =>
+                    email.id === action.payload.id
+                        ? {...email, ...action.payload.updates}
+                        : email
                 ),
-              }
-            : email
-        ),
-      };
+                currentEmail:
+                    state.currentEmail?.id === action.payload.id
+                        ? {...state.currentEmail, ...action.payload.updates}
+                        : state.currentEmail,
+            };
 
-    case "CREATE_LABEL":
-      return {
-        ...state,
-        customLabels: [...state.customLabels, action.payload],
-      };
+        case "DELETE_EMAIL":
+            return {
+                ...state,
+                emails: state.emails.filter((email) => email.id !== action.payload),
+                selectedEmails: state.selectedEmails.filter(
+                    (id) => id !== action.payload
+                ),
+                currentEmail:
+                    state.currentEmail?.id === action.payload ? null : state.currentEmail,
+            };
 
-    case "DELETE_LABEL":
-      return {
-        ...state,
-        customLabels: state.customLabels.filter(
-          (label) => label.id !== action.payload
-        ),
-        emails: state.emails.map((email) => ({
-          ...email,
-          labels: email.labels.filter((l) => l.id !== action.payload),
-        })),
-      };
+        case "MOVE_TO_TRASH":
+            return {
+                ...state,
+                emails: state.emails.map((email) =>
+                    action.payload.includes(email.id)
+                        ? {
+                            ...email,
+                            labels: [
+                                ...email.labels.filter((l) => l.id !== "trash"),
+                                {
+                                    id: "trash",
+                                    name: "Trash",
+                                    color: "#5f6368",
+                                    type: "system",
+                                },
+                            ],
+                        }
+                        : email
+                ),
+                selectedEmails: [],
+            };
 
-    case "BULK_UPDATE_EMAILS":
-      return {
-        ...state,
-        emails: state.emails.map((email) =>
-          action.payload.ids.includes(email.id)
-            ? { ...email, ...action.payload.updates }
-            : email
-        ),
-      };
+        case "MOVE_TO_SPAM":
+            return {
+                ...state,
+                emails: state.emails.map((email) =>
+                    action.payload.includes(email.id)
+                        ? {
+                            ...email,
+                            labels: [
+                                ...email.labels.filter((l) => l.id !== "spam"),
+                                {
+                                    id: "spam",
+                                    name: "Spam",
+                                    color: "#ea4335",
+                                    type: "system",
+                                },
+                            ],
+                        }
+                        : email
+                ),
+                selectedEmails: [],
+            };
 
-    case "SELECT_EMAIL":
-      return {
-        ...state,
-        selectedEmails: state.selectedEmails.includes(action.payload)
-          ? state.selectedEmails.filter((id) => id !== action.payload)
-          : [...state.selectedEmails, action.payload],
-      };
+        case "ADD_LABEL_TO_EMAILS":
+            return {
+                ...state,
+                emails: state.emails.map((email) =>
+                    action.payload.emailIds.includes(email.id)
+                        ? {
+                            ...email,
+                            labels: [
+                                ...email.labels.filter(
+                                    (l) => l.id !== action.payload.label.id
+                                ),
+                                action.payload.label,
+                            ],
+                        }
+                        : email
+                ),
+            };
 
-    case "SELECT_EMAILS":
-      return { ...state, selectedEmails: action.payload };
+        case "REMOVE_LABEL_FROM_EMAILS":
+            return {
+                ...state,
+                emails: state.emails.map((email) =>
+                    action.payload.emailIds.includes(email.id)
+                        ? {
+                            ...email,
+                            labels: email.labels.filter(
+                                (l) => l.id !== action.payload.labelId
+                            ),
+                        }
+                        : email
+                ),
+            };
 
-    case "CLEAR_SELECTION":
-      return { ...state, selectedEmails: [] };
+        case "CREATE_LABEL":
+            return {
+                ...state,
+                customLabels: [...state.customLabels, action.payload],
+            };
 
-    case "SET_CURRENT_EMAIL":
-      return { ...state, currentEmail: action.payload };
+        case "DELETE_LABEL":
+            return {
+                ...state,
+                customLabels: state.customLabels.filter(
+                    (label) => label.id !== action.payload
+                ),
+                emails: state.emails.map((email) => ({
+                    ...email,
+                    labels: email.labels.filter((l) => l.id !== action.payload),
+                })),
+            };
 
-    case "SET_FILTER":
-      return {
-        ...state,
-        currentFilter: action.payload,
-        selectedEmails: [],
-        currentPage: 1,
-        currentEmail: null,
-      };
+        case "BULK_UPDATE_EMAILS":
+            return {
+                ...state,
+                emails: state.emails.map((email) =>
+                    action.payload.ids.includes(email.id)
+                        ? {...email, ...action.payload.updates}
+                        : email
+                ),
+            };
 
-    case "SET_SEARCH_QUERY":
-      return { ...state, searchQuery: action.payload, currentPage: 1 };
+        case "SELECT_EMAIL":
+            return {
+                ...state,
+                selectedEmails: state.selectedEmails.includes(action.payload)
+                    ? state.selectedEmails.filter((id) => id !== action.payload)
+                    : [...state.selectedEmails, action.payload],
+            };
 
-    case "SET_PAGE":
-      return { ...state, currentPage: action.payload };
+        case "SELECT_EMAILS":
+            return {...state, selectedEmails: action.payload};
 
-    case "TOGGLE_COMPOSE":
-      return {
-        ...state,
-        isComposeOpen: action.payload ?? !state.isComposeOpen,
-        composeData:
-          action.payload === false ? initialComposeData : state.composeData,
-      };
+        case "CLEAR_SELECTION":
+            return {...state, selectedEmails: []};
 
-    case "SET_COMPOSE_DATA":
-      return {
-        ...state,
-        composeData: { ...state.composeData, ...action.payload },
-      };
+        case "SET_CURRENT_EMAIL":
+            return {...state, currentEmail: action.payload};
 
-    case "RESET_COMPOSE_DATA":
-      return { ...state, composeData: initialComposeData };
+        case "SET_FILTER":
+            return {
+                ...state,
+                currentFilter: action.payload,
+                selectedEmails: [],
+                currentPage: 1,
+                currentEmail: null,
+            };
 
-    default:
-      return state;
-  }
+        case "SET_SEARCH_QUERY":
+            return {...state, searchQuery: action.payload, currentPage: 1};
+
+        case "SET_PAGE":
+            return {...state, currentPage: action.payload};
+
+        case "TOGGLE_COMPOSE":
+            return {
+                ...state,
+                isComposeOpen: action.payload ?? !state.isComposeOpen,
+                composeData:
+                    action.payload === false ? initialComposeData : state.composeData,
+            };
+
+        case "SET_COMPOSE_DATA":
+            return {
+                ...state,
+                composeData: {...state.composeData, ...action.payload},
+            };
+
+        case "RESET_COMPOSE_DATA":
+            return {...state, composeData: initialComposeData};
+
+        default:
+            return state;
+    }
 }
 
 interface EmailContextValue extends EmailState {
@@ -333,379 +334,399 @@ interface EmailContextValue extends EmailState {
 }
 
 const EmailContext = createContext<EmailContextValue | undefined>(undefined);
-
-export function EmailProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(emailReducer, initialState);
-
-  // Initialize emails on client side to avoid hydration mismatch
-  useEffect(() => {
-    if (state.emails.length === 0) {
-      // Generate only 10 emails for inbox - no other folder emails
-      const mockEmails = generateMockEmails(50);
-      dispatch({ type: "SET_EMAILS", payload: mockEmails });
+const tokenize = (str: string) => {
+    const regex = /"([^"]+)"|'([^']+)'|(\S+)/g;
+    const tokens = [];
+    let match;
+    while ((match = regex.exec(str))) {
+        tokens.push(
+            (match[1] || match[2] || match[3]).toLowerCase()
+        );
     }
-  }, [state.emails.length]);
+    return tokens;
+};
 
-  // Email actions
-  const toggleStar = useCallback(
-    (emailId: string) => {
-      const email = state.emails.find((e) => e.id === emailId);
-      if (email) {
-        dispatch({
-          type: "UPDATE_EMAIL",
-          payload: { id: emailId, updates: { isStarred: !email.isStarred } },
-        });
-      }
-    },
-    [state.emails]
-  );
+export function EmailProvider({children}: { children: React.ReactNode }) {
+    const [state, dispatch] = useReducer(emailReducer, initialState);
 
-  const markAsRead = useCallback((emailId: string, isRead = true) => {
-    dispatch({
-      type: "UPDATE_EMAIL",
-      payload: { id: emailId, updates: { isRead } },
-    });
-  }, []);
+    // Initialize emails on client side to avoid hydration mismatch
+    useEffect(() => {
+        if (state.emails.length === 0) {
+            // Generate only 10 emails for inbox - no other folder emails
+            // const mockEmails = generateMockEmails(50);
+            const mockEmails = emails;
+            dispatch({type: "SET_EMAILS", payload: mockEmails});
+        }
+    }, [state.emails.length]);
 
-  const markAsUnread = useCallback((emailId: string) => {
-    dispatch({
-      type: "UPDATE_EMAIL",
-      payload: { id: emailId, updates: { isRead: false } },
-    });
-    // Return to inbox after marking as unread
-    dispatch({ type: "SET_CURRENT_EMAIL", payload: null });
-    dispatch({ type: "SET_FILTER", payload: { folder: "inbox" } });
-  }, []);
-
-  const markAsSpam = useCallback((emailIds: string[]) => {
-    dispatch({ type: "MOVE_TO_SPAM", payload: emailIds });
-  }, []);
-
-  // Label actions
-  const addLabelToEmails = useCallback((emailIds: string[], label: Label) => {
-    dispatch({ type: "ADD_LABEL_TO_EMAILS", payload: { emailIds, label } });
-  }, []);
-
-  const removeLabelFromEmails = useCallback(
-    (emailIds: string[], labelId: string) => {
-      dispatch({
-        type: "REMOVE_LABEL_FROM_EMAILS",
-        payload: { emailIds, labelId },
-      });
-    },
-    []
-  );
-
-  const createLabel = useCallback((name: string, color: string) => {
-    const newLabel: Label = {
-      id: name.toLowerCase().replace(/\s+/g, "-"),
-      name,
-      color,
-      type: "user",
-    };
-    dispatch({ type: "CREATE_LABEL", payload: newLabel });
-  }, []);
-
-  const deleteLabel = useCallback((labelId: string) => {
-    dispatch({ type: "DELETE_LABEL", payload: labelId });
-  }, []);
-
-  const getAllLabels = useCallback(() => {
-    return [...systemLabels, ...state.customLabels];
-  }, [state.customLabels]);
-
-  const markAsImportant = useCallback((emailId: string, isImportant = true) => {
-    dispatch({
-      type: "UPDATE_EMAIL",
-      payload: { id: emailId, updates: { isImportant } },
-    });
-  }, []);
-
-  const deleteEmail = useCallback((emailId: string) => {
-    dispatch({ type: "DELETE_EMAIL", payload: emailId });
-  }, []);
-
-  const deleteEmails = useCallback((emailIds: string[]) => {
-    for (const id of emailIds) {
-      dispatch({ type: "DELETE_EMAIL", payload: id });
-    }
-  }, []);
-
-  const moveToTrash = useCallback((emailIds: string[]) => {
-    dispatch({ type: "MOVE_TO_TRASH", payload: emailIds });
-  }, []);
-
-  // Selection actions
-  const selectEmail = useCallback((emailId: string) => {
-    dispatch({ type: "SELECT_EMAIL", payload: emailId });
-  }, []);
-
-  const selectAllVisible = useCallback((emailIds: string[]) => {
-    dispatch({ type: "SELECT_EMAILS", payload: emailIds });
-  }, []);
-
-  const clearSelection = useCallback(() => {
-    dispatch({ type: "CLEAR_SELECTION" });
-  }, []);
-
-  // Navigation actions
-  const setCurrentEmail = useCallback(
-    (email: Email | null) => {
-      if (email && !email.isRead) {
-        markAsRead(email.id);
-      }
-      dispatch({ type: "SET_CURRENT_EMAIL", payload: email });
-    },
-    [markAsRead]
-  );
-
-  const setFilter = useCallback((filter: EmailFilter) => {
-    dispatch({ type: "SET_FILTER", payload: filter });
-  }, []);
-
-  const setSearchQuery = useCallback((query: string) => {
-    dispatch({ type: "SET_SEARCH_QUERY", payload: query });
-  }, []);
-
-  // Pagination actions
-  const setPage = useCallback((page: number) => {
-    dispatch({ type: "SET_PAGE", payload: page });
-  }, []);
-
-  const nextPage = useCallback(() => {
-    dispatch({ type: "SET_PAGE", payload: state.currentPage + 1 });
-  }, [state.currentPage]);
-
-  const prevPage = useCallback(() => {
-    dispatch({ type: "SET_PAGE", payload: Math.max(1, state.currentPage - 1) });
-  }, [state.currentPage]);
-
-  // Compose actions
-  const toggleCompose = useCallback((open?: boolean) => {
-    dispatch({ type: "TOGGLE_COMPOSE", payload: open });
-    // if (open) {
-    //   logEvent(EVENT_TYPES.COMPOSE_EMAIL, {
-    //     action: "opened_compose",
-    //   });
-    // }
-  }, []);
-
-  const updateComposeData = useCallback((data: Partial<ComposeEmailData>) => {
-    dispatch({ type: "SET_COMPOSE_DATA", payload: data });
-  }, []);
-
-  const sendEmail = useCallback(() => {
-    // In a real app, this would send the email via API
-    const newEmail: Email = {
-      id: Math.random().toString(36).substring(2) + Date.now().toString(36),
-      from: { name: "Me", email: "me@gmail.com" },
-      to: state.composeData.to.map((email) => ({ name: email, email })),
-      subject: state.composeData.subject,
-      body: state.composeData.body,
-      snippet: `${state.composeData.body.substring(0, 120)}...`,
-      timestamp: new Date(),
-      isRead: true,
-      isStarred: false,
-      isSnoozed: false,
-      isDraft: false,
-      isImportant: false,
-      labels: [],
-      category: "primary",
-      threadId:
-        Math.random().toString(36).substring(2) + Date.now().toString(36),
-    };
-
-    dispatch({ type: "ADD_EMAIL", payload: newEmail });
-    dispatch({ type: "RESET_COMPOSE_DATA" });
-    dispatch({ type: "TOGGLE_COMPOSE", payload: false });
-  }, [state.composeData]);
-
-  const saveDraft = useCallback(() => {
-    if (
-      !state.composeData.to.length &&
-      !state.composeData.subject &&
-      !state.composeData.body
-    ) {
-      return; // Don't save empty drafts
-    }
-
-    const draftEmail: Email = {
-      id: Math.random().toString(36).substring(2) + Date.now().toString(36),
-      from: { name: "Me", email: "me@gmail.com" },
-      to: state.composeData.to.map((email) => ({ name: email, email })),
-      cc: state.composeData.cc?.map((email) => ({ name: email, email })),
-      bcc: state.composeData.bcc?.map((email) => ({ name: email, email })),
-      subject: state.composeData.subject || "(no subject)",
-      body: state.composeData.body,
-      snippet: `${state.composeData.body.substring(0, 120)}...`,
-      timestamp: new Date(),
-      isRead: true,
-      isStarred: false,
-      isSnoozed: false,
-      isDraft: true,
-      isImportant: false,
-      labels: [],
-      category: "primary",
-      threadId:
-        Math.random().toString(36).substring(2) + Date.now().toString(36),
-    };
-
-    dispatch({ type: "ADD_EMAIL", payload: draftEmail });
-    dispatch({ type: "RESET_COMPOSE_DATA" });
-    dispatch({ type: "TOGGLE_COMPOSE", payload: false });
-  }, [state.composeData]);
-
-  // Computed values
-  const filteredEmails = useMemo(() => {
-    let filtered = state.emails;
-
-    // If filtering by a custom label, show emails from all folders (except trash/spam) that have that label
-    if (state.currentFilter.label) {
-      filtered = filtered.filter(
-        (email) =>
-          email.labels.some((l) => l.id === state.currentFilter.label) &&
-          !email.labels.some((l) => ["spam", "trash"].includes(l.id))
-      );
-    }
-    // Apply all other filters in combination
-    // Folder filter
-    if (state.currentFilter.folder) {
-      switch (state.currentFilter.folder) {
-        case "inbox":
-          filtered = filtered.filter(
-            (email) =>
-              !email.isDraft &&
-              email.from.email !== "me@gmail.com" &&
-              !email.labels.some((l) =>
-                ["sent", "spam", "trash"].includes(l.id)
-              )
-          );
-          break;
-        case "starred":
-          filtered = filtered.filter(
-            (email) =>
-              email.isStarred &&
-              !email.labels.some((l) => ["spam", "trash"].includes(l.id))
-          );
-          break;
-        case "snoozed":
-          filtered = filtered.filter(
-            (email) =>
-              email.isSnoozed &&
-              !email.labels.some((l) => ["spam", "trash"].includes(l.id))
-          );
-          break;
-        case "sent":
-          filtered = filtered.filter(
-            (email) =>
-              email.from.email === "me@gmail.com" &&
-              !email.isDraft &&
-              !email.labels.some((l) => ["trash"].includes(l.id))
-          );
-          break;
-        case "drafts":
-          filtered = filtered.filter(
-            (email) =>
-              email.isDraft &&
-              !email.labels.some((l) => ["trash"].includes(l.id))
-          );
-          break;
-        case "important":
-          filtered = filtered.filter(
-            (email) =>
-              email.isImportant &&
-              !email.labels.some((l) => ["spam", "trash"].includes(l.id))
-          );
-          break;
-        case "spam":
-          filtered = filtered.filter((email) =>
-            email.labels.some((l) => l.id === "spam")
-          );
-          break;
-        case "trash":
-          filtered = filtered.filter((email) =>
-            email.labels.some((l) => l.id === "trash")
-          );
-          break;
-      }
-    }
-    // Category filter
-    if (state.currentFilter.category) {
-      filtered = filtered.filter(
-        (email) => email.category === state.currentFilter.category
-      );
-    }
-    // Read status filter
-    if (typeof state.currentFilter.isRead === "boolean") {
-      filtered = filtered.filter(
-        (email) => email.isRead === state.currentFilter.isRead
-      );
-    }
-    // Starred status filter
-    if (typeof state.currentFilter.isStarred === "boolean") {
-      filtered = filtered.filter(
-        (email) => email.isStarred === state.currentFilter.isStarred
-      );
-    }
-    // Search query filter (multi-token, already supports AND logic)
-    if (state.searchQuery) {
-      const tokens = state.searchQuery
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
-      filtered = filtered.filter((email) => {
-        return tokens.every((token) => {
-          if (token.startsWith("from:")) {
-            const fromQuery = token.replace("from:", "").trim();
-            return (
-              email.from.name.toLowerCase().includes(fromQuery) ||
-              email.from.email.toLowerCase().includes(fromQuery)
-            );
-          } else if (token.startsWith("to:")) {
-            const toQuery = token.replace("to:", "").trim();
-            return email.to.some(
-              (recipient) =>
-                recipient.name.toLowerCase().includes(toQuery) ||
-                recipient.email.toLowerCase().includes(toQuery)
-            );
-          } else if (token.startsWith("subject:")) {
-            const subjectQuery = token.replace("subject:", "").trim();
-            return email.subject.toLowerCase().includes(subjectQuery);
-          } else if (token === "has:attachment") {
-            return email.attachments && email.attachments.length > 0;
-          } else if (token === "is:unread") {
-            return !email.isRead;
-          } else if (token === "is:read") {
-            return email.isRead;
-          } else if (token === "is:starred") {
-            return email.isStarred;
-          } else if (token === "is:important") {
-            return email.isImportant;
-          } else {
-            // General search across multiple fields
-            return (
-              email.subject.toLowerCase().includes(token) ||
-              email.from.name.toLowerCase().includes(token) ||
-              email.from.email.toLowerCase().includes(token) ||
-              email.body.toLowerCase().includes(token) ||
-              email.to.some(
-                (recipient) =>
-                  recipient.name.toLowerCase().includes(token) ||
-                  recipient.email.toLowerCase().includes(token)
-              ) ||
-              email.labels.some((label) =>
-                label.name.toLowerCase().includes(token)
-              )
-            );
-          }
-        });
-      });
-    }
-    // Sort by timestamp (newest first)
-    return filtered.sort(
-      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+    // Email actions
+    const toggleStar = useCallback(
+        (emailId: string) => {
+            const email = state.emails.find((e) => e.id === emailId);
+            if (email) {
+                dispatch({
+                    type: "UPDATE_EMAIL",
+                    payload: {id: emailId, updates: {isStarred: !email.isStarred}},
+                });
+            }
+        },
+        [state.emails]
     );
-  }, [state.emails, state.currentFilter, state.searchQuery]);
+
+    const markAsRead = useCallback((emailId: string, isRead = true) => {
+        dispatch({
+            type: "UPDATE_EMAIL",
+            payload: {id: emailId, updates: {isRead}},
+        });
+    }, []);
+
+    const markAsUnread = useCallback((emailId: string) => {
+        dispatch({
+            type: "UPDATE_EMAIL",
+            payload: {id: emailId, updates: {isRead: false}},
+        });
+        // Return to inbox after marking as unread
+        dispatch({type: "SET_CURRENT_EMAIL", payload: null});
+        dispatch({type: "SET_FILTER", payload: {folder: "inbox"}});
+    }, []);
+
+    const markAsSpam = useCallback((emailIds: string[]) => {
+        dispatch({type: "MOVE_TO_SPAM", payload: emailIds});
+    }, []);
+
+    // Label actions
+    const addLabelToEmails = useCallback((emailIds: string[], label: Label) => {
+        dispatch({type: "ADD_LABEL_TO_EMAILS", payload: {emailIds, label}});
+    }, []);
+
+    const removeLabelFromEmails = useCallback(
+        (emailIds: string[], labelId: string) => {
+            dispatch({
+                type: "REMOVE_LABEL_FROM_EMAILS",
+                payload: {emailIds, labelId},
+            });
+        },
+        []
+    );
+
+    const createLabel = useCallback((name: string, color: string) => {
+        const newLabel: Label = {
+            id: name.toLowerCase().replace(/\s+/g, "-"),
+            name,
+            color,
+            type: "user",
+        };
+        dispatch({type: "CREATE_LABEL", payload: newLabel});
+    }, []);
+
+    const deleteLabel = useCallback((labelId: string) => {
+        dispatch({type: "DELETE_LABEL", payload: labelId});
+    }, []);
+
+    const getAllLabels = useCallback(() => {
+        return [...systemLabels, ...state.customLabels];
+    }, [state.customLabels]);
+
+    const markAsImportant = useCallback((emailId: string, isImportant = true) => {
+        dispatch({
+            type: "UPDATE_EMAIL",
+            payload: {id: emailId, updates: {isImportant}},
+        });
+    }, []);
+
+    const deleteEmail = useCallback((emailId: string) => {
+        dispatch({type: "DELETE_EMAIL", payload: emailId});
+    }, []);
+
+    const deleteEmails = useCallback((emailIds: string[]) => {
+        for (const id of emailIds) {
+            dispatch({type: "DELETE_EMAIL", payload: id});
+        }
+    }, []);
+
+    const moveToTrash = useCallback((emailIds: string[]) => {
+        dispatch({type: "MOVE_TO_TRASH", payload: emailIds});
+    }, []);
+
+    // Selection actions
+    const selectEmail = useCallback((emailId: string) => {
+        dispatch({type: "SELECT_EMAIL", payload: emailId});
+    }, []);
+
+    const selectAllVisible = useCallback((emailIds: string[]) => {
+        dispatch({type: "SELECT_EMAILS", payload: emailIds});
+    }, []);
+
+    const clearSelection = useCallback(() => {
+        dispatch({type: "CLEAR_SELECTION"});
+    }, []);
+
+    // Navigation actions
+    const setCurrentEmail = useCallback(
+        (email: Email | null) => {
+            if (email && !email.isRead) {
+                markAsRead(email.id);
+            }
+            dispatch({type: "SET_CURRENT_EMAIL", payload: email});
+        },
+        [markAsRead]
+    );
+
+    const setFilter = useCallback((filter: EmailFilter) => {
+        dispatch({type: "SET_FILTER", payload: filter});
+    }, []);
+
+    const setSearchQuery = useCallback((query: string) => {
+        dispatch({type: "SET_SEARCH_QUERY", payload: query});
+    }, []);
+
+    // Pagination actions
+    const setPage = useCallback((page: number) => {
+        dispatch({type: "SET_PAGE", payload: page});
+    }, []);
+
+    const nextPage = useCallback(() => {
+        dispatch({type: "SET_PAGE", payload: state.currentPage + 1});
+    }, [state.currentPage]);
+
+    const prevPage = useCallback(() => {
+        dispatch({type: "SET_PAGE", payload: Math.max(1, state.currentPage - 1)});
+    }, [state.currentPage]);
+
+    // Compose actions
+    const toggleCompose = useCallback((open?: boolean) => {
+        dispatch({type: "TOGGLE_COMPOSE", payload: open});
+        // if (open) {
+        //   logEvent(EVENT_TYPES.COMPOSE_EMAIL, {
+        //     action: "opened_compose",
+        //   });
+        // }
+    }, []);
+
+    const updateComposeData = useCallback((data: Partial<ComposeEmailData>) => {
+        dispatch({type: "SET_COMPOSE_DATA", payload: data});
+    }, []);
+
+    const sendEmail = useCallback(() => {
+        // In a real app, this would send the email via API
+        const newEmail: Email = {
+            id: Math.random().toString(36).substring(2) + Date.now().toString(36),
+            from: {name: "Me", email: "me@gmail.com"},
+            to: state.composeData.to.map((email) => ({name: email, email})),
+            subject: state.composeData.subject,
+            body: state.composeData.body,
+            snippet: `${state.composeData.body.substring(0, 120)}...`,
+            timestamp: new Date(),
+            isRead: true,
+            isStarred: false,
+            isSnoozed: false,
+            isDraft: false,
+            isImportant: false,
+            labels: [],
+            category: "primary",
+            threadId:
+                Math.random().toString(36).substring(2) + Date.now().toString(36),
+        };
+
+        dispatch({type: "ADD_EMAIL", payload: newEmail});
+        dispatch({type: "RESET_COMPOSE_DATA"});
+        dispatch({type: "TOGGLE_COMPOSE", payload: false});
+    }, [state.composeData]);
+
+    const saveDraft = useCallback(() => {
+        if (
+            !state.composeData.to.length &&
+            !state.composeData.subject &&
+            !state.composeData.body
+        ) {
+            return; // Don't save empty drafts
+        }
+
+        const draftEmail: Email = {
+            id: Math.random().toString(36).substring(2) + Date.now().toString(36),
+            from: {name: "Me", email: "me@gmail.com"},
+            to: state.composeData.to.map((email) => ({name: email, email})),
+            cc: state.composeData.cc?.map((email) => ({name: email, email})),
+            bcc: state.composeData.bcc?.map((email) => ({name: email, email})),
+            subject: state.composeData.subject || "(no subject)",
+            body: state.composeData.body,
+            snippet: `${state.composeData.body.substring(0, 120)}...`,
+            timestamp: new Date(),
+            isRead: true,
+            isStarred: false,
+            isSnoozed: false,
+            isDraft: true,
+            isImportant: false,
+            labels: [],
+            category: "primary",
+            threadId:
+                Math.random().toString(36).substring(2) + Date.now().toString(36),
+        };
+
+        dispatch({type: "ADD_EMAIL", payload: draftEmail});
+        dispatch({type: "RESET_COMPOSE_DATA"});
+        dispatch({type: "TOGGLE_COMPOSE", payload: false});
+    }, [state.composeData]);
+
+    // Computed values
+    const filteredEmails = useMemo(() => {
+        let filtered = state.emails;
+
+        // If filtering by a custom label, show emails from all folders (except trash/spam) that have that label
+        if (state.currentFilter.label) {
+            filtered = filtered.filter(
+                (email) =>
+                    email.labels.some((l) => l.id === state.currentFilter.label) &&
+                    !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+            );
+        }
+        // Apply all other filters in combination
+        // Folder filter
+        if (state.currentFilter.folder) {
+            switch (state.currentFilter.folder) {
+                case "inbox":
+                    filtered = filtered.filter(
+                        (email) =>
+                            !email.isDraft &&
+                            email.from.email !== "me@gmail.com" &&
+                            !email.labels.some((l) =>
+                                ["sent", "spam", "trash"].includes(l.id)
+                            )
+                    );
+                    break;
+                case "starred":
+                    filtered = filtered.filter(
+                        (email) =>
+                            email.isStarred &&
+                            !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+                    );
+                    break;
+                case "snoozed":
+                    filtered = filtered.filter(
+                        (email) =>
+                            email.isSnoozed &&
+                            !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+                    );
+                    break;
+                case "sent":
+                    filtered = filtered.filter(
+                        (email) =>
+                            email.from.email === "me@gmail.com" &&
+                            !email.isDraft &&
+                            !email.labels.some((l) => ["trash"].includes(l.id))
+                    );
+                    break;
+                case "drafts":
+                    filtered = filtered.filter(
+                        (email) =>
+                            email.isDraft &&
+                            !email.labels.some((l) => ["trash"].includes(l.id))
+                    );
+                    break;
+                case "important":
+                    filtered = filtered.filter(
+                        (email) =>
+                            email.isImportant &&
+                            !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+                    );
+                    break;
+                case "spam":
+                    filtered = filtered.filter((email) =>
+                        email.labels.some((l) => l.id === "spam")
+                    );
+                    break;
+                case "trash":
+                    filtered = filtered.filter((email) =>
+                        email.labels.some((l) => l.id === "trash")
+                    );
+                    break;
+            }
+        }
+        // Category filter
+        if (state.currentFilter.category) {
+            filtered = filtered.filter(
+                (email) => email.category === state.currentFilter.category
+            );
+        }
+        // Read status filter
+        if (typeof state.currentFilter.isRead === "boolean") {
+            filtered = filtered.filter(
+                (email) => email.isRead === state.currentFilter.isRead
+            );
+        }
+        // Starred status filter
+        if (typeof state.currentFilter.isStarred === "boolean") {
+            filtered = filtered.filter(
+                (email) => email.isStarred === state.currentFilter.isStarred
+            );
+        }
+        // Search query filter (multi-token, already supports AND logic)
+        const normalize = (str: string) =>
+          str
+            .toLowerCase()
+            .replace(/[‘’]/g, "'")       // normalize apostrophes
+            .replace(/[“”]/g, '"')       // normalize quotes
+            .replace(/\s+/g, ' ')        // normalize all whitespace including newlines
+            .replace(/[^\w\s@.']/g, '')  // remove punctuation except @, ., '
+            .trim();
+
+        if (state.searchQuery) {
+            const tokens = tokenize(state.searchQuery);
+            filtered = filtered.filter((email) => {
+                return tokens.every((token) => {
+                    const normalizedToken = normalize(token);
+
+                    if (token.startsWith("from:")) {
+                        const fromQuery = normalize(token.replace("from:", ""));
+                        return (
+                            normalize(email.from.name).includes(fromQuery) ||
+                            normalize(email.from.email).includes(fromQuery)
+                        );
+                    } else if (token.startsWith("to:")) {
+                        const toQuery = normalize(token.replace("to:", ""));
+                        return email.to.some(
+                            (recipient) =>
+                                normalize(recipient.name).includes(toQuery) ||
+                                normalize(recipient.email).includes(toQuery)
+                        );
+                    } else if (token.startsWith("subject:")) {
+                        const subjectQuery = normalize(token.replace("subject:", ""));
+                        return normalize(email.subject).includes(subjectQuery);
+                    } else if (token === "has:attachment") {
+                        return email.attachments && email.attachments.length > 0;
+                    } else if (token === "is:unread") {
+                        return !email.isRead;
+                    } else if (token === "is:read") {
+                        return email.isRead;
+                    } else if (token === "is:starred") {
+                        return email.isStarred;
+                    } else if (token === "is:important") {
+                        return email.isImportant;
+                    } else {
+                        // General search across multiple fields
+                        return (
+                            normalize(email.subject).includes(normalizedToken) ||
+                            normalize(email.from.name).includes(normalizedToken) ||
+                            normalize(email.from.email).includes(normalizedToken) ||
+                            normalize(email.body).includes(normalizedToken) ||
+                            email.to.some(
+                                (recipient) =>
+                                    normalize(recipient.name).includes(normalizedToken) ||
+                                    normalize(recipient.email).includes(normalizedToken)
+                            ) ||
+                            email.labels.some((label) =>
+                                normalize(label.name).includes(normalizedToken)
+                            )
+                        );
+                    }
+                });
+            });
+        }
+        // Sort by timestamp (newest first)
+        return filtered.sort(
+            (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+        );
+    }, [state.emails, state.currentFilter, state.searchQuery]);
 
   const unreadCount = useMemo(() => {
     return state.emails.filter((email) => !email.isRead && !email.isDraft)
