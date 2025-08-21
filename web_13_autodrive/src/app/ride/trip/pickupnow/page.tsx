@@ -95,7 +95,13 @@ export default function PickupNowPage() {
     }
     router.push("/ride/trip");
     console.log("Logging NEXT_PICKUP", { date, time });
-    logEvent(EVENT_TYPES.NEXT_PICKUP, { date, time });
+    logEvent(EVENT_TYPES.NEXT_PICKUP, { 
+      date, 
+      time,
+      timestamp: new Date().toISOString(),
+      scheduledDateTime: `${date}T${time}`,
+      isFutureDate: new Date(`${date}T${time}`) > new Date()
+    });
   };
   const handleRemove = () => {
     setDate(new Date().toISOString().slice(0, 10));
@@ -169,7 +175,12 @@ export default function PickupNowPage() {
                   setDate(e.target.value);
                   setTime("");
                   console.log("Logging SELECT_DATE", { date: e.target.value });
-                  logEvent(EVENT_TYPES.SELECT_DATE, { date: e.target.value });
+                  logEvent(EVENT_TYPES.SELECT_DATE, { 
+                    date: e.target.value,
+                    timestamp: new Date().toISOString(),
+                    isToday: e.target.value === new Date().toISOString().slice(0, 10),
+                    isFutureDate: e.target.value > new Date().toISOString().slice(0, 10)
+                  });
                 }}
                 disabled={!isMounted}
               />
@@ -245,7 +256,12 @@ export default function PickupNowPage() {
                       setTime(slot.value);
                       setShowSlotPanel(false);
                       console.log("Logging SELECT_TIME", { time: slot.value });
-                      logEvent(EVENT_TYPES.SELECT_TIME, { time: slot.value });
+                      logEvent(EVENT_TYPES.SELECT_TIME, { 
+                        time: slot.value,
+                        timestamp: new Date().toISOString(),
+                        timeSlot: slot.label,
+                        isAvailable: true
+                      });
                     }}
                     className={`block w-full text-left px-6 py-3 text-base font-medium hover:bg-[#e6f6fc] ${
                       time === slot.value

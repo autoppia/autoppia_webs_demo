@@ -326,8 +326,25 @@ export default function RideTripPage() {
     return `${mmmd}, ${hma}`;
   }
 
+
+
   function handleSearch() {
     if (pickup && dropoff) {
+      // 🔹 log the SEARCH event
+      logEvent(EVENT_TYPES.SEARCH, {
+        pickup,
+        dropoff,
+        scheduled: pickupScheduled
+          ? `${pickupScheduled.date} ${pickupScheduled.time}`
+          : "now",
+        timestamp: new Date().toISOString(),
+        hasPickup: !!pickup,
+        hasDropoff: !!dropoff,
+        isScheduled: !!pickupScheduled,
+        pickupLength: pickup?.length || 0,
+        dropoffLength: dropoff?.length || 0
+      });
+  
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -335,6 +352,7 @@ export default function RideTripPage() {
       }, 2000);
     }
   }
+  
 
   useEffect(() => {
     if (!pickup || !dropoff) {
@@ -484,7 +502,28 @@ export default function RideTripPage() {
               {rides.map((ride, idx) => (
                 <div
                   key={ride.name}
-                  onClick={() => setSelectedRideIdx(idx)}
+                  onClick={() => {
+                    setSelectedRideIdx(idx);
+                    // 🔹 log the SELECT_CAR event
+                    logEvent(EVENT_TYPES.SELECT_CAR, {
+                      rideId: idx,
+                      rideName: ride.name,
+                      rideType: ride.name,
+                      price: ride.price,
+                      oldPrice: ride.oldPrice,
+                      seats: ride.seats,
+                      eta: ride.eta,
+                      pickup,
+                      dropoff,
+                      scheduled: pickupScheduled
+                        ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                        : "now",
+                      timestamp: new Date().toISOString(),
+                      priceDifference: ride.oldPrice - ride.price,
+                      discountPercentage: ((ride.oldPrice - ride.price) / ride.oldPrice * 100).toFixed(2),
+                      isRecommended: ride.recommended || false
+                    });
+                  }}
                   className={
                     "flex items-center gap-4 rounded-xl px-6 py-5 cursor-pointer transition" +
                     (selectedRideIdx === idx
@@ -591,6 +630,38 @@ export default function RideTripPage() {
               disabled={selectedRideIdx === null}
               onClick={() => {
                 if (selectedRideIdx !== null) {
+                  const selectedRide = rides[selectedRideIdx];
+                  // 🔹 log the RESERVE_RIDE event
+                  logEvent(EVENT_TYPES.RESERVE_RIDE, {
+                    rideId: selectedRideIdx,
+                    rideName: selectedRide.name,
+                    rideType: selectedRide.name,
+                    price: selectedRide.price,
+                    oldPrice: selectedRide.oldPrice,
+                    seats: selectedRide.seats,
+                    eta: selectedRide.eta,
+                    pickup,
+                    dropoff,
+                    scheduled: pickupScheduled
+                      ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                      : "now",
+                    timestamp: new Date().toISOString(),
+                    priceDifference: selectedRide.oldPrice - selectedRide.price,
+                    discountPercentage: ((selectedRide.oldPrice - selectedRide.price) / selectedRide.oldPrice * 100).toFixed(2),
+                    isRecommended: selectedRide.recommended || false,
+                    tripDetails: {
+                      pickup,
+                      dropoff,
+                      scheduled: pickupScheduled
+                        ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                        : "now",
+                      rideType: selectedRide.name,
+                      price: selectedRide.price,
+                      totalSeats: selectedRide.seats,
+                      estimatedArrival: selectedRide.eta
+                    },
+                  });
+                  
                   if (typeof window !== "undefined") {
                     sessionStorage.setItem(
                       "__ud_selectedRideIdx",
