@@ -135,7 +135,16 @@ function TripCard({ trip }: { trip: Trip }) {
     // Log the TRIP_DETAILS event
     logEvent(EVENT_TYPES.TRIP_DETAILS, { 
       trip_id: trip.id, 
-      ride_name: trip.ride.name 
+      ride_name: trip.ride.name,
+      timestamp: new Date().toISOString(),
+      trip_status: trip.status,
+      trip_date: trip.date,
+      trip_time: trip.time,
+      trip_price: trip.price,
+      trip_payment: trip.payment,
+      driver_name: trip.driver.name,
+      pickup_location: trip.pickup,
+      dropoff_location: trip.dropoff
     });
     
     // Navigate to trip details page

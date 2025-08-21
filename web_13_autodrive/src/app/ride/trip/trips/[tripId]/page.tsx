@@ -70,7 +70,13 @@ export default function TripDetailsPage() {
   function handleConfirmCancel() {
     // Log the CANCEL_RESERVATION event
     console.log("Logging CANCEL_RESERVATION", { tripId });
-    logEvent(EVENT_TYPES.CANCEL_RESERVATION, { tripId });
+    logEvent(EVENT_TYPES.CANCEL_RESERVATION, { 
+      tripId,
+      timestamp: new Date().toISOString(),
+      tripData: activeTrip,
+      cancellationReason: 'user_requested',
+      cancellationTime: new Date().toISOString()
+    });
     
     if (typeof window !== "undefined") {
       // We use localStorage to store a simple array of cancelled trip ids
@@ -89,8 +95,13 @@ export default function TripDetailsPage() {
   // On page load or when trip details are shown:
   useEffect(() => {
     console.log("Logging TRIP_DETAILS", { tripId });
-    logEvent(EVENT_TYPES.TRIP_DETAILS, { tripId });
-  }, [tripId]);
+    logEvent(EVENT_TYPES.TRIP_DETAILS, { 
+      tripId,
+      timestamp: new Date().toISOString(),
+      pageType: 'trip_details',
+      tripData: activeTrip
+    });
+  }, [tripId, activeTrip]);
 
   const rideIcon = rides[activeTrip.rideIndex]?.icon ?? "";
 

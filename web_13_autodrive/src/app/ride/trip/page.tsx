@@ -337,6 +337,12 @@ export default function RideTripPage() {
         scheduled: pickupScheduled
           ? `${pickupScheduled.date} ${pickupScheduled.time}`
           : "now",
+        timestamp: new Date().toISOString(),
+        hasPickup: !!pickup,
+        hasDropoff: !!dropoff,
+        isScheduled: !!pickupScheduled,
+        pickupLength: pickup?.length || 0,
+        dropoffLength: dropoff?.length || 0
       });
   
       setLoading(true);
@@ -512,6 +518,10 @@ export default function RideTripPage() {
                       scheduled: pickupScheduled
                         ? `${pickupScheduled.date} ${pickupScheduled.time}`
                         : "now",
+                      timestamp: new Date().toISOString(),
+                      priceDifference: ride.oldPrice - ride.price,
+                      discountPercentage: ((ride.oldPrice - ride.price) / ride.oldPrice * 100).toFixed(2),
+                      isRecommended: ride.recommended || false
                     });
                   }}
                   className={
@@ -635,6 +645,10 @@ export default function RideTripPage() {
                     scheduled: pickupScheduled
                       ? `${pickupScheduled.date} ${pickupScheduled.time}`
                       : "now",
+                    timestamp: new Date().toISOString(),
+                    priceDifference: selectedRide.oldPrice - selectedRide.price,
+                    discountPercentage: ((selectedRide.oldPrice - selectedRide.price) / selectedRide.oldPrice * 100).toFixed(2),
+                    isRecommended: selectedRide.recommended || false,
                     tripDetails: {
                       pickup,
                       dropoff,
@@ -643,6 +657,8 @@ export default function RideTripPage() {
                         : "now",
                       rideType: selectedRide.name,
                       price: selectedRide.price,
+                      totalSeats: selectedRide.seats,
+                      estimatedArrival: selectedRide.eta
                     },
                   });
                   

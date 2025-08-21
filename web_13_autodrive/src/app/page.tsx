@@ -45,7 +45,11 @@ function AutocompleteInput({
               eventType, 
               value: e.target.value
             });
-            logEvent(eventType, { value: e.target.value });
+            logEvent(eventType, { 
+              value: e.target.value,
+              inputType: placeholder.toLowerCase().includes('location') ? 'location' : 'destination',
+              timestamp: new Date().toISOString()
+            });
           }}
           onFocus={() => setShow(true)}
           onBlur={() => setTimeout(() => setShow(false), 120)}
@@ -74,7 +78,12 @@ function AutocompleteInput({
                   console.log(`🎯 Dropdown option selected for "${placeholder}":`, { eventType, value: s });
                   setValue(s);
                   setShow(false);
-                  logEvent(eventType, { value: s });
+                  logEvent(eventType, { 
+                    value: s,
+                    inputType: placeholder.toLowerCase().includes('location') ? 'location' : 'destination',
+                    selectionMethod: 'dropdown',
+                    timestamp: new Date().toISOString()
+                  });
                   console.log(`✅ logEvent called for dropdown selection "${placeholder}"`);
                 }}
               >
@@ -374,7 +383,15 @@ function HomePage() {
               className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition"
               onClick={() => {
                 console.log("Logging SEE_PRICES", { location, destination });
-                logEvent(EVENT_TYPES.SEE_PRICES, { location, destination });
+                logEvent(EVENT_TYPES.SEE_PRICES, { 
+                  location, 
+                  destination,
+                  timestamp: new Date().toISOString(),
+                  hasLocation: !!location,
+                  hasDestination: !!destination,
+                  locationLength: location?.length || 0,
+                  destinationLength: destination?.length || 0
+                });
                 if (typeof window !== "undefined") {
                   window.sessionStorage.setItem("__ud_pickup", location);
                   window.sessionStorage.setItem("__ud_dropoff", destination);
