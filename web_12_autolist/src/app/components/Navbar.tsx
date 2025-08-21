@@ -14,10 +14,6 @@ export default function Navbar() {
         className="flex items-center w-full px-4 py-2 text-[15px] hover:bg-gray-50 cursor-pointer"
         onClick={() => {
           setProfilePopoverOpen(false);
-          logEvent(EVENT_TYPES.PROFILE_CLICKED, {
-            timestamp: Date.now()
-          });
-          // Add profile page navigation logic here
         }}
       >
         <span className="flex-1 text-gray-900 text-left">Profile</span>
@@ -26,10 +22,6 @@ export default function Navbar() {
         className="flex items-center w-full px-4 py-2 text-[15px] hover:bg-gray-50 cursor-pointer"
         onClick={() => {
           setProfilePopoverOpen(false);
-          logEvent(EVENT_TYPES.SETTINGS_CLICKED, {
-            timestamp: Date.now()
-          });
-          // Add settings page navigation logic here
         }}
       >
         <span className="flex-1 text-gray-900 text-left">Settings</span>
@@ -38,10 +30,6 @@ export default function Navbar() {
         className="flex items-center w-full px-4 py-2 text-[15px] hover:bg-gray-50 cursor-pointer"
         onClick={() => {
           setProfilePopoverOpen(false);
-          logEvent(EVENT_TYPES.LOGOUT_CLICKED, {
-            timestamp: Date.now()
-          });
-          // Add logout logic here
         }}
       >
         <span className="flex-1 text-gray-900 text-left">Logout</span>
@@ -57,31 +45,16 @@ export default function Navbar() {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <button
                 className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
-                onClick={() => {
-                  logEvent(EVENT_TYPES.UPCOMING_CLICKED, {
-                    timestamp: Date.now()
-                  });
-                }}
               >
                 Upcoming
               </button>
               <button
                 className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
-                onClick={() => {
-                  logEvent(EVENT_TYPES.DRAFT_CLICKED, {
-                    timestamp: Date.now()
-                  });
-                }}
               >
                 Drafts
               </button>
               <button
                 className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
-                onClick={() => {
-                  logEvent(EVENT_TYPES.MORE_MENU_CLICKED, {
-                    timestamp: Date.now()
-                  });
-                }}
               >
                 More
               </button>
