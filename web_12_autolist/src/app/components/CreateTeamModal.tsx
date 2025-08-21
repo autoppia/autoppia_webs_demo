@@ -35,6 +35,19 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
     errors?: string[];
   }
 
+  const memberOptions = [
+    { value: 'john@example.com', label: 'John Doe' },
+    { value: 'jane@example.com', label: 'Jane Smith' },
+    { value: 'bob@example.com', label: 'Bob Johnson' },
+    { value: 'alice@example.com', label: 'Alice Williams' },
+    { value: 'michael@example.com', label: 'Michael Brown' },
+    { value: 'emily@example.com', label: 'Emily Davis' },
+    { value: 'david@example.com', label: 'David Wilson' },
+    { value: 'sophia@example.com', label: 'Sophia Martinez' },
+    { value: 'li@example.com', label: 'Li Wei' },
+    { value: 'fatima@example.com', label: 'Fatima Al-Farsi' },
+    // Add more as needed
+  ];
 
   const handleSubmit = async () => {
     try {
@@ -42,14 +55,27 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
 
       const values = await form.validateFields();
 
+      // Build members array with id, name, and role
+      const members = (values.members || []).map((memberId: string) => {
+        const option = memberOptions.find(opt => opt.value === memberId);
+        const name = option ? option.label : memberId;
+        const role = values.roles && values.roles[memberId] ? values.roles[memberId] : 'member';
+        return {
+          id: memberId,
+          name,
+          role
+        };
+      });
+
       logEvent(EVENT_TYPES.TEAM_CREATED, {
         timestamp: Date.now(),
         teamName: values.name,
+        teamDescription: values.description,
+        members,
       });
       
-      onOk(values);
+      onOk({ ...values, members });
       form.resetFields();
-      
 
     } catch (error) {
 
@@ -132,18 +158,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                   members: values
                 });
               }}
-              options={[
-                { value: 'john@example.com', label: 'John Doe' },
-                { value: 'jane@example.com', label: 'Jane Smith' },
-                { value: 'bob@example.com', label: 'Bob Johnson' },
-                { value: 'alice@example.com', label: 'Alice Williams' },
-                { value: 'michael@example.com', label: 'Michael Brown' },
-                { value: 'emily@example.com', label: 'Emily Davis' },
-                { value: 'david@example.com', label: 'David Wilson' },
-                { value: 'sophia@example.com', label: 'Sophia Martinez' },
-                { value: 'li@example.com', label: 'Li Wei' },
-                { value: 'fatima@example.com', label: 'Fatima Al-Farsi' },
-              ]}
+              options={memberOptions}
             />
           </Form.Item>
 
