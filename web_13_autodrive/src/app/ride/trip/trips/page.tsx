@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RideNavbar from "../../../../components/RideNavbar";
+import { logEvent, EVENT_TYPES } from "@/library/event";
 
 // Ride type for extensibility
 interface RideType {
@@ -129,6 +130,18 @@ function formatDateShort(date: string, time: string) {
 
 function TripCard({ trip }: { trip: Trip }) {
   const router = useRouter();
+  
+  const handleTripDetailsClick = () => {
+    // Log the TRIP_DETAILS event
+    logEvent(EVENT_TYPES.TRIP_DETAILS, { 
+      trip_id: trip.id, 
+      ride_name: trip.ride.name 
+    });
+    
+    // Navigate to trip details page
+    router.push(`/ride/trip/trips/${trip.id}`);
+  };
+  
   return (
     <div className="bg-gray-100 rounded-2xl flex items-center px-8 py-7 gap-7 mb-6">
       <img
@@ -150,7 +163,7 @@ function TripCard({ trip }: { trip: Trip }) {
       <div className="flex flex-col justify-between items-end h-full gap-2">
         <button
           className="flex items-center gap-2 px-4 py-1 mt-0 bg-white border border-gray-300 rounded-lg text-black font-medium text-sm"
-          onClick={() => router.push(`/ride/trip/trips/${trip.id}`)}
+          onClick={handleTripDetailsClick}
         >
           <svg width="18" height="18" fill="none" viewBox="0 0 20 20">
             <rect width="20" height="20" rx="10" fill="#2095d2" />

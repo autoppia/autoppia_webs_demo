@@ -496,7 +496,24 @@ export default function RideTripPage() {
               {rides.map((ride, idx) => (
                 <div
                   key={ride.name}
-                  onClick={() => setSelectedRideIdx(idx)}
+                  onClick={() => {
+                    setSelectedRideIdx(idx);
+                    // 🔹 log the SELECT_CAR event
+                    logEvent(EVENT_TYPES.SELECT_CAR, {
+                      rideId: idx,
+                      rideName: ride.name,
+                      rideType: ride.name,
+                      price: ride.price,
+                      oldPrice: ride.oldPrice,
+                      seats: ride.seats,
+                      eta: ride.eta,
+                      pickup,
+                      dropoff,
+                      scheduled: pickupScheduled
+                        ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                        : "now",
+                    });
+                  }}
                   className={
                     "flex items-center gap-4 rounded-xl px-6 py-5 cursor-pointer transition" +
                     (selectedRideIdx === idx
@@ -603,6 +620,32 @@ export default function RideTripPage() {
               disabled={selectedRideIdx === null}
               onClick={() => {
                 if (selectedRideIdx !== null) {
+                  const selectedRide = rides[selectedRideIdx];
+                  // 🔹 log the RESERVE_RIDE event
+                  logEvent(EVENT_TYPES.RESERVE_RIDE, {
+                    rideId: selectedRideIdx,
+                    rideName: selectedRide.name,
+                    rideType: selectedRide.name,
+                    price: selectedRide.price,
+                    oldPrice: selectedRide.oldPrice,
+                    seats: selectedRide.seats,
+                    eta: selectedRide.eta,
+                    pickup,
+                    dropoff,
+                    scheduled: pickupScheduled
+                      ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                      : "now",
+                    tripDetails: {
+                      pickup,
+                      dropoff,
+                      scheduled: pickupScheduled
+                        ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                        : "now",
+                      rideType: selectedRide.name,
+                      price: selectedRide.price,
+                    },
+                  });
+                  
                   if (typeof window !== "undefined") {
                     sessionStorage.setItem(
                       "__ud_selectedRideIdx",

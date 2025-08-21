@@ -68,6 +68,10 @@ export default function TripDetailsPage() {
 
   // Handler to actually cancel
   function handleConfirmCancel() {
+    // Log the CANCEL_RESERVATION event
+    console.log("Logging CANCEL_RESERVATION", { tripId });
+    logEvent(EVENT_TYPES.CANCEL_RESERVATION, { tripId });
+    
     if (typeof window !== "undefined") {
       // We use localStorage to store a simple array of cancelled trip ids
       let cancelled = [];
@@ -87,9 +91,6 @@ export default function TripDetailsPage() {
     console.log("Logging TRIP_DETAILS", { tripId });
     logEvent(EVENT_TYPES.TRIP_DETAILS, { tripId });
   }, [tripId]);
-  // When cancel reservation is confirmed:
-  console.log("Logging CANCEL_RESERVATION", { tripId });
-  logEvent(EVENT_TYPES.CANCEL_RESERVATION, { tripId });
 
   const rideIcon = rides[activeTrip.rideIndex]?.icon ?? "";
 
