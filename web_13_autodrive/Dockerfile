@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Use Node.js 20 base image
 FROM node:20-alpine
 
@@ -24,6 +25,8 @@ EXPOSE 9000
 # Set the entrypoint
 ENTRYPOINT ["sh", "./entrypoint.sh"]
 =======
+=======
+>>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
 =======
 >>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
 # Stage 1: Build the Next.js application
@@ -57,6 +60,9 @@ COPY --from=builder /app/package.json ./package.json
 
 CMD ["npm", "start"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
+=======
 >>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
 =======
 >>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
