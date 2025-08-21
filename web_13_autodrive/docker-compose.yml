@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: "3.8"
 
 services:
@@ -18,6 +19,8 @@ services:
 networks:
   app-network:
 =======
+=======
+>>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
 services:
   web:
     build:
@@ -35,5 +38,8 @@ services:
 
 networks:
   apps_net:
+<<<<<<< HEAD
+>>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
+=======
 >>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
     external: true
