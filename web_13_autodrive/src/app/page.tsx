@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { EVENT_TYPES, logEvent } from "@/library/event";
+import { EVENT_TYPES, logEvent, EventType } from "@/library/event";
 
 const SUGGESTIONS = [
   "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
@@ -16,11 +16,13 @@ function AutocompleteInput({
   icon,
   value,
   setValue,
+  eventType,
 }: {
   placeholder: string;
   icon: React.ReactNode;
   value: string;
   setValue: (v: string) => void;
+  eventType: EventType;
 }) {
   const [show, setShow] = useState(false);
   const options = SUGGESTIONS.filter((s) =>
@@ -39,8 +41,11 @@ function AutocompleteInput({
           onChange={(e) => {
             setValue(e.target.value);
             setShow(true);
-            console.log("Logging ENTER_LOCATION", { value: e.target.value });
-            logEvent(EVENT_TYPES.ENTER_LOCATION, { value: e.target.value });
+            console.log(`🔍 Input "${placeholder}" changed:`, { 
+              eventType, 
+              value: e.target.value
+            });
+            logEvent(eventType, { value: e.target.value });
           }}
           onFocus={() => setShow(true)}
           onBlur={() => setTimeout(() => setShow(false), 120)}
@@ -66,8 +71,11 @@ function AutocompleteInput({
                 className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-100 transition text-sm text-gray-800"
                 onMouseDown={(e) => {
                   e.preventDefault();
+                  console.log(`🎯 Dropdown option selected for "${placeholder}":`, { eventType, value: s });
                   setValue(s);
                   setShow(false);
+                  logEvent(eventType, { value: s });
+                  console.log(`✅ logEvent called for dropdown selection "${placeholder}"`);
                 }}
               >
                 <span className="mr-2 text-gray-400">{icon}</span>
@@ -333,6 +341,7 @@ function HomePage() {
               }
               value={location}
               setValue={setLocation}
+              eventType={EVENT_TYPES.ENTER_LOCATION}
             />
             <AutocompleteInput
               placeholder="Enter Destination"
@@ -359,6 +368,7 @@ function HomePage() {
               }
               value={destination}
               setValue={setDestination}
+              eventType={EVENT_TYPES.ENTER_DESTINATION}
             />
             <button
               className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition"
@@ -374,6 +384,7 @@ function HomePage() {
             >
               See prices
             </button>
+
           </div>
         </div>
         {/* Car image */}
