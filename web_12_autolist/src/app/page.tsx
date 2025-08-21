@@ -104,10 +104,10 @@ function AddTaskCard({
   }
 
   const priorities = [
-    { key: 1, label: "Priority 1", color: "red" },
-    { key: 2, label: "Priority 2", color: "orange" },
-    { key: 3, label: "Priority 3", color: "blue" },
-    { key: 4, label: "Priority 4", color: "gray" },
+    { key: 1, label: "Highest", color: "red" },
+    { key: 2, label: "High", color: "orange" },
+    { key: 3, label: "Medium", color: "blue" },
+    { key: 4, label: "Low", color: "gray" },
   ];
 
   const priorityPanel = (
@@ -243,7 +243,7 @@ function AddTaskCard({
             type="button"
             onClick={() => {
               logEvent(EVENT_TYPES.SELECT_DATE, {
-                selectedDate: q.value.toISOString(),
+                selectedDate: q.value.format("YYYY-MM-DD"),
                 quickOption: q.key,
               });
               setSelectedDate(q.value);
@@ -268,7 +268,7 @@ function AddTaskCard({
           value={selectedDate || dayjs()}
           onSelect={(d) => {
             logEvent(EVENT_TYPES.SELECT_DATE, {
-              selectedDate: d.toISOString(),
+              selectedDate: d.format("YYYY-MM-DD"),
               wasPreviouslySelected: !!selectedDate,
             });
             setSelectedDate(d);
