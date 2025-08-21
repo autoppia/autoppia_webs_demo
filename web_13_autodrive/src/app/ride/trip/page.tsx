@@ -326,8 +326,19 @@ export default function RideTripPage() {
     return `${mmmd}, ${hma}`;
   }
 
+
+
   function handleSearch() {
     if (pickup && dropoff) {
+      // 🔹 log the SEARCH event
+      logEvent(EVENT_TYPES.SEARCH, {
+        pickup,
+        dropoff,
+        scheduled: pickupScheduled
+          ? `${pickupScheduled.date} ${pickupScheduled.time}`
+          : "now",
+      });
+  
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
@@ -335,6 +346,7 @@ export default function RideTripPage() {
       }, 2000);
     }
   }
+  
 
   useEffect(() => {
     if (!pickup || !dropoff) {
