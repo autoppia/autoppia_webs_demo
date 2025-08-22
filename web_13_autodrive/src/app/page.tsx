@@ -380,7 +380,7 @@ function HomePage() {
               eventType={EVENT_TYPES.ENTER_DESTINATION}
             />
             <button
-              className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition"
+              className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition" id="see-prices"
               onClick={() => {
                 console.log("Logging SEE_PRICES", { location, destination });
                 logEvent(EVENT_TYPES.SEE_PRICES, { 
