@@ -147,15 +147,18 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
               placeholder="Select team members"
               style={{ width: '100%' }}
               onChange={(values: string[]) => {
+                const memberNames = values.map(
+                  v => memberOptions.find(opt => opt.value === v)?.label || v
+                );
                 setSelectedMembers(values.map(v => ({
                   id: v,
-                  name: v,
+                  name: memberOptions.find(opt => opt.value === v)?.label || v,
                   role: 'member' as const
                 })));
                 logEvent(EVENT_TYPES.TEAM_MEMBERS_ADDED, {
                   timestamp: Date.now(),
                   memberCount: values.length,
-                  members: values
+                  members: memberNames
                 });
               }}
               options={memberOptions}
