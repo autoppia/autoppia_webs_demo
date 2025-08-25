@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import RideNavbar from "../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
+import { DatePickerInput } from "../../../../components/DatePicker";
 
 function getTimeSlotsForDate(dateStr: string) {
   const results = [];
@@ -48,10 +49,14 @@ function getTimeSlotsForDate(dateStr: string) {
 export default function PickupNowPage() {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState<string>("");
   const [showSlotPanel, setShowSlotPanel] = useState(false);
   const slotPanelRef = useRef<HTMLDivElement>(null);
+  
+  // Convert Date to string format for compatibility
+  const date = selectedDate ? selectedDate.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
+  
   // Only calculate slots and set initial time on client
   const slots = isMounted ? getTimeSlotsForDate(date) : [];
   useEffect(() => {
@@ -64,7 +69,7 @@ export default function PickupNowPage() {
       const sd = sessionStorage.getItem("ud_pickupdate");
       const st = sessionStorage.getItem("ud_pickuptime");
       if (sd && st) {
-        setDate(sd);
+        setSelectedDate(new Date(sd));
         setTime(st);
       }
     }
@@ -74,7 +79,7 @@ export default function PickupNowPage() {
     if (isMounted && slots.length && !time) {
       setTime(slots[0]?.value || "");
     }
-  }, [date, slots.length, isMounted]);
+  }, [isMounted, slots, time]);
   useEffect(() => {
     if (!showSlotPanel) return;
     function handle(e: MouseEvent) {
@@ -104,7 +109,7 @@ export default function PickupNowPage() {
     });
   };
   const handleRemove = () => {
-    setDate(new Date().toISOString().slice(0, 10));
+    setSelectedDate(new Date());
     if (isMounted && slots.length) setTime(slots[0]?.value || "");
     setShowSlotPanel(false);
     if (typeof window !== "undefined") {
@@ -144,56 +149,27 @@ export default function PickupNowPage() {
           </div>
           {/* Date picker row */}
           <div className="mb-4">
-            <div className="bg-gray-100 rounded-lg flex items-center px-4 py-3 cursor-pointer text-base group border border-gray-200">
-              <svg
-                width="22"
-                height="22"
-                fill="none"
-                className="mr-3"
-                viewBox="0 0 20 20"
-              >
-                <rect
-                  x="3"
-                  y="5"
-                  width="14"
-                  height="12"
-                  rx="3"
-                  fill="#fff"
-                  stroke="#2095d2"
-                  strokeWidth="1.5"
-                />
-                <path d="M3 8h14" stroke="#2095d2" strokeWidth="1.2" />
-                <rect x="6" y="2" width="2" height="3" rx="1" fill="#2095d2" />
-                <rect x="12" y="2" width="2" height="3" rx="1" fill="#2095d2" />
-              </svg>
-              <input
-                type="date"
-                className="bg-transparent border-none outline-none w-full text-base font-[500] text-gray-900 placeholder:text-gray-400 group-hover:placeholder:text-gray-800 focus:ring-0 p-0 m-0"
-                min={new Date().toISOString().slice(0, 10)}
-                value={date}
-                onChange={(e) => {
-                  setDate(e.target.value);
-                  setTime("");
-                  console.log("Logging SELECT_DATE", { date: e.target.value });
+            <DatePickerInput
+              date={selectedDate}
+              onDateChange={(newDate) => {
+                setSelectedDate(newDate);
+                setTime("");
+                if (newDate) {
+                  const dateString = newDate.toISOString().slice(0, 10);
+                  console.log("Logging SELECT_DATE", { date: dateString });
                   logEvent(EVENT_TYPES.SELECT_DATE, { 
-                    date: e.target.value,
+                    date: dateString,
                     timestamp: new Date().toISOString(),
-                    isToday: e.target.value === new Date().toISOString().slice(0, 10),
-                    isFutureDate: e.target.value > new Date().toISOString().slice(0, 10)
+                    isToday: dateString === new Date().toISOString().slice(0, 10),
+                    isFutureDate: dateString > new Date().toISOString().slice(0, 10)
                   });
-                }}
-                disabled={!isMounted}
-              />
-              <svg
-                width="22"
-                height="22"
-                fill="none"
-                className="ml-2"
-                viewBox="0 0 20 20"
-              >
-                <path d="M16 7l-6 6-6-6" stroke="#2095d2" strokeWidth="1.5" />
-              </svg>
-            </div>
+                }
+              }}
+              placeholder="Select date"
+              disabled={!isMounted}
+              minDate={new Date()}
+              maxDate={new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)} // 30 days from now
+            />
           </div>
           {/* Time picker row */}
           <div className="mb-7 relative">
