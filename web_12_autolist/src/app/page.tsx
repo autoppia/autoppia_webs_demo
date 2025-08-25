@@ -383,7 +383,7 @@ function AddTaskCard({
                 logEvent(EVENT_TYPES.CANCEL_TASK, {
                   currentName: name,
                   currentDescription: desc,
-                  selectedDate: selectedDate?.toISOString() ?? null,
+                  selectedDate: selectedDate ? selectedDate.format("YYYY-MM-DD") : null,
                   priority: getPriorityLabel(selectedPriority),
                   isEditing: !!editingTask,
                 });
@@ -401,7 +401,7 @@ function AddTaskCard({
                   action: editingTask ? "Save changes" : "Add",
                   name: name.trim(),
                   description: desc.trim(),
-                  date: selectedDate?.toISOString() ?? null,
+                  date: selectedDate ? selectedDate.format("YYYY-MM-DD") : null,
                   priority: getPriorityLabel(selectedPriority),
                 });
                 onAdd({
@@ -749,7 +749,7 @@ export default function Home() {
                           taskId: task.id,
                           name: task.name,
                           description: task.description,
-                          date: task.date?.toISOString() ?? null,
+                          date: task.date ? task.date.format("YYYY-MM-DD") : null,
                           priority: getPriorityLabel(task.priority),
                           completedAt: new Date().toISOString(),
                         });
@@ -816,7 +816,7 @@ export default function Home() {
                             taskId: task.id,
                             name: task.name,
                             description: task.description,
-                            date: task.date?.toISOString() ?? null,
+                            date: task.date ? task.date.format("YYYY-MM-DD") : null,
                             priority: getPriorityLabel(task.priority),
                           });
                           handleEditTask(task.id);
@@ -832,7 +832,7 @@ export default function Home() {
                             taskId: task.id,
                             name: task.name,
                             description: task.description,
-                            date: task.date?.toISOString() ?? null,
+                            date: task.date ? task.date.format("YYYY-MM-DD") : null,
                             priority: getPriorityLabel(task.priority),
                             deletedAt: new Date().toISOString(),
                           });
