@@ -44,7 +44,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
     { value: 'emily@example.com', label: 'Emily Davis' },
     { value: 'david@example.com', label: 'David Wilson' },
     { value: 'sophia@example.com', label: 'Sophia Martinez' },
-    { value: 'li@example.com', label: 'Li Wei' },
+    { value: 'lie@example.com', label: 'Lie Wei' },
     { value: 'fatima@example.com', label: 'Fatima Al-Farsi' },
     // Add more as needed
   ];
