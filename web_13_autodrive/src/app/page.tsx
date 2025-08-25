@@ -9,6 +9,33 @@ const SUGGESTIONS = [
   "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
   "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
   "1001 Castro Street - 1001 Castro St, San Francisco, CA 94114, USA",
+    "The Ritz-Carlton - 600 Stockton St, San Francisco, CA 94108, USA",
+    "Fairmont San Francisco - 950 Mason St, San Francisco, CA 94108, USA",
+    "Hotel Nikko - 222 Mason St, San Francisco, CA 94102, USA",
+    "Palace Hotel - 2 New Montgomery St, San Francisco, CA 94105, USA",
+    "InterContinental San Francisco - 888 Howard St, San Francisco, CA 94103, USA",
+    "Hotel Zephyr - 250 Beach St, San Francisco, CA 94133, USA",
+    "Hotel Zoe Fisherman's Wharf - 425 North Point St, San Francisco, CA 94133, USA",
+    "The Clift Royal Sonesta Hotel - 495 Geary St, San Francisco, CA 94102, USA",
+    "The Marker San Francisco - 501 Geary St, San Francisco, CA 94102, USA",
+    "Hilton San Francisco Union Square - 333 O'Farrell St, San Francisco, CA 94102, USA",
+    "Parc 55 San Francisco - 55 Cyril Magnin St, San Francisco, CA 94102, USA",
+    "Hotel Kabuki - 1625 Post St, San Francisco, CA 94115, USA",
+    "Hotel G San Francisco - 386 Geary St, San Francisco, CA 94102, USA",
+    "The Westin St. Francis - 335 Powell St, San Francisco, CA 94102, USA",
+    "Hotel Vitale - 8 Mission St, San Francisco, CA 94105, USA",
+    "Argonaut Hotel - 495 Jefferson St, San Francisco, CA 94109, USA",
+    "Hotel Emblem - 562 Sutter St, San Francisco, CA 94102, USA",
+    "Hotel Triton - 342 Grant Ave, San Francisco, CA 94108, USA",
+    "Hotel North Beach - 935 Kearny St, San Francisco, CA 94133, USA",
+    "Hotel Spero - 405 Taylor St, San Francisco, CA 94102, USA",
+    "Hotel Caza - 1300 Columbus Ave, San Francisco, CA 94133, USA",
+    "The Donatello - 501 Post St, San Francisco, CA 94102, USA",
+    "Hotel Abri - 127 Ellis St, San Francisco, CA 94102, USA",
+    "Hotel Fusion - 140 Ellis St, San Francisco, CA 94102, USA",
+    "Hotel Whitcomb - 1231 Market St, San Francisco, CA 94103, USA",
+    "Hotel Majestic - 1500 Sutter St, San Francisco, CA 94109, USA",
+
 ];
 
 function AutocompleteInput({
@@ -380,7 +407,7 @@ function HomePage() {
               eventType={EVENT_TYPES.ENTER_DESTINATION}
             />
             <button
-              className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition"
+              className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition" id="see-price"
               onClick={() => {
                 console.log("Logging SEE_PRICES", { location, destination });
                 logEvent(EVENT_TYPES.SEE_PRICES, { 

@@ -1,40 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> review/web13
-# Use Node.js 20 base image
-FROM node:20-alpine
-
-# Set working directory
-WORKDIR /app
-
-# Copy package.json and lock file
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application
-COPY . .
-
-# Ensure entrypoint script is executable
-RUN chmod +x ./entrypoint.sh
-
-# Expose your app port (used in npm run dev -- -p 8004)
-EXPOSE 9000
-
-# Set the entrypoint
-ENTRYPOINT ["sh", "./entrypoint.sh"]
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
-=======
->>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
->>>>>>> review/web13
 # Stage 1: Build the Next.js application
 FROM node:20-alpine AS builder
 
@@ -65,13 +28,3 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 CMD ["npm", "start"]
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
-=======
->>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43
-=======
->>>>>>> review/web13
->>>>>>> 29b2f9aaa371021ed149224c567b9edf87333d43

@@ -174,7 +174,7 @@ export default function PickupNowPage() {
           {/* Time picker row */}
           <div className="mb-7 relative">
             <div
-              className="bg-gray-100 rounded-lg flex items-center px-4 py-3 cursor-pointer border border-gray-200 text-base group"
+              className="bg-gray-100 rounded-lg flex items-center px-4 py-3 cursor-pointer border border-gray-200 text-base group" id="time-picker"
               onClick={() => isMounted && setShowSlotPanel(!showSlotPanel)}
               tabIndex={0}
             >
