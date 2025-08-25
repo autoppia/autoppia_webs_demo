@@ -27,6 +27,15 @@ type Task = {
   priority: number;
   completedAt?: string;
 };
+const priorities = [
+  { key: 1, label: "Highest", color: "red" },
+  { key: 2, label: "High", color: "orange" },
+  { key: 3, label: "Medium", color: "blue" },
+  { key: 4, label: "Low", color: "gray" },
+];
+function getPriorityLabel(priority: number): string {
+    return priorities.find((p) => p.key === priority)?.label || String(priority);
+  }
 
 function getUpcoming(label: "today" | "tomorrow" | "weekend" | "nextweek") {
   const now = dayjs();
@@ -102,13 +111,6 @@ function AddTaskCard({
       />
     );
   }
-
-  const priorities = [
-    { key: 1, label: "Highest", color: "red" },
-    { key: 2, label: "High", color: "orange" },
-    { key: 3, label: "Medium", color: "blue" },
-    { key: 4, label: "Low", color: "gray" },
-  ];
 
   const priorityPanel = (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 min-w-[200px] py-2 px-0 mt-2">
@@ -382,7 +384,7 @@ function AddTaskCard({
                   currentName: name,
                   currentDescription: desc,
                   selectedDate: selectedDate?.toISOString() ?? null,
-                  priority: selectedPriority,
+                  priority: getPriorityLabel(selectedPriority),
                   isEditing: !!editingTask,
                 });
                 onCancel();
@@ -400,7 +402,7 @@ function AddTaskCard({
                   name: name.trim(),
                   description: desc.trim(),
                   date: selectedDate?.toISOString() ?? null,
-                  priority: selectedPriority,
+                  priority: getPriorityLabel(selectedPriority),
                 });
                 onAdd({
                   name: name.trim(),
@@ -748,7 +750,7 @@ export default function Home() {
                           name: task.name,
                           description: task.description,
                           date: task.date?.toISOString() ?? null,
-                          priority: task.priority,
+                          priority: getPriorityLabel(task.priority),
                           completedAt: new Date().toISOString(),
                         });
                         handleCompleteTask(task.id);
@@ -815,7 +817,7 @@ export default function Home() {
                             name: task.name,
                             description: task.description,
                             date: task.date?.toISOString() ?? null,
-                            priority: task.priority,
+                            priority: getPriorityLabel(task.priority),
                           });
                           handleEditTask(task.id);
                         }}
@@ -831,7 +833,7 @@ export default function Home() {
                             name: task.name,
                             description: task.description,
                             date: task.date?.toISOString() ?? null,
-                            priority: task.priority,
+                            priority: getPriorityLabel(task.priority),
                             deletedAt: new Date().toISOString(),
                           });
                           handleDeleteTask(task.id);
