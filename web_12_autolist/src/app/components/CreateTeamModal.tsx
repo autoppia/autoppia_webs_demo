@@ -5,7 +5,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 interface TeamMember {
   id: string;
   name: string;
-  role: 'admin' | 'member';
+  role: string;
 }
 
 interface TeamFormValues {
@@ -27,14 +27,6 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
   const [avatarUrl, setAvatarUrl] = useState<string>();
   const [selectedMembers, setSelectedMembers] = useState<TeamMember[]>([]);
 
-  interface FieldData {
-    name: (string | number)[];
-    value?: string | string[] | File | undefined;
-    touched?: boolean;
-    validating?: boolean;
-    errors?: string[];
-  }
-
   const memberOptions = [
     { value: 'john@example.com', label: 'John Doe' },
     { value: 'jane@example.com', label: 'Jane Smith' },
@@ -46,7 +38,16 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
     { value: 'sophia@example.com', label: 'Sophia Martinez' },
     { value: 'lie@example.com', label: 'Lie Wei' },
     { value: 'fatima@example.com', label: 'Fatima Al-Farsi' },
-    // Add more as needed
+  ];
+
+  const roleOptions = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'member', label: 'Member' },
+    { value: 'viewer', label: 'Viewer' },
+    { value: 'developer', label: 'Developer' },
+    { value: 'designer', label: 'Designer' },
+    { value: 'tester', label: 'Tester' },
+    { value: 'product_manager', label: 'Product Manager' },
   ];
 
   const handleSubmit = async () => {
@@ -55,11 +56,13 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
 
       const values = await form.validateFields();
 
-      // Build members array with id, name, and role
+      // Build members array with id, name, and role (label)
       const members = (values.members || []).map((memberId: string) => {
         const option = memberOptions.find(opt => opt.value === memberId);
         const name = option ? option.label : memberId;
-        const role = values.roles && values.roles[memberId] ? values.roles[memberId] : 'member';
+        const roleValue = values.roles && values.roles[memberId] ? values.roles[memberId] : 'member';
+        const roleObj = roleOptions.find(opt => opt.value === roleValue || opt.label === roleValue);
+        const role = roleObj ? roleObj.label : roleValue;
         return {
           id: memberId,
           name,
@@ -73,12 +76,11 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
         teamDescription: values.description,
         members,
       });
-      
+
       onOk({ ...values, members });
       form.resetFields();
 
     } catch (error) {
-
       console.error("Form validation failed:", error);
     } finally {
       setLoading(false);
@@ -130,7 +132,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
             ]}
             validateTrigger="onBlur"
           >
-            <Input.TextArea 
+            <Input.TextArea
               placeholder="Enter team description"
               rows={4}
             />
@@ -153,7 +155,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 setSelectedMembers(values.map(v => ({
                   id: v,
                   name: memberOptions.find(opt => opt.value === v)?.label || v,
-                  role: 'member' as const
+                  role: 'member'
                 })));
                 logEvent(EVENT_TYPES.TEAM_MEMBERS_ADDED, {
                   timestamp: Date.now(),
@@ -174,22 +176,17 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
               initialValue="member"
             >
               <Select
+                options={roleOptions}
                 onChange={(value) => {
+                  const option = roleOptions.find(opt => opt.value === value);
+                  const label = option ? option.label : value;
+                  form.setFieldValue(['roles', member.id], label);
                   logEvent(EVENT_TYPES.TEAM_ROLE_ASSIGNED, {
                     timestamp: Date.now(),
                     memberId: member.name,
-                    role: value
+                    role: label
                   });
                 }}
-                options={[
-                  { value: 'admin', label: 'Admin' },
-                  { value: 'member', label: 'Member' },
-                  { value: 'viewer', label: 'Viewer' },
-                  { value: 'developer', label: 'Developer' },
-                  { value: 'designer', label: 'Designer' },
-                  { value: 'tester', label: 'Tester' },
-                  { value: 'product_manager', label: 'Product Manager' },
-                ]}
               />
             </Form.Item>
           ))}
