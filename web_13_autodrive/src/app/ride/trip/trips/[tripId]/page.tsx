@@ -3,39 +3,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import RideNavbar from "../../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
-
-const rides = [
-  {
-    name: "AutoDriverX",
-    icon: "https://ext.same-assets.com/407674263/3757967630.png",
-    price: 26.6,
-  },
-  {
-    name: "Comfort",
-    icon: "https://ext.same-assets.com/407674263/2600779409.svg",
-    price: 31.5,
-  },
-  {
-    name: "AutoDriverXL",
-    icon: "https://ext.same-assets.com/407674263/2882408466.svg",
-    price: 27.37,
-  },
-];
-const trips = [
-  {
-    id: "1",
-    rideName: "AutoDriverX",
-    pickup: "8 Mission St, San Francisco, CA 94105, USA",
-    pickupLabel: "1 Hotel San Francisco",
-    dropoff: "1000 Chestnut St, San Francisco, CA 94109, USA",
-    dropoffLabel: "1000 Chestnut Street Apartments",
-    date: "2025-07-18",
-    time: "12:00",
-    price: 26.6,
-    payment: "Visa ••••1270",
-    rideIndex: 0,
-  },
-];
+import { simulatedTrips } from "@library/dataset";
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "--";
@@ -63,7 +31,7 @@ export default function TripDetailsPage() {
 
   // Get trip from storage or fallback
   const [activeTrip, setActiveTrip] = useState(
-    trips.find((t) => t.id === tripId) || trips[0]
+    simulatedTrips.find((t) => t.id === tripId) || simulatedTrips[0]
   );
 
   // Handler to actually cancel
@@ -99,7 +67,18 @@ export default function TripDetailsPage() {
       tripId,
       timestamp: new Date().toISOString(),
       pageType: 'trip_details',
-      tripData: activeTrip
+      // tripData: activeTrip,
+      trip_id: activeTrip.id,
+      ride_name: activeTrip.ride.name,
+      timestamp: new Date().toISOString(),
+      trip_status: activeTrip.status,
+      trip_date: activeTrip.date,
+      trip_time: activeTrip.time,
+      trip_price: activeTrip.price,
+      trip_payment: activeTrip.payment,
+      driver_name: activeTrip.driver.name,
+      pickup_location: activeTrip.pickup,
+      dropoff_location: activeTrip.dropoff
     });
   }, [tripId, activeTrip]);
 

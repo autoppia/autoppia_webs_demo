@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { format } from "date-fns";
 import RideNavbar from "../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import { DatePickerInput } from "../../../../components/DatePicker";
@@ -155,7 +156,7 @@ export default function PickupNowPage() {
                 setSelectedDate(newDate);
                 setTime("");
                 if (newDate) {
-                  const dateString = newDate.toISOString().slice(0, 10);
+                  const dateString = format(newDate, "yyyy-MM-dd");
                   console.log("Logging SELECT_DATE", { date: dateString });
                   logEvent(EVENT_TYPES.SELECT_DATE, { 
                     date: dateString,
