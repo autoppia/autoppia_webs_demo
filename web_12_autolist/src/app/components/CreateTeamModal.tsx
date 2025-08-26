@@ -177,7 +177,7 @@ export default function CreateTeamModal({ open, onCancel, onOk }: CreateTeamModa
                 onChange={(value) => {
                   logEvent(EVENT_TYPES.TEAM_ROLE_ASSIGNED, {
                     timestamp: Date.now(),
-                    memberId: member.id,
+                    memberId: member.name,
                     role: value
                   });
                 }}
