@@ -1,5 +1,5 @@
 // Driver type for extensibility
-interface DriverType {
+export interface DriverType {
   name: string;
   car: string;
   plate: string;
@@ -8,7 +8,7 @@ interface DriverType {
 }
 
 // Trip type for extensibility
-interface Trip {
+export interface Trip {
   id: string;
   status: "upcoming" | "completed" | "cancelled";
   ride: RideType;
@@ -22,13 +22,13 @@ interface Trip {
 }
 
 // Ride type for extensibility
-interface RideType {
+export interface RideType {
   name: string;
   icon: string;
   price: number;
 }
 
-const rides: RideType[] = [
+export const rides: RideType[] = [
   {
     name: "AutoDriverX",
     icon: "/car1.jpg",
@@ -67,7 +67,7 @@ const rides: RideType[] = [
 //   },
 // ];
 
-const simulatedTrips: Trip[] = [
+export const simulatedTrips: Trip[] = [
   {
     id: "1",
     status: "upcoming",

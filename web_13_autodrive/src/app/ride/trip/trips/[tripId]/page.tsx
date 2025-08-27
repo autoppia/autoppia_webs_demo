@@ -3,7 +3,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import RideNavbar from "../../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
-import { simulatedTrips } from "@library/dataset";
+import { simulatedTrips, rides } from "@/library/dataset";
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "--";
@@ -65,9 +65,7 @@ export default function TripDetailsPage() {
     console.log("Logging TRIP_DETAILS", { tripId });
     logEvent(EVENT_TYPES.TRIP_DETAILS, { 
       tripId,
-      timestamp: new Date().toISOString(),
       pageType: 'trip_details',
-      // tripData: activeTrip,
       trip_id: activeTrip.id,
       ride_name: activeTrip.ride.name,
       timestamp: new Date().toISOString(),
@@ -82,7 +80,7 @@ export default function TripDetailsPage() {
     });
   }, [tripId, activeTrip]);
 
-  const rideIcon = rides[activeTrip.rideIndex]?.icon ?? "";
+  const rideIcon = activeTrip.ride.icon;
 
   return (
     <div className="min-h-screen bg-[#fafbfc]">
@@ -121,7 +119,7 @@ export default function TripDetailsPage() {
             Thank you for reserving your ride
           </div>
           <span className="inline-block mb-8 bg-[#e6f6fc] text-[#2095d2] px-2.5 py-1.5 text-[15px] font-medium rounded-md">
-            {activeTrip.rideName} reserved...
+            {activeTrip.ride.name} reserved...
           </span>
           <div className="space-y-7 border-t border-b py-7">
             <div className="flex flex-col gap-2">
@@ -164,7 +162,7 @@ export default function TripDetailsPage() {
                       {activeTrip.pickup}
                     </span>
                     <div className="text-sm text-gray-500">
-                      {activeTrip.pickupLabel}
+                      Pickup location
                     </div>
                   </div>
                   <div>
@@ -172,7 +170,7 @@ export default function TripDetailsPage() {
                       {activeTrip.dropoff}
                     </span>
                     <div className="text-sm text-gray-500">
-                      {activeTrip.dropoffLabel}
+                      Dropoff location
                     </div>
                   </div>
                 </div>

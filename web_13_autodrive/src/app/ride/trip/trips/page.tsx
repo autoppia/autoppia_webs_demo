@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RideNavbar from "../../../../components/RideNavbar";
 import { logEvent, EVENT_TYPES } from "@/library/event";
-import {simulatedTrips, rides, DriverType, RideType, Trip} from "@library/dataset";
+import {simulatedTrips, rides, DriverType, RideType, Trip} from "@/library/dataset";
 
 
 function formatDateShort(date: string, time: string) {
