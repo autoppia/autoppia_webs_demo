@@ -16,7 +16,7 @@ function getTimeSlotsForDate(dateStr: string) {
   }
   let startHour = 0,
     startMin = 0;
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = format(new Date(), "yyyy-MM-dd");
   if (dateStr === todayStr) {
     // If today, start at now rounded up to next slot
     const now = new Date();
@@ -56,7 +56,7 @@ export default function PickupNowPage() {
   const slotPanelRef = useRef<HTMLDivElement>(null);
   
   // Convert Date to string format for compatibility
-  const date = selectedDate ? selectedDate.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
+  const date = selectedDate ? format(selectedDate, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd");
   
   // Only calculate slots and set initial time on client
   const slots = isMounted ? getTimeSlotsForDate(date) : [];
@@ -161,8 +161,8 @@ export default function PickupNowPage() {
                   logEvent(EVENT_TYPES.SELECT_DATE, { 
                     date: dateString,
                     timestamp: new Date().toISOString(),
-                    isToday: dateString === new Date().toISOString().slice(0, 10),
-                    isFutureDate: dateString > new Date().toISOString().slice(0, 10)
+                    isToday: dateString === format(new Date(), "yyyy-MM-dd"),
+                    isFutureDate: dateString > format(new Date(), "yyyy-MM-dd")
                   });
                 }
               }}
