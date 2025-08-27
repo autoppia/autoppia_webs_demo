@@ -1,0 +1,1555 @@
+[
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "destination": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA"
+    },
+    "timestamp": "2025-08-21T05:18:18.806Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-22"
+    },
+    "timestamp": "2025-08-21T05:23:27.463Z"
+  },
+  {
+    "event_name": "SELECT_TIME",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "time": "19:00"
+    },
+    "timestamp": "2025-08-21T05:23:36.546Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-22",
+      "time": "19:00"
+    },
+    "timestamp": "2025-08-21T05:23:45.583Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "1"
+    },
+    "timestamp": "2025-08-21T05:27:24.438Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "1"
+    },
+    "timestamp": "2025-08-21T05:27:24.453Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "1"
+    },
+    "timestamp": "2025-08-21T05:27:24.657Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "1"
+    },
+    "timestamp": "2025-08-21T05:27:24.692Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "1"
+    },
+    "timestamp": "2025-08-21T05:28:16.372Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "1"
+    },
+    "timestamp": "2025-08-21T05:28:16.391Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "destination": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA"
+    },
+    "timestamp": "2025-08-21T05:37:19.944Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "destination": "1001 Castro Street - 1001 Castro St, San Francisco, CA 94114, USA"
+    },
+    "timestamp": "2025-08-21T05:40:58.360Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "test value"
+    },
+    "timestamp": "2025-08-21T05:43:19.637Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "test value"
+    },
+    "timestamp": "2025-08-21T05:43:27.659Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA"
+    },
+    "timestamp": "2025-08-21T05:46:24.917Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T05:46:34.494Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA"
+    },
+    "timestamp": "2025-08-21T05:48:16.302Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1001 Castro Street - 1001 Castro St, San Francisco, CA 94114, USA"
+    },
+    "timestamp": "2025-08-21T05:48:35.413Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "destination": "1001 Castro Street - 1001 Castro St, San Francisco, CA 94114, USA"
+    },
+    "timestamp": "2025-08-21T05:48:41.195Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "scheduled": "2025-08-22 19:00"
+    },
+    "timestamp": "2025-08-21T05:54:13.822Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "scheduled": "2025-08-22 19:00"
+    },
+    "timestamp": "2025-08-21T05:54:40.388Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA"
+    },
+    "timestamp": "2025-08-21T05:55:32.502Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1001 Castro Street - 1001 Castro St, San Francisco, CA 94114, USA"
+    },
+    "timestamp": "2025-08-21T05:55:40.090Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "destination": "1001 Castro Street - 1001 Castro St, San Francisco, CA 94114, USA"
+    },
+    "timestamp": "2025-08-21T05:55:46.647Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-24"
+    },
+    "timestamp": "2025-08-21T05:56:24.601Z"
+  },
+  {
+    "event_name": "SELECT_TIME",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "time": "14:10"
+    },
+    "timestamp": "2025-08-21T05:56:32.909Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-24",
+      "time": "14:10"
+    },
+    "timestamp": "2025-08-21T05:56:39.665Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T05:56:52.768Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:09:15.940Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:09:20.237Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA"
+    },
+    "timestamp": "2025-08-21T06:11:54.383Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T06:11:58.227Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "destination": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T06:12:00.443Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:06.546Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 1,
+      "rideName": "Comfort",
+      "rideType": "Comfort",
+      "price": 31.5,
+      "oldPrice": 35,
+      "seats": 4,
+      "eta": "2 min away · 1:40 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:13.245Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 2,
+      "rideName": "AutoDriverXL",
+      "rideType": "AutoDriverXL",
+      "price": 27.37,
+      "oldPrice": 32.2,
+      "seats": 6,
+      "eta": "3 min away · 1:41 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:15.034Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:16.272Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:20.716Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 1,
+      "rideName": "Comfort",
+      "rideType": "Comfort",
+      "price": 31.5,
+      "oldPrice": 35,
+      "seats": 4,
+      "eta": "2 min away · 1:40 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:24.200Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:25.117Z"
+  },
+  {
+    "event_name": "RESERVE_RIDE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10",
+      "tripDetails": {
+        "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+        "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+        "scheduled": "2025-08-24 14:10",
+        "rideType": "AutoDriverX",
+        "price": 26.6
+      }
+    },
+    "timestamp": "2025-08-21T06:12:27.134Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:34.437Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10"
+    },
+    "timestamp": "2025-08-21T06:12:42.175Z"
+  },
+  {
+    "event_name": "RESERVE_RIDE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-24 14:10",
+      "tripDetails": {
+        "pickup": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+        "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+        "scheduled": "2025-08-24 14:10",
+        "rideType": "AutoDriverX",
+        "price": 26.6
+      }
+    },
+    "timestamp": "2025-08-21T06:13:10.200Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "trip_id": "2",
+      "ride_name": "AutoDriverX"
+    },
+    "timestamp": "2025-08-21T06:19:36.096Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:19:37.869Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:19:37.934Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:19:38.002Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:19:38.170Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "trip_id": "2",
+      "ride_name": "AutoDriverX"
+    },
+    "timestamp": "2025-08-21T06:24:23.799Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:24:24.375Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:24:24.658Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:24:32.328Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA"
+    },
+    "timestamp": "2025-08-21T06:45:37.592Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA"
+    },
+    "timestamp": "2025-08-21T06:45:45.396Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA"
+    },
+    "timestamp": "2025-08-21T06:46:11.722Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA"
+    },
+    "timestamp": "2025-08-21T06:46:42.628Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T06:46:43.520Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T06:46:47.675Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "destination": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T06:46:58.437Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-25"
+    },
+    "timestamp": "2025-08-21T06:47:17.918Z"
+  },
+  {
+    "event_name": "SELECT_TIME",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "time": "12:00"
+    },
+    "timestamp": "2025-08-21T06:47:23.537Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-25",
+      "time": "12:00"
+    },
+    "timestamp": "2025-08-21T06:47:29.998Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "dropoff": "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-25 12:00"
+    },
+    "timestamp": "2025-08-21T06:48:12.687Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "dropoff": "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-25 12:00"
+    },
+    "timestamp": "2025-08-21T06:48:19.134Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 1,
+      "rideName": "Comfort",
+      "rideType": "Comfort",
+      "price": 31.5,
+      "oldPrice": 35,
+      "seats": 4,
+      "eta": "2 min away · 1:40 PM",
+      "pickup": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "dropoff": "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-25 12:00"
+    },
+    "timestamp": "2025-08-21T06:48:21.304Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 2,
+      "rideName": "AutoDriverXL",
+      "rideType": "AutoDriverXL",
+      "price": 27.37,
+      "oldPrice": 32.2,
+      "seats": 6,
+      "eta": "3 min away · 1:41 PM",
+      "pickup": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "dropoff": "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-25 12:00"
+    },
+    "timestamp": "2025-08-21T06:48:24.041Z"
+  },
+  {
+    "event_name": "RESERVE_RIDE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 2,
+      "rideName": "AutoDriverXL",
+      "rideType": "AutoDriverXL",
+      "price": 27.37,
+      "oldPrice": 32.2,
+      "seats": 6,
+      "eta": "3 min away · 1:41 PM",
+      "pickup": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "dropoff": "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-25 12:00",
+      "tripDetails": {
+        "pickup": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+        "dropoff": "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+        "scheduled": "2025-08-25 12:00",
+        "rideType": "AutoDriverXL",
+        "price": 27.37
+      }
+    },
+    "timestamp": "2025-08-21T06:48:31.643Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "trip_id": "2",
+      "ride_name": "AutoDriverX"
+    },
+    "timestamp": "2025-08-21T06:48:51.825Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:48:53.992Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:48:54.532Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:49:24.708Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "trip_id": "2",
+      "ride_name": "AutoDriverX"
+    },
+    "timestamp": "2025-08-21T06:49:44.522Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:49:44.883Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2"
+    },
+    "timestamp": "2025-08-21T06:49:44.940Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "trip_id": "3",
+      "ride_name": "AutoDriverX"
+    },
+    "timestamp": "2025-08-21T06:49:56.104Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "3"
+    },
+    "timestamp": "2025-08-21T06:49:56.547Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "3"
+    },
+    "timestamp": "2025-08-21T06:49:56.589Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "inputType": "location",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:06:29.005Z"
+    },
+    "timestamp": "2025-08-21T07:06:30.069Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "inputType": "location",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:06:45.725Z"
+    },
+    "timestamp": "2025-08-21T07:06:45.865Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "inputType": "destination",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:06:51.812Z"
+    },
+    "timestamp": "2025-08-21T07:06:51.953Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "inputType": "destination",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:07:00.981Z"
+    },
+    "timestamp": "2025-08-21T07:07:01.432Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "inputType": "destination",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:07:05.530Z"
+    },
+    "timestamp": "2025-08-21T07:07:05.690Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "destination": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "timestamp": "2025-08-21T07:07:07.618Z",
+      "hasLocation": true,
+      "hasDestination": true,
+      "locationLength": 66,
+      "destinationLength": 61
+    },
+    "timestamp": "2025-08-21T07:07:07.714Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-22",
+      "timestamp": "2025-08-21T07:07:35.979Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-21T07:07:36.077Z"
+  },
+  {
+    "event_name": "SELECT_TIME",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "time": "12:00",
+      "timestamp": "2025-08-21T07:07:49.514Z",
+      "timeSlot": "12:00",
+      "isAvailable": true
+    },
+    "timestamp": "2025-08-21T07:07:49.586Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-22",
+      "time": "12:00",
+      "timestamp": "2025-08-21T07:08:05.124Z",
+      "scheduledDateTime": "2025-08-22T12:00",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-21T07:08:05.359Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:08:18.114Z",
+      "hasPickup": true,
+      "hasDropoff": true,
+      "isScheduled": true,
+      "pickupLength": 66,
+      "dropoffLength": 61
+    },
+    "timestamp": "2025-08-21T07:08:18.219Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:08:30.177Z",
+      "priceDifference": 1.3999999999999986,
+      "discountPercentage": "5.00",
+      "isRecommended": true
+    },
+    "timestamp": "2025-08-21T07:08:30.565Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 1,
+      "rideName": "Comfort",
+      "rideType": "Comfort",
+      "price": 31.5,
+      "oldPrice": 35,
+      "seats": 4,
+      "eta": "2 min away · 1:40 PM",
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:08:53.490Z",
+      "priceDifference": 3.5,
+      "discountPercentage": "10.00",
+      "isRecommended": false
+    },
+    "timestamp": "2025-08-21T07:08:53.567Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 2,
+      "rideName": "AutoDriverXL",
+      "rideType": "AutoDriverXL",
+      "price": 27.37,
+      "oldPrice": 32.2,
+      "seats": 6,
+      "eta": "3 min away · 1:41 PM",
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:09:01.762Z",
+      "priceDifference": 4.830000000000002,
+      "discountPercentage": "15.00",
+      "isRecommended": false
+    },
+    "timestamp": "2025-08-21T07:09:01.905Z"
+  },
+  {
+    "event_name": "RESERVE_RIDE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 2,
+      "rideName": "AutoDriverXL",
+      "rideType": "AutoDriverXL",
+      "price": 27.37,
+      "oldPrice": 32.2,
+      "seats": 6,
+      "eta": "3 min away · 1:41 PM",
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:09:10.098Z",
+      "priceDifference": 4.830000000000002,
+      "discountPercentage": "15.00",
+      "isRecommended": false,
+      "tripDetails": {
+        "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+        "dropoff": "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+        "scheduled": "2025-08-22 12:00",
+        "rideType": "AutoDriverXL",
+        "price": 27.37,
+        "totalSeats": 6,
+        "estimatedArrival": "3 min away · 1:41 PM"
+      }
+    },
+    "timestamp": "2025-08-21T07:09:10.191Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "trip_id": "2",
+      "ride_name": "AutoDriverX",
+      "timestamp": "2025-08-21T07:10:13.226Z",
+      "trip_status": "upcoming",
+      "trip_date": "2025-07-18",
+      "trip_time": "13:00",
+      "trip_price": 26.6,
+      "trip_payment": "Visa ••••1270",
+      "driver_name": "Maria Chen",
+      "pickup_location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff_location": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T07:10:13.334Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2",
+      "timestamp": "2025-08-21T07:10:14.974Z",
+      "pageType": "trip_details",
+      "tripData": {
+        "id": "1",
+        "rideName": "AutoDriverX",
+        "pickup": "8 Mission St, San Francisco, CA 94105, USA",
+        "pickupLabel": "1 Hotel San Francisco",
+        "dropoff": "1000 Chestnut St, San Francisco, CA 94109, USA",
+        "dropoffLabel": "1000 Chestnut Street Apartments",
+        "date": "2025-07-18",
+        "time": "12:00",
+        "price": 26.6,
+        "payment": "Visa ••••1270",
+        "rideIndex": 0
+      }
+    },
+    "timestamp": "2025-08-21T07:10:15.253Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2",
+      "timestamp": "2025-08-21T07:10:14.982Z",
+      "pageType": "trip_details",
+      "tripData": {
+        "id": "1",
+        "rideName": "AutoDriverX",
+        "pickup": "8 Mission St, San Francisco, CA 94105, USA",
+        "pickupLabel": "1 Hotel San Francisco",
+        "dropoff": "1000 Chestnut St, San Francisco, CA 94109, USA",
+        "dropoffLabel": "1000 Chestnut Street Apartments",
+        "date": "2025-07-18",
+        "time": "12:00",
+        "price": 26.6,
+        "payment": "Visa ••••1270",
+        "rideIndex": 0
+      }
+    },
+    "timestamp": "2025-08-21T07:10:15.301Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2",
+      "timestamp": "2025-08-21T07:10:39.450Z",
+      "tripData": {
+        "id": "1",
+        "rideName": "AutoDriverX",
+        "pickup": "8 Mission St, San Francisco, CA 94105, USA",
+        "pickupLabel": "1 Hotel San Francisco",
+        "dropoff": "1000 Chestnut St, San Francisco, CA 94109, USA",
+        "dropoffLabel": "1000 Chestnut Street Apartments",
+        "date": "2025-07-18",
+        "time": "12:00",
+        "price": 26.6,
+        "payment": "Visa ••••1270",
+        "rideIndex": 0
+      },
+      "cancellationReason": "user_requested",
+      "cancellationTime": "2025-08-21T07:10:39.450Z"
+    },
+    "timestamp": "2025-08-21T07:10:39.634Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "inputType": "location",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:43:04.807Z"
+    },
+    "timestamp": "2025-08-21T07:43:05.604Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "inputType": "destination",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:43:08.330Z"
+    },
+    "timestamp": "2025-08-21T07:43:08.425Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "inputType": "destination",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-21T07:43:13.136Z"
+    },
+    "timestamp": "2025-08-21T07:43:13.246Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "destination": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "timestamp": "2025-08-21T07:43:16.290Z",
+      "hasLocation": true,
+      "hasDestination": true,
+      "locationLength": 66,
+      "destinationLength": 80
+    },
+    "timestamp": "2025-08-21T07:43:16.384Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-22",
+      "timestamp": "2025-08-21T07:43:35.027Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-21T07:43:35.123Z"
+  },
+  {
+    "event_name": "SELECT_TIME",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "time": "12:00",
+      "timestamp": "2025-08-21T07:43:48.674Z",
+      "timeSlot": "12:00",
+      "isAvailable": true
+    },
+    "timestamp": "2025-08-21T07:43:48.769Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-22",
+      "time": "12:00",
+      "timestamp": "2025-08-21T07:43:57.532Z",
+      "scheduledDateTime": "2025-08-22T12:00",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-21T07:43:57.965Z"
+  },
+  {
+    "event_name": "SEARCH",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:44:06.762Z",
+      "hasPickup": true,
+      "hasDropoff": true,
+      "isScheduled": true,
+      "pickupLength": 66,
+      "dropoffLength": 80
+    },
+    "timestamp": "2025-08-21T07:44:06.847Z"
+  },
+  {
+    "event_name": "SELECT_CAR",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:44:17.218Z",
+      "priceDifference": 1.3999999999999986,
+      "discountPercentage": "5.00",
+      "isRecommended": true
+    },
+    "timestamp": "2025-08-21T07:44:17.632Z"
+  },
+  {
+    "event_name": "RESERVE_RIDE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "rideId": 0,
+      "rideName": "AutoDriverX",
+      "rideType": "AutoDriverX",
+      "price": 26.6,
+      "oldPrice": 28,
+      "seats": 4,
+      "eta": "1 min away · 1:39 PM",
+      "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "scheduled": "2025-08-22 12:00",
+      "timestamp": "2025-08-21T07:44:25.834Z",
+      "priceDifference": 1.3999999999999986,
+      "discountPercentage": "5.00",
+      "isRecommended": true,
+      "tripDetails": {
+        "pickup": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+        "dropoff": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+        "scheduled": "2025-08-22 12:00",
+        "rideType": "AutoDriverX",
+        "price": 26.6,
+        "totalSeats": 4,
+        "estimatedArrival": "1 min away · 1:39 PM"
+      }
+    },
+    "timestamp": "2025-08-21T07:44:25.957Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "trip_id": "2",
+      "ride_name": "AutoDriverX",
+      "timestamp": "2025-08-21T07:44:41.162Z",
+      "trip_status": "upcoming",
+      "trip_date": "2025-07-18",
+      "trip_time": "13:00",
+      "trip_price": 26.6,
+      "trip_payment": "Visa ••••1270",
+      "driver_name": "Maria Chen",
+      "pickup_location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "dropoff_location": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA"
+    },
+    "timestamp": "2025-08-21T07:44:41.280Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2",
+      "timestamp": "2025-08-21T07:44:43.022Z",
+      "pageType": "trip_details",
+      "tripData": {
+        "id": "1",
+        "rideName": "AutoDriverX",
+        "pickup": "8 Mission St, San Francisco, CA 94105, USA",
+        "pickupLabel": "1 Hotel San Francisco",
+        "dropoff": "1000 Chestnut St, San Francisco, CA 94109, USA",
+        "dropoffLabel": "1000 Chestnut Street Apartments",
+        "date": "2025-07-18",
+        "time": "12:00",
+        "price": 26.6,
+        "payment": "Visa ••••1270",
+        "rideIndex": 0
+      }
+    },
+    "timestamp": "2025-08-21T07:44:43.324Z"
+  },
+  {
+    "event_name": "TRIP_DETAILS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2",
+      "timestamp": "2025-08-21T07:44:43.031Z",
+      "pageType": "trip_details",
+      "tripData": {
+        "id": "1",
+        "rideName": "AutoDriverX",
+        "pickup": "8 Mission St, San Francisco, CA 94105, USA",
+        "pickupLabel": "1 Hotel San Francisco",
+        "dropoff": "1000 Chestnut St, San Francisco, CA 94109, USA",
+        "dropoffLabel": "1000 Chestnut Street Apartments",
+        "date": "2025-07-18",
+        "time": "12:00",
+        "price": 26.6,
+        "payment": "Visa ••••1270",
+        "rideIndex": 0
+      }
+    },
+    "timestamp": "2025-08-21T07:44:43.336Z"
+  },
+  {
+    "event_name": "CANCEL_RESERVATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "tripId": "2",
+      "timestamp": "2025-08-21T07:44:50.570Z",
+      "tripData": {
+        "id": "1",
+        "rideName": "AutoDriverX",
+        "pickup": "8 Mission St, San Francisco, CA 94105, USA",
+        "pickupLabel": "1 Hotel San Francisco",
+        "dropoff": "1000 Chestnut St, San Francisco, CA 94109, USA",
+        "dropoffLabel": "1000 Chestnut Street Apartments",
+        "date": "2025-07-18",
+        "time": "12:00",
+        "price": 26.6,
+        "payment": "Visa ••••1270",
+        "rideIndex": 0
+      },
+      "cancellationReason": "user_requested",
+      "cancellationTime": "2025-08-21T07:44:50.570Z"
+    },
+    "timestamp": "2025-08-21T07:44:50.699Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "inputType": "location",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-25T05:19:53.606Z"
+    },
+    "timestamp": "2025-08-25T05:19:54.898Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "inputType": "destination",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-25T05:19:54.917Z"
+    },
+    "timestamp": "2025-08-25T05:19:55.067Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "destination": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "timestamp": "2025-08-25T05:19:55.534Z",
+      "hasLocation": true,
+      "hasDestination": true,
+      "locationLength": 66,
+      "destinationLength": 66
+    },
+    "timestamp": "2025-08-25T05:19:56.030Z"
+  },
+  {
+    "event_name": "ENTER_DESTINATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "inputType": "destination",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-25T05:28:38.216Z"
+    },
+    "timestamp": "2025-08-25T05:28:39.141Z"
+  },
+  {
+    "event_name": "ENTER_LOCATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "value": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "inputType": "location",
+      "selectionMethod": "dropdown",
+      "timestamp": "2025-08-25T05:28:36.991Z"
+    },
+    "timestamp": "2025-08-25T05:28:39.186Z"
+  },
+  {
+    "event_name": "SEE_PRICES",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "location": "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+      "destination": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+      "timestamp": "2025-08-25T05:28:38.903Z",
+      "hasLocation": true,
+      "hasDestination": true,
+      "locationLength": 80,
+      "destinationLength": 66
+    },
+    "timestamp": "2025-08-25T05:28:39.438Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-25",
+      "timestamp": "2025-08-25T05:28:56.455Z",
+      "isToday": true,
+      "isFutureDate": false
+    },
+    "timestamp": "2025-08-25T05:28:56.608Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-26",
+      "timestamp": "2025-08-25T05:28:57.487Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-25T05:28:57.955Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-25",
+      "timestamp": "2025-08-25T05:28:59.438Z",
+      "isToday": true,
+      "isFutureDate": false
+    },
+    "timestamp": "2025-08-25T05:28:59.572Z"
+  }
+]

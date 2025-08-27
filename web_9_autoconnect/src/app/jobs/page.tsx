@@ -3,6 +3,8 @@ import { useState, useMemo } from "react";
 import { mockJobs } from "@/library/dataset";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSeed } from "@/library/useSeed";
+import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
 
 interface Filters {
   search: string;
@@ -13,6 +15,7 @@ interface Filters {
 }
 
 export default function JobsPage() {
+  const { layout } = useSeed();
   const [filters, setFilters] = useState<Filters>({
     search: "",
     experience: "",
@@ -156,6 +159,10 @@ export default function JobsPage() {
     (value) => value !== "" && value !== false
   );
 
+  const shuffledJobs = getShuffledItems(filteredJobs, layout.feedOrder);
+  const jobCardsClasses = getLayoutClasses(layout, 'jobCardsLayout');
+  const filtersClasses = getLayoutClasses(layout, 'filtersPosition');
+
   return (
     <section>
       <h1 className="font-bold text-2xl mb-6">Job Search</h1>
@@ -171,14 +178,14 @@ export default function JobsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
+      <div className={`bg-white rounded-lg shadow p-4 ${filtersClasses}`}>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-lg">Filters</h2>
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
               className="text-blue-600 hover:text-blue-800 text-sm"
-            >
+              >
               Clear all filters
             </button>
           )}
@@ -275,8 +282,8 @@ export default function JobsPage() {
       </div>
 
       {/* Job Listings */}
-      <div className="flex flex-col gap-4">
-        {filteredJobs.length === 0 ? (
+      <div className={jobCardsClasses}>
+        {shuffledJobs.length === 0 ? (
           <div className="text-center py-8">
             <div className="text-gray-500 italic mb-2">No jobs found.</div>
             <p className="text-sm text-gray-400">
@@ -284,7 +291,7 @@ export default function JobsPage() {
             </p>
           </div>
         ) : (
-          filteredJobs.map((job) => <JobCard key={job.id} job={job} />)
+          shuffledJobs.map((job) => <JobCard key={job.id} job={job} />)
         )}
       </div>
 

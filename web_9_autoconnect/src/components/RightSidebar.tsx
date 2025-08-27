@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import UserSearchBar from "./UserSearchBar";
+import { useSeed } from "@/library/useSeed";
+import { getLayoutClasses } from "@/library/layouts";
 
 const companies = [
   {
@@ -21,6 +24,8 @@ const companies = [
 ];
 
 export default function RightSidebar() {
+  const { layout } = useSeed();
+  const searchClasses = getLayoutClasses(layout, 'searchPosition');
   const [followed, setFollowed] = useState<{ [name: string]: boolean }>({});
 
   const handleFollow = (name: string) => {
@@ -43,6 +48,13 @@ export default function RightSidebar() {
 
   return (
     <aside className="bg-white rounded-lg shadow p-5 sticky top-20">
+      {/* Search in Sidebar */}
+      {layout.searchPosition === 'sidebar' && (
+        <div className={`${searchClasses} mb-4`}>
+          <UserSearchBar />
+        </div>
+      )}
+      
       <h2 className="font-bold text-base mb-4">Add to your feed</h2>
       <ul className="flex flex-col gap-3 mb-3">
         {companies.map((c) => {

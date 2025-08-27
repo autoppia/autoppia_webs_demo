@@ -1,11 +1,24 @@
 import Avatar from "@/components/Avatar";
 import { mockUsers } from "@/library/dataset";
+import UserSearchBar from "./UserSearchBar";
+import { useSeed } from "@/library/useSeed";
+import { getLayoutClasses } from "@/library/layouts";
 
 const currentUser = mockUsers[2];
 
 export default function LeftSidebar() {
+  const { layout } = useSeed();
+  const searchClasses = getLayoutClasses(layout, 'searchPosition');
+
   return (
     <aside className="bg-white rounded-lg shadow p-5 mb-5 sticky top-20">
+      {/* Search in Sidebar */}
+      {layout.searchPosition === 'sidebar' && (
+        <div className={`${searchClasses} mb-4`}>
+          <UserSearchBar />
+        </div>
+      )}
+      
       <div className="flex flex-col items-center gap-2 mb-4">
         <Avatar src={currentUser.avatar} alt={currentUser.name} size={76} />
         <div className="font-bold text-lg mt-2">{currentUser.name}</div>
