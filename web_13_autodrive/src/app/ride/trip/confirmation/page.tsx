@@ -2,28 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RideNavbar from "../../../../components/RideNavbar";
-import { EVENT_TYPES, logEvent } from "@/library/event";
-
-const rides = [
-  {
-    name: "AutoDriverX",
-    image: "/car1.jpg",
-    icon: "https://ext.same-assets.com/407674263/3757967630.png",
-    price: 26.6,
-  },
-  {
-    name: "Comfort",
-    image: "/car2.jpg",
-    icon: "https://ext.same-assets.com/407674263/2600779409.svg",
-    price: 31.5,
-  },
-  {
-    name: "AutoDriverXL",
-    image: "/car3.jpg",
-    icon: "https://ext.same-assets.com/407674263/2882408466.svg",
-    price: 27.37,
-  },
-];
+import { rides } from "@/library/dataset";
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "";

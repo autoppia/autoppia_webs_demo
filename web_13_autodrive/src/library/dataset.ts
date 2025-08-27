@@ -25,26 +25,27 @@ export interface Trip {
 export interface RideType {
   name: string;
   icon: string;
+  image: string;
   price: number;
 }
 
 export const rides: RideType[] = [
   {
     name: "AutoDriverX",
-    icon: "/car1.jpg",
-    // icon: "https://ext.same-assets.com/407674263/3757967630.png",
+    image: "/car1.jpg",
+    icon: "https://ext.same-assets.com/407674263/3757967630.png",
     price: 26.6,
   },
   {
     name: "Comfort",
-    icon: "/car2.jpg",
-    // icon: "https://ext.same-assets.com/407674263/2600779409.svg",
+    image: "/car2.jpg",
+    icon: "https://ext.same-assets.com/407674263/2600779409.svg",
     price: 31.5,
   },
   {
     name: "AutoDriverXL",
-    icon: "/car3.jpg",
-    // icon: "https://ext.same-assets.com/407674263/2882408466.svg",
+    image: "/car3.jpg",
+    icon: "https://ext.same-assets.com/407674263/2882408466.svg",
     price: 27.37,
   },
 ];
