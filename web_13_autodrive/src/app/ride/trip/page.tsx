@@ -195,6 +195,8 @@ function PlaceSelect({
   open: boolean;
   setOpen: (v: boolean) => void;
 }) {
+  const [searchValue, setSearchValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [inputWidth, setInputWidth] = useState<number | null>(null);
@@ -222,7 +224,11 @@ function PlaceSelect({
         className={`flex items-center px-3 py-2 rounded border bg-white shadow-sm focus-within:border-[#2095d2] cursor-pointer relative ${
           open ? "border-[#2095d2] ring-2 ring-[#2095d2]" : "border-gray-300"
         }`}
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          if (!isTyping) {
+            setOpen(true);
+          }
+        }}
         tabIndex={0}
         style={{ paddingRight: 42 }}
       >
@@ -246,11 +252,72 @@ function PlaceSelect({
           </svg>
         </span>
         <input
-          value={value ? value : ""}
-          readOnly
+          value={isTyping ? searchValue : (value ? value : "")}
+          readOnly={!isTyping}
           placeholder={placeholder}
-          className="flex-1 bg-transparent border-none outline-none text-[16px] placeholder:text-gray-400 cursor-pointer pr-8"
+          className="flex-1 bg-transparent border-none outline-none text-[16px] placeholder:text-gray-400 pr-8"
           style={{ paddingRight: 32 }}
+          onFocus={() => {
+            if (!isTyping) {
+              setIsTyping(true);
+              setSearchValue("");
+            }
+            // Log enter event when user focuses on input
+            const enterEventType = placeholder.toLowerCase().includes('pickup') 
+              ? EVENT_TYPES.ENTER_LOCATION 
+              : EVENT_TYPES.ENTER_DESTINATION;
+            
+            logEvent(enterEventType, { 
+              inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
+              timestamp: new Date().toISOString(),
+              page: 'trip_form',
+              action: 'focus'
+            });
+          }}
+          onBlur={() => {
+            // Delay to allow for dropdown selection
+            setTimeout(() => {
+              if (!open) {
+                setIsTyping(false);
+                setSearchValue("");
+              }
+            }, 200);
+          }}
+          onChange={(e) => {
+            if (isTyping) {
+              const newValue = e.target.value;
+              setSearchValue(newValue);
+              
+              // Open dropdown when user starts typing
+              if (!open && newValue.trim()) {
+                setOpen(true);
+              }
+              
+              // Log SEARCH event when user types
+              if (newValue.trim()) {
+                const searchEventType = placeholder.toLowerCase().includes('pickup') 
+                  ? EVENT_TYPES.SEARCH_LOCATION 
+                  : EVENT_TYPES.SEARCH_DESTINATION;
+                
+                const matchedResults = PLACES.filter((option) => 
+                  option.label.toLowerCase().includes(newValue.toLowerCase()) ||
+                  option.main.toLowerCase().includes(newValue.toLowerCase()) ||
+                  option.sub.toLowerCase().includes(newValue.toLowerCase())
+                );
+                
+                logEvent(searchEventType, { 
+                  value: newValue,
+                  inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
+                  timestamp: new Date().toISOString(),
+                  searchType: 'typing',
+                  page: 'trip_form',
+                  matchedResults: matchedResults.length,
+                  hasMatches: matchedResults.length > 0,
+                  searchLength: newValue.length
+                });
+              }
+            }
+          }}
         />
         {open ? (
           <button
@@ -281,6 +348,8 @@ function PlaceSelect({
               onClick={(e) => {
                 e.stopPropagation();
                 setValue(null);
+                setIsTyping(false);
+                setSearchValue("");
               }}
               className="absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-white"
               style={{ pointerEvents: "auto" }}
@@ -319,13 +388,59 @@ function PlaceSelect({
             width: inputWidth || undefined,
           }}
         >
-          {PLACES.map((option) => (
+{(() => {
+            const filteredOptions = PLACES.filter((option) => {
+              if (!isTyping || !searchValue.trim()) {
+                return true; // Show all options when not typing or search is empty
+              }
+              
+              const searchLower = searchValue.toLowerCase();
+              return (
+                option.label.toLowerCase().includes(searchLower) ||
+                option.main.toLowerCase().includes(searchLower) ||
+                option.sub.toLowerCase().includes(searchLower)
+              );
+            });
+
+            // Add custom option if user is typing and there are no exact matches
+            const hasExactMatch = filteredOptions.some(option => 
+              option.label.toLowerCase() === searchValue.toLowerCase()
+            );
+            
+            const showCustomOption = isTyping && searchValue.trim() && !hasExactMatch;
+            
+            return (
+              <>
+                {filteredOptions.map((option) => (
             <button
               key={option.label}
               type="button"
               onClick={() => {
                 setValue(option.label);
                 setOpen(false);
+                setIsTyping(false);
+                setSearchValue("");
+                
+                // Log ENTER event when user selects from dropdown
+                const enterEventType = placeholder.toLowerCase().includes('pickup') 
+                  ? EVENT_TYPES.ENTER_LOCATION 
+                  : EVENT_TYPES.ENTER_DESTINATION;
+                
+                logEvent(enterEventType, { 
+                  value: option.label,
+                  inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
+                  timestamp: new Date().toISOString(),
+                  page: 'trip_form',
+                  selectionMethod: 'dropdown',
+                  selectedOption: {
+                    main: option.main,
+                    sub: option.sub,
+                    full: option.label
+                  },
+                  wasTyping: isTyping,
+                  searchValue: isTyping ? searchValue : null
+                });
+                
                 if (typeof window !== "undefined") {
                   sessionStorage.setItem(
                     placeholder === "Pickup location"
@@ -365,7 +480,78 @@ function PlaceSelect({
                 </span>
               </span>
             </button>
-          ))}
+                ))}
+                
+                {showCustomOption && (
+                  <button
+                    key="custom-option"
+                    type="button"
+                    onClick={() => {
+                      setValue(searchValue);
+                      setOpen(false);
+                      setIsTyping(false);
+                      const customOption = searchValue;
+                      setSearchValue("");
+                      
+                      // Log ENTER event for custom value
+                      const enterEventType = placeholder.toLowerCase().includes('pickup') 
+                        ? EVENT_TYPES.ENTER_LOCATION 
+                        : EVENT_TYPES.ENTER_DESTINATION;
+                      
+                      logEvent(enterEventType, { 
+                        value: customOption,
+                        inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
+                        timestamp: new Date().toISOString(),
+                        page: 'trip_form',
+                        selectionMethod: 'custom_input',
+                        isCustomValue: true,
+                        searchValue: customOption
+                      });
+                      
+                      if (typeof window !== "undefined") {
+                        sessionStorage.setItem(
+                          placeholder === "Pickup location"
+                            ? "__ud_pickup"
+                            : "__ud_dropoff",
+                          customOption
+                        );
+                      }
+                    }}
+                    className="flex gap-3 w-full text-left items-start px-3 py-3 border-b last:border-b-0 border-gray-100 hover:bg-[#e6f6fc] bg-blue-50"
+                  >
+                    <span className="mt-0.5">
+                      <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
+                        <rect
+                          x="4"
+                          y="4"
+                          width="12"
+                          height="12"
+                          rx="6"
+                          stroke="#2095d2"
+                          strokeWidth="2"
+                          fill="#e6f6fc"
+                        />
+                        <path
+                          d="M10 7v6M7 10h6"
+                          stroke="#2095d2"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="text-black text-[15px] leading-[1.2] font-medium">
+                        Use "{searchValue}"
+                      </span>
+                      <span className="text-xs text-gray-700 leading-tight mt-0.5">
+                        Custom location
+                      </span>
+                    </span>
+                  </button>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
     </div>

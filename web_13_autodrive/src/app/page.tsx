@@ -285,8 +285,6 @@ function ProfileDropdown({
 }
 
 function HomePage() {
-  const [location, setLocation] = useState("");
-  const [destination, setDestination] = useState("");
   const router = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
   return (
@@ -376,90 +374,21 @@ function HomePage() {
             <br className="hidden md:inline" /> Request, explore, arrive.
           </h2>
           <div className="w-full max-w-md mx-auto md:mx-0 mt-2 bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 mb-8 border border-gray-100">
-            <AutocompleteInput
-              placeholder="Enter Location"
-              icon={
-                <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                  <circle
-                    cx="10"
-                    cy="10"
-                    r="8"
-                    stroke="#2095d2"
-                    strokeWidth="2"
-                    fill="#e6f6fc"
-                  />
-                  <circle cx="10" cy="10" r="3" fill="#2095d2" />
-                </svg>
-              }
-              value={location}
-              setValue={setLocation}
-              eventType={EVENT_TYPES.ENTER_LOCATION}
-            />
-            <AutocompleteInput
-              placeholder="Enter Destination"
-              icon={
-                <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                  <rect
-                    x="4"
-                    y="4"
-                    width="12"
-                    height="12"
-                    rx="6"
-                    stroke="#2095d2"
-                    strokeWidth="2"
-                    fill="#e6f6fc"
-                  />
-                  <path
-                    d="M10 7v3l2 2"
-                    stroke="#2095d2"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              }
-              value={destination}
-              setValue={setDestination}
-              eventType={EVENT_TYPES.ENTER_DESTINATION}
-            />
             <button
-              className="bg-[#2095d2] text-white px-4 py-3 rounded-md font-bold text-lg hover:bg-[#1273a0] transition" id="see-price"
+              className="bg-[#2095d2] text-white px-6 py-4 rounded-md font-bold text-xl hover:bg-[#1273a0] transition shadow-lg"
               onClick={() => {
-                console.log("Logging SEE_PRICES", { location, destination });
+                console.log("Logging GET_TRIP_CLICK");
                 logEvent(EVENT_TYPES.SEE_PRICES, { 
-                  location, 
-                  destination,
                   timestamp: new Date().toISOString(),
-                  hasLocation: !!location,
-                  hasDestination: !!destination,
-                  locationLength: location?.length || 0,
-                  destinationLength: destination?.length || 0
+                  sourcePage: 'home',
+                  buttonType: 'get_trip',
+                  action: 'navigate_to_trip_form'
                 });
-                if (typeof window !== "undefined") {
-                  window.sessionStorage.setItem("__ud_pickup", location);
-                  window.sessionStorage.setItem("__ud_dropoff", destination);
-                }
                 router.push("/ride/trip");
               }}
             >
-              See prices
+              Get a Trip
             </button>
-            
-            <button
-              className="bg-white text-[#2095d2] border-2 border-[#2095d2] px-4 py-3 rounded-md font-bold text-lg hover:bg-[#e6f6fc] transition"
-              onClick={() => {
-                console.log("Logging EXPLORE_FEATURES");
-                logEvent(EVENT_TYPES.EXPLORE_FEATURES, { 
-                  timestamp: new Date().toISOString(),
-                  sourcePage: 'home',
-                  buttonType: 'explore'
-                });
-                router.push("/help");
-              }}
-            >
-              Explore Features
-            </button>
-
           </div>
         </div>
         {/* Car image */}
