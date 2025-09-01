@@ -283,6 +283,82 @@ function PlaceSelect({
               }
             }, 200);
           }}
+          onKeyDown={(e) => {
+            if (isTyping && e.key === 'Enter' && searchValue.trim()) {
+              e.preventDefault();
+              
+              // Check if there's an exact match
+              const exactMatch = PLACES.find(option => 
+                option.label.toLowerCase() === searchValue.toLowerCase()
+              );
+              
+              if (exactMatch) {
+                // Use exact match if found
+                setValue(exactMatch.label);
+                setOpen(false);
+                setIsTyping(false);
+                setSearchValue("");
+                
+                // Log ENTER event for exact match
+                const enterEventType = placeholder.toLowerCase().includes('pickup') 
+                  ? EVENT_TYPES.ENTER_LOCATION 
+                  : EVENT_TYPES.ENTER_DESTINATION;
+                
+                logEvent(enterEventType, { 
+                  value: exactMatch.label,
+                  inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
+                  timestamp: new Date().toISOString(),
+                  page: 'trip_form',
+                  selectionMethod: 'enter_key_exact_match',
+                  selectedOption: {
+                    main: exactMatch.main,
+                    sub: exactMatch.sub,
+                    full: exactMatch.label
+                  }
+                });
+                
+                if (typeof window !== "undefined") {
+                  sessionStorage.setItem(
+                    placeholder === "Pickup location"
+                      ? "__ud_pickup"
+                      : "__ud_dropoff",
+                    exactMatch.label
+                  );
+                }
+              } else {
+                // Use custom value if no exact match
+                setValue(searchValue);
+                setOpen(false);
+                setIsTyping(false);
+                const customOption = searchValue;
+                setSearchValue("");
+                
+                // Log ENTER event for custom value
+                const enterEventType = placeholder.toLowerCase().includes('pickup') 
+                  ? EVENT_TYPES.ENTER_LOCATION 
+                  : EVENT_TYPES.ENTER_DESTINATION;
+                
+                logEvent(enterEventType, { 
+                  value: customOption,
+                  inputType: placeholder.toLowerCase().includes('pickup') ? 'location' : 'destination',
+                  timestamp: new Date().toISOString(),
+                  page: 'trip_form',
+                  selectionMethod: 'enter_key_custom',
+                  isCustomValue: true,
+                  searchValue: customOption
+                });
+                
+                if (typeof window !== "undefined") {
+                  sessionStorage.setItem(
+                    placeholder === "Pickup location"
+                      ? "__ud_pickup"
+                      : "__ud_dropoff",
+                    customOption
+                  );
+                }
+              }
+            }
+          }}
           onChange={(e) => {
             if (isTyping) {
               const newValue = e.target.value;
@@ -319,6 +395,11 @@ function PlaceSelect({
             }
           }}
         />
+        {isTyping && searchValue.trim() && (
+          <div className="text-xs text-gray-500 mt-1 px-1">
+            Press Enter to use "{searchValue}"
+          </div>
+        )}
         {open ? (
           <button
             tabIndex={-1}
