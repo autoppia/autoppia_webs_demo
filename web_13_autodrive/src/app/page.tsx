@@ -72,11 +72,27 @@ function AutocompleteInput({
               eventType, 
               value: e.target.value
             });
+            
+            // Log the enter event (existing functionality)
             logEvent(eventType, { 
               value: e.target.value,
               inputType: placeholder.toLowerCase().includes('location') ? 'location' : 'destination',
               timestamp: new Date().toISOString()
             });
+            
+            // Log search event when user types (new functionality)
+            if (e.target.value.trim()) {
+              const searchEventType = placeholder.toLowerCase().includes('location') 
+                ? EVENT_TYPES.SEARCH_LOCATION 
+                : EVENT_TYPES.SEARCH_DESTINATION;
+              
+              logEvent(searchEventType, { 
+                value: e.target.value,
+                inputType: placeholder.toLowerCase().includes('location') ? 'location' : 'destination',
+                timestamp: new Date().toISOString(),
+                searchType: 'typing'
+              });
+            }
           }}
           onFocus={() => setShow(true)}
           onBlur={() => setTimeout(() => setShow(false), 120)}
@@ -427,6 +443,21 @@ function HomePage() {
               }}
             >
               See prices
+            </button>
+            
+            <button
+              className="bg-white text-[#2095d2] border-2 border-[#2095d2] px-4 py-3 rounded-md font-bold text-lg hover:bg-[#e6f6fc] transition"
+              onClick={() => {
+                console.log("Logging EXPLORE_FEATURES");
+                logEvent(EVENT_TYPES.EXPLORE_FEATURES, { 
+                  timestamp: new Date().toISOString(),
+                  sourcePage: 'home',
+                  buttonType: 'explore'
+                });
+                router.push("/help");
+              }}
+            >
+              Explore Features
             </button>
 
           </div>
