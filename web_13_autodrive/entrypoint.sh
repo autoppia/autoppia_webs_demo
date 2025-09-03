@@ -3,8 +3,8 @@ set -e
 
 # --- Configuration Variables ---
 NODE_VERSION="v20"
-APP_NAME="autocalendar-app"
-APP_PORT="5009"
+APP_NAME="autodrive-app"
+APP_PORT="5011"
 APP_HOST="0.0.0.0"
 NVM_INSTALL_SCRIPT="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
 
