@@ -23,15 +23,17 @@ export default function Sidebar({
   inboxCount = 0,
   todayCount = 0,
   completedCount = 0,
+  className,
 }: {
   onSelect?: (v: string) => void;
   selected?: string;
   inboxCount?: number;
   todayCount?: number;
   completedCount?: number;
+  className?: string;
 }) {
   return (
-    <aside className="w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-between fixed top-0 left-0 h-full px-4 pb-4 pt-2 z-30">
+    <aside className={className || "w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-between fixed top-0 left-0 h-full px-4 pb-4 pt-2 z-30"}>
       <div>
         {/* Profile */}
         <div className="flex items-center mb-6 px-1 gap-2">
