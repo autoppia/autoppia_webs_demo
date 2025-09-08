@@ -9,7 +9,6 @@ import {
 import { NewEventModal } from "@/components/NewEventModal";
 import { CalendarEvent, COLORS, EVENTS } from "@/library/dataset";
 
-
 function getMonthMatrix(year: number, month: number) {
   // returns [[date, ...], ...weeks] covering 6 weeks
   const matrix = [];
@@ -26,11 +25,10 @@ function getMonthMatrix(year: number, month: number) {
   }
   return matrix;
 }
+
 function pad(num: number) {
   return num.toString().padStart(2, "0");
 }
-
-
 
 export default function CalendarPage() {
   const today = new Date();
@@ -45,22 +43,37 @@ export default function CalendarPage() {
   });
   const weeks = getMonthMatrix(curYear, curMonth);
   const getDateStr = (d: number) => `${curYear}-${pad(curMonth + 1)}-${pad(d)}`;
+
   return (
-    <section>
-      <h1 className="text-3xl font-extrabold mb-10 tracking-tight">Calendar</h1>
-      <div className="flex items-center gap-2 mb-6">
+    <section id="calendar-page">
+      <h1
+        id="calendar-title"
+        className="text-3xl font-extrabold mb-10 tracking-tight"
+      >
+        Calendar
+      </h1>
+      <div
+        id="calendar-navigation"
+        className="flex items-center gap-2 mb-6"
+      >
         <button
+          id="previous-month-button"
+          data-testid="previous-month-button"
           className="p-2 rounded-full hover:bg-accent-forest/20"
           aria-label="Previous Month"
           onClick={() =>
-            setCurMonth((m) =>
-              m === 0 ? (setCurYear((y) => y - 1), 11) : m - 1
+            setCurMonth((m: number) =>
+              m === 0 ? (setCurYear((y: number) => y - 1), 11) : m - 1
             )
           }
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
-        <span className="font-bold text-lg px-4" aria-live="polite">
+        <span
+          id="current-month-label"
+          className="font-bold text-lg px-4"
+          aria-live="polite"
+        >
           {monthLabel}
         </span>
         <button
@@ -78,7 +91,11 @@ export default function CalendarPage() {
       <div className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
         <div className="grid grid-cols-7 bg-neutral-bg-dark text-zinc-500 text-xs font-semibold uppercase tracking-wider">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-            <div key={d} className="py-3 px-1 text-center whitespace-nowrap">
+            <div
+              key={d}
+              id={`day-header-${d.toLowerCase()}`}
+              className="py-3 px-1 text-center whitespace-nowrap"
+            >
               {d}
             </div>
           ))}
@@ -93,29 +110,35 @@ export default function CalendarPage() {
                 curMonth === today.getMonth() &&
                 d === today.getDate();
               const dayEvents = d
-                ? events.filter((e) => e.date === dateStr)
+                ? events.filter((e: CalendarEvent) => e.date === dateStr)
                 : [];
               return (
                 <div
                   key={wi + "-" + di}
+                  id={d ? `calendar-cell-${dateStr}` : `calendar-cell-empty-${wi}-${di}`}
+                  data-testid={d ? `calendar-cell-${dateStr}` : undefined}
                   onClick={() => d && setOpenEventDate(dateStr)}
                   className={`relative border-b border-zinc-100 min-h-[86px] px-2 md:px-3 pt-2 group flex flex-col items-start ${
                     d ? "bg-white" : "bg-neutral-bg-dark"
                   }${isToday ? " ring-2 ring-accent-forest/70 z-10" : ""}`}
                 >
                   <div
+                    id={d ? `day-number-${dateStr}` : undefined}
                     className={`font-semibold text-zinc-400 text-xs ${
                       isToday && "text-accent-forest"
                     }`}
                   >
                     {d || ""}
                   </div>
-                  <div className="flex flex-col gap-1.5 mt-0.5 w-full">
-                    {dayEvents.map((ev) => (
+                  <div
+                    id={d ? `events-container-${dateStr}` : undefined}
+                    className="flex flex-col gap-1.5 mt-0.5 w-full"
+                  >
+                    {dayEvents.map((ev: CalendarEvent) => (
                       <div
                         key={ev.id}
                         className={`border rounded-xl px-2 py-1 w-full text-xs font-medium truncate shadow-sm cursor-pointer ${
-                          COLORS[ev.color]
+                          COLORS[ev.color as keyof typeof COLORS]
                         }`}
                         title={ev.label}
                       >
@@ -137,7 +160,7 @@ export default function CalendarPage() {
           <NewEventModal
             date={openEventDate}
             onClose={() => setOpenEventDate(null)}
-            onSave={(newEvent) => setEvents((prev) => [...prev, newEvent])}
+            onSave={(newEvent: CalendarEvent) => setEvents((prev) => [...prev, newEvent])}
           />
         )}
 
