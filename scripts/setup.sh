@@ -5,15 +5,15 @@ set -euo pipefail
 
 echo "🚀 Setting up web demos..."
 
-# 0. Remove all containers
-echo "[INFO] Removing all containers..."
-docker ps -aq | xargs -r docker rm -f || true
-
-# 1. Prune Docker environment
-echo "[INFO] Pruning volumes, images and networks..."
-docker volume rm $(docker volume ls -q) 2>/dev/null || true
-docker rmi $(docker images -q) --force 2>/dev/null || true
-docker network prune -f || true
+## 0. Remove all containers
+#echo "[INFO] Removing all containers..."
+#docker ps -aq | xargs -r docker rm -f || true
+#
+## 1. Prune Docker environment
+#echo "[INFO] Pruning volumes, images and networks..."
+#docker volume rm $(docker volume ls -q) 2>/dev/null || true
+#docker rmi $(docker images -q) --force 2>/dev/null || true
+#docker network prune -f || true
 
 # 2. Ensure external network for app ↔ front communication
 EXTERNAL_NET="apps_net"
@@ -160,6 +160,10 @@ case "$WEB_DEMO" in
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
     deploy_webs_server
     ;;
+  autowork)
+    deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
+    deploy_webs_server
+    ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
@@ -169,6 +173,7 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
     deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
     deploy_webs_server
     ;;
   *)
