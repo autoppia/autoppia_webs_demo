@@ -376,6 +376,11 @@ export default function PropertyDetail() {
                   id: prop.id,
                   guests_set: guests,
                   hotel: prop,
+                  // Include actual selected dates instead of hotel's default dates
+                  selected_checkin: checkinDate.toISOString(),
+                  selected_checkout: checkoutDate.toISOString(),
+                  selected_dates_from: checkinDate.toISOString().split('T')[0], // YYYY-MM-DD format
+                  selected_dates_to: checkoutDate.toISOString().split('T')[0], // YYYY-MM-DD format
                 });
                 
                 // Set flag to prevent duplicate logging on confirm page

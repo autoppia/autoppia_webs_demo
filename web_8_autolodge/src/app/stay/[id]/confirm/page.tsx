@@ -135,6 +135,11 @@ export default function ConfirmPage() {
         id: prop.id,
         guests_set: guests,
         hotel: prop,
+        // Include actual selected dates from URL instead of hotel's default dates
+        selected_checkin: dateRange.from.toISOString(),
+        selected_checkout: dateRange.to.toISOString(),
+        selected_dates_from: dateRange.from.toISOString().split('T')[0], // YYYY-MM-DD format
+        selected_dates_to: dateRange.to.toISOString().split('T')[0], // YYYY-MM-DD format
       });
     }
     
