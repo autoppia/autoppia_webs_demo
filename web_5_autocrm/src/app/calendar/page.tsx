@@ -57,8 +57,6 @@ export default function CalendarPage() {
         className="flex items-center gap-2 mb-6"
       >
         <button
-          id="previous-month-button"
-          data-testid="previous-month-button"
           className="p-2 rounded-full hover:bg-accent-forest/20"
           aria-label="Previous Month"
           onClick={() =>
