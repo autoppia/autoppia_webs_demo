@@ -40,9 +40,6 @@ export default function PropertyDetail() {
   const prop = useMemo(() => {
     const numId = Number(id);
     const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
-    if (!hotel && !isNaN(numId)) {
-      return DASHBOARD_HOTELS[numId] ?? DASHBOARD_HOTELS[0];
-    }
     return hotel ?? DASHBOARD_HOTELS[0];
   }, [id]);
   const stayFrom = new Date(prop.datesFrom);
@@ -376,7 +373,7 @@ export default function PropertyDetail() {
 
               try {
                 await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
-                  id,
+                  id: prop.id, // Use the actual hotel ID from the prop object
                   guests_set: guests,
                   hotel: prop,
                 });

@@ -2,7 +2,7 @@
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Calendar } from "@/components/ui/calendar";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import { useRef } from "react";
@@ -22,7 +22,11 @@ export default function ConfirmPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
-  const prop = DASHBOARD_HOTELS[Number(params.id)] ?? DASHBOARD_HOTELS[0];
+  const prop = useMemo(() => {
+    const numId = Number(params.id);
+    const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
+    return hotel ?? DASHBOARD_HOTELS[0];
+  }, [params.id]);
   const stayFrom = new Date(prop.datesFrom);
   const stayTo = new Date(prop.datesTo);
   // Load selection from search params (or defaults)
@@ -120,15 +124,6 @@ export default function ConfirmPage() {
   const showCvvError = hasTriedSubmit && !cvvFilled;
   const showZipError = hasTriedSubmit && !zipFilled;
   const showCountryError = hasTriedSubmit && !countryFilled;
-  useEffect(() => {
-    if (dateRange.from && dateRange.to && guests && params.id) {
-      logEvent(EVENT_TYPES.RESERVE_HOTEL, {
-        id: params.id,
-        guests_set: guests,
-        hotel: prop,
-      });
-    }
-  }, []); // empty deps = run once on mount
 
   return (
     <div className="w-full" style={{ marginTop: "38px" }}>
