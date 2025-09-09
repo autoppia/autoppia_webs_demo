@@ -373,10 +373,13 @@ export default function PropertyDetail() {
 
               try {
                 await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
-                  id: prop.id, // Use the actual hotel ID from the prop object
+                  id: prop.id,
                   guests_set: guests,
                   hotel: prop,
                 });
+                
+                // Set flag to prevent duplicate logging on confirm page
+                sessionStorage.setItem('reserveEventLogged', 'true');
               } catch (err) {
                 console.error("❌ logEvent failed", err);
               }

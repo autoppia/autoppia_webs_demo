@@ -125,6 +125,23 @@ export default function ConfirmPage() {
   const showZipError = hasTriedSubmit && !zipFilled;
   const showCountryError = hasTriedSubmit && !countryFilled;
 
+  useEffect(() => {
+    // Log RESERVE_HOTEL event when confirm page loads (for direct URL navigation)
+    // But only if it wasn't already logged by Reserve button click
+    const alreadyLogged = sessionStorage.getItem('reserveEventLogged');
+    
+    if (dateRange.from && dateRange.to && guests && params.id && !alreadyLogged) {
+      logEvent(EVENT_TYPES.RESERVE_HOTEL, {
+        id: prop.id,
+        guests_set: guests,
+        hotel: prop,
+      });
+    }
+    
+    // Clear the flag after checking
+    sessionStorage.removeItem('reserveEventLogged');
+  }, []); // Run once on mount
+
   return (
     <div className="w-full" style={{ marginTop: "38px" }}>
       <button
