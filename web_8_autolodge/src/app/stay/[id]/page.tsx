@@ -40,9 +40,6 @@ export default function PropertyDetail() {
   const prop = useMemo(() => {
     const numId = Number(id);
     const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
-    if (!hotel && !isNaN(numId)) {
-      return DASHBOARD_HOTELS[numId] ?? DASHBOARD_HOTELS[0];
-    }
     return hotel ?? DASHBOARD_HOTELS[0];
   }, [id]);
   const stayFrom = new Date(prop.datesFrom);
@@ -376,10 +373,18 @@ export default function PropertyDetail() {
 
               try {
                 await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
-                  id,
+                  id: prop.id,
                   guests_set: guests,
                   hotel: prop,
+                  // Include actual selected dates in local timezone (not UTC)
+                  selected_checkin: checkinDate.toLocaleDateString('en-CA'), // YYYY-MM-DD format
+                  selected_checkout: checkoutDate.toLocaleDateString('en-CA'), // YYYY-MM-DD format
+                  selected_dates_from: checkinDate.toLocaleDateString('en-CA'),
+                  selected_dates_to: checkoutDate.toLocaleDateString('en-CA'),
                 });
+                
+                // Set flag to prevent duplicate logging on confirm page
+                sessionStorage.setItem('reserveEventLogged', 'true');
               } catch (err) {
                 console.error("❌ logEvent failed", err);
               }

@@ -12,7 +12,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 2,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 189,
         host: {
@@ -51,7 +51,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 104,
         host: {
@@ -90,7 +90,7 @@ export const DASHBOARD_HOTELS = [
         beds: 3,
         baths: 2,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-21",
+        datesTo: "2025-08-15",
 
         price: 320,
         host: {
@@ -129,7 +129,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-09",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 142,
         host: {
@@ -168,7 +168,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 1,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 115,
         host: {
@@ -207,7 +207,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-09",
-        datesTo: "2025-07-21",
+        datesTo: "2025-08-15",
 
         price: 134,
         host: {
@@ -246,7 +246,7 @@ export const DASHBOARD_HOTELS = [
         beds: 3,
         baths: 2,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 245,
         host: {
@@ -285,7 +285,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-21",
+        datesTo: "2025-08-15",
 
         price: 129,
         host: {
@@ -324,7 +324,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 159,
         host: {
@@ -363,7 +363,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 198,
         host: {
@@ -402,7 +402,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-21",
+        datesTo: "2025-08-15",
 
         price: 154,
         host: {
@@ -441,7 +441,7 @@ export const DASHBOARD_HOTELS = [
         beds: 3,
         baths: 2,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 199,
         host: {
@@ -480,7 +480,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 123,
         host: {
@@ -519,7 +519,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 182,
         host: {
@@ -558,7 +558,7 @@ export const DASHBOARD_HOTELS = [
         beds: 3,
         baths: 2,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 215,
         host: {
@@ -597,7 +597,7 @@ export const DASHBOARD_HOTELS = [
         beds: 4,
         baths: 2,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 264,
         host: {
@@ -636,7 +636,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 179,
         host: {
@@ -675,7 +675,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 149,
         host: {
@@ -714,7 +714,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 158,
         host: {
@@ -753,7 +753,7 @@ export const DASHBOARD_HOTELS = [
         beds: 4,
         baths: 2,
         datesFrom: "2025-03-13",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 245,
         host: {
@@ -792,7 +792,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-13",
+        datesTo: "2025-07-15",
 
         price: 179,
         host: {
@@ -831,7 +831,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 2,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 289,
         host: {
@@ -870,7 +870,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 149,
         host: {
@@ -909,7 +909,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 199,
         host: {
@@ -948,7 +948,7 @@ export const DASHBOARD_HOTELS = [
         beds: 3,
         baths: 2,
         datesFrom: "2025-05-05",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 209,
         host: {
@@ -987,7 +987,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 189,
         host: {
@@ -1026,7 +1026,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 149,
         host: {
@@ -1065,7 +1065,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 139,
         host: {
@@ -1104,7 +1104,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 159,
         host: {
@@ -1143,7 +1143,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-05-03",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 219,
         host: {
@@ -1183,7 +1183,7 @@ export const DASHBOARD_HOTELS = [
         baths: 1,
 
         datesFrom: "2025-05-09",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 185,
         host: {
             name: "Camille",
@@ -1222,7 +1222,7 @@ export const DASHBOARD_HOTELS = [
         baths: 2,
 
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 210,
         host: {
             name: "Marco",
@@ -1261,7 +1261,7 @@ export const DASHBOARD_HOTELS = [
         baths: 2,
 
         datesFrom: "2025-03-09",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 175,
         host: {
             name: "Maya",
@@ -1300,7 +1300,7 @@ export const DASHBOARD_HOTELS = [
         baths: 3,
 
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 360,
         host: {
             name: "Lukas",
@@ -1339,7 +1339,7 @@ export const DASHBOARD_HOTELS = [
         baths: 1,
 
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 145,
         host: {
             name: "Nok",
@@ -1378,7 +1378,7 @@ export const DASHBOARD_HOTELS = [
         baths: 2,
 
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 220,
         host: {
             name: "Gianna",
@@ -1417,7 +1417,7 @@ export const DASHBOARD_HOTELS = [
         baths: 1,
 
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 155,
         host: {
             name: "Dylan",
@@ -1456,7 +1456,7 @@ export const DASHBOARD_HOTELS = [
         baths: 1,
 
         datesFrom: "2025-05-09",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 160,
         host: {
             name: "Carlos",
@@ -1495,7 +1495,7 @@ export const DASHBOARD_HOTELS = [
         baths: 2,
 
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 165,
         host: {
             name: "Valeria",
@@ -1534,7 +1534,7 @@ export const DASHBOARD_HOTELS = [
         baths: 1,
 
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
         price: 190,
         host: {
             name: "Astrid",
@@ -1572,7 +1572,7 @@ export const DASHBOARD_HOTELS = [
         beds: 3,
         baths: 2,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 220,
         host: {
@@ -1611,7 +1611,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 145,
         host: {
@@ -1650,7 +1650,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 180,
         host: {
@@ -1689,7 +1689,7 @@ export const DASHBOARD_HOTELS = [
         beds: 2,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 165,
         host: {
@@ -1728,7 +1728,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 132,
         host: {
@@ -1767,7 +1767,7 @@ export const DASHBOARD_HOTELS = [
         beds: 3,
         baths: 2,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 174,
         host: {
@@ -1806,7 +1806,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 210,
         host: {
@@ -1845,7 +1845,7 @@ export const DASHBOARD_HOTELS = [
         beds: 4,
         baths: 2,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 198,
         host: {
@@ -1884,7 +1884,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-07-12",
-        datesTo: "2025-07-16",
+        datesTo: "2025-08-25",
 
         price: 205,
         host: {
@@ -1923,7 +1923,7 @@ export const DASHBOARD_HOTELS = [
         beds: 1,
         baths: 1,
         datesFrom: "2025-05-09",
-        datesTo: "2025-07-21",
+        datesTo: "2025-08-15",
 
         price: 139,
         host: {
