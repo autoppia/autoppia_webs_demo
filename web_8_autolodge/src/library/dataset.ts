@@ -419,7 +419,7 @@ export const DASHBOARD_HOTELS = [
             {
                 icon: "📍",
                 title: "Near Sagrada Familia",
-                desc: "5-minute walk to Gaudí’s masterpiece.",
+                desc: "5-minute walk to Gaudí's masterpiece.",
             },
             {
                 icon: "🔍",
@@ -491,7 +491,7 @@ export const DASHBOARD_HOTELS = [
         amenities: [
             {
                 icon: "💻",
-                title: "Writer’s nook",
+                title: "Writer's nook",
                 desc: "Quiet corner for reading and journaling.",
             },
             {
