@@ -29,19 +29,32 @@ export default function ConfirmPage() {
   const urlCheckin = search.get("checkin");
   const urlCheckout = search.get("checkout");
   const urlGuests = search.get("guests");
-  const [dateOpen, setDateOpen] = useState(false);
-  const [guestsOpen, setGuestsOpen] = useState(false);
-  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+
+  // Validate URL parameters
+  const parseDateSafely = (dateStr: string | null): Date | null => {
+    if (!dateStr) return null;
+    try {
+      const parsed = parseISO(dateStr);
+      if (isNaN(parsed.getTime())) return null;
+      return toStartOfDay(parsed);
+    } catch (e) {
+      console.error(`Invalid date format for ${dateStr}:`, e);
+      return null;
+    }
+  };
 
   const [dateRange, setDateRange] = useState<{
     from: Date | null;
     to: Date | null;
   }>({
-    from: urlCheckin ? parseISO(urlCheckin) : toStartOfDay(stayFrom),
-    to: urlCheckout ? parseISO(urlCheckout) : toStartOfDay(stayTo),
+    from: parseDateSafely(urlCheckin) ?? toStartOfDay(stayFrom),
+    to: parseDateSafely(urlCheckout) ?? toStartOfDay(stayTo),
   });
   const [guests, setGuests] = useState(Number(urlGuests) || 1);
   const [prevGuests, setPrevGuests] = useState(1);
+  const [dateOpen, setDateOpen] = useState(false);
+  const [guestsOpen, setGuestsOpen] = useState(false);
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   // For pricing
   const nights =
     dateRange.from && dateRange.to
@@ -136,14 +149,18 @@ export default function ConfirmPage() {
       params.id &&
       !alreadyLogged
     ) {
+      console.log("RESERVE_HOTEL - Raw dates:", {
+        from: dateRange.from.toISOString(),
+        to: dateRange.to.toISOString(),
+      });
       logEvent(EVENT_TYPES.RESERVE_HOTEL, {
         id: prop.id,
         guests_set: guests,
         hotel: prop,
         selected_checkin: format(dateRange.from, "yyyy-MM-dd"),
-        selected_checkout: format(addDays(dateRange.to, -1), "yyyy-MM-dd"), // Log last night
+        selected_checkout: format(dateRange.to, "yyyy-MM-dd"), // Log actual checkout date
         selected_dates_from: format(dateRange.from, "yyyy-MM-dd"),
-        selected_dates_to: format(addDays(dateRange.to, -1), "yyyy-MM-dd"), // Log last night
+        selected_dates_to: format(dateRange.to, "yyyy-MM-dd"), // Log actual checkout date
       });
     }
 
@@ -185,7 +202,7 @@ export default function ConfirmPage() {
                 </div>
                 <div className="flex-1 text-neutral-800 tracking-wide">
                   {dateRange.from && format(dateRange.from, "MMM d")} –{" "}
-                  {dateRange.to && format(addDays(dateRange.to, -1), "MMM d")}
+                  {dateRange.to && format(dateRange.to, "MMM d")} {/* Display actual checkout date */}
                 </div>
                 <button
                   onClick={() => {
@@ -214,8 +231,8 @@ export default function ConfirmPage() {
                   >
                     <Calendar
                       numberOfMonths={2}
-                      fromDate={undefined}
-                      toDate={undefined}
+                      fromDate={stayFrom}
+                      toDate={stayTo}
                       selected={{
                         from: dateRange.from ?? undefined,
                         to: dateRange.to ?? undefined,
@@ -226,13 +243,24 @@ export default function ConfirmPage() {
 
                         const { from, to } = range;
 
-                        setDateRange({ from: from ?? null, to: to ?? null });
+                        // Validate to date to ensure it matches the selected day
+                        let adjustedTo = to;
+                        if (to) {
+                          adjustedTo = toStartOfDay(to);
+                          console.log("EDIT_CHECK_IN_OUT_DATES - Raw dates:", {
+                            from: from?.toISOString(),
+                            to: to?.toISOString(),
+                            adjustedTo: adjustedTo.toISOString(),
+                          });
+                        }
 
-                        if (from && to) {
+                        setDateRange({ from: from ?? null, to: adjustedTo ?? null });
+
+                        if (from && adjustedTo) {
                           logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
                             dateRange: {
                               from: format(from, "yyyy-MM-dd"),
-                              to: format(addDays(to, -1), "yyyy-MM-dd"), // Log last night
+                              to: format(adjustedTo, "yyyy-MM-dd"), // Log actual checkout date
                             },
                             source: "calendar_picker",
                             hotel: prop,
@@ -242,7 +270,7 @@ export default function ConfirmPage() {
 
                           pushWith({
                             checkin: from,
-                            checkout: to,
+                            checkout: adjustedTo,
                           });
                         }
                       }}
@@ -295,20 +323,15 @@ export default function ConfirmPage() {
                     onChange={(e) => setCardNumber(e.target.value)}
                     placeholder="0000 0000 0000 0000"
                     className={`w-full border rounded-md px-3 py-2 text-[16px] tracking-wider bg-white focus:ring-2 ring-neutral-200 ${
-                      hasTriedSubmit &&
-                      cardNumber.trim().replace(/\s/g, "").length < 14
-                        ? "border-red-500 ring-red-200"
-                        : ""
+                      showCardError ? "border-red-500 ring-red-200" : ""
                     }`}
                     maxLength={19}
                   />
-
-                  {hasTriedSubmit &&
-                    cardNumber.trim().replace(/\s/g, "").length < 14 && (
-                      <p className="text-red-500 text-sm mt-1">
-                        Card number is required
-                      </p>
-                    )}
+                  {showCardError && (
+                    <p className="text-red-500 text-sm mt-1">
+                      Card number is required
+                    </p>
+                  )}
                 </div>
                 <div className="flex gap-2 mt-2 px-3">
                   <div className="flex-1">
@@ -322,12 +345,10 @@ export default function ConfirmPage() {
                       placeholder="MM / YY"
                       onChange={(e) => setExp(e.target.value)}
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
-                        hasTriedSubmit && exp.trim().length < 3
-                          ? "border-red-500 ring-red-200"
-                          : ""
+                        showExpError ? "border-red-500 ring-red-200" : ""
                       }`}
                     />
-                    {hasTriedSubmit && exp.trim().length < 3 && (
+                    {showExpError && (
                       <p className="text-red-500 text-sm mt-1">
                         Expiration is required
                       </p>
@@ -344,12 +365,10 @@ export default function ConfirmPage() {
                       onChange={(e) => setCvv(e.target.value)}
                       placeholder="123"
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
-                        hasTriedSubmit && cvv.trim().length < 3
-                          ? "border-red-500 ring-red-200"
-                          : ""
+                        showCvvError ? "border-red-500 ring-red-200" : ""
                       }`}
                     />
-                    {hasTriedSubmit && cvv.trim().length < 3 && (
+                    {showCvvError && (
                       <p className="text-red-500 text-sm mt-1">
                         CVV is required
                       </p>
@@ -367,12 +386,10 @@ export default function ConfirmPage() {
                     onChange={(e) => setZip(e.target.value)}
                     placeholder="ZIP code"
                     className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
-                      hasTriedSubmit && zip.trim().length === 0
-                        ? "border-red-500 ring-red-200"
-                        : ""
+                      showZipError ? "border-red-500 ring-red-200" : ""
                     }`}
                   />
-                  {hasTriedSubmit && zip.trim().length === 0 && (
+                  {showZipError && (
                     <p className="text-red-500 text-sm mt-1">
                       ZIP code is required
                     </p>
