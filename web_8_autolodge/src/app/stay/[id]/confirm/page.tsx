@@ -13,10 +13,6 @@ function toStartOfDay(date: Date): Date {
   return d;
 }
 
-function toUtcIsoWithTimezone(date: Date) {
-  return date.toISOString().replace("Z", "+00:00");
-}
-
 export default function ConfirmPage() {
   const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -41,8 +37,8 @@ export default function ConfirmPage() {
     from: Date | null;
     to: Date | null;
   }>({
-    from: urlCheckin ? new Date(urlCheckin) : toStartOfDay(stayFrom),
-    to: urlCheckout ? new Date(urlCheckout) : toStartOfDay(stayTo),
+    from: urlCheckin ? parseISO(urlCheckin) : toStartOfDay(stayFrom),
+    to: urlCheckout ? parseISO(urlCheckout) : toStartOfDay(stayTo),
   });
   const [guests, setGuests] = useState(Number(urlGuests) || 1);
   const [prevGuests, setPrevGuests] = useState(1);
@@ -58,12 +54,14 @@ export default function ConfirmPage() {
   const serviceFee = 34;
   const priceSubtotal = prop.price * nights;
   const total = priceSubtotal + cleaningFee + serviceFee;
+
   function isWithinAvailable(date: Date) {
     return isWithinInterval(date, {
       start: stayFrom,
       end: addDays(stayTo, -1),
     });
   }
+
   // Update confirm page with params
   function pushWith(newVals: {
     checkin?: Date;
@@ -73,11 +71,12 @@ export default function ConfirmPage() {
     const search = [];
     const f = newVals.checkin || dateRange.from;
     const t = newVals.checkout || dateRange.to;
-    if (f) search.push(`checkin=${toUtcIsoWithTimezone(f)}`);
-    if (t) search.push(`checkout=${toUtcIsoWithTimezone(t)}`);
+    if (f) search.push(`checkin=${format(f, "yyyy-MM-dd")}`);
+    if (t) search.push(`checkout=${format(t, "yyyy-MM-dd")}`);
     search.push(`guests=${newVals.guests ?? guests}`);
     router.replace(`/stay/${params.id}/confirm?` + search.join("&"));
   }
+
   const [hostMessage, setHostMessage] = useState("");
   const [toast, setToast] = useState<string | null>(null);
   const hostYear = 2014;
@@ -93,6 +92,7 @@ export default function ConfirmPage() {
       return () => clearTimeout(timer);
     }
   }, [toast]);
+
   // Close popovers on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -106,6 +106,7 @@ export default function ConfirmPage() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
   const [cardNumber, setCardNumber] = useState("");
   const [exp, setExp] = useState("");
   const [cvv, setCvv] = useState("");
@@ -126,26 +127,28 @@ export default function ConfirmPage() {
   const showCountryError = hasTriedSubmit && !countryFilled;
 
   useEffect(() => {
-    // Log RESERVE_HOTEL event when confirm page loads (for direct URL navigation)
-    // But only if it wasn't already logged by Reserve button click
-    const alreadyLogged = sessionStorage.getItem('reserveEventLogged');
-    
-    if (dateRange.from && dateRange.to && guests && params.id && !alreadyLogged) {
+    const alreadyLogged = sessionStorage.getItem("reserveEventLogged");
+
+    if (
+      dateRange.from &&
+      dateRange.to &&
+      guests &&
+      params.id &&
+      !alreadyLogged
+    ) {
       logEvent(EVENT_TYPES.RESERVE_HOTEL, {
         id: prop.id,
         guests_set: guests,
         hotel: prop,
-        // Include actual selected dates in local timezone (not UTC)
-        selected_checkin: dateRange.from.toLocaleDateString('en-CA'), // YYYY-MM-DD format
-        selected_checkout: dateRange.to.toLocaleDateString('en-CA'), // YYYY-MM-DD format
-        selected_dates_from: dateRange.from.toLocaleDateString('en-CA'),
-        selected_dates_to: dateRange.to.toLocaleDateString('en-CA'),
+        selected_checkin: format(dateRange.from, "yyyy-MM-dd"),
+        selected_checkout: format(addDays(dateRange.to, -1), "yyyy-MM-dd"), // Log last night
+        selected_dates_from: format(dateRange.from, "yyyy-MM-dd"),
+        selected_dates_to: format(addDays(dateRange.to, -1), "yyyy-MM-dd"), // Log last night
       });
     }
-    
-    // Clear the flag after checking
-    sessionStorage.removeItem('reserveEventLogged');
-  }, []); // Run once on mount
+
+    sessionStorage.removeItem("reserveEventLogged");
+  }, [dateRange.from, dateRange.to, guests, params.id, prop]);
 
   return (
     <div className="w-full" style={{ marginTop: "38px" }}>
@@ -205,7 +208,10 @@ export default function ConfirmPage() {
                   Edit
                 </button>
                 {dateOpen && (
-                  <div id="dateRangeCalendar" className="absolute left-0 top-8 z-40 bg-white p-3 rounded-2xl shadow-xl border">
+                  <div
+                    id="dateRangeCalendar"
+                    className="absolute left-0 top-8 z-40 bg-white p-3 rounded-2xl shadow-xl border"
+                  >
                     <Calendar
                       numberOfMonths={2}
                       fromDate={undefined}
@@ -220,23 +226,13 @@ export default function ConfirmPage() {
 
                         const { from, to } = range;
 
-                        // Set partial range to allow selecting end date later
                         setDateRange({ from: from ?? null, to: to ?? null });
 
-                        // Only proceed when both start and end dates are selected
                         if (from && to) {
                           logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
                             dateRange: {
-                              from: (() => {
-                                const fromDate = new Date(from);
-                                fromDate.setDate(fromDate.getDate() + 1);
-                                return fromDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
-                              })(),
-                              to: (() => {
-                                const toDate = new Date(to);
-                                toDate.setDate(toDate.getDate()+1);
-                                return toDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
-                              })(),
+                              from: format(from, "yyyy-MM-dd"),
+                              to: format(addDays(to, -1), "yyyy-MM-dd"), // Log last night
                             },
                             source: "calendar_picker",
                             hotel: prop,
@@ -446,7 +442,7 @@ export default function ConfirmPage() {
                     message: hostMessage.trim(),
                     hostName: prop.host.name,
                     source: "message_host_section",
-                    hotel: prop, // Pass the whole hotel object
+                    hotel: prop,
                   });
 
                   showToast(" ✅ Message sent.");
@@ -533,32 +529,22 @@ export default function ConfirmPage() {
                 return; // Don't proceed if any field is incomplete
               }
               logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
-                // checkin: dateRange.from
-                //   ? toUtcIsoWithTimezone(dateRange.from)
-                //   : null,
-                // checkout: dateRange.to
-                //   ? toUtcIsoWithTimezone(dateRange.to)
-                //   : null,
                 guests_set: guests,
-                // listingTitle: prop.title,
-                // pricePerNight: prop.price,
                 nights,
                 priceSubtotal,
                 cleaningFee,
                 serviceFee,
                 total,
-                // paymentMethod: "credit_card",
                 cardNumber,
                 expiration: exp,
                 cvv,
                 zip,
                 country,
-                // source: "confirmation_page",
-                hotel: prop, // Pass the whole hotel object
+                hotel: prop,
               });
 
               showToast("✅ Reservation complete! Thank you! 🙏");
-              // ✅ Reset form fields
+              // Reset form fields
               setCardNumber("");
               setExp("");
               setCvv("");
