@@ -365,11 +365,6 @@ export default function PropertyDetail() {
               const checkinDate = selected.from!;
               const checkoutDate = selected.to!;
 
-              console.log("🔔 Reserve clicked", {
-                checkin: checkinDate,
-                checkout: checkoutDate,
-                guests,
-              });
 
               try {
                 await logEvent(EVENT_TYPES.RESERVE_HOTEL, {

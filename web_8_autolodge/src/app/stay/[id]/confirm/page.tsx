@@ -149,10 +149,6 @@ export default function ConfirmPage() {
       params.id &&
       !alreadyLogged
     ) {
-      console.log("RESERVE_HOTEL - Raw dates:", {
-        from: dateRange.from.toISOString(),
-        to: dateRange.to.toISOString(),
-      });
       logEvent(EVENT_TYPES.RESERVE_HOTEL, {
         id: prop.id,
         guests_set: guests,
@@ -231,8 +227,6 @@ export default function ConfirmPage() {
                   >
                     <Calendar
                       numberOfMonths={2}
-                      fromDate={stayFrom}
-                      toDate={stayTo}
                       selected={{
                         from: dateRange.from ?? undefined,
                         to: dateRange.to ?? undefined,
@@ -247,11 +241,6 @@ export default function ConfirmPage() {
                         let adjustedTo = to;
                         if (to) {
                           adjustedTo = toStartOfDay(to);
-                          console.log("EDIT_CHECK_IN_OUT_DATES - Raw dates:", {
-                            from: from?.toISOString(),
-                            to: to?.toISOString(),
-                            adjustedTo: adjustedTo.toISOString(),
-                          });
                         }
 
                         setDateRange({ from: from ?? null, to: adjustedTo ?? null });
