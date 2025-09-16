@@ -750,7 +750,7 @@ export default function Home() {
         return;
       }
     }
-    logEvent(EVENT_TYPES.ADD_EVENT, {
+    const eventData = {
       source: "event-modal",
       title: eventModal.label,
       calendar: eventModal.calendar,
