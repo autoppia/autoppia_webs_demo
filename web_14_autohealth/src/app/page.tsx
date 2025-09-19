@@ -7,10 +7,10 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 
 export default function Home() {
   const nav = [
-    { href: "/appointments", title: "Appointments", desc: "Find a slot and book online", event: EVENT_TYPES.NAVIGATE_TO_APPOINTMENTS },
-    { href: "/doctors", title: "Doctors", desc: "Browse specialists and ratings", event: EVENT_TYPES.NAVIGATE_TO_DOCTORS },
-    { href: "/prescriptions", title: "Prescriptions", desc: "View your medications", event: EVENT_TYPES.NAVIGATE_TO_PRESCRIPTIONS },
-    { href: "/medical-records", title: "Medical Records", desc: "Upload and review files", event: EVENT_TYPES.VIEW_HEALTH_METRICS },
+    { href: "/appointments", title: "Appointments", desc: "Find a slot and book online", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
+    { href: "/doctors", title: "Doctors", desc: "Browse specialists and ratings", event: EVENT_TYPES.BROWSE_DOCTORS_CLICKED },
+    { href: "/prescriptions", title: "Prescriptions", desc: "View your medications", event: EVENT_TYPES.BROWSE_PRESCRIPTIONS_CLICKED },
+    { href: "/medical-records", title: "Medical Records", desc: "Upload and review files", event: EVENT_TYPES.BROWSE_MEDICAL_RECORDS_CLICKED },
   ];
 
   return (
@@ -26,7 +26,7 @@ export default function Home() {
           <Link href="/appointments">
             <Button 
               size="lg"
-              onClick={() => logEvent(EVENT_TYPES.NAVIGATE_TO_APPOINTMENTS, { source: "homepage_cta_button" })}
+              onClick={() => logEvent(EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED, { source: "homepage_cta_button" })}
             >
               Browse Appointments
             </Button>

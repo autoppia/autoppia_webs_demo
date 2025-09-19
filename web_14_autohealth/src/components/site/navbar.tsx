@@ -11,7 +11,7 @@ export default function Navbar() {
         <Link 
           href="/" 
           className="font-semibold text-emerald-700"
-          onClick={() => logEvent(EVENT_TYPES.NAVIGATE_TO_HOME, { source: "navbar_logo" })}
+          onClick={() => logEvent(EVENT_TYPES.BROWSE_HOME_CLICKED, { source: "navbar_logo" })}
         >
           AutoHealth
         </Link>
@@ -19,28 +19,28 @@ export default function Navbar() {
           <Link
             href="/appointments"
             className="text-sm text-muted-foreground hover:text-foreground"
-            onClick={() => logEvent(EVENT_TYPES.NAVIGATE_TO_APPOINTMENTS, { source: "navbar_link" })}
+            onClick={() => logEvent(EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED, { source: "navbar_link" })}
           >
             Appointments
           </Link>
           <Link
             href="/doctors"
             className="text-sm text-muted-foreground hover:text-foreground"
-            onClick={() => logEvent(EVENT_TYPES.NAVIGATE_TO_DOCTORS, { source: "navbar_link" })}
+            onClick={() => logEvent(EVENT_TYPES.BROWSE_DOCTORS_CLICKED, { source: "navbar_link" })}
           >
             Doctors
           </Link>
           <Link
             href="/prescriptions"
             className="text-sm text-muted-foreground hover:text-foreground"
-            onClick={() => logEvent(EVENT_TYPES.NAVIGATE_TO_PRESCRIPTIONS, { source: "navbar_link" })}
+            onClick={() => logEvent(EVENT_TYPES.BROWSE_PRESCRIPTIONS_CLICKED, { source: "navbar_link" })}
           >
             Prescriptions
           </Link>
           <Link
             href="/medical-records"
             className="text-sm text-muted-foreground hover:text-foreground"
-            onClick={() => logEvent(EVENT_TYPES.VIEW_HEALTH_METRICS, { source: "navbar_link", action: "navigate_to_medical_records" })}
+            onClick={() => logEvent(EVENT_TYPES.BROWSE_MEDICAL_RECORDS_CLICKED, { source: "navbar_link" })}
           >
             Medical Records
           </Link>
@@ -49,7 +49,7 @@ export default function Navbar() {
           <Link href="/appointments">
             <Button 
               size="sm"
-              onClick={() => logEvent(EVENT_TYPES.NAVIGATE_TO_APPOINTMENTS, { source: "navbar_cta_button" })}
+              onClick={() => logEvent(EVENT_TYPES.BOOK_NOW_CLICKED, { source: "navbar_cta_button" })}
             >
               Book now
             </Button>
