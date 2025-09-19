@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useRouter, useSearchParams } from "next/navigation";
+import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -23,7 +24,8 @@ export function Header() {
   const cartItemCount = state.totalItems;
 
   const searchParams = useSearchParams();
-  const seed = Number(searchParams.get("seed") ?? "1");
+  const rawSeed = Number(searchParams.get("seed") ?? "1");
+  const seed = getEffectiveSeed(rawSeed);
 
   const getChildOrderFromSeed = (seed = 1) => {
     const orderings = [

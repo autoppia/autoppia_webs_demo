@@ -75,6 +75,11 @@ export class DynamicDataProvider {
     return this.isEnabled;
   }
 
+  // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
+  public getEffectiveSeed(providedSeed: number = 1): number {
+    return this.isEnabled ? providedSeed : 1;
+  }
+
   // Static category data for static mode
   public getStaticCategories(): Array<{
     image: string;
@@ -170,6 +175,7 @@ export const getProductsByCategory = (category: string) => dynamicDataProvider.g
 export const getFeaturedProducts = (count?: number) => dynamicDataProvider.getFeaturedProducts(count);
 export const searchProducts = (query: string) => dynamicDataProvider.searchProducts(query);
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
+export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 
 // Static data helpers
 export const getStaticCategories = () => dynamicDataProvider.getStaticCategories();

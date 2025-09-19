@@ -9,6 +9,7 @@ import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
+import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
@@ -28,7 +29,8 @@ function ProductContent() {
 
   const seed = useMemo(() => {
     const s = searchParams.get("seed") ?? "1";
-    return s ? parseInt(s) : Math.floor(Math.random() * 1000);
+    const rawSeed = s ? parseInt(s) : Math.floor(Math.random() * 1000);
+    return getEffectiveSeed(rawSeed);
   }, [searchParams]);
 
   const order = seed % 3;

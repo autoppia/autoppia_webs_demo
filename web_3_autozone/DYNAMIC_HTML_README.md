@@ -14,12 +14,14 @@ This implementation adds config-driven dynamic HTML content generation to web_3_
 ### Setup Script Usage
 
 ```bash
-# Static mode (default behavior)
+# Static mode (default behavior) - layout always uses seed=1
 bash scripts/setup.sh --demo=autozone --enable_dynamic_html=false
 
-# Dynamic mode (seed-driven content)
+# Dynamic mode (seed-driven content) - layout varies with seed parameter
 bash scripts/setup.sh --demo=autozone --enable_dynamic_html=true
 ```
+
+**Important**: When `--enable_dynamic_html=false`, the layout will always use seed=1 regardless of the seed parameter in the URL. This ensures consistent layout behavior when dynamic HTML is disabled.
 
 ### Environment Variables
 
@@ -43,21 +45,24 @@ Key functions:
 - `getProductsByCategory(category)`: Filter by category
 - `searchProducts(query)`: Search functionality
 - `isDynamicModeEnabled()`: Check current mode
+- `getEffectiveSeed(providedSeed)`: Returns provided seed if dynamic mode enabled, otherwise returns 1
 
 ### 2. Updated Components
 
 #### Main Page (`src/app/page.tsx`)
-- Uses `isDynamicModeEnabled()` to determine data source
+- Uses `getEffectiveSeed()` to get the appropriate seed value
 - Maps seed data to category items when dynamic mode enabled
 - Falls back to static data when disabled
+- Layout remains consistent (seed=1) when dynamic HTML is disabled
 
 #### Search Page (`src/components/SearchPage.tsx`)
 - Uses `searchProducts()` for dynamic search
 - Returns empty results when static mode
 
 #### Product Detail Page (`src/app/[productId]/page.tsx`)
-- Uses `getDynamicProductById()` when dynamic mode enabled
+- Uses `getEffectiveSeed()` for layout variations
 - Falls back to static `getProductById()` when disabled
+- Layout remains consistent (seed=1) when dynamic HTML is disabled
 
 ### 3. Component Compatibility
 
@@ -117,6 +122,7 @@ React Components ← Data-driven rendering
 - Search returns empty results
 - Static category cards and images
 - Product detail pages work with existing static data
+- Layout always uses seed=1 (consistent regardless of URL seed parameter)
 
 #### Dynamic Mode (`enable_dynamic_html=true`)
 - Full seed-driven content generation
@@ -125,6 +131,7 @@ React Components ← Data-driven rendering
 - Category cards populated with real product data
 - Product detail pages work with seed data
 - All HTML generated from `products.ts` seed data
+- Layout varies based on seed parameter in URL
 
 ## File Structure
 

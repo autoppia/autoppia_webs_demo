@@ -6,6 +6,7 @@ import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { products, getProductsByCategory } from "@/data/products";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
 
 // Create category links for items
 const kitchenCategories = [
@@ -78,7 +79,8 @@ const FitnessProducts = getProductsByCategory("Fitness");
 
 function HomeContent() {
   const searchParams = useSearchParams();
-  const seed = Number(searchParams.get("seed") ?? "1");
+  const rawSeed = Number(searchParams.get("seed") ?? "1");
+  const seed = getEffectiveSeed(rawSeed);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

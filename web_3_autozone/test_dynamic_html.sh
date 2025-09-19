@@ -14,6 +14,9 @@ echo "✅ Static mode deployed. Check http://localhost:8002"
 echo "   - Should show static content without dynamic product data"
 echo "   - Search should return no results"
 echo "   - Product detail pages should work with static data"
+echo "   - Layout should remain consistent regardless of seed parameter (always seed=1)"
+echo "   - Try URLs: http://localhost:8002?seed=1 and http://localhost:8002?seed=2"
+echo "   - Both should show identical layouts"
 echo
 
 # Wait for user to test
@@ -30,6 +33,9 @@ echo "   - Search should return filtered results from products.ts"
 echo "   - Product detail pages should work with dynamic data"
 echo "   - Category cards should show real product data"
 echo "   - Product carousels should show filtered products by category"
+echo "   - Layout should vary based on seed parameter"
+echo "   - Try URLs: http://localhost:8003?seed=1 and http://localhost:8003?seed=2"
+echo "   - Should show different layouts based on seed value"
 echo
 
 # Wait for user to test
@@ -37,9 +43,9 @@ read -p "Press Enter after testing dynamic mode..."
 
 echo "🎉 Testing complete!"
 echo "Both modes should work independently:"
-echo "  - Static mode: Traditional behavior with hardcoded content"
-echo "  - Dynamic mode: Data-driven content from products.ts seed data"
+echo "  - Static mode: Traditional behavior with hardcoded content, consistent layout (seed=1)"
+echo "  - Dynamic mode: Data-driven content from products.ts seed data, variable layout"
 echo
 echo "To switch between modes, use:"
-echo "  --enable_dynamic_html=false  (static mode)"
-echo "  --enable_dynamic_html=true   (dynamic mode)"
+echo "  --enable_dynamic_html=false  (static mode, layout always seed=1)"
+echo "  --enable_dynamic_html=true   (dynamic mode, layout varies with seed)"
