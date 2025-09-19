@@ -152,7 +152,7 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     deploy_webs_server
     ;;
-  autolodge)
+  autodelivery)
     deploy_project "web_7_autodelivery" "$WEB_PORT" "" "web_7_autodelivery${WEB_PORT}"
     deploy_webs_server
     ;;
