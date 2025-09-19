@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${WEB_PORT}:8013"
+    restart: always
+    environment:
+      - API_URL=http://app:8080
+      - PORT=8013
+      - NODE_ENV=production
+    networks:
+      - apps_net
+
+networks:
+  apps_net:
+    external: true
