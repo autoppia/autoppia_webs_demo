@@ -18,12 +18,12 @@ export default function HireButton({
   return (
     <button
       onClick={() => {
-        logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-          expertName: expert.name,
-          expertSlug: expert.slug,
-          role: expert.role,
-          country: expert.country,
-        });
+        // logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
+        //   expertName: expert.name,
+        //   expertSlug: expert.slug,
+        //   role: expert.role,
+        //   country: expert.country,
+        // });
 
         router.push(`/expert/${expert.slug}/hire`);
       }}
