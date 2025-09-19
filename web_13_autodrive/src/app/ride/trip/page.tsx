@@ -769,7 +769,7 @@ export default function RideTripPage() {
       setTimeout(() => {
         setLoading(false);
         setShowRides(true);
-      }, 2000);
+      }, 20);
     }
   }
   
