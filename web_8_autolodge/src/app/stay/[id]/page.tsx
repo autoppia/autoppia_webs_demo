@@ -37,7 +37,11 @@ export default function PropertyDetail() {
   const didTrack = useRef(false);
   const params = useParams<{ id: string }>();
   const { id } = params;
-  const prop = DASHBOARD_HOTELS[Number(id)] ?? DASHBOARD_HOTELS[0];
+  const prop = useMemo(() => {
+    const numId = Number(id);
+    const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
+    return hotel ?? DASHBOARD_HOTELS[0];
+  }, [id]);
   const stayFrom = new Date(prop.datesFrom);
   const stayTo = new Date(prop.datesTo);
   const availableDates = useMemo(
@@ -361,18 +365,21 @@ export default function PropertyDetail() {
               const checkinDate = selected.from!;
               const checkoutDate = selected.to!;
 
-              console.log("🔔 Reserve clicked", {
-                checkin: checkinDate,
-                checkout: checkoutDate,
-                guests,
-              });
 
               try {
                 await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
-                  id,
+                  id: prop.id,
                   guests_set: guests,
                   hotel: prop,
+                  // Include actual selected dates in local timezone (not UTC)
+                  selected_checkin: checkinDate.toLocaleDateString('en-CA'), // YYYY-MM-DD format
+                  selected_checkout: checkoutDate.toLocaleDateString('en-CA'), // YYYY-MM-DD format
+                  selected_dates_from: checkinDate.toLocaleDateString('en-CA'),
+                  selected_dates_to: checkoutDate.toLocaleDateString('en-CA'),
                 });
+                
+                // Set flag to prevent duplicate logging on confirm page
+                sessionStorage.setItem('reserveEventLogged', 'true');
               } catch (err) {
                 console.error("❌ logEvent failed", err);
               }
