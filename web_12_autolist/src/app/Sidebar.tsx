@@ -45,10 +45,6 @@ export default function Sidebar({
         <ul className="mb-4">
           <li
             onClick={() => {
-              // logEvent(EVENT_TYPES.CHECK_SIDEBAR_INBOX_CLICKED, {
-              //   label: "Inbox",
-              //   count: inboxCount,
-              // });
            if (onSelect) onSelect("inbox");
             }}
             className={`flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
@@ -72,10 +68,6 @@ export default function Sidebar({
                 : "text-black hover:bg-gray-100")
             }
             onClick={() => {
-              // logEvent(EVENT_TYPES.CHECK_SIDEBAR_TODAY_CLICKED, {
-              //   label: "Today",
-              //   count: todayCount,
-              // });
             if (onSelect) onSelect("today");
             }}
           >
@@ -87,10 +79,6 @@ export default function Sidebar({
           </li>
           <li
             onClick={() => {
-              // logEvent(EVENT_TYPES.CHECK_SIDEBAR_COMPLETE_CLICKED, {
-              //   label: "Completed",
-              //   count: completedCount,
-              // });
                if (onSelect) onSelect("completed");
             }}
             className={`flex items-center gap-2 text-[16px] px-2.5 py-2 cursor-pointer rounded-lg ${
