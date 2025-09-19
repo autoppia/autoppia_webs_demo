@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 export default function MedicalRecordsPage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -13,7 +14,16 @@ export default function MedicalRecordsPage() {
     if (!newFiles) return;
     const arr = Array.from(newFiles);
     setFiles((prev) => [...prev, ...arr]);
-    console.log("upload-record", arr.map((f) => ({ name: f.name, type: f.type, size: f.size })));
+    
+    // Log upload event
+    logEvent(EVENT_TYPES.UPLOAD_HEALTH_DATA, {
+      files: arr.map((f) => ({ 
+        name: f.name, 
+        type: f.type, 
+        size: f.size 
+      }))
+    });
+    
     if (fileRef.current) fileRef.current.value = "";
   }
 
@@ -43,7 +53,12 @@ export default function MedicalRecordsPage() {
             <Button
               variant="outline"
               onClick={() => {
-                console.log("view-record", { index: idx, name: f.name });
+                logEvent(EVENT_TYPES.VIEW_HEALTH_METRICS, { 
+                  index: idx, 
+                  fileName: f.name,
+                  fileType: f.type,
+                  fileSize: f.size
+                });
               }}
             >
               View Record

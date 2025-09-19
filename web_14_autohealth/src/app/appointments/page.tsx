@@ -25,7 +25,16 @@ export default function AppointmentsPage() {
                 <TableCell>{a.date}</TableCell>
                 <TableCell>{a.time}</TableCell>
                 <TableCell className="text-right">
-                  <EventButton event="book-appointment" payload={{ id: a.id }}>
+                  <EventButton 
+                    event="BOOK_APPOINTMENT" 
+                    payload={{ 
+                      appointmentId: a.id, 
+                      doctorName: a.doctorName, 
+                      specialty: a.specialty, 
+                      date: a.date, 
+                      time: a.time 
+                    }}
+                  >
                     Book Appointment
                   </EventButton>
                 </TableCell>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { doctors } from "@/data/doctors";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { EventButton } from "@/components/event-button";
 import { Star } from "lucide-react";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -36,9 +39,29 @@ export default function DoctorsPage() {
             </CardContent>
             <CardFooter className="mt-auto flex gap-2">
               <Link href={`/doctors/${d.id}`}>
-                <Button variant="outline">View Profile</Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+                    doctorId: d.id,
+                    doctorName: d.name,
+                    specialty: d.specialty,
+                    rating: d.rating
+                  })}
+                >
+                  View Profile
+                </Button>
               </Link>
-              <EventButton event="book-now" payload={{ doctorId: d.id }}>Book Now</EventButton>
+              <EventButton 
+                event="BOOK_APPOINTMENT" 
+                payload={{ 
+                  doctorId: d.id, 
+                  doctorName: d.name, 
+                  specialty: d.specialty, 
+                  rating: d.rating 
+                }}
+              >
+                Book Now
+              </EventButton>
             </CardFooter>
           </Card>
         ))}

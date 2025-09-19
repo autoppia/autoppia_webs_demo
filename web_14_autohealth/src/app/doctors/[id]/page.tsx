@@ -8,8 +8,9 @@ export function generateStaticParams() {
   return doctors.map((d) => ({ id: d.id }));
 }
 
-export default function DoctorProfile({ params }: { params: { id: string } }) {
-  const doctor = doctors.find((d) => d.id === params.id);
+export default async function DoctorProfile({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const doctor = doctors.find((d) => d.id === id);
   if (!doctor) return notFound();
 
   return (
@@ -26,7 +27,16 @@ export default function DoctorProfile({ params }: { params: { id: string } }) {
           <p>
             {doctor.bio} This is a demo profile. Information, schedules, and contact details are placeholders.
           </p>
-          <EventButton event="contact-doctor" payload={{ doctorId: doctor.id }}>
+          <EventButton 
+            event="BOOK_APPOINTMENT" 
+            payload={{ 
+              doctorId: doctor.id, 
+              doctorName: doctor.name, 
+              specialty: doctor.specialty, 
+              rating: doctor.rating,
+              action: "contact_doctor"
+            }}
+          >
             Contact Doctor
           </EventButton>
         </CardContent>

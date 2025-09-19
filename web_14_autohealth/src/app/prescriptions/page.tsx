@@ -25,7 +25,16 @@ export default function PrescriptionsPage() {
                 <TableCell>{p.doctorName}</TableCell>
                 <TableCell>{p.startDate}</TableCell>
                 <TableCell className="text-right">
-                  <EventButton event="view-prescription" payload={{ id: p.id }}>
+                  <EventButton 
+                    event="VIEW_PRESCRIPTION" 
+                    payload={{ 
+                      prescriptionId: p.id, 
+                      medicineName: p.medicineName, 
+                      dosage: p.dosage, 
+                      doctorName: p.doctorName, 
+                      startDate: p.startDate 
+                    }}
+                  >
                     View Prescription
                   </EventButton>
                 </TableCell>
