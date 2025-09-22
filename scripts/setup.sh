@@ -161,7 +161,7 @@ case "$WEB_DEMO" in
     deploy_webs_server
     ;;
   autohealth)
-    deploy_project "web_10_autohealth" "$WEB_PORT" "" "autohealthk_${WEB_PORT}"
+    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealthk_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
