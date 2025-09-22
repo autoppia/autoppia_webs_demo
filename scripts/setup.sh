@@ -153,15 +153,15 @@ case "$WEB_DEMO" in
     deploy_webs_server
     ;;
   autolodge)
-    deploy_project "web_7_autodelivery" "$WEB_PORT" "" "web_7_autodelivery${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autolodge)
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
     deploy_webs_server
     ;;
   autowork)
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autohealth)
+    deploy_project "web_10_autohealth" "$WEB_PORT" "" "autohealthk_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
@@ -174,10 +174,11 @@ case "$WEB_DEMO" in
     deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autohealth' or 'all'."
     exit 1
     ;;
 esac
