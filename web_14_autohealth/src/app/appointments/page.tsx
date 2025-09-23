@@ -16,11 +16,14 @@ export default function AppointmentsPage() {
     // Log the initial booking attempt
     logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
       appointmentId: appointment.id,
+      doctorId: appointment.doctorId,
       doctorName: appointment.doctorName,
       specialty: appointment.specialty,
       date: appointment.date,
       time: appointment.time,
-      action: "open_booking_modal"
+      action: "open_booking_modal",
+      source: "appointments_page",
+      modalOpenTime: new Date().toISOString()
     });
 
     setSelectedAppointment(appointment);

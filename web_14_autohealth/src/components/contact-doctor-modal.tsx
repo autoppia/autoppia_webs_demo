@@ -90,9 +90,20 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
       logEvent(EVENT_TYPES.DOCTOR_CONTACTED_SUCCESSFULLY, {
         doctorId: doctor.id,
         doctorName: doctor.name,
+        specialty: doctor.specialty,
+        // Patient Information
         patientName: formData.patientName,
+        patientEmail: formData.patientEmail,
+        patientPhone: formData.patientPhone,
+        // Message Information
+        subject: formData.subject,
+        message: formData.message,
         urgency: formData.urgency,
-        contactTimestamp: new Date().toISOString()
+        preferredContactMethod: formData.preferredContactMethod,
+        appointmentRequest: formData.appointmentRequest,
+        // Success metadata
+        contactTimestamp: new Date().toISOString(),
+        success: true
       });
 
       alert("Your message has been sent successfully! The doctor will contact you within 24 hours.");

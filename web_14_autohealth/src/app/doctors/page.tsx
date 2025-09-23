@@ -27,11 +27,16 @@ export default function DoctorsPage() {
   const handleBookNow = (doctor: Doctor) => {
     // Log the book now event
     logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
+      appointmentId: `temp-${doctor.id}`,
       doctorId: doctor.id,
       doctorName: doctor.name,
       specialty: doctor.specialty,
       rating: doctor.rating,
-      action: "book_now_from_doctors_page"
+      date: new Date().toISOString().split('T')[0],
+      time: "10:00 AM",
+      action: "open_booking_modal",
+      source: "doctors_page",
+      modalOpenTime: new Date().toISOString()
     });
 
     setSelectedDoctor(doctor);

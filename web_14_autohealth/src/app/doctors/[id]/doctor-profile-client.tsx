@@ -10,6 +10,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useState } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
+import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -25,15 +26,22 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
   const handleBookAppointment = () => {
     logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
+      appointmentId: `temp-${doctor.id}`,
       doctorId: doctor.id,
       doctorName: doctor.name,
       specialty: doctor.specialty,
       rating: doctor.rating,
-      action: "book_from_profile"
+      date: new Date().toISOString().split('T')[0],
+      time: "10:00 AM",
+      action: "open_booking_modal",
+      source: "doctor_profile_page",
+      modalOpenTime: new Date().toISOString()
     });
+    setIsBookingModalOpen(true);
   };
 
   const handleContactDoctor = () => {
@@ -393,6 +401,19 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         open={isReviewsModalOpen}
         onOpenChange={setIsReviewsModalOpen}
         doctor={doctor}
+      />
+
+      <AppointmentBookingModal
+        open={isBookingModalOpen}
+        onOpenChange={setIsBookingModalOpen}
+        appointment={{
+          id: `temp-${doctor.id}`,
+          doctorId: doctor.id,
+          doctorName: doctor.name,
+          specialty: doctor.specialty,
+          date: new Date().toISOString().split('T')[0],
+          time: "10:00 AM"
+        }}
       />
     </div>
   );

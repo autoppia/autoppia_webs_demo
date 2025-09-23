@@ -77,11 +77,25 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
         specialty: appointment.specialty,
         date: appointment.date,
         time: appointment.time,
+        // Patient Information
         patientName: formData.patientName,
         patientEmail: formData.patientEmail,
+        patientPhone: formData.patientPhone,
         reasonForVisit: formData.reasonForVisit,
+        // Insurance Information
+        insuranceProvider: formData.insuranceProvider,
+        insuranceNumber: formData.insuranceNumber,
         hasInsurance: !!formData.insuranceProvider,
-        action: "confirm_booking"
+        // Emergency Contact
+        emergencyContact: formData.emergencyContact,
+        emergencyPhone: formData.emergencyPhone,
+        hasEmergencyContact: !!formData.emergencyContact,
+        // Additional Information
+        notes: formData.notes,
+        hasNotes: !!formData.notes,
+        // Form completion
+        action: "confirm_booking",
+        formCompletionTime: new Date().toISOString()
       });
 
       // Simulate API call
@@ -90,9 +104,30 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
       // Log successful booking
       logEvent(EVENT_TYPES.APPOINTMENT_BOOKED_SUCCESSFULLY, {
         appointmentId: appointment.id,
+        doctorId: appointment.doctorId,
         doctorName: appointment.doctorName,
+        specialty: appointment.specialty,
+        date: appointment.date,
+        time: appointment.time,
+        // Patient Information
         patientName: formData.patientName,
-        bookingTimestamp: new Date().toISOString()
+        patientEmail: formData.patientEmail,
+        patientPhone: formData.patientPhone,
+        reasonForVisit: formData.reasonForVisit,
+        // Insurance Information
+        insuranceProvider: formData.insuranceProvider,
+        insuranceNumber: formData.insuranceNumber,
+        hasInsurance: !!formData.insuranceProvider,
+        // Emergency Contact
+        emergencyContact: formData.emergencyContact,
+        emergencyPhone: formData.emergencyPhone,
+        hasEmergencyContact: !!formData.emergencyContact,
+        // Additional Information
+        notes: formData.notes,
+        hasNotes: !!formData.notes,
+        // Success metadata
+        bookingTimestamp: new Date().toISOString(),
+        success: true
       });
 
       alert("Appointment booked successfully!");
