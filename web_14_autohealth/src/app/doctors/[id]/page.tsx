@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 import { doctors } from "@/data/doctors";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar } from "@/components/ui/avatar";
-import { EventButton } from "@/components/event-button";
+import { DoctorProfileClient } from "./doctor-profile-client";
 
 export function generateStaticParams() {
   return doctors.map((d) => ({ id: d.id }));
@@ -13,34 +11,5 @@ export default async function DoctorProfile({ params }: { params: Promise<{ id: 
   const doctor = doctors.find((d) => d.id === id);
   if (!doctor) return notFound();
 
-  return (
-    <div className="container py-10">
-      <Card>
-        <CardHeader className="flex-row items-center gap-4">
-          <Avatar name={doctor.name} />
-          <div>
-            <CardTitle className="text-xl">{doctor.name}</CardTitle>
-            <div className="text-sm text-muted-foreground">{doctor.specialty}</div>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>
-            {doctor.bio} This is a demo profile. Information, schedules, and contact details are placeholders.
-          </p>
-          <EventButton 
-            event="BOOK_APPOINTMENT" 
-            payload={{ 
-              doctorId: doctor.id, 
-              doctorName: doctor.name, 
-              specialty: doctor.specialty, 
-              rating: doctor.rating,
-              action: "contact_doctor"
-            }}
-          >
-            Contact Doctor
-          </EventButton>
-        </CardContent>
-      </Card>
-    </div>
-  );
+  return <DoctorProfileClient doctor={doctor} />;
 }

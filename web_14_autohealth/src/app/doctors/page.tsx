@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { doctors } from "@/data/doctors";
+import { useState } from "react";
+import { doctors, type Doctor } from "@/data/doctors";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
-import { EventButton } from "@/components/event-button";
 import { Star } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -20,6 +21,23 @@ function Stars({ value }: { value: number }) {
 }
 
 export default function DoctorsPage() {
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
+  const handleBookNow = (doctor: Doctor) => {
+    // Log the book now event
+    logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
+      doctorId: doctor.id,
+      doctorName: doctor.name,
+      specialty: doctor.specialty,
+      rating: doctor.rating,
+      action: "book_now_from_doctors_page"
+    });
+
+    setSelectedDoctor(doctor);
+    setIsBookingModalOpen(true);
+  };
+
   return (
     <div className="container py-10">
       <h1 className="text-2xl font-semibold">Doctors</h1>
@@ -51,21 +69,30 @@ export default function DoctorsPage() {
                   View Profile
                 </Button>
               </Link>
-              <EventButton 
-                event="BOOK_APPOINTMENT" 
-                payload={{ 
-                  doctorId: d.id, 
-                  doctorName: d.name, 
-                  specialty: d.specialty, 
-                  rating: d.rating 
-                }}
+              <Button 
+                onClick={() => handleBookNow(d)}
+                className="bg-green-600 hover:bg-green-700"
               >
                 Book Now
-              </EventButton>
+              </Button>
             </CardFooter>
           </Card>
         ))}
       </div>
+
+      {/* Appointment Booking Modal */}
+      <AppointmentBookingModal
+        open={isBookingModalOpen}
+        onOpenChange={setIsBookingModalOpen}
+        appointment={selectedDoctor ? {
+          id: `temp-${selectedDoctor.id}`,
+          doctorId: selectedDoctor.id,
+          doctorName: selectedDoctor.name,
+          specialty: selectedDoctor.specialty,
+          date: new Date().toISOString().split('T')[0],
+          time: "10:00 AM"
+        } : null}
+      />
     </div>
   );
 }

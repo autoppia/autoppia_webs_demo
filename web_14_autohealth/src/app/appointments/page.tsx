@@ -1,8 +1,32 @@
+"use client";
+
+import { useState } from "react";
 import { appointments } from "@/data/appointments";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { EventButton } from "@/components/event-button";
+import { Button } from "@/components/ui/button";
+import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
+import { logEvent, EVENT_TYPES } from "@/library/events";
+import type { Appointment } from "@/data/appointments";
 
 export default function AppointmentsPage() {
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleBookAppointment = (appointment: Appointment) => {
+    // Log the initial booking attempt
+    logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
+      appointmentId: appointment.id,
+      doctorName: appointment.doctorName,
+      specialty: appointment.specialty,
+      date: appointment.date,
+      time: appointment.time,
+      action: "open_booking_modal"
+    });
+
+    setSelectedAppointment(appointment);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="container py-10">
       <h1 className="text-2xl font-semibold">Available Appointments</h1>
@@ -25,24 +49,24 @@ export default function AppointmentsPage() {
                 <TableCell>{a.date}</TableCell>
                 <TableCell>{a.time}</TableCell>
                 <TableCell className="text-right">
-                  <EventButton 
-                    event="BOOK_APPOINTMENT" 
-                    payload={{ 
-                      appointmentId: a.id, 
-                      doctorName: a.doctorName, 
-                      specialty: a.specialty, 
-                      date: a.date, 
-                      time: a.time 
-                    }}
+                  <Button 
+                    onClick={() => handleBookAppointment(a)}
+                    className="bg-blue-600 hover:bg-blue-700"
                   >
                     Book Appointment
-                  </EventButton>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+
+      <AppointmentBookingModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        appointment={selectedAppointment}
+      />
     </div>
   );
 }
