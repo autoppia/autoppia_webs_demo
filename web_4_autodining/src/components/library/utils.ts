@@ -1151,9 +1151,19 @@ export class SeedVariationManager {
   }
 }
 
+// Helper function to check if dynamic HTML is enabled
+export function isDynamicModeEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+}
+
 // Helper function to get seed from URL
 export function getSeedFromUrl(): number {
   if (typeof window === 'undefined') return 1;
+  
+  // If dynamic HTML is disabled, always return seed 1 (static mode)
+  if (!isDynamicModeEnabled()) {
+    return 1;
+  }
   
   const urlParams = new URLSearchParams(window.location.search);
   const seedParam = urlParams.get('seed');
@@ -1166,6 +1176,11 @@ export function getSeedFromUrl(): number {
 // Helper function to get seed from URL with fallback
 export function getSeedFromUrlWithFallback(fallback: number = 1): number {
   if (typeof window === 'undefined') return fallback;
+  
+  // If dynamic HTML is disabled, always return seed 1 (static mode)
+  if (!isDynamicModeEnabled()) {
+    return 1;
+  }
   
   const urlParams = new URLSearchParams(window.location.search);
   const seedParam = urlParams.get('seed');
