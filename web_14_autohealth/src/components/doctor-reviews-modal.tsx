@@ -129,29 +129,29 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
 
   const handleFilterChange = (rating: number | null) => {
     setFilterRating(rating);
-    logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+    logEvent(EVENT_TYPES.FILTER_REVIEWS, {
       doctorId: doctor?.id,
       doctorName: doctor?.name,
-      action: "filter_reviews",
+      specialty: doctor?.specialty,
       filterRating: rating
     });
   };
 
   const handleSortChange = (order: "newest" | "oldest" | "highest" | "lowest") => {
     setSortOrder(order);
-    logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+    logEvent(EVENT_TYPES.SORT_REVIEWS, {
       doctorId: doctor?.id,
       doctorName: doctor?.name,
-      action: "sort_reviews",
+      specialty: doctor?.specialty,
       sortOrder: order
     });
   };
 
   const handleClose = () => {
-    logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
+    logEvent(EVENT_TYPES.CANCEL_VIEW_REVIEWS, {
       doctorId: doctor?.id,
       doctorName: doctor?.name,
-      action: "close_reviews_modal"
+      specialty: doctor?.specialty
     });
     onOpenChange(false);
   };

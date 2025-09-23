@@ -119,10 +119,12 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
   };
 
   const handleCancel = () => {
-    logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
+    logEvent(EVENT_TYPES.CANCEL_BOOK_APPOINTMENT, {
       appointmentId: appointment?.id,
       doctorName: appointment?.doctorName,
-      action: "cancel_booking_modal"
+      specialty: appointment?.specialty,
+      date: appointment?.date,
+      time: appointment?.time
     });
     onOpenChange(false);
   };

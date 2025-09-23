@@ -118,10 +118,10 @@ export function ContactDoctorModal({ open, onOpenChange, doctor }: ContactDoctor
   };
 
   const handleCancel = () => {
-    logEvent(EVENT_TYPES.CONTACT_DOCTOR, {
+    logEvent(EVENT_TYPES.CANCEL_CONTACT_DOCTOR, {
       doctorId: doctor?.id,
       doctorName: doctor?.name,
-      action: "cancel_contact_modal"
+      specialty: doctor?.specialty
     });
     onOpenChange(false);
   };
