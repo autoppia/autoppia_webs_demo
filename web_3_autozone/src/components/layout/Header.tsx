@@ -15,7 +15,8 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses } from "@/utils/seedLayout";
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -26,51 +27,47 @@ export function Header() {
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
   const seed = getEffectiveSeed(rawSeed);
+  const layoutConfig = getLayoutConfig(seed);
+  const layoutClasses = getLayoutClasses(layoutConfig);
 
-  const getChildOrderFromSeed = (seed = 1) => {
-    const orderings = [
-      ["location", "search", "nav"],
-      ["nav", "search", "location"],
-      ["search", "location", "nav"],
-      ["search", "nav", "location"],
-      ["location", "nav", "search"],
-    ];
-    return orderings[seed % orderings.length];
+  // Map layout config to component order
+  const getComponentOrder = (config: any) => {
+    const orderMap: { [key: string]: string[] } = {
+      'logo': ['logo', 'search', 'nav'],
+      'search': ['search', 'logo', 'nav'],
+      'nav': ['nav', 'logo', 'search'],
+    };
+    
+    // Use headerOrder from config, fallback to default
+    return config.headerOrder || ['logo', 'search', 'nav'];
   };
 
-  const order = getChildOrderFromSeed(seed);
+  const order = getComponentOrder(layoutConfig);
 
   return (
     <header className="fixed top-0 z-50 w-full">
       {/* Main navigation bar */}
       <nav className="bg-white border-b border-gray-200 px-2 py-2 flex items-center gap-2 md:gap-4">
-        {/* Logo */}
-        <Link href="/" className="mr-2 flex-shrink-0">
-          <div className="bg-[#17A2B8] px-3 py-1 rounded flex items-center h-9">
-            <span className="font-bold text-white text-lg">AUTOZONE</span>
-          </div>
-        </Link>
-        {/* Deliver to */}
-        <div className="flex items-center w-full">
-          {order.map((key) => {
-            if (key === "location") {
+        {/* Header content with dynamic layout */}
+        <div className={`flex items-center w-full ${layoutClasses.header}`}>
+          {order.map((key: string) => {
+            if (key === "logo") {
               return (
-                <div
-                  key="location"
-                  className="text-gray-700 hidden md:flex items-start gap-1 flex-shrink-0"
-                >
-                  <MapPin size={18} className="mt-1 text-gray-400" />
-                  <div className="text-xs leading-tight">
-                    <span className="text-gray-400">Deliver to user</span>
-                    <p className="font-bold">San Francisco</p>
+                <Link key="logo" href="/" className="mr-2 flex-shrink-0">
+                  <div className="bg-[#17A2B8] px-3 py-1 rounded flex items-center h-9">
+                    <span className="font-bold text-white text-lg">AUTOZONE</span>
                   </div>
-                </div>
+                </Link>
               );
             }
 
             if (key === "search") {
+              const searchClasses = layoutConfig.searchPosition === 'full-width' 
+                ? 'flex-grow mx-1 md:mx-4' 
+                : 'flex-grow flex mx-1 md:mx-4';
+              
               return (
-                <div key="search" className="flex-grow flex mx-1 md:mx-4">
+                <div key="search" className={searchClasses}>
                   <div className="w-full flex">
                     <div className="flex items-center bg-gray-100 border-r border-gray-200 px-2 rounded-l-md">
                       <span className="text-xs font-medium text-gray-700">

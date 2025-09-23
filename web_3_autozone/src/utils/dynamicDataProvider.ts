@@ -1,14 +1,9 @@
 import type { Product } from "@/context/CartContext";
+import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
-  if (typeof window !== 'undefined') {
-    // Client-side: check environment variable or localStorage fallback
-    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true' || 
-           localStorage.getItem('enable_dynamic_html') === 'true';
-  }
-  // Server-side: check environment variable
-  return process.env.ENABLE_DYNAMIC_HTML === 'true';
+  return isDynamicEnabled();
 };
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
@@ -30,39 +25,33 @@ export class DynamicDataProvider {
   }
 
   private async loadProducts(): Promise<void> {
-    if (this.isEnabled) {
-      try {
-        // Dynamically import products only when dynamic HTML is enabled
-        const { products } = await import('@/data/products');
-        this.products = products;
-      } catch (error) {
-        console.warn('Failed to load dynamic products:', error);
-        this.products = [];
-      }
+    try {
+      // Always load products - the difference is in how we use them for layout
+      const { products } = await import('@/data/products');
+      this.products = products;
+    } catch (error) {
+      console.warn('Failed to load products:', error);
+      this.products = [];
     }
   }
 
   public getProducts(): Product[] {
-    return this.isEnabled ? this.products : [];
+    return this.products; // Always return products
   }
 
   public getProductById(id: string): Product | undefined {
-    if (!this.isEnabled) return undefined;
     return this.products.find((product) => product.id === id);
   }
 
   public getProductsByCategory(category: string): Product[] {
-    if (!this.isEnabled) return [];
     return this.products.filter((product) => product.category === category);
   }
 
   public getFeaturedProducts(count: number = 4): Product[] {
-    if (!this.isEnabled) return [];
     return this.products.slice(0, count);
   }
 
   public searchProducts(query: string): Product[] {
-    if (!this.isEnabled) return [];
     const lowercaseQuery = query.toLowerCase();
     return this.products.filter((product) => 
       product.title.toLowerCase().includes(lowercaseQuery) ||
@@ -80,14 +69,17 @@ export class DynamicDataProvider {
     return this.isEnabled ? providedSeed : 1;
   }
 
-  // Static category data for static mode
+  // Get layout configuration based on seed
+  public getLayoutConfig(seed?: number) {
+    return getEffectiveLayoutConfig(seed);
+  }
+
+  // Static category data - always available
   public getStaticCategories(): Array<{
     image: string;
     title: string;
     link?: string;
   }> {
-    if (this.isEnabled) return [];
-    
     return [
       {
         image: "/images/homepage_categories/air_fryer.jpg",
@@ -116,8 +108,6 @@ export class DynamicDataProvider {
     image: string;
     title: string;
   }> {
-    if (this.isEnabled) return [];
-    
     return [
       {
         image: "/images/homepage_categories/cleaning.jpg",
@@ -142,8 +132,6 @@ export class DynamicDataProvider {
     image: string;
     title: string;
   }> {
-    if (this.isEnabled) return [];
-    
     return [
       {
         image: "/images/homepage_categories/dining.jpg",
@@ -176,6 +164,7 @@ export const getFeaturedProducts = (count?: number) => dynamicDataProvider.getFe
 export const searchProducts = (query: string) => dynamicDataProvider.searchProducts(query);
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
+export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
 
 // Static data helpers
 export const getStaticCategories = () => dynamicDataProvider.getStaticCategories();

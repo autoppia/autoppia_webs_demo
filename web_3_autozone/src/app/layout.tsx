@@ -29,7 +29,9 @@ export default function RootLayout({
             <Header />
           </Suspense>
           {children}
-          <Footer />
+          <Suspense fallback={<div className="h-32 bg-white"></div>}>
+            <Footer />
+          </Suspense>
         </CartProvider>
       </body>
     </html>

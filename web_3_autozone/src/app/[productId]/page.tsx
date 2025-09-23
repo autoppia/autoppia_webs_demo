@@ -5,11 +5,10 @@ import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
-import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
@@ -440,7 +439,7 @@ function ProductContent() {
           <h2 className="text-xl font-bold mb-4">About This Item</h2>
           <div className="pl-5 text-sm">
             <ul className="list-disc space-y-2">
-              {product.description.split("\n\n").map((paragraph, idx) => (
+              {product.description.split("\n\n").map((paragraph: string, idx: number) => (
                 <li
                   key={`bullet-${paragraph.substring(0, 10)}-${idx}`}
                   className="mb-2"

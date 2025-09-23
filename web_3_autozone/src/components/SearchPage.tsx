@@ -1,13 +1,13 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { searchProducts } from "@/utils/dynamicDataProvider";
 
 const getTopMarginClass = () => {
   const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
@@ -20,11 +20,7 @@ export default function SearchPage() {
   const { addToCart } = useCart();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
 
-  const results = products.filter((p) => 
-    p.title.toLowerCase().includes(query) || 
-    p.brand?.toLowerCase().includes(query) ||
-    p.description?.toLowerCase().includes(query)
-  );
+  const results = searchProducts(query);
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);

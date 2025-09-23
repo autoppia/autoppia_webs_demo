@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-false}
     # En producción NO montes tu código: deja que la imagen lleve la build
     # volumes:
     #   - .:/app
@@ -15,6 +17,7 @@ services:
       - PORT=8002
       - NODE_ENV=production
       - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
+      - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
     networks:
       - apps_net
 

@@ -93,4 +93,104 @@
   .category-title {
     @apply text-xl font-bold mb-4;
   }
+
+  /* Dynamic Layout Classes */
+  
+  /* Header Layout Variations */
+  .search-left {
+    @apply justify-start;
+  }
+  
+  .search-center {
+    @apply justify-center;
+  }
+  
+  .search-right {
+    @apply justify-end;
+  }
+  
+  .search-full-width {
+    @apply w-full;
+  }
+  
+  .navbar-side {
+    @apply flex-col items-start;
+  }
+  
+  .navbar-hidden-top {
+    @apply hidden md:flex;
+  }
+  
+  .navbar-floating {
+    @apply absolute top-4 right-4 bg-white shadow-lg rounded-lg p-2;
+  }
+  
+  /* Content Layout Variations */
+  .content-reverse {
+    @apply flex-col-reverse;
+  }
+  
+  .content-centered {
+    @apply justify-center items-center;
+  }
+  
+  .content-wide {
+    @apply max-w-none mx-0;
+  }
+  
+  .content-narrow {
+    @apply max-w-4xl mx-auto;
+  }
+  
+  /* Card Layout Variations */
+  .cards-row {
+    @apply grid-cols-1 md:grid-cols-1 lg:grid-cols-1;
+  }
+  
+  .cards-column {
+    @apply grid-cols-1;
+  }
+  
+  .cards-masonry {
+    @apply columns-1 md:columns-2 lg:columns-3 gap-4;
+  }
+  
+  /* Button Style Variations */
+  .buttons-rounded {
+    @apply rounded-full;
+  }
+  
+  .buttons-outlined {
+    @apply border-2 border-current bg-transparent;
+  }
+  
+  .buttons-minimal {
+    @apply bg-transparent border-none shadow-none;
+  }
+  
+  /* Footer Style Variations */
+  .footer-minimal {
+    @apply py-4;
+  }
+  
+  .footer-expanded {
+    @apply py-16;
+  }
+  
+  .footer-centered {
+    @apply text-center;
+  }
+  
+  /* Spacing Variations */
+  .spacing-tight {
+    @apply gap-2 p-2;
+  }
+  
+  .spacing-loose {
+    @apply gap-8 p-8;
+  }
+  
+  .spacing-normal {
+    @apply gap-4 p-4;
+  }
 }

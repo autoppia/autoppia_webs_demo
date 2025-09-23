@@ -21,7 +21,7 @@ bash scripts/setup.sh --demo=autozone --enable_dynamic_html=false
 bash scripts/setup.sh --demo=autozone --enable_dynamic_html=true
 ```
 
-**Important**: When `--enable_dynamic_html=false`, the layout will always use seed=1 regardless of the seed parameter in the URL. This ensures consistent layout behavior when dynamic HTML is disabled.
+**Important**: When `--enable_dynamic_html=false`, the layout will always use seed=1 regardless of the seed parameter in the URL. This ensures consistent X-paths and layout behavior when dynamic HTML is disabled. All content remains the same - only the layout/X-paths change.
 
 ### Environment Variables
 
@@ -35,12 +35,12 @@ bash scripts/setup.sh --demo=autozone --enable_dynamic_html=true
 Central utility that manages data sources based on configuration:
 
 - **Singleton pattern**: Single instance manages data state
-- **Lazy loading**: Products only loaded when dynamic mode enabled
-- **Fallback support**: Returns empty arrays when static mode
+- **Always loaded**: Products always loaded for consistent content
+- **Layout control**: Only layout/X-paths change based on seed value
 - **Helper functions**: Easy access to filtered data
 
 Key functions:
-- `getProducts()`: Returns all products or empty array
+- `getProducts()`: Returns all products (always loaded)
 - `getProductById(id)`: Find specific product
 - `getProductsByCategory(category)`: Filter by category
 - `searchProducts(query)`: Search functionality
@@ -51,24 +51,24 @@ Key functions:
 
 #### Main Page (`src/app/page.tsx`)
 - Uses `getEffectiveSeed()` to get the appropriate seed value
-- Maps seed data to category items when dynamic mode enabled
-- Falls back to static data when disabled
+- Always uses static data for consistent content
+- Layout/X-paths vary based on seed value when dynamic mode enabled
 - Layout remains consistent (seed=1) when dynamic HTML is disabled
 
 #### Search Page (`src/components/SearchPage.tsx`)
-- Uses `searchProducts()` for dynamic search
-- Returns empty results when static mode
+- Uses `searchProducts()` for search functionality
+- Always returns search results (content is consistent)
 
 #### Product Detail Page (`src/app/[productId]/page.tsx`)
 - Uses `getEffectiveSeed()` for layout variations
-- Falls back to static `getProductById()` when disabled
+- Always uses `getProductById()` for consistent content
 - Layout remains consistent (seed=1) when dynamic HTML is disabled
 
 ### 3. Component Compatibility
 
 All existing components work with both modes:
-- **CategoryCard**: Accepts items as props (works with both static and dynamic data)
-- **ProductCarousel**: Accepts products as props (works with both modes)
+- **CategoryCard**: Accepts items as props (works with consistent data)
+- **ProductCarousel**: Accepts products as props (works with consistent data)
 - **SearchPage**: Uses dynamic provider for search results
 
 ## Data Flow
@@ -83,12 +83,15 @@ isDynamicModeEnabled() check
 ┌─────────────────┬─────────────────┐
 │   Static Mode   │  Dynamic Mode   │
 │                 │                 │
-│ Empty arrays    │ Load products   │
-│ Static defaults  │ from seed data  │
+│ Always load     │ Always load     │
+│ products        │ products        │
 │                 │                 │
+│ Seed = 1        │ Seed = provided │
+│ (consistent     │ (variable       │
+│ X-paths)        │ X-paths)        │
 └─────────────────┴─────────────────┘
     ↓                     ↓
-React Components ← Data-driven rendering
+React Components ← Layout-driven rendering
 ```
 
 ## Testing
@@ -118,19 +121,19 @@ React Components ← Data-driven rendering
 
 #### Static Mode (`enable_dynamic_html=false`)
 - Traditional behavior preserved
-- No dynamic product data
-- Search returns empty results
-- Static category cards and images
-- Product detail pages work with existing static data
-- Layout always uses seed=1 (consistent regardless of URL seed parameter)
+- All product data loaded (consistent content)
+- Search returns results (consistent functionality)
+- Static category cards and images (consistent content)
+- Product detail pages work with consistent data
+- Layout always uses seed=1 (consistent X-paths regardless of URL seed parameter)
 
 #### Dynamic Mode (`enable_dynamic_html=true`)
-- Full seed-driven content generation
-- Dynamic product lists and carousels
-- Functional search with filtered results
-- Category cards populated with real product data
-- Product detail pages work with seed data
-- All HTML generated from `products.ts` seed data
+- Full seed-driven layout generation
+- All product data loaded (consistent content)
+- Functional search with results (consistent functionality)
+- Category cards populated with consistent data
+- Product detail pages work with consistent data
+- All HTML generated with variable X-paths based on seed parameter
 - Layout varies based on seed parameter in URL
 
 ## File Structure
