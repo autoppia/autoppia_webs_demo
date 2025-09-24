@@ -11,7 +11,6 @@ import {
   getStaticCategories, 
   getStaticHomeEssentials, 
   getStaticRefreshSpace,
-  isDynamicModeEnabled,
   getLayoutConfig
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";

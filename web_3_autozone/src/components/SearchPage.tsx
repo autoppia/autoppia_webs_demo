@@ -50,7 +50,7 @@ export default function SearchPage() {
         className={`grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 ${getTopMarginClass()}`}
       >
         {results.map((product, index) => (
-          <Link
+          <Link id={product.id}
             key={product.id}
             href={`/${product.id}`}
             onClick={() =>

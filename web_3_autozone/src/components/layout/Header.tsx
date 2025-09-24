@@ -93,6 +93,7 @@ export function Header() {
                       className="flex-grow rounded-none border bg-white shadow-inner focus:bg-white focus-visible:ring-2 focus-visible:ring-amazon-blue px-3 text-gray-800"
                     />
                     <Button
+                      id="search-btn"
                       className="rounded-l-none bg-amazon-yellow hover:bg-amazon-darkYellow shadow"
                       onClick={() => {
                         logEvent(EVENT_TYPES.SEARCH_PRODUCT, {
