@@ -47,6 +47,20 @@ function ProductContent() {
     setIsLoading(false);
   }, [productId]);
 
+  // Log view event
+  useEffect(() => {
+    if (product) {
+      logEvent(EVENT_TYPES.VIEW_DETAIL, {
+        productId: product.id,
+        title: product.title,
+        price: product.price,
+        category: product.category,
+        brand: product.brand,
+        rating: product.rating,
+      });
+    }
+  }, [product]);
+
   const quantityInput = (
     <>
       <label htmlFor="quantity-select" className="mt-2 mb-1 block text-[15px]">

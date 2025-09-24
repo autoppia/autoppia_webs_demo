@@ -1,12 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSearchParams } from "next/navigation";
 
 interface CartItem {
   id: string;
@@ -22,9 +22,6 @@ export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
 
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q")?.toLowerCase() || "1";
-
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
   };
@@ -33,6 +30,7 @@ export function CartPageContent() {
     const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
     return margins[Math.floor(Math.random() * margins.length)];
   };
+  useEffect(() => {logEvent(EVENT_TYPES.VIEW_CART, {});}, []);
 
   const handleUpdateQuantity = (item: CartItem, newQuantity: number) => {
     const { id, title, quantity } = item;
