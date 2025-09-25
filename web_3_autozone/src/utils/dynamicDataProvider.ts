@@ -1,5 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { products } from "@/data/products";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -14,7 +15,7 @@ export class DynamicDataProvider {
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
-    this.loadProducts();
+    this.products = products;
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -22,17 +23,6 @@ export class DynamicDataProvider {
       DynamicDataProvider.instance = new DynamicDataProvider();
     }
     return DynamicDataProvider.instance;
-  }
-
-  private async loadProducts(): Promise<void> {
-    try {
-      // Always load products - the difference is in how we use them for layout
-      const { products } = await import('@/data/products');
-      this.products = products;
-    } catch (error) {
-      console.warn('Failed to load products:', error);
-      this.products = [];
-    }
   }
 
   public getProducts(): Product[] {
@@ -65,8 +55,18 @@ export class DynamicDataProvider {
   }
 
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
+  // Validates seed is between 1-300, defaults to 1 if invalid
   public getEffectiveSeed(providedSeed: number = 1): number {
-    return this.isEnabled ? providedSeed : 1;
+    if (!this.isEnabled) {
+      return 1;
+    }
+    
+    // Validate seed range (1-300)
+    if (providedSeed < 1 || providedSeed > 300) {
+      return 1;
+    }
+    
+    return providedSeed;
   }
 
   // Get layout configuration based on seed

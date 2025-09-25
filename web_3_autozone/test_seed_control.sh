@@ -27,8 +27,10 @@ bash ../scripts/setup.sh --demo=autozone --enable_dynamic_html=true --web_port=8
 
 echo "✅ Dynamic HTML enabled deployed. Check http://localhost:8003"
 echo "   - Should show dynamic content from seed data"
-echo "   - Layout should change based on seed parameter"
+echo "   - Layout should change based on seed parameter (1-300 range)"
 echo "   - Try URLs: http://localhost:8003?seed=1 and http://localhost:8003?seed=2"
+echo "   - Try extended range: http://localhost:8003?seed=76 (maps to layout 3)"
+echo "   - Try extended range: http://localhost:8003?seed=23 (maps to layout 1)"
 echo "   - Should show different layouts based on seed value"
 echo
 

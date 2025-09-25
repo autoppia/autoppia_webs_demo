@@ -226,7 +226,7 @@ function ProductContent() {
 
   return (
     <main
-      className="container mx-auto px-2 md:px-4 py-6 bg-white mt-20"
+      className="container mx-auto px-2 md:px-4 py-6 bg-white"
       suppressHydrationWarning
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -330,7 +330,7 @@ function ProductContent() {
 
         {/* Buy Box Right (Sticky on desktop, full-width mobile) */}
         <div className="md:col-span-1 w-full">
-          <aside className="border border-[#D5D9D9] bg-white rounded-lg shadow-sm p-4 md:sticky md:top-24 min-w-[275px] max-w-xs mx-auto md:mx-0 text-[15px]">
+          <aside className="border border-[#D5D9D9] bg-white rounded-lg shadow-sm p-4 md:sticky md:top-20 min-w-[275px] max-w-xs mx-auto md:mx-0 text-[15px]">
             <div className="mb-2 flex items-center">
               <span className="text-xs font-bold mr-2">Buy new:</span>
               <span className="ml-auto">

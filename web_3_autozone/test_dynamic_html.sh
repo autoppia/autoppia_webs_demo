@@ -33,8 +33,10 @@ echo "   - Search should return filtered results from products.ts"
 echo "   - Product detail pages should work with dynamic data"
 echo "   - Category cards should show real product data"
 echo "   - Product carousels should show filtered products by category"
-echo "   - Layout should vary based on seed parameter"
+echo "   - Layout should vary based on seed parameter (1-300 range)"
 echo "   - Try URLs: http://localhost:8003?seed=1 and http://localhost:8003?seed=2"
+echo "   - Try extended range: http://localhost:8003?seed=76 (maps to layout 3)"
+echo "   - Try extended range: http://localhost:8003?seed=23 (maps to layout 1)"
 echo "   - Should show different layouts based on seed value"
 echo
 

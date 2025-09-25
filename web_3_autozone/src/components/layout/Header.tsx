@@ -156,29 +156,31 @@ export function Header() {
           })}
         </div>
       </nav>
-      {/* Secondary navigation */}
-      <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
-        <Link href="/">
-          <button className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
-            <Menu size={18} className="mr-1" />
-            <span className="font-bold">All</span>
-          </button>
-        </Link>
-        <div className="flex gap-4 flex-grow overflow-x-auto no-scrollbar">
-          <span className="cursor-default text-gray-300">Rufus</span>
-          <span className="cursor-default text-gray-300">
-            Today&apos;s Deals
-          </span>
-          <span className="cursor-default text-gray-300">Buy Again</span>
-          <span className="cursor-default text-gray-300">Customer Service</span>
-          <span className="cursor-default text-gray-300">Registry</span>
-          <span className="cursor-default text-gray-300">Gift Cards</span>
-          <span className="cursor-default text-gray-300">Sell</span>
+      {/* Secondary navigation - hidden for floating navbar */}
+      {layoutConfig.navbarStyle !== 'floating' && (
+        <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
+          <Link href="/">
+            <button className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
+              <Menu size={18} className="mr-1" />
+              <span className="font-bold">All</span>
+            </button>
+          </Link>
+          <div className="flex gap-4 flex-grow overflow-x-auto no-scrollbar">
+            <span className="cursor-default text-gray-300">Rufus</span>
+            <span className="cursor-default text-gray-300">
+              Today&apos;s Deals
+            </span>
+            <span className="cursor-default text-gray-300">Buy Again</span>
+            <span className="cursor-default text-gray-300">Customer Service</span>
+            <span className="cursor-default text-gray-300">Registry</span>
+            <span className="cursor-default text-gray-300">Gift Cards</span>
+            <span className="cursor-default text-gray-300">Sell</span>
+          </div>
+          <div className="ml-auto font-bold whitespace-nowrap">
+            $5 flat delivery fee
+          </div>
         </div>
-        <div className="ml-auto font-bold whitespace-nowrap">
-          $5 flat delivery fee
-        </div>
-      </div>
+      )}
     </header>
   );
 }

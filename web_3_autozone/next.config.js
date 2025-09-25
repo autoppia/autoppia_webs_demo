@@ -1,14 +1,26 @@
-// Set default environment variables (only if not already set)
-// This ensures Docker build args are respected
+// Set default environment variables for local development
+// For local development (non-Docker), always enable dynamic HTML
+// Docker builds will override these values via build args
+const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
+const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
+
+// For local development, always default to true unless explicitly set to false
 if (!process.env.ENABLE_DYNAMIC_HTML) {
-  process.env.ENABLE_DYNAMIC_HTML = 'false';
+  process.env.ENABLE_DYNAMIC_HTML = isLocalDev ? 'true' : 'false';
 }
-if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = process.env.ENABLE_DYNAMIC_HTML || 'false';
+// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_HTML to true
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
 }
 
 // Debug: Print environment variables
 console.log('🔍 Next.js config - Environment variables:');
+console.log('  NODE_ENV:', process.env.NODE_ENV);
+console.log('  DOCKER_BUILD:', process.env.DOCKER_BUILD);
+console.log('  isLocalDev:', isLocalDev);
+console.log('  isDockerBuild:', isDockerBuild);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
 
@@ -35,8 +47,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   env: {
-    ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML || 'true',
-    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML || 'true',
+    ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
   },
   // experimental: {
   //   allowedDevOrigins: ['https://be96-72-255-23-44.ngrok-free.app'], // ← your ngrok public URL

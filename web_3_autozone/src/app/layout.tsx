@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
+import { BodyWrapper } from "@/components/layout/BodyWrapper";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -28,7 +29,11 @@ export default function RootLayout({
           <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
             <Header />
           </Suspense>
-          {children}
+          <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
+            <BodyWrapper>
+              {children}
+            </BodyWrapper>
+          </Suspense>
           <Suspense fallback={<div className="h-32 bg-white"></div>}>
             <Footer />
           </Suspense>
