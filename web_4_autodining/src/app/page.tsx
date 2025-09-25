@@ -140,7 +140,7 @@ function RestaurantCard({
             View details
           </Link>
           <Link
-            href={`/booking/${r.id}/${time}`}
+            href={`/booking/${r.id}/${time}?people=${people}&date=${formattedDate}`}
             className={`${bookButtonVariation.className} text-sm`}
             data-testid={bookButtonVariation.dataTestId}
             style={{ position: bookButtonVariation.position as any }}
