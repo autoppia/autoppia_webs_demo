@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import { useMemo } from "react";
 import { cn } from "@/library/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,19 +16,15 @@ import {
   Star,
   Archive,
   Trash2,
-  MoreVertical,
   Paperclip,
-  AlertTriangle,
   RefreshCw,
   ChevronLeft,
   ChevronRight,
-  Check,
   Search,
   Mail,
   Shield,
   Tag,
 } from "lucide-react";
-// import { format, isToday, isYesterday, isThisWeek } from 'date-fns';
 
 export function EmailList() {
   const { currentVariant } = useLayout();
@@ -49,8 +44,6 @@ export function EmailList() {
     moveToTrash,
     currentFilter,
     searchQuery,
-    currentPage,
-    totalPages,
     hasNextPage,
     hasPrevPage,
     nextPage,
@@ -555,7 +548,9 @@ function EmailItem({
       </Button>
 
       {/* Email Content */}
-      <div className="flex-1 grid grid-cols-12 gap-4 min-w-0">
+      <div
+      id="view-email"
+      className="flex-1 grid grid-cols-12 gap-4 min-w-0">
         {/* Sender */}
         <div className="col-span-3 min-w-0 mt-3">
           <p
