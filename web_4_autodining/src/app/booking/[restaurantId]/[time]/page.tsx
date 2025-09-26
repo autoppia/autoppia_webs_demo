@@ -230,6 +230,7 @@ export default function Page() {
               <div className="flex-1 min-w-[220px]">
                 <div className="flex items-center space-x-2">
                   <select
+                    id="select-country"
                     className="border px-2 py-2 rounded-l bg-white cursor-pointer text-lg"
                     value={selectedCountry.code}
                     onChange={(e) => {
@@ -287,6 +288,7 @@ export default function Page() {
             <div className="flex-1 min-w-[220px]">
               <div className="flex items-center space-x-2">
                 <select
+                id="select-country"
                   className="border px-2 py-2 rounded-l bg-white cursor-pointer text-lg"
                   value={selectedCountry.code}
                   onChange={(e) => {
@@ -344,6 +346,7 @@ export default function Page() {
               } mb-${layout.marginBottom}`}
             >
               <select
+                id = "select-occasion"
                 className="flex-1 border rounded px-3 py-2 bg-white min-w-[220px]"
                 value={occasion}
                 onChange={(e) => {
@@ -376,6 +379,7 @@ export default function Page() {
             } mb-${layout.marginBottom}`}
           >
             <select
+            id="select-occasion"
               className="flex-1 border rounded px-3 py-2 bg-white min-w-[220px]"
               value={occasion}
               onChange={(e) => {

@@ -363,6 +363,7 @@ function HomePageContent() {
           <Popover open={dateOpen} onOpenChange={setDateOpen}>
             <PopoverTrigger asChild>
               <Button
+              id="select-date"
                 variant="outline"
                 className="w-[200px] justify-start text-left font-normal"
                 onClick={() => logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: 'open' })}
@@ -384,6 +385,7 @@ function HomePageContent() {
           <Popover open={timeOpen} onOpenChange={setTimeOpen}>
             <PopoverTrigger asChild>
               <Button
+                id="select-time"
                 variant="outline"
                 className="w-[150px] justify-start text-left font-normal"
                 onClick={() => logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: 'open' })}
@@ -414,6 +416,7 @@ function HomePageContent() {
           <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
             <PopoverTrigger asChild>
               <Button
+                id="select-people"
                 variant="outline"
                 className="w-[150px] justify-start text-left font-normal"
                 onClick={() => logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { action: 'open' })}
