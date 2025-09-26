@@ -113,11 +113,11 @@ export class SeedVariationManager {
         dataTestId: "search-btn-layout-b-left",
         position: 'relative'
       },
-      // Layout C: Right side fixed positioned buttons (Seeds 3, 6, 9)
+      // Layout C: Right side relative positioned buttons (Seeds 3, 6, 9)
       { 
-        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] fixed bottom-4 right-4", 
+        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative ml-2", 
         dataTestId: "search-btn-layout-c-right",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Left side positioned buttons (Seeds 1, 4, 7, 10)
       { 
@@ -131,11 +131,11 @@ export class SeedVariationManager {
         dataTestId: "search-btn-layout-b-right",
         position: 'relative'
       },
-      // Layout C: Left side fixed positioned buttons (Seeds 3, 6, 9)
+      // Layout C: Left side relative positioned buttons (Seeds 3, 6, 9)
       { 
-        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] fixed bottom-4 left-4", 
+        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative mr-2", 
         dataTestId: "search-btn-layout-c-left",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Right side positioned buttons (Seeds 1, 4, 7, 10)
       { 
@@ -149,11 +149,11 @@ export class SeedVariationManager {
         dataTestId: "search-btn-layout-b-left",
         position: 'relative'
       },
-      // Layout C: Right side fixed positioned buttons (Seeds 3, 6, 9)
+      // Layout C: Right side relative positioned buttons (Seeds 3, 6, 9)
       { 
-        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] fixed bottom-4 right-4", 
+        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative ml-2", 
         dataTestId: "search-btn-layout-c-right",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Left side positioned buttons (Seeds 1, 4, 7, 10)
       { 
@@ -171,17 +171,17 @@ export class SeedVariationManager {
         dataTestId: "book-btn-layout-a",
         position: 'relative'
       },
-      // Layout B: Absolutely positioned buttons (Seeds 2, 5, 8)
+      // Layout B: Relative positioned buttons with margin (Seeds 2, 5, 8)
       { 
-        className: "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg absolute top-2 right-2 font-semibold", 
+        className: "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg relative mt-2 ml-auto font-semibold", 
         dataTestId: "book-btn-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed positioned buttons (Seeds 3, 6, 9)
+      // Layout C: Relative positioned buttons with different styling (Seeds 3, 6, 9)
       { 
-        className: "bg-purple-600 hover:bg-purple-700 text-white px-3 py-3 rounded-full fixed bottom-4 right-4 font-semibold", 
+        className: "bg-purple-600 hover:bg-purple-700 text-white px-3 py-3 rounded-full relative mt-2 font-semibold", 
         dataTestId: "book-btn-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal positioned buttons (Seeds 1, 4, 7, 10)
       { 
@@ -189,17 +189,17 @@ export class SeedVariationManager {
         dataTestId: "book-btn-layout-a",
         position: 'relative'
       },
-      // Layout B: Absolutely positioned buttons (Seeds 2, 5, 8)
+      // Layout B: Relative positioned buttons with margin (Seeds 2, 5, 8)
       { 
-        className: "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg absolute top-2 right-2 font-semibold", 
+        className: "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg relative mt-2 ml-auto font-semibold", 
         dataTestId: "book-btn-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed positioned buttons (Seeds 3, 6, 9)
+      // Layout C: Relative positioned buttons with different styling (Seeds 3, 6, 9)
       { 
-        className: "bg-purple-600 hover:bg-purple-700 text-white px-3 py-3 rounded-full fixed bottom-4 right-4 font-semibold", 
+        className: "bg-purple-600 hover:bg-purple-700 text-white px-3 py-3 rounded-full relative mt-2 font-semibold", 
         dataTestId: "book-btn-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal positioned buttons (Seeds 1, 4, 7, 10)
       { 
@@ -207,17 +207,17 @@ export class SeedVariationManager {
         dataTestId: "book-btn-layout-a",
         position: 'relative'
       },
-      // Layout B: Absolutely positioned buttons (Seeds 2, 5, 8)
+      // Layout B: Relative positioned buttons with margin (Seeds 2, 5, 8)
       { 
-        className: "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg absolute top-2 right-2 font-semibold", 
+        className: "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg relative mt-2 ml-auto font-semibold", 
         dataTestId: "book-btn-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed positioned buttons (Seeds 3, 6, 9)
+      // Layout C: Relative positioned buttons with different styling (Seeds 3, 6, 9)
       { 
-        className: "bg-purple-600 hover:bg-purple-700 text-white px-3 py-3 rounded-full fixed bottom-4 right-4 font-semibold", 
+        className: "bg-purple-600 hover:bg-purple-700 text-white px-3 py-3 rounded-full relative mt-2 font-semibold", 
         dataTestId: "book-btn-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal positioned buttons (Seeds 1, 4, 7, 10)
       { 
@@ -235,17 +235,17 @@ export class SeedVariationManager {
         dataTestId: "search-bar-layout-a",
         position: 'relative'
       },
-      // Layout B: Floating search bar (Seeds 2, 5, 8)
+      // Layout B: Relative positioned search bar with different styling (Seeds 2, 5, 8)
       { 
-        className: "w-full px-6 py-3 border-2 rounded-xl absolute top-0 left-0 focus:outline-none focus:ring-2 focus:ring-green-500", 
+        className: "w-full px-6 py-3 border-2 rounded-xl relative focus:outline-none focus:ring-2 focus:ring-green-500", 
         dataTestId: "search-bar-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed search bar (Seeds 3, 6, 9)
+      // Layout C: Relative positioned search bar with compact styling (Seeds 3, 6, 9)
       { 
-        className: "w-full px-3 py-2 border rounded-md fixed top-4 left-4 focus:outline-none focus:ring-2 focus:ring-purple-500", 
+        className: "w-full px-3 py-2 border rounded-md relative focus:outline-none focus:ring-2 focus:ring-purple-500", 
         dataTestId: "search-bar-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal search bar (Seeds 1, 4, 7, 10)
       { 
@@ -253,17 +253,17 @@ export class SeedVariationManager {
         dataTestId: "search-bar-layout-a",
         position: 'relative'
       },
-      // Layout B: Floating search bar (Seeds 2, 5, 8)
+      // Layout B: Relative positioned search bar with different styling (Seeds 2, 5, 8)
       { 
-        className: "w-full px-6 py-3 border-2 rounded-xl absolute top-0 left-0 focus:outline-none focus:ring-2 focus:ring-green-500", 
+        className: "w-full px-6 py-3 border-2 rounded-xl relative focus:outline-none focus:ring-2 focus:ring-green-500", 
         dataTestId: "search-bar-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed search bar (Seeds 3, 6, 9)
+      // Layout C: Relative positioned search bar with compact styling (Seeds 3, 6, 9)
       { 
-        className: "w-full px-3 py-2 border rounded-md fixed top-4 left-4 focus:outline-none focus:ring-2 focus:ring-purple-500", 
+        className: "w-full px-3 py-2 border rounded-md relative focus:outline-none focus:ring-2 focus:ring-purple-500", 
         dataTestId: "search-bar-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal search bar (Seeds 1, 4, 7, 10)
       { 
@@ -271,17 +271,17 @@ export class SeedVariationManager {
         dataTestId: "search-bar-layout-a",
         position: 'relative'
       },
-      // Layout B: Floating search bar (Seeds 2, 5, 8)
+      // Layout B: Relative positioned search bar with different styling (Seeds 2, 5, 8)
       { 
-        className: "w-full px-6 py-3 border-2 rounded-xl absolute top-0 left-0 focus:outline-none focus:ring-2 focus:ring-green-500", 
+        className: "w-full px-6 py-3 border-2 rounded-xl relative focus:outline-none focus:ring-2 focus:ring-green-500", 
         dataTestId: "search-bar-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed search bar (Seeds 3, 6, 9)
+      // Layout C: Relative positioned search bar with compact styling (Seeds 3, 6, 9)
       { 
-        className: "w-full px-3 py-2 border rounded-md fixed top-4 left-4 focus:outline-none focus:ring-2 focus:ring-purple-500", 
+        className: "w-full px-3 py-2 border rounded-md relative focus:outline-none focus:ring-2 focus:ring-purple-500", 
         dataTestId: "search-bar-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal search bar (Seeds 1, 4, 7, 10)
       { 
@@ -299,11 +299,11 @@ export class SeedVariationManager {
         dataTestId: "dropdown-layout-a",
         position: 'absolute'
       },
-      // Layout B: Fixed dropdown (Seeds 2, 5, 8)
+      // Layout B: Relative dropdown with different styling (Seeds 2, 5, 8)
       { 
-        className: "fixed z-10 bg-gray-50 border-2 rounded-xl shadow-xl top-0 left-0 p-3", 
+        className: "relative z-10 bg-gray-50 border-2 rounded-xl shadow-xl p-3", 
         dataTestId: "dropdown-layout-b",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout C: Sticky dropdown (Seeds 3, 6, 9)
       { 
@@ -317,11 +317,11 @@ export class SeedVariationManager {
         dataTestId: "dropdown-layout-a",
         position: 'absolute'
       },
-      // Layout B: Fixed dropdown (Seeds 2, 5, 8)
+      // Layout B: Relative dropdown with different styling (Seeds 2, 5, 8)
       { 
-        className: "fixed z-10 bg-gray-50 border-2 rounded-xl shadow-xl top-0 left-0 p-3", 
+        className: "relative z-10 bg-gray-50 border-2 rounded-xl shadow-xl p-3", 
         dataTestId: "dropdown-layout-b",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout C: Sticky dropdown (Seeds 3, 6, 9)
       { 
@@ -335,11 +335,11 @@ export class SeedVariationManager {
         dataTestId: "dropdown-layout-a",
         position: 'absolute'
       },
-      // Layout B: Fixed dropdown (Seeds 2, 5, 8)
+      // Layout B: Relative dropdown with different styling (Seeds 2, 5, 8)
       { 
-        className: "fixed z-10 bg-gray-50 border-2 rounded-xl shadow-xl top-0 left-0 p-3", 
+        className: "relative z-10 bg-gray-50 border-2 rounded-xl shadow-xl p-3", 
         dataTestId: "dropdown-layout-b",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout C: Sticky dropdown (Seeds 3, 6, 9)
       { 
@@ -618,51 +618,51 @@ export class SeedVariationManager {
         className: "w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition", 
         dataTestId: "image-container-layout-a"
       },
-      // Layout B: Floating images (Seeds 2, 5, 8)
+      // Layout B: Relative positioned images with different styling (Seeds 2, 5, 8)
       { 
-        className: "w-full h-[160px] object-cover rounded-lg border-2 cursor-pointer hover:opacity-90 transition absolute top-0", 
+        className: "w-full h-[160px] object-cover rounded-lg border-2 cursor-pointer hover:opacity-90 transition relative", 
         dataTestId: "image-container-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed images (Seeds 3, 6, 9)
+      // Layout C: Relative positioned images with compact styling (Seeds 3, 6, 9)
       { 
-        className: "w-full h-[120px] object-cover rounded-2xl border cursor-pointer hover:opacity-90 transition fixed top-4", 
+        className: "w-full h-[120px] object-cover rounded-2xl border cursor-pointer hover:opacity-90 transition relative", 
         dataTestId: "image-container-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal images (Seeds 1, 4, 7, 10)
       { 
         className: "w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition", 
         dataTestId: "image-container-layout-a"
       },
-      // Layout B: Floating images (Seeds 2, 5, 8)
+      // Layout B: Relative positioned images with different styling (Seeds 2, 5, 8)
       { 
-        className: "w-full h-[160px] object-cover rounded-lg border-2 cursor-pointer hover:opacity-90 transition absolute top-0", 
+        className: "w-full h-[160px] object-cover rounded-lg border-2 cursor-pointer hover:opacity-90 transition relative", 
         dataTestId: "image-container-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed images (Seeds 3, 6, 9)
+      // Layout C: Relative positioned images with compact styling (Seeds 3, 6, 9)
       { 
-        className: "w-full h-[120px] object-cover rounded-2xl border cursor-pointer hover:opacity-90 transition fixed top-4", 
+        className: "w-full h-[120px] object-cover rounded-2xl border cursor-pointer hover:opacity-90 transition relative", 
         dataTestId: "image-container-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal images (Seeds 1, 4, 7, 10)
       { 
         className: "w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition", 
         dataTestId: "image-container-layout-a"
       },
-      // Layout B: Floating images (Seeds 2, 5, 8)
+      // Layout B: Relative positioned images with different styling (Seeds 2, 5, 8)
       { 
-        className: "w-full h-[160px] object-cover rounded-lg border-2 cursor-pointer hover:opacity-90 transition absolute top-0", 
+        className: "w-full h-[160px] object-cover rounded-lg border-2 cursor-pointer hover:opacity-90 transition relative", 
         dataTestId: "image-container-layout-b",
-        position: 'absolute'
+        position: 'relative'
       },
-      // Layout C: Fixed images (Seeds 3, 6, 9)
+      // Layout C: Relative positioned images with compact styling (Seeds 3, 6, 9)
       { 
-        className: "w-full h-[120px] object-cover rounded-2xl border cursor-pointer hover:opacity-90 transition fixed top-4", 
+        className: "w-full h-[120px] object-cover rounded-2xl border cursor-pointer hover:opacity-90 transition relative", 
         dataTestId: "image-container-layout-c",
-        position: 'fixed'
+        position: 'relative'
       },
       // Layout A: Normal images (Seeds 1, 4, 7, 10)
       { 
@@ -1115,9 +1115,11 @@ export class SeedVariationManager {
       return {};
     }
     
-    // Ensure seed is between 1-10 and get the corresponding variation
-    const normalizedSeed = ((seed - 1) % 10) + 1;
-    return variations[normalizedSeed - 1] || variations[0];
+    // Map seed to layout index (1-4) using ceil(seed/30)
+    const layoutIndex = getLayoutIndexFromSeed(seed);
+    // Convert to 0-based index and ensure we don't exceed available variations
+    const variationIndex = Math.min(layoutIndex - 1, variations.length - 1);
+    return variations[variationIndex] || variations[0];
   }
 
   static getXPath(type: keyof SeedVariations, seed: number, eventType?: string): string {
@@ -1156,6 +1158,13 @@ export function isDynamicModeEnabled(): boolean {
   return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
 }
 
+// Helper function to map seed to layout index (1-4)
+export function getLayoutIndexFromSeed(seed: number): number {
+  // Divide seed by 30 and take ceil to get layout index (1-4)
+  // Seeds 1-30 → layout 1, 31-60 → layout 2, 61-90 → layout 3, 91-120 → layout 4, etc.
+  return Math.ceil(seed / 30);
+}
+
 // Helper function to get seed from URL
 export function getSeedFromUrl(): number {
   if (typeof window === 'undefined') return 1;
@@ -1169,8 +1178,8 @@ export function getSeedFromUrl(): number {
   const seedParam = urlParams.get('seed');
   const seed = parseInt(seedParam || '1', 10);
   
-  // Ensure seed is between 1-10
-  return ((seed - 1) % 10) + 1;
+  // Ensure seed is between 1-300
+  return Math.max(1, Math.min(300, seed));
 }
 
 // Helper function to get seed from URL with fallback
@@ -1186,8 +1195,8 @@ export function getSeedFromUrlWithFallback(fallback: number = 1): number {
   const seedParam = urlParams.get('seed');
   const seed = parseInt(seedParam || fallback.toString(), 10);
   
-  // Ensure seed is between 1-10
-  return ((seed - 1) % 10) + 1;
+  // Ensure seed is between 1-300
+  return Math.max(1, Math.min(300, seed));
 }
 
 // Hook for using seed-based variations with event support
