@@ -44,24 +44,72 @@ export function Header() {
 
   const order = getComponentOrder(layoutConfig);
 
+  // Handle floating navbar style
+  const headerClasses = layoutConfig.navbarStyle === 'floating' 
+    ? "absolute top-4 right-4 bg-white shadow-xl rounded-lg p-2 border border-gray-200 z-50"
+    : "fixed top-0 z-50 w-full";
+  
+  const navClasses = layoutConfig.navbarStyle === 'floating'
+    ? "flex items-center gap-1 md:gap-2"
+    : "bg-white border-b border-gray-200 px-2 py-2 flex items-center gap-2 md:gap-4";
+
   return (
-    <header className="fixed top-0 z-50 w-full">
+    <header className={headerClasses}>
       {/* Main navigation bar */}
-      <nav className="bg-white border-b border-gray-200 px-2 py-2 flex items-center gap-2 md:gap-4">
+      <nav className={navClasses}>
         {/* Header content with dynamic layout */}
-        <div className={`flex items-center w-full ${layoutClasses.header}`}>
+        <div className={`flex items-center ${layoutConfig.navbarStyle === 'floating' ? 'flex-wrap' : 'w-full'} ${layoutClasses.header}`}>
           {order.map((key: string) => {
             if (key === "logo") {
               return (
-                <Link key="logo" href="/" className="mr-2 flex-shrink-0">
-                  <div className="bg-[#17A2B8] px-3 py-1 rounded flex items-center h-9">
-                    <span className="font-bold text-white text-lg">AUTOZONE</span>
+                <Link key="logo" href="/" className={`${layoutConfig.navbarStyle === 'floating' ? 'mr-1' : 'mr-2'} flex-shrink-0`}>
+                  <div className={`bg-[#17A2B8] ${layoutConfig.navbarStyle === 'floating' ? 'px-2 py-1' : 'px-3 py-1'} rounded flex items-center ${layoutConfig.navbarStyle === 'floating' ? 'h-7' : 'h-9'}`}>
+                    <span className={`font-bold text-white ${layoutConfig.navbarStyle === 'floating' ? 'text-sm' : 'text-lg'}`}>AUTOZONE</span>
                   </div>
                 </Link>
               );
             }
 
             if (key === "search") {
+              if (layoutConfig.navbarStyle === 'floating') {
+                // Compact search for floating navbar
+                return (
+                  <div key="search" className="flex items-center">
+                    <Input
+                      type="search"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          logEvent(EVENT_TYPES.SEARCH_PRODUCT, {
+                            query: searchQuery,
+                          });
+                          router.push(
+                            `/search?q=${encodeURIComponent(searchQuery)}`
+                          );
+                        }
+                      }}
+                      placeholder="Search"
+                      className="w-32 h-7 text-xs rounded border bg-white shadow-inner focus:bg-white focus-visible:ring-1 focus-visible:ring-amazon-blue px-2 text-gray-800"
+                    />
+                    <Button
+                      id="search-btn"
+                      className="ml-1 h-7 w-7 p-0 bg-amazon-yellow hover:bg-amazon-darkYellow shadow"
+                      onClick={() => {
+                        logEvent(EVENT_TYPES.SEARCH_PRODUCT, {
+                          query: searchQuery,
+                        });
+                        router.push(
+                          `/search?q=${encodeURIComponent(searchQuery)}`
+                        );
+                      }}
+                    >
+                      <Search className="h-3 w-3 text-amazon-lightBlue" />
+                    </Button>
+                  </div>
+                );
+              }
+              
               const searchClasses = layoutConfig.searchPosition === 'full-width' 
                 ? 'flex-grow mx-1 md:mx-4' 
                 : 'flex-grow flex mx-1 md:mx-4';
@@ -112,6 +160,26 @@ export function Header() {
             }
 
             if (key === "nav") {
+              if (layoutConfig.navbarStyle === 'floating') {
+                // Compact nav for floating navbar
+                return (
+                  <div key="nav" className="flex items-center gap-1">
+                    <Link
+                      href="/cart"
+                      className="text-gray-700 flex items-center"
+                      onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
+                    >
+                      <div className="relative">
+                        <ShoppingCart size={20} />
+                        <span className="absolute -top-1 right-[6px] text-amazon-yellow font-bold text-xs">
+                          {cartItemCount}
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              }
+              
               return (
                 <div
                   key="nav"

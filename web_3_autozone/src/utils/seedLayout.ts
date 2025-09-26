@@ -31,6 +31,16 @@ export function getSeedLayout(seed?: number): SeedLayoutConfig {
     return getLayoutByIndex(3);
   }
 
+  // Special case: Seeds 5,15,25,35,45,55,65,75...295 should use Layout 2
+  if (seed % 10 === 5) {
+    return getLayoutByIndex(2);
+  }
+
+  // Special case: Seed 8 should use Layout 1
+  if (seed === 8) {
+    return getLayoutByIndex(1);
+  }
+
   // Special cases: New unique layouts for specific seeds
   const specialLayouts: { [key: number]: number } = {
     180: 11, // New Layout 11 - Ultra-wide layout
@@ -46,10 +56,10 @@ export function getSeedLayout(seed?: number): SeedLayoutConfig {
     return getLayoutByIndex(specialLayouts[seed]);
   }
 
-  // Map seed (1-300) to layout index (1-10) using ceiling division
-  // Examples: 76 -> 76/30=2.53 -> ceil(2.53)=3, 23 -> 23/30=0.77 -> ceil(0.77)=1
-  // Wrap around using modulo to ensure we stay within 1-10 range
-  const layoutIndex = ((Math.ceil(seed / 30) - 1) % 10) + 1;
+  // Map seed (1-300) to layout index (1-10) using modulo for less obvious pattern
+  // Examples: 300 -> 300%30=0 -> 0+1=1, 31 -> 31%30=1 -> 1+1=2, 76 -> 76%30=16 -> 16+1=17 -> 17%10=7
+  // Use modulo 30 to get 0-29 range, then add 1 for 1-30, then modulo 10 for 1-10 range
+  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
 
   return getLayoutByIndex(layoutIndex);
 }
