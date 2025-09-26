@@ -1158,11 +1158,12 @@ export function isDynamicModeEnabled(): boolean {
   return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
 }
 
-// Helper function to map seed to layout index (1-4)
+// Helper function to map seed to layout index (1-10)
 export function getLayoutIndexFromSeed(seed: number): number {
-  // Divide seed by 30 and take ceil to get layout index (1-4)
-  // Seeds 1-30 → layout 1, 31-60 → layout 2, 61-90 → layout 3, 91-120 → layout 4, etc.
-  return Math.ceil(seed / 30);
+  if (seed < 1 || seed > 300) return 1; // fallback
+  const bucket = seed % 30 || 30;  // gives 1–30
+  const layoutId = ((bucket - 1) % 10) + 1; // cycles into 1–10
+  return layoutId;
 }
 
 // Helper function to get seed from URL
