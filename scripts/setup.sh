@@ -168,6 +168,10 @@ case "$WEB_DEMO" in
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     deploy_webs_server
     ;;
+  autocalender)
+    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
+    deploy_webs_server
+    ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
@@ -179,10 +183,11 @@ case "$WEB_DEMO" in
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
     deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalender_$((WEB_PORT + 10))"
     deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autocalender', or 'all'."
     exit 1
     ;;
 esac
