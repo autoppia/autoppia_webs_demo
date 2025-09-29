@@ -107,6 +107,17 @@ export default function RestaurantPage() {
     const newState = !showFullMenu;
     setShowFullMenu(newState);
 
+    // Define menu data that should be included in both events
+    const menuData = [
+      {
+        category: "Mains",
+        items: [
+          { name: "Coq au Vin", price: "$26.00" },
+          { name: "Ratatouille", price: "$20.00" },
+        ],
+      },
+    ];
+
     logEvent(
       newState ? EVENT_TYPES.VIEW_FULL_MENU : EVENT_TYPES.COLLAPSE_MENU,
       {
@@ -122,17 +133,7 @@ export default function RestaurantPage() {
         time,
         date: formattedDate,
         people,
-        menu: newState
-          ? [
-              {
-                category: "Mains",
-                items: [
-                  { name: "Coq au Vin", price: "$26.00" },
-                  { name: "Ratatouille", price: "$20.00" },
-                ],
-              },
-            ]
-          : [],
+        menu: menuData,
       }
     );
   };
