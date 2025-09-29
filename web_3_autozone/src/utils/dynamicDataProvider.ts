@@ -1,6 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
-import { products } from "@/data/products";
+import { products, initializeProducts } from "@/data/products-enhanced";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -16,6 +16,9 @@ export class DynamicDataProvider {
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
     this.products = products;
+    
+    // Initialize products with data generation if enabled
+    this.initializeProducts();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -23,6 +26,17 @@ export class DynamicDataProvider {
       DynamicDataProvider.instance = new DynamicDataProvider();
     }
     return DynamicDataProvider.instance;
+  }
+
+  private async initializeProducts(): Promise<void> {
+    try {
+      const initializedProducts = await initializeProducts();
+      this.products = initializedProducts;
+      console.log('✅ Products initialized with data generation:', this.products.length, 'products');
+    } catch (error) {
+      console.warn('⚠️ Failed to initialize products with data generation, using static data:', error);
+      // Keep the original products
+    }
   }
 
   public getProducts(): Product[] {

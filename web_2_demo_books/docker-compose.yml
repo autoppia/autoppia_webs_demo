@@ -16,6 +16,8 @@ services:
       - DB_PASSWORD=autoppia_2025
       - DB_HOST=db
       - DB_PORT=5432
+      - DATA_GENERATION=${DATA_GENERATION:-false}
+      - API_URL=http://app:8080
     depends_on:
       - db
     networks:

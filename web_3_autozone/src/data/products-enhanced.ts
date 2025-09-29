@@ -1,6 +1,20 @@
-import type { Product } from "@/context/CartContext";
+/**
+ * Enhanced Products Data with AI Generation Support
+ * 
+ * This file provides both static and dynamic product data generation
+ * for the AutoZone e-commerce application.
+ */
 
-export const products: Product[] = [
+import type { Product } from "@/context/CartContext";
+import { 
+  generateProductsWithFallback, 
+  replaceAllProducts, 
+  addGeneratedProducts,
+  isDataGenerationAvailable 
+} from "@/utils/dataGenerator";
+
+// Original static products
+export const originalProducts: Product[] = [
   {
     id: "kitchen-1",
     title: "Espresso Machine",
@@ -516,14 +530,231 @@ export const products: Product[] = [
   },
 ];
 
-export const getProductById = (id: string): Product | undefined => {
-  return products.find((product) => product.id === id);
+// Dynamic products array that can be populated with generated data
+let dynamicProducts: Product[] = [...originalProducts];
+
+// Configuration for async data generation
+const DATA_GENERATION_CONFIG = {
+  // Default delay between category calls (in milliseconds)
+  DEFAULT_DELAY_BETWEEN_CALLS: 1000,
+  // Default products per category
+  DEFAULT_PRODUCTS_PER_CATEGORY: 10,
+  // Maximum retry attempts for failed category generation
+  MAX_RETRY_ATTEMPTS: 2,
+  // Available categories for data generation
+  AVAILABLE_CATEGORIES: ["Kitchen", "Electronics", "Home", "Fitness", "Technology"]
 };
 
-export const getProductsByCategory = (category: string): Product[] => {
-  return products.filter((product) => product.category === category);
-};
+/**
+ * Utility function to generate products for multiple categories with delays
+ * Prevents server overload by spacing out API calls
+ */
+async function generateProductsForCategories(
+  categories: string[],
+  productsPerCategory: number,
+  delayBetweenCalls: number = 1000,
+  existingProducts: Product[] = []
+): Promise<Product[]> {
+  let allGeneratedProducts: Product[] = [...existingProducts];
+  
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+    
+    try {
+      console.log(`Generating ${productsPerCategory} products for ${category}...`);
+      
+      // Generate products for this specific category
+      const categoryProducts = await generateProductsWithFallback(
+        [], // Start with empty array for this category
+        productsPerCategory,
+        [category]
+      );
+      
+      // Add generated products to our collection
+      allGeneratedProducts = [...allGeneratedProducts, ...categoryProducts];
+      
+      console.log(`✅ Generated ${categoryProducts.length} products for ${category}`);
+      
+      // Add delay between category calls to prevent server overload
+      if (i < categories.length - 1) {
+        console.log(`Waiting ${delayBetweenCalls}ms before next category...`);
+        await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
+      }
+      
+    } catch (categoryError) {
+      console.warn(`Failed to generate products for ${category}:`, categoryError);
+      // Continue with other categories even if one fails
+    }
+  }
+  
+  return allGeneratedProducts;
+}
 
-export const getFeaturedProducts = (count = 4): Product[] => {
-  return products.slice(0, count);
-};
+/**
+ * Initialize products with data generation if enabled
+ * Uses async calls for each category to avoid overwhelming the server
+ */
+export async function initializeProducts(): Promise<Product[]> {
+  if (isDataGenerationAvailable()) {
+    try {
+      console.log('Starting async data generation for each category...');
+      
+      // Define categories and products per category
+      const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
+      const productsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_PRODUCTS_PER_CATEGORY;
+      const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
+      
+      // Generate products for all categories with delays
+      const allGeneratedProducts = await generateProductsForCategories(
+        categories,
+        productsPerCategory,
+        delayBetweenCalls,
+        originalProducts
+      );
+      
+      console.log(`🎉 Data generation complete! Total products: ${allGeneratedProducts.length}`);
+      dynamicProducts = allGeneratedProducts;
+      return dynamicProducts;
+      
+    } catch (error) {
+      console.warn('Failed to generate products, using original data:', error);
+      dynamicProducts = originalProducts;
+      return dynamicProducts;
+    }
+  } else {
+    dynamicProducts = originalProducts;
+    return dynamicProducts;
+  }
+}
+
+/**
+ * Get all products (original + generated)
+ */
+export function getAllProducts(): Product[] {
+  return dynamicProducts;
+}
+
+/**
+ * Replace all products with newly generated ones
+ */
+export async function replaceAllProductsWithGenerated(
+  count: number = 50,
+  categories?: string[]
+): Promise<Product[]> {
+  if (!isDataGenerationAvailable()) {
+    throw new Error('Data generation is not available');
+  }
+
+  try {
+    const newProducts = await replaceAllProducts(count, categories);
+    dynamicProducts = newProducts;
+    return dynamicProducts;
+  } catch (error) {
+    console.error('Failed to replace products:', error);
+    throw error;
+  }
+}
+
+/**
+ * Add generated products to existing ones
+ * Uses async calls for each category to avoid overwhelming the server
+ */
+export async function addGeneratedProductsToExisting(
+  additionalCount: number = 10,
+  categories?: string[]
+): Promise<Product[]> {
+  if (!isDataGenerationAvailable()) {
+    return dynamicProducts;
+  }
+
+  try {
+    console.log('Adding generated products with async category calls...');
+    
+    // Use provided categories or default to all categories
+    const targetCategories = categories || DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
+    const productsPerCategory = Math.ceil(additionalCount / targetCategories.length);
+    const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
+    
+    // Generate new products for all categories with delays
+    const allGeneratedProducts = await generateProductsForCategories(
+      targetCategories,
+      productsPerCategory,
+      delayBetweenCalls,
+      [] // Start with empty array for new products only
+    );
+    
+    // Update the dynamic products array with new products
+    dynamicProducts = [...dynamicProducts, ...allGeneratedProducts];
+    console.log(`🎉 Added ${allGeneratedProducts.length} new products! Total products: ${dynamicProducts.length}`);
+    
+    return dynamicProducts;
+    
+  } catch (error) {
+    console.error('Failed to add generated products:', error);
+    return dynamicProducts;
+  }
+}
+
+/**
+ * Get products by category
+ */
+export function getProductsByCategory(category: string): Product[] {
+  return dynamicProducts.filter((product) => product.category === category);
+}
+
+/**
+ * Get a product by ID
+ */
+export function getProductById(id: string): Product | undefined {
+  return dynamicProducts.find((product) => product.id === id);
+}
+
+/**
+ * Get featured products (first N products)
+ */
+export function getFeaturedProducts(count: number = 4): Product[] {
+  return dynamicProducts.slice(0, count);
+}
+
+/**
+ * Reset to original products only
+ */
+export function resetToOriginalProducts(): void {
+  dynamicProducts = [...originalProducts];
+}
+
+/**
+ * Get statistics about current products
+ */
+export function getProductStats() {
+  const categories = dynamicProducts.reduce((acc, product) => {
+    const category = product.category || "Unknown";
+    acc[category] = (acc[category] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  return {
+    totalProducts: dynamicProducts.length,
+    originalProducts: originalProducts.length,
+    generatedProducts: dynamicProducts.length - originalProducts.length,
+    categories,
+    averageRating: dynamicProducts.reduce((sum, p) => sum + (p.rating || 0), 0) / dynamicProducts.length,
+  };
+}
+
+/**
+ * Search products by query
+ */
+export function searchProducts(query: string): Product[] {
+  const lowercaseQuery = query.toLowerCase();
+  return dynamicProducts.filter((product) =>
+    product.title.toLowerCase().includes(lowercaseQuery) ||
+    product.description?.toLowerCase().includes(lowercaseQuery) ||
+    product.category?.toLowerCase().includes(lowercaseQuery) ||
+    product.brand?.toLowerCase().includes(lowercaseQuery)
+  );
+}
+
+
+// Export the dynamic products array for direct access
+export { dynamicProducts as products };

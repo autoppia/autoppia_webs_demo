@@ -77,7 +77,6 @@ dmypy.json
 .pytype/
 cython_debug/
 .idea/
-
 # =========================
 # NODE / NEXT.JS ADDITIONS
 # =========================
@@ -129,3 +128,6 @@ coverage/
 **/.vercel/
 .turbo/
 **/.turbo/
+
+*next-env.d.ts
+*pnpm-lock.yaml

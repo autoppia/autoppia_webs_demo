@@ -13,12 +13,21 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
 from loguru import logger
 from pydantic import BaseModel, Field, field_validator
+from openai import AsyncOpenAI
+
+try:
+    import fastjsonschema
+
+    HAS_FASTJSONSCHEMA = True
+except ImportError:
+    HAS_FASTJSONSCHEMA = False
 
 # --- Configuration ---
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
 DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "10"))
 DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "50"))
 GZIP_MIN_SIZE = int(os.getenv("GZIP_MIN_SIZE", "1000"))
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 # --- Helper Function for URL Trimming ---
@@ -92,12 +101,32 @@ class ResetResponse(BaseModel):
     deleted_count: int
 
 
+# --- Data Generation Models (generic) ---
+class DataGenerationRequest(BaseModel):
+    interface_definition: str = Field(..., description="TypeScript interface definition")
+    examples: List[Dict[str, Any]] = Field(..., description="Few-shot JSON examples")
+    count: int = Field(..., ge=1, le=200, description="How many objects to generate")
+    categories: Optional[List[str]] = Field(None, description="Optional categories/themes")
+    additional_requirements: Optional[str] = Field(None, description="Free-form guidance")
+    json_schema: Optional[Dict[str, Any]] = Field(None, description="Optional JSON Schema to validate the result shape")
+    naming_rules: Optional[Dict[str, Any]] = Field(None, description="Optional rules e.g. id or image path patterns")
+
+
+class DataGenerationResponse(BaseModel):
+    message: str
+    generated_data: List[Dict[str, Any]]
+    count: int
+    generation_time: float
+
+
 # --- Database Initialization ---
 async def init_db_pool():
     """Initializes the database connection pool and prepared statements."""
     retry_count = 0
     max_retries = 5
     retry_delay = 5  # seconds
+
+    logger.info(f"Initializing database connection pool to: {DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else 'localhost'}")
 
     while retry_count < max_retries:
         try:
@@ -107,7 +136,16 @@ async def init_db_pool():
                 max_size=DB_POOL_MAX,
                 timeout=30,  # Connection acquisition timeout
                 command_timeout=30,  # Default timeout for commands on a connection
+                server_settings={
+                    "application_name": "webs_server_api",
+                    "timezone": "UTC",
+                },
             )
+
+            # Test the connection pool
+            async with app.state.pool.acquire() as conn:
+                await conn.fetchval("SELECT 1")
+
             logger.success(f"Database connection pool established (min: {DB_POOL_MIN}, max: {DB_POOL_MAX})")
             return
         except asyncpg.PostgresError as e:
@@ -115,14 +153,14 @@ async def init_db_pool():
             logger.warning(f"Database pool creation failed (attempt {retry_count}/{max_retries}): {str(e)}")
             if retry_count >= max_retries:
                 logger.error("Failed to create database pool after multiple attempts.")
-                raise RuntimeError("Database pool creation failed.")
+                raise RuntimeError(f"Database pool creation failed: {str(e)}")
             await asyncio.sleep(retry_delay)
         except Exception as e:
             retry_count += 1
             logger.error(f"An unexpected error occurred during database pool creation (attempt {retry_count}/{max_retries}): {e}")
             if retry_count >= max_retries:
                 logger.error("Failed to create database pool after multiple attempts due to unexpected error.")
-                raise RuntimeError("Database pool creation failed due to unexpected error.")
+                raise RuntimeError(f"Database pool creation failed due to unexpected error: {str(e)}")
             await asyncio.sleep(retry_delay)
 
 
@@ -146,12 +184,34 @@ async def lifespan(app: FastAPI):
 # --- FastAPI Application ---
 app = FastAPI(
     title="Blazing Fast Event API",
-    description="API for saving, retrieving, and resetting web agent events. Enhanced version.",
+    description="API for saving, retrieving, and resetting web agent events. Enhanced version with Python 3.11 support.",
+    version="1.0.0",
     lifespan=lifespan,
     default_response_class=ORJSONResponse,
     redoc_url=None,
 )
 app.add_middleware(GZipMiddleware, minimum_size=GZIP_MIN_SIZE)
+
+
+# --- Root Endpoint ---
+@app.get("/", summary="API Root")
+async def root():
+    """
+    Root endpoint providing basic API information and available endpoints.
+    """
+    return {
+        "message": "Blazing Fast Event API",
+        "version": "1.0.0",
+        "python_version": f"{__import__('sys').version_info.major}.{__import__('sys').version_info.minor}.{__import__('sys').version_info.micro}",
+        "endpoints": {
+            "health": "/health",
+            "save_events": "/save_events/",
+            "get_events": "/get_events/",
+            "reset_events": "/reset_events/",
+            "generate_dataset": "/datasets/generate",
+        },
+        "status": "operational",
+    }
 
 
 # --- API Endpoints ---
@@ -163,36 +223,59 @@ async def save_event_endpoint(event: EventInput):
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
         logger.error("Database pool not available for saving event.")
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database service temporarily unavailable.")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service temporarily unavailable.",
+        )
     try:
         event_data_json_string = orjson.dumps(event.data).decode("utf-8")
         # --- Apply trimming before saving ---
         trimmed_url = trim_url_to_origin(event.web_url)
         if not trimmed_url:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid web_url provided after trimming.")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid web_url provided after trimming.",
+            )
 
         result = await app.state.pool.fetchrow(INSERT_EVENT_SQL, event.web_agent_id, trimmed_url, event_data_json_string)
         if result:
             logger.info(f"Event saved successfully with ID: {result['id']}")
-            return EventSaveResponse(message="Event saved successfully", event_id=result["id"], created_at=result["created_at"])
+            return EventSaveResponse(
+                message="Event saved successfully",
+                event_id=result["id"],
+                created_at=result["created_at"],
+            )
         else:
             logger.error("Event save operation did not return expected result.")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to save event due to unexpected DB response.")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to save event due to unexpected DB response.",
+            )
 
     except PostgresError as e:
         logger.error(f"Database error during event save: {e} (SQLState: {e.sqlstate}).")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database operation failed during save: {e.pgcode}.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database operation failed during save: {e.pgcode}.",
+        ) from e
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Unexpected error during event save: {e}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An internal server error occurred while saving the event.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An internal server error occurred while saving the event.",
+        ) from e
 
 
 @app.get("/get_events/", response_model=List[EventOutput], summary="Get events for a web agent and URL")
 async def get_events_endpoint(
     web_url: str = Query(..., description="The specific web URL to filter events for."),
-    web_agent_id: str = Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID to filter events for."),
+    web_agent_id: str = Query(
+        default="UNKNOWN_AGENT",
+        max_length=255,
+        description="The specific web agent ID to filter events for.",
+    ),
 ):
     """
     Retrieves events, utilizing prepared statements.
@@ -268,25 +351,161 @@ async def reset_events_endpoint(web_url: str = Query(..., description="The web U
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An internal server error occurred while resetting events.") from e
 
 
+# --- Data Generation Functions (generic) ---
+async def generate_with_openai(request: DataGenerationRequest) -> List[Dict[str, Any]]:
+    if not OPENAI_API_KEY:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="OpenAI API key not configured")
+
+    client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+
+    examples_json = orjson.dumps(request.examples, option=orjson.OPT_INDENT_2).decode("utf-8")
+    naming_rules = orjson.dumps(request.naming_rules or {}, option=orjson.OPT_INDENT_2).decode("utf-8")
+
+    prompt = f"""
+You generate strictly valid JSON arrays for synthetic datasets.
+
+Return ONLY a JSON array (no preface, no markdown).
+
+Generate exactly {request.count} items that conform to this TypeScript interface:
+
+{request.interface_definition}
+
+Few-shot examples to mimic style/shape:
+{examples_json}
+
+Guidance:
+- Follow the interface types exactly.
+- Make realistic, diverse data.
+- Required fields must always be present.
+- Prefer consistent keys; avoid null unless optional.
+- If arrays/tuples/enums exist, respect them.
+- IDs must be unique per item.
+- Avoid placeholders like "lorem ipsum" or "image.png".
+
+Naming rules (may be empty JSON):
+{naming_rules}
+
+{f"Focus on categories: {', '.join(request.categories)}" if request.categories else ""}
+{request.additional_requirements or ""}
+
+Output strictly a JSON array only.
+"""
+
+    try:
+        resp = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a strict JSON data generator. Output must be a JSON array only.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.5,
+            # max_tokens=6000,
+        )
+        content = resp.choices[0].message.content.strip()
+
+        try:
+            data = orjson.loads(content)
+            if not isinstance(data, list):
+                raise ValueError("Model response is not a JSON array")
+        except Exception as e:
+            # Log raw content for debugging
+            logger.error(f"Failed to parse generation as JSON array: {e}")
+            logger.error(f"Raw content: {content[:1000]}...")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Generated output is not valid JSON")
+
+        # Optional JSON Schema validation if provided
+        if request.json_schema:
+            if not HAS_FASTJSONSCHEMA:
+                logger.warning("JSON Schema validation requested but fastjsonschema not available")
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="JSON Schema validation not available - fastjsonschema not installed")
+
+            try:
+                validate = fastjsonschema.compile(request.json_schema)
+                for idx, item in enumerate(data):
+                    validate(item)
+            except Exception as e:
+                logger.error(f"Schema validation failed: {e}")
+                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"JSON Schema validation failed: {e}")
+
+        return data
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"OpenAI generation failed: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Data generation failed: {str(e)}")
+
+
+# --- Data Generation Endpoint (generic) ---
+@app.post("/datasets/generate", response_model=DataGenerationResponse, status_code=status.HTTP_200_OK)
+async def generate_dataset_endpoint(request: DataGenerationRequest):
+    start = datetime.now()
+    data = await generate_with_openai(request)
+    elapsed = (datetime.now() - start).total_seconds()
+    logger.info(f"Generated {len(data)} items in {elapsed:.2f}s")
+    logger.debug("=" * 60 + f"DATA: {data}" + "=" * 60)
+    return DataGenerationResponse(
+        message=f"Successfully generated {len(data)} items",
+        generated_data=data,
+        count=len(data),
+        generation_time=elapsed,
+    )
+
+
+# --- Health Check Models ---
+class HealthResponse(BaseModel):
+    status: str
+    database_pool_operational: bool
+    timestamp: datetime
+    version: str = "1.0.0"
+    python_version: str
+    debug_message: Optional[str] = None
+
+
 # --- Health Check ---
-@app.get("/health", summary="Perform a health check of the API")
+@app.get("/health", response_model=HealthResponse, summary="Perform a health check of the API")
 async def health_check_endpoint():
     """
-    Provides a basic health check, including the status of the database pool.
+    Provides a comprehensive health check, including the status of the database pool,
+    system information, and detailed diagnostics.
     """
+    import sys
+
     db_pool_operational = False
     debug_message = "Database pool not initialized or available."
+    timestamp = datetime.utcnow()
 
     if hasattr(app.state, "pool") and app.state.pool is not None:
-        db_pool_operational = True
         try:
+            # Test database connection with a simple query
             async with app.state.pool.acquire() as conn:
-                await conn.fetchval("SELECT 1")
-            debug_message = "Database connection pool is active and responding."
+                result = await conn.fetchval("SELECT 1")
+                if result == 1:
+                    db_pool_operational = True
+                    debug_message = "Database connection pool is active and responding."
+                else:
+                    debug_message = "Database query returned unexpected result."
+        except PostgresError as e:
+            db_pool_operational = False
+            debug_message = f"Database connection failed with PostgresError: {e}"
+            logger.error(f"Health check DB query failed with PostgresError: {e}")
         except Exception as e:
             db_pool_operational = False
             debug_message = f"Database connection pool exists but failed health check query: {e}"
             logger.error(f"Health check DB query failed: {e}")
 
+    # Determine overall health status
+    overall_status = "healthy" if db_pool_operational else "unhealthy"
+
     logger.debug(f"Health check status: {debug_message}")
-    return {"status": "healthy" if db_pool_operational else "unhealthy", "database_pool_operational": db_pool_operational}
+
+    return HealthResponse(
+        status=overall_status,
+        database_pool_operational=db_pool_operational,
+        timestamp=timestamp,
+        python_version=f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+        debug_message=debug_message,
+    )
