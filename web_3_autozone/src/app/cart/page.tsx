@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,10 @@ interface CartItem {
 export default function CartPage() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
+
+  useEffect(() => {
+      logEvent(EVENT_TYPES.VIEW_CART, {});
+      }, []);
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);

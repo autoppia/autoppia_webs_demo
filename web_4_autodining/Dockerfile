@@ -14,10 +14,6 @@ COPY . .
 ARG ENABLE_DYNAMIC_HTML=false
 ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML
 
-# Debug: Print the environment variable
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_HTML: $ENABLE_DYNAMIC_HTML"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: $NEXT_PUBLIC_ENABLE_DYNAMIC_HTML"
-
 RUN npm run build
 
 # Stage 2: Create the lean production image

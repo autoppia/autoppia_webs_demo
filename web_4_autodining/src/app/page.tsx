@@ -192,7 +192,7 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
 
   return (
     <div className="relative">
-      {canScrollLeft && (
+      {/*{canScrollLeft && (*/}
         <button
           onClick={() => scroll("left")}
           className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
@@ -200,7 +200,7 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
-      )}
+      {/*)}*/}
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
