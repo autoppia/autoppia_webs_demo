@@ -356,7 +356,7 @@ export function getSeedFromUrl(): number {
   
   if (seedParam) {
     const seed = parseInt(seedParam, 10);
-    if (seed >= 1 && seed <= 10) {
+    if (seed >= 1 && seed <= 300) {
       return seed;
     }
   }

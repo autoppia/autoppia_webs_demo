@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { LayoutVariant, getLayoutVariant, getSeedFromUrl } from '@/library/layoutVariants';
+import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 
 interface LayoutContextType {
   currentVariant: LayoutVariant;
@@ -22,24 +23,26 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   // Initial URL reading - only run once
   useEffect(() => {
     const urlSeed = getSeedFromUrl();
-    console.log('LayoutProvider: Initial seed from URL:', urlSeed, 'Current seed state:', seed);
-    if (urlSeed !== seed) {
-      console.log('LayoutProvider: Updating seed from URL:', urlSeed);
-      setSeed(urlSeed);
-      setCurrentVariant(getLayoutVariant(urlSeed));
+    const effectiveSeed = getEffectiveSeed(urlSeed);
+    console.log('LayoutProvider: Initial seed from URL:', urlSeed, 'Effective seed:', effectiveSeed, 'Current seed state:', seed);
+    if (effectiveSeed !== seed) {
+      console.log('LayoutProvider: Updating seed from URL:', effectiveSeed);
+      setSeed(effectiveSeed);
+      setCurrentVariant(getLayoutVariant(effectiveSeed));
     } else {
       console.log('LayoutProvider: Seed already matches URL, no update needed');
     }
-  }, []); // Empty dependency array - only run once on mount
+  }, [seed]); // Include seed dependency
 
   // Listen for URL changes (back/forward buttons)
   useEffect(() => {
     const handlePopState = () => {
       const urlSeed = getSeedFromUrl();
-      console.log('LayoutProvider: URL changed via browser navigation, new seed:', urlSeed);
-      if (urlSeed !== seed) {
+      const effectiveSeed = getEffectiveSeed(urlSeed);
+      console.log('LayoutProvider: URL changed via browser navigation, new seed:', urlSeed, 'Effective seed:', effectiveSeed);
+      if (effectiveSeed !== seed) {
         // This is not a user action, so don't set the flag
-        setSeed(urlSeed);
+        setSeed(effectiveSeed);
       }
     };
 
@@ -52,8 +55,8 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     console.log('LayoutProvider: Seed changed to:', seed, 'Is user action:', isUserAction);
     setCurrentVariant(getLayoutVariant(seed));
     
-    // Only update URL if this was a user-initiated change
-    if (isUserAction && typeof window !== 'undefined') {
+    // Only update URL if this was a user-initiated change and dynamic HTML is enabled
+    if (isUserAction && typeof window !== 'undefined' && isDynamicModeEnabled()) {
       const url = new URL(window.location.href);
       
       if (seed === 1) {
@@ -74,10 +77,11 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   const handleSetSeed = (newSeed: number) => {
     console.log('LayoutProvider: handleSetSeed called with:', newSeed);
-    if (newSeed >= 1 && newSeed <= 10) {
-      console.log('LayoutProvider: Setting seed to:', newSeed);
+    if (newSeed >= 1 && newSeed <= 300) {
+      const effectiveSeed = getEffectiveSeed(newSeed);
+      console.log('LayoutProvider: Setting seed to:', effectiveSeed);
       setIsUserAction(true); // Mark this as a user action
-      setSeed(newSeed);
+      setSeed(effectiveSeed);
     } else {
       console.log('LayoutProvider: Invalid seed value:', newSeed);
     }
@@ -85,21 +89,22 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   const updateUrlManually = (newSeed: number) => {
     console.log('LayoutProvider: Manual URL update called with:', newSeed);
-    if (newSeed >= 1 && newSeed <= 10) {
+    if (newSeed >= 1 && newSeed <= 300) {
+      const effectiveSeed = getEffectiveSeed(newSeed);
       if (typeof window !== 'undefined') {
         const url = new URL(window.location.href);
         
-        if (newSeed === 1) {
+        if (effectiveSeed === 1) {
           url.searchParams.delete('seed');
         } else {
-          url.searchParams.set('seed', newSeed.toString());
+          url.searchParams.set('seed', effectiveSeed.toString());
         }
         
         window.history.pushState({}, '', url.toString());
         console.log('LayoutProvider: Manually updated URL to:', url.toString());
         
         // Update the seed state to match the URL (not a user action)
-        setSeed(newSeed);
+        setSeed(effectiveSeed);
       }
     }
   };
