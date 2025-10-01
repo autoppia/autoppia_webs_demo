@@ -341,7 +341,7 @@ function PropertyDetailContent() {
             <span className="text-neutral-600">
               · {prop.reviews ?? 30} reviews
             </span>
-            <button
+            <button id="add-to-wishlist"
               onClick={() => {
                 const newState = !isWishlisted;
                 setIsWishlisted(newState);
