@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
-import { getSeedLayout, type LayoutConfig } from './layouts';
+import { getEffectiveLayoutConfig, type LayoutConfig } from './layouts';
 
 export function useSeed(): { seed: number | undefined; layout: LayoutConfig } {
   const searchParams = useSearchParams();
@@ -13,14 +13,15 @@ export function useSeed(): { seed: number | undefined; layout: LayoutConfig } {
       if (!seedParam) return undefined;
       
       const seedNumber = parseInt(seedParam, 10);
-      return isNaN(seedNumber) || seedNumber < 1 || seedNumber > 10 ? undefined : seedNumber;
+      // Updated to support seeds 1-300
+      return isNaN(seedNumber) || seedNumber < 1 || seedNumber > 300 ? undefined : seedNumber;
     } catch (error) {
       // Fallback to default layout if useSearchParams fails
       return undefined;
     }
   }, [searchParams]);
   
-  const layout = useMemo(() => getSeedLayout(seed), [seed]);
+  const layout = useMemo(() => getEffectiveLayoutConfig(seed), [seed]);
   
   return { seed, layout };
 } 

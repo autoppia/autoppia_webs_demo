@@ -12,22 +12,63 @@ export interface LayoutConfig {
 }
 
 export function getSeedLayout(seed?: number): LayoutConfig {
-  if (!seed || seed < 1 || seed > 10) {
-    // Default layout
-    return {
-      mainLayout: 'default',
-      headerPosition: 'top',
-      sidebarPosition: 'left',
-      postBoxPosition: 'top',
-      feedOrder: 'normal',
-      navOrder: 'normal',
-      searchPosition: 'header',
-      filtersPosition: 'top',
-      jobCardsLayout: 'list',
-      profileLayout: 'standard'
-    };
+  // If no seed provided or out of range, return default
+  if (!seed || seed < 1 || seed > 300) {
+    return getDefaultLayout();
   }
 
+  // Special case: Seeds 160-170 should use the same layout as seed 80 (Layout 3)
+  if (seed >= 160 && seed <= 170) {
+    return getLayoutByIndex(3);
+  }
+
+  // Special case: Seeds 5,15,25,35,45,55,65,75...295 should use Layout 2
+  if (seed % 10 === 5) {
+    return getLayoutByIndex(2);
+  }
+
+  // Special case: Seed 8 should use Layout 1
+  if (seed === 8) {
+    return getLayoutByIndex(1);
+  }
+
+  // Special cases: Unique layouts for specific seeds
+  const specialLayouts: { [key: number]: number } = {
+    180: 11, // Ultra-wide layout
+    190: 18, // Split-screen layout
+    200: 20, // Asymmetric layout
+    210: 14, // Dashboard-style layout
+    250: 15, // Magazine-style layout
+    260: 19, // Card-stack layout
+    270: 17, // Premium showcase layout
+  };
+
+  if (specialLayouts[seed]) {
+    return getLayoutByIndex(specialLayouts[seed]);
+  }
+
+  // Map seed (1-300) to layout index (1-20) using modulo
+  const layoutIndex = ((seed % 30) + 1) % 20 || 20;
+
+  return getLayoutByIndex(layoutIndex);
+}
+
+function getDefaultLayout(): LayoutConfig {
+  return {
+    mainLayout: 'default',
+    headerPosition: 'top',
+    sidebarPosition: 'left',
+    postBoxPosition: 'top',
+    feedOrder: 'normal',
+    navOrder: 'normal',
+    searchPosition: 'header',
+    filtersPosition: 'top',
+    jobCardsLayout: 'list',
+    profileLayout: 'standard'
+  };
+}
+
+function getLayoutByIndex(layoutIndex: number): LayoutConfig {
   const layouts: LayoutConfig[] = [
     // Seed 1: Reverse layout with sidebar on right
     {
@@ -158,10 +199,145 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       filtersPosition: 'bottom',
       jobCardsLayout: 'grid',
       profileLayout: 'compact'
+    },
+    // Seed 11: Ultra-wide layout
+    {
+      mainLayout: 'grid',
+      headerPosition: 'top',
+      sidebarPosition: 'none',
+      postBoxPosition: 'top',
+      feedOrder: 'normal',
+      navOrder: 'normal',
+      searchPosition: 'floating',
+      filtersPosition: 'top',
+      jobCardsLayout: 'grid',
+      profileLayout: 'expanded'
+    },
+    // Seed 12: Compact sidebar layout
+    {
+      mainLayout: 'default',
+      headerPosition: 'top',
+      sidebarPosition: 'left',
+      postBoxPosition: 'center',
+      feedOrder: 'shuffled',
+      navOrder: 'reverse',
+      searchPosition: 'header',
+      filtersPosition: 'sidebar',
+      jobCardsLayout: 'compact',
+      profileLayout: 'compact'
+    },
+    // Seed 13: Minimalist centered layout
+    {
+      mainLayout: 'center-focus',
+      headerPosition: 'top',
+      sidebarPosition: 'none',
+      postBoxPosition: 'top',
+      feedOrder: 'normal',
+      navOrder: 'normal',
+      searchPosition: 'main',
+      filtersPosition: 'top',
+      jobCardsLayout: 'list',
+      profileLayout: 'standard'
+    },
+    // Seed 14: Dashboard-style layout
+    {
+      mainLayout: 'grid',
+      headerPosition: 'top',
+      sidebarPosition: 'right',
+      postBoxPosition: 'left',
+      feedOrder: 'reverse',
+      navOrder: 'shuffled',
+      searchPosition: 'header',
+      filtersPosition: 'right',
+      jobCardsLayout: 'cards',
+      profileLayout: 'sidebar'
+    },
+    // Seed 15: Magazine-style layout
+    {
+      mainLayout: 'masonry',
+      headerPosition: 'top',
+      sidebarPosition: 'left',
+      postBoxPosition: 'top',
+      feedOrder: 'shuffled',
+      navOrder: 'normal',
+      searchPosition: 'floating',
+      filtersPosition: 'top',
+      jobCardsLayout: 'grid',
+      profileLayout: 'expanded'
+    },
+    // Seed 16: Mobile-first layout
+    {
+      mainLayout: 'vertical',
+      headerPosition: 'top',
+      sidebarPosition: 'top',
+      postBoxPosition: 'center',
+      feedOrder: 'normal',
+      navOrder: 'reverse',
+      searchPosition: 'main',
+      filtersPosition: 'top',
+      jobCardsLayout: 'list',
+      profileLayout: 'compact'
+    },
+    // Seed 17: Premium showcase layout
+    {
+      mainLayout: 'center-focus',
+      headerPosition: 'top',
+      sidebarPosition: 'right',
+      postBoxPosition: 'center',
+      feedOrder: 'shuffled',
+      navOrder: 'normal',
+      searchPosition: 'header',
+      filtersPosition: 'bottom',
+      jobCardsLayout: 'cards',
+      profileLayout: 'expanded'
+    },
+    // Seed 18: Split-screen layout
+    {
+      mainLayout: 'split-view',
+      headerPosition: 'top',
+      sidebarPosition: 'left',
+      postBoxPosition: 'right',
+      feedOrder: 'reverse',
+      navOrder: 'reverse',
+      searchPosition: 'sidebar',
+      filtersPosition: 'left',
+      jobCardsLayout: 'compact',
+      profileLayout: 'sidebar'
+    },
+    // Seed 19: Card-stack layout
+    {
+      mainLayout: 'masonry',
+      headerPosition: 'top',
+      sidebarPosition: 'bottom',
+      postBoxPosition: 'top',
+      feedOrder: 'shuffled',
+      navOrder: 'shuffled',
+      searchPosition: 'main',
+      filtersPosition: 'bottom',
+      jobCardsLayout: 'cards',
+      profileLayout: 'standard'
+    },
+    // Seed 20: Asymmetric layout
+    {
+      mainLayout: 'reverse',
+      headerPosition: 'top',
+      sidebarPosition: 'right',
+      postBoxPosition: 'left',
+      feedOrder: 'reverse',
+      navOrder: 'shuffled',
+      searchPosition: 'floating',
+      filtersPosition: 'right',
+      jobCardsLayout: 'grid',
+      profileLayout: 'compact'
     }
   ];
 
-  return layouts[seed - 1];
+  // Return the layout at the correct index (1-based to 0-based)
+  if (layoutIndex >= 1 && layoutIndex <= layouts.length) {
+    return layouts[layoutIndex - 1];
+  }
+  
+  return getDefaultLayout();
 }
 
 export function getLayoutClasses(layout: LayoutConfig, component: keyof LayoutConfig): string {
@@ -249,4 +425,17 @@ export function getShuffledItems<T>(items: T[], order: 'normal' | 'reverse' | 's
     default:
       return items;
   }
+}
+
+// Helper function to check if dynamic HTML is enabled
+export function isDynamicEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+}
+
+// Helper function to get effective layout config
+export function getEffectiveLayoutConfig(seed?: number): LayoutConfig {
+  if (!isDynamicEnabled()) {
+    return getDefaultLayout();
+  }
+  return getSeedLayout(seed);
 } 
