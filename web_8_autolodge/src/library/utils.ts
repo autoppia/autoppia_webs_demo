@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -140,14 +141,25 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   return layouts[normalizedSeed] || layouts[1];
 }
 
-// Hook to get current seed and layout
+// Hook to get current seed and layout with dynamic HTML support
 export function useSeedLayout() {
   const searchParams = useSearchParams();
   const seedParam = searchParams.get('seed');
+  
   const seed = useMemo(() => {
     if (!seedParam) return undefined;
     const parsed = parseInt(seedParam, 10);
-    return isNaN(parsed) ? undefined : Math.max(1, Math.min(10, parsed));
+    if (isNaN(parsed)) return undefined;
+    
+    // Check if dynamic mode is enabled
+    const isDynamicEnabled = isDynamicModeEnabled();
+    if (!isDynamicEnabled) {
+      // When disabled, return default seed (1)
+      return 1;
+    }
+    
+    // When enabled, support seeds 1-300
+    return getEffectiveSeed(parsed);
   }, [seedParam]);
   
   const layout = useMemo(() => getSeedLayout(seed), [seed]);

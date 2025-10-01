@@ -11,9 +11,17 @@ import Image from "next/image";
 import { useSeedLayout } from "@/library/utils";
 import { DynamicWrapper } from "@/components/DynamicWrapper";
 import { Suspense } from "react";
+import { getEffectiveSeed, isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
 
 function HomeContent() {
   const { seed, layout } = useSeedLayout();
+  
+  // Log dynamic HTML status for debugging
+  React.useEffect(() => {
+    const isDynamic = isDynamicModeEnabled();
+    console.log('Dynamic HTML enabled:', isDynamic);
+    console.log('Current seed:', seed);
+  }, [seed]);
   
   // Range state: { from, to }
   const [dateRange, setDateRange] = React.useState<{
