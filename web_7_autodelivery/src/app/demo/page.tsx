@@ -65,9 +65,9 @@ function DemoPageContent() {
             <CardTitle>Navbar Layout</CardTitle>
           </CardHeader>
           <CardContent>
-            <p><strong>Logo Position:</strong> {layout.navbar.logoPosition}</p>
-            <p><strong>Cart Position:</strong> {layout.navbar.cartPosition}</p>
-            <p><strong>Menu Position:</strong> {layout.navbar.menuPosition}</p>
+            <p><strong>Logo Position:</strong> {layout.navigation.logoPosition}</p>
+            <p><strong>Cart Position:</strong> {layout.navigation.cartPosition}</p>
+            <p><strong>Menu Position:</strong> {layout.navigation.menuPosition}</p>
           </CardContent>
         </Card>
 
@@ -76,9 +76,9 @@ function DemoPageContent() {
             <CardTitle>Restaurant Cards</CardTitle>
           </CardHeader>
           <CardContent>
-            <p><strong>Grid Class:</strong> <code>{layout.restaurantCards.gridClass}</code></p>
-            <p><strong>Card Class:</strong> <code>{layout.restaurantCards.cardClass}</code></p>
-            <p><strong>Title Class:</strong> <code>{layout.restaurantCards.titleClass}</code></p>
+            <p><strong>Grid Class:</strong> <code>{layout.grid.containerClass}</code></p>
+            <p><strong>Card Class:</strong> <code>{layout.restaurantCard.containerClass}</code></p>
+            <p><strong>Title Class:</strong> <code>{layout.restaurantCard.titleClass}</code></p>
           </CardContent>
         </Card>
 
@@ -100,7 +100,7 @@ function DemoPageContent() {
           <CardContent>
             <p><strong>Icon Class:</strong> <code>{layout.cart.iconClass}</code></p>
             <p><strong>Badge Class:</strong> <code>{layout.cart.badgeClass}</code></p>
-            <p><strong>Page Class:</strong> <code>{layout.cart.pageClass}</code></p>
+            <p><strong>Page Class:</strong> <code>{layout.cart.pageContainerClass}</code></p>
           </CardContent>
         </Card>
 

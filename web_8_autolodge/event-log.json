@@ -1,0 +1,3733 @@
+[
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "10",
+      "title": "Mountain View Cabin",
+      "location": "Banff, Canada",
+      "rating": 4.8,
+      "reviews": 174,
+      "price": 198,
+      "dates": {
+        "from": "2025-07-12",
+        "to": "2025-08-25"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Sarah",
+        "since": 6,
+        "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+      },
+      "amenities": [
+        "Loft workspace",
+        "Near National Park",
+        "Wood-burning stove"
+      ]
+    },
+    "timestamp": "2025-09-12T09:32:14.729Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "10",
+      "title": "Mountain View Cabin",
+      "location": "Banff, Canada",
+      "rating": 4.8,
+      "reviews": 174,
+      "price": 198,
+      "dates": {
+        "from": "2025-07-12",
+        "to": "2025-08-25"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Sarah",
+        "since": 6,
+        "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+      },
+      "amenities": [
+        "Loft workspace",
+        "Near National Park",
+        "Wood-burning stove"
+      ]
+    },
+    "timestamp": "2025-09-12T09:32:27.515Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 10,
+      "guests_set": 1,
+      "hotel": {
+        "id": 10,
+        "image": "/images/hotel10.jpg",
+        "title": "Mountain View Cabin",
+        "location": "Banff, Canada",
+        "rating": 4.8,
+        "reviews": 174,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-25",
+        "price": 198,
+        "host": {
+          "name": "Sarah",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Loft workspace",
+            "desc": "Views of the Rockies while working."
+          },
+          {
+            "icon": "📍",
+            "title": "Near National Park",
+            "desc": "5-minute drive to Banff Park entrance."
+          },
+          {
+            "icon": "🔍",
+            "title": "Wood-burning stove",
+            "desc": "Rustic warmth and mountain charm."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T09:34:21.859Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 10,
+      "guests_set": 1,
+      "hotel": {
+        "id": 10,
+        "image": "/images/hotel10.jpg",
+        "title": "Mountain View Cabin",
+        "location": "Banff, Canada",
+        "rating": 4.8,
+        "reviews": 174,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-25",
+        "price": 198,
+        "host": {
+          "name": "Sarah",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Loft workspace",
+            "desc": "Views of the Rockies while working."
+          },
+          {
+            "icon": "📍",
+            "title": "Near National Park",
+            "desc": "5-minute drive to Banff Park entrance."
+          },
+          {
+            "icon": "🔍",
+            "title": "Wood-burning stove",
+            "desc": "Rustic warmth and mountain charm."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T09:34:28.638Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 10,
+      "guests_set": 1,
+      "hotel": {
+        "id": 10,
+        "image": "/images/hotel10.jpg",
+        "title": "Mountain View Cabin",
+        "location": "Banff, Canada",
+        "rating": 4.8,
+        "reviews": 174,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-25",
+        "price": 198,
+        "host": {
+          "name": "Sarah",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Loft workspace",
+            "desc": "Views of the Rockies while working."
+          },
+          {
+            "icon": "📍",
+            "title": "Near National Park",
+            "desc": "5-minute drive to Banff Park entrance."
+          },
+          {
+            "icon": "🔍",
+            "title": "Wood-burning stove",
+            "desc": "Rustic warmth and mountain charm."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T09:34:37.192Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 10,
+      "guests_set": 1,
+      "hotel": {
+        "id": 10,
+        "image": "/images/hotel10.jpg",
+        "title": "Mountain View Cabin",
+        "location": "Banff, Canada",
+        "rating": 4.8,
+        "reviews": 174,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-25",
+        "price": 198,
+        "host": {
+          "name": "Sarah",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Loft workspace",
+            "desc": "Views of the Rockies while working."
+          },
+          {
+            "icon": "📍",
+            "title": "Near National Park",
+            "desc": "5-minute drive to Banff Park entrance."
+          },
+          {
+            "icon": "🔍",
+            "title": "Wood-burning stove",
+            "desc": "Rustic warmth and mountain charm."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T09:43:23.471Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 10,
+      "guests_set": 1,
+      "hotel": {
+        "id": 10,
+        "image": "/images/hotel10.jpg",
+        "title": "Mountain View Cabin",
+        "location": "Banff, Canada",
+        "rating": 4.8,
+        "reviews": 174,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-25",
+        "price": 198,
+        "host": {
+          "name": "Sarah",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Loft workspace",
+            "desc": "Views of the Rockies while working."
+          },
+          {
+            "icon": "📍",
+            "title": "Near National Park",
+            "desc": "5-minute drive to Banff Park entrance."
+          },
+          {
+            "icon": "🔍",
+            "title": "Wood-burning stove",
+            "desc": "Rustic warmth and mountain charm."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T09:44:49.767Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 10,
+      "guests_set": 1,
+      "hotel": {
+        "id": 10,
+        "image": "/images/hotel10.jpg",
+        "title": "Mountain View Cabin",
+        "location": "Banff, Canada",
+        "rating": 4.8,
+        "reviews": 174,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-25",
+        "price": 198,
+        "host": {
+          "name": "Sarah",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Loft workspace",
+            "desc": "Views of the Rockies while working."
+          },
+          {
+            "icon": "📍",
+            "title": "Near National Park",
+            "desc": "5-minute drive to Banff Park entrance."
+          },
+          {
+            "icon": "🔍",
+            "title": "Wood-burning stove",
+            "desc": "Rustic warmth and mountain charm."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T09:47:50.895Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "10",
+      "title": "Mountain View Cabin",
+      "location": "Banff, Canada",
+      "rating": 4.8,
+      "reviews": 174,
+      "price": 198,
+      "dates": {
+        "from": "2025-07-12",
+        "to": "2025-08-25"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Sarah",
+        "since": 6,
+        "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+      },
+      "amenities": [
+        "Loft workspace",
+        "Near National Park",
+        "Wood-burning stove"
+      ]
+    },
+    "timestamp": "2025-09-12T09:48:03.526Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-12T09:48:16.025Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T09:48:18.252Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T09:48:19.441Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T09:48:28.118Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T10:04:22.467Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T10:04:24.648Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-12T10:12:00.991Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T10:12:03.482Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-09-12T10:14:41.724Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 2,
+      "guests_set": 1,
+      "hotel": {
+        "id": 2,
+        "image": "/images/hotel2.jpeg",
+        "title": "Sunset Beach Bungalow",
+        "location": "Goa, India",
+        "rating": 4.5,
+        "reviews": 98,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 104,
+        "host": {
+          "name": "Raj",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "WiFi included",
+            "desc": "Reliable high-speed internet connection."
+          },
+          {
+            "icon": "📍",
+            "title": "Prime beach access",
+            "desc": "Step out directly onto the sandy beach."
+          },
+          {
+            "icon": "🔍",
+            "title": "Local guidebooks",
+            "desc": "Explore nearby restaurants and attractions."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T10:14:48.451Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 2,
+      "guests_set": 1,
+      "hotel": {
+        "id": 2,
+        "image": "/images/hotel2.jpeg",
+        "title": "Sunset Beach Bungalow",
+        "location": "Goa, India",
+        "rating": 4.5,
+        "reviews": 98,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 104,
+        "host": {
+          "name": "Raj",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "WiFi included",
+            "desc": "Reliable high-speed internet connection."
+          },
+          {
+            "icon": "📍",
+            "title": "Prime beach access",
+            "desc": "Step out directly onto the sandy beach."
+          },
+          {
+            "icon": "🔍",
+            "title": "Local guidebooks",
+            "desc": "Explore nearby restaurants and attractions."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-14",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-14"
+    },
+    "timestamp": "2025-09-12T10:14:49.803Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-09-12T10:15:05.549Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "4",
+      "title": "Riverside Zen Cottage",
+      "location": "Kyoto, Japan",
+      "rating": 4.8,
+      "reviews": 163,
+      "price": 142,
+      "dates": {
+        "from": "2025-03-09",
+        "to": "2025-08-25"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Aiko",
+        "since": 6,
+        "avatar": "https://randomuser.me/api/portraits/women/33.jpg"
+      },
+      "amenities": [
+        "Tatami workspace",
+        "Near Gion District",
+        "Traditional style"
+      ]
+    },
+    "timestamp": "2025-09-12T10:15:07.845Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 4,
+      "guests_set": 1,
+      "hotel": {
+        "id": 4,
+        "image": "/images/hotel4.png",
+        "title": "Riverside Zen Cottage",
+        "location": "Kyoto, Japan",
+        "rating": 4.8,
+        "reviews": 163,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-03-09",
+        "datesTo": "2025-08-25",
+        "price": 142,
+        "host": {
+          "name": "Aiko",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/33.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Tatami workspace",
+            "desc": "Low table with garden view and high-speed wifi."
+          },
+          {
+            "icon": "📍",
+            "title": "Near Gion District",
+            "desc": "Walking distance to temples and tea houses."
+          },
+          {
+            "icon": "🔍",
+            "title": "Traditional style",
+            "desc": "Shoji doors, futon beds, and stone bath."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-09",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-03-09",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T10:15:16.855Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 4,
+      "guests_set": 1,
+      "hotel": {
+        "id": 4,
+        "image": "/images/hotel4.png",
+        "title": "Riverside Zen Cottage",
+        "location": "Kyoto, Japan",
+        "rating": 4.8,
+        "reviews": 163,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-03-09",
+        "datesTo": "2025-08-25",
+        "price": 142,
+        "host": {
+          "name": "Aiko",
+          "since": 6,
+          "avatar": "https://randomuser.me/api/portraits/women/33.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Tatami workspace",
+            "desc": "Low table with garden view and high-speed wifi."
+          },
+          {
+            "icon": "📍",
+            "title": "Near Gion District",
+            "desc": "Walking distance to temples and tea houses."
+          },
+          {
+            "icon": "🔍",
+            "title": "Traditional style",
+            "desc": "Shoji doors, futon beds, and stone bath."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-09",
+      "selected_checkout": "2025-08-24",
+      "selected_dates_from": "2025-03-09",
+      "selected_dates_to": "2025-08-24"
+    },
+    "timestamp": "2025-09-12T10:15:17.126Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-09-12T10:41:35.038Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 2,
+      "guests_set": 1,
+      "hotel": {
+        "id": 2,
+        "image": "/images/hotel2.jpeg",
+        "title": "Sunset Beach Bungalow",
+        "location": "Goa, India",
+        "rating": 4.5,
+        "reviews": 98,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 104,
+        "host": {
+          "name": "Raj",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "WiFi included",
+            "desc": "Reliable high-speed internet connection."
+          },
+          {
+            "icon": "📍",
+            "title": "Prime beach access",
+            "desc": "Step out directly onto the sandy beach."
+          },
+          {
+            "icon": "🔍",
+            "title": "Local guidebooks",
+            "desc": "Explore nearby restaurants and attractions."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T10:46:09.113Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 2,
+      "guests_set": 1,
+      "hotel": {
+        "id": 2,
+        "image": "/images/hotel2.jpeg",
+        "title": "Sunset Beach Bungalow",
+        "location": "Goa, India",
+        "rating": 4.5,
+        "reviews": 98,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 104,
+        "host": {
+          "name": "Raj",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "WiFi included",
+            "desc": "Reliable high-speed internet connection."
+          },
+          {
+            "icon": "📍",
+            "title": "Prime beach access",
+            "desc": "Step out directly onto the sandy beach."
+          },
+          {
+            "icon": "🔍",
+            "title": "Local guidebooks",
+            "desc": "Explore nearby restaurants and attractions."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-14",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-14"
+    },
+    "timestamp": "2025-09-12T10:46:14.921Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "6",
+      "title": "Cozy City Apartment",
+      "location": "Amsterdam, Netherlands",
+      "rating": 4.3,
+      "reviews": 76,
+      "price": 134,
+      "dates": {
+        "from": "2025-03-09",
+        "to": "2025-08-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Jasper",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+      },
+      "amenities": [
+        "Desk & chair",
+        "Near canals",
+        "Bike rental available"
+      ]
+    },
+    "timestamp": "2025-09-12T10:52:26.543Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 6,
+      "guests_set": 1,
+      "hotel": {
+        "id": 6,
+        "image": "/images/hotel6.png",
+        "title": "Cozy City Apartment",
+        "location": "Amsterdam, Netherlands",
+        "rating": 4.3,
+        "reviews": 76,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-03-09",
+        "datesTo": "2025-08-15",
+        "price": 134,
+        "host": {
+          "name": "Jasper",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Desk & chair",
+            "desc": "Work-friendly setup in a quiet corner."
+          },
+          {
+            "icon": "📍",
+            "title": "Near canals",
+            "desc": "2-minute walk to iconic canal paths."
+          },
+          {
+            "icon": "🔍",
+            "title": "Bike rental available",
+            "desc": "Host offers bikes for local exploring."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-09",
+      "selected_checkout": "2025-08-15",
+      "selected_dates_from": "2025-03-09",
+      "selected_dates_to": "2025-08-15"
+    },
+    "timestamp": "2025-09-12T10:52:30.184Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 6,
+      "guests_set": 1,
+      "hotel": {
+        "id": 6,
+        "image": "/images/hotel6.png",
+        "title": "Cozy City Apartment",
+        "location": "Amsterdam, Netherlands",
+        "rating": 4.3,
+        "reviews": 76,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-03-09",
+        "datesTo": "2025-08-15",
+        "price": 134,
+        "host": {
+          "name": "Jasper",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Desk & chair",
+            "desc": "Work-friendly setup in a quiet corner."
+          },
+          {
+            "icon": "📍",
+            "title": "Near canals",
+            "desc": "2-minute walk to iconic canal paths."
+          },
+          {
+            "icon": "🔍",
+            "title": "Bike rental available",
+            "desc": "Host offers bikes for local exploring."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-09",
+      "selected_checkout": "2025-08-14",
+      "selected_dates_from": "2025-03-09",
+      "selected_dates_to": "2025-08-14"
+    },
+    "timestamp": "2025-09-12T10:52:31.625Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "7",
+      "title": "Modern Desert Villa",
+      "location": "Sedona, USA",
+      "rating": 4.9,
+      "reviews": 205,
+      "price": 245,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 5,
+      "host": {
+        "name": "Melissa",
+        "since": 7,
+        "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+      },
+      "amenities": [
+        "Outdoor workspace",
+        "Red rock views",
+        "Private pool"
+      ]
+    },
+    "timestamp": "2025-09-12T10:53:38.298Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 7,
+      "guests_set": 1,
+      "hotel": {
+        "id": 7,
+        "image": "/images/hotel7.jpg",
+        "title": "Modern Desert Villa",
+        "location": "Sedona, USA",
+        "rating": 4.9,
+        "reviews": 205,
+        "guests": 5,
+        "maxGuests": 5,
+        "bedrooms": 2,
+        "beds": 3,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 245,
+        "host": {
+          "name": "Melissa",
+          "since": 7,
+          "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Outdoor workspace",
+            "desc": "Covered patio with power and WiFi."
+          },
+          {
+            "icon": "📍",
+            "title": "Red rock views",
+            "desc": "Floor-to-ceiling windows face the mountains."
+          },
+          {
+            "icon": "🔍",
+            "title": "Private pool",
+            "desc": "Saltwater pool with night lighting."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T10:53:40.478Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 7,
+      "guests_set": 1,
+      "hotel": {
+        "id": 7,
+        "image": "/images/hotel7.jpg",
+        "title": "Modern Desert Villa",
+        "location": "Sedona, USA",
+        "rating": 4.9,
+        "reviews": 205,
+        "guests": 5,
+        "maxGuests": 5,
+        "bedrooms": 2,
+        "beds": 3,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 245,
+        "host": {
+          "name": "Melissa",
+          "since": 7,
+          "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Outdoor workspace",
+            "desc": "Covered patio with power and WiFi."
+          },
+          {
+            "icon": "📍",
+            "title": "Red rock views",
+            "desc": "Floor-to-ceiling windows face the mountains."
+          },
+          {
+            "icon": "🔍",
+            "title": "Private pool",
+            "desc": "Saltwater pool with night lighting."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-14",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-14"
+    },
+    "timestamp": "2025-09-12T10:53:46.416Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "7",
+      "title": "Modern Desert Villa",
+      "location": "Sedona, USA",
+      "rating": 4.9,
+      "reviews": 205,
+      "price": 245,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 5,
+      "host": {
+        "name": "Melissa",
+        "since": 7,
+        "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+      },
+      "amenities": [
+        "Outdoor workspace",
+        "Red rock views",
+        "Private pool"
+      ]
+    },
+    "timestamp": "2025-09-12T10:53:58.982Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "8",
+      "title": "The Garden House",
+      "location": "Melbourne, Australia",
+      "rating": 4.4,
+      "reviews": 63,
+      "price": 129,
+      "dates": {
+        "from": "2025-07-12",
+        "to": "2025-08-15"
+      },
+      "guests": 3,
+      "host": {
+        "name": "Tom",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+      },
+      "amenities": [
+        "Sunroom workspace",
+        "Botanic Gardens nearby",
+        "Eco-friendly"
+      ]
+    },
+    "timestamp": "2025-09-12T10:54:09.674Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 8,
+      "guests_set": 1,
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-15",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-15"
+    },
+    "timestamp": "2025-09-12T10:54:16.632Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 8,
+      "guests_set": 1,
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-14",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-14"
+    },
+    "timestamp": "2025-09-12T10:54:17.400Z"
+  },
+  {
+    "event_name": "EDIT_CHECK_IN_OUT_DATES",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "dateRange": {
+        "from": "2025-08-04",
+        "to": "2025-08-14"
+      },
+      "source": "calendar_picker",
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      }
+    },
+    "timestamp": "2025-09-12T10:54:40.517Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 8,
+      "guests_set": 1,
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      },
+      "selected_checkin": "2025-08-04",
+      "selected_checkout": "2025-08-14",
+      "selected_dates_from": "2025-08-04",
+      "selected_dates_to": "2025-08-14"
+    },
+    "timestamp": "2025-09-12T10:54:40.692Z"
+  },
+  {
+    "event_name": "EDIT_CHECK_IN_OUT_DATES",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "dateRange": {
+        "from": "2025-08-03",
+        "to": "2025-08-14"
+      },
+      "source": "calendar_picker",
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      }
+    },
+    "timestamp": "2025-09-12T10:55:01.306Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 8,
+      "guests_set": 1,
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      },
+      "selected_checkin": "2025-08-03",
+      "selected_checkout": "2025-08-14",
+      "selected_dates_from": "2025-08-03",
+      "selected_dates_to": "2025-08-14"
+    },
+    "timestamp": "2025-09-12T10:55:01.731Z"
+  },
+  {
+    "event_name": "EDIT_CHECK_IN_OUT_DATES",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "dateRange": {
+        "from": "2025-07-16",
+        "to": "2025-08-14"
+      },
+      "source": "calendar_picker",
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      }
+    },
+    "timestamp": "2025-09-12T10:55:17.798Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 8,
+      "guests_set": 1,
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-16",
+      "selected_checkout": "2025-08-14",
+      "selected_dates_from": "2025-07-16",
+      "selected_dates_to": "2025-08-14"
+    },
+    "timestamp": "2025-09-12T10:55:17.981Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 8,
+      "guests_set": 1,
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-16",
+      "selected_checkout": "2025-08-14",
+      "selected_dates_from": "2025-07-16",
+      "selected_dates_to": "2025-08-14"
+    },
+    "timestamp": "2025-09-12T10:56:22.498Z"
+  },
+  {
+    "event_name": "BACK_TO_ALL_HOTELS",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "hotel": {
+        "id": 8,
+        "image": "/images/hotel8.jpg",
+        "title": "The Garden House",
+        "location": "Melbourne, Australia",
+        "rating": 4.4,
+        "reviews": 63,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 129,
+        "host": {
+          "name": "Tom",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Sunroom workspace",
+            "desc": "Natural light and lush garden views."
+          },
+          {
+            "icon": "📍",
+            "title": "Botanic Gardens nearby",
+            "desc": "Walk to iconic Royal Botanic Gardens."
+          },
+          {
+            "icon": "🔍",
+            "title": "Eco-friendly",
+            "desc": "Solar-powered with recycling facilities."
+          }
+        ]
+      }
+    },
+    "timestamp": "2025-09-12T11:01:16.605Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "5",
+      "title": "Bohemian Loft",
+      "location": "Lisbon, Portugal",
+      "rating": 4.6,
+      "reviews": 81,
+      "price": 115,
+      "dates": {
+        "from": "2025-03-13",
+        "to": "2025-08-25"
+      },
+      "guests": 3,
+      "host": {
+        "name": "Beatriz",
+        "since": 4,
+        "avatar": "https://randomuser.me/api/portraits/women/22.jpg"
+      },
+      "amenities": [
+        "Fast WiFi",
+        "Central Alfama",
+        "City views"
+      ]
+    },
+    "timestamp": "2025-09-12T11:01:23.550Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 5,
+      "guests_set": 1,
+      "hotel": {
+        "id": 5,
+        "image": "/images/hotel5.png",
+        "title": "Bohemian Loft",
+        "location": "Lisbon, Portugal",
+        "rating": 4.6,
+        "reviews": 81,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-03-13",
+        "datesTo": "2025-08-25",
+        "price": 115,
+        "host": {
+          "name": "Beatriz",
+          "since": 4,
+          "avatar": "https://randomuser.me/api/portraits/women/22.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Fast WiFi",
+            "desc": "Perfect for remote work or video calls."
+          },
+          {
+            "icon": "📍",
+            "title": "Central Alfama",
+            "desc": "Right in the heart of old Lisbon."
+          },
+          {
+            "icon": "🔍",
+            "title": "City views",
+            "desc": "Rooftop access with panoramic skyline."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-13",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-03-13",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T11:01:26.095Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 5,
+      "guests_set": 1,
+      "hotel": {
+        "id": 5,
+        "image": "/images/hotel5.png",
+        "title": "Bohemian Loft",
+        "location": "Lisbon, Portugal",
+        "rating": 4.6,
+        "reviews": 81,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-03-13",
+        "datesTo": "2025-08-25",
+        "price": 115,
+        "host": {
+          "name": "Beatriz",
+          "since": 4,
+          "avatar": "https://randomuser.me/api/portraits/women/22.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Fast WiFi",
+            "desc": "Perfect for remote work or video calls."
+          },
+          {
+            "icon": "📍",
+            "title": "Central Alfama",
+            "desc": "Right in the heart of old Lisbon."
+          },
+          {
+            "icon": "🔍",
+            "title": "City views",
+            "desc": "Rooftop access with panoramic skyline."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-13",
+      "selected_checkout": "2025-08-24",
+      "selected_dates_from": "2025-03-13",
+      "selected_dates_to": "2025-08-24"
+    },
+    "timestamp": "2025-09-12T11:01:26.843Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 5,
+      "guests_set": 1,
+      "hotel": {
+        "id": 5,
+        "image": "/images/hotel5.png",
+        "title": "Bohemian Loft",
+        "location": "Lisbon, Portugal",
+        "rating": 4.6,
+        "reviews": 81,
+        "guests": 3,
+        "maxGuests": 3,
+        "bedrooms": 1,
+        "beds": 2,
+        "baths": 1,
+        "datesFrom": "2025-03-13",
+        "datesTo": "2025-08-25",
+        "price": 115,
+        "host": {
+          "name": "Beatriz",
+          "since": 4,
+          "avatar": "https://randomuser.me/api/portraits/women/22.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Fast WiFi",
+            "desc": "Perfect for remote work or video calls."
+          },
+          {
+            "icon": "📍",
+            "title": "Central Alfama",
+            "desc": "Right in the heart of old Lisbon."
+          },
+          {
+            "icon": "🔍",
+            "title": "City views",
+            "desc": "Rooftop access with panoramic skyline."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-13",
+      "selected_checkout": "2025-08-25",
+      "selected_dates_from": "2025-03-13",
+      "selected_dates_to": "2025-08-25"
+    },
+    "timestamp": "2025-09-12T11:04:47.496Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "5",
+      "title": "Bohemian Loft",
+      "location": "Lisbon, Portugal",
+      "rating": 4.6,
+      "reviews": 81,
+      "price": 115,
+      "dates": {
+        "from": "2025-03-13",
+        "to": "2025-08-25"
+      },
+      "guests": 3,
+      "host": {
+        "name": "Beatriz",
+        "since": 4,
+        "avatar": "https://randomuser.me/api/portraits/women/22.jpg"
+      },
+      "amenities": [
+        "Fast WiFi",
+        "Central Alfama",
+        "City views"
+      ]
+    },
+    "timestamp": "2025-09-12T11:05:32.123Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "7",
+      "title": "Modern Desert Villa",
+      "location": "Sedona, USA",
+      "rating": 4.9,
+      "reviews": 205,
+      "price": 245,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 5,
+      "host": {
+        "name": "Melissa",
+        "since": 7,
+        "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+      },
+      "amenities": [
+        "Outdoor workspace",
+        "Red rock views",
+        "Private pool"
+      ]
+    },
+    "timestamp": "2025-09-12T11:05:40.402Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "7",
+      "title": "Modern Desert Villa",
+      "location": "Sedona, USA",
+      "rating": 4.9,
+      "reviews": 205,
+      "price": 245,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 5,
+      "host": {
+        "name": "Melissa",
+        "since": 7,
+        "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+      },
+      "amenities": [
+        "Outdoor workspace",
+        "Red rock views",
+        "Private pool"
+      ]
+    },
+    "timestamp": "2025-09-12T11:13:17.492Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 7,
+      "guests_set": 1,
+      "hotel": {
+        "id": 7,
+        "image": "/images/hotel7.jpg",
+        "title": "Modern Desert Villa",
+        "location": "Sedona, USA",
+        "rating": 4.9,
+        "reviews": 205,
+        "guests": 5,
+        "maxGuests": 5,
+        "bedrooms": 2,
+        "beds": 3,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 245,
+        "host": {
+          "name": "Melissa",
+          "since": 7,
+          "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Outdoor workspace",
+            "desc": "Covered patio with power and WiFi."
+          },
+          {
+            "icon": "📍",
+            "title": "Red rock views",
+            "desc": "Floor-to-ceiling windows face the mountains."
+          },
+          {
+            "icon": "🔍",
+            "title": "Private pool",
+            "desc": "Saltwater pool with night lighting."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T11:13:29.602Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 7,
+      "guests_set": 1,
+      "hotel": {
+        "id": 7,
+        "image": "/images/hotel7.jpg",
+        "title": "Modern Desert Villa",
+        "location": "Sedona, USA",
+        "rating": 4.9,
+        "reviews": 205,
+        "guests": 5,
+        "maxGuests": 5,
+        "bedrooms": 2,
+        "beds": 3,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 245,
+        "host": {
+          "name": "Melissa",
+          "since": 7,
+          "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Outdoor workspace",
+            "desc": "Covered patio with power and WiFi."
+          },
+          {
+            "icon": "📍",
+            "title": "Red rock views",
+            "desc": "Floor-to-ceiling windows face the mountains."
+          },
+          {
+            "icon": "🔍",
+            "title": "Private pool",
+            "desc": "Saltwater pool with night lighting."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-12T11:13:31.122Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "7",
+      "title": "Modern Desert Villa",
+      "location": "Sedona, USA",
+      "rating": 4.9,
+      "reviews": 205,
+      "price": 245,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 5,
+      "host": {
+        "name": "Melissa",
+        "since": 7,
+        "avatar": "https://randomuser.me/api/portraits/women/11.jpg"
+      },
+      "amenities": [
+        "Outdoor workspace",
+        "Red rock views",
+        "Private pool"
+      ]
+    },
+    "timestamp": "2025-09-12T11:13:41.904Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "6",
+      "title": "Cozy City Apartment",
+      "location": "Amsterdam, Netherlands",
+      "rating": 4.3,
+      "reviews": 76,
+      "price": 134,
+      "dates": {
+        "from": "2025-03-09",
+        "to": "2025-08-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Jasper",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+      },
+      "amenities": [
+        "Desk & chair",
+        "Near canals",
+        "Bike rental available"
+      ]
+    },
+    "timestamp": "2025-09-12T11:13:48.570Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 6,
+      "guests_set": 1,
+      "hotel": {
+        "id": 6,
+        "image": "/images/hotel6.png",
+        "title": "Cozy City Apartment",
+        "location": "Amsterdam, Netherlands",
+        "rating": 4.3,
+        "reviews": 76,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-03-09",
+        "datesTo": "2025-08-15",
+        "price": 134,
+        "host": {
+          "name": "Jasper",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Desk & chair",
+            "desc": "Work-friendly setup in a quiet corner."
+          },
+          {
+            "icon": "📍",
+            "title": "Near canals",
+            "desc": "2-minute walk to iconic canal paths."
+          },
+          {
+            "icon": "🔍",
+            "title": "Bike rental available",
+            "desc": "Host offers bikes for local exploring."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-09",
+      "selected_checkout": "2025-08-15",
+      "selected_dates_from": "2025-03-09",
+      "selected_dates_to": "2025-08-15"
+    },
+    "timestamp": "2025-09-12T11:14:03.274Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68bea4173bcb1abe82136b95\",\"email\":\"tayyabcheemadev@gmail.com\",\"fullName\":\"Tayyab Cheema\",\"role\":\"user\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 6,
+      "guests_set": 1,
+      "hotel": {
+        "id": 6,
+        "image": "/images/hotel6.png",
+        "title": "Cozy City Apartment",
+        "location": "Amsterdam, Netherlands",
+        "rating": 4.3,
+        "reviews": 76,
+        "guests": 2,
+        "maxGuests": 2,
+        "bedrooms": 1,
+        "beds": 1,
+        "baths": 1,
+        "datesFrom": "2025-03-09",
+        "datesTo": "2025-08-15",
+        "price": 134,
+        "host": {
+          "name": "Jasper",
+          "since": 2,
+          "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Desk & chair",
+            "desc": "Work-friendly setup in a quiet corner."
+          },
+          {
+            "icon": "📍",
+            "title": "Near canals",
+            "desc": "2-minute walk to iconic canal paths."
+          },
+          {
+            "icon": "🔍",
+            "title": "Bike rental available",
+            "desc": "Host offers bikes for local exploring."
+          }
+        ]
+      },
+      "selected_checkin": "2025-03-09",
+      "selected_checkout": "2025-08-15",
+      "selected_dates_from": "2025-03-09",
+      "selected_dates_to": "2025-08-15"
+    },
+    "timestamp": "2025-09-12T11:14:03.758Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:15:01.798Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:15:03.970Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:15:06.235Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:16:18.171Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:18:39.724Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:18:50.616Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:18:52.741Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:18:52.963Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:21:53.551Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:26:26.791Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:26:27.512Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:26:30.060Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:26:34.092Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "searchTerm": "Lisbon",
+      "checkinDate": "2026-01-06T19:00:00.000Z",
+      "checkoutDate": "2026-04-09T19:00:00.000Z",
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-09-15T07:30:30.339Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:35:32.233Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:35:34.021Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:35:34.756Z"
+  },
+  {
+    "event_name": "EDIT_CHECK_IN_OUT_DATES",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "dateRange": {
+        "from": "2026-08-12",
+        "to": "2026-09-16"
+      },
+      "source": "calendar_picker",
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      }
+    },
+    "timestamp": "2025-09-15T07:35:47.400Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2026-08-12",
+      "selected_checkout": "2026-09-16",
+      "selected_dates_from": "2026-08-12",
+      "selected_dates_to": "2026-09-16"
+    },
+    "timestamp": "2025-09-15T07:35:47.583Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:35:55.624Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:36:22.042Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:37:24.614Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:37:27.270Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:37:28.242Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-09-15T07:38:44.491Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:38:48.433Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": "{\"_id\":\"68c5232d2895aa177d22e187\",\"email\":\"admin@aspiro.com\",\"fullName\":\"Aspiro Admin\",\"role\":\"admin\",\"hasCompletedOnboarding\":false}",
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-09-15T07:38:48.743Z"
+  }
+]

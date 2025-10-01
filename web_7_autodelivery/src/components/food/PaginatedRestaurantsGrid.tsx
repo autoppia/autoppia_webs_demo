@@ -82,7 +82,7 @@ export default function PaginatedRestaurantsGrid({
       </div>
 
       {/* Restaurants Grid */}
-      <div className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 max-w-6xl mx-auto mb-8 ${layout.restaurantCards.gridClass}`}>
+      <div className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 max-w-6xl mx-auto mb-8 ${layout.grid.containerClass}`}>
         {currentRestaurants.map((r) => (
           <RestaurantCard
             key={r.id}

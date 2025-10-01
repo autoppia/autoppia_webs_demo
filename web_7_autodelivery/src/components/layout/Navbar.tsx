@@ -37,7 +37,7 @@ export default function Navbar() {
   };
 
   const getLogoPosition = () => {
-    switch (layout.navbar.logoPosition) {
+    switch (layout.navbar?.logoPosition) {
       case 'left':
         return 'order-1';
       case 'center':
@@ -50,7 +50,7 @@ export default function Navbar() {
   };
 
   const getCartPosition = () => {
-    switch (layout.navbar.cartPosition) {
+    switch (layout.navbar?.cartPosition) {
       case 'left':
         return 'order-1';
       case 'center':
@@ -63,7 +63,7 @@ export default function Navbar() {
   };
 
   const getMenuPosition = () => {
-    switch (layout.navbar.menuPosition) {
+    switch (layout.navbar?.menuPosition) {
       case 'left':
         return 'order-1';
       case 'center':
@@ -76,7 +76,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`sticky top-0 z-30 bg-white border-b border-zinc-200 shadow-sm h-20 flex items-center px-6 gap-8 ${layout.navbar.containerClass}`}>
+    <nav className={`sticky top-0 z-30 bg-white border-b border-zinc-200 shadow-sm h-20 flex items-center px-6 gap-8 ${layout.navbar?.containerClass || ''}`}>
       <Link
         href="/"
         className={`font-extrabold text-xl text-zinc-800 tracking-tight ${getLogoPosition()}`}

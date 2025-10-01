@@ -92,7 +92,7 @@ export default function CartPage() {
 
   if (items.length === 0 && !orderSuccess)
     return (
-      <div className={`max-w-2xl mx-auto mt-24 text-center text-lg text-zinc-500 ${layout.cart.pageClass}`}>
+      <div className={`max-w-2xl mx-auto mt-24 text-center text-lg text-zinc-500 ${layout.cart.pageContainerClass}`}>
         Your cart is empty.
       </div>
     );
@@ -178,7 +178,7 @@ export default function CartPage() {
   };
 
   return (
-    <div id="cart-page-container" className={`max-w-3xl mx-auto mt-8 px-4 ${layout.cart.pageClass}`}>
+    <div id="cart-page-container" className={`max-w-3xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
       <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
@@ -421,7 +421,7 @@ export default function CartPage() {
                         />
                         <Button
                           id="save-address-button"
-                          className={`mt-2 w-full ${layout.buttons.primaryClass}`}
+                          className={`mt-2 w-full ${layout.cart.buttonClass}`}
                           onClick={() => {
                             if (customAddress.trim()) {
                               setForm((f) => ({
@@ -657,7 +657,7 @@ export default function CartPage() {
                     id={`decrement-${item.id}`}
                     size="icon"
                     variant="outline"
-                    className={layout.buttons.secondaryClass}
+                    className={layout.cart.buttonClass}
                     onClick={() => {
                       updateQuantity(item.id, item.quantity - 1);
                       logEvent(EVENT_TYPES.ITEM_DECREMENTED, {
@@ -675,7 +675,7 @@ export default function CartPage() {
                     id={`increment-${item.id}`}
                     size="icon"
                     variant="outline"
-                    className={layout.buttons.secondaryClass}
+                    className={layout.cart.buttonClass}
                     onClick={() => {
                       updateQuantity(item.id, item.quantity + 1);
                       logEvent(EVENT_TYPES.ITEM_INCREMENTED, {
@@ -758,7 +758,7 @@ export default function CartPage() {
             <Button
               id="place-order-button"
               size="lg"
-              className={`mt-3 ${layout.buttons.primaryClass}`}
+              className={`mt-3 ${layout.cart.buttonClass}`}
               type="submit"
               disabled={items.length === 0}
             >
