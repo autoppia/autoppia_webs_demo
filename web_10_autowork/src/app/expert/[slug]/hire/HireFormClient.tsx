@@ -78,6 +78,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
               </label>
               <select
                 className="border rounded-lg px-4 py-2 w-full mb-5"
+                id="select-team"
                 onChange={(e) => {
                   const team = e.target.value;
                   // Fire event
