@@ -184,6 +184,9 @@ case "$WEB_DEMO" in
     deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     deploy_webs_server
     ;;
+  webs_server)
+    deploy_webs_server
+    ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
@@ -202,7 +205,7 @@ case "$WEB_DEMO" in
     deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', 'autohealth' or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', 'autohealth' or 'all' and 'webs_server."
     exit 1
     ;;
 esac
