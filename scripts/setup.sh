@@ -5,15 +5,15 @@ set -euo pipefail
 
 echo "🚀 Setting up web demos..."
 
-# 0. Remove all containers
-echo "[INFO] Removing all containers..."
-docker ps -aq | xargs -r docker rm -f || true
-
-# 1. Prune Docker environment
-echo "[INFO] Pruning volumes, images and networks..."
-docker volume rm $(docker volume ls -q) 2>/dev/null || true
-docker rmi $(docker images -q) --force 2>/dev/null || true
-docker network prune -f || true
+## 0. Remove all containers
+#echo "[INFO] Removing all containers..."
+#docker ps -aq | xargs -r docker rm -f || true
+#
+## 1. Prune Docker environment
+#echo "[INFO] Pruning volumes, images and networks..."
+#docker volume rm $(docker volume ls -q) 2>/dev/null || true
+#docker rmi $(docker images -q) --force 2>/dev/null || true
+#docker network prune -f || true
 
 # 2. Ensure external network for app ↔ front communication
 EXTERNAL_NET="apps_net"
@@ -47,7 +47,7 @@ for ARG in "$@"; do
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
     -y|--yes)          FORCE_DELETE=true ;;
-    *) ;; 
+    *) ;;
   esac
 done
 
@@ -168,8 +168,20 @@ case "$WEB_DEMO" in
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     deploy_webs_server
     ;;
-  autocalender)
+  autocalendar)
     deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autolist)
+    deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autodrive)
+    deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autohealth)
+    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
@@ -183,11 +195,14 @@ case "$WEB_DEMO" in
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
     deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalender_$((WEB_PORT + 10))"
+    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autocalender', or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', 'autohealth' or 'all'."
     exit 1
     ;;
 esac
