@@ -45,10 +45,13 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
     }
   };
 
+  const cardIndex = parseInt(id.replace('restaurant-', '')) || 0;
+
   return (
     <Link 
       href={`/restaurants/${id}`}
       onClick={handleClick}
+      {...layout.getElementAttributes('VIEW_DELIVERY_RESTAURANT', cardIndex)}
     >
       <Card className={`hover:shadow-xl transition-shadow duration-200 cursor-pointer ${layout.restaurantCard.containerClass}`}>
         <div className={`relative w-full h-48 rounded-t-xl overflow-hidden ${layout.restaurantCard.imageClass}`}>

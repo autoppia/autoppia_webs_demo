@@ -1,17 +1,25 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { getSeedLayout, SeedLayout } from '@/lib/seed-layout';
+import { useEffect, useState, useCallback } from 'react';
+import { getSeedLayout, SeedLayout, getEffectiveSeed, generateElementAttributes, isDynamicEnabled } from '@/lib/seed-layout';
 
-export function useSeedLayout(): SeedLayout {
-  const [layout, setLayout] = useState<SeedLayout>(getSeedLayout(1));
+export function useSeedLayout() {
+  const [layout, setLayout] = useState<SeedLayout>(getSeedLayout(6));
+  const [seed, setSeed] = useState(6);
+  const [isDynamicMode, setIsDynamicMode] = useState(false);
 
   useEffect(() => {
+    // Check if dynamic HTML is enabled
+    setIsDynamicMode(isDynamicEnabled());
+    
     const updateLayout = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const seedParam = urlParams.get('seed');
-      const seed = seedParam ? parseInt(seedParam, 10) : 1;
-      setLayout(getSeedLayout(seed));
+      const rawSeed = seedParam ? parseInt(seedParam, 10) : 6;
+      const effectiveSeed = getEffectiveSeed(rawSeed);
+      
+      setSeed(effectiveSeed);
+      setLayout(getSeedLayout(effectiveSeed));
     };
 
     // Set initial layout
@@ -42,5 +50,33 @@ export function useSeedLayout(): SeedLayout {
     };
   }, []);
 
-  return layout;
+  // Function to get element attributes with seed
+  const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
+    return generateElementAttributes(elementType, seed, index);
+  }, [seed]);
+
+  // Function to generate element ID with seed
+  const generateId = useCallback((context: string, index: number = 0) => {
+    if (!isDynamicMode) {
+      return `${context}-${index}`;
+    }
+    return `${context}-${seed}-${index}`;
+  }, [seed, isDynamicMode]);
+
+  // Function to generate seed-based class name
+  const generateSeedClass = useCallback((baseClass: string) => {
+    if (!isDynamicMode) {
+      return baseClass;
+    }
+    return `${baseClass}-seed-${seed}`;
+  }, [seed, isDynamicMode]);
+
+  return {
+    ...layout,
+    seed,
+    isDynamicMode,
+    getElementAttributes,
+    generateId,
+    generateSeedClass,
+  };
 } 

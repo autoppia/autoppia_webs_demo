@@ -195,6 +195,7 @@ export default function CartPage() {
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
             }`}
             aria-pressed={mode === "delivery"}
+            {...layout.getElementAttributes('DELIVERY_MODE', 0)}
           >
             Delivery
           </button>
@@ -212,6 +213,7 @@ export default function CartPage() {
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
             }`}
             aria-pressed={mode === "pickup"}
+            {...layout.getElementAttributes('PICKUP_MODE', 0)}
           >
             Pickup
           </button>
@@ -634,7 +636,7 @@ export default function CartPage() {
       ) : (
         <>
           <div id="cart-items-container" className="rounded-xl bg-white shadow p-4 mb-8">
-            {items.map((item) => (
+            {items.map((item, idx) => (
               <div
                 id={`cart-item-${item.id}`}
                 key={item.id}
@@ -667,6 +669,7 @@ export default function CartPage() {
                       });
                     }}
                     disabled={item.quantity === 1}
+                    {...layout.getElementAttributes('ITEM_DECREMENTED', idx)}
                   >
                     -
                   </Button>
@@ -684,6 +687,7 @@ export default function CartPage() {
                         quantity: item.quantity + 1,
                       });
                     }}
+                    {...layout.getElementAttributes('ITEM_INCREMENTED', idx)}
                   >
                     +
                   </Button>
@@ -712,6 +716,7 @@ export default function CartPage() {
                     //   });
                     // }
                   }}
+                  {...layout.getElementAttributes('EMPTY_CART', idx)}
                 >
                   ×
                 </Button>
@@ -761,6 +766,7 @@ export default function CartPage() {
               className={`mt-3 ${layout.cart.buttonClass}`}
               type="submit"
               disabled={items.length === 0}
+              {...layout.getElementAttributes('PLACE_ORDER', 0)}
             >
               Place Order
             </Button>

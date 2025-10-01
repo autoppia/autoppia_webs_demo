@@ -95,6 +95,7 @@ export default function Navbar() {
           value={search}
           onChange={handleSearchChange}
           className={`w-96 rounded-full text-sm ${layout.searchBar.inputClass}`}
+          {...layout.getElementAttributes('SEARCH_DELIVERY_RESTAURANT', 0)}
         />
       </div>
       
