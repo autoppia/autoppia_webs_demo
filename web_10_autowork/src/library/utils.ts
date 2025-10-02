@@ -43,7 +43,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   };
 
   // If no seed or invalid seed, return default
-  if (!seed || seed < 1 || seed > 10) {
+  if (!seed || seed < 1 || seed > 300) {
     return defaultLayout;
   }
 
@@ -241,7 +241,11 @@ export function getSeedLayout(seed?: number): LayoutConfig {
     }
   };
 
-  return layouts[seed] || defaultLayout;
+  // Map seed to available layout (1-10)
+  const mappedSeed = ((seed - 1) % 10) + 1;
+  
+  // Return the layout for the mapped seed
+  return layouts[mappedSeed] || defaultLayout;
 }
 
 // Helper function to get URL search params

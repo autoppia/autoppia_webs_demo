@@ -15,7 +15,7 @@ function PostJobWizard({
   open: boolean;
   onClose: () => void;
 }) {
-  const { layout } = useSeedLayout();
+  const { layout, getElementAttributes } = useSeedLayout();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -261,6 +261,7 @@ function PostJobWizard({
                 </label>
                 <input
                   id="job-title"
+                  {...getElementAttributes('job-title-input', 0)}
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-lg focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none mt-1"
                   placeholder=""
                   type="text"
@@ -300,6 +301,7 @@ function PostJobWizard({
                 </label>
                 <div className="flex gap-2 items-start mb-2" ref={dropdownRef}>
                   <input
+                    {...getElementAttributes('skill-search-input', 0)}
                     className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
                     placeholder="Type a skill and press Enter or Add button"
                     type="text"
@@ -354,6 +356,7 @@ function PostJobWizard({
                     </ul>
                   )}
                   <button
+                    {...getElementAttributes('add-skill-button', 0)}
                     className="rounded bg-[#08b4ce] text-white px-4 py-2 h-11 ml-2 font-bold hover:bg-[#0999ac]"
                     type="button"
                     onClick={() => {
@@ -385,6 +388,7 @@ function PostJobWizard({
                     >
                       {skill}
                       <button
+                        {...getElementAttributes('remove-skill-button', i)}
                         type="button"
                         className="ml-1 text-xs font-bold"
                         onClick={() => {
@@ -411,6 +415,7 @@ function PostJobWizard({
                     {popularSkills.map((skill) => (
                       <button
                         key={skill}
+                        {...getElementAttributes('popular-skill-button', popularSkills.indexOf(skill))}
                         type="button"
                         className="px-3 py-1 bg-gray-100 hover:bg-[#e6f9fb] border border-[#cad2d0] rounded-full text-[#253037] text-sm"
                         onClick={() => {
@@ -571,6 +576,7 @@ function PostJobWizard({
                 </label>
                 <textarea
                   id="desc"
+                  {...getElementAttributes('job-description-textarea', 0)}
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none h-28 resize-vertical"
                   value={form.description}
                   onChange={(e) => setValue("description", e.target.value)}
@@ -593,6 +599,7 @@ function PostJobWizard({
                 </div>
                 <div className="mt-6">
                   <button
+                    {...getElementAttributes('attach-file-button', 0)}
                     type="button"
                     // style={{ display: "none" }}
                     onClick={() => fileInputRef.current?.click()}
@@ -633,6 +640,7 @@ function PostJobWizard({
           'justify-between'
         }`}>
           <button
+            {...getElementAttributes('back-button', 0)}
             type="button"
             onClick={() => {
               logEvent(EVENT_TYPES.BACK_BUTTON, {
@@ -662,6 +670,7 @@ function PostJobWizard({
 
           {step < totalSteps ? (
             <button
+              {...getElementAttributes('next-button', step)}
               type="button"
               className={`px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700 ${
                 layout.buttonPositions.submit === 'center' ? 'order-1' : ''
@@ -672,6 +681,7 @@ function PostJobWizard({
             </button>
           ) : (
             <button
+              {...getElementAttributes('submit-job-button', 0)}
               type="submit"
               onClick={() => {
                 logEvent(EVENT_TYPES.SUBMIT_JOB, {
@@ -697,6 +707,7 @@ function PostJobWizard({
         </div>
         {/* Close icon */}
         <button
+          {...getElementAttributes('close-post-job-button', 0)}
           onClick={() => {
             logEvent(EVENT_TYPES.CLOSE_POST_A_JOB_WINDOW, {
               step,
@@ -728,7 +739,7 @@ function PostJobWizard({
 
 export default function Home() {
   const [showPostJob, setShowPostJob] = useState(false);
-  const { layout } = useSeedLayout();
+  const { layout, getElementAttributes } = useSeedLayout();
 
   // Create section components
   const JobsSection = () => (
@@ -736,6 +747,7 @@ export default function Home() {
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-semibold">Your jobs</h2>
         <button
+          {...getElementAttributes('post-job-button', 0)}
           type="button"
           className={`inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
             layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
@@ -756,6 +768,7 @@ export default function Home() {
         {jobs.map((job, i) => (
           <div
             key={i}
+            {...getElementAttributes('job-item', i)}
             className="bg-white shadow rounded-xl px-7 py-6 flex flex-col gap-2 border border-gray-100"
           >
             <div className="flex flex-wrap justify-between items-center gap-4">
@@ -876,7 +889,7 @@ export default function Home() {
         Review your project's goals with an expert, one-on-one
       </h2>
       <div className="grid gap-7 md:grid-cols-2">
-        {experts.map((expert) => (
+        {experts.map((expert, i) => (
           <div
             key={expert.name}
             className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
@@ -934,6 +947,7 @@ export default function Home() {
                 .replace(/\s+/g, "-")
                 .replace(/\./g, "")}`}
               passHref
+              {...getElementAttributes('book-consultation-button', i)}
               className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
             >
               Book a consultation

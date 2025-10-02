@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-false}
     ports:
       - "${WEB_PORT}:8009"
     restart: always
@@ -10,6 +12,8 @@ services:
       - API_URL=http://app:8080
       - PORT=8009
       - NODE_ENV=production
+      - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
+      - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
     networks:
       - apps_net
 
