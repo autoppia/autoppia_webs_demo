@@ -37,7 +37,7 @@ WEBS_PORT_DEFAULT=8090
 WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 ENABLE_DYNAMIC_HTML_DEFAULT=false
-DATA_GENERATION=false
+ENABLE_DATA_GENERATION=false
 FORCE_DELETE=false
 
 # 5) Parse args (only one public flag, plus -y convenience)
@@ -49,7 +49,7 @@ for ARG in "$@"; do
     --webs_postgres=*)   WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)            WEB_DEMO="${ARG#*=}" ;;
     --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
-    --data_generation=*) DATA_GENERATION="${ARG#*=}" ;;
+    --enable_data_generation=*) ENABLE_DATA_GENERATION="${ARG#*=}" ;;
     -y|--yes)            FORCE_DELETE=true ;;
     *) ;;
   esac
@@ -60,6 +60,7 @@ POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
 ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
+ENABLE_DATA_GENERATION="${ENABLE_DATA_GENERATION:-$ENABLE_DATA_GENERATION_DEFAULT}"
 
 echo "🔣 Configuration:"
 echo "    movies/books base HTTP  →  $WEB_PORT"
@@ -68,7 +69,7 @@ echo "    webs_server HTTP        →  $WEBS_PORT"
 echo "    webs_server Postgres    →  $WEBS_PG_PORT"
 echo "    Demo to deploy:         →  $WEB_DEMO"
 echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
-echo "    Data generation:        →  $DATA_GENERATION"
+echo "    Data generation:        →  $ENABLE_DATA_GENERATION"
 echo
 
 # 6) Check Docker
@@ -105,7 +106,7 @@ deploy_project() {
 
   # Environment-only prefixes apply to the single command that follows
   WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
-  DATA_GENERATION="$DATA_GENERATION" \
+  ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
   docker compose -p "$proj" up -d --build
 
   popd >/dev/null

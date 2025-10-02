@@ -141,7 +141,7 @@ export async function generateProjectData(
  */
 export function isDataGenerationEnabled(): boolean {
   return process.env.NEXT_PUBLIC_DATA_GENERATION === 'true' || 
-         process.env.DATA_GENERATION === 'true';
+         process.env.ENABLE_DATA_GENERATION === 'true';
 }
 
 /**
