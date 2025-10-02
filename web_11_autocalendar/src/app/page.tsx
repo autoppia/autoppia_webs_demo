@@ -1347,7 +1347,7 @@ export default function Home() {
                   />
                   {/* Search Results Dropdown */}
                   {searchDropdownOpen && searchResults.length > 0 && (
-                    <div className="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-50 max-h-64 overflow-auto">
+                    <div id="select-event" className="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-50 max-h-64 overflow-auto">
                       {searchResults.map((ev) => (
                         <div
                           key={ev.id}
@@ -2148,7 +2148,7 @@ export default function Home() {
                 <div>
                   <Label>Reminders</Label>
                   <div className="flex gap-2 mt-1">
-                    <select
+                    <select id="select-minutes"
                       className="px-3 py-2 border rounded"
                       value={eventModal.reminderToAdd}
                       onChange={(e) =>
