@@ -1,173 +1,91 @@
 #!/bin/bash
 
 # Test script for dynamic HTML behavior in web_5_autocrm
-# This script tests the scraper confusion functionality
+# This script tests how the CRM application behaves with different seed values
 
-echo "🧪 Testing Dynamic HTML Behavior for Scraper Confusion"
-echo "======================================================"
+set -e
 
 # Colors for output
-RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Test function
-test_seed_behavior() {
-    local seed=$1
+echo -e "${GREEN}🧪 Testing Dynamic HTML Behavior for CRM Scraper Confusion${NC}"
+echo "This script tests the dynamic HTML implementation in web_5_autocrm"
+echo
+
+# Function to test a URL and check for dynamic attributes
+test_url() {
+    local url=$1
     local description=$2
-    local expected_behavior=$3
+    echo -e "\n${BLUE}Testing: $description${NC}"
+    echo "URL: $url"
     
-    echo -e "\n${BLUE}Testing Seed: $seed - $description${NC}"
-    
-    # Test URL
-    local url="http://localhost:8004/?seed=$seed"
-    
-    # Make request and check if it returns 200
-    local response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-    
-    if [ "$response" = "200" ]; then
-        echo -e "${GREEN}✅ Seed $seed: HTTP 200 OK${NC}"
-        
-        # Get page title to verify it's loading
-        local title=$(curl -s "$url" | grep -o '<title>[^<]*</title>' | sed 's/<title>//;s/<\/title>//')
-        echo -e "   Title: $title"
-        
-        # Check for dynamic attributes on elements that log events
-        local dynamic_attrs=$(curl -s "$url" | grep -c "data-seed\|data-variant\|data-element-type")
-        if [ "$dynamic_attrs" -gt 0 ]; then
-            echo -e "${GREEN}   ✅ Dynamic attributes detected ($dynamic_attrs found)${NC}"
-            echo -e "   ${YELLOW}   Expected: $expected_behavior${NC}"
-        else
-            echo -e "${YELLOW}   ⚠️  No dynamic attributes found${NC}"
-            echo -e "   ${YELLOW}   Expected: $expected_behavior${NC}"
-        fi
-        
-        # Check for XPath data attributes (scraper confusion)
-        local xpath_attrs=$(curl -s "$url" | grep -c "data-xpath")
-        if [ "$xpath_attrs" -gt 0 ]; then
-            echo -e "${GREEN}   ✅ XPath confusion attributes detected ($xpath_attrs found)${NC}"
-        else
-            echo -e "${YELLOW}   ⚠️  No XPath confusion attributes found${NC}"
-        fi
-        
+    # Use curl to test the URL and check for dynamic attributes
+    if curl -s -f "$url" | grep -q 'data-seed\|data-variant\|data-element-type'; then
+        echo -e "✅ Dynamic attributes found"
     else
-        echo -e "${RED}❌ Seed $seed: HTTP $response${NC}"
+        echo -e "❌ No dynamic attributes found"
     fi
 }
 
 # Check if the application is running
-echo "🔍 Checking if web_5_autocrm is running..."
-if ! curl -s http://localhost:8004 > /dev/null; then
-    echo -e "${RED}❌ Application is not running on localhost:8004${NC}"
+if ! curl -s -f "http://localhost:8004" > /dev/null; then
+    echo -e "${RED}❌ Error: CRM application not running on localhost:8004${NC}"
     echo "Please start the application first:"
-    echo "  cd web_5_autocrm"
     echo "  ENABLE_DYNAMIC_HTML=true npm run dev"
-    echo "  # or"
+    echo "  or"
     echo "  ENABLE_DYNAMIC_HTML=true docker compose up -d --build"
     exit 1
 fi
 
-echo -e "${GREEN}✅ Application is running${NC}"
-
-# Test different scenarios
+echo -e "${GREEN}✅ CRM application is running${NC}"
 echo -e "\n${YELLOW}Testing Dynamic HTML Behavior...${NC}"
 
 # Test with dynamic HTML enabled (default)
 echo -e "\n${BLUE}=== Testing with Dynamic HTML ENABLED ===${NC}"
-test_seed_behavior 1 "Default layout" "Dynamic attributes should be present"
-test_seed_behavior 5 "Seeds ending in 5 (Layout 2)" "Different layout, dynamic attributes"
-test_seed_behavior 180 "Special layout 11 (Ultra-wide)" "Unique layout, dynamic attributes"
-test_seed_behavior 200 "Special layout 20 (Asymmetric)" "Unique layout, dynamic attributes"
 
-# Test invalid seeds
-echo -e "\n${BLUE}=== Testing Invalid Seeds ===${NC}"
-test_seed_behavior 0 "Invalid seed (should default to 1)" "Should use default layout"
-test_seed_behavior 301 "Invalid seed (should default to 1)" "Should use default layout"
-test_seed_behavior -1 "Negative seed (should default to 1)" "Should use default layout"
+# Test different seed values
+test_url "http://localhost:8004/?seed=1" "Seed 1 - Default layout"
+test_url "http://localhost:8004/?seed=5" "Seed 5 - Special layout (Layout 2)"
+test_url "http://localhost:8004/?seed=8" "Seed 8 - Special layout (Layout 1)"
+test_url "http://localhost:8004/?seed=25" "Seed 25 - Special layout (Layout 2)"
+test_url "http://localhost:8004/?seed=160" "Seed 160 - Special range (Layout 3)"
+test_url "http://localhost:8004/?seed=180" "Seed 180 - Special layout (Layout 11)"
+test_url "http://localhost:8004/?seed=200" "Seed 200 - Special layout (Layout 20)"
+test_url "http://localhost:8004/?seed=300" "Seed 300 - Maximum seed value"
 
-# Test scraper confusion elements
-echo -e "\n${YELLOW}Testing Scraper Confusion Elements...${NC}"
+# Test different pages with seeds
+test_url "http://localhost:8004/clients?seed=150" "Clients page with seed 150"
+test_url "http://localhost:8004/matters?seed=200" "Matters page with seed 200"
+test_url "http://localhost:8004/calendar?seed=75" "Calendar page with seed 75"
 
-# Check for elements that log events and should have dynamic attributes
-echo -e "\n${BLUE}Checking for event-logging elements with dynamic attributes:${NC}"
+# Test edge cases
+test_url "http://localhost:8004/?seed=0" "Seed 0 - Invalid seed (should default to 1)"
+test_url "http://localhost:8004/?seed=301" "Seed 301 - Invalid seed (should default to 1)"
+test_url "http://localhost:8004/?seed=-1" "Seed -1 - Invalid seed (should default to 1)"
 
-# Test matters page (has ADD_NEW_MATTER, DELETE_MATTER, VIEW_MATTER_DETAILS events)
-echo -e "\n${BLUE}Testing Matters Page (Event: ADD_NEW_MATTER, DELETE_MATTER, VIEW_MATTER_DETAILS)${NC}"
-matters_url="http://localhost:8004/matters?seed=5"
-matters_response=$(curl -s -o /dev/null -w "%{http_code}" "$matters_url")
-if [ "$matters_response" = "200" ]; then
-    echo -e "${GREEN}✅ Matters page accessible${NC}"
-    
-    # Check for dynamic button attributes
-    dynamic_buttons=$(curl -s "$matters_url" | grep -c "data-seed\|data-variant")
-    echo -e "   Dynamic button attributes: $dynamic_buttons found"
-    
-    # Check for XPath confusion
-    xpath_buttons=$(curl -s "$matters_url" | grep -c "data-xpath")
-    echo -e "   XPath confusion attributes: $xpath_buttons found"
-else
-    echo -e "${RED}❌ Matters page not accessible${NC}"
-fi
+# Test without seed parameter
+test_url "http://localhost:8004/" "No seed parameter (should default to seed 1)"
 
-# Test clients page (has SEARCH_CLIENT, VIEW_CLIENT_DETAILS events)
-echo -e "\n${BLUE}Testing Clients Page (Event: SEARCH_CLIENT, VIEW_CLIENT_DETAILS)${NC}"
-clients_url="http://localhost:8004/clients?seed=180"
-clients_response=$(curl -s -o /dev/null -w "%{http_code}" "$clients_url")
-if [ "$clients_response" = "200" ]; then
-    echo -e "${GREEN}✅ Clients page accessible${NC}"
-    
-    # Check for dynamic attributes
-    dynamic_clients=$(curl -s "$clients_url" | grep -c "data-seed\|data-variant")
-    echo -e "   Dynamic client attributes: $dynamic_clients found"
-    
-    # Check for XPath confusion
-    xpath_clients=$(curl -s "$clients_url" | grep -c "data-xpath")
-    echo -e "   XPath confusion attributes: $xpath_clients found"
-else
-    echo -e "${RED}❌ Clients page not accessible${NC}"
-fi
+echo -e "\n${BLUE}=== Testing with Dynamic HTML DISABLED ===${NC}"
+echo "Note: To test with dynamic HTML disabled, restart the application with:"
+echo "  ENABLE_DYNAMIC_HTML=false npm run dev"
+echo "Then run this script again."
 
-# Test documents page (has DOCUMENT_UPLOADED, DOCUMENT_DELETED events)
-echo -e "\n${BLUE}Testing Documents Page (Event: DOCUMENT_UPLOADED, DOCUMENT_DELETED)${NC}"
-documents_url="http://localhost:8004/documents?seed=200"
-documents_response=$(curl -s -o /dev/null -w "%{http_code}" "$documents_url")
-if [ "$documents_response" = "200" ]; then
-    echo -e "${GREEN}✅ Documents page accessible${NC}"
-    
-    # Check for dynamic attributes
-    dynamic_docs=$(curl -s "$documents_url" | grep -c "data-seed\|data-variant")
-    echo -e "   Dynamic document attributes: $dynamic_docs found"
-    
-    # Check for XPath confusion
-    xpath_docs=$(curl -s "$documents_url" | grep -c "data-xpath")
-    echo -e "   XPath confusion attributes: $xpath_docs found"
-else
-    echo -e "${RED}❌ Documents page not accessible${NC}"
-fi
-
-# Summary
-echo -e "\n${YELLOW}Test Summary${NC}"
-echo "============"
-echo "✅ Dynamic HTML behavior is working"
-echo "✅ Seed-based layout variations are functional"
-echo "✅ Scraper confusion attributes are being applied"
-echo "✅ Event-logging elements have dynamic attributes"
-echo "✅ XPath confusion is implemented"
-
-echo -e "\n${GREEN}🎉 Scraper Confusion System is Active!${NC}"
-echo -e "\n${BLUE}How it works:${NC}"
+echo -e "\n${GREEN}🎉 Dynamic HTML behavior test completed!${NC}"
+echo -e "\n${BLUE}Summary:${NC}"
 echo "1. When ENABLE_DYNAMIC_HTML=true, seed values (1-300) change layouts"
-echo "2. Only elements that log events get dynamic attributes"
-echo "3. Each seed produces different XPath selectors"
-echo "4. Scrapers get confused by changing element attributes"
-echo "5. When ENABLE_DYNAMIC_HTML=false, seed has no effect"
-
-echo -e "\n${BLUE}Test different layouts:${NC}"
-echo "  http://localhost:8004/?seed=1   (Default layout)"
-echo "  http://localhost:8004/?seed=5   (Layout 2 - seeds ending in 5)"
-echo "  http://localhost:8004/?seed=180 (Ultra-wide layout)"
-echo "  http://localhost:8004/?seed=200 (Asymmetric layout)"
-echo "  http://localhost:8004/matters?seed=5   (Matters with dynamic attributes)"
-echo "  http://localhost:8004/clients?seed=180 (Clients with dynamic attributes)"
+echo "2. Special seed values have predefined layouts:"
+echo "   - Seeds ending in 5 (5,15,25...) → Layout 2"
+echo "   - Seeds 160-170 → Layout 3"  
+echo "   - Seed 8 → Layout 1"
+echo "   - Seeds 180,190,200,210,250,260,270 → Special layouts"
+echo "3. Dynamic attributes include data-seed, data-variant, data-element-type"
+echo "4. Layout changes affect button styles, spacing, and component positioning"
+echo "5. When ENABLE_DYNAMIC_HTML=false, seed has no効果"
+echo
+echo "🚀 To enable dynamic HTML in production:"
+echo "bash scripts/setup.sh --demo=autocrm --web_port=8004 --enable_dynamic_html=true"

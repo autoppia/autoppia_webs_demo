@@ -32,7 +32,7 @@ export class DynamicDataProvider {
       return 1;
     }
     
-    // Validate seed range (1-300)
+    // Validate seed range (1-300), default to 1 if invalid
     if (providedSeed < 1 || providedSeed > 300) {
       return 1;
     }

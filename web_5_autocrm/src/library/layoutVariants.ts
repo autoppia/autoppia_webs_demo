@@ -141,19 +141,27 @@ const elementPositioning: Record<number, ElementPositioning> = {
 };
 
 export function getLayoutVariant(seed: number): LayoutVariant {
+  // Validate seed range (1-300)
+  if (seed < 1 || seed > 300) {
+    seed = 1;
+  }
+
+  // Apply the seed mapping formula: ((seed % 30) + 1) % 10 || 10
+  const mappedSeed = ((seed % 30) + 1) % 10 || 10;
+  
   const buttonLayoutTypes = ['standard', 'split', 'stacked', 'circular', 'floating', 'inline', 'card', 'minimal'] as const;
   const labelStyles = ['pill', 'tag', 'badge', 'chip', 'dot', 'underline', 'border', 'gradient'] as const;
   const layoutTypes = ['grid', 'flex', 'list', 'masonry', 'carousel', 'table'] as const;
   const spacingTypes = ['tight', 'normal', 'loose', 'random'] as const;
   const elementOrders = ['standard', 'reversed', 'random'] as const;
   
-  // Use seeded values for different aspects of the layout
-  const buttonLayoutIndex = getSeededValue(seed, 'button') % buttonLayoutTypes.length;
-  const labelStyleIndex = getSeededValue(seed, 'label') % labelStyles.length;
-  const layoutTypeIndex = getSeededValue(seed, 'layout') % layoutTypes.length;
-  const spacingIndex = getSeededValue(seed, 'spacing') % spacingTypes.length;
-  const elementOrderIndex = getSeededValue(seed, 'order') % elementOrders.length;
-  const xpathVariant = (getSeededValue(seed, 'xpath') % 10) + 1;
+  // Use mapped seed for different aspects of the layout
+  const buttonLayoutIndex = mappedSeed % buttonLayoutTypes.length;
+  const labelStyleIndex = mappedSeed % labelStyles.length;
+  const layoutTypeIndex = mappedSeed % layoutTypes.length;
+  const spacingIndex = mappedSeed % spacingTypes.length;
+  const elementOrderIndex = mappedSeed % elementOrders.length;
+  const xpathVariant = mappedSeed;
 
   // Generate layout classes based on seed and layout type
   const containerVariants = {
@@ -190,7 +198,7 @@ export function getLayoutVariant(seed: number): LayoutVariant {
   };
 
   const layoutType = layoutTypes[layoutTypeIndex];
-  const containerIndex = getSeededValue(seed, 'container') % containerVariants[layoutType].length;
+  const containerIndex = mappedSeed % containerVariants[layoutType].length;
 
   const itemVariants = [
     'rounded-lg border p-4 shadow-sm hover:shadow-md transition-shadow',
@@ -202,9 +210,9 @@ export function getLayoutVariant(seed: number): LayoutVariant {
     'rounded-md border-r-4 border-r-red-500 p-4 bg-red-50',
     'rounded-lg border-l-8 border-l-yellow-500 p-6 bg-yellow-50',
     'rounded-2xl border-2 border-dashed border-gray-300 p-8 bg-white',
-    'rounded-md border border-gray-200 p-4 bg-gradient-to-br from-white to-gray-50'
+    ' rounded-md border border-gray-200 p-4 bg-gradient-to-br from-white to-gray-50'
   ];
-  const itemIndex = getSeededValue(seed, 'item') % itemVariants.length;
+  const itemIndex = mappedSeed % itemVariants.length;
 
   const checkboxVariants = [
     'absolute top-2 right-2',
@@ -218,7 +226,7 @@ export function getLayoutVariant(seed: number): LayoutVariant {
     'relative self-center',
     'absolute top-6 left-6'
   ];
-  const checkboxIndex = getSeededValue(seed, 'checkbox') % checkboxVariants.length;
+  const checkboxIndex = mappedSeed % checkboxVariants.length;
 
   return {
     containerClasses: containerVariants[layoutType][containerIndex],
