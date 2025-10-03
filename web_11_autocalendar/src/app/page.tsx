@@ -16,7 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { EVENTS_DATASET } from "@/library/dataset";
-import { getSeedLayout, getSeedFromUrl, LayoutConfig } from "@/library/seedLayout";
+import { getEffectiveLayoutConfig, getSeedFromUrl, SeedLayoutConfig } from "@/utils/seedLayout";
+import { LayoutProvider, useLayout } from "@/contexts/LayoutContext";
 import {
   addDays,
   startOfWeek,
@@ -338,7 +339,8 @@ function expandRecurringEvents(
   return results;
 }
 
-export default function Home() {
+function CalendarApp() {
+  const { currentVariant, seed, isDynamicHTMLEnabled } = useLayout();
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
     const nowInPKT = new Date(
@@ -356,8 +358,6 @@ export default function Home() {
   const [addCalName, setAddCalName] = useState("");
   const [addCalDesc, setAddCalDesc] = useState("");
   const [addCalColorIdx, setAddCalColorIdx] = useState(0);
-  const [seed, setSeed] = useState<number | undefined>(undefined);
-  const [layoutConfig, setLayoutConfig] = useState<LayoutConfig>(getSeedLayout());
   // Dynamically generate all calendar types from EVENTS_DATASET, enabled by default
   const uniqueCalendars = Array.from(
     new Map(
@@ -400,12 +400,6 @@ export default function Home() {
   const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<typeof EVENTS_DATASET>([]);
 
-  // Effect to read seed from URL and update layout
-  useEffect(() => {
-    const urlSeed = getSeedFromUrl();
-    setSeed(urlSeed);
-    setLayoutConfig(getSeedLayout(urlSeed));
-  }, []);
 
   useEffect(() => {
     if (!hasOpenedSearch && searchQuery === "") return;
@@ -945,7 +939,7 @@ export default function Home() {
   const renderSidebarComponents = () => {
     const components = [];
     
-    if (layoutConfig.createButton.position === 'sidebar') {
+    if (currentVariant.layout.createButton === 'sidebar') {
       components.push(
         <div key="create-button" className="flex flex-row items-center px-4 mt-2 mb-4">
           <button
@@ -994,7 +988,7 @@ export default function Home() {
       );
     }
 
-    if (layoutConfig.miniCalendar.position === 'sidebar') {
+    if (currentVariant.layout.miniCalendar === 'sidebar') {
       components.push(
         <div key="mini-calendar" className="px-6 py-0 mb-0 mt-10">
           <div className="flex w-full justify-between text-[14px] items-center mb-1 mt-1 font-medium">
@@ -1071,7 +1065,7 @@ export default function Home() {
       );
     }
 
-    if (layoutConfig.myCalendars.position === 'sidebar') {
+    if (currentVariant.layout.myCalendars === 'sidebar') {
       components.push(
         <div key="my-calendars" className="flex flex-col px-4 mt-10">
           <button
@@ -1167,12 +1161,13 @@ export default function Home() {
     }
 
     return components.sort((a, b) => {
-      const aOrder = a.key === 'create-button' ? layoutConfig.createButton.order :
-                    a.key === 'mini-calendar' ? layoutConfig.miniCalendar.order :
-                    layoutConfig.myCalendars.order;
-      const bOrder = b.key === 'create-button' ? layoutConfig.createButton.order :
-                    b.key === 'mini-calendar' ? layoutConfig.miniCalendar.order :
-                    layoutConfig.myCalendars.order;
+      // Since the new layout doesn't use order, maintain original order
+      const aOrder = a.key === 'create-button' ? 1 :
+                    a.key === 'mini-calendar' ? 2 :
+                    3; // myCalendars
+      const bOrder = b.key === 'create-button' ? 1 :
+                    b.key === 'mini-calendar' ? 2 :
+                    3; // myCalendars
       return aOrder - bOrder;
     });
   };
@@ -1181,7 +1176,7 @@ export default function Home() {
   const renderNavigationComponents = () => {
     const components = [];
     
-    if (layoutConfig.createButton.position === 'navigation') {
+    if (currentVariant.layout.createButton === 'navigation') {
       components.push(
         <button
           key="create-button"
@@ -1216,7 +1211,7 @@ export default function Home() {
       );
     }
 
-    if (layoutConfig.miniCalendar.position === 'navigation') {
+    if (currentVariant.layout.miniCalendar === 'navigation') {
       components.push(
         <div key="mini-calendar" className="flex items-center gap-2">
           <div className="flex w-full justify-between text-[14px] items-center mb-1 mt-1 font-medium">
@@ -1257,25 +1252,24 @@ export default function Home() {
     }
 
     return components.sort((a, b) => {
-      const aOrder = a.key === 'create-button' ? layoutConfig.createButton.order :
-                    layoutConfig.miniCalendar.order;
-      const bOrder = b.key === 'create-button' ? layoutConfig.createButton.order :
-                    layoutConfig.miniCalendar.order;
+      // Since the new layout doesn't use order, maintain original order
+      const aOrder = a.key === 'create-button' ? 1 : 2; // miniCalendar
+      const bOrder = b.key === 'create-button' ? 1 : 2; // miniCalendar
       return aOrder - bOrder;
     });
   };
 
   // Helper function to get layout classes based on configuration
   const getLayoutClasses = () => {
-    const isSidebarLeft = layoutConfig.sidebar.position === 'left';
-    const isSidebarRight = layoutConfig.sidebar.position === 'right';
-    const isSidebarTop = layoutConfig.sidebar.position === 'top';
-    const isSidebarBottom = layoutConfig.sidebar.position === 'bottom';
+    const isSidebarLeft = currentVariant.layout.sidebar === 'left';
+    const isSidebarRight = currentVariant.layout.sidebar === 'right';
+    const isSidebarTop = currentVariant.layout.sidebar === 'top';
+    const isSidebarBottom = currentVariant.layout.sidebar === 'bottom';
     
-    const isNavTop = layoutConfig.navigation.position === 'top';
-    const isNavBottom = layoutConfig.navigation.position === 'bottom';
-    const isNavLeft = layoutConfig.navigation.position === 'left';
-    const isNavRight = layoutConfig.navigation.position === 'right';
+    const isNavTop = currentVariant.layout.navigation === 'top';
+    const isNavBottom = currentVariant.layout.navigation === 'bottom';
+    const isNavLeft = currentVariant.layout.navigation === 'left';
+    const isNavRight = currentVariant.layout.navigation === 'right';
 
     return {
       mainContainer: isSidebarTop || isSidebarBottom ? 'flex-col' : 'flex-row',
@@ -1290,7 +1284,7 @@ export default function Home() {
   return (
     <main className={`flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f] ${layoutClasses.mainContainer}`}>
       {/* Sidebar - positioned based on layout config */}
-      {layoutConfig.sidebar.position !== 'none' && (
+      {currentVariant.layout.sidebar !== 'none' && (
         <aside className={`${layoutClasses.sidebarContainer} bg-white border-r border-[#e5e5e5] flex flex-col pt-0 pb-2 px-0 shadow z-10 min-h-screen select-none`}>
           <div className="flex items-center justify-center gap-1 h-[64px]">
             <div className="bg-[#1976d2] px-14 py-6 rounded flex items-center h-9">
@@ -1302,7 +1296,7 @@ export default function Home() {
       )}
       <section className={`${layoutClasses.contentContainer} flex flex-col h-screen overflow-hidden`}>
         {/* Navigation - positioned based on layout config */}
-        {layoutConfig.navigation.position !== 'none' && (
+        {currentVariant.layout.navigation !== 'none' && (
           <nav className={`w-full flex items-center justify-between h-[64px] px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer}`}>
             <div className="flex items-center gap-2 min-w-[340px]">
               <button
@@ -1330,7 +1324,7 @@ export default function Home() {
               {renderNavigationComponents()}
             </div>
             <div className="flex items-center gap-2">
-              {layoutConfig.search.position === 'top' && (
+              {currentVariant.layout.search === 'top' && (
                 <div className="hidden md:block relative">
                   <Input
                     value={searchQuery}
@@ -1416,7 +1410,7 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              {layoutConfig.userProfile.position === 'top' && (
+              {currentVariant.layout.userProfile === 'top' && (
                 <button
                   className="rounded-full hover:ring-2 hover:ring-blue-200 ml-1"
                   aria-label="User profile"
@@ -1661,7 +1655,7 @@ export default function Home() {
       </section>
 
       {/* Floating Components */}
-      {layoutConfig.createButton.position === 'floating' && (
+      {currentVariant.layout.createButton === 'floating' && (
         <button
           className="fixed bottom-6 right-6 bg-[#1976d2] hover:bg-[#1660b2] text-white rounded-full p-4 shadow-lg z-50"
           onClick={() =>
@@ -1690,7 +1684,7 @@ export default function Home() {
         </button>
       )}
 
-      {layoutConfig.miniCalendar.position === 'floating' && (
+      {currentVariant.layout.miniCalendar === 'floating' && (
         <div className="fixed top-20 right-6 bg-white border border-[#e5e5e5] rounded-lg shadow-lg p-4 z-50 w-64">
           <div className="flex w-full justify-between text-[14px] items-center mb-2 font-medium">
             <button
@@ -2250,5 +2244,13 @@ export default function Home() {
         </DialogContent>
       </Dialog>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <LayoutProvider>
+      <CalendarApp />
+    </LayoutProvider>
   );
 }

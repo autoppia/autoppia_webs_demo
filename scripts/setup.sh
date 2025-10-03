@@ -37,6 +37,7 @@ WEBS_PORT_DEFAULT=8090
 WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
+ENABLE_DYNAMIC_HTML="false"
 
 # 5. Parse args
 for ARG in "$@"; do
@@ -46,6 +47,7 @@ for ARG in "$@"; do
     --webs_port=*)     WEBS_PORT="${ARG#*=}" ;;
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
+    --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
     -y|--yes)          FORCE_DELETE=true ;;
     *) ;; 
   esac
@@ -62,6 +64,7 @@ echo "    movies/books Postgres   →  $POSTGRES_PORT"
 echo "    webs_server HTTP        →  $WEBS_PORT"
 echo "    webs_server Postgres    →  $WEBS_PG_PORT"
 echo "    Demo to deploy:         →  $WEB_DEMO"
+echo "    Enable Dynamic HTML     →  $ENABLE_DYNAMIC_HTML"
 echo
 
 # 6. Check Docker
@@ -98,7 +101,7 @@ deploy_project() {
     fi
 
     # up
-    WEB_PORT="$webp" POSTGRES_PORT="$pgp" \
+    WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
