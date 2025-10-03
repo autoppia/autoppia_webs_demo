@@ -23,6 +23,7 @@ console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
+console.log('  NEXT_ENABLE_DATA_GENERATION:', process.env.NEXT_ENABLE_DATA_GENERATION);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -49,6 +50,7 @@ const nextConfig = {
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
+    NEXT_ENABLE_DATA_GENERATION: process.env.NEXT_ENABLE_DATA_GENERATION,
   },
   // experimental: {
   //   allowedDevOrigins: ['https://be96-72-255-23-44.ngrok-free.app'], // ← your ngrok public URL
