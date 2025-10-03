@@ -1,7 +1,8 @@
 "use client";
 
 import { useSeedLayout } from "@/library/useSeedLayout";
-import { experts } from "@/library/dataset";
+import HireButton from "@/app/components/HireButton";
+import Link from "next/link";
 
 interface Expert {
   name: string;
@@ -76,12 +77,15 @@ export default function ExpertProfileClient({ expert }: { expert: Expert }) {
         <button className="w-12 h-12 rounded-full bg-white border border-[#08b4ce] flex items-center justify-center text-2xl text-[#08b4ce] hover:bg-[#e6f9fb]">
           …
         </button>
-        <button className="px-8 py-2 rounded-full bg-[#1fc12c] text-white text-lg font-semibold shadow-sm ml-1 text-center flex items-center justify-center">
-          Hire
-        </button>
-        <button className="px-7 py-2 rounded-full border-2 border-[#08b4ce] text-[#08b4ce] bg-white text-lg ml-1 font-semibold hover:bg-[#e6f9fb]">
+
+        <HireButton expert={expert} />
+        <Link
+          href={`#`}
+          passHref
+          className="px-7 py-2 rounded-full border-2 border-[#08b4ce] text-[#08b4ce] bg-white text-lg ml-1 font-semibold hover:bg-[#e6f9fb]"
+        >
           Message
-        </button>
+        </Link>
         <button className="w-12 h-12 rounded-full border border-green-700 flex items-center justify-center text-2xl text-green-700 ml-1">
           ♡
         </button>
