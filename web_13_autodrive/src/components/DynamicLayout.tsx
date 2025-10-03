@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { getSeedLayout, getLayoutClasses, LayoutConfig } from "@/library/layouts";
+import { useSeedLayout } from "@/library/useSeedLayout";
 import { ReactNode, Suspense } from "react";
 
 interface DynamicLayoutProps {
@@ -17,11 +17,7 @@ function DynamicLayoutContent({
   main, 
   footer 
 }: DynamicLayoutProps) {
-  const searchParams = useSearchParams();
-  const seedParam = searchParams.get('seed');
-  const seed = seedParam ? parseInt(seedParam, 10) : undefined;
-  
-  const layout = getSeedLayout(seed);
+  const { layout, isDynamicEnabled } = useSeedLayout();
   const classes = getLayoutClasses(layout);
 
   // Render different layouts based on seed

@@ -13,9 +13,35 @@ export interface LayoutConfig {
   className: string;
 }
 
+/**
+ * Check if dynamic HTML is enabled
+ * @returns boolean indicating if dynamic HTML is enabled
+ */
+export function isDynamicEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+}
+
 export function getSeedLayout(seed?: number): LayoutConfig {
-  if (!seed || seed < 1 || seed > 10) {
-    // Default layout (unchanged)
+  // If dynamic HTML is disabled, always return default layout regardless of seed
+  if (!isDynamicEnabled()) {
+    return {
+      name: "Default",
+      description: "Standard layout with header top, content center, footer bottom",
+      structure: {
+        header: { position: 'top' },
+        main: { 
+          layout: 'default',
+          sections: ['hero', 'booking', 'map', 'rides']
+        },
+        footer: { position: 'bottom' }
+      },
+      className: "layout-default"
+    };
+  }
+
+  // Validate seed range (1-300) - when dynamic HTML is enabled
+  if (!seed || seed < 1 || seed > 300) {
+    // Default layout when seed is invalid
     return {
       name: "Default",
       description: "Standard layout with header top, content center, footer bottom",
@@ -183,7 +209,10 @@ export function getSeedLayout(seed?: number): LayoutConfig {
     }
   ];
 
-  return layouts[seed - 1] || layouts[0];
+  // Apply the seed mapping formula: ((seed % 30) + 1) % 10 || 10
+  const mappedSeed = ((seed % 30) + 1) % 10 || 10;
+  
+  return layouts[mappedSeed - 1] || layouts[0];
 }
 
 // Helper function to get CSS classes for different layout types
