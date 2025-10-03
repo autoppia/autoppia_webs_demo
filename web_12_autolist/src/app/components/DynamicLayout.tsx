@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { getSeedLayout, LayoutConfig } from "@/library/layouts";
+import { useSeedLayout } from "@/library/useSeedLayout";
 import Navbar from "./Navbar";
 import Sidebar from "../Sidebar";
 
@@ -34,11 +35,7 @@ interface DynamicLayoutProps {
 
 // Component that uses useSearchParams - needs to be wrapped in Suspense
 function DynamicLayoutContent({ children, sidebarProps }: DynamicLayoutProps) {
-  const searchParams = useSearchParams();
-  const seed = searchParams.get('seed');
-  const seedNumber = seed ? parseInt(seed, 10) : undefined;
-  
-  const layout = getSeedLayout(seedNumber);
+  const { layout, isDynamicEnabled } = useSeedLayout();
   
   // Create container styles based on layout config
   const containerStyle: React.CSSProperties = {

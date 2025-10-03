@@ -356,17 +356,33 @@ const LAYOUTS: Record<number, LayoutConfig> = {
 };
 
 /**
+ * Check if dynamic HTML is enabled
+ * @returns boolean indicating if dynamic HTML is enabled
+ */
+export function isDynamicEnabled(): boolean {
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+}
+
+/**
  * Get layout configuration based on seed value
- * @param seed - Seed value from URL query param (1-10)
+ * @param seed - Seed value from URL query param (1-300)
  * @returns Layout configuration object
  */
 export function getSeedLayout(seed?: number): LayoutConfig {
-  // If no seed provided or seed is out of range, return default layout
-  if (!seed || seed < 1 || seed > 10) {
+  // If dynamic HTML is disabled, always return default layout regardless of seed
+  if (!isDynamicEnabled()) {
     return LAYOUTS[1];
   }
   
-  return LAYOUTS[seed];
+  // Validate seed range (1-300) - when dynamic HTML is enabled
+  if (!seed || seed < 1 || seed > 300) {
+    return LAYOUTS[1];
+  }
+
+  // Apply the seed mapping formula: ((seed % 30) + 1) % 10 || 10
+  const mappedSeed = ((seed % 30) + 1) % 10 || 10;
+  
+  return LAYOUTS[mappedSeed];
 }
 
 /**
