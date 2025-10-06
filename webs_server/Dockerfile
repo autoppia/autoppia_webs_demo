@@ -14,7 +14,7 @@ RUN apt-get update && \
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Runtime environment
 FROM python:3.11-slim
@@ -32,7 +32,8 @@ RUN apt-get update && \
     && apt-get clean
 
 # Copy Python packages from builder stage
-COPY --from=builder /root/.local /root/.local
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code
 COPY ./src .
@@ -46,7 +47,6 @@ RUN chmod +x ./run_api.sh && \
 USER appuser
 
 # Set environment variables
-ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
