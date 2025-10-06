@@ -93,8 +93,9 @@ export function CategoryCard({
                   <Image
                     src={item.image}
                     alt={item.title}
-                    fill
-                    className="object-cover"
+                    width={150}
+                    height={150}
+                    className="object-cover w-auto h-auto"
                   />
                 </div>
                 <h3 className="text-sm hover:text-blue-600">{item.title}</h3>

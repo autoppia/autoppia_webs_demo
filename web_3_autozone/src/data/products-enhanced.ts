@@ -13,6 +13,40 @@ import {
   isDataGenerationAvailable 
 } from "@/utils/dataGenerator";
 
+// Map some category keywords to existing local images as safe fallbacks
+function normalizeImageUrl(image: string | undefined, category?: string, nameHint?: string): string {
+  const localByCategory: Record<string, string> = {
+    Kitchen: "/images/homepage_categories/kettles.jpg",
+    Electronics: "/images/homepage_categories/smart_tv.jpg",
+    Technology: "/images/homepage_categories/laptop_stand.jpg",
+    Home: "/images/homepage_categories/sofa.jpg",
+    Fitness: "/images/homepage_categories/foam_roller.jpg",
+  };
+  const defaultLocal = "/images/homepage_categories/coffee_machine.jpg";
+
+  if (!image) return localByCategory[category || ""] || defaultLocal;
+
+  // Allow valid relative local paths
+  if (image.startsWith("/images/")) return image;
+
+  // Allow Unsplash sources but force small size and lower quality
+  const urlLower = image.toLowerCase();
+  if (urlLower.includes("images.unsplash.com") || urlLower.includes("source.unsplash.com")) {
+    const sep = image.includes("?") ? "&" : "?";
+    return `${image}${sep}w=150&h=150&fit=crop&crop=entropy&auto=format&q=60`;
+  }
+
+  // Block other http(s) unknown hosts to avoid 404 and CSP; use category fallback
+  return localByCategory[category || ""] || defaultLocal;
+}
+
+function normalizeProductImages(products: Product[]): Product[] {
+  return products.map((p) => ({
+    ...p,
+    image: normalizeImageUrl(p.image, p.category, p.title),
+  }));
+}
+
 // Original static products
 export const originalProducts: Product[] = [
   {
@@ -552,42 +586,47 @@ const DATA_GENERATION_CONFIG = {
 async function generateProductsForCategories(
   categories: string[],
   productsPerCategory: number,
-  delayBetweenCalls: number = 1000,
+  delayBetweenCalls: number = 200,
   existingProducts: Product[] = []
 ): Promise<Product[]> {
-  let allGeneratedProducts: Product[] = [...existingProducts];
-  
-  for (let i = 0; i < categories.length; i++) {
-    const category = categories[i];
-    
-    try {
-      console.log(`Generating ${productsPerCategory} products for ${category}...`);
-      
-      // Generate products for this specific category
-      const categoryProducts = await generateProductsWithFallback(
-        [], // Start with empty array for this category
-        productsPerCategory,
-        [category]
-      );
-      
-      // Add generated products to our collection
-      allGeneratedProducts = [...allGeneratedProducts, ...categoryProducts];
-      
-      console.log(`✅ Generated ${categoryProducts.length} products for ${category}`);
-      
-      // Add delay between category calls to prevent server overload
-      if (i < categories.length - 1) {
-        console.log(`Waiting ${delayBetweenCalls}ms before next category...`);
-        await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
+  let allGeneratedProducts: Product[] = [];
+
+  // Bounded concurrency (e.g., 3 at a time)
+  const concurrencyLimit = 3;
+  let index = 0;
+
+  async function worker() {
+    while (index < categories.length) {
+      const currentIndex = index++;
+      const category = categories[currentIndex];
+      try {
+        console.log(`Generating ${productsPerCategory} products for ${category}...`);
+        const categoryProducts = await generateProductsWithFallback(
+          [],
+          productsPerCategory,
+          [category]
+        );
+        allGeneratedProducts = [...allGeneratedProducts, ...categoryProducts];
+        console.log(`✅ Generated ${categoryProducts.length} products for ${category}`);
+      } catch (categoryError) {
+        console.warn(`Failed to generate products for ${category}:`, categoryError);
       }
-      
-    } catch (categoryError) {
-      console.warn(`Failed to generate products for ${category}:`, categoryError);
-      // Continue with other categories even if one fails
+      // small gap to avoid burst
+      if (currentIndex < categories.length - 1 && delayBetweenCalls > 0) {
+        await new Promise((r) => setTimeout(r, delayBetweenCalls));
+      }
     }
   }
-  
-  return allGeneratedProducts;
+
+  const workers = Array.from({ length: Math.min(concurrencyLimit, categories.length) }, () => worker());
+  await Promise.all(workers);
+
+  if (allGeneratedProducts.length > 0) {
+    return allGeneratedProducts;
+  } else {
+    console.warn('No products were generated for any category, returning existing products.');
+    return existingProducts;
+  }
 }
 
 /**
@@ -597,31 +636,40 @@ async function generateProductsForCategories(
 export async function initializeProducts(): Promise<Product[]> {
   if (isDataGenerationAvailable()) {
     try {
-      console.log('Starting async data generation for each category...');
+      console.log('🚀 Starting async data generation for each category...');
+      console.log('📡 Using API:', process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090');
       
       // Define categories and products per category
       const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
       const productsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_PRODUCTS_PER_CATEGORY;
       const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
       
+      console.log(`📊 Will generate ${productsPerCategory} products per category`);
+      console.log(`🏷️  Categories: ${categories.join(', ')}`);
+      
       // Generate products for all categories with delays
-      const allGeneratedProducts = await generateProductsForCategories(
+      let allGeneratedProducts = await generateProductsForCategories(
         categories,
         productsPerCategory,
         delayBetweenCalls,
         originalProducts
       );
+      // Normalize images to ensure they resolve to local assets
+      allGeneratedProducts = normalizeProductImages(allGeneratedProducts);
       
-      console.log(`🎉 Data generation complete! Total products: ${allGeneratedProducts.length}`);
+      console.log(`🎉 Data generation complete! Generated ${allGeneratedProducts.length} products (replacing ${originalProducts.length} original products)`);
+      console.log(`✅ Generated data is now active!`);
       dynamicProducts = allGeneratedProducts;
       return dynamicProducts;
       
     } catch (error) {
-      console.warn('Failed to generate products, using original data:', error);
-      dynamicProducts = originalProducts;
+      console.warn('⚠️ Failed to generate products while generation is enabled. Keeping products empty until ready. Error:', error);
+      // When data generation is enabled, do NOT fall back to static data; return empty
+      dynamicProducts = [];
       return dynamicProducts;
     }
   } else {
+    console.log('ℹ️ Data generation is disabled, using original static products');
     dynamicProducts = originalProducts;
     return dynamicProducts;
   }

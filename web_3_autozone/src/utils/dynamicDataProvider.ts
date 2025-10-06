@@ -1,6 +1,7 @@
 import type { Product } from "@/context/CartContext";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
 import { products, initializeProducts } from "@/data/products-enhanced";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -12,10 +13,18 @@ export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private products: Product[] = [];
   private isEnabled: boolean = false;
+  private dataGenerationEnabled: boolean = false;
+  private ready: boolean = false;
+  private readyPromise: Promise<void>;
+  private resolveReady!: () => void;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    this.dataGenerationEnabled = isDataGenerationEnabled();
     this.products = products;
+    this.readyPromise = new Promise<void>((resolve) => {
+      this.resolveReady = resolve;
+    });
     
     // Initialize products with data generation if enabled
     this.initializeProducts();
@@ -30,13 +39,33 @@ export class DynamicDataProvider {
 
   private async initializeProducts(): Promise<void> {
     try {
+      console.log('🔄 Initializing products...');
       const initializedProducts = await initializeProducts();
       this.products = initializedProducts;
-      console.log('✅ Products initialized with data generation:', this.products.length, 'products');
+      console.log('✅ Products initialized:', this.products.length, 'total products');
+
+      // Mark as ready only when either generation is disabled or we have generated data
+      if (!this.dataGenerationEnabled || this.products.length > 0) {
+        this.ready = true;
+        this.resolveReady();
+      }
+
     } catch (error) {
-      console.warn('⚠️ Failed to initialize products with data generation, using static data:', error);
-      // Keep the original products
+      console.warn('⚠️ Failed to initialize products with data generation.', error);
+      // If generation is enabled, do not mark ready here; the gate will continue showing loading
+      if (!this.dataGenerationEnabled) {
+        this.ready = true;
+        this.resolveReady();
+      }
     }
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
   }
 
   public getProducts(): Product[] {

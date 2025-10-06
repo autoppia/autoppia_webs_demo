@@ -1,5 +1,7 @@
 import asyncio
 import os
+import json
+from pathlib import Path
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import List, Dict, Any, Optional
@@ -10,6 +12,7 @@ from asyncpg.exceptions import PostgresError
 import orjson
 from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from loguru import logger
 from pydantic import BaseModel, Field, field_validator
@@ -21,6 +24,8 @@ try:
     HAS_FASTJSONSCHEMA = True
 except ImportError:
     HAS_FASTJSONSCHEMA = False
+
+from master_dataset_handler import save_master_pool, select_from_pool, get_pool_info, list_available_pools
 
 # --- Configuration ---
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
@@ -110,6 +115,11 @@ class DataGenerationRequest(BaseModel):
     additional_requirements: Optional[str] = Field(None, description="Free-form guidance")
     json_schema: Optional[Dict[str, Any]] = Field(None, description="Optional JSON Schema to validate the result shape")
     naming_rules: Optional[Dict[str, Any]] = Field(None, description="Optional rules e.g. id or image path patterns")
+    project_key: Optional[str] = Field(None, description="Project key for saving data to specific project directory")
+    entity_type: Optional[str] = Field(None, description="Entity type (e.g., 'products', 'movies', 'tasks')")
+    save_to_file: bool = Field(default=True, description="Whether to save generated data to JSON file")
+    save_to_db: bool = Field(default=True, description="Whether to save generated data to database")
+    seed_value: Optional[int] = Field(None, description="Seed value for reproducible generation")
 
 
 class DataGenerationResponse(BaseModel):
@@ -117,6 +127,7 @@ class DataGenerationResponse(BaseModel):
     generated_data: List[Dict[str, Any]]
     count: int
     generation_time: float
+    saved_path: Optional[str] = Field(None, description="Path where data was saved (if save_to_file=True)")
 
 
 # --- Database Initialization ---
@@ -190,6 +201,31 @@ app = FastAPI(
     default_response_class=ORJSONResponse,
     redoc_url=None,
 )
+
+# Add CORS middleware to allow requests from Next.js local development
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:8002",
+        "http://localhost:8000",
+        "http://localhost:8001",
+        "http://localhost:8003",
+        "http://localhost:8004",
+        "http://localhost:8005",
+        "http://localhost:8006",
+        "http://localhost:8007",
+        "http://localhost:8008",
+        "http://localhost:8009",
+        "http://localhost:8010",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8002",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
+
 app.add_middleware(GZipMiddleware, minimum_size=GZIP_MIN_SIZE)
 
 
@@ -439,6 +475,37 @@ Output strictly a JSON array only.
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Data generation failed: {str(e)}")
 
 
+# --- Helper Function to Save Data to JSON ---
+def save_data_to_json(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
+    """
+    Save generated data to a JSON file in the project's generated_data directory.
+    Returns the relative path where the file was saved.
+    """
+    # Get the base directory (parent of webs_server)
+    base_dir = Path(__file__).parent.parent.parent
+
+    # Create the path: <project_key>/generated_data/<entity_type>_<timestamp>.json
+    project_dir = base_dir / project_key / "generated_data"
+    project_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{entity_type}_{timestamp}.json"
+    filepath = project_dir / filename
+
+    # Create data container with metadata
+    data_container = {"metadata": {"projectKey": project_key, "entityType": entity_type, "generatedAt": datetime.now().isoformat(), "count": len(data), "version": "1.0"}, "data": data}
+
+    # Save to file
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(data_container, f, indent=2, ensure_ascii=False)
+
+    # Return relative path from base directory
+    relative_path = str(filepath.relative_to(base_dir))
+    logger.info(f"Saved {len(data)} items to {relative_path}")
+
+    return relative_path
+
+
 # --- Data Generation Endpoint (generic) ---
 @app.post("/datasets/generate", response_model=DataGenerationResponse, status_code=status.HTTP_200_OK)
 async def generate_dataset_endpoint(request: DataGenerationRequest):
@@ -447,12 +514,131 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     elapsed = (datetime.now() - start).total_seconds()
     logger.info(f"Generated {len(data)} items in {elapsed:.2f}s")
     logger.debug("=" * 60 + f"DATA: {data}" + "=" * 60)
+
+    # Save to file if requested
+    saved_path = None
+    if request.save_to_file and request.project_key and request.entity_type:
+        try:
+            saved_path = save_data_to_json(data, request.project_key, request.entity_type)
+        except Exception as e:
+            logger.error(f"Failed to save data to file: {e}")
+            # Don't fail the request if saving fails
+
+    # Save to master pool if requested (replaces or appends)
+    pool_id = None
+    if request.save_to_db and request.project_key and request.entity_type and hasattr(app.state, "pool"):
+        try:
+            pool_id = await save_master_pool(app.state.pool, request.project_key, request.entity_type, data)
+            logger.info(f"Saved to master pool with ID: {pool_id}")
+        except Exception as e:
+            logger.error(f"Failed to save data to master pool: {e}")
+            # Don't fail the request if saving fails
+
     return DataGenerationResponse(
         message=f"Successfully generated {len(data)} items",
         generated_data=data,
         count=len(data),
         generation_time=elapsed,
+        saved_path=saved_path,
     )
+
+
+# --- Data Loading Models ---
+class DatasetLoadRequest(BaseModel):
+    project_key: str = Field(..., description="Project key")
+    entity_type: str = Field(..., description="Entity type")
+    seed_value: int = Field(..., description="Seed value to load")
+    limit: int = Field(default=50, ge=1, le=500, description="Maximum number of items to return")
+
+
+class DatasetLoadResponse(BaseModel):
+    message: str
+    metadata: Dict[str, Any]
+    data: List[Dict[str, Any]]
+    count: int
+
+
+# --- Data Loading Endpoint (Seeded Selection) ---
+@app.get("/datasets/load", response_model=DatasetLoadResponse, summary="Load dataset using seeded selection")
+async def load_dataset_endpoint(
+    project_key: str = Query(..., description="Project key"),
+    entity_type: str = Query(..., description="Entity type"),
+    seed_value: int = Query(..., description="Seed value for deterministic selection"),
+    limit: int = Query(default=50, ge=1, le=500, description="Maximum items to return"),
+    method: str = Query(default="select", description="Selection method: select, shuffle, filter, distribute"),
+    filter_key: Optional[str] = Query(None, description="Key to filter on (for filter method)"),
+    filter_values: Optional[str] = Query(None, description="Comma-separated values to filter (for filter method)"),
+):
+    """
+    Select data from master pool using seed for reproducible selection.
+    This endpoint uses deterministic seeded selection - same seed always returns same data.
+    No duplicate data storage - all selections are computed from master pool.
+
+    This endpoint is used when projects are deployed with --load_from_db parameter.
+    """
+    if not hasattr(app.state, "pool") or app.state.pool is None:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
+
+    try:
+        # Parse filter values if provided
+        filter_list = filter_values.split(",") if filter_values else None
+
+        result = await select_from_pool(app.state.pool, project_key, entity_type, seed_value, limit, method=method, filter_key=filter_key, filter_values=filter_list, log_usage=True)
+
+        if not result["data"]:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No master pool found for project={project_key}, entity={entity_type}")
+
+        return DatasetLoadResponse(message=f"Successfully selected {len(result['data'])} items using seed={seed_value}", metadata=result["metadata"], data=result["data"], count=len(result["data"]))
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to load dataset: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to load dataset: {str(e)}")
+
+
+# --- List Pools Endpoint ---
+@app.get("/datasets/pools", summary="List available master pools")
+async def list_pools_endpoint(project_key: Optional[str] = Query(None, description="Optional project key filter")):
+    """
+    List all available master data pools.
+    Each pool can be queried with any seed value for reproducible selection.
+    """
+    if not hasattr(app.state, "pool") or app.state.pool is None:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
+
+    try:
+        pools = await list_available_pools(app.state.pool, project_key)
+
+        return {"pools": pools, "count": len(pools), "message": "Master pools available for seeded selection"}
+
+    except Exception as e:
+        logger.error(f"Failed to list pools: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to list pools: {str(e)}")
+
+
+# --- Get Pool Info Endpoint ---
+@app.get("/datasets/pool/info", summary="Get master pool information")
+async def get_pool_info_endpoint(project_key: str = Query(..., description="Project key"), entity_type: str = Query(..., description="Entity type")):
+    """
+    Get information about a master pool without loading all data.
+    """
+    if not hasattr(app.state, "pool") or app.state.pool is None:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
+
+    try:
+        info = await get_pool_info(app.state.pool, project_key, entity_type)
+
+        if not info:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No pool found for project={project_key}, entity={entity_type}")
+
+        return info
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get pool info: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to get pool info: {str(e)}")
 
 
 # --- Health Check Models ---

@@ -131,3 +131,6 @@ coverage/
 
 *next-env.d.ts
 *pnpm-lock.yaml
+
+# Generated data files
+*/generated_data/*.json

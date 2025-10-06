@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { BodyWrapper } from "@/components/layout/BodyWrapper";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -30,9 +31,11 @@ export default function RootLayout({
             <Header />
           </Suspense>
           <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
-            <BodyWrapper>
-              {children}
-            </BodyWrapper>
+            <DataReadyGate>
+              <BodyWrapper>
+                {children}
+              </BodyWrapper>
+            </DataReadyGate>
           </Suspense>
           <Suspense fallback={<div className="h-32 bg-white"></div>}>
             <Footer />

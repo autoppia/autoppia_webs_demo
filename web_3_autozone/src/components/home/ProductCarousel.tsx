@@ -99,12 +99,13 @@ export function ProductCarousel({
               }
               className="flex-none w-[160px] md:w-[200px] group"
             >
-              <div className="relative h-48 w-full bg-gray-100">
+              <div className="relative w-full bg-gray-100" style={{ height: 150 }}>
                 <Image
                   src={product.image}
                   alt={product.title || "Product image"}
-                  fill
-                  className="object-contain"
+                  width={150}
+                  height={150}
+                  className="object-contain w-auto h-auto"
                 />
               </div>
               {product.title && (

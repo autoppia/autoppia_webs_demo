@@ -56,7 +56,7 @@ export interface Product {
         id: "kitchen-1",
         title: "Espresso Machine",
         price: "$160.00",
-        image: "/images/homepage_categories/coffee_machine.jpg",
+        image: "https://source.unsplash.com/featured/?espresso-machine",
         description: "Professional-grade espresso machine with steam wand and programmable settings.",
         category: "Kitchen",
         rating: 4.5,
@@ -67,9 +67,9 @@ export interface Product {
     categories: ["Kitchen", "Electronics", "Home", "Fitness", "Technology"],
     namingRules: {
       id: "{category}-{number}",
-      image: "/images/homepage_categories/{name_snake_case}.jpg"
+      image: "https://source.unsplash.com/featured/?{name_snake_case}"
     },
-    additionalRequirements: "Generate realistic e-commerce product data with proper pricing, descriptions, and categories."
+      additionalRequirements: "Generate realistic e-commerce product data with proper pricing, descriptions, and categories. Images must be sourced from Unsplash only; do not use local image paths. Prefer query-based URLs like https://source.unsplash.com/featured/?{keyword}."
   }
 };
 
@@ -140,8 +140,11 @@ export async function generateProjectData(
  * Check if data generation is enabled
  */
 export function isDataGenerationEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_DATA_GENERATION === 'true' || 
-         process.env.ENABLE_DATA_GENERATION === 'true';
+  const raw = (process.env.NEXT_PUBLIC_DATA_GENERATION ??
+               process.env.NEXT_ENABLE_DATA_GENERATION ??
+               process.env.ENABLE_DATA_GENERATION ??
+               '').toString().toLowerCase();
+  return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
 }
 
 /**
@@ -153,9 +156,3 @@ export function getApiBaseUrl(): string {
          'http://localhost:8000';
 }
 
-
-export default {
-  generateProjectData,
-  isDataGenerationEnabled,
-  getApiBaseUrl
-};

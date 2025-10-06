@@ -7,15 +7,13 @@
 
 import type { Product } from "@/context/CartContext";
 
-// Import the universal data generator
-import { 
+import {
   generateProjectData, 
   isDataGenerationEnabled, 
   getApiBaseUrl,
   type DataGenerationResponse 
 } from "../shared/data-generator";
 
-// Project-specific configuration
 const PROJECT_KEY = 'web_3_autozone';
 
 /**
@@ -111,13 +109,3 @@ export function isDataGenerationAvailable(): boolean {
 export function getApiUrl(): string {
   return getApiBaseUrl();
 }
-
-
-export default {
-  generateProducts,
-  generateProductsWithFallback,
-  replaceAllProducts,
-  addGeneratedProducts,
-  isDataGenerationAvailable,
-  getApiUrl
-};
