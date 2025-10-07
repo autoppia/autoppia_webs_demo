@@ -56,8 +56,8 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Port Structure**
 
-* 🌐 **Web Server Port** (`--web_port`) - Django or Next.js application
-* 🗄️ **Database Port** (`--postgres_port`) - PostgreSQL database (if applicable)
+- 🌐 **Web Server Port** (`--web_port`) - Django or Next.js application
+- 🗄️ **Database Port** (`--postgres_port`) - PostgreSQL database (if applicable)
 
 ### **Default Port Assignments**
 
@@ -102,13 +102,14 @@ Use the setup script with flexible deployment options:
 ```bash
 chmod +x ./scripts/setup.sh
 ```
+
 #### **🎯 Deploy All Demos** (Recommended)
 
 ```bash
 ./scripts/setup.sh --demo=all
 ```
-> 💡 **Note**: When using `--demo=all`, the system automatically assigns ports to prevent conflicts.
 
+> 💡 **Note**: When using `--demo=all`, the system automatically assigns ports to prevent conflicts.
 
 #### **🎬 Deploy Movies Demo**
 
@@ -148,7 +149,7 @@ chmod +x ./scripts/setup.sh
 
 #### **📦 Deploy AutoLodge Demo**
 
-```bash
+````bash
 ./scripts/setup.sh --demo=autolodge --web_port=8007
 ```
 #### **📦 Deploy AutoDrive Demo**
@@ -160,7 +161,6 @@ chmod +x ./scripts/setup.sh
 > ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
 
 ---
-
 
 #### **Custom Port Configuration**
 
@@ -204,7 +204,7 @@ After successful deployment, access your demo webs:
 | **AutoLodge Demo**  | `http://localhost:8007` | Book Hotels, Cabins & Retreats UI  |
 | **AutoDrive Demo**  | `http://localhost:8012` | Go anywhere with AutoDriver UI  |
 
---- 
+---
 
 ### **Custom Port Access**
 
