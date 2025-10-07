@@ -81,6 +81,7 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
               {LABEL_COLORS.map((color) => (
                 <button
                   key={color}
+                  id={`label-color-${color.replace('#', '')}`}
                   className={`w-8 h-8 rounded-full border-2 transition-all ${
                     selectedColor === color
                       ? 'border-foreground scale-110'
@@ -95,10 +96,11 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
         </div>
 
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="outline" onClick={() => setOpen(false)} id="cancel-create-label-button">
             Cancel
           </Button>
           <Button
+            id="create-label-button"
             onClick={handleCreate}
             disabled={!labelName.trim()}
             className="btn-primary-gradient"

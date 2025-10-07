@@ -194,7 +194,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
+              <Button id="user-menu-btn" variant="ghost" size="icon" className="relative">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                   <span className="text-white font-medium text-sm">U</span>
                 </div>
@@ -223,6 +223,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                   <div className="flex items-center justify-between">
                     <span className="text-sm">Light</span>
                     <Button
+                      id="theme-light-btn"
                       variant={theme === 'light' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
@@ -237,6 +238,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                   <div className="flex items-center justify-between">
                     <span className="text-sm">Dark</span>
                     <Button
+                      id="theme-dark-btn"
                       variant={theme === 'dark' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
@@ -250,6 +252,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                   <div className="flex items-center justify-between">
                     <span className="text-sm">System</span>
                     <Button
+                      id="theme-system-btn"
                       variant={theme === 'system' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {

@@ -7,10 +7,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
-import { systemLabels } from "@/library/dataset";
+// import { systemLabels } from "@/library/dataset";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import type { EmailFolder } from "@/types/email";
-import { EVENT_TYPES, logEvent } from "@/library/events";
+// import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   Inbox,
   Star,
@@ -34,15 +34,14 @@ interface NavigationItem {
   type: "folder" | "label";
 }
 
-const folderEventMap = {
-  inbox: EVENT_TYPES.INBOX_SIDEBAR_CLICKED,
-  starred: EVENT_TYPES.STARRED_SIDEBAR_CLICKED,
-  sent: EVENT_TYPES.SENT_SIDEBAR_CLICKED,
-  drafts: EVENT_TYPES.DRAFT_SIDEBAR_CLICKED,
-  important: EVENT_TYPES.IMPORTANT_SIDEBAR_CLICKED,
-  trash: EVENT_TYPES.TRASH_SIDEBAR_CLICKED,
-} as const;
-
+// const folderEventMap = {
+//   inbox: EVENT_TYPES.INBOX_SIDEBAR_CLICKED,
+//   starred: EVENT_TYPES.STARRED_SIDEBAR_CLICKED,
+//   sent: EVENT_TYPES.SENT_SIDEBAR_CLICKED,
+//   drafts: EVENT_TYPES.DRAFT_SIDEBAR_CLICKED,
+//   important: EVENT_TYPES.IMPORTANT_SIDEBAR_CLICKED,
+//   trash: EVENT_TYPES.TRASH_SIDEBAR_CLICKED,
+// } as const;
 
 export function Sidebar() {
   const {
@@ -131,10 +130,10 @@ export function Sidebar() {
   const handleItemClick = (item: NavigationItem) => {
     if (item.type === "folder") {
       setFilter({ folder: item.id as EmailFolder });
-      if (item.type === "folder" && item.id in folderEventMap) {
-        const eventName = folderEventMap[item.id as keyof typeof folderEventMap];
-        logEvent(eventName, { label: item.label, id: item.id });
-      }         
+      // if (item.type === "folder" && item.id in folderEventMap) {
+      //   const eventName = folderEventMap[item.id as keyof typeof folderEventMap];
+      //   logEvent(eventName, { label: item.label, id: item.id });
+      // }
     } else {
       setFilter({ folder: "inbox", label: item.id });
     }
@@ -165,6 +164,7 @@ export function Sidebar() {
             const active = isActive(item);
             return (
               <Button
+                id={item.id}
                 key={item.id}
                 variant={active ? "secondary" : "ghost"}
                 className={cn("w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover", active && "sidebar-item-active")}
@@ -215,15 +215,15 @@ export function Sidebar() {
           <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             More
           </div>
-          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
+          <Button id="contacts-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <Users className="h-4 w-4" />
             Contacts
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
+          <Button id="chats-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <MessageSquare className="h-4 w-4" />
             Chats
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
+          <Button id="settings-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
             <Settings className="h-4 w-4" />
             Settings
           </Button>
