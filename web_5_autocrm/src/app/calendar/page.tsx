@@ -48,30 +48,15 @@ export default function CalendarPage() {
   const getDateStr = (d: number) => `${curYear}-${pad(curMonth + 1)}-${pad(d)}`;
 
   return (
-<<<<<<< HEAD
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight">Calendar</h1>
       </DynamicElement>
-      
+
       <DynamicElement elementType="section" index={1} className="flex items-center gap-2 mb-6">
         <DynamicButton
           eventType="NEW_CALENDAR_EVENT_ADDED"
           index={0}
-=======
-    <section id="calendar-page">
-      <h1
-        id="calendar-title"
-        className="text-3xl font-extrabold mb-10 tracking-tight"
-      >
-        Calendar
-      </h1>
-      <div
-        id="calendar-navigation"
-        className="flex items-center gap-2 mb-6"
-      >
-        <button
->>>>>>> main
           className="p-2 rounded-full hover:bg-accent-forest/20"
           aria-label="Previous Month"
           onClick={() =>
@@ -81,17 +66,8 @@ export default function CalendarPage() {
           }
         >
           <ChevronLeft className="w-5 h-5" />
-<<<<<<< HEAD
         </DynamicButton>
         <span className="font-bold text-lg px-4" aria-live="polite">
-=======
-        </button>
-        <span
-          id="current-month-label"
-          className="font-bold text-lg px-4"
-          aria-live="polite"
-        >
->>>>>>> main
           {monthLabel}
         </span>
         <DynamicButton
@@ -108,6 +84,7 @@ export default function CalendarPage() {
           <ChevronRight className="w-5 h-5" />
         </DynamicButton>
       </DynamicElement>
+
       <DynamicElement elementType="section" index={2} className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
         <div className="grid grid-cols-7 bg-neutral-bg-dark text-zinc-500 text-xs font-semibold uppercase tracking-wider">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
@@ -135,12 +112,7 @@ export default function CalendarPage() {
               return (
                 <DynamicItem
                   key={wi + "-" + di}
-<<<<<<< HEAD
                   index={wi * 7 + di}
-=======
-                  id={d ? `calendar-cell-${dateStr}` : `calendar-cell-empty-${wi}-${di}`}
-                  data-testid={d ? `calendar-cell-${dateStr}` : undefined}
->>>>>>> main
                   onClick={() => d && setOpenEventDate(dateStr)}
                   className={`relative border-b border-zinc-100 min-h-[86px] px-2 md:px-3 pt-2 group flex flex-col items-start ${
                     d ? "bg-white" : "bg-neutral-bg-dark"

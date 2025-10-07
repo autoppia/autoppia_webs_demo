@@ -113,7 +113,6 @@ export default function MattersListPage() {
   };
 
   return (
-<<<<<<< HEAD
     <section className="p-6">
       <DynamicContainer className="flex flex-col gap-6">
         {/* Header */}
@@ -121,35 +120,18 @@ export default function MattersListPage() {
           <h1 className="text-3xl font-bold">Matters</h1>
           <DynamicButton
             eventType="ADD_NEW_MATTER"
-            index={0}
-=======
-    <section id="matters-page">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 md:gap-0">
-        <h1
-          id="matters-title"
-          className="text-3xl md:text-[2.25rem] font-extrabold tracking-tight"
-        >
-          Matters
-        </h1>
-        <div className="flex gap-2">
-          <button
-            id="new-matter-button"
-            className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent-forest text-white font-medium text-sm shadow-sm hover:bg-accent-forest/90 transition"
->>>>>>> main
             onClick={() => setOpenNew(true)}
             className="bg-accent-forest text-white hover:bg-accent-forest/90"
           >
             <Plus className="w-4 h-4 mr-2" /> New Matter
           </DynamicButton>
         </div>
-<<<<<<< HEAD
 
         {/* Matter List */}
         <div className="grid gap-4">
-          {matters.map((matter, index) => (
+          {matters.map((matter) => (
             <DynamicItem
               key={matter.id}
-              index={index}
               className={`relative ${
                 isSelected(matter.id) ? "ring-2 ring-accent-forest/30" : ""
               }`}
@@ -184,207 +166,6 @@ export default function MattersListPage() {
               </Link>
             </DynamicItem>
           ))}
-=======
-      </div>
-      {/* Table Head */}
-      <div
-        id="matters-table-header"
-        className="hidden md:grid grid-cols-7 items-center px-6 text-sm text-zinc-500 uppercase tracking-wide mb-3 select-none"
-        style={{ letterSpacing: "0.06em" }}
-      >
-        <span>
-          <input
-            id="select-all-checkbox"
-            type="checkbox"
-            className="accent-accent-forest w-5 h-5 rounded-xl border-zinc-200"
-            checked={allSelected}
-            ref={(el) => {
-              if (el) el.indeterminate = someSelected;
-            }}
-            onChange={toggleSelectAll}
-            aria-label="Select all matters"
-          />
-        </span>
-        <span className="col-span-2">Matter</span>
-        <span className="col-span-2">Client</span>
-        <span>Status</span>
-        <span>Updated</span>
-        <span></span>
-      </div>
-
-      <div id="matters-list" className="flex flex-col gap-3">
-        {matters.map((m) => (
-          <div
-            key={m.id}
-            id={`matter-row-${m.id}`}
-            data-testid={`matter-${m.id}`}
-            className={`group bg-white rounded-2xl shadow-card border border-zinc-100 hover:border-accent-forest/40 hover:shadow-lg transition p-6 flex flex-col md:grid md:grid-cols-7 items-center gap-2 md:gap-0 no-underline ${
-              isSelected(m.id) ? "ring-2 ring-accent-forest/30" : ""
-            }`}
-          >
-            {/* Select checkbox */}
-            <div onClick={(e) => e.stopPropagation()}>
-              <input
-                id={`checkbox-${m.id}`}
-                data-testid={`checkbox-${m.id}`}
-                type="checkbox"
-                checked={isSelected(m.id)}
-                onChange={() => toggleSelect(m.id)}
-                aria-label={`Select matter ${m.name}`}
-                className="accent-accent-forest w-5 h-5 rounded-xl border-zinc-200"
-              />
-            </div>
-            <Link
-              href={`/matters/${m.id}`}
-              id={`matter-link-${m.id}`}
-              data-testid={`matter-link-${m.id}`}
-              onClick={() => logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, m)}
-              className="col-span-6 grid grid-cols-6 w-full items-center"
-            >
-              <div className="col-span-2 flex items-center gap-3">
-                <Briefcase className="w-6 h-6 text-zinc-400" />
-                <span
-                  id={`matter-name-${m.id}`}
-                  className="font-semibold text-md text-zinc-800"
-                >
-                  {m.name}
-                </span>
-              </div>
-              <div
-                id={`matter-client-${m.id}`}
-                className="col-span-2 text-zinc-700"
-              >
-                {m.client}
-              </div>
-              <div
-                id={`matter-status-${m.id}`}
-                className="flex items-center"
-              >
-                {statusPill(m.status)}
-              </div>
-              <div
-                id={`matter-updated-${m.id}`}
-                className="text-zinc-500"
-              >
-                {m.updated}
-              </div>
-            </Link>
-          </div>
-        ))}
-      </div>
-      {/* Batch actions bar */}
-      {selected.length > 0 && (
-        <div
-          id="batch-actions-bar"
-          className="mt-12 flex gap-2 items-center text-sm text-zinc-500 justify-end animate-in fade-in"
-        >
-          <span>Batch actions:</span>
-          <button
-            id="archive-selected-button"
-            data-testid="archive-selected-button"
-            className="rounded-2xl px-4 py-2 bg-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-300 inline-flex gap-2 items-center"
-            onClick={archiveSelected}
-          >
-            <Archive className="w-4 h-4" /> Archive
-          </button>
-          <button
-            id="delete-selected-button"
-            data-testid="delete-selected-button"
-            className="rounded-2xl px-4 py-2 bg-red-500 text-white font-semibold hover:bg-red-600 inline-flex gap-2 items-center"
-            onClick={deleteSelected}
-          >
-            <Trash2 className="w-4 h-4" /> Delete
-          </button>
-        </div>
-      )}
-
-      {/* Modal for New Matter */}
-      {openNew && (
-        <div
-          id="new-matter-modal-overlay"
-          className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"
-        >
-          <form
-            id="new-matter-form"
-            data-testid="new-matter-form"
-            className="rounded-2xl bg-white w-full max-w-md p-8 shadow-2xl flex flex-col gap-6 border border-zinc-100 relative animate-in fade-in zoom-in-50"
-            onSubmit={addMatter}
-          >
-            <button
-              id="close-modal-button"
-              type="button"
-              onClick={closeModal}
-              className="absolute right-3 top-3 text-zinc-400 rounded-full hover:bg-zinc-100 p-2"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <h2 id="new-matter-modal-title" className="text-2xl font-bold mb-2">
-              New Matter
-            </h2>
-            <div className="flex flex-col gap-2">
-              <label
-                className="font-medium text-zinc-700"
-                htmlFor="matter-name-input"
-              >
-                Matter Name
-              </label>
-              <input
-                id="matter-name-input"
-                data-testid="matter-name-input"
-                className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
-                required
-                value={newMatter.name}
-                onChange={(e) =>
-                  setNewMatter((n) => ({ ...n, name: e.target.value }))
-                }
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label
-                className="font-medium text-zinc-700"
-                htmlFor="matter-client-input"
-              >
-                Client
-              </label>
-              <input
-                id="matter-client-input"
-                className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
-                required
-                value={newMatter.client}
-                onChange={(e) =>
-                  setNewMatter((n) => ({ ...n, client: e.target.value }))
-                }
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label
-                className="font-medium text-zinc-700"
-                htmlFor="matter-status-select"
-              >
-                Status
-              </label>
-              <select
-                id="matter-status-select"
-                className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
-                value={newMatter.status}
-                onChange={(e) =>
-                  setNewMatter((n) => ({ ...n, status: e.target.value }))
-                }
-              >
-                <option value="Active">Active</option>
-                <option value="On Hold">On Hold</option>
-                <option value="Archived">Archived</option>
-              </select>
-            </div>
-            <button
-              id="create-matter-submit-button"
-              type="submit"
-              className="rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg"
-            >
-              Create Matter
-            </button>
-          </form>
->>>>>>> main
         </div>
 
         {/* Batch Actions */}
@@ -392,7 +173,6 @@ export default function MattersListPage() {
           <div className="flex justify-end gap-2 mt-4">
             <DynamicButton
               eventType="ARCHIVE_MATTER"
-              index={0}
               onClick={archiveSelected}
               variant="outline"
             >
@@ -400,7 +180,6 @@ export default function MattersListPage() {
             </DynamicButton>
             <DynamicButton
               eventType="DELETE_MATTER"
-              index={1}
               onClick={deleteSelected}
               variant="outline"
               className="text-red-600 hover:bg-red-50"
@@ -475,7 +254,6 @@ export default function MattersListPage() {
 
                 <DynamicButton
                   eventType="ADD_NEW_MATTER"
-                  index={1}
                   type="submit"
                   className="w-full bg-accent-forest text-white hover:bg-accent-forest/90"
                 >
