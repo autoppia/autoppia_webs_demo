@@ -13,7 +13,6 @@ import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
 const DELIVERY_ADDRESS = "Daly City 94016";
-const FREE_DELIVERY_LINE = `FREE delivery ${DELIVERY_DATE} on orders shipped by Autozon over $35`;
 
 function ProductContent() {
   const router = useRouter();
@@ -42,9 +41,10 @@ function ProductContent() {
       if (foundProduct) {
         setProduct(foundProduct);
       }
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
+    fetchProduct();
+    return () => { isMounted = false; };
   }, [productId]);
 
   // Log view event
@@ -141,10 +141,7 @@ function ProductContent() {
 
   const handleAddToCart = () => {
     if (!product) return;
-
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
+    Array.from({ length: quantity }).forEach(() => addToCart(product));
     logEvent(EVENT_TYPES.ADD_TO_CART, {
       productId: product.id,
       title: product.title,

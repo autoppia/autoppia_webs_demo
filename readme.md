@@ -40,6 +40,7 @@ demo-webs/
 ├── web_5_autocrm/
 ├── web_6_automail/
 ├── web_8_autolodge/
+├── web_9_autoconnect/
 ├── web_10_autowork/
 ├── webs_server/
 └── scripts/
@@ -156,6 +157,12 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=autowork --web_port=8009
 ````
 
+#### **📦 Deploy AutoConnect Demo**
+
+```bash
+./scripts/setup.sh --demo=autoconnect --web_port=8008
+```
+
 > ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
 
 ---
@@ -191,15 +198,15 @@ After successful deployment, access your demo webs:
 
 ### **Default Access URLs**
 
-| Demo Application    | URL                     | Description                     |
-| ------------------- | ----------------------- | ------------------------------- |
-| **Movies Demo**     | `http://localhost:8000` | Movie database interface        |
-| **Books Demo**      | `http://localhost:8001` | Book catalog system             |
-| **Autozone Demo**   | `http://localhost:8002` | Online Shopping for Electronics |
-| **Autodining Demo** | `http://localhost:8003` | Restaurant Reservation UI       |
-| **AutoCRM Demo**    | `http://localhost:8004` | Customer Relation Management UI |
-| **AutoMail Demo**   | `http://localhost:8005` | Modern Email Client UI          |
-| **AutoWork Demo**   | `http://localhost:8009` | Hire Freelancers UI             |
+| Demo Application     | URL                     | Description                                   |
+| -------------------- | ----------------------- | --------------------------------------------- |
+| **Movies Demo**      | `http://localhost:8000` | Movie database interface                      |
+| **Books Demo**       | `http://localhost:8001` | Book catalog system                           |
+| **Autozone Demo**    | `http://localhost:8002` | Online Shopping for Electronics               |
+| **Autodining Demo**  | `http://localhost:8003` | Restaurant Reservation UI                     |
+| **AutoCRM Demo**     | `http://localhost:8004` | Customer Relation Management UI               |
+| **AutoMail Demo**    | `http://localhost:8005` | Modern Email Client UI                        |
+| **AutoConnect Demo** | `http://localhost:8008` | A LinkedIn-like Professional NetworkClient UI |
 
 ---
 
