@@ -38,6 +38,8 @@ WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 ENABLE_DYNAMIC_HTML_DEFAULT=false
 ENABLE_DATA_GENERATION=false
+ENABLE_DB_MODE_DEFAULT=false
+SEED_VALUE=""    # optional integer seed
 FORCE_DELETE=false
 
 # 5) Parse args (only one public flag, plus -y convenience)
@@ -50,6 +52,8 @@ for ARG in "$@"; do
     --demo=*)            WEB_DEMO="${ARG#*=}" ;;
     --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
     --enable_data_generation=*) ENABLE_DATA_GENERATION="${ARG#*=}" ;;
+    --enable_db_mode=*)   ENABLE_DB_MODE="${ARG#*=}" ;;
+    --seed_value=*)       SEED_VALUE="${ARG#*=}" ;;
     -y|--yes)            FORCE_DELETE=true ;;
     *) ;;
   esac
@@ -61,6 +65,8 @@ WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
 ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
 ENABLE_DATA_GENERATION="${ENABLE_DATA_GENERATION:-$ENABLE_DATA_GENERATION_DEFAULT}"
+ENABLE_DB_MODE="${ENABLE_DB_MODE:-$ENABLE_DB_MODE_DEFAULT}"
+SEED_VALUE="${SEED_VALUE:-}"
 
 echo "🔣 Configuration:"
 echo "    movies/books base HTTP  →  $WEB_PORT"
@@ -70,6 +76,8 @@ echo "    webs_server Postgres    →  $WEBS_PG_PORT"
 echo "    Demo to deploy:         →  $WEB_DEMO"
 echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
 echo "    Data generation:        →  $ENABLE_DATA_GENERATION"
+echo "    DB mode:                →  $ENABLE_DB_MODE"
+echo "    Seed value:             →  ${SEED_VALUE:-<none>}"
 echo
 
 # 6) Check Docker
@@ -107,6 +115,8 @@ deploy_project() {
   # Environment-only prefixes apply to the single command that follows
   WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
   ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
+  ENABLE_DB_MODE="$ENABLE_DB_MODE" NEXT_PUBLIC_ENABLE_DB_MODE="$ENABLE_DB_MODE" \
+  DATA_SEED_VALUE="$SEED_VALUE" NEXT_PUBLIC_DATA_SEED_VALUE="$SEED_VALUE" \
   API_URL="http://app:$WEBS_PORT" NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
   docker compose -p "$proj" up -d --build
 

@@ -1,6 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
-import { products, initializeProducts } from "@/data/products-enhanced";
+import { products, initializeProducts, loadProductsFromDb } from "@/data/products-enhanced";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
@@ -40,6 +40,18 @@ export class DynamicDataProvider {
   private async initializeProducts(): Promise<void> {
     try {
       console.log('🔄 Initializing products...');
+      
+      // Try DB mode first if enabled
+      const dbProducts = await loadProductsFromDb();
+      if (dbProducts.length > 0) {
+        this.products = dbProducts;
+        console.log('✅ Products loaded from DB:', this.products.length, 'total products');
+        this.ready = true;
+        this.resolveReady();
+        return;
+      }
+      
+      // Fallback to existing behavior
       const initializedProducts = await initializeProducts();
       this.products = initializedProducts;
       console.log('✅ Products initialized:', this.products.length, 'total products');

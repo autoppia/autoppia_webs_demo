@@ -12,6 +12,7 @@ import {
   addGeneratedProducts,
   isDataGenerationAvailable 
 } from "@/utils/dataGenerator";
+import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 // Map some category keywords to existing local images as safe fallbacks
 function normalizeImageUrl(image: string | undefined, category?: string, nameHint?: string): string {
@@ -659,6 +660,7 @@ async function generateProductsForCategories(
  * Uses async calls for each category to avoid overwhelming the server
  */
 export async function initializeProducts(): Promise<Product[]> {
+  // Preserve existing behavior: use generation when enabled, else static data
   if (isDataGenerationAvailable()) {
     try {
       // Use cached products on client to prevent re-generation on reloads
@@ -668,17 +670,17 @@ export async function initializeProducts(): Promise<Product[]> {
         return dynamicProducts;
       }
 
-      console.log('🚀 Starting async data generation for each category...');
-      console.log('📡 Using API:', process.env.API_URL || 'http://app:8090');
-      
+      console.log("🚀 Starting async data generation for each category...");
+      console.log("📡 Using API:", process.env.API_URL || "http://app:8090");
+
       // Define categories and products per category
       const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
       const productsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_PRODUCTS_PER_CATEGORY;
       const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
-      
+
       console.log(`📊 Will generate ${productsPerCategory} products per category`);
-      console.log(`🏷️  Categories: ${categories.join(', ')}`);
-      
+      console.log(`🏷️  Categories: ${categories.join(", ")}`);
+
       // Generate products for all categories with delays
       let allGeneratedProducts = await generateProductsForCategories(
         categories,
@@ -690,23 +692,48 @@ export async function initializeProducts(): Promise<Product[]> {
       allGeneratedProducts = normalizeProductImages(allGeneratedProducts);
 
       console.log(`🎉 Data generation complete! Generated ${allGeneratedProducts.length} products (replacing ${originalProducts.length} original products)`);
-      console.log(`✅ Generated data is now active!`);
+      console.log("✅ Generated data is now active!");
       dynamicProducts = allGeneratedProducts;
       // Cache generated products on client
       writeCachedProducts(dynamicProducts);
       return dynamicProducts;
-      
     } catch (error) {
-      console.warn('⚠️ Failed to generate products while generation is enabled. Keeping products empty until ready. Error:', error);
+      console.warn("⚠️ Failed to generate products while generation is enabled. Keeping products empty until ready. Error:", error);
       // When data generation is enabled, do NOT fall back to static data; return empty
       dynamicProducts = [];
       return dynamicProducts;
     }
   } else {
-    console.log('ℹ️ Data generation is disabled, using original static products');
+    console.log("ℹ️ Data generation is disabled, using original static products");
     dynamicProducts = originalProducts;
     return dynamicProducts;
   }
+}
+
+// Runtime-only DB fetch for when DB mode is enabled
+export async function loadProductsFromDb(): Promise<Product[]> {
+  if (!isDbLoadModeEnabled()) {
+    return [];
+  }
+  
+  try {
+    const seed = getSeedValueFromEnv(1);
+    const limit = 100;
+    const selected = await fetchSeededSelection<Product>({
+      projectKey: "web_3_autozone",
+      entityType: "products",
+      seedValue: seed,
+      limit,
+      method: "select",
+    });
+    if (selected && selected.length > 0) {
+      return normalizeProductImages(selected);
+    }
+  } catch (e) {
+    console.warn("Failed to load seeded selection from DB:", e);
+  }
+  
+  return [];
 }
 
 /**

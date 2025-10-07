@@ -23,6 +23,10 @@ console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DATA_GENERATION);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('  DATA_SEED_VALUE:', process.env.DATA_SEED_VALUE);
+console.log('  NEXT_PUBLIC_DATA_SEED_VALUE:', process.env.NEXT_PUBLIC_DATA_SEED_VALUE);
+console.log('  ENABLE_DB_MODE:', process.env.ENABLE_DB_MODE);
+console.log('  NEXT_PUBLIC_ENABLE_DB_MODE:', process.env.NEXT_PUBLIC_ENABLE_DB_MODE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -58,6 +62,10 @@ const nextConfig = {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
     ENABLE_DATA_GENERATION: process.env.ENABLE_DATA_GENERATION,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    DATA_SEED_VALUE: process.env.DATA_SEED_VALUE,
+    NEXT_PUBLIC_DATA_SEED_VALUE: process.env.NEXT_PUBLIC_DATA_SEED_VALUE,
+    ENABLE_DB_MODE: process.env.ENABLE_DB_MODE,
+    NEXT_PUBLIC_ENABLE_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DB_MODE,
   },
   // experimental: {
   //   allowedDevOrigins: ['https://be96-72-255-23-44.ngrok-free.app'], // ← your ngrok public URL

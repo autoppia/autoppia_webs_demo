@@ -107,7 +107,10 @@ export async function generateProjectData(
         count: Math.max(1, Math.min(200, count)),
         categories: categories || config.categories,
         additional_requirements: config.additionalRequirements,
-        naming_rules: config.namingRules
+        naming_rules: config.namingRules,
+        project_key: projectKey,
+        entity_type: config.dataType,
+        save_to_db: true,
       })
     });
 
