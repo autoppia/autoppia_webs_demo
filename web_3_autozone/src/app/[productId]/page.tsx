@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { Star, Check } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
@@ -12,7 +12,6 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
 const DELIVERY_ADDRESS = "Daly City 94016";
-const FREE_DELIVERY_LINE = `FREE delivery ${DELIVERY_DATE} on orders shipped by Autozon over $35`;
 
 export default function ProductPage() {
   const router = useRouter();
@@ -23,25 +22,38 @@ export default function ProductPage() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch product
   useEffect(() => {
-    setIsLoading(true);
-
-    if (typeof productId === "string") {
-      const foundProduct = getProductById(productId);
-      if (foundProduct) {
-        setProduct(foundProduct);
+    let isMounted = true;
+    async function fetchProduct() {
+      setIsLoading(true);
+      if (typeof productId === "string") {
+        const foundProduct = await getProductById(productId);
+        if (isMounted) setProduct(foundProduct ?? null);
       }
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
+    fetchProduct();
+    return () => { isMounted = false; };
   }, [productId]);
+
+  // Log view event
+  useEffect(() => {
+    if (product) {
+      logEvent(EVENT_TYPES.VIEW_DETAIL, {
+        productId: product.id,
+        title: product.title,
+        price: product.price,
+        category: product.category,
+        brand: product.brand,
+        rating: product.rating,
+      });
+    }
+  }, [product]);
 
   const handleAddToCart = () => {
     if (!product) return;
-
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
+    Array.from({ length: quantity }).forEach(() => addToCart(product));
     logEvent(EVENT_TYPES.ADD_TO_CART, {
       productId: product.id,
       title: product.title,

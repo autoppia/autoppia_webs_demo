@@ -8,15 +8,15 @@ import {
   ClockIcon,
 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
+import React, { useEffect, useState } from "react";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { format } from "date-fns";
-import React from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Link from "next/link";
@@ -71,7 +71,19 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
-
+  useEffect(() => {
+    if (!r) return; // evita enviar si aún no hay datos
+    logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
+      restaurantId: id,
+      restaurantName: r.name,
+      cuisine: r.cuisine,
+      desc: r.desc,
+      area: "test",
+      reviews: r.reviews,
+      bookings: r.bookings,
+      rating: r.rating,
+    });
+  }, [id]);
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
   const handleToggleMenu = () => {
@@ -83,6 +95,12 @@ export default function RestaurantPage() {
       {
         restaurantId: id,
         restaurantName: r.name,
+        cuisine: r.cuisine,
+        desc: r.desc,
+        area: "test",
+        reviews: r.reviews,
+        bookings: r.bookings,
+        rating: r.rating,
         action: newState ? "view_full_menu" : "collapse_menu",
         time,
         date: formattedDate,
@@ -402,6 +420,12 @@ export default function RestaurantPage() {
                       logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                         restaurantId: id,
                         restaurantName: r.name,
+                        cuisine: r.cuisine,
+                        desc: r.desc,
+                        area: "test",
+                        reviews: r.reviews,
+                        bookings: r.bookings,
+                        rating: r.rating,
                         date: formattedDate,
                         time,
                         people,
