@@ -30,6 +30,8 @@ export default function SettingsPage() {
                 <User className="w-4 h-4 inline" /> Full name
               </label>
               <input
+                id="user-name-input"
+                data-testid="user-name-input"
                 className="rounded-xl border px-4 py-3 font-medium bg-white"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -48,6 +50,8 @@ export default function SettingsPage() {
             </div>
             <div className="flex items-center gap-3">
               <button
+                id="save-name-button"
+                data-testid="save-name-button"
                 onClick={saveName}
                 className="ml-auto rounded-2xl text-accent-forest border border-accent-forest px-4 py-2 font-medium hover:bg-accent-forest/10 transition"
               >
