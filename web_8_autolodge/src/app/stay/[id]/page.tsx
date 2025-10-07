@@ -42,22 +42,15 @@ function PropertyDetailContent() {
   const didTrack = useRef(false);
   const params = useParams<{ id: string }>();
   const { id } = params;
-<<<<<<< HEAD
-  const prop = DASHBOARD_HOTELS[Number(id)] ?? DASHBOARD_HOTELS[0];
-  
-  // Wrap stayFrom and stayTo in useMemo to prevent unnecessary recalculations
-  const stayFrom = useMemo(() => new Date(prop.datesFrom), [prop.datesFrom]);
-  const stayTo = useMemo(() => new Date(prop.datesTo), [prop.datesTo]);
-  
-=======
   const prop = useMemo(() => {
     const numId = Number(id);
     const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
     return hotel ?? DASHBOARD_HOTELS[0];
   }, [id]);
-  const stayFrom = new Date(prop.datesFrom);
-  const stayTo = new Date(prop.datesTo);
->>>>>>> main
+  
+  // Wrap date objects in useMemo to prevent unnecessary recalculations
+  const stayFrom = useMemo(() => new Date(prop.datesFrom), [prop.datesFrom]);
+  const stayTo = useMemo(() => new Date(prop.datesTo), [prop.datesTo]);
   const availableDates = useMemo(
     () => eachDayOfInterval({ start: stayFrom, end: addDays(stayTo, -1) }),
     [stayFrom, stayTo]
@@ -482,8 +475,6 @@ function PropertyDetailContent() {
           {toastMessage}
         </div>
       )}
-<<<<<<< HEAD
-=======
       {showShareModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md animate-fade-in">
@@ -686,7 +677,7 @@ function PropertyDetailContent() {
               CHECK-IN
             </div>
             <div className="tracking-wide text-[15px]">
-              {selected.from ? format(selected.from, "MM/dd/yyyy") : "–"}
+              {selected?.from ? format(selected.from, "MM/dd/yyyy") : "–"}
             </div>
           </div>
           <div id="checkOut" className="flex-1 border rounded-md px-3 py-2">
@@ -694,7 +685,7 @@ function PropertyDetailContent() {
               CHECK-OUT
             </div>
             <div className="tracking-wide text-[15px]">
-              {selected.to ? format(selected.to, "MM/dd/yyyy") : "–"}
+              {selected?.to ? format(selected.to, "MM/dd/yyyy") : "–"}
             </div>
           </div>
         </div>
@@ -726,7 +717,7 @@ function PropertyDetailContent() {
             }}
           />
         </div>
-        {selected.from && selected.to && (
+        {selected?.from && selected?.to && (
           <button
             id="reserveButton"
             className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
@@ -765,7 +756,7 @@ function PropertyDetailContent() {
             Reserve
           </button>
         )}
-        {(!selected.from || !selected.to) && (
+        {(!selected?.from || !selected?.to) && (
           <button
             id="checkAvailabilityButton"
             disabled
@@ -794,7 +785,6 @@ function PropertyDetailContent() {
           </div>
         </div>
       </div>
->>>>>>> main
     </div>
   );
 }
