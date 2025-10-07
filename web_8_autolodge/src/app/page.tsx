@@ -64,6 +64,7 @@ function HomeContent() {
   // Filtering logic
   const totalSelectedGuests = guests.adults + guests.children;
 
+
   function toStartOfDay(date: Date): Date {
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
@@ -80,8 +81,11 @@ function HomeContent() {
     const to = toStartOfDay(propTo);
     const selFrom = toStartOfDay(selectedFrom);
     const selTo = toStartOfDay(selectedTo);
-    const lastBookedNight = toStartOfDay(addDays(selTo, -1));
-    return selFrom >= from && lastBookedNight <= to;
+    
+    // Check if there's any overlap between the selected date range and property's available range
+    // Two date ranges overlap if: start1 <= end2 AND start2 <= end1
+    // In our case: selFrom <= to AND from <= selTo
+    return selFrom <= to && from <= selTo;
   }
 
   const filtered = DASHBOARD_HOTELS.filter((card) => {
