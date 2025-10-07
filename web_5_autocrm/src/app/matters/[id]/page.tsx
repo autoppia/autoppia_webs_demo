@@ -183,6 +183,7 @@ export default function MatterDetailPage() {
           {TABS.map(({ name, icon }) => (
             <button
               key={name}
+              id={`tab-${name.toLowerCase()}`}
               className={`flex items-center px-5 py-2 rounded-2xl font-semibold text-md transition-colors ${
                 name === tab
                   ? layout.activeTabClasses

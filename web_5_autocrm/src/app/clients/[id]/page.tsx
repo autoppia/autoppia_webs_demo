@@ -68,74 +68,159 @@ export default function ClientProfilePage() {
   return (
     <section className="max-w-4xl mx-auto flex flex-col gap-10 px-4 md:px-0"> {/* Added padding for responsiveness */}
       {/* Profile Card */}
-      <div className="rounded-2xl bg-white shadow-card p-8 flex flex-col md:flex-row items-center md:items-start gap-7 border border-zinc-100">
-        <div className="w-20 h-20 rounded-full bg-accent-forest/10 flex items-center justify-center text-accent-forest text-4xl font-bold">
-          {/* Display initials dynamically */}
+      <div
+        id="client-profile-card"
+        className="rounded-2xl bg-white shadow-card p-8 flex flex-col md:flex-row items-center md:items-start gap-7 border border-zinc-100"
+      >
+        <div
+          id={`client-avatar-${client.id}`}
+          className="w-20 h-20 rounded-full bg-accent-forest/10 flex items-center justify-center text-accent-forest text-4xl font-bold"
+        >
           <span className="hidden md:block">{getInitials(client.name)}</span>
           <User className="w-9 h-9 md:hidden" />
         </div>
         <div className="flex flex-col gap-2 flex-1 min-w-0 text-center md:text-left">
-          <span className="font-bold text-xl text-[#1A1A1A] truncate">{client.name}</span>
-          <span className="text-zinc-500 flex items-center justify-center md:justify-start gap-2 text-sm">
+          <span
+            id={`client-name-${client.id}`}
+            className="font-bold text-xl text-[#1A1A1A] truncate"
+          >
+            {client.name}
+          </span>
+          <span
+            id={`client-email-${client.id}`}
+            className="text-zinc-500 flex items-center justify-center md:justify-start gap-2 text-sm"
+          >
             <Mail className="w-4 h-4" />{client.email}
           </span>
-          { client.phone && (
-            <span className="text-zinc-500 flex items-center justify-center md:justify-start gap-2 text-sm">
+          {client.phone && (
+            <span
+              id={`client-phone-${client.id}`}
+              className="text-zinc-500 flex items-center justify-center md:justify-start gap-2 text-sm"
+            >
               <Phone className="w-4 h-4" />{client.phone}
             </span>
           )}
           <div className="flex flex-wrap gap-3 mt-2 items-center justify-center md:justify-start">
-            <span className={`px-3 py-1 rounded-2xl text-xs font-semibold ${
-              client.status === "Active"
-                ? "bg-accent-forest/10 text-accent-forest"
-                : "bg-zinc-200 text-zinc-500"
-            }`}>
+            <span
+              id={`client-status-${client.id}`}
+              className={`px-3 py-1 rounded-2xl text-xs font-semibold ${
+                client.status === "Active"
+                  ? "bg-accent-forest/10 text-accent-forest"
+                  : "bg-zinc-200 text-zinc-500"
+              }`}
+            >
               {client.status}
             </span>
-            <span className="text-xs text-zinc-400 font-mono">{client.id}</span>
+            <span
+              id={`client-id-display-${client.id}`}
+              className="text-xs text-zinc-400 font-mono"
+            >
+              {client.id}
+            </span>
           </div>
         </div>
       </div>
-      {/* Timeline + Related matters row (mobile: stacks) */}
-      <div className="flex flex-col lg:flex-row gap-10">
+
+      {/* Timeline + Related matters row */}
+      <div id="client-content-sections" className="flex flex-col lg:flex-row gap-10">
         {/* Timeline */}
-        <section className="flex-1 min-w-0 rounded-2xl bg-white shadow-card p-6 md:p-8 border border-zinc-100">
-          <h2 className="font-semibold text-lg mb-5">Activity Timeline</h2>
-          <ul className="flex flex-col gap-6">
+        <section
+          id="activity-timeline-section"
+          className="flex-1 min-w-0 rounded-2xl bg-white shadow-card p-6 md:p-8 border border-zinc-100"
+        >
+          <h2
+            id="activity-timeline-heading"
+            className="font-semibold text-lg mb-5"
+          >
+            Activity Timeline
+          </h2>
+          <ul id="activity-timeline-list" className="flex flex-col gap-6">
             {activity.map((item, i) => (
-              <li key={i} className="flex items-center gap-4">
-                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-100 text-accent-forest text-lg">
+              <li
+                key={i}
+                id={`activity-item-${i}`}
+                data-testid={`activity-item-${i}`}
+                className="flex items-center gap-4"
+              >
+                <div
+                  id={`activity-icon-${i}`}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-zinc-100 text-accent-forest text-lg"
+                >
                   {item.icon}
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-medium text-zinc-700">{item.label}</span>
-                  <span className="text-xs text-zinc-400">{item.date}</span>
+                  <span
+                    id={`activity-label-${i}`}
+                    className="font-medium text-zinc-700"
+                  >
+                    {item.label}
+                  </span>
+                  <span
+                    id={`activity-date-${i}`}
+                    className="text-xs text-zinc-400"
+                  >
+                    {item.date}
+                  </span>
                 </div>
               </li>
             ))}
           </ul>
         </section>
+
         {/* Related matters */}
-        <section className="w-full lg:w-80 flex-shrink-0">
-          <h2 className="font-semibold text-lg mb-5">Related Matters</h2>
-          <div className="flex flex-col gap-4">
+        <section
+          id="related-matters-section"
+          className="w-full lg:w-80 flex-shrink-0"
+        >
+          <h2
+            id="related-matters-heading"
+            className="font-semibold text-lg mb-5"
+          >
+            Related Matters
+          </h2>
+          <div id="related-matters-list" className="flex flex-col gap-4">
             {matters.length === 0 ? (
-              <div className="rounded-2xl bg-white border border-zinc-100 shadow p-4 text-center text-zinc-400">
+              <div
+                id="no-matters-message"
+                data-testid="no-matters-message"
+                className="rounded-2xl bg-white border border-zinc-100 shadow p-4 text-center text-zinc-400"
+              >
                 No related matters found.
               </div>
             ) : (
               matters.map(m => (
                 <div
                   key={m.id}
-                  onClick={() => router.push(`/matters/${m.id}`)} // Link to matter detail page
+                  id={`related-matter-${m.id}`}
+                  data-testid={`related-matter-${m.id}`}
+                  onClick={() => router.push(`/matters/${m.id}`)}
                   className="rounded-2xl bg-white border border-zinc-100 shadow p-4 flex items-center gap-4 hover:shadow-lg transition cursor-pointer"
                 >
                   <FileText className="w-7 h-7 text-accent-forest/60"/>
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-zinc-800 truncate">{m.name}</div>
+                    <div
+                      id={`matter-name-${m.id}`}
+                      className="font-semibold text-zinc-800 truncate"
+                    >
+                      {m.name}
+                    </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className={`inline-flex px-3 py-0.5 rounded-2xl text-xs font-semibold ${m.status==='Active'?'bg-accent-forest/10 text-accent-forest':'bg-zinc-200 text-zinc-500'}`}>{m.status}</span>
-                      <span className="text-xs text-zinc-400 font-mono">{m.id}</span>
+                      <span
+                        id={`matter-status-${m.id}`}
+                        className={`inline-flex px-3 py-0.5 rounded-2xl text-xs font-semibold ${
+                          m.status==='Active'
+                            ? 'bg-accent-forest/10 text-accent-forest'
+                            : 'bg-zinc-200 text-zinc-500'
+                        }`}
+                      >
+                        {m.status}
+                      </span>
+                      <span
+                        id={`matter-id-${m.id}`}
+                        className="text-xs text-zinc-400 font-mono"
+                      >
+                        {m.id}
+                      </span>
                     </div>
                   </div>
                   <ChevronRight className="w-6 h-6 text-zinc-300"/>

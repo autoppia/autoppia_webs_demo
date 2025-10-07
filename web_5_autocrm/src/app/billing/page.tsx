@@ -28,9 +28,6 @@ export default function BillingPage() {
     setTimerActive(true);
     setTimerSec(0);
     setTab("Logs");
-    // logEvent(EVENT_TYPES.TIMER_STARTED, {
-    //   startedAt: new Date().toISOString(),
-    // });
   }
 
   function stopTimer() {
@@ -46,7 +43,6 @@ export default function BillingPage() {
         status: "Billable",
       };
       setLogs([entry, ...logs]);
-      // logEvent(EVENT_TYPES.TIMER_STOPPED, { duration: timerSec, ...entry });
     }
   }
 
@@ -107,12 +103,14 @@ export default function BillingPage() {
             </div>
             <div className="flex gap-3">
               <button
+                id="timer-toggle-button"
                 className={`rounded-2xl px-5 py-3 font-bold text-lg shadow-sm flex items-center gap-2 transition ${
                   timerActive
                     ? "bg-red-500 hover:bg-red-600 text-white"
                     : "bg-accent-forest hover:bg-accent-forest/90 text-white"
                 }`}
                 onClick={timerActive ? stopTimer : startTimer}
+                aria-label={timerActive ? "Stop Timer" : "Start Timer"}
               >
                 {timerActive ? (
                   <>
@@ -128,62 +126,67 @@ export default function BillingPage() {
               </button>
             </div>
           </div>
-          <form
-            onSubmit={addManual}
-            className="bg-white rounded-2xl shadow-card p-7 flex flex-col gap-5 border border-zinc-100 w-full max-w-xl"
-          >
-            <div className="flex items-center gap-3 mb-1">
-              <Plus className="w-6 h-6 text-accent-forest" />
-              <span className="font-bold text-lg">Add Log Entry</span>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">
-                Matter
-              </label>
-              <input
-                className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
-                value={manual.matter}
-                onChange={(e) =>
-                  setManual((m) => ({ ...m, matter: e.target.value }))
-                }
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">
-                Description
-              </label>
-              <input
-                className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
-                value={manual.description}
-                onChange={(e) =>
-                  setManual((m) => ({ ...m, description: e.target.value }))
-                }
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-zinc-700">Hours</label>
-              <input
-                type="number"
-                step=".1"
-                min="0.1"
-                max="24"
-                className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium w-32"
-                value={manual.hours}
-                onChange={(e) =>
-                  setManual((m) => ({ ...m, hours: +e.target.value }))
-                }
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg"
+            <form
+              id="add-log-form"
+              onSubmit={addManual}
+              className="bg-white rounded-2xl shadow-card p-7 flex flex-col gap-5 border border-zinc-100 w-full max-w-xl"
             >
-              Add Entry
-            </button>
-          </form>
+              <div className="flex items-center gap-3 mb-1">
+                <Plus className="w-6 h-6 text-accent-forest" />
+                <span className="font-bold text-lg">Add Log Entry</span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="manual-matter" className="text-sm font-medium text-zinc-700">
+                  Matter
+                </label>
+                <input
+                  id="manual-matter"
+                  className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
+                  value={manual.matter}
+                  onChange={(e) =>
+                    setManual((m) => ({ ...m, matter: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="manual-description" className="text-sm font-medium text-zinc-700">
+                  Description
+                </label>
+                <input
+                  id="manual-description"
+                  className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
+                  value={manual.description}
+                  onChange={(e) =>
+                    setManual((m) => ({ ...m, description: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="manual-hours" className="text-sm font-medium text-zinc-700">Hours</label>
+                <input
+                  id="manual-hours"
+                  type="number"
+                  step=".1"
+                  min="0.1"
+                  max="24"
+                  className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium w-32"
+                  value={manual.hours}
+                  onChange={(e) =>
+                    setManual((m) => ({ ...m, hours: +e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              <button
+                id="add-entry-button"
+                type="submit"
+                className="rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg"
+              >
+                Add Entry
+              </button>
+            </form>
         </div>
       )}
       {tab === "Logs" && (
@@ -191,27 +194,48 @@ export default function BillingPage() {
           <h2 className="text-lg font-semibold mb-5">Recent Logs</h2>
           <div className="flex flex-col gap-4">
             {logs.length === 0 && (
-              <div className="text-zinc-400 px-4 py-8 text-center">
+              <div
+                id="no-logs-message"
+                data-testid="no-logs-message"
+                className="text-zinc-400 px-4 py-8 text-center"
+              >
                 No logs yet.
               </div>
             )}
             {logs.map((l) => (
               <div
                 key={l.id}
+                id={`log-entry-${l.id}`}
+                data-testid={`log-entry-${l.id}`}
                 className="bg-white rounded-2xl shadow p-5 flex flex-col sm:flex-row items-start sm:items-center gap-2 border border-zinc-100 hover:shadow-lg transition group relative"
               >
                 <div className="flex-1 flex flex-col sm:flex-row gap-1 sm:gap-6 items-start sm:items-center">
-                  <span className="text-xl font-bold text-accent-forest min-w-[38px] text-left">
+                  <span
+                    id={`log-hours-${l.id}`}
+                    className="text-xl font-bold text-accent-forest min-w-[38px] text-left"
+                  >
                     {l.hours}h
                   </span>
-                  <span className="text-zinc-700 font-semibold">
+                  <span
+                    id={`log-matter-${l.id}`}
+                    className="text-zinc-700 font-semibold"
+                  >
                     {l.matter}
                   </span>
-                  <span className="text-xs text-zinc-400 whitespace-nowrap">
+                  <span
+                    id={`log-client-${l.id}`}
+                    className="text-xs text-zinc-400 whitespace-nowrap"
+                  >
                     {l.client}
                   </span>
-                  <span className="text-xs text-zinc-400">{l.date}</span>
                   <span
+                    id={`log-date-${l.id}`}
+                    className="text-xs text-zinc-400"
+                  >
+                    {l.date}
+                  </span>
+                  <span
+                    id={`log-status-${l.id}`}
                     className={`inline-flex px-3 py-1 ml-3 rounded-2xl text-xs font-semibold ${
                       l.status === "Billable"
                         ? "bg-accent-forest/10 text-accent-forest"
@@ -220,12 +244,19 @@ export default function BillingPage() {
                   >
                     {l.status}
                   </span>
-                  <span className="text-zinc-500 ml-2">{l.description}</span>
+                  <span
+                    id={`log-description-${l.id}`}
+                    className="text-zinc-500 ml-2"
+                  >
+                    {l.description}
+                  </span>
                 </div>
                 <button
+                  id={`delete-log-${l.id}`}
                   className="absolute right-3 top-3 text-zinc-300 hover:text-red-500 rounded-full"
                   title="Delete"
                   onClick={() => deleteLog(l.id)}
+                  aria-label={`Delete log entry for ${l.matter}`}
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>

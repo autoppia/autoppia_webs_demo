@@ -15,7 +15,11 @@ export default function SearchPage() {
   const { addToCart } = useCart();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
 
-  const results = products.filter((p) => p.title.toLowerCase().includes(query));
+  const results = products.filter((p) => 
+    p.title.toLowerCase().includes(query) || 
+    p.brand?.toLowerCase().includes(query) ||
+    p.description?.toLowerCase().includes(query)
+  );
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);
