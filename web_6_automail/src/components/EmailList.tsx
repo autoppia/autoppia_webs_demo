@@ -240,19 +240,19 @@ export function EmailList() {
             {selectedEmails.length} selected
           </span>
           <Separator orientation="vertical" className="h-4" />
-          <Button variant="ghost" size="sm" onClick={handleBulkDelete}>
+          <Button id="bulk-delete-button" variant="ghost" size="sm" onClick={handleBulkDelete}>
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
-          <Button variant="ghost" size="sm">
+          <Button id="bulk-archive-button" variant="ghost" size="sm">
             <Archive className="h-4 w-4 mr-2" />
             Archive
           </Button>
-          <Button variant="ghost" size="sm" onClick={handleBulkMarkAsUnread}>
+          <Button id="bulk-mark-unread-button" variant="ghost" size="sm" onClick={handleBulkMarkAsUnread}>
             <Mail className="h-4 w-4 mr-2" />
             Mark as unread
           </Button>
-          <Button variant="ghost" size="sm" onClick={handleBulkMarkAsSpam}>
+          <Button id="bulk-mark-spam-button" variant="ghost" size="sm" onClick={handleBulkMarkAsSpam}>
             <Shield className="h-4 w-4 mr-2" />
             Mark as spam
           </Button>

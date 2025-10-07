@@ -87,17 +87,29 @@ export default function ClientsDirectory() {
                   <span className="hidden md:block">{getInitials(c.name)}</span>
                 </div>
                 <div className="flex flex-col min-w-0">
-                  <span className="font-semibold text-zinc-800 truncate leading-tight">
+                  <span
+                    id={`client-name-${c.id}`}
+                    className="font-semibold text-zinc-800 truncate leading-tight"
+                  >
                     {c.name}
                   </span>
-                  <span className="text-xs text-zinc-400 truncate">
+                  <span
+                    id={`client-email-${c.id}`}
+                    className="text-xs text-zinc-400 truncate"
+                  >
                     {c.email}
                   </span>
                 </div>
               </div>
-              <div className="text-zinc-700 font-medium">{c.matters}</div>
+              <div
+                id={`client-matters-count-${c.id}`}
+                className="text-zinc-700 font-medium"
+              >
+                {c.matters}
+              </div>
               <div>
                 <span
+                  id={`client-status-${c.id}`}
                   className={`inline-flex px-3 py-1 rounded-2xl text-xs font-semibold ${
                     c.status === "Active"
                       ? "bg-accent-forest/10 text-accent-forest"
@@ -107,7 +119,12 @@ export default function ClientsDirectory() {
                   {c.status}
                 </span>
               </div>
-              <div className="text-zinc-500">{c.last}</div>
+              <div
+                id={`client-last-updated-${c.id}`}
+                className="text-zinc-500"
+              >
+                {c.last}
+              </div>
               <div className="ml-auto">
                 <ChevronRight className="w-6 h-6 text-zinc-300 group-hover:text-accent-forest transition" />
               </div>

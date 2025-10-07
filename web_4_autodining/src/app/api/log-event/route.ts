@@ -90,4 +90,3 @@ export async function DELETE() {
     message: "Event log deletion is disabled",
   });
 }
-

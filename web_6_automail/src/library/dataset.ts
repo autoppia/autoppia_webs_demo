@@ -28,8 +28,11 @@ const categories: EmailCategory[] = [
 ];
 
 // Fixed dataset of 20 emails
-export function generateMockEmails(count = 20): Email[] {
-  const emails: Email[] = [
+// export function generateMockEmails(count = 20): Email[] {
+//
+//   return emails.slice(0, count);
+// }
+const emails: Email[] = [
     // Inbox emails (8)
     {
       id: "email1",
@@ -123,8 +126,8 @@ export function generateMockEmails(count = 20): Email[] {
       from: { name: "Emma Davis", email: "emma.davis@yahoo.com" },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Community Forum Update",
-      body: "Hello,\n\nThere’s a new reply to your post in the community forum.\n\nRegards,\nEmma",
-      snippet: "There’s a new reply to your post in the community forum...",
+      body: "Hello,\n\nThere's a new reply to your post in the community forum.\n\nRegards,\nEmma",
+      snippet: "There's a new reply to your post in the community forum...",
       timestamp: new Date("2025-07-04T11:45:00Z"),
       isRead: true,
       isStarred: false,
@@ -157,8 +160,8 @@ export function generateMockEmails(count = 20): Email[] {
       from: { name: "Grace Lee", email: "grace.lee@company.com" },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Team Outing Plan",
-      body: "Hi,\n\nWe’re planning a team outing next month. Please share your availability.\n\nThanks,\nGrace",
-      snippet: "We’re planning a team outing next month...",
+      body: "Hi,\n\nWe're planning a team outing next month. Please share your availability.\n\nThanks,\nGrace",
+      snippet: "We're planning a team outing next month...",
       timestamp: new Date("2025-07-02T13:10:00Z"),
       isRead: false,
       isStarred: true,
@@ -463,8 +466,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Training Workshop",
-      body: "Dear Me,\n\nYou’re invited to a training workshop next Tuesday. Details attached.\n\nBest,\nRuby",
-      snippet: "You’re invited to a training workshop next Tuesday...",
+      body: "Dear Me,\n\nYou're invited to a training workshop next Tuesday. Details attached.\n\nBest,\nRuby",
+      snippet: "You're invited to a training workshop next Tuesday...",
       timestamp: new Date("2025-07-08T21:30:00Z"),
       isRead: true,
       isStarred: false,
@@ -745,8 +748,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Team Meeting Notes",
-      body: "Dear Me,\n\nAttached are the notes from today’s team meeting.\n\nBest,\nFreya",
-      snippet: "Attached are the notes from today’s team meeting...",
+      body: "Dear Me,\n\nAttached are the notes from today's team meeting.\n\nBest,\nFreya",
+      snippet: "Attached are the notes from today's team meeting...",
       timestamp: new Date("2025-07-09T17:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -805,8 +808,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Coffee Catch-Up",
-      body: "Hey Me,\n\nLet’s grab coffee next week. When are you free?\n\nCheers,\nLuna",
-      snippet: "Let’s grab coffee next week...",
+      body: "Hey Me,\n\nLet's grab coffee next week. When are you free?\n\nCheers,\nLuna",
+      snippet: "Let's grab coffee next week...",
       timestamp: new Date("2025-07-09T19:30:00Z"),
       isRead: true,
       isStarred: false,
@@ -861,8 +864,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Weekly Newsletter",
-      body: "Dear Customer,\n\nCheck out this week’s newsletter for updates!\n\nBest,\nAda",
-      snippet: "Check out this week’s newsletter for updates...",
+      body: "Dear Customer,\n\nCheck out this week's newsletter for updates!\n\nBest,\nAda",
+      snippet: "Check out this week's newsletter for updates...",
       timestamp: new Date("2025-07-09T22:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -921,8 +924,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Team Feedback Request",
-      body: "Hi Me,\n\nPlease provide feedback on the team’s recent work.\n\nThanks,\nEliza",
-      snippet: "Please provide feedback on the team’s recent work...",
+      body: "Hi Me,\n\nPlease provide feedback on the team's recent work.\n\nThanks,\nEliza",
+      snippet: "Please provide feedback on the team's recent work...",
       timestamp: new Date("2025-07-09T06:30:00Z"),
       isRead: true,
       isStarred: false,
@@ -975,8 +978,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Coffee Break Invite",
-      body: "Hey Me,\n\nLet’s have a quick coffee break tomorrow afternoon.\n\nCheers,\nRose",
-      snippet: "Let’s have a quick coffee break tomorrow...",
+      body: "Hey Me,\n\nLet's have a quick coffee break tomorrow afternoon.\n\nCheers,\nRose",
+      snippet: "Let's have a quick coffee break tomorrow...",
       timestamp: new Date("2025-07-09T04:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -1027,8 +1030,8 @@ export function generateMockEmails(count = 20): Email[] {
     from: { name: "Sienna Walsh", email: "sienna.walsh@org.com", avatar: "https://example.com/avatars/sienna.jpg" },
     to: [{ name: "Me", email: "me@gmail.com" }],
     subject: "Weekly Team Update",
-    body: "Dear Me,\n\nHere’s the weekly team update. Please review the attached slides.\n\nBest,\nSienna",
-    snippet: "Here’s the weekly team update...",
+    body: "Dear Me,\n\nHere's the weekly team update. Please review the attached slides.\n\nBest,\nSienna",
+    snippet: "Here's the weekly team update...",
     timestamp: new Date("2025-07-09T09:00:00Z"),
     isRead: false,
     isStarred: false,
@@ -1234,8 +1237,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Alice Smith", email: "alice.smith@company.com" }],
       subject: "Re: Project Kickoff Meeting",
-      body: "Hi Alice,\n\nThanks for the agenda. I’ll review and get back to you.\n\nBest,\nMe",
-      snippet: "Thanks for the agenda. I’ll review and get back to you...",
+      body: "Hi Alice,\n\nThanks for the agenda. I'll review and get back to you.\n\nBest,\nMe",
+      snippet: "Thanks for the agenda. I'll review and get back to you...",
       timestamp: new Date("2025-07-08T11:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -1255,8 +1258,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Bob Johnson", email: "bob.johnson@tech.org" }],
       subject: "Re: Lunch Plans",
-      body: "Hey Bob,\n\nFriday works for me! Let’s meet at noon.\n\nCheers,\nMe",
-      snippet: "Friday works for me! Let’s meet at noon...",
+      body: "Hey Bob,\n\nFriday works for me! Let's meet at noon.\n\nCheers,\nMe",
+      snippet: "Friday works for me! Let's meet at noon...",
       timestamp: new Date("2025-07-07T13:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -1279,8 +1282,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "David Brown", email: "david.brown@company.com" }],
       subject: "Re: Q2 Report Feedback",
-      body: "Hi David,\n\nI’ve added comments to the Q2 report. Let me know if you need more details.\n\nThanks,\nMe",
-      snippet: "I’ve added comments to the Q2 report...",
+      body: "Hi David,\n\nI've added comments to the Q2 report. Let me know if you need more details.\n\nThanks,\nMe",
+      snippet: "I've added comments to the Q2 report...",
       timestamp: new Date("2025-07-05T15:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -1303,8 +1306,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Grace Lee", email: "grace.lee@company.com" }],
       subject: "Re: Team Outing Plan",
-      body: "Hi Grace,\n\nI’m available on the 15th. Let me know the details!\n\nThanks,\nMe",
-      snippet: "I’m available on the 15th...",
+      body: "Hi Grace,\n\nI'm available on the 15th. Let me know the details!\n\nThanks,\nMe",
+      snippet: "I'm available on the 15th...",
       timestamp: new Date("2025-07-02T14:00:00Z"),
       isRead: true,
       isStarred: true,
@@ -1327,8 +1330,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Henry Moore", email: "henry.moore@tech.org" }],
       subject: "Re: Exclusive Offer",
-      body: "Hi Henry,\n\nThanks for the offer! I’ll use the code this weekend.\n\nBest,\nMe",
-      snippet: "Thanks for the offer! I’ll use the code this weekend...",
+      body: "Hi Henry,\n\nThanks for the offer! I'll use the code this weekend.\n\nBest,\nMe",
+      snippet: "Thanks for the offer! I'll use the code this weekend...",
       timestamp: new Date("2025-07-01T09:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -1350,8 +1353,8 @@ export function generateMockEmails(count = 20): Email[] {
       },
       to: [{ name: "Alice Smith", email: "alice.smith@company.com" }],
       subject: "Draft: Project Update",
-      body: "Hi Alice,\n\nHere’s the latest project update...\n\nBest,\nMe",
-      snippet: "Here’s the latest project update...",
+      body: "Hi Alice,\n\nHere's the latest project update...\n\nBest,\nMe",
+      snippet: "Here's the latest project update...",
       timestamp: new Date("2025-07-07T10:00:00Z"),
       isRead: true,
       isStarred: false,
@@ -1418,8 +1421,8 @@ export function generateMockEmails(count = 20): Email[] {
       from: { name: "Unknown Sender", email: "spam@unknown.com" },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Win a Free Vacation!",
-      body: "Congratulations! You’ve won a free vacation. Click here to claim.\n\nBest,\nUnknown Sender",
-      snippet: "Congratulations! You’ve won a free vacation...",
+      body: "Congratulations! You've won a free vacation. Click here to claim.\n\nBest,\nUnknown Sender",
+      snippet: "Congratulations! You've won a free vacation...",
       timestamp: new Date("2025-07-04T08:00:00Z"),
       isRead: false,
       isStarred: false,
@@ -1435,8 +1438,8 @@ export function generateMockEmails(count = 20): Email[] {
       from: { name: "Promo Bot", email: "promo.bot@scam.com" },
       to: [{ name: "Me", email: "me@gmail.com" }],
       subject: "Amazing Deal Awaits!",
-      body: "Don’t miss this amazing deal! Click now to save big.\n\nBest,\nPromo Bot",
-      snippet: "Don’t miss this amazing deal...",
+      body: "Don't miss this amazing deal! Click now to save big.\n\nBest,\nPromo Bot",
+      snippet: "Don't miss this amazing deal...",
       timestamp: new Date("2025-07-03T07:00:00Z"),
       isRead: false,
       isStarred: false,
@@ -1493,16 +1496,13 @@ export function generateMockEmails(count = 20): Email[] {
       threadId: "thread20",
     },
   ];
-
-  return emails.slice(0, count);
-}
-
-// Generate draft emails (subset of the fixed dataset)
-export function generateDraftEmails(count = 3): Email[] {
-  const drafts = [
-    generateMockEmails().find((email) => email.id === "email14")!,
-    generateMockEmails().find((email) => email.id === "email15")!,
-    generateMockEmails().find((email) => email.id === "email16")!,
-  ];
-  return drafts.slice(0, count);
-}
+export { emails };
+// // Generate draft emails (subset of the fixed dataset)
+// export function generateDraftEmails(count = 3): Email[] {
+//   const drafts = [
+//     generateMockEmails().find((email) => email.id === "email14")!,
+//     generateMockEmails().find((email) => email.id === "email15")!,
+//     generateMockEmails().find((email) => email.id === "email16")!,
+//   ];
+//   return drafts.slice(0, count);
+// }

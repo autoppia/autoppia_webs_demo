@@ -12,7 +12,6 @@ services:
       - NODE_ENV=production
     networks:
       - apps_net
-
 networks:
   apps_net:
     external: true
