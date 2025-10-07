@@ -23,6 +23,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
   const handleCancel = () => {
     logEvent(EVENT_TYPES.CANCEL_HIRE, {
       Button: "Cancel",
+      expert
     });
     route.push("/");
   };
@@ -256,6 +257,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                     value={increaseWhen}
                     onChange={(e) => setIncreaseWhen(e.target.value)}
                     className="border border-gray-300 rounded-lg px-4 py-2 text-base"
+                    id="rate-increase-when"
                   >
                     <option>Never</option>
                     <option>After 3 months</option>
@@ -266,6 +268,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                     value={increaseHowMuch}
                     onChange={(e) => setIncreaseHowMuch(e.target.value)}
                     className="border border-gray-300 rounded-lg px-4 py-2 text-base"
+                    id="rate-increase"
                   >
                     <option>5%</option>
                     <option>10%</option>

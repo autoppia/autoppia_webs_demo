@@ -135,9 +135,7 @@ function RestaurantCard({
               key={t}
               href={`/booking/${r.id}/${encodeURIComponent(
                 time
-              )}?date=${formattedDate}&people=${people}&time=${encodeURIComponent(
-                time
-              )}`}
+              )}?date=${formattedDate}&people=${people}`}
               onClick={() =>
                 logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                   restaurantId: r.id,

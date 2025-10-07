@@ -1,9 +1,9 @@
 "use client";
+
 import { useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import dayjs from "dayjs";
@@ -15,7 +15,6 @@ const photos = [
   "https://images.unsplash.com/photo-1551218808-94e220e084d2",
 ];
 
-// Define the new restaurant data from the JSON structure
 const restaurantData: Record<
   string,
   {
@@ -32,10 +31,8 @@ const restaurantData: Record<
   }
 > = {};
 
-// Populate restaurantData from jsonData
 RestaurantsData.forEach((item, index) => {
-  const id = `restaurant-${item.id}`;
-  restaurantData[id] = {
+  restaurantData[`restaurant-${item.id}`] = {
     name: item.namepool,
     image: `/images/restaurant${(index % 19) + 1}.jpg`,
     rating: item.staticStars,
@@ -48,6 +45,7 @@ RestaurantsData.forEach((item, index) => {
     photos,
   };
 });
+
 export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -58,45 +56,69 @@ export default function Page() {
   const reservationDateParam = searchParams.get("date");
 
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [date, setDate] = useState<Date | undefined>();
+  const [formattedDate, setFormattedDate] = useState<string | null>(null);
+  const [fullDate, setFullDate] = useState<string | null>(null);
   const [time, setTime] = useState(reservationTimeParam || "1:00 PM");
-  const [people, setPeople] = useState(parseInt(reservationPeopleParam || "2"));
+  const [people, setPeople] = useState(
+    parseInt(reservationPeopleParam || "2", 10)
+  );
+  const [reservationTime, setReservationTime] = useState<string | null>(null);
+  const [reservationPeople, setReservationPeople] = useState<string | null>(
+    null
+  );
   const [phoneNumber, setPhoneNumber] = useState("");
   const [occasion, setOccasion] = useState("");
   const [specialRequest, setSpecialRequest] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
-  const [reservationTime, setReservationTime] = useState<string | null>(null);
-  const [reservationPeople, setReservationPeople] = useState<string | null>(
-    null
-  );
-  const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [email, setEmail] = useState("user_name@gmail.com");
+
+  const data = restaurantData[restaurantId] ?? restaurantData["restaurant-1"];
+
+  const restaurantInfo = {
+    restaurantId,
+    restaurantName: data.name,
+    rating: data.rating,
+    reviews: data.reviews,
+    bookings: data.bookings,
+    price: data.price,
+    cuisine: data.cuisine,
+    desc: data.desc,
+  };
+
+  useEffect(() => {
+    const computedFullDate = reservationDateParam
+      ? dayjs(reservationDateParam).format("YYYY-MM-DD")
+      : null;
+    logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+      ...restaurantInfo,
+      date: computedFullDate,
+      time: reservationTime || time,
+      people: reservationPeople || people,
+    });
+  }, []);
 
   useEffect(() => {
     if (reservationDateParam) {
       const d = new Date(reservationDateParam);
       setDate(d);
       setFormattedDate(dayjs(d).format("MMM D"));
+      setFullDate(dayjs(d).format("YYYY-MM-DD"));
     }
-
     if (reservationTimeParam) setReservationTime(reservationTimeParam);
     if (reservationPeopleParam) setReservationPeople(reservationPeopleParam);
   }, [reservationDateParam, reservationTimeParam, reservationPeopleParam]);
-
-  const data = restaurantData[restaurantId] || restaurantData["restaurant-1"];
 
   const handleReservation = () => {
     if (!phoneNumber.trim()) {
       setPhoneError(true);
       return;
     }
-
     setPhoneError(false);
     logEvent(EVENT_TYPES.RESERVATION_COMPLETE, {
-      restaurantId,
-      date: formattedDate,
+      ...restaurantInfo,
+      date: fullDate,
       time: reservationTime,
       people: reservationPeople,
       countryCode: selectedCountry.code,
@@ -108,7 +130,6 @@ export default function Page() {
     });
     setShowToast(true);
     setTimeout(() => setShowToast(false), 4000);
-
     setPhoneNumber("");
     setOccasion("");
     setSpecialRequest("");
@@ -153,6 +174,7 @@ export default function Page() {
           </div>
         </div>
       </nav>
+
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
         <h2 className="font-bold text-lg mt-8 mb-4">You’re almost done!</h2>
         <div className="flex items-center gap-3 mb-6">
@@ -166,19 +188,20 @@ export default function Page() {
             <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
-                <p>{formattedDate ? formattedDate : "Select Date"}</p>
+                {formattedDate ?? "Select Date"}
               </span>
               <span className="flex items-center gap-1">
                 <ClockIcon className="w-4 h-4 mr-1" />
-                {reservationTime ? reservationTime : "Select Time"}
+                {reservationTime ?? "Select Time"}
               </span>
               <span className="flex items-center gap-1">
                 <UserIcon className="w-4 h-4 mr-1" />
-                {reservationPeople ? reservationPeople : "Select"} people
+                {reservationPeople ?? "Select"} people
               </span>
             </div>
           </div>
         </div>
+
         <h3 className="font-semibold text-lg mb-2 mt-4">Diner details</h3>
         <div className="flex gap-2 mb-3 flex-wrap">
           <div className="flex-1 min-w-[220px]">
@@ -192,6 +215,7 @@ export default function Page() {
                   )!;
                   setSelectedCountry(country);
                   logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                    ...restaurantInfo,
                     countryCode: country.code,
                     countryName: country.name,
                     restaurantName: data.name,
@@ -221,6 +245,7 @@ export default function Page() {
               </p>
             )}
           </div>
+
           <input
             type="email"
             value={email}
@@ -229,6 +254,7 @@ export default function Page() {
             disabled
           />
         </div>
+
         <div className="flex gap-2 mb-4 flex-wrap">
           <select
             className="flex-1 border rounded px-3 py-2 bg-white min-w-[220px]"
@@ -236,6 +262,7 @@ export default function Page() {
             onChange={(e) => {
               setOccasion(e.target.value);
               logEvent(EVENT_TYPES.OCCASION_SELECTED, {
+                ...restaurantInfo,
                 occasion: e.target.value,
               });
             }}
@@ -254,12 +281,14 @@ export default function Page() {
             onChange={(e) => setSpecialRequest(e.target.value)}
           />
         </div>
+
         <Button
           onClick={handleReservation}
           className="w-full bg-[#46a758] hover:bg-[#54ce68] text-white py-6 mt-1 mb-4 text-lg rounded"
         >
           Complete reservation
         </Button>
+
         <div className="text-xs text-gray-600 mt-3">
           By clicking “Complete reservation” you agree to the{" "}
           <Link href="#" className="text-[#46a758] underline">
@@ -269,10 +298,12 @@ export default function Page() {
           <Link href="#" className="text-[#46a758] underline">
             Privacy Policy
           </Link>
-          . Message & data rates may apply. You can opt out of receiving text
-          messages at any time in your account settings or by replying STOP.
+          . Message &amp; data rates may apply. You can opt out of receiving
+          text messages at any time in your account settings or by replying
+          STOP.
         </div>
       </div>
+
       {showToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-20 py-5 rounded shadow-lg z-50">
           Reservation completed successfully!

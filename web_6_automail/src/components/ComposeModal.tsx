@@ -89,8 +89,20 @@ export function ComposeModal() {
   };
 
   const handleSaveDraft = () => {
+    // Only include the uncommitted toInput, ccInput, and bccInput in the event, do not update composeData arrays
+    const allTo = toInput.trim()
+      ? [...composeData.to, toInput.trim()]
+      : composeData.to;
+    const allCc = ccInput.trim()
+      ? [...(composeData.cc || []), ccInput.trim()]
+      : composeData.cc || [];
+    const allBcc = bccInput.trim()
+      ? [...(composeData.bcc || []), bccInput.trim()]
+      : composeData.bcc || [];
     logEvent(EVENT_TYPES.EMAIL_SAVE_AS_DRAFT, {
-      to: composeData.to,
+      to: allTo,
+      cc: allCc,
+      bcc: allBcc,
       subject: composeData.subject || "",
       body: composeData.body || "",
     });
@@ -100,7 +112,10 @@ export function ComposeModal() {
   const canSend = composeData.to.length > 0 || toInput.trim();
 
   return (
-    <Dialog open={isComposeOpen} onOpenChange={(open) => toggleCompose(open)}>
+    <Dialog
+      open={isComposeOpen}
+      onOpenChange={(open: boolean) => toggleCompose(open)}
+    >
       <DialogContent className="max-w-2xl max-h-[80vh] p-0 gap-0 compose-modal">
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b border-border/50">
@@ -108,13 +123,14 @@ export function ComposeModal() {
             New Message
           </DialogTitle>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button id="compose-minimize-button" variant="ghost" size="icon" className="h-6 w-6">
               <Minus className="h-3 w-3" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button id="compose-maximize-button" variant="ghost" size="icon" className="h-6 w-6">
               <Square className="h-3 w-3" />
             </Button>
             <Button
+              id="compose-close-button"
               variant="ghost"
               size="icon"
               className="h-6 w-6"
@@ -153,6 +169,7 @@ export function ComposeModal() {
                     </Badge>
                   ))}
                   <Input
+                    id="compose-to-input"
                     value={toInput}
                     onChange={(e) => setToInput(e.target.value)}
                     onKeyDown={handleToKeyDown}
@@ -189,6 +206,7 @@ export function ComposeModal() {
                 Subject
               </Label>
               <Input
+                id="compose-subject-input"
                 value={composeData.subject}
                 onChange={(e) => updateComposeData({ subject: e.target.value })}
                 placeholder="Subject"
@@ -224,6 +242,7 @@ export function ComposeModal() {
           {/* Message Body */}
           <div className="flex-1 px-4 py-3">
             <Textarea
+              id="compose-body-textarea"
               value={composeData.body}
               onChange={(e) => updateComposeData({ body: e.target.value })}
               placeholder="Compose your message..."
@@ -235,6 +254,7 @@ export function ComposeModal() {
           <div className="flex items-center justify-between px-4 py-3 border-t border-border/50 bg-muted/20">
             <div className="flex items-center gap-2">
               <Button
+                id="compose-send-button"
                 onClick={handleSend}
                 disabled={!canSend}
                 className="btn-primary-gradient h-8 px-4"
@@ -254,6 +274,7 @@ export function ComposeModal() {
             </div>
 
             <Button
+              id="compose-save-draft-button"
               variant="ghost"
               onClick={handleSaveDraft}
               className="h-8 px-3 text-sm"
