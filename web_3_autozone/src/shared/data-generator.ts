@@ -69,7 +69,7 @@ export interface Product {
       id: "{category}-{number}",
       image: "https://source.unsplash.com/featured/?{name_snake_case}"
     },
-      additionalRequirements: "Generate realistic e-commerce product data with proper pricing, descriptions, and categories. Images must be sourced from Unsplash only; do not use local image paths. Prefer query-based URLs like https://source.unsplash.com/featured/?{keyword}."
+      additionalRequirements: "Generate realistic e-commerce product data with proper pricing, descriptions, and categories. For the image field: use Unsplash only and ensure the photo semantically matches the title/brand/category (no placeholders). Prefer specific query terms like 'stainless-steel cookware set', 'gaming-laptop', 'yoga-mat'. You may also return a direct images.unsplash.com URL. Append size/quality params '?w=150&h=150&fit=crop&crop=entropy&auto=format&q=60'. Never return local paths or dummy names like 'image.png'."
   }
 };
 
@@ -95,7 +95,8 @@ export async function generateProjectData(
   const startTime = Date.now();
   
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/datasets/generate`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}/datasets/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -153,6 +154,6 @@ export function isDataGenerationEnabled(): boolean {
 export function getApiBaseUrl(): string {
   return process.env.NEXT_PUBLIC_API_URL || 
          process.env.API_URL || 
-         'http://localhost:8000';
+         'http://localhost:8090';
 }
 

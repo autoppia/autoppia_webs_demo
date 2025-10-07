@@ -107,6 +107,7 @@ deploy_project() {
   # Environment-only prefixes apply to the single command that follows
   WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
   ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
+  API_URL="http://app:$WEBS_PORT" NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
   docker compose -p "$proj" up -d --build
 
   popd >/dev/null

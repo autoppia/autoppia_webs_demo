@@ -567,6 +567,31 @@ export const originalProducts: Product[] = [
 // Dynamic products array that can be populated with generated data
 let dynamicProducts: Product[] = [...originalProducts];
 
+// Client-side cache to avoid regenerating on every reload
+function readCachedProducts(): Product[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem("autozone_generated_products_v1");
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as Product[]) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedProducts(productsToCache: Product[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(
+      "autozone_generated_products_v1",
+      JSON.stringify(productsToCache)
+    );
+  } catch {
+    // ignore storage errors
+  }
+}
+
 // Configuration for async data generation
 const DATA_GENERATION_CONFIG = {
   // Default delay between category calls (in milliseconds)
@@ -636,8 +661,15 @@ async function generateProductsForCategories(
 export async function initializeProducts(): Promise<Product[]> {
   if (isDataGenerationAvailable()) {
     try {
+      // Use cached products on client to prevent re-generation on reloads
+      const cached = readCachedProducts();
+      if (cached && cached.length > 0) {
+        dynamicProducts = normalizeProductImages(cached);
+        return dynamicProducts;
+      }
+
       console.log('🚀 Starting async data generation for each category...');
-      console.log('📡 Using API:', process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090');
+      console.log('📡 Using API:', process.env.API_URL || 'http://app:8090');
       
       // Define categories and products per category
       const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
@@ -654,12 +686,14 @@ export async function initializeProducts(): Promise<Product[]> {
         delayBetweenCalls,
         originalProducts
       );
-      // Normalize images to ensure they resolve to local assets
+      // Normalize and resolve images to concrete URLs to ensure they exist
       allGeneratedProducts = normalizeProductImages(allGeneratedProducts);
-      
+
       console.log(`🎉 Data generation complete! Generated ${allGeneratedProducts.length} products (replacing ${originalProducts.length} original products)`);
       console.log(`✅ Generated data is now active!`);
       dynamicProducts = allGeneratedProducts;
+      // Cache generated products on client
+      writeCachedProducts(dynamicProducts);
       return dynamicProducts;
       
     } catch (error) {
@@ -671,74 +705,6 @@ export async function initializeProducts(): Promise<Product[]> {
   } else {
     console.log('ℹ️ Data generation is disabled, using original static products');
     dynamicProducts = originalProducts;
-    return dynamicProducts;
-  }
-}
-
-/**
- * Get all products (original + generated)
- */
-export function getAllProducts(): Product[] {
-  return dynamicProducts;
-}
-
-/**
- * Replace all products with newly generated ones
- */
-export async function replaceAllProductsWithGenerated(
-  count: number = 50,
-  categories?: string[]
-): Promise<Product[]> {
-  if (!isDataGenerationAvailable()) {
-    throw new Error('Data generation is not available');
-  }
-
-  try {
-    const newProducts = await replaceAllProducts(count, categories);
-    dynamicProducts = newProducts;
-    return dynamicProducts;
-  } catch (error) {
-    console.error('Failed to replace products:', error);
-    throw error;
-  }
-}
-
-/**
- * Add generated products to existing ones
- * Uses async calls for each category to avoid overwhelming the server
- */
-export async function addGeneratedProductsToExisting(
-  additionalCount: number = 10,
-  categories?: string[]
-): Promise<Product[]> {
-  if (!isDataGenerationAvailable()) {
-    return dynamicProducts;
-  }
-
-  try {
-    console.log('Adding generated products with async category calls...');
-    
-    // Use provided categories or default to all categories
-    const targetCategories = categories || DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
-    const productsPerCategory = Math.ceil(additionalCount / targetCategories.length);
-    const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
-    
-    // Generate new products for all categories with delays
-    const allGeneratedProducts = await generateProductsForCategories(
-      targetCategories,
-      productsPerCategory,
-      delayBetweenCalls,
-      [] // Start with empty array for new products only
-    );
-    
-    // Update the dynamic products array with new products
-    dynamicProducts = [...dynamicProducts, ...allGeneratedProducts];
-    console.log(`🎉 Added ${allGeneratedProducts.length} new products! Total products: ${dynamicProducts.length}`);
-    
-    return dynamicProducts;
-    
-  } catch (error) {
-    console.error('Failed to add generated products:', error);
     return dynamicProducts;
   }
 }

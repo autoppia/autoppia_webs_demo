@@ -215,7 +215,7 @@ export async function generateProjectData(
   const startTime = Date.now();
   
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/datasets/generate`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://app:8000'}/datasets/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -283,7 +283,7 @@ export function isDataGenerationEnabled(): boolean {
 export function getApiBaseUrl(): string {
   return process.env.NEXT_PUBLIC_API_URL || 
          process.env.API_URL || 
-         'http://localhost:8000';
+         'http://app:8000';
 }
 
 /**

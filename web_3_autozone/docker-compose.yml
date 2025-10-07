@@ -5,11 +5,16 @@ services:
       dockerfile: Dockerfile
       args:
         ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-false}
+        ENABLE_DATA_GENERATION: ${ENABLE_DATA_GENERATION:-false}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8090}
+        API_URL: ${API_URL:-http://app:8090}
+
     ports:
       - "${WEB_PORT}:8002"
     restart: always
     environment:
-      - API_URL=http://app:8080
+      - API_URL=${API_URL:-http://app:8090}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8090}
       - PORT=8002
       - NODE_ENV=production
       - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
