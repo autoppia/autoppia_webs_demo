@@ -83,9 +83,9 @@ export function ProductCarousel({
           className="flex overflow-x-auto py-4 px-4 scrollbar-hide scroll-smooth gap-4"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {products.map((product) => (
+          {products.map((product, index) => (
             <Link
-              key={product.id}
+              key={`${product.id}-${index}`}
               href={`/${product.id}`}
               onClick={() =>
                 logEvent(EVENT_TYPES.VIEW_DETAIL, {

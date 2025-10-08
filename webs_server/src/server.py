@@ -117,8 +117,8 @@ class DataGenerationRequest(BaseModel):
     naming_rules: Optional[Dict[str, Any]] = Field(None, description="Optional rules e.g. id or image path patterns")
     project_key: Optional[str] = Field(None, description="Project key for saving data to specific project directory")
     entity_type: Optional[str] = Field(None, description="Entity type (e.g., 'products', 'movies', 'tasks')")
-    save_to_file: bool = Field(default=True, description="Whether to save generated data to JSON file")
-    save_to_db: bool = Field(default=True, description="Whether to save generated data to database")
+    save_to_file: bool = Field(default=False, description="Whether to save generated data to JSON file")
+    save_to_db: bool = Field(default=False, description="Whether to save generated data to database")
     seed_value: Optional[int] = Field(None, description="Seed value for reproducible generation")
 
 

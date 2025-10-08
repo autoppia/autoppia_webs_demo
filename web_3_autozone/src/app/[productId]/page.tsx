@@ -43,8 +43,7 @@ function ProductContent() {
       }
       setIsLoading(false);
     }
-    fetchProduct();
-    return () => { isMounted = false; };
+    
   }, [productId]);
 
   // Log view event

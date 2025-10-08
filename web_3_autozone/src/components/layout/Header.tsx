@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -20,15 +20,20 @@ import { getLayoutClasses } from "@/utils/seedLayout";
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const { state } = useCart();
-  const cartItemCount = state.totalItems;
+  const cartItemCount = isMounted ? state.totalItems : 0;
 
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
   const seed = getEffectiveSeed(rawSeed);
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Map layout config to component order
   const getComponentOrder = (config: any) => {

@@ -719,7 +719,16 @@ export async function loadProductsFromDb(): Promise<Product[]> {
   try {
     const seed = getSeedValueFromEnv(1);
     const limit = 100;
-    const selected = await fetchSeededSelection<Product>({
+    // Prefer distributed selection to avoid category dominance (e.g., Fitness only)
+    const distributed = await fetchSeededSelection<Product>({
+      projectKey: "web_3_autozone",
+      entityType: "products",
+      seedValue: seed,
+      limit,
+      method: "distribute",
+      filterKey: "category",
+    });
+    const selected = Array.isArray(distributed) && distributed.length > 0 ? distributed : await fetchSeededSelection<Product>({
       projectKey: "web_3_autozone",
       entityType: "products",
       seedValue: seed,
@@ -727,7 +736,36 @@ export async function loadProductsFromDb(): Promise<Product[]> {
       method: "select",
     });
     if (selected && selected.length > 0) {
-      return normalizeProductImages(selected);
+      // Ensure we have at least some items for all primary categories by supplementing with originals if needed
+      const categories = ["Kitchen", "Electronics", "Home", "Fitness", "Technology"];
+      const byCategory: Record<string, Product[]> = {};
+      for (const p of selected) {
+        const cat = p.category || "Unknown";
+        byCategory[cat] = byCategory[cat] || [];
+        byCategory[cat].push(p);
+      }
+
+      // Pull minimal items from originals to fill missing categories
+      const supplemented: Product[] = [...selected];
+      for (const cat of categories) {
+        if (!byCategory[cat] || byCategory[cat].length === 0) {
+          const fallback = originalProducts.filter((p) => p.category === cat).slice(0, 6);
+          if (fallback.length > 0) {
+            supplemented.push(...fallback);
+          }
+        }
+      }
+
+      // Deduplicate by id
+      const seen = new Set<string>();
+      const deduped = supplemented.filter((p) => {
+        const id = p.id || `${p.title}-${p.category}`;
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      });
+
+      return normalizeProductImages(deduped);
     }
   } catch (e) {
     console.warn("Failed to load seeded selection from DB:", e);
