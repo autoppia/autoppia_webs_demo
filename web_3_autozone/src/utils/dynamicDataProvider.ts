@@ -39,13 +39,10 @@ export class DynamicDataProvider {
 
   private async initializeProducts(): Promise<void> {
     try {
-      console.log('🔄 Initializing products...');
-      
       // Try DB mode first if enabled
       const dbProducts = await loadProductsFromDb();
       if (dbProducts.length > 0) {
         this.products = dbProducts;
-        console.log('✅ Products loaded from DB:', this.products.length, 'total products');
         this.ready = true;
         this.resolveReady();
         return;
@@ -54,7 +51,6 @@ export class DynamicDataProvider {
       // Fallback to existing behavior
       const initializedProducts = await initializeProducts();
       this.products = initializedProducts;
-      console.log('✅ Products initialized:', this.products.length, 'total products');
 
       // Mark as ready only when either generation is disabled or we have generated data
       if (!this.dataGenerationEnabled || this.products.length > 0) {
@@ -63,7 +59,7 @@ export class DynamicDataProvider {
       }
 
     } catch (error) {
-      console.warn('⚠️ Failed to initialize products with data generation.', error);
+      // Keep silent in production; initialize readiness when generation off
       // If generation is enabled, do not mark ready here; the gate will continue showing loading
       if (!this.dataGenerationEnabled) {
         this.ready = true;

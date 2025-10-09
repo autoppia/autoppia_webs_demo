@@ -6,6 +6,7 @@
  */
 
 import type { Product } from "@/context/CartContext";
+import { readJson, writeJson } from "@/shared/storage";
 import { 
   generateProductsWithFallback, 
   replaceAllProducts, 
@@ -570,27 +571,11 @@ let dynamicProducts: Product[] = [...originalProducts];
 
 // Client-side cache to avoid regenerating on every reload
 function readCachedProducts(): Product[] | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem("autozone_generated_products_v1");
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as Product[]) : null;
-  } catch {
-    return null;
-  }
+  return readJson<Product[]>("autozone_generated_products_v1", null);
 }
 
 function writeCachedProducts(productsToCache: Product[]): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(
-      "autozone_generated_products_v1",
-      JSON.stringify(productsToCache)
-    );
-  } catch {
-    // ignore storage errors
-  }
+  writeJson("autozone_generated_products_v1", productsToCache);
 }
 
 // Configuration for async data generation
