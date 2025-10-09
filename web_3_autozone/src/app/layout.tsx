@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { NotificationBanner } from "@/components/layout/NotificationBanner";
 import { CartProvider } from "@/context/CartContext";
+import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
@@ -25,17 +26,21 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <CartProvider>
-          {/* <NotificationBanner /> */}
-          <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
-            <Header />
-          </Suspense>
-          <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
-            <BodyWrapper>
-              {children}
-            </BodyWrapper>
-          </Suspense>
-          <Suspense fallback={<div className="h-32 bg-white"></div>}>
-            <Footer />
+          <Suspense fallback={<div>Loading...</div>}>
+            <DynamicStructureProvider>
+              {/* <NotificationBanner /> */}
+              <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
+                <Header />
+              </Suspense>
+              <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
+                <BodyWrapper>
+                  {children}
+                </BodyWrapper>
+              </Suspense>
+              <Suspense fallback={<div className="h-32 bg-white"></div>}>
+                <Footer />
+              </Suspense>
+            </DynamicStructureProvider>
           </Suspense>
         </CartProvider>
       </body>

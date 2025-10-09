@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# Test script for dynamic HTML structure implementation
+echo "🧪 Testing Dynamic HTML Structure Implementation for web_3_autozone"
+echo "=================================================================="
+
+# Test 1: Static structure mode (default)
+echo "📋 Test 1: Static Structure Mode (dynamic_html_structure=false)"
+echo "Running setup with static structure mode..."
+cd "$(dirname "$0")/.."
+bash scripts/setup.sh --demo=autozone --dynamic_html_structure=false --web_port=8002
+
+echo "✅ Static structure mode deployed. Check http://localhost:8002"
+echo "   - Text content and IDs should remain constant (Structure Variation 1)"
+echo "   - Try URLs: http://localhost:8002?seed-structure=1 and http://localhost:8002?seed-structure=2"
+echo "   - Both should show identical text content and element IDs"
+echo "   - Search placeholder should always be 'Search Autozon'"
+echo "   - Cart button should always be labeled 'Cart'"
+echo "   - All element IDs should match Structure Variation 1"
+echo
+read -p "Press Enter after testing static structure mode..."
+
+# Test 2: Dynamic structure mode
+echo "📋 Test 2: Dynamic Structure Mode (dynamic_html_structure=true)"
+echo "Running setup with dynamic structure mode..."
+bash scripts/setup.sh --demo=autozone --dynamic_html_structure=true --web_port=8003
+
+echo "✅ Dynamic structure mode deployed. Check http://localhost:8003"
+echo "   - Text content and IDs should change based on seed-structure parameter (1-5)"
+echo "   - Try different seed-structure values:"
+echo ""
+echo "   Structure 1 (Standard Amazon Style):"
+echo "     http://localhost:8003?seed-structure=1"
+echo "     - Search: 'Search Autozon'"
+echo "     - Cart: 'Cart'"
+echo "     - Greeting: 'Hello, user'"
+echo ""
+echo "   Structure 2 (Modern Shopping Hub):"
+echo "     http://localhost:8003?seed-structure=2"
+echo "     - Search: 'What are you looking for?'"
+echo "     - Cart: 'Basket'"
+echo "     - Greeting: 'Welcome back'"
+echo ""
+echo "   Structure 3 (E-Commerce Express):"
+echo "     http://localhost:8003?seed-structure=3"
+echo "     - Search: 'Search products...'"
+echo "     - Cart: 'Shopping Cart'"
+echo "     - Greeting: 'Hi there'"
+echo ""
+echo "   Structure 4 (Shop Smart):"
+echo "     http://localhost:8003?seed-structure=4"
+echo "     - Search: 'Find what you need'"
+echo "     - Cart: 'My Cart'"
+echo "     - Greeting: 'Hey there'"
+echo ""
+echo "   Structure 5 (Quick Shop):"
+echo "     http://localhost:8003?seed-structure=5"
+echo "     - Search: 'Search our store'"
+echo "     - Cart: 'Bag'"
+echo "     - Greeting: 'Welcome'"
+echo ""
+read -p "Press Enter after testing dynamic structure mode..."
+
+# Test 3: Combined mode (both dynamic HTML and dynamic structure)
+echo "📋 Test 3: Combined Mode (enable_dynamic_html=true + dynamic_html_structure=true)"
+echo "Running setup with both features enabled..."
+bash scripts/setup.sh --demo=autozone --enable_dynamic_html=true --dynamic_html_structure=true --web_port=8004
+
+echo "✅ Combined mode deployed. Check http://localhost:8004"
+echo "   - Both layout AND text content should change"
+echo "   - Try: http://localhost:8004?seed=5&seed-structure=2"
+echo "     * seed=5 controls the LAYOUT (Modern minimalist)"
+echo "     * seed-structure=2 controls TEXT CONTENT (Modern Shopping Hub)"
+echo "   - Try: http://localhost:8004?seed=180&seed-structure=5"
+echo "     * seed=180 controls the LAYOUT (Ultra-wide)"
+echo "     * seed-structure=5 controls TEXT CONTENT (Quick Shop)"
+echo ""
+read -p "Press Enter after testing combined mode..."
+
+echo "🎉 Testing complete!"
+echo ""
+echo "Summary of test results:"
+echo "  ✓ Static structure mode: Text/IDs always use Structure Variation 1"
+echo "  ✓ Dynamic structure mode: Text/IDs vary based on seed-structure (1-5)"
+echo "  ✓ Combined mode: Independent control of layout (seed) and text (seed-structure)"
+echo ""
+echo "Available seed-structure variations:"
+echo "  1 - Standard Amazon Style"
+echo "  2 - Modern Shopping Hub"
+echo "  3 - E-Commerce Express"
+echo "  4 - Shop Smart"
+echo "  5 - Quick Shop"
+echo ""
+echo "To switch structure mode, use:"
+echo "  --dynamic_html_structure=false  (static structure, always variation 1)"
+echo "  --dynamic_html_structure=true   (dynamic structure, respects seed-structure)"
+

@@ -14,9 +14,11 @@ import {
   getLayoutConfig
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 
 function HomeContent() {
+  const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
   const seed = getEffectiveSeed(rawSeed);
@@ -57,10 +59,10 @@ function HomeContent() {
         <div className={`omnizon-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${layoutClasses.cards}`}>
           {/* Kitchen Categories */}
           <CategoryCard
-            title="Top categories in Kitchen appliances"
+            title={getText("home_title")}
             items={kitchenCategoriesData}
             footerLink={{
-              text: "Explore all products",
+              text: getText("explore_all"),
               href: "#",
             }}
             columns={2}
@@ -68,25 +70,25 @@ function HomeContent() {
           />
           {/* Delivery */}
           <CategoryCard
-            title="$5 flat delivery fee on international orders"
+            title={getText("delivery_title")}
             items={[]}
-            footerLink={{ text: "Learn more", href: "#" }}
+            footerLink={{ text: getText("learn_more"), href: "#" }}
             singleImage="/images/homepage_categories/delivery_5.jpg"
             seed={seed}
           />
           {/* Home Essentials */}
           <CategoryCard
-            title="Shop for your home essentials"
+            title={getText("essentials_title")}
             items={homeEssentialsData}
-            footerLink={{ text: "Discover more", href: "#" }}
+            footerLink={{ text: getText("discover_more"), href: "#" }}
             columns={2}
             seed={seed}
           />
           {/* Home Decor */}
           <CategoryCard
-            title="Home décor under $50"
+            title={getText("decor_title")}
             items={[]}
-            footerLink={{ text: "See more", href: "#" }}
+            footerLink={{ text: getText("see_more"), href: "#" }}
             singleImage="/images/homepage_categories/decor_under.jpg"
             seed={seed}
           />
@@ -94,9 +96,9 @@ function HomeContent() {
           {/* Refresh Your Space */}
           <div className="md:col-span-2">
             <CategoryCard
-              title="Refresh your space"
+              title={getText("refresh_title")}
               items={refreshYourSpaceData}
-              footerLink={{ text: "See more", href: "#" }}
+              footerLink={{ text: getText("see_more"), href: "#" }}
               columns={4}
               seed={seed}
             />
@@ -105,9 +107,9 @@ function HomeContent() {
           {/* Gaming */}
           <div className="md:col-span-1">
             <CategoryCard
-              title="Get your game on"
+              title={getText("gaming_title")}
               items={[]}
-              footerLink={{ text: "Shop Gaming", href: "/tech-4" }}
+              footerLink={{ text: getText("shop_now"), href: "/tech-4" }}
               singleImage="/images/homepage_categories/gaming_laptop.jpg"
               seed={seed}
             />
@@ -116,9 +118,9 @@ function HomeContent() {
           {/* Beauty */}
           <div className="md:col-span-1">
             <CategoryCard
-              title="Beauty steals under $25"
+              title={getText("beauty_title")}
               items={[]}
-              footerLink={{ text: "See More", href: "#" }}
+              footerLink={{ text: getText("see_more"), href: "#" }}
               singleImage="/images/homepage_categories/makeup.jpg"
               seed={seed}
             />
