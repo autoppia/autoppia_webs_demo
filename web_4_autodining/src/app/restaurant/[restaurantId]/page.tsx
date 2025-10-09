@@ -22,6 +22,7 @@ import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Link from "next/link";
 import { RestaurantsData } from "@/components/library/dataset";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -72,6 +73,7 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
+  const { getText, getId } = useDynamicStructure();
 
   const searchParams = useSearchParams();
   const seed = Number(searchParams?.get("seed") ?? "1");
@@ -235,7 +237,7 @@ export default function RestaurantPage() {
           {r.photos && (
             <>
               <h2 className="text-2xl font-bold mb-3">
-                {r.photos.length} photos
+                {r.photos.length} {getText("photos_count")}
               </h2>
               <div className="grid grid-cols-3 gap-3 w-full max-w-2xl mb-9">
                 {r.photos.map((url: string, i: number) => (
@@ -251,15 +253,15 @@ export default function RestaurantPage() {
           )}
           {/* Menu Section */}
           <section className="max-w-2xl w-full mb-10">
-            <h2 className="text-2xl font-bold mb-3 mt-8">Menu</h2>
+            <h2 className="text-2xl font-bold mb-3 mt-8">{getText("menu")}</h2>
             <div className="flex gap-6 border-b mb-5">
               <button className="border-b-2 border-[#46a758] text-[#46a758] font-semibold px-4 py-2 -mb-px bg-white">
-                Main Menu
+                {getText("main_menu")}
               </button>
             </div>
             <div className="space-y-6">
               <div>
-                <div className="font-bold text-lg mb-3">Starters</div>
+                <div className="font-bold text-lg mb-3">{getText("starters")}</div>
                 <div className="grid grid-cols-2 gap-y-2">
                   <div>
                     <div className="font-semibold">Cheese Board</div>
@@ -288,7 +290,7 @@ export default function RestaurantPage() {
               </div>
               {showFullMenu && (
                 <div>
-                  <div className="font-bold text-lg mb-3">Mains</div>
+                  <div className="font-bold text-lg mb-3">{getText("mains")}</div>
                   <div className="grid grid-cols-2 gap-y-2">
                     <div className="font-semibold">Coq au Vin</div>
                     <div className="text-right font-bold">$26.00</div>
@@ -305,7 +307,7 @@ export default function RestaurantPage() {
                       className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
                       onClick={handleToggleMenu}
                     >
-                      {showFullMenu ? "Collapse menu" : "View full menu"}
+                      {showFullMenu ? getText("collapse_menu") : getText("view_full_menu")}
                     </Button>
                   </div>
                 ) : (
@@ -314,7 +316,7 @@ export default function RestaurantPage() {
                       className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
                       onClick={handleToggleMenu}
                     >
-                      {showFullMenu ? "Collapse menu" : "View full menu"}
+                      {showFullMenu ? getText("collapse_menu") : getText("view_full_menu")}
                     </Button>
                   </div>
                 )}
@@ -324,12 +326,11 @@ export default function RestaurantPage() {
           {/* Reviews Section */}
           <section className="max-w-2xl w-full mb-10">
             <h2 className="text-2xl font-bold mb-5 mt-10">
-              What 20 people are saying
+              {getText("reviews_tab")}
             </h2>
-            <div className="font-bold mb-2">Overall ratings and reviews</div>
+            <div className="font-bold mb-2">{getText("reviews_tab")}</div>
             <div className="mb-4 text-gray-700">
-              Reviews can only be made by diners who have booked through
-              OpenDinning and dined at this restaurant.
+              {getText("reviews_tab")}
             </div>
             {/* Ratings bar chart (simplified) */}
             <div className="mb-6 space-y-1">
@@ -350,19 +351,20 @@ export default function RestaurantPage() {
         {/* Reservation Box - now more detailed per screenshot */}
         <div className="rounded-xl border bg-white shadow-sm p-6 w-full max-w-sm mt-[-120px] md:mt-16 self-start">
           <h2 className="font-bold text-lg mb-2 text-center">
-            Make a reservation
+            {getText("make_reservation")}
           </h2>
           <div className="flex flex-col gap-3">
             {/* People select (demo, not fully interactive) */}
             <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
               <PopoverTrigger asChild>
                 <Button
+                  id={getId("people_picker")}
                   variant="outline"
                   className="flex items-center gap-2 min-w-[100px] justify-start"
                 >
                   <UserIcon className="h-5 w-5 text-gray-700" />
-                  {people ? people : "Pick"}{" "}
-                  {people === 1 ? "Person" : "People"}{" "}
+                  {people ? people : getText("pick")}{" "}
+                  {people === 1 ? getText("person_cap") : getText("people_cap")}{" "}
                   <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                 </Button>
               </PopoverTrigger>
@@ -377,7 +379,7 @@ export default function RestaurantPage() {
                       setPeopleOpen(false);
                     }}
                   >
-                    {n} {n === 1 ? "person" : "people"}
+                    {n} {n === 1 ? getText("person") : getText("people")}
                   </Button>
                 ))}
               </PopoverContent>
@@ -387,11 +389,12 @@ export default function RestaurantPage() {
               <Popover open={dateOpen} onOpenChange={setDateOpen}>
                 <PopoverTrigger asChild>
                   <Button
+                    id={getId("date_picker")}
                     variant="outline"
                     className="flex items-center gap-2 min-w-[120px] justify-start"
                   >
                     <CalendarIcon className="h-5 w-5 text-gray-700" />
-                    {date ? format(date, "MMM d") : "Pick date"}
+                    {date ? format(date, "MMM d") : getText("date_picker")}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -409,11 +412,12 @@ export default function RestaurantPage() {
               <Popover open={timeOpen} onOpenChange={setTimeOpen}>
                 <PopoverTrigger asChild>
                   <Button
+                    id={getId("time_picker")}
                     variant="outline"
                     className="flex items-center gap-2 min-w-[120px] justify-start"
                   >
                     <ClockIcon className="h-5 w-5 text-gray-700" />
-                    {time ? time : "Pick Time"}
+                    {time ? time : getText("select_time")}
                     <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                   </Button>
                 </PopoverTrigger>
@@ -449,7 +453,7 @@ export default function RestaurantPage() {
                     className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
                   >
                     <span>{time}</span>
-                    <span className="ml-2">🔔 Notify me</span>
+                    <span className="ml-2">{getText("notify_me")}</span>
                   </Button>
                 </div>
               ) : time ? (
@@ -524,18 +528,19 @@ export default function RestaurantPage() {
                       passHref
                     >
                       <Button
+                        id={getId("book_button")}
                         className={`${bookButtonVariation.className} font-semibold text-sm`}
                         data-testid={bookButtonVariation.dataTestId}
                         asChild
                       >
-                        <span>Book Restaurant</span>
+                        <span>{getText("book_now")}</span>
                       </Button>
                     </Link>
                   </div>
                 )
               ) : (
                 <div className="text-gray-500 text-sm mt-2">
-                  Please select a time
+                  {getText("please_select_time")}
                 </div>
               )}
             </div>

@@ -9,6 +9,7 @@ import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import dayjs from "dayjs";
 import { countries, RestaurantsData } from "@/components/library/dataset";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -74,6 +75,7 @@ export default function Page() {
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [email, setEmail] = useState("user_name@gmail.com");
+  const { getText, getId } = useDynamicStructure();
 
   const data = restaurantData[restaurantId] ?? restaurantData["restaurant-1"];
 
@@ -159,19 +161,20 @@ export default function Page() {
           <div className="flex items-center gap-3">
             <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">AutoDining</span>
+                <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
             </Link>
           </div>
           <div className="flex-1 flex items-center justify-center">
             <input
+              id={getId("search_input")}
               type="text"
-              placeholder="Location, Restaurant, or Cuisine"
+              placeholder={getText("search_placeholder")}
               className="rounded p-2 min-w-[250px] border border-gray-300"
               disabled
             />
-            <button className="ml-2 px-4 py-2 rounded bg-[#46a758] text-white">
-              Let's go
+            <button id={getId("search_button")} className="ml-2 px-4 py-2 rounded bg-[#46a758] text-white">
+              {getText("search_button")}
             </button>
           </div>
           <div className="flex items-center gap-4">
@@ -179,20 +182,20 @@ export default function Page() {
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/help"
             >
-              Get help
+              {getText("get_help")}
             </Link>
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/faqs"
             >
-              FAQs
+              {getText("about")}
             </Link>
           </div>
         </div>
       </nav>
 
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
-        <h2 className="font-bold text-lg mt-8 mb-4">You’re almost done!</h2>
+        <h2 className="font-bold text-lg mt-8 mb-4">{getText("you_almost_done")}</h2>
         <div className="flex items-center gap-3 mb-6">
           <img
             src={data.image}
@@ -204,21 +207,21 @@ export default function Page() {
             <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
-                {formattedDate ?? "Select Date"}
+                {formattedDate ?? getText("select_date")}
               </span>
               <span className="flex items-center gap-1">
                 <ClockIcon className="w-4 h-4 mr-1" />
-                {reservationTime ?? "Select Time"}
+                {reservationTime ?? getText("select_time")}
               </span>
               <span className="flex items-center gap-1">
                 <UserIcon className="w-4 h-4 mr-1" />
-                {reservationPeople ?? "Select"} people
+                {reservationPeople ?? getText("select_people")} {getText("people")}
               </span>
             </div>
           </div>
         </div>
 
-        <h3 className="font-semibold text-lg mb-2 mt-4">Diner details</h3>
+        <h3 className="font-semibold text-lg mb-2 mt-4">{getText("diner_details")}</h3>
         <div className={formVariation.className} data-testid={formVariation.dataTestId}>
         {layout.wrap ? (
           <div className="w-full" data-testid={`input-wrapper-${seed}`}>
@@ -254,7 +257,7 @@ export default function Page() {
                   </select>
                   <input
                     type="tel"
-                    placeholder="Phone number"
+                    placeholder={getText("phone_number")}
                     className="border border-l-0 px-3 py-2 w-full rounded-r focus:outline-none"
                     value={phoneNumber}
                     onChange={(e) => {
@@ -265,7 +268,7 @@ export default function Page() {
                 </div>
                 {phoneError && (
                   <p className="text-red-500 text-sm mt-1 ml-1">
-                    Phone number is required.
+                    {getText("phone_required")}
                   </p>
                 )}
               </div>
@@ -312,7 +315,7 @@ export default function Page() {
                 </select>
                 <input
                   type="tel"
-                  placeholder="Phone number"
+                  placeholder={getText("phone_number")}
                   className="border border-l-0 px-3 py-2 w-full rounded-r focus:outline-none"
                   value={phoneNumber}
                   onChange={(e) => {
@@ -323,7 +326,7 @@ export default function Page() {
               </div>
               {phoneError && (
                 <p className="text-red-500 text-sm mt-1 ml-1">
-                  Phone number is required.
+                  {getText("phone_required")}
                 </p>
               )}
             </div>
@@ -357,15 +360,15 @@ export default function Page() {
                   });
                 }}
               >
-                <option value="">Select an occasion (optional)</option>
-                <option value="birthday">Birthday</option>
-                <option value="anniversary">Anniversary</option>
-                <option value="business">Business meal</option>
-                <option value="other">Other</option>
+                <option value="">{getText("select_occasion")}</option>
+                <option value="birthday">{getText("birthday")}</option>
+                <option value="anniversary">{getText("anniversary")}</option>
+                <option value="business">{getText("business_meal")}</option>
+                <option value="other">{getText("other")}</option>
               </select>
               <input
                 type="text"
-                placeholder="Add a special request (optional)"
+                placeholder={getText("special_request")}
                 className="flex-1 border px-3 py-2 rounded min-w-[220px]"
                 value={specialRequest}
                 onChange={(e) => setSpecialRequest(e.target.value)}
@@ -390,15 +393,15 @@ export default function Page() {
                 });
               }}
             >
-              <option value="">Select an occasion (optional)</option>
-              <option value="birthday">Birthday</option>
-              <option value="anniversary">Anniversary</option>
-              <option value="business">Business meal</option>
-              <option value="other">Other</option>
+              <option value="">{getText("select_occasion")}</option>
+              <option value="birthday">{getText("birthday")}</option>
+              <option value="anniversary">{getText("anniversary")}</option>
+              <option value="business">{getText("business_meal")}</option>
+              <option value="other">{getText("other")}</option>
             </select>
             <input
               type="text"
-              placeholder="Add a special request (optional)"
+              placeholder={getText("special_request")}
               className="flex-1 border px-3 py-2 rounded min-w-[220px]"
               value={specialRequest}
               onChange={(e) => setSpecialRequest(e.target.value)}
@@ -422,32 +425,31 @@ export default function Page() {
           </div>
         ) : (
           <Button
+            id={getId("confirm_button")}
             onClick={handleReservation}
             className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
             data-testid={bookButtonVariation.dataTestId}
           >
-            Complete reservation
+            {getText("confirm_booking")}
           </Button>
         )}
 
         <div className="text-xs text-gray-600 mt-3">
-          By clicking “Complete reservation” you agree to the{" "}
+          {getText("agree_terms")}{" "}
           <Link href="#" className="text-[#46a758] underline">
-            OpenDinning Terms of Use
+            {getText("terms_of_use")}
           </Link>{" "}
           and{" "}
           <Link href="#" className="text-[#46a758] underline">
-            Privacy Policy
+            {getText("privacy_policy")}
           </Link>
-          . Message &amp; data rates may apply. You can opt out of receiving
-          text messages at any time in your account settings or by replying
-          STOP.
+          . {getText("message_rates")}
         </div>
       </div>
 
       {showToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-green-600 text-white px-20 py-5 rounded shadow-lg z-50">
-          Reservation completed successfully!
+          {getText("confirmation_message")}
         </div>
       )}
     </main>
