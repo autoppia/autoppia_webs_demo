@@ -1,6 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
-import { products, initializeProducts, loadProductsFromDb } from "@/data/products-enhanced";
+import { products, initializeProducts, loadProductsFromDb, writeCachedProducts, readCachedProducts } from "@/data/products-enhanced";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
@@ -21,7 +21,9 @@ export class DynamicDataProvider {
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
     this.dataGenerationEnabled = isDataGenerationEnabled();
-    this.products = products;
+    // hydrate from cache if available to keep content stable across reloads
+    const cached = readCachedProducts();
+    this.products = Array.isArray(cached) && cached.length > 0 ? cached : products;
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
@@ -43,6 +45,7 @@ export class DynamicDataProvider {
       const dbProducts = await loadProductsFromDb();
       if (dbProducts.length > 0) {
         this.products = dbProducts;
+        writeCachedProducts(this.products);
         this.ready = true;
         this.resolveReady();
         return;
@@ -51,6 +54,9 @@ export class DynamicDataProvider {
       // Fallback to existing behavior
       const initializedProducts = await initializeProducts();
       this.products = initializedProducts;
+      if (this.products.length > 0) {
+        writeCachedProducts(this.products);
+      }
 
       // Mark as ready only when either generation is disabled or we have generated data
       if (!this.dataGenerationEnabled || this.products.length > 0) {
@@ -77,7 +83,7 @@ export class DynamicDataProvider {
   }
 
   public getProducts(): Product[] {
-    return this.products; // Always return products
+    return this.products; // Return empty until ready when generation is enabled
   }
 
   public getProductById(id: string): Product | undefined {

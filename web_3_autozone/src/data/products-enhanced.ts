@@ -567,14 +567,14 @@ export const originalProducts: Product[] = [
 ];
 
 // Dynamic products array that can be populated with generated data
-let dynamicProducts: Product[] = [...originalProducts];
+let dynamicProducts: Product[] = isDataGenerationAvailable() ? [] : [...originalProducts];
 
 // Client-side cache to avoid regenerating on every reload
-function readCachedProducts(): Product[] | null {
+export function readCachedProducts(): Product[] | null {
   return readJson<Product[]>("autozone_generated_products_v1", null);
 }
 
-function writeCachedProducts(productsToCache: Product[]): void {
+export function writeCachedProducts(productsToCache: Product[]): void {
   writeJson("autozone_generated_products_v1", productsToCache);
 }
 
@@ -673,11 +673,15 @@ export async function initializeProducts(): Promise<Product[]> {
         delayBetweenCalls,
         originalProducts
       );
+      // Normalize category field to one of the allowed categories
+      const allowed = new Set(categories);
+      allGeneratedProducts = allGeneratedProducts.map((p) => ({
+        ...p,
+        category: allowed.has(p.category || "") ? p.category : (p.category ? p.category : "Home"),
+      }));
       // Normalize and resolve images to concrete URLs to ensure they exist
       allGeneratedProducts = normalizeProductImages(allGeneratedProducts);
 
-      console.log(`🎉 Data generation complete! Generated ${allGeneratedProducts.length} products (replacing ${originalProducts.length} original products)`);
-      console.log("✅ Generated data is now active!");
       dynamicProducts = allGeneratedProducts;
       // Cache generated products on client
       writeCachedProducts(dynamicProducts);

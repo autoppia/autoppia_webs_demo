@@ -35,6 +35,9 @@ function HomeContent() {
   const ElectronicProducts = getProductsByCategory("Electronics");
   const FitnessProducts = getProductsByCategory("Fitness");
 
+  const isLoadingProducts =
+    kitchenProducts.length + techProducts.length + HomeProducts.length + ElectronicProducts.length + FitnessProducts.length === 0;
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
@@ -54,6 +57,9 @@ function HomeContent() {
       <HeroSlider />
       {/* Main Content Grid */}
       <div className={`px-4 py-4 -mt-20 relative z-10 ${layoutClasses.content}`}>
+        {isLoadingProducts && (
+          <div className="omnizon-container text-center text-zinc-500 mb-4">Loading products...</div>
+        )}
         <div className={`omnizon-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${layoutClasses.cards}`}>
           {/* Kitchen Categories */}
           <CategoryCard

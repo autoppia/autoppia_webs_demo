@@ -42,7 +42,7 @@ export async function generateProductsWithFallback(
   try {
     const result = await generateProducts(count, categories);
     if (result.success && result.data.length > 0) {
-      console.log("GENERATED RECEIVED: ", result.data)
+      // console.log("GENERATED RECEIVED: ", result.data)
       return result.data as Product[];
     }
   } catch (error) {

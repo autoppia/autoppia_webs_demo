@@ -422,7 +422,8 @@ Guidance:
 Naming rules (may be empty JSON):
 {naming_rules}
 
-{f"Focus on categories: {', '.join(request.categories)}" if request.categories else ""}
+{f"Focus on categories mentioning the EXACT names: {', '.join(request.categories)}" if request.categories else ""}
+
 {request.additional_requirements or ""}
 
 Output strictly a JSON array only.
