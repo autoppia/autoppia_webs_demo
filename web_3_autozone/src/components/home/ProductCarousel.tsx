@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 
 interface ProductCarouselProps {
@@ -31,6 +32,7 @@ export function ProductCarousel({
   seed = 1,
 }: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { getText, getId } = useDynamicStructure();
   // const [showLeftButton, setShowLeftButton] = useState(false);
   // const [showRightButton, setShowRightButton] = useState(true);
 
@@ -65,7 +67,7 @@ export function ProductCarousel({
   };
 
   return (
-    <Card className={`category-card relative ${horizontal} ${vertical}`}>
+    <Card id={getId("product_carousel")} className={`category-card relative ${horizontal} ${vertical}`}>
       <h2 className="category-title px-4 pt-4">{title}</h2>
 
       <div className="relative">
@@ -73,7 +75,7 @@ export function ProductCarousel({
         <button
           onClick={() => scroll("left")}
           className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-          aria-label="Scroll left"
+          aria-label={getText("scroll_left")}
         >
           <ChevronLeft size={24} />
         </button>
@@ -123,7 +125,7 @@ export function ProductCarousel({
         <button
           onClick={() => scroll("right")}
           className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-          aria-label="Scroll right"
+          aria-label={getText("scroll_right")}
         >
           <ChevronRight size={24} />
         </button>

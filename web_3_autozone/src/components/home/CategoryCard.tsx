@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 
 interface CategoryItem {
@@ -46,6 +47,8 @@ export function CategoryCard({
   singleImage,
   seed = 1,
 }: CategoryCardProps) {
+  const { getId } = useDynamicStructure();
+  
   const gridCols = {
     2: "grid-cols-2",
     3: "grid-cols-3",
@@ -55,7 +58,7 @@ export function CategoryCard({
   const { horizontal, vertical } = getCardShiftClasses(seed);
 
   return (
-    <Card className={`category-card ${horizontal} ${vertical}`}>
+    <Card id={getId("category_card")} className={`category-card ${horizontal} ${vertical}`}>
       <CardContent className="p-4">
         <h2 className="category-title">{title}</h2>
 

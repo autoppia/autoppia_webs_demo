@@ -38,18 +38,24 @@ export class DynamicStructureProvider {
   }
 
   // Get effective seed-structure value - returns 1 (default) when dynamic HTML structure is disabled
-  // Validates seed-structure is between 1-5 (number of variations), defaults to 1 if invalid
+  // Maps seed-structure from 1-300 to variations 1-10 using formula
+  // Formula: Maps 300 seeds to 10 variations using modulo pattern
   public getEffectiveSeedStructure(providedSeed: number = 1): number {
     if (!this.isEnabled) {
       return 1;
     }
     
-    // Validate seed-structure range (1 to number of variations)
-    if (providedSeed < 1 || providedSeed > this.variations.length) {
+    // Validate seed-structure range (1-300)
+    if (providedSeed < 1 || providedSeed > 300) {
       return 1;
     }
     
-    return providedSeed;
+    // Map 1-300 to 1-10 using modulo
+    // Use modulo 30 to get 0-29 range, then map to 1-10
+    // This distributes the 300 seeds evenly across 10 variations
+    const mappedSeed = ((providedSeed - 1) % 10) + 1;
+    
+    return mappedSeed;
   }
 
   // Set the current variation based on seed-structure

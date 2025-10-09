@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export function Footer() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ export function Footer() {
   const seed = getEffectiveSeed(rawSeed);
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+  const { getText } = useDynamicStructure();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -23,7 +25,7 @@ export function Footer() {
         onClick={scrollToTop}
         className={`w-full py-4 bg-amazon-lightBlue hover:bg-amazon-blue text-white text-sm font-medium ${layoutClasses.buttons}`}
       >
-        Back to top
+        {getText("back_to_top")}
       </button>
 
       {/* Main Links */}
@@ -31,7 +33,7 @@ export function Footer() {
         <div className="omnizon-container grid grid-cols-2 md:grid-cols-4 gap-6 px-6">
           {/* Column: Get to Know Us */}
           <div className="min-w-[180px]">
-            <h3 className="font-bold text-lg mb-3">Get to Know Us</h3>
+            <h3 className="font-bold text-lg mb-3">{getText("get_to_know_us")}</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>Careers</li>
               <li>Blog</li>
@@ -44,7 +46,7 @@ export function Footer() {
 
           {/* Column: Make Money */}
           <div className="min-w-[180px]">
-            <h3 className="font-bold text-lg mb-3">Make Money with Us</h3>
+            <h3 className="font-bold text-lg mb-3">{getText("make_money_with_us")}</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>Sell products on Autozon</li>
               <li>Sell on Autozon Business</li>
@@ -57,7 +59,7 @@ export function Footer() {
 
           {/* Column: Payment Products */}
           <div className="min-w-[180px]">
-            <h3 className="font-bold text-lg mb-3">Autozon Payment Products</h3>
+            <h3 className="font-bold text-lg mb-3">{getText("payment_products")}</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>Autozon Business Card</li>
               <li>Shop with Points</li>
@@ -68,7 +70,7 @@ export function Footer() {
 
           {/* Column: Help */}
           <div className="min-w-[180px]">
-            <h3 className="font-bold text-lg mb-3">Let Us Help You</h3>
+            <h3 className="font-bold text-lg mb-3">{getText("let_us_help_you")}</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>Autozon and COVID-19</li>
               <li>Your Account</li>
