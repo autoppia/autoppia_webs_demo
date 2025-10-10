@@ -11,9 +11,9 @@ import { countries, RestaurantsData } from "@/components/library/dataset";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 
 const photos = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
-  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=150&h=150",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150",
 ];
 
 const restaurantData: Record<

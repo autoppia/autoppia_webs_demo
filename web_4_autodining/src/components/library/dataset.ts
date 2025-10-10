@@ -586,3 +586,116 @@ export const RestaurantsData = [
     staticPrices: "$$$",
   },
 ];
+
+export interface RestaurantGenerated {
+  id: string;
+  name: string;
+  image: string;
+  cuisine?: string;
+  area?: string;
+  reviews?: number;
+  stars?: number;
+  price?: string;
+  bookings?: number;
+}
+
+// Cache helpers
+function readCachedRestaurants(): RestaurantGenerated[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem("autodining_generated_restaurants_v1");
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as RestaurantGenerated[]) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedRestaurants(items: RestaurantGenerated[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(
+      "autodining_generated_restaurants_v1",
+      JSON.stringify(items)
+    );
+  } catch {}
+}
+
+// Normalization
+function normalizeRestaurants(items: RestaurantGenerated[]): RestaurantGenerated[] {
+  return items.map((r, index) => ({
+    id: r.id || `gen-${index + 1}`,
+    name: r.name || `Restaurant ${index + 1}`,
+    image: r.image?.startsWith("/images/") ? r.image : `/images/restaurant${(index % 19) + 1}.jpg`,
+    cuisine: r.cuisine || "International",
+    area: r.area || "Downtown",
+    reviews: r.reviews ?? 0,
+    stars: r.stars ?? 4,
+    price: r.price || "$$",
+    bookings: r.bookings ?? 0,
+  }));
+}
+
+export let dynamicRestaurants: RestaurantGenerated[] = [];
+
+export function getRestaurants(): RestaurantGenerated[] {
+  return dynamicRestaurants.length > 0
+    ? dynamicRestaurants
+    : RestaurantsData.map((item, index) => ({
+        id: `restaurant-${item.id}`,
+        name: item.namepool,
+        image: `/images/restaurant${(index % 19) + 1}.jpg`,
+        stars: item.staticStars,
+        reviews: item.staticReviews,
+        cuisine: item.cuisine,
+        price: item.staticPrices,
+        bookings: item.staticBookings,
+        area: item.area,
+      }));
+}
+
+export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
+  // Prefer cache first on client
+  const cached = readCachedRestaurants();
+  if (cached && cached.length > 0) {
+    dynamicRestaurants = normalizeRestaurants(cached);
+    return dynamicRestaurants;
+  }
+  // DB mode check and fetch
+  try {
+    const { isDbLoadModeEnabled, fetchPoolInfo, fetchSeededSelection, getSeedValueFromEnv } = await import("@/shared/seeded-loader");
+    if (isDbLoadModeEnabled()) {
+      const info = await fetchPoolInfo("web_4_autodining", "restaurants");
+      if (info && info.pool_size >= 50) {
+        const seed = getSeedValueFromEnv(1);
+        const fromDb = await fetchSeededSelection<RestaurantGenerated>({
+          projectKey: "web_4_autodining",
+          entityType: "restaurants",
+          seedValue: seed,
+          limit: 100,
+          method: "shuffle",
+        });
+        if (fromDb && fromDb.length > 0) {
+          dynamicRestaurants = normalizeRestaurants(fromDb);
+          writeCachedRestaurants(dynamicRestaurants);
+          return dynamicRestaurants;
+        }
+      }
+    }
+  } catch {}
+  // Generation fallback
+  try {
+    const { isDataGenerationEnabled, generateProjectData } = await import("@/shared/data-generator");
+    if (isDataGenerationEnabled()) {
+      const result = await generateProjectData("web_4_autodining", 60, ["International", "Italian", "Japanese", "Mexican", "American"]);
+      if (result.success && result.data.length > 0) {
+        dynamicRestaurants = normalizeRestaurants(result.data as RestaurantGenerated[]);
+        writeCachedRestaurants(dynamicRestaurants);
+        return dynamicRestaurants;
+      }
+    }
+  } catch {}
+  dynamicRestaurants = [];
+  return dynamicRestaurants;
+}

@@ -19,23 +19,12 @@ import {
 } from "lucide-react";
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { RestaurantsData } from "@/components/library/dataset";
+import { getRestaurants, initializeRestaurants } from "@/components/library/dataset";
 import { useSearchParams } from "next/navigation";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 
-// Create restaurants array from jsonData
-const restaurants = RestaurantsData.map((item, index) => ({
-  id: `restaurant-${item.id}`,
-  name: item.namepool,
-  image: `/images/restaurant${(index % 19) + 1}.jpg`,
-  stars: item.staticStars,
-  reviews: item.staticReviews,
-  cuisine: item.cuisine,
-  price: item.staticPrices,
-  bookings: item.staticBookings,
-  area: item.area,
-  times: ["1:00 PM"],
-}));
+// Will be filled after initialization
+let restaurants = getRestaurants().map((r) => ({ ...r, times: ["1:00 PM"] }));
 // Split restaurants into unique sets per section
 const lunchRestaurants = restaurants.slice(0, 15);
 const iconRestaurants = restaurants.slice(15, 30);
@@ -232,6 +221,8 @@ function getLayoutVariant(seed: number) {
 
 // Client-only component that uses useSearchParams
 function HomePageContent() {
+  const [isReady, setIsReady] = useState(false);
+  const [list, setList] = useState(restaurants);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
@@ -307,7 +298,7 @@ function HomePageContent() {
     );
   }
 
-  const filtered = restaurants.filter(matches);
+  const filtered = list.filter(matches);
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const timeOptions = [
     "12:00 PM",
@@ -317,6 +308,14 @@ function HomePageContent() {
     "2:00 PM",
     "2:30 PM",
   ];
+
+  useEffect(() => {
+    initializeRestaurants().then(() => {
+      const fresh = getRestaurants().map((r) => ({ ...r, times: ["1:00 PM"] }));
+      setList(fresh);
+      setIsReady(true);
+    });
+  }, []);
 
   return (
     <main suppressHydrationWarning>
@@ -356,6 +355,9 @@ function HomePageContent() {
 
       {/* Hero Section */}
       <section className={pageLayoutVariation.className} data-testid={pageLayoutVariation.dataTestId}>
+        {!isReady && (
+          <div className="text-center text-gray-500 mb-4">Loading restaurants...</div>
+        )}
         <h1 className="text-4xl font-bold mb-6">Find your table for any occasion</h1>
         
         {/* Search and Filters */}
@@ -530,7 +532,7 @@ function HomePageContent() {
                 </button>
               </div>
               <CardScroller title="Introducing OpenDinning Icons">
-                {iconRestaurants.map((r) => (
+                {list.slice(15, 30).map((r) => (
                   <RestaurantCard
                     key={r.id + "-icon"}
                     r={r}
@@ -562,7 +564,7 @@ function HomePageContent() {
               </button>
             </div>
             <CardScroller title="Introducing OpenDinning Icons">
-              {iconRestaurants.map((r) => (
+              {list.slice(15, 30).map((r) => (
                 <RestaurantCard
                   key={r.id + "-icon"}
                   r={r}
@@ -581,7 +583,7 @@ function HomePageContent() {
             <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
               <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
               <CardScroller title="Award Winners">
-                {awardRestaurants.map((r) => (
+                {list.slice(30, 50).map((r) => (
                   <RestaurantCard
                     key={r.id + "-award"}
                     r={r}
@@ -597,7 +599,7 @@ function HomePageContent() {
           <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
             <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
             <CardScroller title="Award Winners">
-              {awardRestaurants.map((r) => (
+              {list.slice(30, 50).map((r) => (
                 <RestaurantCard
                   key={r.id + "-award"}
                   r={r}
