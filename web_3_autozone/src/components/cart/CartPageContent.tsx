@@ -133,8 +133,14 @@ export function CartPageContent() {
                         {/* Product Details */}
                         <div className="flex-1 flex flex-col justify-between">
                           <a
-                            href={`/${item.id}`}
+                            href={`#${item.id}`}
                             title={`View ${item.title} - Product ID: ${item.id}`}
+                            onMouseEnter={() => {
+                              window.history.replaceState(null, '', `#${item.id}`);
+                            }}
+                            onMouseLeave={() => {
+                              window.history.replaceState(null, '', window.location.pathname);
+                            }}
                             onClick={(e) => {
                               e.preventDefault();
                               router.push(`/${item.id}`);

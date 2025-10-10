@@ -53,8 +53,14 @@ export default function SearchPage() {
           <a
             id={product.id}
             key={product.id}
-            href={`/${product.id}`}
+            href={`#${product.id}`}
             title={`View ${product.title} - Product ID: ${product.id}`}
+            onMouseEnter={() => {
+              window.history.replaceState(null, '', `#${product.id}`);
+            }}
+            onMouseLeave={() => {
+              window.history.replaceState(null, '', window.location.pathname);
+            }}
             onClick={(e) => {
               e.preventDefault();
               logEvent(EVENT_TYPES.VIEW_DETAIL, {

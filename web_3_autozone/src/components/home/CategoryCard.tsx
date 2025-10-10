@@ -77,9 +77,17 @@ export function CategoryCard({
           <div className={`grid ${gridCols[columns]} gap-4`}>
             {items.map((item, index) => (
               <a
-                href={item.link || "#"}
+                href={item.link ? `#${item.link.replace('/', '')}` : "#"}
                 title={item.link ? `View ${item.title} - ${item.link}` : item.title}
                 key={`${item.title}-${index}`}
+                onMouseEnter={() => {
+                  if (item.link && item.link !== "#") {
+                    window.history.replaceState(null, '', `#${item.link.replace('/', '')}`);
+                  }
+                }}
+                onMouseLeave={() => {
+                  window.history.replaceState(null, '', window.location.pathname);
+                }}
                 onClick={(e) => {
                   if (item.link && item.link !== "#") {
                     e.preventDefault();

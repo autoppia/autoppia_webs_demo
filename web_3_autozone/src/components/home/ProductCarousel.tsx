@@ -88,8 +88,16 @@ export function ProductCarousel({
           {products.map((product) => (
             <a
               key={product.id}
-              href={`/${product.id}`}
+              href={`#${product.id}`}
               title={`View ${product.title} - Product ID: ${product.id}`}
+              onMouseEnter={() => {
+                // Update URL in address bar on hover
+                window.history.replaceState(null, '', `#${product.id}`);
+              }}
+              onMouseLeave={() => {
+                // Clear hash on mouse leave
+                window.history.replaceState(null, '', window.location.pathname);
+              }}
               onClick={(e) => {
                 e.preventDefault();
                 logEvent(EVENT_TYPES.VIEW_DETAIL, {
