@@ -1,12 +1,11 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { searchProducts } from "@/utils/dynamicDataProvider";
 
 const getTopMarginClass = () => {
@@ -16,6 +15,7 @@ const getTopMarginClass = () => {
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const query = searchParams.get("q")?.toLowerCase() || "1";
   const { addToCart } = useCart();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
@@ -50,10 +50,13 @@ export default function SearchPage() {
         className={`grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 ${getTopMarginClass()}`}
       >
         {results.map((product, index) => (
-          <Link id={product.id}
+          <a
+            id={product.id}
             key={product.id}
             href={`/${product.id}`}
-            onClick={() =>
+            title={`View ${product.title} - Product ID: ${product.id}`}
+            onClick={(e) => {
+              e.preventDefault();
               logEvent(EVENT_TYPES.VIEW_DETAIL, {
                 productId: product.id,
                 title: product.title,
@@ -61,17 +64,23 @@ export default function SearchPage() {
                 rating: product.rating ?? 0,
                 brand: product.brand || "Generic",
                 category: product.category || "Uncategorized",
-              })
-            }
-            passHref
-            className={getTopMarginClass()}
+              });
+              router.push(`/${product.id}`);
+            }}
+            className={`${getTopMarginClass()} block no-underline text-inherit cursor-pointer group`}
           >
-            <div className="border p-3 rounded bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="h-32 w-full object-contain mb-2"
-              />
+            <div className="border p-3 rounded bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow relative">
+              <div className="relative">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="h-32 w-full object-contain mb-2"
+                />
+                {/* URL Display on Hover */}
+                <div className="absolute bottom-2 left-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
+                  /{product.id}
+                </div>
+              </div>
               <h3 className="text-sm font-medium">{product.title}</h3>
               <p className="text-sm text-gray-500 mb-2">{product.price}</p>
               <Button
@@ -89,7 +98,7 @@ export default function SearchPage() {
                 </p>
               )}
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </div>

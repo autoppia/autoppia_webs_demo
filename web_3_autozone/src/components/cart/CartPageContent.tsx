@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
@@ -21,6 +22,7 @@ interface CartItem {
 export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
+  const router = useRouter();
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
@@ -115,7 +117,7 @@ export function CartPageContent() {
                         className="flex flex-col md:flex-row items-center md:items-stretch gap-4 border-b border-gray-100 pb-6 last:border-b-0"
                       >
                         {/* Product Image */}
-                        <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded">
+                        <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded relative group">
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -123,15 +125,24 @@ export function CartPageContent() {
                             height={80}
                             className="object-contain max-h-20 max-w-20"
                           />
+                          {/* URL Display on Hover */}
+                          <div className="absolute bottom-1 left-1 right-1 bg-black/80 text-white text-xs px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
+                            /{item.id}
+                          </div>
                         </div>
                         {/* Product Details */}
                         <div className="flex-1 flex flex-col justify-between">
-                          <Link
+                          <a
                             href={`/${item.id}`}
-                            className="text-base font-medium hover:text-blue-600"
+                            title={`View ${item.title} - Product ID: ${item.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push(`/${item.id}`);
+                            }}
+                            className="text-base font-medium hover:text-blue-600 no-underline cursor-pointer"
                           >
                             {item.title}
-                          </Link>
+                          </a>
                           <div className="text-xs text-gray-500 mt-1">
                             {item.brand && `Brand: ${item.brand}`}
                             {item.color && `, Color: ${item.color}`}
