@@ -1,9 +1,10 @@
 #!/bin/bash
 
-HOST=0.0.0.0
-PORT=8080
-WORKERS=4
-LOG_LEVEL=info
+HOST=${HOST:-0.0.0.0}
+PORT=${PORT:-8080}
+WORKERS=${WORKERS:-4}
+LOG_LEVEL=${LOG_LEVEL:-info}
+KEEP_ALIVE=${KEEP_ALIVE:-30}
 
 exec uvicorn server:app \
     --host $HOST \
@@ -11,4 +12,4 @@ exec uvicorn server:app \
     --workers $WORKERS \
     --log-level $LOG_LEVEL \
     --no-access-log \
-    --timeout-keep-alive 30
+    --timeout-keep-alive $KEEP_ALIVE \

@@ -22,6 +22,9 @@ services:
 
       # Minimum response size (in bytes) before applying GZIP compression
       GZIP_MIN_SIZE: 1000
+      
+      # ======== Data Generation ========
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
     depends_on:
       db:
         condition: service_healthy
@@ -29,7 +32,7 @@ services:
       - apps_net
 
   db:
-    image: postgres:13-alpine
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: webs_user
       POSTGRES_PASSWORD: autoppia_2025
