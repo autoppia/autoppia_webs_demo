@@ -37,7 +37,8 @@ WEBS_PORT_DEFAULT=8090
 WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
-ENABLE_DYNAMIC_HTML_DEFAULT=true
+ENABLE_DYNAMIC_HTML_DEFAULT=false
+DYNAMIC_HTML_STRUCTURE_DEFAULT=false
 
 # 5. Parse args
 for ARG in "$@"; do
@@ -48,6 +49,7 @@ for ARG in "$@"; do
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
     --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
+    --dynamic_html_structure=*) DYNAMIC_HTML_STRUCTURE="${ARG#*=}" ;;
     -y|--yes)          FORCE_DELETE=true ;;
     *) ;; 
   esac
@@ -58,14 +60,16 @@ POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
 ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
+DYNAMIC_HTML_STRUCTURE="${DYNAMIC_HTML_STRUCTURE:-$DYNAMIC_HTML_STRUCTURE_DEFAULT}"
 
 echo "🔣 Configuration:"
-echo "    movies/books base HTTP  →  $WEB_PORT"
-echo "    movies/books Postgres   →  $POSTGRES_PORT"
-echo "    webs_server HTTP        →  $WEBS_PORT"
-echo "    webs_server Postgres    →  $WEBS_PG_PORT"
-echo "    Demo to deploy:         →  $WEB_DEMO"
-echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
+echo "    movies/books base HTTP    →  $WEB_PORT"
+echo "    movies/books Postgres     →  $POSTGRES_PORT"
+echo "    webs_server HTTP          →  $WEBS_PORT"
+echo "    webs_server Postgres      →  $WEBS_PG_PORT"
+echo "    Demo to deploy:           →  $WEB_DEMO"
+echo "    Dynamic HTML enabled:     →  $ENABLE_DYNAMIC_HTML"
+echo "    Dynamic HTML Structure:   →  $DYNAMIC_HTML_STRUCTURE"
 echo
 
 # 6. Check Docker
@@ -102,7 +106,9 @@ deploy_project() {
     fi
 
     # up
-    WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+    WEB_PORT="$webp" POSTGRES_PORT="$pgp" \
+      ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+      DYNAMIC_HTML_STRUCTURE="$DYNAMIC_HTML_STRUCTURE" \
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
@@ -123,7 +129,9 @@ deploy_webs_server() {
 
     docker compose -p "$name" down --volumes || true
 
-    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
+      ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+      DYNAMIC_HTML_STRUCTURE="$DYNAMIC_HTML_STRUCTURE" \
       docker compose -p "$name" up -d --build
 
   popd > /dev/null

@@ -4,7 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-false}
+        ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-true}
+        ENABLE_DYNAMIC_STRUCTURE: ${DYNAMIC_HTML_STRUCTURE:-true}
     ports:
       - "${WEB_PORT}:8004"
     restart: always
@@ -12,8 +13,10 @@ services:
       - API_URL=http://app:8080
       - PORT=8004
       - NODE_ENV=production
-      - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
-      - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
+      - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
+      - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
+      - NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE=${DYNAMIC_HTML_STRUCTURE:-true}
+      - DYNAMIC_HTML_STRUCTURE=${DYNAMIC_HTML_STRUCTURE:-true}
     networks:
       - apps_net
 

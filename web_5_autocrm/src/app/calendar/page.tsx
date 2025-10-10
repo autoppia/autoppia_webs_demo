@@ -11,6 +11,7 @@ import { CalendarEvent, COLORS, EVENTS } from "@/library/dataset";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 function getMonthMatrix(year: number, month: number) {
   // returns [[date, ...], ...weeks] covering 6 weeks
@@ -34,6 +35,7 @@ function pad(num: number) {
 }
 
 export default function CalendarPage() {
+  const { getText, getId } = useDynamicStructure();
   const today = new Date();
   const [curMonth, setCurMonth] = useState(today.getMonth());
   const [curYear, setCurYear] = useState(today.getFullYear());
@@ -50,7 +52,7 @@ export default function CalendarPage() {
   return (
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
-        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">Calendar</h1>
+        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">{getText("calendar_title")}</h1>
       </DynamicElement>
 
       <DynamicElement elementType="section" index={1} className="flex items-center gap-2 mb-6">
@@ -58,7 +60,8 @@ export default function CalendarPage() {
           eventType="NEW_CALENDAR_EVENT_ADDED"
           index={0}
           className="p-2 rounded-full hover:bg-accent-forest/20"
-          aria-label="Previous Month"
+          id={getId("previous_month_button")}
+          aria-label={getText("previous_month")}
           onClick={() =>
             setCurMonth((m: number) =>
               m === 0 ? (setCurYear((y: number) => y - 1), 11) : m - 1
@@ -74,7 +77,8 @@ export default function CalendarPage() {
           eventType="NEW_CALENDAR_EVENT_ADDED"
           index={1}
           className="p-2 rounded-full hover:bg-accent-forest/20"
-          aria-label="Next Month"
+          id={getId("next_month_button")}
+          aria-label={getText("next_month")}
           onClick={() =>
             setCurMonth((m) =>
               m === 11 ? (setCurYear((y) => y + 1), 0) : m + 1

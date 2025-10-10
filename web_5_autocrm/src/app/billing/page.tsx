@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_LOGS } from "@/library/dataset";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 
 export default function BillingPage() {
+  const { getText, getId } = useDynamicStructure();
   const [timerActive, setTimerActive] = useState(false);
   const [timerSec, setTimerSec] = useState(0);
   const [manual, setManual] = useState({
@@ -71,7 +73,7 @@ export default function BillingPage() {
   return (
     <section>
       <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
-        Time Tracking / Billing
+        {getText("billing_title")}
       </h1>
       <div className="flex gap-4 mb-8">
         <button
@@ -81,8 +83,10 @@ export default function BillingPage() {
               ? "bg-accent-forest/10 text-accent-forest shadow"
               : "text-zinc-700 hover:bg-zinc-100"
           }`}
+          id={getId("logs_tab_button")}
+          aria-label={getText("time_entries")}
         >
-          Logs
+          {getText("time_entries")}
         </button>
       </div>
       {tab === "Logs" && (
@@ -90,7 +94,7 @@ export default function BillingPage() {
           <div className="bg-white rounded-2xl shadow-card p-7 flex flex-col gap-6 border border-zinc-100 w-full max-w-sm">
             <div className="flex items-center gap-3 mb-2">
               <Timer className="w-7 h-7 text-accent-forest" />
-              <span className="font-bold text-xl">Timer</span>
+              <span className="font-bold text-xl">{getText("timer")}</span>
             </div>
             <div className="text-5xl font-bold tracking-tight text-[#1A1A1A] mb-2 select-none">
               {`${Math.floor(timerSec / 3600)
@@ -103,70 +107,72 @@ export default function BillingPage() {
             </div>
             <div className="flex gap-3">
               <button
-                id="timer-toggle-button"
+                id={getId("timer_toggle_button")}
                 className={`rounded-2xl px-5 py-3 font-bold text-lg shadow-sm flex items-center gap-2 transition ${
                   timerActive
                     ? "bg-red-500 hover:bg-red-600 text-white"
                     : "bg-accent-forest hover:bg-accent-forest/90 text-white"
                 }`}
                 onClick={timerActive ? stopTimer : startTimer}
-                aria-label={timerActive ? "Stop Timer" : "Start Timer"}
+                aria-label={timerActive ? getText("stop_timer") : getText("start_timer")}
               >
                 {timerActive ? (
                   <>
                     <PauseCircle className="w-6 h-6" />
-                    Stop
+                    {getText("stop_timer")}
                   </>
                 ) : (
                   <>
                     <PlayCircle className="w-6 h-6" />
-                    Start
+                    {getText("start_timer")}
                   </>
                 )}
               </button>
             </div>
           </div>
             <form
-              id="add-log-form"
+              id={getId("add_log_form")}
               onSubmit={addManual}
               className="bg-white rounded-2xl shadow-card p-7 flex flex-col gap-5 border border-zinc-100 w-full max-w-xl"
             >
               <div className="flex items-center gap-3 mb-1">
                 <Plus className="w-6 h-6 text-accent-forest" />
-                <span className="font-bold text-lg">Add Log Entry</span>
+                <span className="font-bold text-lg">{getText("add_time_entry")}</span>
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="manual-matter" className="text-sm font-medium text-zinc-700">
-                  Matter
+                <label htmlFor={getId("manual_matter_input")} className="text-sm font-medium text-zinc-700">
+                  {getText("matter_name")}
                 </label>
                 <input
-                  id="manual-matter"
+                  id={getId("manual_matter_input")}
                   className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
                   value={manual.matter}
                   onChange={(e) =>
                     setManual((m) => ({ ...m, matter: e.target.value }))
                   }
+                  placeholder={getText("matter_name")}
                   required
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="manual-description" className="text-sm font-medium text-zinc-700">
-                  Description
+                <label htmlFor={getId("manual_description_input")} className="text-sm font-medium text-zinc-700">
+                  {getText("task_description")}
                 </label>
                 <input
-                  id="manual-description"
+                  id={getId("manual_description_input")}
                   className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
                   value={manual.description}
                   onChange={(e) =>
                     setManual((m) => ({ ...m, description: e.target.value }))
                   }
+                  placeholder={getText("task_description")}
                   required
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="manual-hours" className="text-sm font-medium text-zinc-700">Hours</label>
+                <label htmlFor={getId("manual_hours_input")} className="text-sm font-medium text-zinc-700">{getText("hours_logged")}</label>
                 <input
-                  id="manual-hours"
+                  id={getId("manual_hours_input")}
                   type="number"
                   step=".1"
                   min="0.1"
@@ -180,26 +186,27 @@ export default function BillingPage() {
                 />
               </div>
               <button
-                id="add-entry-button"
+                id={getId("add_entry_button")}
                 type="submit"
                 className="rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg"
+                aria-label={getText("add_time_entry")}
               >
-                Add Entry
+                {getText("add_time_entry")}
               </button>
             </form>
         </div>
       )}
       {tab === "Logs" && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-5">Recent Logs</h2>
+          <h2 className="text-lg font-semibold mb-5">{getText("recent_activity")}</h2>
           <div className="flex flex-col gap-4">
             {logs.length === 0 && (
               <div
-                id="no-logs-message"
+                id={getId("no_logs_message")}
                 data-testid="no-logs-message"
                 className="text-zinc-400 px-4 py-8 text-center"
               >
-                No logs yet.
+                {getText("no_logs_yet")}
               </div>
             )}
             {logs.map((l) => (
@@ -252,11 +259,11 @@ export default function BillingPage() {
                   </span>
                 </div>
                 <button
-                  id={`delete-log-${l.id}`}
+                  id={`${getId("delete_log_button")}-${l.id}`}
                   className="absolute right-3 top-3 text-zinc-300 hover:text-red-500 rounded-full"
-                  title="Delete"
+                  title={getText("delete_button")}
                   onClick={() => deleteLog(l.id)}
-                  aria-label={`Delete log entry for ${l.matter}`}
+                  aria-label={`${getText("delete_button")} ${l.matter}`}
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
@@ -267,9 +274,4 @@ export default function BillingPage() {
       )}
     </section>
   );
-	return (
-		<section>
-			<h1 className="text-3xl font-extrabold mb-10 tracking-tight">Time Tracking / Billing</h1>
-		</section>
-	);
 }

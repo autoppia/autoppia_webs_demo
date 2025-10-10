@@ -3,8 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Accept build argument
-ARG ENABLE_DYNAMIC_HTML=false
+# Accept build arguments
+ARG ENABLE_DYNAMIC_HTML=true
+ARG ENABLE_DYNAMIC_STRUCTURE=true
 
 COPY package.json package-lock.json ./
 
@@ -16,12 +17,14 @@ COPY . .
 # Set environment variables for build
 ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
 ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE=${ENABLE_DYNAMIC_STRUCTURE}
 ENV DOCKER_BUILD=true
 
 # Debug: Print environment variables
 RUN echo "🔍 Build environment variables:"
 RUN echo "  ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}"
 RUN echo "  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}"
+RUN echo "  NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE: ${ENABLE_DYNAMIC_STRUCTURE}"
 RUN echo "  DOCKER_BUILD: ${DOCKER_BUILD}"
 
 RUN npm run build
