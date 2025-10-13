@@ -5,10 +5,6 @@ services:
       dockerfile: Dockerfile
       args:
         ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-false}
-    # En producción NO montes tu código: deja que la imagen lleve la build
-    # volumes:
-    #   - .:/app
-    #   - /app/node_modules
     ports:
       - "${WEB_PORT}:8002"
     restart: always
