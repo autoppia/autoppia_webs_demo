@@ -703,7 +703,6 @@ function CalendarApp() {
 
   function handleModalSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     // --- Full Form Validation ---
     // Required fields
     if (!eventModal.label || eventModal.label.trim() === "") {

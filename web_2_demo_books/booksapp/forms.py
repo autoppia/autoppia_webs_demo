@@ -24,8 +24,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ["name", "desc", "year", "director", "duration",
-                  "trailer_url", "rating", "genres", "user"]
+        fields = ["name", "desc", "year", "director", "duration", "trailer_url", "rating", "genres", "user"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter the book name"}),
             "desc": forms.Textarea(
@@ -95,8 +94,7 @@ class BookForm(forms.ModelForm):
         elif not book.user:  # For updates, ensure we don't overwrite with None
             pass
         else:
-            raise ValueError(
-                "User must be provided to create or update a book.")
+            raise ValueError("User must be provided to create or update a book.")
 
         book.img = self.cleaned_data["img"] or None
 
@@ -136,10 +134,8 @@ class CommentForm(forms.ModelForm):
 
 # Custom login form with Bootstrap styling
 class CustomLoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={"class": "form-control", "placeholder": "Username"}))
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={"class": "form-control", "placeholder": "Password"}))
+    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Username"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"}))
 
 
 # Custom registration form with Bootstrap styling
@@ -147,8 +143,7 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         max_length=254,
         help_text="Required. Enter a valid email address.",
-        widget=forms.EmailInput(
-            attrs={"class": "form-control", "placeholder": "Email"}),
+        widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email"}),
     )
 
     class Meta:
@@ -158,12 +153,9 @@ class SignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
         # Add Bootstrap classes to default fields
-        self.fields["username"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Username"})
-        self.fields["password1"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Password"})
-        self.fields["password2"].widget.attrs.update(
-            {"class": "form-control", "placeholder": "Confirm Password"})
+        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Username"})
+        self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Password"})
+        self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Confirm Password"})
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
@@ -176,8 +168,7 @@ class SignUpForm(UserCreationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ["bio", "profile_pic",
-                  "favorite_genres", "website", "location"]
+        fields = ["bio", "profile_pic", "favorite_genres", "website", "location"]
         widgets = {
             "bio": forms.Textarea(
                 attrs={
@@ -217,15 +208,11 @@ class UserForm(forms.ModelForm):
 class ContactForm(forms.Form):
     name = forms.CharField(
         max_length=100,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Your name"}),
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Your name"}),
     )
-    email = forms.EmailField(widget=forms.EmailInput(
-        attrs={"class": "form-control", "placeholder": "Your email address"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Your email address"}))
     subject = forms.CharField(
         max_length=200,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "What is this regarding?"}),
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "What is this regarding?"}),
     )
-    message = forms.CharField(widget=forms.Textarea(
-        attrs={"class": "form-control", "placeholder": "Your message", "rows": 5}))
+    message = forms.CharField(widget=forms.Textarea(attrs={"class": "form-control", "placeholder": "Your message", "rows": 5}))

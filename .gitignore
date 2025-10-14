@@ -78,5 +78,8 @@ dmypy.json
 cython_debug/
 .idea/
 
-*/.next/
-*/node_modules/
+
+# Node Modules
+**/node_modules/
+**/.next/
+**/next-env.d.ts
