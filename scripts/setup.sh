@@ -1,19 +1,5 @@
 #!/usr/bin/env bash
 # setup.sh - Deploy all web demo projects + API (webs_server) with isolation
-#
-# Usage:
-#   bash setup.sh --demo=autodrive --web_port=8012 --enable_dynamic_html=true
-#   bash setup.sh --demo=autolist --web_port=8011 --enable_dynamic_html=false  
-#   bash setup.sh --demo=autocrm --web_port=8013
-#   bash setup.sh --demo=all
-#
-# Options:
-#   --demo=[movies|books|autozone|autodining|autocrm|automail|autolist|autodrive|all]
-#   --web_port=PORT (default: 8000)
-#   --postgres_port=PORT (default: 5434) 
-#   --webs_port=PORT (default: 8090)
-#   --webs_postgres=PORT (default: 5437)
-#   --enable_dynamic_html=[true|false] (default: false) - Enables dynamic HTML layouts
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -178,8 +164,20 @@ case "$WEB_DEMO" in
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
     deploy_webs_server
     ;;
-  autodrive)
-    deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
+  autoconnect)
+    deploy_project "web_9_autoconnect" "$WEB_PORT" "" "autoconnect_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autowork)
+    deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autocalendar)
+    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
+     deploy_webs_server
+    ;;
+  autolist)
+    deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
@@ -191,11 +189,14 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
     deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalender_$((WEB_PORT + 10))"
+    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
     deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use movies, books, autozone, autodining, autocrm, automail, autolodge, autodrive, or all."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autolist' or 'all'."
     exit 1
     ;;
 esac
