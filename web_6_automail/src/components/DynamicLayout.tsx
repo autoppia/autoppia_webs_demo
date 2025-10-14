@@ -15,7 +15,7 @@ export function DynamicLayout() {
   const { currentEmail } = useEmail();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
-  console.log('DynamicLayout: Rendering with seed:', seed, 'variant:', currentVariant.name);
+  // console.log('DynamicLayout: Rendering with seed:', seed, 'variant:', currentVariant.name);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);

@@ -9,12 +9,12 @@ export function SeedTestPanel() {
   const [testValue, setTestValue] = useState(seed);
 
   const handleDirectSet = () => {
-    console.log('SeedTestPanel: Direct set to:', testValue);
+    // console.log('SeedTestPanel: Direct set to:', testValue);
     setSeed(testValue);
   };
 
   const handleForceUpdate = () => {
-    console.log('SeedTestPanel: Force update to:', testValue);
+    // console.log('SeedTestPanel: Force update to:', testValue);
     // Force URL update
     const url = new URL(window.location.href);
     url.searchParams.set('seed', testValue.toString());

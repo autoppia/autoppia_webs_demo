@@ -24,13 +24,13 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const urlSeed = getSeedFromUrl();
     const effectiveSeed = getEffectiveSeed(urlSeed);
-    console.log('LayoutProvider: Initial seed from URL:', urlSeed, 'Effective seed:', effectiveSeed, 'Current seed state:', seed);
+    // console.log('LayoutProvider: Initial seed from URL:', urlSeed, 'Effective seed:', effectiveSeed, 'Current seed state:', seed);
     if (effectiveSeed !== seed) {
-      console.log('LayoutProvider: Updating seed from URL:', effectiveSeed);
+      // console.log('LayoutProvider: Updating seed from URL:', effectiveSeed);
       setSeed(effectiveSeed);
       setCurrentVariant(getLayoutVariant(effectiveSeed));
     } else {
-      console.log('LayoutProvider: Seed already matches URL, no update needed');
+      // console.log('LayoutProvider: Seed already matches URL, no update needed');
     }
   }, [seed]); // Include seed dependency
 
@@ -39,7 +39,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     const handlePopState = () => {
       const urlSeed = getSeedFromUrl();
       const effectiveSeed = getEffectiveSeed(urlSeed);
-      console.log('LayoutProvider: URL changed via browser navigation, new seed:', urlSeed, 'Effective seed:', effectiveSeed);
+      // console.log('LayoutProvider: URL changed via browser navigation, new seed:', urlSeed, 'Effective seed:', effectiveSeed);
       if (effectiveSeed !== seed) {
         // This is not a user action, so don't set the flag
         setSeed(effectiveSeed);
@@ -52,7 +52,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   // Update URL when seed changes (but don't override manual URL changes)
   useEffect(() => {
-    console.log('LayoutProvider: Seed changed to:', seed, 'Is user action:', isUserAction);
+    // console.log('LayoutProvider: Seed changed to:', seed, 'Is user action:', isUserAction);
     setCurrentVariant(getLayoutVariant(seed));
     
     // Only update URL if this was a user-initiated change and dynamic HTML is enabled
@@ -68,7 +68,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
       }
       
       window.history.replaceState({}, '', url.toString());
-      console.log('LayoutProvider: User action - Updated URL to:', url.toString());
+      // console.log('LayoutProvider: User action - Updated URL to:', url.toString());
       
       // Reset the flag
       setIsUserAction(false);
@@ -76,19 +76,19 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   }, [seed, isUserAction]);
 
   const handleSetSeed = (newSeed: number) => {
-    console.log('LayoutProvider: handleSetSeed called with:', newSeed);
+    // console.log('LayoutProvider: handleSetSeed called with:', newSeed);
     if (newSeed >= 1 && newSeed <= 300) {
       const effectiveSeed = getEffectiveSeed(newSeed);
-      console.log('LayoutProvider: Setting seed to:', effectiveSeed);
+      // console.log('LayoutProvider: Setting seed to:', effectiveSeed);
       setIsUserAction(true); // Mark this as a user action
       setSeed(effectiveSeed);
     } else {
-      console.log('LayoutProvider: Invalid seed value:', newSeed);
+      // console.log('LayoutProvider: Invalid seed value:', newSeed);
     }
   };
 
   const updateUrlManually = (newSeed: number) => {
-    console.log('LayoutProvider: Manual URL update called with:', newSeed);
+    // console.log('LayoutProvider: Manual URL update called with:', newSeed);
     if (newSeed >= 1 && newSeed <= 300) {
       const effectiveSeed = getEffectiveSeed(newSeed);
       if (typeof window !== 'undefined') {
@@ -101,7 +101,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
         }
         
         window.history.pushState({}, '', url.toString());
-        console.log('LayoutProvider: Manually updated URL to:', url.toString());
+        // console.log('LayoutProvider: Manually updated URL to:', url.toString());
         
         // Update the seed state to match the URL (not a user action)
         setSeed(effectiveSeed);
