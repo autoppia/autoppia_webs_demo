@@ -18,12 +18,6 @@ ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
 ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
 ENV DOCKER_BUILD=true
 
-# Debug: Print environment variables
-RUN echo "🔍 Build environment variables:"
-RUN echo "  ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}"
-RUN echo "  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}"
-RUN echo "  DOCKER_BUILD: ${DOCKER_BUILD}"
-
 RUN npm run build
 
 # Stage 2: Create the lean production image
