@@ -22,9 +22,7 @@ def index(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = (
-        Book.objects.values_list("year", flat=True).distinct().order_by("-year")
-    )
+    available_years = Book.objects.values_list("year", flat=True).distinct().order_by("-year")
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -36,11 +34,7 @@ def index(request):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        books = books.filter(
-            Q(name__icontains=search_query)
-            | Q(desc__icontains=search_query)
-            | Q(director__icontains=search_query)
-        ).distinct()
+        books = books.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
 
     from events.models import Event
 
@@ -119,30 +113,20 @@ def detail(request, book_id):
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
 
     # Registrar evento de detalle de libro
-    detail_event = Event.create_book_detail_event(
-        request.user if request.user.is_authenticated else None, web_agent_id, book
-    )
+    detail_event = Event.create_book_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, book)
     detail_event.save()
 
     # Libros relacionados
     related_books = []
     if book.genres.exists():
-        related_books = (
-            Book.objects.filter(genres__in=book.genres.all())
-            .exclude(id=book.id)
-            .distinct()[:4]
-        )
+        related_books = Book.objects.filter(genres__in=book.genres.all()).exclude(id=book.id).distinct()[:4]
 
     if len(related_books) < 4:
-        more_books = Book.objects.filter(year=book.year).exclude(
-            id__in=[m.id for m in list(related_books) + [book]]
-        )[: 4 - len(related_books)]
+        more_books = Book.objects.filter(year=book.year).exclude(id__in=[m.id for m in list(related_books) + [book]])[: 4 - len(related_books)]
         related_books = list(related_books) + list(more_books)
 
     if len(related_books) < 4:
-        random_books = Book.objects.exclude(
-            id__in=[m.id for m in list(related_books) + [book]]
-        ).order_by("?")[: 4 - len(related_books)]
+        random_books = Book.objects.exclude(id__in=[m.id for m in list(related_books) + [book]]).order_by("?")[: 4 - len(related_books)]
         related_books = list(related_books) + list(random_books)
 
     comments = Comment.objects.filter(movie=book)
@@ -178,9 +162,7 @@ def mybook(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = (
-        Book.objects.values_list("year", flat=True).distinct().order_by("-year")
-    )
+    available_years = Book.objects.values_list("year", flat=True).distinct().order_by("-year")
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -192,11 +174,7 @@ def mybook(request):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        books = books.filter(
-            Q(name__icontains=search_query)
-            | Q(desc__icontains=search_query)
-            | Q(director__icontains=search_query)
-        ).distinct()
+        books = books.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
 
     from events.models import Event
 
@@ -462,14 +440,8 @@ def add_comment(request, book_id):
                         "comment": {
                             "name": comment.name,
                             "content": comment.content,
-                            "created_at": comment.created_at.strftime(
-                                "%b %d, %Y, %I:%M %p"
-                            ),
-                            "time_ago": (
-                                f"{(timezone.now() - comment.created_at).days} days ago"
-                                if (timezone.now() - comment.created_at).days > 0
-                                else "Today"
-                            ),
+                            "created_at": comment.created_at.strftime("%b %d, %Y, %I:%M %p"),
+                            "time_ago": (f"{(timezone.now() - comment.created_at).days} days ago" if (timezone.now() - comment.created_at).days > 0 else "Today"),
                             "avatar": comment.avatar.url if comment.avatar else None,
                         },
                     }
@@ -516,9 +488,7 @@ def contact(request):
             message = form.cleaned_data["message"]
 
             # Crear el mensaje de contacto
-            contact_message = ContactMessage.objects.create(
-                name=name, email=email, subject=subject, message=message
-            )
+            contact_message = ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
 
             # Crear evento de CONTACT
             contact_event = Event.create_contact_event(
@@ -613,15 +583,11 @@ def register_view(request):
             error = True
 
         if not error:
-            user = User.objects.create_user(
-                username=username, email=email, password=password1
-            )
+            user = User.objects.create_user(username=username, email=email, password=password1)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
             register_event = Event.create_registration_event(user, web_agent_id)
             register_event.save()
-            messages.success(
-                request, f"Account created successfully. Welcome, {username}!"
-            )
+            messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect("booksapp:index")
 
     return render(request, "register.html")

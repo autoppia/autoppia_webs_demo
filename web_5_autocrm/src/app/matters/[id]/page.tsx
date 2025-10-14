@@ -9,7 +9,8 @@ import {
 } from "lucide-react";
 import React, { useState, useMemo, useEffect } from "react";
 import Cookies from "js-cookie";
-
+import {EVENT_TYPES, logEvent} from "@/library/events";
+import { DEMO_MATTERS } from "@/library/dataset";
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
   { name: "Documents", icon: <FileText className="w-5 h-5 mr-1" /> },
@@ -17,53 +18,14 @@ const TABS = [
   { name: "Activity", icon: <Clock className="w-5 h-5 mr-1" /> },
 ];
 
-const DEMO_MATTERS = [
-  {
-    id: "MAT-0012",
-    name: "Estate Planning",
-    status: "Active",
-    client: "Smith & Co.",
-    updated: "Today",
-    opened: "April 8, 2024",
-    description:
-      "Wills, trusts, powers of attorney. Review client docs and manage billables.",
-  },
-  {
-    id: "MAT-0011",
-    name: "Contract Review",
-    status: "Archived",
-    client: "Jones Legal",
-    updated: "2 days ago",
-    opened: "March 14, 2024",
-    description: "Review and finalize commercial agreements.",
-  },
-  {
-    id: "MAT-0009",
-    name: "IP Filing",
-    status: "Active",
-    client: "Acme Biotech",
-    updated: "Last week",
-    opened: "Feb 2, 2024",
-    description: "Manage patent filing and related IP documentation.",
-  },
-  {
-    id: "MAT-0005",
-    name: "M&A Advice",
-    status: "On Hold",
-    client: "Peak Ventures",
-    updated: "Yesterday",
-    opened: "Jan 20, 2024",
-    description: "Strategic legal counsel for merger assessment.",
-  },
-];
 type Matter = {
   id: string;
   name: string;
   status: string;
   client: string;
   updated: string;
-  opened: string;
-  description: string;
+  // opened: string;
+  // description: string;
 };
 
 export default function MatterDetailPage() {
@@ -71,6 +33,7 @@ export default function MatterDetailPage() {
   const [tab, setTab] = useState("Overview");
   const [summaryOpen, setSummaryOpen] = useState(true);
   const [customMatters, setCustomMatters] = useState<Matter[]>([]);
+  const [currentMatter, setCurrentMatter] = useState<Matter | null>(null);
   const params = useParams();
   const matterId = params?.id as string;
 
@@ -79,19 +42,28 @@ export default function MatterDetailPage() {
     if (cookie) setCustomMatters(JSON.parse(cookie));
   }, []);
 
-  const summary = useMemo(() => {
-    return (
-      [...customMatters, ...DEMO_MATTERS].find((m) => m.id === matterId) ?? {
-        id: matterId,
-        name: "Matter Not Found",
-        status: "Unknown",
-        client: "-",
-        updated: "-",
-        opened: "-",
-        description: "This matter could not be found. Please check the ID.",
-      }
-    );
+  useEffect(() => {
+    if (!matterId) return;
+
+    const allMatters = [...customMatters, ...DEMO_MATTERS];
+    const matter = allMatters.find((m) => m.id === matterId);
+    if (matter) {
+      setCurrentMatter(matter);
+      logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, matter);
+    } else {
+      console.warn(`Matter with ID ${matterId} not found.`);
+      setCurrentMatter(null);
+    }
   }, [matterId, customMatters]);
+
+  // If the matter is not found or still loading, you might want to show a loading state or an error
+  if (!currentMatter) {
+    return (
+      <section className="flex justify-center items-center h-screen">
+        <p className="text-zinc-500">Loading matter details or matter not found...</p>
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col lg:flex-row gap-10">
@@ -100,7 +72,7 @@ export default function MatterDetailPage() {
         <div className="bg-white rounded-2xl shadow-card p-8 flex flex-col gap-4 mb-6 border border-zinc-100">
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-xl text-[#1A1A1A]">
-              {summary.name}
+              {currentMatter.name}
             </span>
             <button
               aria-label="collapse"
@@ -118,27 +90,27 @@ export default function MatterDetailPage() {
             <>
               <div className="flex items-center gap-3 mb-2">
                 <span className="inline-block px-3 py-1 bg-accent-forest/10 text-accent-forest rounded-2xl text-xs font-medium">
-                  {summary.status}
+                  {currentMatter.status}
                 </span>
                 <span className="text-xs text-zinc-400 font-mono">
-                  {summary.id}
+                  {currentMatter.id}
                 </span>
               </div>
               <dl className="text-sm text-zinc-500 font-medium space-y-1">
                 <div>
                   <dt className="inline">Client: </dt>
                   <dd className="inline text-zinc-700 font-semibold ml-1">
-                    {summary.client}
+                    {currentMatter.client}
                   </dd>
                 </div>
                 <div>
                   <dt className="inline">Last updated: </dt>
-                  <dd className="inline ml-1">{summary.updated}</dd>
+                  <dd className="inline ml-1">{currentMatter.updated}</dd>
                 </div>
               </dl>
-              <p className="text-zinc-600 mt-3 font-normal text-sm leading-relaxed">
-                {summary.description}
-              </p>
+              {/*<p className="text-zinc-600 mt-3 font-normal text-sm leading-relaxed">*/}
+              {/*  {currentMatter.description}*/}
+              {/*</p>*/}
             </>
           )}
         </div>
@@ -149,6 +121,7 @@ export default function MatterDetailPage() {
           {TABS.map(({ name, icon }) => (
             <button
               key={name}
+              id={`tab-${name.toLowerCase()}`}
               className={`flex items-center px-5 py-2 rounded-2xl font-semibold text-md transition-colors ${
                 name === tab
                   ? "bg-accent-forest/10 text-accent-forest shadow"

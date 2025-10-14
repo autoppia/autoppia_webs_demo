@@ -1,0 +1,42 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
+    ports:
+      - "127.0.0.1:${WEB_PORT}:8000"
+    environment:
+      - DEBUG=0
+      - DB_NAME=web1_movies
+      - DB_USER=postgres
+      - DB_PASSWORD=autoppia_2025
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+    networks:
+      - web1_net
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=web1_movies
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=autoppia_2025
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT}:5432"
+    volumes:
+      - web1_db_data:/var/lib/postgresql/data
+    networks:
+      - web1_net
+
+volumes:
+  web1_db_data:
+
+networks:
+  web1_net:
+    driver: bridge

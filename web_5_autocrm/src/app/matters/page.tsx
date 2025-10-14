@@ -14,49 +14,9 @@ import {
 const STORAGE_KEY = "matters";
 import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-const DEMO_MATTERS = [
-  { id: "MAT-0012", name: "Estate Planning", status: "Active", client: "Smith & Co.", updated: "Today" },
-  { id: "MAT-0011", name: "Contract Review", status: "Archived", client: "Jones Legal", updated: "2 days ago" },
-  { id: "MAT-0009", name: "IP Filing", status: "Active", client: "Acme Biotech", updated: "Last week" },
-  { id: "MAT-0005", name: "M&A Advice", status: "On Hold", client: "Peak Ventures", updated: "Yesterday" },
-  { id: "MAT-0020", name: "Trademark Registration", status: "Active", client: "Olivia Martinez", updated: "1d ago" },
-  { id: "MAT-0021", name: "Patent Analysis", status: "On Hold", client: "TechNova Inc.", updated: "3d ago" },
-  { id: "MAT-0022", name: "Corporate Formation", status: "Active", client: "Chen Legal Group", updated: "Today" },
-  { id: "MAT-0023", name: "Partnership Agreement", status: "Archived", client: "BrightMind Ltd.", updated: "2w ago" },
-  { id: "MAT-0024", name: "IP Litigation", status: "Active", client: "Zara Sheikh", updated: "Yesterday" },
-  { id: "MAT-0025", name: "Shareholder Dispute", status: "Active", client: "Al-Madina Textiles", updated: "3d ago" },
-  { id: "MAT-0026", name: "License Drafting", status: "On Hold", client: "Nova Enterprises", updated: "5d ago" },
-  { id: "MAT-0027", name: "Employee Contracts", status: "Archived", client: "Grace Consulting", updated: "1w ago" },
-  { id: "MAT-0028", name: "Real Estate Purchase", status: "Active", client: "Mohammed Anwar", updated: "Yesterday" },
-  { id: "MAT-0029", name: "Data Protection Audit", status: "Active", client: "Sunrise Partners", updated: "2d ago" },
-  { id: "MAT-0030", name: "Debt Collection", status: "Archived", client: "GreenLeaf Holdings", updated: "3d ago" },
-  { id: "MAT-0031", name: "Technology Transfer", status: "On Hold", client: "David Thompson", updated: "2w ago" },
-  { id: "MAT-0032", name: "Joint Venture Setup", status: "Active", client: "Yuki Tanaka", updated: "Today" },
-  { id: "MAT-0033", name: "Compliance Review", status: "Active", client: "Skyline Architects", updated: "Yesterday" },
-  { id: "MAT-0034", name: "Business Incorporation", status: "On Hold", client: "Fatima Noor", updated: "3w ago" },
-  { id: "MAT-0035", name: "Franchise Agreement", status: "Archived", client: "Visionary Lab", updated: "1d ago" },
-  { id: "MAT-0036", name: "Land Acquisition", status: "Active", client: "Eleanor White", updated: "2d ago" },
-  { id: "MAT-0037", name: "Vendor Contract", status: "Active", client: "EcoBuild Solutions", updated: "Last week" },
-  { id: "MAT-0038", name: "Copyright Filing", status: "On Hold", client: "Carlos Rivera", updated: "5d ago" },
-  { id: "MAT-0039", name: "Startup Advisory", status: "Active", client: "Global Reach Inc.", updated: "Yesterday" },
-  { id: "MAT-0040", name: "Internal Investigation", status: "Archived", client: "Jin Park", updated: "2w ago" },
-  { id: "MAT-0041", name: "Financial Compliance", status: "Active", client: "Aurora Media", updated: "Today" },
-  { id: "MAT-0042", name: "Supplier Dispute", status: "On Hold", client: "Trinity Pharma", updated: "4d ago" },
-  { id: "MAT-0043", name: "Regulatory Approval", status: "Archived", client: "George Maxwell", updated: "1w ago" },
-  { id: "MAT-0044", name: "Government Tender", status: "Active", client: "NextGen Realty", updated: "3d ago" },
-  { id: "MAT-0045", name: "Joint Ownership Case", status: "On Hold", client: "Rebecca Clark", updated: "5d ago" },
-  { id: "MAT-0046", name: "Investment Deal Review", status: "Active", client: "Gulf Horizons", updated: "Yesterday" },
-  { id: "MAT-0047", name: "Business Dissolution", status: "Archived", client: "Starlight Finance", updated: "1w ago" },
-  { id: "MAT-0048", name: "Legal Risk Audit", status: "Active", client: "Anastasia Romanov", updated: "3d ago" },
-  { id: "MAT-0049", name: "Engineering IP Audit", status: "On Hold", client: "Quantum Engineering", updated: "Today" },
-  { id: "MAT-0050", name: "Tax Compliance", status: "Active", client: "Nina Patel", updated: "2d ago" },
-  { id: "MAT-0051", name: "Security Policy Review", status: "Archived", client: "Bravo Security", updated: "Last week" },
-  { id: "MAT-0052", name: "HR Law Training", status: "Active", client: "Jade Harper", updated: "Yesterday" },
-  { id: "MAT-0053", name: "IT Contract Negotiation", status: "On Hold", client: "Arctic Tech", updated: "4d ago" },
-  { id: "MAT-0054", name: "Asset Sale", status: "Active", client: "Theodore Lee", updated: "Today" },
-  { id: "MAT-0055", name: "Outsourcing Agreement", status: "Archived", client: "Ravi Gupta", updated: "2d ago" },
-  { id: "MAT-0056", name: "Joint Patent Filing", status: "Active", client: "Meera Shah", updated: "3w ago" },
-];
+import { DEMO_MATTERS } from "@/library/dataset";
+
+
 
 function statusPill(status: string) {
   let color = "bg-accent-forest/10 text-accent-forest";
@@ -166,13 +126,17 @@ export default function MattersListPage() {
   };
 
   return (
-    <section>
+    <section id="matters-page">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 md:gap-0">
-        <h1 className="text-3xl md:text-[2.25rem] font-extrabold tracking-tight">
+        <h1
+          id="matters-title"
+          className="text-3xl md:text-[2.25rem] font-extrabold tracking-tight"
+        >
           Matters
         </h1>
         <div className="flex gap-2">
           <button
+            id="new-matter-button"
             className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent-forest text-white font-medium text-sm shadow-sm hover:bg-accent-forest/90 transition"
             onClick={() => setOpenNew(true)}
           >
@@ -182,11 +146,13 @@ export default function MattersListPage() {
       </div>
       {/* Table Head */}
       <div
+        id="matters-table-header"
         className="hidden md:grid grid-cols-7 items-center px-6 text-sm text-zinc-500 uppercase tracking-wide mb-3 select-none"
         style={{ letterSpacing: "0.06em" }}
       >
         <span>
           <input
+            id="select-all-checkbox"
             type="checkbox"
             className="accent-accent-forest w-5 h-5 rounded-xl border-zinc-200"
             checked={allSelected}
@@ -203,10 +169,13 @@ export default function MattersListPage() {
         <span>Updated</span>
         <span></span>
       </div>
-      <div className="flex flex-col gap-3">
+
+      <div id="matters-list" className="flex flex-col gap-3">
         {matters.map((m) => (
           <div
             key={m.id}
+            id={`matter-row-${m.id}`}
+            data-testid={`matter-${m.id}`}
             className={`group bg-white rounded-2xl shadow-card border border-zinc-100 hover:border-accent-forest/40 hover:shadow-lg transition p-6 flex flex-col md:grid md:grid-cols-7 items-center gap-2 md:gap-0 no-underline ${
               isSelected(m.id) ? "ring-2 ring-accent-forest/30" : ""
             }`}
@@ -214,42 +183,71 @@ export default function MattersListPage() {
             {/* Select checkbox */}
             <div onClick={(e) => e.stopPropagation()}>
               <input
+                id={`checkbox-${m.id}`}
+                data-testid={`checkbox-${m.id}`}
                 type="checkbox"
                 checked={isSelected(m.id)}
                 onChange={() => toggleSelect(m.id)}
-                aria-label="Select matter"
+                aria-label={`Select matter ${m.name}`}
                 className="accent-accent-forest w-5 h-5 rounded-xl border-zinc-200"
               />
             </div>
             <Link
               href={`/matters/${m.id}`}
+              id={`matter-link-${m.id}`}
+              data-testid={`matter-link-${m.id}`}
               onClick={() => logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, m)}
               className="col-span-6 grid grid-cols-6 w-full items-center"
             >
               <div className="col-span-2 flex items-center gap-3">
                 <Briefcase className="w-6 h-6 text-zinc-400" />
-                <span className="font-semibold text-md text-zinc-800">
+                <span
+                  id={`matter-name-${m.id}`}
+                  className="font-semibold text-md text-zinc-800"
+                >
                   {m.name}
                 </span>
               </div>
-              <div className="col-span-2 text-zinc-700">{m.client}</div>
-              <div className="flex items-center">{statusPill(m.status)}</div>
-              <div className="text-zinc-500">{m.updated}</div>
+              <div
+                id={`matter-client-${m.id}`}
+                className="col-span-2 text-zinc-700"
+              >
+                {m.client}
+              </div>
+              <div
+                id={`matter-status-${m.id}`}
+                className="flex items-center"
+              >
+                {statusPill(m.status)}
+              </div>
+              <div
+                id={`matter-updated-${m.id}`}
+                className="text-zinc-500"
+              >
+                {m.updated}
+              </div>
             </Link>
           </div>
         ))}
       </div>
       {/* Batch actions bar */}
       {selected.length > 0 && (
-        <div className="mt-12 flex gap-2 items-center text-sm text-zinc-500 justify-end animate-in fade-in">
+        <div
+          id="batch-actions-bar"
+          className="mt-12 flex gap-2 items-center text-sm text-zinc-500 justify-end animate-in fade-in"
+        >
           <span>Batch actions:</span>
           <button
+            id="archive-selected-button"
+            data-testid="archive-selected-button"
             className="rounded-2xl px-4 py-2 bg-zinc-200 text-zinc-700 font-semibold hover:bg-zinc-300 inline-flex gap-2 items-center"
             onClick={archiveSelected}
           >
             <Archive className="w-4 h-4" /> Archive
           </button>
           <button
+            id="delete-selected-button"
+            data-testid="delete-selected-button"
             className="rounded-2xl px-4 py-2 bg-red-500 text-white font-semibold hover:bg-red-600 inline-flex gap-2 items-center"
             onClick={deleteSelected}
           >
@@ -260,28 +258,37 @@ export default function MattersListPage() {
 
       {/* Modal for New Matter */}
       {openNew && (
-        <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center">
+        <div
+          id="new-matter-modal-overlay"
+          className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"
+        >
           <form
+            id="new-matter-form"
+            data-testid="new-matter-form"
             className="rounded-2xl bg-white w-full max-w-md p-8 shadow-2xl flex flex-col gap-6 border border-zinc-100 relative animate-in fade-in zoom-in-50"
             onSubmit={addMatter}
           >
             <button
+              id="close-modal-button"
               type="button"
               onClick={closeModal}
               className="absolute right-3 top-3 text-zinc-400 rounded-full hover:bg-zinc-100 p-2"
             >
               <X className="w-5 h-5" />
             </button>
-            <h2 className="text-2xl font-bold mb-2">New Matter</h2>
+            <h2 id="new-matter-modal-title" className="text-2xl font-bold mb-2">
+              New Matter
+            </h2>
             <div className="flex flex-col gap-2">
               <label
                 className="font-medium text-zinc-700"
-                htmlFor="matter-name"
+                htmlFor="matter-name-input"
               >
                 Matter Name
               </label>
               <input
-                id="matter-name"
+                id="matter-name-input"
+                data-testid="matter-name-input"
                 className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
                 required
                 value={newMatter.name}
@@ -293,12 +300,12 @@ export default function MattersListPage() {
             <div className="flex flex-col gap-2">
               <label
                 className="font-medium text-zinc-700"
-                htmlFor="matter-client"
+                htmlFor="matter-client-input"
               >
                 Client
               </label>
               <input
-                id="matter-client"
+                id="matter-client-input"
                 className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
                 required
                 value={newMatter.client}
@@ -308,8 +315,14 @@ export default function MattersListPage() {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <label className="font-medium text-zinc-700">Status</label>
+              <label
+                className="font-medium text-zinc-700"
+                htmlFor="matter-status-select"
+              >
+                Status
+              </label>
               <select
+                id="matter-status-select"
                 className="rounded-xl border border-zinc-200 px-4 py-3 text-md font-medium"
                 value={newMatter.status}
                 onChange={(e) =>
@@ -322,6 +335,7 @@ export default function MattersListPage() {
               </select>
             </div>
             <button
+              id="create-matter-submit-button"
               type="submit"
               className="rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg"
             >

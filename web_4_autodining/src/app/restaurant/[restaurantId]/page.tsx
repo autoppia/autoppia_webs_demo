@@ -8,7 +8,7 @@ import {
   ClockIcon,
 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Popover,
@@ -16,13 +16,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { format } from "date-fns";
-import React from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import Cookies from "js-cookie";
 import Link from "next/link";
+import { RestaurantsData } from "@/components/library/dataset";
+
+const photos = [
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150&fit=crop",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=150&h=150&fit=crop",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150&fit=crop",
+];
+
 const restaurantData: Record<
   string,
   {
@@ -39,174 +44,22 @@ const restaurantData: Record<
   }
 > = {};
 
-const namePool = [
-  "The Royal Dine",
-  "Vintage Bites",
-  "Evening Delight",
-  "River View Café",
-  "Fancy Lights Bistro",
-  "Urban Palate",
-  "Tandoori House",
-  "Zen Sushi",
-  "El Toro",
-  "Bella Vita",
-  "Coastal Catch",
-  "Harvest Table",
-  "Crimson Spoon",
-  "Golden Lotus",
-  "The Hungry Fork",
-  "Ocean's Plate",
-  "Fire & Spice",
-  "Olive & Vine",
-  "La Bella Cucina",
-  "Sunset Grill",
-  "Noir Brasserie",
-  "Blue Orchid",
-  "Saffron Garden",
-  "Rustic Roots",
-  "Amber Lounge",
-  "Bistro Lumière",
-  "Maple Hearth",
-  "Oak & Ember",
-  "Peppercorn Place",
-  "The Local Dish",
-  "Cedar Grove Café",
-  "Soleil Bistro",
-  "Brickhouse Eats",
-  "Wanderlust Grill",
-  "The Nest",
-  "Cafe Verona",
-  "Midtown Meals",
-  "Ginger & Thyme",
-  "Lavender & Sage",
-  "Hearthstone Inn",
-  "Juniper Table",
-  "The Garden Fork",
-  "Twilight Tapas",
-  "Meadow & Moor",
-  "The Vine",
-  "Ember Flame",
-  "Miso Modern",
-  "The Borough",
-  "Copper Kitchen",
-  "Pine & Poppy",
-];
-
-const cuisines = [
-  "French",
-  "Italian",
-  "American",
-  "Japanese",
-  "Mexican",
-  "Indian",
-  "Thai",
-  "Café",
-  "Mediterranean",
-];
-const areas = [
-  "Mission District",
-  "SOMA",
-  "North Beach",
-  "Downtown",
-  "Hayes Valley",
-  "Nob Hill",
-  "Japantown",
-  "Embarcadero",
-  "Marina",
-];
-const staticReviews = [
-  18, 22, 35, 47, 53, 62, 71, 28, 39, 44, 55, 66, 72, 80, 91, 24, 31, 42, 48,
-  60, 70, 15, 33, 45, 59, 63, 76, 81, 95, 38, 49, 51, 58, 64, 77, 82, 87, 90,
-  96, 99, 19, 26, 29, 36, 46, 54, 61, 73, 85, 88,
-];
-const staticBookings = [
-  6, 12, 17, 23, 27, 32, 37, 40, 43, 50, 57, 65, 67, 69, 74, 79, 84, 86, 89, 92,
-  94, 97, 98, 100, 13, 14, 16, 20, 21, 25, 30, 34, 41, 52, 56, 68, 75, 78, 83,
-  93, 7, 8, 9, 10, 11, 35, 38, 60, 70, 90,
-];
-const staticStars = [
-  3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3,
-  4, 5, 3, 4, 5, 4, 5, 3, 4, 5, 3, 4, 5, 4, 3, 4, 5, 3, 4, 5, 3, 4, 5, 4,
-];
-const staticPrices = [
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-  "$$$$",
-  "$$",
-  "$$$",
-];
-
-const photos = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
-  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
-];
-
-for (let i = 0; i < 50; i++) {
-  const id = `restaurant-${i + 1}`;
+// Populate restaurantData from jsonData
+RestaurantsData.forEach((item, index) => {
+  const id = `restaurant-${item.id}`;
   restaurantData[id] = {
-    name: namePool[i],
-    image: `/images/restaurant${(i % 19) + 1}.jpg`,
-    rating: staticStars[i],
-    reviews: staticReviews[i],
-    bookings: staticBookings[i],
-    price: staticPrices[i],
-    cuisine: cuisines[i % cuisines.length],
+    name: item.namepool,
+    image: `/images/restaurant${(index % 19) + 1}.jpg`,
+    rating: item.staticStars,
+    reviews: item.staticReviews,
+    bookings: item.staticBookings,
+    price: item.staticPrices,
+    cuisine: item.cuisine,
     tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${
-      namePool[i]
-    }, offering a fusion of flavors in the heart of ${
-      areas[i % areas.length]
-    }.`,
-    photos: photos,
+    desc: `Enjoy a delightful experience at ${item.namepool}, offering a fusion of flavors in the heart of ${item.area}.`,
+    photos,
   };
-}
-
+});
 export default function RestaurantPage() {
   const params = useParams();
   const id = params.restaurantId as string;
@@ -224,8 +77,10 @@ export default function RestaurantPage() {
       restaurantId: id,
       restaurantName: r.name,
       cuisine: r.cuisine,
+      desc: r.desc,
       area: "test",
       reviews: r.reviews,
+      bookings: r.bookings,
       rating: r.rating,
     });
   }, [id]);
@@ -240,6 +95,12 @@ export default function RestaurantPage() {
       {
         restaurantId: id,
         restaurantName: r.name,
+        cuisine: r.cuisine,
+        desc: r.desc,
+        area: "test",
+        reviews: r.reviews,
+        bookings: r.bookings,
+        rating: r.rating,
         action: newState ? "view_full_menu" : "collapse_menu",
         time,
         date: formattedDate,
@@ -261,12 +122,10 @@ export default function RestaurantPage() {
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const handlePeopleSelect = (n: number) => {
     setPeople(n);
-    Cookies.set("reservation_people", String(n));
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
   };
   const handleTimeSelect = (t: string) => {
     setTime(t);
-    Cookies.set("reservation_time", t);
     logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { time: t });
   };
   const timeOptions = [
@@ -297,7 +156,6 @@ export default function RestaurantPage() {
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
     if (d) {
-      Cookies.set("reservation_date", d.toISOString());
       // logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: d.toISOString() });
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: toLocalISO(d) });
     }
@@ -545,41 +403,47 @@ export default function RestaurantPage() {
             {/* Time slots */}
             <div className="mt-3">
               <div className="flex gap-1 mt-2 flex-wrap">
-                {["1:00 PM"].map((t) =>
-                  t !== "3:00 PM" ? (
-                    <Link
-                      key={t}
-                      href={`/booking/${id}/${encodeURIComponent(
-                        t
-                      )}?date=${formattedDate}&people=${people ?? ""}`}
-                      onClick={() =>
-                        logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                          restaurantId: id,
-                          restaurantName: r.name,
-                          date: formattedDate,
-                          time: time,
-                          people,
-                        })
-                      }
-                      passHref
-                    >
-                      <Button
-                        className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
-                        asChild
-                      >
-                        <span>Book Restaurant</span>
-                      </Button>
-                    </Link>
-                  ) : (
+                {time === "3:00 PM" ? (
+                  <Button
+                    variant="outline"
+                    className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
+                  >
+                    <span>{time}</span>
+                    <span className="ml-2">🔔 Notify me</span>
+                  </Button>
+                ) : time ? (
+                  <Link
+                    href={`/booking/${id}/${encodeURIComponent(
+                      time
+                    )}?date=${formattedDate}&people=${people ?? ""}`}
+                    onClick={() =>
+                      logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                        restaurantId: id,
+                        restaurantName: r.name,
+                        cuisine: r.cuisine,
+                        desc: r.desc,
+                        area: "test",
+                        reviews: r.reviews,
+                        bookings: r.bookings,
+                        rating: r.rating,
+                        date: formattedDate,
+                        time,
+                        people,
+                      })
+                    }
+                    passHref
+                  >
                     <Button
-                      key={t}
-                      variant="outline"
-                      className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
+                      className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
+                      asChild
                     >
-                      <span>3:00 PM</span>
-                      <span className="ml-2">🔔 Notify me</span>
+                      <span>Book Restaurant</span>
                     </Button>
-                  )
+                  </Link>
+                ) : (
+                  <div className="text-gray-500 text-sm mt-2">
+                    Please select a time
+                  </div>
                 )}
               </div>
             </div>
