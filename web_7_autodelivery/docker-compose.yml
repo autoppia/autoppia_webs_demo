@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${WEB_PORT}:8006"
+      - "127.0.0.1:${WEB_PORT}:8006"
     restart: always
     environment:
       - API_URL=http://app:8080
