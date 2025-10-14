@@ -10,9 +10,9 @@ import dayjs from "dayjs";
 import { countries, RestaurantsData } from "@/components/library/dataset";
 
 const photos = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
-  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150&fit=crop",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=150&h=150&fit=crop",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150&fit=crop",
 ];
 
 const restaurantData: Record<
