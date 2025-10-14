@@ -17,17 +17,13 @@ class Genre(models.Model):
 class Movie(models.Model):
     name = models.CharField(max_length=250)
     desc = models.TextField()
-    year = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(9999)])
+    year = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(9999)])
     img = models.ImageField(upload_to="gallery", blank=True, null=True)
     director = models.CharField(max_length=250, blank=True, null=True)
-    cast = models.TextField(blank=True, null=True,
-                            help_text="Names of actors separated by commas")
-    duration = models.IntegerField(
-        blank=True, null=True, help_text="Duration in minutes")
+    cast = models.TextField(blank=True, null=True, help_text="Names of actors separated by commas")
+    duration = models.IntegerField(blank=True, null=True, help_text="Duration in minutes")
     trailer_url = models.URLField(blank=True, null=True)
-    rating = models.FloatField(default=0.0, validators=[MinValueValidator(
-        0.0), MaxValueValidator(5.0)], help_text="Rating between 0 and 5")
+    rating = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)], help_text="Rating between 0 and 5")
     genres = models.ManyToManyField(Genre, blank=True, related_name="movies")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -48,13 +44,11 @@ class Movie(models.Model):
 
 
 class Comment(models.Model):
-    movie = models.ForeignKey(
-        Movie, on_delete=models.CASCADE, related_name="comments")
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="comments")
     name = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    avatar = models.ImageField(
-        upload_to="gallery/avatars", blank=True, null=True)
+    avatar = models.ImageField(upload_to="gallery/avatars", blank=True, null=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -64,13 +58,10 @@ class Comment(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     bio = models.TextField(max_length=500, blank=True, null=True)
-    profile_pic = models.ImageField(
-        upload_to="gallery/profiles", blank=True, null=True)
-    favorite_genres = models.ManyToManyField(
-        Genre, blank=True, related_name="user_favorites")
+    profile_pic = models.ImageField(upload_to="gallery/profiles", blank=True, null=True)
+    favorite_genres = models.ManyToManyField(Genre, blank=True, related_name="user_favorites")
     website = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
 
