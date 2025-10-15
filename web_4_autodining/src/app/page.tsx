@@ -8,12 +8,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format, parseISO, isValid } from "date-fns";
+import { format } from "date-fns";
 import {
   CalendarIcon,
   ClockIcon,
   UserIcon,
-  ChevronDownIcon,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -21,7 +20,7 @@ import React from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { getRestaurants, initializeRestaurants } from "@/library/dataset";
 import { useSearchParams } from "next/navigation";
-import { useSeedVariation, getSeedFromUrl } from "@/library/utils";
+import { useSeedVariation } from "@/library/utils";
 
 // UI restaurant type with required fields
 type UiRestaurant = {

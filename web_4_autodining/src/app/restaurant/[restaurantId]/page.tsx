@@ -94,16 +94,16 @@ export default function RestaurantPage() {
   }, [id]);
 
   useEffect(() => {
-    if (!r) return; // evita enviar si aún no hay datos
+    if (!r) return; // avoid sending until data is ready
     logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
       restaurantId: id,
-      restaurantName: r.name,
-      cuisine: r.cuisine,
-      desc: r.desc,
+      restaurantName: r?.name ?? "",
+      cuisine: r?.cuisine ?? "",
+      desc: r?.desc ?? "",
       area: "test",
-      reviews: r.reviews,
-      bookings: r.bookings,
-      rating: r.rating,
+      reviews: r?.reviews ?? 0,
+      bookings: r?.bookings ?? 0,
+      rating: r?.rating ?? 0,
     });
   }, [id, r]);
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
@@ -127,13 +127,13 @@ export default function RestaurantPage() {
       newState ? EVENT_TYPES.VIEW_FULL_MENU : EVENT_TYPES.COLLAPSE_MENU,
       {
         restaurantId: id,
-        restaurantName: r.name,
-        cuisine: r.cuisine,
-        desc: r.desc,
+        restaurantName: r?.name ?? "",
+        cuisine: r?.cuisine ?? "",
+        desc: r?.desc ?? "",
         area: "test",
-        reviews: r.reviews,
-        bookings: r.bookings,
-        rating: r.rating,
+        reviews: r?.reviews ?? 0,
+        bookings: r?.bookings ?? 0,
+        rating: r?.rating ?? 0,
         action: newState ? "view_full_menu" : "collapse_menu",
         time,
         date: formattedDate,
@@ -475,13 +475,13 @@ export default function RestaurantPage() {
                         onClick={() =>
                           logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                             restaurantId: id,
-                            restaurantName: r.name,
-                            cuisine: r.cuisine,
-                            desc: r.desc,
+                            restaurantName: r?.name ?? "",
+                            cuisine: r?.cuisine ?? "",
+                            desc: r?.desc ?? "",
                             area: "test",
-                            reviews: r.reviews,
-                            bookings: r.bookings,
-                            rating: r.rating,
+                            reviews: r?.reviews ?? 0,
+                            bookings: r?.bookings ?? 0,
+                            rating: r?.rating ?? 0,
                             date: formattedDate,
                             time,
                             people,
@@ -514,13 +514,13 @@ export default function RestaurantPage() {
                       onClick={() =>
                         logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                           restaurantId: id,
-                          restaurantName: r.name,
-                          cuisine: r.cuisine,
-                          desc: r.desc,
+                          restaurantName: r?.name ?? "",
+                          cuisine: r?.cuisine ?? "",
+                          desc: r?.desc ?? "",
                           area: "test",
-                          reviews: r.reviews,
-                          bookings: r.bookings,
-                          rating: r.rating,
+                          reviews: r?.reviews ?? 0,
+                          bookings: r?.bookings ?? 0,
+                          rating: r?.rating ?? 0,
                           date: formattedDate,
                           time,
                           people,

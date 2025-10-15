@@ -75,13 +75,13 @@ export default function Page() {
 
   const restaurantInfo = {
     restaurantId,
-    restaurantName: data.name,
-    rating: data.rating,
-    reviews: data.reviews,
-    bookings: data.bookings,
-    price: data.price,
-    cuisine: data.cuisine,
-    desc: data.desc,
+    restaurantName: data?.name ?? "",
+    rating: data?.rating ?? 0,
+    reviews: data?.reviews ?? 0,
+    bookings: data?.bookings ?? 0,
+    price: data?.price ?? "",
+    cuisine: data?.cuisine ?? "",
+    desc: data?.desc ?? "",
   };
 
   useEffect(() => {
@@ -205,7 +205,7 @@ export default function Page() {
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
         <h2 className="font-bold text-lg mt-8 mb-4">You’re almost done!</h2>
         <div className="flex items-center gap-3 mb-6">
-          <img
+            <img
             src={data?.image || "/images/restaurant1.jpg"}
             alt={data?.name || "Restaurant"}
             className="w-16 h-16 rounded-lg object-cover border"
@@ -253,7 +253,7 @@ export default function Page() {
                         ...restaurantInfo,
                         countryCode: country.code,
                         countryName: country.name,
-                        restaurantName: data.name,
+                        restaurantName: data?.name ?? "",
                       });
                     }}
                   >
@@ -307,11 +307,11 @@ export default function Page() {
                       (c) => c.code === e.target.value
                     )!;
                     setSelectedCountry(country);
-                    logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                      logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
                       ...restaurantInfo,
                       countryCode: country.code,
                       countryName: country.name,
-                      restaurantName: data.name,
+                        restaurantName: data?.name ?? "",
                     });
                   }}
                 >
