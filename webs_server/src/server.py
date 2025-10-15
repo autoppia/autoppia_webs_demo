@@ -206,11 +206,11 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:8002",
         "http://app:8002",
+        "http://app:8003",
         "http://localhost:8000",
         "http://localhost:8001",
+        "http://localhost:8002",
         "http://localhost:8003",
         "http://localhost:8004",
         "http://localhost:8005",
@@ -220,7 +220,6 @@ app.add_middleware(
         "http://localhost:8009",
         "http://localhost:8010",
         "http://127.0.0.1:3000",
-        "http://127.0.0.1:8002",
     ],
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
