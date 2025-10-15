@@ -1,3 +1,5 @@
+import { writeJson, readJson } from "@/shared/storage";
+
 export const countries = [
   { code: "AR", name: "Argentina", dial: "+54", flag: "🇦🇷" },
   { code: "AU", name: "Australia", dial: "+61", flag: "🇦🇺" },
@@ -603,9 +605,7 @@ export interface RestaurantGenerated {
 function readCachedRestaurants(): RestaurantGenerated[] | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = window.localStorage.getItem("autodining_generated_restaurants_v1");
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
+    const parsed = readJson("autodining_generated_restaurants_v1");
     return Array.isArray(parsed) ? (parsed as RestaurantGenerated[]) : null;
   } catch {
     return null;
@@ -614,12 +614,7 @@ function readCachedRestaurants(): RestaurantGenerated[] | null {
 
 function writeCachedRestaurants(items: RestaurantGenerated[]): void {
   if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(
-      "autodining_generated_restaurants_v1",
-      JSON.stringify(items)
-    );
-  } catch {}
+  writeJson("autodining_generated_restaurants_v1", items);
 }
 
 // Normalization
@@ -643,16 +638,16 @@ export function getRestaurants(): RestaurantGenerated[] {
   return dynamicRestaurants.length > 0
     ? dynamicRestaurants
     : RestaurantsData.map((item, index) => ({
-        id: `restaurant-${item.id}`,
-        name: item.namepool,
-        image: `/images/restaurant${(index % 19) + 1}.jpg`,
-        stars: item.staticStars,
-        reviews: item.staticReviews,
-        cuisine: item.cuisine,
-        price: item.staticPrices,
-        bookings: item.staticBookings,
-        area: item.area,
-      }));
+      id: `restaurant-${item.id}`,
+      name: item.namepool,
+      image: `/images/restaurant${(index % 19) + 1}.jpg`,
+      stars: item.staticStars,
+      reviews: item.staticReviews,
+      cuisine: item.cuisine,
+      price: item.staticPrices,
+      bookings: item.staticBookings,
+      area: item.area,
+    }));
 }
 
 export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
@@ -683,19 +678,42 @@ export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
         }
       }
     }
-  } catch {}
+  } catch (err) {
+    console.warn("[autodining] DB load attempt failed:", err);
+  }
   // Generation fallback
   try {
     const { isDataGenerationEnabled, generateProjectData } = await import("@/shared/data-generator");
+    console.log("isDataGenerationEnabled: ", isDataGenerationEnabled());
     if (isDataGenerationEnabled()) {
       const result = await generateProjectData("web_4_autodining", 60, ["International", "Italian", "Japanese", "Mexican", "American"]);
+      console.log("Generated restaurants:", result);
       if (result.success && result.data.length > 0) {
         dynamicRestaurants = normalizeRestaurants(result.data as RestaurantGenerated[]);
         writeCachedRestaurants(dynamicRestaurants);
         return dynamicRestaurants;
+      } else {
+        console.warn("[autodining] Data generation returned empty or failed; falling back to static dataset.");
+        dynamicRestaurants = normalizeRestaurants(
+          RestaurantsData.map((item, index) => ({
+            id: `restaurant-${item.id}`,
+            name: item.namepool,
+            image: `/images/restaurant${(index % 19) + 1}.jpg`,
+            stars: item.staticStars,
+            reviews: item.staticReviews,
+            cuisine: item.cuisine,
+            price: item.staticPrices,
+            bookings: item.staticBookings,
+            area: item.area,
+          })) as unknown as RestaurantGenerated[]
+        );
+        writeCachedRestaurants(dynamicRestaurants);
+        return dynamicRestaurants;
       }
     }
-  } catch {}
+  } catch (err) {
+    console.warn("[autodining] Data generation request failed:", err);
+  }
   dynamicRestaurants = [];
   return dynamicRestaurants;
 }

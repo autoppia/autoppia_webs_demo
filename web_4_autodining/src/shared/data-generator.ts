@@ -27,49 +27,41 @@ export interface ProjectDataConfig {
 
 // Project-specific configurations
 export const PROJECT_CONFIGS: Record<string, ProjectDataConfig> = {
-  'web_3_autozone': {
-    projectName: 'AutoZone E-commerce',
-    dataType: 'products',
+  'web_4_autodining': {
+    projectName: 'AutoDining Restaurants',
+    dataType: 'restaurants',
     interfaceDefinition: `
-export interface Product {
+export interface RestaurantGenerated {
   id: string;
-  title: string;
-  price: string;
+  name: string;
   image: string;
-  description?: string;
-  category?: string;
-  rating?: number;
-  brand?: string;
-  inStock?: boolean;
-  color?: string;
-  size?: string;
-  dimensions?: {
-    depth?: string;
-    length?: string;
-    width?: string;
-  };
-  careInstructions?: string;
+  cuisine?: string;
+  area?: string;
+  reviews?: number;
+  stars?: number;
+  price?: string;
+  bookings?: number;
 }
     `,
     examples: [
       {
-        id: "kitchen-1",
-        title: "Espresso Machine",
-        price: "$160.00",
-        image: "https://source.unsplash.com/featured/?espresso-machine",
-        description: "Professional-grade espresso machine with steam wand and programmable settings.",
-        category: "Kitchen",
-        rating: 4.5,
-        brand: "BrewMaster",
-        inStock: true
+        id: "restaurant-101",
+        name: "Juniper & Ash",
+        image: "https://images.unsplash.com/photo-1541542684-4a0b3cd7b2f5?w=640&h=480&fit=crop&auto=format&q=60",
+        cuisine: "Italian",
+        area: "Downtown",
+        reviews: 124,
+        stars: 4,
+        price: "$$$",
+        bookings: 23
       }
     ],
-    categories: ["Kitchen", "Electronics", "Home", "Fitness", "Technology"],
+    categories: ["International", "Italian", "Japanese", "Mexican", "American", "French", "Mediterranean", "Café", "Thai", "Indian"],
     namingRules: {
-      id: "{category}-{number}",
-      image: "https://source.unsplash.com/featured/?{name_snake_case}"
+      id: "restaurant-{number}",
+      image: "https://images.unsplash.com/photo-{random_food_hash}?w=640&h=480&fit=crop&auto=format&q=60"
     },
-      additionalRequirements: "Generate realistic e-commerce product data with proper pricing, descriptions, and categories. For the image field: use Unsplash only and ensure the photo semantically matches the title/brand/category (no placeholders). Prefer specific query terms like 'stainless-steel cookware set', 'gaming-laptop', 'yoga-mat'. You may also return a direct images.unsplash.com URL. Append size/quality params '?w=150&h=150&fit=crop&crop=entropy&auto=format&q=60'. Never return local paths or dummy names like 'image.png'."
+    additionalRequirements: "Generate realistic restaurant records suitable for a dining/booking site. Ensure 'image' uses Unsplash images related to restaurants/food/interiors and includes size/quality params. Provide balanced 'stars' (3-5), plausible 'reviews' and 'bookings', and common 'price' symbols ($, $$, $$$, $$$$). Prefer distinct 'name' values."
   }
 };
 
