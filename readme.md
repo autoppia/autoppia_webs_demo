@@ -41,12 +41,16 @@ demo-webs/
 ├── web_6_automail/
 ├── web_6_autodelivery/
 ├── web_8_autolodge/
+<<<<<<< HEAD
 ├── web_9_autoconnect/
 ├── web_10_autowork/
 ├── web_11_autocalendar/
 ├── web_12_autolist/
 ├── web_13_autodrive/
 ├── web_14_autohealth/
+=======
+├── web_13_autodrive/
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
 ├── webs_server/
 └── scripts/
     ├── install_docker.sh
@@ -67,23 +71,38 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Default Port Assignments**
 
-| Demo             | Web Port | DB Port | Notes                              |
+<<<<<<< HEAD
+| Demo | Web Port | DB Port | Notes |
 |------------------|----------| ------- | ---------------------------------- |
-| **Movies**       | 8000     | 5434    | Django + PostgreSQL                |
-| **Books**        | 8001     | 5435    | Django + PostgreSQL                |
-| **AutoZone**     | 8002     | —       | Next.js, no database required      |
-| **AutoDining**   | 8003     | —       | Next.js, no database required      |
-| **AutoCRM**      | 8004     | —       | Next.js, no database required      |
-| **AutoMail**     | 8005     | —       | Next.js, no database required      |
-| **AutoDelivery** | 8006     | —       | Next.js, no database required      |
-| **AutoLodge**    | 8007     | —       | Next.js, no database required      |
-| **AutoConnect**  | 8008     | —       | Next.js, no database required      |
-| **AutoWork**     | 8009     | —       | Next.js, no database required      |
-| **AutoCalendar** | 8010     | —       | Next.js, no database required      |
-| **AutoList**     | 8011     | —       | Next.js, no database required      |
-| **AutoDrive**    | 8012     | —       | Next.js, no database required      |
-| **AutoHealth**   | 8013     | —       | Next.js, no database required      |
-| **webs_server**  | 8090     | 5437    | API service used for event logging |
+| **Movies** | 8000 | 5434 | Django + PostgreSQL |
+| **Books** | 8001 | 5435 | Django + PostgreSQL |
+| **AutoZone** | 8002 | — | Next.js, no database required |
+| **AutoDining** | 8003 | — | Next.js, no database required |
+| **AutoCRM** | 8004 | — | Next.js, no database required |
+| **AutoMail** | 8005 | — | Next.js, no database required |
+| **AutoDelivery** | 8006 | — | Next.js, no database required |
+| **AutoLodge** | 8007 | — | Next.js, no database required |
+| **AutoConnect** | 8008 | — | Next.js, no database required |
+| **AutoWork** | 8009 | — | Next.js, no database required |
+| **AutoCalendar** | 8010 | — | Next.js, no database required |
+| **AutoList** | 8011 | — | Next.js, no database required |
+| **AutoDrive** | 8012 | — | Next.js, no database required |
+| **AutoHealth** | 8013 | — | Next.js, no database required |
+| **webs_server** | 8090 | 5437 | API service used for event logging |
+=======
+| Demo | Web Port | DB Port | Notes |
+|-----------------|----------|---------|-----------------------------------------|
+| **Movies** | 8000 | 5434 | Django + PostgreSQL |
+| **Books** | 8001 | 5435 | Django + PostgreSQL |
+| **AutoZone** | 8002 | — | Next.js, no database required |
+| **AutoDining** | 8003 | — | Next.js, no database required |
+| **AutoCRM** | 8004 | — | Next.js, no database required |
+| **AutoMail** | 8005 | — | Next.js, no database required |
+| **AutoLodge** | 8007 | — | Next.js, no database required |
+| **AutoDrive** | 8012 | — | Next.js, no database required |
+| **webs_server** | 8090 | 5437 | API service used for event logging |
+
+> > > > > > > 4d0c953937374ebeda63841f70d33ff5cc06c2e0
 
 ---
 
@@ -171,6 +190,12 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=autolodge --web_port=8007
 ```
 
+#### **📦 Deploy AutoDrive Demo**
+
+```bash
+./scripts/setup.sh --demo=autodrive --web_port=8012
+```
+
 #### **📦 Deploy AutoConnect Demo**
 
 ```bash
@@ -242,15 +267,16 @@ After successful deployment, access your demo webs:
 
 ### **Default Access URLs**
 
-| Demo Application     | URL                     | Description                                   |
-| -------------------- | ----------------------- | --------------------------------------------- |
-| **Movies Demo**      | `http://localhost:8000` | Movie database interface                      |
-| **Books Demo**       | `http://localhost:8001` | Book catalog system                           |
-| **Autozone Demo**    | `http://localhost:8002` | Online Shopping for Electronics               |
-| **Autodining Demo**  | `http://localhost:8003` | Restaurant Reservation UI                     |
-| **AutoCRM Demo**     | `http://localhost:8004` | Customer Relation Management UI               |
-| **AutoMail Demo**    | `http://localhost:8005` | Modern Email Client UI                        |
-| **AutoConnect Demo** | `http://localhost:8008` | A LinkedIn-like Professional NetworkClient UI |
+| Demo Application    | URL                     | Description                       |
+| ------------------- | ----------------------- | --------------------------------- |
+| **Movies Demo**     | `http://localhost:8000` | Movie database interface          |
+| **Books Demo**      | `http://localhost:8001` | Book catalog system               |
+| **Autozone Demo**   | `http://localhost:8002` | Online Shopping for Electronics   |
+| **Autodining Demo** | `http://localhost:8003` | Restaurant Reservation UI         |
+| **AutoCRM Demo**    | `http://localhost:8004` | Customer Relation Management UI   |
+| **AutoMail Demo**   | `http://localhost:8005` | Modern Email Client UI            |
+| **AutoLodge Demo**  | `http://localhost:8007` | Book Hotels, Cabins & Retreats UI |
+| **AutoDrive Demo**  | `http://localhost:8012` | Go anywhere with AutoDriver UI    |
 
 ---
 
@@ -260,12 +286,12 @@ If you used custom ports, access via: `http://localhost:[your_web_port]`
 
 ---
 
-
 ## Accessing the Demo Webs
 
 ### Local Access
 
 After deployment, access the demo webs locally at:
+
 - Web 1 (Movies): `http://localhost:8000`
 - Web 2 (Books): `http://localhost:8001`
 - Web 3 (Autozone): `http://localhost:8002`
@@ -284,6 +310,7 @@ After deployment, access the demo webs locally at:
 ### Server Access
 
 Publicly deployed demo webs:
+
 - Autocinema: `https://autocinema.autoppia.com`
 - Autobooks: `https://autobooks.autoppia.com`
 - Autozone: `https://autozone.autoppia.com`

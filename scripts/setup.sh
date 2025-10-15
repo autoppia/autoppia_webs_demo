@@ -174,6 +174,9 @@ case "$WEB_DEMO" in
     ;;
   autolist)
     deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
+    ;;
+  autodrive)
+    deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
@@ -189,10 +192,11 @@ case "$WEB_DEMO" in
     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
     deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalender_$((WEB_PORT + 10))"
     deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     deploy_webs_server
-    ;;
+    ;;   
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autolist' or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autodrive', or 'all'."
     exit 1
     ;;
 esac

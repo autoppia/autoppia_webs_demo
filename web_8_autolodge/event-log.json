@@ -479,6 +479,9 @@
     "event_name": "SEARCH_HOTEL",
     "web_agent_id": null,
     "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
     "data": {
       "searchTerm": "",
       "dateRange": {
@@ -492,12 +495,20 @@
         "pets": 0
       }
     },
+<<<<<<< HEAD
     "timestamp": "2025-07-24T12:11:23.552Z"
+=======
+    "timestamp": "2025-08-20T07:37:33.269Z"
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
   },
   {
     "event_name": "SEARCH_HOTEL",
     "web_agent_id": null,
+<<<<<<< HEAD
     "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
+=======
+    "user_id": null,
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
     "data": {
       "searchTerm": "",
       "dateRange": {
@@ -512,11 +523,12 @@
       }
     },
     "timestamp": "2025-07-24T12:11:24.323Z"
+    "timestamp": "2025-08-20T07:37:34.253Z"
   },
   {
     "event_name": "SEARCH_HOTEL",
     "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
+    "user_id": null,
     "data": {
       "searchTerm": "",
       "dateRange": {
@@ -530,540 +542,12 @@
         "pets": 0
       }
     },
-    "timestamp": "2025-07-24T12:11:24.742Z"
+    "timestamp": "2025-08-20T07:41:09.971Z"
   },
   {
     "event_name": "SEARCH_HOTEL",
     "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Bali",
-      "dateRange": {
-        "from": "2025-05-02T19:00:00.000Z",
-        "to": "2025-07-12T19:00:00.000Z"
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-24T12:21:31.595Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Bali",
-      "dateRange": {
-        "from": "2025-05-02T19:00:00.000Z",
-        "to": "2025-07-12T19:00:00.000Z"
-      },
-      "guests": {
-        "adults": 1,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-24T12:21:38.240Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Bali",
-      "dateRange": {
-        "from": "2025-05-02T19:00:00.000Z",
-        "to": "2025-07-12T19:00:00.000Z"
-      },
-      "guests": {
-        "adults": 1,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-24T12:21:39.277Z"
-  },
-  {
-    "event_name": "SEARCH_CLEARED",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "source": "date"
-    },
-    "timestamp": "2025-07-24T12:21:40.823Z"
-  },
-  {
-    "event_name": "SEARCH_CLEARED",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "source": "location"
-    },
-    "timestamp": "2025-07-24T12:21:43.617Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 1,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-24T12:21:45.461Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "0",
-      "title": "Cabin in the woods",
-      "location": "Asheville, USA",
-      "rating": 4,
-      "price": 127,
-      "dates": {
-        "from": "2025-07-12",
-        "to": "2025-07-30"
-      },
-      "guests": 2,
-      "host": {
-        "name": "Natalie",
-        "since": 4,
-        "avatar": "https://randomuser.me/api/portraits/women/44.jpg"
-      },
-      "amenities": [
-        "Dedicated workspace",
-        "Great location",
-        "Great check-in experience"
-      ]
-    },
-    "timestamp": "2025-07-24T12:22:25.519Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "4",
-      "title": "Cozy Beach House",
-      "location": "Byron Bay, Australia",
-      "rating": 4.31,
-      "price": 969,
-      "dates": {
-        "from": "2025-07-20",
-        "to": "2025-07-21"
-      },
-      "guests": 8,
-      "host": {
-        "name": "Ella",
-        "since": 3,
-        "avatar": "https://randomuser.me/api/portraits/women/31.jpg"
-      },
-      "amenities": [
-        "Beach access",
-        "Private pool",
-        "Bikes included"
-      ]
-    },
-    "timestamp": "2025-07-24T12:23:14.347Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "7",
-      "title": "Modern City Apartment",
-      "location": "New York, USA",
-      "rating": 4.27,
-      "price": 258,
-      "dates": {
-        "from": "2025-07-25",
-        "to": "2025-07-28"
-      },
-      "guests": 2,
-      "host": {
-        "name": "Harper",
-        "since": 7,
-        "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
-      },
-      "amenities": [
-        "Fast Wi-Fi",
-        "Washer/dryer"
-      ]
-    },
-    "timestamp": "2025-07-24T12:23:19.548Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "40",
-      "title": "Cabin in the woods",
-      "location": "Asheville, USA",
-      "rating": 4,
-      "price": 127,
-      "dates": {
-        "from": "2025-07-12",
-        "to": "2025-07-30"
-      },
-      "guests": 2,
-      "host": {
-        "name": "Natalie",
-        "since": 4,
-        "avatar": "https://randomuser.me/api/portraits/women/44.jpg"
-      },
-      "amenities": [
-        "Dedicated workspace",
-        "Great location",
-        "Great check-in experience"
-      ]
-    },
-    "timestamp": "2025-07-24T12:23:38.780Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "1",
-      "title": "Lake House Retreat",
-      "location": "Kelowna, Canada",
-      "rating": 4.3,
-      "price": 571,
-      "dates": {
-        "from": "2025-07-18",
-        "to": "2025-07-24"
-      },
-      "guests": 6,
-      "host": {
-        "name": "Alex",
-        "since": 2,
-        "avatar": "https://randomuser.me/api/portraits/men/11.jpg"
-      },
-      "amenities": [
-        "Lake view",
-        "Mountain views",
-        "Family friendly"
-      ]
-    },
-    "timestamp": "2025-07-24T12:25:10.068Z"
-  },
-  {
-    "event_name": "RESERVE_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "1",
-      "checkin": "2025-07-18T00:00:00.000+00:00",
-      "checkout": "2025-07-24T00:00:00.000+00:00",
-      "guests": 1,
-      "hotel": {
-        "id": 2,
-        "image": "/images/hotel2.jpeg",
-        "title": "Lake House Retreat",
-        "location": "Kelowna, Canada",
-        "rating": 4.3,
-        "reviews": 12,
-        "guests": 6,
-        "bedrooms": 3,
-        "beds": 4,
-        "baths": 2,
-        "datesFrom": "2025-07-18",
-        "datesTo": "2025-07-24",
-        "price": 571,
-        "host": {
-          "name": "Alex",
-          "since": 2,
-          "avatar": "https://randomuser.me/api/portraits/men/11.jpg"
-        },
-        "amenities": [
-          {
-            "icon": "🏝",
-            "title": "Lake view",
-            "desc": "Enjoy beautiful sunrises on the water."
-          },
-          {
-            "icon": "🌬",
-            "title": "Mountain views",
-            "desc": "Views of the Rockies from the balcony."
-          },
-          {
-            "icon": "🛌",
-            "title": "Family friendly",
-            "desc": "Cribs, highchair, and backyard play area."
-          }
-        ]
-      }
-    },
-    "timestamp": "2025-07-24T12:25:12.127Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "2",
-      "title": "Mountain Escape",
-      "location": "Zermatt, Switzerland",
-      "rating": 4.34,
-      "price": 960,
-      "dates": {
-        "from": "2025-07-28",
-        "to": "2025-08-10"
-      },
-      "guests": 4,
-      "host": {
-        "name": "Sofia",
-        "since": 6,
-        "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
-      },
-      "amenities": [
-        "Hot tub",
-        "Gourmet kitchen",
-        "Resort access"
-      ]
-    },
-    "timestamp": "2025-07-24T12:25:17.095Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "4",
-      "title": "Cozy Beach House",
-      "location": "Byron Bay, Australia",
-      "rating": 4.31,
-      "price": 969,
-      "dates": {
-        "from": "2025-07-20",
-        "to": "2025-07-21"
-      },
-      "guests": 8,
-      "host": {
-        "name": "Ella",
-        "since": 3,
-        "avatar": "https://randomuser.me/api/portraits/women/31.jpg"
-      },
-      "amenities": [
-        "Beach access",
-        "Private pool",
-        "Bikes included"
-      ]
-    },
-    "timestamp": "2025-07-24T12:25:20.793Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "4",
-      "title": "Cozy Beach House",
-      "location": "Byron Bay, Australia",
-      "rating": 4.31,
-      "price": 969,
-      "dates": {
-        "from": "2025-07-20",
-        "to": "2025-07-21"
-      },
-      "guests": 8,
-      "host": {
-        "name": "Ella",
-        "since": 3,
-        "avatar": "https://randomuser.me/api/portraits/women/31.jpg"
-      },
-      "amenities": [
-        "Beach access",
-        "Private pool",
-        "Bikes included"
-      ]
-    },
-    "timestamp": "2025-07-24T12:25:35.750Z"
-  },
-  {
-    "event_name": "VIEW_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "id": "2",
-      "title": "Mountain Escape",
-      "location": "Zermatt, Switzerland",
-      "rating": 4.34,
-      "reviews": 29,
-      "price": 960,
-      "dates": {
-        "from": "2025-07-28",
-        "to": "2025-08-10"
-      },
-      "guests": 4,
-      "host": {
-        "name": "Sofia",
-        "since": 6,
-        "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
-      },
-      "amenities": [
-        "Hot tub",
-        "Gourmet kitchen",
-        "Resort access"
-      ]
-    },
-    "timestamp": "2025-07-25T05:04:52.267Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Rome",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-25T05:19:45.242Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Barcelona",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-25T05:19:48.889Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Lisbon",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-25T05:19:52.414Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Berlin",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-25T05:19:56.535Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Kyoto",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-25T05:20:01.578Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "I'm flexible",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-25T05:20:06.433Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
-    "data": {
-      "searchTerm": "Kyoto",
-      "dateRange": {
-        "from": null,
-        "to": null
-      },
-      "guests": {
-        "adults": 0,
-        "children": 0,
-        "infants": 0,
-        "pets": 0
-      }
-    },
-    "timestamp": "2025-07-25T05:25:42.585Z"
-  },
-  {
-    "event_name": "SEARCH_HOTEL",
-    "web_agent_id": null,
-    "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
+    "user_id": null,
     "data": {
       "searchTerm": "",
       "dateRange": {
@@ -1077,6 +561,7 @@
         "pets": 0
       }
     },
+<<<<<<< HEAD
     "timestamp": "2025-07-25T05:25:45.059Z"
   },
   {
@@ -3684,13 +3169,22 @@
       }
     },
     "timestamp": "2025-07-29T12:18:34.749Z"
+=======
+    "timestamp": "2025-08-20T07:41:10.017Z"
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
   },
   {
     "event_name": "SEARCH_HOTEL",
     "web_agent_id": null,
+<<<<<<< HEAD
     "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
     "data": {
       "searchTerm": "Barcelona",
+=======
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
       "dateRange": {
         "from": null,
         "to": null
@@ -3702,14 +3196,24 @@
         "pets": 0
       }
     },
+<<<<<<< HEAD
     "timestamp": "2025-07-30T05:16:12.998Z"
+=======
+    "timestamp": "2025-08-20T07:41:10.083Z"
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
   },
   {
     "event_name": "SEARCH_HOTEL",
     "web_agent_id": null,
+<<<<<<< HEAD
     "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
     "data": {
       "searchTerm": "Bali",
+=======
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
       "dateRange": {
         "from": null,
         "to": null
@@ -3721,12 +3225,419 @@
         "pets": 0
       }
     },
+<<<<<<< HEAD
     "timestamp": "2025-07-30T05:16:17.436Z"
+=======
+    "timestamp": "2025-08-20T07:41:13.145Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.243Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.605Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.685Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:15.783Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:16.670Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:16.857Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:17.824Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:18.128Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:20.124Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:20.525Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:41:33.388Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:18.525Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:18.977Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:19.493Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:23.474Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-20T07:59:23.518Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:21.958Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:22.198Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:22.845Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:23.056Z"
+  },
+  {
+    "event_name": "SEARCH_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "searchTerm": "",
+      "dateRange": {
+        "from": null,
+        "to": null
+      },
+      "guests": {
+        "adults": 0,
+        "children": 0,
+        "infants": 0,
+        "pets": 0
+      }
+    },
+    "timestamp": "2025-08-21T04:03:23.576Z"
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
   },
   {
     "event_name": "VIEW_HOTEL",
     "web_agent_id": null,
+<<<<<<< HEAD
     "user_id": "{\"id\":501,\"first_name\":\"Shoaib\",\"last_name\":\"Mehboob\",\"username\":\"user88\",\"contact_number\":\"03025835815\",\"company_name\":\"rev9\",\"email\":\"mian.shebi78@gmail.com\",\"addon_id\":\"price_1QiDx6ATA1IrWNjKsKrIbdQL\",\"auto_addon\":1,\"auto_change_plan\":0,\"last_notification_sent_at\":null,\"otp\":null,\"verify_smtp\":null,\"email_verified_at\":null,\"created_at\":\"2024-11-07T14:06:04.000000Z\",\"updated_at\":\"2025-07-16T12:33:43.000000Z\",\"email_otp\":null,\"is_email_verified\":null,\"phone_otp\":null,\"phone_verified_at\":null,\"is_phone_verified\":null,\"failed_otp_attempts\":null,\"lockout_until\":null,\"stripe_id\":\"cus_Rkh2mvZBljEH2H\",\"pm_type\":\"visa\",\"pm_last_four\":\"4242\",\"trial_ends_at\":null,\"invited_by\":null,\"fub_agent_id\":null,\"invited_user\":125,\"can_invite\":3,\"fub_key\":{\"id\":115,\"user_id\":501,\"fub_key\":\"fka_0YU4EDqzgqG0o3yzzOh3USDA1HVPFStBBg\",\"created_at\":\"2024-11-07T14:09:40.000000Z\",\"updated_at\":\"2025-01-09T10:48:58.000000Z\",\"is_disabled\":null,\"x_system\":\"Trevy-System-473-501\",\"x_system_key\":\"f94a9474f5dfca712866bf71a26a26b3\"}}",
+=======
+    "user_id": null,
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
     "data": {
       "id": "3",
       "title": "Riverside Zen Cottage",
@@ -3750,6 +3661,7 @@
         "Traditional style"
       ]
     },
+<<<<<<< HEAD
     "timestamp": "2025-07-30T05:16:30.584Z"
   },
   {
@@ -3952,5 +3864,8 @@
       }
     },
     "timestamp": "2025-07-30T05:17:05.759Z"
+=======
+    "timestamp": "2025-08-21T04:03:32.980Z"
+>>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
   }
 ]
