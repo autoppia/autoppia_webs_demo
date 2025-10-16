@@ -1,0 +1,385 @@
+[
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755071421140
+    },
+    "timestamp": "2025-08-13T07:50:21.226Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1755071456074
+    },
+    "timestamp": "2025-08-13T07:50:56.151Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/expert/alexa-r",
+      "search": "",
+      "timestamp": 1755071459814
+    },
+    "timestamp": "2025-08-13T07:51:00.238Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full Stack Developer",
+      "country": "United States"
+    },
+    "timestamp": "2025-08-13T07:51:02.262Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/expert/alexa-r/hire",
+      "search": "",
+      "timestamp": 1755071465835
+    },
+    "timestamp": "2025-08-13T07:51:05.986Z"
+  },
+  {
+    "event_name": "HIRE_CONSULTANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "expertSlug": "alexa-r",
+      "role": "Full Stack Developer",
+      "country": "United States",
+      "paymentType": "hourly",
+      "rate": "50",
+      "increaseWhen": "After 3 months",
+      "increaseHowMuch": "5%"
+    },
+    "timestamp": "2025-08-13T07:51:19.513Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755071488892
+    },
+    "timestamp": "2025-08-13T07:51:28.978Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755071608848
+    },
+    "timestamp": "2025-08-13T07:53:29.008Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755071929214
+    },
+    "timestamp": "2025-08-13T07:58:51.932Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/talent",
+      "search": "",
+      "timestamp": 1755072171439
+    },
+    "timestamp": "2025-08-13T08:02:51.807Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755072176189
+    },
+    "timestamp": "2025-08-13T08:02:56.304Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755077362017
+    },
+    "timestamp": "2025-08-13T09:29:22.165Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/talent",
+      "search": "",
+      "timestamp": 1755077365631
+    },
+    "timestamp": "2025-08-13T09:29:25.706Z"
+  },
+  {
+    "event_name": "NAVIGATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755077370104
+    },
+    "timestamp": "2025-08-13T09:29:30.290Z"
+  },
+  {
+    "event_name": "PAGE_LOAD",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755077668211
+    },
+    "timestamp": "2025-08-13T09:34:28.737Z"
+  },
+  {
+    "event_name": "PAGE_LOAD",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755077669566
+    },
+    "timestamp": "2025-08-13T09:34:29.647Z"
+  },
+  {
+    "event_name": "PAGE_LOAD",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755077746074
+    },
+    "timestamp": "2025-08-13T09:35:46.294Z"
+  },
+  {
+    "event_name": "PAGE_LOAD",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "pathname": "/",
+      "search": "",
+      "timestamp": 1755077758424
+    },
+    "timestamp": "2025-08-13T09:35:58.897Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1755078474368
+    },
+    "timestamp": "2025-08-13T09:47:54.503Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Ashley C.",
+      "role": "Backend Developer",
+      "rate": "$35.00/hr",
+      "country": "USA",
+      "rating": 4.8,
+      "jobs": 90,
+      "timestamp": 1755078483839
+    },
+    "timestamp": "2025-08-13T09:48:03.994Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1755078495712
+    },
+    "timestamp": "2025-08-13T09:48:16.253Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Alexa R.",
+      "role": "Full Stack Developer",
+      "rate": "$50.00/hr",
+      "country": "United States",
+      "rating": 4.5,
+      "jobs": 120,
+      "timestamp": 1755080020824
+    },
+    "timestamp": "2025-08-13T10:13:41.004Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "alexa-r",
+      "expertName": "Alexa R.",
+      "timestamp": 1755080021776
+    },
+    "timestamp": "2025-08-13T10:13:42.590Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "alexa-r",
+      "expertName": "Alexa R.",
+      "timestamp": 1755080021767
+    },
+    "timestamp": "2025-08-13T10:13:42.604Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "alexa-r",
+      "expertName": "Alexa R.",
+      "timestamp": 1755080033919
+    },
+    "timestamp": "2025-08-13T10:13:54.782Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Brian K.",
+      "role": "Full Stack Developer",
+      "rate": "$45.00/hr",
+      "country": "Colombia",
+      "rating": 4.6,
+      "jobs": 140,
+      "timestamp": 1755149269240
+    },
+    "timestamp": "2025-08-14T05:27:51.628Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "brian-k",
+      "expertName": "Brian K.",
+      "timestamp": 1755149273974
+    },
+    "timestamp": "2025-08-14T05:27:54.533Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "brian-k",
+      "expertName": "Brian K.",
+      "timestamp": 1755149273966
+    },
+    "timestamp": "2025-08-14T05:27:54.566Z"
+  },
+  {
+    "event_name": "BOOK_A_CONSULTATION",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "brian-k",
+      "expertName": "Brian K.",
+      "timestamp": 1755149289873
+    },
+    "timestamp": "2025-08-14T05:28:11.085Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertName": "Brian K.",
+      "expertSlug": "brian-k",
+      "role": "Full Stack Developer",
+      "country": "Colombia"
+    },
+    "timestamp": "2025-08-14T05:28:22.573Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "brian-k",
+      "expertName": "Brian K.",
+      "timestamp": 1755149476224
+    },
+    "timestamp": "2025-08-14T05:31:16.330Z"
+  },
+  {
+    "event_name": "HIRE_BTN_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "expertSlug": "brian-k",
+      "expertName": "Brian K.",
+      "timestamp": 1755149583696
+    },
+    "timestamp": "2025-08-14T05:33:04.155Z"
+  }
+]

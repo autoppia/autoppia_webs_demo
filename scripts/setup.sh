@@ -1,19 +1,35 @@
 #!/usr/bin/env bash
 # setup.sh - Deploy all web demo projects + API (webs_server) with isolation
 #------------------------------------------------------------
+# Usage:
+#   ./setup.sh [OPTIONS]
+#
+# Options:
+#   --web_port=PORT               Set base web port (default: 8000)
+#   --postgres_port=PORT          Set base postgres port (default: 5434)
+#   --webs_port=PORT              Set webs_server port (default: 8090)
+#   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
+#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autoconnect, or all (default: all)
+#   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
+#   -y, --yes                     Force delete without confirmation
+#
+# Examples:
+#   ./setup.sh --demo=automail --enable_dynamic_html=true
+#   ./setup.sh --demo=all --enable_dynamic_html=true --web_port=8000
+#------------------------------------------------------------
 set -euo pipefail
 
 echo "🚀 Setting up web demos..."
 
-## 0. Remove all containers
-#echo "[INFO] Removing all containers..."
-#docker ps -aq | xargs -r docker rm -f || true
-#
-## 1. Prune Docker environment
-#echo "[INFO] Pruning volumes, images and networks..."
-#docker volume rm $(docker volume ls -q) 2>/dev/null || true
-#docker rmi $(docker images -q) --force 2>/dev/null || true
-#docker network prune -f || true
+# 0. Remove all containers
+echo "[INFO] Removing all containers..."
+docker ps -aq | xargs -r docker rm -f || true
+
+# 1. Prune Docker environment
+echo "[INFO] Pruning volumes, images and networks..."
+docker volume rm $(docker volume ls -q) 2>/dev/null || true
+docker rmi $(docker images -q) --force 2>/dev/null || true
+docker network prune -f || true
 
 # 2. Ensure external network for app ↔ front communication
 EXTERNAL_NET="apps_net"
@@ -37,6 +53,7 @@ WEBS_PORT_DEFAULT=8090
 WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
+ENABLE_DYNAMIC_HTML_DEFAULT=false
 
 # 5. Parse args
 for ARG in "$@"; do
@@ -46,8 +63,9 @@ for ARG in "$@"; do
     --webs_port=*)     WEBS_PORT="${ARG#*=}" ;;
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
+    --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
     -y|--yes)          FORCE_DELETE=true ;;
-    *) ;;
+    *) ;; 
   esac
 done
 
@@ -55,6 +73,7 @@ WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
+ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
 
 echo "🔣 Configuration:"
 echo "    movies/books base HTTP  →  $WEB_PORT"
@@ -62,6 +81,7 @@ echo "    movies/books Postgres   →  $POSTGRES_PORT"
 echo "    webs_server HTTP        →  $WEBS_PORT"
 echo "    webs_server Postgres    →  $WEBS_PG_PORT"
 echo "    Demo to deploy:         →  $WEB_DEMO"
+echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
 echo
 
 # 6. Check Docker
@@ -89,7 +109,7 @@ deploy_project() {
     return
   fi
 
-  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp)..."
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML)..."
   pushd "$dir" > /dev/null
 
     if docker compose -p "$proj" ps -q | grep -q .; then
@@ -98,11 +118,11 @@ deploy_project() {
     fi
 
     # up
-    WEB_PORT="$webp" POSTGRES_PORT="$pgp" \
+    WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
-  echo "✅ $name is running on port $webp"
+  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML)"
   echo
 }
 
@@ -119,7 +139,7 @@ deploy_webs_server() {
 
     docker compose -p "$name" down --volumes || true
 
-    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
+    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$name" up -d --build
 
   popd > /dev/null
@@ -152,39 +172,19 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     deploy_webs_server
     ;;
-  autodelivery)
-    deploy_project "web_7_autodelivery" "$WEB_PORT" "" "web_7_autodelivery${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autolodge)
-    deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autoconnect)
-    deploy_project "web_9_autoconnect" "$WEB_PORT" "" "autoconnect_${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autowork)
-    deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
+  autocalender)
+    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
     deploy_webs_server
     ;;
   autocalendar)
     deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
-    deploy_webs_server
+     deploy_webs_server
     ;;
   autolist)
     deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
-    deploy_webs_server
     ;;
   autodrive)
     deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autohealth)
-    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  webs_server)
     deploy_webs_server
     ;;
   all)
@@ -201,11 +201,10 @@ case "$WEB_DEMO" in
     deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
     deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
     deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
-    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     deploy_webs_server
-    ;;
+    ;;   
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', 'autohealth' or 'all' and 'webs_server."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autodrive', or 'all'."
     exit 1
     ;;
 esac

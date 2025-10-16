@@ -57,6 +57,7 @@ export default function RecommendationsPage() {
   return (
     <section className="max-w-3xl mx-auto mt-8 px-4">
       <h1 className="text-2xl font-bold mb-6">Recommendations for you</h1>
+      {/* Always show recommendations and follow content */}
       <ul className="flex flex-col gap-4">
         {companies.map((c) => (
           <li

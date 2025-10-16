@@ -4,6 +4,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { useSeedLayout } from "@/library/useSeedLayout";
 
 interface Expert {
   slug: string;
@@ -14,6 +15,7 @@ interface Expert {
 }
 
 export default function HireFormClient({ expert }: { expert: Expert }) {
+  const { layout } = useSeedLayout();
   const [paymentType, setPaymentType] = useState("hourly");
   const [rate, setRate] = useState("50"); // demo value
   const [increaseWhen, setIncreaseWhen] = useState("Never");
@@ -76,6 +78,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
               </label>
               <select
                 className="border rounded-lg px-4 py-2 w-full mb-5"
+                id="select-team"
                 onChange={(e) => {
                   const team = e.target.value;
                   // Fire event
@@ -277,17 +280,26 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end gap-4 mt-10">
+            <div className={`flex gap-4 mt-10 ${
+              layout.buttonPositions.cancel === 'left' && layout.buttonPositions.hire === 'right' ? 'justify-between' :
+              layout.buttonPositions.cancel === 'center' && layout.buttonPositions.hire === 'center' ? 'justify-center' :
+              layout.buttonPositions.cancel === 'right' && layout.buttonPositions.hire === 'left' ? 'justify-between flex-row-reverse' :
+              'justify-end'
+            }`}>
               <button
                 type="button"
-                className="border border-green-600 text-green-700 hover:bg-green-50 px-6 py-2 rounded-lg font-semibold transition"
+                className={`border border-green-600 text-green-700 hover:bg-green-50 px-6 py-2 rounded-lg font-semibold transition ${
+                  layout.buttonPositions.cancel === 'center' ? 'order-2' : ''
+                }`}
                 onClick={handleCancel}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition"
+                className={`bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition ${
+                  layout.buttonPositions.hire === 'center' ? 'order-1' : ''
+                }`}
               >
                 Hire
               </button>

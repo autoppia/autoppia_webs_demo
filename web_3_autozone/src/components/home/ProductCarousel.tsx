@@ -3,36 +3,58 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
-import { logEvent,EVENT_TYPES } from "@/library/events";
-
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 interface ProductCarouselProps {
   title: string;
   products: Product[];
+  seed: number;
 }
 
-export function ProductCarousel({ title, products }: ProductCarouselProps) {
+const getCardShiftClasses = (seed: number = 1) => {
+  const marginLeftRightOptions = ["ml-0", "ml-2", "ml-4", "mr-2", "mr-4"];
+  const marginTopOptions = ["mt-2", "mt-32", "mt-4", "mt-16", "mt-32"];
+  const index = seed % marginLeftRightOptions.length;
+
+  return {
+    horizontal: marginLeftRightOptions[index],
+    vertical: marginTopOptions[index],
+  };
+};
+
+export function ProductCarousel({
+  title,
+  products,
+  seed = 1,
+}: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   // const [showLeftButton, setShowLeftButton] = useState(false);
   // const [showRightButton, setShowRightButton] = useState(true);
 
+  const { horizontal, vertical } = getCardShiftClasses(seed);
+
   const scroll = (direction: "left" | "right") => {
     if (!containerRef.current) return;
-  
+
     const container = containerRef.current;
     const scrollAmount = container.clientWidth * 0.8;
-  
-    container.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
-  
+
+    container.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+
     // ✅ Log the event
     logEvent(EVENT_TYPES.SCROLL_CAROUSEL, {
       direction: direction.toUpperCase(),
       title,
     });
-  
+
     // Update button visibility after scrolling
     // setTimeout(() => {
     //   if (!containerRef.current) return;
@@ -43,21 +65,20 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
     //   );
     // }, 300);
   };
-  
 
   return (
-    <Card className="category-card relative">
+    <Card className={`category-card relative ${horizontal} ${vertical}`}>
       <h2 className="category-title px-4 pt-4">{title}</h2>
 
       <div className="relative">
         {/*{showLeftButton && (*/}
-          <button
-            onClick={() => scroll("left")}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft size={24} />
-          </button>
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
+          aria-label="Scroll left"
+        >
+          <ChevronLeft size={24} />
+        </button>
         {/*// )}*/}
         <div
           ref={containerRef}
@@ -65,18 +86,31 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {products.map((product) => (
-            <Link
+            <a
               key={product.id}
-              href={`/${product.id}`}
-              onClick={() => logEvent(EVENT_TYPES.VIEW_DETAIL, {
-                section: product.description,
-                title: product.title,
-                price: product.price,
-                category: product.category,
-                rating: product.rating ?? 12,
-                brand: product.brand || "generic",
-              })}
-              className="flex-none w-[160px] md:w-[200px] group"
+              href={`#${product.id}`}
+              title={`View ${product.title} - Product ID: ${product.id}`}
+              onMouseEnter={() => {
+                // Update URL in address bar on hover
+                window.history.replaceState(null, '', `#${product.id}`);
+              }}
+              onMouseLeave={() => {
+                // Clear hash on mouse leave
+                window.history.replaceState(null, '', window.location.pathname);
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                logEvent(EVENT_TYPES.VIEW_DETAIL, {
+                  section: product.description,
+                  title: product.title,
+                  price: product.price,
+                  category: product.category,
+                  rating: product.rating ?? 12,
+                  brand: product.brand || "generic",
+                });
+                router.push(`/${product.id}`);
+              }}
+              className="flex-none w-[160px] md:w-[200px] group block no-underline text-inherit cursor-pointer relative"
             >
               <div className="relative h-48 w-full bg-gray-100">
                 <Image
@@ -85,25 +119,31 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                   fill
                   className="object-contain"
                 />
+                {/* URL Display on Hover */}
+                <div className="absolute bottom-2 left-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
+                  /{product.id}
+                </div>
               </div>
               {product.title && (
-                <div className="mt-2 text-sm truncate group-hover:text-blue-600">{product.title}</div>
+                <div className="mt-2 text-sm truncate group-hover:text-blue-600">
+                  {product.title}
+                </div>
               )}
               {product.price && (
                 <div className="text-sm font-bold">{product.price}</div>
               )}
-            </Link>
+            </a>
           ))}
         </div>
 
         {/*{showRightButton && (*/}
-          <button
-            onClick={() => scroll("right")}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-            aria-label="Scroll right"
-          >
-            <ChevronRight size={24} />
-          </button>
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
+          aria-label="Scroll right"
+        >
+          <ChevronRight size={24} />
+        </button>
         {/*)}*/}
       </div>
     </Card>

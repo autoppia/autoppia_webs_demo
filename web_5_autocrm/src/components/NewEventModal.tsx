@@ -1,5 +1,8 @@
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useState } from "react";
+import { DynamicButton } from "@/components/DynamicButton";
+import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
+import { DynamicElement } from "@/components/DynamicElement";
 
 type EventColor = "forest" | "indigo" | "blue" | "zinc";
 
@@ -66,65 +69,28 @@ export function NewEventModal({
   };
 
   return (
-    <div
-      id={rootId}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"
-    >
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white rounded-2xl p-6 shadow-xl border w-full max-w-sm flex flex-col gap-4"
-        aria-describedby={`${labelInputId} ${timeInputId} ${colorSelectId}`}
-      >
-        <h2 id={titleId} className="font-bold text-xl">
-          New Event – {date}
-        </h2>
-        <input
-          id={labelInputId}
-          value={label}
-          onChange={(e) => setLabel(e.target.value)}
-          placeholder="Event label"
-          required
-          className="border px-3 py-2 rounded"
-        />
-        <input
-          id={timeInputId}
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="border px-3 py-2 rounded"
-        />
-        <select
-          id={colorSelectId}
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-          className="border px-3 py-2 rounded"
-        >
-          <option value="Matter/Event">Matter/Event</option>
-          <option value="Internal">Internal</option>
-          <option value="Filing">Filing</option>
-          <option value="Other">Other</option>
-        </select>
-        <div className="flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-sm text-zinc-500"
-            aria-label="Cancel"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="bg-accent-forest text-white px-4 py-2 rounded text-sm font-semibold"
-            aria-label="Save"
-          >
-            Save
-          </button>
-        </div>
-      </form>
+    <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center">
+      <DynamicContainer index={0} className="bg-white rounded-2xl p-6 shadow-xl border w-full max-w-sm flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <DynamicElement elementType="header" index={0}>
+            <h2 className="font-bold text-xl">New Event – {date}</h2>
+          </DynamicElement>
+
+          <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Event label" required className="border px-3 py-2 rounded" />
+          <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="border px-3 py-2 rounded" />
+          <select value={color} onChange={(e) => setColor(e.target.value)} className="border px-3 py-2 rounded">
+            <option value="Matter/Event">Matter/Event</option>
+            <option value="Internal">Internal</option>
+            <option value="Filing">Filing</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <div className="flex justify-end gap-3">
+            <DynamicButton eventType="NEW_CALENDAR_EVENT_ADDED" index={0} type="button" onClick={onClose} className="text-sm text-zinc-500">Cancel</DynamicButton>
+            <DynamicButton eventType="NEW_CALENDAR_EVENT_ADDED" index={1} type="submit" className="bg-accent-forest text-white px-4 py-2 rounded text-sm font-semibold">Save</DynamicButton>
+          </div>
+        </form>
+      </DynamicContainer>
     </div>
   );
 }

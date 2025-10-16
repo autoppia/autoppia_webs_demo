@@ -16,29 +16,50 @@ export const EVENT_TYPES = {
 } as const;
   
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
-  
-  export function logEvent(eventType: EventType, data: any = {}, extra_headers: Record<string, string> = {}) {
-    if (typeof window === "undefined") return;
-  
-    let user = localStorage.getItem("user");
-    if (user === "null") {
-      user = null;
-    }
-  
-    const payload = {
-      event_name: eventType,
-      data,
-      user_id: user,
-    };
-  
-    console.log("📦 Logging Event:", { ...payload, headers: extra_headers });
-  
-    fetch("/api/log-event", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...extra_headers,
-      },
-      body: JSON.stringify(payload),
-    });
+
+// Import the SeedVariationManager for event registration
+import { SeedVariationManager } from './utils';
+
+export function logEvent(eventType: EventType, data: any = {}, extra_headers: Record<string, string> = {}) {
+  if (typeof window === "undefined") return;
+
+  let user = localStorage.getItem("user");
+  if (user === "null") {
+    user = null;
   }
+
+  const payload = {
+    event_name: eventType,
+    data,
+    user_id: user,
+  };
+
+  console.log("📦 Logging Event:", { ...payload, headers: extra_headers });
+
+  // Register the event with the SeedVariationManager to trigger layout changes
+  SeedVariationManager.registerEvent(eventType);
+
+  fetch("/api/log-event", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...extra_headers,
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+// Helper function to get active events
+export function getActiveEvents(): string[] {
+  return SeedVariationManager.getActiveEvents();
+}
+
+// Helper function to clear all events
+export function clearEvents(): void {
+  SeedVariationManager.clearEvents();
+}
+
+// Helper function to register an event manually
+export function registerEvent(eventType: string): void {
+  SeedVariationManager.registerEvent(eventType);
+}

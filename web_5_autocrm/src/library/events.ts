@@ -1,4 +1,5 @@
 // src/lib/logger.ts
+import { generateElementAttributes, getLayoutVariant, getXPathSelector } from './layoutVariants';
 
 export const EVENT_TYPES = {
   // DASHBOARD_SIDEBAR_CLICKED: "DASHBOARD_SIDEBAR_CLICKED",
@@ -41,7 +42,11 @@ export function logEvent<T extends Record<string, unknown>>(
 
   const payload = {
     event_name: eventType,
-    data,
+    data: {
+      ...data,
+      timestamp: new Date().toISOString(),
+      url: window.location.href,
+    },
     user_id: user,
   };
 

@@ -8,8 +8,21 @@ import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import Image from "next/image";
+import { useSeedLayout } from "@/library/utils";
+import { DynamicWrapper } from "@/components/DynamicWrapper";
+import { Suspense } from "react";
+import { getEffectiveSeed, isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
 
-export default function Home() {
+function HomeContent() {
+  const { seed, layout } = useSeedLayout();
+  
+  // Log dynamic HTML status for debugging
+  React.useEffect(() => {
+    const isDynamic = isDynamicModeEnabled();
+    console.log('Dynamic HTML enabled:', isDynamic);
+    console.log('Current seed:', seed);
+  }, [seed]);
+  
   // Range state: { from, to }
   const [dateRange, setDateRange] = React.useState<{
     from: Date | null;
@@ -123,224 +136,347 @@ export default function Home() {
     setCurrentPage(1);
   }, [committedSearch, dateRange, guests]);
 
-  return (
-    <div className="flex flex-col w-full items-center mt-4 pb-12">
-      {/* Search/Filter Bar */}
-      <section className="w-full flex justify-center">
-        <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
-          {/* Where */}
-          <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <div
-              id="searchField"
-              className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Where
-              </span>
-              <span className="text-sm text-neutral-700">
-                {searchTerm ? searchTerm : "Search destinations"}
-              </span>
-              {searchTerm && (
-                <button
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
-                  type="button"
-                  style={{ lineHeight: 1, background: "none" }}
-                  tabIndex={0}
-                  aria-label="Clear search"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSearchTerm("");
-                    setCommittedSearch("");
-                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, {
-                    //   source: "location",
-                    // });
-                  }}
+  // Create event elements based on layout order
+  const createEventElement = (eventType: string) => {
+    switch (eventType) {
+      case 'search':
+        return (
+          <DynamicWrapper key="search" as={layout.searchBar.wrapper} className={layout.searchBar.className}>
+            <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
+              {/* Where */}
+              <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+                <div
+                  id="searchField"
+                  className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
                 >
-                  ×
-                </button>
-              )}
-            </div>
-          </WherePopover>
-          {/* Check in */}
-          <DateRangePopover
-            selectedRange={dateRange}
-            setSelectedRange={setDateRange}
-          >
-            <div
-              id="checkInField"
-              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Check in
-              </span>
-              <span className="text-sm text-neutral-700">
-                {calendarLabel("in")}
-              </span>
-              {dateRange.from && (
-                <button
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
-                  type="button"
-                  style={{ lineHeight: 1, background: "none" }}
-                  tabIndex={0}
-                  aria-label="Clear check-in/check-out"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDateRange({ from: null, to: null });
-                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "date" });
-                  }}
+                  <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+                    Where
+                  </span>
+                  <span className="text-sm text-neutral-700">
+                    {searchTerm ? searchTerm : "Search destinations"}
+                  </span>
+                  {searchTerm && (
+                    <button
+                      className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+                      type="button"
+                      style={{ lineHeight: 1, background: "none" }}
+                      tabIndex={0}
+                      aria-label="Clear search"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSearchTerm("");
+                        setCommittedSearch("");
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              </WherePopover>
+              {/* Check in */}
+              <DateRangePopover
+                selectedRange={dateRange}
+                setSelectedRange={setDateRange}
+              >
+                <div
+                  id="checkInField"
+                  className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
                 >
-                  ×
-                </button>
-              )}
-            </div>
-          </DateRangePopover>
-          {/* Check out */}
-          <DateRangePopover
-            selectedRange={dateRange}
-            setSelectedRange={setDateRange}
-          >
-            <div
-              id="checkOutField"
-              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Check out
-              </span>
-              <span className="text-sm text-neutral-700">
-                {calendarLabel("out")}
-              </span>
-            </div>
-          </DateRangePopover>
-          {/* Who */}
-          <GuestSelectorPopover counts={guests} setCounts={setGuests}>
-            <div
-              id="guestsField"
-              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Who
-              </span>
-              <span className="text-sm text-neutral-700">{guestSummary()}</span>
-              {(guests.adults > 0 ||
-                guests.children > 0 ||
-                guests.infants > 0 ||
-                guests.pets > 0) && (
-                <button
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
-                  type="button"
-                  style={{ lineHeight: 1, background: "none" }}
-                  tabIndex={0}
-                  aria-label="Clear guests"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
-                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "guests" });
-                  }}
+                  <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+                    Check in
+                  </span>
+                  <span className="text-sm text-neutral-700">
+                    {calendarLabel("in")}
+                  </span>
+                  {dateRange.from && (
+                    <button
+                      className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+                      type="button"
+                      style={{ lineHeight: 1, background: "none" }}
+                      tabIndex={0}
+                      aria-label="Clear check-in/check-out"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDateRange({ from: null, to: null });
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              </DateRangePopover>
+              {/* Check out */}
+              <DateRangePopover
+                selectedRange={dateRange}
+                setSelectedRange={setDateRange}
+              >
+                <div
+                  id="checkOutField"
+                  className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all"
                 >
-                  ×
-                </button>
-              )}
+                  <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+                    Check out
+                  </span>
+                  <span className="text-sm text-neutral-700">
+                    {calendarLabel("out")}
+                  </span>
+                </div>
+              </DateRangePopover>
+              {/* Who */}
+              <GuestSelectorPopover counts={guests} setCounts={setGuests}>
+                <div
+                  id="guestsField"
+                  className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+                >
+                  <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+                    Who
+                  </span>
+                  <span className="text-sm text-neutral-700">{guestSummary()}</span>
+                  {(guests.adults > 0 ||
+                    guests.children > 0 ||
+                    guests.infants > 0 ||
+                    guests.pets > 0) && (
+                    <button
+                      className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+                      type="button"
+                      style={{ lineHeight: 1, background: "none" }}
+                      tabIndex={0}
+                      aria-label="Clear guests"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              </GuestSelectorPopover>
+              {/* Search button */}
+              <button
+                id="searchButton"
+                className="ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
+                onClick={() => {
+                  setCommittedSearch(searchTerm);
+                  logEvent(EVENT_TYPES.SEARCH_HOTEL, {
+                    searchTerm,
+                    dateRange: {
+                      from: dateRange.from
+                        ? (() => {
+                            const fromDate = new Date(dateRange.from);
+                            fromDate.setDate(fromDate.getDate() + 1);
+                            return fromDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
+                          })()
+                        : null,
+                      to: dateRange.to
+                        ? (() => {
+                            const toDate = new Date(dateRange.to);
+                            toDate.setDate(toDate.getDate() + 1);
+                            return toDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
+                          })()
+                        : null,
+                    },
+                    guests: {
+                      adults: guests.adults,
+                      children: guests.children,
+                      infants: guests.infants,
+                      pets: guests.pets,
+                    },
+                  });
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="22"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="mr-1"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="M21 21l-3.5-3.5" />
+                </svg>
+                Search
+              </button>
             </div>
-          </GuestSelectorPopover>
-          {/* Search button */}
-          <button
-            id="searchButton"
-            className="ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
-            onClick={() => {
-              setCommittedSearch(searchTerm);
-              logEvent(EVENT_TYPES.SEARCH_HOTEL, {
-                searchTerm,
-                dateRange: {
-                  from: dateRange.from
-                    ? (() => {
-                        const fromDate = new Date(dateRange.from);
-                        fromDate.setDate(fromDate.getDate() + 1);
-                        return fromDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
-                      })()
-                    : null,
-                  to: dateRange.to
-                    ? (() => {
-                        const toDate = new Date(dateRange.to);
-                        toDate.setDate(toDate.getDate() + 1);
-                        return toDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
-                      })()
-                    : null,
-                },
-                guests: {
-                  adults: guests.adults,
-                  children: guests.children,
-                  infants: guests.infants,
-                  pets: guests.pets,
-                },
-              });
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="mr-1"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-3.5-3.5" />
-            </svg>
-            Search
-          </button>
-        </div>
-      </section>
-
-      {/* Results grid placeholder */}
-      <section className="w-full flex flex-col items-center mt-8">
-        {paginatedResults.length === 0 ? (
-          <div
-            id="noResults"
-            className="text-neutral-400 font-semibold text-lg mt-12"
-          >
-            No results found.
-          </div>
-        ) : (
-          <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-            {paginatedResults.map((prop, i) => (
-              <PropertyCard key={i + prop.title} {...prop} />
-            ))}
-          </div>
-        )}
-      </section>
-      {totalPages > 1 && (
-        <div className="flex mt-6 gap-2 items-center justify-center">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 rounded border disabled:opacity-50"
-          >
-            Prev
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
+          </DynamicWrapper>
+        );
+      case 'view':
+        return (
+          <DynamicWrapper key="view" as="div" className="w-full flex flex-col mt-8">
+            {paginatedResults.length === 0 ? (
+              <div
+                id="noResults"
+                className="text-neutral-400 font-semibold text-lg mt-12"
+              >
+                No results found.
+              </div>
+            ) : (
+              <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 w-full">
+                {paginatedResults.map((prop, i) => (
+                  <PropertyCard key={i + prop.title} {...prop} />
+                ))}
+              </div>
+            )}
+          </DynamicWrapper>
+        );
+      case 'reserve':
+        return (
+          <DynamicWrapper key="reserve" as="div" className="mt-6 text-center">
             <button
-              key={index + 1}
-              onClick={() => setCurrentPage(index + 1)}
-              className={`px-3 py-1 rounded border ${
-                currentPage === index + 1 ? "bg-gray-300" : ""
-              }`}
+              onClick={() => {
+                logEvent(EVENT_TYPES.RESERVE_HOTEL, {
+                  searchTerm: committedSearch,
+                  dateRange,
+                  guests,
+                });
+              }}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             >
-              {index + 1}
+              Reserve Selected Hotels
             </button>
-          ))}
-          <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-            }
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded border disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
-      )}
+          </DynamicWrapper>
+        );
+      case 'guests':
+        return (
+          <DynamicWrapper key="guests" as="div" className="mt-4 text-center">
+            <div className="text-sm text-neutral-600">
+              Total guests: {guests.adults + guests.children + guests.infants}
+            </div>
+          </DynamicWrapper>
+        );
+      case 'dates':
+        return (
+          <DynamicWrapper key="dates" as="div" className="mt-4 text-center">
+            <div className="text-sm text-neutral-600">
+              {dateRange.from && dateRange.to ? (
+                <>
+                  {dateRange.from.toLocaleDateString()} - {dateRange.to.toLocaleDateString()}
+                </>
+              ) : (
+                "Select dates"
+              )}
+            </div>
+          </DynamicWrapper>
+        );
+      case 'message':
+        return (
+          <DynamicWrapper key="message" as="div" className="mt-4 text-center">
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.MESSAGE_HOST, {
+                  searchTerm: committedSearch,
+                });
+              }}
+              className="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            >
+              Contact Hosts
+            </button>
+          </DynamicWrapper>
+        );
+      case 'confirm':
+        return (
+          <DynamicWrapper key="confirm" as="div" className="mt-4 text-center">
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
+                  searchTerm: committedSearch,
+                  dateRange,
+                  guests,
+                });
+              }}
+              className="px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+            >
+              Confirm & Pay
+            </button>
+          </DynamicWrapper>
+        );
+      case 'wishlist':
+        return (
+          <DynamicWrapper key="wishlist" as="div" className="mt-4 text-center">
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+                  searchTerm: committedSearch,
+                });
+              }}
+              className="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Add to Wishlist
+            </button>
+          </DynamicWrapper>
+        );
+      case 'share':
+        return (
+          <DynamicWrapper key="share" as="div" className="mt-4 text-center">
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.SHARE_HOTEL, {
+                  searchTerm: committedSearch,
+                });
+              }}
+              className="px-4 py-2 text-sm bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
+            >
+              Share Results
+            </button>
+          </DynamicWrapper>
+        );
+      case 'back':
+        return (
+          <DynamicWrapper key="back" as="div" className="flex mt-6 gap-2 items-center justify-center">
+            {totalPages > 1 && (
+              <>
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 rounded border disabled:opacity-50"
+                >
+                  Prev
+                </button>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => setCurrentPage(index + 1)}
+                    className={`px-3 py-1 rounded border ${
+                      currentPage === index + 1 ? "bg-gray-300" : ""
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 rounded border disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </>
+            )}
+          </DynamicWrapper>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="flex flex-col w-full mt-4 pb-12">
+      <DynamicWrapper as={layout.eventElements.wrapper} className={layout.eventElements.className}>
+        {layout.eventElements.order.map(createEventElement)}
+      </DynamicWrapper>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }

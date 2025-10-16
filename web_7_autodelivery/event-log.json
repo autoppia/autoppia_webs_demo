@@ -1,0 +1,233 @@
+[
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "sush"
+    },
+    "timestamp": "2025-08-19T06:54:44.931Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "sus"
+    },
+    "timestamp": "2025-08-19T06:54:45.039Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "s"
+    },
+    "timestamp": "2025-08-19T06:54:45.056Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "sushi"
+    },
+    "timestamp": "2025-08-19T06:54:45.086Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "su"
+    },
+    "timestamp": "2025-08-19T06:54:45.120Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "sush"
+    },
+    "timestamp": "2025-08-19T06:54:48.220Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "sus"
+    },
+    "timestamp": "2025-08-19T06:54:48.360Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "su"
+    },
+    "timestamp": "2025-08-19T06:54:48.371Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "s"
+    },
+    "timestamp": "2025-08-19T06:54:50.083Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": ""
+    },
+    "timestamp": "2025-08-19T06:54:50.095Z"
+  },
+  {
+    "event_name": "QUICK_ORDER_STARTED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "restaurantId": "9",
+      "restaurantName": "Sweet Corner",
+      "cuisine": "Desserts"
+    },
+    "timestamp": "2025-08-19T06:54:57.018Z"
+  },
+  {
+    "event_name": "VIEW_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "9",
+      "name": "Sweet Corner",
+      "cuisine": "Desserts",
+      "rating": 4.9
+    },
+    "timestamp": "2025-08-19T06:55:01.767Z"
+  },
+  {
+    "event_name": "BACK_TO_ALL_RESTAURANTS",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "fromRestaurantId": "9",
+      "fromRestaurantName": "Sweet Corner"
+    },
+    "timestamp": "2025-08-19T06:55:03.875Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "t"
+    },
+    "timestamp": "2025-08-19T07:41:09.422Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "ta"
+    },
+    "timestamp": "2025-08-19T07:41:09.877Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tay"
+    },
+    "timestamp": "2025-08-19T07:41:10.307Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayy"
+    },
+    "timestamp": "2025-08-19T07:41:10.340Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayyab"
+    },
+    "timestamp": "2025-08-19T07:41:10.375Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayya"
+    },
+    "timestamp": "2025-08-19T07:41:10.383Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayya"
+    },
+    "timestamp": "2025-08-19T07:41:12.683Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tayy"
+    },
+    "timestamp": "2025-08-19T07:41:12.768Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "tay"
+    },
+    "timestamp": "2025-08-19T07:41:14.350Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "ta"
+    },
+    "timestamp": "2025-08-19T07:41:14.803Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": "t"
+    },
+    "timestamp": "2025-08-19T07:41:16.553Z"
+  },
+  {
+    "event_name": "SEARCH_DELIVERY_RESTAURANT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "query": ""
+    },
+    "timestamp": "2025-08-19T07:41:17.085Z"
+  }
+]

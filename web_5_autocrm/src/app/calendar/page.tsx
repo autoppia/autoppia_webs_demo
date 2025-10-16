@@ -8,6 +8,9 @@ import {
 } from "lucide-react";
 import { NewEventModal } from "@/components/NewEventModal";
 import { CalendarEvent, COLORS, EVENTS } from "@/library/dataset";
+import { DynamicButton } from "@/components/DynamicButton";
+import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
+import { DynamicElement } from "@/components/DynamicElement";
 
 function getMonthMatrix(year: number, month: number) {
   // returns [[date, ...], ...weeks] covering 6 weeks
@@ -45,18 +48,15 @@ export default function CalendarPage() {
   const getDateStr = (d: number) => `${curYear}-${pad(curMonth + 1)}-${pad(d)}`;
 
   return (
-    <section id="calendar-page">
-      <h1
-        id="calendar-title"
-        className="text-3xl font-extrabold mb-10 tracking-tight"
-      >
-        Calendar
-      </h1>
-      <div
-        id="calendar-navigation"
-        className="flex items-center gap-2 mb-6"
-      >
-        <button
+    <DynamicContainer index={0}>
+      <DynamicElement elementType="header" index={0}>
+        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">Calendar</h1>
+      </DynamicElement>
+
+      <DynamicElement elementType="section" index={1} className="flex items-center gap-2 mb-6">
+        <DynamicButton
+          eventType="NEW_CALENDAR_EVENT_ADDED"
+          index={0}
           className="p-2 rounded-full hover:bg-accent-forest/20"
           aria-label="Previous Month"
           onClick={() =>
@@ -66,15 +66,13 @@ export default function CalendarPage() {
           }
         >
           <ChevronLeft className="w-5 h-5" />
-        </button>
-        <span
-          id="current-month-label"
-          className="font-bold text-lg px-4"
-          aria-live="polite"
-        >
+        </DynamicButton>
+        <span className="font-bold text-lg px-4" aria-live="polite">
           {monthLabel}
         </span>
-        <button
+        <DynamicButton
+          eventType="NEW_CALENDAR_EVENT_ADDED"
+          index={1}
           className="p-2 rounded-full hover:bg-accent-forest/20"
           aria-label="Next Month"
           onClick={() =>
@@ -84,9 +82,10 @@ export default function CalendarPage() {
           }
         >
           <ChevronRight className="w-5 h-5" />
-        </button>
-      </div>
-      <div className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
+        </DynamicButton>
+      </DynamicElement>
+
+      <DynamicElement elementType="section" index={2} className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
         <div className="grid grid-cols-7 bg-neutral-bg-dark text-zinc-500 text-xs font-semibold uppercase tracking-wider">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
             <div
@@ -111,10 +110,9 @@ export default function CalendarPage() {
                 ? events.filter((e: CalendarEvent) => e.date === dateStr)
                 : [];
               return (
-                <div
+                <DynamicItem
                   key={wi + "-" + di}
-                  id={d ? `calendar-cell-${dateStr}` : `calendar-cell-empty-${wi}-${di}`}
-                  data-testid={d ? `calendar-cell-${dateStr}` : undefined}
+                  index={wi * 7 + di}
                   onClick={() => d && setOpenEventDate(dateStr)}
                   className={`relative border-b border-zinc-100 min-h-[86px] px-2 md:px-3 pt-2 group flex flex-col items-start ${
                     d ? "bg-white" : "bg-neutral-bg-dark"
@@ -149,7 +147,7 @@ export default function CalendarPage() {
                       </div>
                     ))}
                   </div>
-                </div>
+                </DynamicItem>
               );
             })
           )}
@@ -182,7 +180,7 @@ export default function CalendarPage() {
             Other
           </span>
         </div>
-      </div>
-    </section>
+      </DynamicElement>
+    </DynamicContainer>
   );
 }

@@ -1,19 +1,25 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import React from "react";
 import Sidebar from "@/components/Sidebar";
 import UserNameBadge from "@/components/UserNameBadge";
+import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses } from "@/utils/seedLayout";
 
-const geistSans = Geist({
+// Local Geist Sans
+const geistSans = localFont({
+  src: "./fonts/Geist-Variable.woff2",
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  weight: "100 900",
 });
 
-const geistMono = Geist_Mono({
+// Local Geist Mono
+const geistMono = localFont({
+  src: "./fonts/GeistMono-Variable.woff2",
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: "100 900",
 });
 
 export const metadata: Metadata = {
@@ -26,6 +32,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // For server-side rendering, we'll use default values
+  // The actual seed will be handled in client components
+  const seed = 1; // Default seed for SSR
+  const layoutConfig = getLayoutConfig(seed);
+  const layoutClasses = getLayoutClasses(layoutConfig);
+
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body
@@ -33,7 +45,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <nav
-          className="w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30"
+          className={`w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30 ${layoutClasses.header}`}
           style={{
             WebkitBackdropFilter: "blur(8px)",
             backdropFilter: "blur(8px)",
@@ -50,7 +62,7 @@ export default function RootLayout({
         <div className="flex min-h-[calc(100vh-5rem)] relative">
           <Sidebar />
           <main
-            className="flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto"
+            className={`flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto ${layoutClasses.content}`}
             style={{
               paddingLeft: 60,
               paddingRight: 60,
