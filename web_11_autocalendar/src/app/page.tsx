@@ -937,10 +937,14 @@ function CalendarApp() {
   // Helper function to render sidebar components
   const renderSidebarComponents = () => {
     const components = [];
-    
+
     if (currentVariant.layout.createButton === 'sidebar') {
       components.push(
-        <div key="create-button" className="flex flex-row items-center px-4 mt-2 mb-4">
+        <div key="create-button" className={`${
+          currentVariant.layout.sidebar === 'top'
+            ? 'flex flex-row items-center mr-6'
+            : 'flex flex-row items-center px-4 mt-2 mb-4'
+        }`}>
           <button
             className="bg-white shadow-md rounded-2xl h-[44px] w-full flex items-center px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition"
             onClick={() =>
@@ -989,7 +993,11 @@ function CalendarApp() {
 
     if (currentVariant.layout.miniCalendar === 'sidebar') {
       components.push(
-        <div key="mini-calendar" className="px-6 py-0 mb-0 mt-10">
+        <div key="mini-calendar" className={`${
+          currentVariant.layout.sidebar === 'top'
+            ? 'flex items-center mr-6'
+            : 'px-6 py-0 mb-0 mt-10'
+        }`}>
           <div className="flex w-full justify-between text-[14px] items-center mb-1 mt-1 font-medium">
             <button
               onClick={() => setMiniCalYear((y) => y - 1)}
@@ -1066,10 +1074,18 @@ function CalendarApp() {
 
     if (currentVariant.layout.myCalendars === 'sidebar') {
       components.push(
-        <div key="my-calendars" className="flex flex-col px-4 mt-10">
+        <div key="my-calendars" className={`${
+          currentVariant.layout.sidebar === 'top'
+            ? 'flex items-center mr-6'
+            : 'flex flex-col px-4 mt-10'
+        }`}>
           <button
             onClick={() => setMyCalExpanded((v) => !v)}
-            className="flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group"
+            className={`${
+              currentVariant.layout.sidebar === 'top'
+                ? 'flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group px-2 py-1 rounded hover:bg-gray-100'
+                : 'flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group'
+            }`}
             aria-expanded={myCalExpanded}
             aria-label="Toggle my calendars"
           >
@@ -1088,7 +1104,11 @@ function CalendarApp() {
             </svg>
           </button>
           {myCalExpanded && (
-            <div className="flex flex-col gap-2 pl-1 mt-2">
+            <div className={`${
+              currentVariant.layout.sidebar === 'top'
+                ? 'flex flex-row gap-2 pl-1 mt-2 flex-wrap'
+                : 'flex flex-col gap-2 pl-1 mt-2'
+            }`}>
               {myCalendars.map((cal, idx) => (
                 <label
                   key={cal.name}
@@ -1125,7 +1145,11 @@ function CalendarApp() {
               ))}
             </div>
           )}
-          <div className="flex items-center gap-2 mt-4 mb-1">
+          <div className={`${
+            currentVariant.layout.sidebar === 'top'
+              ? 'flex items-center gap-2 mt-4 mb-1'
+              : 'flex items-center gap-2 mt-4 mb-1'
+          }`}>
             <span className="text-[15px] text-[#2d2d36] font-medium select-none">
               Add new calendar
             </span>
@@ -1174,7 +1198,7 @@ function CalendarApp() {
   // Helper function to render navigation components
   const renderNavigationComponents = () => {
     const components = [];
-    
+
     if (currentVariant.layout.createButton === 'navigation') {
       components.push(
         <button
@@ -1250,54 +1274,175 @@ function CalendarApp() {
       );
     }
 
+    if (currentVariant.layout.myCalendars === 'navigation') {
+      components.push(
+        <div key="my-calendars" className="flex items-center gap-2">
+          <button
+            onClick={() => setMyCalExpanded((v) => !v)}
+            className="flex items-center text-[15px] font-bold text-[#383e4d] mb-1 gap-1 group px-2 py-1 rounded hover:bg-gray-100"
+            aria-expanded={myCalExpanded}
+            aria-label="Toggle my calendars"
+          >
+            <span>My calendars</span>
+            <svg
+              className={`transition ${
+                myCalExpanded ? "rotate-0" : "-rotate-90"
+              }`}
+              width="18"
+              height="18"
+              fill="none"
+              stroke="#383e4d"
+              strokeWidth="2"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          {myCalExpanded && (
+            <div className="flex flex-col gap-2 pl-1 mt-2">
+              {myCalendars.map((cal, idx) => (
+                <label
+                  key={cal.name}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={cal.enabled}
+                    onChange={() => {
+                      logEvent(EVENT_TYPES.CHOOSE_CALENDAR, {
+                        calendarName: cal.name,
+                        selected: !cal.enabled,
+                        color: cal.color,
+                      });
+                      setMyCalendars((cals) =>
+                        cals.map((c, i) =>
+                          i === idx ? { ...c, enabled: !c.enabled } : c
+                        )
+                      );
+                    }}
+                    className="appearance-none w-4 h-4 rounded-sm cursor-pointer border-2"
+                    style={{
+                      borderColor: cal.color,
+                      background: cal.enabled ? cal.color : "#fff",
+                    }}
+                    aria-label={`Toggle ${cal.name} calendar`}
+                  />
+                  <span
+                    className="w-2 h-2 rounded-sm"
+                    style={{ background: cal.color }}
+                  />
+                  {cal.name}
+                </label>
+              ))}
+            </div>
+          )}
+          <div className="flex items-center gap-2 mt-4 mb-1">
+            <span className="text-[15px] text-[#2d2d36] font-medium select-none">
+              Add new calendar
+            </span>
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.ADD_NEW_CALENDAR, {
+                  source: "calendar-navigation",
+                  action: "open_add_calendar_modal",
+                });
+                setAddCalOpen(true);
+              }}
+              type="button"
+              aria-label="Add new calendar"
+              className="flex items-center justify-center p-0 w-6 h-6 rounded-full border-[#222] text-[#222] hover:bg-gray-100 transition"
+            >
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="#222"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return components.sort((a, b) => {
       // Since the new layout doesn't use order, maintain original order
-      const aOrder = a.key === 'create-button' ? 1 : 2; // miniCalendar
-      const bOrder = b.key === 'create-button' ? 1 : 2; // miniCalendar
+      const aOrder = a.key === 'create-button' ? 1 :
+                    a.key === 'mini-calendar' ? 2 :
+                    3; // myCalendars
+      const bOrder = b.key === 'create-button' ? 1 :
+                    b.key === 'mini-calendar' ? 2 :
+                    3; // myCalendars
       return aOrder - bOrder;
     });
   };
 
+  // Layout configuration variables
+  const isSidebarLeft = currentVariant.layout.sidebar === 'left';
+  const isSidebarRight = currentVariant.layout.sidebar === 'right';
+  const isSidebarTop = currentVariant.layout.sidebar === 'top';
+  const isSidebarBottom = currentVariant.layout.sidebar === 'bottom';
+
+  const isNavTop = currentVariant.layout.navigation === 'top';
+  const isNavBottom = currentVariant.layout.navigation === 'bottom';
+  const isNavLeft = currentVariant.layout.navigation === 'left';
+  const isNavRight = currentVariant.layout.navigation === 'right';
+
   // Helper function to get layout classes based on configuration
   const getLayoutClasses = () => {
-    const isSidebarLeft = currentVariant.layout.sidebar === 'left';
-    const isSidebarRight = currentVariant.layout.sidebar === 'right';
-    const isSidebarTop = currentVariant.layout.sidebar === 'top';
-    const isSidebarBottom = currentVariant.layout.sidebar === 'bottom';
-    
-    const isNavTop = currentVariant.layout.navigation === 'top';
-    const isNavBottom = currentVariant.layout.navigation === 'bottom';
-    const isNavLeft = currentVariant.layout.navigation === 'left';
-    const isNavRight = currentVariant.layout.navigation === 'right';
-
     return {
       mainContainer: isSidebarTop || isSidebarBottom ? 'flex-col' : 'flex-row',
-      sidebarContainer: isSidebarLeft ? 'w-[260px]' : isSidebarRight ? 'w-[260px]' : isSidebarTop ? 'w-full h-auto' : 'w-full h-auto',
-      contentContainer: isSidebarLeft ? 'flex-1' : isSidebarRight ? 'flex-1' : 'flex-1',
-      navContainer: isNavTop ? 'flex-row' : isNavBottom ? 'flex-row' : isNavLeft ? 'flex-col' : 'flex-col',
+      sidebarContainer: isSidebarLeft ? 'w-[260px] min-h-screen' : isSidebarRight ? 'w-[260px] min-h-screen' : isSidebarTop ? 'w-full h-auto' : 'w-full h-auto',
+      contentContainer: isSidebarLeft ? 'flex-1 min-h-screen' : isSidebarRight ? 'flex-1 min-h-screen' : 'flex-1 min-h-screen',
+      navContainer: (isNavTop && isSidebarTop) ? 'flex-col' : isNavTop ? 'flex-row' : isNavBottom ? 'flex-row' : isNavLeft ? 'flex-col' : 'flex-col',
+      navHeight: isSidebarTop && isNavTop ? 'h-[128px]' : 'h-[64px]', // Increased height when both sidebar and nav are at top
     };
   };
 
   const layoutClasses = getLayoutClasses();
+  const relocateCalendar = seed === 4 || seed === 7;
 
   return (
     <main className={`flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f] ${layoutClasses.mainContainer}`}>
       {/* Sidebar - positioned based on layout config */}
       {currentVariant.layout.sidebar !== 'none' && (
-        <aside className={`${layoutClasses.sidebarContainer} bg-white border-r border-[#e5e5e5] flex flex-col pt-0 pb-2 px-0 shadow z-10 min-h-screen select-none`}>
-          <div className="flex items-center justify-center gap-1 h-[64px]">
-            <div className="bg-[#1976d2] px-14 py-6 rounded flex items-center h-9">
-              <span className="font-bold text-white text-lg">AutoCalendar</span>
-            </div>
-          </div>
-          {renderSidebarComponents()}
+        <aside className={`${
+          currentVariant.layout.sidebar === 'top'
+            ? 'w-full h-auto bg-white border-b border-[#e5e5e5] flex flex-row items-center px-6 shadow z-10'
+            : `${layoutClasses.sidebarContainer} bg-white border-r border-[#e5e5e5] flex flex-col pt-0 pb-2 px-0 shadow z-10 min-h-screen select-none`
+        }`}>
+          {currentVariant.layout.sidebar === 'top' ? (
+            <>
+              <div className="flex items-center gap-1 mr-6">
+                <div className="bg-[#1976d2] px-4 py-2 rounded flex items-center h-9">
+                  <span className="font-bold text-white text-lg">AutoCalendar</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 flex-1">
+                {renderSidebarComponents()}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center justify-center gap-1 h-[64px]">
+                <div className="bg-[#1976d2] px-14 py-6 rounded flex items-center h-9">
+                  <span className="font-bold text-white text-lg">AutoCalendar</span>
+                </div>
+              </div>
+              {renderSidebarComponents()}
+            </>
+          )}
         </aside>
       )}
-      <section className={`${layoutClasses.contentContainer} flex flex-col h-screen overflow-hidden`}>
+  <section className={`${layoutClasses.contentContainer} flex flex-col h-screen overflow-visible ${relocateCalendar ? 'pr-[560px]' : ''}`}>
         {/* Navigation - positioned based on layout config */}
         {currentVariant.layout.navigation !== 'none' && (
-          <nav className={`w-full flex items-center justify-between h-[64px] px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer}`}>
-            <div className="flex items-center gap-2 min-w-[340px]">
+          <nav className={`w-full flex items-center justify-between ${layoutClasses.navHeight} px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer}`}>
+            <div className={`flex items-center gap-2 ${isSidebarTop && isNavTop ? 'flex-row gap-2 flex-1' : 'min-w-[340px]'}`}>
               <button
                 className="border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] font-medium shadow-sm hover:bg-[#f5f5f5]"
                 onClick={handleSetToday}
@@ -1322,15 +1467,15 @@ function CalendarApp() {
               <span className="text-[22px] font-normal ml-3">{topLabel}</span>
               {renderNavigationComponents()}
             </div>
-            <div className="flex items-center gap-2">
-              {currentVariant.layout.search === 'top' && (
-                <div className="hidden md:block relative">
+            <div className={`flex items-center gap-2 ${isSidebarTop && isNavTop ? 'flex-col gap-2' : ''}`}>
+              {(currentVariant.layout.search === 'top' || seed === 6 || seed === 9) && (
+                <div className={`relative z-20 ${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full flex-1 min-w-[200px]' : (seed === 6 || seed === 9 ? 'w-[240px]' : 'hidden md:block')}`}>
                   <Input
                     value={searchQuery}
                     onChange={handleSearchChange}
                     onKeyDown={handleSearchKeyDown}
                     placeholder="Search events"
-                    className="w-[240px]"
+                    className={`${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full' : 'w-[240px]'} bg-white border border-[#e5e5e5] shadow-sm`}
                     aria-label="Search events"
                     onFocus={() => {
                       if (!hasOpenedSearch) {
@@ -1340,7 +1485,7 @@ function CalendarApp() {
                   />
                   {/* Search Results Dropdown */}
                   {searchDropdownOpen && searchResults.length > 0 && (
-                    <div id="select-event" className="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-50 max-h-64 overflow-auto">
+                    <div id="select-event" className="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded shadow-lg z-[9999] max-h-64 overflow-auto">
                       {searchResults.map((ev) => (
                         <div
                           key={ev.id}
@@ -1378,36 +1523,36 @@ function CalendarApp() {
                   </svg>
                 </button>
                 {viewDropdown && (
-                  <div className="absolute mt-1 right-0 z-50 bg-white shadow-lg border border-[#e5e5e5] rounded min-w-[130px]">
-                    {VIEW_OPTIONS.map((opt) => (
-                      <button
-                        key={opt}
-                        onClick={() => {
-                          logEvent(
-                            {
-                              Day: EVENT_TYPES.SELECT_DAY,
-                              "5 days": EVENT_TYPES.SELECT_FIVE_DAYS,
-                              Week: EVENT_TYPES.SELECT_WEEK,
-                              Month: EVENT_TYPES.SELECT_MONTH,
-                            }[opt],
-                            {
-                              source: "calendar-view-dropdown",
-                              selectedView: opt,
-                            }
-                          );
-                          setCurrentView(opt);
-                          setViewDropdown(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] ${
-                          opt === currentView ? "font-semibold bg-[#f3f7fa]" : ""
-                        }`}
-                        aria-label={`Select ${opt} view`}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                   <div className="absolute mt-1 right-0 z-[9999] bg-white shadow-lg border border-[#e5e5e5] rounded min-w-[130px]">
+                     {VIEW_OPTIONS.map((opt) => (
+                       <button
+                         key={opt}
+                         onClick={() => {
+                           logEvent(
+                             {
+                               Day: EVENT_TYPES.SELECT_DAY,
+                               "5 days": EVENT_TYPES.SELECT_FIVE_DAYS,
+                               Week: EVENT_TYPES.SELECT_WEEK,
+                               Month: EVENT_TYPES.SELECT_MONTH,
+                             }[opt],
+                             {
+                               source: "calendar-view-dropdown",
+                               selectedView: opt,
+                             }
+                           );
+                           setCurrentView(opt);
+                           setViewDropdown(false);
+                         }}
+                         className={`w-full text-left px-4 py-2 hover:bg-[#f3f7fa] text-[15px] ${
+                           opt === currentView ? "font-semibold bg-[#f3f7fa]" : ""
+                         }`}
+                         aria-label={`Select ${opt} view`}
+                       >
+                         {opt}
+                       </button>
+                     ))}
+                   </div>
+                 )}
               </div>
               {currentVariant.layout.userProfile === 'top' && (
                 <button
@@ -1427,8 +1572,12 @@ function CalendarApp() {
           </nav>
         )}
         <div
-          className="flex-1 w-full overflow-auto relative bg-white select-none"
-          style={{ minHeight: "500px" }}
+          className={
+            relocateCalendar
+              ? "fixed right-6 top-[64px] w-[520px] h-[calc(100vh-64px)] overflow-auto bg-white select-none shadow-lg z-[40]"
+              : "flex-1 w-full overflow-auto relative bg-white select-none"
+          }
+          style={{ minHeight: relocateCalendar ? undefined : "500px" }}
         >
           {currentView === "Month" && (
             <div className="w-full">

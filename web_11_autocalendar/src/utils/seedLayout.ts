@@ -202,7 +202,7 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
           userProfile: 'top',
           createButton: 'sidebar',
           miniCalendar: 'sidebar',
-        myCalendars: 'sidebar'
+          myCalendars: 'sidebar'
         },
         xpaths: {
           calendarCell: "//td[@data-week='true']",
