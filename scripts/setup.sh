@@ -117,7 +117,7 @@ deploy_project() {
   ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
   ENABLE_DB_MODE="$ENABLE_DB_MODE" NEXT_PUBLIC_ENABLE_DB_MODE="$ENABLE_DB_MODE" \
   DATA_SEED_VALUE="$SEED_VALUE" NEXT_PUBLIC_DATA_SEED_VALUE="$SEED_VALUE" \
-  API_URL="http://app:$WEBS_PORT" NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
+  API_URL="http://app:8080" NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
   docker compose -p "$proj" up -d --build
 
   popd >/dev/null
