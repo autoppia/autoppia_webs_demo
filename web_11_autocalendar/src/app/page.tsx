@@ -1398,13 +1398,17 @@ function CalendarApp() {
       mainContainer: isSidebarTop || isSidebarBottom ? 'flex-col' : 'flex-row',
       sidebarContainer: isSidebarLeft ? 'w-[260px] min-h-screen' : isSidebarRight ? 'w-[260px] min-h-screen' : isSidebarTop ? 'w-full h-auto' : 'w-full h-auto',
       contentContainer: isSidebarLeft ? 'flex-1 min-h-screen' : isSidebarRight ? 'flex-1 min-h-screen' : 'flex-1 min-h-screen',
+      // Ensure nav can wrap when there are many controls
       navContainer: (isNavTop && isSidebarTop) ? 'flex-col' : isNavTop ? 'flex-row' : isNavBottom ? 'flex-row' : isNavLeft ? 'flex-col' : 'flex-col',
-      navHeight: isSidebarTop && isNavTop ? 'h-[128px]' : 'h-[64px]', // Increased height when both sidebar and nav are at top
+      navHeight: isSidebarTop && isNavTop ? 'min-h-[128px]' : 'min-h-[64px]',
     };
   };
 
   const layoutClasses = getLayoutClasses();
   const relocateCalendar = seed === 4 || seed === 7;
+  // Position helpers to prevent overlaps for floating mini calendar
+  // Place at bottom; if right panel exists, anchor to left side instead of right
+  const miniCalHorizontal = relocateCalendar ? 'left-6' : 'right-6';
 
   return (
     <main className={`flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f] ${layoutClasses.mainContainer}`}>
@@ -1412,7 +1416,7 @@ function CalendarApp() {
       {currentVariant.layout.sidebar !== 'none' && (
         <aside className={`${
           currentVariant.layout.sidebar === 'top'
-            ? 'w-full h-auto bg-white border-b border-[#e5e5e5] flex flex-row items-center px-6 shadow z-10'
+            ? 'w-full h-auto bg-white border-b border-[#e5e5e5] flex flex-row flex-wrap items-center gap-3 px-6 shadow z-10'
             : `${layoutClasses.sidebarContainer} bg-white border-r border-[#e5e5e5] flex flex-col pt-0 pb-2 px-0 shadow z-10 min-h-screen select-none`
         }`}>
           {currentVariant.layout.sidebar === 'top' ? (
@@ -1441,8 +1445,8 @@ function CalendarApp() {
   <section className={`${layoutClasses.contentContainer} flex flex-col h-screen overflow-visible ${relocateCalendar ? 'pr-[560px]' : ''}`}>
         {/* Navigation - positioned based on layout config */}
         {currentVariant.layout.navigation !== 'none' && (
-          <nav className={`w-full flex items-center justify-between ${layoutClasses.navHeight} px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer}`}>
-            <div className={`flex items-center gap-2 ${isSidebarTop && isNavTop ? 'flex-row gap-2 flex-1' : 'min-w-[340px]'}`}>
+          <nav className={`w-full flex flex-wrap items-center justify-between ${layoutClasses.navHeight} px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer} gap-2`}>
+            <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? 'flex-row gap-2 flex-1 min-w-[280px]' : 'flex-1 min-w-[320px]'}`}>
               <button
                 className="border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] font-medium shadow-sm hover:bg-[#f5f5f5]"
                 onClick={handleSetToday}
@@ -1467,9 +1471,9 @@ function CalendarApp() {
               <span className="text-[22px] font-normal ml-3">{topLabel}</span>
               {renderNavigationComponents()}
             </div>
-            <div className={`flex items-center gap-2 ${isSidebarTop && isNavTop ? 'flex-col gap-2' : ''}`}>
+            <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? 'flex-col gap-2 flex-1 min-w-[260px]' : 'flex-1 min-w-[260px] justify-end'}`}>
               {(currentVariant.layout.search === 'top' || seed === 6 || seed === 9) && (
-                <div className={`relative z-20 ${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full flex-1 min-w-[200px]' : (seed === 6 || seed === 9 ? 'w-[240px]' : 'hidden md:block')}`}>
+                <div className={`relative z-20 ${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full flex-1 min-w-[200px]' : (seed === 6 || seed === 9 ? 'w-[240px]' : 'hidden md:block')} max-w-[360px]`}>
                   <Input
                     value={searchQuery}
                     onChange={handleSearchChange}
@@ -1833,7 +1837,7 @@ function CalendarApp() {
       )}
 
       {currentVariant.layout.miniCalendar === 'floating' && (
-        <div className="fixed top-20 right-6 bg-white border border-[#e5e5e5] rounded-lg shadow-lg p-4 z-50 w-64">
+        <div className={`fixed bottom-6 ${miniCalHorizontal} bg-white border border-[#e5e5e5] rounded-lg shadow-lg p-4 z-50 w-64`}>
           <div className="flex w-full justify-between text-[14px] items-center mb-2 font-medium">
             <button
               onClick={() => setMiniCalYear((y) => y - 1)}

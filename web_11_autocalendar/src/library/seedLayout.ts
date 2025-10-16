@@ -53,7 +53,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
 
   // Define 10 different layout configurations
   const layouts: LayoutConfig[] = [
-    // Seed 1: Default layout (navigation on top, sidebar left)
     {
       sidebar: { position: 'left', order: 1 },
       navigation: { position: 'top', order: 2 },
@@ -64,8 +63,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'sidebar', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 2: Navigation on left, calendar on right
     {
       sidebar: { position: 'right', order: 2 },
       navigation: { position: 'left', order: 1 },
@@ -76,8 +73,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'navigation', order: 2 },
       myCalendars: { position: 'navigation', order: 3 },
     },
-    
-    // Seed 3: Search first, calendar below, event panel last
     {
       sidebar: { position: 'bottom', order: 3 },
       navigation: { position: 'top', order: 2 },
@@ -88,8 +83,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'sidebar', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 4: Sidebar on right, navigation on bottom
     {
       sidebar: { position: 'right', order: 1 },
       navigation: { position: 'bottom', order: 2 },
@@ -100,8 +93,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'sidebar', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 5: Top-heavy layout with navigation and search stacked
     {
       sidebar: { position: 'left', order: 2 },
       navigation: { position: 'top', order: 1 },
@@ -112,8 +103,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'floating', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 6: Sidebar on top, calendar below
     {
       sidebar: { position: 'top', order: 1 },
       navigation: { position: 'top', order: 2 },
@@ -124,8 +113,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'sidebar', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 7: Navigation on right, sidebar on left
     {
       sidebar: { position: 'left', order: 1 },
       navigation: { position: 'right', order: 2 },
@@ -136,8 +123,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'sidebar', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 8: Bottom navigation with floating elements
     {
       sidebar: { position: 'left', order: 1 },
       navigation: { position: 'bottom', order: 2 },
@@ -148,8 +133,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'floating', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 9: Split layout with navigation and sidebar on opposite sides
     {
       sidebar: { position: 'right', order: 2 },
       navigation: { position: 'left', order: 1 },
@@ -160,8 +143,6 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       miniCalendar: { position: 'navigation', order: 2 },
       myCalendars: { position: 'sidebar', order: 3 },
     },
-    
-    // Seed 10: Compact layout with elements rearranged
     {
       sidebar: { position: 'top', order: 2 },
       navigation: { position: 'top', order: 1 },

@@ -116,5 +116,83 @@
       "selectedView": "Month"
     },
     "timestamp": "2025-10-16T07:30:02.376Z"
+  },
+  {
+    "event_name": "EVENT_WIZARD_OPEN",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "isEditing": false,
+      "eventId": null,
+      "calendar": "Work",
+      "title": "",
+      "color": "#2196F3",
+      "date": "2025-10-15",
+      "startTime": [
+        4,
+        0
+      ],
+      "endTime": [
+        4,
+        30
+      ],
+      "description": "",
+      "location": "",
+      "allDay": false,
+      "recurrence": "none",
+      "recurrenceEndDate": "2025-10-15",
+      "attendees": [],
+      "reminders": [],
+      "busy": true,
+      "visibility": "default",
+      "meetingLink": ""
+    },
+    "timestamp": "2025-10-16T10:51:08.133Z"
+  },
+  {
+    "event_name": "CELL_CLICKED",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "5 days-view",
+      "date": "2025-10-15",
+      "hour": 4,
+      "view": "5 days"
+    },
+    "timestamp": "2025-10-16T10:51:08.555Z"
+  },
+  {
+    "event_name": "CANCEL_ADD_EVENT",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "source": "event-modal",
+      "reason": "User clicked cancel button",
+      "eventId": null,
+      "title": "",
+      "calendar": "Work",
+      "date": "2025-10-15",
+      "startTime": [
+        4,
+        0
+      ],
+      "endTime": [
+        4,
+        30
+      ],
+      "color": "#2196F3",
+      "isEditing": false,
+      "allDay": false,
+      "recurrence": "none",
+      "attendees": [],
+      "reminders": [],
+      "busy": true,
+      "visibility": "default",
+      "location": "",
+      "description": "",
+      "meetingLink": ""
+    },
+    "timestamp": "2025-10-16T10:51:08.889Z"
   }
 ]
