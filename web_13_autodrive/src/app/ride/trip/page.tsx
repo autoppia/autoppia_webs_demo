@@ -727,8 +727,8 @@ export default function RideTripPage() {
     if (typeof window === "undefined") return;
     const pick = sessionStorage.getItem("__ud_pickup");
     const drop = sessionStorage.getItem("__ud_dropoff");
-    if (pick && PLACES.map((p) => p.label).includes(pick)) setPickup(pick);
-    if (drop && PLACES.map((d) => d.label).includes(drop)) setDropoff(drop);
+    if (pick) setPickup(pick);
+    if (drop) setDropoff(drop);
 
     const date = sessionStorage.getItem("ud_pickupdate");
     const time = sessionStorage.getItem("ud_pickuptime");
@@ -771,7 +771,7 @@ export default function RideTripPage() {
       setTimeout(() => {
         setLoading(false);
         setShowRides(true);
-      }, 2000);
+      }, 20);
     }
   }
   
