@@ -6,9 +6,13 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
-RUN npm ci
+RUN npm install
 
 COPY . .
+
+# Build argument for dynamic HTML control
+ARG ENABLE_DYNAMIC_HTML=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML
 
 RUN npm run build
 

@@ -8,11 +8,12 @@ import React, { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import dayjs from "dayjs";
 import { countries, RestaurantsData } from "@/components/library/dataset";
+import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 
 const photos = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150&fit=crop",
-  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=150&h=150&fit=crop",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150&fit=crop",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=150&h=150",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150",
 ];
 
 const restaurantData: Record<
@@ -75,6 +76,21 @@ export default function Page() {
   const [email, setEmail] = useState("user_name@gmail.com");
 
   const data = restaurantData[restaurantId] ?? restaurantData["restaurant-1"];
+
+  const seed = Number(searchParams?.get("seed") ?? "1");
+
+  // Create layout based on seed
+  const layout = {
+    wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
+    justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
+    marginTop: [0, 4, 8, 12, 16][seed % 5],
+    marginBottom: [0, 4, 8, 12, 16][seed % 5],
+    gap: [2, 3, 4, 5, 6][seed % 5],
+  };
+
+  // Use seed-based variations
+  const formVariation = useSeedVariation("form");
+  const bookButtonVariation = useSeedVariation("bookButton");
 
   const restaurantInfo = {
     restaurantId,
@@ -203,91 +219,216 @@ export default function Page() {
         </div>
 
         <h3 className="font-semibold text-lg mb-2 mt-4">Diner details</h3>
-        <div className="flex gap-2 mb-3 flex-wrap">
-          <div className="flex-1 min-w-[220px]">
-            <div className="flex items-center space-x-2">
+        <div className={formVariation.className} data-testid={formVariation.dataTestId}>
+        {layout.wrap ? (
+          <div className="w-full" data-testid={`input-wrapper-${seed}`}>
+            <div
+              className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
+                layout.gap
+              } mb-${layout.marginBottom}`}
+            >
+              <div className="flex-1 min-w-[220px]">
+                <div className="flex items-center space-x-2">
+                  <select
+                    id="select-country"
+                    className="border px-2 py-2 rounded-l bg-white cursor-pointer text-lg"
+                    value={selectedCountry.code}
+                    onChange={(e) => {
+                      const country = countries.find(
+                        (c) => c.code === e.target.value
+                      )!;
+                      setSelectedCountry(country);
+                      logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                        ...restaurantInfo,
+                        countryCode: country.code,
+                        countryName: country.name,
+                        restaurantName: data.name,
+                      });
+                    }}
+                  >
+                    {countries.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.flag} {c.dial}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    placeholder="Phone number"
+                    className="border border-l-0 px-3 py-2 w-full rounded-r focus:outline-none"
+                    value={phoneNumber}
+                    onChange={(e) => {
+                      setPhoneNumber(e.target.value);
+                      if (e.target.value.trim()) setPhoneError(false);
+                    }}
+                  />
+                </div>
+                {phoneError && (
+                  <p className="text-red-500 text-sm mt-1 ml-1">
+                    Phone number is required.
+                  </p>
+                )}
+              </div>
+
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 border px-3 py-2 rounded min-w-[220px] bg-gray-100 text-gray-800"
+                disabled
+              />
+            </div>
+          </div>
+        ) : (
+          <div
+            className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
+              layout.gap
+            } mb-${layout.marginBottom}`}
+          >
+            <div className="flex-1 min-w-[220px]">
+              <div className="flex items-center space-x-2">
+                <select
+                id="select-country"
+                  className="border px-2 py-2 rounded-l bg-white cursor-pointer text-lg"
+                  value={selectedCountry.code}
+                  onChange={(e) => {
+                    const country = countries.find(
+                      (c) => c.code === e.target.value
+                    )!;
+                    setSelectedCountry(country);
+                    logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                      ...restaurantInfo,
+                      countryCode: country.code,
+                      countryName: country.name,
+                      restaurantName: data.name,
+                    });
+                  }}
+                >
+                  {countries.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.flag} {c.dial}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  className="border border-l-0 px-3 py-2 w-full rounded-r focus:outline-none"
+                  value={phoneNumber}
+                  onChange={(e) => {
+                    setPhoneNumber(e.target.value);
+                    if (e.target.value.trim()) setPhoneError(false);
+                  }}
+                />
+              </div>
+              {phoneError && (
+                <p className="text-red-500 text-sm mt-1 ml-1">
+                  Phone number is required.
+                </p>
+              )}
+            </div>
+
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="flex-1 border px-3 py-2 rounded min-w-[220px] bg-gray-100 text-gray-800"
+              disabled
+            />
+          </div>
+        )}
+
+        {layout.wrap ? (
+          <div className="w-full" data-testid={`occasion-wrapper-${seed}`}>
+            <div
+              className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
+                layout.gap
+              } mb-${layout.marginBottom}`}
+            >
               <select
-                className="border px-2 py-2 rounded-l bg-white cursor-pointer text-lg"
-                value={selectedCountry.code}
+                id = "select-occasion"
+                className="flex-1 border rounded px-3 py-2 bg-white min-w-[220px]"
+                value={occasion}
                 onChange={(e) => {
-                  const country = countries.find(
-                    (c) => c.code === e.target.value
-                  )!;
-                  setSelectedCountry(country);
-                  logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                  setOccasion(e.target.value);
+                  logEvent(EVENT_TYPES.OCCASION_SELECTED, {
                     ...restaurantInfo,
-                    countryCode: country.code,
-                    countryName: country.name,
-                    restaurantName: data.name,
+                    occasion: e.target.value,
                   });
                 }}
               >
-                {countries.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.flag} {c.dial}
-                  </option>
-                ))}
+                <option value="">Select an occasion (optional)</option>
+                <option value="birthday">Birthday</option>
+                <option value="anniversary">Anniversary</option>
+                <option value="business">Business meal</option>
+                <option value="other">Other</option>
               </select>
               <input
-                type="tel"
-                placeholder="Phone number"
-                className="border border-l-0 px-3 py-2 w-full rounded-r focus:outline-none"
-                value={phoneNumber}
-                onChange={(e) => {
-                  setPhoneNumber(e.target.value);
-                  if (e.target.value.trim()) setPhoneError(false);
-                }}
+                type="text"
+                placeholder="Add a special request (optional)"
+                className="flex-1 border px-3 py-2 rounded min-w-[220px]"
+                value={specialRequest}
+                onChange={(e) => setSpecialRequest(e.target.value)}
               />
             </div>
-            {phoneError && (
-              <p className="text-red-500 text-sm mt-1 ml-1">
-                Phone number is required.
-              </p>
-            )}
           </div>
-
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 border px-3 py-2 rounded min-w-[220px] bg-gray-100 text-gray-800"
-            disabled
-          />
-        </div>
-
-        <div className="flex gap-2 mb-4 flex-wrap">
-          <select
-            className="flex-1 border rounded px-3 py-2 bg-white min-w-[220px]"
-            value={occasion}
-            onChange={(e) => {
-              setOccasion(e.target.value);
-              logEvent(EVENT_TYPES.OCCASION_SELECTED, {
-                ...restaurantInfo,
-                occasion: e.target.value,
-              });
-            }}
+        ) : (
+          <div
+            className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
+              layout.gap
+            } mb-${layout.marginBottom}`}
           >
-            <option value="">Select an occasion (optional)</option>
-            <option value="birthday">Birthday</option>
-            <option value="anniversary">Anniversary</option>
-            <option value="business">Business meal</option>
-            <option value="other">Other</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Add a special request (optional)"
-            className="flex-1 border px-3 py-2 rounded min-w-[220px]"
-            value={specialRequest}
-            onChange={(e) => setSpecialRequest(e.target.value)}
-          />
+            <select
+            id="select-occasion"
+              className="flex-1 border rounded px-3 py-2 bg-white min-w-[220px]"
+              value={occasion}
+              onChange={(e) => {
+                setOccasion(e.target.value);
+                logEvent(EVENT_TYPES.OCCASION_SELECTED, {
+                  ...restaurantInfo,
+                  occasion: e.target.value,
+                });
+              }}
+            >
+              <option value="">Select an occasion (optional)</option>
+              <option value="birthday">Birthday</option>
+              <option value="anniversary">Anniversary</option>
+              <option value="business">Business meal</option>
+              <option value="other">Other</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Add a special request (optional)"
+              className="flex-1 border px-3 py-2 rounded min-w-[220px]"
+              value={specialRequest}
+              onChange={(e) => setSpecialRequest(e.target.value)}
+            />
+          </div>
+        )}
         </div>
 
-        <Button
-          onClick={handleReservation}
-          className="w-full bg-[#46a758] hover:bg-[#54ce68] text-white py-6 mt-1 mb-4 text-lg rounded"
-        >
-          Complete reservation
-        </Button>
+        {layout.wrap ? (
+          <div
+            className="w-full"
+            data-testid={`complete-reservation-wrapper-${seed}`}
+          >
+            <Button
+              onClick={handleReservation}
+              className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+              data-testid={bookButtonVariation.dataTestId}
+            >
+              Complete reservation
+            </Button>
+          </div>
+        ) : (
+          <Button
+            onClick={handleReservation}
+            className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+            data-testid={bookButtonVariation.dataTestId}
+          >
+            Complete reservation
+          </Button>
+        )}
 
         <div className="text-xs text-gray-600 mt-3">
           By clicking “Complete reservation” you agree to the{" "}
