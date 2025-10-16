@@ -427,244 +427,78 @@ function PropertyDetailContent() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <DynamicWrapper as={layout.propertyDetail.wrapper} className={layout.propertyDetail.className}>
-        {layout.eventElements.order.map(createEventElement)}
-      </DynamicWrapper>
-      
-      {/* Additional content that doesn't change with layout */}
-      <div className="mb-4 flex items-center gap-3">
-        <Image
-          id="hostAvatar"
-          src={prop.host.avatar}
-          alt={prop.host.name}
-          width={54}
-          height={54}
-          className="rounded-full border"
-        />
-        <div>
-          <div id="hostName" className="font-medium text-neutral-800">
-            Hosted by {prop.host.name}
-          </div>
-          <div className="text-neutral-500 text-sm">
-            {prop.host.since} years hosting
-          </div>
-        </div>
-      </div>
-      <hr className="my-3" />
-      <div className="flex flex-col gap-7 mt-4">
-        {prop.amenities?.map((f, i) => (
-          <div
-            className="flex items-start gap-4"
-            key={f.title}
-            id={`amenity-${i}`}
-          >
-            <span className="text-2xl pt-1">{f.icon}</span>
-            <div>
-              <div className="font-semibold text-neutral-900 text-[17px]">
-                {f.title}
-              </div>
-              <div className="text-neutral-500 text-sm -mt-0.5">{f.desc}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {toastMessage && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-green-50 border border-green-800 text-green-800 rounded-lg p-5 text-center text-xl font-semibold shadow">
-          {toastMessage}
-        </div>
-      )}
-      {showShareModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md animate-fade-in">
-            <h2 className="text-xl font-semibold mb-3 text-neutral-800">
-              📤 Share this property
-            </h2>
-
-            <input
-              type="email"
-              placeholder="Receiver's email"
-              value={receiverEmail}
-              onChange={(e) => {
-                const value = e.target.value;
-                setReceiverEmail(value);
-
-                const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-                setEmailError(
-                  isValidEmail || value === "" ? "" : "Invalid email address"
-                );
-              }}
-              className="w-full border px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-300"
-            />
-            {emailError && (
-              <p className="text-red-500 text-xs mt-1">{emailError}</p>
-            )}
-
-            <div className="mt-5 flex justify-end gap-3">
-              <button
-                onClick={() => {
-                  setShowShareModal(false);
-                  setReceiverEmail("");
-                  setEmailError("");
-                }}
-                className="px-4 py-1.5 rounded-full text-sm bg-neutral-200 hover:bg-neutral-300"
-              >
-                Cancel
-              </button>
-              <button
-                disabled={!!emailError || !receiverEmail}
-                onClick={() => {
-                  setShowShareModal(false);
-                  setToastMessage(`Link sent to ${receiverEmail}`);
-                  logEvent("SHARE_HOTEL", {
-                    title: prop.title,
-                    location: prop.location,
-                    rating: prop.rating,
-                    reviews: prop.reviews,
-                    price: prop.price,
-                    dates: { from: prop.datesFrom, to: prop.datesTo },
-                    guests: prop.guests,
-                    host: prop.host,
-                    amenities: prop.amenities?.map((a) => a.title),
-                    email: receiverEmail,
-                  });
-                  setReceiverEmail("");
-                  setEmailError("");
-                  setTimeout(() => setToastMessage(""), 3000);
-                }}
-                className="px-4 py-1.5 rounded-full text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="flex-1 min-w-0 pr-6">
-        <h1 className="text-2xl font-bold mb-2 leading-7">
-          Entire Rental Unit in {prop.location}
-        </h1>
-        <div className="mb-3 text-neutral-700 text-[16px] flex gap-2 flex-wrap items-center">
+    <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="lg:col-span-2">
+        <h1 className="text-2xl font-bold text-neutral-900 mb-2">{prop.title}</h1>
+        <div className="flex items-center gap-2 text-neutral-600 mb-4">
+          <span>{prop.location}</span>
+          <span>·</span>
           <span>{prop.guests} guests</span>
-          <span>· {prop.bedrooms} bedroom</span>
-          <span>· {prop.beds} bed</span>
-          <span>· {prop.baths} bath</span>
+          <span>·</span>
+          <span>{prop.bedrooms} bedrooms</span>
+          <span>·</span>
+          <span>{prop.baths} bathrooms</span>
         </div>
-        <div className="flex items-center gap-3 mb-3">
-          <span className="text-lg font-semibold flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="#FF5A5F"
-              width={18}
-              height={18}
-              viewBox="0 0 24 24"
-              stroke="none"
-            >
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-            </svg>{" "}
-            {prop.rating.toFixed(2)}
-          </span>
-          <span className="text-neutral-600">
-            · {prop.reviews ?? 30} reviews
-          </span>
-          <button
-            onClick={() => {
-              const newState = !isWishlisted;
-              setIsWishlisted(newState);
-
-              if(newState) {
-
-              logEvent(
-                  EVENT_TYPES.ADD_TO_WISHLIST,
-                {
-                  title: prop.title,
-                  location: prop.location,
-                  rating: prop.rating,
-                  reviews: prop.reviews,
-                  price: prop.price,
-                  dates: { from: prop.datesFrom, to: prop.datesTo },
-                  guests: prop.guests,
-                  host: prop.host,
-                  amenities: prop.amenities?.map((a) => a.title),
-                }
-              );
-               }
-
-              setToastMessage(
-                newState ? "Added to wishlist ❤️" : "Removed from wishlist 💔"
-              );
-            }}
-            className="p-2 bg-white border border-neutral-200 rounded-full hover:shadow transition"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill={isWishlisted ? "red" : "none"}
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              width={24}
-              height={24}
-              className={isWishlisted ? "text-red-500" : "text-neutral-600"}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3
-         c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3
-         C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={() => setShowShareModal(true)}
-            className="px-4 py-2 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
-          >
-            Share
-          </button>
+        <div className="mb-6">
+          <Image src={prop.image} alt={prop.title} width={1200} height={800} className="rounded-xl w-full object-cover" />
         </div>
-        <hr className="my-4" />
-        <div className="mb-4 flex items-center gap-3">
-          <Image
-            id="hostAvatar"
-            src={prop.host.avatar}
-            alt={prop.host.name}
-            width={54}
-            height={54}
-            className="rounded-full border"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
-            <div id="hostName" className="font-medium text-neutral-800">
-              Hosted by {prop.host.name}
+            <h2 className="text-xl font-semibold mb-4">Select dates</h2>
+            <Calendar mode="range" selected={selected} onSelect={(r) => setSelected(r || undefined)} disabled={(d) => !isWithinAvailable(d)} className="rounded-md border" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Number of guests</h2>
+            <div className="border rounded-lg p-4">
+              <input type="number" min={1} max={prop.guests} value={guests} onChange={(e) => setGuests(Number(e.target.value))} className="w-full p-2 border rounded" />
             </div>
-            <div className="text-neutral-500 text-sm">
-              {prop.host.since} years hosting
-            </div>
+          </div>
+        </div>
+        <div className="mb-4 flex items-center gap-3">
+          <Image id="hostAvatar" src={prop.host.avatar} alt={prop.host.name} width={54} height={54} className="rounded-full border" />
+          <div>
+            <div id="hostName" className="font-medium text-neutral-800">Hosted by {prop.host.name}</div>
+            <div className="text-neutral-500 text-sm">{prop.host.since} years hosting</div>
           </div>
         </div>
         <hr className="my-3" />
         <div className="flex flex-col gap-7 mt-4">
           {prop.amenities?.map((f, i) => (
-            <div
-              className="flex items-start gap-4"
-              key={f.title}
-              id={`amenity-${i}`}
-            >
+            <div className="flex items-start gap-4" key={f.title} id={`amenity-${i}`}>
               <span className="text-2xl pt-1">{f.icon}</span>
               <div>
-                <div className="font-semibold text-neutral-900 text-[17px]">
-                  {f.title}
-                </div>
+                <div className="font-semibold text-neutral-900 text-[17px]">{f.title}</div>
                 <div className="text-neutral-500 text-sm -mt-0.5">{f.desc}</div>
               </div>
             </div>
           ))}
         </div>
+
+        {toastMessage && (
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-green-50 border border-green-800 text-green-800 rounded-lg p-5 text-center text-xl font-semibold shadow">{toastMessage}</div>
+        )}
+        {showShareModal && (
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md animate-fade-in">
+              <h2 className="text-xl font-semibold mb-3 text-neutral-800">📤 Share this property</h2>
+              <input type="email" placeholder="Receiver's email" value={receiverEmail} onChange={(e) => {
+                const value = e.target.value; setReceiverEmail(value);
+                const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                setEmailError(isValidEmail || value === "" ? "" : "Invalid email address");
+              }} className="w-full border px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-300" />
+              {emailError && (<p className="text-red-500 text-xs mt-1">{emailError}</p>)}
+              <div className="mt-5 flex justify-end gap-3">
+                <button onClick={() => { setShowShareModal(false); setReceiverEmail(""); setEmailError(""); }} className="px-4 py-1.5 rounded-full text-sm bg-neutral-200 hover:bg-neutral-300">Cancel</button>
+                <button disabled={!!emailError || !receiverEmail} onClick={() => { setShowShareModal(false); setToastMessage(`Link sent to ${receiverEmail}`); logEvent("SHARE_HOTEL", { title: prop.title, location: prop.location, rating: prop.rating, reviews: prop.reviews, price: prop.price, dates: { from: prop.datesFrom, to: prop.datesTo }, guests: prop.guests, host: prop.host, amenities: prop.amenities?.map((a) => a.title), email: receiverEmail, }); setReceiverEmail(""); setEmailError(""); setTimeout(() => setToastMessage(""), 3000); }} className="px-4 py-1.5 rounded-full text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">Send</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Sidebar/summary */}
-      <div className="w-[350px] min-w-[300px] bg-white shadow-md rounded-2xl border flex flex-col p-6 sticky top-8 h-fit">
+      <aside className="lg:col-span-1">
+      <div className="bg-white shadow-md rounded-2xl border flex flex-col p-6 sticky top-8 h-fit">
         <div id="pricePerNight" className="text-2xl font-bold mb-1">
           ${prop.price.toFixed(2)}{" "}
           <span className="text-base text-neutral-600 font-medium">
@@ -783,8 +617,9 @@ function PropertyDetailContent() {
           <div className="flex items-center justify-between font-bold text-neutral-900">
             <span>Total</span> <span>${total.toFixed(2)} USD</span>
           </div>
-        </div>
+            </div>
       </div>
+      </aside>
     </div>
   );
 }
