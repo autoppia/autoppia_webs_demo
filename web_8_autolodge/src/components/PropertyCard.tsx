@@ -38,7 +38,7 @@ export function PropertyCard({
 }) {
   return (
     <Link href={`/stay/${id}`} className="block">
-      <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
+      <div className="bg-white rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
             src={image}

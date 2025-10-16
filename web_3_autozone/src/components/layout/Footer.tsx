@@ -1,18 +1,27 @@
 "use client";
 
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses } from "@/utils/seedLayout";
 
 export function Footer() {
+  const searchParams = useSearchParams();
+  const rawSeed = Number(searchParams.get("seed") ?? "1");
+  const seed = getEffectiveSeed(rawSeed);
+  const layoutConfig = getLayoutConfig(seed);
+  const layoutClasses = getLayoutClasses(layoutConfig);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer className="bg-white">
+    <footer className={`bg-white ${layoutClasses.footer}`}>
       {/* Back to top */}
       <button
         onClick={scrollToTop}
-        className="w-full py-4 bg-amazon-lightBlue hover:bg-amazon-blue text-white text-sm font-medium"
+        className={`w-full py-4 bg-amazon-lightBlue hover:bg-amazon-blue text-white text-sm font-medium ${layoutClasses.buttons}`}
       >
         Back to top
       </button>
