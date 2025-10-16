@@ -4,16 +4,29 @@
     "web_agent_id": null,
     "user_id": null,
     "data": {
+<<<<<<< HEAD
       "location": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
       "destination": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA"
     },
     "timestamp": "2025-08-21T05:18:18.806Z"
+=======
+      "location": "",
+      "destination": "",
+      "timestamp": "2025-08-27T12:47:41.293Z",
+      "hasLocation": false,
+      "hasDestination": false,
+      "locationLength": 0,
+      "destinationLength": 0
+    },
+    "timestamp": "2025-08-27T12:47:42.548Z"
+>>>>>>> 16b9690753c02c3670a0a11f15340d290b318436
   },
   {
     "event_name": "SELECT_DATE",
     "web_agent_id": null,
     "user_id": null,
     "data": {
+<<<<<<< HEAD
       "date": "2025-08-22"
     },
     "timestamp": "2025-08-21T05:23:27.463Z"
@@ -956,24 +969,166 @@
       "isFutureDate": true
     },
     "timestamp": "2025-08-21T07:07:36.077Z"
+=======
+      "date": "2025-08-30",
+      "timestamp": "2025-08-27T12:48:01.997Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T12:48:02.428Z"
   },
   {
-    "event_name": "SELECT_TIME",
+    "event_name": "SELECT_DATE",
     "web_agent_id": null,
     "user_id": null,
     "data": {
-      "time": "12:00",
-      "timestamp": "2025-08-21T07:07:49.514Z",
-      "timeSlot": "12:00",
-      "isAvailable": true
+      "date": "2025-08-29",
+      "timestamp": "2025-08-27T12:48:07.508Z",
+      "isToday": false,
+      "isFutureDate": true
     },
-    "timestamp": "2025-08-21T07:07:49.586Z"
+    "timestamp": "2025-08-27T12:48:07.670Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-28",
+      "timestamp": "2025-08-27T12:48:11.028Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T12:48:11.151Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-30",
+      "timestamp": "2025-08-27T12:48:24.775Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T12:48:24.985Z"
   },
   {
     "event_name": "NEXT_PICKUP",
     "web_agent_id": null,
     "user_id": null,
     "data": {
+      "date": "2025-08-29",
+      "time": "00:00",
+      "timestamp": "2025-08-27T12:48:49.058Z",
+      "scheduledDateTime": "2025-08-29T00:00",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T12:48:49.605Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-31",
+      "timestamp": "2025-08-27T12:49:10.910Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T12:49:11.059Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-30",
+      "time": "00:00",
+      "timestamp": "2025-08-27T12:49:14.544Z",
+      "scheduledDateTime": "2025-08-30T00:00",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T12:49:14.936Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-30",
+      "time": "18:00",
+      "timestamp": "2025-08-27T12:51:45.465Z",
+      "scheduledDateTime": "2025-08-30T18:00",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T12:51:45.755Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-31",
+      "timestamp": "2025-08-27T13:00:23.271Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T13:00:23.755Z"
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-31",
+      "time": "00:00",
+      "timestamp": "2025-08-27T13:00:26.015Z",
+      "scheduledDateTime": "2025-08-31T00:00",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T13:00:26.533Z"
+  },
+  {
+    "event_name": "SELECT_DATE",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "date": "2025-08-28",
+      "timestamp": "2025-08-27T13:00:48.987Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T13:00:49.471Z"
+>>>>>>> 16b9690753c02c3670a0a11f15340d290b318436
+  },
+  {
+    "event_name": "SELECT_TIME",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+<<<<<<< HEAD
+      "time": "12:00",
+      "timestamp": "2025-08-21T07:07:49.514Z",
+      "timeSlot": "12:00",
+      "isAvailable": true
+    },
+    "timestamp": "2025-08-21T07:07:49.586Z"
+=======
+      "time": "07:30",
+      "timestamp": "2025-08-27T13:00:53.447Z",
+      "timeSlot": "07:30",
+      "isAvailable": true
+    },
+    "timestamp": "2025-08-27T13:00:53.852Z"
+>>>>>>> 16b9690753c02c3670a0a11f15340d290b318436
+  },
+  {
+    "event_name": "NEXT_PICKUP",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+<<<<<<< HEAD
       "date": "2025-08-22",
       "time": "12:00",
       "timestamp": "2025-08-21T07:08:05.124Z",
@@ -1238,12 +1393,22 @@
       "destinationLength": 80
     },
     "timestamp": "2025-08-21T07:43:16.384Z"
+=======
+      "date": "2025-08-28",
+      "time": "07:30",
+      "timestamp": "2025-08-27T13:00:55.844Z",
+      "scheduledDateTime": "2025-08-28T07:30",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T13:00:56.766Z"
+>>>>>>> 16b9690753c02c3670a0a11f15340d290b318436
   },
   {
     "event_name": "SELECT_DATE",
     "web_agent_id": null,
     "user_id": null,
     "data": {
+<<<<<<< HEAD
       "date": "2025-08-22",
       "timestamp": "2025-08-21T07:43:35.027Z",
       "isToday": false,
@@ -1262,12 +1427,21 @@
       "isAvailable": true
     },
     "timestamp": "2025-08-21T07:43:48.769Z"
+=======
+      "date": "2025-08-30",
+      "timestamp": "2025-08-27T13:05:16.019Z",
+      "isToday": false,
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T13:05:17.939Z"
+>>>>>>> 16b9690753c02c3670a0a11f15340d290b318436
   },
   {
     "event_name": "NEXT_PICKUP",
     "web_agent_id": null,
     "user_id": null,
     "data": {
+<<<<<<< HEAD
       "date": "2025-08-22",
       "time": "12:00",
       "timestamp": "2025-08-21T07:43:57.532Z",
@@ -1551,5 +1725,14 @@
       "isFutureDate": false
     },
     "timestamp": "2025-08-25T05:28:59.572Z"
+=======
+      "date": "2025-08-30",
+      "time": "00:00",
+      "timestamp": "2025-08-27T13:05:18.753Z",
+      "scheduledDateTime": "2025-08-30T00:00",
+      "isFutureDate": true
+    },
+    "timestamp": "2025-08-27T13:05:19.272Z"
+>>>>>>> 16b9690753c02c3670a0a11f15340d290b318436
   }
 ]
