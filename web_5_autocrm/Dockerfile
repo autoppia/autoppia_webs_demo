@@ -3,12 +3,20 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Accept build argument
+ARG ENABLE_DYNAMIC_HTML=false
+
 COPY package.json package-lock.json ./
 
-# Install dependencies (including dev dependencies needed for building)
+# Install dependencies (including dev libraries needed for building)
 RUN npm ci
 
 COPY . .
+
+# Set environment variables for build
+ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV DOCKER_BUILD=true
 
 RUN npm run build
 

@@ -1,6 +1,13 @@
 'use client'
 import Link from 'next/link';
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from 'lucide-react';
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { 
+  getEffectiveSeed, 
+  getLayoutConfig
+} from "@/utils/dynamicDataProvider";
+import { getLayoutClasses } from "@/utils/seedLayout";
 // import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
 
 // interface EventData {
@@ -8,13 +15,18 @@ import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from 'lucide-r
 //   href: string;
 // }
 
-export default function DashboardPage() {
+function DashboardContent() {
+  const searchParams = useSearchParams();
+  const rawSeed = Number(searchParams.get("seed") ?? "1");
+  const seed = getEffectiveSeed(rawSeed);
+  const layoutConfig = getLayoutConfig(seed);
+  const layoutClasses = getLayoutClasses(layoutConfig);
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
 
   return (
-    <section>
+    <section className={`${layoutClasses.spacing}`}>
       <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">Dashboard Overview</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
         {/* Card 1: Matters */}
         <Link
           href="/matters"
@@ -100,5 +112,13 @@ export default function DashboardPage() {
         </Link>
       </div>
     </section>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }

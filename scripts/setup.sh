@@ -123,7 +123,7 @@ deploy_webs_server() {
 
     docker compose -p "$name" down --volumes || true
 
-    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
+    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$name" up -d --build
 
   popd > /dev/null
