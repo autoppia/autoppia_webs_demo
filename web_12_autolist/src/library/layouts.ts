@@ -380,6 +380,8 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   }
 
   // Apply the seed mapping formula: ((seed % 30) + 1) % 10 || 10
+  // Special-case: seed=3 should use the Default Layout (layout 1)
+  if (seed === 3) return LAYOUTS[1];
   const mappedSeed = ((seed % 30) + 1) % 10 || 10;
   
   return LAYOUTS[mappedSeed];
