@@ -99,11 +99,10 @@ export default function HeaderNav() {
             </span>
           </Link>
         </div>
-        {layout.searchPosition === 'header' && layout.headerPosition !== 'left' && layout.headerPosition !== 'right' && (
-          <div className={searchClasses}>
-            <UserSearchBar />
-          </div>
-        )}
+        {/* Always show UserSearchBar in header for all layouts */}
+        <div className={searchClasses}>
+          <UserSearchBar />
+        </div>
         <nav className={getNavClasses()}>
           {shuffledNavItems.map((item) => (
             <Link
