@@ -33,6 +33,12 @@ export default function HeaderNav() {
       eventData: { label: "Jobs" }
     },
     {
+      href: "/recommendations",
+      label: "Recommendations",
+      eventType: EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS,
+      eventData: { label: "Recommendations", source: "navbar" }
+    },
+    {
       href: "/profile/alexsmith",
       label: "Profile",
       eventType: EVENT_TYPES.PROFILE_NAVBAR,
@@ -59,11 +65,9 @@ export default function HeaderNav() {
       case 'bottom':
         return `${baseClasses} sticky bottom-0 z-30 h-16 w-full`;
       case 'left':
-        return `${baseClasses} fixed left-0 top-0 h-full w-16 z-30 flex-col`;
+        return `fixed left-0 top-0 h-full w-56 z-30 flex flex-col border-r bg-white shadow-sm`;
       case 'right':
-        return `${baseClasses} fixed right-0 top-0 h-full w-16 z-30 flex-col`;
-      case 'hidden':
-        return 'hidden';
+        return `fixed right-0 top-0 h-full w-56 z-30 flex flex-col border-l bg-white shadow-sm`;
       default:
         return `${baseClasses} sticky top-0 z-30 h-16 w-full`;
     }
@@ -73,7 +77,7 @@ export default function HeaderNav() {
     switch (layout.headerPosition) {
       case 'left':
       case 'right':
-        return "flex flex-col items-center gap-4 h-full py-4";
+        return "flex flex-col items-start gap-4 h-full py-4 px-3";
       default:
         return "flex items-center gap-4 w-full max-w-6xl mx-auto";
     }
@@ -94,7 +98,7 @@ export default function HeaderNav() {
       <div className={getHeaderContentClasses()}>
         <div className="text-white bg-blue-600 px-2 py-2">
           <Link href="/" className="flex items-center gap-2">
-            <span className={`font-bold text-xl tracking-tight text-white ${layout.headerPosition === 'left' || layout.headerPosition === 'right' ? 'hidden' : 'hidden sm:block'}`}>
+            <span className={`font-bold text-xl tracking-tight text-white`}>
               AutoConnect
             </span>
           </Link>

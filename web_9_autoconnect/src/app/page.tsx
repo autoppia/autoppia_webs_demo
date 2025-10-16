@@ -15,7 +15,7 @@ import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
 
 export default function HomePage() {
-  const { layout } = useSeed();
+  const { seed, layout } = useSeed();
   
   // pick a current user
   const currentUser = mockUsers[2];
@@ -110,33 +110,7 @@ export default function HomePage() {
   const postBoxClasses = getLayoutClasses(layout, 'postBoxPosition');
   const searchClasses = getLayoutClasses(layout, 'searchPosition');
 
-  const renderSidebar = (position: 'left' | 'right' | 'top' | 'bottom') => {
-    if (layout.sidebarPosition !== position) return null;
-    
-    if (position === 'top' || position === 'bottom') {
-      return (
-        <div className={`w-full ${sidebarClasses}`}>
-          <div className="flex gap-4 justify-center">
-            <div className="w-[220px]">
-              <LeftSidebar />
-            </div>
-            <div className="w-[280px]">
-              <RightSidebar />
-            </div>
-          </div>
-        </div>
-      );
-    }
-    
-    const sidebarWidth = position === 'left' ? 'w-[220px]' : 'w-[280px]';
-    const visibility = position === 'left' ? 'hidden lg:block' : 'hidden xl:block';
-    
-    return (
-      <div className={`${visibility} ${sidebarWidth} flex-shrink-0 ${sidebarClasses}`}>
-        {position === 'left' ? <LeftSidebar /> : <RightSidebar />}
-      </div>
-    );
-  };
+  const renderSidebar = (_position: 'left' | 'right' | 'top' | 'bottom') => null;
 
   const renderPostBox = () => {
     if (layout.postBoxPosition === 'left' || layout.postBoxPosition === 'right') {
@@ -348,11 +322,19 @@ export default function HomePage() {
     );
   };
 
+  const wrapperPadding = layout.headerPosition === 'left' ? 'pl-56' : layout.headerPosition === 'right' ? 'pr-56' : '';
+
   return (
-    <div className={getMainLayoutClasses()}>
+    <div className={`${getMainLayoutClasses()} ${wrapperPadding}`}>
       {/* Floating Search */}
       {layout.searchPosition === 'floating' && (
         <div className={searchClasses}>
+          <UserSearchBar />
+        </div>
+      )}
+      {/* Fallback: ensure search is accessible on small screens when header/sidebar may hide it */}
+      {layout.searchPosition !== 'main' && (
+        <div className="w-full px-4 mt-2 sm:hidden">
           <UserSearchBar />
         </div>
       )}
