@@ -75,6 +75,23 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
       Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
+  
+  /* Dynamic body padding based on navbar style */
+  body.navbar-side {
+    @apply pt-24; /* Two-line header height: main nav (~64px) + secondary nav (~32px) */
+  }
+  
+  body.navbar-hidden-top {
+    @apply pt-20; /* Standard header height since nav is hidden but header still exists */
+  }
+  
+  body.navbar-floating {
+    @apply pt-20; /* Standard header height to account for floating navbar space */
+  }
+  
+  body.navbar-top {
+    @apply pt-24; /* Two-line header height: main nav (~64px) + secondary nav (~32px) */
+  }
 }
 
 @layer components {
@@ -92,5 +109,113 @@
 
   .category-title {
     @apply text-xl font-bold mb-4;
+  }
+
+  /* Dynamic Layout Classes */
+  
+  /* Header Layout Variations */
+  .search-left {
+    @apply justify-start;
+  }
+  
+  .search-center {
+    @apply justify-center;
+  }
+  
+  .search-right {
+    @apply justify-end;
+  }
+  
+  .search-full-width {
+    @apply w-full;
+  }
+  
+  .navbar-side {
+    @apply flex-col items-start h-24; /* Two-line header height */
+  }
+  
+  .navbar-hidden-top {
+    @apply hidden md:flex;
+  }
+  
+  .navbar-floating {
+    @apply absolute top-4 right-4 bg-white shadow-xl rounded-lg p-3 border border-gray-200 z-50 max-w-sm;
+  }
+  
+  /* Content Layout Variations */
+  .content-reverse {
+    @apply flex-col-reverse;
+  }
+  
+  .content-centered {
+    @apply justify-center items-center min-h-screen;
+  }
+  
+  .content-wide {
+    @apply max-w-none mx-0 px-2;
+  }
+  
+  .content-narrow {
+    @apply max-w-4xl mx-auto px-4;
+  }
+  
+  .content-default {
+    @apply max-w-7xl mx-auto px-4;
+  }
+  
+  /* Card Layout Variations */
+  .cards-row {
+    @apply grid grid-cols-1 gap-4;
+  }
+  
+  .cards-column {
+    @apply grid grid-cols-1 gap-6;
+  }
+  
+  .cards-masonry {
+    @apply columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6;
+  }
+  
+  .cards-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+  }
+  
+  /* Button Style Variations */
+  .buttons-rounded {
+    @apply rounded-full;
+  }
+  
+  .buttons-outlined {
+    @apply border-2 border-current bg-transparent;
+  }
+  
+  .buttons-minimal {
+    @apply bg-transparent border-none shadow-none;
+  }
+  
+  /* Footer Style Variations */
+  .footer-minimal {
+    @apply py-4;
+  }
+  
+  .footer-expanded {
+    @apply py-16;
+  }
+  
+  .footer-centered {
+    @apply text-center;
+  }
+  
+  /* Spacing Variations */
+  .spacing-tight {
+    @apply gap-2 p-2;
+  }
+  
+  .spacing-loose {
+    @apply gap-8 p-8;
+  }
+  
+  .spacing-normal {
+    @apply gap-4 p-4;
   }
 }

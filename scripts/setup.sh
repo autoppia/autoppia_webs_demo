@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 # setup.sh - Deploy all web demo projects + API (webs_server) with isolation
 #------------------------------------------------------------
+# Usage:
+#   ./setup.sh [OPTIONS]
+#
+# Options:
+#   --web_port=PORT               Set base web port (default: 8000)
+#   --postgres_port=PORT          Set base postgres port (default: 5434)
+#   --webs_port=PORT              Set webs_server port (default: 8090)
+#   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
+#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autoconnect, or all (default: all)
+#   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
+#   -y, --yes                     Force delete without confirmation
+#
+# Examples:
+#   ./setup.sh --demo=automail --enable_dynamic_html=true
+#   ./setup.sh --demo=all --enable_dynamic_html=true --web_port=8000
+#------------------------------------------------------------
 set -euo pipefail
 
 echo "🚀 Setting up web demos..."
@@ -93,7 +109,7 @@ deploy_project() {
     return
   fi
 
-  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp)..."
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML)..."
   pushd "$dir" > /dev/null
 
     if docker compose -p "$proj" ps -q | grep -q .; then
@@ -106,7 +122,7 @@ deploy_project() {
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
-  echo "✅ $name is running on port $webp"
+  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML)"
   echo
 }
 
@@ -123,7 +139,7 @@ deploy_webs_server() {
 
     docker compose -p "$name" down --volumes || true
 
-    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
+    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$name" up -d --build
 
   popd > /dev/null
@@ -156,20 +172,8 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     deploy_webs_server
     ;;
-  autodelivery)
-    deploy_project "web_7_autodelivery" "$WEB_PORT" "" "web_7_autodelivery${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autolodge)
-    deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autoconnect)
-    deploy_project "web_9_autoconnect" "$WEB_PORT" "" "autoconnect_${WEB_PORT}"
-    deploy_webs_server
-    ;;
-  autowork)
-    deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
+  autocalender)
+    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
     deploy_webs_server
     ;;
   autocalendar)
@@ -178,6 +182,9 @@ case "$WEB_DEMO" in
     ;;
   autolist)
     deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
+    ;;
+  autodrive)
+    deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
@@ -191,12 +198,13 @@ case "$WEB_DEMO" in
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
     deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalender_$((WEB_PORT + 10))"
+    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
     deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     deploy_webs_server
-    ;;
+    ;;   
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autolist' or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autodrive', or 'all'."
     exit 1
     ;;
 esac

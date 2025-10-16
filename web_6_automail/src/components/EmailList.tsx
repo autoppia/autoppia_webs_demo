@@ -12,6 +12,8 @@ import { useEmail } from "@/contexts/EmailContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import type { Email } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { DynamicButton } from "@/components/DynamicButton";
+import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import {
   Star,
   Archive,
@@ -203,76 +205,78 @@ export function EmailList() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
+          <DynamicButton variant="ghost" size="icon" eventType="REFRESH_VIEW">
             <RefreshCw className="h-4 w-4" />
-          </Button>
+          </DynamicButton>
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <span>
               {filteredEmails.length === 0 ? "0" : `1-${filteredEmails.length}`}{" "}
               of {filteredEmails.length}
             </span>
-            <Button
+            <DynamicButton
               variant="ghost"
               size="icon"
               className="h-6 w-6"
               onClick={prevPage}
               disabled={!hasPrevPage}
+              eventType="PREV_PAGE"
             >
               <ChevronLeft className="h-3 w-3" />
-            </Button>
-            <Button
+            </DynamicButton>
+            <DynamicButton
               variant="ghost"
               size="icon"
               className="h-6 w-6"
               onClick={nextPage}
               disabled={!hasNextPage}
+              eventType="NEXT_PAGE"
             >
               <ChevronRight className="h-3 w-3" />
-            </Button>
+            </DynamicButton>
           </div>
         </div>
       </div>
 
       {/* Action Bar */}
       {selectedEmails.length > 0 && (
-        <div className="flex items-center gap-2 p-3 bg-muted/50 border-b border-border">
+        <DynamicContainer className="flex items-center gap-2 p-3 bg-muted/50 border-b border-border" eventType="BULK_ACTIONS">
           <span className="text-sm text-muted-foreground">
             {selectedEmails.length} selected
           </span>
           <Separator orientation="vertical" className="h-4" />
-          <Button id="bulk-delete-button" variant="ghost" size="sm" onClick={handleBulkDelete}>
+          <DynamicButton variant="ghost" size="sm" onClick={handleBulkDelete} eventType="DELETE_EMAIL">
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
-          </Button>
-          <Button id="bulk-archive-button" variant="ghost" size="sm">
+          </DynamicButton>
+          <DynamicButton variant="ghost" size="sm" eventType="ARCHIVE_EMAIL">
             <Archive className="h-4 w-4 mr-2" />
             Archive
-          </Button>
-          <Button id="bulk-mark-unread-button" variant="ghost" size="sm" onClick={handleBulkMarkAsUnread}>
+          </DynamicButton>
+          <DynamicButton variant="ghost" size="sm" onClick={handleBulkMarkAsUnread} eventType="MARK_AS_UNREAD">
             <Mail className="h-4 w-4 mr-2" />
             Mark as unread
-          </Button>
-          <Button id="bulk-mark-spam-button" variant="ghost" size="sm" onClick={handleBulkMarkAsSpam}>
+          </DynamicButton>
+          <DynamicButton variant="ghost" size="sm" onClick={handleBulkMarkAsSpam} eventType="MARK_AS_SPAM">
             <Shield className="h-4 w-4 mr-2" />
             Mark as spam
-          </Button>
+          </DynamicButton>
           <LabelSelector
             emailIds={selectedEmails}
             trigger={
-              <Button variant="ghost" size="sm">
+              <DynamicButton variant="ghost" size="sm" eventType="ADD_LABEL">
                 <Tag className="h-4 w-4 mr-2" />
                 Labels
-              </Button>
+              </DynamicButton>
             }
           />
-          <Button variant="ghost" size="sm" onClick={clearSelection}>
+          <DynamicButton variant="ghost" size="sm" onClick={clearSelection} eventType="CLEAR_SELECTION">
             Clear Selection
-          </Button>
-        </div>
+          </DynamicButton>
+        </DynamicContainer>
       )}
 
       {/* Email List Header */}
-      <div className="flex items-center gap-3 p-3 border-b border-border bg-muted/30">
+      <DynamicContainer className="flex items-center gap-3 p-3 border-b border-border bg-muted/30" eventType="EMAIL_LIST_HEADER">
         <div className="flex items-center">
           <Checkbox
             checked={allSelected}
@@ -293,58 +297,61 @@ export function EmailList() {
           <div className="col-span-6">Subject</div>
           <div className="col-span-2 text-right">Time</div>
         </div>
-      </div>
+      </DynamicContainer>
 
       {/* Email List */}
       <ScrollArea className="flex-1">
-        {paginatedEmails.length === 0 ? (
-          <div className="flex items-center justify-center h-64 text-center">
-            <div>
-              {searchQuery ? (
-                <>
-                  <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
-                    <Search className="h-8 w-8 text-muted-foreground" />
-                  </div>
-                  <p className="text-lg font-medium text-muted-foreground">
-                    No emails found
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    No emails match your search for "{searchQuery}"
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Try different keywords or check your spelling
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="text-lg font-medium text-muted-foreground">
-                    No emails found
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Try adjusting your filters or search terms
-                  </p>
-                </>
-              )}
+        <DynamicContainer className="h-full" eventType="EMAIL_LIST">
+          {paginatedEmails.length === 0 ? (
+            <DynamicItem className="flex items-center justify-center h-64 text-center" eventType="NO_RESULTS">
+              <div>
+                {searchQuery ? (
+                  <>
+                    <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
+                      <Search className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                    <p className="text-lg font-medium text-muted-foreground">
+                      No emails found
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      No emails match your search for "{searchQuery}"
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Try different keywords or check your spelling
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-lg font-medium text-muted-foreground">
+                      No emails found
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Try adjusting your filters or search terms
+                    </p>
+                  </>
+                )}
+              </div>
+            </DynamicItem>
+          ) : (
+            <div className="divide-y divide-border">
+              {paginatedEmails.map((email) => (
+                <DynamicItem key={email.id} eventType="EMAIL_LIST_ITEM">
+                  <EmailItem
+                    email={email}
+                    isSelected={selectedEmails.includes(email.id)}
+                    isActive={currentEmail?.id === email.id}
+                    onSelect={(e) => handleCheckboxClick(e, email)}
+                    onClick={() => handleEmailClick(email)}
+                    onStarClick={(e) => handleStarClick(e, email)}
+                    formatTimestamp={formatTimestamp}
+                    highlightSearchTerm={highlightSearchTerm}
+                    searchQuery={searchQuery}
+                  />
+                </DynamicItem>
+              ))}
             </div>
-          </div>
-        ) : (
-          <div className="divide-y divide-border">
-            {paginatedEmails.map((email) => (
-              <EmailItem
-                key={email.id}
-                email={email}
-                isSelected={selectedEmails.includes(email.id)}
-                isActive={currentEmail?.id === email.id}
-                onSelect={(e) => handleCheckboxClick(e, email)}
-                onClick={() => handleEmailClick(email)}
-                onStarClick={(e) => handleStarClick(e, email)}
-                formatTimestamp={formatTimestamp}
-                highlightSearchTerm={highlightSearchTerm}
-                searchQuery={searchQuery}
-              />
-            ))}
-          </div>
-        )}
+          )}
+        </DynamicContainer>
       </ScrollArea>
     </div>
   );
@@ -394,11 +401,12 @@ function EmailItem({
       </div>
 
       {/* Star */}
-      <Button
+      <DynamicButton
         variant="ghost"
         size="icon"
         className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
         onClick={onStarClick}
+        eventType="STAR_AN_EMAIL"
       >
         <Star
           className={cn(
@@ -406,21 +414,21 @@ function EmailItem({
             email.isStarred && "fill-yellow-400 text-yellow-400"
           )}
         />
-      </Button>
+      </DynamicButton>
 
       {/* Email Content */}
-      <div className="flex-1 grid grid-cols-12 gap-4 min-w-0">
+      <DynamicContainer eventType="EMAIL_CONTENT" className="flex-1 grid grid-cols-12 gap-4 min-w-0">
         {/* Sender */}
-        <div className="col-span-3 min-w-0 mt-3">
+        <DynamicItem eventType="EMAIL_SENDER" className="col-span-3 min-w-0 mt-3">
           <p
             className={cn("text-sm truncate", !email.isRead && "font-semibold")}
           >
             {highlightSearchTerm(email.from.name, searchQuery)}
           </p>
-        </div>
+        </DynamicItem>
 
         {/* Subject and Snippet */}
-        <div className="col-span-7 min-w-0">
+        <DynamicItem eventType="EMAIL_CONTENT" className="col-span-7 min-w-0">
           <div className="flex items-center gap-2">
             <p
               className={cn(
@@ -458,15 +466,15 @@ function EmailItem({
               )}
             </div>
           )}
-        </div>
+        </DynamicItem>
 
         {/* Timestamp */}
-        <div className="col-span-2 text-right">
+        <DynamicItem eventType="EMAIL_TIMESTAMP" className="col-span-2 text-right">
           <p className="text-xs text-muted-foreground">
             {formatTimestamp(email.timestamp)}
           </p>
-        </div>
-      </div>
+        </DynamicItem>
+      </DynamicContainer>
     </div>
   );
 }

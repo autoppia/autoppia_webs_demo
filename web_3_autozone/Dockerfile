@@ -10,6 +10,10 @@ RUN npm ci
 
 COPY . .
 
+# Build argument for dynamic HTML control
+ARG ENABLE_DYNAMIC_HTML=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML
+
 RUN npm run build
 
 # Stage 2: Create the lean production image
