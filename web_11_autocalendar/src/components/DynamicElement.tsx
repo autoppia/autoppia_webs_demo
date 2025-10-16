@@ -1,0 +1,89 @@
+// src/components/DynamicElement.tsx
+
+import { useState, useEffect, useRef } from 'react';
+import { useSeedLayout } from '@/library/useSeedLayout';
+
+interface DynamicElementProps {
+  children: React.ReactNode;
+  elementType: string;
+  index?: number;
+  className?: string;
+  as?: 'div' | 'span' | 'section' | 'article' | 'aside' | 'nav' | 'a';
+  reorder?: boolean;
+  [key: string]: unknown;
+}
+
+export function DynamicElement({
+  children,
+  elementType,
+  index = 0,
+  className = "",
+  as: Component = 'div',
+  reorder = false,
+  ...props
+}: DynamicElementProps) {
+  const elementRef = useRef<HTMLElement | null>(null);
+  const {
+    getElementAttributes,
+    getElementXPath,
+    generateId,
+    generateSeedClass,
+    applyCSSVariables,
+    createDynamicStyles,
+    reorderElements
+  } = useSeedLayout();
+
+  const [attributes, setAttributes] = useState<Record<string, string>>({});
+  const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
+
+  useEffect(() => {
+    // Generate dynamic attributes and styles based on seed
+    const elementAttrs = getElementAttributes(elementType, index);
+    const elementId = generateId(elementType, index);
+    const seedClass = generateSeedClass(`dynamic-${elementType}`);
+    const xpath = getElementXPath(elementType);
+    
+    setAttributes({
+      ...elementAttrs,
+      id: elementId,
+      className: `${seedClass} ${className}`.trim(),
+      'data-xpath': xpath,
+      'data-element-type': elementType,
+      'data-index': `${index}`
+    });
+    
+    setDynamicStyles(createDynamicStyles());
+  }, [elementType, index, className, getElementAttributes, generateId, generateSeedClass, getElementXPath, createDynamicStyles]);
+
+  useEffect(() => {
+    // Apply CSS variables to the element
+    if (elementRef.current) {
+      applyCSSVariables(elementRef.current);
+    }
+  }, [dynamicStyles, applyCSSVariables]);
+
+  // Render based on component type to avoid TypeScript issues
+  const commonProps = {
+    ...attributes,
+    ...props,
+    style: dynamicStyles,
+    children
+  };
+
+  switch (Component) {
+    case 'section':
+      return <section ref={elementRef as React.RefObject<HTMLElement>} {...commonProps} />;
+    case 'article':
+      return <article ref={elementRef as React.RefObject<HTMLElement>} {...commonProps} />;
+    case 'aside':
+      return <aside ref={elementRef as React.RefObject<HTMLElement>} {...commonProps} />;
+    case 'nav':
+      return <nav ref={elementRef as React.RefObject<HTMLElement>} {...commonProps} />;
+    case 'span':
+      return <span ref={elementRef as React.RefObject<HTMLElement>} {...commonProps} />;
+    case 'a':
+      return <a ref={elementRef as React.RefObject<HTMLAnchorElement>} {...commonProps} />;
+    default:
+      return <div ref={elementRef as React.RefObject<HTMLDivElement>} {...commonProps} />;
+  }
+}
