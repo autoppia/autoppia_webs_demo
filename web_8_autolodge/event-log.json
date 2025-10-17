@@ -4329,5 +4329,167 @@
       ]
     },
     "timestamp": "2025-10-16T12:02:04.212Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "1",
+      "title": "The Pinewood Chalet",
+      "location": "Lake Tahoe, USA",
+      "rating": 4.7,
+      "reviews": 124,
+      "price": 189,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 4,
+      "host": {
+        "name": "Emily",
+        "since": 3,
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      "amenities": [
+        "Dedicated workspace",
+        "Great location",
+        "Easy check-in"
+      ]
+    },
+    "timestamp": "2025-10-17T03:35:09.180Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": 1,
+      "guests_set": 1,
+      "hotel": {
+        "id": 1,
+        "image": "/images/hotel1.jpeg",
+        "title": "The Pinewood Chalet",
+        "location": "Lake Tahoe, USA",
+        "rating": 4.7,
+        "reviews": 124,
+        "guests": 4,
+        "maxGuests": 4,
+        "bedrooms": 2,
+        "beds": 2,
+        "baths": 2,
+        "datesFrom": "2025-05-03",
+        "datesTo": "2025-07-15",
+        "price": 189,
+        "host": {
+          "name": "Emily",
+          "since": 3,
+          "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Dedicated workspace",
+            "desc": "A common area with wifi that's well-suited for working."
+          },
+          {
+            "icon": "📍",
+            "title": "Great location",
+            "desc": "Close to hiking trails and the lake shore."
+          },
+          {
+            "icon": "🔍",
+            "title": "Easy check-in",
+            "desc": "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      "selected_checkin": "2025-05-03",
+      "selected_checkout": "2025-07-15",
+      "selected_dates_from": "2025-05-03",
+      "selected_dates_to": "2025-07-15"
+    },
+    "timestamp": "2025-10-17T03:35:12.131Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "3",
+      "title": "Alpine Retreat Lodge",
+      "location": "Zermatt, Switzerland",
+      "rating": 4.9,
+      "reviews": 212,
+      "price": 320,
+      "dates": {
+        "from": "2025-07-12",
+        "to": "2025-08-15"
+      },
+      "guests": 6,
+      "host": {
+        "name": "Luca",
+        "since": 5,
+        "avatar": "https://randomuser.me/api/portraits/men/54.jpg"
+      },
+      "amenities": [
+        "Work-friendly space",
+        "Ski-in, Ski-out",
+        "Luxury amenities"
+      ]
+    },
+    "timestamp": "2025-10-17T03:57:23.776Z"
+  },
+  {
+    "event_name": "RESERVE_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": 3,
+      "guests_set": 1,
+      "hotel": {
+        "id": 3,
+        "image": "/images/hotel3.png",
+        "title": "Alpine Retreat Lodge",
+        "location": "Zermatt, Switzerland",
+        "rating": 4.9,
+        "reviews": 212,
+        "guests": 6,
+        "maxGuests": 6,
+        "bedrooms": 3,
+        "beds": 3,
+        "baths": 2,
+        "datesFrom": "2025-07-12",
+        "datesTo": "2025-08-15",
+        "price": 320,
+        "host": {
+          "name": "Luca",
+          "since": 5,
+          "avatar": "https://randomuser.me/api/portraits/men/54.jpg"
+        },
+        "amenities": [
+          {
+            "icon": "💻",
+            "title": "Work-friendly space",
+            "desc": "Large table and mountain views for productivity."
+          },
+          {
+            "icon": "📍",
+            "title": "Ski-in, Ski-out",
+            "desc": "Direct access to the Matterhorn slopes."
+          },
+          {
+            "icon": "🔍",
+            "title": "Luxury amenities",
+            "desc": "Fireplace, spa tub, and heated floors included."
+          }
+        ]
+      },
+      "selected_checkin": "2025-07-12",
+      "selected_checkout": "2025-08-15",
+      "selected_dates_from": "2025-07-12",
+      "selected_dates_to": "2025-08-15"
+    },
+    "timestamp": "2025-10-17T03:57:24.369Z"
   }
 ]
