@@ -21,7 +21,7 @@ function toUtcIsoWithTimezone(date: Date) {
 }
 
 function ConfirmPageContent() {
-  const { seed, layout } = useSeedLayout();
+  const { seed, layout } = useSeedLayout('confirm');
   const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -142,11 +142,11 @@ function ConfirmPageContent() {
 
 
   // Create event elements based on layout order with proper spacing
-  const createEventElement = (eventType: string) => {
+  const createEventElement = (eventType: string, index: number) => {
     switch (eventType) {
       case 'view':
         return (
-          <DynamicWrapper key="view" as="div" className="bg-white rounded-lg border p-6">
+          <DynamicWrapper key={`view-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <h1 className="text-2xl font-bold mb-4">Confirm your booking</h1>
             <div className="flex items-start gap-4">
               <img
@@ -179,7 +179,7 @@ function ConfirmPageContent() {
         );
       case 'dates':
         return (
-          <DynamicWrapper key="dates" as="div" className="bg-white rounded-lg border p-6">
+          <DynamicWrapper key={`dates-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <h3 className="text-lg font-semibold mb-4">Edit your dates</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -229,7 +229,7 @@ function ConfirmPageContent() {
         );
       case 'guests':
         return (
-          <DynamicWrapper key="guests" as="div" className="bg-white rounded-lg border p-6">
+          <DynamicWrapper key={`guests-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <h3 className="text-lg font-semibold mb-4">Number of guests</h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -258,7 +258,7 @@ function ConfirmPageContent() {
         );
       case 'message':
         return (
-          <DynamicWrapper key="message" as="div" className="bg-white rounded-lg border p-6">
+          <DynamicWrapper key={`message-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <h3 className="text-lg font-semibold mb-4">Message your host</h3>
             <div className="flex items-center gap-3 mb-4">
               <img
@@ -309,7 +309,7 @@ function ConfirmPageContent() {
         );
       case 'wishlist':
         return (
-          <DynamicWrapper key="wishlist" as="div" className="bg-white rounded-lg border p-6">
+          <DynamicWrapper key={`wishlist-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <h3 className="text-lg font-semibold mb-4">Save for Later</h3>
             <button
               onClick={() => {
@@ -334,7 +334,7 @@ function ConfirmPageContent() {
         );
       case 'share':
         return (
-          <DynamicWrapper key="share" as="div" className="bg-white rounded-lg border p-6">
+          <DynamicWrapper key={`share-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <h3 className="text-lg font-semibold mb-4">Share Property</h3>
             <button
               onClick={() => {
@@ -359,7 +359,7 @@ function ConfirmPageContent() {
         );
       case 'back':
         return (
-          <DynamicWrapper key="back" as="div" className="bg-white rounded-lg border p-6">
+          <DynamicWrapper key={`back-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <button
               onClick={() => {
                 logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, {
@@ -376,7 +376,7 @@ function ConfirmPageContent() {
         );
       case 'confirm':
         return (
-          <DynamicWrapper key="confirm" as="div" className="bg-white rounded-lg border p-6 sticky top-8">
+          <DynamicWrapper key={`confirm-${index}`} as="div" className="bg-white rounded-lg border p-6 sticky top-8">
             <div className="font-bold mb-4 text-lg">Price details</div>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
@@ -444,7 +444,7 @@ function ConfirmPageContent() {
   return (
     <div>
       <DynamicWrapper as={layout.propertyDetail.wrapper} className={layout.propertyDetail.className}>
-        {layout.eventElements.order.map(createEventElement)}
+        {layout.eventElements.order.map((eventType, index) => createEventElement(eventType, index))}
       </DynamicWrapper>
       
       {toast && (

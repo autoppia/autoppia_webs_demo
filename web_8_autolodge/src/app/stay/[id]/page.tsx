@@ -31,7 +31,7 @@ function toUtcIsoWithTimezone(date: Date) {
 }
 
 function PropertyDetailContent() {
-  const { seed, layout } = useSeedLayout();
+  const { seed, layout } = useSeedLayout('stay');
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);

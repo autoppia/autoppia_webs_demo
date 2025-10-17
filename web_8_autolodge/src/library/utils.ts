@@ -16,7 +16,7 @@ export interface LayoutConfig {
     className: string;
   };
   propertyDetail: {
-    layout: 'sidebar' | 'grid' | 'stack' | 'horizontal';
+    layout: 'sidebar' | 'grid' | 'stack' | 'horizontal' | 'vertical';
     wrapper: 'div' | 'section' | 'article' | 'main';
     className: string;
   };
@@ -28,14 +28,18 @@ export interface LayoutConfig {
 }
 
 // Enhanced seed-based layout configurations with proper spacing
-export function getSeedLayout(seed?: number): LayoutConfig {
+export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'stay'): LayoutConfig {
   // If no seed provided, return default layout
   if (!seed) {
+    const defaultOrder = pageType === 'confirm' 
+      ? ['view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'confirm']
+      : ['view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'];
+    
     return {
       searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'], 
+        order: defaultOrder, 
         wrapper: 'div', 
         className: 'flex flex-col gap-6' 
       }
@@ -45,12 +49,19 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   // Normalize seed to 1-10 range
   const normalizedSeed = ((seed - 1) % 10) + 1;
 
+  // Get the appropriate element order based on page type
+  const getElementOrder = (baseOrder: string[]) => {
+    return pageType === 'confirm' 
+      ? baseOrder.map(el => el === 'reserve' ? 'confirm' : el)
+      : baseOrder;
+  };
+
   const layouts: Record<number, LayoutConfig> = {
     1: {
       searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['share', 'message', 'view', 'dates', 'guests', 'wishlist', 'back', 'reserve'], 
+        order: getElementOrder(['message', 'share', 'guests', 'wishlist', 'back', 'view', 'dates', 'reserve']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-6' 
       }
@@ -59,7 +70,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['view', 'dates', 'share', 'message', 'guests', 'wishlist', 'back', 'reserve'], 
+        order: getElementOrder(['reserve', 'back', 'view', 'dates', 'guests', 'message', 'share', 'wishlist']), 
         wrapper: 'article', 
         className: 'flex flex-col gap-8' 
       }
@@ -68,7 +79,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-6xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['view', 'dates', 'guests', 'wishlist', 'back', 'reserve', 'share', 'message'], 
+        order: getElementOrder(['wishlist', 'guests', 'dates', 'view', 'share', 'message', 'back', 'reserve']), 
         wrapper: 'section', 
         className: 'flex flex-col gap-4' 
       }
@@ -77,7 +88,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['guests', 'share', 'message', 'view', 'dates', 'wishlist', 'back', 'reserve'], 
+        order: getElementOrder(['dates', 'view', 'reserve', 'back', 'share', 'message', 'guests', 'wishlist']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-5' 
       }
@@ -86,7 +97,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['dates', 'view', 'guests', 'share', 'message', 'wishlist', 'back', 'reserve'], 
+        order: getElementOrder(['back', 'reserve', 'message', 'share', 'view', 'dates', 'guests', 'wishlist']), 
         wrapper: 'aside', 
         className: 'flex flex-col gap-7' 
       }
@@ -95,7 +106,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6 bg-purple-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['message', 'view', 'dates', 'guests', 'share', 'wishlist', 'back', 'reserve'], 
+        order: getElementOrder(['share', 'wishlist', 'guests', 'dates', 'view', 'message', 'back', 'reserve']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-6' 
       }
@@ -104,7 +115,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['view', 'share', 'message', 'dates', 'guests', 'wishlist', 'back', 'reserve'], 
+        order: getElementOrder(['view', 'dates', 'reserve', 'back', 'message', 'share', 'guests', 'wishlist']), 
         wrapper: 'article', 
         className: 'flex flex-col gap-8' 
       }
@@ -113,7 +124,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6 bg-green-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-6xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['wishlist', 'view', 'dates', 'guests', 'message', 'back', 'reserve', 'share'], 
+        order: getElementOrder(['guests', 'message', 'share', 'wishlist', 'view', 'dates', 'back', 'reserve']), 
         wrapper: 'section', 
         className: 'flex flex-col gap-5' 
       }
@@ -122,7 +133,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6 bg-orange-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['view', 'dates', 'guests', 'wishlist', 'share', 'message', 'back', 'reserve'], 
+        order: getElementOrder(['reserve', 'back', 'wishlist', 'share', 'message', 'view', 'dates', 'guests']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-6' 
       }
@@ -131,7 +142,7 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6 bg-indigo-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['back', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'reserve'], 
+        order: getElementOrder(['message', 'share', 'back', 'reserve', 'view', 'dates', 'guests', 'wishlist']), 
         wrapper: 'aside', 
         className: 'flex flex-col gap-7' 
       }
@@ -142,9 +153,21 @@ export function getSeedLayout(seed?: number): LayoutConfig {
 }
 
 // Hook to get current seed and layout with dynamic HTML support
-export function useSeedLayout() {
+export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
   const searchParams = useSearchParams();
-  const seedParam = searchParams.get('seed');
+  
+  // Custom function to handle malformed URLs with multiple ? characters
+  const getSeedFromUrl = () => {
+    if (typeof window === 'undefined') return null;
+    
+    const url = window.location.href;
+    // Look for ?seed=X pattern anywhere in the URL (handles malformed URLs)
+    const seedMatch = url.match(/\?seed=(\d+)/);
+    return seedMatch ? seedMatch[1] : null;
+  };
+  
+  // Try to get seed from searchParams first, then fallback to custom URL parsing
+  const seedParam = searchParams.get('seed') || getSeedFromUrl();
   
   const seed = useMemo(() => {
     if (!seedParam) return undefined;
@@ -162,7 +185,7 @@ export function useSeedLayout() {
     return getEffectiveSeed(parsed);
   }, [seedParam]);
   
-  const layout = useMemo(() => getSeedLayout(seed), [seed]);
+  const layout = useMemo(() => getSeedLayout(seed, pageType), [seed, pageType]);
   
   return { seed, layout };
 }
