@@ -11,6 +11,7 @@ from django.views.decorators.http import require_http_methods
 
 from events.models import Event
 from .forms import BookForm, ContactForm
+from .utils import get_seed_layout
 from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
 
 
@@ -83,6 +84,7 @@ def index(request):
         )
         filter_event.save()
 
+    layout_config = get_seed_layout(request.GET.get("seed"))
     context = {
         "book_list": books,
         "search_query": search_query,
@@ -90,6 +92,7 @@ def index(request):
         "available_years": available_years,
         "selected_genre": genre_filter,
         "selected_year": year_filter,
+        "layout_config": layout_config,
     }
     return render(request, "index.html", context)
 
@@ -136,11 +139,13 @@ def detail(request, book_id):
     else:
         carts = []
 
+    layout_config = get_seed_layout(request.GET.get("seed"))
     context = {
         "book": book,
         "related_books": related_books,
         "comments": comments,
         "carts": len(carts),
+        "layout_config": layout_config,
     }
     return render(request, "details.html", context)
 
@@ -300,7 +305,8 @@ def add_book(request):
     else:
         form = BookForm()
 
-    return render(request, "add.html", {"form": form, "genres": all_genres})
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "add.html", {"form": form, "genres": all_genres, "layout_config": layout_config})
 
 
 def update_book(request, id):

@@ -1,0 +1,18 @@
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center py-5">
+            <div class="col-md-12">
+                <form method="GET" action="{% url 'booksapp:index' %}" class="search-form">
+                    <div class="input-group mb-3">
+                        <input type="text" name="search" class="form-control" placeholder="Search books..." value="{{ search_query }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
