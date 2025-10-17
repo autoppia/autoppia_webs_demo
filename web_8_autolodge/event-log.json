@@ -4491,5 +4491,2122 @@
       "selected_dates_to": "2025-08-15"
     },
     "timestamp": "2025-10-17T03:57:24.369Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:06:24.651Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:11:47.540Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:11:50.692Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:11:57.856Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:08.839Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:11.480Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:13.799Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:15.781Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:18.656Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:21.738Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:27.713Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:30.111Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:32.623Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:12:40.610Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:15:03.622Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:15:07.014Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:15:14.380Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:15:20.214Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:15:25.530Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:15:28.700Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:02.198Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:04.383Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:06.351Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:08.320Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:10.334Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:18.490Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:20.955Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:19:24.931Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:24.664Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:32.970Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:34.910Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:36.557Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:38.180Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:39.583Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:42.151Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:22:45.159Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:25:32.728Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:25:34.683Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:25:38.666Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:25:40.459Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:25:42.070Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:27:30.447Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:27:33.259Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:27:35.442Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:27:38.016Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:27:46.590Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:28:04.779Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:28:22.676Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:28:47.506Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:12.553Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:28.769Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:32.922Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:38.394Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:39.893Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:42.244Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:48.452Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:52.288Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:55.254Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:35:58.586Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:36:01.306Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:36:04.977Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:36:07.936Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:36:10.484Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:37:43.223Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:37:46.300Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:37:48.036Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:37:50.026Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:37:53.816Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:37:59.548Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:38:01.775Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:38:03.958Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:38:06.117Z"
+  },
+  {
+    "event_name": "VIEW_HOTEL",
+    "web_agent_id": null,
+    "user_id": null,
+    "data": {
+      "id": "2",
+      "title": "Sunset Beach Bungalow",
+      "location": "Goa, India",
+      "rating": 4.5,
+      "reviews": 98,
+      "price": 104,
+      "dates": {
+        "from": "2025-05-03",
+        "to": "2025-07-15"
+      },
+      "guests": 2,
+      "host": {
+        "name": "Raj",
+        "since": 2,
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      "amenities": [
+        "WiFi included",
+        "Prime beach access",
+        "Local guidebooks"
+      ]
+    },
+    "timestamp": "2025-10-17T04:38:08.198Z"
   }
 ]

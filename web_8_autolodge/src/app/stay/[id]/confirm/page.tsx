@@ -6,6 +6,8 @@ import { useState, useEffect, useMemo } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import { useRef } from "react";
+import { useSeedLayout } from "@/library/utils";
+import { DynamicWrapper } from "@/components/DynamicWrapper";
 import { Suspense } from "react";
 
 function toStartOfDay(date: Date): Date {
@@ -19,6 +21,7 @@ function toUtcIsoWithTimezone(date: Date) {
 }
 
 function ConfirmPageContent() {
+  const { seed, layout } = useSeedLayout();
   const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -138,13 +141,12 @@ function ConfirmPageContent() {
     country.length > 0;
 
 
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column - Booking Details */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Property Information */}
-          <div className="bg-white rounded-lg border p-6">
+  // Create event elements based on layout order with proper spacing
+  const createEventElement = (eventType: string) => {
+    switch (eventType) {
+      case 'view':
+        return (
+          <DynamicWrapper key="view" as="div" className="bg-white rounded-lg border p-6">
             <h1 className="text-2xl font-bold mb-4">Confirm your booking</h1>
             <div className="flex items-start gap-4">
               <img
@@ -173,11 +175,12 @@ function ConfirmPageContent() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Booking Details */}
-          <div className="bg-white rounded-lg border p-6">
-            <h3 className="text-lg font-semibold mb-4">Your trip</h3>
+          </DynamicWrapper>
+        );
+      case 'dates':
+        return (
+          <DynamicWrapper key="dates" as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Edit your dates</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -222,7 +225,13 @@ function ConfirmPageContent() {
                 />
               </div>
             </div>
-            <div className="mt-4">
+          </DynamicWrapper>
+        );
+      case 'guests':
+        return (
+          <DynamicWrapper key="guests" as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Number of guests</h3>
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Guests
               </label>
@@ -245,10 +254,11 @@ function ConfirmPageContent() {
                 className="w-20 border rounded-lg px-3 py-2"
               />
             </div>
-          </div>
-
-          {/* Message Host */}
-          <div className="bg-white rounded-lg border p-6">
+          </DynamicWrapper>
+        );
+      case 'message':
+        return (
+          <DynamicWrapper key="message" as="div" className="bg-white rounded-lg border p-6">
             <h3 className="text-lg font-semibold mb-4">Message your host</h3>
             <div className="flex items-center gap-3 mb-4">
               <img
@@ -295,12 +305,78 @@ function ConfirmPageContent() {
             >
               Send message
             </button>
-          </div>
-        </div>
-
-        {/* Right Column - Booking Summary */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg border p-6 sticky top-8">
+          </DynamicWrapper>
+        );
+      case 'wishlist':
+        return (
+          <DynamicWrapper key="wishlist" as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Save for Later</h3>
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+                  title: prop.title,
+                  location: prop.location,
+                  rating: prop.rating,
+                  reviews: prop.reviews,
+                  price: prop.price,
+                  dates: { from: prop.datesFrom, to: prop.datesTo },
+                  guests: prop.guests,
+                  host: prop.host,
+                  amenities: prop.amenities?.map((a) => a.title),
+                });
+                showToast("Added to wishlist ❤️");
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Add to Wishlist
+            </button>
+          </DynamicWrapper>
+        );
+      case 'share':
+        return (
+          <DynamicWrapper key="share" as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Share Property</h3>
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.SHARE_HOTEL, {
+                  title: prop.title,
+                  location: prop.location,
+                  rating: prop.rating,
+                  reviews: prop.reviews,
+                  price: prop.price,
+                  dates: { from: prop.datesFrom, to: prop.datesTo },
+                  guests: prop.guests,
+                  host: prop.host,
+                  amenities: prop.amenities?.map((a) => a.title),
+                });
+                showToast("Share link copied to clipboard!");
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Share Property
+            </button>
+          </DynamicWrapper>
+        );
+      case 'back':
+        return (
+          <DynamicWrapper key="back" as="div" className="bg-white rounded-lg border p-6">
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, {
+                  from: "confirm_page",
+                  hotel: prop,
+                });
+                router.push('/');
+              }}
+              className="px-4 py-2 text-sm rounded-full bg-gray-600 text-white hover:bg-gray-700 transition"
+            >
+              Back to All Hotels
+            </button>
+          </DynamicWrapper>
+        );
+      case 'confirm':
+        return (
+          <DynamicWrapper key="confirm" as="div" className="bg-white rounded-lg border p-6 sticky top-8">
             <div className="font-bold mb-4 text-lg">Price details</div>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
@@ -358,9 +434,18 @@ function ConfirmPageContent() {
             >
               Confirm and pay
             </button>
-          </div>
-        </div>
-      </div>
+          </DynamicWrapper>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div>
+      <DynamicWrapper as={layout.propertyDetail.wrapper} className={layout.propertyDetail.className}>
+        {layout.eventElements.order.map(createEventElement)}
+      </DynamicWrapper>
       
       {toast && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-green-50 border border-green-800 text-green-800 rounded-lg p-5 text-center text-xl font-semibold shadow">

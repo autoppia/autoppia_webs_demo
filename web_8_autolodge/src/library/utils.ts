@@ -27,17 +27,17 @@ export interface LayoutConfig {
   };
 }
 
-// Seed-based layout configurations
+// Enhanced seed-based layout configurations with proper spacing
 export function getSeedLayout(seed?: number): LayoutConfig {
   // If no seed provided, return default layout
   if (!seed) {
     return {
-      searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center' },
-      propertyDetail: { layout: 'sidebar', wrapper: 'div', className: 'flex gap-8' },
+      searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center mb-6' },
+      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['search', 'view', 'reserve', 'guests', 'dates', 'message', 'confirm', 'wishlist', 'share', 'back'], 
+        order: ['view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'], 
         wrapper: 'div', 
-        className: 'flex flex-col gap-4 w-full' 
+        className: 'flex flex-col gap-6' 
       }
     };
   }
@@ -47,93 +47,93 @@ export function getSeedLayout(seed?: number): LayoutConfig {
 
   const layouts: Record<number, LayoutConfig> = {
     1: {
-      searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center' },
-      propertyDetail: { layout: 'sidebar', wrapper: 'div', className: 'flex gap-8' },
+      searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6' },
+      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['search', 'view', 'reserve', 'guests', 'dates', 'message', 'confirm', 'wishlist', 'share', 'back'], 
+        order: ['share', 'message', 'view', 'dates', 'guests', 'wishlist', 'back', 'reserve'], 
         wrapper: 'div', 
-        className: 'flex flex-col gap-4 w-full' 
+        className: 'flex flex-col gap-6' 
       }
     },
     2: {
-      searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end' },
-      propertyDetail: { layout: 'grid', wrapper: 'section', className: 'grid grid-cols-1 lg:grid-cols-2 gap-8' },
+      searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
+      propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['view', 'search', 'reserve', 'dates', 'guests', 'message', 'wishlist', 'share', 'confirm', 'back'], 
+        order: ['view', 'dates', 'share', 'message', 'guests', 'wishlist', 'back', 'reserve'], 
         wrapper: 'article', 
-        className: 'flex flex-col gap-4 w-full' 
+        className: 'flex flex-col gap-8' 
       }
     },
     3: {
-      searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8' },
-      propertyDetail: { layout: 'stack', wrapper: 'main', className: 'flex flex-col gap-8' },
+      searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6' },
+      propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-6xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['reserve', 'view', 'search', 'guests', 'message', 'confirm', 'dates', 'wishlist', 'share', 'back'], 
+        order: ['view', 'dates', 'guests', 'wishlist', 'back', 'reserve', 'share', 'message'], 
         wrapper: 'section', 
-        className: 'flex flex-col gap-4 w-full' 
+        className: 'flex flex-col gap-4' 
       }
     },
     4: {
-      searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start' },
-      propertyDetail: { layout: 'horizontal', wrapper: 'div', className: 'flex flex-row gap-8' },
+      searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6' },
+      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['guests', 'search', 'view', 'reserve', 'message', 'dates', 'wishlist', 'share', 'confirm', 'back'], 
+        order: ['guests', 'share', 'message', 'view', 'dates', 'wishlist', 'back', 'reserve'], 
         wrapper: 'div', 
-        className: 'flex flex-col gap-4 w-full' 
+        className: 'flex flex-col gap-5' 
       }
     },
     5: {
-      searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center' },
-      propertyDetail: { layout: 'sidebar', wrapper: 'div', className: 'flex gap-8' },
+      searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6' },
+      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['dates', 'search', 'view', 'reserve', 'guests', 'wishlist', 'message', 'share', 'confirm', 'back'], 
+        order: ['dates', 'view', 'guests', 'share', 'message', 'wishlist', 'back', 'reserve'], 
         wrapper: 'aside', 
-        className: 'flex flex-col gap-4 w-full' 
+        className: 'flex flex-col gap-7' 
       }
     },
     6: {
-      searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center bg-purple-50' },
-      propertyDetail: { layout: 'grid', wrapper: 'section', className: 'grid grid-cols-1 lg:grid-cols-2 gap-8' },
+      searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6 bg-purple-50 p-4 rounded-lg' },
+      propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['message', 'search', 'view', 'reserve', 'guests', 'dates', 'wishlist', 'share', 'confirm', 'back'], 
+        order: ['message', 'view', 'dates', 'guests', 'share', 'wishlist', 'back', 'reserve'], 
         wrapper: 'div', 
-        className: 'flex flex-col gap-4 w-full bg-purple-50 p-4' 
+        className: 'flex flex-col gap-6' 
       }
     },
     7: {
-      searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end' },
-      propertyDetail: { layout: 'stack', wrapper: 'main', className: 'flex flex-col gap-4' },
+      searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
+      propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['share', 'search', 'view', 'reserve', 'guests', 'dates', 'message', 'wishlist', 'confirm', 'back'], 
+        order: ['view', 'share', 'message', 'dates', 'guests', 'wishlist', 'back', 'reserve'], 
         wrapper: 'article', 
-        className: 'flex flex-col gap-4 w-full' 
+        className: 'flex flex-col gap-8' 
       }
     },
     8: {
-      searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 bg-green-50' },
-      propertyDetail: { layout: 'horizontal', wrapper: 'div', className: 'flex flex-row gap-8' },
+      searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6 bg-green-50 p-4 rounded-lg' },
+      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-6xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['wishlist', 'search', 'view', 'reserve', 'guests', 'dates', 'message', 'share', 'confirm', 'back'], 
+        order: ['wishlist', 'view', 'dates', 'guests', 'message', 'back', 'reserve', 'share'], 
         wrapper: 'section', 
-        className: 'flex flex-col gap-4 w-full bg-green-50 p-4' 
+        className: 'flex flex-col gap-5' 
       }
     },
     9: {
-      searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start bg-orange-50' },
-      propertyDetail: { layout: 'sidebar', wrapper: 'div', className: 'flex gap-8' },
+      searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6 bg-orange-50 p-4 rounded-lg' },
+      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['confirm', 'search', 'view', 'reserve', 'guests', 'dates', 'message', 'wishlist', 'share', 'back'], 
+        order: ['view', 'dates', 'guests', 'wishlist', 'share', 'message', 'back', 'reserve'], 
         wrapper: 'div', 
-        className: 'flex flex-col gap-4 w-full bg-orange-50 p-4' 
+        className: 'flex flex-col gap-6' 
       }
     },
     10: {
-      searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center bg-indigo-50' },
-      propertyDetail: { layout: 'grid', wrapper: 'section', className: 'grid grid-cols-1 lg:grid-cols-2 gap-8' },
+      searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6 bg-indigo-50 p-4 rounded-lg' },
+      propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: ['back', 'search', 'view', 'reserve', 'guests', 'dates', 'message', 'wishlist', 'share', 'confirm'], 
+        order: ['back', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'reserve'], 
         wrapper: 'aside', 
-        className: 'flex flex-col gap-4 w-full bg-indigo-50 p-4' 
+        className: 'flex flex-col gap-7' 
       }
     }
   };
