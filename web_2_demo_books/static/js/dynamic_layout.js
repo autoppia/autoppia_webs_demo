@@ -10,6 +10,8 @@ function __runDynamicLayout(){
     var seedParam = params.get('seed');
     var rawSeed = seedParam ? parseInt(seedParam, 10) : initialSeed;
     var seed = (rawSeed >= 1 && rawSeed <= 300) ? rawSeed : 1;
+  // Compute parity early so it's available everywhere
+  var isEven = (seed % 2) === 0;
 
     if (!enabled) {
       document.body.setAttribute('data-layout', 'disabled');
@@ -62,19 +64,41 @@ function __runDynamicLayout(){
       for (var i = 0; i < str.length; i++) h = ((h << 5) - h) + str.charCodeAt(i) | 0;
       return Math.abs(h);
     }
-    function reorderGroup(groupEl, itemSelector) {
-      if (!groupEl) return;
-      var items = Array.prototype.slice.call(groupEl.querySelectorAll(itemSelector));
-      if (items.length < 2) return;
-      var salt = saltedHash(groupEl.tagName + '|' + groupEl.className + '|' + (groupEl.id || ''));
-      var rand = seededRandomWithSalt(salt);
-      var order = items.map(function(_, i){ return i; });
-      for (var i = order.length - 1; i > 0; i--) {
-        var j = Math.floor(rand() * (i + 1));
-        var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
-      }
-      order.forEach(function(idx){ groupEl.appendChild(items[idx]); });
+  function reorderGroup(groupEl, itemSelector) {
+    if (!groupEl) return;
+    var items = Array.prototype.slice.call(groupEl.querySelectorAll(itemSelector));
+    if (items.length < 2) return;
+
+    // Seeded: assign bucket top/middle/bottom to force vertical movement
+    var salt = saltedHash(groupEl.tagName + '|' + groupEl.className + '|' + (groupEl.id || ''));
+    var rand = seededRandomWithSalt(salt);
+    var buckets = { 0: [], 1: [], 2: [] }; // 0=top,1=middle,2=bottom
+    for (var i = 0; i < items.length; i++) {
+      var bucket = (seed + i) % 3;
+      buckets[bucket].push(items[i]);
     }
+    // Shuffle within each bucket deterministically
+    function shuffleInPlace(arr) {
+      var idxs = arr.map(function(_, k){ return k; });
+      for (var t = idxs.length - 1; t > 0; t--) {
+        var j = Math.floor(rand() * (t + 1));
+        var tmp = idxs[t]; idxs[t] = idxs[j]; idxs[j] = tmp;
+      }
+      return idxs.map(function(k){ return arr[k]; });
+    }
+    var top = shuffleInPlace(buckets[0]);
+    var mid = shuffleInPlace(buckets[1]);
+    var bot = shuffleInPlace(buckets[2]);
+    var newOrder;
+    // Alternate bucket priority per seed to produce stronger shifts
+    var mode = seed % 3; // 0: top→mid→bot, 1: mid→bot→top, 2: bot→top→mid
+    if (mode === 0) newOrder = top.concat(mid, bot);
+    else if (mode === 1) newOrder = mid.concat(bot, top);
+    else newOrder = bot.concat(top, mid);
+
+    // Apply
+    newOrder.forEach(function(el){ groupEl.appendChild(el); });
+  }
 
     // Aggressive recursive reordering across most containers
     var SKIP_TAGS = { 'SCRIPT':1, 'STYLE':1, 'LINK':1, 'META':1, 'TITLE':1, 'HEAD':1, 'HTML':1 };
@@ -99,7 +123,7 @@ function __runDynamicLayout(){
     var bookGrid = document.querySelector('[data-dynamic-group="book-grid"]');
     if (bookGrid) reorderGroup(bookGrid, ':scope > div[class^="col-"]');
 
-    // Our Library bar: swap title and filters per parity and reorder inner controls
+  // Our Library bar: swap title and filters per parity and reorder inner controls
     var libBar = document.querySelector('[data-dynamic-group="library-bar"]');
     if (libBar) {
       var libTitle = libBar.querySelector('[data-dyn="library-title"]');
@@ -115,7 +139,7 @@ function __runDynamicLayout(){
       if (libRow) reorderGroup(libRow, ':scope > *');
     }
 
-    // Hero row explicit swap text/image per seed parity
+  // Hero row explicit swap text/image per seed parity
     var hero = document.querySelector('[data-dynamic-group="hero-row"]');
     if (hero) {
       var text = hero.querySelector('[data-dyn="hero-text"]');
@@ -139,24 +163,83 @@ function __runDynamicLayout(){
     }
 
     // Generic dynamic application across pages to confuse scrapers
-    var dynamicSelectors = [
-      'ul', 'ol', '.navbar-nav', '.dropdown-menu', '.list-group',
-      '.row', '.card-deck', '.card-columns', '.grid',
-      '.form-row'
-    ];
+  var dynamicSelectors = [
+    // Lists and menus
+    'ul', 'ol', '.navbar-nav', '.dropdown-menu', '.list-group', '.pagination',
+    // Grid/layout containers
+    '.row', '.card-deck', '.card-columns', '.grid', '.form-row', '.container', '.card',
+    // Semantic blocks
+    'section', 'article', 'aside', 'nav', 'header', 'footer', 'main', 'tbody', 'dl', 'form'
+  ];
     dynamicSelectors.forEach(function(sel){
       var groups = document.querySelectorAll(sel);
       groups.forEach(function(group){
         if (group.getAttribute && group.getAttribute('data-dynamic') === 'off') return;
-        var childSel = ':scope > *';
-        if (group.matches('ul,ol,.navbar-nav,.dropdown-menu,.list-group')) childSel = ':scope > li, :scope > a, :scope > .dropdown-item, :scope > .list-group-item';
-        if (group.matches('.row,.card-deck,.card-columns,.grid,.form-row')) childSel = ':scope > [class*="col-"], :scope > .card, :scope > *';
+      var childSel = ':scope > *';
+      if (group.matches('ul,ol,.navbar-nav,.dropdown-menu,.list-group,.pagination')) childSel = ':scope > li, :scope > a, :scope > .dropdown-item, :scope > .list-group-item, :scope > *';
+      if (group.matches('.row,.card-deck,.card-columns,.grid,.form-row,.container,.card')) childSel = ':scope > [class*="col-"], :scope > .card, :scope > *';
         reorderGroup(group, childSel);
       });
     });
 
-    // Global recursive pass: reorder most containers up to depth 3
-    reorderChildren(document.body, 3);
+  // Generic: reorder any element explicitly marked as a dynamic group
+  var explicitGroups = document.querySelectorAll('[data-dynamic-group]');
+  explicitGroups.forEach(function(group){
+    var childSel = ':scope > *';
+    if (group.matches('ul,ol,.navbar-nav,.dropdown-menu,.list-group,.pagination')) childSel = ':scope > li, :scope > a, :scope > .dropdown-item, :scope > .list-group-item, :scope > *';
+    if (group.matches('.row,.card-deck,.card-columns,.grid,.form-row,.container,.card')) childSel = ':scope > [class*="col-"], :scope > .card, :scope > *';
+    reorderGroup(group, childSel);
+  });
+
+  // Reorder <select> options deterministically based on seed, keeping the first placeholder option in place
+  function reorderSelectOptions(selectEl) {
+    if (!selectEl || !selectEl.options || selectEl.options.length <= 2) return;
+    var salt = saltedHash((selectEl.id || selectEl.name || 'select') + '|' + (selectEl.className || ''));
+    var rand = seededRandomWithSalt(salt);
+    var opts = Array.prototype.slice.call(selectEl.options);
+    var head = null;
+    if (opts[0] && (opts[0].value === '' || opts[0].disabled)) {
+      head = opts.shift();
+    }
+    // Build indices and shuffle
+    var idxs = opts.map(function(_, i){ return i; });
+    for (var i = idxs.length - 1; i > 0; i--) {
+      var j = Math.floor(rand() * (i + 1));
+      var tmp = idxs[i]; idxs[i] = idxs[j]; idxs[j] = tmp;
+    }
+    // Preserve the currently selected value if any, by re-selecting it after reordering
+    var selectedVal = selectEl.value;
+    // Rebuild option list
+    while (selectEl.firstChild) selectEl.removeChild(selectEl.firstChild);
+    if (head) {
+      head.setAttribute('data-seed', String(seed));
+      head.setAttribute('data-variant', String((seed % 10) || 10));
+      head.setAttribute('data-xid', 'x-' + seed + '-opt-0');
+      selectEl.appendChild(head);
+    }
+    idxs.forEach(function(k, idx){
+      var opt = opts[k];
+      // Tag each option for XPath variability
+      opt.setAttribute('data-seed', String(seed));
+      opt.setAttribute('data-variant', String((seed % 10) || 10));
+      opt.setAttribute('data-xid', 'x-' + seed + '-opt-' + (idx + 1));
+      selectEl.appendChild(opt);
+    });
+    // Restore selection if present
+    if (selectedVal) selectEl.value = selectedVal;
+  }
+
+  var allSelects = document.querySelectorAll('select');
+  allSelects.forEach(function(sel){
+    // Tag the select itself
+    sel.setAttribute('data-seed', String(seed));
+    sel.setAttribute('data-variant', String((seed % 10) || 10));
+    if (!sel.getAttribute('data-xid')) sel.setAttribute('data-xid', 'x-' + seed + '-select');
+    reorderSelectOptions(sel);
+  });
+
+  // Global recursive pass: reorder most containers up to depth 4
+    reorderChildren(document.body, 4);
 
     // Assign seed-based IDs and data attributes to interactive elements for XPath variance
     var counter = 0;
@@ -177,8 +260,21 @@ function __runDynamicLayout(){
       if (!el.id && idx < 500) el.id = 'blk-' + (seed % 1000) + '-' + idx;
     });
 
-    // Swap auth block vs navbar by parity
-    var isEven = (seed % 2) === 0;
+  // Global: ensure every element gets seed-based attributes and a unique data-xid to alter XPath
+  var allNodes = document.getElementsByTagName('*');
+  for (var n = 0; n < allNodes.length; n++) {
+    var node = allNodes[n];
+    // Skip script/style/link/meta/title to avoid side effects
+    if (SKIP_TAGS[node.tagName]) continue;
+    if (!node.getAttribute('data-seed')) node.setAttribute('data-seed', String(seed));
+    if (!node.getAttribute('data-variant')) node.setAttribute('data-variant', String((seed % 10) || 10));
+    // Assign a stable, seed-specific xid for XPath predicates
+    if (!node.getAttribute('data-xid')) node.setAttribute('data-xid', 'x-' + seed + '-' + n);
+    // Add a seed-specific class to make class-based XPath differ
+    if (node.classList) node.classList.add('sx-' + seed);
+  }
+
+  // Swap auth block vs navbar by parity
     var navCollapse = document.getElementById('navbarNav');
     if (navCollapse) {
       var left = navCollapse.querySelector('[data-dynamic-group="navbar"]');

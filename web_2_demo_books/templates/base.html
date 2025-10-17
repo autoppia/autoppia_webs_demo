@@ -421,15 +421,15 @@
     {% endif %}
 
     <!-- Main Content -->
-    <main>
+    <main data-dynamic-group="main">
         {% block body %}
         {% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" data-dynamic-group="footer">
         <div class="container">
-            <div class="row">
+            <div class="row" data-dynamic-group="footer-columns">
                 <div class="col-md-4">
                     <h5>BookStore</h5>
                     <p>Your favorite online book store with the best selection and quality.</p>
@@ -451,7 +451,7 @@
                 </div>
                 <div class="col-md-4">
                     <h5>Follow Us</h5>
-                    <div class="social-icons">
+                    <div class="social-icons" data-dynamic-group="footer-social">
                         <a href="#" class="text-light mr-3"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="text-light mr-3"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="text-light mr-3"><i class="fab fa-instagram"></i></a>
@@ -459,7 +459,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-3">
+            <div class="row mt-3" data-dynamic-group="footer-bottom">
                 <div class="col-12 text-center">
                     <p class="mb-0">&copy; 2025 Autoppia BookStore. All rights reserved.</p>
                 </div>

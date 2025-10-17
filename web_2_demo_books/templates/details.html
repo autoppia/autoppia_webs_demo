@@ -4,15 +4,15 @@
 {% block body %}
 <div class="container mt-5">
     <div class="card border-0 shadow">
-        <div class="row no-gutters">
-            <div class="col-md-4">
+        <div class="row no-gutters" data-dynamic-group="detail-hero">
+            <div class="col-md-4" data-dyn="detail-image">
                 {% if book.img %}
                     <img src="{{ book.img.url }}" class="card-img" alt="{{ book.name }}" style="height: 450px; object-fit: cover;">
                 {% else %}
                     <img src="/media/gallery/default_book.png" class="card-img" alt="No Image" style="height: 450px; object-fit: cover;">
                 {% endif %}
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" data-dyn="detail-text">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="card-title">{{book.name}}</h1>
@@ -22,7 +22,7 @@
                     <hr>
 
                     <div class="movie-info mb-4">
-                        <div class="row">
+                        <div class="row" data-dynamic-group="detail-info-row">
                             <div class="col-md-6">
                                 <p class="text-muted">
                                     <strong><i class="fas fa-file mr-2"></i>Category:</strong>
@@ -67,7 +67,7 @@
                     {% comment %} <h5 class="card-subtitle mb-3 mt-4"><i class="fas fa-users mr-2"></i>Cast</h5>
                     <p>{{ book.cast|default:"No cast information available" }}</p> {% endcomment %}
 
-                    <div class="mt-4">
+                    <div class="mt-4" data-dynamic-group="detail-actions">
                         {% if book.trailer_url %}
                         <a href="{{ book.trailer_url }}" target="_blank" class="btn btn-success mr-2">
                             <i class="fas fa-play-circle mr-1"></i> Buy Book
@@ -97,7 +97,7 @@
         <div class="card-header bg-light">
             <h4 class="mb-0"><i class="fas fa-comments mr-2"></i>Comments ({{ comments.count }})</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body" data-dynamic-group="detail-comments">
             <!-- Form for adding comments -->
             <form id="comment-form" method="POST" action="{% url 'booksapp:add_comment' book.id %}">
                 {% csrf_token %}
@@ -109,7 +109,7 @@
             </form>
 
             <!-- Comments list -->
-            <div class="comment-list mt-4" id="comments-container">
+            <div class="comment-list mt-4" id="comments-container" data-dynamic-group="comments-list">
                 {% for comment in comments %}
                 <div class="media mb-3 p-3 {% if not forloop.last %}border-bottom{% endif %}">
                     {% if comment.avatar %}
@@ -151,7 +151,7 @@
     {% if related_movies %}
     <div class="mt-5">
         <h3 class="mb-4">Related Books</h3>
-        <div class="row">
+        <div class="row" data-dynamic-group="related-grid">
             {% for related in related_movies %}
             <div class="col-md-3">
                 <div class="card movie-card h-100 shadow-sm">
