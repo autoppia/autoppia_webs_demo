@@ -14,7 +14,7 @@
     <div class="row" data-dynamic-group="contact-main-row">
         <div class="col-md-6" data-dyn="contact-form-section">
             <div class="card border-0 shadow mb-4">
-                <div class="card-body p-4" data-dynamic-group="contact-form">
+                <div class="card-body p-4">
                     <h2 class="h3 mb-4"><i class="fas fa-envelope mr-2 text-success"></i>Send us a message</h2>
 
                     {% if messages %}
@@ -28,7 +28,7 @@
                         {% endfor %}
                     {% endif %}
 
-                    <form method="POST">
+                    <form method="POST" data-dynamic-group="contact-form">
                         {% csrf_token %}
 
                         <div class="form-group">
@@ -86,43 +86,45 @@
                 <div class="card-body p-4">
                     <h2 class="h3 mb-4"><i class="fas fa-map-marker-alt mr-2 text-success"></i>Find Us</h2>
 
-                    <div class="contact-info-item" data-dynamic-group="contact-info-items">
-                        <div class="icon">
-                            <i class="fas fa-map-marker-alt"></i>
+                    <div data-dynamic-group="contact-info-items">
+                        <div class="contact-info-item">
+                            <div class="icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Our Location</h5>
+                                <p class="mb-0">123 Movie Street, Cinema District<br>Los Angeles, CA 90001</p>
+                            </div>
                         </div>
-                        <div>
-                            <h5 class="mb-1">Our Location</h5>
-                            <p class="mb-0">123 Movie Street, Cinema District<br>Los Angeles, CA 90001</p>
-                        </div>
-                    </div>
 
-                    <div class="contact-info-item">
-                        <div class="icon">
-                            <i class="fas fa-phone"></i>
+                        <div class="contact-info-item">
+                            <div class="icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Phone Number</h5>
+                                <p class="mb-0">(555) 123-4567</p>
+                            </div>
                         </div>
-                        <div>
-                            <h5 class="mb-1">Phone Number</h5>
-                            <p class="mb-0">(555) 123-4567</p>
-                        </div>
-                    </div>
 
-                    <div class="contact-info-item">
-                        <div class="icon">
-                            <i class="fas fa-envelope"></i>
+                        <div class="contact-info-item">
+                            <div class="icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Email Address</h5>
+                                <p class="mb-0">info@cinestore.com</p>
+                            </div>
                         </div>
-                        <div>
-                            <h5 class="mb-1">Email Address</h5>
-                            <p class="mb-0">info@cinestore.com</p>
-                        </div>
-                    </div>
 
-                    <div class="contact-info-item">
-                        <div class="icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-1">Business Hours</h5>
-                            <p class="mb-0">Monday - Friday: 9AM - 5PM<br>Saturday - Sunday: Closed</p>
+                        <div class="contact-info-item">
+                            <div class="icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Business Hours</h5>
+                                <p class="mb-0">Monday - Friday: 9AM - 5PM<br>Saturday - Sunday: Closed</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -132,7 +134,7 @@
                 <div class="card-body p-4">
                     <h2 class="h3 mb-4"><i class="fas fa-question-circle mr-2 text-success"></i>FAQs</h2>
 
-                    <div class="accordion" id="faqAccordion">
+                    <div class="accordion" id="faqAccordion" data-dynamic-group="faq-items">
                         <div class="card border-0 mb-3">
                             <div class="card-header bg-light" id="faqOne">
                                 <h5 class="mb-0">
