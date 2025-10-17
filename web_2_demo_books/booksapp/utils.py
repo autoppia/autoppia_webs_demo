@@ -1,21 +1,42 @@
+from django.conf import settings
+
+
+def _is_dynamic_enabled() -> bool:
+    return bool(getattr(settings, "DYNAMIC_HTML_ENABLED", False))
+
+
+def _normalize_seed(raw) -> int:
+    try:
+        val = int(raw)
+    except Exception:
+        return 1
+    if val < 1 or val > 300:
+        return 1
+    return val
+
+
 def get_seed_layout(seed=None):
     """
-    Normalize seed value and return a layout configuration.
-    - If seed is None: return default layout config.
-    - If seed is 1–300: normalize it to 1–10 and return that layout config.
+    Seed → layout mapping gated by ENABLE_DYNAMIC_HTML.
+    - If disabled: always return default.
+    - If enabled: accept seed 1–300, map to one of 10 layouts with special cases,
+      mirroring the approach in web_6_automail.
     """
-    if seed in (None, "",):
+    if not _is_dynamic_enabled():
         return {"layout": "default"}
 
-    try:
-        s = int(seed)
-    except Exception:
-        return {"layout": "default"}
+    s = 1 if seed in (None, "") else _normalize_seed(seed)
 
-    if s < 1 or s > 300:
-        return {"layout": "default"}
-
-    layout_seed = ((s - 1) % 10) + 1
+    # Special cases similar to automail
+    if 160 <= s <= 170:
+        layout_seed = 3
+    elif s % 10 == 5:
+        layout_seed = 2
+    elif s == 8:
+        layout_seed = 1
+    else:
+        # Modulo mapping to 1..10
+        layout_seed = ((s - 1) % 10) + 1
 
     layouts = {
         1: "layout_nav_search_grid",
@@ -30,6 +51,6 @@ def get_seed_layout(seed=None):
         10: "layout_nav_footer_grid",
     }
 
-    return {"layout": layouts.get(layout_seed, "default")}
+    return {"layout": layouts.get(layout_seed, "default"), "seed": s}
 
 

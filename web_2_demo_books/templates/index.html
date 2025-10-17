@@ -11,4 +11,12 @@
     {% include "layouts/default_home.html" %}
 {% endif %}
 
+<script>
+  // Expose seed/layout for debugging
+  window.__LAYOUT_CONFIG__ = {{ layout_config|safe }};
+  if (window.DynamicLayout && window.DynamicLayout.enabled) {
+    document.body.setAttribute('data-seed', String(window.DynamicLayout.seed));
+  }
+</script>
+
 {% endblock %}
