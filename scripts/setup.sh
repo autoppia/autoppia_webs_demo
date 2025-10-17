@@ -117,7 +117,7 @@ deploy_project() {
       docker compose -p "$proj" down --volumes
     fi
 
-    # up
+    # up with dynamic HTML support
     WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$proj" up -d --build
 
@@ -139,7 +139,7 @@ deploy_webs_server() {
 
     docker compose -p "$name" down --volumes || true
 
-    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+    WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
       docker compose -p "$name" up -d --build
 
   popd > /dev/null
@@ -202,7 +202,7 @@ case "$WEB_DEMO" in
     deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
     deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     deploy_webs_server
-    ;;   
+    ;;
   *)
     echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autodrive', or 'all'."
     exit 1
