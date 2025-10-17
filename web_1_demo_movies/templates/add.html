@@ -10,7 +10,7 @@
           </h3>
         </div>
         <div class="card-body">
-          <form method="POST" enctype="multipart/form-data" class="movie-form">
+          <form method="POST" enctype="multipart/form-data" class="movie-form" data-dynamic-group="add-form">
             {% csrf_token %}
 
             {# Mostrar errores del formulario #}
@@ -36,7 +36,7 @@
               {{ form.name }}
             </div>
 
-            <div class="row">
+            <div class="row" data-dynamic-group="add-row-1">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="{{ form.year.id_for_label }}">
@@ -55,7 +55,7 @@
               </div>
             </div>
 
-            <div class="row">
+            <div class="row" data-dynamic-group="add-row-2">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="{{ form.director.id_for_label }}">

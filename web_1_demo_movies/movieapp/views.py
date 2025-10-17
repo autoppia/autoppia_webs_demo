@@ -340,8 +340,10 @@ def genre_list(request):
     """
     Vista que muestra la lista de géneros.
     """
+    seed = normalize_seed(request.GET.get("seed"))
     genres = Genre.objects.all()
-    return render(request, "genres.html", {"genres": genres})
+    genres_list = stable_shuffle(genres, seed, salt="genres-page")
+    return render(request, "genres.html", {"genres": genres_list})
 
 
 def genre_detail(request, genre_id):
@@ -349,8 +351,10 @@ def genre_detail(request, genre_id):
     Vista que muestra los detalles de un género y las películas asociadas.
     """
     genre = get_object_or_404(Genre, id=genre_id)
+    seed = normalize_seed(request.GET.get("seed"))
     movies = Movie.objects.filter(genres=genre)
-    context = {"genre": genre, "movies": movies}
+    movies_list = stable_shuffle(movies, seed, salt="genre-detail")
+    context = {"genre": genre, "movies": movies_list}
     return render(request, "genres_detail.html", context)
 
 
