@@ -1,0 +1,17 @@
+<!-- Layout 5: Featured Section, Search, then Grid -->
+{% include "layouts/_home_nav.html" %}
+<div class="hero-section">
+  <div class="container">
+    <div class="row align-items-center py-5" data-dynamic-group="featured-hero">
+      <div class="col-md-12 text-center" data-dyn="featured-content">
+        <h1 class="display-4 text-white">Featured Books Collection</h1>
+        <p class="lead text-light">Discover our curated selection</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% include "layouts/_home_search.html" %}
+<div class="container mt-5">
+  {% include "partials/home_filters_and_grid.html" %}
+</div>
+

@@ -1,0 +1,22 @@
+<!-- Layout 8: Main Content, Sidebar, then Nav -->
+{% include "layouts/_home_search.html" %}
+<div class="container mt-5">
+  <div class="row" data-dynamic-group="layout8-container">
+    <div class="col-md-8" data-dyn="layout8-main">
+      {% include "partials/home_filters_and_grid.html" %}
+    </div>
+    <div class="col-md-4" data-dyn="layout8-sidebar">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <h5>Categories</h5>
+          <ul class="list-unstyled" data-dynamic-group="layout8-categories">
+            {% for genre in genres %}
+            <li><a href="{% url 'booksapp:genre_detail' genre.id %}">{{ genre.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

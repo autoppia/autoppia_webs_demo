@@ -1,8 +1,11 @@
-{% extends 'base.html' %} {% load static %} {% block body %}
-<div class="container mt-5">
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block body %}
+<div class="container mt-5" data-dynamic-group="add-book-container">
   <div class="row justify-content-center">
     <div class="col-lg-8">
-      <div class="card shadow">
+      <div class="card shadow" data-dynamic-group="add-book-form">
         <div class="card-header bg-primary text-white">
           <h3 class="mb-0">
             <i class="fas fa-plus-circle mr-2"></i>Add New Book
@@ -183,7 +186,7 @@
                 <i class="fas fa-save mr-2"></i>Save Book
               </button>
               <a
-                href="{% url 'booksapp:index' %}"
+                href="{% url 'booksapp:index' %}{% preserve_seed %}"
                 class="btn btn-secondary btn-lg ml-2"
               >
                 <i class="fas fa-times mr-2"></i>Cancel
@@ -192,8 +195,8 @@
           </form>
           {% else %}
           <p>You must be logged in to add books.</p>
-          <a href="{% url 'booksapp:login' %}">Log In</a> or
-          <a href="{% url 'booksapp:register' %}">Register</a>
+          <a href="{% url 'booksapp:login' %}{% preserve_seed %}">Log In</a> or
+          <a href="{% url 'booksapp:register' %}{% preserve_seed %}">Register</a>
           {% endif %}
         </div>
       </div>

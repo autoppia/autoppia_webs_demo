@@ -1,0 +1,14 @@
+<!-- Layout 10: Nav elements, Footer elements, then Grid -->
+{% include "layouts/_home_nav.html" %}
+<div class="container mt-5">
+  <div class="row mb-4" data-dynamic-group="layout10-info">
+    <div class="col-12" data-dyn="layout10-info-section">
+      <div class="alert alert-info">
+        <h4>Welcome to our Book Store</h4>
+        <p>Browse our extensive collection of books</p>
+      </div>
+    </div>
+  </div>
+  {% include "partials/home_filters_and_grid.html" %}
+</div>
+

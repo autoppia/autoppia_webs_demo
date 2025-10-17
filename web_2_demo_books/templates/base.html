@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -344,14 +345,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto" data-dynamic-group="navbar">
                     <li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
-                        <a class="nav-link" href="{% url 'booksapp:index' %}">Home</a>
+                        <a class="nav-link" href="{% url 'booksapp:index' %}{% preserve_seed %}">Home</a>
                     </li>
 
                     <li class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
-                        <a class="nav-link" href="{% url 'booksapp:about' %}">About Us</a>
+                        <a class="nav-link" href="{% url 'booksapp:about' %}{% preserve_seed %}">About Us</a>
                     </li>
                     <li class="nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
-                        <a class="nav-link" href="{% url 'booksapp:contact' %}">Contact</a>
+                        <a class="nav-link" href="{% url 'booksapp:contact' %}{% preserve_seed %}">Contact</a>
                     </li>
                 </ul>
 
@@ -365,7 +366,7 @@
                 <!-- Authentication Links -->
                 {% if user.is_authenticated %}
                 <div class="nav-item dropdown user-dropdown" style="display: flex" data-dyn="auth">
-                    <a class="nav-link" style="cursor: pointer; position: relative" href="{% url 'booksapp:shoppingcart' %}">
+                    <a class="nav-link" style="cursor: pointer; position: relative" href="{% url 'booksapp:shoppingcart' %}{% preserve_seed %}">
                         <i class="fas fa-shopping-cart mr-1"></i>
                         <div style="display: inline-block; width: 15px; height: 15px; background: #ff0000; border-radius: 100%; position: absolute; transform: translate(-50%, -50%); color: white; font-size: 10px; text-align: center">
                             <span style="line-height: 1" id="cart_count"></span>
@@ -380,24 +381,24 @@
                         {{ user.username }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="{% url 'booksapp:profile' %}">
+                        <a class="dropdown-item" href="{% url 'booksapp:profile' %}{% preserve_seed %}">
                             <i class="fas fa-user mr-2"></i>My Profile
                         </a>
-                        <a class="dropdown-item" href="{% url 'booksapp:mybook' %}">
+                        <a class="dropdown-item" href="{% url 'booksapp:mybook' %}{% preserve_seed %}">
                             <i class="fas fa-book mr-2"></i>My Book
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'booksapp:logout' %}">
+                        <a class="dropdown-item" href="{% url 'booksapp:logout' %}{% preserve_seed %}">
                             <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
                         </a>
                     </div>
                 </div>
                 {% else %}
                 <div class="auth-buttons" data-dyn="auth">
-                    <a href="{% url 'booksapp:login' %}" class="btn btn-signin">
+                    <a href="{% url 'booksapp:login' %}{% preserve_seed %}" class="btn btn-signin">
                         <i class="fas fa-sign-in-alt mr-1"></i>Login
                     </a>
-                    <a href="{% url 'booksapp:register' %}" class="btn btn-register">
+                    <a href="{% url 'booksapp:register' %}{% preserve_seed %}" class="btn btn-register">
                         <i class="fas fa-user-plus mr-1"></i>Register
                     </a>
                 </div>
@@ -437,15 +438,15 @@
                 <div class="col-md-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled" data-dynamic-group="footer-links">
-                        <li><a href="{% url 'booksapp:index' %}" class="text-light">Home</a></li>
-                        <li><a href="{% url 'booksapp:add_book' %}" class="text-light">Add Book</a></li>
-                        <li><a href="{% url 'booksapp:genre_list' %}" class="text-light">Categories</a></li>
-                        <li><a href="{% url 'booksapp:about' %}" class="text-light">About Us</a></li>
-                        <li><a href="{% url 'booksapp:contact' %}" class="text-light">Contact</a></li>
+                        <li><a href="{% url 'booksapp:index' %}{% preserve_seed %}" class="text-light">Home</a></li>
+                        <li><a href="{% url 'booksapp:add_book' %}{% preserve_seed %}" class="text-light">Add Book</a></li>
+                        <li><a href="{% url 'booksapp:genre_list' %}{% preserve_seed %}" class="text-light">Categories</a></li>
+                        <li><a href="{% url 'booksapp:about' %}{% preserve_seed %}" class="text-light">About Us</a></li>
+                        <li><a href="{% url 'booksapp:contact' %}{% preserve_seed %}" class="text-light">Contact</a></li>
                         {% if user.is_authenticated %}
-                        <li><a href="{% url 'booksapp:profile' %}" class="text-light">My Profile</a></li>
+                        <li><a href="{% url 'booksapp:profile' %}{% preserve_seed %}" class="text-light">My Profile</a></li>
                         {% else %}
-                        <li><a href="{% url 'booksapp:login' %}" class="text-light">Sign In</a></li>
+                        <li><a href="{% url 'booksapp:login' %}{% preserve_seed %}" class="text-light">Sign In</a></li>
                         {% endif %}
                     </ul>
                 </div>

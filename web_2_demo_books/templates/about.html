@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block body %}
-<div class="container mt-5">
-    <div class="row mb-5">
+<div class="container mt-5" data-dynamic-group="about-container">
+    <div class="row mb-5" data-dynamic-group="about-intro">
         <div class="col-lg-8 mx-auto text-center">
             <h1 class="display-4 mb-4">About BookStore</h1>
             <p class="lead">Your Ultimate Destination for Quality Books</p>
@@ -10,8 +11,8 @@
         </div>
     </div>
 
-    <div class="row mb-5">
-        <div class="col-md-6">
+    <div class="row mb-5" data-dynamic-group="about-mission-vision">
+        <div class="col-md-6" data-dyn="about-mission">
             <div class="card border-0 shadow h-100">
                 <div class="card-body p-4">
                     <h2 class="h3 mb-4 text-success"><i class="fas fa-bullseye mr-2"></i>Our Mission</h2>
@@ -20,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" data-dyn="about-vision">
             <div class="card border-0 shadow h-100">
                 <div class="card-body p-4">
                     <h2 class="h3 mb-4 text-success"><i class="fas fa-eye mr-2"></i>Our Vision</h2>
@@ -31,10 +32,10 @@
         </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row mb-5" data-dynamic-group="about-values-section">
         <div class="col-lg-8 mx-auto text-center">
             <h2 class="mb-4"><i class="fas fa-heart text-danger mr-2"></i>Our Values</h2>
-            <div class="row">
+            <div class="row" data-dynamic-group="about-values">
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow hover-card">
                         <div class="card-body text-center p-4">
@@ -66,13 +67,13 @@
         </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row mb-5" data-dynamic-group="about-team-section">
         <div class="col-12 text-center mb-4">
             <h2><i class="fas fa-user-friends text-info mr-2"></i>Meet Our Team</h2>
             <p class="lead">The passionate book writers behind BookStore</p>
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
+        <div class="col-lg-3 col-md-6 mb-4" data-dyn="team-member-1">
             <div class="team-card hover-card">
                 <img src="/media/gallery/people/person1.jpg" class="card-img-top" alt="Alex Johnson" style="height: 250px; object-fit: cover;">
                 <div class="card-body text-center">
@@ -88,7 +89,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
+        <div class="col-lg-3 col-md-6 mb-4" data-dyn="team-member-2">
             <div class="team-card hover-card">
                 <img src="/media/gallery/people/person2.jpg" class="card-img-top" alt="Sophia Chen" style="height: 250px; object-fit: cover;">
                 <div class="card-body text-center">
@@ -104,7 +105,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
+        <div class="col-lg-3 col-md-6 mb-4" data-dyn="team-member-3">
             <div class="team-card hover-card">
                 <img src="/media/gallery/people/person3.jpg" class="card-img-top" alt="David Rodriguez" style="height: 250px; object-fit: cover;">
                 <div class="card-body text-center">
@@ -120,7 +121,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
+        <div class="col-lg-3 col-md-6 mb-4" data-dyn="team-member-4">
             <div class="team-card hover-card">
                 <img src="/media/gallery/people/person4.jpg" class="card-img-top" alt="Emily Wilson" style="height: 250px; object-fit: cover;">
                 <div class="card-body text-center">
@@ -143,7 +144,7 @@
             <p>BookStore began as a small project between friends who shared a passion for books. What started as a simple database quickly grew into a platform where thousands of book enthusiasts could come together to share their thoughts and discoveries.</p>
             <p>Today, we're proud to host one of the most engaged book communities online, with users from over 50 countries contributing to our growing database of books, reviews, and discussions.</p>
             <p>Our journey is just beginning, and we're excited to continue growing and improving with the help of our dedicated community.</p>
-            <a href="{% url 'booksapp:contact' %}" class="btn btn-success btn-lg mt-3">
+            <a href="{% url 'booksapp:contact' %}{% preserve_seed %}" class="btn btn-success btn-lg mt-3">
                 <i class="fas fa-envelope mr-2"></i>Get in Touch
             </a>
         </div>

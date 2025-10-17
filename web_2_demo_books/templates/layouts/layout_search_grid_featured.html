@@ -1,0 +1,18 @@
+<!-- Layout 9: Search, Grid, then Featured -->
+{% include "layouts/_home_search.html" %}
+<div class="container mt-5">
+  <div class="row" data-dynamic-group="layout9-container">
+    <div class="col-12" data-dyn="layout9-grid">
+      {% include "partials/home_filters_and_grid.html" %}
+    </div>
+    <div class="col-12 mt-5" data-dyn="layout9-featured">
+      <div class="card shadow">
+        <div class="card-body bg-light">
+          <h3 class="text-center">Featured Collection</h3>
+          <p class="text-center text-muted">Check out our handpicked selection</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

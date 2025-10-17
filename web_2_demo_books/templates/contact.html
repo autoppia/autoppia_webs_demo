@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block body %}
-<div class="container mt-5 mb-5">
-    <div class="row mb-5">
+<div class="container mt-5 mb-5" data-dynamic-group="contact-container">
+    <div class="row mb-5" data-dynamic-group="contact-intro">
         <div class="col-lg-8 mx-auto text-center">
             <h1 class="display-4 mb-4">Contact Us</h1>
             <p class="lead">We'd love to hear from you!</p>
@@ -10,10 +11,10 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row" data-dynamic-group="contact-main-row">
+        <div class="col-md-6" data-dyn="contact-form-section">
             <div class="card border-0 shadow mb-4">
-                <div class="card-body p-4">
+                <div class="card-body p-4" data-dynamic-group="contact-form">
                     <h2 class="h3 mb-4"><i class="fas fa-envelope mr-2 text-success"></i>Send us a message</h2>
 
                     {% if messages %}
@@ -80,12 +81,12 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" data-dyn="contact-info-section">
             <div class="card border-0 shadow mb-4">
                 <div class="card-body p-4">
                     <h2 class="h3 mb-4"><i class="fas fa-map-marker-alt mr-2 text-success"></i>Find Us</h2>
 
-                    <div class="contact-info-item">
+                    <div class="contact-info-item" data-dynamic-group="contact-info-items">
                         <div class="icon">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>

@@ -99,7 +99,8 @@ def index(request):
 
 def about(request):
     """Vista de la página "Acerca de"."""
-    return render(request, "about.html")
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "about.html", {"layout_config": layout_config})
 
 
 # =============================================================================
@@ -156,7 +157,8 @@ def shoppingcart(request):
     for cart in carts:
         books.append(cart.book)
 
-    return render(request, "shoppingcart.html", {"books": books, "carts": len(carts)})
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "shoppingcart.html", {"books": books, "carts": len(carts), "layout_config": layout_config})
 
 
 def mybook(request):
@@ -228,6 +230,7 @@ def mybook(request):
         )
         filter_event.save()
 
+    layout_config = get_seed_layout(request.GET.get("seed"))
     context = {
         "book_list": books,
         "search_query": search_query,
@@ -235,6 +238,7 @@ def mybook(request):
         "available_years": available_years,
         "selected_genre": genre_filter,
         "selected_year": year_filter,
+        "layout_config": layout_config,
     }
     return render(request, "mybook.html", context)
 
@@ -254,9 +258,11 @@ def payment_success(request, book_id):
         if request.user.is_authenticated:
             book_to_delete = Cart.objects.get(user=request.user, book_id=book_id)
             book_to_delete.delete()
-        return render(request, "payment_success.html", {"book": book})
+        layout_config = get_seed_layout(request.GET.get("seed"))
+        return render(request, "payment_success.html", {"book": book, "layout_config": layout_config})
 
-    return render(request, "payment_success.html", {"book": book})
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "payment_success.html", {"book": book, "layout_config": layout_config})
 
 
 def carts_count(request):
@@ -370,7 +376,8 @@ def update_book(request, id):
     else:
         form = BookForm(instance=book)
 
-    return render(request, "edit.html", {"form": form, "book": book})
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "edit.html", {"form": form, "book": book, "layout_config": layout_config})
 
 
 def delete_book(request, id):
@@ -388,7 +395,8 @@ def delete_book(request, id):
         delete_book_event.save()
         messages.success(request, "Book deleted successfully.")
         return redirect("/")
-    return render(request, "delete.html", {"book": book})
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "delete.html", {"book": book, "layout_config": layout_config})
 
 
 def add_to_cart(request, id):
@@ -465,7 +473,8 @@ def genre_list(request):
     Vista que muestra la lista de géneros.
     """
     genres = Genre.objects.all()
-    return render(request, "genres.html", {"genres": genres})
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "genres.html", {"genres": genres, "layout_config": layout_config})
 
 
 def genre_detail(request, genre_id):
@@ -474,7 +483,8 @@ def genre_detail(request, genre_id):
     """
     genre = get_object_or_404(Genre, id=genre_id)
     books = Book.objects.filter(genres=genre)
-    context = {"genre": genre, "books": books}
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    context = {"genre": genre, "books": books, "layout_config": layout_config}
     return render(request, "genres_detail.html", context)
 
 
@@ -511,7 +521,8 @@ def contact(request):
             return redirect("booksapp:contact")
     else:
         form = ContactForm()
-    return render(request, "contact.html", {"form": form})
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "contact.html", {"form": form, "layout_config": layout_config})
 
 
 # =============================================================================
@@ -541,7 +552,8 @@ def login_view(request):
             return redirect(next_url)
         else:
             messages.error(request, "Invalid username or password.")
-    return render(request, "login.html")
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "login.html", {"layout_config": layout_config})
 
 
 def logout_view(request):
@@ -596,7 +608,8 @@ def register_view(request):
             messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect("booksapp:index")
 
-    return render(request, "register.html")
+    layout_config = get_seed_layout(request.GET.get("seed"))
+    return render(request, "register.html", {"layout_config": layout_config})
 
 
 @login_required
@@ -680,9 +693,11 @@ def profile_view(request):
 
     # For GET requests, display the form
     all_genres = Genre.objects.all().order_by("name")
+    layout_config = get_seed_layout(request.GET.get("seed"))
     context = {
         "profile": profile,
         "genres": all_genres,
         "selected_genres": [g.id for g in profile.favorite_genres.all()],
+        "layout_config": layout_config,
     }
     return render(request, "profile.html", context)

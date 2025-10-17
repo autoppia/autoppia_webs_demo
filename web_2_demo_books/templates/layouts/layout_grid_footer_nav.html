@@ -1,0 +1,21 @@
+<!-- Layout 7: Grid, Footer elements, then Nav -->
+<div class="container mt-5">
+  <div class="row" data-dynamic-group="layout7-main">
+    <div class="col-md-9" data-dyn="layout7-grid">
+      {% include "partials/home_filters_and_grid.html" %}
+    </div>
+    <div class="col-md-3" data-dyn="layout7-sidebar">
+      <div class="card shadow">
+        <div class="card-body">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled" data-dynamic-group="layout7-links">
+            <li><a href="{% url 'booksapp:genre_list' %}">All Genres</a></li>
+            <li><a href="{% url 'booksapp:about' %}">About Us</a></li>
+            <li><a href="{% url 'booksapp:contact' %}">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
