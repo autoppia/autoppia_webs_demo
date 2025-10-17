@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
+import { LayoutProvider } from "@/contexts/LayoutContext";
+import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses } from "@/utils/seedLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,12 +19,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // For server-side rendering, we'll use default values
+  // The actual seed will be handled in client components
+  const seed = 1; // Default seed for SSR
+  const layoutConfig = getLayoutConfig(seed);
+  const layoutClasses = getLayoutClasses(layoutConfig);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
         <ThemeProvider>
-          <EmailProvider>{children}</EmailProvider>
+          <EmailProvider>
+            <LayoutProvider>{children}</LayoutProvider>
+          </EmailProvider>
         </ThemeProvider>
       </body>
     </html>

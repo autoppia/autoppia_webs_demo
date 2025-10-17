@@ -41,16 +41,12 @@ demo-webs/
 ├── web_6_automail/
 ├── web_7_autodelivery/
 ├── web_8_autolodge/
-<<<<<<< HEAD
 ├── web_9_autoconnect/
 ├── web_10_autowork/
 ├── web_11_autocalendar/
 ├── web_12_autolist/
 ├── web_13_autodrive/
 ├── web_14_autohealth/
-=======
-├── web_13_autodrive/
->>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
 ├── webs_server/
 └── scripts/
     ├── install_docker.sh
@@ -71,7 +67,6 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Default Port Assignments**
 
-<<<<<<< HEAD
 | Demo | Web Port | DB Port | Notes |
 |------------------|----------| ------- | ---------------------------------- |
 | **Movies** | 8000 | 5434 | Django + PostgreSQL |
@@ -102,7 +97,6 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 | **AutoDrive** | 8012 | — | Next.js, no database required |
 | **webs_server** | 8090 | 5437 | API service used for event logging |
 
-> > > > > > > 4d0c953937374ebeda63841f70d33ff5cc06c2e0
 
 ---
 

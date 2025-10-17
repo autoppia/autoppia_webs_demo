@@ -2,10 +2,12 @@
 import { useCartStore } from "@/store/cart-store";
 import Link from "next/link";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { useSeedLayout } from "@/hooks/use-seed-layout";
 
 export default function CartNavIcon() {
   const items = useCartStore((s) => s.items);
   const count = items.reduce((acc, i) => acc + i.quantity, 0);
+  const layout = useSeedLayout();
 
   const handleClick = () => {
     logEvent(EVENT_TYPES.OPEN_CHECKOUT_PAGE, {
@@ -20,7 +22,7 @@ export default function CartNavIcon() {
   };
 
   return (
-    <div onClick={handleClick}>
+    <div onClick={handleClick} className={layout.cart.iconClass}>
       <Link href="/cart" className="relative px-3 py-1 flex items-center group">
         <span className="text-zinc-700 group-hover:text-green-600 text-base">
           <svg
@@ -41,7 +43,7 @@ export default function CartNavIcon() {
           </svg>
         </span>
         {count > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-5 h-5 text-xs bg-green-600 text-white rounded-full flex items-center justify-center px-1 font-bold border-2 border-white">
+          <span className={`absolute -top-1 -right-1 min-w-5 h-5 text-xs bg-green-600 text-white rounded-full flex items-center justify-center px-1 font-bold border-2 border-white ${layout.cart.badgeClass}`}>
             {count}
           </span>
         )}

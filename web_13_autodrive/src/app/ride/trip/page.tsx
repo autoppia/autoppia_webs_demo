@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RideNavbar from "../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
+import DynamicLayout from "../../../components/DynamicLayout";
+import SiteElements from "../../../components/SiteElements";
 
 // const PLACES = [
 //   {
@@ -797,228 +799,273 @@ export default function RideTripPage() {
     isTripsActive = currentPath === "/ride/trip/trips";
   }
 
+  // Header component
+  const header = <RideNavbar activeTab="ride" />;
+
+  // Booking section component
+  const booking = (
+    <section className="w-[340px] bg-white rounded-xl shadow p-6 flex flex-col gap-2 max-lg:w-full">
+      <div className="text-lg font-semibold mb-3">Get a trip</div>
+      <PlaceSelect
+        value={pickup}
+        setValue={setPickup}
+        placeholder="Pickup location"
+        open={pickupOpen}
+        setOpen={setPickupOpen}
+      />
+      <PlaceSelect
+        value={dropoff}
+        setValue={setDropoff}
+        placeholder="Dropoff location"
+        open={dropoffOpen}
+        setOpen={setDropoffOpen}
+      />
+      <div
+        className="flex items-center bg-gray-100 rounded-md px-4 py-3 mb-3 text-base font-[500] cursor-pointer border border-gray-200 h-12 select-none mt-0"
+        onClick={() => router.push("/ride/trip/pickupnow")}
+      >
+        <svg
+          width="18"
+          height="18"
+          fill="none"
+          className="mr-2"
+          viewBox="0 0 20 20"
+        >
+          <circle
+            cx="10"
+            cy="10"
+            r="8"
+            fill="#fff"
+            stroke="#2095d2"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M6 10h4.2a2 2 0 0 1 2 2v2"
+            stroke="#2095d2"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+        </svg>
+        <span className="font-bold mr-1 text-[#2095d2]">
+          {pickupScheduled ? "Pick up:" : "Pickup now"}
+        </span>
+        {pickupScheduled ? (
+          <span className="ml-1 font-[500]">
+            {formatDateTime(pickupScheduled.date, pickupScheduled.time)}
+          </span>
+        ) : null}
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          className="ml-auto"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M6 4l4 4-4 4"
+            stroke="#2095d2"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+      <div className="flex items-center bg-gray-100 rounded-md px-3 py-2 text-sm font-medium mb-4">
+        <svg
+          width="15"
+          height="15"
+          fill="none"
+          viewBox="0 0 16 16"
+          className="mr-2"
+        >
+          <circle
+            cx="7.5"
+            cy="7.5"
+            r="6.5"
+            stroke="#2095d2"
+            strokeWidth="1.4"
+            fill="#e6f6fc"
+          />
+          <path
+            d="M6.9 6.9a1.2 1.2 0 1 1 2.2 0c0 .6-.5 1-1.1 1-.7 0-1.1-.4-1.1-1zM7.5 10.2c.9 0 2.1.2 2.5.6-.4.4-1.6.7-2.5.7s-2.1-.3-2.5-.7c.4-.4 1.6-.6 2.5-.6z"
+            fill="#2095d2"
+          />
+        </svg>
+        <span>For me</span>
+        <svg
+          width="10"
+          height="10"
+          fill="none"
+          viewBox="0 0 10 10"
+          className="ml-auto"
+        >
+          <path d="M2 4l3 3 3-3" stroke="#2095d2" strokeWidth="1.3" />
+        </svg>
+      </div>
+      <button
+        onClick={handleSearch}
+        className={`rounded-md h-10 font-bold mb-2 transition ${
+          !pickup || !dropoff || loading
+            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+            : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
+        }`}
+        disabled={!pickup || !dropoff || loading}
+      >
+        {loading ? "Searching..." : "Search"}
+      </button>
+    </section>
+  );
+
+  // Rides section component
+  const ridesSection = loading ? (
+    <section className="flex-1 flex flex-col items-center justify-center">
+      <Spinner />
+    </section>
+  ) : pickup && dropoff && showRides ? (
+    <section className="flex-1 max-w-2xl max-lg:max-w-full">
+      <h1 className="text-3xl font-bold mb-2">Choose a ride</h1>
+      <div className="text-lg font-semibold mb-4">Recommended</div>
+      <div className="space-y-3">
+        {rides.map((ride, idx) => (
+          <div
+            key={ride.name}
+            onClick={() => {
+              setSelectedRideIdx(idx);
+              // 🔹 log the SELECT_CAR event
+              logEvent(EVENT_TYPES.SELECT_CAR, {
+                rideId: idx,
+                rideName: ride.name,
+                rideType: ride.name,
+                price: ride.price,
+                oldPrice: ride.oldPrice,
+                seats: ride.seats,
+                eta: ride.eta,
+                pickup,
+                dropoff,
+                scheduled: pickupScheduled
+                  ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                  : "now",
+                timestamp: new Date().toISOString(),
+                priceDifference: ride.oldPrice - ride.price,
+                discountPercentage: ((ride.oldPrice - ride.price) / ride.oldPrice * 100).toFixed(2),
+                isRecommended: ride.recommended || false
+              });
+            }}
+            className={
+              "flex items-center gap-4 rounded-xl px-6 py-5 cursor-pointer transition" +
+              (selectedRideIdx === idx
+                ? " border-2 border-[#2095d2] bg-[#e6f6fc] shadow-sm"
+                : " border border-transparent bg-gray-100")
+            }
+            tabIndex={0}
+            style={{
+              outline:
+                selectedRideIdx === idx ? "2px solid #2095d2" : "none",
+            }}
+          >
+            <img
+              src={ride.image}
+              alt={ride.name}
+              className="rounded-lg w-16 h-14 object-contain bg-gray-200"
+            />
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-1">
+                <span className="font-semibold text-lg">{ride.name}</span>
+                <svg
+                  width="17"
+                  height="17"
+                  fill="none"
+                  viewBox="0 0 16 16"
+                >
+                  <rect
+                    x="2"
+                    y="2"
+                    width="12"
+                    height="12"
+                    rx="6"
+                    stroke="#2095d2"
+                    strokeWidth="1"
+                    fill="#e6f6fc"
+                  />
+                  <text
+                    x="8"
+                    y="11"
+                    textAnchor="middle"
+                    fontSize="9"
+                    fill="#2095d2"
+                  >
+                    {ride.seats}
+                  </text>
+                </svg>
+              </div>
+              <div className="text-xs text-gray-600 font-semibold mb-0.5">
+                {ride.eta}
+              </div>
+              <div className="text-xs text-gray-600">{ride.desc}</div>
+            </div>
+            <div className="text-right pr-1">
+              <div className="font-bold text-xl text-[#2095d2]">
+                ${ride.price.toFixed(2)}
+              </div>
+              <div className="line-through text-xs text-gray-400">
+                ${ride.oldPrice.toFixed(2)}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
+  // Map section component
+  const map = (
+    <section className="flex-1 min-w-0">
+      <div className="w-full h-full min-h-[640px] flex items-center justify-center rounded-2xl border border-gray-100 overflow-hidden bg-gray-100">
+        <img
+          src="/map.jpg"
+          alt="Map"
+          className="object-none w-full max-h-[700px]"
+        />
+      </div>
+    </section>
+  );
+
+  // Hero section component (placeholder for trip page)
+  const hero = (
+    <div className="w-full bg-white rounded-xl shadow p-6">
+      <h2 className="text-2xl font-bold mb-4">Plan Your Trip</h2>
+      <p className="text-gray-600">Choose your pickup and destination to get started.</p>
+    </div>
+  );
+
+  // Footer component (placeholder)
+  const footer = (
+    <footer className="bg-gray-100 py-4 px-4">
+      <div className="max-w-7xl mx-auto text-center text-gray-600 text-sm">
+        <p>&copy; 2024 AutoDriver. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+
   return (
     <div className="min-h-screen w-full bg-[#f5fbfc]">
-      <RideNavbar activeTab="ride" />
-      <div className="flex gap-8 mt-8 px-10 pb-32 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
-        <section className="w-[340px] bg-white rounded-xl shadow p-6 flex flex-col gap-2 max-lg:w-full">
-          <div className="text-lg font-semibold mb-3">Get a trip</div>
-          <PlaceSelect
-            value={pickup}
-            setValue={setPickup}
-            placeholder="Pickup location"
-            open={pickupOpen}
-            setOpen={setPickupOpen}
-          />
-          <PlaceSelect
-            value={dropoff}
-            setValue={setDropoff}
-            placeholder="Dropoff location"
-            open={dropoffOpen}
-            setOpen={setDropoffOpen}
-          />
-          <div
-            className="flex items-center bg-gray-100 rounded-md px-4 py-3 mb-3 text-base font-[500] cursor-pointer border border-gray-200 h-12 select-none mt-0"
-            onClick={() => router.push("/ride/trip/pickupnow")}
-          >
-            <svg
-              width="18"
-              height="18"
-              fill="none"
-              className="mr-2"
-              viewBox="0 0 20 20"
-            >
-              <circle
-                cx="10"
-                cy="10"
-                r="8"
-                fill="#fff"
-                stroke="#2095d2"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M6 10h4.2a2 2 0 0 1 2 2v2"
-                stroke="#2095d2"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="font-bold mr-1 text-[#2095d2]">
-              {pickupScheduled ? "Pick up:" : "Pickup now"}
-            </span>
-            {pickupScheduled ? (
-              <span className="ml-1 font-[500]">
-                {formatDateTime(pickupScheduled.date, pickupScheduled.time)}
-              </span>
-            ) : null}
-            <svg
-              width="16"
-              height="16"
-              fill="none"
-              className="ml-auto"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M6 4l4 4-4 4"
-                stroke="#2095d2"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-            </svg>
+      <DynamicLayout
+        header={header}
+        main={
+          <div className="flex gap-8 mt-8 px-10 pb-32 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
+            <SiteElements>
+              {{
+                header,
+                hero,
+                booking,
+                map,
+                rides: ridesSection,
+                footer
+              }}
+            </SiteElements>
           </div>
-          <div className="flex items-center bg-gray-100 rounded-md px-3 py-2 text-sm font-medium mb-4">
-            <svg
-              width="15"
-              height="15"
-              fill="none"
-              viewBox="0 0 16 16"
-              className="mr-2"
-            >
-              <circle
-                cx="7.5"
-                cy="7.5"
-                r="6.5"
-                stroke="#2095d2"
-                strokeWidth="1.4"
-                fill="#e6f6fc"
-              />
-              <path
-                d="M6.9 6.9a1.2 1.2 0 1 1 2.2 0c0 .6-.5 1-1.1 1-.7 0-1.1-.4-1.1-1zM7.5 10.2c.9 0 2.1.2 2.5.6-.4.4-1.6.7-2.5.7s-2.1-.3-2.5-.7c.4-.4 1.6-.6 2.5-.6z"
-                fill="#2095d2"
-              />
-            </svg>
-            <span>For me</span>
-            <svg
-              width="10"
-              height="10"
-              fill="none"
-              viewBox="0 0 10 10"
-              className="ml-auto"
-            >
-              <path d="M2 4l3 3 3-3" stroke="#2095d2" strokeWidth="1.3" />
-            </svg>
-          </div>
-          <button
-            onClick={handleSearch}
-            className={`rounded-md h-10 font-bold mb-2 transition ${
-              !pickup || !dropoff || loading
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
-            }`}
-            disabled={!pickup || !dropoff || loading}
-          >
-            {loading ? "Searching..." : "Search"}
-          </button>
-        </section>
-        {loading ? (
-          <section className="flex-1 flex flex-col items-center justify-center">
-            <Spinner />
-          </section>
-        ) : pickup && dropoff && showRides ? (
-          <section className="flex-1 max-w-2xl max-lg:max-w-full">
-            <h1 className="text-3xl font-bold mb-2">Choose a ride</h1>
-            <div className="text-lg font-semibold mb-4">Recommended</div>
-            <div className="space-y-3">
-              {rides.map((ride, idx) => (
-                <div
-                  key={ride.name}
-                  onClick={() => {
-                    setSelectedRideIdx(idx);
-                    // 🔹 log the SELECT_CAR event
-                    logEvent(EVENT_TYPES.SELECT_CAR, {
-                      rideId: idx,
-                      rideName: ride.name,
-                      rideType: ride.name,
-                      price: ride.price,
-                      oldPrice: ride.oldPrice,
-                      seats: ride.seats,
-                      eta: ride.eta,
-                      pickup,
-                      dropoff,
-                      scheduled: pickupScheduled
-                        ? `${pickupScheduled.date} ${pickupScheduled.time}`
-                        : "now",
-                      timestamp: new Date().toISOString(),
-                      priceDifference: ride.oldPrice - ride.price,
-                      discountPercentage: ((ride.oldPrice - ride.price) / ride.oldPrice * 100).toFixed(2),
-                      isRecommended: ride.recommended || false
-                    });
-                  }}
-                  className={
-                    "flex items-center gap-4 rounded-xl px-6 py-5 cursor-pointer transition" +
-                    (selectedRideIdx === idx
-                      ? " border-2 border-[#2095d2] bg-[#e6f6fc] shadow-sm"
-                      : " border border-transparent bg-gray-100")
-                  }
-                  tabIndex={0}
-                  style={{
-                    outline:
-                      selectedRideIdx === idx ? "2px solid #2095d2" : "none",
-                  }}
-                >
-                  <img
-                    src={ride.image}
-                    alt={ride.name}
-                    className="rounded-lg w-16 h-14 object-contain bg-gray-200"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      <span className="font-semibold text-lg">{ride.name}</span>
-                      <svg
-                        width="17"
-                        height="17"
-                        fill="none"
-                        viewBox="0 0 16 16"
-                      >
-                        <rect
-                          x="2"
-                          y="2"
-                          width="12"
-                          height="12"
-                          rx="6"
-                          stroke="#2095d2"
-                          strokeWidth="1"
-                          fill="#e6f6fc"
-                        />
-                        <text
-                          x="8"
-                          y="11"
-                          textAnchor="middle"
-                          fontSize="9"
-                          fill="#2095d2"
-                        >
-                          {ride.seats}
-                        </text>
-                      </svg>
-                    </div>
-                    <div className="text-xs text-gray-600 font-semibold mb-0.5">
-                      {ride.eta}
-                    </div>
-                    <div className="text-xs text-gray-600">{ride.desc}</div>
-                  </div>
-                  <div className="text-right pr-1">
-                    <div className="font-bold text-xl text-[#2095d2]">
-                      ${ride.price.toFixed(2)}
-                    </div>
-                    <div className="line-through text-xs text-gray-400">
-                      ${ride.oldPrice.toFixed(2)}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        ) : null}
-        <section className="flex-1 min-w-0">
-          <div className="w-full h-full min-h-[640px] flex items-center justify-center rounded-2xl border border-gray-100 overflow-hidden bg-gray-100">
-            <img
-              src="/map.jpg"
-              alt="Map"
-              className="object-none w-full max-h-[700px]"
-            />
-          </div>
-        </section>
-      </div>
+        }
+        footer={footer}
+      />
       {pickup && dropoff && showRides && (
         <div className="fixed z-50 left-1/2 bottom-8 -translate-x-1/2 max-w-lg w-[calc(100vw-32px)] drop-shadow-xl bg-transparent pointer-events-none max-lg:bottom-2">
           <div className="flex items-center bg-white rounded-xl shadow-lg px-6 py-5 gap-6 max-lg:min-w-0 max-lg:w-full max-lg:px-3 pointer-events-auto">
