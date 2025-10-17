@@ -16,6 +16,7 @@ services:
       - DB_PASSWORD=autoppia_2025
       - DB_HOST=db
       - DB_PORT=5432
+      - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
     depends_on:
       - db
     networks:

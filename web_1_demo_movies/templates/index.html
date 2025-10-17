@@ -4,8 +4,8 @@
 
 <div class="hero-section">
     <div class="container">
-        <div class="row align-items-center py-5">
-            <div class="col-md-6">
+        <div class="row align-items-center py-5" data-dynamic-group="hero-row">
+            <div class="col-md-6" data-dyn="hero-text">
                 <h1 class="display-4 text-white">Decentralized Store for AI Films</h1>
                 <p class="lead text-light">The Revolution of AI Films</p>
                 <form method="GET" action="{% url 'movieapp:index' %}" class="search-form">
@@ -21,7 +21,7 @@
                 </form>
                 <a href="{% url 'movieapp:add_movie' %}" class="btn  btn-autoppia-color">Add new movie</a>
             </div>
-            <div class="col-md-6 text-center">
+            <div class="col-md-6 text-center" data-dyn="hero-image">
                 <img src="/media/gallery/goodfellas.jpg" alt="Movie Collection" style="max-height: 400px;" class="img-fluid rounded shadow">
             </div>
         </div>
@@ -30,16 +30,19 @@
 
 <div class="container mt-5">
     <!-- Filter bar -->
-    <div class="row mb-4">
-        <div class="col-md-6">
+    <div class="row mb-4" data-dynamic-group="library-bar">
+        <div class="col-md-6" data-dyn="library-title">
             <h2 class="section-title">Our Collection</h2>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" data-dyn="library-filters">
             <form method="GET" action="{% url 'movieapp:index' %}" class="float-md-right">
+                {% if DYNAMIC_HTML_ENABLED %}
+                <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
+                {% endif %}
                 {% if search_query %}
                 <input type="hidden" name="search" value="{{ search_query }}">
                 {% endif %}
-                <div class="form-row">
+                <div class="form-row" data-dynamic-group="library-filters-row">
                     <div class="col-md-5 mb-2 mb-md-0">
                         <select name="genre" class="form-control" id="genreFilter">
                             <option value="">All Genres</option>
@@ -84,7 +87,7 @@
     </div>
     {% endif %}
     
-    <div class="row">
+    <div class="row" data-dynamic-group="movie-grid">
         {% for i in movie_list %}
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100 shadow-sm">
@@ -123,7 +126,7 @@
                     {% endif %}
                 </div>
                 <div class="card-footer bg-transparent border-top-0 pt-0">
-                    <a href="{% url 'movieapp:detail' i.id %}" class="btn btn-primary btn-block">
+                    <a href="{% url 'movieapp:detail' i.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-block">
                         <i class="fas fa-info-circle mr-1"></i> View Details
                     </a>
                 </div>

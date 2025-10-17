@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from events.models import Event
 from .forms import MovieForm, ContactForm
+from .utils import normalize_seed, stable_shuffle
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
 
 
@@ -82,11 +83,17 @@ def index(request):
         )
         filter_event.save()
 
+    # Server-side dynamic order based on seed
+    seed = normalize_seed(request.GET.get("seed"))
+    movie_list = stable_shuffle(movies, seed, salt="movies")
+    genre_list = stable_shuffle(all_genres, seed, salt="genres")
+    years_list = stable_shuffle(available_years, seed, salt="years")
+
     context = {
-        "movie_list": movies,
+        "movie_list": movie_list,
         "search_query": search_query,
-        "genres": all_genres,
-        "available_years": available_years,
+        "genres": genre_list,
+        "available_years": years_list,
         "selected_genre": genre_filter,
         "selected_year": year_filter,
     }
@@ -116,6 +123,7 @@ def detail(request, movie_id):
     detail_event.save()
 
     # Películas relacionadas
+    seed = normalize_seed(request.GET.get("seed"))
     related_movies = []
     if movie.genres.exists():
         related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct()[:4]
@@ -127,6 +135,9 @@ def detail(request, movie_id):
     if len(related_movies) < 4:
         random_movies = Movie.objects.exclude(id__in=[m.id for m in list(related_movies) + [movie]]).order_by("?")[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(random_movies)
+
+    # Server-side shuffle related movies by seed for deterministic order
+    related_movies = stable_shuffle(related_movies, seed, salt="related")
 
     comments = movie.comments.all()
 

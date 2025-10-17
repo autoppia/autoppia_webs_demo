@@ -5,15 +5,15 @@
 {% block body %}
 <div class="container mt-5">
     <div class="card border-0 shadow">
-        <div class="row no-gutters">
-            <div class="col-md-4">
+        <div class="row no-gutters" data-dynamic-group="detail-hero">
+            <div class="col-md-4" data-dyn="detail-image">
                 {% if movie.img %}
                 <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;">
               {% else %}
                 <!-- Puedes mostrar una imagen por defecto o nada -->
                 <img src="{% static 'default_movie.jpg' %}" alt="No image available" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;">
               {% endif %}            </div>
-            <div class="col-md-8">
+            <div class="col-md-8" data-dyn="detail-text">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="card-title">{{movie.name}}</h1>
@@ -23,7 +23,7 @@
                     <hr>
                     
                     <div class="movie-info mb-4">
-                        <div class="row">
+                        <div class="row" data-dynamic-group="detail-info-row">
                             <div class="col-md-6">
                                 <p class="text-muted">
                                     <strong><i class="fas fa-film mr-2"></i>Category:</strong> 
@@ -68,7 +68,7 @@
                     <h5 class="card-subtitle mb-3 mt-4"><i class="fas fa-users mr-2"></i>Cast</h5>
                     <p>{{ movie.cast|default:"No cast information available" }}</p>
                     
-                    <div class="mt-4">
+                    <div class="mt-4" data-dynamic-group="detail-actions">
                         {% if movie.trailer_url %}
                         <a href="{{ movie.trailer_url }}" target="_blank" class="btn btn-primary mr-2">
                             <i class="fas fa-play-circle mr-1"></i> Watch Trailer
@@ -91,7 +91,7 @@
         <div class="card-header bg-light">
             <h4 class="mb-0"><i class="fas fa-comments mr-2"></i>Comments ({{ comments.count }})</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body" data-dynamic-group="detail-comments">
             <!-- Form for adding comments -->
             <form id="comment-form" method="POST" action="{% url 'movieapp:add_comment' movie.id %}">
                 {% csrf_token %}
@@ -103,7 +103,7 @@
             </form>
             
             <!-- Comments list -->
-            <div class="comment-list mt-4" id="comments-container">
+            <div class="comment-list mt-4" id="comments-container" data-dynamic-group="comments-list">
                 {% for comment in comments %}
                 <div class="media mb-3 p-3 {% if not forloop.last %}border-bottom{% endif %}">
                     {% if comment.avatar %}
@@ -145,7 +145,7 @@
     {% if related_movies %}
     <div class="mt-5">
         <h3 class="mb-4">Related Movies</h3>
-        <div class="row">
+        <div class="row" data-dynamic-group="related-grid">
             {% for related in related_movies %}
             <div class="col-md-3">
                 <div class="card movie-card h-100 shadow-sm">
