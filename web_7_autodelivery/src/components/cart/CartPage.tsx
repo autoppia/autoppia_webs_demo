@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { EVENT_TYPES, logEvent } from "../library/events";
+import { useSeedLayout } from "@/hooks/use-seed-layout";
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, clearCart, getTotal } =
@@ -24,6 +25,7 @@ export default function CartPage() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const hydrated = useHasHydrated();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const layout = useSeedLayout();
   const predefinedAddresses = [
     "710 Portofino Ln, Foster City, CA 94004",
     "450 Townsend St, San Francisco, CA 94107",
@@ -90,7 +92,7 @@ export default function CartPage() {
 
   if (items.length === 0 && !orderSuccess)
     return (
-      <div className="max-w-2xl mx-auto mt-24 text-center text-lg text-zinc-500">
+      <div className={`max-w-2xl mx-auto mt-24 text-center text-lg text-zinc-500 ${layout.cart.pageContainerClass}`}>
         Your cart is empty.
       </div>
     );
@@ -176,7 +178,7 @@ export default function CartPage() {
   };
 
   return (
-    <div id="cart-page-container" className="max-w-3xl mx-auto mt-8 px-4">
+    <div id="cart-page-container" className={`max-w-3xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
       <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
@@ -193,6 +195,7 @@ export default function CartPage() {
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
             }`}
             aria-pressed={mode === "delivery"}
+            {...layout.getElementAttributes('DELIVERY_MODE', 0)}
           >
             Delivery
           </button>
@@ -210,6 +213,7 @@ export default function CartPage() {
                 : "bg-transparent text-zinc-900 hover:bg-zinc-200"
             }`}
             aria-pressed={mode === "pickup"}
+            {...layout.getElementAttributes('PICKUP_MODE', 0)}
           >
             Pickup
           </button>
@@ -419,7 +423,7 @@ export default function CartPage() {
                         />
                         <Button
                           id="save-address-button"
-                          className="mt-2 w-full"
+                          className={`mt-2 w-full ${layout.cart.buttonClass}`}
                           onClick={() => {
                             if (customAddress.trim()) {
                               setForm((f) => ({
@@ -632,7 +636,7 @@ export default function CartPage() {
       ) : (
         <>
           <div id="cart-items-container" className="rounded-xl bg-white shadow p-4 mb-8">
-            {items.map((item) => (
+            {items.map((item, idx) => (
               <div
                 id={`cart-item-${item.id}`}
                 key={item.id}
@@ -655,6 +659,7 @@ export default function CartPage() {
                     id={`decrement-${item.id}`}
                     size="icon"
                     variant="outline"
+                    className={layout.cart.buttonClass}
                     onClick={() => {
                       updateQuantity(item.id, item.quantity - 1);
                       logEvent(EVENT_TYPES.ITEM_DECREMENTED, {
@@ -664,6 +669,7 @@ export default function CartPage() {
                       });
                     }}
                     disabled={item.quantity === 1}
+                    {...layout.getElementAttributes('ITEM_DECREMENTED', idx)}
                   >
                     -
                   </Button>
@@ -672,6 +678,7 @@ export default function CartPage() {
                     id={`increment-${item.id}`}
                     size="icon"
                     variant="outline"
+                    className={layout.cart.buttonClass}
                     onClick={() => {
                       updateQuantity(item.id, item.quantity + 1);
                       logEvent(EVENT_TYPES.ITEM_INCREMENTED, {
@@ -680,6 +687,7 @@ export default function CartPage() {
                         quantity: item.quantity + 1,
                       });
                     }}
+                    {...layout.getElementAttributes('ITEM_INCREMENTED', idx)}
                   >
                     +
                   </Button>
@@ -708,6 +716,7 @@ export default function CartPage() {
                     //   });
                     // }
                   }}
+                  {...layout.getElementAttributes('EMPTY_CART', idx)}
                 >
                   ×
                 </Button>
@@ -754,9 +763,10 @@ export default function CartPage() {
             <Button
               id="place-order-button"
               size="lg"
-              className="mt-3"
+              className={`mt-3 ${layout.cart.buttonClass}`}
               type="submit"
               disabled={items.length === 0}
+              {...layout.getElementAttributes('PLACE_ORDER', 0)}
             >
               Place Order
             </Button>
