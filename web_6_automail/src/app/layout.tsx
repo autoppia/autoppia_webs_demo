@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
@@ -8,21 +7,7 @@ import { LayoutProvider } from "@/contexts/LayoutContext";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 
-// const inter = Inter({ subsets: ["latin"] });
-// Load Inter from local files
-const inter = localFont({
-  src: [
-    {
-      path: "./fonts/Inter-VariableFont.woff2",
-      style: "normal",
-    },
-    {
-      path: "./fonts/Inter-Italic-VariableFont.woff2",
-      style: "italic",
-    },
-  ],
-  variable: "--font-inter", // optional CSS variable
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AutoMail - Modern Email Client",

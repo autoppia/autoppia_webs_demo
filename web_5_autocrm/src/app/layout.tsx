@@ -1,6 +1,6 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import React from "react";
 import Sidebar from "@/components/Sidebar";
@@ -8,18 +8,14 @@ import UserNameBadge from "@/components/UserNameBadge";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 
-// Local Geist Sans
-const geistSans = localFont({
-  src: "./fonts/Geist-Variable.woff2",
+const geistSans = Geist({
   variable: "--font-geist-sans",
-  weight: "100 900",
+  subsets: ["latin"],
 });
 
-// Local Geist Mono
-const geistMono = localFont({
-  src: "./fonts/GeistMono-Variable.woff2",
+const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  weight: "100 900",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
