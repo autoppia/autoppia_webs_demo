@@ -1,62 +1,108 @@
 // src/components/DynamicContainer.tsx
-import React, { HTMLAttributes } from "react";
-import { cn } from "@/library/utils";
-import { generateElementAttributes } from "@/library/layoutVariants";
-import { EVENT_TYPES } from "@/library/events";
 
-interface ContainerBaseProps extends HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
-  className?: string;
-}
+import { useState, useEffect, useRef } from "react";
+import { useSeedLayout } from "@/library/useSeedLayout";
 
-export interface DynamicContainerProps extends ContainerBaseProps {
-  eventType: keyof typeof EVENT_TYPES;
-}
-
-export interface DynamicItemProps extends ContainerBaseProps {
-  eventType: keyof typeof EVENT_TYPES;
+interface DynamicContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+	children: React.ReactNode;
+	className?: string;
+	index?: number;
 }
 
 export function DynamicContainer({
-  children,
-  className = "",
-  eventType,
-  ...props
+	children,
+	className = "",
+	index = 0,
+	...rest
 }: DynamicContainerProps) {
-  const attributes = generateElementAttributes(eventType);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const {
+		getLayoutClasses,
+		generateId,
+		generateSeedClass,
+		applyCSSVariables,
+		createDynamicStyles
+	} = useSeedLayout();
 
-  return (
-    <div
-      {...props}
-      {...attributes}
-      className={cn(
-        "rounded-lg border border-border bg-background shadow-sm",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
+	const [containerClasses, setContainerClasses] = useState("");
+	const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
+
+	useEffect(() => {
+		const layoutClasses = getLayoutClasses('container');
+		const elementId = generateId('container', index);
+		const seedClass = generateSeedClass('dynamic-container');
+		
+		setContainerClasses(`${layoutClasses} ${seedClass} ${className}`.trim());
+		setDynamicStyles(createDynamicStyles());
+	}, [className, index, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
+
+	useEffect(() => {
+		if (containerRef.current) {
+			applyCSSVariables(containerRef.current);
+		}
+	}, [dynamicStyles, applyCSSVariables]);
+
+	return (
+		<div 
+			ref={containerRef}
+			id={generateId('container', index)}
+			className={containerClasses}
+			style={dynamicStyles}
+			{...rest}
+		>
+			{children}
+		</div>
+	);
+}
+
+interface DynamicItemProps extends React.HTMLAttributes<HTMLDivElement> {
+	children: React.ReactNode;
+	className?: string;
+	index?: number;
 }
 
 export function DynamicItem({
-  children,
-  className = "",
-  eventType,
-  ...props
+	children,
+	className = "",
+	index = 0,
+	...rest
 }: DynamicItemProps) {
-  const attributes = generateElementAttributes(eventType);
+	const itemRef = useRef<HTMLDivElement>(null);
+	const {
+		getLayoutClasses,
+		generateId,
+		generateSeedClass,
+		applyCSSVariables,
+		createDynamicStyles
+	} = useSeedLayout();
 
-  return (
-    <div
-      {...props}
-      {...attributes}
-      className={cn(
-        "p-4 bg-background hover:bg-accent/5 transition-colors",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
+	const [itemClasses, setItemClasses] = useState("");
+	const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
+
+	useEffect(() => {
+		const layoutClasses = getLayoutClasses('item');
+		const elementId = generateId('item', index);
+		const seedClass = generateSeedClass('dynamic-item');
+		
+		setItemClasses(`${layoutClasses} ${seedClass} ${className}`.trim());
+		setDynamicStyles(createDynamicStyles());
+	}, [className, index, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
+
+	useEffect(() => {
+		if (itemRef.current) {
+			applyCSSVariables(itemRef.current);
+		}
+	}, [dynamicStyles, applyCSSVariables]);
+
+	return (
+		<div 
+			ref={itemRef}
+			id={generateId('item', index)}
+			className={itemClasses}
+			style={dynamicStyles}
+			{...rest}
+		>
+			{children}
+		</div>
+	);
 }
