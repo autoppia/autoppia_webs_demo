@@ -15,6 +15,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
+import { useLayout } from "@/contexts/LayoutContext";
+import { cn } from "@/library/utils";
 import {
   Send,
   Paperclip,
@@ -32,6 +34,7 @@ import {
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export function ComposeModal() {
+  const { currentVariant } = useLayout();
   const {
     isComposeOpen,
     composeData,
@@ -257,7 +260,18 @@ export function ComposeModal() {
                 id="compose-send-button"
                 onClick={handleSend}
                 disabled={!canSend}
-                className="btn-primary-gradient h-8 px-4"
+                className={cn(
+                  "btn-primary-gradient h-8 px-4",
+                  currentVariant.id === 2 && "compose-actions",
+                  currentVariant.id === 3 && "compose-footer",
+                  currentVariant.id === 4 && "compose-panel",
+                  currentVariant.id === 5 && "modal-actions",
+                  currentVariant.id === 6 && "compose-controls",
+                  currentVariant.id === 7 && "compose-widget",
+                  currentVariant.id === 8 && "mobile-compose",
+                  currentVariant.id === 9 && "terminal-compose",
+                  currentVariant.id === 10 && "magazine-compose"
+                )}
               >
                 <Send className="h-3 w-3 mr-2" />
                 Send
@@ -277,7 +291,18 @@ export function ComposeModal() {
               id="compose-save-draft-button"
               variant="ghost"
               onClick={handleSaveDraft}
-              className="h-8 px-3 text-sm"
+              className={cn(
+                "h-8 px-3 text-sm",
+                currentVariant.id === 2 && "compose-actions",
+                currentVariant.id === 3 && "compose-footer",
+                currentVariant.id === 4 && "compose-panel",
+                currentVariant.id === 5 && "modal-actions",
+                currentVariant.id === 6 && "compose-controls",
+                currentVariant.id === 7 && "compose-widget",
+                currentVariant.id === 8 && "mobile-compose",
+                currentVariant.id === 9 && "terminal-compose",
+                currentVariant.id === 10 && "magazine-compose"
+              )}
             >
               <Save className="h-3 w-3 mr-1" />
               Save Draft

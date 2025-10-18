@@ -16,8 +16,13 @@ import {
 import { Calendar, Popover, Modal } from "antd";
 import { useState, useRef, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import Navbar from "./components/Navbar";
+import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+
+// Import debug utilities in development
+if (process.env.NODE_ENV === 'development') {
+  import("@/library/layoutDebugger");
+}
 
 type Task = {
   id: string;
@@ -652,16 +657,16 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <Navbar />
-      <Sidebar
-        onSelect={setSelectedView as (v: string) => void}
-        selected={selectedView}
-        inboxCount={inboxCount}
-        todayCount={todayCount}
-        completedCount={completedCount}
-      />
-      <main className="flex-1 ml-[280px] flex flex-col min-h-screen ">
+    <DynamicLayout
+      sidebarProps={{
+        onSelect: setSelectedView as (v: string) => void,
+        selected: selectedView,
+        inboxCount,
+        todayCount,
+        completedCount,
+      }}
+    >
+      <main className="flex-1 flex flex-col min-h-screen">
         {selectedView === "today" ? (
           renderToday()
         ) : selectedView === "completed" ? (
@@ -850,6 +855,6 @@ export default function Home() {
           </div>
         )}
       </main>
-    </div>
+    </DynamicLayout>
   );
 }

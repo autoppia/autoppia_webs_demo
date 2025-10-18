@@ -39,18 +39,14 @@ demo-webs/
 ├── web_4_autodining/
 ├── web_5_autocrm/
 ├── web_6_automail/
-├── web_6_autodelivery/
+├── web_7_autodelivery/
 ├── web_8_autolodge/
-<<<<<<< HEAD
 ├── web_9_autoconnect/
 ├── web_10_autowork/
 ├── web_11_autocalendar/
 ├── web_12_autolist/
 ├── web_13_autodrive/
 ├── web_14_autohealth/
-=======
-├── web_13_autodrive/
->>>>>>> 4d0c953937374ebeda63841f70d33ff5cc06c2e0
 ├── webs_server/
 └── scripts/
     ├── install_docker.sh
@@ -71,7 +67,6 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Default Port Assignments**
 
-<<<<<<< HEAD
 | Demo | Web Port | DB Port | Notes |
 |------------------|----------| ------- | ---------------------------------- |
 | **Movies** | 8000 | 5434 | Django + PostgreSQL |
@@ -102,7 +97,6 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 | **AutoDrive** | 8012 | — | Next.js, no database required |
 | **webs_server** | 8090 | 5437 | API service used for event logging |
 
-> > > > > > > 4d0c953937374ebeda63841f70d33ff5cc06c2e0
 
 ---
 
@@ -232,15 +226,62 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=autohealth --web_port=8013
 ```
 
+#### **🎨 Enable Dynamic HTML (AutoMail & AutoConnect)**
+
+AutoMail and AutoConnect support dynamic HTML generation for anti-scraping protection. Enable it with:
+
+```bash
+# Deploy AutoMail with dynamic HTML enabled
+./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_html=true
+
+# Deploy AutoConnect with dynamic HTML enabled
+./scripts/setup.sh --demo=autoconnect --web_port=8008 --enable_dynamic_html=true
+
+# Deploy all demos with dynamic HTML enabled
+./scripts/setup.sh --demo=all --enable_dynamic_html=true
+```
+
+**What Dynamic HTML does:**
+- 🔀 Changes page layouts based on URL seed parameter (1-300)
+- 🎯 Adds dynamic attributes to confuse web scrapers
+- 🆔 Generates seed-based element IDs and XPath selectors
+- 🎨 Applies CSS variables for layout variations
+- 🔒 Enhances protection against automated data extraction
+
+**Testing different layouts:**
+```
+http://localhost:8005/?seed=1    # Default layout
+http://localhost:8005/?seed=180  # Ultra-wide layout
+http://localhost:8005/?seed=200  # Asymmetric layout
+```
+
 > ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
 
 ---
+
+
+#### **Available Setup Options**
+
+| Option | Description | Default | Example |
+|--------|-------------|---------|---------|
+| `--demo=NAME` | Deploy specific demo or all | `all` | `--demo=automail` |
+| `--web_port=PORT` | Base web server port | `8000` | `--web_port=9000` |
+| `--postgres_port=PORT` | Base PostgreSQL port | `5434` | `--postgres_port=6000` |
+| `--webs_port=PORT` | webs_server API port | `8090` | `--webs_port=8080` |
+| `--webs_postgres=PORT` | webs_server DB port | `5437` | `--webs_postgres=5440` |
+| `--enable_dynamic_html=BOOL` | Enable dynamic HTML | `false` | `--enable_dynamic_html=true` |
+| `-y, --yes` | Skip confirmation prompts | - | `-y` |
+
+**Valid demo names:** `movies`, `books`, `autozone`, `autodining`, `autocrm`, `automail`, `autoconnect`, `all`
 
 #### **Custom Port Configuration**
 
 ```bash
 # Custom ports for specific deployment
 ./scripts/setup.sh --demo=movies --web_port=9000 --postgres_port=6000
+
+# Multiple options combined
+./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_html=true --webs_port=8090
 ```
 
 ---

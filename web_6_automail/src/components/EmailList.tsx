@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import { useMemo } from "react";
 import { cn } from "@/library/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -9,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
+import { useLayout } from "@/contexts/LayoutContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import type { Email } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -16,21 +16,18 @@ import {
   Star,
   Archive,
   Trash2,
-  MoreVertical,
   Paperclip,
-  AlertTriangle,
   RefreshCw,
   ChevronLeft,
   ChevronRight,
-  Check,
   Search,
   Mail,
   Shield,
   Tag,
 } from "lucide-react";
-// import { format, isToday, isYesterday, isThisWeek } from 'date-fns';
 
 export function EmailList() {
+  const { currentVariant } = useLayout();
   const {
     paginatedEmails,
     filteredEmails,
@@ -47,8 +44,6 @@ export function EmailList() {
     moveToTrash,
     currentFilter,
     searchQuery,
-    currentPage,
-    totalPages,
     hasNextPage,
     hasPrevPage,
     nextPage,
@@ -191,6 +186,7 @@ export function EmailList() {
   return (
     <div
       className="flex flex-col h-full bg-background"
+      data-testid="email-list"
       suppressHydrationWarning
     >
       {/* Header */}
@@ -235,12 +231,39 @@ export function EmailList() {
 
       {/* Action Bar */}
       {selectedEmails.length > 0 && (
-        <div className="flex items-center gap-2 p-3 bg-muted/50 border-b border-border">
+        <div className={cn(
+          "flex items-center gap-2 p-3 bg-muted/50 border-b border-border",
+          currentVariant.id === 2 && "action-bar",
+          currentVariant.id === 3 && "action-nav",
+          currentVariant.id === 4 && "bulk-actions",
+          currentVariant.id === 5 && "card-actions",
+          currentVariant.id === 6 && "action-list",
+          currentVariant.id === 7 && "widget-actions",
+          currentVariant.id === 8 && "mobile-actions",
+          currentVariant.id === 9 && "terminal-actions",
+          currentVariant.id === 10 && "magazine-actions"
+        )}>
           <span className="text-sm text-muted-foreground">
             {selectedEmails.length} selected
           </span>
           <Separator orientation="vertical" className="h-4" />
-          <Button id="bulk-delete-button" variant="ghost" size="sm" onClick={handleBulkDelete}>
+          <Button 
+            id="bulk-delete-button" 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleBulkDelete}
+            className={cn(
+              currentVariant.id === 2 && "delete-element",
+              currentVariant.id === 3 && "delete-btn",
+              currentVariant.id === 4 && "delete-element",
+              currentVariant.id === 5 && "card-delete",
+              currentVariant.id === 6 && "delete-item",
+              currentVariant.id === 7 && "widget-delete",
+              currentVariant.id === 8 && "mobile-delete",
+              currentVariant.id === 9 && "action-delete",
+              currentVariant.id === 10 && "action-delete"
+            )}
+          >
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
@@ -259,7 +282,21 @@ export function EmailList() {
           <LabelSelector
             emailIds={selectedEmails}
             trigger={
-              <Button variant="ghost" size="sm">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className={cn(
+                  currentVariant.id === 2 && "label-panel",
+                  currentVariant.id === 3 && "label-btn",
+                  currentVariant.id === 4 && "label-element",
+                  currentVariant.id === 5 && "card-label",
+                  currentVariant.id === 6 && "label-item",
+                  currentVariant.id === 7 && "widget-label",
+                  currentVariant.id === 8 && "mobile-label",
+                  currentVariant.id === 9 && "action-label",
+                  currentVariant.id === 10 && "action-label"
+                )}
+              >
                 <Tag className="h-4 w-4 mr-2" />
                 Labels
               </Button>
@@ -373,19 +410,110 @@ function EmailItem({
   highlightSearchTerm,
   searchQuery,
 }: EmailItemProps) {
+  const { currentVariant } = useLayout();
+  
+  // Get CSS classes based on layout variant
+  const getEmailItemClasses = () => {
+    switch (currentVariant.id) {
+      case 1: // Classic Gmail
+        return cn(
+          "group flex items-center gap-3 p-3 cursor-pointer email-item-hover",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 2: // Right Sidebar
+        return cn(
+          "group flex items-center gap-3 p-3 cursor-pointer email-container",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 3: // Top Navigation
+        return cn(
+          "group flex items-center gap-3 p-3 cursor-pointer email-card",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 4: // Split View
+        return cn(
+          "group flex items-center gap-3 p-3 cursor-pointer email-entry",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 5: // Card Layout
+        return cn(
+          "group flex flex-col gap-2 p-4 cursor-pointer email-card rounded-lg border",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 6: // Minimalist
+        return cn(
+          "group flex items-center gap-3 p-2 cursor-pointer email-row",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 7: // Dashboard Style
+        return cn(
+          "group flex items-center gap-3 p-3 cursor-pointer widget-email",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 8: // Mobile First
+        return cn(
+          "group flex items-center gap-3 p-3 cursor-pointer mobile-email",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 9: // Terminal Style
+        return cn(
+          "group flex items-center gap-3 p-2 cursor-pointer terminal-line font-mono",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      case 10: // Magazine Layout
+        return cn(
+          "group flex flex-col gap-2 p-4 cursor-pointer magazine-article rounded-lg border",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+      default:
+        return cn(
+          "group flex items-center gap-3 p-3 cursor-pointer email-item-hover",
+          isActive && "bg-muted",
+          !email.isRead && "email-item-unread",
+          isSelected && "email-item-selected"
+        );
+    }
+  };
+
   return (
     <div
-      className={cn(
-        "group flex items-center gap-3 p-3 cursor-pointer email-item-hover",
-        isActive && "bg-muted",
-        !email.isRead && "email-item-unread",
-        isSelected && "email-item-selected"
-      )}
+      className={getEmailItemClasses()}
       onClick={onClick}
       suppressHydrationWarning
     >
       {/* Selection Checkbox */}
-      <div className="flex items-center">
+      <div className={cn(
+        "flex items-center",
+        currentVariant.id === 2 && "select-box",
+        currentVariant.id === 3 && "select-icon",
+        currentVariant.id === 4 && "check-element",
+        currentVariant.id === 5 && "card-check",
+        currentVariant.id === 6 && "row-check",
+        currentVariant.id === 7 && "widget-check",
+        currentVariant.id === 8 && "mobile-check",
+        currentVariant.id === 9 && "line-check",
+        currentVariant.id === 10 && "article-check"
+      )}>
         <Checkbox
           checked={isSelected}
           onCheckedChange={() => onSelect({} as React.MouseEvent)}
@@ -397,7 +525,18 @@ function EmailItem({
       <Button
         variant="ghost"
         size="icon"
-        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+        className={cn(
+          "h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity",
+          currentVariant.id === 2 && "star-container",
+          currentVariant.id === 3 && "star-icon",
+          currentVariant.id === 4 && "star-element",
+          currentVariant.id === 5 && "card-star",
+          currentVariant.id === 6 && "star-icon",
+          currentVariant.id === 7 && "widget-star",
+          currentVariant.id === 8 && "mobile-star",
+          currentVariant.id === 9 && "line-star",
+          currentVariant.id === 10 && "article-star"
+        )}
         onClick={onStarClick}
       >
         <Star
@@ -409,7 +548,9 @@ function EmailItem({
       </Button>
 
       {/* Email Content */}
-      <div className="flex-1 grid grid-cols-12 gap-4 min-w-0">
+      <div
+      id="view-email"
+      className="flex-1 grid grid-cols-12 gap-4 min-w-0">
         {/* Sender */}
         <div className="col-span-3 min-w-0 mt-3">
           <p
