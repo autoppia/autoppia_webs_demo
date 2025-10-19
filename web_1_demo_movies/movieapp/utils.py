@@ -27,3 +27,22 @@ def stable_shuffle(items: Iterable[T], seed: int, salt: str = "") -> List[T]:
     return lst
 
 
+def compute_variant(seed: int) -> int:
+    """Map any seed (1..300) deterministically into a layout variant 1..10."""
+    try:
+        s = int(seed or 1)
+    except Exception:
+        s = 1
+    # ((seed - 1) % 10) + 1 yields range 1..10
+    return ((s - 1) % 10) + 1
+
+
+def normalize_variant(raw) -> int:
+    """Clamp/validate a raw variant value into [1,10], default 1 if invalid."""
+    try:
+        v = int(raw)
+    except Exception:
+        return 1
+    if v < 1 or v > 10:
+        return 1
+    return v

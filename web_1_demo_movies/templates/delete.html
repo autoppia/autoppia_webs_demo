@@ -30,7 +30,7 @@
                             <button type="submit" class="btn btn-danger btn-lg mr-2">
                                 <i class="fas fa-trash mr-2"></i>Sí, Eliminar
                             </button>
-                            <a href="{% url 'movieapp:detail' movie.id %}" class="btn btn-secondary btn-lg">
+                            <a href="{% if DYNAMIC_HTML_ENABLED %}{% url 'movieapp:detail_variant' variant=LAYOUT_VARIANT movie_id=movie.id %}?seed={{ INITIAL_SEED }}{% else %}{% url 'movieapp:detail' movie.id %}{% endif %}" class="btn btn-secondary btn-lg">
                                 <i class="fas fa-times mr-2"></i>Cancelar
                             </a>
                         </div>

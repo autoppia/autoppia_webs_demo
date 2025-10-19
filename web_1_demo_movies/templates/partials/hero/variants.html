@@ -1,0 +1,9 @@
+{% with v=LAYOUT_VARIANT %}
+{% if v|divisibleby:2 %}
+  {% include "partials/hero/variant_2.html" %}
+{% else %}
+  {% include "partials/hero/variant_1.html" %}
+{% endif %}
+{% endwith %}
+
+

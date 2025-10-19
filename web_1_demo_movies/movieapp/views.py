@@ -10,11 +10,11 @@ from django.utils import timezone
 
 from events.models import Event
 from .forms import MovieForm, ContactForm
-from .utils import normalize_seed, stable_shuffle
+from .utils import normalize_seed, stable_shuffle, compute_variant
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
 
 
-def index(request):
+def index(request, variant=None):
     """
     Vista principal que muestra la lista de películas con opciones de búsqueda y filtrado.
     """
@@ -83,8 +83,13 @@ def index(request):
         )
         filter_event.save()
 
-    # Server-side dynamic order based on seed
+    # Server-side dynamic order and variant based on seed / explicit variant
     seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
     movie_list = stable_shuffle(movies, seed, salt="movies")
     genre_list = stable_shuffle(all_genres, seed, salt="genres")
     years_list = stable_shuffle(available_years, seed, salt="years")
@@ -96,6 +101,8 @@ def index(request):
         "available_years": years_list,
         "selected_genre": genre_filter,
         "selected_year": year_filter,
+        "LAYOUT_VARIANT": variant_val,
+        "INITIAL_SEED": seed,
     }
     return render(request, "index.html", context)
 
@@ -110,7 +117,7 @@ def about(request):
 # =============================================================================
 
 
-def detail(request, movie_id):
+def detail(request, movie_id, variant=None):
     """
     Vista de detalle de película: muestra información, películas relacionadas y comentarios.
     Además, registra el evento de visualización de detalle.
@@ -124,6 +131,11 @@ def detail(request, movie_id):
 
     # Películas relacionadas
     seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
     related_movies = []
     if movie.genres.exists():
         related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct()[:4]
@@ -141,11 +153,11 @@ def detail(request, movie_id):
 
     comments = movie.comments.all()
 
-    context = {"movie": movie, "related_movies": related_movies, "comments": comments}
+    context = {"movie": movie, "related_movies": related_movies, "comments": comments, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed}
     return render(request, "details.html", context)
 
 
-def add_movie(request):
+def add_movie(request, variant=None):
     """
     Vista para registrar un evento de ADD_FILM sin guardar la película.
     """
@@ -180,10 +192,16 @@ def add_movie(request):
     else:
         form = MovieForm()
 
-    return render(request, "add.html", {"form": form})
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
+    return render(request, "add.html", {"form": form, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
-def update_movie(request, id):
+def update_movie(request, id, variant=None):
     """
     Vista para actualizar una película existente.
     Registra el evento de EDIT_FILM si se detectan cambios, pero NO guarda los cambios en la BD.
@@ -268,10 +286,16 @@ def update_movie(request, id):
     else:
         form = MovieForm(instance=movie)
 
-    return render(request, "edit.html", {"form": form, "movie": movie})
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
+    return render(request, "edit.html", {"form": form, "movie": movie, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
-def delete_movie(request, id):
+def delete_movie(request, id, variant=None):
     """
     Vista para eliminar una película y registrar el evento de DELETE_FILM.
     """
@@ -287,7 +311,13 @@ def delete_movie(request, id):
         # movie.delete()
         messages.success(request, "Movie deleted successfully.")
         return redirect("/")
-    return render(request, "delete.html", {"movie": movie})
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
+    return render(request, "delete.html", {"movie": movie, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
 def add_comment(request, movie_id):
@@ -336,17 +366,18 @@ def add_comment(request, movie_id):
     return redirect("movieapp:detail", movie_id=movie.id)
 
 
-def genre_list(request):
+def genre_list(request, variant=None):
     """
     Vista que muestra la lista de géneros.
     """
     seed = normalize_seed(request.GET.get("seed"))
     genres = Genre.objects.all()
+    variant_val = compute_variant(seed)
     genres_list = stable_shuffle(genres, seed, salt="genres-page")
-    return render(request, "genres.html", {"genres": genres_list})
+    return render(request, "genres.html", {"genres": genres_list, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
-def genre_detail(request, genre_id):
+def genre_detail(request, genre_id, variant=None):
     """
     Vista que muestra los detalles de un género y las películas asociadas.
     """
@@ -354,14 +385,15 @@ def genre_detail(request, genre_id):
     seed = normalize_seed(request.GET.get("seed"))
     movies = Movie.objects.filter(genres=genre)
     movies_list = stable_shuffle(movies, seed, salt="genre-detail")
-    context = {"genre": genre, "movies": movies_list}
+    variant_val = compute_variant(seed)
+    context = {"genre": genre, "movies": movies_list, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed}
     return render(request, "genres_detail.html", context)
 
 
 # =============================================================================
 #                        CONTACT
 # =============================================================================
-def contact(request):
+def contact(request, variant=None):
     """
     Vista de contacto: guarda el mensaje en la base de datos y crea un evento.
     """
@@ -391,7 +423,13 @@ def contact(request):
             return redirect("movieapp:contact")
     else:
         form = ContactForm()
-    return render(request, "contact.html", {"form": form})
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
+    return render(request, "contact.html", {"form": form, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
 # =============================================================================
@@ -399,7 +437,7 @@ def contact(request):
 # =============================================================================
 
 
-def login_view(request):
+def login_view(request, variant=None):
     """
     Vista para iniciar sesión.
     Si el usuario ya está autenticado, redirige a la página principal.
@@ -421,10 +459,16 @@ def login_view(request):
             return redirect(next_url)
         else:
             messages.error(request, "Invalid username or password.")
-    return render(request, "login.html")
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
+    return render(request, "login.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
-def logout_view(request):
+def logout_view(request, variant=None):
     """
     Vista para cerrar sesión.
     Registra el evento de cierre de sesión antes de finalizar la sesión.
@@ -437,7 +481,7 @@ def logout_view(request):
     return redirect("movieapp:index")
 
 
-def register_view(request):
+def register_view(request, variant=None):
     """
     Vista para registrar un nuevo usuario.
     Valida la información, crea el usuario, registra los eventos de registro e inicio de sesión y redirige a la página principal.
@@ -479,11 +523,17 @@ def register_view(request):
             messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect("movieapp:index")
 
-    return render(request, "register.html")
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
+    return render(request, "register.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
 @login_required
-def profile_view(request):
+def profile_view(request, variant=None):
     """
     Vista para mostrar y actualizar el perfil del usuario.
     Permite actualizar datos personales, email, imagen y géneros favoritos.
@@ -568,4 +618,7 @@ def profile_view(request):
         "genres": all_genres,
         "selected_genres": [g.id for g in profile.favorite_genres.all()],
     }
+    seed = normalize_seed(request.GET.get("seed"))
+    variant_val = compute_variant(seed)
+    context.update({"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
     return render(request, "profile.html", context)
