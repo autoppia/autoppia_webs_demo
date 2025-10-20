@@ -1,9 +1,11 @@
 function __runDynamicLayout(){
   try {
+    console.log('Dynamic layout script starting...');
     var params0 = new URLSearchParams(window.location.search);
     var debugForce = params0.get('forceDynamic') === '1';
     var enabled = Boolean(window.__DYNAMIC_HTML_ENABLED__);
     var initialSeed = Number(window.__INITIAL_SEED__ || 1) || 1;
+    console.log('Dynamic layout enabled:', enabled, 'initialSeed:', initialSeed);
 
     var params = new URLSearchParams(window.location.search);
     var seedParam = params.get('seed');
@@ -32,27 +34,56 @@ function __runDynamicLayout(){
       if (items.length < 2) return;
       var salt = saltedHash(groupEl.tagName + '|' + groupEl.className + '|' + (groupEl.id || ''));
       var rand = seededRandomWithSalt(salt);
-      var buckets = {0:[],1:[],2:[]};
-      for (var i=0;i<items.length;i++){ var b=(seed+i)%3; buckets[b].push(items[i]); }
-      function shuffle(arr){ var idxs=arr.map(function(_,k){return k;}); for (var t=idxs.length-1;t>0;t--){ var j=Math.floor(rand()*(t+1)); var tmp=idxs[t]; idxs[t]=idxs[j]; idxs[j]=tmp; } return idxs.map(function(k){return arr[k];}); }
-      var top=shuffle(buckets[0]), mid=shuffle(buckets[1]), bot=shuffle(buckets[2]);
-      var mode = seed%3; var newOrder = mode===0? top.concat(mid,bot) : (mode===1? mid.concat(bot,top) : bot.concat(top,mid));
-      newOrder.forEach(function(el){ groupEl.appendChild(el); });
+      
+      // Simple Fisher-Yates shuffle for more predictable reordering
+      var shuffled = items.slice();
+      for (var i = shuffled.length - 1; i > 0; i--) {
+        var j = Math.floor(rand() * (i + 1));
+        var temp = shuffled[i];
+        shuffled[i] = shuffled[j];
+        shuffled[j] = temp;
+      }
+      
+      // Re-append in new order
+      shuffled.forEach(function(el){ groupEl.appendChild(el); });
     }
 
     function reorderChildren(el, depth){
       if (!el || depth<=0) return; if (SKIP_TAGS[el.tagName]) return; if (el.getAttribute && el.getAttribute('data-dynamic')==='off') return;
+      
+      // Skip reordering major sections - only reorder elements within them
+      var skipSections = ['BODY', 'HEADER', 'NAV', 'MAIN', 'SECTION', 'ARTICLE', 'ASIDE', 'FOOTER'];
+      if (skipSections.includes(el.tagName)) {
+        // Only reorder children of major sections, not the sections themselves
+        var children = Array.prototype.slice.call(el.children||[]);
+        for (var k=0;k<children.length;k++) reorderChildren(children[k], depth-1);
+        return;
+      }
+      
       var children = Array.prototype.slice.call(el.children||[]);
       if (children.length>1) reorderGroup(el, ':scope > *');
       for (var k=0;k<children.length;k++) reorderChildren(children[k], depth-1);
     }
 
-    // Only perform reordering when explicitly forced via ?forceDynamic=1
-    if (debugForce) {
+    // Perform reordering when dynamic HTML is enabled or explicitly forced via ?forceDynamic=1
+    if (enabled || debugForce) {
       // Known groups (add markers in templates if needed)
       var navbar = document.querySelector('.navbar-nav'); if (navbar) reorderGroup(navbar, ':scope > li');
       var rows = document.querySelectorAll('.row'); rows.forEach(function(r){ reorderGroup(r, ':scope > [class*="col-"]'); });
       var lists = document.querySelectorAll('ul,ol,.dropdown-menu,.list-group'); lists.forEach(function(l){ reorderGroup(l, ':scope > *'); });
+      
+      // Handle data-dynamic-group elements
+      var dynamicGroups = document.querySelectorAll('[data-dynamic-group]');
+      dynamicGroups.forEach(function(group){
+        var groupName = group.getAttribute('data-dynamic-group');
+        if (groupName === 'navbar-nav') {
+          reorderGroup(group, ':scope > li');
+        } else if (groupName === 'book-grid') {
+          reorderGroup(group, ':scope > [class*="col-"]');
+        } else {
+          reorderGroup(group, ':scope > *');
+        }
+      });
 
       // Reorder selects (keep first placeholder)
       document.querySelectorAll('select').forEach(function(sel){
@@ -64,8 +95,8 @@ function __runDynamicLayout(){
         idxs.forEach(function(k){ sel.appendChild(opts[k]); }); if (selectedVal) sel.value=selectedVal;
       });
 
-      // Global recursive pass strengthens vertical movement across the page
-      reorderChildren(document.body, 4);
+      // Global recursive pass - limited depth to avoid reordering major sections
+      reorderChildren(document.body, 2);
     }
 
     // Tag all nodes with seed markers for XPath variance
