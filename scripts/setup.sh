@@ -21,15 +21,15 @@ set -euo pipefail
 
 echo "🚀 Setting up web demos..."
 
-## 0. Remove all containers
-#echo "[INFO] Removing all containers..."
-#docker ps -aq | xargs -r docker rm -f || true
-#
-## 1. Prune Docker environment
-#echo "[INFO] Pruning volumes, images and networks..."
-#docker volume rm $(docker volume ls -q) 2>/dev/null || true
-#docker rmi $(docker images -q) --force 2>/dev/null || true
-#docker network prune -f || true
+# 0. Remove all containers
+echo "[INFO] Removing all containers..."
+docker ps -aq | xargs -r docker rm -f || true
+
+# 1. Prune Docker environment
+echo "[INFO] Pruning volumes, images and networks..."
+docker volume rm $(docker volume ls -q) 2>/dev/null || true
+docker rmi $(docker images -q) --force 2>/dev/null || true
+docker network prune -f || true
 
 # 2. Ensure external network for app ↔ front communication
 EXTERNAL_NET="apps_net"
@@ -190,10 +190,11 @@ case "$WEB_DEMO" in
     ;;
   autocalendar)
     deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
-     deploy_webs_server
+    deploy_webs_server
     ;;
   autolist)
     deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
+    deploy_webs_server
     ;;
   autodrive)
     deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
