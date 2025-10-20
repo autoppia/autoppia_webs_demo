@@ -29,8 +29,8 @@ def index(request, variant=None):
     genre_filter = request.GET.get("genre", "")
     year_filter = request.GET.get("year", "")
 
-    # Comenzar con todas las películas
-    movies = Movie.objects.all()
+    # Comenzar con todas las películas (prefetch genres to avoid N+1 in templates)
+    movies = Movie.objects.all().prefetch_related("genres")
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
@@ -138,15 +138,22 @@ def detail(request, movie_id, variant=None):
     variant_val = compute_variant(seed)
     related_movies = []
     if movie.genres.exists():
-        related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct()[:4]
+        related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct().prefetch_related("genres")[:4]
 
     if len(related_movies) < 4:
-        more_movies = Movie.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]])[: 4 - len(related_movies)]
+        more_movies = Movie.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]]).prefetch_related("genres")[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(more_movies)
 
     if len(related_movies) < 4:
-        random_movies = Movie.objects.exclude(id__in=[m.id for m in list(related_movies) + [movie]]).order_by("?")[: 4 - len(related_movies)]
-        related_movies = list(related_movies) + list(random_movies)
+        remaining_needed = 4 - len(related_movies)
+        # Avoid DB-level random ordering which is slow; pick a capped candidate pool and deterministically shuffle it
+        excluded_ids = [m.id for m in list(related_movies) + [movie]]
+        candidate_ids = list(Movie.objects.exclude(id__in=excluded_ids).order_by("id").values_list("id", flat=True)[:100])
+        shuffled_ids = stable_shuffle(candidate_ids, seed, salt="related-fallback")
+        extra_ids = shuffled_ids[:remaining_needed]
+        extra_movies_qs = Movie.objects.filter(id__in=extra_ids).prefetch_related("genres")
+        id_to_movie = {m.id: m for m in extra_movies_qs}
+        related_movies = list(related_movies) + [id_to_movie[i] for i in extra_ids if i in id_to_movie]
 
     # Server-side shuffle related movies by seed for deterministic order
     related_movies = stable_shuffle(related_movies, seed, salt="related")
@@ -383,7 +390,7 @@ def genre_detail(request, genre_id, variant=None):
     """
     genre = get_object_or_404(Genre, id=genre_id)
     seed = normalize_seed(request.GET.get("seed"))
-    movies = Movie.objects.filter(genres=genre)
+    movies = Movie.objects.filter(genres=genre).prefetch_related("genres")
     movies_list = stable_shuffle(movies, seed, salt="genre-detail")
     variant_val = compute_variant(seed)
     context = {"genre": genre, "movies": movies_list, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed}
