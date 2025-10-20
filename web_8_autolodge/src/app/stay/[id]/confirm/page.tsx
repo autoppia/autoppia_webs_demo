@@ -21,7 +21,7 @@ function toUtcIsoWithTimezone(date: Date) {
 }
 
 function ConfirmPageContent() {
-  const { seed, layout } = useSeedLayout();
+  const { seed, layout } = useSeedLayout('confirm');
   const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -100,7 +100,6 @@ function ConfirmPageContent() {
 
   const [hostMessage, setHostMessage] = useState("");
   const [toast, setToast] = useState<string | null>(null);
-  const hostYear = 2014;
 
   function showToast(msg: string) {
     setToast(msg);
@@ -141,206 +140,50 @@ function ConfirmPageContent() {
     zip.length >= 3 &&
     country.length > 0;
 
-  // Create event elements based on layout order
-  const createEventElement = (eventType: string) => {
+
+  // Create event elements based on layout order with proper spacing
+  const createEventElement = (eventType: string, index: number) => {
     switch (eventType) {
-      case 'search':
-        return (
-          <DynamicWrapper key="search" as="div" className="mb-6">
-            <div className="bg-white rounded-2xl border p-6">
-              <h2 className="text-xl font-semibold mb-4">Search Options</h2>
-              <div className="text-sm text-neutral-600">
-                Current search: {prop.location}
-              </div>
-            </div>
-          </DynamicWrapper>
-        );
       case 'view':
         return (
-          <DynamicWrapper key="view" as="div" className="mb-6">
-            <div className="bg-white rounded-2xl border p-6">
-              <h2 className="text-xl font-semibold mb-4">Property Details</h2>
-              <div className="flex items-center gap-3">
-                <img
-                  src={prop.image}
-                  alt={prop.title}
-                  width={80}
-                  height={60}
-                  className="rounded-lg object-cover"
-                />
-                <div>
-                  <div className="font-semibold">{prop.title}</div>
-                  <div className="text-sm text-neutral-600">{prop.location}</div>
-                </div>
-              </div>
-            </div>
-          </DynamicWrapper>
-        );
-      case 'reserve':
-        return (
-          <DynamicWrapper key="reserve" as="div" className="mb-6">
-            <div className="bg-white rounded-2xl border p-6">
-              <h2 className="text-xl font-semibold mb-4">Reservation Summary</h2>
-              <div className="text-sm text-neutral-600">
-                {nights} nights • {guests} guests
-              </div>
-            </div>
-          </DynamicWrapper>
-        );
-      case 'confirm':
-        return (
-          <DynamicWrapper key="confirm" as="div" className="w-full min-w-[325px] max-w-xs bg-white shadow-md rounded-2xl border flex flex-col p-6 sticky top-8 h-fit self-start">
-            <div className="flex gap-3 mb-3 items-center">
+          <DynamicWrapper key={`view-${index}`} as="div" className="bg-white rounded-lg border p-6">
+            <h1 className="text-2xl font-bold mb-4">Confirm your booking</h1>
+            <div className="flex items-start gap-4">
               <img
                 src={prop.image}
-                width={64}
-                height={48}
-                className="rounded-xl object-cover border"
                 alt={prop.title}
+                width={120}
+                height={90}
+                className="rounded-lg object-cover"
               />
-              <div>
-                <div className="font-semibold text-base leading-tight mb-0">
-                  {prop.title}
-                </div>
-                <div className="text-xs text-neutral-600 mb-0.5">
-                  Entire condo
-                </div>
-                <div className="flex items-center gap-0.5 text-[15px]">
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold mb-2">{prop.title}</h2>
+                <p className="text-gray-600 mb-2">{prop.location}</p>
+                <div className="flex items-center gap-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="#FF5A5F"
-                    width={15}
-                    height={15}
+                    width={16}
+                    height={16}
                     viewBox="0 0 24 24"
                     stroke="none"
                   >
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                   </svg>
-                  <b>{prop.rating.toFixed(2)}</b>
-                  <span className="text-neutral-400 ml-1">
-                    ({prop.reviews ?? 30} reviews)
-                  </span>
+                  <span className="font-medium">{prop.rating.toFixed(2)}</span>
+                  <span className="text-gray-500">({prop.reviews ?? 30} reviews)</span>
                 </div>
               </div>
             </div>
-            <hr className="my-3 mt-0.5" />
-            <div className="font-bold mb-3">Price details</div>
-            <div className="flex flex-col gap-2 text-[15px]">
-              <div className="flex items-center justify-between">
-                <span className="underline">
-                  ${prop.price.toFixed(2)} USD x {nights} nights
-                </span>
-                <span>${priceSubtotal.toFixed(2)} USD</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="underline">Cleaning fee</span>{" "}
-                <span>${cleaningFee} USD</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="underline">Staynb service fee</span>{" "}
-                <span>${serviceFee} USD</span>
-              </div>
-              <hr />
-              <div className="flex items-center justify-between font-bold text-neutral-900">
-                <span>Total (USD)</span> <span>${total.toFixed(2)} USD</span>
-              </div>
-            </div>
-            <button
-              className="mt-7 rounded-lg w-full py-4 text-white font-semibold text-[18px] bg-[#616882] hover:bg-[#7d87aa] transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-              id="confirm-and-pay-btn"
-              onClick={() => {
-                setHasTriedSubmit(true);
-
-                if (!canPay) {
-                  return; // Don't proceed if any field is incomplete
-                }
-                logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
-                  guests_set: guests,
-                  nights,
-                  priceSubtotal,
-                  cleaningFee,
-                  serviceFee,
-                  total,
-                  cardNumber,
-                  expiration: exp,
-                  cvv,
-                  zip,
-                  country,
-                  hotel: prop,
-                });
-
-                showToast("✅ Reservation complete! Thank you! 🙏");
-                // ✅ Reset form fields
-                setCardNumber("");
-                setExp("");
-                setCvv("");
-                setZip("");
-                setCountry("United States");
-                setHasTriedSubmit(false);
-              }}
-            >
-              Confirm and pay
-            </button>
-          </DynamicWrapper>
-        );
-      case 'message':
-        return (
-          <DynamicWrapper key="message" as="section" className="bg-white rounded-2xl border p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4">Message your host</h2>
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src={prop.host.avatar}
-                alt={prop.title}
-                width={44}
-                height={44}
-                className="rounded-full border"
-              />
-              <div>
-                <div className="font-medium text-neutral-900">
-                  {prop.host.name}
-                </div>
-                <div className="text-neutral-500 text-xs">
-                  Joined in {hostYear}
-                </div>
-              </div>
-            </div>
-            <textarea
-              id="host-message-input"
-              value={hostMessage}
-              onChange={(e) => setHostMessage(e.target.value)}
-              rows={4}
-              placeholder={`Hi ${prop.host.name} I'll be staying...`}
-              className="w-full border rounded-lg px-3 py-3 text-[16px] bg-white mb-3 resize-none"
-            />
-            <button
-              id="send-host-message-btn"
-              onClick={() => {
-                if (hostMessage.trim() !== "") {
-                  logEvent(EVENT_TYPES.MESSAGE_HOST, {
-                    message: hostMessage.trim(),
-                    hostName: prop.host.name,
-                    source: "message_host_section",
-                    hotel: prop,
-                  });
-
-                  showToast(" ✅ Message sent.");
-                  setHostMessage("");
-                }
-              }}
-              className="bg-[#616882] hover:bg-[#504546] text-white font-semibold px-6 py-2 rounded-lg mb-2 transition disabled:opacity-50 disabled:pointer-events-none"
-              disabled={!hostMessage.trim()}
-            >
-              Send
-            </button>
           </DynamicWrapper>
         );
       case 'dates':
         return (
-          <DynamicWrapper key="dates" as="section" className="bg-white rounded-2xl border p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4">Edit your dates</h2>
+          <DynamicWrapper key={`dates-${index}`} as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Edit your dates</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Check-in
                 </label>
                 <input
@@ -361,7 +204,7 @@ function ConfirmPageContent() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Check-out
                 </label>
                 <input
@@ -386,11 +229,11 @@ function ConfirmPageContent() {
         );
       case 'guests':
         return (
-          <DynamicWrapper key="guests" as="section" className="bg-white rounded-2xl border p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4">Number of guests</h2>
-            <div className="flex items-center gap-4">
-              <label className="block text-sm font-medium text-neutral-700">
-                Guests:
+          <DynamicWrapper key={`guests-${index}`} as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Number of guests</h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Guests
               </label>
               <input
                 type="number"
@@ -413,63 +256,110 @@ function ConfirmPageContent() {
             </div>
           </DynamicWrapper>
         );
+      case 'message':
+        return (
+          <DynamicWrapper key={`message-${index}`} as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Message your host</h3>
+            <div className="flex items-center gap-3 mb-4">
+              <img
+                src={prop.host.avatar}
+                alt={prop.host.name}
+                width={40}
+                height={40}
+                className="rounded-full border"
+              />
+              <div>
+                <div className="font-medium text-gray-900">
+                  {prop.host.name}
+                </div>
+                <div className="text-gray-500 text-sm">
+                  Host
+                </div>
+              </div>
+            </div>
+            <textarea
+              id="host-message-input"
+              value={hostMessage}
+              onChange={(e) => setHostMessage(e.target.value)}
+              rows={3}
+              placeholder={`Hi ${prop.host.name}, I'm looking forward to my stay...`}
+              className="w-full border rounded-lg px-3 py-3 text-sm bg-white mb-3 resize-none"
+            />
+            <button
+              id="send-host-message-btn"
+              onClick={() => {
+                if (hostMessage.trim() !== "") {
+                  logEvent(EVENT_TYPES.MESSAGE_HOST, {
+                    message: hostMessage.trim(),
+                    hostName: prop.host.name,
+                    source: "message_host_section",
+                    hotel: prop,
+                  });
+
+                  showToast("Message sent successfully!");
+                  setHostMessage("");
+                }
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition disabled:opacity-50 disabled:pointer-events-none"
+              disabled={!hostMessage.trim()}
+            >
+              Send message
+            </button>
+          </DynamicWrapper>
+        );
       case 'wishlist':
         return (
-          <DynamicWrapper key="wishlist" as="div" className="mb-6">
-            <div className="bg-white rounded-2xl border p-6">
-              <h2 className="text-xl font-semibold mb-4">Save for Later</h2>
-              <button
-                onClick={() => {
-                  logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
-                    title: prop.title,
-                    location: prop.location,
-                    rating: prop.rating,
-                    reviews: prop.reviews,
-                    price: prop.price,
-                    dates: { from: prop.datesFrom, to: prop.datesTo },
-                    guests: prop.guests,
-                    host: prop.host,
-                    amenities: prop.amenities?.map((a) => a.title),
-                  });
-                  showToast("Added to wishlist ❤️");
-                }}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-              >
-                Add to Wishlist
-              </button>
-            </div>
+          <DynamicWrapper key={`wishlist-${index}`} as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Save for Later</h3>
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+                  title: prop.title,
+                  location: prop.location,
+                  rating: prop.rating,
+                  reviews: prop.reviews,
+                  price: prop.price,
+                  dates: { from: prop.datesFrom, to: prop.datesTo },
+                  guests: prop.guests,
+                  host: prop.host,
+                  amenities: prop.amenities?.map((a) => a.title),
+                });
+                showToast("Added to wishlist ❤️");
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Add to Wishlist
+            </button>
           </DynamicWrapper>
         );
       case 'share':
         return (
-          <DynamicWrapper key="share" as="div" className="mb-6">
-            <div className="bg-white rounded-2xl border p-6">
-              <h2 className="text-xl font-semibold mb-4">Share Property</h2>
-              <button
-                onClick={() => {
-                  logEvent(EVENT_TYPES.SHARE_HOTEL, {
-                    title: prop.title,
-                    location: prop.location,
-                    rating: prop.rating,
-                    reviews: prop.reviews,
-                    price: prop.price,
-                    dates: { from: prop.datesFrom, to: prop.datesTo },
-                    guests: prop.guests,
-                    host: prop.host,
-                    amenities: prop.amenities?.map((a) => a.title),
-                  });
-                  showToast("Share link copied to clipboard!");
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-              >
-                Share Property
-              </button>
-            </div>
+          <DynamicWrapper key={`share-${index}`} as="div" className="bg-white rounded-lg border p-6">
+            <h3 className="text-lg font-semibold mb-4">Share Property</h3>
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.SHARE_HOTEL, {
+                  title: prop.title,
+                  location: prop.location,
+                  rating: prop.rating,
+                  reviews: prop.reviews,
+                  price: prop.price,
+                  dates: { from: prop.datesFrom, to: prop.datesTo },
+                  guests: prop.guests,
+                  host: prop.host,
+                  amenities: prop.amenities?.map((a) => a.title),
+                });
+                showToast("Share link copied to clipboard!");
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Share Property
+            </button>
           </DynamicWrapper>
         );
       case 'back':
         return (
-          <DynamicWrapper key="back" as="div" className="mb-6">
+          <DynamicWrapper key={`back-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <button
               onClick={() => {
                 logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, {
@@ -484,15 +374,177 @@ function ConfirmPageContent() {
             </button>
           </DynamicWrapper>
         );
+      case 'confirm':
+        return (
+          <DynamicWrapper key={`confirm-${index}`} as="div" className="bg-white rounded-lg border p-6 sticky top-8">
+            <div className="font-bold mb-4 text-lg">Price details</div>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center justify-between">
+                <span>
+                  ${prop.price.toFixed(2)} USD × {nights} nights
+                </span>
+                <span>${priceSubtotal.toFixed(2)} USD</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Cleaning fee</span>
+                <span>${cleaningFee} USD</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Service fee</span>
+                <span>${serviceFee} USD</span>
+              </div>
+              <hr />
+              <div className="flex items-center justify-between font-bold text-lg">
+                <span>Total (USD)</span>
+                <span>${total.toFixed(2)} USD</span>
+              </div>
+            </div>
+
+            {/* Payment Form */}
+            <div className="mt-6 space-y-4">
+              <h3 className="font-semibold text-base">Payment Information</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Card Number
+                </label>
+                <input
+                  id="cardNumber"
+                  type="text"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                  placeholder="1234 5678 9012 3456"
+                  maxLength={19}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Expiration
+                  </label>
+                  <input
+                    id="exp"
+                    type="text"
+                    value={exp}
+                    onChange={(e) => {
+                      let val = e.target.value.replace(/\D/g, '');
+                      if (val.length >= 2) {
+                        val = val.slice(0, 2) + '/' + val.slice(2, 4);
+                      }
+                      setExp(val);
+                    }}
+                    placeholder="MM/YY"
+                    maxLength={5}
+                    className="w-full border rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    CVV
+                  </label>
+                  <input
+                    id="cvv"
+                    type="text"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
+                    placeholder="123"
+                    maxLength={4}
+                    className="w-full border rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ZIP Code
+                </label>
+                <input
+                  id="zip"
+                  type="text"
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value)}
+                  placeholder="12345"
+                  maxLength={10}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Country
+                </label>
+                <select
+                  id="country"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="United States">United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Germany">Germany</option>
+                  <option value="France">France</option>
+                  <option value="Japan">Japan</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <button
+              className="mt-6 rounded-lg w-full py-4 text-white font-semibold text-lg bg-blue-600 hover:bg-blue-700 transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
+              id="confirm-and-pay-btn"
+              onClick={() => {
+                setHasTriedSubmit(true);
+
+                if (!canPay) {
+                  return;
+                }
+                logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
+                  guests_set: guests,
+                  nights,
+                  priceSubtotal,
+                  cleaningFee,
+                  serviceFee,
+                  total,
+                  cardNumber,
+                  expiration: exp,
+                  cvv,
+                  zip,
+                  country,
+                  hotel: prop,
+                });
+
+                showToast("✅ Reservation complete! Thank you!");
+                setCardNumber("");
+                setExp("");
+                setCvv("");
+                setZip("");
+                setCountry("United States");
+                setHasTriedSubmit(false);
+              }}
+              disabled={!canPay}
+            >
+              Confirm and pay
+            </button>
+            {hasTriedSubmit && !canPay && (
+              <p className="text-red-600 text-sm mt-2 text-center">
+                Please fill in all payment fields
+              </p>
+            )}
+          </DynamicWrapper>
+        );
       default:
         return null;
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div>
       <DynamicWrapper as={layout.propertyDetail.wrapper} className={layout.propertyDetail.className}>
-        {layout.eventElements.order.map(createEventElement)}
+        {layout.eventElements.order.map((eventType, index) => createEventElement(eventType, index))}
       </DynamicWrapper>
       
       {toast && (

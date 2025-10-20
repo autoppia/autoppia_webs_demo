@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { EVENT_TYPES, logEvent, EventType } from "@/library/event";
+import DynamicLayout from "@/components/DynamicLayout";
+import SiteElements from "@/components/SiteElements";
 
 const SUGGESTIONS = [
   "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
@@ -287,119 +289,197 @@ function ProfileDropdown({
 function HomePage() {
   const router = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
-  return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-[#eaf6fd] via-[#f5fbfc] to-[#eaf6fd] overflow-x-hidden">
-      <header className="bg-white shadow-md w-full sticky top-0 z-20">
-        <nav className="max-w-7xl mx-auto flex items-center justify-between py-2 px-4">
-          <div
-            className="font-bold text-xl tracking-tight text-[#2095d2] cursor-pointer hover:opacity-80 transition"
-            onClick={() => router.push("/")}
-          >
-            AutoDriver
-          </div>
-          <ul className="hidden md:flex space-x-6">
-            <li>
-              <button
-                className="hover:text-[#2095d2] transition"
-                onClick={() => router.push("/ride/trip")}
-              >
-                Ride
-              </button>
-            </li>
-            <li>
-              <Link href="#" className="hover:text-[#2095d2] transition">
-                Drive
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:text-[#2095d2] transition">
-                Business
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:text-[#2095d2] transition">
-                AutoDriver Eats
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:text-[#2095d2] transition">
-                About
-              </Link>
-            </li>
-          </ul>
-          <div className="flex items-center space-x-2">
-            <Link
-              href="#"
-              className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
-            >
-              ES
-            </Link>
-            <Link
-              href="/help"
-              className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
-            >
-              Help
-            </Link>
-            <button
-              className="bg-[#2095d2] text-white text-sm px-4 py-1 rounded-md font-semibold shadow hover:bg-[#1273a0] transition relative"
-              onClick={() => setProfileOpen(!profileOpen)}
-            >
-              Federico
-              <svg
-                width="18"
-                height="18"
-                fill="none"
-                viewBox="0 0 18 18"
-                className="inline-block ml-2"
-              >
-                <path d="M6 8l3 3 3-3" stroke="#fff" strokeWidth="2.1" />
-              </svg>
-            </button>
-            <ProfileDropdown
-              open={profileOpen}
-              setOpen={setProfileOpen}
-              router={router}
-            />
-          </div>
-        </nav>
-      </header>
-      <section className="flex flex-col md:flex-row items-center justify-center min-h-[calc(100vh-80px)] px-4 max-w-7xl mx-auto w-full gap-10">
-        {/* Hero text and form */}
-        <div className="flex-1 flex flex-col items-center md:items-start justify-center z-10">
-          <h1 className="font-extrabold text-4xl md:text-5xl mb-2 text-[#2095d2] text-center md:text-left drop-shadow">
-            Go anywhere with AutoDriver
-          </h1>
-          <h2 className="text-2xl md:text-3xl mb-7 text-gray-900 text-center md:text-left font-medium">
-            Your ride, your way.
-            <br className="hidden md:inline" /> Request, explore, arrive.
-          </h2>
-          <div className="w-full max-w-md mx-auto md:mx-0 mt-2 bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 mb-8 border border-gray-100">
-            <button
-              className="bg-[#2095d2] text-white px-6 py-4 rounded-md font-bold text-xl hover:bg-[#1273a0] transition shadow-lg"
-              onClick={() => {
-                console.log("Logging GET_TRIP_CLICK");
-                logEvent(EVENT_TYPES.SEE_PRICES, { 
-                  timestamp: new Date().toISOString(),
-                  sourcePage: 'home',
-                  buttonType: 'get_trip',
-                  action: 'navigate_to_trip_form'
-                });
-                router.push("/ride/trip");
-              }}
-            >
-              Get a Trip
-            </button>
-          </div>
+
+  // Header component
+  const header = (
+    <header className="bg-white shadow-md w-full sticky top-0 z-20">
+      <nav className="max-w-7xl mx-auto flex items-center justify-between py-2 px-4">
+        <div
+          className="font-bold text-xl tracking-tight text-[#2095d2] cursor-pointer hover:opacity-80 transition"
+          onClick={() => router.push("/")}
+        >
+          AutoDriver
         </div>
-        {/* Car image */}
-        <div className="flex-1 flex items-center justify-center z-0">
-          <img
-            src="/dashboard.jpg"
-            alt="Car"
-            className="w-[22rem] h-64 md:w-[36rem] md:h-[22rem] object-contain drop-shadow-xl"
+        <ul className="hidden md:flex space-x-6">
+          <li>
+            <button
+              className="hover:text-[#2095d2] transition"
+              onClick={() => router.push("/ride/trip")}
+            >
+              Ride
+            </button>
+          </li>
+          <li>
+            <Link href="#" className="hover:text-[#2095d2] transition">
+              Drive
+            </Link>
+          </li>
+          <li>
+            <Link href="#" className="hover:text-[#2095d2] transition">
+              Business
+            </Link>
+          </li>
+          <li>
+            <Link href="#" className="hover:text-[#2095d2] transition">
+              AutoDriver Eats
+            </Link>
+          </li>
+          <li>
+            <Link href="#" className="hover:text-[#2095d2] transition">
+              About
+            </Link>
+          </li>
+        </ul>
+        <div className="flex items-center space-x-2">
+          <Link
+            href="#"
+            className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
+          >
+            ES
+          </Link>
+          <Link
+            href="/help"
+            className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
+          >
+            Help
+          </Link>
+          <button
+            className="bg-[#2095d2] text-white text-sm px-4 py-1 rounded-md font-semibold shadow hover:bg-[#1273a0] transition relative"
+            onClick={() => setProfileOpen(!profileOpen)}
+          >
+            Federico
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              viewBox="0 0 18 18"
+              className="inline-block ml-2"
+            >
+              <path d="M6 8l3 3 3-3" stroke="#fff" strokeWidth="2.1" />
+            </svg>
+          </button>
+          <ProfileDropdown
+            open={profileOpen}
+            setOpen={setProfileOpen}
+            router={router}
           />
         </div>
-      </section>
+      </nav>
+    </header>
+  );
+
+  // Hero section component
+  const hero = (
+    <section className="flex flex-col md:flex-row items-center justify-center min-h-[calc(100vh-80px)] px-4 max-w-7xl mx-auto w-full gap-10">
+      {/* Hero text and form */}
+      <div className="flex-1 flex flex-col items-center md:items-start justify-center z-10">
+        <h1 className="font-extrabold text-4xl md:text-5xl mb-2 text-[#2095d2] text-center md:text-left drop-shadow">
+          Go anywhere with AutoDriver
+        </h1>
+        <h2 className="text-2xl md:text-3xl mb-7 text-gray-900 text-center md:text-left font-medium">
+          Your ride, your way.
+          <br className="hidden md:inline" /> Request, explore, arrive.
+        </h2>
+        <div className="w-full max-w-md mx-auto md:mx-0 mt-2 bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 mb-8 border border-gray-100">
+          <button
+            className="bg-[#2095d2] text-white px-6 py-4 rounded-md font-bold text-xl hover:bg-[#1273a0] transition shadow-lg"
+            onClick={() => {
+              console.log("Logging GET_TRIP_CLICK");
+              logEvent(EVENT_TYPES.SEE_PRICES, { 
+                timestamp: new Date().toISOString(),
+                sourcePage: 'home',
+                buttonType: 'get_trip',
+                action: 'navigate_to_trip_form'
+              });
+              router.push("/ride/trip");
+            }}
+          >
+            Get a Trip
+          </button>
+        </div>
+      </div>
+      {/* Car image */}
+      <div className="flex-1 flex items-center justify-center z-0">
+        <img
+          src="/dashboard.jpg"
+          alt="Car"
+          className="w-[22rem] h-64 md:w-[36rem] md:h-[22rem] object-contain drop-shadow-xl"
+        />
+      </div>
+    </section>
+  );
+
+  // Booking section component (placeholder for now)
+  const booking = (
+    <div className="w-full max-w-md mx-auto bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 border border-gray-100">
+      <h3 className="text-lg font-semibold mb-3">Quick Booking</h3>
+      <button
+        className="bg-[#2095d2] text-white px-6 py-3 rounded-md font-bold hover:bg-[#1273a0] transition"
+        onClick={() => {
+          logEvent(EVENT_TYPES.EXPLORE_FEATURES, { 
+            timestamp: new Date().toISOString(),
+            sourcePage: 'home',
+            feature: 'quick_booking'
+          });
+          router.push("/ride/trip");
+        }}
+      >
+        Book Now
+      </button>
+    </div>
+  );
+
+  // Map section component (placeholder for now)
+  const map = (
+    <div className="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center">
+      <div className="text-gray-500">Map View</div>
+    </div>
+  );
+
+  // Rides section component (placeholder for now)
+  const rides = (
+    <div className="w-full bg-white rounded-xl shadow-md p-6 border border-gray-100">
+      <h3 className="text-lg font-semibold mb-3">Available Rides</h3>
+      <div className="space-y-2">
+        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span>AutoDriverX</span>
+          <span className="font-bold text-[#2095d2]">$26.60</span>
+        </div>
+        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <span>Comfort</span>
+          <span className="font-bold text-[#2095d2]">$31.50</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Footer component (placeholder for now)
+  const footer = (
+    <footer className="bg-gray-100 py-8 px-4">
+      <div className="max-w-7xl mx-auto text-center text-gray-600">
+        <p>&copy; 2024 AutoDriver. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+
+  return (
+    <div className="min-h-screen w-full bg-gradient-to-br from-[#eaf6fd] via-[#f5fbfc] to-[#eaf6fd] overflow-x-hidden">
+      <DynamicLayout
+        header={header}
+        main={
+          <SiteElements>
+            {{
+              header,
+              hero,
+              booking,
+              map,
+              rides,
+              footer
+            }}
+          </SiteElements>
+        }
+        footer={footer}
+      />
     </div>
   );
 }
