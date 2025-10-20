@@ -28,7 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["https://autocinema.autoppia.com"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://autocinema.autoppia.com",
+    "https://autobooks.autoppia.com",
+]
 
 # Application definition
 
