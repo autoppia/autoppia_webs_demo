@@ -172,8 +172,20 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     deploy_webs_server
     ;;
-  autocalender)
-    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
+  autodelivery)
+    deploy_project "web_7_autodelivery" "$WEB_PORT" "" "autodelivery_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autolodge)
+    deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autoconnect)
+    deploy_project "web_9_autoconnect" "$WEB_PORT" "" "autoconnect_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autowork)
+    deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     deploy_webs_server
     ;;
   autocalendar)
