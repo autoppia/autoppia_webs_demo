@@ -27,6 +27,15 @@ function __runDynamicLayout(){
     }
 
     var SKIP_TAGS = { 'SCRIPT':1, 'STYLE':1, 'LINK':1, 'META':1, 'TITLE':1, 'HEAD':1, 'HTML':1 };
+    
+    // Function to check if element should be completely skipped
+    function shouldSkipElement(el) {
+      if (!el) return true;
+      if (SKIP_TAGS[el.tagName]) return true;
+      if (el.getAttribute && el.getAttribute('data-dynamic')==='off') return true;
+      if (el.className && el.className.includes('hero-section')) return true;
+      return false;
+    }
 
     function reorderGroup(groupEl, sel){
       if (!groupEl) return;
@@ -49,7 +58,7 @@ function __runDynamicLayout(){
     }
 
     function reorderChildren(el, depth){
-      if (!el || depth<=0) return; if (SKIP_TAGS[el.tagName]) return; if (el.getAttribute && el.getAttribute('data-dynamic')==='off') return;
+      if (shouldSkipElement(el) || depth<=0) return;
       
       // Skip reordering major sections - only reorder elements within them
       var skipSections = ['BODY', 'HEADER', 'NAV', 'MAIN', 'SECTION', 'ARTICLE', 'ASIDE', 'FOOTER'];
@@ -119,7 +128,13 @@ function __runDynamicLayout(){
       });
 
       // Global recursive pass - limited depth to avoid reordering major sections
-      reorderChildren(document.body, 2);
+      // But completely skip hero section
+      var bodyChildren = Array.prototype.slice.call(document.body.children);
+      bodyChildren.forEach(function(child) {
+        if (!shouldSkipElement(child)) {
+          reorderChildren(child, 2);
+        }
+      });
     }
 
     // Tag all nodes with seed markers for XPath variance
