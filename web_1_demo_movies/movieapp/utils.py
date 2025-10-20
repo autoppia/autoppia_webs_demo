@@ -10,8 +10,11 @@ def normalize_seed(raw) -> int:
         s = int(raw)
     except Exception:
         return 1
+    # Seed 0 means: original structure (no dynamic changes)
+    if s == 0:
+        return 0
     if s < 1 or s > 300:
-        return 1
+        return 0
     return s
 
 
@@ -38,11 +41,5 @@ def compute_variant(seed: int) -> int:
 
 
 def normalize_variant(raw) -> int:
-    """Clamp/validate a raw variant value into [1,10], default 1 if invalid."""
-    try:
-        v = int(raw)
-    except Exception:
-        return 1
-    if v < 1 or v > 10:
-        return 1
-    return v
+    """Deprecated. No longer used."""
+    return 1

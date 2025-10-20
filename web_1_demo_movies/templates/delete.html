@@ -1,43 +1,4 @@
 {% extends 'base.html' %}
 {% block body %}
-<div class="container mt-5" data-dynamic-group="delete">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow border-danger">
-                <div class="card-header bg-danger text-white">
-                    <h3 class="mb-0"><i class="fas fa-exclamation-triangle mr-2"></i>Confirmar Eliminación</h3>
-                </div>
-                <div class="card-body text-center">
-                    <div class="mb-4">
-                        {% if movie.img %}
-                            <img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid rounded" style="max-height: 200px;">
-                        {% else %}
-                            <img src="/media/gallery/default_movie.png" alt="No Image" class="img-fluid rounded" style="max-height: 200px;">
-                        {% endif %}
-                    </div>
-                    
-                    <h4 class="mb-3">¿Estás seguro de que deseas eliminar la película?</h4>
-                    <h5 class="text-danger mb-4">"{{ movie.name }}" ({{ movie.year }})</h5>
-                    
-                    <p class="alert alert-warning">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        Esta acción no se puede deshacer. Al eliminar esta película, se eliminarán todos los datos asociados.
-                    </p>
-                    
-                    <form method="POST">
-                        {% csrf_token %}
-                        <div class="form-group d-flex justify-content-center mt-4">
-                            <button type="submit" class="btn btn-danger btn-lg mr-2">
-                                <i class="fas fa-trash mr-2"></i>Sí, Eliminar
-                            </button>
-                            <a href="{% if DYNAMIC_HTML_ENABLED %}{% url 'movieapp:detail_variant' variant=LAYOUT_VARIANT movie_id=movie.id %}?seed={{ INITIAL_SEED }}{% else %}{% url 'movieapp:detail' movie.id %}{% endif %}" class="btn btn-secondary btn-lg">
-                                <i class="fas fa-times mr-2"></i>Cancelar
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{% include "partials/delete/variants.html" %}
 {% endblock %}

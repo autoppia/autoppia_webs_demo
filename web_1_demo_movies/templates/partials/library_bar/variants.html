@@ -1,66 +1,36 @@
 {% with v=LAYOUT_VARIANT %}
 <div class="row mb-4" data-dynamic-group="library-bar">
-  {% if v|divisibleby:2 %}
-    <div class="col-md-6 order-md-2" data-dyn="library-filters">
-      <form method="GET" action="{% url 'movieapp:index' %}" class="float-md-right">
-        {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
-        {% if search_query %}<input type="hidden" name="search" value="{{ search_query }}">{% endif %}
-        <div class="form-row" data-dynamic-group="library-filters-row">
-          <div class="col-md-5 mb-2 mb-md-0">
-            <select name="genre" class="form-control" id="genreFilter">
-              <option value="">All Genres</option>
-              {% for genre in genres %}
-              <option value="{{ genre.id }}" {% if selected_genre == genre.id|stringformat:"i" %}selected{% endif %}>{{ genre.name }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-4 mb-2 mb-md-0">
-            <select name="year" class="form-control" id="yearFilter" style="min-width: 120px; margin-right: 2em;">
-              <option value="">All Years</option>
-              {% for year in available_years %}
-              <option value="{{ year }}" {% if selected_year == year|stringformat:"i" %}selected{% endif %}>{{ year }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-3">
-            <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="col-md-6 order-md-1" data-dyn="library-title">
-      <h2 class="section-title">Our Collection</h2>
-    </div>
+  {% if v == 1 %}
+    <div class="col-md-6" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+    <div class="col-md-6" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+  {% elif v == 2 %}
+    <div class="col-md-6 order-md-2" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+    <div class="col-md-6 order-md-1" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+  {% elif v == 3 %}
+    <div class="col-md-12" data-dyn="library-title"><h2 class="section-title text-center">Our Collection</h2></div>
+    <div class="col-md-12" data-dyn="library-filters">{% include "partials/library_bar/_filters_inline.html" %}</div>
+  {% elif v == 4 %}
+    <div class="col-md-4" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+    <div class="col-md-8" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+  {% elif v == 5 %}
+    <div class="col-md-7" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+    <div class="col-md-5" data-dyn="library-filters">{% include "partials/library_bar/_filters_dense.html" %}</div>
+  {% elif v == 6 %}
+    <div class="col-md-5 order-md-2" data-dyn="library-title"><h2 class="section-title text-md-right">Our Collection</h2></div>
+    <div class="col-md-7 order-md-1" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+  {% elif v == 7 %}
+    <div class="col-md-12" data-dyn="library-filters">{% include "partials/library_bar/_filters_inline.html" %}</div>
+    <div class="col-md-12" data-dyn="library-title"><h2 class="section-title mt-2">Our Collection</h2></div>
+  {% elif v == 8 %}
+    <div class="col-md-6" data-dyn="library-filters">{% include "partials/library_bar/_filters_dense.html" %}</div>
+    <div class="col-md-6" data-dyn="library-title"><h2 class="section-title text-md-right">Our Collection</h2></div>
+  {% elif v == 9 %}
+    <div class="col-md-3" data-dyn="library-title"><h2 class="section-title">Collection</h2></div>
+    <div class="col-md-9" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
   {% else %}
-    <div class="col-md-6" data-dyn="library-title">
-      <h2 class="section-title">Our Collection</h2>
-    </div>
-    <div class="col-md-6" data-dyn="library-filters">
-      <form method="GET" action="{% url 'movieapp:index' %}" class="float-md-right">
-        {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
-        {% if search_query %}<input type="hidden" name="search" value="{{ search_query }}">{% endif %}
-        <div class="form-row" data-dynamic-group="library-filters-row">
-          <div class="col-md-5 mb-2 mb-md-0">
-            <select name="genre" class="form-control" id="genreFilter">
-              <option value="">All Genres</option>
-              {% for genre in genres %}
-              <option value="{{ genre.id }}" {% if selected_genre == genre.id|stringformat:"i" %}selected{% endif %}>{{ genre.name }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-4 mb-2 mb-md-0">
-            <select name="year" class="form-control" id="yearFilter" style="min-width: 120px; margin-right: 2em;">
-              <option value="">All Years</option>
-              {% for year in available_years %}
-              <option value="{{ year }}" {% if selected_year == year|stringformat:"i" %}selected{% endif %}>{{ year }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-3">
-            <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
-          </div>
-        </div>
-      </form>
+    <div class="col-md-12 d-flex justify-content-between align-items-center" data-dyn="library-wrap">
+      <h2 class="section-title mb-0">Our Collection</h2>
+      <div class="flex-grow-1 ml-3">{% include "partials/library_bar/_filters_inline.html" %}</div>
     </div>
   {% endif %}
 </div>

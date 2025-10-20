@@ -14,7 +14,7 @@
         <div class="col-12 text-center py-5">
             <h3>No movies found</h3>
             <p>Try changing your search criteria or add a new movie</p>
-            <a href="{% if DYNAMIC_HTML_ENABLED %}{% url 'movieapp:add_movie_variant' variant=LAYOUT_VARIANT %}?seed={{ INITIAL_SEED }}{% else %}{% url 'movieapp:add_movie' %}{% endif %}" class="btn btn-success">Add movie</a>
+            <a href="{% url 'movieapp:add_movie' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-success">Add movie</a>
         </div>
         {% endfor %}
     </div>

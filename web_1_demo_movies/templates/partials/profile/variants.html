@@ -1,0 +1,187 @@
+{% with v=LAYOUT_VARIANT %}
+<div class="container mt-5" data-dynamic-group="profile">
+  {% if v == 1 %}
+  <div class="row">
+    <div class="col-lg-4 mb-4">
+      <div class="card border-0 shadow"><div class="card-header bg-info text-white text-center py-3"><h3 class="mb-0"><i class="fas fa-user-circle mr-2"></i>Your Profile</h3></div>
+        <div class="card-body text-center p-4">
+          <i class="fas fa-user-circle fa-7x text-secondary mb-3"></i>
+          <h4>{{ user.username }}</h4>
+          <p class="text-muted">Member since {{ user.date_joined|date:"F j, Y" }}</p>
+          {% if profile.bio %}<p class="mt-2">{{ profile.bio }}</p>{% endif %}
+          {% if profile.favorite_genres.all %}<div class="mt-3"><h5>Favorite Genres</h5><div class="d-flex flex-wrap justify-content-center">{% for genre in profile.favorite_genres.all %}<span class="badge badge-info m-1 p-2">{{ genre.name }}</span>{% endfor %}</div></div>{% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="card border-0 shadow"><div class="card-header bg-primary text-white text-center py-3"><h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Edit Profile</h3></div>
+        <div class="card-body p-4">
+          <form method="post" enctype="multipart/form-data">{% csrf_token %}
+            <div class="row"><div class="col-md-6"><div class="form-group"><label>First Name</label><input type="text" name="first_name" class="form-control" value="{{ user.first_name }}"></div></div>
+              <div class="col-md-6"><div class="form-group"><label>Last Name</label><input type="text" name="last_name" class="form-control" value="{{ user.last_name }}"></div></div></div>
+            <div class="form-group"><label>Email</label><input type="email" name="email" class="form-control" value="{{ user.email }}" required></div>
+            <hr class="my-4">
+            <div class="form-group"><label>About Me</label><textarea name="bio" class="form-control" rows="3">{{ profile.bio }}</textarea></div>
+            <div class="row"><div class="col-md-6"><div class="form-group"><label>Location</label><input type="text" name="location" class="form-control" value="{{ profile.location }}"></div></div>
+              <div class="col-md-6"><div class="form-group"><label>Website</label><input type="url" name="website" class="form-control" value="{{ profile.website }}"></div></div></div>
+            <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i> Save Changes</button>
+          </form>
+        </div></div>
+    </div>
+  </div>
+
+  {% elif v == 2 %}
+  <div class="row align-items-start">
+    <div class="col-md-8 order-md-2 mb-4">
+      <div class="card border-0 shadow"><div class="card-header bg-primary text-white">Edit Profile</div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">{% csrf_token %}
+            <div class="form-row"><div class="col-md-6"><div class="form-group"><label>First Name</label><input name="first_name" class="form-control" value="{{ user.first_name }}"></div></div>
+              <div class="col-md-6"><div class="form-group"><label>Last Name</label><input name="last_name" class="form-control" value="{{ user.last_name }}"></div></div></div>
+            <div class="form-group"><label>Email</label><input type="email" name="email" class="form-control" value="{{ user.email }}" required></div>
+            <div class="form-row"><div class="col-md-6"><div class="form-group"><label>Location</label><input name="location" class="form-control" value="{{ profile.location }}"></div></div>
+              <div class="col-md-6"><div class="form-group"><label>Website</label><input type="url" name="website" class="form-control" value="{{ profile.website }}"></div></div></div>
+            <div class="form-group"><label>About</label><textarea name="bio" class="form-control" rows="3">{{ profile.bio }}</textarea></div>
+            <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+            <button class="btn btn-primary">Save</button>
+          </form>
+        </div></div>
+    </div>
+    <div class="col-md-4 order-md-1">
+      <div class="card border-0 shadow"><div class="card-body text-center p-4">
+        <i class="fas fa-user-circle fa-7x text-secondary mb-3"></i>
+        <h5 class="mb-1">{{ user.username }}</h5>
+        <div class="text-muted">Member since {{ user.date_joined|date:"F j, Y" }}</div>
+      </div></div>
+    </div>
+  </div>
+
+  {% elif v == 3 %}
+  <div class="row"><div class="col-md-12"><div class="card border-0 shadow"><div class="card-body">
+    <div class="row"><div class="col-md-4 text-center mb-3"><i class="fas fa-user-circle fa-6x text-secondary"></i><h5 class="mt-2">{{ user.username }}</h5></div>
+      <div class="col-md-8"><form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div></div>
+        <div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div></div>
+        <div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div>
+        <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+        <button class="btn btn-primary">Save</button>
+      </form></div></div>
+  </div></div></div>
+
+  {% elif v == 4 %}
+  <div class="row">
+    <div class="col-md-8"><div class="card border-0 shadow"><div class="card-header bg-primary text-white">Profile</div><div class="card-body">
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group"><label>Username</label><input class="form-control" value="{{ user.username }}" disabled></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div></div>
+        <div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div>
+        <div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div></div>
+        <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+        <button class="btn btn-primary">Save</button>
+      </form>
+    </div></div></div>
+    <div class="col-md-4"><div class="card border-0 shadow"><div class="card-body text-center p-4"><i class="fas fa-user-circle fa-6x text-secondary"></i><h5 class="mt-2">{{ user.username }}</h5></div></div></div>
+  </div>
+
+  {% elif v == 5 %}
+  <div class="row justify-content-center"><div class="col-lg-9"><div class="card border-0 shadow"><div class="card-body">
+    <div class="row"><div class="col-md-3 text-center mb-3"><i class="fas fa-user-circle fa-5x text-secondary"></i><div class="text-muted mt-2">{{ user.username }}</div></div>
+      <div class="col-md-9"><form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div></div>
+          <div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div></div>
+        <div class="form-row"><div class="col-8"><div class="form-group"><label>About</label><textarea class="form-control" name="bio" rows="3">{{ profile.bio }}</textarea></div></div>
+          <div class="col-4"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div></div>
+        <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+        <button class="btn btn-primary">Save</button>
+      </form></div></div>
+  </div></div></div>
+
+  {% elif v == 6 %}
+  <div class="row">
+    <div class="col-md-12"><div class="card border-0 shadow"><div class="card-header bg-primary text-white">Edit Profile</div><div class="card-body">
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-row"><div class="col-4"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+          <div class="col-4"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div>
+          <div class="col-4"><div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div></div></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div></div>
+        <div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div>
+        <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+        <button class="btn btn-primary">Save</button>
+      </form>
+    </div></div></div>
+  </div>
+
+  {% elif v == 7 %}
+  <div class="row"><div class="col-md-8"><div class="card border-0 shadow"><div class="card-body">
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+        <div class="col-6"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div></div>
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div></div>
+        <div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div></div>
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div>
+        <div class="col-6"><div class="form-group"><label>Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div></div></div>
+      <div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div>
+      <button class="btn btn-primary">Save</button>
+    </form>
+  </div></div>
+  <div class="col-md-4"><div class="card border-0 shadow"><div class="card-body text-center p-4"><i class="fas fa-user-circle fa-6x text-secondary"></i><h5 class="mt-2">{{ user.username }}</h5></div></div></div></div>
+
+  {% elif v == 8 %}
+  <div class="row justify-content-center"><div class="col-md-9"><div class="card border-0 shadow"><div class="card-header bg-primary text-white">Edit Profile</div><div class="card-body">
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+      <div class="form-row"><div class="col-3"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+        <div class="col-3"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div>
+        <div class="col-3"><div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div></div>
+        <div class="col-3"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div></div>
+      <div class="form-row"><div class="col-8"><div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div></div>
+        <div class="col-4"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div></div>
+      <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+      <div class="text-right"><button class="btn btn-primary">Save</button></div>
+    </form>
+  </div></div></div></div>
+
+  {% elif v == 9 %}
+  <div class="row align-items-center"><div class="col-md-5 text-center mb-3 mb-md-0"><i class="fas fa-user-circle fa-7x text-secondary"></i><div class="mt-2">{{ user.username }}</div></div>
+    <div class="col-md-7"><div class="card border-0 shadow"><div class="card-body">
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div></div>
+        <div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div>
+          <div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div></div>
+        <div class="form-row"><div class="col-12"><div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div></div></div>
+        <div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div>
+        <button class="btn btn-primary">Save</button>
+      </form>
+    </div></div></div></div>
+
+  {% else %}
+  <div class="row">
+    <div class="col-md-12"><div class="card border-0 shadow"><div class="card-header bg-primary text-white">Profile</div><div class="card-body">
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-row"><div class="col-3"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
+          <div class="col-3"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div>
+          <div class="col-3"><div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div></div>
+          <div class="col-3"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div></div>
+        <div class="form-row"><div class="col-8"><div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div></div>
+          <div class="col-4"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div></div>
+        <div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div>
+        <div class="text-right"><button class="btn btn-primary">Save</button></div>
+      </form>
+    </div></div></div>
+  </div>
+  {% endif %}
+</div>
+{% endwith %}
+
+
