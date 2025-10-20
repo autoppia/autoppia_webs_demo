@@ -98,18 +98,82 @@ function __runDynamicLayout(){
       dynamicGroups.forEach(function(group){
         var groupName = group.getAttribute('data-dynamic-group');
         if (groupName === 'navbar-nav') {
-          reorderGroup(group, ':scope > li');
+          // Create multiple navbar layout variants
+          var navItems = Array.prototype.slice.call(group.querySelectorAll('li'));
+          if (navItems.length >= 3) {
+            var variant = seed % 4; // 4 different navbar variants (0-3)
+            
+            switch(variant) {
+              case 0: // Default: Home, About, Contact
+                reorderGroup(group, ':scope > li');
+                break;
+              case 1: // Reversed: Contact, About, Home
+                var reversed = navItems.slice().reverse();
+                while (group.firstChild) group.removeChild(group.firstChild);
+                reversed.forEach(function(item) { group.appendChild(item); });
+                break;
+              case 2: // Middle first: About, Home, Contact
+                var middleFirst = [navItems[1], navItems[0], navItems[2]];
+                while (group.firstChild) group.removeChild(group.firstChild);
+                middleFirst.forEach(function(item) { group.appendChild(item); });
+                break;
+              case 3: // Ends first: Contact, Home, About
+                var endsFirst = [navItems[2], navItems[0], navItems[1]];
+                while (group.firstChild) group.removeChild(group.firstChild);
+                endsFirst.forEach(function(item) { group.appendChild(item); });
+                break;
+            }
+          } else {
+            reorderGroup(group, ':scope > li');
+          }
         } else if (groupName === 'book-grid') {
           reorderGroup(group, ':scope > [class*="col-"]');
         } else if (groupName === 'hero-content') {
-          // Reorder elements within hero section (container, row, etc.)
-          // But don't reorder the hero section itself
+          // Create multiple hero layout variants
           var container = group.querySelector('.container');
           if (container) {
             var row = container.querySelector('.row');
             if (row) {
-              // Reorder the columns within the row
-              reorderGroup(row, ':scope > [class*="col-"]');
+              var columns = Array.prototype.slice.call(row.querySelectorAll('[class*="col-"]'));
+              if (columns.length >= 2) {
+                var variant = seed % 6; // 6 different variants (0-5)
+                
+                // Add variant class to hero section for styling
+                group.className += ' hero-variant-' + variant;
+                
+                switch(variant) {
+                  case 0: // Default: Text left, Image right
+                    // Keep original order
+                    break;
+                  case 1: // Image left, Text right
+                    reorderGroup(row, ':scope > [class*="col-"]');
+                    break;
+                  case 2: // Stacked: Text on top, Image below
+                    columns.forEach(function(col, index) {
+                      if (index === 0) col.className = col.className.replace(/col-md-\d+/, 'col-12');
+                      if (index === 1) col.className = col.className.replace(/col-md-\d+/, 'col-12');
+                    });
+                    break;
+                  case 3: // Stacked: Image on top, Text below
+                    columns.forEach(function(col, index) {
+                      if (index === 0) col.className = col.className.replace(/col-md-\d+/, 'col-12');
+                      if (index === 1) col.className = col.className.replace(/col-md-\d+/, 'col-12');
+                    });
+                    reorderGroup(row, ':scope > [class*="col-"]');
+                    break;
+                  case 4: // Centered layout: Both columns centered
+                    columns.forEach(function(col) {
+                      col.className = col.className.replace(/col-md-\d+/, 'col-md-6') + ' text-center';
+                    });
+                    break;
+                  case 5: // Wide layout: Text takes more space
+                    columns.forEach(function(col, index) {
+                      if (index === 0) col.className = col.className.replace(/col-md-\d+/, 'col-md-8');
+                      if (index === 1) col.className = col.className.replace(/col-md-\d+/, 'col-md-4');
+                    });
+                    break;
+                }
+              }
             }
           }
         } else {
