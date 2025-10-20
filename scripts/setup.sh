@@ -9,7 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autoconnect, or all (default: all)
+#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
 #   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
 #   -y, --yes                     Force delete without confirmation
 #
@@ -21,24 +21,24 @@ set -euo pipefail
 
 echo "🚀 Setting up web demos..."
 
-## 0. Remove all containers
-#echo "[INFO] Removing all containers..."
-#docker ps -aq | xargs -r docker rm -f || true
-#
-## 1. Prune Docker environment
-#echo "[INFO] Pruning volumes, images and networks..."
-#docker volume rm $(docker volume ls -q) 2>/dev/null || true
-#docker rmi $(docker images -q) --force 2>/dev/null || true
-#docker network prune -f || true
-#
-## 2. Ensure external network for app ↔ front communication
-#EXTERNAL_NET="apps_net"
-#if ! docker network ls --format '{{.Name}}' | grep -qx "$EXTERNAL_NET"; then
-#  echo "[INFO] Creating external network: $EXTERNAL_NET"
-#  docker network create "$EXTERNAL_NET"
-#else
-#  echo "[INFO] External network $EXTERNAL_NET already exists"
-#fi
+# 0. Remove all containers
+echo "[INFO] Removing all containers..."
+docker ps -aq | xargs -r docker rm -f || true
+
+# 1. Prune Docker environment
+echo "[INFO] Pruning volumes, images and networks..."
+docker volume rm $(docker volume ls -q) 2>/dev/null || true
+docker rmi $(docker images -q) --force 2>/dev/null || true
+docker network prune -f || true
+
+# 2. Ensure external network for app ↔ front communication
+EXTERNAL_NET="apps_net"
+if ! docker network ls --format '{{.Name}}' | grep -qx "$EXTERNAL_NET"; then
+  echo "[INFO] Creating external network: $EXTERNAL_NET"
+  docker network create "$EXTERNAL_NET"
+else
+  echo "[INFO] External network $EXTERNAL_NET already exists"
+fi
 
 # 3. Detect script & demos root
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -172,6 +172,22 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     deploy_webs_server
     ;;
+  autodelivery)
+    deploy_project "web_7_autodelivery" "$WEB_PORT" "" "autodelivery_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autolodge)
+    deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autoconnect)
+    deploy_project "web_9_autoconnect" "$WEB_PORT" "" "autoconnect_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autowork)
+    deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
+    deploy_webs_server
+    ;;
   autocalender)
     deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
     deploy_webs_server
@@ -205,7 +221,7 @@ case "$WEB_DEMO" in
     deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autodrive', or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', or 'all'."
     exit 1
     ;;
 esac
