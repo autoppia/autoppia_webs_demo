@@ -399,6 +399,100 @@ function ConfirmPageContent() {
                 <span>${total.toFixed(2)} USD</span>
               </div>
             </div>
+
+            {/* Payment Form */}
+            <div className="mt-6 space-y-4">
+              <h3 className="font-semibold text-base">Payment Information</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Card Number
+                </label>
+                <input
+                  id="cardNumber"
+                  type="text"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                  placeholder="1234 5678 9012 3456"
+                  maxLength={19}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Expiration
+                  </label>
+                  <input
+                    id="exp"
+                    type="text"
+                    value={exp}
+                    onChange={(e) => {
+                      let val = e.target.value.replace(/\D/g, '');
+                      if (val.length >= 2) {
+                        val = val.slice(0, 2) + '/' + val.slice(2, 4);
+                      }
+                      setExp(val);
+                    }}
+                    placeholder="MM/YY"
+                    maxLength={5}
+                    className="w-full border rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    CVV
+                  </label>
+                  <input
+                    id="cvv"
+                    type="text"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))}
+                    placeholder="123"
+                    maxLength={4}
+                    className="w-full border rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ZIP Code
+                </label>
+                <input
+                  id="zip"
+                  type="text"
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value)}
+                  placeholder="12345"
+                  maxLength={10}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Country
+                </label>
+                <select
+                  id="country"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                >
+                  <option value="United States">United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Germany">Germany</option>
+                  <option value="France">France</option>
+                  <option value="Japan">Japan</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
             <button
               className="mt-6 rounded-lg w-full py-4 text-white font-semibold text-lg bg-blue-600 hover:bg-blue-700 transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
               id="confirm-and-pay-btn"
@@ -431,9 +525,15 @@ function ConfirmPageContent() {
                 setCountry("United States");
                 setHasTriedSubmit(false);
               }}
+              disabled={!canPay}
             >
               Confirm and pay
             </button>
+            {hasTriedSubmit && !canPay && (
+              <p className="text-red-600 text-sm mt-2 text-center">
+                Please fill in all payment fields
+              </p>
+            )}
           </DynamicWrapper>
         );
       default:
