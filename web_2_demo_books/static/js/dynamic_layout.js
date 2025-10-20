@@ -1,11 +1,7 @@
 function __runDynamicLayout(){
   try {
-    console.log('Dynamic layout script starting...');
-    var params0 = new URLSearchParams(window.location.search);
-    var debugForce = params0.get('forceDynamic') === '1';
     var enabled = Boolean(window.__DYNAMIC_HTML_ENABLED__);
     var initialSeed = Number(window.__INITIAL_SEED__ || 1) || 1;
-    console.log('Dynamic layout enabled:', enabled, 'initialSeed:', initialSeed);
 
     var params = new URLSearchParams(window.location.search);
     var seedParam = params.get('seed');
@@ -86,8 +82,8 @@ function __runDynamicLayout(){
       for (var k=0;k<children.length;k++) reorderChildren(children[k], depth-1);
     }
 
-    // Perform reordering when dynamic HTML is enabled or explicitly forced via ?forceDynamic=1
-    if (enabled || debugForce) {
+    // Perform reordering when dynamic HTML is enabled
+    if (enabled) {
       // Known groups (add markers in templates if needed)
       var navbar = document.querySelector('.navbar-nav'); if (navbar) reorderGroup(navbar, ':scope > li');
       var rows = document.querySelectorAll('.row'); rows.forEach(function(r){ reorderGroup(r, ':scope > [class*="col-"]'); });
@@ -210,7 +206,7 @@ function __runDynamicLayout(){
       if (!node.getAttribute('data-xid')) node.setAttribute('data-xid', 'x-'+seed+'-'+n);
       if (node.classList) node.classList.add('sx-'+seed);
     }
-  } catch(e) { console.error('dynamic books init failed', e); }
+  } catch(e) { console.error('Dynamic layout initialization failed', e); }
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', __runDynamicLayout); else __runDynamicLayout();
