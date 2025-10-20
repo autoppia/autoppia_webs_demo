@@ -53,8 +53,20 @@ function __runDynamicLayout(){
       
       // Skip reordering major sections - only reorder elements within them
       var skipSections = ['BODY', 'HEADER', 'NAV', 'MAIN', 'SECTION', 'ARTICLE', 'ASIDE', 'FOOTER'];
-      if (skipSections.includes(el.tagName)) {
+      var skipClasses = ['hero-section', 'hero', 'jumbotron'];
+      
+      // Check if element is a major section or has a protected class
+      if (skipSections.includes(el.tagName) || 
+          (el.className && skipClasses.some(cls => el.className.includes(cls)))) {
         // Only reorder children of major sections, not the sections themselves
+        var children = Array.prototype.slice.call(el.children||[]);
+        for (var k=0;k<children.length;k++) reorderChildren(children[k], depth-1);
+        return;
+      }
+      
+      // Also skip elements with data-dynamic-group="hero-content" to prevent hero section from moving
+      if (el.getAttribute && el.getAttribute('data-dynamic-group') === 'hero-content') {
+        // Only reorder children of hero content, not the hero content itself
         var children = Array.prototype.slice.call(el.children||[]);
         for (var k=0;k<children.length;k++) reorderChildren(children[k], depth-1);
         return;
@@ -80,6 +92,17 @@ function __runDynamicLayout(){
           reorderGroup(group, ':scope > li');
         } else if (groupName === 'book-grid') {
           reorderGroup(group, ':scope > [class*="col-"]');
+        } else if (groupName === 'hero-content') {
+          // Reorder elements within hero section (container, row, etc.)
+          // But don't reorder the hero section itself
+          var container = group.querySelector('.container');
+          if (container) {
+            var row = container.querySelector('.row');
+            if (row) {
+              // Reorder the columns within the row
+              reorderGroup(row, ':scope > [class*="col-"]');
+            }
+          }
         } else {
           reorderGroup(group, ':scope > *');
         }
