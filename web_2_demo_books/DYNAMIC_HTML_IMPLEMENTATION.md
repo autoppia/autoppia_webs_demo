@@ -354,6 +354,25 @@ The register page features 10 distinct layout variants that affect multiple aspe
 - **Variant 9**: Header, Body, Footer with relative positioning
 - **Variant 10**: Header, Body, Footer with flex layout
 
+## Protected Elements
+
+Certain elements are protected from dynamic reordering to maintain proper page structure:
+
+### Always Protected Elements
+- **`<main>` element**: Prevents book details and other main content from moving to the bottom
+- **`<script>`, `<style>`, `<link>`, `<meta>`, `<title>`, `<head>`, `<html>`**: Standard HTML elements that should never be reordered
+- **Hero sections**: Protected to maintain visual hierarchy
+- **Major sections**: `BODY`, `HEADER`, `NAV`, `SECTION`, `ARTICLE`, `ASIDE`, `FOOTER` are protected from reordering but their children can be reordered
+
+### Protection Mechanism
+The dynamic HTML system includes multiple layers of protection:
+1. **SKIP_TAGS**: Elements in this list are completely skipped
+2. **shouldSkipElement()**: Function that checks if an element should be skipped
+3. **reorderChildren()**: Special handling for major sections
+4. **Dynamic groups processing**: Explicit checks for protected elements
+
+This ensures that critical page structure elements remain in their proper positions while still allowing dynamic reordering of content within them.
+
 ## Configuration
 
 ### Environment Variable
@@ -479,6 +498,7 @@ The dynamic HTML system in `web_2_demo_books` is **fully implemented and enabled
 - **Homepage**: Hero layouts, book grid arrangements, navigation orders
 - **Login Page**: Container alignment, column sizes, form field orders, card element reordering (original colors preserved)
 - **Register Page**: Container alignment, column sizes, form field orders, card element reordering (original colors preserved)
+- **Book Details Page**: Content stays properly positioned under navbar (main element protected from reordering)
 - **All Pages**: Footer variations, element reordering, XPath changes
 
 The implementation is production-ready and working out of the box with significantly enhanced scraper confusion capabilities.

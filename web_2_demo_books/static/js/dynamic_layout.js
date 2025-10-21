@@ -807,7 +807,7 @@ function __runDynamicLayout(){
       return function(){ state=(a*state+c)%m; return state/(m-1); };
     }
 
-    var SKIP_TAGS = { 'SCRIPT':1, 'STYLE':1, 'LINK':1, 'META':1, 'TITLE':1, 'HEAD':1, 'HTML':1 };
+    var SKIP_TAGS = { 'SCRIPT':1, 'STYLE':1, 'LINK':1, 'META':1, 'TITLE':1, 'HEAD':1, 'HTML':1, 'MAIN':1 };
     
     // Function to check if element should be completely skipped
     function shouldSkipElement(el) {
@@ -817,6 +817,8 @@ function __runDynamicLayout(){
       if (el.className && el.className.includes('hero-section')) return true;
       // Also skip if element is inside a hero section
       if (el.closest && el.closest('.hero-section')) return true;
+      // Skip main element to prevent it from being reordered
+      if (el.tagName === 'MAIN') return true;
       return false;
     }
 
@@ -871,6 +873,11 @@ function __runDynamicLayout(){
         return;
       }
       
+      // Special handling for MAIN element - skip it completely to prevent reordering
+      if (el.tagName === 'MAIN') {
+        return;
+      }
+      
       // Also skip elements with data-dynamic-group="hero-content" to prevent hero section from moving
       if (el.getAttribute && el.getAttribute('data-dynamic-group') === 'hero-content') {
         // Only reorder children of hero content, not the hero content itself
@@ -919,6 +926,11 @@ function __runDynamicLayout(){
       var dynamicGroups = document.querySelectorAll('[data-dynamic-group]');
       dynamicGroups.forEach(function(group){
         var groupName = group.getAttribute('data-dynamic-group');
+        
+        // Skip main element to prevent it from being reordered
+        if (group.tagName === 'MAIN' || groupName === 'main') {
+          return;
+        }
         
         // Allow hero-content to be processed even if data-dynamic="off" for internal reordering
         if (group.getAttribute('data-dynamic') === 'off' && groupName !== 'hero-content') {
