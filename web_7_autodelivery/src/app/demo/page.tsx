@@ -4,13 +4,13 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSeedLayout } from '@/hooks/use-seed-layout';
+import { useLayout } from '@/contexts/LayoutProvider';
 
 function DemoPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentSeed = parseInt(searchParams.get('seed') || '1', 10);
-  const layout = useSeedLayout();
+  const layout = useLayout();
 
   const handleSeedChange = (seed: number) => {
     router.push(`/demo?seed=${seed}`);

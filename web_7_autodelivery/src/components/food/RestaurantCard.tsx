@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { useSeedLayout } from "@/hooks/use-seed-layout";
+import { useLayout } from "@/contexts/LayoutProvider";
 
 interface RestaurantCardProps {
   id: string;
@@ -14,7 +14,7 @@ interface RestaurantCardProps {
 }
 
 export default function RestaurantCard({ id, name, image, cuisine, rating, description }: RestaurantCardProps) {
-  const layout = useSeedLayout();
+  const layout = useLayout();
 
   const handleClick = () => {
     // Log the event
