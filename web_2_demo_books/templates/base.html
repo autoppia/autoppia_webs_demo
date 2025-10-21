@@ -32,39 +32,207 @@
             position: relative;
         }
         
-        /* Hero Layout Variants */
-        .hero-variant-2, .hero-variant-3 {
+        /* 10 Layout Variants - Hero Section Styles */
+        .hero-variant-1 {
+            /* Default layout - no special styling */
+        }
+        
+        .hero-variant-2 {
+            /* Image left, text right - no special styling needed */
+        }
+        
+        .hero-variant-3, .hero-variant-4, .hero-variant-9 {
             /* Stacked layouts */
         }
         
-        .hero-variant-2 .col-12:first-child,
-        .hero-variant-3 .col-12:first-child {
+        .hero-variant-3 .col-12:first-child,
+        .hero-variant-4 .col-12:first-child,
+        .hero-variant-9 .col-12:first-child {
             margin-bottom: 1rem;
         }
         
-        .hero-variant-4 {
+        .hero-variant-5 {
             /* Centered layout */
         }
         
-        .hero-variant-4 .text-center {
+        .hero-variant-5 .text-center {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
         
-        .hero-variant-5 {
-            /* Wide layout */
+        .hero-variant-6 {
+            /* Wide layout - text takes more space */
         }
         
-        .hero-variant-5 .col-md-8 {
+        .hero-variant-6 .col-md-8 {
             padding-right: 2rem;
         }
         
-        .hero-variant-5 .col-md-4 {
+        .hero-variant-6 .col-md-4 {
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        
+        .hero-variant-7 {
+            /* Narrow layout - image takes more space */
+        }
+        
+        .hero-variant-7 .col-md-4 {
+            padding-right: 1rem;
+        }
+        
+        .hero-variant-7 .col-md-8 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hero-variant-8 {
+            /* Equal width with different styling */
+        }
+        
+        .hero-variant-8 .col-md-6 {
+            padding: 0 1rem;
+        }
+        
+        .hero-variant-10 {
+            /* Custom layout - 7/5 split */
+        }
+        
+        .hero-variant-10 .col-md-7 {
+            padding-right: 1.5rem;
+        }
+        
+        .hero-variant-10 .col-md-5 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 10 Layout Variants - General Styles */
+        .layout-variant-1 {
+            /* Default layout */
+        }
+        
+        .layout-variant-2 {
+            /* Reversed elements */
+        }
+        
+        .layout-variant-3 {
+            /* Middle-first ordering */
+        }
+        
+        .layout-variant-4 {
+            /* Last-first ordering */
+        }
+        
+        .layout-variant-5 {
+            /* Random shuffle variant 1 */
+        }
+        
+        .layout-variant-6 {
+            /* Random shuffle variant 2 */
+        }
+        
+        .layout-variant-7 {
+            /* Random shuffle variant 3 */
+        }
+        
+        .layout-variant-8 {
+            /* Random shuffle variant 4 */
+        }
+        
+        .layout-variant-9 {
+            /* Random shuffle variant 5 */
+        }
+        
+        .layout-variant-10 {
+            /* Random shuffle variant 6 */
+        }
+
+        /* Layout Variant Specific Styling */
+        .layout-variant-2 .navbar-nav {
+            justify-content: flex-end;
+        }
+        
+        .layout-variant-3 .navbar-nav {
+            justify-content: center;
+        }
+        
+        .layout-variant-4 .navbar-nav {
+            justify-content: space-between;
+        }
+        
+        .layout-variant-5 .movie-card {
+            border-left: 3px solid #007bff;
+        }
+        
+        .layout-variant-6 .movie-card {
+            border-right: 3px solid #28a745;
+        }
+        
+        .layout-variant-7 .movie-card {
+            border-top: 3px solid #ffc107;
+        }
+        
+        .layout-variant-8 .movie-card {
+            border-bottom: 3px solid #dc3545;
+        }
+        
+        .layout-variant-9 .movie-card {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        
+        .layout-variant-10 .movie-card {
+            transform: rotate(1deg);
+        }
+        
+        .layout-variant-10 .movie-card:nth-child(even) {
+            transform: rotate(-1deg);
+        }
+
+        /* Login Page Layout Variants - Element Reordering Only */
+        .layout-variant-1 .login-card {
+            /* Default login card styling - no visual changes */
+        }
+        
+        .layout-variant-2 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-3 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-4 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-5 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-6 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-7 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-8 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-9 .login-card {
+            /* Element reordering only - no visual changes */
+        }
+        
+        .layout-variant-10 .login-card {
+            /* Element reordering only - no visual changes */
         }
 
         .section-title {

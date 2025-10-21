@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `web_2_demo_books` Django application has a **complete dynamic HTML system** that reorders HTML elements and changes their XPaths based on seed values from 1-300.
+The `web_2_demo_books` Django application has a **complete dynamic HTML system** with **10 distinct layout variants** that reorders HTML elements and changes their XPaths based on seed values from 1-300.
 
 ## How It Works
 
@@ -14,11 +14,15 @@ The `web_2_demo_books` Django application has a **complete dynamic HTML system**
 ### 2. JavaScript Reordering (Frontend)
 - **File**: `static/js/dynamic_layout.js`
 - **Execution**: Runs on `DOMContentLoaded`
-- **Algorithm**: Seeded Fisher-Yates shuffle for deterministic reordering
+- **Algorithm**: 10 distinct layout variants with specific reordering patterns
+- **Layout Variants**: Each seed maps to one of 10 layout variants (1-10)
 - **Targets**:
-  - Navigation menus (`.navbar-nav`)
-  - Rows and columns (`.row`, `[class*="col-"]`)
-  - Lists (`ul`, `ol`)
+  - Navigation menus (`.navbar-nav`) - 10 different ordering patterns
+  - Book grid (`.book-grid`) - 10 different card arrangements
+  - Hero sections (`.hero-content`) - 10 different layouts (side-by-side, stacked, centered, etc.)
+  - Footer columns (`.footer-columns`) - 10 different column orders
+  - Footer links (`.footer-links`) - 10 different link orders
+  - Footer social (`.footer-social`) - 10 different social icon orders
   - Select dropdowns (shuffles options, preserves placeholder)
   - All containers recursively (depth 4)
 
@@ -31,27 +35,44 @@ Every element gets seed-specific attributes:
 
 ## Features
 
+✅ **10 Distinct Layout Variants**
+- **Variant 1**: Default layout with standard ordering
+- **Variant 2**: Reversed element ordering
+- **Variant 3**: Middle-first ordering pattern
+- **Variant 4**: Last-first ordering pattern
+- **Variant 5**: Random shuffle with blue accent styling
+- **Variant 6**: Random shuffle with green accent styling
+- **Variant 7**: Random shuffle with yellow accent styling
+- **Variant 8**: Random shuffle with red accent styling
+- **Variant 9**: Random shuffle with enhanced shadows
+- **Variant 10**: Random shuffle with rotation effects
+
 ✅ **Dynamic Element Reordering**
-- Hero sections swap text/image positions
-- Navigation menu items shuffle
-- Footer links reorder
-- Book grid cards randomize position
-- Form filter elements rearrange
+- **Hero sections**: 10 different layouts (side-by-side, stacked, centered, wide, narrow, custom)
+- **Navigation menus**: 10 different ordering patterns (default, reversed, middle-first, etc.)
+- **Book grids**: 10 different card arrangements (default, reversed, every-other, middle-out, etc.)
+- **Footer sections**: 10 different column and link orders
+- **Login pages**: 10 different layouts (container alignment, column sizes, form field orders, card styling)
+- **Register pages**: 10 different layouts (container alignment, column sizes, form field orders, card styling)
+- **Form elements**: Dynamic reordering with seed preservation
 
 ✅ **XPath Changes**
 - All element IDs include seed: `blk-50-0` vs `blk-1-0`
-- Data attributes vary per seed
-- Class names include seed marker
+- Data attributes vary per seed: `data-seed`, `data-variant`, `data-xid`
+- Class names include seed marker: `sx-{seed}`
+- Layout variant classes: `layout-variant-{1-10}`
 
 ✅ **Seed Preservation**
 - Filter forms include hidden seed input
 - Detail links append `?seed=N`
 - Seed persists across navigation
+- URL parameters maintained throughout user journey
 
 ✅ **Deterministic**
-- Same seed always produces same layout
-- Different seeds = different layouts
+- Same seed always produces same layout variant
+- Different seeds = different layout variants
 - Reproducible for testing
+- Consistent across page refreshes
 
 ## Usage
 
@@ -192,18 +213,146 @@ assert normalize_seed(400) == 1  # Out of range
 assert normalize_seed("invalid") == 1  # Invalid input
 ```
 
+## Layout Variants Mapping
+
+| Seed Range | Variant | Layout Description |
+|------------|---------|-------------------|
+| 1, 11, 21, 31... | 1 | Default layout with standard ordering |
+| 2, 12, 22, 32... | 2 | Reversed element ordering |
+| 3, 13, 23, 33... | 3 | Middle-first ordering pattern |
+| 4, 14, 24, 34... | 4 | Last-first ordering pattern |
+| 5, 15, 25, 35... | 5 | Random shuffle with blue accent styling |
+| 6, 16, 26, 36... | 6 | Random shuffle with green accent styling |
+| 7, 17, 27, 37... | 7 | Random shuffle with yellow accent styling |
+| 8, 18, 28, 38... | 8 | Random shuffle with red accent styling |
+| 9, 19, 29, 39... | 9 | Random shuffle with enhanced shadows |
+| 10, 20, 30, 40... | 10 | Random shuffle with rotation effects |
+
 ## Seed Range Examples
 
 | Seed | Variant | Use Case |
 |------|---------|----------|
 | 1 | 1 | Default layout |
-| 50 | 10 | Mid-range variation |
-| 100 | 10 | Round number |
-| 150 | 10 | Mid-range variation |
-| 200 | 10 | High variation |
-| 300 | 10 | Maximum seed |
+| 2 | 2 | Reversed layout |
+| 5 | 5 | Blue accent layout |
+| 10 | 10 | Rotation effects layout |
+| 50 | 10 | Mid-range with rotation effects |
+| 100 | 10 | Round number with rotation effects |
+| 150 | 10 | Mid-range with rotation effects |
+| 200 | 10 | High variation with rotation effects |
+| 300 | 10 | Maximum seed with rotation effects |
 
-Note: Variant = `(seed % 10) || 10`
+Note: Variant = `((seed - 1) % 10) + 1`
+
+## Login Page Layout Variants
+
+The login page features 10 distinct layout variants that affect multiple aspects of the form:
+
+### Container Layout Variants
+- **Variant 1**: Default centered layout
+- **Variant 2**: Left aligned container
+- **Variant 3**: Right aligned container
+- **Variant 4**: Space between alignment
+- **Variant 5**: Space around alignment
+- **Variant 6**: Space evenly alignment
+- **Variant 7**: Flex start with 10% left margin
+- **Variant 8**: Flex end with 10% right margin
+- **Variant 9**: Center with 5% padding on sides
+- **Variant 10**: Center with 2% left positioning
+
+### Column Size Variants
+- **Variant 1**: Default (col-md-6 col-lg-5)
+- **Variant 2**: Wider (col-md-8 col-lg-6)
+- **Variant 3**: Narrower (col-md-4 col-lg-3)
+- **Variant 4**: Full width on small (col-12 col-md-6)
+- **Variant 5**: Large only (col-lg-4)
+- **Variant 6**: Medium only (col-md-5)
+- **Variant 7**: Extra wide (col-md-10 col-lg-8)
+- **Variant 8**: Extra narrow (col-md-3 col-lg-2)
+- **Variant 9**: Responsive (col-12 col-sm-8 col-md-6 col-lg-4)
+- **Variant 10**: Custom (col-11 col-md-7 col-lg-6)
+
+### Form Field Order Variants
+- **Variant 1**: Default order (Username, Password)
+- **Variant 2**: Reverse order (Password, Username)
+- **Variant 3**: Deterministic shuffle with seed 3
+- **Variant 4**: Deterministic shuffle with seed 4
+- **Variant 5**: Deterministic shuffle with seed 5
+- **Variant 6**: Deterministic shuffle with seed 6
+- **Variant 7**: Deterministic shuffle with seed 7
+- **Variant 8**: Deterministic shuffle with seed 8
+- **Variant 9**: Deterministic shuffle with seed 9
+- **Variant 10**: Deterministic shuffle with seed 10
+
+### Card Layout Variants
+- **Variant 1**: Default order (Header, Body, Footer)
+- **Variant 2**: Reversed order (Footer, Body, Header)
+- **Variant 3**: Header, Footer, Body
+- **Variant 4**: Body, Header, Footer
+- **Variant 5**: Body, Footer, Header
+- **Variant 6**: Footer, Header, Body
+- **Variant 7**: Header, Body, Footer with zero margins
+- **Variant 8**: Header, Body, Footer with 5px spacing
+- **Variant 9**: Header, Body, Footer with relative positioning
+- **Variant 10**: Header, Body, Footer with flex layout
+
+### Element Reordering Only
+- **All Variants**: Preserve original colors and styling
+- **Focus**: Element reordering and positioning changes only
+- **No Visual Changes**: Colors, borders, shadows, and gradients remain original
+- **Layout Changes**: Only container alignment, column sizes, form field orders, and card element orders change
+
+## Register Page Layout Variants
+
+The register page features 10 distinct layout variants that affect multiple aspects of the form:
+
+### Container Layout Variants
+- **Variant 1**: Default centered layout
+- **Variant 2**: Left aligned container
+- **Variant 3**: Right aligned container
+- **Variant 4**: Space between alignment
+- **Variant 5**: Space around alignment
+- **Variant 6**: Space evenly alignment
+- **Variant 7**: Flex start with 15% left margin
+- **Variant 8**: Flex end with 15% right margin
+- **Variant 9**: Center with 8% padding on sides
+- **Variant 10**: Center with 3% left positioning
+
+### Column Size Variants
+- **Variant 1**: Default (col-md-7 col-lg-6)
+- **Variant 2**: Wider (col-md-9 col-lg-8)
+- **Variant 3**: Narrower (col-md-5 col-lg-4)
+- **Variant 4**: Full width on small (col-12 col-md-7)
+- **Variant 5**: Large only (col-lg-5)
+- **Variant 6**: Medium only (col-md-6)
+- **Variant 7**: Extra wide (col-md-11 col-lg-10)
+- **Variant 8**: Extra narrow (col-md-4 col-lg-3)
+- **Variant 9**: Responsive (col-12 col-sm-9 col-md-7 col-lg-5)
+- **Variant 10**: Custom (col-10 col-md-8 col-lg-7)
+
+### Form Field Order Variants
+- **Variant 1**: Default order (Username, Email, Password, Confirm Password)
+- **Variant 2**: Reverse order (Confirm Password, Password, Email, Username)
+- **Variant 3**: Deterministic shuffle with seed 3
+- **Variant 4**: Deterministic shuffle with seed 4
+- **Variant 5**: Deterministic shuffle with seed 5
+- **Variant 6**: Deterministic shuffle with seed 6
+- **Variant 7**: Deterministic shuffle with seed 7
+- **Variant 8**: Deterministic shuffle with seed 8
+- **Variant 9**: Deterministic shuffle with seed 9
+- **Variant 10**: Deterministic shuffle with seed 10
+
+### Card Layout Variants
+- **Variant 1**: Default order (Header, Body, Footer)
+- **Variant 2**: Reversed order (Footer, Body, Header)
+- **Variant 3**: Header, Footer, Body
+- **Variant 4**: Body, Header, Footer
+- **Variant 5**: Body, Footer, Header
+- **Variant 6**: Footer, Header, Body
+- **Variant 7**: Header, Body, Footer with zero margins
+- **Variant 8**: Header, Body, Footer with 8px spacing
+- **Variant 9**: Header, Body, Footer with relative positioning
+- **Variant 10**: Header, Body, Footer with flex layout
 
 ## Configuration
 
@@ -304,12 +453,32 @@ docker-compose up -d
 
 ## Summary
 
-The dynamic HTML system in `web_2_demo_books` is **fully implemented and enabled**. It provides:
-- 300 unique seed values (1-300)
-- Deterministic element reordering
-- XPath variation on all elements
+The dynamic HTML system in `web_2_demo_books` is **fully implemented and enabled** with **10 distinct layout variants**. It provides:
+- 300 unique seed values (1-300) mapped to 10 layout variants
+- 10 distinct layout patterns with specific reordering algorithms
+- Deterministic element reordering for each variant
+- XPath variation on all elements with seed-specific attributes
+- Visual styling differences between variants (colors, shadows, rotations)
 - Seed preservation across navigation
 - Zero performance impact
 - Easy enable/disable via environment variable
 
-The implementation is production-ready and working out of the box.
+### Layout Variants Summary:
+1. **Variant 1**: Default standard layout (centered, default column, default fields, default card)
+2. **Variant 2**: Left aligned, wider column, reversed fields, reversed card (original colors preserved)
+3. **Variant 3**: Right aligned, narrower column, shuffle seed 3, header-footer-body card (original colors preserved)
+4. **Variant 4**: Space between, full width small, shuffle seed 4, body-header-footer card (original colors preserved)
+5. **Variant 5**: Space around, large only, shuffle seed 5, body-footer-header card (original colors preserved)
+6. **Variant 6**: Space evenly, medium only, shuffle seed 6, footer-header-body card (original colors preserved)
+7. **Variant 7**: Flex start + margin, extra wide, shuffle seed 7, zero margins card (original colors preserved)
+8. **Variant 8**: Flex end + margin, extra narrow, shuffle seed 8, 5px spacing card (original colors preserved)
+9. **Variant 9**: Center + padding, responsive, shuffle seed 9, relative positioning card (original colors preserved)
+10. **Variant 10**: Center + positioning, custom, shuffle seed 10, flex layout card (original colors preserved)
+
+### Page-Specific Features:
+- **Homepage**: Hero layouts, book grid arrangements, navigation orders
+- **Login Page**: Container alignment, column sizes, form field orders, card element reordering (original colors preserved)
+- **Register Page**: Container alignment, column sizes, form field orders, card element reordering (original colors preserved)
+- **All Pages**: Footer variations, element reordering, XPath changes
+
+The implementation is production-ready and working out of the box with significantly enhanced scraper confusion capabilities.
