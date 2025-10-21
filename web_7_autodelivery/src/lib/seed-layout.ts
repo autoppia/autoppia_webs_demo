@@ -64,6 +64,14 @@ export interface SeedLayout {
     paginationClass: string;
     xpath: string;
   };
+  restaurantDetail: {
+    elementOrder: string[];
+    containerClass: string;
+    headerClass: string;
+    menuClass: string;
+    reviewsClass: string;
+    xpath: string;
+  };
 }
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicEnabled(): boolean {
@@ -143,6 +151,20 @@ export function getSeedLayout(seed: number): SeedLayout {
   const heroPositions: Array<'left' | 'center' | 'right'> = [
     'center', 'left', 'right', 'center', 'left', 'right', 'center', 'left', 'right', 'center'
   ];
+  
+  // Restaurant detail element orders
+  const elementOrders = [
+    ['header', 'menu', 'reviews'], // Default order
+    ['header', 'reviews', 'menu'], // Reviews before menu
+    ['menu', 'header', 'reviews'], // Menu first
+    ['reviews', 'header', 'menu'], // Reviews first
+    ['menu', 'reviews', 'header'], // Menu and reviews before header
+    ['reviews', 'menu', 'header'], // Reviews and menu before header
+    ['header', 'menu', 'reviews'], // Back to default
+    ['header', 'reviews', 'menu'], // Reviews before menu
+    ['menu', 'header', 'reviews'], // Menu first
+    ['reviews', 'header', 'menu'], // Reviews first
+  ];
   return {
     seed: effectiveSeed,
     layoutId: layoutId,
@@ -206,6 +228,14 @@ export function getSeedLayout(seed: number): SeedLayout {
       itemClass: generateVariations('grid-item', effectiveSeed),
       paginationClass: generateVariations('pagination', effectiveSeed),
       xpath: generateXPath('div', effectiveSeed),
+    },
+    restaurantDetail: {
+      elementOrder: elementOrders[normalizedSeed - 1],
+      containerClass: generateVariations('restaurant-detail-container', effectiveSeed),
+      headerClass: generateVariations('restaurant-detail-header', effectiveSeed),
+      menuClass: generateVariations('restaurant-detail-menu', effectiveSeed),
+      reviewsClass: generateVariations('restaurant-detail-reviews', effectiveSeed),
+      xpath: generateXPath('section', effectiveSeed),
     },
   };
 }
