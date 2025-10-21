@@ -74,14 +74,14 @@
                         </a>
                         {% endif %}
                         {% if user.is_authenticated %}
-                        <a href="{% url 'booksapp:cart' book.id %}" class="btn btn-primary mr-2" data-dynamic-group="cart-button">
+                        <a href="{% url 'booksapp:cart' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary mr-2" data-dynamic-group="cart-button">
                             <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
                         </a>
                         {% if user.id == book.user.id%}
-                        <a href="{% url 'booksapp:update' book.id %}" class="btn btn-warning mr-2" data-dynamic-group="edit-button">
+                        <a href="{% url 'booksapp:update' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-warning mr-2" data-dynamic-group="edit-button">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </a>
-                        <a href="{% url 'booksapp:delete' book.id %}" class="btn btn-danger" data-dynamic-group="delete-button">
+                        <a href="{% url 'booksapp:delete' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-danger" data-dynamic-group="delete-button">
                             <i class="fas fa-trash-alt mr-1"></i> Delete
                         </a>
                         {% endif %}
@@ -99,7 +99,7 @@
         </div>
         <div class="card-body" data-dynamic-group="comments-body">
             <!-- Form for adding comments -->
-            <form id="comment-form" method="POST" action="{% url 'booksapp:add_comment' book.id %}" data-dynamic-group="comment-form">
+            <form id="comment-form" method="POST" action="{% url 'booksapp:add_comment' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" data-dynamic-group="comment-form">
                 {% csrf_token %}
                 <div class="form-group" data-dynamic-group="comment-form-fields">
                     <input type="text" name="name" class="form-control mb-2" placeholder="Your name" required data-dynamic-group="comment-name">
@@ -173,7 +173,7 @@
                     <div class="card-body" data-dynamic-group="related-book-body">
                         <h5 class="card-title" data-dynamic-group="related-book-title">{{ related.name }}</h5>
                         <p class="card-text small" data-dynamic-group="related-book-description">{{ related.desc|truncatechars:80 }}</p>
-                        <a href="{% url 'booksapp:detail' related.id %}" class="btn btn-sm btn-primary" data-dynamic-group="related-book-link">
+                        <a href="{% url 'booksapp:detail' related.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-sm btn-primary" data-dynamic-group="related-book-link">
                             <i class="fas fa-info-circle mr-1"></i> View Details
                         </a>
                     </div>

@@ -8,7 +8,7 @@
                 <h1 class="display-4 text-white">Online Book Store
                     </h1>
                 <p class="lead text-light">Free worldwide delivery with every order</p>
-                <form method="GET" action="{% url 'booksapp:index' %}" class="search-form">
+                <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="search-form">
                     {% if selected_genre %}
                     <input type="hidden" name="genre" value="{{ selected_genre }}">
                     {% endif %}
@@ -41,7 +41,7 @@
             <h2 class="section-title">Our Library</h2>
         </div>
         <div class="col-md-6">
-            <form method="GET" action="{% url 'booksapp:index' %}" class="float-md-right">
+            <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="float-md-right">
                 {% if search_query %}
                 <input type="hidden" name="search" value="{{ search_query }}">
                 {% endif %}

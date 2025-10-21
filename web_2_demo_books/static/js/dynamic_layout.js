@@ -1349,6 +1349,28 @@ function applyCommentItemLayout(group, variant) {
   }
 }
 
+function preserveSeedInLinks(seed) {
+  // Function to preserve seed values in all links that don't already have them
+  var links = document.querySelectorAll('a[href]');
+  links.forEach(function(link) {
+    var href = link.getAttribute('href');
+    if (href && !href.includes('seed=') && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+      var separator = href.includes('?') ? '&' : '?';
+      link.setAttribute('href', href + separator + 'seed=' + seed);
+    }
+  });
+  
+  // Also preserve seed in form actions
+  var forms = document.querySelectorAll('form[action]');
+  forms.forEach(function(form) {
+    var action = form.getAttribute('action');
+    if (action && !action.includes('seed=') && !action.startsWith('#')) {
+      var separator = action.includes('?') ? '&' : '?';
+      form.setAttribute('action', action + separator + 'seed=' + seed);
+    }
+  });
+}
+
 function __runDynamicLayout(){
   try {
     var enabled = Boolean(window.__DYNAMIC_HTML_ENABLED__);
@@ -1465,6 +1487,9 @@ function __runDynamicLayout(){
       // Apply layout-specific styling
       document.body.setAttribute('data-layout-variant', layoutVariant);
       document.body.classList.add('layout-variant-' + layoutVariant);
+      
+      // Preserve seed values in all links
+      preserveSeedInLinks(initialSeed);
       
       // Known groups (add markers in templates if needed)
       var navbar = document.querySelector('.navbar-nav'); if (navbar) reorderGroup(navbar, ':scope > li');

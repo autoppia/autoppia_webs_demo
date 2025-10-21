@@ -538,7 +538,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'booksapp:index' %}">
+            <a class="navbar-brand" href="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
                 <img src="/media/gallery/autoppia_logo.png" alt="AutoPpia" height="30">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -568,7 +568,7 @@
                 <!-- Authentication Links -->
                 {% if user.is_authenticated %}
                 <div class="nav-item dropdown user-dropdown" style="display: flex">
-                    <a class="nav-link" style="cursor: pointer; position: relative" href="{% url 'booksapp:shoppingcart' %}">
+                    <a class="nav-link" style="cursor: pointer; position: relative" href="{% url 'booksapp:shoppingcart' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
                         <i class="fas fa-shopping-cart mr-1"></i>
                         <div style="display: inline-block; width: 15px; height: 15px; background: #ff0000; border-radius: 100%; position: absolute; transform: translate(-50%, -50%); color: white; font-size: 10px; text-align: center">
                             <span style="line-height: 1" id="cart_count"></span>
@@ -583,24 +583,24 @@
                         {{ user.username }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="{% url 'booksapp:profile' %}">
+                        <a class="dropdown-item" href="{% url 'booksapp:profile' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
                             <i class="fas fa-user mr-2"></i>My Profile
                         </a>
-                        <a class="dropdown-item" href="{% url 'booksapp:mybook' %}">
+                        <a class="dropdown-item" href="{% url 'booksapp:mybook' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
                             <i class="fas fa-book mr-2"></i>My Book
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'booksapp:logout' %}">
+                        <a class="dropdown-item" href="{% url 'booksapp:logout' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
                             <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
                         </a>
                     </div>
                 </div>
                 {% else %}
                 <div class="auth-buttons">
-                    <a href="{% url 'booksapp:login' %}" class="btn btn-signin">
+                    <a href="{% url 'booksapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-signin">
                         <i class="fas fa-sign-in-alt mr-1"></i>Login
                     </a>
-                    <a href="{% url 'booksapp:register' %}" class="btn btn-register">
+                    <a href="{% url 'booksapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-register">
                         <i class="fas fa-user-plus mr-1"></i>Register
                     </a>
                 </div>
