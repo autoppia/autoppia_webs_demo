@@ -192,24 +192,24 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
     case 6:
       return {
         id: 6,
-        name: "Weekly Focus",
-        description: "Focus on weekly view layout",
+        name: "Minimalist",
+        description: "Clean minimal design focus",
         layout: {
-          sidebar: 'top',
-          navigation: 'top',
+          sidebar: 'right',
+          navigation: 'bottom',
           search: 'top',
-          calendar: 'bottom',
-          userProfile: 'top',
+          calendar: 'left',
+          userProfile: 'bottom',
           createButton: 'sidebar',
           miniCalendar: 'sidebar',
           myCalendars: 'sidebar'
         },
         xpaths: {
-          calendarCell: "//td[@data-week='true']",
-          addEventButton: "//button[contains(@class, 'weekly-add')]",
-          eventItem: "//div[@data-view='weekly']",
-          searchInput: "//input[@data-weekly='true']",
-          calendarSelector: "//button[contains(@class, 'week-calendar')]"
+          calendarCell: "//td[@role='gridcell']",
+          addEventButton: "//button[text()='+']",
+          eventItem: "//span[@class='event-title']",
+          searchInput: "//input[@type='search']",
+          calendarSelector: "//button[@aria-label='Choose calendar']"
         }
       };
 
@@ -264,48 +264,48 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
     case 9:
       return {
         id: 9,
-        name: "Mobile-first",
-        description: "Touch-optimized mobile layout",
+        name: "Minimalist",
+        description: "Clean minimal design focus",
         layout: {
           sidebar: 'right',
-          navigation: 'left',
-          search: 'left',
-          calendar: 'center',
-          userProfile: 'left',
-          createButton: 'navigation',
-          miniCalendar: 'navigation',
+          navigation: 'bottom',
+          search: 'top',
+          calendar: 'left',
+          userProfile: 'bottom',
+          createButton: 'sidebar',
+          miniCalendar: 'sidebar',
           myCalendars: 'sidebar'
         },
         xpaths: {
-          calendarCell: "//div[@data-mobile='true']",
-          addEventButton: "//button[@data-mobile-add]",
-          eventItem: "//div[@class='mobile-event']",
-          searchInput: "//input[@data-mobile-search]",
-          calendarSelector: "//select[@data-mobile-cal]"
+          calendarCell: "//td[@role='gridcell']",
+          addEventButton: "//button[text()='+']",
+          eventItem: "//span[@class='event-title']",
+          searchInput: "//input[@type='search']",
+          calendarSelector: "//button[@aria-label='Choose calendar']"
         }
       };
 
     case 10:
       return {
         id: 10,
-        name: "Magazine Style Agenda",
-        description: "Article-style agenda layout",
+        name: "Minimalist",
+        description: "Clean minimal design focus",
         layout: {
-          sidebar: 'top',
-          navigation: 'top',
-          search: 'bottom',
-          calendar: 'center',
-          userProfile: 'top',
-          createButton: 'navigation',
+          sidebar: 'right',
+          navigation: 'bottom',
+          search: 'top',
+          calendar: 'left',
+          userProfile: 'bottom',
+          createButton: 'sidebar',
           miniCalendar: 'sidebar',
           myCalendars: 'sidebar'
         },
         xpaths: {
-          calendarCell: "//article[@data-magazine='true']",
-          addEventButton: "//button[@data-magazine-add]",
-          eventItem: "//article[@class='magazine-event']",
-          searchInput: "//input[@data-magazine-search]",
-          calendarSelector: "//nav[@class='magazine-nav']"
+          calendarCell: "//td[@role='gridcell']",
+          addEventButton: "//button[text()='+']",
+          eventItem: "//span[@class='event-title']",
+          searchInput: "//input[@type='search']",
+          calendarSelector: "//button[@aria-label='Choose calendar']"
         }
       };
 
