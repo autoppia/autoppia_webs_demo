@@ -1,6 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 function formatDateRange(datesFrom: string, datesTo: string) {
   const fromDate = new Date(datesFrom);
@@ -36,8 +37,14 @@ export function PropertyCard({
   datesFrom: string;
   datesTo: string;
 }) {
+  const searchParams = useSearchParams();
+  const seed = searchParams.get('seed');
+  
+  // Build URL with seed preservation
+  const href = seed ? `/stay/${id}?seed=${seed}` : `/stay/${id}`;
+  
   return (
-    <Link href={`/stay/${id}`} className="block">
+    <Link href={href} className="block">
       <div className="bg-white rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
