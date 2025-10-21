@@ -76,7 +76,6 @@
   <div class="row">
     <div class="col-md-8"><div class="card border-0 shadow"><div class="card-header bg-primary text-white">Profile</div><div class="card-body">
       <form method="post" enctype="multipart/form-data">{% csrf_token %}
-        <div class="form-group"><label>Username</label><input class="form-control" value="{{ user.username }}" disabled></div>
         <div class="form-row"><div class="col-6"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
           <div class="col-6"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div></div>
         <div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div>
@@ -157,8 +156,8 @@
         <div class="form-row"><div class="col-6"><div class="form-group"><label>First</label><input class="form-control" name="first_name" value="{{ user.first_name }}"></div></div>
           <div class="col-6"><div class="form-group"><label>Last</label><input class="form-control" name="last_name" value="{{ user.last_name }}"></div></div></div>
         <div class="form-group"><label>Email</label><input class="form-control" type="email" name="email" value="{{ user.email }}" required></div>
-        <div class="form-row"><div class="col-6"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div>
-          <div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div></div>
+          <div class="col-6"><div class="form-group"><label>Location</label><input class="form-control" name="location" value="{{ profile.location }}"></div></div>
+          <div class="form-row"><div class="col-6"><div class="form-group"><label>Website</label><input class="form-control" type="url" name="website" value="{{ profile.website }}"></div></div></div>
         <div class="form-row"><div class="col-12"><div class="form-group"><label>Favorite Genres</label><select name="favorite_genres" class="form-control">{% for genre in genres %}<option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>{% endfor %}</select></div></div></div>
         <div class="form-group"><label>About</label><textarea class="form-control" rows="3" name="bio">{{ profile.bio }}</textarea></div>
         <button class="btn btn-primary">Save</button>
