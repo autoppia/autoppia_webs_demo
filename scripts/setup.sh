@@ -109,7 +109,13 @@ deploy_project() {
     return
   fi
 
-  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML)..."
+  # Check if this demo supports dynamic HTML
+  local dynamic_html_support="false"
+  if [[ "$name" == "web_1_demo_movies" || "$name" == "web_2_demo_books" ]]; then
+    dynamic_html_support="$ENABLE_DYNAMIC_HTML"
+  fi
+
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$dynamic_html_support)..."
   pushd "$dir" > /dev/null
 
     if docker compose -p "$proj" ps -q | grep -q .; then
@@ -117,12 +123,12 @@ deploy_project() {
       docker compose -p "$proj" down --volumes
     fi
 
-    # up with dynamic HTML support
-    WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+    # up with dynamic HTML support (only for supported demos)
+    WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$dynamic_html_support" \
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
-  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML)"
+  echo "✅ $name is running on port $webp (Dynamic HTML: $dynamic_html_support)"
   echo
 }
 
