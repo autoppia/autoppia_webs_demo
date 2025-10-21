@@ -30,11 +30,28 @@ function __runDynamicLayout(){
       if (SKIP_TAGS[el.tagName]) return true;
       if (el.getAttribute && el.getAttribute('data-dynamic')==='off') return true;
       if (el.className && el.className.includes('hero-section')) return true;
+      // Also skip if element is inside a hero section
+      if (el.closest && el.closest('.hero-section')) return true;
       return false;
     }
 
     function reorderGroup(groupEl, sel){
       if (!groupEl) return;
+      
+      // Completely skip if this group is a hero section or contains a hero section
+      // But allow hero-content to be processed for internal reordering
+      if (groupEl.classList.contains('hero-section') || 
+          groupEl.querySelector('.hero-section') || 
+          groupEl.closest('.hero-section')) {
+        return;
+      }
+      
+      // Skip if data-dynamic="off" but allow hero-content
+      if (groupEl.getAttribute('data-dynamic') === 'off' && 
+          groupEl.getAttribute('data-dynamic-group') !== 'hero-content') {
+        return;
+      }
+      
       var items = Array.prototype.slice.call(groupEl.querySelectorAll(sel));
       if (items.length < 2) return;
       var salt = saltedHash(groupEl.tagName + '|' + groupEl.className + '|' + (groupEl.id || ''));
@@ -86,13 +103,35 @@ function __runDynamicLayout(){
     if (enabled) {
       // Known groups (add markers in templates if needed)
       var navbar = document.querySelector('.navbar-nav'); if (navbar) reorderGroup(navbar, ':scope > li');
-      var rows = document.querySelectorAll('.row'); rows.forEach(function(r){ reorderGroup(r, ':scope > [class*="col-"]'); });
-      var lists = document.querySelectorAll('ul,ol,.dropdown-menu,.list-group'); lists.forEach(function(l){ reorderGroup(l, ':scope > *'); });
+      
+      // Reorder rows but skip rows inside hero sections
+      var rows = document.querySelectorAll('.row'); 
+      rows.forEach(function(r){
+        // Skip rows that are inside hero sections
+        if (r.closest('.hero-section')) {
+          return;
+        }
+        reorderGroup(r, ':scope > [class*="col-"]'); 
+      });
+      
+      var lists = document.querySelectorAll('ul,ol,.dropdown-menu,.list-group'); 
+      lists.forEach(function(l){
+        // Skip lists that are inside hero sections
+        if (l.closest('.hero-section')) {
+          return;
+        }
+        reorderGroup(l, ':scope > *'); 
+      });
       
       // Handle data-dynamic-group elements
       var dynamicGroups = document.querySelectorAll('[data-dynamic-group]');
       dynamicGroups.forEach(function(group){
         var groupName = group.getAttribute('data-dynamic-group');
+        
+        // Allow hero-content to be processed even if data-dynamic="off" for internal reordering
+        if (group.getAttribute('data-dynamic') === 'off' && groupName !== 'hero-content') {
+          return;
+        }
         if (groupName === 'navbar-nav') {
           // Create multiple navbar layout variants
           var navItems = Array.prototype.slice.call(group.querySelectorAll('li'));
@@ -142,7 +181,13 @@ function __runDynamicLayout(){
                     // Keep original order
                     break;
                   case 1: // Image left, Text right
-                    reorderGroup(row, ':scope > [class*="col-"]');
+                    // Manually swap the columns
+                    var firstCol = columns[0];
+                    var secondCol = columns[1];
+                    row.removeChild(firstCol);
+                    row.removeChild(secondCol);
+                    row.appendChild(secondCol);
+                    row.appendChild(firstCol);
                     break;
                   case 2: // Stacked: Text on top, Image below
                     columns.forEach(function(col, index) {
@@ -155,7 +200,13 @@ function __runDynamicLayout(){
                       if (index === 0) col.className = col.className.replace(/col-md-\d+/, 'col-12');
                       if (index === 1) col.className = col.className.replace(/col-md-\d+/, 'col-12');
                     });
-                    reorderGroup(row, ':scope > [class*="col-"]');
+                    // Manually swap the columns for stacked layout
+                    var firstCol = columns[0];
+                    var secondCol = columns[1];
+                    row.removeChild(firstCol);
+                    row.removeChild(secondCol);
+                    row.appendChild(secondCol);
+                    row.appendChild(firstCol);
                     break;
                   case 4: // Centered layout: Both columns centered
                     columns.forEach(function(col) {
@@ -191,9 +242,14 @@ function __runDynamicLayout(){
       // But completely skip hero section
       var bodyChildren = Array.prototype.slice.call(document.body.children);
       bodyChildren.forEach(function(child) {
-        if (!shouldSkipElement(child)) {
-          reorderChildren(child, 2);
+        // Completely skip hero section and any element that contains or is inside a hero section
+        if (shouldSkipElement(child) || 
+            child.classList.contains('hero-section') || 
+            child.querySelector('.hero-section') || 
+            child.closest('.hero-section')) {
+          return;
         }
+        reorderChildren(child, 2);
       });
     }
 
@@ -206,7 +262,7 @@ function __runDynamicLayout(){
       if (!node.getAttribute('data-xid')) node.setAttribute('data-xid', 'x-'+seed+'-'+n);
       if (node.classList) node.classList.add('sx-'+seed);
     }
-  } catch(e) { console.error('Dynamic layout initialization failed', e); }
+  } catch(e) { /* Silent error handling */ }
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', __runDynamicLayout); else __runDynamicLayout();
