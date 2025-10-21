@@ -54,6 +54,7 @@ Every element gets seed-specific attributes:
 - **Footer sections**: 10 different column and link orders
 - **Login pages**: 10 different layouts (container alignment, column sizes, form field orders, card styling)
 - **Register pages**: 10 different layouts (container alignment, column sizes, form field orders, card styling)
+- **Book details pages**: 10 different layouts (container alignment, row layouts, info section ordering, action button ordering, comment section layouts)
 - **Form elements**: Dynamic reordering with seed preservation
 
 ✅ **XPath Changes**
@@ -354,6 +355,110 @@ The register page features 10 distinct layout variants that affect multiple aspe
 - **Variant 9**: Header, Body, Footer with relative positioning
 - **Variant 10**: Header, Body, Footer with flex layout
 
+## Book Details Page Layout Variants
+
+The book details page features 10 distinct layout variants that affect multiple aspects of the page:
+
+### Container Layout Variants
+- **Variant 1**: Default centered layout
+- **Variant 2**: Left aligned container
+- **Variant 3**: Right aligned container
+- **Variant 4**: Space between alignment
+- **Variant 5**: Space around alignment
+- **Variant 6**: Space evenly alignment
+- **Variant 7**: Flex start with 5% left margin
+- **Variant 8**: Flex end with 5% right margin
+- **Variant 9**: Center with 3% padding on sides
+- **Variant 10**: Center with 1% left positioning
+
+### Row Layout Variants
+- **Variant 1**: Default (Image left, Info right)
+- **Variant 2**: Reversed (Info left, Image right)
+- **Variant 3**: Stacked (Image top, Info bottom)
+- **Variant 4**: Stacked (Info top, Image bottom)
+- **Variant 5**: Centered image, full width info
+- **Variant 6**: Full width image, centered info
+- **Variant 7**: Narrow image, wide info
+- **Variant 8**: Wide image, narrow info
+- **Variant 9**: Responsive layout
+- **Variant 10**: Custom layout
+
+### Info Section Order Variants
+- **Variant 1**: Default order (Left column, Right column)
+- **Variant 2**: Reversed order (Right column, Left column)
+- **Variant 3**: Deterministic shuffle with seed 3
+- **Variant 4**: Deterministic shuffle with seed 4
+- **Variant 5**: Deterministic shuffle with seed 5
+- **Variant 6**: Deterministic shuffle with seed 6
+- **Variant 7**: Deterministic shuffle with seed 7
+- **Variant 8**: Deterministic shuffle with seed 8
+- **Variant 9**: Deterministic shuffle with seed 9
+- **Variant 10**: Deterministic shuffle with seed 10
+
+### Action Button Order Variants
+- **Variant 1**: Default order (Buy Book, Add to Cart, Edit, Delete)
+- **Variant 2**: Reversed order (Delete, Edit, Add to Cart, Buy Book)
+- **Variant 3**: Deterministic shuffle with seed 3
+- **Variant 4**: Deterministic shuffle with seed 4
+- **Variant 5**: Deterministic shuffle with seed 5
+- **Variant 6**: Deterministic shuffle with seed 6
+- **Variant 7**: Deterministic shuffle with seed 7
+- **Variant 8**: Deterministic shuffle with seed 8
+- **Variant 9**: Deterministic shuffle with seed 9
+- **Variant 10**: Deterministic shuffle with seed 10
+
+## Comment Section Layout Variants
+
+The comment section features 10 distinct layout variants that affect multiple aspects of the comments:
+
+### Comment Section Layout Variants
+- **Variant 1**: Default order (Header, Body)
+- **Variant 2**: Reversed order (Body, Header)
+- **Variant 3**: Header, Body with custom spacing
+- **Variant 4**: Header, Body with increased spacing
+- **Variant 5**: Header, Body with custom positioning
+- **Variant 6**: Header, Body with flex layout
+- **Variant 7**: Body, Header with zero margins
+- **Variant 8**: Body, Header with spacing
+- **Variant 9**: Body, Header with custom positioning
+- **Variant 10**: Body, Header with flex layout
+
+### Comment Form Layout Variants
+- **Variant 1**: Default order (Name, Content, Submit)
+- **Variant 2**: Reversed order (Submit, Content, Name)
+- **Variant 3**: Deterministic shuffle with seed 3
+- **Variant 4**: Deterministic shuffle with seed 4
+- **Variant 5**: Deterministic shuffle with seed 5
+- **Variant 6**: Deterministic shuffle with seed 6
+- **Variant 7**: Deterministic shuffle with seed 7
+- **Variant 8**: Deterministic shuffle with seed 8
+- **Variant 9**: Deterministic shuffle with seed 9
+- **Variant 10**: Deterministic shuffle with seed 10
+
+### Comments List Layout Variants
+- **Variant 1**: Default order (newest first)
+- **Variant 2**: Reversed order (oldest first)
+- **Variant 3**: Deterministic shuffle with seed 3
+- **Variant 4**: Deterministic shuffle with seed 4
+- **Variant 5**: Deterministic shuffle with seed 5
+- **Variant 6**: Deterministic shuffle with seed 6
+- **Variant 7**: Deterministic shuffle with seed 7
+- **Variant 8**: Deterministic shuffle with seed 8
+- **Variant 9**: Deterministic shuffle with seed 9
+- **Variant 10**: Deterministic shuffle with seed 10
+
+### Comment Item Layout Variants
+- **Variant 1**: Default order (Avatar, Content)
+- **Variant 2**: Reversed order (Content, Avatar)
+- **Variant 3**: Avatar, Content with custom spacing
+- **Variant 4**: Avatar, Content with increased spacing
+- **Variant 5**: Avatar, Content with custom positioning
+- **Variant 6**: Avatar, Content with flex layout
+- **Variant 7**: Content, Avatar with zero margins
+- **Variant 8**: Content, Avatar with spacing
+- **Variant 9**: Content, Avatar with custom positioning
+- **Variant 10**: Content, Avatar with flex layout
+
 ## Protected Elements
 
 Certain elements are protected from dynamic reordering to maintain proper page structure:
@@ -498,7 +603,7 @@ The dynamic HTML system in `web_2_demo_books` is **fully implemented and enabled
 - **Homepage**: Hero layouts, book grid arrangements, navigation orders
 - **Login Page**: Container alignment, column sizes, form field orders, card element reordering (original colors preserved)
 - **Register Page**: Container alignment, column sizes, form field orders, card element reordering (original colors preserved)
-- **Book Details Page**: Content stays properly positioned under navbar (main element protected from reordering)
+- **Book Details Page**: Container alignment, row layouts, info section ordering, action button ordering, comment section layouts (original colors preserved)
 - **All Pages**: Footer variations, element reordering, XPath changes
 
 The implementation is production-ready and working out of the box with significantly enhanced scraper confusion capabilities.

@@ -783,6 +783,572 @@ function applyRegisterCardLayout(group, variant) {
   }
 }
 
+// Book details page layout functions
+function applyBookDetailsContainerLayout(group, variant) {
+  // Apply different container styles based on variant
+  switch(variant) {
+    case 1: // Default centered layout
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-center');
+      break;
+    case 2: // Left aligned
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-start');
+      break;
+    case 3: // Right aligned
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-end');
+      break;
+    case 4: // Space between
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-between');
+      break;
+    case 5: // Space around
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-around');
+      break;
+    case 6: // Space evenly
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-evenly');
+      break;
+    case 7: // Flex start with margin
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-start');
+      group.style.marginLeft = '5%';
+      break;
+    case 8: // Flex end with margin
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-end');
+      group.style.marginRight = '5%';
+      break;
+    case 9: // Center with padding
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-center');
+      group.style.paddingLeft = '3%';
+      group.style.paddingRight = '3%';
+      break;
+    case 10: // Center with custom positioning
+      group.className = group.className.replace(/justify-content-\w+/, 'justify-content-center');
+      group.style.position = 'relative';
+      group.style.left = '1%';
+      break;
+  }
+}
+
+function applyBookDetailsRowLayout(group, variant) {
+  // Apply different row layouts based on variant
+  switch(variant) {
+    case 1: // Default: Image left, Info right
+      group.className = group.className.replace(/no-gutters/, 'no-gutters');
+      break;
+    case 2: // Reversed: Info left, Image right
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        group.removeChild(imageCol);
+        group.removeChild(infoCol);
+        group.appendChild(infoCol);
+        group.appendChild(imageCol);
+      }
+      break;
+    case 3: // Stacked: Image top, Info bottom
+      group.className = group.className.replace(/no-gutters/, 'no-gutters flex-column');
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-12');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-12');
+      }
+      break;
+    case 4: // Stacked: Info top, Image bottom
+      group.className = group.className.replace(/no-gutters/, 'no-gutters flex-column');
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        group.removeChild(imageCol);
+        group.removeChild(infoCol);
+        group.appendChild(infoCol);
+        group.appendChild(imageCol);
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-12');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-12');
+      }
+      break;
+    case 5: // Centered image, full width info
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-md-6 col-lg-4');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-12');
+      }
+      break;
+    case 6: // Full width image, centered info
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-12');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-md-6 col-lg-8');
+      }
+      break;
+    case 7: // Narrow image, wide info
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-md-3');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-md-9');
+      }
+      break;
+    case 8: // Wide image, narrow info
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-md-6');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-md-6');
+      }
+      break;
+    case 9: // Responsive layout
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-12 col-sm-6 col-md-4');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-12 col-sm-6 col-md-8');
+      }
+      break;
+    case 10: // Custom layout
+      var imageCol = group.querySelector('[data-dynamic-group="book-image-column"]');
+      var infoCol = group.querySelector('[data-dynamic-group="book-info-column"]');
+      if (imageCol && infoCol) {
+        imageCol.className = imageCol.className.replace(/col-md-4/, 'col-md-5');
+        infoCol.className = infoCol.className.replace(/col-md-8/, 'col-md-7');
+      }
+      break;
+  }
+}
+
+function applyBookInfoSectionLayout(group, variant) {
+  // Apply different info section layouts based on variant
+  var leftCol = group.querySelector('[data-dynamic-group="book-info-left"]');
+  var rightCol = group.querySelector('[data-dynamic-group="book-info-right"]');
+  
+  if (!leftCol || !rightCol) return;
+  
+  // Use deterministic shuffle based on variant for consistent results
+  function deterministicShuffle(array, seed) {
+    var shuffled = array.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+      var j = (seed + i) % (i + 1);
+      var temp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
+    return shuffled;
+  }
+  
+  switch(variant) {
+    case 1: // Default order: Left, Right
+      break;
+    case 2: // Reversed order: Right, Left
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      group.appendChild(rightCol);
+      group.appendChild(leftCol);
+      break;
+    case 3: // Deterministic shuffle with seed 3
+      var shuffled = deterministicShuffle([leftCol, rightCol], 3);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+    case 4: // Deterministic shuffle with seed 4
+      var shuffled = deterministicShuffle([leftCol, rightCol], 4);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+    case 5: // Deterministic shuffle with seed 5
+      var shuffled = deterministicShuffle([leftCol, rightCol], 5);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+    case 6: // Deterministic shuffle with seed 6
+      var shuffled = deterministicShuffle([leftCol, rightCol], 6);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+    case 7: // Deterministic shuffle with seed 7
+      var shuffled = deterministicShuffle([leftCol, rightCol], 7);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+    case 8: // Deterministic shuffle with seed 8
+      var shuffled = deterministicShuffle([leftCol, rightCol], 8);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+    case 9: // Deterministic shuffle with seed 9
+      var shuffled = deterministicShuffle([leftCol, rightCol], 9);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+    case 10: // Deterministic shuffle with seed 10
+      var shuffled = deterministicShuffle([leftCol, rightCol], 10);
+      group.removeChild(leftCol);
+      group.removeChild(rightCol);
+      shuffled.forEach(function(col) { group.appendChild(col); });
+      break;
+  }
+}
+
+function applyBookActionsLayout(group, variant) {
+  // Apply different action button layouts based on variant
+  var buttons = Array.prototype.slice.call(group.querySelectorAll('a, button'));
+  if (buttons.length < 2) return;
+  
+  // Use deterministic shuffle based on variant for consistent results
+  function deterministicShuffle(array, seed) {
+    var shuffled = array.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+      var j = (seed + i) % (i + 1);
+      var temp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
+    return shuffled;
+  }
+  
+  switch(variant) {
+    case 1: // Default order
+      break;
+    case 2: // Reversed order
+      var reversed = buttons.slice().reverse();
+      while (group.firstChild) group.removeChild(group.firstChild);
+      reversed.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 3: // Deterministic shuffle with seed 3
+      var shuffled = deterministicShuffle(buttons, 3);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 4: // Deterministic shuffle with seed 4
+      var shuffled = deterministicShuffle(buttons, 4);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 5: // Deterministic shuffle with seed 5
+      var shuffled = deterministicShuffle(buttons, 5);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 6: // Deterministic shuffle with seed 6
+      var shuffled = deterministicShuffle(buttons, 6);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 7: // Deterministic shuffle with seed 7
+      var shuffled = deterministicShuffle(buttons, 7);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 8: // Deterministic shuffle with seed 8
+      var shuffled = deterministicShuffle(buttons, 8);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 9: // Deterministic shuffle with seed 9
+      var shuffled = deterministicShuffle(buttons, 9);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+    case 10: // Deterministic shuffle with seed 10
+      var shuffled = deterministicShuffle(buttons, 10);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(btn) { group.appendChild(btn); });
+      break;
+  }
+}
+
+// Comment section layout functions
+function applyCommentsSectionLayout(group, variant) {
+  // Apply different comment section layouts based on variant
+  var header = group.querySelector('[data-dynamic-group="comments-header"]');
+  var body = group.querySelector('[data-dynamic-group="comments-body"]');
+  
+  if (!header || !body) return;
+  
+  // Clear the section
+  while (group.firstChild) {
+    group.removeChild(group.firstChild);
+  }
+  
+  switch(variant) {
+    case 1: // Default order: Header, Body
+      group.appendChild(header);
+      group.appendChild(body);
+      break;
+    case 2: // Reversed order: Body, Header
+      group.appendChild(body);
+      group.appendChild(header);
+      break;
+    case 3: // Header, Body with custom spacing
+      group.appendChild(header);
+      group.appendChild(body);
+      header.style.marginBottom = '0';
+      body.style.marginTop = '0';
+      break;
+    case 4: // Header, Body with increased spacing
+      group.appendChild(header);
+      group.appendChild(body);
+      header.style.marginBottom = '10px';
+      body.style.marginTop = '10px';
+      break;
+    case 5: // Header, Body with custom positioning
+      group.appendChild(header);
+      group.appendChild(body);
+      header.style.position = 'relative';
+      header.style.zIndex = '1';
+      break;
+    case 6: // Header, Body with flex layout
+      group.appendChild(header);
+      group.appendChild(body);
+      group.style.display = 'flex';
+      group.style.flexDirection = 'column';
+      group.style.gap = '5px';
+      break;
+    case 7: // Body, Header with zero margins
+      group.appendChild(body);
+      group.appendChild(header);
+      body.style.marginBottom = '0';
+      header.style.marginTop = '0';
+      break;
+    case 8: // Body, Header with spacing
+      group.appendChild(body);
+      group.appendChild(header);
+      body.style.marginBottom = '8px';
+      header.style.marginTop = '8px';
+      break;
+    case 9: // Body, Header with custom positioning
+      group.appendChild(body);
+      group.appendChild(header);
+      body.style.position = 'relative';
+      body.style.zIndex = '1';
+      break;
+    case 10: // Body, Header with flex layout
+      group.appendChild(body);
+      group.appendChild(header);
+      group.style.display = 'flex';
+      group.style.flexDirection = 'column-reverse';
+      group.style.gap = '3px';
+      break;
+  }
+}
+
+function applyCommentFormLayout(group, variant) {
+  // Apply different comment form layouts based on variant
+  var nameField = group.querySelector('[data-dynamic-group="comment-name"]');
+  var contentField = group.querySelector('[data-dynamic-group="comment-content"]');
+  var submitBtn = group.querySelector('[data-dynamic-group="comment-submit"]');
+  
+  if (!nameField || !contentField || !submitBtn) return;
+  
+  // Use deterministic shuffle based on variant for consistent results
+  function deterministicShuffle(array, seed) {
+    var shuffled = array.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+      var j = (seed + i) % (i + 1);
+      var temp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
+    return shuffled;
+  }
+  
+  switch(variant) {
+    case 1: // Default order: Name, Content, Submit
+      break;
+    case 2: // Reversed order: Submit, Content, Name
+      var reversed = [nameField, contentField, submitBtn].reverse();
+      while (group.firstChild) group.removeChild(group.firstChild);
+      reversed.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 3: // Deterministic shuffle with seed 3
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 3);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 4: // Deterministic shuffle with seed 4
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 4);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 5: // Deterministic shuffle with seed 5
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 5);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 6: // Deterministic shuffle with seed 6
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 6);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 7: // Deterministic shuffle with seed 7
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 7);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 8: // Deterministic shuffle with seed 8
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 8);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 9: // Deterministic shuffle with seed 9
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 9);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+    case 10: // Deterministic shuffle with seed 10
+      var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 10);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(field) { group.appendChild(field); });
+      break;
+  }
+}
+
+function applyCommentsListLayout(group, variant) {
+  // Apply different comment list layouts based on variant
+  var comments = Array.prototype.slice.call(group.querySelectorAll('[data-dynamic-group="comment-item"]'));
+  if (comments.length < 2) return;
+  
+  // Use deterministic shuffle based on variant for consistent results
+  function deterministicShuffle(array, seed) {
+    var shuffled = array.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+      var j = (seed + i) % (i + 1);
+      var temp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
+    return shuffled;
+  }
+  
+  switch(variant) {
+    case 1: // Default order (newest first)
+      break;
+    case 2: // Reversed order (oldest first)
+      var reversed = comments.slice().reverse();
+      while (group.firstChild) group.removeChild(group.firstChild);
+      reversed.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 3: // Deterministic shuffle with seed 3
+      var shuffled = deterministicShuffle(comments, 3);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 4: // Deterministic shuffle with seed 4
+      var shuffled = deterministicShuffle(comments, 4);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 5: // Deterministic shuffle with seed 5
+      var shuffled = deterministicShuffle(comments, 5);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 6: // Deterministic shuffle with seed 6
+      var shuffled = deterministicShuffle(comments, 6);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 7: // Deterministic shuffle with seed 7
+      var shuffled = deterministicShuffle(comments, 7);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 8: // Deterministic shuffle with seed 8
+      var shuffled = deterministicShuffle(comments, 8);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 9: // Deterministic shuffle with seed 9
+      var shuffled = deterministicShuffle(comments, 9);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+    case 10: // Deterministic shuffle with seed 10
+      var shuffled = deterministicShuffle(comments, 10);
+      while (group.firstChild) group.removeChild(group.firstChild);
+      shuffled.forEach(function(comment) { group.appendChild(comment); });
+      break;
+  }
+}
+
+function applyCommentItemLayout(group, variant) {
+  // Apply different comment item layouts based on variant
+  var avatar = group.querySelector('[data-dynamic-group="comment-avatar"]');
+  var content = group.querySelector('[data-dynamic-group="comment-content"]');
+  
+  if (!avatar || !content) return;
+  
+  // Clear the comment item
+  while (group.firstChild) {
+    group.removeChild(group.firstChild);
+  }
+  
+  switch(variant) {
+    case 1: // Default order: Avatar, Content
+      group.appendChild(avatar);
+      group.appendChild(content);
+      break;
+    case 2: // Reversed order: Content, Avatar
+      group.appendChild(content);
+      group.appendChild(avatar);
+      break;
+    case 3: // Avatar, Content with custom spacing
+      group.appendChild(avatar);
+      group.appendChild(content);
+      avatar.style.marginRight = '0';
+      content.style.marginLeft = '0';
+      break;
+    case 4: // Avatar, Content with increased spacing
+      group.appendChild(avatar);
+      group.appendChild(content);
+      avatar.style.marginRight = '20px';
+      content.style.marginLeft = '20px';
+      break;
+    case 5: // Avatar, Content with custom positioning
+      group.appendChild(avatar);
+      group.appendChild(content);
+      avatar.style.position = 'relative';
+      avatar.style.zIndex = '1';
+      break;
+    case 6: // Avatar, Content with flex layout
+      group.appendChild(avatar);
+      group.appendChild(content);
+      group.style.display = 'flex';
+      group.style.gap = '10px';
+      break;
+    case 7: // Content, Avatar with zero margins
+      group.appendChild(content);
+      group.appendChild(avatar);
+      content.style.marginRight = '0';
+      avatar.style.marginLeft = '0';
+      break;
+    case 8: // Content, Avatar with spacing
+      group.appendChild(content);
+      group.appendChild(avatar);
+      content.style.marginRight = '15px';
+      avatar.style.marginLeft = '15px';
+      break;
+    case 9: // Content, Avatar with custom positioning
+      group.appendChild(content);
+      group.appendChild(avatar);
+      content.style.position = 'relative';
+      content.style.zIndex = '1';
+      break;
+    case 10: // Content, Avatar with flex layout
+      group.appendChild(content);
+      group.appendChild(avatar);
+      group.style.display = 'flex';
+      group.style.flexDirection = 'row-reverse';
+      group.style.gap = '8px';
+      break;
+  }
+}
+
 function __runDynamicLayout(){
   try {
     var enabled = Boolean(window.__DYNAMIC_HTML_ENABLED__);
@@ -968,6 +1534,22 @@ function __runDynamicLayout(){
           applyRegisterFormFieldsLayout(group, layoutVariant);
         } else if (groupName === 'register-card') {
           applyRegisterCardLayout(group, layoutVariant);
+        } else if (groupName === 'book-details-container') {
+          applyBookDetailsContainerLayout(group, layoutVariant);
+        } else if (groupName === 'book-details-row') {
+          applyBookDetailsRowLayout(group, layoutVariant);
+        } else if (groupName === 'book-info-row') {
+          applyBookInfoSectionLayout(group, layoutVariant);
+        } else if (groupName === 'book-actions') {
+          applyBookActionsLayout(group, layoutVariant);
+        } else if (groupName === 'comments-section') {
+          applyCommentsSectionLayout(group, layoutVariant);
+        } else if (groupName === 'comment-form') {
+          applyCommentFormLayout(group, layoutVariant);
+        } else if (groupName === 'comments-list') {
+          applyCommentsListLayout(group, layoutVariant);
+        } else if (groupName === 'comment-item') {
+          applyCommentItemLayout(group, layoutVariant);
         } else {
           reorderGroup(group, ':scope > *');
         }
