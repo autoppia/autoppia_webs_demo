@@ -1,6 +1,6 @@
 "use client";
 import { useCartStore } from "@/store/cart-store";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
 
@@ -23,7 +23,7 @@ export default function CartNavIcon() {
 
   return (
     <div onClick={handleClick} className={layout.cart.iconClass}>
-      <Link href="/cart" className="relative px-3 py-1 flex items-center group">
+      <SeedLink href="/cart" className="relative px-3 py-1 flex items-center group">
         <span className="text-zinc-700 group-hover:text-green-600 text-base">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@ export default function CartNavIcon() {
             {count}
           </span>
         )}
-      </Link>
+      </SeedLink>
     </div>
   );
 }
