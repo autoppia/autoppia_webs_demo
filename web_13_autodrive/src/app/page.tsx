@@ -1,7 +1,7 @@
 "use client";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent, EventType } from "@/library/event";
 import DynamicLayout from "@/components/DynamicLayout";
 import SiteElements from "@/components/SiteElements";
@@ -150,7 +150,7 @@ function ProfileDropdown({
 }: {
   open: boolean;
   setOpen: (v: boolean) => void;
-  router: ReturnType<typeof useRouter>;
+  router: ReturnType<typeof useSeedRouter>;
 }) {
   if (!open) return null;
   return (
@@ -287,7 +287,7 @@ function ProfileDropdown({
 }
 
 function HomePage() {
-  const router = useRouter();
+  const router = useSeedRouter();
   const [profileOpen, setProfileOpen] = useState(false);
 
   // Header component
@@ -310,39 +310,40 @@ function HomePage() {
             </button>
           </li>
           <li>
-            <Link href="#" className="hover:text-[#2095d2] transition">
+            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
               Drive
-            </Link>
+            </SeedLink>
           </li>
           <li>
-            <Link href="#" className="hover:text-[#2095d2] transition">
+            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
               Business
-            </Link>
+            </SeedLink>
           </li>
           <li>
-            <Link href="#" className="hover:text-[#2095d2] transition">
+            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
               AutoDriver Eats
-            </Link>
+            </SeedLink>
           </li>
           <li>
-            <Link href="#" className="hover:text-[#2095d2] transition">
+            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
               About
-            </Link>
+            </SeedLink>
           </li>
         </ul>
         <div className="flex items-center space-x-2">
-          <Link
+          <SeedLink
             href="#"
             className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
+            preserveSeed={false}
           >
             ES
-          </Link>
-          <Link
+          </SeedLink>
+          <SeedLink
             href="/help"
             className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
           >
             Help
-          </Link>
+          </SeedLink>
           <button
             className="bg-[#2095d2] text-white text-sm px-4 py-1 rounded-md font-semibold shadow hover:bg-[#1273a0] transition relative"
             onClick={() => setProfileOpen(!profileOpen)}

@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { getSeedLayout } from "@/library/layouts";
 import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { Suspense } from "react";
 
 function LayoutTestContent() {
@@ -66,18 +67,18 @@ function LayoutTestContent() {
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Navigation:</h3>
           <div className="flex gap-4">
-            <Link
+            <SeedLink
               href="/"
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
             >
               Home Page
-            </Link>
-            <Link
+            </SeedLink>
+            <SeedLink
               href="/ride/trip"
               className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
             >
               Trip Page
-            </Link>
+            </SeedLink>
           </div>
         </div>
 

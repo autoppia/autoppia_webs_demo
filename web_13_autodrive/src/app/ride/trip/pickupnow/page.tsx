@@ -1,7 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { format } from "date-fns";
 import RideNavbar from "../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
@@ -48,7 +47,7 @@ function getTimeSlotsForDate(dateStr: string) {
 }
 
 export default function PickupNowPage() {
-  const router = useRouter();
+  const router = useSeedRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState<string>("");

@@ -1,4 +1,6 @@
-import { useRouter } from "next/navigation";
+"use client";
+
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useState } from "react";
 
 interface RideNavbarProps {
@@ -6,7 +8,7 @@ interface RideNavbarProps {
 }
 
 export default function RideNavbar({ activeTab }: RideNavbarProps) {
-  const router = useRouter();
+  const router = useSeedRouter();
   const [profileOpen, setProfileOpen] = useState(false);
 
   return (
