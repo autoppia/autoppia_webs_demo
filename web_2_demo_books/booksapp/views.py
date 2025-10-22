@@ -455,7 +455,14 @@ def add_comment(request, book_id):
             )
             add_comment_event.save()
 
-            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            # Detect AJAX/JSON request robustly
+            wants_json = (
+                (request.headers.get("X-Requested-With", "") == "XMLHttpRequest")
+                or (request.headers.get("x-requested-with", "") == "XMLHttpRequest")
+                or ("application/json" in (request.headers.get("Accept", "") or ""))
+            )
+
+            if wants_json:
                 return JsonResponse(
                     {
                         "status": "success",
@@ -471,6 +478,15 @@ def add_comment(request, book_id):
 
             messages.success(request, "Your comment has been added successfully!")
             return redirect("booksapp:detail", book_id=book.id)
+
+    # If AJAX expects JSON, return JSON error to avoid HTML in fetch
+    wants_json = (
+        (request.headers.get("X-Requested-With", "") == "XMLHttpRequest")
+        or (request.headers.get("x-requested-with", "") == "XMLHttpRequest")
+        or ("application/json" in (request.headers.get("Accept", "") or ""))
+    )
+    if wants_json:
+        return JsonResponse({"status": "error", "message": "Invalid comment."}, status=400)
 
     messages.error(request, "There was a problem with your comment.")
     return redirect("booksapp:detail", book_id=book.id)
