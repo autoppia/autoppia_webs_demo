@@ -18,12 +18,13 @@ services:
       - DB_PORT=5432
       - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - web2_net
 
   db:
-    image: postgres:latest
+    image: postgres:14
     environment:
       - POSTGRES_DB=web2_books
       - POSTGRES_USER=postgres
@@ -34,6 +35,12 @@ services:
       - web2_db_data:/var/lib/postgresql/data
     networks:
       - web2_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d web2_books"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   web2_db_data:

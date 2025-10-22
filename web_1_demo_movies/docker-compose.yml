@@ -24,7 +24,7 @@ services:
       - web1_net
 
   db:
-    image: postgres:latest
+    image: postgres:14
     environment:
       - POSTGRES_DB=web1_movies
       - POSTGRES_USER=postgres
