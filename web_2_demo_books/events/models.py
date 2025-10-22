@@ -32,6 +32,7 @@ class Event(models.Model):
     event_name = models.CharField(max_length=50, choices=EventName.choices)
     timestamp = models.DateTimeField(default=timezone.now)
     web_agent_id = models.CharField()
+    validator_id = models.CharField()
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Campo JSON para datos específicos del evento
@@ -59,9 +60,9 @@ class Event(models.Model):
     # -------------------- EVENTOS RELACIONADOS CON LIBROS --------------------
 
     @classmethod
-    def create_book_detail_event(cls, user, web_agent_id, book):
+    def create_book_detail_event(cls, user, web_agent_id, book, validator_id):
         """Factory method para crear un evento de detalles de libro."""
-        event = cls(event_name=EventName.BOOK_DETAIL, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.BOOK_DETAIL, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
             "id": book.id,
@@ -80,12 +81,13 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_search_book_event(cls, user, web_agent_id, query):
+    def create_search_book_event(cls, user, web_agent_id, query, validator_id):
         """Factory method para crear un evento de búsqueda de libro."""
         event = cls(
             event_name=EventName.SEARCH_BOOK,
             user=user,
             web_agent_id=web_agent_id,
+            validator_id=validator_id,
         )
         event.data = {
             "query": query,
@@ -93,9 +95,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_add_book_event(cls, user, web_agent_id, book):
+    def create_add_book_event(cls, user, web_agent_id, book, validator_id):
         """Factory method para crear un evento de añadir libro."""
-        event = cls(event_name=EventName.ADD_BOOK, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.ADD_BOOK, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
             "id": book.id,
@@ -115,9 +117,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_edit_book_event(cls, user, web_agent_id, book, previous_values=None, changed_fields=None):
+    def create_edit_book_event(cls, user, web_agent_id, book, previous_values=None, changed_fields=None, validator_id=None):
         """Factory method para crear un evento de editar libro."""
-        event = cls(event_name=EventName.EDIT_BOOK, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.EDIT_BOOK, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
             "id": book.id,
@@ -139,9 +141,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_delete_book_event(cls, user, web_agent_id, book):
+    def create_delete_book_event(cls, user, web_agent_id, book, validator_id):
         """Factory method para crear un evento de eliminar libro."""
-        event = cls(event_name=EventName.DELETE_BOOK, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.DELETE_BOOK, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
             "id": book.id,
@@ -161,9 +163,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_filter_book_event(cls, user, web_agent_id, genre=None, year=None):
+    def create_filter_book_event(cls, user, web_agent_id, genre=None, year=None, validator_id=None):
         """Factory method to create a filter book event"""
-        event = cls(event_name=EventName.FILTER_BOOK, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.FILTER_BOOK, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         # Get genre information if provided
         genre_data = None
@@ -190,9 +192,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_purchase_book_event(cls, user, web_agent_id, book):
+    def create_purchase_book_event(cls, user, web_agent_id, book, validator_id=None):
         """Factory method to create a purchase book event"""
-        event = cls(event_name=EventName.PURCHASE_BOOK, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.PURCHASE_BOOK, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
 
         event.data = {
@@ -215,9 +217,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_shoppingcart_event(cls, user, web_agent_id, book):
+    def create_shoppingcart_event(cls, user, web_agent_id, book, validator_id=None):
         """Factory method to create a shopping cart event"""
-        event = cls(event_name=EventName.SHOPPING_CART, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.SHOPPING_CART, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in book.genres.all()]
         event.data = {
             "id": book.id,
@@ -238,9 +240,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_add_comment_event(cls, user, web_agent_id, comment, book):
+    def create_add_comment_event(cls, user, web_agent_id, comment, book, validator_id=None):
         """Factory method para crear un evento de añadir comentario."""
-        event = cls(event_name=EventName.ADD_COMMENT, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.ADD_COMMENT, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "comment_id": comment.id,
             "name": comment.name,
@@ -257,9 +259,9 @@ class Event(models.Model):
 
     # --------------------- CONTACT --------------------------------
     @classmethod
-    def create_contact_event(cls, user, web_agent_id, contact):
+    def create_contact_event(cls, user, web_agent_id, contact, validator_id=None):
         """Factory method para crear un evento de contacto"""
-        event = cls(event_name=EventName.CONTACT, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.CONTACT, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         # Guardar datos del mensaje de contacto en formato JSON
         event.data = {
@@ -276,36 +278,36 @@ class Event(models.Model):
     # -------------------- EVENTOS DE USUARIO --------------------
 
     @classmethod
-    def create_registration_event(cls, user, web_agent_id):
+    def create_registration_event(cls, user, web_agent_id, validator_id=None):
         """Factory method para crear un evento de registro."""
-        event = cls(event_name=EventName.REGISTRATION, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.REGISTRATION, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "username": user.username,
         }
         return event
 
     @classmethod
-    def create_login_event(cls, user, web_agent_id):
+    def create_login_event(cls, user, web_agent_id, validator_id=None):
         """Factory method para crear un evento de inicio de sesión."""
-        event = cls(event_name=EventName.LOGIN, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.LOGIN, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "username": user.username,
         }
         return event
 
     @classmethod
-    def create_logout_event(cls, user, web_agent_id):
+    def create_logout_event(cls, user, web_agent_id, validator_id=None):
         """Factory method para crear un evento de cierre de sesión."""
-        event = cls(event_name=EventName.LOGOUT, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.LOGOUT, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "username": user.username,
         }
         return event
 
     @classmethod
-    def create_edit_user_event(cls, user, web_agent_id, profile, previous_values=None):
+    def create_edit_user_event(cls, user, web_agent_id, profile, previous_values=None, validator_id=None):
         """Factory method to create an edit user profile event"""
-        event = cls(event_name=EventName.EDIT_USER, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.EDIT_USER, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         # Get favorite genres as a list of dictionaries
         favorite_genres = []

@@ -40,6 +40,7 @@ def index(request):
         search_event = Event.create_search_film_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validation_id=request.headers.get("X-Validator-Id", None),
             query=search_query,
         )
         search_event.save()
@@ -77,6 +78,7 @@ def index(request):
         filter_event = Event.create_filter_film_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validation_id=request.headers.get("X-Validation-Id", None),
             genre=genre_obj,
             year=year_value,
         )
@@ -110,9 +112,15 @@ def detail(request, movie_id):
     """
     movie = get_object_or_404(Movie, id=movie_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
+    validation_id = request.headers.get("X-Validation-Id", None)
 
     # Registrar evento de detalle de película
-    detail_event = Event.create_film_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, movie)
+    detail_event = Event.create_film_detail_event(
+        request.user if request.user.is_authenticated else None,
+        web_agent_id,
+        movie,
+        validation_id=validation_id,
+    )
     detail_event.save()
 
     # Películas relacionadas
@@ -158,6 +166,7 @@ def add_movie(request):
             add_film_event = Event.create_add_film_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validation_id=request.headers.get("X-Validation-Id", None),
                 movie_data=new_values,
             )
             add_film_event.save()
@@ -238,6 +247,7 @@ def update_movie(request, id):
                 event = Event.create_edit_film_event(
                     user=request.user if request.user.is_authenticated else None,
                     web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                    validation_id=request.headers.get("X-Validation-Id", None),
                     movie=movie,
                     previous_values=original_values,
                     changed_fields=changed_fields,
@@ -270,6 +280,7 @@ def delete_movie(request, id):
         delete_film_event = Event.create_delete_film_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validation_id=request.headers.get("X-Validation-Id", None),
             movie=movie,
         )
         delete_film_event.save()
@@ -299,6 +310,7 @@ def add_comment(request, movie_id):
             add_comment_event = Event.create_add_comment_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validation_id=request.headers.get("X-Validation-Id", None),
                 comment=comment,
                 movie=movie,
             )
@@ -365,6 +377,7 @@ def contact(request):
             contact_event = Event.create_contact_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validation_id=request.headers.get("X-Validation-Id", None),
                 contact=contact_message,
             )
             contact_event.save()
@@ -401,6 +414,10 @@ def login_view(request):
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
             login_event = Event.create_login_event(user, web_agent_id)
             login_event.save()
+            # add validation id to login event
+            # (login_event already created above; create a new one with validation_id for backward compatibility)
+            login_event = Event.create_login_event(user, web_agent_id, validation_id=request.headers.get("X-Validation-Id", None))
+            login_event.save()
             next_url = request.GET.get("next", reverse("movieapp:index"))
             messages.success(request, f"Welcome back, {username}!")
             return redirect(next_url)
@@ -415,7 +432,8 @@ def logout_view(request):
     Registra el evento de cierre de sesión antes de finalizar la sesión.
     """
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-    logout_event = Event.create_logout_event(request.user, web_agent_id)
+    validation_id = request.headers.get("X-Validation-Id", None)
+    logout_event = Event.create_logout_event(request.user, web_agent_id, validation_id=validation_id)
     logout(request)
     logout_event.save()
     messages.success(request, "You have been logged out successfully.")
@@ -456,7 +474,7 @@ def register_view(request):
         if not error:
             user = User.objects.create_user(username=username, email=email, password=password1)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-            register_event = Event.create_registration_event(user, web_agent_id)
+            register_event = Event.create_registration_event(user, web_agent_id, validation_id=request.headers.get("X-Validation-Id", None))
             register_event.save()
             # login(request, user)
             # login_event = Event.create_login_event(user, web_agent_id)
@@ -540,6 +558,7 @@ def profile_view(request):
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
             profile=profile,
             previous_values=previous_values,
+            validation_id=request.headers.get("X-Validation-Id", None),
         )
         edit_user_event.save()
 
