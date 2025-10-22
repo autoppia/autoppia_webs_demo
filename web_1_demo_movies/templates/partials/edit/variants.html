@@ -112,6 +112,7 @@
         <div class="form-row"><div class="col-6"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div>
           <div class="col-6"><div class="form-group"><label>Trailer</label>{{ form.trailer_url|safe }}</div></div></div>
         <div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div>
+          <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
         <div class="text-right"><button class="btn btn-warning">Save</button>
           <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a></div>
       </form>
@@ -127,6 +128,7 @@
       <div class="form-row"><div class="col-3"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
         <div class="col-3"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
         <div class="col-3"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div>
+          <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
         <div class="col-3"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div></div>
       <div class="form-row"><div class="col-6"><div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div></div>
         <div class="col-6"><div class="form-group"><label>Trailer URL</label>{{ form.trailer_url|safe }}</div></div></div>

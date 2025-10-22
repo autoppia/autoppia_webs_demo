@@ -188,10 +188,6 @@ case "$WEB_DEMO" in
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     deploy_webs_server
     ;;
-  autocalender)
-    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
-    deploy_webs_server
-    ;;
   autocalendar)
     deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
     deploy_webs_server
