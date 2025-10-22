@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { usePathname } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
@@ -19,7 +19,7 @@ export default function BottomNav() {
       <ul className="max-w-6xl mx-auto flex items-center justify-around py-2 px-4">
         {items.map((it) => (
           <li key={it.href}>
-            <Link
+            <SeedLink
               href={it.href}
               onClick={() => logEvent(it.event, { source: "bottom_nav", label: it.label })}
               className={`px-3 py-2 rounded text-sm font-medium ${
@@ -27,7 +27,7 @@ export default function BottomNav() {
               }`}
             >
               {it.label}
-            </Link>
+            </SeedLink>
           </li>
         ))}
       </ul>
