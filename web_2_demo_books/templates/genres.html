@@ -16,7 +16,7 @@
                 <div class="card-body text-center">
                     <h3 class="card-title">{{ genre.name }}</h3>
                     <p class="card-text text-muted">{{ genre.movies.count }} books</p>
-                    <a href="{% url 'booksapp:genre_detail' genre.id %}" class="btn btn-primary">View books</a>
+                    <a href="{% url 'booksapp:genre_detail' genre.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary">View books</a>
                 </div>
             </div>
         </div>

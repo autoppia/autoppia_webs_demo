@@ -9,7 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autoconnect, or all (default: all)
+#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
 #   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
 #   -y, --yes                     Force delete without confirmation
 #
@@ -217,7 +217,7 @@ case "$WEB_DEMO" in
     deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autodrive', or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', or 'all'."
     exit 1
     ;;
 esac

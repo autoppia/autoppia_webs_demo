@@ -1,32 +1,37 @@
 {% extends 'base.html' %}
 {% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow border-0">
-                <div class="card-header bg-primary text-white text-center py-3">
+<div class="container mt-5" data-dynamic-group="login-container">
+    <div class="row justify-content-center" data-dynamic-group="login-row">
+        <div class="col-md-6 col-lg-5" data-dynamic-group="login-column">
+            <div class="card shadow border-0" data-dynamic-group="login-card">
+                <div class="card-header bg-primary text-white text-center py-3" data-dynamic-group="login-header">
                     <h3 class="mb-0"><i class="fas fa-sign-in-alt mr-2"></i>Sign In</h3>
                 </div>
 
-                <div class="card-body p-4">
-                    <form method="post" action="{% url 'booksapp:login' %}">
+                <div class="card-body p-4" data-dynamic-group="login-body">
+                    <form method="post" action="{% url 'booksapp:login' %}" data-dynamic-group="login-form">
                         {% csrf_token %}
+                        {% if DYNAMIC_HTML_ENABLED %}
+                        <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
+                        {% endif %}
 
-                        <div class="form-group">
-                            <label for="username">
-                                <i class="fas fa-user mr-1"></i> Username
-                            </label>
-                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required autofocus>
+                        <div class="form-group" data-dynamic-group="login-form-fields">
+                            <div class="form-group" data-dynamic-group="username-field">
+                                <label for="username">
+                                    <i class="fas fa-user mr-1"></i> Username
+                                </label>
+                                <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required autofocus>
+                            </div>
+
+                            <div class="form-group" data-dynamic-group="password-field">
+                                <label for="password">
+                                    <i class="fas fa-lock mr-1"></i> Password
+                                </label>
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="password">
-                                <i class="fas fa-lock mr-1"></i> Password
-                            </label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
-                        </div>
-
-                        <div class="form-group mt-4">
+                        <div class="form-group mt-4" data-dynamic-group="login-button">
                             <button type="submit" class="btn btn-primary btn-block">
                                 <i class="fas fa-sign-in-alt mr-1"></i> Sign In
                             </button>
@@ -38,8 +43,8 @@
                     </form>
                 </div>
 
-                <div class="card-footer bg-light text-center py-3">
-                    <p class="mb-0">Don't have an account? <a href="{% url 'booksapp:register' %}">Register</a></p>
+                <div class="card-footer bg-light text-center py-3" data-dynamic-group="login-footer">
+                    <p class="mb-0">Don't have an account? <a href="{% url 'booksapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Register</a></p>
                 </div>
             </div>
         </div>

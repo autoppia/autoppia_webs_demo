@@ -1,18 +1,21 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const seed = searchParams.get('seed');
+  
   const navItems = [
-    { name: "Stays", href: "/" },
+    { name: "Stays", href: seed ? `/?seed=${seed}` : "/" },
     { name: "Experiences", href: "#" },
   ];
   return (
     <header className="w-full flex flex-col items-center border-b bg-white sticky top-0 z-20">
       <nav className="w-full max-w-7xl flex items-center justify-between py-2 px-3 md:px-0">
         <div className="flex items-center gap-2 min-w-[130px]">
-          <Link href="/" className="flex items-center gap-1 select-none">
+          <Link href={seed ? `/?seed=${seed}` : "/"} className="flex items-center gap-1 select-none">
             <span className="font-logo font-bold text-2xl text-[#18181b] tracking-tight">
               Auto
             </span>

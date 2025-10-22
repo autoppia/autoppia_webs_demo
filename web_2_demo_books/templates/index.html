@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% block body %}
 
-<div class="hero-section">
+<div class="hero-section" data-dynamic-group="hero-content" data-dynamic="off">
     <div class="container">
         <div class="row align-items-center py-5">
             <div class="col-md-6">
                 <h1 class="display-4 text-white">Online Book Store
                     </h1>
                 <p class="lead text-light">Free worldwide delivery with every order</p>
-                <form method="GET" action="{% url 'booksapp:index' %}" class="search-form">
+                <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="search-form">
                     {% if selected_genre %}
                     <input type="hidden" name="genre" value="{{ selected_genre }}">
+                    {% endif %}
+                    {% if DYNAMIC_HTML_ENABLED %}
+                    <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
                     {% endif %}
                     <div class="input-group mb-3">
                         <input type="text" name="search" class="form-control" placeholder="Search books..." value="{{ search_query }}">
@@ -20,7 +23,7 @@
                     </div>
                 </form>
                 {% if user.is_authenticated %}
-                <a href="{% url 'booksapp:add_book' %}" class="btn  btn-autoppia-color">Add new book</a>
+                <a href="{% url 'booksapp:add_book' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn  btn-autoppia-color">Add new book</a>
                 {% endif %}
 
             </div>
@@ -38,9 +41,12 @@
             <h2 class="section-title">Our Library</h2>
         </div>
         <div class="col-md-6">
-            <form method="GET" action="{% url 'booksapp:index' %}" class="float-md-right">
+            <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="float-md-right">
                 {% if search_query %}
                 <input type="hidden" name="search" value="{{ search_query }}">
+                {% endif %}
+                {% if DYNAMIC_HTML_ENABLED %}
+                <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
                 {% endif %}
                 <div class="form-row">
                     <div class="col-md-5 mb-2 mb-md-0">
@@ -83,11 +89,11 @@
                 {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
             {% endfor %} genre
         {% endif %}
-        <a href="{% url 'booksapp:index' %}" class="float-right">Clear filters</a>
+        <a href="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="float-right">Clear filters</a>
     </div>
     {% endif %}
 
-    <div class="row">
+    <div class="row" data-dynamic-group="book-grid">
         {% for i in book_list %}
         <div class="col-md-3 mb-4">
             <div class="card movie-card h-100 shadow-sm">
@@ -125,11 +131,11 @@
                     {% endif %}
                 </div>
                 <div class="card-footer bg-transparent border-top-0 pt-0">
-                    <a href="{% url 'booksapp:detail' i.id %}" class="btn btn-success btn-block">
+                    <a href="{% url 'booksapp:detail' i.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-success btn-block">
                         <i class="fas fa-info-circle mr-1"></i> View Details
                     </a>
                     {% if user.is_authenticated %}
-                    <a href="{% url 'booksapp:cart' i.id %}" class="btn btn-primary btn-block">
+                    <a href="{% url 'booksapp:cart' i.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-block">
                         <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
                     </a>
                     {% endif %}
@@ -140,7 +146,7 @@
         <div class="col-12 text-center py-5">
             <h3>No books found</h3>
             <p>Try changing your search criteria or add a new books</p>
-            <a href="{% url 'booksapp:add_book' %}" class="btn btn-success">Add books</a>
+            <a href="{% url 'booksapp:add_book' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-success">Add books</a>
         </div>
         {% endfor %}
     </div>

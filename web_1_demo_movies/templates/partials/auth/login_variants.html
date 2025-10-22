@@ -1,0 +1,148 @@
+{% with v=LAYOUT_VARIANT %}
+<div class="container mt-5" data-dynamic-group="login">
+  {% if v == 1 %}
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white text-center py-3"><h3 class="mb-0"><i class="fas fa-sign-in-alt mr-2"></i>Sign In</h3></div>
+        <div class="card-body p-4">
+          <form method="post" action="{% url 'movieapp:login' %}">
+            {% csrf_token %}
+            <div class="form-group"><label for="username"><i class="fas fa-user mr-1"></i> Username</label><input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required autofocus></div>
+            <div class="form-group"><label for="password"><i class="fas fa-lock mr-1"></i> Password</label><input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required></div>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <div class="form-group mt-4"><button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt mr-1"></i> Sign In</button></div>
+          </form>
+        </div>
+        <div class="card-footer bg-light text-center py-3"><p class="mb-0">Don't have an account? <a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Register</a></p></div>
+      </div>
+    </div>
+  </div>
+  {% elif v == 2 %}
+  <div class="row align-items-center">
+    <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0 text-center d-none d-lg-block"><i class="fas fa-film fa-7x text-secondary"></i></div>
+    <div class="col-lg-6 order-lg-1">
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white text-center py-3"><h3 class="mb-0">Sign In</h3></div>
+        <div class="card-body p-4">
+          <form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+            <div class="form-row"><div class="col-12"><div class="form-group"><label for="username">Username</label><input type="text" name="username" id="username" class="form-control" required autofocus></div></div>
+            <div class="col-12"><div class="form-group"><label for="password">Password</label><input type="password" name="password" id="password" class="form-control" required></div></div></div>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </form>
+        </div>
+        <div class="card-footer bg-light text-center py-3"><a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Create account</a></div>
+      </div>
+    </div>
+  </div>
+  {% elif v == 3 %}
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card shadow border-0">
+        <div class="card-body p-4">
+          <h3 class="mb-3 text-center">Sign In</h3>
+          <form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+            <div class="form-row"><div class="col-md-6"><div class="form-group"><label>Username</label><input class="form-control" name="username" required></div></div>
+              <div class="col-md-6"><div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div></div></div>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <div class="text-right"><button class="btn btn-primary">Sign In</button></div>
+          </form>
+        </div>
+        <div class="card-footer text-center bg-light">No account? <a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Register</a></div>
+      </div>
+    </div>
+  </div>
+  {% elif v == 4 %}
+  <div class="row align-items-center">
+    <div class="col-md-5 text-center d-none d-md-block"><i class="fas fa-user-lock fa-6x text-secondary"></i></div>
+    <div class="col-md-7">
+      <div class="card shadow border-0"><div class="card-header bg-primary text-white">Sign In</div>
+        <div class="card-body"><form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+          <div class="form-group"><label>Username</label><input class="form-control" name="username" required></div>
+          <div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div>
+          {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+          <button class="btn btn-primary btn-block">Sign In</button>
+        </form></div>
+        <div class="card-footer bg-light text-center"><a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Register</a></div>
+      </div>
+    </div>
+  </div>
+  {% elif v == 5 %}
+  <div class="row justify-content-center"><div class="col-lg-4">
+    <form method="post" action="{% url 'movieapp:login' %}" class="card p-4 shadow border-0">{% csrf_token %}
+      <h3 class="mb-3 text-center">Sign In</h3>
+      <div class="form-group"><label>Username</label><input class="form-control" name="username" required></div>
+      <div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div>
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <button class="btn btn-primary btn-block">Continue</button>
+      <div class="text-center mt-3"><a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Create account</a></div>
+    </form></div></div>
+  {% elif v == 6 %}
+  <div class="row">
+    <div class="col-md-6"><div class="card shadow border-0"><div class="card-body">
+      <h4>Welcome back</h4><p class="text-muted">Sign in to continue</p>
+      <form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+        <div class="form-group"><label>Username</label><input class="form-control" name="username" required></div>
+        <div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div>
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button class="btn btn-primary">Sign In</button>
+      </form>
+    </div></div></div>
+    <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center"><i class="fas fa-film fa-6x text-secondary"></i></div>
+  </div>
+  {% elif v == 7 %}
+  <div class="row justify-content-center"><div class="col-md-8"><div class="card shadow border-0"><div class="card-body">
+    <div class="row"><div class="col-sm-6 border-right"><h5>Sign In</h5>
+      <form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+        <div class="form-group"><label>Username</label><input class="form-control" name="username" required></div>
+        <div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div>
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button class="btn btn-primary btn-sm">Sign In</button>
+      </form></div>
+      <div class="col-sm-6 text-center d-none d-sm-flex align-items-center justify-content-center"><i class="fas fa-user-lock fa-5x text-secondary"></i></div>
+    </div>
+  </div><div class="card-footer text-center bg-light"><a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Need an account?</a></div></div></div></div>
+  {% elif v == 8 %}
+  <div class="row justify-content-center"><div class="col-md-5"><div class="card shadow border-0">
+    <div class="card-header bg-primary text-white">Sign In</div>
+    <div class="card-body"><form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+      <div class="form-group"><label>Username</label><input class="form-control" name="username" required></div>
+      <div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div>
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <button class="btn btn-primary btn-block">Sign In</button>
+    </form></div>
+    <div class="card-footer bg-light text-center"><a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Register</a></div>
+  </div></div></div>
+  {% elif v == 9 %}
+  <div class="row">
+    <div class="col-md-12"><div class="card shadow border-0"><div class="card-body">
+      <h5 class="mb-3">Sign In</h5>
+      <form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+        <div class="form-row">
+          <div class="col-md-6"><div class="form-group"><label>Username</label><input class="form-control" name="username" required></div></div>
+          <div class="col-md-6"><div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div></div>
+        </div>
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button class="btn btn-primary">Sign In</button>
+      </form>
+    </div></div></div>
+  </div>
+  {% else %}
+  <div class="row align-items-center">
+    <div class="col-lg-7 order-lg-2 mb-4 mb-lg-0 text-center d-none d-lg-block"><i class="fas fa-video fa-7x text-secondary"></i></div>
+    <div class="col-lg-5 order-lg-1"><div class="card shadow border-0"><div class="card-body">
+      <h5 class="mb-3">Sign In</h5>
+      <form method="post" action="{% url 'movieapp:login' %}">{% csrf_token %}
+        <div class="form-group"><label>Username</label><input class="form-control" name="username" required></div>
+        <div class="form-group"><label>Password</label><input class="form-control" type="password" name="password" required></div>
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button class="btn btn-primary btn-block">Sign In</button>
+      </form>
+    </div></div></div>
+  </div>
+  {% endif %}
+</div>
+{% endwith %}
+
+

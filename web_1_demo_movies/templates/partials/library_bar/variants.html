@@ -1,0 +1,39 @@
+{% with v=LAYOUT_VARIANT %}
+<div class="row mb-4" data-dynamic-group="library-bar">
+  {% if v == 1 %}
+    <div class="col-md-6" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+    <div class="col-md-6" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+  {% elif v == 2 %}
+    <div class="col-md-6 order-md-2" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+    <div class="col-md-6 order-md-1" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+  {% elif v == 3 %}
+    <div class="col-md-12" data-dyn="library-title"><h2 class="section-title text-center">Our Collection</h2></div>
+    <div class="col-md-12" data-dyn="library-filters">{% include "partials/library_bar/_filters_inline.html" %}</div>
+  {% elif v == 4 %}
+    <div class="col-md-4" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+    <div class="col-md-8" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+  {% elif v == 5 %}
+    <div class="col-md-7" data-dyn="library-title"><h2 class="section-title">Our Collection</h2></div>
+    <div class="col-md-5" data-dyn="library-filters">{% include "partials/library_bar/_filters_dense.html" %}</div>
+  {% elif v == 6 %}
+    <div class="col-md-5 order-md-2" data-dyn="library-title"><h2 class="section-title text-md-right">Our Collection</h2></div>
+    <div class="col-md-7 order-md-1" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+  {% elif v == 7 %}
+    <div class="col-md-12" data-dyn="library-filters">{% include "partials/library_bar/_filters_inline.html" %}</div>
+    <div class="col-md-12" data-dyn="library-title"><h2 class="section-title mt-2">Our Collection</h2></div>
+  {% elif v == 8 %}
+    <div class="col-md-6" data-dyn="library-filters">{% include "partials/library_bar/_filters_dense.html" %}</div>
+    <div class="col-md-6" data-dyn="library-title"><h2 class="section-title text-md-right">Our Collection</h2></div>
+  {% elif v == 9 %}
+    <div class="col-md-3" data-dyn="library-title"><h2 class="section-title">Collection</h2></div>
+    <div class="col-md-9" data-dyn="library-filters">{% include "partials/library_bar/_filters.html" %}</div>
+  {% else %}
+    <div class="col-md-12 d-flex justify-content-between align-items-center" data-dyn="library-wrap">
+      <h2 class="section-title mb-0">Our Collection</h2>
+      <div class="flex-grow-1 ml-3">{% include "partials/library_bar/_filters_inline.html" %}</div>
+    </div>
+  {% endif %}
+</div>
+{% endwith %}
+
+

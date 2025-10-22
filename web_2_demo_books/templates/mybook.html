@@ -9,13 +9,13 @@
             <h2 class="section-title">My Book</h2>
         </div>
         <div class="col-md-9">
-            <form method="GET" action="{% url 'booksapp:mybook' %}" class="float-md-right">
+            <form method="GET" action="{% url 'booksapp:mybook' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="float-md-right">
                 {% if search_query %}
                 <input type="hidden" name="search" value="{{ search_query }}">
                 {% endif %}
                 <div class="form-row">
                     <div class="col-md-3">
-                        <a class="btn btn-outline-secondary w-100" href="{% url 'booksapp:add_book' %}">
+                        <a class="btn btn-outline-secondary w-100" href="{% url 'booksapp:add_book' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
                             <i class="fas fa-plus"></i>
                             Add
                         </a>
@@ -60,7 +60,7 @@
                 {% if selected_genre == genre.id|stringformat:"i" %}{{ genre.name }}{% endif %}
             {% endfor %} genre
         {% endif %}
-        <a href="{% url 'booksapp:mybook' %}" class="float-right">Clear filters</a>
+        <a href="{% url 'booksapp:mybook' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="float-right">Clear filters</a>
     </div>
     {% endif %}
 
@@ -101,7 +101,7 @@
                     {% endif %}
                 </div>
                 <div class="card-footer bg-transparent border-top-0 pt-0">
-                    <a href="{% url 'booksapp:detail' i.id %}" class="btn btn-success btn-block">
+                    <a href="{% url 'booksapp:detail' i.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-success btn-block">
                         <i class="fas fa-info-circle mr-1"></i> View Details
                     </a>
                     {% comment %} {% if user.is_authenticated %}
@@ -116,7 +116,7 @@
         <div class="col-12 text-center py-5">
             <h3>No Books found</h3>
             <p>Try changing your search criteria or add a new book</p>
-            <a href="{% url 'booksapp:add_book' %}" class="btn btn-success">Add books</a>
+            <a href="{% url 'booksapp:add_book' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-success">Add books</a>
         </div>
         {% endfor %}
     </div>

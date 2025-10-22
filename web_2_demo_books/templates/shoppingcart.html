@@ -67,7 +67,7 @@
                                         data-bs-target="#myModal">
                                     <i class="fas fa-wallet mr-1"></i> Buy
                                 </button>
-                                <a class="btn btn-warning" href="{% url 'booksapp:delete_cart' book.id %}">
+                                <a class="btn btn-warning" href="{% url 'booksapp:delete_cart' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
                                     <i class="fas fa-trash-alt mr-1"></i> Delete
                                 </a>
                             </div>

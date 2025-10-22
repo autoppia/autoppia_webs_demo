@@ -12,16 +12,21 @@ import { useSeedLayout } from "@/library/utils";
 import { DynamicWrapper } from "@/components/DynamicWrapper";
 import { Suspense } from "react";
 import { getEffectiveSeed, isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function HomeContent() {
   const { seed, layout } = useSeedLayout();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   
   // Log dynamic HTML status for debugging
   React.useEffect(() => {
     const isDynamic = isDynamicModeEnabled();
     console.log('Dynamic HTML enabled:', isDynamic);
     console.log('Current seed:', seed);
-  }, [seed]);
+    console.log('Layout configuration:', layout);
+    console.log('Event elements order:', layout.eventElements.order);
+  }, [seed, layout]);
   
   // Range state: { from, to }
   const [dateRange, setDateRange] = React.useState<{
@@ -36,6 +41,73 @@ function HomeContent() {
   });
   const [searchTerm, setSearchTerm] = React.useState("");
   const [committedSearch, setCommittedSearch] = React.useState("");
+
+  // Initialize search state from URL parameters
+  React.useEffect(() => {
+    const urlSearchTerm = searchParams.get('search');
+    const urlFromDate = searchParams.get('from');
+    const urlToDate = searchParams.get('to');
+    const urlAdults = searchParams.get('adults');
+    const urlChildren = searchParams.get('children');
+    const urlInfants = searchParams.get('infants');
+    const urlPets = searchParams.get('pets');
+
+    if (urlSearchTerm) {
+      setSearchTerm(urlSearchTerm);
+      setCommittedSearch(urlSearchTerm);
+    }
+
+    if (urlFromDate && urlToDate) {
+      setDateRange({
+        from: new Date(urlFromDate),
+        to: new Date(urlToDate)
+      });
+    }
+
+    if (urlAdults || urlChildren || urlInfants || urlPets) {
+      setGuests({
+        adults: parseInt(urlAdults || '0', 10),
+        children: parseInt(urlChildren || '0', 10),
+        infants: parseInt(urlInfants || '0', 10),
+        pets: parseInt(urlPets || '0', 10)
+      });
+    }
+  }, [searchParams]);
+
+  // Function to update URL with search parameters while preserving seed
+  const updateUrlWithSearchParams = (searchData: {
+    searchTerm?: string;
+    dateRange?: { from: Date | null; to: Date | null };
+    guests?: { adults: number; children: number; infants: number; pets: number };
+  }) => {
+    const params = new URLSearchParams();
+    
+    // Preserve seed if it exists
+    if (seed) {
+      params.set('seed', seed.toString());
+    }
+    
+    // Add search parameters
+    if (searchData.searchTerm) {
+      params.set('search', searchData.searchTerm);
+    }
+    
+    if (searchData.dateRange?.from && searchData.dateRange?.to) {
+      params.set('from', searchData.dateRange.from.toISOString().split('T')[0]);
+      params.set('to', searchData.dateRange.to.toISOString().split('T')[0]);
+    }
+    
+    if (searchData.guests) {
+      if (searchData.guests.adults > 0) params.set('adults', searchData.guests.adults.toString());
+      if (searchData.guests.children > 0) params.set('children', searchData.guests.children.toString());
+      if (searchData.guests.infants > 0) params.set('infants', searchData.guests.infants.toString());
+      if (searchData.guests.pets > 0) params.set('pets', searchData.guests.pets.toString());
+    }
+    
+    // Update URL without causing a page reload
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    router.replace(newUrl, { scroll: false });
+  };
 
   const calendarLabel = (kind: "in" | "out") => {
     if (kind === "in" && dateRange.from)
@@ -138,8 +210,10 @@ function HomeContent() {
 
   // Create event elements based on layout order
   const createEventElement = (eventType: string) => {
+    console.log('Creating event element:', eventType);
     switch (eventType) {
       case 'search':
+        console.log('Rendering search element');
         return (
           <DynamicWrapper key="search" as={layout.searchBar.wrapper} className={layout.searchBar.className}>
             <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
@@ -166,6 +240,13 @@ function HomeContent() {
                         e.stopPropagation();
                         setSearchTerm("");
                         setCommittedSearch("");
+                        
+                        // Update URL to remove search term while preserving seed
+                        updateUrlWithSearchParams({
+                          searchTerm: "",
+                          dateRange,
+                          guests
+                        });
                       }}
                     >
                       ×
@@ -198,6 +279,13 @@ function HomeContent() {
                       onClick={(e) => {
                         e.stopPropagation();
                         setDateRange({ from: null, to: null });
+                        
+                        // Update URL to remove date range while preserving seed
+                        updateUrlWithSearchParams({
+                          searchTerm,
+                          dateRange: { from: null, to: null },
+                          guests
+                        });
                       }}
                     >
                       ×
@@ -245,6 +333,13 @@ function HomeContent() {
                       onClick={(e) => {
                         e.stopPropagation();
                         setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
+                        
+                        // Update URL to remove guests while preserving seed
+                        updateUrlWithSearchParams({
+                          searchTerm,
+                          dateRange,
+                          guests: { adults: 0, children: 0, infants: 0, pets: 0 }
+                        });
                       }}
                     >
                       ×
@@ -258,6 +353,14 @@ function HomeContent() {
                 className="ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
                 onClick={() => {
                   setCommittedSearch(searchTerm);
+                  
+                  // Update URL with search parameters while preserving seed
+                  updateUrlWithSearchParams({
+                    searchTerm,
+                    dateRange,
+                    guests
+                  });
+                  
                   logEvent(EVENT_TYPES.SEARCH_HOTEL, {
                     searchTerm,
                     dateRange: {
@@ -282,6 +385,7 @@ function HomeContent() {
                       infants: guests.infants,
                       pets: guests.pets,
                     },
+                    seed: seed, // Include seed in event logging
                   });
                 }}
               >
@@ -301,11 +405,63 @@ function HomeContent() {
                 Search
               </button>
             </div>
+            
+            {/* Clear All Filters Button */}
+            {(committedSearch || dateRange.from || dateRange.to || guests.adults > 0 || guests.children > 0 || guests.infants > 0 || guests.pets > 0) && (
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setCommittedSearch("");
+                    setDateRange({ from: null, to: null });
+                    setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
+                    
+                    // Update URL to clear all filters while preserving seed
+                    updateUrlWithSearchParams({
+                      searchTerm: "",
+                      dateRange: { from: null, to: null },
+                      guests: { adults: 0, children: 0, infants: 0, pets: 0 }
+                    });
+                  }}
+                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 underline"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
           </DynamicWrapper>
         );
       case 'view':
         return (
           <DynamicWrapper key="view" as="div" className="w-full flex flex-col mt-8">
+            {/* Search Results Summary */}
+            {(committedSearch || dateRange.from || dateRange.to || guests.adults > 0 || guests.children > 0 || guests.infants > 0 || guests.pets > 0) && (
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Search Results</h3>
+                <div className="text-sm text-gray-600 space-y-1">
+                  {committedSearch && <div>📍 <strong>Location:</strong> {committedSearch}</div>}
+                  {dateRange.from && dateRange.to && (
+                    <div>📅 <strong>Dates:</strong> {dateRange.from.toLocaleDateString()} - {dateRange.to.toLocaleDateString()}</div>
+                  )}
+                  {(guests.adults > 0 || guests.children > 0 || guests.infants > 0 || guests.pets > 0) && (
+                    <div>
+                      👥 <strong>Guests:</strong> 
+                      {guests.adults > 0 && ` ${guests.adults} adult${guests.adults > 1 ? 's' : ''}`}
+                      {guests.children > 0 && `, ${guests.children} child${guests.children > 1 ? 'ren' : ''}`}
+                      {guests.infants > 0 && `, ${guests.infants} infant${guests.infants > 1 ? 's' : ''}`}
+                      {guests.pets > 0 && `, ${guests.pets} pet${guests.pets > 1 ? 's' : ''}`}
+                    </div>
+                  )}
+                  {seed && (
+                    <div>🎨 <strong>Layout:</strong> Seed {seed} (Variant {((seed - 1) % 10) + 1})</div>
+                  )}
+                  <div className="mt-2 text-xs text-gray-500">
+                    Found {filtered.length} hotel{filtered.length !== 1 ? 's' : ''} matching your criteria
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {paginatedResults.length === 0 ? (
               <div
                 id="noResults"
@@ -316,7 +472,9 @@ function HomeContent() {
             ) : (
               <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 w-full">
                 {paginatedResults.map((prop, i) => (
-                  <PropertyCard key={i + prop.title} {...prop} />
+                  <Suspense key={i + prop.title} fallback={<div className="bg-gray-200 rounded-3xl h-80 animate-pulse" />}>
+                    <PropertyCard {...prop} />
+                  </Suspense>
                 ))}
               </div>
             )}

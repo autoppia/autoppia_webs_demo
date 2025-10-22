@@ -725,8 +725,42 @@ function PostJobWizard({
           className={`absolute text-xl text-[#253037] font-bold ${
             layout.buttonPositions.close === 'top-left' ? 'top-4 left-4' :
             layout.buttonPositions.close === 'top-right' ? 'top-4 right-4' :
-            layout.buttonPositions.close === 'bottom-left' ? 'bottom-4 left-4' :
-            layout.buttonPositions.close === 'bottom-right' ? 'bottom-4 right-4' :
+            layout.buttonPositions.close === 'bottom-left' ? 
+              // Smart positioning to avoid overlap with navigation buttons
+              (() => {
+                const backPos = layout.buttonPositions.back as string;
+                const submitPos = layout.buttonPositions.submit as string;
+                
+                // If back is left and submit is right (justify-between), move close to top-right to avoid both
+                if (backPos === 'left' && submitPos === 'right') return 'top-4 right-4';
+                // If back button is on left and submit is centered, move close to right
+                if (backPos === 'left' && submitPos === 'center') return 'bottom-4 right-4';
+                // If both back and submit are centered, move close to top-right to avoid navigation area
+                if (backPos === 'center' && submitPos === 'center') return 'top-4 right-4';
+                // If back is centered and submit is right, move close to left
+                if (backPos === 'center' && submitPos === 'right') return 'bottom-4 left-4';
+                // Default to bottom-left if no conflicts
+                return 'bottom-4 left-4';
+              })() :
+            layout.buttonPositions.close === 'bottom-right' ? 
+              // Smart positioning to avoid overlap with navigation buttons
+              (() => {
+                const backPos = layout.buttonPositions.back as string;
+                const submitPos = layout.buttonPositions.submit as string;
+                
+                // If back is left and submit is right (justify-between), move close to top-left to avoid both
+                if (backPos === 'left' && submitPos === 'right') return 'top-4 left-4';
+                // If back is right and submit is left (justify-between), move close to top-right to avoid both
+                if (backPos === 'right' && submitPos === 'left') return 'top-4 right-4';
+                // If submit button is on right, move close to left
+                if (submitPos === 'right') return 'bottom-4 left-4';
+                // If back button is on right, move close to left
+                if (backPos === 'right') return 'bottom-4 left-4';
+                // If both back and submit are centered, move close to top-left to avoid navigation area
+                if (backPos === 'center' && submitPos === 'center') return 'top-4 left-4';
+                // Default to bottom-right if no conflicts
+                return 'bottom-4 right-4';
+              })() :
             'top-4 right-4'
           }`} id="close-post-job-btn"
         >

@@ -183,7 +183,7 @@
                 <i class="fas fa-save mr-2"></i>Save Book
               </button>
               <a
-                href="{% url 'booksapp:index' %}"
+                href="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}"
                 class="btn btn-secondary btn-lg ml-2"
               >
                 <i class="fas fa-times mr-2"></i>Cancel
@@ -192,8 +192,8 @@
           </form>
           {% else %}
           <p>You must be logged in to add books.</p>
-          <a href="{% url 'booksapp:login' %}">Log In</a> or
-          <a href="{% url 'booksapp:register' %}">Register</a>
+          <a href="{% url 'booksapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Log In</a> or
+          <a href="{% url 'booksapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Register</a>
           {% endif %}
         </div>
       </div>

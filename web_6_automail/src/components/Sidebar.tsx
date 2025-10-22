@@ -10,6 +10,7 @@ import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
 // import { systemLabels } from "@/library/dataset";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
+import { DynamicElement } from "@/components/DynamicElement";
 import type { EmailFolder } from "@/types/email";
 // import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
@@ -234,6 +235,18 @@ export function Sidebar() {
               );
             })}
           </div>
+
+          {/* Labels section for horizontal layout */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Labels
+            </span>
+            <div className="!block !visible !opacity-100">
+              <DynamicElement elementType="create-label-button" index={0}>
+                <CreateLabelDialog />
+              </DynamicElement>
+            </div>
+          </div>
         </div>
       ) : (
         // Vertical layout for other variants
@@ -281,7 +294,11 @@ export function Sidebar() {
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Labels
             </span>
-            <CreateLabelDialog />
+            <div className="!block !visible !opacity-100">
+              <DynamicElement elementType="create-label-button" index={0}>
+                <CreateLabelDialog />
+              </DynamicElement>
+            </div>
           </div>
           {customLabels.map((label) => (
             <Button
