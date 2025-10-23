@@ -19,7 +19,6 @@ function DashboardContent() {
   const { isLoading } = useProjectDataMany([
     { key: 'clients', projectKey: 'web_5_autocrm', entityType: 'clients', generateCount: 60, version: 'v1' },
   ]);
-  // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
 
   return (
     <section className={`${layoutClasses.spacing}`}>
@@ -29,7 +28,6 @@ function DashboardContent() {
         {/* Card 1: Matters */}
         <Link
           href="/matters"
-          // onClick={handleClick(EVENT_TYPES.MATTERS_SIDEBAR_CLICKED, { label: "Active Matters", href: "/matters" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -43,7 +41,6 @@ function DashboardContent() {
         {/* Card 2: Clients */}
         <Link
           href="/clients"
-          // onClick={handleClick(EVENT_TYPES.CLIENTS_SIDEBAR_CLICKED, { label: "Clients", href: "/clients" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -57,7 +54,6 @@ function DashboardContent() {
         {/* Card 3: Calendar */}
         <Link
           href="/calendar"
-          // onClick={handleClick(EVENT_TYPES.CALENDAR_SIDEBAR_CLICKED, { label: "Upcoming Events", href: "/calendar" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -71,7 +67,6 @@ function DashboardContent() {
         {/* Card 4: Documents */}
         <Link
           href="/documents"
-          // onClick={handleClick(EVENT_TYPES.DOCUMENTS_SIDEBAR_CLICKED, { label: "Documents", href: "/documents" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -85,7 +80,6 @@ function DashboardContent() {
         {/* Card 5: Time Tracking */}
         <Link
           href="/billing"
-          // onClick={handleClick(EVENT_TYPES.TIME_AND_BILLING_SIDEBAR_CLICKED, { label: "Time & Billing", href: "/billing" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -99,7 +93,6 @@ function DashboardContent() {
         {/* Card 6: Settings */}
         <Link
           href="/settings"
-          // onClick={handleClick(EVENT_TYPES.SETTINGS_SIDEBAR_CLICKED, { label: "Settings", href: "/settings" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">

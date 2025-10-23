@@ -14,7 +14,6 @@ import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 
 function getMonthMatrix(year: number, month: number) {
-  // returns [[date, ...], ...weeks] covering 6 weeks
   const matrix = [];
   const firstDayOfWeek = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
