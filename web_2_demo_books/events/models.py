@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from booksapp.models import Genre
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class EventName(models.TextChoices):
@@ -21,6 +24,37 @@ class EventName(models.TextChoices):
     PURCHASE_BOOK = "PURCHASE_BOOK", "Purchase Book"
     SHOPPING_CART = "SHOPPING_CART", "Shopping Cart"
 
+class EventQuerySet(models.QuerySet):
+    def delete(self):
+        try:
+            criteria = str(self.query)
+        except Exception:
+            criteria = "<unrepresentable queryset>"
+
+        try:
+            count = self.count()
+        except Exception:
+            count = None
+
+        try:
+            Event._deletion_counters.setdefault(criteria, 0)
+            if count is not None:
+                Event._deletion_counters[criteria] += count
+                total = Event._deletion_counters[criteria]
+            else:
+                total = Event._deletion_counters[criteria]
+        except Exception:
+            total = None
+
+        logger.info(
+            "Deleting events: count=%s, criteria=%s, total_deleted_for_criteria=%s",
+            count,
+            criteria,
+            total,
+        )
+
+        return super().delete()
+
 
 class Event(models.Model):
     """
@@ -28,11 +62,14 @@ class Event(models.Model):
     relacionados con libros y acciones de usuario.
     """
 
+    # Add a class-level dict to accumulate deletion counters by criteria
+    _deletion_counters = {}
+
     # Campos básicos comunes a todos los eventos
     event_name = models.CharField(max_length=50, choices=EventName.choices)
     timestamp = models.DateTimeField(default=timezone.now)
-    web_agent_id = models.CharField()
-    validator_id = models.CharField()
+    web_agent_id = models.CharField(max_length=100)
+    validator_id = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Campo JSON para datos específicos del evento
@@ -51,11 +88,49 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.get_event_name_display()} at {self.timestamp}"
 
-    # def save(self, *args, **kwargs):
-    #     if not self.timestamp:
-    #         self.timestamp = timezone.now()
-    #     super().save(*args, **kwargs)
-    #     print(f"Saving event: {self.event_name} with data: {self.data} for user: {self.user} at time: {self.timestamp} with web agent id: {self.web_agent_id}")
+    def save(self, *args, **kwargs):
+        """Override save to log when an event is created or updated."""
+        is_create = self.pk is None
+        super().save(*args, **kwargs)
+
+        try:
+            logger.info(
+                "Event %s saved (id=%s) name=%s web_agent_id=%s validator_id=%s timestamp=%s",
+                "created" if is_create else "updated",
+                self.pk,
+                getattr(self, "event_name", None),
+                getattr(self, "web_agent_id", None),
+                getattr(self, "validator_id", None),
+                getattr(self, "timestamp", None),
+            )
+        except Exception:
+            pass
+
+    def delete(self, *args, **kwargs):
+        """Log single-instance deletions and update deletion counters."""
+        try:
+            criteria = f"id={self.pk}"
+        except Exception:
+            criteria = "<unrepresentable instance>"
+
+        try:
+            Event._deletion_counters.setdefault(criteria, 0)
+            Event._deletion_counters[criteria] += 1
+            total = Event._deletion_counters[criteria]
+        except Exception:
+            total = None
+
+        logger.info(
+            "Deleting single event: id=%s criteria=%s total_deleted_for_criteria=%s",
+            getattr(self, "pk", None),
+            criteria,
+            total,
+        )
+
+        return super().delete(*args, **kwargs)
+
+    # Attach a custom manager that uses EventQuerySet so QuerySet.delete() is intercepted
+    objects = models.Manager.from_queryset(EventQuerySet)()
 
     # -------------------- EVENTOS RELACIONADOS CON LIBROS --------------------
 
