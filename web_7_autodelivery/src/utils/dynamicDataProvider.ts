@@ -1,4 +1,13 @@
+import type { Restaurant } from "@/data/restaurants";
 import { getEffectiveSeed, isDynamicEnabled, getSeedLayout } from "@/lib/seed-layout";
+import {
+  restaurants,
+  initializeRestaurants,
+  loadRestaurantsFromDb,
+  writeCachedRestaurants,
+  readCachedRestaurants,
+} from "@/data/restaurants-enhanced";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -8,10 +17,59 @@ const isDynamicHtmlEnabled = (): boolean => {
 // Dynamic data provider that returns either seed data or default data based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
+  private restaurants: Restaurant[] = [];
   private isEnabled: boolean = false;
+  private dataGenerationEnabled: boolean = false;
+  private ready: boolean = false;
+  private readyPromise: Promise<void>;
+  private resolveReady!: () => void;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    this.dataGenerationEnabled = isDataGenerationEnabled();
+    // hydrate from cache if available to keep content stable across reloads
+    const cached = readCachedRestaurants();
+    this.restaurants = Array.isArray(cached) && cached.length > 0 ? cached : restaurants;
+    this.readyPromise = new Promise<void>((resolve) => {
+      this.resolveReady = resolve;
+    });
+
+    // Initialize restaurants with data generation if enabled
+    this.initializeRestaurants();
+  }
+
+  private async initializeRestaurants(): Promise<void> {
+    try {
+      // Try DB mode first if enabled
+      const dbRestaurants = await loadRestaurantsFromDb();
+      if (dbRestaurants.length > 0) {
+        this.restaurants = dbRestaurants;
+        writeCachedRestaurants(this.restaurants);
+        this.ready = true;
+        this.resolveReady();
+        return;
+      }
+
+      // Fallback to existing behavior
+      const initializedRestaurants = await initializeRestaurants();
+      this.restaurants = initializedRestaurants;
+      if (this.restaurants.length > 0) {
+        writeCachedRestaurants(this.restaurants);
+      }
+
+      // Mark as ready only when either generation is disabled or we have generated data
+      if (!this.dataGenerationEnabled || this.restaurants.length > 0) {
+        this.ready = true;
+        this.resolveReady();
+      }
+    } catch (error) {
+      // Keep silent in production; initialize readiness when generation off
+      // If generation is enabled, do not mark ready here; the gate will continue showing loading
+      if (!this.dataGenerationEnabled) {
+        this.ready = true;
+        this.resolveReady();
+      }
+    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -19,6 +77,40 @@ export class DynamicDataProvider {
       DynamicDataProvider.instance = new DynamicDataProvider();
     }
     return DynamicDataProvider.instance;
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
+  }
+
+  public getRestaurants(): Restaurant[] {
+    return this.restaurants; // Return empty until ready when generation is enabled
+  }
+
+  public getRestaurantById(id: string): Restaurant | undefined {
+    return this.restaurants.find((restaurant) => restaurant.id === id);
+  }
+
+  public getRestaurantsByCuisine(cuisine: string): Restaurant[] {
+    return this.restaurants.filter((restaurant) => restaurant.cuisine === cuisine);
+  }
+
+  public getFeaturedRestaurants(): Restaurant[] {
+    return this.restaurants.filter((restaurant) => restaurant.featured);
+  }
+
+  public searchRestaurants(query: string): Restaurant[] {
+    const lowercaseQuery = query.toLowerCase();
+    return this.restaurants.filter(
+      (restaurant) =>
+        restaurant.name.toLowerCase().includes(lowercaseQuery) ||
+        restaurant.description?.toLowerCase().includes(lowercaseQuery) ||
+        restaurant.cuisine?.toLowerCase().includes(lowercaseQuery)
+    );
   }
 
   public isDynamicModeEnabled(): boolean {
@@ -107,6 +199,11 @@ export class DynamicDataProvider {
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Helper functions for easy access
+export const getRestaurants = () => dynamicDataProvider.getRestaurants();
+export const getRestaurantById = (id: string) => dynamicDataProvider.getRestaurantById(id);
+export const getRestaurantsByCuisine = (cuisine: string) => dynamicDataProvider.getRestaurantsByCuisine(cuisine);
+export const getFeaturedRestaurants = () => dynamicDataProvider.getFeaturedRestaurants();
+export const searchRestaurants = (query: string) => dynamicDataProvider.searchRestaurants(query);
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeedValue = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
