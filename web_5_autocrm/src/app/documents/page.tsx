@@ -3,12 +3,29 @@ import { useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_FILES } from "@/library/dataset";
+import { useProjectData } from "@/shared/universal-loader";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 
 export default function DocumentsPage() {
-  const [files, setFiles] = useState(DEMO_FILES);
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: 'web_5_autocrm:files',
+    entityType: 'files',
+    generateCount: 30,
+    version: 'v1',
+    fallback: () => DEMO_FILES,
+  });
+  const [files, setFiles] = useState(
+    (data && data.length ? data : DEMO_FILES).map((f: any, idx: number) => ({
+      id: f.id ?? idx + 1,
+      name: f.name ?? `Document-${idx + 1}.pdf`,
+      size: f.size ?? '200 KB',
+      version: f.version ?? 'v1',
+      updated: f.updated ?? 'Today',
+      status: f.status ?? 'Draft',
+    }))
+  );
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -88,6 +105,12 @@ export default function DocumentsPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {isLoading && (
+          <div className="col-span-full text-zinc-400">Loading documents…</div>
+        )}
+        {error && (
+          <div className="col-span-full text-red-600">Failed to load documents: {error}</div>
+        )}
         {files.map((file, index) => (
           <DynamicItem key={file.id} index={index} className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition">
             <div className="flex items-center gap-3 mb-2">

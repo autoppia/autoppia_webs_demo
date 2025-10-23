@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { clients } from "@/library/dataset";
+import { clients as staticClients } from "@/library/dataset";
+import { useProjectData } from "@/shared/universal-loader";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
@@ -20,6 +21,22 @@ function getInitials(name: string) {
 
 export default function ClientsDirectory() {
   const [query, setQuery] = useState("");
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: 'web_5_autocrm',
+    entityType: 'clients',
+    generateCount: 60,
+    version: 'v1',
+    fallback: () => staticClients,
+  });
+  const clients = (data && data.length ? data : staticClients).map((c: any, i: number) => ({
+    id: c.id ?? `CL-${1000 + i}`,
+    name: c.name ?? c.title ?? `Client ${i+1}`,
+    email: c.email ?? `client${i+1}@example.com`,
+    matters: typeof c.matters === 'number' ? c.matters : (Math.floor(Math.random()*5)+1),
+    avatar: c.avatar ?? "",
+    status: c.status ?? 'Active',
+    last: c.last ?? 'Today',
+  }));
   const router = useRouter();
 
   useEffect(() => {
@@ -69,6 +86,12 @@ export default function ClientsDirectory() {
         </DynamicButton>
       </DynamicElement>
       <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
+        {isLoading && (
+          <div className="py-6 px-6 text-zinc-400">Loading clients…</div>
+        )}
+        {error && (
+          <div className="py-6 px-6 text-red-600">Failed to load data: {error}</div>
+        )}
         <div
           className="hidden md:grid grid-cols-7 px-10 pt-6 pb-2 text-zinc-500 text-xs uppercase tracking-wide select-none"
           style={{ letterSpacing: "0.08em" }}

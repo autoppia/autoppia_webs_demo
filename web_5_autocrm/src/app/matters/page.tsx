@@ -14,6 +14,7 @@ import {
 import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_MATTERS } from "@/library/dataset";
+import { useProjectData } from "@/shared/universal-loader";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 
@@ -48,6 +49,13 @@ function statusPill(status: string) {
 
 export default function MattersListPage() {
   const [matters, setMatters] = useState<Matter[]>([]);
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: 'web_5_autocrm:matters',
+    entityType: 'matters',
+    generateCount: 50,
+    version: 'v1',
+    fallback: () => DEMO_MATTERS,
+  });
   const [selected, setSelected] = useState<string[]>([]);
   const [openNew, setOpenNew] = useState(false);
   const [newMatter, setNewMatter] = useState({
@@ -58,13 +66,21 @@ export default function MattersListPage() {
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
+    const base = (data && data.length ? data : DEMO_MATTERS) as any[];
+    const normalized = base.map((m: any) => ({
+      id: m.id ?? `MAT-${Math.floor(Math.random() * 9000 + 1000)}`,
+      name: m.name ?? 'Untitled Matter',
+      client: m.client ?? '—',
+      status: m.status ?? 'Active',
+      updated: m.updated ?? 'Today',
+    })) as Matter[];
     if (saved) {
       setMatters(JSON.parse(saved));
     } else {
-      setMatters(DEMO_MATTERS);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEMO_MATTERS));
+      setMatters(normalized);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
     }
-  }, []);
+  }, [data]);
 
   const updateMatters = (newList: Matter[]) => {
     setMatters(newList);
@@ -129,6 +145,12 @@ export default function MattersListPage() {
 
         {/* Matter List */}
         <div className="grid gap-4">
+          {isLoading && (
+            <div className="text-zinc-400">Loading matters…</div>
+          )}
+          {error && (
+            <div className="text-red-600">Failed to load matters: {error}</div>
+          )}
           {matters.map((matter) => (
             <DynamicItem
               key={matter.id}

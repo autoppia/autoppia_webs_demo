@@ -7,13 +7,8 @@ import {
   getEffectiveSeed, 
   getLayoutConfig
 } from "@/utils/dynamicDataProvider";
+import { useProjectDataMany } from "@/shared/universal-loader";
 import { getLayoutClasses } from "@/utils/seedLayout";
-// import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
-
-// interface EventData {
-//   label: string;
-//   href: string;
-// }
 
 function DashboardContent() {
   const searchParams = useSearchParams();
@@ -21,12 +16,16 @@ function DashboardContent() {
   const seed = getEffectiveSeed(rawSeed);
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+  const { isLoading } = useProjectDataMany([
+    { key: 'clients', projectKey: 'web_5_autocrm', entityType: 'clients', generateCount: 60, version: 'v1' },
+  ]);
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
 
   return (
     <section className={`${layoutClasses.spacing}`}>
       <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">Dashboard Overview</h1>
       <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
+        {isLoading && <div className="col-span-full text-zinc-400">Loading dashboard data…</div>}
         {/* Card 1: Matters */}
         <Link
           href="/matters"
