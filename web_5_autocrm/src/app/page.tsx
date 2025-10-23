@@ -1,19 +1,16 @@
 'use client'
-import Link from 'next/link';
+import { SeedLink } from '@/components/ui/SeedLink';
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from 'lucide-react';
-import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useSeed } from "@/context/SeedContext";
 import { 
-  getEffectiveSeed, 
   getLayoutConfig
 } from "@/utils/dynamicDataProvider";
 import { useProjectDataMany } from "@/shared/universal-loader";
 import { getLayoutClasses } from "@/utils/seedLayout";
 
 function DashboardContent() {
-  const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
   const { isLoading } = useProjectDataMany([
@@ -26,7 +23,7 @@ function DashboardContent() {
       <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
         {isLoading && <div className="col-span-full text-zinc-400">Loading dashboard data…</div>}
         {/* Card 1: Matters */}
-        <Link
+        <SeedLink
           href="/matters"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
@@ -36,10 +33,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">41</span>
           <span className="text-sm text-zinc-400">Matters currently open</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 2: Clients */}
-        <Link
+        <SeedLink
           href="/clients"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
@@ -49,10 +46,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">44</span>
           <span className="text-sm text-zinc-400">Total clients</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 3: Calendar */}
-        <Link
+        <SeedLink
           href="/calendar"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
@@ -62,10 +59,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">6</span>
           <span className="text-sm text-zinc-400">Events this week</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 4: Documents */}
-        <Link
+        <SeedLink
           href="/documents"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
@@ -75,10 +72,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">50</span>
           <span className="text-sm text-zinc-400">Files managed</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 5: Time Tracking */}
-        <Link
+        <SeedLink
           href="/billing"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
@@ -88,10 +85,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">36</span>
           <span className="text-sm text-zinc-400">Billable hours</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 6: Settings */}
-        <Link
+        <SeedLink
           href="/settings"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
@@ -101,7 +98,7 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-5xl font-bold tracking-tight text-[#1A1A1A] select-none">--</span>
           <span className="text-sm text-zinc-400">Customize CRM</span>
-        </Link>
+        </SeedLink>
       </div>
     </section>
   );

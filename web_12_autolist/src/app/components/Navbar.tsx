@@ -4,7 +4,7 @@ import { useState } from "react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import CreateTeamModal from "./CreateTeamModal";
 
-export default function Navbar() {
+export default function Navbar({ className }: { className?: string }) {
   const [profilePopoverOpen, setProfilePopoverOpen] = useState(false);
   const [createTeamModalOpen, setCreateTeamModalOpen] = useState(false);
 
@@ -38,7 +38,7 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-10">
+    <nav className={className || "fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-10"}>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">

@@ -58,7 +58,7 @@
                     {% endif %}
 
                     <div class="mt-4">
-                        <a href="{% url 'booksapp:mybook' %}" class="btn btn-success">
+                        <a href="{% url 'booksapp:mybook' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-success">
                             <i class="fas fa-book-medical mr-2"></i>Add/Edit Book
                         </a>
                     </div>

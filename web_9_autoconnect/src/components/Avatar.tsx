@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function Avatar({ src, alt, size = 40, href }: { src: string; alt: string; size?: number; href?: string }) {
   const img = (
@@ -12,5 +12,5 @@ export default function Avatar({ src, alt, size = 40, href }: { src: string; alt
       style={{ width: size, height: size }}
     />
   );
-  return href ? <Link href={href}>{img}</Link> : img;
+  return href ? <SeedLink href={href}>{img}</SeedLink> : img;
 }

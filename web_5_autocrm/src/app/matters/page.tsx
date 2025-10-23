@@ -192,11 +192,12 @@ export default function MattersListPage() {
 
         {/* Batch Actions */}
         {selected.length > 0 && (
-          <div className="flex justify-end gap-2 mt-4">
+          <div className="flex flex-wrap justify-end gap-3 mt-4 p-4 bg-zinc-50 rounded-lg border border-zinc-200">
             <DynamicButton
               eventType="ARCHIVE_MATTER"
               onClick={archiveSelected}
               variant="outline"
+              className="min-w-fit !relative !top-auto !right-auto !left-auto !bottom-auto"
             >
               <Archive className="w-4 h-4 mr-2" /> Archive Selected
             </DynamicButton>
@@ -204,7 +205,7 @@ export default function MattersListPage() {
               eventType="DELETE_MATTER"
               onClick={deleteSelected}
               variant="outline"
-              className="text-red-600 hover:bg-red-50"
+              className="text-red-600 hover:bg-red-50 min-w-fit !relative !top-auto !right-auto !left-auto !bottom-auto"
             >
               <Trash2 className="w-4 h-4 mr-2" /> Delete Selected
             </DynamicButton>

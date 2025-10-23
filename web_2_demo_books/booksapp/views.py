@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods
 from events.models import Event
 from .forms import BookForm, ContactForm
 from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
+from .utils import normalize_seed, stable_shuffle, compute_variant
 
 
 def index(request):
@@ -83,13 +84,25 @@ def index(request):
         )
         filter_event.save()
 
+    # Server-side dynamic order and variant based on seed / explicit variant
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    variant_val = compute_variant(seed)
+    book_list = stable_shuffle(books, seed, salt="books")
+    genre_list = stable_shuffle(all_genres, seed, salt="genres")
+
     context = {
-        "book_list": books,
+        "book_list": book_list,
         "search_query": search_query,
-        "genres": all_genres,
+        "genres": genre_list,
         "available_years": available_years,
         "selected_genre": genre_filter,
         "selected_year": year_filter,
+        "LAYOUT_VARIANT": variant_val,
+        "INITIAL_SEED": seed,
     }
     return render(request, "index.html", context)
 
@@ -136,11 +149,20 @@ def detail(request, book_id):
     else:
         carts = []
 
+    # Server-side dynamic order for related books
+    seed = normalize_seed(request.GET.get("seed"))
+    from django.conf import settings
+
+    if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+        seed = 1
+    related_books = stable_shuffle(related_books, seed, salt="related_books")
+
     context = {
         "book": book,
         "related_books": related_books,
         "comments": comments,
         "carts": len(carts),
+        "INITIAL_SEED": seed,
     }
     return render(request, "details.html", context)
 
@@ -433,7 +455,14 @@ def add_comment(request, book_id):
             )
             add_comment_event.save()
 
-            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            # Detect AJAX/JSON request robustly
+            wants_json = (
+                (request.headers.get("X-Requested-With", "") == "XMLHttpRequest")
+                or (request.headers.get("x-requested-with", "") == "XMLHttpRequest")
+                or ("application/json" in (request.headers.get("Accept", "") or ""))
+            )
+
+            if wants_json:
                 return JsonResponse(
                     {
                         "status": "success",
@@ -449,6 +478,15 @@ def add_comment(request, book_id):
 
             messages.success(request, "Your comment has been added successfully!")
             return redirect("booksapp:detail", book_id=book.id)
+
+    # If AJAX expects JSON, return JSON error to avoid HTML in fetch
+    wants_json = (
+        (request.headers.get("X-Requested-With", "") == "XMLHttpRequest")
+        or (request.headers.get("x-requested-with", "") == "XMLHttpRequest")
+        or ("application/json" in (request.headers.get("Accept", "") or ""))
+    )
+    if wants_json:
+        return JsonResponse({"status": "error", "message": "Invalid comment."}, status=400)
 
     messages.error(request, "There was a problem with your comment.")
     return redirect("booksapp:detail", book_id=book.id)

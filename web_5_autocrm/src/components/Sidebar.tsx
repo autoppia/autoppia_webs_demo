@@ -1,6 +1,6 @@
 "use client";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
@@ -52,7 +52,7 @@ export default function Sidebar() {
               : pathname === href || pathname.startsWith(href + "/");
 
           return (
-            <Link
+            <SeedLink
               key={label}
               href={href}
               className={`text-base font-medium rounded-2xl px-4 py-2 transition-all ${
@@ -62,7 +62,7 @@ export default function Sidebar() {
               }`}
             >
               {label}
-            </Link>
+            </SeedLink>
           );
         })}
       </nav>
