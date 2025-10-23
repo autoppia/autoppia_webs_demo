@@ -1,5 +1,5 @@
 import * as React from "react";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import Image from "next/image";
 
 function formatDateRange(datesFrom: string, datesTo: string) {
@@ -37,7 +37,7 @@ export function PropertyCard({
   datesTo: string;
 }) {
   return (
-    <Link href={`/stay/${id}`} className="block">
+    <SeedLink href={`/stay/${id}`} className="block">
       <div className="bg-white rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
@@ -97,6 +97,6 @@ export function PropertyCard({
           </div>
         </div>
       </div>
-    </Link>
+    </SeedLink>
   );
 }

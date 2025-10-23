@@ -32,8 +32,8 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
   // If no seed provided, return default layout
   if (!seed) {
     const defaultOrder = pageType === 'confirm' 
-      ? ['view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'confirm']
-      : ['view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'];
+      ? ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'confirm']
+      : ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'];
     
     return {
       searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center mb-6' },
@@ -61,7 +61,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['message', 'share', 'guests', 'wishlist', 'back', 'view', 'dates', 'reserve']), 
+        order: getElementOrder(['search', 'message', 'share', 'guests', 'wishlist', 'back', 'view', 'dates', 'reserve']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-6' 
       }
@@ -70,7 +70,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['reserve', 'back', 'view', 'dates', 'guests', 'message', 'share', 'wishlist']), 
+        order: getElementOrder(['search', 'reserve', 'back', 'view', 'dates', 'guests', 'message', 'share', 'wishlist']), 
         wrapper: 'article', 
         className: 'flex flex-col gap-8' 
       }
@@ -79,7 +79,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-6xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['wishlist', 'guests', 'dates', 'view', 'share', 'message', 'back', 'reserve']), 
+        order: getElementOrder(['search', 'wishlist', 'guests', 'dates', 'view', 'share', 'message', 'back', 'reserve']), 
         wrapper: 'section', 
         className: 'flex flex-col gap-4' 
       }
@@ -88,7 +88,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['dates', 'view', 'reserve', 'back', 'share', 'message', 'guests', 'wishlist']), 
+        order: getElementOrder(['search', 'dates', 'view', 'reserve', 'back', 'share', 'message', 'guests', 'wishlist']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-5' 
       }
@@ -97,7 +97,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['back', 'reserve', 'message', 'share', 'view', 'dates', 'guests', 'wishlist']), 
+        order: getElementOrder(['search', 'back', 'reserve', 'message', 'share', 'view', 'dates', 'guests', 'wishlist']), 
         wrapper: 'aside', 
         className: 'flex flex-col gap-7' 
       }
@@ -106,7 +106,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6 bg-purple-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['share', 'wishlist', 'guests', 'dates', 'view', 'message', 'back', 'reserve']), 
+        order: getElementOrder(['search', 'share', 'wishlist', 'guests', 'dates', 'view', 'message', 'back', 'reserve']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-6' 
       }
@@ -115,7 +115,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
       propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-4xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['view', 'dates', 'reserve', 'back', 'message', 'share', 'guests', 'wishlist']), 
+        order: getElementOrder(['search', 'view', 'dates', 'reserve', 'back', 'message', 'share', 'guests', 'wishlist']), 
         wrapper: 'article', 
         className: 'flex flex-col gap-8' 
       }
@@ -124,7 +124,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6 bg-green-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-6xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['guests', 'message', 'share', 'wishlist', 'view', 'dates', 'back', 'reserve']), 
+        order: getElementOrder(['search', 'guests', 'message', 'share', 'wishlist', 'view', 'dates', 'back', 'reserve']), 
         wrapper: 'section', 
         className: 'flex flex-col gap-5' 
       }
@@ -133,7 +133,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6 bg-orange-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['reserve', 'back', 'wishlist', 'share', 'message', 'view', 'dates', 'guests']), 
+        order: getElementOrder(['search', 'reserve', 'back', 'wishlist', 'share', 'message', 'view', 'dates', 'guests']), 
         wrapper: 'div', 
         className: 'flex flex-col gap-6' 
       }
@@ -142,7 +142,7 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
       searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6 bg-indigo-50 p-4 rounded-lg' },
       propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
       eventElements: { 
-        order: getElementOrder(['message', 'share', 'back', 'reserve', 'view', 'dates', 'guests', 'wishlist']), 
+        order: getElementOrder(['search', 'message', 'share', 'back', 'reserve', 'view', 'dates', 'guests', 'wishlist']), 
         wrapper: 'aside', 
         className: 'flex flex-col gap-7' 
       }
@@ -166,8 +166,30 @@ export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
     return seedMatch ? seedMatch[1] : null;
   };
   
-  // Try to get seed from searchParams first, then fallback to custom URL parsing
-  const seedParam = searchParams.get('seed') || getSeedFromUrl();
+  // Try to get seed from searchParams first, then fallback to custom URL parsing, then localStorage
+  const getSeedWithFallback = () => {
+    // First priority: URL parameter
+    const urlSeed = searchParams.get('seed') || getSeedFromUrl();
+    if (urlSeed) {
+      return urlSeed;
+    }
+    
+    // Second priority: localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('autolodgeSeed');
+        if (stored) {
+          return stored;
+        }
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+    }
+    
+    return null;
+  };
+  
+  const seedParam = getSeedWithFallback();
   
   const seed = useMemo(() => {
     if (!seedParam) return undefined;
@@ -182,7 +204,18 @@ export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
     }
     
     // When enabled, support seeds 1-300
-    return getEffectiveSeed(parsed);
+    const effectiveSeed = getEffectiveSeed(parsed);
+    
+    // Persist to localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('autolodgeSeed', effectiveSeed.toString());
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+    }
+    
+    return effectiveSeed;
   }, [seedParam]);
   
   const layout = useMemo(() => getSeedLayout(seed, pageType), [seed, pageType]);

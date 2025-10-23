@@ -1,8 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { useSeedLayout } from "@/hooks/use-seed-layout";
+import { useLayout } from "@/contexts/LayoutProvider";
 
 interface RestaurantCardProps {
   id: string;
@@ -14,7 +14,7 @@ interface RestaurantCardProps {
 }
 
 export default function RestaurantCard({ id, name, image, cuisine, rating, description }: RestaurantCardProps) {
-  const layout = useSeedLayout();
+  const layout = useLayout();
 
   const handleClick = () => {
     // Log the event
@@ -48,7 +48,7 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
   const cardIndex = parseInt(id.replace('restaurant-', '')) || 0;
 
   return (
-    <Link 
+    <SeedLink 
       href={`/restaurants/${id}`}
       onClick={handleClick}
       {...layout.getElementAttributes('VIEW_DELIVERY_RESTAURANT', cardIndex)}
@@ -66,6 +66,6 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
           {description && <div className="text-xs text-zinc-400 line-clamp-2">{description}</div>}
         </CardContent>
       </Card>
-    </Link>
+    </SeedLink>
   );
 }

@@ -16,13 +16,15 @@ services:
       - DB_PASSWORD=autoppia_2025
       - DB_HOST=db
       - DB_PORT=5432
+      - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - web1_net
 
   db:
-    image: postgres:latest
+    image: postgres:14
     environment:
       - POSTGRES_DB=web1_movies
       - POSTGRES_USER=postgres
@@ -33,6 +35,12 @@ services:
       - web1_db_data:/var/lib/postgresql/data
     networks:
       - web1_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d web1_movies"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   web1_db_data:

@@ -117,7 +117,7 @@ deploy_project() {
       docker compose -p "$proj" down --volumes
     fi
 
-    # up with dynamic HTML support
+    # Pass ENABLE_DYNAMIC_HTML to all webs
     WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$proj" up -d --build
 

@@ -13,14 +13,37 @@ export function useSeedLayout() {
     const dynamicEnabled = isDynamicEnabled();
     setIsDynamicEnabledState(dynamicEnabled);
     
-    // Get seed from URL parameters
+    // Get seed from URL parameters or localStorage
     const searchParams = new URLSearchParams(window.location.search);
     const seedParam = searchParams.get('seed');
-    const rawSeed = seedParam ? parseInt(seedParam) : 1;
+    
+    let rawSeed = 1;
+    
+    if (seedParam) {
+      // Priority 1: URL parameter
+      rawSeed = parseInt(seedParam);
+    } else {
+      // Priority 2: localStorage
+      try {
+        const stored = localStorage.getItem('autodriveSeed');
+        if (stored) {
+          rawSeed = parseInt(stored);
+        }
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+    }
     
     // Get effective seed (validates range and respects dynamic HTML setting)
     const effectiveSeed = getEffectiveSeed(rawSeed);
     setSeed(effectiveSeed);
+    
+    // Save to localStorage
+    try {
+      localStorage.setItem('autodriveSeed', effectiveSeed.toString());
+    } catch (e) {
+      // Ignore localStorage errors
+    }
     
     // Update layout only if dynamic HTML is enabled
     if (dynamicEnabled) {
@@ -133,6 +156,20 @@ export function useSeedLayout() {
     };
   }, [seed, isDynamicEnabledState]);
 
+  // Helper function to generate navigation URLs with seed parameter
+  const getNavigationUrl = useCallback((path: string): string => {
+    // If path already has query params
+    if (path.includes('?')) {
+      // Check if seed already exists in the URL
+      if (path.includes('seed=')) {
+        return path;
+      }
+      return `${path}&seed=${seed}`;
+    }
+    // Add seed as first query param
+    return `${path}?seed=${seed}`;
+  }, [seed]);
+
   return {
     seed,
     layout,
@@ -145,6 +182,7 @@ export function useSeedLayout() {
     applyCSSVariables,
     getLayoutInfo,
     generateSeedClass,
-    createDynamicStyles
+    createDynamicStyles,
+    getNavigationUrl,
   };
 }
