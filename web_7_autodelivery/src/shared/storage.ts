@@ -1,42 +1,42 @@
-export const isBrowser = (): boolean => typeof window !== "undefined";
+/**
+ * LocalStorage utilities for data caching
+ */
 
-export function readJson<T>(key: string, defaultValue: T | null = null): T | null {
-  if (!isBrowser()) return defaultValue;
+export function readJson<T>(key: string): T | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
   try {
-    const raw = window.localStorage.getItem(key);
-    if (!raw) return defaultValue;
-    return JSON.parse(raw) as T;
-  } catch {
-    return defaultValue;
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  } catch (error) {
+    console.error(`Failed to read JSON from localStorage for key "${key}":`, error);
+    return null;
   }
 }
 
-export function writeJson<T>(key: string, value: T): void {
-  if (!isBrowser()) return;
+export function writeJson<T>(key: string, data: T): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   try {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // ignore
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (error) {
+    console.error(`Failed to write JSON to localStorage for key "${key}":`, error);
   }
 }
 
-export function readString(key: string, defaultValue: string | null = null): string | null {
-  if (!isBrowser()) return defaultValue;
+export function removeItem(key: string): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   try {
-    const raw = window.localStorage.getItem(key);
-    return raw ?? defaultValue;
-  } catch {
-    return defaultValue;
+    localStorage.removeItem(key);
+  } catch (error) {
+    console.error(`Failed to remove item from localStorage for key "${key}":`, error);
   }
 }
-
-export function writeString(key: string, value: string): void {
-  if (!isBrowser()) return;
-  try {
-    window.localStorage.setItem(key, value);
-  } catch {
-    // ignore
-  }
-}
-
 

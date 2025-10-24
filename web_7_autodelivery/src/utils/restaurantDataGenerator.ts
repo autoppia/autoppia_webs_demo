@@ -1,22 +1,23 @@
 /**
- * Restaurant Data Generation Utility for Food Delivery Platform
+ * Restaurant Data Generation Utility for Food Delivery
  * 
- * This utility provides restaurant data generation capabilities for the web_7 project.
+ * This utility provides restaurant data generation capabilities for the Food Delivery project.
  * It integrates with the universal data generation system and provides project-specific functionality.
  */
 
 import type { Restaurant } from "@/data/restaurants";
+
 import {
-  generateProjectData,
-  isDataGenerationEnabled,
+  generateProjectData, 
+  isDataGenerationEnabled, 
   getApiBaseUrl,
-  type DataGenerationResponse,
+  type DataGenerationResponse 
 } from "../shared/data-generator";
 
-const PROJECT_KEY = "web_7_food_delivery";
+const PROJECT_KEY = 'web_7_food_delivery';
 
 /**
- * Generate restaurants for Food Delivery Platform
+ * Generate restaurants for Food Delivery
  */
 export async function generateRestaurants(
   count: number = 10,
@@ -34,8 +35,32 @@ export async function generateRestaurantsWithFallback(
   categories?: string[]
 ): Promise<Restaurant[]> {
   if (!isDataGenerationEnabled()) {
-    console.error("Data Generation is not Enabled, returning original.");
+    console.error("Data Generation is not Enabled, returning original.")
     return originalRestaurants;
+  }
+
+  try {
+    const result = await generateRestaurants(count, categories);
+    if (result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
+      return result.data as Restaurant[];
+    }
+  } catch (error) {
+    console.warn('Restaurant data generation failed, using original restaurants:', error);
+  }
+
+  return originalRestaurants;
+}
+
+/**
+ * Replace all restaurants with generated data
+ */
+export async function replaceAllRestaurants(
+  count: number = 50,
+  categories?: string[]
+): Promise<Restaurant[]> {
+  if (!isDataGenerationEnabled()) {
+    console.error("Data Generation is not Enabled, cannot replace restaurants.")
+    return [];
   }
 
   try {
@@ -44,29 +69,10 @@ export async function generateRestaurantsWithFallback(
       return result.data as Restaurant[];
     }
   } catch (error) {
-    console.warn("Restaurant data generation failed, using original restaurants:", error);
+    console.error('Failed to replace restaurants:', error);
   }
 
-  return originalRestaurants;
-}
-
-/**
- * Replace all restaurants with generated ones
- */
-export async function replaceAllRestaurants(
-  count: number = 50,
-  categories?: string[]
-): Promise<Restaurant[]> {
-  if (!isDataGenerationEnabled()) {
-    throw new Error("Data generation is not enabled");
-  }
-
-  const result = await generateRestaurants(count, categories);
-  if (!result.success) {
-    throw new Error(result.error || "Failed to generate restaurants");
-  }
-
-  return result.data as Restaurant[];
+  return [];
 }
 
 /**
@@ -74,20 +80,22 @@ export async function replaceAllRestaurants(
  */
 export async function addGeneratedRestaurants(
   existingRestaurants: Restaurant[],
-  additionalCount: number = 10,
+  count: number = 10,
   categories?: string[]
 ): Promise<Restaurant[]> {
   if (!isDataGenerationEnabled()) {
+    console.error("Data Generation is not Enabled, returning existing restaurants.")
     return existingRestaurants;
   }
 
   try {
-    const result = await generateRestaurants(additionalCount, categories);
+    const result = await generateRestaurants(count, categories);
     if (result.success && result.data.length > 0) {
-      return [...existingRestaurants, ...result.data as Restaurant[]];
+      const generatedRestaurants = result.data as Restaurant[];
+      return [...existingRestaurants, ...generatedRestaurants];
     }
   } catch (error) {
-    console.warn("Failed to add generated restaurants:", error);
+    console.warn('Failed to add generated restaurants, returning existing:', error);
   }
 
   return existingRestaurants;
@@ -101,9 +109,8 @@ export function isDataGenerationAvailable(): boolean {
 }
 
 /**
- * Get API base URL
+ * Get the API base URL
  */
 export function getApiUrl(): string {
   return getApiBaseUrl();
 }
-

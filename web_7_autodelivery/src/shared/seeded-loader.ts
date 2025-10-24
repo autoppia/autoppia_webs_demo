@@ -1,68 +1,75 @@
-import { getApiBaseUrl } from "./data-generator";
+/**
+ * Database seeded selection utilities
+ */
 
-export interface SeededLoadOptions {
+export interface SeededSelectionParams {
   projectKey: string;
   entityType: string;
-  seedValue?: number;
-  limit?: number;
-  method?: "select" | "shuffle" | "filter" | "distribute";
+  seedValue: number;
+  limit: number;
+  method: 'select' | 'distribute';
   filterKey?: string;
-  filterValues?: string[];
 }
 
+/**
+ * Check if DB load mode is enabled via environment variables
+ */
 export function isDbLoadModeEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DB_MODE || process.env.ENABLE_DB_MODE || "").toString().toLowerCase();
-  return raw === "true";
+  if (typeof window !== 'undefined') {
+    return process.env.NEXT_PUBLIC_ENABLE_DB_MODE === 'true';
+  }
+  return process.env.ENABLE_DB_MODE === 'true';
 }
 
-export function getSeedValueFromEnv(defaultSeed: number = 1): number {
-  const raw = (process.env.NEXT_PUBLIC_DATA_SEED_VALUE || process.env.DATA_SEED_VALUE || "").toString();
-  const parsed = Number(raw);
-  if (!Number.isFinite(parsed) || parsed <= 0) return defaultSeed;
-  return Math.floor(parsed);
+/**
+ * Get seed value from environment variables
+ */
+export function getSeedValueFromEnv(defaultValue: number = 1): number {
+  const seedValue = typeof window !== 'undefined' 
+    ? process.env.NEXT_PUBLIC_DATA_SEED_VALUE 
+    : process.env.DATA_SEED_VALUE;
+  
+  if (seedValue) {
+    const parsed = parseInt(seedValue, 10);
+    return isNaN(parsed) ? defaultValue : parsed;
+  }
+  
+  return defaultValue;
 }
 
-export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
-  const baseUrl = getApiBaseUrl();
-  const seed = options.seedValue ?? getSeedValueFromEnv(1);
-  const limit = options.limit ?? 50;
-  const method = options.method ?? "select";
-  const params = new URLSearchParams({
-    project_key: options.projectKey,
-    entity_type: options.entityType,
-    seed_value: String(seed),
-    limit: String(limit),
-    method,
-  });
-  if (options.filterKey) params.set("filter_key", options.filterKey);
-  if (options.filterValues && options.filterValues.length > 0) {
-    params.set("filter_values", options.filterValues.join(","));
+/**
+ * Fetch seeded selection from database
+ */
+export async function fetchSeededSelection<T>(params: SeededSelectionParams): Promise<T[]> {
+  if (!isDbLoadModeEnabled()) {
+    console.log("🔍 DB mode not enabled, returning empty array");
+    return [];
   }
 
-  const url = `${baseUrl}/datasets/load?${params.toString()}`;
-  const resp = await fetch(url, { method: "GET" });
-  if (!resp.ok) {
-    throw new Error(`Seeded selection request failed: ${resp.status}`);
-  }
-  const json = await resp.json();
-  return (json?.data ?? []) as T[];
-}
-
-
-export async function fetchPoolInfo(projectKey: string, entityType: string): Promise<{ pool_size: number } | null> {
-  const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
   try {
-    const resp = await fetch(url, { method: "GET" });
-    if (!resp.ok) return null;
-    const json = await resp.json();
-    if (json && typeof json.pool_size === "number") {
-      return { pool_size: json.pool_size as number };
+    const apiUrl = typeof window !== 'undefined' 
+      ? process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090'
+      : process.env.API_URL || 'http://localhost:8090';
+
+    const queryParams = new URLSearchParams({
+      project_key: params.projectKey,
+      entity_type: params.entityType,
+      seed_value: params.seedValue.toString(),
+      limit: params.limit.toString(),
+      method: params.method,
+      ...(params.filterKey && { filter_key: params.filterKey })
+    });
+
+    const response = await fetch(`${apiUrl}/datasets/load?${queryParams}`);
+    
+    if (!response.ok) {
+      throw new Error(`Seeded selection request failed: ${response.status}`);
     }
-    return null;
-  } catch {
-    return null;
+
+    const result = await response.json();
+    return result.data || [];
+  } catch (error) {
+    console.error("Failed to load seeded selection from DB:", error);
+    throw error;
   }
 }
-
-

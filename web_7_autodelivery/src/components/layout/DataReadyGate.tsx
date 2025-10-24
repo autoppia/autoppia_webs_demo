@@ -22,36 +22,47 @@ export function DataReadyGate({ children }: DataReadyGateProps) {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    // Check if we have data available
-    const restaurants = dynamicDataProvider.getRestaurants();
-    if (restaurants && restaurants.length > 0) {
-      console.log("✅ DataReadyGate: Data already available, showing content");
+    // Check if already ready
+    if (dynamicDataProvider.isReady()) {
       setIsReady(true);
       return;
     }
 
-    // If no data, wait for it to load
-    console.log("⏳ DataReadyGate: Waiting for data to load...");
+    // Wait for data to be ready
     dynamicDataProvider.whenReady().then(() => {
-      console.log("✅ DataReadyGate: Data loaded, showing content");
       setIsReady(true);
-    }).catch((error) => {
-      console.error("❌ DataReadyGate: Error loading data:", error);
-      // Show content anyway after a delay
-      setTimeout(() => {
-        console.log("⏰ DataReadyGate: Timeout, showing content anyway");
-        setIsReady(true);
-      }, 2000);
     });
   }, []);
 
+  // Determine loading message based on mode
+  const getLoadingMessage = () => {
+    if (isDataGenerationEnabled()) {
+      return {
+        title: "Generating Data...",
+        subtitle: "AI is creating realistic restaurants. This may take a few moments."
+      };
+    } else if (isDbLoadModeEnabled()) {
+      return {
+        title: "Loading Data...",
+        subtitle: "Fetching restaurants from database..."
+      };
+    } else {
+      return {
+        title: "Initializing...",
+        subtitle: "Preparing your food delivery app..."
+      };
+    }
+  };
+
   if (!isReady) {
+    const message = getLoadingMessage();
+    
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="text-center space-y-4 max-w-md px-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="text-lg font-semibold text-foreground">Loading Data...</p>
-          <p className="text-sm text-muted-foreground">Fetching restaurants from database...</p>
+          <p className="text-lg font-semibold text-foreground">{message.title}</p>
+          <p className="text-sm text-muted-foreground">{message.subtitle}</p>
         </div>
       </div>
     );
@@ -59,4 +70,3 @@ export function DataReadyGate({ children }: DataReadyGateProps) {
 
   return <>{children}</>;
 }
-

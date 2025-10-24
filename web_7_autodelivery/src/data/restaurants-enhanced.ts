@@ -2,41 +2,45 @@
  * Enhanced Restaurants Data with AI Generation Support
  * 
  * This file provides both static and dynamic restaurant data generation
- * for the Food Delivery Platform application.
+ * for the Food Delivery application.
  */
 
 import type { Restaurant } from "@/data/restaurants";
-import { restaurants as originalRestaurants } from "@/data/restaurants";
 import { readJson, writeJson } from "@/shared/storage";
-import {
-  generateRestaurantsWithFallback,
-  replaceAllRestaurants,
+import { 
+  generateRestaurantsWithFallback, 
+  replaceAllRestaurants, 
   addGeneratedRestaurants,
-  isDataGenerationAvailable,
+  isDataGenerationAvailable 
 } from "@/utils/restaurantDataGenerator";
-import {
-  fetchSeededSelection,
-  getSeedValueFromEnv,
-  isDbLoadModeEnabled,
-} from "@/shared/seeded-loader";
+import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { restaurants as originalRestaurants } from "@/data/restaurants";
+
+// Configuration for data generation
+const DATA_GENERATION_CONFIG = {
+  DEFAULT_DELAY_BETWEEN_CALLS: 1000,
+  DEFAULT_RESTAURANTS_PER_CATEGORY: 8,
+  MAX_RETRY_ATTEMPTS: 2,
+  AVAILABLE_CATEGORIES: ["Italian", "Japanese", "Indian", "Mexican", "American"]
+};
 
 // Helper function to normalize restaurant images
 function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
-  const localImageMap: Record<string, string> = {
-    "Pizza Palace": "/images/pizza-palace.jpg",
-    "Sushi World": "/images/sushi-world.jpg",
-    "Curry House": "/images/curry-house.jpg",
-    "Taco Fiesta": "/images/taco-fiesta.jpg",
-    "Burger Joint": "/images/burger-joint.jpg",
-  };
+  if (!Array.isArray(restaurants)) {
+    console.warn('normalizeRestaurantImages: restaurants is not an array:', restaurants);
+    return [];
+  }
+  
+  return restaurants.map((restaurant) => {
+    if (!restaurant || typeof restaurant !== 'object') {
+      console.warn('normalizeRestaurantImages: invalid restaurant object:', restaurant);
+      return restaurant;
+    }
 
-  return restaurants.map((r) => {
-    let image = r.image;
-
-    // Use local image if available
-    if (localImageMap[r.name]) {
-      image = localImageMap[r.name];
-    } else if (!image || (!image.startsWith("/images/") && !image.includes("unsplash.com") && !image.includes("source.unsplash.com"))) {
+    let image = restaurant.image;
+    
+    // Ensure restaurant image is valid
+    if (!image || (!image.startsWith("/images/") && !image.includes("unsplash.com"))) {
       // Default fallback image based on cuisine
       const cuisineFallback: Record<string, string> = {
         Italian: "/images/pizza-palace.jpg",
@@ -45,173 +49,141 @@ function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
         Mexican: "/images/taco-fiesta.jpg",
         American: "/images/burger-joint.jpg",
       };
-      image = cuisineFallback[r.cuisine] || "/images/pizza-palace.jpg";
+      image = cuisineFallback[restaurant.cuisine] || "/images/pizza-palace.jpg";
     }
 
+    // Safely handle menu items
+    const normalizedMenu = Array.isArray(restaurant.menu) 
+      ? restaurant.menu.map((item) => {
+          if (!item || typeof item !== 'object') {
+            console.warn('normalizeRestaurantImages: invalid menu item:', item);
+            return item;
+          }
+          return {
+            ...item,
+            // Ensure menu item images are valid
+            image: item.image && (item.image.startsWith("/images/") || item.image.includes("unsplash.com"))
+              ? item.image
+              : `/images/${item.name?.toLowerCase().replace(/ /g, "-") || 'menu-item'}.jpg`,
+          };
+        })
+      : [];
+
     return {
-      ...r,
+      ...restaurant,
       image,
-      menu: r.menu.map((item) => ({
-        ...item,
-        // Ensure menu item images are valid
-        image: item.image && (item.image.startsWith("/images/") || item.image.includes("unsplash.com"))
-          ? item.image
-          : `/images/${item.name.toLowerCase().replace(/ /g, "-")}.jpg`,
-      })),
+      menu: normalizedMenu,
     };
   });
 }
 
-// Dynamic restaurants array that can be populated with generated data
-let dynamicRestaurants: Restaurant[] = isDataGenerationAvailable()
-  ? []
-  : [...originalRestaurants];
-
-// Client-side cache to avoid regenerating on every reload
-export function readCachedRestaurants(): Restaurant[] | null {
-  return readJson<Restaurant[]>("food_delivery_generated_restaurants_v1", null);
-}
-
-export function writeCachedRestaurants(restaurantsToCache: Restaurant[]): void {
-  writeJson("food_delivery_generated_restaurants_v1", restaurantsToCache);
-}
-
-// Configuration for async data generation
-const DATA_GENERATION_CONFIG = {
-  // Default delay between category calls (in milliseconds)
-  DEFAULT_DELAY_BETWEEN_CALLS: 1000,
-  // Default restaurants per category
-  DEFAULT_RESTAURANTS_PER_CATEGORY: 2,
-  // Maximum retry attempts for failed category generation
-  MAX_RETRY_ATTEMPTS: 2,
-  // Available categories for data generation
-  AVAILABLE_CATEGORIES: [
-    "Italian",
-    "Japanese",
-    "Indian",
-    "Mexican",
-    "American",
-  ],
-};
-
 /**
- * Utility function to generate restaurants for multiple categories with delays
- * Prevents server overload by spacing out API calls
+ * Generate restaurants for multiple categories with bounded concurrency
  */
 async function generateRestaurantsForCategories(
   categories: string[],
-  restaurantsPerCategory: number,
-  delayBetweenCalls: number = 200,
-  existingRestaurants: Restaurant[] = []
+  restaurantsPerCategory: number = DATA_GENERATION_CONFIG.DEFAULT_RESTAURANTS_PER_CATEGORY,
+  delayBetweenCalls: number = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS
 ): Promise<Restaurant[]> {
-  let allGeneratedRestaurants: Restaurant[] = [];
+  const allGeneratedRestaurants: Restaurant[] = [];
+  const maxConcurrent = 3; // Limit concurrent API calls
+  
+  console.log(`🚀 Starting async restaurant data generation for each cuisine...`);
+  console.log(`📡 Using API: ${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090'}`);
+  console.log(`📊 Will generate ${restaurantsPerCategory} restaurants per cuisine`);
+  console.log(`🏷️ Cuisines: ${categories.join(', ')}`);
 
-  // Bounded concurrency (e.g., 3 at a time)
-  const concurrencyLimit = 3;
-  let index = 0;
-
-  async function worker() {
-    while (index < categories.length) {
-      const currentIndex = index++;
-      const category = categories[currentIndex];
+  // Process categories in batches to avoid overwhelming the server
+  for (let i = 0; i < categories.length; i += maxConcurrent) {
+    const batch = categories.slice(i, i + maxConcurrent);
+    
+    const batchPromises = batch.map(async (category) => {
+      console.log(`Generating ${restaurantsPerCategory} restaurants for ${category}...`);
+      
       try {
-        console.log(`Generating ${restaurantsPerCategory} restaurants for ${category}...`);
-        const categoryRestaurants = await generateRestaurantsWithFallback(
-          [],
+        const result = await generateRestaurantsWithFallback(
+          originalRestaurants,
           restaurantsPerCategory,
           [category]
         );
-        allGeneratedRestaurants = [...allGeneratedRestaurants, ...categoryRestaurants];
-        console.log(`✅ Generated ${categoryRestaurants.length} restaurants for ${category}`);
-      } catch (categoryError) {
-        console.warn(`Failed to generate restaurants for ${category}:`, categoryError);
+        
+        console.log(`✅ Generated ${result.length} restaurants for ${category}`);
+        return result;
+      } catch (error) {
+        console.error(`❌ Failed to generate restaurants for ${category}:`, error);
+        return [];
       }
-      // small gap to avoid burst
-      if (currentIndex < categories.length - 1 && delayBetweenCalls > 0) {
-        await new Promise((r) => setTimeout(r, delayBetweenCalls));
-      }
+    });
+
+    const batchResults = await Promise.all(batchPromises);
+    const validResults = batchResults.filter(result => Array.isArray(result));
+    allGeneratedRestaurants.push(...validResults.flat());
+
+    // Add delay between batches to be respectful to the API
+    if (i + maxConcurrent < categories.length) {
+      await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
     }
   }
 
-  const workers = Array.from(
-    { length: Math.min(concurrencyLimit, categories.length) },
-    () => worker()
-  );
-  await Promise.all(workers);
+  return allGeneratedRestaurants;
+}
 
-  if (allGeneratedRestaurants.length > 0) {
-    return allGeneratedRestaurants;
-  } else {
-    console.warn("No restaurants were generated for any category, returning existing restaurants.");
-    return existingRestaurants;
+/**
+ * Main initialization function for restaurants
+ */
+export async function initializeRestaurants(): Promise<Restaurant[]> {
+  if (!isDataGenerationAvailable()) {
+    console.log("🔍 Data generation not available, using original restaurants");
+    return originalRestaurants;
+  }
+
+  // Check cache first
+  const cached = readCachedRestaurants();
+  if (cached && cached.length > 0) {
+    console.log("🔍 Using cached restaurants:", cached.length, "items");
+    return cached;
+  }
+
+  try {
+    const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
+    const restaurantsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_RESTAURANTS_PER_CATEGORY;
+    
+    const allGeneratedRestaurants = await generateRestaurantsForCategories(
+      categories,
+      restaurantsPerCategory,
+      DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS
+    );
+
+    if (!Array.isArray(allGeneratedRestaurants) || allGeneratedRestaurants.length === 0) {
+      console.log("No restaurants were generated for any category, returning existing restaurants.");
+      return originalRestaurants;
+    }
+
+    try {
+      // Normalize images and cache results
+      const normalizedRestaurants = normalizeRestaurantImages(allGeneratedRestaurants);
+      
+      if (!Array.isArray(normalizedRestaurants) || normalizedRestaurants.length === 0) {
+        console.warn("Normalization failed, using original restaurants");
+        return originalRestaurants;
+      }
+      
+      writeCachedRestaurants(normalizedRestaurants);
+      console.log(`✅ Successfully generated and cached ${normalizedRestaurants.length} restaurants`);
+      return normalizedRestaurants;
+    } catch (error) {
+      console.error("Error during restaurant normalization:", error);
+      return originalRestaurants;
+    }
+  } catch (error) {
+    console.error("❌ Failed to generate restaurants:", error);
+    return originalRestaurants;
   }
 }
 
 /**
- * Initialize restaurants with data generation if enabled
- * Uses async calls for each category to avoid overwhelming the server
+ * Load restaurants from database with seeded selection
  */
-export async function initializeRestaurants(): Promise<Restaurant[]> {
-  // Preserve existing behavior: use generation when enabled, else static data
-  if (isDataGenerationAvailable()) {
-    try {
-      // Use cached restaurants on client to prevent re-generation on reloads
-      const cached = readCachedRestaurants();
-      if (cached && cached.length > 0) {
-        dynamicRestaurants = normalizeRestaurantImages(cached);
-        return dynamicRestaurants;
-      }
-
-      console.log("🚀 Starting async restaurant data generation for each cuisine...");
-      console.log("📡 Using API:", process.env.API_URL || "http://app:8080");
-
-      // Define categories and restaurants per category
-      const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
-      const restaurantsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_RESTAURANTS_PER_CATEGORY;
-      const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
-
-      console.log(`📊 Will generate ${restaurantsPerCategory} restaurants per cuisine`);
-      console.log(`🏷️  Cuisines: ${categories.join(", ")}`);
-
-      // Generate restaurants for all categories with delays
-      let allGeneratedRestaurants = await generateRestaurantsForCategories(
-        categories,
-        restaurantsPerCategory,
-        delayBetweenCalls,
-        originalRestaurants
-      );
-
-      // Normalize category field to one of the allowed categories
-      const allowed = new Set(categories);
-      allGeneratedRestaurants = allGeneratedRestaurants.map((r) => ({
-        ...r,
-        cuisine: allowed.has(r.cuisine || "") ? r.cuisine : r.cuisine ? r.cuisine : "American",
-      }));
-
-      // Normalize and resolve images to concrete URLs
-      allGeneratedRestaurants = normalizeRestaurantImages(allGeneratedRestaurants);
-
-      dynamicRestaurants = allGeneratedRestaurants;
-      // Cache generated restaurants on client
-      writeCachedRestaurants(dynamicRestaurants);
-      return dynamicRestaurants;
-    } catch (error) {
-      console.warn(
-        "⚠️ Failed to generate restaurants while generation is enabled. Keeping restaurants empty until ready. Error:",
-        error
-      );
-      // When data generation is enabled, do NOT fall back to static data; return empty
-      dynamicRestaurants = [];
-      return dynamicRestaurants;
-    }
-  } else {
-    console.log("ℹ️ Data generation is disabled, using original static restaurants");
-    dynamicRestaurants = originalRestaurants;
-    return dynamicRestaurants;
-  }
-}
-
-// Runtime-only DB fetch for when DB mode is enabled
 export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
   if (!isDbLoadModeEnabled()) {
     console.log("🔍 DB mode not enabled, returning empty array");
@@ -222,131 +194,131 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
     const seed = getSeedValueFromEnv(1);
     const limit = 100;
     console.log("🔍 Attempting to load restaurants from DB with seed:", seed, "limit:", limit);
+    
     // Prefer distributed selection to avoid category dominance
     const distributed = await fetchSeededSelection<Restaurant>({
-      projectKey: "web_7_food_delivery_v2",
+      projectKey: "web_7_food_delivery",
       entityType: "restaurants",
       seedValue: seed,
       limit,
       method: "distribute",
       filterKey: "cuisine",
     });
+    
     console.log("🔍 Distributed selection result:", distributed?.length || 0, "items");
-    const selected =
-      Array.isArray(distributed) && distributed.length > 0
-        ? distributed
-        : await fetchSeededSelection<Restaurant>({
-            projectKey: "web_7_food_delivery_v2",
-            entityType: "restaurants",
-            seedValue: seed,
-            limit,
-            method: "select",
-          });
+    
+    const selected = Array.isArray(distributed) && distributed.length > 0
+      ? distributed
+      : await fetchSeededSelection<Restaurant>({
+          projectKey: "web_7_food_delivery",
+          entityType: "restaurants",
+          seedValue: seed,
+          limit,
+          method: "select",
+        });
+    
     console.log("🔍 Final selected restaurants:", selected?.length || 0, "items");
 
     if (selected && selected.length > 0) {
       // Ensure we have at least some items for all primary cuisines by supplementing with originals if needed
       const cuisines = ["Italian", "Japanese", "Indian", "Mexican", "American"];
       const byCuisine: Record<string, Restaurant[]> = {};
-      for (const r of selected) {
-        const cui = r.cuisine || "American";
-        byCuisine[cui] = byCuisine[cui] || [];
-        byCuisine[cui].push(r);
-      }
-
-      // Pull minimal items from originals to fill missing cuisines
-      const supplemented: Restaurant[] = [...selected];
-      for (const cui of cuisines) {
-        if (!byCuisine[cui] || byCuisine[cui].length === 0) {
-          const fallback = originalRestaurants.filter((r) => r.cuisine === cui).slice(0, 2);
-          if (fallback.length > 0) {
-            supplemented.push(...fallback);
-          }
+      
+      // Group selected restaurants by cuisine
+      selected.forEach(restaurant => {
+        if (!byCuisine[restaurant.cuisine]) {
+          byCuisine[restaurant.cuisine] = [];
         }
-      }
-
-      // Deduplicate by id
-      const seen = new Set<string>();
-      const deduped = supplemented.filter((r) => {
-        const id = r.id || `${r.name}-${r.cuisine}`;
-        if (seen.has(id)) return false;
-        seen.add(id);
-        return true;
+        byCuisine[restaurant.cuisine].push(restaurant);
       });
-
-      return normalizeRestaurantImages(deduped);
+      
+      // Supplement missing cuisines with original restaurants
+      const supplemented: Restaurant[] = [...selected];
+      cuisines.forEach(cuisine => {
+        if (!byCuisine[cuisine] || byCuisine[cuisine].length === 0) {
+          const originalForCuisine = originalRestaurants.filter(r => r.cuisine === cuisine);
+          supplemented.push(...originalForCuisine.slice(0, 2)); // Add up to 2 original restaurants per missing cuisine
+        }
+      });
+      
+      // Remove duplicates by ID
+      const uniqueRestaurants = supplemented.filter((restaurant, index, self) => 
+        index === self.findIndex(r => r.id === restaurant.id)
+      );
+      
+      const normalizedRestaurants = normalizeRestaurantImages(uniqueRestaurants);
+      console.log("🔍 DB restaurants loaded:", normalizedRestaurants.length, "items");
+      return normalizedRestaurants;
     }
-  } catch (e) {
-    console.warn("Failed to load seeded restaurant selection from DB:", e);
+    
+    console.log("🔍 No restaurants found in DB, falling back to original restaurants");
+    return originalRestaurants;
+  } catch (error) {
+    console.error("❌ Failed to load restaurants from DB:", error);
+    return originalRestaurants;
   }
-
-  return [];
 }
 
-/**
- * Get restaurants by cuisine
- */
-export function getRestaurantsByCuisine(cuisine: string): Restaurant[] {
-  return dynamicRestaurants.filter((restaurant) => restaurant.cuisine === cuisine);
+// Cache management
+const CACHE_KEY = 'fooddelivery_generated_restaurants_v1';
+
+export function readCachedRestaurants(): Restaurant[] | null {
+  return readJson<Restaurant[]>(CACHE_KEY);
 }
 
-/**
- * Get a restaurant by ID
- */
-export function getRestaurantById(id: string): Restaurant | undefined {
-  return dynamicRestaurants.find((restaurant) => restaurant.id === id);
+export function writeCachedRestaurants(restaurants: Restaurant[]): void {
+  writeJson(CACHE_KEY, restaurants);
 }
 
-/**
- * Get featured restaurants
- */
-export function getFeaturedRestaurants(): Restaurant[] {
-  return dynamicRestaurants.filter((restaurant) => restaurant.featured);
+export function clearCachedRestaurants(): void {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(CACHE_KEY);
+  }
 }
 
-/**
- * Reset to original restaurants only
- */
-export function resetToOriginalRestaurants(): void {
-  dynamicRestaurants = [...originalRestaurants];
+// Helper functions for restaurant data access
+export function getRestaurantsByCuisine(cuisine: string, restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.cuisine === cuisine);
 }
 
-/**
- * Get statistics about current restaurants
- */
-export function getRestaurantStats() {
-  const cuisines = dynamicRestaurants.reduce((acc, restaurant) => {
-    const cuisine = restaurant.cuisine || "Unknown";
-    acc[cuisine] = (acc[cuisine] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  return {
-    totalRestaurants: dynamicRestaurants.length,
-    originalRestaurants: originalRestaurants.length,
-    generatedRestaurants: dynamicRestaurants.length - originalRestaurants.length,
-    featuredCount: dynamicRestaurants.filter((r) => r.featured).length,
-    cuisines,
-    averageRating:
-      dynamicRestaurants.reduce((sum, r) => sum + (r.rating || 0), 0) /
-      dynamicRestaurants.length,
-  };
+export function getRestaurantById(id: string, restaurants: Restaurant[] = originalRestaurants): Restaurant | undefined {
+  return restaurants.find(restaurant => restaurant.id === id);
 }
 
-/**
- * Search restaurants by query
- */
-export function searchRestaurants(query: string): Restaurant[] {
+export function getFeaturedRestaurants(restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.featured);
+}
+
+export function getTopRatedRestaurants(restaurants: Restaurant[] = originalRestaurants, minRating: number = 4.5): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.rating >= minRating);
+}
+
+export function searchRestaurants(query: string, restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
   const lowercaseQuery = query.toLowerCase();
-  return dynamicRestaurants.filter(
-    (restaurant) =>
-      restaurant.name.toLowerCase().includes(lowercaseQuery) ||
-      restaurant.description?.toLowerCase().includes(lowercaseQuery) ||
-      restaurant.cuisine?.toLowerCase().includes(lowercaseQuery)
+  return restaurants.filter(restaurant => 
+    restaurant.name.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.description.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.cuisine.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.menu.some(item => 
+      item.name.toLowerCase().includes(lowercaseQuery) ||
+      item.description.toLowerCase().includes(lowercaseQuery)
+    )
   );
 }
 
-// Export the dynamic restaurants array for direct access
-export { dynamicRestaurants as restaurants };
-export { originalRestaurants };
-
+export function getRestaurantStats(restaurants: Restaurant[] = originalRestaurants) {
+  const cuisines = [...new Set(restaurants.map(r => r.cuisine))];
+  const totalMenuItems = restaurants.reduce((sum, r) => sum + r.menu.length, 0);
+  const totalReviews = restaurants.reduce((sum, r) => sum + r.reviews.length, 0);
+  const averageRating = restaurants.reduce((sum, r) => sum + r.rating, 0) / restaurants.length;
+  
+  return {
+    totalRestaurants: restaurants.length,
+    totalCuisines: cuisines.length,
+    cuisines,
+    totalMenuItems,
+    totalReviews,
+    averageRating: Math.round(averageRating * 10) / 10,
+    featuredCount: restaurants.filter(r => r.featured).length
+  };
+}

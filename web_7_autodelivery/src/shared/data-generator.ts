@@ -1,8 +1,8 @@
 /**
- * Universal Data Generation Utility for web_7
+ * Universal Data Generation Utility for web_7_autodelivery
  * 
- * This utility provides consistent restaurant data generation for the web_7 food delivery project.
- * It generates realistic restaurant and menu item data based on predefined types and configurations.
+ * This utility provides consistent restaurant data generation for the web_7_autodelivery project.
+ * It generates realistic restaurant data based on predefined types and configurations.
  */
 
 export interface DataGenerationResponse {
@@ -25,7 +25,7 @@ export interface ProjectDataConfig {
 
 // Project-specific configurations
 export const PROJECT_CONFIGS: Record<string, ProjectDataConfig> = {
-  'web_7_food_delivery_v2': {
+  'web_7_food_delivery': {
     projectName: 'Food Delivery Platform',
     dataType: 'restaurants',
     interfaceDefinition: `
@@ -72,7 +72,13 @@ export interface Review {
   date: string;
   avatar: string;
 }
-    `,
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  avatar: string;
+  feedback: string;
+}`,
     examples: [
       {
         id: "1",
@@ -92,12 +98,12 @@ export interface Review {
             sizes: [
               { name: "Small", cal: 230, priceMod: 0 },
               { name: "Medium", cal: 320, priceMod: 0.9 },
-              { name: "Large", cal: 480, priceMod: 1.6 },
+              { name: "Large", cal: 480, priceMod: 1.6 }
             ],
             options: [{ label: "No Basil" }, { label: "No Cheese" }],
             restaurantId: "1",
-            restaurantName: "Pizza Palace",
-          },
+            restaurantName: "Pizza Palace"
+          }
         ],
         reviews: [
           {
@@ -105,46 +111,18 @@ export interface Review {
             rating: 5,
             comment: "Pizza was amazing! Will order again.",
             date: "2025-06-02",
-            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-          },
+            avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+          }
         ],
         deliveryTime: "40-55 min",
-        pickupTime: "15 min",
-      },
+        pickupTime: "15 min"
+      }
     ],
-    categories: [
-      "Italian",
-      "Japanese",
-      "Indian",
-      "Mexican",
-      "American",
-      "Vegan",
-      "Chinese",
-      "Desserts",
-      "Vietnamese",
-      "Breakfast",
-      "Middle Eastern",
-      "Steakhouse",
-      "French",
-      "Turkish",
-      "Deli",
-      "Barbecue",
-      "Spanish",
-      "Greek",
-      "Hawaiian",
-    ],
+    categories: ["Italian", "Japanese", "Indian", "Mexican", "American"],
     namingRules: {
-      id: "{number}",
-      menu: {
-        id: "{restaurantId}-{number}",
-        image: "https://source.unsplash.com/featured/?{name_snake_case}&w=150&h=150&fit=crop&crop=entropy&auto=format&q=60",
-        restaurantId: "{parent.id}",
-        restaurantName: "{parent.name}",
-      },
-      image: "https://source.unsplash.com/featured/?{name_snake_case}&w=150&h=150&fit=crop&crop=entropy&auto=format&q=60",
-      reviews: {
-        avatar: "https://randomuser.me/api/portraits/{gender}/{number}.jpg",
-      },
+      restaurant_names: "Use authentic names that reflect the cuisine type",
+      menu_items: "Use descriptive names that match the cuisine",
+      reviews: "Use realistic customer names and authentic feedback"
     },
     additionalRequirements: `
 Generate realistic restaurant data for a food delivery application. Ensure:
@@ -158,43 +136,77 @@ Generate realistic restaurant data for a food delivery application. Ensure:
 - Delivery times are in the format 'X-Y min' (e.g., '30-45 min'), and pickup times are shorter (e.g., '10-20 min').
 - Each restaurant has 2-5 menu items and 1-3 reviews.
 
+ALSO GENERATE TESTIMONIALS:
+- Create 3-5 customer testimonials about the food delivery service
+- Use realistic customer names (first name + last initial, e.g., 'Sarah M.', 'Mike R.')
+- Use randomuser.me for avatar URLs
+- Write authentic feedback about delivery experience, food quality, app usability
+- Keep testimonials positive and specific (mention delivery speed, food temperature, variety, etc.)
+
 CRITICAL: Follow the exact data structure:
 - Reviews must have: author (string), rating (number), comment (string), date (string in YYYY-MM-DD format), avatar (string URL)
 - Menu items must have: id (string), name (string), description (string), price (number), image (string URL), sizes (array), options (array)
+- Testimonials must have: id (string), name (string), avatar (string URL), feedback (string)
 - Use realistic names and authentic reviews with proper ratings (4-5 stars)
-- Include avatar URLs from randomuser.me for reviews
+- Include avatar URLs from randomuser.me for reviews and testimonials
 - Use proper date format for reviews (YYYY-MM-DD)
 `
-  },
+  }
 };
 
 /**
- * Generate data for a specific project
+ * Check if data generation is enabled via environment variables
+ */
+export function isDataGenerationEnabled(): boolean {
+  if (typeof window !== 'undefined') {
+    return process.env.NEXT_PUBLIC_DATA_GENERATION === 'true';
+  }
+  return process.env.ENABLE_DATA_GENERATION === 'true';
+}
+
+/**
+ * Get the API base URL for data generation
+ */
+export function getApiBaseUrl(): string {
+  // In browser, prefer NEXT_PUBLIC_API_URL
+  if (typeof window !== 'undefined') {
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090';
+  }
+  // In server, use API_URL
+  return process.env.API_URL || 'http://localhost:8090';
+}
+
+/**
+ * Generate project data using the universal API
  */
 export async function generateProjectData(
   projectKey: string,
   count: number = 10,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
-  const config = PROJECT_CONFIGS[projectKey];
-  if (!config) {
+  const startTime = Date.now();
+  
+  if (!isDataGenerationEnabled()) {
     return {
       success: false,
       data: [],
       count: 0,
       generationTime: 0,
-      error: `Project configuration not found for: ${projectKey}`,
+      error: 'Data generation is not enabled'
     };
   }
 
-  const startTime = Date.now();
+  const config = PROJECT_CONFIGS[projectKey];
+  if (!config) {
+    throw new Error(`Project configuration not found for: ${projectKey}`);
+  }
 
   try {
-    const baseUrl = getApiBaseUrl();
-    const response = await fetch(`${baseUrl}/datasets/generate`, {
-      method: "POST",
+    const apiBaseUrl = getApiBaseUrl();
+    const response = await fetch(`${apiBaseUrl}/datasets/generate`, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         interface_definition: config.interfaceDefinition,
@@ -229,30 +241,7 @@ export async function generateProjectData(
       data: [],
       count: 0,
       generationTime,
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: error instanceof Error ? error.message : 'Unknown error'
     };
   }
-}
-
-/**
- * Check if data generation is enabled
- */
-export function isDataGenerationEnabled(): boolean {
-  const raw =
-    (process.env.NEXT_PUBLIC_DATA_GENERATION ??
-    process.env.NEXT_ENABLE_DATA_GENERATION ??
-    process.env.ENABLE_DATA_GENERATION ??
-    "").toString().toLowerCase();
-  return raw === "true" || raw === "1" || raw === "yes" || raw === "on";
-}
-
-/**
- * Get API base URL
- */
-export function getApiBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_API_URL ||
-    process.env.API_URL ||
-    "http://localhost:8090"
-  );
 }

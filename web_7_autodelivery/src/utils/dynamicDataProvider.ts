@@ -1,23 +1,21 @@
 import type { Restaurant } from "@/data/restaurants";
-import { getEffectiveSeed, isDynamicEnabled, getSeedLayout } from "@/lib/seed-layout";
-import {
-  restaurants,
-  initializeRestaurants,
-  loadRestaurantsFromDb,
-  writeCachedRestaurants,
-  readCachedRestaurants,
-} from "@/data/restaurants-enhanced";
+import type { Testimonial } from "@/data/testimonials";
+import { initializeRestaurants, loadRestaurantsFromDb, writeCachedRestaurants, readCachedRestaurants } from "@/data/restaurants-enhanced";
+import { initializeTestimonials, loadTestimonialsFromDb, writeCachedTestimonials, readCachedTestimonials } from "@/data/testimonials-enhanced";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { restaurants } from "@/data/restaurants";
+import { testimonials } from "@/data/testimonials";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
-  return isDynamicEnabled();
+  return process.env.ENABLE_DYNAMIC_HTML === 'true' || process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
 };
 
-// Dynamic data provider that returns either seed data or default data based on config
+// Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private restaurants: Restaurant[] = [];
+  private testimonials: Testimonial[] = [];
   private isEnabled: boolean = false;
   private dataGenerationEnabled: boolean = false;
   private ready: boolean = false;
@@ -28,57 +26,16 @@ export class DynamicDataProvider {
     this.isEnabled = isDynamicHtmlEnabled();
     this.dataGenerationEnabled = isDataGenerationEnabled();
     // hydrate from cache if available to keep content stable across reloads
-    const cached = readCachedRestaurants();
-    this.restaurants = Array.isArray(cached) && cached.length > 0 ? cached : restaurants;
+    const cachedRestaurants = readCachedRestaurants();
+    const cachedTestimonials = readCachedTestimonials();
+    this.restaurants = Array.isArray(cachedRestaurants) && cachedRestaurants.length > 0 ? cachedRestaurants : restaurants;
+    this.testimonials = Array.isArray(cachedTestimonials) && cachedTestimonials.length > 0 ? cachedTestimonials : testimonials;
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;
     });
-
-    // Initialize restaurants with data generation if enabled
-    this.initializeRestaurants();
-  }
-
-  private async initializeRestaurants(): Promise<void> {
-    try {
-      // Try DB mode first if enabled
-      const dbRestaurants = await loadRestaurantsFromDb();
-      console.log("🔍 DB restaurants loaded:", dbRestaurants.length, "items");
-      if (dbRestaurants.length > 0) {
-        this.restaurants = dbRestaurants;
-        writeCachedRestaurants(this.restaurants);
-        this.ready = true;
-        this.resolveReady();
-        console.log("✅ DB mode: Data loaded successfully, marking as ready");
-        return;
-      }
-
-      // If DB mode is enabled but no data found, use static data as fallback
-      if (this.dataGenerationEnabled) {
-        // Fallback to existing behavior for data generation mode
-        const initializedRestaurants = await initializeRestaurants();
-        this.restaurants = initializedRestaurants;
-        if (this.restaurants.length > 0) {
-          writeCachedRestaurants(this.restaurants);
-        }
-
-        // Mark as ready only when we have generated data
-        if (this.restaurants.length > 0) {
-          this.ready = true;
-          this.resolveReady();
-        }
-      } else {
-        // For DB mode, use static data as fallback if no DB data found
-        this.restaurants = restaurants;
-        this.ready = true;
-        this.resolveReady();
-      }
-    } catch (error) {
-      console.error("Failed to initialize restaurants:", error);
-      // Use static data as fallback
-      this.restaurants = restaurants;
-      this.ready = true;
-      this.resolveReady();
-    }
+    
+    // Initialize restaurants and testimonials with data generation if enabled
+    this.initializeData();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -88,16 +45,89 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  public isReady(): boolean {
-    return this.ready;
+  private async initializeData(): Promise<void> {
+    try {
+      // Initialize restaurants and testimonials in parallel
+      const [initializedRestaurants, initializedTestimonials] = await Promise.all([
+        this.initializeRestaurants(),
+        this.initializeTestimonials()
+      ]);
+
+      this.restaurants = initializedRestaurants;
+      this.testimonials = initializedTestimonials;
+
+      // Mark as ready when both are loaded
+      this.ready = true;
+      this.resolveReady();
+      console.log("✅ Data initialization complete");
+    } catch (error) {
+      console.error("Failed to initialize data:", error);
+      // Use static data as fallback
+      this.restaurants = restaurants;
+      this.testimonials = testimonials;
+      this.ready = true;
+      this.resolveReady();
+    }
   }
 
-  public whenReady(): Promise<void> {
-    return this.readyPromise;
+  private async initializeRestaurants(): Promise<Restaurant[]> {
+    try {
+      // Try DB mode first if enabled
+      const dbRestaurants = await loadRestaurantsFromDb();
+      if (dbRestaurants.length > 0) {
+        console.log("🔍 DB restaurants loaded:", dbRestaurants.length, "items");
+        writeCachedRestaurants(dbRestaurants);
+        return dbRestaurants;
+      }
+
+      // If DB mode is enabled but no data found, use static data as fallback
+      if (this.dataGenerationEnabled) {
+        // Fallback to existing behavior for data generation mode
+        const initializedRestaurants = await initializeRestaurants();
+        if (initializedRestaurants.length > 0) {
+          writeCachedRestaurants(initializedRestaurants);
+        }
+        return initializedRestaurants;
+      } else {
+        // For DB mode, use static data as fallback if no DB data found
+        return restaurants;
+      }
+    } catch (error) {
+      console.error("Failed to initialize restaurants:", error);
+      return restaurants;
+    }
+  }
+
+  private async initializeTestimonials(): Promise<Testimonial[]> {
+    try {
+      // Try DB mode first if enabled
+      const dbTestimonials = await loadTestimonialsFromDb();
+      if (dbTestimonials.length > 0) {
+        console.log("🔍 DB testimonials loaded:", dbTestimonials.length, "items");
+        writeCachedTestimonials(dbTestimonials);
+        return dbTestimonials;
+      }
+
+      // If DB mode is enabled but no data found, use static data as fallback
+      if (this.dataGenerationEnabled) {
+        // Fallback to existing behavior for data generation mode
+        const initializedTestimonials = await initializeTestimonials();
+        if (initializedTestimonials.length > 0) {
+          writeCachedTestimonials(initializedTestimonials);
+        }
+        return initializedTestimonials;
+      } else {
+        // For DB mode, use static data as fallback if no DB data found
+        return testimonials;
+      }
+    } catch (error) {
+      console.error("Failed to initialize testimonials:", error);
+      return testimonials;
+    }
   }
 
   public getRestaurants(): Restaurant[] {
-    return this.restaurants || []; // Return empty array if restaurants is undefined
+    return this.restaurants || [];
   }
 
   public getRestaurantById(id: string): Restaurant | undefined {
@@ -122,105 +152,44 @@ export class DynamicDataProvider {
     );
   }
 
-  public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
+  public getTestimonials(): Testimonial[] {
+    return this.testimonials || [];
   }
 
-  // Get effective seed value - returns 6 (default) when dynamic HTML is disabled
-  // Validates seed is between 1-300, defaults to 6 if invalid
-  public getEffectiveSeed(providedSeed: number = 6): number {
-    if (!this.isEnabled) {
-      return 6; // Default to seed 6 (layout 7)
-    }
-    
-    // Validate seed range (1-300)
-    if (providedSeed < 1 || providedSeed > 300) {
-      return 6; // Default to seed 6 (layout 7)
-    }
-    
-    return providedSeed;
+  public getTestimonialById(id: string): Testimonial | undefined {
+    return (this.testimonials || []).find((testimonial) => testimonial.id === id);
   }
 
-  // Get layout configuration based on seed
-  public getLayoutConfig(seed?: number) {
-    return getSeedLayout(seed || 6);
+  public getRandomTestimonials(count: number = 3): Testimonial[] {
+    const testimonials = this.testimonials || [];
+    const shuffled = [...testimonials].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, Math.min(count, testimonials.length));
   }
 
-  // Get seed from URL parameter
-  public getSeedFromUrl(): number {
-    if (typeof window === 'undefined') return 6;
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const seedParam = urlParams.get('seed');
-    const rawSeed = seedParam ? parseInt(seedParam, 10) : 6;
-    
-    return this.getEffectiveSeed(rawSeed);
+  public isReady(): boolean {
+    return this.ready;
   }
 
-  // Generate dynamic element attributes based on seed
-  public generateElementAttributes(elementType: string, seed: number, index: number = 0): Record<string, string> {
-    if (!this.isEnabled) {
-      return {
-        id: `${elementType}-${index}`,
-        'data-element-type': elementType,
-      };
-    }
-    
-    return {
-      id: `${elementType}-${seed}-${index}`,
-      'data-seed': seed.toString(),
-      'data-variant': (seed % 10).toString(),
-      'data-element-type': elementType,
-      'data-layout-id': getSeedLayout(seed).layoutId.toString(),
-    };
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
   }
 
-  // Generate XPath selector based on seed
-  public generateXPath(elementType: string, seed: number): string {
-    if (!this.isEnabled) {
-      return `//${elementType}`;
-    }
-    return `//${elementType}[@data-seed='${seed}']`;
-  }
-
-  // Reorder array elements based on seed
-  public reorderElements<T extends { id?: string | number; name?: string }>(elements: T[], seed: number): T[] {
-    if (!this.isEnabled) {
-      return elements;
-    }
-    
-    // Simple reordering based on seed
-    const reordered = [...elements];
-    const shifts = seed % elements.length;
-    
-    for (let i = 0; i < shifts; i++) {
-      const first = reordered.shift();
-      if (first) {
-        reordered.push(first);
-      }
-    }
-    
-    return reordered;
+  public getLayoutConfig() {
+    return { isEnabled: this.isEnabled };
   }
 }
 
 // Export singleton instance
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
-// Helper functions for easy access
+// Helper exports for easy access
 export const getRestaurants = () => dynamicDataProvider.getRestaurants();
 export const getRestaurantById = (id: string) => dynamicDataProvider.getRestaurantById(id);
 export const getRestaurantsByCuisine = (cuisine: string) => dynamicDataProvider.getRestaurantsByCuisine(cuisine);
 export const getFeaturedRestaurants = () => dynamicDataProvider.getFeaturedRestaurants();
 export const searchRestaurants = (query: string) => dynamicDataProvider.searchRestaurants(query);
-export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getEffectiveSeedValue = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
-export const getSeedFromUrl = () => dynamicDataProvider.getSeedFromUrl();
-export const generateElementAttrs = (elementType: string, seed: number, index?: number) => 
-  dynamicDataProvider.generateElementAttributes(elementType, seed, index);
-export const generateXPathSelector = (elementType: string, seed: number) => 
-  dynamicDataProvider.generateXPath(elementType, seed);
-export const reorderBySeed = <T extends { id?: string | number; name?: string }>(elements: T[], seed: number) => 
-  dynamicDataProvider.reorderElements(elements, seed);
-
+export const getTestimonials = () => dynamicDataProvider.getTestimonials();
+export const getTestimonialById = (id: string) => dynamicDataProvider.getTestimonialById(id);
+export const getRandomTestimonials = (count: number = 3) => dynamicDataProvider.getRandomTestimonials(count);
+export const isDataReady = () => dynamicDataProvider.isReady();
+export const whenDataReady = () => dynamicDataProvider.whenReady();
