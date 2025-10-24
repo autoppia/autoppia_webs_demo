@@ -42,33 +42,42 @@ export class DynamicDataProvider {
     try {
       // Try DB mode first if enabled
       const dbRestaurants = await loadRestaurantsFromDb();
+      console.log("🔍 DB restaurants loaded:", dbRestaurants.length, "items");
       if (dbRestaurants.length > 0) {
         this.restaurants = dbRestaurants;
         writeCachedRestaurants(this.restaurants);
         this.ready = true;
         this.resolveReady();
+        console.log("✅ DB mode: Data loaded successfully, marking as ready");
         return;
       }
 
-      // Fallback to existing behavior
-      const initializedRestaurants = await initializeRestaurants();
-      this.restaurants = initializedRestaurants;
-      if (this.restaurants.length > 0) {
-        writeCachedRestaurants(this.restaurants);
-      }
+      // If DB mode is enabled but no data found, use static data as fallback
+      if (this.dataGenerationEnabled) {
+        // Fallback to existing behavior for data generation mode
+        const initializedRestaurants = await initializeRestaurants();
+        this.restaurants = initializedRestaurants;
+        if (this.restaurants.length > 0) {
+          writeCachedRestaurants(this.restaurants);
+        }
 
-      // Mark as ready only when either generation is disabled or we have generated data
-      if (!this.dataGenerationEnabled || this.restaurants.length > 0) {
+        // Mark as ready only when we have generated data
+        if (this.restaurants.length > 0) {
+          this.ready = true;
+          this.resolveReady();
+        }
+      } else {
+        // For DB mode, use static data as fallback if no DB data found
+        this.restaurants = restaurants;
         this.ready = true;
         this.resolveReady();
       }
     } catch (error) {
-      // Keep silent in production; initialize readiness when generation off
-      // If generation is enabled, do not mark ready here; the gate will continue showing loading
-      if (!this.dataGenerationEnabled) {
-        this.ready = true;
-        this.resolveReady();
-      }
+      console.error("Failed to initialize restaurants:", error);
+      // Use static data as fallback
+      this.restaurants = restaurants;
+      this.ready = true;
+      this.resolveReady();
     }
   }
 
@@ -88,24 +97,24 @@ export class DynamicDataProvider {
   }
 
   public getRestaurants(): Restaurant[] {
-    return this.restaurants; // Return empty until ready when generation is enabled
+    return this.restaurants || []; // Return empty array if restaurants is undefined
   }
 
   public getRestaurantById(id: string): Restaurant | undefined {
-    return this.restaurants.find((restaurant) => restaurant.id === id);
+    return (this.restaurants || []).find((restaurant) => restaurant.id === id);
   }
 
   public getRestaurantsByCuisine(cuisine: string): Restaurant[] {
-    return this.restaurants.filter((restaurant) => restaurant.cuisine === cuisine);
+    return (this.restaurants || []).filter((restaurant) => restaurant.cuisine === cuisine);
   }
 
   public getFeaturedRestaurants(): Restaurant[] {
-    return this.restaurants.filter((restaurant) => restaurant.featured);
+    return (this.restaurants || []).filter((restaurant) => restaurant.featured);
   }
 
   public searchRestaurants(query: string): Restaurant[] {
     const lowercaseQuery = query.toLowerCase();
-    return this.restaurants.filter(
+    return (this.restaurants || []).filter(
       (restaurant) =>
         restaurant.name.toLowerCase().includes(lowercaseQuery) ||
         restaurant.description?.toLowerCase().includes(lowercaseQuery) ||

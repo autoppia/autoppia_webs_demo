@@ -214,31 +214,35 @@ export async function initializeRestaurants(): Promise<Restaurant[]> {
 // Runtime-only DB fetch for when DB mode is enabled
 export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
   if (!isDbLoadModeEnabled()) {
+    console.log("🔍 DB mode not enabled, returning empty array");
     return [];
   }
 
   try {
     const seed = getSeedValueFromEnv(1);
     const limit = 100;
+    console.log("🔍 Attempting to load restaurants from DB with seed:", seed, "limit:", limit);
     // Prefer distributed selection to avoid category dominance
     const distributed = await fetchSeededSelection<Restaurant>({
-      projectKey: "web_7_food_delivery",
+      projectKey: "web_7_food_delivery_v2",
       entityType: "restaurants",
       seedValue: seed,
       limit,
       method: "distribute",
       filterKey: "cuisine",
     });
+    console.log("🔍 Distributed selection result:", distributed?.length || 0, "items");
     const selected =
       Array.isArray(distributed) && distributed.length > 0
         ? distributed
         : await fetchSeededSelection<Restaurant>({
-            projectKey: "web_7_food_delivery",
+            projectKey: "web_7_food_delivery_v2",
             entityType: "restaurants",
             seedValue: seed,
             limit,
             method: "select",
           });
+    console.log("🔍 Final selected restaurants:", selected?.length || 0, "items");
 
     if (selected && selected.length > 0) {
       // Ensure we have at least some items for all primary cuisines by supplementing with originals if needed

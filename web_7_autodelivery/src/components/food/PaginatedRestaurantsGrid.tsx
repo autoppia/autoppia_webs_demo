@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { restaurants } from "@/data/restaurants";
+import { getRestaurants } from "@/utils/dynamicDataProvider";
 import RestaurantCard from "./RestaurantCard";
 import {
   Pagination,
@@ -19,18 +19,20 @@ interface PaginatedRestaurantsGridProps {
 }
 
 export default function PaginatedRestaurantsGrid({ 
-  filteredRestaurants = restaurants, 
+  filteredRestaurants, 
   title = "All Restaurants" 
 }: PaginatedRestaurantsGridProps) {
+  const restaurants = getRestaurants() || [];
+  const defaultFilteredRestaurants = filteredRestaurants || restaurants;
   const [currentPage, setCurrentPage] = useState(1);
   const restaurantsPerPage = 12;
   const layout = useSeedLayout();
   
   // Calculate pagination
-  const totalPages = Math.ceil(filteredRestaurants.length / restaurantsPerPage);
+  const totalPages = Math.ceil(defaultFilteredRestaurants.length / restaurantsPerPage);
   const startIndex = (currentPage - 1) * restaurantsPerPage;
   const endIndex = startIndex + restaurantsPerPage;
-  const currentRestaurants = filteredRestaurants.slice(startIndex, endIndex);
+  const currentRestaurants = defaultFilteredRestaurants.slice(startIndex, endIndex);
 
   // Generate page numbers to show
   const getPageNumbers = () => {

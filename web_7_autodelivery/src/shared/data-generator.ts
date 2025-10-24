@@ -157,6 +157,13 @@ Generate realistic restaurant data for a food delivery application. Ensure:
 - Reviews have realistic comments, authors, and dates (within 30 days from 2025-07-09). Use randomuser.me for avatars.
 - Delivery times are in the format 'X-Y min' (e.g., '30-45 min'), and pickup times are shorter (e.g., '10-20 min').
 - Each restaurant has 2-5 menu items and 1-3 reviews.
+
+CRITICAL: Follow the exact data structure:
+- Reviews must have: author (string), rating (number), comment (string), date (string in YYYY-MM-DD format), avatar (string URL)
+- Menu items must have: id (string), name (string), description (string), price (number), image (string URL), sizes (array), options (array)
+- Use realistic names and authentic reviews with proper ratings (4-5 stars)
+- Include avatar URLs from randomuser.me for reviews
+- Use proper date format for reviews (YYYY-MM-DD)
 `
   },
 };
