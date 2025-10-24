@@ -80,7 +80,7 @@ export default function PaginatedRestaurantsGrid({
       
       {/* Results count */}
       <div className="text-center text-zinc-600 mb-6">
-        Showing {startIndex + 1}-{Math.min(endIndex, filteredRestaurants.length)} of {filteredRestaurants.length} restaurants
+        Showing {startIndex + 1}-{Math.min(endIndex, defaultFilteredRestaurants.length)} of {defaultFilteredRestaurants.length} restaurants
       </div>
 
       {/* Restaurants Grid */}
