@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 # ORM-only deletion of filtered events
                 deleted = self.delete_events_filtered(web_agent_id, validator_id)
                 if deleted:
-                    self.stdout.write(self.style.SUCCESS(f"Deleted {deleted} Event records matching filters."))
+                    self.stdout.write(self.style.SUCCESS(f"Deleted {deleted} Event records matching filters (web_agent_id: {web_agent_id}, validator_id: {validator_id})."))
                 else:
                     self.stdout.write(self.style.NOTICE("No Event records matched the provided filters."))
                 logger.info(
