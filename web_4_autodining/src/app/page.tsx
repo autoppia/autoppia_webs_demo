@@ -151,6 +151,8 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
   const ref = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const rafIdRef = useRef<number | null>(null);
+  const tickingRef = useRef(false);
 
   const searchParams = useSearchParams();
   const seedParam = searchParams?.get("seed");
@@ -167,17 +169,28 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
     }
   };
 
+  const scheduleCheck = () => {
+    if (tickingRef.current) return;
+    tickingRef.current = true;
+    rafIdRef.current = window.requestAnimationFrame(() => {
+      checkScroll();
+      tickingRef.current = false;
+    });
+  };
+
   useEffect(() => {
     checkScroll();
     let ro: ResizeObserver | null = null;
     if (ref.current && typeof ResizeObserver !== 'undefined') {
-      ro = new ResizeObserver(() => checkScroll());
+      ro = new ResizeObserver(() => scheduleCheck());
       ro.observe(ref.current);
     }
-    window.addEventListener("resize", checkScroll);
+    window.addEventListener("resize", scheduleCheck);
     return () => {
-      window.removeEventListener("resize", checkScroll);
+      window.removeEventListener("resize", scheduleCheck);
       if (ro && ref.current) ro.disconnect();
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      tickingRef.current = false;
     };
   }, []);
 
@@ -219,7 +232,7 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
         ref={ref}
         className={`flex gap-4 pb-4 scroll-smooth pl-1 pr-10 overflow-x-auto overflow-y-hidden`}
         data-testid={cardContainerVariation.dataTestId}
-        onScroll={checkScroll}
+        onScroll={scheduleCheck}
       >
         {children}
       </div>
