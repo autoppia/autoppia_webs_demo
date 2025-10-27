@@ -332,15 +332,15 @@ def generate_hotel_data(index):
     ]
     
     amenities_list = [
-        [{'title': 'Pool', 'icon': '🏊'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Parking', 'icon': '🅿️'}],
-        [{'title': 'Hot Tub', 'icon': '🛁'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Gym', 'icon': '💪'}],
-        [{'title': 'Fireplace', 'icon': '🔥'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Balcony', 'icon': '🏠'}],
-        [{'title': 'Garden', 'icon': '🌿'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'BBQ', 'icon': '🍖'}],
-        [{'title': 'Ocean View', 'icon': '🌊'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Beach Access', 'icon': '🏖️'}]
+        [{'title': 'Pool', 'icon': '🏊', 'desc': 'Private swimming pool'}, {'title': 'WiFi', 'icon': '📶', 'desc': 'High-speed internet'}, {'title': 'Kitchen', 'icon': '🍳', 'desc': 'Fully equipped kitchen'}, {'title': 'Parking', 'icon': '🅿️', 'desc': 'Free parking available'}],
+        [{'title': 'Hot Tub', 'icon': '🛁', 'desc': 'Private hot tub'}, {'title': 'WiFi', 'icon': '📶', 'desc': 'High-speed internet'}, {'title': 'Kitchen', 'icon': '🍳', 'desc': 'Fully equipped kitchen'}, {'title': 'Gym', 'icon': '💪', 'desc': 'Private fitness center'}],
+        [{'title': 'Fireplace', 'icon': '🔥', 'desc': 'Cozy fireplace'}, {'title': 'WiFi', 'icon': '📶', 'desc': 'High-speed internet'}, {'title': 'Kitchen', 'icon': '🍳', 'desc': 'Fully equipped kitchen'}, {'title': 'Balcony', 'icon': '🏠', 'desc': 'Private balcony with view'}],
+        [{'title': 'Garden', 'icon': '🌿', 'desc': 'Beautiful garden space'}, {'title': 'WiFi', 'icon': '📶', 'desc': 'High-speed internet'}, {'title': 'Kitchen', 'icon': '🍳', 'desc': 'Fully equipped kitchen'}, {'title': 'BBQ', 'icon': '🍖', 'desc': 'Outdoor BBQ grill'}],
+        [{'title': 'Ocean View', 'icon': '🌊', 'desc': 'Stunning ocean views'}, {'title': 'WiFi', 'icon': '📶', 'desc': 'High-speed internet'}, {'title': 'Kitchen', 'icon': '🍳', 'desc': 'Fully equipped kitchen'}, {'title': 'Beach Access', 'icon': '🏖️', 'desc': 'Direct beach access'}]
     ]
     
     return {
-        'id': f'hotel_{index + 1}',
+        'id': index + 1,
         'image': f'https://images.unsplash.com/photo-{1566073771259 + index}?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
         'title': hotel_types[index % len(hotel_types)],
         'location': locations[index % len(locations)],
@@ -357,10 +357,7 @@ def generate_hotel_data(index):
         'host': {
             'name': host_names[index % len(host_names)],
             'avatar': f'https://images.unsplash.com/photo-{1494790108755 + index}?w=100&h=100&fit=crop&crop=face&auto=format&q=80',
-            'isSuperhost': random.choice([True, False]),
-            'responseTime': random.choice(['within an hour', 'within a few hours', 'within a day']),
-            'responseRate': random.randint(85, 100),
-            'joinDate': f'20{random.randint(18, 23)}-{random.randint(1, 12):02d}-{random.randint(1, 28):02d}'
+            'since': random.randint(1, 10)
         },
         'amenities': amenities_list[index % len(amenities_list)]
     }
