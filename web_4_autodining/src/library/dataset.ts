@@ -651,31 +651,53 @@ export function getRestaurants(): RestaurantGenerated[] {
 }
 
 export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
-  // Prefer cache first on client
-  const cached = readCachedRestaurants();
-  if (cached && cached.length > 0) {
-    dynamicRestaurants = normalizeRestaurants(cached);
-    return dynamicRestaurants;
+  // If DB mode is enabled, skip the local cache so changes take effect immediately
+  let skipCache = false;
+  try {
+    const { isDbLoadModeEnabled } = await import("@/shared/seeded-loader");
+    skipCache = isDbLoadModeEnabled();
+  } catch {}
+
+  if (!skipCache) {
+    // Prefer cache first on client
+    const cached = readCachedRestaurants();
+    if (cached && cached.length > 0) {
+      dynamicRestaurants = normalizeRestaurants(cached);
+      return dynamicRestaurants;
+    }
   }
   // DB mode check and fetch
   try {
     const { isDbLoadModeEnabled, fetchPoolInfo, fetchSeededSelection, getSeedValueFromEnv } = await import("@/shared/seeded-loader");
+    console.log("isDbLoadModeEnabled: ", isDbLoadModeEnabled());
     if (isDbLoadModeEnabled()) {
       const info = await fetchPoolInfo("web_4_autodining", "restaurants");
-      if (info && info.pool_size >= 50) {
-        const seed = getSeedValueFromEnv(1);
-        const fromDb = await fetchSeededSelection<RestaurantGenerated>({
-          projectKey: "web_4_autodining",
-          entityType: "restaurants",
-          seedValue: seed,
-          limit: 100,
-          method: "shuffle",
-        });
-        if (fromDb && fromDb.length > 0) {
-          dynamicRestaurants = normalizeRestaurants(fromDb);
-          writeCachedRestaurants(dynamicRestaurants);
-          return dynamicRestaurants;
+      let poolSize = info?.pool_size ?? 0;
+      // If pool is missing or too small, and DB mode is on, try to auto-generate and save to DB
+      if (!info || poolSize < 50) {
+        try {
+          const { generateProjectData } = await import("@/shared/data-generator");
+          const gen = await generateProjectData("web_4_autodining", 100, ["International", "Italian", "Japanese", "Mexican", "American"]);
+          console.log("Auto-generated for DB mode:", gen);
+        } catch (e) {
+          console.warn("[autodining] Auto-generation for DB mode failed:", e);
         }
+      }
+
+      // Attempt to load from DB regardless; after possible generation above
+      const seed = getSeedValueFromEnv(1);
+      const fromDb = await fetchSeededSelection<RestaurantGenerated>({
+        projectKey: "web_4_autodining",
+        entityType: "restaurants",
+        seedValue: seed,
+        limit: 100,
+        method: "shuffle",
+      });
+      console.log("Fetched from DB:", fromDb);
+      if (fromDb && fromDb.length > 0) {
+        dynamicRestaurants = normalizeRestaurants(fromDb);
+        writeCachedRestaurants(dynamicRestaurants);
+        return dynamicRestaurants;
       }
     }
   } catch (err) {
