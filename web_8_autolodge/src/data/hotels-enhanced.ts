@@ -6,7 +6,7 @@ import { Hotel } from "@/types/hotel";
  * Initialize hotels data - either from database, AI generation, or fallback to static data
  */
 export async function initializeHotels(): Promise<Hotel[]> {
-  // Check if database mode is enabled and we're not in build time
+  // Check if database mode is enabled and we're in the browser (not during build)
   if (isDbLoadModeEnabled() && typeof window !== "undefined") {
     console.log('🗄️ Database mode enabled, loading hotels from database...');
     try {
@@ -26,6 +26,17 @@ export async function initializeHotels(): Promise<Hotel[]> {
     } catch (error) {
       console.warn('⚠️ Database load failed, falling back to static data:', error);
     }
+  }
+
+  // If DB mode is enabled but we're server-side (during build), use static data with proper images
+  if (isDbLoadModeEnabled() && typeof window === "undefined") {
+    console.log('📊 DB mode enabled but running server-side, using static hotel data with Unsplash images');
+    const staticData = await import("./hotels").then(m => m.default);
+    // Update static data with proper images
+    return staticData.map((hotel: Hotel, index: number) => ({
+      ...hotel,
+      image: getRandomHotelImage(index)
+    }));
   }
 
   // Check if data generation is enabled

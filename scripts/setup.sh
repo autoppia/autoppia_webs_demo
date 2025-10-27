@@ -339,9 +339,23 @@ def generate_hotel_data(index):
         [{'title': 'Ocean View', 'icon': '🌊', 'desc': 'Stunning ocean views'}, {'title': 'WiFi', 'icon': '📶', 'desc': 'High-speed internet'}, {'title': 'Kitchen', 'icon': '🍳', 'desc': 'Fully equipped kitchen'}, {'title': 'Beach Access', 'icon': '🏖️', 'desc': 'Direct beach access'}]
     ]
     
+    # Curated list of valid Unsplash image URLs
+    hotel_images = [
+        'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80'
+    ]
+    
     return {
         'id': index + 1,
-        'image': f'https://images.unsplash.com/photo-{1566073771259 + index}?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'image': hotel_images[index % len(hotel_images)],
         'title': hotel_types[index % len(hotel_types)],
         'location': locations[index % len(locations)],
         'rating': round(random.uniform(4.0, 5.0), 1),
