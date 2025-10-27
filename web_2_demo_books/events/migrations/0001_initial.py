@@ -50,6 +50,7 @@ class Migration(migrations.Migration):
                 ),
                 ("timestamp", models.DateTimeField(default=django.utils.timezone.now)),
                 ("web_agent_id", models.CharField()),
+                ("validator_id", models.CharField()),
                 ("data", models.JSONField(default=dict)),
                 (
                     "user",

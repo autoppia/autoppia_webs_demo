@@ -166,8 +166,30 @@ export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
     return seedMatch ? seedMatch[1] : null;
   };
   
-  // Try to get seed from searchParams first, then fallback to custom URL parsing
-  const seedParam = searchParams.get('seed') || getSeedFromUrl();
+  // Try to get seed from searchParams first, then fallback to custom URL parsing, then localStorage
+  const getSeedWithFallback = () => {
+    // First priority: URL parameter
+    const urlSeed = searchParams.get('seed') || getSeedFromUrl();
+    if (urlSeed) {
+      return urlSeed;
+    }
+    
+    // Second priority: localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('autolodgeSeed');
+        if (stored) {
+          return stored;
+        }
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+    }
+    
+    return null;
+  };
+  
+  const seedParam = getSeedWithFallback();
   
   const seed = useMemo(() => {
     if (!seedParam) return undefined;
@@ -182,7 +204,18 @@ export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
     }
     
     // When enabled, support seeds 1-300
-    return getEffectiveSeed(parsed);
+    const effectiveSeed = getEffectiveSeed(parsed);
+    
+    // Persist to localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('autolodgeSeed', effectiveSeed.toString());
+      } catch (e) {
+        // Ignore localStorage errors
+      }
+    }
+    
+    return effectiveSeed;
   }, [seedParam]);
   
   const layout = useMemo(() => getSeedLayout(seed, pageType), [seed, pageType]);

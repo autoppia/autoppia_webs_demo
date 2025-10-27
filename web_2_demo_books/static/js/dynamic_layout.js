@@ -1162,48 +1162,40 @@ function applyCommentFormLayout(group, variant) {
       break;
     case 2: // Reversed order: Submit, Content, Name
       var reversed = [nameField, contentField, submitBtn].reverse();
-      while (group.firstChild) group.removeChild(group.firstChild);
-      reversed.forEach(function(field) { group.appendChild(field); });
+      // Preserve other children (e.g., hidden inputs like CSRF) and only move target fields
+      reversed.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 3: // Deterministic shuffle with seed 3
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 3);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 4: // Deterministic shuffle with seed 4
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 4);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 5: // Deterministic shuffle with seed 5
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 5);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 6: // Deterministic shuffle with seed 6
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 6);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 7: // Deterministic shuffle with seed 7
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 7);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 8: // Deterministic shuffle with seed 8
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 8);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 9: // Deterministic shuffle with seed 9
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 9);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
     case 10: // Deterministic shuffle with seed 10
       var shuffled = deterministicShuffle([nameField, contentField, submitBtn], 10);
-      while (group.firstChild) group.removeChild(group.firstChild);
-      shuffled.forEach(function(field) { group.appendChild(field); });
+      shuffled.forEach(function(field) { if (field && field.parentNode === group) group.appendChild(field); });
       break;
   }
 }

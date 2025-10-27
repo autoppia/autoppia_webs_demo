@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useRef, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { title } from "process";
@@ -975,7 +975,7 @@ export default function Home() {
               </svg>
               <span>{expert.consultation}</span>
             </div>
-            <Link
+            <SeedLink
               href={`/expert/${expert.name
                 .toLowerCase()
                 .replace(/\s+/g, "-")
@@ -985,7 +985,7 @@ export default function Home() {
               className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
             >
               Book a consultation
-            </Link>
+            </SeedLink>
           </div>
         ))}
       </div>

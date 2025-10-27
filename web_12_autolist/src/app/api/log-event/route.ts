@@ -14,7 +14,7 @@ interface LogEventRequestBody {
 export async function POST(req: NextRequest) {
   let body: LogEventRequestBody;
 
-  // 1) Validate and parse JSON
+  // 1) Validar y parsear JSON
   try {
     const ct = req.headers.get("content-type") || "";
     if (!ct.includes("application/json")) {
@@ -41,8 +41,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 2) Build the event
+  // 2) Construir el evento
   const webAgentId = req.headers.get("X-WebAgent-Id") || "1";
+  const validatorId=req.headers.get("X-Validator-Id") || "1";
   const { event_name, user_id = null, data = {} } = body;
 
   const newEntry = {
@@ -51,15 +52,17 @@ export async function POST(req: NextRequest) {
     user_id,
     data,
     timestamp: new Date().toISOString(),
+    validator_id: validatorId,
   };
 
   const externalPayload = {
     web_agent_id: webAgentId,
     web_url: req.headers.get("referer") || null,
     data: newEntry,
+    validator_id: validatorId,
   };
 
-  // 3) Send to the real backend
+  // 3) Enviar al backend real
   try {
     const res = await fetch(`${BACKEND_URL}/save_events/`, {
       method: "POST",
@@ -83,7 +86,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 4) Respond with success
+  // 4) Responder éxito
   return NextResponse.json({ success: true });
 }
 

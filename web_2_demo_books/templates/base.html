@@ -678,6 +678,69 @@
         window.__DYNAMIC_HTML_ENABLED__ = {{ DYNAMIC_HTML_ENABLED|yesno:"true,false" }};
         window.__INITIAL_SEED__ = {{ INITIAL_SEED }};
     </script>
+    <script>
+        // Seed Preservation Script
+        (function() {
+            if (!window.__DYNAMIC_HTML_ENABLED__) return;
+            
+            var currentSeed = window.__INITIAL_SEED__;
+            
+            // Store seed in sessionStorage
+            if (currentSeed) {
+                sessionStorage.setItem('booksDemoSeed', currentSeed);
+            } else {
+                // Try to get seed from sessionStorage if not in context
+                var storedSeed = sessionStorage.getItem('booksDemoSeed');
+                if (storedSeed) {
+                    currentSeed = parseInt(storedSeed);
+                    window.__INITIAL_SEED__ = currentSeed;
+                }
+            }
+            
+            // Function to add seed to URL
+            function addSeedToUrl(url) {
+                if (!url || url.startsWith('javascript:') || url.startsWith('#') || url.startsWith('mailto:')) {
+                    return url;
+                }
+                
+                // Check if URL already has seed parameter
+                if (url.indexOf('seed=') !== -1) {
+                    return url;
+                }
+                
+                // Add seed parameter
+                var separator = url.indexOf('?') !== -1 ? '&' : '?';
+                return url + separator + 'seed=' + currentSeed;
+            }
+            
+            // Update all links on page to include seed
+            document.addEventListener('DOMContentLoaded', function() {
+                var links = document.querySelectorAll('a[href]');
+                links.forEach(function(link) {
+                    var href = link.getAttribute('href');
+                    // Only modify internal links
+                    if (href && !href.startsWith('http') && !href.startsWith('//')) {
+                        var newHref = addSeedToUrl(href);
+                        if (newHref !== href) {
+                            link.setAttribute('href', newHref);
+                        }
+                    }
+                });
+                
+                // Update form actions
+                var forms = document.querySelectorAll('form[action]');
+                forms.forEach(function(form) {
+                    var action = form.getAttribute('action');
+                    if (action && !action.startsWith('http') && !action.startsWith('//')) {
+                        var newAction = addSeedToUrl(action);
+                        if (newAction !== action) {
+                            form.setAttribute('action', newAction);
+                        }
+                    }
+                });
+            });
+        })();
+    </script>
     <script src="{% static 'js/dynamic_layout.js' %}"></script>
     <script>
         fetch("/carts", {

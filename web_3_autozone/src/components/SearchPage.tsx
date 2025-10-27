@@ -1,6 +1,7 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";
@@ -15,7 +16,7 @@ const getTopMarginClass = () => {
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const router = useSeedRouter();
   const query = searchParams.get("q")?.toLowerCase() || "1";
   const { addToCart } = useCart();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);

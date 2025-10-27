@@ -12,6 +12,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="event",
             name="web_agent_id",
-            field=models.CharField(),
+            field=models.CharField(max_length=100),
         ),
     ]

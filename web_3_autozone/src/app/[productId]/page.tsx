@@ -2,20 +2,22 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
+import { useSeed } from "@/context/SeedContext";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
-import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
+import { getProductById } from "@/utils/dynamicDataProvider";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
 const DELIVERY_ADDRESS = "Daly City 94016";
 
 function ProductContent() {
-  const router = useRouter();
+  const router = useSeedRouter();
   const { productId } = useParams();
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
@@ -23,14 +25,7 @@ function ProductContent() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const searchParams = useSearchParams();
-
-  const seed = useMemo(() => {
-    const s = searchParams.get("seed") ?? "1";
-    const rawSeed = s ? parseInt(s) : Math.floor(Math.random() * 1000);
-    return getEffectiveSeed(rawSeed);
-  }, [searchParams]);
-
+  const { seed } = useSeed();
   const order = seed % 3;
 
   useEffect(() => {

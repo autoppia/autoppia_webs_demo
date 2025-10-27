@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import UserSearchBar from "./UserSearchBar";
@@ -97,11 +97,11 @@ export default function HeaderNav() {
     <header className={getHeaderClasses()}>
       <div className={getHeaderContentClasses()}>
         <div className="text-white bg-blue-600 px-2 py-2">
-          <Link href="/" className="flex items-center gap-2">
+          <SeedLink href="/" className="flex items-center gap-2">
             <span className={`font-bold text-xl tracking-tight text-white`}>
               AutoConnect
             </span>
-          </Link>
+          </SeedLink>
         </div>
         {/* Always show UserSearchBar in header for all layouts */}
         <div className={searchClasses}>
@@ -109,14 +109,14 @@ export default function HeaderNav() {
         </div>
         <nav className={getNavClasses()}>
           {shuffledNavItems.map((item) => (
-            <Link
+            <SeedLink
               key={item.href}
               href={item.href}
               className={linkClass(item.href)}
               onClick={() => logEvent(item.eventType, item.eventData)}
             >
               {item.label}
-            </Link>
+            </SeedLink>
           ))}
         </nav>
       </div>

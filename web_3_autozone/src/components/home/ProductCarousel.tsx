@@ -2,8 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
@@ -32,7 +31,7 @@ export function ProductCarousel({
   seed = 1,
 }: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const router = useSeedRouter();
   // const [showLeftButton, setShowLeftButton] = useState(false);
   // const [showRightButton, setShowRightButton] = useState(true);
 

@@ -9,13 +9,40 @@ interface LayoutContextType extends SeedLayout {
   getElementAttributes: (elementType: string, index?: number) => Record<string, string>;
   generateId: (context: string, index?: number) => string;
   generateSeedClass: (baseClass: string) => string;
+  getNavigationUrl: (path: string) => string;
 }
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
-  const [layout, setLayout] = useState<SeedLayout>(getSeedLayout(6));
-  const [seed, setSeed] = useState(6);
+  // Initialize seed from localStorage or URL
+  const getInitialSeed = () => {
+    if (typeof window === 'undefined') return 6;
+    
+    // Try URL first
+    const urlParams = new URLSearchParams(window.location.search);
+    const seedParam = urlParams.get('seed');
+    if (seedParam) {
+      const rawSeed = parseInt(seedParam, 10);
+      return getEffectiveSeed(rawSeed);
+    }
+    
+    // Then try localStorage
+    try {
+      const stored = localStorage.getItem('autodeliverySeed');
+      if (stored) {
+        const parsed = parseInt(stored, 10);
+        return getEffectiveSeed(parsed);
+      }
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+    
+    return 6; // Default seed
+  };
+
+  const [layout, setLayout] = useState<SeedLayout>(getSeedLayout(getInitialSeed()));
+  const [seed, setSeed] = useState(getInitialSeed);
   const [isDynamicMode, setIsDynamicMode] = useState(false);
 
   useEffect(() => {
@@ -25,8 +52,15 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     const updateLayout = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const seedParam = urlParams.get('seed');
-      const rawSeed = seedParam ? parseInt(seedParam, 10) : 6;
+      const rawSeed = seedParam ? parseInt(seedParam, 10) : seed; // Use current seed if no URL param
       const effectiveSeed = getEffectiveSeed(rawSeed);
+      
+      // Save to localStorage
+      try {
+        localStorage.setItem('autodeliverySeed', effectiveSeed.toString());
+      } catch (e) {
+        // Ignore localStorage errors
+      }
       
       setSeed(effectiveSeed);
       setLayout(getSeedLayout(effectiveSeed));
@@ -58,6 +92,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
       history.pushState = originalPushState;
       history.replaceState = originalReplaceState;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Function to get element attributes with seed
@@ -94,6 +129,20 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     return `${baseClass}-seed-${seed}`;
   };
 
+  // Helper function to generate navigation URLs with seed parameter
+  const getNavigationUrl = (path: string): string => {
+    // If path already has query params
+    if (path.includes('?')) {
+      // Check if seed already exists in the URL
+      if (path.includes('seed=')) {
+        return path;
+      }
+      return `${path}&seed=${seed}`;
+    }
+    // Add seed as first query param
+    return `${path}?seed=${seed}`;
+  };
+
   const value: LayoutContextType = {
     ...layout,
     seed,
@@ -101,6 +150,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     getElementAttributes,
     generateId,
     generateSeedClass,
+    getNavigationUrl,
   };
 
   return (

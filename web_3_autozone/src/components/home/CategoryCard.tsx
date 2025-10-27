@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 
@@ -47,7 +47,7 @@ export function CategoryCard({
   singleImage,
   seed = 1,
 }: CategoryCardProps) {
-  const router = useRouter();
+  const router = useSeedRouter();
   const gridCols = {
     2: "grid-cols-2",
     3: "grid-cols-3",
@@ -62,7 +62,7 @@ export function CategoryCard({
         <h2 className="category-title">{title}</h2>
 
         {singleImage ? (
-          <Link
+          <SeedLink
             href={footerLink?.href || "#"}
             className="block relative h-60 w-full hover:opacity-90 transition-opacity"
           >
@@ -72,7 +72,7 @@ export function CategoryCard({
               fill
               className="object-cover"
             />
-          </Link>
+          </SeedLink>
         ) : (
           <div className={`grid ${gridCols[columns]} gap-4`}>
             {items.map((item, index) => (
@@ -127,12 +127,12 @@ export function CategoryCard({
 
       {footerLink && (
         <CardFooter className="px-4 pt-0 pb-4">
-          <Link
+          <SeedLink
             href={footerLink.href}
             className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
           >
             {footerLink.text}
-          </Link>
+          </SeedLink>
         </CardFooter>
       )}
     </Card>

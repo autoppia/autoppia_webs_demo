@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
@@ -22,7 +22,7 @@ interface CartItem {
 export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
-  const router = useRouter();
+  const router = useSeedRouter();
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
@@ -98,11 +98,11 @@ export function CartPageContent() {
                     with groceries, clothing, household supplies, electronics,
                     and more.
                   </p>
-                  <Link href="/">
+                  <SeedLink href="/">
                     <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
                       Continue Shopping
                     </Button>
-                  </Link>
+                  </SeedLink>
                 </div>
               ) : (
                 <div className="flex flex-col gap-6">
@@ -237,14 +237,14 @@ export function CartPageContent() {
                     This order contains a gift
                   </label>
                 </div>
-                <Link href="/checkout">
+                <SeedLink href="/checkout">
                   <Button
                     className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
                     onClick={handleProceedToCheckout}
                   >
                     Proceed to checkout
                   </Button>
-                </Link>
+                </SeedLink>
               </>
             )}
             {items.length === 0 && (

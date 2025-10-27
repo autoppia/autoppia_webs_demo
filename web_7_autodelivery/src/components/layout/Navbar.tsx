@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import CartNavIcon from "@/components/cart/CartNavIcon";
 import { Input } from "@/components/ui/input";
 import { useSearchStore } from "@/store/search-store";
@@ -77,12 +77,12 @@ export default function Navbar() {
 
   return (
     <nav className={`sticky top-0 z-30 bg-white border-b border-zinc-200 shadow-sm h-20 flex items-center px-6 gap-8 ${layout.navbar?.containerClass || ''}`}>
-      <Link
+      <SeedLink
         href="/"
         className={`font-extrabold text-xl text-zinc-800 tracking-tight ${getLogoPosition()}`}
       >
         Auto<span className="text-green-600">Delivery</span>
-      </Link>
+      </SeedLink>
       
       <h1 className={`text-zinc-700 hover:text-green-600 font-medium px-3 py-1 ${getMenuPosition()}`}>
         Restaurants

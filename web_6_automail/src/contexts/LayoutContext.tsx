@@ -9,30 +9,58 @@ interface LayoutContextType {
   seed: number;
   setSeed: (seed: number) => void;
   updateUrlManually: (seed: number) => void;
+  getNavigationUrl: (path: string) => string;
 }
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
-  // Initialize with the seed from URL immediately
-  const initialSeed = typeof window !== 'undefined' ? getSeedFromUrl() : 1;
-  const [seed, setSeed] = useState(initialSeed);
-  const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(initialSeed));
+  // Initialize with seed from localStorage or URL
+  const getInitialSeed = () => {
+    if (typeof window === 'undefined') return 1;
+    
+    // Try URL first
+    const urlSeed = getSeedFromUrl();
+    if (urlSeed && urlSeed !== 1) {
+      return urlSeed;
+    }
+    
+    // Then try localStorage
+    try {
+      const stored = localStorage.getItem('automailSeed');
+      if (stored) {
+        const parsed = parseInt(stored, 10);
+        return getEffectiveSeed(parsed);
+      }
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+    
+    return 1;
+  };
+
+  const [seed, setSeed] = useState(getInitialSeed);
+  const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(getInitialSeed()));
   const [isUserAction, setIsUserAction] = useState(false);
 
   // Initial URL reading - only run once
   useEffect(() => {
     const urlSeed = getSeedFromUrl();
     const effectiveSeed = getEffectiveSeed(urlSeed);
-    // console.log('LayoutProvider: Initial seed from URL:', urlSeed, 'Effective seed:', effectiveSeed, 'Current seed state:', seed);
+    
+    // Save to localStorage
+    try {
+      localStorage.setItem('automailSeed', effectiveSeed.toString());
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+    
     if (effectiveSeed !== seed) {
-      // console.log('LayoutProvider: Updating seed from URL:', effectiveSeed);
       setSeed(effectiveSeed);
       setCurrentVariant(getLayoutVariant(effectiveSeed));
-    } else {
-      // console.log('LayoutProvider: Seed already matches URL, no update needed');
     }
-  }, [seed]); // Include seed dependency
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
 
   // Listen for URL changes (back/forward buttons)
   useEffect(() => {
@@ -82,6 +110,13 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
       // console.log('LayoutProvider: Setting seed to:', effectiveSeed);
       setIsUserAction(true); // Mark this as a user action
       setSeed(effectiveSeed);
+      
+      // Persist to localStorage
+      try {
+        localStorage.setItem('automailSeed', effectiveSeed.toString());
+      } catch (e) {
+        // Ignore localStorage errors
+      }
     } else {
       // console.log('LayoutProvider: Invalid seed value:', newSeed);
     }
@@ -105,12 +140,33 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
         
         // Update the seed state to match the URL (not a user action)
         setSeed(effectiveSeed);
+        
+        // Persist to localStorage
+        try {
+          localStorage.setItem('automailSeed', effectiveSeed.toString());
+        } catch (e) {
+          // Ignore localStorage errors
+        }
       }
     }
   };
 
+  // Helper function to generate navigation URLs with seed parameter
+  const getNavigationUrl = (path: string): string => {
+    // If path already has query params
+    if (path.includes('?')) {
+      // Check if seed already exists in the URL
+      if (path.includes('seed=')) {
+        return path;
+      }
+      return `${path}&seed=${seed}`;
+    }
+    // Add seed as first query param
+    return `${path}?seed=${seed}`;
+  };
+
   return (
-    <LayoutContext.Provider value={{ currentVariant, seed, setSeed: handleSetSeed, updateUrlManually }}>
+    <LayoutContext.Provider value={{ currentVariant, seed, setSeed: handleSetSeed, updateUrlManually, getNavigationUrl }}>
       {children}
     </LayoutContext.Provider>
   );

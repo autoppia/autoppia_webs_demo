@@ -1,10 +1,9 @@
 'use client'
-import Link from 'next/link';
+import { SeedLink } from '@/components/ui/SeedLink';
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from 'lucide-react';
-import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useSeed } from "@/context/SeedContext";
 import { 
-  getEffectiveSeed, 
   getLayoutConfig
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
@@ -16,9 +15,7 @@ import { getLayoutClasses } from "@/utils/seedLayout";
 // }
 
 function DashboardContent() {
-  const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
@@ -28,7 +25,7 @@ function DashboardContent() {
       <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">Dashboard Overview</h1>
       <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
         {/* Card 1: Matters */}
-        <Link
+        <SeedLink
           href="/matters"
           // onClick={handleClick(EVENT_TYPES.MATTERS_SIDEBAR_CLICKED, { label: "Active Matters", href: "/matters" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -39,10 +36,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">41</span>
           <span className="text-sm text-zinc-400">Matters currently open</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 2: Clients */}
-        <Link
+        <SeedLink
           href="/clients"
           // onClick={handleClick(EVENT_TYPES.CLIENTS_SIDEBAR_CLICKED, { label: "Clients", href: "/clients" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -53,10 +50,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">44</span>
           <span className="text-sm text-zinc-400">Total clients</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 3: Calendar */}
-        <Link
+        <SeedLink
           href="/calendar"
           // onClick={handleClick(EVENT_TYPES.CALENDAR_SIDEBAR_CLICKED, { label: "Upcoming Events", href: "/calendar" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -67,10 +64,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">6</span>
           <span className="text-sm text-zinc-400">Events this week</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 4: Documents */}
-        <Link
+        <SeedLink
           href="/documents"
           // onClick={handleClick(EVENT_TYPES.DOCUMENTS_SIDEBAR_CLICKED, { label: "Documents", href: "/documents" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -81,10 +78,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">50</span>
           <span className="text-sm text-zinc-400">Files managed</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 5: Time Tracking */}
-        <Link
+        <SeedLink
           href="/billing"
           // onClick={handleClick(EVENT_TYPES.TIME_AND_BILLING_SIDEBAR_CLICKED, { label: "Time & Billing", href: "/billing" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -95,10 +92,10 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">36</span>
           <span className="text-sm text-zinc-400">Billable hours</span>
-        </Link>
+        </SeedLink>
 
         {/* Card 6: Settings */}
-        <Link
+        <SeedLink
           href="/settings"
           // onClick={handleClick(EVENT_TYPES.SETTINGS_SIDEBAR_CLICKED, { label: "Settings", href: "/settings" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -109,7 +106,7 @@ function DashboardContent() {
           </div>
           <span className="text-4xl md:text-5xl font-bold tracking-tight text-[#1A1A1A] select-none">--</span>
           <span className="text-sm text-zinc-400">Customize CRM</span>
-        </Link>
+        </SeedLink>
       </div>
     </section>
   );

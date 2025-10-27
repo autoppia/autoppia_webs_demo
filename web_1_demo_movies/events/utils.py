@@ -1,20 +1,21 @@
 from events.models import Event
 
 
-def create_event(user, event_type, description, data=None, web_agent_id=None):
+def create_event(user, event_name, data=None, web_agent_id=None, validator_id=None):
     """
     Create an event in the database.
 
     Args:
         user (User): The user associated with the event (can be None).
-        event_type (str): The type of the event (must be one of Event.EVENT_TYPES).
-        description (str): A brief description of the event.
+        event_name (str): The type/name of the event (must match an Event.event_name choice).
         data (dict): Additional data to store with the event.
+        web_agent_id (str): Identifier of the web agent that produced the event.
+        validator_id (str): Identifier of the validator associated with the event.
     """
     Event.objects.create(
+        event_name=event_name,
         user=user,
-        event_type=event_type,
-        description=description,
-        data=data or {},  # Use empty dict if no data is provided
+        data=data or {},
         web_agent_id=web_agent_id,
+        validator_id=validator_id,
     )

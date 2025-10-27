@@ -1,21 +1,19 @@
 "use client";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const seed = searchParams.get('seed');
   
   const navItems = [
-    { name: "Stays", href: seed ? `/?seed=${seed}` : "/" },
+    { name: "Stays", href: "/" },
     { name: "Experiences", href: "#" },
   ];
   return (
     <header className="w-full flex flex-col items-center border-b bg-white sticky top-0 z-20">
       <nav className="w-full max-w-7xl flex items-center justify-between py-2 px-3 md:px-0">
         <div className="flex items-center gap-2 min-w-[130px]">
-          <Link href={seed ? `/?seed=${seed}` : "/"} className="flex items-center gap-1 select-none">
+          <SeedLink href="/" className="flex items-center gap-1 select-none">
             <span className="font-logo font-bold text-2xl text-[#18181b] tracking-tight">
               Auto
             </span>
@@ -25,15 +23,16 @@ export default function Header() {
             >
               Lodge
             </span>
-          </Link>
+          </SeedLink>
         </div>
         <div className="flex-1 flex justify-center">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || (item.href === '/' && pathname === '/');
             return (
-              <Link
+              <SeedLink
                 key={item.name}
                 href={item.href}
+                preserveSeed={item.href !== '#'}
                 className={`mx-2 px-3 py-2 font-medium text-lg ${
                   isActive ? "text-neutral-800" : "text-neutral-500"
                 }`}
@@ -44,7 +43,7 @@ export default function Header() {
                 }
               >
                 {item.name}
-              </Link>
+              </SeedLink>
             );
           })}
         </div>
