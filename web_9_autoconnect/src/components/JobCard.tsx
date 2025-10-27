@@ -2,7 +2,7 @@
 import { useState } from "react";
 import type { Job } from "@/library/dataset";
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function JobCard({
@@ -32,10 +32,20 @@ export default function JobCard({
     onApply?.(job.id);
   };
 
+  const handleViewJob = () => {
+    logEvent(EVENT_TYPES.VIEW_JOB, {
+      jobId: job.id,
+      jobTitle: job.title,
+      company: job.company,
+      location: job.location,
+    });
+  };
+
   return (
-    <Link
+    <SeedLink
       href={`/jobs/${job.id}`}
       className="flex items-center gap-4 bg-white rounded shadow p-4 w-full hover:shadow-md transition-shadow cursor-pointer"
+      onClick={handleViewJob}
     >
       <Image
         src={job.logo}
@@ -73,6 +83,6 @@ export default function JobCard({
           ? "Pending..."
           : "Applied"}
       </button>
-    </Link>
+    </SeedLink>
   );
 }

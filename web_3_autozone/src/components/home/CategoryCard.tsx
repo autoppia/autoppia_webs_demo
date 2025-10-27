@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 
@@ -46,6 +47,7 @@ export function CategoryCard({
   singleImage,
   seed = 1,
 }: CategoryCardProps) {
+  const router = useSeedRouter();
   const gridCols = {
     2: "grid-cols-2",
     3: "grid-cols-3",
@@ -60,7 +62,7 @@ export function CategoryCard({
         <h2 className="category-title">{title}</h2>
 
         {singleImage ? (
-          <Link
+          <SeedLink
             href={footerLink?.href || "#"}
             className="block relative h-60 w-full hover:opacity-90 transition-opacity"
           >
@@ -70,24 +72,37 @@ export function CategoryCard({
               fill
               className="object-cover"
             />
-          </Link>
+          </SeedLink>
         ) : (
           <div className={`grid ${gridCols[columns]} gap-4`}>
             {items.map((item, index) => (
-              <Link
-                href={item.link || "#"}
+              <a
+                href={item.link ? `#${item.link.replace('/', '')}` : "#"}
+                title={item.link ? `View ${item.title} - ${item.link}` : item.title}
                 key={`${item.title}-${index}`}
-                onClick={() =>
-                  logEvent(EVENT_TYPES.VIEW_DETAIL, {
-                    title: item.title,
-                    section: title,
-                    price: item.price || "$0.00",
-                    rating: item.rating ?? 0,
-                    brand: item.brand || "Generic",
-                    category: item.category || title || "Uncategorized",
-                  })
-                }
-                className="space-y-2 hover:opacity-90 transition-opacity"
+                onMouseEnter={() => {
+                  if (item.link && item.link !== "#") {
+                    window.history.replaceState(null, '', `#${item.link.replace('/', '')}`);
+                  }
+                }}
+                onMouseLeave={() => {
+                  window.history.replaceState(null, '', window.location.pathname);
+                }}
+                onClick={(e) => {
+                  if (item.link && item.link !== "#") {
+                    e.preventDefault();
+                    logEvent(EVENT_TYPES.VIEW_DETAIL, {
+                      title: item.title,
+                      section: title,
+                      price: item.price || "$0.00",
+                      rating: item.rating ?? 0,
+                      brand: item.brand || "Generic",
+                      category: item.category || title || "Uncategorized",
+                    });
+                    router.push(item.link);
+                  }
+                }}
+                className="space-y-2 hover:opacity-90 transition-opacity block no-underline text-inherit cursor-pointer group"
               >
                 <div className="relative h-36 w-full">
                   <Image
@@ -97,9 +112,15 @@ export function CategoryCard({
                     height={150}
                     className="object-cover w-auto h-auto"
                   />
+                  {/* URL Display on Hover - only show if there's a valid link */}
+                  {item.link && item.link !== "#" && (
+                    <div className="absolute bottom-2 left-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
+                      {item.link}
+                    </div>
+                  )}
                 </div>
                 <h3 className="text-sm hover:text-blue-600">{item.title}</h3>
-              </Link>
+              </a>
             ))}
           </div>
         )}
@@ -107,12 +128,12 @@ export function CategoryCard({
 
       {footerLink && (
         <CardFooter className="px-4 pt-0 pb-4">
-          <Link
+          <SeedLink
             href={footerLink.href}
             className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
           >
             {footerLink.text}
-          </Link>
+          </SeedLink>
         </CardFooter>
       )}
     </Card>

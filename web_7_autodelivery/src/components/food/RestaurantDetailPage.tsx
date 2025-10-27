@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Trash } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
+import { useLayout } from "@/contexts/LayoutProvider";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -43,6 +44,7 @@ function ReviewsSection({
   isAdmin?: boolean;
   restaurant: typeof restaurants[number];
 }) {
+  const layout = useLayout();
   const [localReviews, setLocalReviews] = useState(reviews);
   const handleDelete = (idx: number) => {
     const deleted = localReviews[idx];
@@ -64,9 +66,20 @@ function ReviewsSection({
 
   if (!localReviews?.length) return null;
   return (
-    <section className="mt-12">
-      <h3 className="text-xl font-bold mb-4">Customer Reviews</h3>
-      <div className="space-y-4">
+    <section 
+      className={`mt-12 ${layout.restaurantDetail.reviewsClass}`}
+      {...layout.getElementAttributes('reviews-section', 0)}
+    >
+      <h3 
+        className={`text-xl font-bold mb-4 ${layout.generateSeedClass('reviews-title')}`}
+        {...layout.getElementAttributes('reviews-title', 0)}
+      >
+        Customer Reviews
+      </h3>
+      <div 
+        className={`space-y-4 ${layout.generateSeedClass('reviews-list')}`}
+        {...layout.getElementAttributes('reviews-list', 0)}
+      >
         {localReviews.map((r, i) => (
           <div
             key={i}
@@ -109,6 +122,7 @@ export default function RestaurantDetailPage({
 }: {
   restaurantId: string;
 }) {
+  const layout = useLayout();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useRouter();
   // fix restaurant
@@ -160,92 +174,171 @@ export default function RestaurantDetailPage({
     }
   }
 
-  return (
-    <div className="max-w-5xl mx-auto px-2 sm:px-0">
-      <div className="flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-6">
-        <div className="relative w-full md:w-72 h-48 rounded-xl overflow-hidden shadow">
-          <Image
-            src={restaurant.image}
-            alt={restaurant.name}
-            fill
-            style={{ objectFit: "cover" }}
-            sizes="(max-width: 768px) 100vw, 400px"
-          />
-        </div>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-1">{restaurant.name}</h1>
-          <div className="text-zinc-500 mb-2">
-            {restaurant.cuisine} &middot;{" "}
-            <span className="font-semibold text-green-700">
-              ★ {restaurant.rating}
-            </span>
-          </div>
-          <p className="text-zinc-600 mb-2">{restaurant.description}</p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              logEvent(EVENT_TYPES.BACK_TO_ALL_RESTAURANTS, {
-                fromRestaurantId: restaurant.id,
-                fromRestaurantName: restaurant.name,
-              });
-              router.back();
-            }}
+  // Render elements based on the dynamic order
+  const renderElement = (elementType: string) => {
+    switch (elementType) {
+      case 'header':
+        return (
+          <div 
+            key="header"
+            className={`flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-6 ${layout.restaurantDetail.headerClass}`}
+            {...layout.getElementAttributes('restaurant-header', 0)}
           >
-            ← Back to all restaurants
-          </Button>
-        </div>
-      </div>
-      <h2 className="text-xl font-bold mb-4 mt-10">Menu</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {restaurant.menu.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white rounded-lg shadow p-4 flex flex-col"
-          >
-            <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
+            <div className="relative w-full md:w-72 h-48 rounded-xl overflow-hidden shadow">
               <Image
-                src={item.image}
-                alt={item.name}
+                src={restaurant.image}
+                alt={restaurant.name}
                 fill
-                className="object-cover"
+                style={{ objectFit: "cover" }}
+                sizes="(max-width: 768px) 100vw, 400px"
               />
             </div>
-            <div className="font-bold text-lg mb-1">{item.name}</div>
-            <div className="text-zinc-500 text-sm mb-2 flex-1">
-              {item.description}
-            </div>
-            <div className="flex items-center justify-between mt-auto">
-              <span className="font-semibold text-green-700 text-base">
-                ${item.price.toFixed(2)}
-              </span>
-              <Button
-                size="sm"
-                id="add-to-cart-modal-btn"
-                onClick={() => {
-                  logEvent(EVENT_TYPES.ADD_TO_CART_MODAL_OPEN, {
-                    restaurantId: restaurant.id,
-                    restaurantName: restaurant.name,
-                    itemId: item.id,
-                    itemName: item.name,
-                    itemPrice: item.price,
-                  });
-                  const itemWithRestaurant = {
-                    ...item,
-                    restaurantId: restaurant.id,
-                    restaurantName: restaurant.name
-                  };
-
-                  setModalOpen(true);
-                  setModalItem(itemWithRestaurant);
-                }}
+            <div className="flex-1">
+              <h1 
+                className={`text-3xl font-bold mb-1 ${layout.generateSeedClass('restaurant-name')}`}
+                {...layout.getElementAttributes('restaurant-name', 0)}
               >
-                Add to Cart
+                {restaurant.name}
+              </h1>
+              <div 
+                className={`text-zinc-500 mb-2 ${layout.generateSeedClass('restaurant-meta')}`}
+                {...layout.getElementAttributes('restaurant-meta', 0)}
+              >
+                {restaurant.cuisine} &middot;{" "}
+                <span className="font-semibold text-green-700">
+                  ★ {restaurant.rating}
+                </span>
+              </div>
+              <p 
+                className={`text-zinc-600 mb-2 ${layout.generateSeedClass('restaurant-description')}`}
+                {...layout.getElementAttributes('restaurant-description', 0)}
+              >
+                {restaurant.description}
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                className={layout.generateSeedClass('back-button')}
+                onClick={() => {
+                  logEvent(EVENT_TYPES.BACK_TO_ALL_RESTAURANTS, {
+                    fromRestaurantId: restaurant.id,
+                    fromRestaurantName: restaurant.name,
+                  });
+                  // Navigate to restaurants page with current seed parameter
+                  const urlParams = new URLSearchParams(window.location.search);
+                  const seedParam = urlParams.get('seed');
+                  const restaurantsUrl = seedParam ? `/restaurants?seed=${seedParam}` : '/restaurants';
+                  router.push(restaurantsUrl);
+                }}
+                {...layout.getElementAttributes('back-button', 0)}
+              >
+                ← Back to all restaurants
               </Button>
             </div>
           </div>
-        ))}
-      </div>
+        );
+      
+      case 'menu':
+        return (
+          <div key="menu">
+            <h2 
+              className={`text-xl font-bold mb-4 mt-10 ${layout.generateSeedClass('menu-title')}`}
+              {...layout.getElementAttributes('menu-title', 0)}
+            >
+              Menu
+            </h2>
+            <div 
+              className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${layout.restaurantDetail.menuClass}`}
+              {...layout.getElementAttributes('menu-grid', 0)}
+            >
+              {restaurant.menu.map((item, index) => (
+                <div
+                  key={item.id}
+                  className={`bg-white rounded-lg shadow p-4 flex flex-col ${layout.generateSeedClass('menu-item')}`}
+                  {...layout.getElementAttributes('menu-item', index)}
+                >
+                  <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div 
+                    className={`font-bold text-lg mb-1 ${layout.generateSeedClass('menu-item-name')}`}
+                    {...layout.getElementAttributes('menu-item-name', index)}
+                  >
+                    {item.name}
+                  </div>
+                  <div 
+                    className={`text-zinc-500 text-sm mb-2 flex-1 ${layout.generateSeedClass('menu-item-description')}`}
+                    {...layout.getElementAttributes('menu-item-description', index)}
+                  >
+                    {item.description}
+                  </div>
+                  <div className="flex items-center justify-between mt-auto">
+                    <span 
+                      className={`font-semibold text-green-700 text-base ${layout.generateSeedClass('menu-item-price')}`}
+                      {...layout.getElementAttributes('menu-item-price', index)}
+                    >
+                      ${item.price.toFixed(2)}
+                    </span>
+                    <Button
+                      size="sm"
+                      id="add-to-cart-modal-btn"
+                      className={layout.generateSeedClass('add-to-cart-btn')}
+                      onClick={() => {
+                        logEvent(EVENT_TYPES.ADD_TO_CART_MODAL_OPEN, {
+                          restaurantId: restaurant.id,
+                          restaurantName: restaurant.name,
+                          itemId: item.id,
+                          itemName: item.name,
+                          itemPrice: item.price,
+                        });
+                        const itemWithRestaurant = {
+                          ...item,
+                          restaurantId: restaurant.id,
+                          restaurantName: restaurant.name
+                        };
+
+                        setModalOpen(true);
+                        setModalItem(itemWithRestaurant);
+                      }}
+                      {...layout.getElementAttributes('add-to-cart-btn', index)}
+                    >
+                      Add to Cart
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      
+      case 'reviews':
+        return (
+          <ReviewsSection 
+            key="reviews"
+            reviews={restaurant.reviews} 
+            isAdmin={isAdmin} 
+            restaurant={restaurant} 
+          />
+        );
+      
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div 
+      className={`max-w-5xl mx-auto px-2 sm:px-0 ${layout.restaurantDetail.containerClass}`}
+      {...layout.getElementAttributes('restaurant-detail-page', 0)}
+    >
+      {/* Render elements in the dynamic order */}
+      {layout.restaurantDetail.elementOrder.map((elementType) => renderElement(elementType))}
+      
       {/* Modal for item customizations */}
       {modalOpen && modalItem && (
         <AddToCartModal
@@ -258,8 +351,6 @@ export default function RestaurantDetailPage({
           onAdd={handleAddToCart}
         />
       )}
-      {/* Reviews section */}
-      <ReviewsSection reviews={restaurant.reviews} isAdmin={isAdmin} restaurant={restaurant} />
       {/* Floating Cart Access here! */}
       <CartFab />
     </div>

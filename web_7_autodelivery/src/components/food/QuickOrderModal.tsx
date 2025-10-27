@@ -10,6 +10,7 @@ import { restaurants } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { Search, Clock, Star, MapPin, Zap } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
+import { useSeedLayout } from "@/hooks/use-seed-layout";
 
 interface QuickOrderModalProps {
   open: boolean;
@@ -20,6 +21,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"popular" | "search" | "recent">("popular");
   const addToCart = useCartStore((s) => s.addToCart);
+  const layout = useSeedLayout();
   
   // Get popular restaurants (those with high ratings or featured)
   const popularRestaurants = restaurants
@@ -116,15 +118,16 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
-            Quick Order
-          </DialogTitle>
-          <p className="text-center text-zinc-600">
-            Choose a restaurant to start ordering delicious food
-          </p>
-        </DialogHeader>
+      <DialogContent className={`max-w-4xl max-h-[80vh] overflow-y-auto ${layout.modal.containerClass}`}>
+        <div className={layout.modal.contentClass}>
+          <DialogHeader className={layout.modal.headerClass}>
+            <DialogTitle className="text-2xl font-bold text-center">
+              Quick Order
+            </DialogTitle>
+            <p className="text-center text-zinc-600">
+              Choose a restaurant to start ordering delicious food
+            </p>
+          </DialogHeader>
 
         {/* Search Bar */}
         <div className="relative mb-6">
@@ -317,6 +320,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
               View Cart
             </Button>
           </div>
+        </div>
         </div>
       </DialogContent>
     </Dialog>

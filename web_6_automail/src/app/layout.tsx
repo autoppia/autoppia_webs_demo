@@ -1,25 +1,13 @@
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
+import { LayoutProvider } from "@/contexts/LayoutContext";
+import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses } from "@/utils/seedLayout";
 
-// const inter = Inter({ subsets: ["latin"] });
-// Load Inter from local files
-const inter = localFont({
-  src: [
-    {
-      path: "./fonts/Inter-VariableFont.woff2",
-      style: "normal",
-    },
-    {
-      path: "./fonts/Inter-Italic-VariableFont.woff2",
-      style: "italic",
-    },
-  ],
-  variable: "--font-inter", // optional CSS variable
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AutoMail - Modern Email Client",
@@ -31,12 +19,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // For server-side rendering, we'll use default values
+  // The actual seed will be handled in client components
+  const seed = 1; // Default seed for SSR
+  const layoutConfig = getLayoutConfig(seed);
+  const layoutClasses = getLayoutClasses(layoutConfig);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
         <ThemeProvider>
-          <EmailProvider>{children}</EmailProvider>
+          <EmailProvider>
+            <LayoutProvider>{children}</LayoutProvider>
+          </EmailProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { mockJobs } from "@/library/dataset";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function JobDetailClient({ jobId }: { jobId: string }) {
   const job = mockJobs.find((j) => j.id === jobId);
@@ -29,12 +29,12 @@ export default function JobDetailClient({ jobId }: { jobId: string }) {
       <div className="text-center text-red-600 mt-8">
         <h1 className="text-2xl font-bold mb-4">Job Not Found</h1>
         <p className="mb-4">The job you're looking for doesn't exist.</p>
-        <Link
+        <SeedLink
           href="/jobs"
           className="text-blue-600 hover:text-blue-800 underline"
         >
           ← Back to Jobs
-        </Link>
+        </SeedLink>
       </div>
     );
   }
@@ -65,12 +65,12 @@ export default function JobDetailClient({ jobId }: { jobId: string }) {
   return (
     <section className="max-w-4xl mx-auto">
       {/* Back Button */}
-      <Link
+      <SeedLink
         href="/jobs"
         className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
       >
         ← Back to Jobs
-      </Link>
+      </SeedLink>
 
       {/* Job Header */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">

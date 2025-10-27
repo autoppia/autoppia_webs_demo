@@ -3,10 +3,9 @@ import { useEffect } from "react";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
-import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useSeed } from "@/context/SeedContext";
 import { 
-  getEffectiveSeed, 
   getProductsByCategory, 
   getStaticCategories, 
   getStaticHomeEssentials, 
@@ -17,9 +16,7 @@ import { getLayoutClasses } from "@/utils/seedLayout";
 
 
 function HomeContent() {
-  const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
 

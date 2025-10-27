@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
@@ -21,6 +22,7 @@ interface CartItem {
 export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
+  const router = useSeedRouter();
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
@@ -96,11 +98,11 @@ export function CartPageContent() {
                     with groceries, clothing, household supplies, electronics,
                     and more.
                   </p>
-                  <Link href="/">
+                  <SeedLink href="/">
                     <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
                       Continue Shopping
                     </Button>
-                  </Link>
+                  </SeedLink>
                 </div>
               ) : (
                 <div className="flex flex-col gap-6">
@@ -115,7 +117,7 @@ export function CartPageContent() {
                         className="flex flex-col md:flex-row items-center md:items-stretch gap-4 border-b border-gray-100 pb-6 last:border-b-0"
                       >
                         {/* Product Image */}
-                        <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded">
+                        <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded relative group">
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -123,15 +125,30 @@ export function CartPageContent() {
                             height={80}
                             className="object-contain max-h-20 max-w-20"
                           />
+                          {/* URL Display on Hover */}
+                          <div className="absolute bottom-1 left-1 right-1 bg-black/80 text-white text-xs px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
+                            /{item.id}
+                          </div>
                         </div>
                         {/* Product Details */}
                         <div className="flex-1 flex flex-col justify-between">
-                          <Link
-                            href={`/${item.id}`}
-                            className="text-base font-medium hover:text-blue-600"
+                          <a
+                            href={`#${item.id}`}
+                            title={`View ${item.title} - Product ID: ${item.id}`}
+                            onMouseEnter={() => {
+                              window.history.replaceState(null, '', `#${item.id}`);
+                            }}
+                            onMouseLeave={() => {
+                              window.history.replaceState(null, '', window.location.pathname);
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push(`/${item.id}`);
+                            }}
+                            className="text-base font-medium hover:text-blue-600 no-underline cursor-pointer"
                           >
                             {item.title}
-                          </Link>
+                          </a>
                           <div className="text-xs text-gray-500 mt-1">
                             {item.brand && `Brand: ${item.brand}`}
                             {item.color && `, Color: ${item.color}`}
@@ -220,14 +237,14 @@ export function CartPageContent() {
                     This order contains a gift
                   </label>
                 </div>
-                <Link href="/checkout">
+                <SeedLink href="/checkout">
                   <Button
                     className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
                     onClick={handleProceedToCheckout}
                   >
                     Proceed to checkout
                   </Button>
-                </Link>
+                </SeedLink>
               </>
             )}
             {items.length === 0 && (

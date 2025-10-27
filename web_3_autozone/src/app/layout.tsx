@@ -1,7 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { NotificationBanner } from "@/components/layout/NotificationBanner";
 import { CartProvider } from "@/context/CartContext";
+import { SeedProvider } from "@/context/SeedContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
@@ -25,7 +25,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <CartProvider>
+      <SeedProvider>
+      <CartProvider>
           {/* <NotificationBanner /> */}
           <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
             <Header />
@@ -41,6 +42,7 @@ export default function RootLayout({
             <Footer />
           </Suspense>
         </CartProvider>
+      </SeedProvider>
       </body>
     </html>
   );
