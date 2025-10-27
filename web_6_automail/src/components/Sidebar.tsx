@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
 import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { TextStructureConfig } from "@/utils/textStructureProvider";
 // import { systemLabels } from "@/library/dataset";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import { DynamicElement } from "@/components/DynamicElement";
@@ -46,7 +47,11 @@ interface NavigationItem {
 //   trash: EVENT_TYPES.TRASH_SIDEBAR_CLICKED,
 // } as const;
 
-export function Sidebar() {
+interface SidebarProps {
+  textStructure?: TextStructureConfig;
+}
+
+export function Sidebar({ textStructure }: SidebarProps) {
   const { currentVariant } = useLayout();
   const { getText, getId } = useDynamicStructure();
   const {
@@ -122,14 +127,14 @@ export function Sidebar() {
   const labelCounts = getLabelCounts();
 
   const navigationItems: NavigationItem[] = [
-    { id: "inbox", label: getText("inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
-    { id: "starred", label: getText("starred"), icon: Star, count: counts.starred, type: "folder" },
+    { id: "inbox", label: textStructure?.inbox_label || getText("inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
+    { id: "starred", label: textStructure?.starred_label || getText("starred"), icon: Star, count: counts.starred, type: "folder" },
     { id: "snoozed", label: "Snoozed", icon: Clock, count: counts.snoozed, type: "folder" },
-    { id: "sent", label: getText("sent"), icon: Send, count: counts.sent, type: "folder" },
-    { id: "drafts", label: getText("drafts"), icon: FileText, count: counts.drafts, type: "folder" },
+    { id: "sent", label: textStructure?.sent_label || getText("sent"), icon: Send, count: counts.sent, type: "folder" },
+    { id: "drafts", label: textStructure?.drafts_label || getText("drafts"), icon: FileText, count: counts.drafts, type: "folder" },
     { id: "important", label: "Important", icon: AlertTriangle, count: counts.important, type: "folder" },
     { id: "spam", label: "Spam", icon: Mail, count: counts.spam, type: "folder" },
-    { id: "trash", label: getText("trash"), icon: Trash2, count: counts.trash, type: "folder" },
+    { id: "trash", label: textStructure?.trash_label || getText("trash"), icon: Trash2, count: counts.trash, type: "folder" },
   ];
 
   const handleItemClick = (item: NavigationItem) => {
@@ -225,11 +230,12 @@ export function Sidebar() {
               const active = isActive(item);
               return (
                 <Button
-                  id={item.id}
+                  id={textStructure?.ids[`${item.id}_btn` as keyof typeof textStructure.ids] || item.id}
                   key={item.id}
                   variant={active ? "secondary" : "ghost"}
                   className="h-8 px-3 text-sm font-normal rounded-lg"
                   onClick={() => handleItemClick(item)}
+                  aria-label={textStructure?.aria_labels[`${item.id}_nav` as keyof typeof textStructure.aria_labels] || `Navigate to ${item.label}`}
                 >
                   <Icon className="h-4 w-4" />
                   <span className="ml-2">{item.label}</span>
@@ -258,9 +264,11 @@ export function Sidebar() {
               onClick={() => toggleCompose(true)}
               className={getComposeButtonClasses()}
               size="lg"
+              id={textStructure?.ids.compose_button || getId("compose_button")}
+              aria-label={textStructure?.aria_labels.compose_button || "Compose new email"}
             >
               <PenTool className="h-4 w-4" />
-              Compose
+              {textStructure?.compose_button || 'Compose'}
             </Button>
           </div>
 
@@ -271,11 +279,12 @@ export function Sidebar() {
             const active = isActive(item);
             return (
               <Button
-                id={item.id}
+                id={textStructure?.ids[`${item.id}_btn` as keyof typeof textStructure.ids] || item.id}
                 key={item.id}
                 variant={active ? "secondary" : "ghost"}
                 className={cn("w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover", active && "sidebar-item-active")}
                 onClick={() => handleItemClick(item)}
+                aria-label={textStructure?.aria_labels[`${item.id}_nav` as keyof typeof textStructure.aria_labels] || `Navigate to ${item.label}`}
               >
                 <Icon className="h-4 w-4" />
                 <span className="flex-1 text-left">{item.label}</span>

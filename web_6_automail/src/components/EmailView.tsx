@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { TextStructureConfig } from "@/utils/textStructureProvider";
 import {
   Star,
   Reply,
@@ -25,7 +26,11 @@ import {
   Mail,
 } from "lucide-react";
 
-export function EmailView() {
+interface EmailViewProps {
+  textStructure?: TextStructureConfig;
+}
+
+export function EmailView({ textStructure }: EmailViewProps) {
   const {
     currentEmail,
     setCurrentEmail,

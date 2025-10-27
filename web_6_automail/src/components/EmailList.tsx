@@ -13,6 +13,7 @@ import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import type { Email } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { TextStructureConfig } from "@/utils/textStructureProvider";
 import {
   Star,
   Archive,
@@ -27,7 +28,11 @@ import {
   Tag,
 } from "lucide-react";
 
-export function EmailList() {
+interface EmailListProps {
+  textStructure?: TextStructureConfig;
+}
+
+export function EmailList({ textStructure }: EmailListProps) {
   const { currentVariant } = useLayout();
   const { getText, getId } = useDynamicStructure();
   const {

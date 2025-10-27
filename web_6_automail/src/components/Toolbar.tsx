@@ -17,6 +17,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useLayout } from '@/contexts/LayoutContext';
 import { useDynamicStructure } from '@/contexts/DynamicStructureContext';
 import { cn } from '@/library/utils';
+import { TextStructureConfig } from '@/utils/textStructureProvider';
 import {
   Search,
   Menu,
@@ -33,9 +34,10 @@ import {
 import { EVENT_TYPES, logEvent } from "@/library/events";
 interface ToolbarProps {
   onMenuClick?: () => void;
+  textStructure?: TextStructureConfig;
 }
 
-export function Toolbar({ onMenuClick }: ToolbarProps) {
+export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
   const { currentVariant } = useLayout();
   const { getText, getId } = useDynamicStructure();
   const { searchQuery, setSearchQuery, filteredEmails } = useEmail();
@@ -149,7 +151,9 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
             <div className="w-8 h-8 bg-gradient-to-br from-primary via-primary/80 to-primary/60 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-sm">A</span>
             </div>
-            <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">AutoMail</span>
+            <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              {textStructure?.app_name || 'AutoMail'}
+            </span>
           </div>
         </div>
 
@@ -159,7 +163,8 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder={`${getText("search_placeholder")} (try: from:, to:, subject:, has:attachment, is:unread)`}
+              id={textStructure?.ids.search_input || getId("search_input")}
+              placeholder={textStructure?.search_placeholder || getText("search_placeholder")}
               value={searchValue}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
@@ -221,7 +226,13 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button id="user-menu-btn" variant="ghost" size="icon" className="relative">
+              <Button 
+                id={textStructure?.ids.user_menu || "user-menu-btn"} 
+                variant="ghost" 
+                size="icon" 
+                className="relative"
+                aria-label={textStructure?.aria_labels.user_menu || "User account menu"}
+              >
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                   <span className="text-white font-medium text-sm">U</span>
                 </div>
@@ -233,7 +244,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                   <span className="text-white font-medium">U</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">User Account</p>
+                  <p className="text-sm font-medium">{textStructure?.user_account || 'User Account'}</p>
                   <p className="text-xs text-muted-foreground">user@gmail.com</p>
                 </div>
               </div>
@@ -248,15 +259,16 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Light</span>
+                    <span className="text-sm">{textStructure?.theme_light || 'Light'}</span>
                     <Button
-                      id="theme-light-btn"
+                      id={textStructure?.ids.theme_light_btn || "theme-light-btn"}
                       variant={theme === 'light' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
                         setTheme('light');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'light' });
                       }}
+                      aria-label={textStructure?.aria_labels.theme_toggle || "Toggle theme"}
                       className={cn(
                         currentVariant.id === 2 && "theme-toggle",
                         currentVariant.id === 3 && "theme-btn",
@@ -273,15 +285,16 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                     </Button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Dark</span>
+                    <span className="text-sm">{textStructure?.theme_dark || 'Dark'}</span>
                     <Button
-                      id="theme-dark-btn"
+                      id={textStructure?.ids.theme_dark_btn || "theme-dark-btn"}
                       variant={theme === 'dark' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
                         setTheme('dark');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'dark' });
                       }}
+                      aria-label={textStructure?.aria_labels.theme_toggle || "Toggle theme"}
                       className={cn(
                         currentVariant.id === 2 && "theme-toggle",
                         currentVariant.id === 3 && "theme-btn",
@@ -298,15 +311,16 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                     </Button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">System</span>
+                    <span className="text-sm">{textStructure?.theme_system || 'System'}</span>
                     <Button
-                      id="theme-system-btn"
+                      id={textStructure?.ids.theme_system_btn || "theme-system-btn"}
                       variant={theme === 'system' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
                         setTheme('system');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'system' });
                       }}
+                      aria-label={textStructure?.aria_labels.theme_toggle || "Toggle theme"}
                       className={cn(
                         currentVariant.id === 2 && "theme-toggle",
                         currentVariant.id === 3 && "theme-btn",

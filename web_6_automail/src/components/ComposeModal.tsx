@@ -18,6 +18,7 @@ import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
 import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 import { cn } from "@/library/utils";
+import { TextStructureConfig } from "@/utils/textStructureProvider";
 import {
   Send,
   Paperclip,
@@ -34,7 +35,11 @@ import {
 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
-export function ComposeModal() {
+interface ComposeModalProps {
+  textStructure?: TextStructureConfig;
+}
+
+export function ComposeModal({ textStructure }: ComposeModalProps) {
   const { currentVariant } = useLayout();
   const { getText, getId } = useDynamicStructure();
   const {
