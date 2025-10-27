@@ -6,7 +6,7 @@ services:
       args:
         ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-false}
     ports:
-      - "${WEB_PORT}:8009"
+      - "127.0.0.1:${WEB_PORT}:8009"
     restart: always
     environment:
       - API_URL=http://app:8080
