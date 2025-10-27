@@ -17,7 +17,7 @@ export interface StructureVariation {
 // Check if dynamic HTML structure is enabled via environment variable
 const isDynamicStructureEnabled = (): boolean => {
   if (typeof window === 'undefined') {
-    return false; // Server-side, default to false
+    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE === 'true';
   }
   // Access environment variable through window object or default to false
   return (window as any).__NEXT_DATA__?.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE === 'true' || false;
