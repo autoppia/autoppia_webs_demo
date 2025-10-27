@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useRef, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { title } from "process";
 import { ToastContainer, toast } from "react-toastify";
 import { jobs,hires, experts  } from "@/library/dataset";
+import { useSeedLayout } from "@/library/useSeedLayout";
 
 function PostJobWizard({
   open,
@@ -14,6 +15,7 @@ function PostJobWizard({
   open: boolean;
   onClose: () => void;
 }) {
+  const { layout, getElementAttributes } = useSeedLayout();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -72,19 +74,29 @@ function PostJobWizard({
 
   // Stepper progress text
   const progress = `${step}/${totalSteps}`;
-  const stepTitle = [
-    "Let's start with a strong title.",
-    "What are the main skills required for your work?",
-    "Next, estimate the scope of your work.",
-    "Tell us about your budget.",
-    "Start the conversation.",
-  ][step - 1];
+  
+  // Create step title map for dynamic ordering
+  const stepTitleMap = {
+    title: "Let's start with a strong title.",
+    skills: "What are the main skills required for your work?",
+    scope: "Next, estimate the scope of your work.",
+    budget: "Tell us about your budget.",
+    description: "Start the conversation.",
+  };
+  
+  // Get current step key based on layout order
+  const currentStepKey = layout.postJobSections[step - 1];
+  const stepTitle = stepTitleMap[currentStepKey as keyof typeof stepTitleMap] || stepTitleMap.title;
 
   const getButtonTitle = (step: number): string => {
-    if (step === 1) return "Next: Skills";
-    if (step === 2) return "Next: Scope";
-    if (step === 3) return "Next: Budget";
-    if (step === 4) return "Next: Description";
+    if (step === totalSteps) return "Submit Job Post";
+    
+    const currentStepKey = layout.postJobSections[step - 1];
+    const nextStepKey = layout.postJobSections[step];
+    
+    if (nextStepKey) {
+      return `Next: ${nextStepKey.charAt(0).toUpperCase() + nextStepKey.slice(1)}`;
+    }
     return "Next";
   };
 
@@ -200,30 +212,30 @@ function PostJobWizard({
             <h2 className="text-4xl font-bold mb-5 leading-tight text-[#253037]">
               {stepTitle}
             </h2>
-            {step === 1 && (
+            {currentStepKey === 'title' && (
               <p className="text-base text-[#4a545b] mb-10">
-                This helps your job post stand out to the right candidates. It’s
-                the first thing they’ll see, so make it count!
+                This helps your job post stand out to the right candidates. It's
+                the first thing they'll see, so make it count!
               </p>
             )}
-            {step === 2 && (
+            {currentStepKey === 'skills' && (
               <>
                 <p className="text-base text-[#4a545b] mb-10">
                   For the best results, add 3-5 skills.
                 </p>
               </>
             )}
-            {step === 3 && (
+            {currentStepKey === 'scope' && (
               <p className="text-base text-[#4a545b] mb-10">
                 Consider the size of your project and the time it will take.
               </p>
             )}
-            {step === 4 && (
+            {currentStepKey === 'budget' && (
               <p className="text-base text-[#4a545b] mb-10">
                 This will help us match you to talent within your range.
               </p>
             )}
-            {step === 5 && (
+            {currentStepKey === 'description' && (
               <>
                 <div className="mb-4 font-medium text-[#253037]">
                   Talent are looking for:
@@ -239,7 +251,7 @@ function PostJobWizard({
           </div>
           {/* Right: Step content */}
           <div className="flex-1 xl:border-l border-gray-200 xl:pl-8 flex flex-col gap-7">
-            {step === 1 && (
+            {currentStepKey === 'title' && (
               <>
                 <label
                   htmlFor="job-title"
@@ -249,6 +261,7 @@ function PostJobWizard({
                 </label>
                 <input
                   id="job-title"
+                  {...getElementAttributes('job-title-input', 0)}
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-lg focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none mt-1"
                   placeholder=""
                   type="text"
@@ -258,7 +271,7 @@ function PostJobWizard({
                     setValue("title", value);
                     logEvent(EVENT_TYPES.WRITE_JOB_TITLE, {
                       query: value,
-                      step: 1,
+                      step: step,
                     });
                   }}
                   required
@@ -281,13 +294,14 @@ function PostJobWizard({
                 </div>
               </>
             )}
-            {step === 2 && (
+            {currentStepKey === 'skills' && (
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
                   Search skills or add your own
                 </label>
                 <div className="flex gap-2 items-start mb-2" ref={dropdownRef}>
                   <input
+                    {...getElementAttributes('skill-search-input', 0)}
                     className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
                     placeholder="Type a skill and press Enter or Add button"
                     type="text"
@@ -342,6 +356,7 @@ function PostJobWizard({
                     </ul>
                   )}
                   <button
+                    {...getElementAttributes('add-skill-button', 0)}
                     className="rounded bg-[#08b4ce] text-white px-4 py-2 h-11 ml-2 font-bold hover:bg-[#0999ac]"
                     type="button"
                     onClick={() => {
@@ -373,6 +388,7 @@ function PostJobWizard({
                     >
                       {skill}
                       <button
+                        {...getElementAttributes('remove-skill-button', i)}
                         type="button"
                         className="ml-1 text-xs font-bold"
                         onClick={() => {
@@ -399,6 +415,7 @@ function PostJobWizard({
                     {popularSkills.map((skill) => (
                       <button
                         key={skill}
+                        {...getElementAttributes('popular-skill-button', popularSkills.indexOf(skill))}
                         type="button"
                         className="px-3 py-1 bg-gray-100 hover:bg-[#e6f9fb] border border-[#cad2d0] rounded-full text-[#253037] text-sm"
                         onClick={() => {
@@ -418,7 +435,7 @@ function PostJobWizard({
                 </div>
               </>
             )}
-            {step === 3 && (
+            {currentStepKey === 'scope' && (
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
                   Estimate the size of your project
@@ -475,7 +492,7 @@ function PostJobWizard({
                 </div>
               </>
             )}
-            {step === 4 && (
+            {currentStepKey === 'budget' && (
               <>
                 <span className="font-semibold mb-2 text-[#253037]">
                   Choose a budget type
@@ -549,7 +566,7 @@ function PostJobWizard({
                 </div>
               </>
             )}
-            {step === 5 && (
+            {currentStepKey === 'description' && (
               <>
                 <label
                   htmlFor="desc"
@@ -559,6 +576,7 @@ function PostJobWizard({
                 </label>
                 <textarea
                   id="desc"
+                  {...getElementAttributes('job-description-textarea', 0)}
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none h-28 resize-vertical"
                   value={form.description}
                   onChange={(e) => setValue("description", e.target.value)}
@@ -581,6 +599,7 @@ function PostJobWizard({
                 </div>
                 <div className="mt-6">
                   <button
+                    {...getElementAttributes('attach-file-button', 0)}
                     type="button"
                     // style={{ display: "none" }}
                     onClick={() => fileInputRef.current?.click()}
@@ -614,28 +633,36 @@ function PostJobWizard({
           </div>
         </form>
         {/* Navigation bottom */}
-        <div className="flex px-5 py-4 border-t border-gray-200 items-center justify-between bg-white">
+        <div className={`flex px-5 py-4 border-t border-gray-200 items-center bg-white ${
+          layout.buttonPositions.back === 'left' && layout.buttonPositions.submit === 'right' ? 'justify-between' :
+          layout.buttonPositions.back === 'center' && layout.buttonPositions.submit === 'center' ? 'justify-center gap-4' :
+          layout.buttonPositions.back === 'right' && layout.buttonPositions.submit === 'left' ? 'justify-between flex-row-reverse' :
+          'justify-between'
+        }`}>
           <button
+            {...getElementAttributes('back-button', 0)}
             type="button"
             onClick={() => {
               logEvent(EVENT_TYPES.BACK_BUTTON, {
                 step,
-                ...(step === 2 && { skills: form.skills }),
-                ...(step === 3 && {
+                ...(currentStepKey === 'skills' && { skills: form.skills }),
+                ...(currentStepKey === 'scope' && {
                   scope: form.scope,
                   duration: form.duration,
                 }),
-                ...(step === 4 && {
+                ...(currentStepKey === 'budget' && {
                   budgetType: form.budgetType,
                   rateFrom: form.rateFrom,
                   rateTo: form.rateTo,
                 }),
-                ...(step === 5 && { description: form.description }),
-                ...(step === 1 && { title: form.title }),
+                ...(currentStepKey === 'description' && { description: form.description }),
+                ...(currentStepKey === 'title' && { title: form.title }),
               });
               back();
             }}
-            className="px-7 py-2 rounded-lg border text-[#253037] bg-white hover:bg-gray-50 shadow-sm"
+            className={`px-7 py-2 rounded-lg border text-[#253037] bg-white hover:bg-gray-50 shadow-sm ${
+              layout.buttonPositions.back === 'center' ? 'order-2' : ''
+            }`}
             disabled={step === 1}
           >
             Back
@@ -643,14 +670,18 @@ function PostJobWizard({
 
           {step < totalSteps ? (
             <button
+              {...getElementAttributes('next-button', step)}
               type="button"
-              className="px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700"
+              className={`px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700 ${
+                layout.buttonPositions.submit === 'center' ? 'order-1' : ''
+              }`}
               onClick={handleStepNext}
             >
               {buttonTitle}
             </button>
           ) : (
             <button
+              {...getElementAttributes('submit-job-button', 0)}
               type="submit"
               onClick={() => {
                 logEvent(EVENT_TYPES.SUBMIT_JOB, {
@@ -666,7 +697,9 @@ function PostJobWizard({
                 });
                 toast.success("Job Submitted successfully!");
               }}
-              className="px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700 ml-2"
+              className={`px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700 ${
+                layout.buttonPositions.submit === 'center' ? 'order-1' : 'ml-2'
+              }`}
             >
               Submit Job Post
             </button>
@@ -674,6 +707,7 @@ function PostJobWizard({
         </div>
         {/* Close icon */}
         <button
+          {...getElementAttributes('close-post-job-button', 0)}
           onClick={() => {
             logEvent(EVENT_TYPES.CLOSE_POST_A_JOB_WINDOW, {
               step,
@@ -688,7 +722,47 @@ function PostJobWizard({
             });
             close();
           }}
-          className="absolute top-4 right-4 text-xl text-[#253037] font-bold" id="close-post-job-btn"
+          className={`absolute text-xl text-[#253037] font-bold ${
+            layout.buttonPositions.close === 'top-left' ? 'top-4 left-4' :
+            layout.buttonPositions.close === 'top-right' ? 'top-4 right-4' :
+            layout.buttonPositions.close === 'bottom-left' ? 
+              // Smart positioning to avoid overlap with navigation buttons
+              (() => {
+                const backPos = layout.buttonPositions.back as string;
+                const submitPos = layout.buttonPositions.submit as string;
+                
+                // If back is left and submit is right (justify-between), move close to top-right to avoid both
+                if (backPos === 'left' && submitPos === 'right') return 'top-4 right-4';
+                // If back button is on left and submit is centered, move close to right
+                if (backPos === 'left' && submitPos === 'center') return 'bottom-4 right-4';
+                // If both back and submit are centered, move close to top-right to avoid navigation area
+                if (backPos === 'center' && submitPos === 'center') return 'top-4 right-4';
+                // If back is centered and submit is right, move close to left
+                if (backPos === 'center' && submitPos === 'right') return 'bottom-4 left-4';
+                // Default to bottom-left if no conflicts
+                return 'bottom-4 left-4';
+              })() :
+            layout.buttonPositions.close === 'bottom-right' ? 
+              // Smart positioning to avoid overlap with navigation buttons
+              (() => {
+                const backPos = layout.buttonPositions.back as string;
+                const submitPos = layout.buttonPositions.submit as string;
+                
+                // If back is left and submit is right (justify-between), move close to top-left to avoid both
+                if (backPos === 'left' && submitPos === 'right') return 'top-4 left-4';
+                // If back is right and submit is left (justify-between), move close to top-right to avoid both
+                if (backPos === 'right' && submitPos === 'left') return 'top-4 right-4';
+                // If submit button is on right, move close to left
+                if (submitPos === 'right') return 'bottom-4 left-4';
+                // If back button is on right, move close to left
+                if (backPos === 'right') return 'bottom-4 left-4';
+                // If both back and submit are centered, move close to top-left to avoid navigation area
+                if (backPos === 'center' && submitPos === 'center') return 'top-4 left-4';
+                // Default to bottom-right if no conflicts
+                return 'bottom-4 right-4';
+              })() :
+            'top-4 right-4'
+          }`} id="close-post-job-btn"
         >
           ×
         </button>
@@ -699,19 +773,25 @@ function PostJobWizard({
 
 export default function Home() {
   const [showPostJob, setShowPostJob] = useState(false);
+  const { layout, getElementAttributes } = useSeedLayout();
 
-  return (
-    <main className="px-10 mt-12 pb-16 text-[#253037]">
+  // Create section components
+  const JobsSection = () => (
+    <div>
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-semibold">Your jobs</h2>
         <button
+          {...getElementAttributes('post-job-button', 0)}
           type="button"
-          className="inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225]"
+          className={`inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
+            layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
+            layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
+          }`}
           onClick={() => {
             setShowPostJob(true);
             logEvent(EVENT_TYPES.POST_A_JOB, {
               source: "button",
-              page: "home", // or 'dashboard', etc.
+              page: "home",
             });
           }}
         >
@@ -722,6 +802,7 @@ export default function Home() {
         {jobs.map((job, i) => (
           <div
             key={i}
+            {...getElementAttributes('job-item', i)}
             className="bg-white shadow rounded-xl px-7 py-6 flex flex-col gap-2 border border-gray-100"
           >
             <div className="flex flex-wrap justify-between items-center gap-4">
@@ -773,146 +854,161 @@ export default function Home() {
           </div>
         ))}
       </div>
-      {/* Add Your Hires Section */}
-      <section className="px-10 mt-14 px-4">
-        <div className="flex items-center justify-between mb-7">
-          <h2 className="text-2xl font-semibold">Your hires</h2>
-          <a
-            href="#"
-            className="text-[#08b4ce] text-sm font-medium hover:underline"
+    </div>
+  );
+
+  const HiresSection = () => (
+    <section className="px-10 mt-14 px-4">
+      <div className="flex items-center justify-between mb-7">
+        <h2 className="text-2xl font-semibold">Your hires</h2>
+        <a
+          href="#"
+          className="text-[#08b4ce] text-sm font-medium hover:underline"
+        >
+          View all your hires
+        </a>
+      </div>
+      <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        {hires.map((hire) => (
+          <div
+            key={hire.name}
+            className="bg-white rounded-xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100"
           >
-            View all your hires
-          </a>
-        </div>
-        <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-          {hires.map((hire) => (
-            <div
-              key={hire.name}
-              className="bg-white rounded-xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100"
-            >
-              <div className="flex items-center gap-4 mb-1">
-                <img
-                  src={hire.avatar}
-                  alt={hire.name}
-                  className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-                />
-                <div>
-                  <div className="font-semibold text-lg text-[#253037]">
-                    {hire.name}
-                  </div>
-                  <div className="text-xs text-gray-500">{hire.country}</div>
+            <div className="flex items-center gap-4 mb-1">
+              <img
+                src={hire.avatar}
+                alt={hire.name}
+                className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
+              />
+              <div>
+                <div className="font-semibold text-lg text-[#253037]">
+                  {hire.name}
                 </div>
+                <div className="text-xs text-gray-500">{hire.country}</div>
               </div>
-              <div className="flex items-center gap-2 text-sm text-[#08b4ce] font-semibold mb-1">
-                {hire.rate}
-                <span className="text-gray-400 font-normal ml-2">
-                  • {hire.role}
-                </span>
-              </div>
-              <div className="flex items-center gap-4 text-xs mt-1 text-gray-500">
-                <span className="flex items-center gap-1">
-                  <svg
-                    className="w-4 h-4 text-[#ebcf95]"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-                  </svg>{" "}
-                  {hire.rating}
-                </span>
-                <span> {hire.jobs} jobs</span>
-              </div>
-              {hire.rehire && (
-                <span className="mt-2 w-32 inline-block text-xs bg-[#e6f9fb] text-[#08b4ce] font-medium px-2 py-1 rounded">
-                  Available for rehire
-                </span>
-              )}
             </div>
-          ))}
-        </div>
-      </section>
-      <section className="px-10 mt-16 px-4">
-        <h2 className="text-2xl font-semibold mb-7">
-          Review your project’s goals with an expert, one-on-one
-        </h2>
-        <div className="grid gap-7 md:grid-cols-2">
-          {experts.map((expert) => (
-            <div
-              key={expert.name}
-              className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
-            >
-              <div className="flex items-center gap-3 mb-3 mt-2">
-                <img
-                  src={expert.avatar}
-                  alt={expert.name}
-                  className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-                />
-                <div>
-                  <div className="font-semibold text-lg text-[#253037] leading-tight">
-                    {expert.name}
-                  </div>
-                  <div className="text-xs text-gray-500">{expert.country}</div>
+            <div className="flex items-center gap-2 text-sm text-[#08b4ce] font-semibold mb-1">
+              {hire.rate}
+              <span className="text-gray-400 font-normal ml-2">
+                • {hire.role}
+              </span>
+            </div>
+            <div className="flex items-center gap-4 text-xs mt-1 text-gray-500">
+              <span className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-[#ebcf95]"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+                </svg>{" "}
+                {hire.rating}
+              </span>
+              <span> {hire.jobs} jobs</span>
+            </div>
+            {hire.rehire && (
+              <span className="mt-2 w-32 inline-block text-xs bg-[#e6f9fb] text-[#08b4ce] font-medium px-2 py-1 rounded">
+                Available for rehire
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+
+  const ExpertsSection = () => (
+    <section className="px-10 mt-16 px-4">
+      <h2 className="text-2xl font-semibold mb-7">
+        Review your project's goals with an expert, one-on-one
+      </h2>
+      <div className="grid gap-7 md:grid-cols-2">
+        {experts.map((expert, i) => (
+          <div
+            key={expert.name}
+            className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
+          >
+            <div className="flex items-center gap-3 mb-3 mt-2">
+              <img
+                src={expert.avatar}
+                alt={expert.name}
+                className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
+              />
+              <div>
+                <div className="font-semibold text-lg text-[#253037] leading-tight">
+                  {expert.name}
                 </div>
+                <div className="text-xs text-gray-500">{expert.country}</div>
               </div>
-              <div className="text-sm font-semibold text-[#253037] mb-1">
-                {expert.role}
-              </div>
-              <div className="flex items-center gap-4 text-[#6c7280] text-xs mb-1">
-                <span>
-                  <span className="font-bold text-base text-[#253037]">
-                    {expert.rate}
-                  </span>
-                </span>
-                <span className="flex items-center gap-1">
-                  <svg
-                    className="w-4 h-4 text-[#ebcf95]"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-                  </svg>{" "}
-                  {expert.rating}
-                </span>
-                <span className="ml-1">{expert.jobs}</span>
-              </div>
-              <div className="text-[15px] text-gray-700 mb-2 leading-tight">
-                {expert.desc}
-              </div>
-              <div className="flex items-center gap-2 text-[#1964e2] text-base font-semibold py-2 mb-2">
-                <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                  <path
-                    stroke="#1964e2"
-                    strokeWidth="1.4"
-                    d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
-                  />
-                </svg>
-                <span>{expert.consultation}</span>
-              </div>
-              <Link
-                href={`/expert/${expert.name
-                  .toLowerCase()
-                  .replace(/\s+/g, "-")
-                  .replace(/\./g, "")}`}
-                passHref
-                // onClick={() =>
-                //   logEvent(EVENT_TYPES.BOOK_A_CONSULTATION, {
-                //     expertName: expert.name,
-                //     role: expert.role,
-                //     rate: expert.rate,
-                //     country: expert.country,
-                //     rating: expert.rating,
-                //     jobs: expert.jobs,
-                //     timestamp: Date.now(),
-                //   })
-                // }
-                className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
-              >
-                Book a consultation
-              </Link>
             </div>
-          ))}
-        </div>
-      </section>
+            <div className="text-sm font-semibold text-[#253037] mb-1">
+              {expert.role}
+            </div>
+            <div className="flex items-center gap-4 text-[#6c7280] text-xs mb-1">
+              <span>
+                <span className="font-bold text-base text-[#253037]">
+                  {expert.rate}
+                </span>
+              </span>
+              <span className="flex items-center gap-1">
+                <svg
+                  className="w-4 h-4 text-[#ebcf95]"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+                </svg>{" "}
+                {expert.rating}
+              </span>
+              <span className="ml-1">{expert.jobs}</span>
+            </div>
+            <div className="text-[15px] text-gray-700 mb-2 leading-tight">
+              {expert.desc}
+            </div>
+            <div className="flex items-center gap-2 text-[#1964e2] text-base font-semibold py-2 mb-2">
+              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+                <path
+                  stroke="#1964e2"
+                  strokeWidth="1.4"
+                  d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
+                />
+              </svg>
+              <span>{expert.consultation}</span>
+            </div>
+            <SeedLink
+              href={`/expert/${expert.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")
+                .replace(/\./g, "")}`}
+              passHref
+              {...getElementAttributes('book-consultation-button', i)}
+              className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
+            >
+              Book a consultation
+            </SeedLink>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+
+  // Create section map for dynamic ordering
+  const sectionMap = {
+    jobs: <JobsSection key="jobs" />,
+    hires: <HiresSection key="hires" />,
+    experts: <ExpertsSection key="experts" />,
+  };
+
+  // Render sections in the order specified by layout
+  const renderSections = () => {
+    return layout.mainSections.map((sectionKey) => {
+      return sectionMap[sectionKey as keyof typeof sectionMap];
+    });
+  };
+
+  return (
+    <main className="px-10 mt-12 pb-16 text-[#253037]">
+      {renderSections()}
       <PostJobWizard open={showPostJob} onClose={() => setShowPostJob(false)} />
     </main>
   );

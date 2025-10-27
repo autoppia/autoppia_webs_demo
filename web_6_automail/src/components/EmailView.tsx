@@ -113,6 +113,7 @@ export function EmailView() {
   return (
     <div
       className="h-full flex flex-col bg-background"
+      data-testid="email-view"
       suppressHydrationWarning
     >
       {/* Top Toolbar */}

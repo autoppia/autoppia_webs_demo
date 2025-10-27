@@ -2,29 +2,29 @@
 {% load custom_filters %}
 {#{% load static %}#}
 {% block body %}
-<div class="container mt-5">
-    <div class="card border-0 shadow">
-        <div class="row no-gutters">
-            <div class="col-md-4">
+<div class="container mt-5" data-dynamic-group="book-details-container">
+    <div class="card border-0 shadow" data-dynamic-group="book-details-card">
+        <div class="row no-gutters" data-dynamic-group="book-details-row">
+            <div class="col-md-4" data-dynamic-group="book-image-column">
                 {% if book.img %}
-                    <img src="{{ book.img.url }}" class="card-img" alt="{{ book.name }}" style="height: 450px; object-fit: cover;">
+                    <img src="{{ book.img.url }}" class="card-img" alt="{{ book.name }}" style="height: 450px; object-fit: cover;" data-dynamic-group="book-image">
                 {% else %}
-                    <img src="/media/gallery/default_book.png" class="card-img" alt="No Image" style="height: 450px; object-fit: cover;">
+                    <img src="/media/gallery/default_book.png" class="card-img" alt="No Image" style="height: 450px; object-fit: cover;" data-dynamic-group="book-image">
                 {% endif %}
             </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h1 class="card-title">{{book.name}}</h1>
-                        <span class="badge badge-primary p-2">{{book.year}}</span>
+            <div class="col-md-8" data-dynamic-group="book-info-column">
+                <div class="card-body" data-dynamic-group="book-info-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3" data-dynamic-group="book-header">
+                        <h1 class="card-title" data-dynamic-group="book-title">{{book.name}}</h1>
+                        <span class="badge badge-primary p-2" data-dynamic-group="book-year">{{book.year}}</span>
                     </div>
 
-                    <hr>
+                    <hr data-dynamic-group="book-separator">
 
-                    <div class="movie-info mb-4">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="text-muted">
+                    <div class="movie-info mb-4" data-dynamic-group="book-info-section">
+                        <div class="row" data-dynamic-group="book-info-row">
+                            <div class="col-md-6" data-dynamic-group="book-info-left">
+                                <p class="text-muted" data-dynamic-group="book-category">
                                     <strong><i class="fas fa-file mr-2"></i>Category:</strong>
                                     {% for genre in book.genres.all %}
                                     <span class="badge badge-secondary">{{ genre.name }}</span>
@@ -32,7 +32,7 @@
                                     <span class="text-muted">Not categorized</span>
                                     {% endfor %}
                                 </p>
-                                <p class="text-muted">
+                                <p class="text-muted" data-dynamic-group="book-rating">
                                     <strong><i class="fas fa-star mr-2"></i>Rating:</strong>
                                     <span class="text-warning">
                                         {% for i in "12345" %}
@@ -48,12 +48,12 @@
                                     ({{book.rating|floatformat:"1"}}/5)
                                 </p>
                             </div>
-                            <div class="col-md-6">
-                                <p class="text-muted">
+                            <div class="col-md-6" data-dynamic-group="book-info-right">
+                                <p class="text-muted" data-dynamic-group="book-author">
                                     <strong><i class="fas fa-user mr-2"></i>Author:</strong>
                                     {{ book.director|default:"Not specified" }}
                                 </p>
-                                <p class="text-muted">
+                                <p class="text-muted" data-dynamic-group="book-pages">
                                     <strong><i class="fas fa-file mr-2"></i>Pages:</strong>
                                     {% if book.duration %}{{ book.duration }} pages{% else %}Not specified{% endif %}
                                 </p>
@@ -61,27 +61,27 @@
                         </div>
                     </div>
 
-                    <h5 class="card-subtitle mb-3"><i class="fas fa-info-circle mr-2"></i>Description</h5>
-                    <p class="card-text">{{book.desc}}</p>
+                    <h5 class="card-subtitle mb-3" data-dynamic-group="book-description-title"><i class="fas fa-info-circle mr-2"></i>Description</h5>
+                    <p class="card-text" data-dynamic-group="book-description">{{book.desc}}</p>
 
                     {% comment %} <h5 class="card-subtitle mb-3 mt-4"><i class="fas fa-users mr-2"></i>Cast</h5>
                     <p>{{ book.cast|default:"No cast information available" }}</p> {% endcomment %}
 
-                    <div class="mt-4">
+                    <div class="mt-4" data-dynamic-group="book-actions">
                         {% if book.trailer_url %}
-                        <a href="{{ book.trailer_url }}" target="_blank" class="btn btn-success mr-2">
+                        <a href="{{ book.trailer_url }}" target="_blank" class="btn btn-success mr-2" data-dynamic-group="buy-button">
                             <i class="fas fa-play-circle mr-1"></i> Buy Book
                         </a>
                         {% endif %}
                         {% if user.is_authenticated %}
-                        <a href="{% url 'booksapp:cart' book.id %}" class="btn btn-primary mr-2">
+                        <a href="{% url 'booksapp:cart' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary mr-2" data-dynamic-group="cart-button">
                             <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
                         </a>
                         {% if user.id == book.user.id%}
-                        <a href="{% url 'booksapp:update' book.id %}" class="btn btn-warning mr-2">
+                        <a href="{% url 'booksapp:update' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-warning mr-2" data-dynamic-group="edit-button">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </a>
-                        <a href="{% url 'booksapp:delete' book.id %}" class="btn btn-danger">
+                        <a href="{% url 'booksapp:delete' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-danger" data-dynamic-group="delete-button">
                             <i class="fas fa-trash-alt mr-1"></i> Delete
                         </a>
                         {% endif %}
@@ -93,53 +93,53 @@
     </div>
 
     <!-- Comments section -->
-    <div class="card mt-4 shadow">
-        <div class="card-header bg-light">
+    <div class="card mt-4 shadow" data-dynamic-group="comments-section">
+        <div class="card-header bg-light" data-dynamic-group="comments-header">
             <h4 class="mb-0"><i class="fas fa-comments mr-2"></i>Comments ({{ comments.count }})</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body" data-dynamic-group="comments-body">
             <!-- Form for adding comments -->
-            <form id="comment-form" method="POST" action="{% url 'booksapp:add_comment' book.id %}">
+            <form id="comment-form" method="POST" action="{% url 'booksapp:add_comment' book.id %}" data-dynamic-group="comment-form">
                 {% csrf_token %}
-                <div class="form-group">
-                    <input type="text" name="name" class="form-control mb-2" placeholder="Your name" required>
-                    <textarea name="content" class="form-control" rows="3" placeholder="Write a comment..." required></textarea>
+                <div class="form-group" data-dynamic-group="comment-form-fields">
+                    <input type="text" name="name" class="form-control mb-2" placeholder="Your name" required data-dynamic-group="comment-name">
+                    <textarea name="content" class="form-control" rows="3" placeholder="Write a comment..." required data-dynamic-group="comment-content"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit comment</button>
+                <button type="submit" class="btn btn-primary" data-dynamic-group="comment-submit">Submit comment</button>
             </form>
 
             <!-- Comments list -->
-            <div class="comment-list mt-4" id="comments-container">
+            <div class="comment-list mt-4" id="comments-container" data-dynamic-group="comments-list">
                 {% for comment in comments %}
-                <div class="media mb-3 p-3 {% if not forloop.last %}border-bottom{% endif %}">
+                <div class="media mb-3 p-3 {% if not forloop.last %}border-bottom{% endif %}" data-dynamic-group="comment-item">
                     {% if comment.avatar %}
-                        <img src="{{ comment.avatar.url }}" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                        <img src="{{ comment.avatar.url }}" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;" data-dynamic-group="comment-avatar">
                     {% else %}
                         <!-- Simplified avatar assignment based on name -->
                         {% with name_lower=comment.name|lower %}
                             {% if name_lower == "james" or name_lower == "michael" or name_lower == "william" or name_lower == "daniel" or name_lower == "david" or name_lower == "john" or name_lower == "robert" %}
                                 <!-- Use male avatars for common male names -->
-                                <img src="/media/gallery/people/person{% cycle '2' '3' %}.jpg " class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                <img src="/media/gallery/people/person{% cycle '2' '3' %}.jpg " class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;" data-dynamic-group="comment-avatar">
                             {% elif name_lower == "emma" or name_lower == "sophia" or name_lower == "olivia" or name_lower == "ava" or name_lower == "isabella" or name_lower == "mia" or name_lower == "charlotte" %}
                                 <!-- Use female avatars for common female names -->
-                                <img src="/media/gallery/people/person{% cycle '1' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                <img src="/media/gallery/people/person{% cycle '1' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;" data-dynamic-group="comment-avatar">
                             {% else %}
                                 <!-- For other names, use this simplified algorithm -->
                                 {% if forloop.counter|divisibleby:2 %}
-                                    <img src="/media/gallery/people/person{% cycle '2' '3' %}.jpg " class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                    <img src="/media/gallery/people/person{% cycle '2' '3' %}.jpg " class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;" data-dynamic-group="comment-avatar">
                                 {% else %}
-                                    <img src="/media/gallery/people/person{% cycle '1' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                    <img src="/media/gallery/people/person{% cycle '1' '4' %}.jpg" class="mr-3 rounded-circle" alt="{{ comment.name }}" style="width: 80px; height: 80px; object-fit: cover;" data-dynamic-group="comment-avatar">
                                 {% endif %}
                             {% endif %}
                         {% endwith %}
                     {% endif %}
-                    <div class="media-body">
-                        <h5 class="mt-0">{{ comment.name }} <small class="text-muted ml-2">{{ comment.created_at|timesince }} ago</small></h5>
-                        <p>{{ comment.content }}</p>
+                    <div class="media-body" data-dynamic-group="comment-content">
+                        <h5 class="mt-0" data-dynamic-group="comment-author">{{ comment.name }} <small class="text-muted ml-2">{{ comment.created_at|timesince }} ago</small></h5>
+                        <p data-dynamic-group="comment-text">{{ comment.content }}</p>
                     </div>
                 </div>
                 {% empty %}
-                <div class="text-center py-4" id="no-comments">
+                <div class="text-center py-4" id="no-comments" data-dynamic-group="no-comments">
                     <p class="text-muted">No comments yet. Be the first to comment!</p>
                 </div>
                 {% endfor %}
@@ -149,31 +149,31 @@
 
     <!-- Related movies -->
     {% if related_movies %}
-    <div class="mt-5">
-        <h3 class="mb-4">Related Books</h3>
-        <div class="row">
+    <div class="mt-5" data-dynamic-group="related-books-section">
+        <h3 class="mb-4" data-dynamic-group="related-books-title">Related Books</h3>
+        <div class="row" data-dynamic-group="related-books-grid">
             {% for related in related_movies %}
-            <div class="col-md-3">
-                <div class="card movie-card h-100 shadow-sm">
-                    <div class="card-img-container position-relative">
+            <div class="col-md-3" data-dynamic-group="related-book-item">
+                <div class="card movie-card h-100 shadow-sm" data-dynamic-group="related-book-card">
+                    <div class="card-img-container position-relative" data-dynamic-group="related-book-image-container">
                     {% if related.img and related.img.url %}
-                        <img src="{{ related.img.url }}" class="card-img-top" alt="{{ related.name }}" style="height: 250px; object-fit: cover;">
+                        <img src="{{ related.img.url }}" class="card-img-top" alt="{{ related.name }}" style="height: 250px; object-fit: cover;" data-dynamic-group="related-book-image">
                     {% else %}
-                        <img src="/media/gallery/default_book.png" class="card-img-top" alt="{{ related.name }}" style="height: 250px; object-fit: cover;">
+                        <img src="/media/gallery/default_book.png" class="card-img-top" alt="{{ related.name }}" style="height: 250px; object-fit: cover;" data-dynamic-group="related-book-image">
                     {% endif %}
-                        <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;">{{ related.year }}</div>
+                        <div class="movie-year position-absolute badge badge-dark p-2" style="top: 10px; right: 10px;" data-dynamic-group="related-book-year">{{ related.year }}</div>
                         {% if related.rating %}
-                        <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;">
+                        <div class="movie-rating position-absolute" style="bottom: 10px; left: 10px;" data-dynamic-group="related-book-rating">
                             <span class="badge badge-warning p-2">
                                 <i class="fas fa-star"></i> {{ related.rating|floatformat:1 }}
                             </span>
                         </div>
                         {% endif %}
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ related.name }}</h5>
-                        <p class="card-text small">{{ related.desc|truncatechars:80 }}</p>
-                        <a href="{% url 'booksapp:detail' related.id %}" class="btn btn-sm btn-primary">
+                    <div class="card-body" data-dynamic-group="related-book-body">
+                        <h5 class="card-title" data-dynamic-group="related-book-title">{{ related.name }}</h5>
+                        <p class="card-text small" data-dynamic-group="related-book-description">{{ related.desc|truncatechars:80 }}</p>
+                        <a href="{% url 'booksapp:detail' related.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-sm btn-primary" data-dynamic-group="related-book-link">
                             <i class="fas fa-info-circle mr-1"></i> View Details
                         </a>
                     </div>
@@ -208,14 +208,35 @@
 
             const formData = new FormData(commentForm);
 
-            fetch(commentForm.action, {
+            // Build POST URL without seed to avoid HTML redirect responses
+            const postUrl = commentForm.action.split('?')[0];
+            fetch(postUrl, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRFToken': (function(){
+                        const name = 'csrftoken=';
+                        const cookies = document.cookie ? document.cookie.split(';') : [];
+                        for (let i = 0; i < cookies.length; i++) {
+                            let c = cookies[i].trim();
+                            if (c.startsWith(name)) return decodeURIComponent(c.substring(name.length));
+                        }
+                        const el = document.querySelector('input[name="csrfmiddlewaretoken"]');
+                        return el ? el.value : '';
+                    })()
+                },
+                credentials: 'same-origin'
             })
-            .then(response => response.json())
+            .then(async response => {
+                const contentType = response.headers.get('content-type') || '';
+                if (!response.ok || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    throw new Error(text);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.status === 'success') {
                     // Remove the no comments message if it exists

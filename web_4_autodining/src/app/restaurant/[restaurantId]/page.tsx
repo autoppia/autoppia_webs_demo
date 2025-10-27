@@ -1,5 +1,5 @@
 "use client";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   CalendarIcon,
   Star,
@@ -18,6 +18,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import Image from "next/image";
+import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { RestaurantsData } from "@/components/library/dataset";
+import { useSeed } from "@/context/SeedContext";
+import { useSeedVariation } from "@/components/library/utils";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import Link from "next/link";
 import { initializeRestaurants, getRestaurants } from "@/library/dataset";
@@ -54,8 +59,7 @@ export default function RestaurantPage() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const searchParams = useSearchParams();
-  const seed = Number(searchParams?.get("seed") ?? "1");
+  const { seed } = useSeed();
 
   // Use seed-based variations
   const bookButtonVariation = useSeedVariation("bookButton");
@@ -507,7 +511,7 @@ export default function RestaurantPage() {
                       marginTop: layout.marginTop,
                     }}
                   >
-                    <Link
+                    <SeedLink
                       href={`/booking/${id}/${encodeURIComponent(
                         time
                       )}?date=${formattedDate}&people=${people ?? ""}`}
@@ -535,7 +539,7 @@ export default function RestaurantPage() {
                       >
                         <span>Book Restaurant</span>
                       </Button>
-                    </Link>
+                    </SeedLink>
                   </div>
                 )
               ) : (

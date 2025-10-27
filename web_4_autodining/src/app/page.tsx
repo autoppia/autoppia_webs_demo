@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useState, useRef, useEffect, useMemo, Suspense } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -17,6 +17,10 @@ import {
   ChevronRight,
 } from "lucide-react";
 import React from "react";
+import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { RestaurantsData } from "@/components/library/dataset";
+import { useSeed } from "@/context/SeedContext";
+import { useSeedVariation } from "@/components/library/utils";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { getRestaurants, initializeRestaurants } from "@/library/dataset";
 import { useSearchParams } from "next/navigation";
@@ -78,9 +82,7 @@ function RestaurantCard({
   people: number;
   time: string;
 }) {
-  const searchParams = useSearchParams();
-  const seedParam = searchParams?.get("seed");
-  const seed = Number(seedParam) || 1;
+  const { seed } = useSeed();
 
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
@@ -125,14 +127,14 @@ function RestaurantCard({
           <span className="text-xs text-gray-500">{r.bookings} booked today</span>
         </div>
         <div className={`mt-3 flex ${layout.wrap ? 'flex-wrap' : 'flex-nowrap'} ${layout.justify} gap-2`}>
-          <Link
+          <SeedLink
             href={`/restaurant/${r.id}`}
             className="text-sm text-blue-600 hover:text-blue-800"
             onClick={() => logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })}
           >
             View details
-          </Link>
-          <Link
+          </SeedLink>
+          <SeedLink
             href={`/booking/${r.id}/${time}?people=${people}&date=${formattedDate}`}
             className={`${bookButtonVariation.className} text-sm`}
             data-testid={bookButtonVariation.dataTestId}
@@ -140,7 +142,7 @@ function RestaurantCard({
             onClick={() => logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })}
           >
             Book now
-          </Link>
+          </SeedLink>
         </div>
       </div>
     </div>
@@ -154,10 +156,7 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
   const rafIdRef = useRef<number | null>(null);
   const tickingRef = useRef(false);
 
-  const searchParams = useSearchParams();
-  const seedParam = searchParams?.get("seed");
-  const seed = Number(seedParam) || 1;
-
+  const { seed } = useSeed();
   const cardContainerVariation = useSeedVariation("cardContainer");
   const childCount = React.Children.count(children);
 
@@ -247,7 +246,7 @@ function getLayoutVariant(seed: number) {
   };
 }
 
-// Client-only component that uses useSearchParams
+// Client-only component that uses seed from context
 function HomePageContent() {
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -260,8 +259,7 @@ function HomePageContent() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
 
-  const searchParams = useSearchParams();
-  const seed = parseInt(searchParams.get("seed") || "1", 10);
+  const { seed } = useSeed();
   const { marginTop, wrapButton } = useMemo(
     () => getLayoutVariant(seed),
     [seed]
@@ -373,32 +371,32 @@ function HomePageContent() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <Link href="/">
+            <SeedLink href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">AutoDining</span>
               </div>
-            </Link>
+            </SeedLink>
           </div>
 
           <div className="flex items-center gap-4">
-            <Link
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/help"
             >
               Get help
-            </Link>
-            <Link
+            </SeedLink>
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/about"
             >
               About
-            </Link>
-            <Link
+            </SeedLink>
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/contact"
             >
               Contact
-            </Link>
+            </SeedLink>
           </div>
         </div>
       </nav>
