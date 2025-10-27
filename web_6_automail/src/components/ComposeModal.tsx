@@ -179,13 +179,14 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
                     </Badge>
                   ))}
                   <Input
-                    id={getId("to_input")}
+                    id={textStructure?.email_ids.to_input || getId("to_input")}
                     value={toInput}
                     onChange={(e) => setToInput(e.target.value)}
                     onKeyDown={handleToKeyDown}
                     placeholder={
-                      composeData.to.length === 0 ? getText("to") : ""
+                      composeData.to.length === 0 ? (textStructure?.email_content.compose_to || getText("to")) : ""
                     }
+                    aria-label={textStructure?.email_aria_labels.to_input || "Recipient email address"}
                     className="border-0 shadow-none focus-visible:ring-0 h-auto p-0 flex-1 min-w-[120px] bg-transparent"
                   />
                 </div>
@@ -213,13 +214,14 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
             {/* Subject */}
             <div className="flex items-center gap-3">
               <Label className="text-xs font-medium text-muted-foreground w-10">
-                {getText("subject")}
+                {textStructure?.email_content.compose_subject || getText("subject")}
               </Label>
               <Input
-                id={getId("subject_input")}
+                id={textStructure?.email_ids.subject_input || getId("subject_input")}
                 value={composeData.subject}
                 onChange={(e) => updateComposeData({ subject: e.target.value })}
-                placeholder={getText("subject")}
+                placeholder={textStructure?.email_content.compose_subject || getText("subject")}
+                aria-label={textStructure?.email_aria_labels.subject_input || "Email subject"}
                 className="flex-1 h-9 border-border focus-visible:ring-1 focus-visible:ring-primary/50"
               />
             </div>
@@ -264,9 +266,10 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
           <div className="flex items-center justify-between px-4 py-3 border-t border-border/50 bg-muted/20">
             <div className="flex items-center gap-2">
               <Button
-                id={getId("send_button")}
+                id={textStructure?.email_ids.send_btn || getId("send_button")}
                 onClick={handleSend}
                 disabled={!canSend}
+                aria-label={textStructure?.email_aria_labels.send_btn || "Send email"}
                 className={cn(
                   "btn-primary-gradient h-8 px-4",
                   currentVariant.id === 2 && "compose-actions",
@@ -281,7 +284,7 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
                 )}
               >
                 <Send className="h-3 w-3 mr-2" />
-                {getText("send")}
+                {textStructure?.email_content.send_button || getText("send")}
               </Button>
 
               <div className="flex items-center gap-1">

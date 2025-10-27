@@ -177,11 +177,12 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id="star-button"
+              id={textStructure?.email_ids.important_btn || "star-button"}
               variant="ghost"
               size="icon"
               onClick={handleStarClick}
               title={currentEmail.isStarred ? "Remove star" : "Add star"}
+              aria-label={textStructure?.email_aria_labels.important_btn || "Mark as important"}
             >
               <Star
                 className={cn(
@@ -362,17 +363,28 @@ export function EmailView({ textStructure }: EmailViewProps) {
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-6 border-t border-border">
-            <Button id="reply-button">
+            <Button 
+              id={textStructure?.email_ids.reply_btn || "reply-button"}
+              aria-label={textStructure?.email_aria_labels.reply_btn || "Reply to this email"}
+            >
               <Reply className="h-4 w-4 mr-2" />
-              Reply
+              {textStructure?.email_content.reply_button || "Reply"}
             </Button>
-            <Button id="reply-all-button" variant="outline">
+            <Button 
+              id={textStructure?.email_ids.reply_all_btn || "reply-all-button"} 
+              variant="outline"
+              aria-label={textStructure?.email_aria_labels.reply_all_btn || "Reply to all recipients"}
+            >
               <ReplyAll className="h-4 w-4 mr-2" />
-              Reply All
+              {textStructure?.email_content.reply_all_button || "Reply All"}
             </Button>
-            <Button id="forward-button" variant="outline">
+            <Button 
+              id={textStructure?.email_ids.forward_btn || "forward-button"} 
+              variant="outline"
+              aria-label={textStructure?.email_aria_labels.forward_btn || "Forward this email"}
+            >
               <Forward className="h-4 w-4 mr-2" />
-              Forward
+              {textStructure?.email_content.forward_button || "Forward"}
             </Button>
           </div>
         </div>
