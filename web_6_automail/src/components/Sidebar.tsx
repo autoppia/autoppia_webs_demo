@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
+import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 // import { systemLabels } from "@/library/dataset";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import { DynamicElement } from "@/components/DynamicElement";
@@ -47,6 +48,7 @@ interface NavigationItem {
 
 export function Sidebar() {
   const { currentVariant } = useLayout();
+  const { getText, getId } = useDynamicStructure();
   const {
     currentFilter,
     setFilter,
@@ -120,14 +122,14 @@ export function Sidebar() {
   const labelCounts = getLabelCounts();
 
   const navigationItems: NavigationItem[] = [
-    { id: "inbox", label: "Inbox", icon: Inbox, count: counts.inbox, type: "folder" },
-    { id: "starred", label: "Starred", icon: Star, count: counts.starred, type: "folder" },
+    { id: "inbox", label: getText("inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
+    { id: "starred", label: getText("starred"), icon: Star, count: counts.starred, type: "folder" },
     { id: "snoozed", label: "Snoozed", icon: Clock, count: counts.snoozed, type: "folder" },
-    { id: "sent", label: "Sent", icon: Send, count: counts.sent, type: "folder" },
-    { id: "drafts", label: "Drafts", icon: FileText, count: counts.drafts, type: "folder" },
+    { id: "sent", label: getText("sent"), icon: Send, count: counts.sent, type: "folder" },
+    { id: "drafts", label: getText("drafts"), icon: FileText, count: counts.drafts, type: "folder" },
     { id: "important", label: "Important", icon: AlertTriangle, count: counts.important, type: "folder" },
     { id: "spam", label: "Spam", icon: Mail, count: counts.spam, type: "folder" },
-    { id: "trash", label: "Trash", icon: Trash2, count: counts.trash, type: "folder" },
+    { id: "trash", label: getText("trash"), icon: Trash2, count: counts.trash, type: "folder" },
   ];
 
   const handleItemClick = (item: NavigationItem) => {

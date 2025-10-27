@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
+import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import type { Email } from "@/types/email";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -28,6 +29,7 @@ import {
 
 export function EmailList() {
   const { currentVariant } = useLayout();
+  const { getText, getId } = useDynamicStructure();
   const {
     paginatedEmails,
     filteredEmails,
@@ -136,23 +138,23 @@ export function EmailList() {
 
     switch (currentFilter.folder) {
       case "inbox":
-        return "Inbox";
+        return getText("inbox");
       case "starred":
-        return "Starred";
+        return getText("starred");
       case "snoozed":
         return "Snoozed";
       case "sent":
-        return "Sent";
+        return getText("sent");
       case "drafts":
-        return "Drafts";
+        return getText("drafts");
       case "important":
         return "Important";
       case "spam":
         return "Spam";
       case "trash":
-        return "Trash";
+        return getText("trash");
       default:
-        return "Inbox";
+        return getText("inbox");
     }
   };
 

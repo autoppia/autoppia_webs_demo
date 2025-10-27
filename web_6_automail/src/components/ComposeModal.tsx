@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useEmail } from "@/contexts/EmailContext";
 import { useLayout } from "@/contexts/LayoutContext";
+import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 import { cn } from "@/library/utils";
 import {
   Send,
@@ -35,6 +36,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export function ComposeModal() {
   const { currentVariant } = useLayout();
+  const { getText, getId } = useDynamicStructure();
   const {
     isComposeOpen,
     composeData,
@@ -123,17 +125,17 @@ export function ComposeModal() {
         {/* Header */}
         <DialogHeader className="flex flex-row items-center justify-between p-3 pb-2 border-b border-border/50">
           <DialogTitle className="text-base font-semibold text-foreground">
-            New Message
+            {getText("new_message")}
           </DialogTitle>
           <div className="flex items-center gap-1">
-            <Button id="compose-minimize-button" variant="ghost" size="icon" className="h-6 w-6">
+            <Button id={getId("compose_minimize_button")} variant="ghost" size="icon" className="h-6 w-6">
               <Minus className="h-3 w-3" />
             </Button>
-            <Button id="compose-maximize-button" variant="ghost" size="icon" className="h-6 w-6">
+            <Button id={getId("compose_maximize_button")} variant="ghost" size="icon" className="h-6 w-6">
               <Square className="h-3 w-3" />
             </Button>
             <Button
-              id="compose-close-button"
+              id={getId("compose_close_button")}
               variant="ghost"
               size="icon"
               className="h-6 w-6"
@@ -150,7 +152,7 @@ export function ComposeModal() {
             {/* To Field */}
             <div className="flex items-start gap-3">
               <Label className="text-xs font-medium text-muted-foreground w-4 pt-2">
-                To
+                {getText("to")}
               </Label>
               <div className="flex-1 min-h-[36px] border border-border rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/50 bg-background">
                 <div className="flex flex-wrap gap-1 items-center">
@@ -172,12 +174,12 @@ export function ComposeModal() {
                     </Badge>
                   ))}
                   <Input
-                    id="compose-to-input"
+                    id={getId("to_input")}
                     value={toInput}
                     onChange={(e) => setToInput(e.target.value)}
                     onKeyDown={handleToKeyDown}
                     placeholder={
-                      composeData.to.length === 0 ? "Recipients" : ""
+                      composeData.to.length === 0 ? getText("to") : ""
                     }
                     className="border-0 shadow-none focus-visible:ring-0 h-auto p-0 flex-1 min-w-[120px] bg-transparent"
                   />
@@ -206,13 +208,13 @@ export function ComposeModal() {
             {/* Subject */}
             <div className="flex items-center gap-3">
               <Label className="text-xs font-medium text-muted-foreground w-10">
-                Subject
+                {getText("subject")}
               </Label>
               <Input
-                id="compose-subject-input"
+                id={getId("subject_input")}
                 value={composeData.subject}
                 onChange={(e) => updateComposeData({ subject: e.target.value })}
-                placeholder="Subject"
+                placeholder={getText("subject")}
                 className="flex-1 h-9 border-border focus-visible:ring-1 focus-visible:ring-primary/50"
               />
             </div>
@@ -245,10 +247,10 @@ export function ComposeModal() {
           {/* Message Body */}
           <div className="flex-1 px-4 py-3">
             <Textarea
-              id="compose-body-textarea"
+              id={getId("message_textarea")}
               value={composeData.body}
               onChange={(e) => updateComposeData({ body: e.target.value })}
-              placeholder="Compose your message..."
+              placeholder={getText("message")}
               className="min-h-[200px] resize-none border-0 shadow-none focus-visible:ring-0 text-sm leading-relaxed bg-transparent"
             />
           </div>
@@ -257,7 +259,7 @@ export function ComposeModal() {
           <div className="flex items-center justify-between px-4 py-3 border-t border-border/50 bg-muted/20">
             <div className="flex items-center gap-2">
               <Button
-                id="compose-send-button"
+                id={getId("send_button")}
                 onClick={handleSend}
                 disabled={!canSend}
                 className={cn(
@@ -274,7 +276,7 @@ export function ComposeModal() {
                 )}
               >
                 <Send className="h-3 w-3 mr-2" />
-                Send
+                {getText("send")}
               </Button>
 
               <div className="flex items-center gap-1">
@@ -288,7 +290,7 @@ export function ComposeModal() {
             </div>
 
             <Button
-              id="compose-save-draft-button"
+              id={getId("save_draft_button")}
               variant="ghost"
               onClick={handleSaveDraft}
               className={cn(
@@ -305,7 +307,7 @@ export function ComposeModal() {
               )}
             >
               <Save className="h-3 w-3 mr-1" />
-              Save Draft
+              {getText("save_draft")}
             </Button>
           </div>
         </div>

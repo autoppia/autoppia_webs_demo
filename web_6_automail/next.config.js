@@ -15,6 +15,16 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
 }
 
+// Handle ENABLE_DYNAMIC_HTML_STRUCTURE (separate from layout control)
+if (!process.env.ENABLE_DYNAMIC_HTML_STRUCTURE) {
+  process.env.ENABLE_DYNAMIC_HTML_STRUCTURE = isLocalDev ? 'true' : 'false';
+}
+if (isLocalDev) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE = 'false';
+}
+
 // Debug: Print environment variables
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
@@ -23,6 +33,8 @@ console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
+console.log('  ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.ENABLE_DYNAMIC_HTML_STRUCTURE);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -61,6 +73,8 @@ const nextConfig = {
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
+    ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.ENABLE_DYNAMIC_HTML_STRUCTURE,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE,
   },
 };
 

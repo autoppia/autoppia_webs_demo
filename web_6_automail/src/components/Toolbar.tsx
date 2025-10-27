@@ -15,6 +15,7 @@ import { Switch } from '@/components/ui/switch';
 import { useEmail } from '@/contexts/EmailContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLayout } from '@/contexts/LayoutContext';
+import { useDynamicStructure } from '@/contexts/DynamicStructureContext';
 import { cn } from '@/library/utils';
 import {
   Search,
@@ -36,6 +37,7 @@ interface ToolbarProps {
 
 export function Toolbar({ onMenuClick }: ToolbarProps) {
   const { currentVariant } = useLayout();
+  const { getText, getId } = useDynamicStructure();
   const { searchQuery, setSearchQuery, filteredEmails } = useEmail();
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [searchValue, setSearchValue] = useState(searchQuery);
@@ -157,7 +159,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search mail (try: from:, to:, subject:, has:attachment, is:unread)"
+              placeholder={`${getText("search_placeholder")} (try: from:, to:, subject:, has:attachment, is:unread)`}
               value={searchValue}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
