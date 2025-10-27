@@ -23,8 +23,144 @@ export interface ProjectDataConfig {
   additionalRequirements: string;
 }
 
-// Project-specific configurations — WEB8 ONLY
+// Project-specific configurations
 export const PROJECT_CONFIGS: Record<string, ProjectDataConfig> = {
+  web_8_autolodge: {
+    projectName: 'Autolodge Hotel Booking',
+    dataType: 'hotels',
+    interfaceDefinition: `
+export interface Amenity {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
+export interface Host {
+  name: string;
+  since: number; // years hosting
+  avatar: string;
+}
+
+export interface Hotel {
+  id: number;
+  image: string;
+  title: string;
+  location: string;
+  rating: number;
+  reviews: number;
+  guests: number;
+  maxGuests: number;
+  bedrooms: number;
+  beds: number;
+  baths: number;
+  datesFrom: string; // YYYY-MM-DD
+  datesTo: string;   // YYYY-MM-DD
+  price: number;
+  host: Host;
+  amenities: Amenity[];
+}
+    `.trim(),
+    examples: [
+      {
+        id: 1,
+        image: "https://source.unsplash.com/featured/?chalet,lake-tahoe,snow,winter-luxury?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80",
+        title: "The Pinewood Chalet",
+        location: "Lake Tahoe, USA",
+        rating: 4.7,
+        reviews: 124,
+        guests: 4,
+        maxGuests: 4,
+        bedrooms: 2,
+        beds: 2,
+        baths: 2,
+        datesFrom: "2025-05-03",
+        datesTo: "2025-07-15",
+        price: 189,
+        host: {
+          name: "Emily",
+          since: 3,
+          avatar: "https://randomuser.me/api/portraits/women/65.jpg"
+        },
+        amenities: [
+          {
+            icon: "💻",
+            title: "Dedicated workspace",
+            desc: "A common area with wifi that's well-suited for working."
+          },
+          {
+            icon: "📍",
+            title: "Great location",
+            desc: "Close to hiking trails and the lake shore."
+          },
+          {
+            icon: "🔍",
+            title: "Easy check-in",
+            desc: "Guests loved the seamless self-check-in process."
+          }
+        ]
+      },
+      {
+        id: 2,
+        image: "https://source.unsplash.com/featured/?beach-bungalow,goa,sunset,oceanfront?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80",
+        title: "Sunset Beach Bungalow",
+        location: "Goa, India",
+        rating: 4.5,
+        reviews: 98,
+        guests: 2,
+        maxGuests: 2,
+        bedrooms: 1,
+        beds: 1,
+        baths: 1,
+        datesFrom: "2025-05-03",
+        datesTo: "2025-07-15",
+        price: 104,
+        host: {
+          name: "Raj",
+          since: 2,
+          avatar: "https://randomuser.me/api/portraits/men/23.jpg"
+        },
+        amenities: [
+          {
+            icon: "💻",
+            title: "WiFi included",
+            desc: "Reliable high-speed internet connection."
+          },
+          {
+            icon: "📍",
+            title: "Prime beach access",
+            desc: "Step out directly onto the sandy beach."
+          },
+          {
+            icon: "🔍",
+            title: "Local guidebooks",
+            desc: "Explore nearby restaurants and attractions."
+          }
+        ]
+      }
+    ],
+    categories: ["Beachfront", "Urban", "Mountain", "Countryside", "Luxury", "Budget", "Boutique", "Resort"],
+    namingRules: {
+      id: "{number}",
+      image: "https://source.unsplash.com/featured/?hotel,{name_snake_case}&w=400&h=300&fit=crop&auto=format&q=60",
+      host: {
+        avatar: "https://randomuser.me/api/portraits/{gender}/{number}.jpg"
+      }
+    },
+    additionalRequirements: `
+Generate realistic hotel listings across diverse locations and price ranges.
+- Include name, location, rating (3.5–5.0), pricePerNight (50–600 USD)
+- Add relevant amenities (Wi-Fi, Pool, Breakfast, Parking, etc.)
+- Include 3–5 reviews per hotel with realistic authors and dates
+- Ensure host profiles have avatars and short bios
+- Use Unsplash for images matching the hotel type
+- Each hotel should have 5–10 days of future availability (ISO dates)
+- Generate diverse property types: chalets, bungalows, apartments, villas, cabins
+- Include realistic amenities with emoji icons
+- Ensure logical consistency between guests, bedrooms, beds, and baths
+- Use realistic host names and experience levels (1-10 years)
+- Generate unique, brand-like property titles
+    `.trim()
+  },
   dashboard_hotels: {
     projectName: 'Web8 Hotel Dashboard',
     dataType: 'hotels',
@@ -261,8 +397,8 @@ export async function generateProjectData(
  */
 export function isDataGenerationEnabled(): boolean {
   const val = (
+    process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION ??
     process.env.NEXT_PUBLIC_DATA_GENERATION ??
-    process.env.NEXT_ENABLE_DATA_GENERATION ??
     process.env.ENABLE_DATA_GENERATION ??
     ''
   ).toString().toLowerCase();

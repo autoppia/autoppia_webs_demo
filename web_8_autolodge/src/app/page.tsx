@@ -6,7 +6,7 @@ import { PropertyCard } from "@/components/PropertyCard";
 import * as React from "react";
 import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import Image from "next/image";
 import { useSeedLayout } from "@/library/utils";
 import { DynamicWrapper } from "@/components/DynamicWrapper";
@@ -160,7 +160,8 @@ function HomeContent() {
     return selFrom <= to && from <= selTo;
   }
 
-  const filtered = DASHBOARD_HOTELS.filter((card) => {
+  const hotels = dynamicDataProvider.getHotels();
+  const filtered = hotels.filter((card) => {
     if (committedSearch.trim()) {
       const term = committedSearch.toLowerCase();
       if (
