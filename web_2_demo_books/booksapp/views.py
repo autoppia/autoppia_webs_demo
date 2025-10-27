@@ -42,6 +42,7 @@ def index(request):
     search_event = Event.create_search_book_event(
         user=request.user if request.user.is_authenticated else None,
         web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+        validator_id=request.headers.get("X-Validator-Id", "0"),
         query=search_query,
     )
     search_event.save()
@@ -79,6 +80,7 @@ def index(request):
         filter_event = Event.create_filter_book_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             genre=genre_obj,
             year=year_value,
         )
@@ -124,9 +126,10 @@ def detail(request, book_id):
     """
     book = get_object_or_404(Book, id=book_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
+    validator_id = request.headers.get("X-Validator-Id", "0")
 
     # Registrar evento de detalle de libro
-    detail_event = Event.create_book_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, book)
+    detail_event = Event.create_book_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, book, validator_id=validator_id)
     detail_event.save()
 
     # Libros relacionados
@@ -203,6 +206,7 @@ def mybook(request):
     search_event = Event.create_search_book_event(
         user=request.user if request.user.is_authenticated else None,
         web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+        validator_id=request.headers.get("X-Validator-Id", "0"),
         query=search_query,
     )
     search_event.save()
@@ -240,6 +244,7 @@ def mybook(request):
         filter_event = Event.create_filter_book_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             genre=genre_obj,
             year=year_value,
         )
@@ -264,6 +269,7 @@ def payment_success(request, book_id):
         payment_success_event = Event.create_purchase_book_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             book=book,
         )
         payment_success_event.save()
@@ -311,6 +317,7 @@ def add_book(request):
             add_book_event = Event.create_add_book_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validator_id=request.headers.get("X-Validator-Id", "0"),
                 book=book,
             )
             add_book_event.save()
@@ -371,6 +378,7 @@ def update_book(request, id):
                 edit_book_event = Event.create_edit_book_event(
                     user=request.user if request.user.is_authenticated else None,
                     web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                    validator_id=request.headers.get("X-Validator-Id", "0"),
                     book=updated_book,
                     previous_values=original_values,
                     changed_fields=changed_fields,
@@ -399,6 +407,7 @@ def delete_book(request, id):
         delete_book_event = Event.create_delete_book_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             book=book,
         )
         delete_book_event.save()
@@ -422,6 +431,7 @@ def add_to_cart(request, id):
         add_to_cart_event = Event.create_shoppingcart_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             book=book,
         )
         add_to_cart_event.save()
@@ -450,6 +460,7 @@ def add_comment(request, book_id):
             add_comment_event = Event.create_add_comment_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validator_id=request.headers.get("X-Validator-Id", "0"),
                 comment=comment,
                 book=book,
             )
@@ -532,6 +543,7 @@ def contact(request):
             contact_event = Event.create_contact_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validator_id=request.headers.get("X-Validator-Id", "0"),
                 contact=contact_message,
             )
             contact_event.save()
@@ -566,7 +578,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-            login_event = Event.create_login_event(user, web_agent_id)
+            login_event = Event.create_login_event(user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
             login_event.save()
             next_url = request.GET.get("next", reverse("booksapp:index"))
             messages.success(request, f"Welcome back, {username}!")
@@ -582,7 +594,7 @@ def logout_view(request):
     Registra el evento de cierre de sesión antes de finalizar la sesión.
     """
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-    logout_event = Event.create_logout_event(request.user, web_agent_id)
+    logout_event = Event.create_logout_event(request.user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
     logout(request)
     logout_event.save()
     messages.success(request, "You have been logged out successfully.")
@@ -623,7 +635,7 @@ def register_view(request):
         if not error:
             user = User.objects.create_user(username=username, email=email, password=password1)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-            register_event = Event.create_registration_event(user, web_agent_id)
+            register_event = Event.create_registration_event(user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
             register_event.save()
             messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect("booksapp:index")
@@ -702,6 +714,7 @@ def profile_view(request):
         edit_user_event = Event.create_edit_user_event(
             user=user,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             profile=profile,
             previous_values=previous_values,
         )
