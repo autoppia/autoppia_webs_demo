@@ -231,8 +231,164 @@ deploy_project() {
       NEXT_PUBLIC_ENABLE_DB_MODE="$ENABLE_DB_MODE" \
       DATA_SEED_VALUE="$SEED_VALUE" \
       NEXT_PUBLIC_DATA_SEED_VALUE="$SEED_VALUE" \
-      API_URL="http://app:$WEBS_PORT" \
+      API_URL="http://webs_server-app-1:8080" \
       NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT"
+
+    # If DB mode is enabled, we need to build with webs_server running
+    if [ "$ENABLE_DB_MODE" = "true" ]; then
+      echo "    [INFO] DB mode enabled - building with webs_server running..."
+      # Start webs_server first if not already running
+      if ! docker compose -p "webs_server" ps -q | grep -q .; then
+        echo "    [INFO] Starting webs_server for build process..."
+        cd "$DEMOS_DIR/webs_server"
+        (
+          export \
+            WEB_PORT="$WEBS_PORT" \
+            POSTGRES_PORT="$WEBS_PG_PORT" \
+            OPENAI_API_KEY="${OPENAI_API_KEY:-}"
+          
+          docker compose -p "webs_server" up -d
+        )
+        cd "$dir"
+        
+        # Wait for webs_server to be ready
+        echo "    [INFO] Waiting for webs_server to be ready..."
+        local max_attempts=30
+        local attempt=1
+        while [ $attempt -le $max_attempts ]; do
+          if curl -s "http://localhost:$WEBS_PORT/health" > /dev/null 2>&1; then
+            echo "    [INFO] webs_server is ready"
+            break
+          fi
+          echo "    [INFO] Attempt $attempt/$max_attempts - webs_server not ready, waiting 2 seconds..."
+          sleep 2
+          attempt=$((attempt + 1))
+        done
+        
+        if [ $attempt -gt $max_attempts ]; then
+          echo "    [ERROR] webs_server did not become ready after $max_attempts attempts"
+          exit 1
+        fi
+      fi
+      
+      # Populate database with sample data if it's empty
+      echo "    [INFO] Checking if database needs to be populated..."
+      local pool_count=$(curl -s "http://localhost:$WEBS_PORT/datasets/pools" | grep -o '"count":[0-9]*' | cut -d: -f2)
+      if [ "$pool_count" = "0" ] || [ -z "$pool_count" ]; then
+        echo "    [INFO] Database is empty, populating with sample data..."
+        docker exec webs_server-app-1 python3 -c "
+import asyncio
+import asyncpg
+import json
+from datetime import datetime
+
+DATABASE_URL = 'postgresql://webs_user:autoppia_2025@db:5432/autoppia_db'
+
+# Generate 50 unique hotels
+import random
+import string
+
+def generate_hotel_data(index):
+    locations = [
+        'Malibu, California', 'Aspen, Colorado', 'Miami, Florida', 'Napa Valley, California',
+        'Sedona, Arizona', 'Portland, Oregon', 'Austin, Texas', 'Charleston, South Carolina',
+        'Savannah, Georgia', 'Nashville, Tennessee', 'Denver, Colorado', 'Seattle, Washington',
+        'San Diego, California', 'Santa Fe, New Mexico', 'Key West, Florida', 'Boulder, Colorado',
+        'Asheville, North Carolina', 'Portland, Maine', 'Burlington, Vermont', 'Madison, Wisconsin',
+        'Bend, Oregon', 'Bozeman, Montana', 'Jackson, Wyoming', 'Park City, Utah',
+        'Taos, New Mexico', 'Crested Butte, Colorado', 'Telluride, Colorado', 'Moab, Utah',
+        'Flagstaff, Arizona', 'Tucson, Arizona', 'Santa Barbara, California', 'Carmel, California',
+        'Monterey, California', 'Big Sur, California', 'Lake Tahoe, California', 'Sonoma, California',
+        'Healdsburg, California', 'St. Helena, California', 'Yountville, California', 'Calistoga, California',
+        'Paso Robles, California', 'Santa Ynez, California', 'Los Olivos, California', 'Solvang, California',
+        'Cambria, California', 'Morro Bay, California', 'Pismo Beach, California', 'Avila Beach, California',
+        'Cayucos, California', 'Los Osos, California'
+    ]
+    
+    hotel_types = [
+        'Luxury Beachfront Villa', 'Mountain Retreat Cabin', 'Urban Loft Apartment', 'Historic Mansion',
+        'Modern Penthouse', 'Cozy Cottage', 'Rustic Lodge', 'Contemporary Condo', 'Charming Bungalow',
+        'Elegant Townhouse', 'Spacious Ranch', 'Stylish Studio', 'Luxury Suite', 'Garden Villa',
+        'Waterfront Home', 'Hillside Retreat', 'Downtown Apartment', 'Suburban House', 'Country Estate',
+        'Beach House', 'Lake House', 'Ski Chalet', 'Wine Country Villa', 'Desert Oasis', 'Forest Cabin',
+        'Coastal Cottage', 'Mountain View Home', 'Historic Brownstone', 'Modern Townhouse', 'Garden Apartment',
+        'Penthouse Suite', 'Luxury Condo', 'Beachfront Condo', 'Mountain Condo', 'Urban Apartment',
+        'Suburban Villa', 'Country House', 'City Loft', 'Riverside Home', 'Hillside Villa',
+        'Valley View House', 'Oceanfront Villa', 'Mountain Cabin', 'Desert Villa', 'Forest Retreat',
+        'Coastal Villa', 'Historic Home', 'Modern Villa', 'Traditional House', 'Contemporary Home'
+    ]
+    
+    host_names = [
+        'Sarah Johnson', 'Michael Chen', 'Emily Rodriguez', 'David Thompson', 'Jessica Williams',
+        'Christopher Lee', 'Amanda Davis', 'Matthew Wilson', 'Ashley Brown', 'Daniel Martinez',
+        'Jennifer Garcia', 'Andrew Anderson', 'Stephanie Taylor', 'Ryan Thomas', 'Nicole Jackson',
+        'Kevin White', 'Rachel Harris', 'Brandon Martin', 'Lauren Thompson', 'Tyler Garcia',
+        'Megan Rodriguez', 'Jordan Wilson', 'Samantha Brown', 'Justin Davis', 'Kayla Miller',
+        'Nathan Jones', 'Brittany Wilson', 'Zachary Moore', 'Taylor Anderson', 'Cameron Taylor',
+        'Morgan Jackson', 'Hunter White', 'Alexis Harris', 'Connor Martin', 'Madison Thompson',
+        'Logan Garcia', 'Sydney Rodriguez', 'Caleb Wilson', 'Hannah Brown', 'Ethan Davis',
+        'Olivia Miller', 'Noah Jones', 'Ava Wilson', 'Liam Moore', 'Isabella Anderson',
+        'Mason Taylor', 'Sophia Jackson', 'William White', 'Charlotte Harris', 'James Martin'
+    ]
+    
+    amenities_list = [
+        [{'title': 'Pool', 'icon': '🏊'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Parking', 'icon': '🅿️'}],
+        [{'title': 'Hot Tub', 'icon': '🛁'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Gym', 'icon': '💪'}],
+        [{'title': 'Fireplace', 'icon': '🔥'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Balcony', 'icon': '🏠'}],
+        [{'title': 'Garden', 'icon': '🌿'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'BBQ', 'icon': '🍖'}],
+        [{'title': 'Ocean View', 'icon': '🌊'}, {'title': 'WiFi', 'icon': '📶'}, {'title': 'Kitchen', 'icon': '🍳'}, {'title': 'Beach Access', 'icon': '🏖️'}]
+    ]
+    
+    return {
+        'id': f'hotel_{index + 1}',
+        'image': f'https://images.unsplash.com/photo-{1566073771259 + index}?w=800&h=600&fit=crop&crop=entropy&auto=format&q=80',
+        'title': hotel_types[index % len(hotel_types)],
+        'location': locations[index % len(locations)],
+        'rating': round(random.uniform(4.0, 5.0), 1),
+        'reviews': random.randint(50, 500),
+        'guests': random.randint(2, 8),
+        'maxGuests': random.randint(4, 16),
+        'bedrooms': random.randint(1, 5),
+        'beds': random.randint(1, 6),
+        'baths': random.randint(1, 4),
+        'datesFrom': '2024-01-15',
+        'datesTo': '2024-01-20',
+        'price': random.randint(100, 2000),
+        'host': {
+            'name': host_names[index % len(host_names)],
+            'avatar': f'https://images.unsplash.com/photo-{1494790108755 + index}?w=100&h=100&fit=crop&crop=face&auto=format&q=80',
+            'isSuperhost': random.choice([True, False]),
+            'responseTime': random.choice(['within an hour', 'within a few hours', 'within a day']),
+            'responseRate': random.randint(85, 100),
+            'joinDate': f'20{random.randint(18, 23)}-{random.randint(1, 12):02d}-{random.randint(1, 28):02d}'
+        },
+        'amenities': amenities_list[index % len(amenities_list)]
+    }
+
+HOTEL_DATA = [generate_hotel_data(i) for i in range(50)]
+
+async def populate_database():
+    try:
+        conn = await asyncpg.connect(DATABASE_URL)
+        await conn.execute('''
+            INSERT INTO master_datasets (project_key, entity_type, data_pool, pool_size, created_at, updated_at)
+            VALUES (\$1, \$2, \$3, \$4, \$5, \$6)
+            ON CONFLICT (project_key, entity_type) DO UPDATE SET
+                data_pool = \$3,
+                pool_size = \$4,
+                updated_at = \$6
+        ''', 'web_8_autolodge', 'hotels', json.dumps(HOTEL_DATA), len(HOTEL_DATA), datetime.now(), datetime.now())
+        print('✅ Database populated successfully with hotel data')
+        await conn.close()
+    except Exception as e:
+        print(f'❌ Error populating database: {e}')
+
+asyncio.run(populate_database())
+" 2>/dev/null || echo "    [WARNING] Failed to populate database, continuing with build..."
+      else
+        echo "    [INFO] Database already has data ($pool_count pools), skipping population"
+      fi
+    fi
 
     docker compose -p "$proj" build $cache_flag
     docker compose -p "$proj" up -d
@@ -337,7 +493,10 @@ case "$WEB_DEMO" in
     deploy_project "web_7_autodelivery" "$WEB_PORT" "" "autodelivery_${WEB_PORT}"
     ;;
   autolodge)
-    deploy_webs_server
+    # Only deploy webs_server if DB mode is not enabled (to avoid double deployment)
+    if [ "$ENABLE_DB_MODE" != "true" ]; then
+      deploy_webs_server
+    fi
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
     ;;
   autoconnect)

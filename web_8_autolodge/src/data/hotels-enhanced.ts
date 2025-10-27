@@ -1,10 +1,33 @@
 import { isDataGenerationEnabled, generateProjectData, getRandomHotelImage } from "@/shared/data-generator";
+import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
 import { Hotel } from "@/types/hotel";
 
 /**
- * Initialize hotels data - either from AI generation or fallback to static data
+ * Initialize hotels data - either from database, AI generation, or fallback to static data
  */
 export async function initializeHotels(): Promise<Hotel[]> {
+  // Check if database mode is enabled and we're not in build time
+  if (isDbLoadModeEnabled() && typeof window !== "undefined") {
+    console.log('🗄️ Database mode enabled, loading hotels from database...');
+    try {
+      const dbData = await fetchSeededSelection({
+        projectKey: "web_8_autolodge",
+        entityType: "hotels",
+        seedValue: 1, // Use default seed when no seed is provided
+        limit: 50
+      });
+      
+      if (dbData && dbData.length > 0) {
+        console.log(`✅ Loaded ${dbData.length} hotels from database`);
+        return dbData as Hotel[];
+      } else {
+        console.log('⚠️ No data found in database, falling back to static data');
+      }
+    } catch (error) {
+      console.warn('⚠️ Database load failed, falling back to static data:', error);
+    }
+  }
+
   // Check if data generation is enabled
   if (!isDataGenerationEnabled()) {
     console.log('📊 Data generation disabled, using static hotel data');
