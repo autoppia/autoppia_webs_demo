@@ -1,4 +1,4 @@
-import { isDataGenerationEnabled, generateProjectData } from "@/shared/data-generator";
+import { isDataGenerationEnabled, generateProjectData, getRandomHotelImage } from "@/shared/data-generator";
 import { Hotel } from "@/types/hotel";
 
 /**
@@ -8,7 +8,12 @@ export async function initializeHotels(): Promise<Hotel[]> {
   // Check if data generation is enabled
   if (!isDataGenerationEnabled()) {
     console.log('📊 Data generation disabled, using static hotel data');
-    return import("./hotels").then(m => m.default);
+    const staticData = await import("./hotels").then(m => m.default);
+    // Update static data with proper images
+    return staticData.map((hotel: Hotel, index: number) => ({
+      ...hotel,
+      image: getRandomHotelImage(index)
+    }));
   }
 
   // Check for cached data first
@@ -42,11 +47,21 @@ export async function initializeHotels(): Promise<Hotel[]> {
       return result.data;
     } else {
       console.warn('⚠️ Data generation failed, falling back to static data:', result.error);
-      return import("./hotels").then(m => m.default);
+      const staticData = await import("./hotels").then(m => m.default);
+      // Update static data with proper images
+      return staticData.map((hotel: Hotel, index: number) => ({
+        ...hotel,
+        image: getRandomHotelImage(index)
+      }));
     }
   } catch (error) {
     console.error('❌ Data generation error, falling back to static data:', error);
-    return import("./hotels").then(m => m.default);
+    const staticData = await import("./hotels").then(m => m.default);
+    // Update static data with proper images
+    return staticData.map((hotel: Hotel, index: number) => ({
+      ...hotel,
+      image: getRandomHotelImage(index)
+    }));
   }
 }
 
