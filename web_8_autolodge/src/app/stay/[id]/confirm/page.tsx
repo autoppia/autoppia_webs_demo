@@ -196,8 +196,8 @@ function ConfirmPageContent() {
             if (newRange.from && newRange.to) {
               logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
                 dateRange: {
-                  from: newRange.from.toISOString(),
-                  to: newRange.to.toISOString(),
+                  from: format(newRange.from, "yyyy-MM-dd"),
+                  to: format(newRange.to, "yyyy-MM-dd"),
                 },
                 hotel: prop,
               });
@@ -243,8 +243,8 @@ function ConfirmPageContent() {
             if (newRange.from && newRange.to) {
               logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
                 dateRange: {
-                  from: newRange.from.toISOString(),
-                  to: newRange.to.toISOString(),
+                  from: format(newRange.from, "yyyy-MM-dd"),
+                  to: format(newRange.to, "yyyy-MM-dd"),
                 },
                 hotel: prop,
               });
