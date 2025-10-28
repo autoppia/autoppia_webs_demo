@@ -149,3 +149,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Dynamic HTML toggle wired from docker-compose/env
 DYNAMIC_HTML_ENABLED = os.environ.get("ENABLE_DYNAMIC_HTML", "false").lower() == "true"
+
+# Data generation configuration
+ENABLE_DATA_GENERATION = os.environ.get("ENABLE_DATA_GENERATION", "false").lower() == "true"
+API_URL = os.environ.get("API_URL", "http://localhost:8090")

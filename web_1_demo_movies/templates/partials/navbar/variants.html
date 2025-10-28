@@ -15,6 +15,9 @@
         <li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}"><a class="nav-link" href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Home</a></li>
         <li class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}"><a class="nav-link" href="{% url 'movieapp:about' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">About Us</a></li>
         <li class="nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"><a class="nav-link" href="{% url 'movieapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Contact</a></li>
+        {% if ENABLE_DATA_GENERATION %}
+        <li class="nav-item {% if request.resolver_match.url_name == 'data_generation_dashboard' %}active{% endif %}"><a class="nav-link" href="{% url 'movieapp:data_generation_dashboard' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}"><i class="fas fa-robot mr-1"></i>Data Gen</a></li>
+        {% endif %}
       </ul>
       {% elif v == 2 %}
       <ul class="navbar-nav ml-auto" data-dynamic-group="navbar">

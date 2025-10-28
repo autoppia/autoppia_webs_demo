@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Data Generation Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-robot"></i> Data Generation Dashboard
+            </h1>
+            
+            {% if not data_generation_enabled %}
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Data Generation Disabled</h4>
+                <p>Data generation is not enabled. Set <code>ENABLE_DATA_GENERATION=true</code> to enable this feature.</p>
+                <hr>
+                <p class="mb-0">API URL: <code>{{ api_url }}</code></p>
+            </div>
+            {% else %}
+            
+            <!-- Status Cards -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="card-title">{{ movies_count }}</h4>
+                                    <p class="card-text">Movies in Database</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-film fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="card-title">{{ genres_count }}</h4>
+                                    <p class="card-text">Genres in Database</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-tags fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Generation Controls -->
+            <div class="row">
+                <!-- Movies Generation -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-film"></i> Generate Movies
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="movies-form">
+                                <div class="mb-3">
+                                    <label for="movies-count" class="form-label">Number of Movies</label>
+                                    <input type="number" class="form-control" id="movies-count" 
+                                           value="50" min="1" max="200" required>
+                                    <div class="form-text">Generate between 1 and 200 movies</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="movies-categories" class="form-label">Categories (Optional)</label>
+                                    <input type="text" class="form-control" id="movies-categories" 
+                                           placeholder="Action, Drama, Comedy (comma-separated)">
+                                    <div class="form-text">Focus on specific movie categories</div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="generate-movies-btn">
+                                    <i class="fas fa-magic"></i> Generate Movies
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Genres Generation -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-tags"></i> Generate Genres
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="genres-form">
+                                <div class="mb-3">
+                                    <label for="genres-count" class="form-label">Number of Genres</label>
+                                    <input type="number" class="form-control" id="genres-count" 
+                                           value="20" min="1" max="50" required>
+                                    <div class="form-text">Generate between 1 and 50 genres</div>
+                                </div>
+                                <button type="submit" class="btn btn-success" id="generate-genres-btn">
+                                    <i class="fas fa-magic"></i> Generate Genres
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-database"></i> Data Management
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Clear Data</h6>
+                                    <p class="text-muted">Remove existing data from the database</p>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="clear-movies">
+                                        <label class="form-check-label" for="clear-movies">
+                                            Clear Movies ({{ movies_count }} items)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="clear-genres">
+                                        <label class="form-check-label" for="clear-genres">
+                                            Clear Genres ({{ genres_count }} items)
+                                        </label>
+                                    </div>
+                                    <button type="button" class="btn btn-danger mt-3" id="clear-data-btn">
+                                        <i class="fas fa-trash"></i> Clear Selected Data
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Quick Actions</h6>
+                                    <p class="text-muted">Common data generation tasks</p>
+                                    <button type="button" class="btn btn-info mb-2" id="quick-setup-btn">
+                                        <i class="fas fa-rocket"></i> Quick Setup (50 movies + 20 genres)
+                                    </button>
+                                    <br>
+                                    <button type="button" class="btn btn-warning" id="refresh-stats-btn">
+                                        <i class="fas fa-sync"></i> Refresh Statistics
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Area -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-chart-line"></i> Generation Results
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="results-area">
+                                <p class="text-muted">Generation results will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5>Generating Data...</h5>
+                <p class="text-muted">Please wait while we generate your data using AI.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const resultsArea = document.getElementById('results-area');
+    
+    function showResult(message, type = 'info') {
+        const alertClass = type === 'success' ? 'alert-success' : 
+                          type === 'error' ? 'alert-danger' : 'alert-info';
+        resultsArea.innerHTML = `
+            <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    }
+    
+    function showLoading() {
+        const modal = new bootstrap.Modal(document.getElementById('loadingModal'));
+        modal.show();
+    }
+    
+    function hideLoading() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('loadingModal'));
+        if (modal) modal.hide();
+    }
+    
+    // Movies generation
+    document.getElementById('movies-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const count = document.getElementById('movies-count').value;
+        const categories = document.getElementById('movies-categories').value;
+        
+        showLoading();
+        
+        fetch('{% url "movieapp:generate_movies_api" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                count: parseInt(count),
+                categories: categories ? categories.split(',').map(c => c.trim()) : null
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                showResult(`Successfully generated ${data.count} movies in ${data.generation_time.toFixed(2)}s`, 'success');
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                showResult(`Error: ${data.error}`, 'error');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showResult(`Error: ${error.message}`, 'error');
+        });
+    });
+    
+    // Genres generation
+    document.getElementById('genres-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const count = document.getElementById('genres-count').value;
+        
+        showLoading();
+        
+        fetch('{% url "movieapp:generate_genres_api" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                count: parseInt(count)
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                showResult(`Successfully generated ${data.count} genres in ${data.generation_time.toFixed(2)}s`, 'success');
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                showResult(`Error: ${data.error}`, 'error');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showResult(`Error: ${error.message}`, 'error');
+        });
+    });
+    
+    // Clear data
+    document.getElementById('clear-data-btn').addEventListener('click', function() {
+        const clearMovies = document.getElementById('clear-movies').checked;
+        const clearGenres = document.getElementById('clear-genres').checked;
+        
+        if (!clearMovies && !clearGenres) {
+            showResult('Please select at least one data type to clear', 'error');
+            return;
+        }
+        
+        if (!confirm('Are you sure you want to clear the selected data? This action cannot be undone.')) {
+            return;
+        }
+        
+        showLoading();
+        
+        fetch('{% url "movieapp:clear_data_api" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                clear_movies: clearMovies,
+                clear_genres: clearGenres
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                showResult(data.message, 'success');
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                showResult(`Error: ${data.error}`, 'error');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showResult(`Error: ${error.message}`, 'error');
+        });
+    });
+    
+    // Quick setup
+    document.getElementById('quick-setup-btn').addEventListener('click', function() {
+        if (!confirm('This will generate 50 movies and 20 genres. Continue?')) {
+            return;
+        }
+        
+        showLoading();
+        
+        // First generate genres
+        fetch('{% url "movieapp:generate_genres_api" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ count: 20 })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Then generate movies
+                return fetch('{% url "movieapp:generate_movies_api" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ count: 50 })
+                });
+            } else {
+                throw new Error(data.error);
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoading();
+            if (data.success) {
+                showResult(`Quick setup completed! Generated ${data.count} movies and 20 genres`, 'success');
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                showResult(`Error: ${data.error}`, 'error');
+            }
+        })
+        .catch(error => {
+            hideLoading();
+            showResult(`Error: ${error.message}`, 'error');
+        });
+    });
+    
+    // Refresh stats
+    document.getElementById('refresh-stats-btn').addEventListener('click', function() {
+        location.reload();
+    });
+});
+</script>
+{% endblock %}

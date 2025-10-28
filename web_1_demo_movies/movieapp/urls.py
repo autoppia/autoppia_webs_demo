@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import views_data_generation
 
 app_name = "movieapp"
 
@@ -24,4 +25,9 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     path("register/", views.register_view, name="register"),
     path("profile/", views.profile_view, name="profile"),
+    # Data generation
+    path("data-generation/", views_data_generation.data_generation_dashboard, name="data_generation_dashboard"),
+    path("api/generate-movies/", views_data_generation.generate_movies_api, name="generate_movies_api"),
+    path("api/generate-genres/", views_data_generation.generate_genres_api, name="generate_genres_api"),
+    path("api/clear-data/", views_data_generation.clear_data_api, name="clear_data_api"),
 ]

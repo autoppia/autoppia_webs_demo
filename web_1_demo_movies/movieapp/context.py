@@ -19,4 +19,5 @@ def dynamic_context(request):
         "DYNAMIC_HTML_ENABLED": enabled,
         "INITIAL_SEED": seed,
         "LAYOUT_VARIANT": variant,
+        "ENABLE_DATA_GENERATION": getattr(settings, "ENABLE_DATA_GENERATION", False),
     }
