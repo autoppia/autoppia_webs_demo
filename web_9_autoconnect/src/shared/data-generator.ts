@@ -315,7 +315,8 @@ export interface Recommendation {
 export async function generateProjectData(
   projectKey: string,
   count: number = 10,
-  categories?: string[]
+  categories?: string[],
+  saveToDb: boolean = false
 ): Promise<DataGenerationResponse> {
   const config = PROJECT_CONFIGS[projectKey];
   if (!config) {
@@ -346,7 +347,7 @@ export async function generateProjectData(
         naming_rules: config.namingRules,
         project_key: projectKey,
         entity_type: config.dataType,
-        save_to_db: true,
+        save_to_db: saveToDb,
       })
     });
 

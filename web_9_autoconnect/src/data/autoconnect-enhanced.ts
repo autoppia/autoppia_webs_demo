@@ -11,7 +11,7 @@ export async function initializeUsers(): Promise<User[]> {
     console.log('🗄️ Database mode enabled, loading users from database...');
     try {
       const dbData = await fetchSeededSelection({
-        projectKey: "web_9_autoconnect",
+        projectKey: "web_9_autoconnect_users",
         entityType: "users",
         seedValue: 1, // Use default seed when no seed is provided
         limit: 50
@@ -57,10 +57,10 @@ export async function initializeUsers(): Promise<User[]> {
   console.log('🚀 Generating users for Autoconnect...');
   
   try {
-    const result = await generateProjectData("web_9_autoconnect_users", 30);
+    const result = await generateProjectData("web_9_autoconnect_users", 30, undefined, true); // Always save to DB when generating
     
     if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} users`);
+      console.log(`✅ Generated ${result.data.length} users and saved to database`);
       
       // Cache the results
       if (typeof window !== "undefined") {
@@ -88,7 +88,7 @@ export async function initializePosts(): Promise<Post[]> {
     console.log('🗄️ Database mode enabled, loading posts from database...');
     try {
       const dbData = await fetchSeededSelection({
-        projectKey: "web_9_autoconnect",
+        projectKey: "web_9_autoconnect_posts",
         entityType: "posts",
         seedValue: 1,
         limit: 50
@@ -134,10 +134,10 @@ export async function initializePosts(): Promise<Post[]> {
   console.log('🚀 Generating posts for Autoconnect...');
   
   try {
-    const result = await generateProjectData("web_9_autoconnect_posts", 20);
+    const result = await generateProjectData("web_9_autoconnect_posts", 20, undefined, true); // Always save to DB when generating
     
     if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} posts`);
+      console.log(`✅ Generated ${result.data.length} posts and saved to database`);
       
       // Cache the results
       if (typeof window !== "undefined") {
@@ -165,7 +165,7 @@ export async function initializeJobs(): Promise<Job[]> {
     console.log('🗄️ Database mode enabled, loading jobs from database...');
     try {
       const dbData = await fetchSeededSelection({
-        projectKey: "web_9_autoconnect",
+        projectKey: "web_9_autoconnect_jobs",
         entityType: "jobs",
         seedValue: 1,
         limit: 50
@@ -211,10 +211,10 @@ export async function initializeJobs(): Promise<Job[]> {
   console.log('🚀 Generating jobs for Autoconnect...');
   
   try {
-    const result = await generateProjectData("web_9_autoconnect_jobs", 25);
+    const result = await generateProjectData("web_9_autoconnect_jobs", 25, undefined, true); // Always save to DB when generating
     
     if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} jobs`);
+      console.log(`✅ Generated ${result.data.length} jobs and saved to database`);
       
       // Cache the results
       if (typeof window !== "undefined") {
@@ -497,9 +497,9 @@ export async function initializeRecommendations(): Promise<Recommendation[]> {
 
   console.log(`🚀 Generating ${entityType} for Autoconnect...`);
   try {
-    const result = await generateProjectData(projectKey, 50);
+    const result = await generateProjectData(projectKey, 50, undefined, true); // Always save to DB when generating
     if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} ${entityType}`);
+      console.log(`✅ Generated ${result.data.length} ${entityType} and saved to database`);
       if (typeof window !== "undefined") {
         localStorage.setItem(cacheKey, JSON.stringify(result.data));
         console.log(`💾 Cached results in localStorage (${cacheKey})`);
