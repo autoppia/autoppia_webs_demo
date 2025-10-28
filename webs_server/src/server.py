@@ -200,7 +200,7 @@ async def save_event_endpoint(event: EventInput):
 async def get_events_endpoint(
     web_url: str = Query(..., description="The specific web URL to filter events for."),
     web_agent_id: str = Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID to filter events for."),
-    validator_id: str = Query(..., description="The validator ID associated with the events.")
+    validator_id: str = Query(..., description="The validator ID associated with the events."),
 ):
     """
     Retrieves events, utilizing prepared statements.
@@ -250,7 +250,7 @@ async def get_events_endpoint(
 async def reset_events_endpoint(
     web_url: str = Query(..., description="The web URL for which all events should be deleted."),
     web_agent_id: str = Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID."),
-    validator_id: str = Query(..., description="The validator ID associated with the events.")
+    validator_id: str = Query(..., description="The validator ID associated with the events."),
 ):
     """
     Deletes all events for a given web_url, web_agent_id, and validator_id using a prepared statement.
@@ -269,12 +269,7 @@ async def reset_events_endpoint(
         deleted_count: Optional[int] = await app.state.pool.fetchval(DELETE_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
         actual_deleted_count = deleted_count if deleted_count is not None else 0
         logger.info(f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
-        return ResetResponse(
-            message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'",
-            web_url=web_url,
-            deleted_count=actual_deleted_count,
-            validator_id=validator_id
-        )
+        return ResetResponse(message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'", web_url=web_url, deleted_count=actual_deleted_count, validator_id=validator_id)
     except PostgresError as e:
         logger.error(f"Database deletion failed for reset_events: {e} (SQLState: {e.sqlstate}).")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database operation failed during event reset: {e.pgcode}.") from e
