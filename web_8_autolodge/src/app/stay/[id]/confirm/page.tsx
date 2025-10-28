@@ -191,14 +191,17 @@ function ConfirmPageContent() {
                   value={dateRange.from ? format(dateRange.from, "yyyy-MM-dd") : ""}
                   onChange={(e) => {
                     const newDate = e.target.value ? new Date(e.target.value) : null;
-                    if (newDate) {
-                      logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
-                        from: newDate.toISOString(),
-                        to: dateRange.to?.toISOString() || null,
-                        hotel: prop,
-                      });
-                    }
-                    setDateRange(prev => ({ ...prev, from: newDate }));
+                    setDateRange(prev => {
+                      const updated = { ...prev, from: newDate };
+                      if (updated.from && updated.to) {
+                        logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
+                          from: updated.from.toISOString(),
+                          to: updated.to.toISOString(),
+                          hotel: prop,
+                        });
+                      }
+                      return updated;
+                    });
                   }}
                   className="w-full border rounded-lg px-3 py-2"
                 />
@@ -212,14 +215,17 @@ function ConfirmPageContent() {
                   value={dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : ""}
                   onChange={(e) => {
                     const newDate = e.target.value ? new Date(e.target.value) : null;
-                    if (newDate) {
-                      logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
-                        from: dateRange.from?.toISOString() || null,
-                        to: newDate.toISOString(),
-                        hotel: prop,
-                      });
-                    }
-                    setDateRange(prev => ({ ...prev, to: newDate }));
+                    setDateRange(prev => {
+                      const updated = { ...prev, to: newDate };
+                      if (updated.from && updated.to) {
+                        logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
+                          from: updated.from.toISOString(),
+                          to: updated.to.toISOString(),
+                          hotel: prop,
+                        });
+                      }
+                      return updated;
+                    });
                   }}
                   className="w-full border rounded-lg px-3 py-2"
                 />
