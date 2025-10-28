@@ -1,0 +1,255 @@
+{
+  "variations": [
+    {
+      "id": 1,
+      "name": "Default",
+      "texts": {
+        "brand_name": "Auto",
+        "brand_suffix": "Delivery",
+        "menu_restaurants": "Restaurants",
+        "hero_title_line1": "Delicious food,",
+        "hero_title_line2": "delivered to your door",
+        "hero_subtitle": "Discover the best restaurants and cuisines. Order fresh, fast, and easy — anytime, anywhere.",
+        "hero_cta": "Order Now"
+      },
+      "placeholders": {
+        "search_input": "Search for cuisine, dish, or restaurant"
+      },
+      "ids": {
+        "hero_title_id": "hero-title",
+        "hero_cta": "hero-cta",
+        "search_box": "search-box"
+      },
+      "aria": {
+        "nav_menu": "Main navigation",
+        "search_input": "Search restaurants input"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Concise",
+      "texts": {
+        "brand_name": "Zip",
+        "brand_suffix": "Eats",
+        "menu_restaurants": "Eateries",
+        "hero_title_line1": "Crave. Tap.",
+        "hero_title_line2": "Delivered.",
+        "hero_subtitle": "Quick bites from top-rated spots near you.",
+        "hero_cta": "Start Order"
+      },
+      "placeholders": {
+        "search_input": "Try 'pizza' or 'sushi'"
+      },
+      "ids": {
+        "hero_title_id": "title-concise",
+        "hero_cta": "cta-hero",
+        "search_box": "box-search"
+      },
+      "aria": {
+        "nav_menu": "Primary site navigation",
+        "search_input": "Find restaurants and dishes"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Friendly",
+      "texts": {
+        "brand_name": "Happy",
+        "brand_suffix": "Meals",
+        "menu_restaurants": "Places",
+        "hero_title_line1": "Hungry?",
+        "hero_title_line2": "We’ve got you.",
+        "hero_subtitle": "Comfort food, healthy picks, and everything in between.",
+        "hero_cta": "Let’s Eat"
+      },
+      "placeholders": {
+        "search_input": "What are you craving today?"
+      },
+      "ids": {
+        "hero_title_id": "title-friendly",
+        "hero_cta": "btn-eat",
+        "search_box": "search-friendly"
+      },
+      "aria": {
+        "nav_menu": "Main menu",
+        "search_input": "Food search input"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Express",
+      "texts": {
+        "brand_name": "Express",
+        "brand_suffix": "Dine",
+        "menu_restaurants": "Venues",
+        "hero_title_line1": "Fast delivery,",
+        "hero_title_line2": "fresh flavors.",
+        "hero_subtitle": "From local legends to hidden gems — on your schedule.",
+        "hero_cta": "Get Started"
+      },
+      "placeholders": {
+        "search_input": "Search meals or restaurants"
+      },
+      "ids": {
+        "hero_title_id": "title-express",
+        "hero_cta": "btn-start",
+        "search_box": "search-express"
+      },
+      "aria": {
+        "nav_menu": "Express navigation",
+        "search_input": "Meal search"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Gourmet",
+      "texts": {
+        "brand_name": "Gourmet",
+        "brand_suffix": "Go",
+        "menu_restaurants": "Dining",
+        "hero_title_line1": "Elevated eats,",
+        "hero_title_line2": "brought to you.",
+        "hero_subtitle": "Chef-crafted dishes and curated kitchens.",
+        "hero_cta": "Browse Now"
+      },
+      "placeholders": {
+        "search_input": "Search by chef, dish, or cuisine"
+      },
+      "ids": {
+        "hero_title_id": "title-gourmet",
+        "hero_cta": "btn-browse",
+        "search_box": "search-gourmet"
+      },
+      "aria": {
+        "nav_menu": "Gourmet navigation",
+        "search_input": "Gourmet search input"
+      }
+    },
+    {
+      "id": 6,
+      "name": "Budget",
+      "texts": {
+        "brand_name": "Value",
+        "brand_suffix": "Bites",
+        "menu_restaurants": "Deals",
+        "hero_title_line1": "Great taste,",
+        "hero_title_line2": "small price.",
+        "hero_subtitle": "Wallet-friendly favorites for every craving.",
+        "hero_cta": "Find Deals"
+      },
+      "placeholders": {
+        "search_input": "Search by budget or cuisine"
+      },
+      "ids": {
+        "hero_title_id": "title-budget",
+        "hero_cta": "btn-deals",
+        "search_box": "search-budget"
+      },
+      "aria": {
+        "nav_menu": "Deals navigation",
+        "search_input": "Deal search input"
+      }
+    },
+    {
+      "id": 7,
+      "name": "Healthy",
+      "texts": {
+        "brand_name": "Fresh",
+        "brand_suffix": "Fuel",
+        "menu_restaurants": "Healthy",
+        "hero_title_line1": "Eat well,",
+        "hero_title_line2": "feel great.",
+        "hero_subtitle": "Nutritious choices delivered fast.",
+        "hero_cta": "Fuel Up"
+      },
+      "placeholders": {
+        "search_input": "Search salads, bowls, and more"
+      },
+      "ids": {
+        "hero_title_id": "title-healthy",
+        "hero_cta": "btn-fuel",
+        "search_box": "search-healthy"
+      },
+      "aria": {
+        "nav_menu": "Healthy navigation",
+        "search_input": "Healthy search input"
+      }
+    },
+    {
+      "id": 8,
+      "name": "LateNight",
+      "texts": {
+        "brand_name": "Night",
+        "brand_suffix": "Bites",
+        "menu_restaurants": "Open Late",
+        "hero_title_line1": "Midnight munchies?",
+        "hero_title_line2": "We deliver.",
+        "hero_subtitle": "Your late-night favorites in minutes.",
+        "hero_cta": "Order Late"
+      },
+      "placeholders": {
+        "search_input": "Search 24/7 kitchens"
+      },
+      "ids": {
+        "hero_title_id": "title-late",
+        "hero_cta": "btn-late",
+        "search_box": "search-late"
+      },
+      "aria": {
+        "nav_menu": "Late navigation",
+        "search_input": "Late night search"
+      }
+    },
+    {
+      "id": 9,
+      "name": "Family",
+      "texts": {
+        "brand_name": "Family",
+        "brand_suffix": "Table",
+        "menu_restaurants": "Family Meals",
+        "hero_title_line1": "Feeding a crew?",
+        "hero_title_line2": "Easy peasy.",
+        "hero_subtitle": "Family-sized portions from local favorites.",
+        "hero_cta": "Feed Family"
+      },
+      "placeholders": {
+        "search_input": "Search family bundles"
+      },
+      "ids": {
+        "hero_title_id": "title-family",
+        "hero_cta": "btn-family",
+        "search_box": "search-family"
+      },
+      "aria": {
+        "nav_menu": "Family navigation",
+        "search_input": "Family search input"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Premium",
+      "texts": {
+        "brand_name": "Prime",
+        "brand_suffix": "Dine",
+        "menu_restaurants": "Curated",
+        "hero_title_line1": "Exceptional taste,",
+        "hero_title_line2": "on demand.",
+        "hero_subtitle": "Handpicked menus from top-rated kitchens.",
+        "hero_cta": "Explore"
+      },
+      "placeholders": {
+        "search_input": "Discover curated menus"
+      },
+      "ids": {
+        "hero_title_id": "title-premium",
+        "hero_cta": "btn-explore",
+        "search_box": "search-premium"
+      },
+      "aria": {
+        "nav_menu": "Premium navigation",
+        "search_input": "Premium search input"
+      }
+    }
+  ]
+}
+
