@@ -10,7 +10,9 @@
         "hero_title_line1": "Delicious food,",
         "hero_title_line2": "delivered to your door",
         "hero_subtitle": "Discover the best restaurants and cuisines. Order fresh, fast, and easy — anytime, anywhere.",
-        "hero_cta": "Order Now"
+        "hero_cta": "Order Now",
+        "back-button": "← Back to restaurants",
+        "add-to-cart-btn": "Add to Cart"
       },
       "placeholders": {
         "search_input": "Search for cuisine, dish, or restaurant"
@@ -18,11 +20,15 @@
       "ids": {
         "hero_title_id": "hero-title",
         "hero_cta": "hero-cta",
-        "search_box": "search-box"
+        "search_box": "search-box",
+        "back-button": "back-button",
+        "add-to-cart-btn": "add-to-cart-btn"
       },
       "aria": {
         "nav_menu": "Main navigation",
-        "search_input": "Search restaurants input"
+        "search_input": "Search restaurants input",
+        "back-button": "Back to all restaurants",
+        "add-to-cart-btn": "Add item to cart"
       }
     },
     {
@@ -35,7 +41,9 @@
         "hero_title_line1": "Crave. Tap.",
         "hero_title_line2": "Delivered.",
         "hero_subtitle": "Quick bites from top-rated spots near you.",
-        "hero_cta": "Start Order"
+        "hero_cta": "Start Order",
+        "back-button": "← Back to eateries",
+        "add-to-cart-btn": "Add Item"
       },
       "placeholders": {
         "search_input": "Try 'pizza' or 'sushi'"
@@ -43,11 +51,15 @@
       "ids": {
         "hero_title_id": "title-concise",
         "hero_cta": "cta-hero",
-        "search_box": "box-search"
+        "search_box": "box-search",
+        "back-button": "back-btn-concise",
+        "add-to-cart-btn": "add-cart-concise"
       },
       "aria": {
         "nav_menu": "Primary site navigation",
-        "search_input": "Find restaurants and dishes"
+        "search_input": "Find restaurants and dishes",
+        "back-button": "Back to eateries",
+        "add-to-cart-btn": "Add item"
       }
     },
     {
@@ -60,7 +72,9 @@
         "hero_title_line1": "Hungry?",
         "hero_title_line2": "We’ve got you.",
         "hero_subtitle": "Comfort food, healthy picks, and everything in between.",
-        "hero_cta": "Let’s Eat"
+        "hero_cta": "Let’s Eat",
+        "back-button": "← Back to places",
+        "add-to-cart-btn": "Add to bag"
       },
       "placeholders": {
         "search_input": "What are you craving today?"
@@ -68,11 +82,15 @@
       "ids": {
         "hero_title_id": "title-friendly",
         "hero_cta": "btn-eat",
-        "search_box": "search-friendly"
+        "search_box": "search-friendly",
+        "back-button": "back-btn-friendly",
+        "add-to-cart-btn": "add-cart-friendly"
       },
       "aria": {
         "nav_menu": "Main menu",
-        "search_input": "Food search input"
+        "search_input": "Food search input",
+        "back-button": "Back to places",
+        "add-to-cart-btn": "Add to bag"
       }
     },
     {
@@ -85,7 +103,9 @@
         "hero_title_line1": "Fast delivery,",
         "hero_title_line2": "fresh flavors.",
         "hero_subtitle": "From local legends to hidden gems — on your schedule.",
-        "hero_cta": "Get Started"
+        "hero_cta": "Get Started",
+        "back-button": "← Back to venues",
+        "add-to-cart-btn": "Add"
       },
       "placeholders": {
         "search_input": "Search meals or restaurants"
@@ -93,11 +113,15 @@
       "ids": {
         "hero_title_id": "title-express",
         "hero_cta": "btn-start",
-        "search_box": "search-express"
+        "search_box": "search-express",
+        "back-button": "back-btn-express",
+        "add-to-cart-btn": "add-cart-express"
       },
       "aria": {
         "nav_menu": "Express navigation",
-        "search_input": "Meal search"
+        "search_input": "Meal search",
+        "back-button": "Back to venues",
+        "add-to-cart-btn": "Add"
       }
     },
     {
@@ -110,7 +134,9 @@
         "hero_title_line1": "Elevated eats,",
         "hero_title_line2": "brought to you.",
         "hero_subtitle": "Chef-crafted dishes and curated kitchens.",
-        "hero_cta": "Browse Now"
+        "hero_cta": "Browse Now",
+        "back-button": "← Back to dining",
+        "add-to-cart-btn": "Add to basket"
       },
       "placeholders": {
         "search_input": "Search by chef, dish, or cuisine"
@@ -118,11 +144,15 @@
       "ids": {
         "hero_title_id": "title-gourmet",
         "hero_cta": "btn-browse",
-        "search_box": "search-gourmet"
+        "search_box": "search-gourmet",
+        "back-button": "back-btn-gourmet",
+        "add-to-cart-btn": "add-cart-gourmet"
       },
       "aria": {
         "nav_menu": "Gourmet navigation",
-        "search_input": "Gourmet search input"
+        "search_input": "Gourmet search input",
+        "back-button": "Back to dining",
+        "add-to-cart-btn": "Add to basket"
       }
     },
     {
@@ -135,7 +165,9 @@
         "hero_title_line1": "Great taste,",
         "hero_title_line2": "small price.",
         "hero_subtitle": "Wallet-friendly favorites for every craving.",
-        "hero_cta": "Find Deals"
+        "hero_cta": "Find Deals",
+        "back-button": "← Back to deals",
+        "add-to-cart-btn": "Add deal"
       },
       "placeholders": {
         "search_input": "Search by budget or cuisine"
@@ -143,11 +175,15 @@
       "ids": {
         "hero_title_id": "title-budget",
         "hero_cta": "btn-deals",
-        "search_box": "search-budget"
+        "search_box": "search-budget",
+        "back-button": "back-btn-budget",
+        "add-to-cart-btn": "add-cart-budget"
       },
       "aria": {
         "nav_menu": "Deals navigation",
-        "search_input": "Deal search input"
+        "search_input": "Deal search input",
+        "back-button": "Back to deals",
+        "add-to-cart-btn": "Add deal to cart"
       }
     },
     {
@@ -160,7 +196,9 @@
         "hero_title_line1": "Eat well,",
         "hero_title_line2": "feel great.",
         "hero_subtitle": "Nutritious choices delivered fast.",
-        "hero_cta": "Fuel Up"
+        "hero_cta": "Fuel Up",
+        "back-button": "← Back to healthy",
+        "add-to-cart-btn": "Add healthy pick"
       },
       "placeholders": {
         "search_input": "Search salads, bowls, and more"
@@ -168,11 +206,15 @@
       "ids": {
         "hero_title_id": "title-healthy",
         "hero_cta": "btn-fuel",
-        "search_box": "search-healthy"
+        "search_box": "search-healthy",
+        "back-button": "back-btn-healthy",
+        "add-to-cart-btn": "add-cart-healthy"
       },
       "aria": {
         "nav_menu": "Healthy navigation",
-        "search_input": "Healthy search input"
+        "search_input": "Healthy search input",
+        "back-button": "Back to healthy",
+        "add-to-cart-btn": "Add healthy pick"
       }
     },
     {
@@ -185,7 +227,9 @@
         "hero_title_line1": "Midnight munchies?",
         "hero_title_line2": "We deliver.",
         "hero_subtitle": "Your late-night favorites in minutes.",
-        "hero_cta": "Order Late"
+        "hero_cta": "Order Late",
+        "back-button": "← Back to late-night",
+        "add-to-cart-btn": "Add late bite"
       },
       "placeholders": {
         "search_input": "Search 24/7 kitchens"
@@ -193,11 +237,15 @@
       "ids": {
         "hero_title_id": "title-late",
         "hero_cta": "btn-late",
-        "search_box": "search-late"
+        "search_box": "search-late",
+        "back-button": "back-btn-late",
+        "add-to-cart-btn": "add-cart-late"
       },
       "aria": {
         "nav_menu": "Late navigation",
-        "search_input": "Late night search"
+        "search_input": "Late night search",
+        "back-button": "Back to late-night",
+        "add-to-cart-btn": "Add late bite"
       }
     },
     {
@@ -210,7 +258,9 @@
         "hero_title_line1": "Feeding a crew?",
         "hero_title_line2": "Easy peasy.",
         "hero_subtitle": "Family-sized portions from local favorites.",
-        "hero_cta": "Feed Family"
+        "hero_cta": "Feed Family",
+        "back-button": "← Back to family meals",
+        "add-to-cart-btn": "Add family item"
       },
       "placeholders": {
         "search_input": "Search family bundles"
@@ -218,11 +268,15 @@
       "ids": {
         "hero_title_id": "title-family",
         "hero_cta": "btn-family",
-        "search_box": "search-family"
+        "search_box": "search-family",
+        "back-button": "back-btn-family",
+        "add-to-cart-btn": "add-cart-family"
       },
       "aria": {
         "nav_menu": "Family navigation",
-        "search_input": "Family search input"
+        "search_input": "Family search input",
+        "back-button": "Back to family meals",
+        "add-to-cart-btn": "Add family item"
       }
     },
     {
@@ -235,7 +289,9 @@
         "hero_title_line1": "Exceptional taste,",
         "hero_title_line2": "on demand.",
         "hero_subtitle": "Handpicked menus from top-rated kitchens.",
-        "hero_cta": "Explore"
+        "hero_cta": "Explore",
+        "back-button": "← Back to curated",
+        "add-to-cart-btn": "Add selection"
       },
       "placeholders": {
         "search_input": "Discover curated menus"
@@ -243,11 +299,15 @@
       "ids": {
         "hero_title_id": "title-premium",
         "hero_cta": "btn-explore",
-        "search_box": "search-premium"
+        "search_box": "search-premium",
+        "back-button": "back-btn-premium",
+        "add-to-cart-btn": "add-cart-premium"
       },
       "aria": {
         "nav_menu": "Premium navigation",
-        "search_input": "Premium search input"
+        "search_input": "Premium search input",
+        "back-button": "Back to curated",
+        "add-to-cart-btn": "Add selection"
       }
     }
   ]
