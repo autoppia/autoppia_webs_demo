@@ -72,7 +72,11 @@ class Event(models.Model):
     event_name = models.CharField(max_length=50, choices=EventName.choices)
     timestamp = models.DateTimeField(default=timezone.now)
     web_agent_id = models.CharField(max_length=100)
-    validator_id = models.CharField(max_length=100)
+    # Allow empty validator id by default so events created without the header
+    # won't cause IntegrityError at save time. We keep the column non-nullable
+    # at the DB level but provide a default empty string here so instances
+    # created without an explicit validator_id are valid.
+    validator_id = models.CharField(max_length=100, blank=True, default="")
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -371,4 +375,3 @@ class Event(models.Model):
 
     # Attach a custom manager that uses EventQuerySet so QuerySet.delete() is intercepted
     objects = models.Manager.from_queryset(EventQuerySet)()
-
