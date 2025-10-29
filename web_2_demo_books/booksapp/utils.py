@@ -43,3 +43,55 @@ def compute_variant(seed: int) -> int:
 def normalize_variant(raw) -> int:
     """Deprecated. No longer used."""
     return 1
+
+
+def redirect_with_seed(request, url_name, *args, seed=None, **kwargs):
+    """
+    Helper function to redirect while preserving seed parameter.
+    
+    Args:
+        request: Django request object
+        url_name: URL name or path for redirect
+        *args: Positional arguments for reverse()
+        seed: Optional seed value (if None, uses seed from request/session)
+        **kwargs: Keyword arguments for reverse()
+    
+    Returns:
+        HttpResponseRedirect with seed parameter preserved
+    """
+    from django.shortcuts import redirect
+    from django.urls import reverse
+    from django.conf import settings
+    
+    # Check if dynamic HTML is enabled
+    enabled = bool(getattr(settings, "DYNAMIC_HTML_ENABLED", False))
+    
+    if not enabled:
+        # Dynamic HTML disabled - normal redirect without seed
+        if args or kwargs:
+            return redirect(reverse(url_name, args=args, kwargs=kwargs))
+        return redirect(url_name)
+    
+    # Get seed from parameter, request.GET, session, or default
+    if seed is None:
+        seed = request.GET.get("seed")
+        if not seed and "preserved_seed" in request.session:
+            seed = request.session["preserved_seed"]
+        else:
+            seed = seed or 1
+    
+    # Normalize seed
+    seed = normalize_seed(seed)
+    
+    # Store in session for future requests
+    request.session["preserved_seed"] = seed
+    
+    # Build URL with seed parameter
+    if args or kwargs:
+        url = reverse(url_name, args=args, kwargs=kwargs)
+    else:
+        url = url_name
+    
+    # Add seed parameter
+    separator = "&" if "?" in url else "?"
+    return redirect(f"{url}{separator}seed={seed}")

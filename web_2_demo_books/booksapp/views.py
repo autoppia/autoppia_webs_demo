@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from events.models import Event
 from .forms import BookForm, ContactForm
 from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
-from .utils import normalize_seed, stable_shuffle, compute_variant
+from .utils import normalize_seed, stable_shuffle, compute_variant, redirect_with_seed
 
 
 def index(request):
@@ -295,7 +295,7 @@ def delete_cart(request, id):
     cart.delete()
 
     messages.success(request, "Book has been deleted from Cart.")
-    return redirect("booksapp:shoppingcart")
+    return redirect_with_seed(request, "booksapp:shoppingcart")
 
 
 def add_book(request):
@@ -322,7 +322,7 @@ def add_book(request):
             )
             add_book_event.save()
             messages.success(request, "Book added successfully.")
-            return redirect("booksapp:index")
+            return redirect_with_seed(request, "booksapp:index")
         else:
             print("Form errors:", form.errors)
             messages.error(request, "Please fix the errors in the form.")
@@ -388,7 +388,7 @@ def update_book(request, id):
                 # updated_book.user = request.user
                 # updated_book.save()
             messages.success(request, "Book updated successfully.")
-            return redirect("booksapp:detail", book_id=id)
+            return redirect_with_seed(request, "booksapp:detail", book_id=id)
         else:
             messages.error(request, "Please correct the errors in the form.")
     else:
@@ -412,7 +412,7 @@ def delete_book(request, id):
         )
         delete_book_event.save()
         messages.success(request, "Book deleted successfully.")
-        return redirect("/")
+        return redirect_with_seed(request, "booksapp:index")
     return render(request, "delete.html", {"book": book})
 
 
@@ -436,7 +436,7 @@ def add_to_cart(request, id):
         )
         add_to_cart_event.save()
 
-        return redirect("booksapp:detail", book_id=id)
+        return redirect_with_seed(request, "booksapp:detail", book_id=id)
     return None
 
 
@@ -488,7 +488,7 @@ def add_comment(request, book_id):
                 )
 
             messages.success(request, "Your comment has been added successfully!")
-            return redirect("booksapp:detail", book_id=book.id)
+            return redirect_with_seed(request, "booksapp:detail", book_id=book.id)
 
     # If AJAX expects JSON, return JSON error to avoid HTML in fetch
     wants_json = (
@@ -500,7 +500,7 @@ def add_comment(request, book_id):
         return JsonResponse({"status": "error", "message": "Invalid comment."}, status=400)
 
     messages.error(request, "There was a problem with your comment.")
-    return redirect("booksapp:detail", book_id=book.id)
+    return redirect_with_seed(request, "booksapp:detail", book_id=book.id)
 
 
 def genre_list(request):
@@ -552,7 +552,7 @@ def contact(request):
                 request,
                 "Your message has been received successfully. We will review it soon!",
             )
-            return redirect("booksapp:contact")
+            return redirect_with_seed(request, "booksapp:contact")
     else:
         form = ContactForm()
     return render(request, "contact.html", {"form": form})
@@ -569,7 +569,7 @@ def login_view(request):
     Si el usuario ya está autenticado, redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("booksapp:index")
+        return redirect_with_seed(request, "booksapp:index")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -580,7 +580,16 @@ def login_view(request):
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
             login_event = Event.create_login_event(user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
             login_event.save()
-            next_url = request.GET.get("next", reverse("booksapp:index"))
+            # Get seed from form or request
+            seed = request.POST.get("seed") or request.GET.get("seed")
+            default_url = reverse("booksapp:index")
+            next_url = request.GET.get("next") or request.POST.get("next") or default_url
+            
+            # Preserve seed in redirect
+            if seed:
+                separator = "&" if "?" in next_url else "?"
+                next_url = f"{next_url}{separator}seed={seed}"
+            
             messages.success(request, f"Welcome back, {username}!")
             return redirect(next_url)
         else:
@@ -598,7 +607,7 @@ def logout_view(request):
     logout(request)
     logout_event.save()
     messages.success(request, "You have been logged out successfully.")
-    return redirect("booksapp:index")
+    return redirect_with_seed(request, "booksapp:index")
 
 
 def register_view(request):
@@ -607,7 +616,7 @@ def register_view(request):
     Valida la información, crea el usuario, registra los eventos de registro e inicio de sesión y redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("booksapp:index")
+        return redirect_with_seed(request, "booksapp:index")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -638,7 +647,7 @@ def register_view(request):
             register_event = Event.create_registration_event(user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
             register_event.save()
             messages.success(request, f"Account created successfully. Welcome, {username}!")
-            return redirect("booksapp:index")
+            return redirect_with_seed(request, "booksapp:index")
 
     return render(request, "register.html")
 
@@ -721,7 +730,7 @@ def profile_view(request):
         edit_user_event.save()
 
         messages.success(request, "Your profile has been updated successfully!")
-        return redirect("booksapp:profile")
+        return redirect_with_seed(request, "booksapp:profile")
 
     # For GET requests, display the form
     all_genres = Genre.objects.all().order_by("name")
