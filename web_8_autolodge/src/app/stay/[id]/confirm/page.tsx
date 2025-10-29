@@ -1,6 +1,5 @@
 "use client";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Calendar } from "@/components/ui/calendar";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import { useState, useEffect, useMemo } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -9,6 +8,7 @@ import { useRef } from "react";
 import { useSeedLayout } from "@/library/utils";
 import { DynamicWrapper } from "@/components/DynamicWrapper";
 import { Suspense } from "react";
+import { DateRangePopover } from "@/components/DateRangePopover";
 
 function toStartOfDay(date: Date): Date {
   const d = new Date(date);
@@ -177,56 +177,100 @@ function ConfirmPageContent() {
             </div>
           </DynamicWrapper>
         );
-      case 'dates':
-        return (
-          <DynamicWrapper key={`dates-${index}`} as="div" className="bg-white rounded-lg border p-6">
-            <h3 className="text-lg font-semibold mb-4">Edit your dates</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Check-in
-                </label>
-                <input
-                  type="date"
-                  value={dateRange.from ? format(dateRange.from, "yyyy-MM-dd") : ""}
-                  onChange={(e) => {
-                    const newDate = e.target.value ? new Date(e.target.value) : null;
-                    if (newDate) {
-                      logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
-                        from: newDate.toISOString(),
-                        to: dateRange.to?.toISOString() || null,
-                        hotel: prop,
-                      });
-                    }
-                    setDateRange(prev => ({ ...prev, from: newDate }));
-                  }}
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Check-out
-                </label>
-                <input
-                  type="date"
-                  value={dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : ""}
-                  onChange={(e) => {
-                    const newDate = e.target.value ? new Date(e.target.value) : null;
-                    if (newDate) {
-                      logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
-                        from: dateRange.from?.toISOString() || null,
-                        to: newDate.toISOString(),
-                        hotel: prop,
-                      });
-                    }
-                    setDateRange(prev => ({ ...prev, to: newDate }));
-                  }}
-                  className="w-full border rounded-lg px-3 py-2"
-                />
-              </div>
-            </div>
-          </DynamicWrapper>
-        );
+    case "dates":
+  return (
+    <DynamicWrapper
+      key={`dates-${index}`}
+      as="div"
+      className="bg-white rounded-lg border p-6"
+    >
+      <h3 className="text-lg font-semibold mb-4">Edit your dates</h3>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* ✅ Check-in */}
+        <DateRangePopover
+          selectedRange={dateRange}
+          setSelectedRange={(newRange) => {
+            setDateRange(newRange);
+            // Fire only when both dates are selected
+            if (newRange.from && newRange.to) {
+              logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
+                dateRange: {
+                  from: format(newRange.from, "yyyy-MM-dd"),
+                  to: format(newRange.to, "yyyy-MM-dd"),
+                },
+                hotel: prop,
+              });
+            }
+          }}
+        >
+          <div
+            id="checkInField"
+            className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative border"
+          >
+            <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+              Check in
+            </span>
+            <span className="text-sm text-neutral-700">
+              {dateRange?.from
+                ? format(dateRange.from, "MMM dd, yyyy")
+                : "Add date"}
+            </span>
+            {dateRange.from && (
+              <button
+                className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+                type="button"
+                style={{ lineHeight: 1, background: "none" }}
+                tabIndex={0}
+                aria-label="Clear check-in/check-out"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDateRange({ from: null, to: null });
+                }}
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </DateRangePopover>
+
+        {/* ✅ Check-out */}
+        <DateRangePopover
+          selectedRange={dateRange}
+          setSelectedRange={(newRange) => {
+            setDateRange(newRange);
+            // Fire only when both dates are selected
+            if (newRange.from && newRange.to) {
+              logEvent(EVENT_TYPES.EDIT_CHECK_IN_OUT_DATES, {
+                dateRange: {
+                  from: format(newRange.from, "yyyy-MM-dd"),
+                  to: format(newRange.to, "yyyy-MM-dd"),
+                },
+                hotel: prop,
+              });
+            }
+          }}
+        >
+          <div
+            id="checkOutField"
+            className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all border"
+          >
+            <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+              Check out
+            </span>
+            <span className="text-sm text-neutral-700">
+              {dateRange?.to
+                ? format(dateRange.to, "MMM dd, yyyy")
+                : "Add date"}
+            </span>
+          </div>
+        </DateRangePopover>
+      </div>
+    </DynamicWrapper>
+  );
+
+
+
       case 'guests':
         return (
           <DynamicWrapper key={`guests-${index}`} as="div" className="bg-white rounded-lg border p-6">
@@ -546,7 +590,7 @@ function ConfirmPageContent() {
       <DynamicWrapper as={layout.propertyDetail.wrapper} className={layout.propertyDetail.className}>
         {layout.eventElements.order.map((eventType, index) => createEventElement(eventType, index))}
       </DynamicWrapper>
-      
+
       {toast && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-green-50 border border-green-800 text-green-800 rounded-lg p-5 text-center text-xl font-semibold shadow">
           {toast}
