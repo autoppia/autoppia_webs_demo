@@ -1,5 +1,6 @@
 services:
   app:
+    restart: always
     build: .
     ports:
       - "127.0.0.1:${WEB_PORT}:8080"
@@ -29,6 +30,7 @@ services:
       - apps_net
 
   db:
+    restart: always
     image: postgres:13-alpine
     environment:
       POSTGRES_USER: webs_user
