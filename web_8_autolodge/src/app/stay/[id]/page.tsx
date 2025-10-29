@@ -14,6 +14,7 @@ import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useRef } from "react";
 import {DASHBOARD_HOTELS} from "@/library/dataset";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 function toStartOfDay(date: Date) {
   if (!date) return date;
@@ -27,6 +28,7 @@ function toUtcIsoWithTimezone(date: Date) {
 }
 
 export default function PropertyDetail() {
+  const { getText, getId } = useDynamicStructure();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -119,12 +121,12 @@ export default function PropertyDetail() {
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md animate-fade-in">
             <h2 className="text-xl font-semibold mb-3 text-neutral-800">
-              📤 Share this property
+              📤 {getText("share_title", "Share this property")}
             </h2>
 
             <input
               type="email"
-              placeholder="Receiver's email"
+              placeholder={getText("share_email_placeholder", "Receiver's email")}
               value={receiverEmail}
               onChange={(e) => {
                 const value = e.target.value;
@@ -132,7 +134,7 @@ export default function PropertyDetail() {
 
                 const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
                 setEmailError(
-                  isValidEmail || value === "" ? "" : "Invalid email address"
+                  isValidEmail || value === "" ? "" : getText("invalid_email", "Invalid email address")
                 );
               }}
               className="w-full border px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-300"
@@ -143,6 +145,7 @@ export default function PropertyDetail() {
 
             <div className="mt-5 flex justify-end gap-3">
               <button
+                id={getId("share_cancel_button")}
                 onClick={() => {
                   setShowShareModal(false);
                   setReceiverEmail("");
@@ -150,13 +153,14 @@ export default function PropertyDetail() {
                 }}
                 className="px-4 py-1.5 rounded-full text-sm bg-neutral-200 hover:bg-neutral-300"
               >
-                Cancel
+                {getText("cancel", "Cancel")}
               </button>
               <button
+                id={getId("share_send_button")}
                 disabled={!!emailError || !receiverEmail}
                 onClick={() => {
                   setShowShareModal(false);
-                  setToastMessage(`Link sent to ${receiverEmail}`);
+                  setToastMessage(getText("share_link_sent", `Link sent to ${receiverEmail}`));
                   logEvent("SHARE_HOTEL", {
                     title: prop.title,
                     location: prop.location,
@@ -175,7 +179,7 @@ export default function PropertyDetail() {
                 }}
                 className="px-4 py-1.5 rounded-full text-sm text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Send
+                {getText("send", "Send")}
               </button>
             </div>
           </div>
@@ -207,7 +211,7 @@ export default function PropertyDetail() {
             {prop.rating.toFixed(2)}
           </span>
           <span className="text-neutral-600">
-            · {prop.reviews ?? 30} reviews
+            · {prop.reviews ?? 30} {getText("reviews", "reviews")}
           </span>
           <button
             onClick={() => {
@@ -233,7 +237,7 @@ export default function PropertyDetail() {
                }
 
               setToastMessage(
-                newState ? "Added to wishlist ❤️" : "Removed from wishlist 💔"
+                newState ? getText("added_to_wishlist", "Added to wishlist ❤️") : getText("removed_from_wishlist", "Removed from wishlist 💔")
               );
             }}
             className="p-2 bg-white border border-neutral-200 rounded-full hover:shadow transition"
@@ -258,10 +262,11 @@ export default function PropertyDetail() {
             </svg>
           </button>
           <button
+            id={getId("share_button")}
             onClick={() => setShowShareModal(true)}
             className="px-4 py-2 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
           >
-            Share
+            {getText("share", "Share")}
           </button>
         </div>
         <hr className="my-4" />
@@ -314,7 +319,7 @@ export default function PropertyDetail() {
         <div className="flex gap-3 mt-3 mb-4">
           <div id="checkIn" className="flex-1 border rounded-md px-3 py-2">
             <div className="text-xs text-neutral-500 font-semibold">
-              CHECK-IN
+              {getText("check_in", "CHECK-IN")}
             </div>
             <div className="tracking-wide text-[15px]">
               {selected.from ? format(selected.from, "MM/dd/yyyy") : "–"}
@@ -322,7 +327,7 @@ export default function PropertyDetail() {
           </div>
           <div id="checkOut" className="flex-1 border rounded-md px-3 py-2">
             <div className="text-xs text-neutral-500 font-semibold">
-              CHECK-OUT
+              {getText("check_out", "CHECK-OUT")}
             </div>
             <div className="tracking-wide text-[15px]">
               {selected.to ? format(selected.to, "MM/dd/yyyy") : "–"}
@@ -330,9 +335,9 @@ export default function PropertyDetail() {
           </div>
         </div>
         <div className="border rounded-md px-3 py-2 mb-3">
-          <div className="text-xs text-neutral-500 font-semibold">GUESTS</div>
+          <div className="text-xs text-neutral-500 font-semibold">{getText("guests", "GUESTS")}</div>
           <input
-            id="guestsCount"
+            id={getId("guests_count")}
             className="bg-transparent text-[15px] w-full p-0 border-none outline-none"
             value={guests}
             type="number"
@@ -359,7 +364,7 @@ export default function PropertyDetail() {
         </div>
         {selected.from && selected.to && (
           <button
-            id="reserveButton"
+            id={getId("reserve_button")}
             className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
             onClick={async () => {
               const checkinDate = selected.from!;
@@ -393,20 +398,20 @@ export default function PropertyDetail() {
               );
             }}
           >
-            Reserve
+            {getText("reserve", "Reserve")}
           </button>
         )}
         {(!selected.from || !selected.to) && (
           <button
-            id="checkAvailabilityButton"
+            id={getId("check_availability_button")}
             disabled
             className="rounded-lg w-full py-3 text-neutral-400 font-semibold text-base bg-neutral-100 mb-3 shadow cursor-not-allowed"
           >
-            Check Availability
+            {getText("check_availability", "Check Availability")}
           </button>
         )}
         <div className="text-center text-neutral-400 text-sm mb-4">
-          You won't be charged yet
+          {getText("no_charge_yet", "You won't be charged yet")}
         </div>
         <div className="flex flex-col gap-2 text-[15px]">
           <div className="flex items-center justify-between">
@@ -416,12 +421,12 @@ export default function PropertyDetail() {
             <span>${priceSubtotal.toFixed(2)} USD</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="underline">Cleaning fee</span>{" "}
+            <span className="underline">{getText("cleaning_fee", "Cleaning fee")}</span>{" "}
             <span>${cleaningFee} USD</span>
           </div>
           <hr />
           <div className="flex items-center justify-between font-bold text-neutral-900">
-            <span>Total</span> <span>${total.toFixed(2)} USD</span>
+            <span>{getText("total", "Total")}</span> <span>${total.toFixed(2)} USD</span>
           </div>
         </div>
       </div>

@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE: ${NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE:-true}
     ports:
       - "${WEB_PORT}:8007"
     restart: always
@@ -10,6 +12,7 @@ services:
       - API_URL=http://app:8080
       - PORT=8007
       - NODE_ENV=production
+      - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE=${NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE:-true}
     networks:
       - apps_net
 

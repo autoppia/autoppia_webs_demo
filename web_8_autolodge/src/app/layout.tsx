@@ -21,6 +21,8 @@ export const metadata: Metadata = {
 };
 
 import Header from "@/components/Header";
+import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
+import { Suspense } from "react";
 
 export default function RootLayout({
   children,
@@ -33,10 +35,14 @@ export default function RootLayout({
         className="bg-neutral-50 min-h-screen font-sans"
         suppressHydrationWarning
       >
-        <Header />
-        <main className="flex justify-center w-full mt-3 px-2">
-          <div className="w-full max-w-7xl">{children}</div>
-        </main>
+        <Suspense fallback={<div className="h-16" />}> 
+          <DynamicStructureProvider>
+            <Header />
+            <main className="flex justify-center w-full mt-3 px-2">
+              <div className="w-full max-w-7xl">{children}</div>
+            </main>
+          </DynamicStructureProvider>
+        </Suspense>
       </body>
     </html>
   );

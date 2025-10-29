@@ -1,18 +1,20 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export default function Header() {
   const pathname = usePathname();
+  const { getText, getId } = useDynamicStructure();
   const navItems = [
-    { name: "Stays", href: "/" },
-    { name: "Experiences", href: "#" },
+    { name: getText("nav_stays"), href: "/", id: getId("nav_stays_link") },
+    { name: getText("nav_experiences"), href: "#", id: getId("nav_experiences_link") },
   ];
   return (
     <header className="w-full flex flex-col items-center border-b bg-white sticky top-0 z-20">
       <nav className="w-full max-w-7xl flex items-center justify-between py-2 px-3 md:px-0">
         <div className="flex items-center gap-2 min-w-[130px]">
-          <Link href="/" className="flex items-center gap-1 select-none">
+          <Link id={getId("logo_link")} href="/" className="flex items-center gap-1 select-none">
             <span className="font-logo font-bold text-2xl text-[#18181b] tracking-tight">
               Auto
             </span>
@@ -31,6 +33,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
+                id={item.id}
                 className={`mx-2 px-3 py-2 font-medium text-lg ${
                   isActive ? "text-neutral-800" : "text-neutral-500"
                 }`}

@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import { useRef } from "react";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 function toStartOfDay(date: Date): Date {
   const d = new Date(date);
@@ -14,6 +15,7 @@ function toStartOfDay(date: Date): Date {
 }
 
 export default function ConfirmPage() {
+  const { getText, getId } = useDynamicStructure();
   const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -182,19 +184,19 @@ export default function ConfirmPage() {
             strokeLinejoin="round"
           />
         </svg>
-        Back to all hotels
+        {getText("back_to_hotels", "Back to all hotels")}
       </button>
       <div className="w-full py-1 grid grid-cols-1 md:grid-cols-[1fr_390px] gap-9">
         {/* LEFT COLUMN */}
         <div className="min-w-0">
-          <h1 className="font-bold text-2xl mb-8">Confirm and pay</h1>
+          <h1 className="font-bold text-2xl mb-8">{getText("confirm_and_pay_title", "Confirm and pay")}</h1>
           <section className="mb-9">
-            <div className="font-semibold text-xl mb-5 mt-1">Your trip</div>
+            <div className="font-semibold text-xl mb-5 mt-1">{getText("your_trip", "Your trip")}</div>
             {/* Trip rows */}
             <div className="flex flex-col gap-3 mb-2">
               <div className="flex items-center gap-5 text-[16.5px] w-full relative">
                 <div className="font-medium min-w-[56px] text-neutral-900">
-                  Dates
+                  {getText("dates", "Dates")}
                 </div>
                 <div className="flex-1 text-neutral-800 tracking-wide">
                   {dateRange.from && format(dateRange.from, "MMM d")} –{" "}
@@ -215,10 +217,10 @@ export default function ConfirmPage() {
 
                     setGuestsOpen(false);
                   }}
-                  id="edit-dates-btn"
+                  id={getId("edit_dates_button")}
                   className="ml-2 text-[#ff5a5f] text-base font-medium hover:underline focus:underline focus:outline-none px-1"
                 >
-                  Edit
+                  {getText("edit", "Edit")}
                 </button>
                 {dateOpen && (
                   <div
@@ -272,9 +274,7 @@ export default function ConfirmPage() {
             <hr className="my-6" />
           </section>
           <section className="mb-12">
-            <div className="font-semibold text-[19px] mb-4 flex items-center justify-between">
-              Pay with
-            </div>
+            <div className="font-semibold text-[19px] mb-4 flex items-center justify-between">{getText("pay_with", "Pay with")}</div>
             <div className="border rounded-2xl bg-white overflow-hidden mb-5">
               <div className="flex items-center px-4 py-4 text-base font-medium cursor-pointer select-none gap-2">
                 <svg width="23" height="23" fill="none" viewBox="0 0 20 20">
@@ -290,7 +290,7 @@ export default function ConfirmPage() {
                     />
                   </svg>
                 </svg>
-                Credit or debit card
+                {getText("card_method", "Credit or debit card")}
                 <svg
                   width="24"
                   viewBox="0 0 24 24"
@@ -302,94 +302,76 @@ export default function ConfirmPage() {
               </div>
               <div className="border-t px-0.5 pb-2 pt-3">
                 <div className="px-3">
-                  <label className="block text-xs mb-1 font-semibold text-neutral-600">
-                    Card number
-                  </label>
+                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("card_number", "Card number")}</label>
                   <input
-                    id="cardNumber"
+                    id={getId("card_number_input")}
                     type="text"
                     value={cardNumber}
                     onChange={(e) => setCardNumber(e.target.value)}
-                    placeholder="0000 0000 0000 0000"
+                    placeholder={getText("card_number_placeholder", "0000 0000 0000 0000")}
                     className={`w-full border rounded-md px-3 py-2 text-[16px] tracking-wider bg-white focus:ring-2 ring-neutral-200 ${
                       showCardError ? "border-red-500 ring-red-200" : ""
                     }`}
                     maxLength={19}
                   />
                   {showCardError && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Card number is required
-                    </p>
+                    <p className="text-red-500 text-sm mt-1">{getText("card_number_required", "Card number is required")}</p>
                   )}
                 </div>
                 <div className="flex gap-2 mt-2 px-3">
                   <div className="flex-1">
-                    <label className="block text-xs mb-1 font-semibold text-neutral-600">
-                      Expiration
-                    </label>
+                    <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("expiration", "Expiration")}</label>
                     <input
-                      id="exp"
+                      id={getId("card_exp_input")}
                       type="text"
                       value={exp}
-                      placeholder="MM / YY"
+                      placeholder={getText("expiration_placeholder", "MM / YY")}
                       onChange={(e) => setExp(e.target.value)}
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                         showExpError ? "border-red-500 ring-red-200" : ""
                       }`}
                     />
                     {showExpError && (
-                      <p className="text-red-500 text-sm mt-1">
-                        Expiration is required
-                      </p>
+                      <p className="text-red-500 text-sm mt-1">{getText("expiration_required", "Expiration is required")}</p>
                     )}
                   </div>
                   <div className="flex-1">
-                    <label className="block text-xs mb-1 font-semibold text-neutral-600">
-                      CVV
-                    </label>
+                    <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("cvv", "CVV")}</label>
                     <input
-                      id="cvv"
+                      id={getId("card_cvv_input")}
                       type="text"
                       value={cvv}
                       onChange={(e) => setCvv(e.target.value)}
-                      placeholder="123"
+                      placeholder={getText("cvv_placeholder", "123")}
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                         showCvvError ? "border-red-500 ring-red-200" : ""
                       }`}
                     />
                     {showCvvError && (
-                      <p className="text-red-500 text-sm mt-1">
-                        CVV is required
-                      </p>
+                      <p className="text-red-500 text-sm mt-1">{getText("cvv_required", "CVV is required")}</p>
                     )}
                   </div>
                 </div>
                 <div className="mt-2 px-3">
-                  <label className="block text-xs mb-1 font-semibold text-neutral-600">
-                    ZIP code
-                  </label>
+                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("zip_code", "ZIP code")}</label>
                   <input
-                    id="zip"
+                    id={getId("zip_input")}
                     type="text"
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
-                    placeholder="ZIP code"
+                    placeholder={getText("zip_placeholder", "ZIP code")}
                     className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                       showZipError ? "border-red-500 ring-red-200" : ""
                     }`}
                   />
                   {showZipError && (
-                    <p className="text-red-500 text-sm mt-1">
-                      ZIP code is required
-                    </p>
+                    <p className="text-red-500 text-sm mt-1">{getText("zip_required", "ZIP code is required")}</p>
                   )}
                 </div>
                 <div className="mt-2 px-3 mb-4">
-                  <label className="block text-xs mb-1 font-semibold text-neutral-600">
-                    Country/region
-                  </label>
+                  <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("country_region", "Country/region")}</label>
                   <select
-                    id="country"
+                    id={getId("country_select")}
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                     className="w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200"
@@ -408,12 +390,9 @@ export default function ConfirmPage() {
             </div>
           </section>
           <section className="mb-12 pt-2 border-t border-neutral-200">
-            <div className="font-bold text-[20px] mb-1 mt-5">
-              Message the Host
-            </div>
+            <div className="font-bold text-[20px] mb-1 mt-5">{getText("message_host_title", "Message the Host")}</div>
             <div className="text-neutral-600 text-sm mb-4">
-              Share why you're traveling, who's coming with you, and what you
-              love about the space.
+              {getText("message_host_hint", "Share why you're traveling, who's coming with you, and what you love about the space.")}
             </div>
             <div className="flex items-center gap-4 mb-2 bg-neutral-100 rounded-lg p-3 w-fit">
               <img
@@ -433,15 +412,15 @@ export default function ConfirmPage() {
               </div>
             </div>
             <textarea
-              id="host-message-input"
+              id={getId("host_message_input")}
               value={hostMessage}
               onChange={(e) => setHostMessage(e.target.value)}
               rows={4}
-              placeholder={`Hi ${prop.host.name} I'll be staying...`}
+              placeholder={getText("host_message_placeholder", `Hi ${prop.host.name} I'll be staying...`)}
               className="w-full border rounded-lg px-3 py-3 text-[16px] bg-white mb-3 resize-none"
             />
             <button
-              id="send-host-message-btn"
+              id={getId("send_host_message_button")}
               onClick={() => {
                 if (hostMessage.trim() !== "") {
                   logEvent(EVENT_TYPES.MESSAGE_HOST, {
@@ -451,14 +430,14 @@ export default function ConfirmPage() {
                     hotel: prop,
                   });
 
-                  showToast(" ✅ Message sent.");
+                  showToast(getText("message_sent", " ✅ Message sent."));
                   setHostMessage("");
                 }
               }}
               className="bg-[#616882] hover:bg-[#504546] text-white font-semibold px-6 py-2 rounded-lg mb-2 transition disabled:opacity-50 disabled:pointer-events-none"
               disabled={!hostMessage.trim()}
             >
-              Send
+              {getText("send", "Send")}
             </button>
           </section>
           {toast && (
@@ -504,7 +483,7 @@ export default function ConfirmPage() {
             </div>
           </div>
           <hr className="my-3 mt-0.5" />
-          <div className="font-bold mb-3">Price details</div>
+          <div className="font-bold mb-3">{getText("price_details", "Price details")}</div>
           <div className="flex flex-col gap-2 text-[15px]">
             <div className="flex items-center justify-between">
               <span className="underline">
@@ -513,21 +492,21 @@ export default function ConfirmPage() {
               <span>${priceSubtotal.toFixed(2)} USD</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="underline">Cleaning fee</span>{" "}
+              <span className="underline">{getText("cleaning_fee", "Cleaning fee")}</span>{" "}
               <span>${cleaningFee} USD</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="underline">Staynb service fee</span>{" "}
+              <span className="underline">{getText("service_fee", "Service fee")}</span>{" "}
               <span>${serviceFee} USD</span>
             </div>
             <hr />
             <div className="flex items-center justify-between font-bold text-neutral-900">
-              <span>Total (USD)</span> <span>${total.toFixed(2)} USD</span>
+              <span>{getText("total_usd", "Total (USD)")}</span> <span>${total.toFixed(2)} USD</span>
             </div>
           </div>
           <button
             className="mt-7 rounded-lg w-full py-4 text-white font-semibold text-[18px] bg-[#616882] hover:bg-[#7d87aa] transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-            id="confirm-and-pay-btn"
+            id={getId("confirm_and_pay_button")}
             onClick={() => {
               setHasTriedSubmit(true);
 
@@ -549,7 +528,7 @@ export default function ConfirmPage() {
                 hotel: prop,
               });
 
-              showToast("✅ Reservation complete! Thank you! 🙏");
+              showToast(getText("reservation_complete", "✅ Reservation complete! Thank you! 🙏"));
               // Reset form fields
               setCardNumber("");
               setExp("");
@@ -559,7 +538,7 @@ export default function ConfirmPage() {
               setHasTriedSubmit(false);
             }}
           >
-            Confirm and pay
+            {getText("confirm_and_pay_button", "Confirm and pay")}
           </button>
         </div>
       </div>

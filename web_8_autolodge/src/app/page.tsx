@@ -8,8 +8,10 @@ import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import Image from "next/image";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export default function Home() {
+  const { getText, getId, getClass } = useDynamicStructure();
   // Range state: { from, to }
   const [dateRange, setDateRange] = React.useState<{
     from: Date | null;
@@ -35,14 +37,14 @@ export default function Home() {
         month: "short",
         day: "numeric",
       });
-    return "Add dates";
+    return getText("add_dates");
   };
 
   const guestSummary = () => {
     const g = guests.adults + guests.children;
     const i = guests.infants;
     const p = guests.pets;
-    let str = g > 0 ? `${g} guest${g > 1 ? "s" : ""}` : "Add guests";
+    let str = g > 0 ? `${g} guest${g > 1 ? "s" : ""}` : getText("add_guests");
     if (i > 0) str += `, ${i} infant${i > 1 ? "s" : ""}`;
     if (p > 0) str += `, ${p} pet${p > 1 ? "s" : ""}`;
     return str;
@@ -131,14 +133,14 @@ export default function Home() {
           {/* Where */}
           <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             <div
-              id="searchField"
+              id={getId("search_field")}
               className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
             >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Where
+                {getText("where_label")}
               </span>
               <span className="text-sm text-neutral-700">
-                {searchTerm ? searchTerm : "Search destinations"}
+                {searchTerm ? searchTerm : getText("where_placeholder")}
               </span>
               {searchTerm && (
                 <button
@@ -146,7 +148,7 @@ export default function Home() {
                   type="button"
                   style={{ lineHeight: 1, background: "none" }}
                   tabIndex={0}
-                  aria-label="Clear search"
+                  aria-label={getText("clear_search")}
                   onClick={(e) => {
                     e.stopPropagation();
                     setSearchTerm("");
@@ -167,11 +169,11 @@ export default function Home() {
             setSelectedRange={setDateRange}
           >
             <div
-              id="checkInField"
+              id={getId("check_in_field")}
               className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
             >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Check in
+                {getText("check_in")}
               </span>
               <span className="text-sm text-neutral-700">
                 {calendarLabel("in")}
@@ -182,7 +184,7 @@ export default function Home() {
                   type="button"
                   style={{ lineHeight: 1, background: "none" }}
                   tabIndex={0}
-                  aria-label="Clear check-in/check-out"
+                  aria-label={getText("clear_dates")}
                   onClick={(e) => {
                     e.stopPropagation();
                     setDateRange({ from: null, to: null });
@@ -200,11 +202,11 @@ export default function Home() {
             setSelectedRange={setDateRange}
           >
             <div
-              id="checkOutField"
+              id={getId("check_out_field")}
               className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all"
             >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Check out
+                {getText("check_out")}
               </span>
               <span className="text-sm text-neutral-700">
                 {calendarLabel("out")}
@@ -214,11 +216,11 @@ export default function Home() {
           {/* Who */}
           <GuestSelectorPopover counts={guests} setCounts={setGuests}>
             <div
-              id="guestsField"
+              id={getId("guests_field")}
               className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
             >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                Who
+                {getText("who")}
               </span>
               <span className="text-sm text-neutral-700">{guestSummary()}</span>
               {(guests.adults > 0 ||
@@ -230,7 +232,7 @@ export default function Home() {
                   type="button"
                   style={{ lineHeight: 1, background: "none" }}
                   tabIndex={0}
-                  aria-label="Clear guests"
+                  aria-label={getText("clear_guests")}
                   onClick={(e) => {
                     e.stopPropagation();
                     setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
@@ -244,8 +246,8 @@ export default function Home() {
           </GuestSelectorPopover>
           {/* Search button */}
           <button
-            id="searchButton"
-            className="ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
+            id={getId("search_button")}
+            className={getClass("search_button", "ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all")}
             onClick={() => {
               setCommittedSearch(searchTerm);
               logEvent(EVENT_TYPES.SEARCH_HOTEL, {
@@ -288,7 +290,7 @@ export default function Home() {
               <circle cx="11" cy="11" r="8" />
               <path d="M21 21l-3.5-3.5" />
             </svg>
-            Search
+            {getText("search_button")}
           </button>
         </div>
       </section>
@@ -297,10 +299,10 @@ export default function Home() {
       <section className="w-full flex flex-col items-center mt-8">
         {paginatedResults.length === 0 ? (
           <div
-            id="noResults"
+            id={getId("no_results")}
             className="text-neutral-400 font-semibold text-lg mt-12"
           >
-            No results found.
+            {getText("no_results")}
           </div>
         ) : (
           <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
