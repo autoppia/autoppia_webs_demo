@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   dynamicStructureProvider,
   type StructureVariation,
@@ -14,6 +14,8 @@ interface DynamicStructureContextType {
   currentVariation: StructureVariation;
   seedStructure: number;
   isEnabled: boolean;
+  setSeedStructure: (value: number) => void;
+  getPersistedSeedStructure: () => number;
 }
 
 const DynamicStructureContext = createContext<
@@ -26,11 +28,44 @@ export function DynamicStructureProvider({
   children: React.ReactNode;
 }) {
   const searchParams = useSearchParams();
-  const rawSeedStructure = Number(searchParams.get("seed-structure") ?? "1");
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  // Get seed-structure from URL or localStorage
+  const getPersistedSeedStructure = (): number => {
+    if (typeof window === 'undefined') return 1;
+    const stored = localStorage.getItem('autolodge-seed-structure');
+    return stored ? parseInt(stored, 10) : 1;
+  };
+
+  const urlSeedStructure = searchParams.get("seed-structure");
+  const persistedSeedStructure = getPersistedSeedStructure();
+  
+  // Use URL parameter if present, otherwise use persisted value
+  const rawSeedStructure = urlSeedStructure 
+    ? Number(urlSeedStructure) 
+    : persistedSeedStructure;
+    
   const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(
     rawSeedStructure
   );
   const isEnabled = dynamicStructureProvider.isDynamicStructureModeEnabled();
+
+  // Persist seed-structure to localStorage when it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('autolodge-seed-structure', seedStructure.toString());
+    }
+  }, [seedStructure]);
+
+  // Update URL with seed-structure if it's not present
+  useEffect(() => {
+    if (urlSeedStructure === null && typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('seed-structure', seedStructure.toString());
+      router.replace(url.pathname + url.search, { scroll: false });
+    }
+  }, [urlSeedStructure, seedStructure, router, pathname]);
 
   useEffect(() => {
     dynamicStructureProvider.setVariation(seedStructure);
@@ -57,9 +92,27 @@ export function DynamicStructureProvider({
     return dynamicStructureProvider.getClass(key, fallback);
   };
 
+  const setSeedStructure = (value: number): void => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('autolodge-seed-structure', value.toString());
+      const url = new URL(window.location.href);
+      url.searchParams.set('seed-structure', value.toString());
+      router.push(url.pathname + url.search);
+    }
+  };
+
   return (
     <DynamicStructureContext.Provider
-      value={{ getText, getId, getClass, currentVariation, seedStructure, isEnabled }}
+      value={{ 
+        getText, 
+        getId, 
+        getClass, 
+        currentVariation, 
+        seedStructure, 
+        isEnabled,
+        setSeedStructure,
+        getPersistedSeedStructure
+      }}
     >
       {children}
     </DynamicStructureContext.Provider>

@@ -7,6 +7,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import { useRef } from "react";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useSeedStructureNavigation } from "@/hooks/useSeedStructureNavigation";
 
 function toStartOfDay(date: Date): Date {
   const d = new Date(date);
@@ -16,6 +17,7 @@ function toStartOfDay(date: Date): Date {
 
 export default function ConfirmPage() {
   const { getText, getId } = useDynamicStructure();
+  const { navigateWithSeedStructure } = useSeedStructureNavigation();
   const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const params = useParams<{ id: string }>();
@@ -171,7 +173,7 @@ export default function ConfirmPage() {
         className="flex items-center gap-2 text-neutral-700 text-base font-medium hover:underline focus:underline focus:outline-none transition cursor-pointer mb-7 px-0 py-0"
         onClick={() => {
           logEvent(EVENT_TYPES.BACK_TO_ALL_HOTELS, { hotel: prop });
-          router.push("/");
+          navigateWithSeedStructure("/");
         }}
         type="button"
       >

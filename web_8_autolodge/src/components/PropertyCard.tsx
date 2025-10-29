@@ -1,6 +1,6 @@
 import * as React from "react";
-import Link from "next/link";
 import Image from "next/image";
+import SeedStructureLink from "./SeedStructureLink";
 
 function formatDateRange(datesFrom: string, datesTo: string) {
   const fromDate = new Date(datesFrom);
@@ -37,7 +37,7 @@ export function PropertyCard({
   datesTo: string;
 }) {
   return (
-    <Link href={`/stay/${id}`} className="block">
+    <SeedStructureLink href={`/stay/${id}`} className="block">
       <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
@@ -97,6 +97,6 @@ export function PropertyCard({
           </div>
         </div>
       </div>
-    </Link>
+    </SeedStructureLink>
   );
 }
