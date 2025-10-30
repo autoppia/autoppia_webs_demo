@@ -375,6 +375,22 @@ export async function generateProjectData(
     try {
       console.log(`[Autowork] Using AI data generation...`);
       const baseUrl = resolvedBaseUrl;
+
+      // Per-session entropy salt to diversify outputs across sessions
+      let entropySalt = '';
+      if (typeof window !== 'undefined') {
+        try {
+          const key = 'autowork_entropy_v1';
+          const existing = localStorage.getItem(key);
+          if (existing) {
+            entropySalt = existing;
+          } else {
+            entropySalt = Math.random().toString(36).slice(2) + Date.now().toString(36);
+            localStorage.setItem(key, entropySalt);
+          }
+        } catch {}
+      }
+
       const response = await fetch(`${baseUrl}/datasets/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -383,7 +399,7 @@ export async function generateProjectData(
           examples: config.examples,
           count: Math.max(1, Math.min(200, count)),
           categories: categories || config.categories,
-          additional_requirements: config.additionalRequirements,
+          additional_requirements: `${config.additionalRequirements}\n\nUse this entropy token to vary names, locations and values: ${entropySalt}`,
           naming_rules: config.namingRules,
           project_key: projectKey,
           entity_type: config.dataType,

@@ -998,11 +998,12 @@ export default function Home() {
 							<span>{expert.consultation}</span>
 						</div>
 						<SeedLink
-							href={`/expert/${expert.name
+							href={`/expert/${(expert as any).slug ?? expert.name
 								.toLowerCase()
 								.replace(/\s+/g, "-")
 								.replace(/\./g, "")}`}
 							passHref
+							preserveSeed={false}
 							prefetch={false}
 							{...getElementAttributes('book-consultation-button', i)}
 							className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
@@ -1031,6 +1032,13 @@ export default function Home() {
 
 	return (
 		<main className="px-10 mt-12 pb-16 text-[#253037]">
+			{(isLoading || statusMessage) && (
+				<div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6">
+					<div className="w-14 h-14 rounded-full border-4 border-[#08b4ce] border-t-transparent animate-spin mb-5" aria-label="Loading" />
+					<div className="text-xl font-semibold text-[#253037] mb-2">Generating data with AI</div>
+					<div className="text-sm text-gray-600">It may take some time. Please wait…</div>
+				</div>
+			)}
 			{statusMessage && (
 				<div className="mb-6 rounded-lg border border-[#08b4ce30] bg-[#e6f9fb] text-[#056b79] px-4 py-3 text-sm">
 					{statusMessage}
