@@ -155,10 +155,12 @@ export async function generateProjectData(
  * Check if data generation is enabled
  */
 export function isDataGenerationEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_DATA_GENERATION ??
-               process.env.NEXT_ENABLE_DATA_GENERATION ??
-               process.env.ENABLE_DATA_GENERATION ??
-               '').toString().toLowerCase();
+  const raw = (
+    process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION ??
+    process.env.NEXT_PUBLIC_DATA_GENERATION ??
+    process.env.ENABLE_DATA_GENERATION ??
+    ''
+  ).toString().toLowerCase();
   return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
 }
 
