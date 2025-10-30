@@ -1,11 +1,9 @@
 /**
- * Universal Data Generation Utility
+ * Universal Data Generation Utility (Web11 Edition)
  * 
- * This utility provides consistent data generation across all web projects.
- * It can generate data for different project types (Django, Next.js, etc.)
- * and handle various data structures.
+ * This utility provides consistent data generation for the Web11 AutoCalendar project.
+ * It generates realistic mock event data for calendar-based applications.
  */
-
 
 export interface DataGenerationResponse {
   success: boolean;
@@ -25,59 +23,75 @@ export interface ProjectDataConfig {
   additionalRequirements: string;
 }
 
-// Project-specific configurations
+/**
+ * Project-specific configuration for Web11 AutoCalendar
+ */
 export const PROJECT_CONFIGS: Record<string, ProjectDataConfig> = {
-  'web_3_autozone': {
-    projectName: 'AutoZone E-commerce',
-    dataType: 'products',
+  'web_11_autocalendar': {
+    projectName: 'AutoCalendar',
+    dataType: 'calendar_events',
     interfaceDefinition: `
-export interface Product {
+export interface CalendarEvent {
   id: string;
-  title: string;
-  price: string;
-  image: string;
-  description?: string;
-  category?: string;
-  rating?: number;
-  brand?: string;
-  inStock?: boolean;
-  color?: string;
-  size?: string;
-  dimensions?: {
-    depth?: string;
-    length?: string;
-    width?: string;
-  };
-  careInstructions?: string;
+  date: string;
+  start: number;
+  end: number;
+  label: string;
+  calendar: string;
+  color: string;
+  startTime: [number, number];
+  endTime: [number, number];
+  description: string;
+  location: string;
+  allDay: boolean;
+  recurrence: "none" | "daily" | "weekly" | "monthly";
+  recurrenceEndDate: string | null;
+  attendees: string[];
+  reminders: number[];
+  busy: boolean;
+  visibility: "default" | "private" | "public";
+  meetingLink: string;
 }
     `,
     examples: [
       {
-        id: "kitchen-1",
-        title: "Espresso Machine",
-        price: "$160.00",
-        image: "https://source.unsplash.com/featured/?espresso-machine",
-        description: "Professional-grade espresso machine with steam wand and programmable settings.",
-        category: "Kitchen",
-        rating: 4.5,
-        brand: "BrewMaster",
-        inStock: true
+        id: "1",
+        date: "2025-08-15",
+        start: 9,
+        end: 10,
+        label: "Team Meeting",
+        calendar: "Work",
+        color: "#2196F3",
+        startTime: [9, 0],
+        endTime: [10, 0],
+        description: "Weekly sync with team.",
+        location: "Zoom",
+        allDay: false,
+        recurrence: "weekly",
+        recurrenceEndDate: "2025-12-31",
+        attendees: ["alice@example.com", "bob@example.com"],
+        reminders: [30],
+        busy: true,
+        visibility: "default",
+        meetingLink: "https://zoom.us/j/123456789",
       }
     ],
-    categories: ["Kitchen", "Electronics", "Home", "Fitness", "Technology"],
+    categories: ["Work", "Personal", "Wellness", "Friends", "Family"],
     namingRules: {
-      id: "{category}-{number}",
-      image: "https://source.unsplash.com/featured/?{name_snake_case}"
+      id: "event-{number}",
+      label: "{verb} {topic}",
+      color: "#{randomHexColor}"
     },
-      additionalRequirements: "Generate realistic e-commerce product data with proper pricing, descriptions, and categories. For the image field: use Unsplash only and ensure the photo semantically matches the title/brand/category (no placeholders). Prefer specific query terms like 'stainless-steel cookware set', 'gaming-laptop', 'yoga-mat'. You may also return a direct images.unsplash.com URL. Append size/quality params '?w=150&h=150&fit=crop&crop=entropy&auto=format&q=60'. Never return local paths or dummy names like 'image.png'."
+    additionalRequirements:
+      "Generate realistic calendar events with unique titles, time ranges, recurrence types, attendees, and locations. Include both personal and professional events. Ensure start and end times make sense (start < end). Color codes should vary. Some events should include online meeting links (Zoom, Google Meet)."
   }
 };
 
 /**
- * Generate data for a specific project
+ * Generate data for the Web11 AutoCalendar project
  */
 export async function generateProjectData(
-  projectKey: string,
+  projectKey: string = 'web_11_autocalendar',
   count: number = 10,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
@@ -93,7 +107,7 @@ export async function generateProjectData(
   }
 
   const startTime = Date.now();
-  
+
   try {
     const baseUrl = getApiBaseUrl();
     const response = await fetch(`${baseUrl}/datasets/generate`, {
@@ -114,9 +128,7 @@ export async function generateProjectData(
       })
     });
 
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`API request failed: ${response.status}`);
 
     const result = await response.json();
     const generationTime = (Date.now() - startTime) / 1000;
@@ -139,7 +151,6 @@ export async function generateProjectData(
   }
 }
 
-
 /**
  * Check if data generation is enabled
  */
@@ -159,4 +170,3 @@ export function getApiBaseUrl(): string {
          process.env.API_URL || 
          'http://localhost:8090';
 }
-
