@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { EVENTS_DATASET } from "@/library/dataset";
+import { initializeEvents } from "@/data/events-enhanced";
 import { getEffectiveLayoutConfig, getSeedFromUrl, SeedLayoutConfig } from "@/utils/seedLayout";
 import { LayoutProvider, useLayout } from "@/contexts/LayoutContext";
 import {
@@ -183,6 +184,18 @@ function usePersistedEvents() {
           );
         setState(validEvents.length > 0 ? validEvents : EVENTS_DATASET as Event[]);
       }
+      // If nothing in local storage, try enhanced initializer (DB or generation)
+      (async () => {
+        try {
+          const initialized = await initializeEvents();
+          if (Array.isArray(initialized) && initialized.length > 0) {
+            setState(initialized as Event[]);
+            window.localStorage.setItem("gocal_events", JSON.stringify(initialized));
+          }
+        } catch {
+          // ignore; state already seeded with static dataset
+        }
+      })();
     } catch (error) {
       console.error("Error parsing localStorage events:", error);
       window.localStorage.removeItem("gocal_events");
