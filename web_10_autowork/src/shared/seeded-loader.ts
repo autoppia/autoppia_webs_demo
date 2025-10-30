@@ -50,6 +50,11 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
 
 
 export async function fetchPoolInfo(projectKey: string, entityType: string): Promise<{ pool_size: number } | null> {
+  // In browser, avoid calling default :8090 when no explicit public API URL is set
+  if (typeof window !== 'undefined') {
+    const pubUrl = (process.env.NEXT_PUBLIC_API_URL || '').toString();
+    if (!pubUrl) return null;
+  }
   const baseUrl = getApiBaseUrl();
   const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
   try {

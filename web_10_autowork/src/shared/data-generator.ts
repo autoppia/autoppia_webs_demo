@@ -9,6 +9,7 @@
  */
 
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "./seeded-loader";
+import { fetchPoolInfo } from "./seeded-loader";
 
 export interface DataGenerationResponse {
   success: boolean;
@@ -348,10 +349,12 @@ export async function generateProjectData(
   const dbMode = isDbLoadModeEnabled();
   const aiEnabled = isDataGenerationEnabled();
 
-  // If DB mode is enabled, prefer seeded first for determinism
+  // If DB mode is enabled, prefer seeded first for determinism (only if pool is available)
   if (dbMode) {
     try {
-      console.log(`[Autowork] Falling back to seeded data... (preferred due to DB mode)`);
+      const pool = await fetchPoolInfo(projectKey, config.dataType);
+      if (!pool) throw new Error('No dataset pool available');
+      console.log(`[Autowork] Using seeded data (DB mode) ...`);
       const seeded = await trySeeded(projectKey, config, count);
       const validated = validateAutoworkData(projectKey, seeded);
       if (validated.length > 0) {
@@ -361,7 +364,7 @@ export async function generateProjectData(
         return { success: true, data: validated, count: validated.length, generationTime };
       }
     } catch (e) {
-      console.warn(`[Autowork] Seeded load failed in DB mode:`, e);
+      console.warn(`[Autowork] Seeded load skipped/failed in DB mode:`, e);
     }
   }
 
@@ -401,19 +404,22 @@ export async function generateProjectData(
     }
   }
 
-  // Secondary: Seeded data
+  // Secondary: Seeded data (only if pool is available)
   try {
-    console.log(`[Autowork] Falling back to seeded data...`);
-    const seeded = await trySeeded(projectKey, config, count);
-    const validated = validateAutoworkData(projectKey, seeded);
-    if (validated.length > 0) {
-      const generationTime = (Date.now() - startTime) / 1000;
-      setCachedData(cacheKey, validated);
-      console.log(`[Autowork] Cache set: ${cacheKey} (count: ${validated.length}) generationTime: ${generationTime}s`);
-      return { success: true, data: validated, count: validated.length, generationTime };
+    const pool = await fetchPoolInfo(projectKey, config.dataType);
+    if (pool) {
+      console.log(`[Autowork] Falling back to seeded data...`);
+      const seeded = await trySeeded(projectKey, config, count);
+      const validated = validateAutoworkData(projectKey, seeded);
+      if (validated.length > 0) {
+        const generationTime = (Date.now() - startTime) / 1000;
+        setCachedData(cacheKey, validated);
+        console.log(`[Autowork] Cache set: ${cacheKey} (count: ${validated.length}) generationTime: ${generationTime}s`);
+        return { success: true, data: validated, count: validated.length, generationTime };
+      }
     }
   } catch (e) {
-    console.warn(`[Autowork] Seeded data failed:`, e);
+    console.warn(`[Autowork] Seeded data skipped/failed:`, e);
   }
 
   // Tertiary: Static fallback (examples)
