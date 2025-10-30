@@ -137,6 +137,7 @@ interface Calendar {
 function usePersistedEvents() {
   // SSR-safe: initialize with EVENTS_DATASET, then hydrate from localStorage on client
   const [state, setState] = useState<Event[]>(EVENTS_DATASET as Event[]);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -186,6 +187,7 @@ function usePersistedEvents() {
       }
       // If nothing in local storage, try enhanced initializer (DB or generation)
       (async () => {
+        setIsGenerating(true);
         try {
           const initialized = await initializeEvents();
           if (Array.isArray(initialized) && initialized.length > 0) {
@@ -194,6 +196,8 @@ function usePersistedEvents() {
           }
         } catch {
           // ignore; state already seeded with static dataset
+        } finally {
+          setIsGenerating(false);
         }
       })();
     } catch (error) {
@@ -209,7 +213,7 @@ function usePersistedEvents() {
     }
   }, [state]);
 
-  return [state, setState] as const;
+  return [state, setState, isGenerating] as const;
 }
 
 const weekDates = [15, 16, 17, 18, 19];
@@ -364,7 +368,7 @@ function CalendarApp() {
   });
   const [myCalExpanded, setMyCalExpanded] = useState(true);
   const [viewDropdown, setViewDropdown] = useState(false);
-  const [events, setEvents] = usePersistedEvents();
+  const [events, setEvents, isGenerating] = usePersistedEvents();
   const [miniCalMonth, setMiniCalMonth] = useState(viewDate.getMonth());
   const [miniCalYear, setMiniCalYear] = useState(viewDate.getFullYear());
   const [addCalOpen, setAddCalOpen] = useState(false);
@@ -411,6 +415,18 @@ function CalendarApp() {
   const [hasOpenedSearch, setHasOpenedSearch] = useState(false);
   const [submittedSearch, setSubmittedSearch] = useState("");
   const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
+
+  // Loader overlay while AI data generation is in progress
+  const generationOverlay = isGenerating ? (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="flex items-center space-x-3 rounded-lg bg-white p-4 shadow-lg">
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-indigo-600"></div>
+        <div className="text-sm text-gray-700">
+          Data generation is in progress. This may take some time...
+        </div>
+      </div>
+    </div>
+  ) : null;
   const [searchResults, setSearchResults] = useState<typeof EVENTS_DATASET>([]);
 
 

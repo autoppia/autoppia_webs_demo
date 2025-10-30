@@ -95,6 +95,7 @@ export async function generateProjectData(
   count: number = 10,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
+  console.log('[AutoCalendar] generateProjectData called', { projectKey, count });
   const config = PROJECT_CONFIGS[projectKey];
   if (!config) {
     return {
@@ -110,6 +111,7 @@ export async function generateProjectData(
 
   try {
     const baseUrl = getApiBaseUrl();
+    console.log('[AutoCalendar] generateProjectData → baseUrl:', baseUrl);
     const response = await fetch(`${baseUrl}/datasets/generate`, {
       method: 'POST',
       headers: {
@@ -128,7 +130,11 @@ export async function generateProjectData(
       })
     });
 
-    if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+    if (!response.ok) {
+      const text = await response.text().catch(() => '<no body>');
+      console.warn('[AutoCalendar] API error', response.status, text);
+      throw new Error(`API request failed: ${response.status}`);
+    }
 
     const result = await response.json();
     const generationTime = (Date.now() - startTime) / 1000;
@@ -140,6 +146,7 @@ export async function generateProjectData(
       generationTime,
     };
   } catch (error) {
+    console.error('[AutoCalendar] generateProjectData error:', error);
     const generationTime = (Date.now() - startTime) / 1000;
     return {
       success: false,
@@ -161,14 +168,17 @@ export function isDataGenerationEnabled(): boolean {
     process.env.ENABLE_DATA_GENERATION ??
     ''
   ).toString().toLowerCase();
-  return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+  const enabled = raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+  console.log('[AutoCalendar] isDataGenerationEnabled:', enabled, '(raw=', raw, ')');
+  return enabled;
 }
 
 /**
  * Get API base URL
  */
 export function getApiBaseUrl(): string {
-  return process.env.NEXT_PUBLIC_API_URL || 
-         process.env.API_URL || 
-         'http://localhost:8090';
+  const url = process.env.NEXT_PUBLIC_API_URL || 
+              process.env.API_URL || 
+              'http://localhost:8080';
+  return url;
 }
