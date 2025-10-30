@@ -15,6 +15,15 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
 }
 
+// Default NEXT_PUBLIC_DATA_GENERATION to true in local dev (unless explicitly disabled)
+if (isLocalDev && !process.env.NEXT_PUBLIC_DATA_GENERATION) {
+  process.env.NEXT_PUBLIC_DATA_GENERATION = 'true';
+}
+// Mirror to server-side flag if not set
+if (!process.env.ENABLE_DATA_GENERATION && process.env.NEXT_PUBLIC_DATA_GENERATION) {
+  process.env.ENABLE_DATA_GENERATION = process.env.NEXT_PUBLIC_DATA_GENERATION;
+}
+
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
 console.log('  isLocalDev:', isLocalDev);
@@ -22,6 +31,7 @@ console.log('  isDockerBuild:', isDockerBuild);
 console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DATA_GENERATION);
+console.log('  NEXT_PUBLIC_DATA_GENERATION:', process.env.NEXT_PUBLIC_DATA_GENERATION);
 console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
 console.log('  DATA_SEED_VALUE:', process.env.DATA_SEED_VALUE);
 console.log('  NEXT_PUBLIC_DATA_SEED_VALUE:', process.env.NEXT_PUBLIC_DATA_SEED_VALUE);
@@ -71,6 +81,7 @@ const nextConfig = {
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
     ENABLE_DATA_GENERATION: process.env.ENABLE_DATA_GENERATION,
+    NEXT_PUBLIC_DATA_GENERATION: process.env.NEXT_PUBLIC_DATA_GENERATION,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     DATA_SEED_VALUE: process.env.DATA_SEED_VALUE,
     NEXT_PUBLIC_DATA_SEED_VALUE: process.env.NEXT_PUBLIC_DATA_SEED_VALUE,

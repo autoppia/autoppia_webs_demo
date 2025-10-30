@@ -348,6 +348,8 @@ export async function generateProjectData(
 
   const dbMode = isDbLoadModeEnabled();
   const aiEnabled = isDataGenerationEnabled();
+  const resolvedBaseUrl = getApiBaseUrl();
+  console.log(`[Autowork] Generation flags -> aiEnabled=${aiEnabled}, dbMode=${dbMode}, apiBaseUrl=${resolvedBaseUrl}`);
 
   // If DB mode is enabled, prefer seeded first for determinism (only if pool is available)
   if (dbMode) {
@@ -372,7 +374,7 @@ export async function generateProjectData(
   if (aiEnabled) {
     try {
       console.log(`[Autowork] Using AI data generation...`);
-      const baseUrl = getApiBaseUrl();
+      const baseUrl = resolvedBaseUrl;
       const response = await fetch(`${baseUrl}/datasets/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -388,7 +390,12 @@ export async function generateProjectData(
           save_to_db: true,
         }),
       });
-      if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+      if (!response.ok) {
+        let bodyText = '';
+        try { bodyText = await response.text(); } catch {}
+        console.warn(`[Autowork] AI request failed`, { status: response.status, body: bodyText.slice(0, 400) });
+        throw new Error(`API request failed: ${response.status}`);
+      }
       const result = await response.json();
       const rawData = (result?.generated_data ?? []) as any[];
       const validated = validateAutoworkData(projectKey, rawData);
@@ -449,7 +456,13 @@ export function isDataGenerationEnabled(): boolean {
                process.env.NEXT_ENABLE_DATA_GENERATION ??
                process.env.ENABLE_DATA_GENERATION ??
                '').toString().toLowerCase();
-  return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+  const explicitOn = raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+  const explicitOff = raw === 'false' || raw === '0' || raw === 'no' || raw === 'off';
+  if (explicitOn) return true;
+  if (explicitOff) return false;
+  // Browser default: attempt AI unless explicitly disabled (server or env)
+  if (typeof window !== 'undefined') return true;
+  return false;
 }
 
 /**
