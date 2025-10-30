@@ -145,7 +145,7 @@ function ConfirmPageContent() {
   const createEventElement = (eventType: string, index: number) => {
     switch (eventType) {
       case 'view':
-        return (
+  return (
           <DynamicWrapper key={`view-${index}`} as="div" className="bg-white rounded-lg border p-6">
             <h1 className="text-2xl font-bold mb-4">Confirm your booking</h1>
             <div className="flex items-start gap-4">
@@ -169,7 +169,7 @@ function ConfirmPageContent() {
                     stroke="none"
                   >
                     <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                  </svg>
+        </svg>
                   <span className="font-medium">{prop.rating.toFixed(2)}</span>
                   <span className="text-gray-500">({prop.reviews ?? 30} reviews)</span>
                 </div>
@@ -206,8 +206,8 @@ function ConfirmPageContent() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Check-out
-                </label>
-                <input
+                  </label>
+                  <input
                   type="date"
                   value={dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : ""}
                   onChange={(e) => {
@@ -417,7 +417,7 @@ function ConfirmPageContent() {
                   maxLength={19}
                   className="w-full border rounded-lg px-3 py-2 text-sm"
                 />
-              </div>
+        </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -440,7 +440,7 @@ function ConfirmPageContent() {
                     className="w-full border rounded-lg px-3 py-2 text-sm"
                   />
                 </div>
-                <div>
+            <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     CVV
                   </label>
@@ -493,42 +493,42 @@ function ConfirmPageContent() {
               </div>
             </div>
 
-            <button
+          <button
               className="mt-6 rounded-lg w-full py-4 text-white font-semibold text-lg bg-blue-600 hover:bg-blue-700 transition shadow focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
-              id="confirm-and-pay-btn"
-              onClick={() => {
-                setHasTriedSubmit(true);
+            id="confirm-and-pay-btn"
+            onClick={() => {
+              setHasTriedSubmit(true);
 
-                if (!canPay) {
+              if (!canPay) {
                   return;
-                }
-                logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
-                  guests_set: guests,
-                  nights,
-                  priceSubtotal,
-                  cleaningFee,
-                  serviceFee,
-                  total,
-                  cardNumber,
-                  expiration: exp,
-                  cvv,
-                  zip,
-                  country,
-                  hotel: prop,
-                });
+              }
+              logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
+                guests_set: guests,
+                nights,
+                priceSubtotal,
+                cleaningFee,
+                serviceFee,
+                total,
+                cardNumber,
+                expiration: exp,
+                cvv,
+                zip,
+                country,
+                hotel: prop,
+              });
 
                 showToast("✅ Reservation complete! Thank you!");
-                setCardNumber("");
-                setExp("");
-                setCvv("");
-                setZip("");
-                setCountry("United States");
-                setHasTriedSubmit(false);
-              }}
+              setCardNumber("");
+              setExp("");
+              setCvv("");
+              setZip("");
+              setCountry("United States");
+              setHasTriedSubmit(false);
+            }}
               disabled={!canPay}
-            >
-              Confirm and pay
-            </button>
+          >
+            Confirm and pay
+          </button>
             {hasTriedSubmit && !canPay && (
               <p className="text-red-600 text-sm mt-2 text-center">
                 Please fill in all payment fields

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 const companies = [
   {
@@ -37,6 +38,7 @@ const companies = [
 
 export default function RecommendationsPage() {
   const [following, setFollowing] = useState<Record<string, boolean>>({});
+  const { getText } = useDynamicStructure();
 
   useEffect(() => {
     logEvent(EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS, {
@@ -81,7 +83,9 @@ export default function RecommendationsPage() {
                   : "bg-gray-200 hover:bg-blue-100 text-blue-700"
               }`}
             >
-              {following[c.name] ? "Following" : "+ Follow"}
+              {following[c.name]
+                ? getText("follow_following", "Following")
+                : getText("follow_button", "+ Follow")}
             </button>
           </li>
         ))}
