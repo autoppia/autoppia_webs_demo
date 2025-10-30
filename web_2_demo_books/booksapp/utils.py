@@ -60,7 +60,7 @@ def redirect_with_seed(request, url_name, *args, seed=None, **kwargs):
         HttpResponseRedirect with seed parameter preserved
     """
     from django.shortcuts import redirect
-    from django.urls import reverse
+    from django.urls import reverse, NoReverseMatch
     from django.conf import settings
     
     # Check if dynamic HTML is enabled
@@ -68,9 +68,11 @@ def redirect_with_seed(request, url_name, *args, seed=None, **kwargs):
     
     if not enabled:
         # Dynamic HTML disabled - normal redirect without seed
-        if args or kwargs:
-            return redirect(reverse(url_name, args=args, kwargs=kwargs))
-        return redirect(url_name)
+        try:
+            resolved_url = reverse(url_name, args=args, kwargs=kwargs)
+        except NoReverseMatch:
+            resolved_url = url_name
+        return redirect(resolved_url)
     
     # Get seed from parameter, request.GET, session, or default
     if seed is None:
@@ -86,10 +88,10 @@ def redirect_with_seed(request, url_name, *args, seed=None, **kwargs):
     # Store in session for future requests
     request.session["preserved_seed"] = seed
     
-    # Build URL with seed parameter
-    if args or kwargs:
+    # Build URL with seed parameter (reverse if it's a URL name)
+    try:
         url = reverse(url_name, args=args, kwargs=kwargs)
-    else:
+    except NoReverseMatch:
         url = url_name
     
     # Add seed parameter
