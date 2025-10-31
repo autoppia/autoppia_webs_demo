@@ -1,9 +1,8 @@
 services:
   app:
-    restart: always
     build: .
     ports:
-      - "127.0.0.1:${WEB_PORT}:8080"
+      - "${WEB_PORT}:8080"
     environment:
       # ======== Core Settings ========
       LOG_LEVEL: info
@@ -23,6 +22,9 @@ services:
 
       # Minimum response size (in bytes) before applying GZIP compression
       GZIP_MIN_SIZE: 1000
+      
+      # ======== Data Generation ========
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
     depends_on:
       db:
         condition: service_healthy
@@ -30,14 +32,13 @@ services:
       - apps_net
 
   db:
-    restart: always
-    image: postgres:13-alpine
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: webs_user
       POSTGRES_PASSWORD: autoppia_2025
       POSTGRES_DB: autoppia_db
     ports:
-      - "127.0.0.1:${POSTGRES_PORT}:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - webs_postgres_data:/var/lib/postgresql/data
       - ./postgres/initdb.d:/docker-entrypoint-initdb.d
