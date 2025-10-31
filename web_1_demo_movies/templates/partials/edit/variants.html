@@ -1,0 +1,235 @@
+{% load static %}
+{% with v=LAYOUT_VARIANT %}
+<div class="container mt-5 mb-5" data-dynamic-group="edit">
+  {% if v == 1 %}
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow border-0">
+        <div class="card-header bg-warning text-white py-3"><h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Edit Movie</h3></div>
+        <div class="card-body p-4">
+          <form method="POST" enctype="multipart/form-data" class="movie-form">{% csrf_token %}
+            <div class="row mb-4">
+              <div class="col-md-8">
+                <div class="form-group"><label for="{{ form.name.id_for_label }}">Title</label>{{ form.name|safe }}</div>
+                <div class="form-group"><label for="{{ form.desc.id_for_label }}">Synopsis</label>{{ form.desc|safe }}</div>
+                <div class="row">
+                  <div class="col-md-6"><div class="form-group"><label for="{{ form.year.id_for_label }}">Year</label>{{ form.year|safe }}</div></div>
+                  <div class="col-md-6"><div class="form-group"><label for="{{ form.duration.id_for_label }}">Duration</label>{{ form.duration|safe }}</div></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6"><div class="form-group"><label for="{{ form.director.id_for_label }}">Director</label>{{ form.director|safe }}</div></div>
+                  <div class="col-md-6"><div class="form-group"><label for="{{ form.rating.id_for_label }}">Rating</label>{{ form.rating|safe }}</div></div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6"><div class="form-group"><label for="{{ form.genres.id_for_label }}">Genres</label>{{ form.genres|safe }}</div></div>
+                  <div class="col-md-6"><div class="form-group"><label for="{{ form.trailer_url.id_for_label }}">Trailer URL</label>{{ form.trailer_url|safe }}</div></div>
+                </div>
+                <div class="form-group"><label for="{{ form.cast.id_for_label }}">Cast</label>{{ form.cast|safe }}</div>
+              </div>
+              <div class="col-md-4">
+                <div class="card border-0 shadow">
+                  <div class="card-header bg-dark text-white"><h5 class="mb-0"><i class="fas fa-image mr-2"></i>Poster</h5></div>
+                  <div class="card-body text-center">
+                    {% if movie.img %}
+                    <div class="mb-3"><img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;"></div>
+                    <hr>
+                    {% else %}
+                    <div class="mb-3"><img src="{% static 'images/placeholder.jpg' %}" alt="No image" class="img-fluid img-thumbnail" style="max-height: 300px; object-fit: contain;"></div>
+                    <hr>
+                    {% endif %}
+                    <div class="custom-file d-block">
+                      {{ form.img }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group text-center mt-4 mb-2">
+              <button type="submit" class="btn btn-warning btn-lg px-5"><i class="fas fa-save mr-2"></i>Save Changes</button>
+              <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary btn-lg ml-2 px-5"><i class="fas fa-times mr-2"></i>Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% elif v == 2 %}
+  <div class="row">
+    <div class="col-md-5 order-md-2 mb-4">
+      <div class="card shadow border-0"><div class="card-header bg-dark text-white">Poster</div>
+        <div class="card-body text-center">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid img-thumbnail mb-3" style="max-height:260px; object-fit:contain;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid img-thumbnail mb-3" style="max-height:260px; object-fit:contain;">{% endif %}{{ form.img }}</div>
+      </div>
+    </div>
+    <div class="col-md-7 order-md-1">
+      <div class="card shadow border-0"><div class="card-header bg-warning text-white">Edit Movie</div>
+        <div class="card-body">
+          <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="form-group"><label>Title</label>{{ form.name|safe }}</div>
+            <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+            <div class="form-row"><div class="col-4"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+              <div class="col-4"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
+              <div class="col-4"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div></div>
+            <div class="form-row"><div class="col-6"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div>
+              <div class="col-6"><div class="form-group"><label>Trailer</label>{{ form.trailer_url|safe }}</div></div></div>
+            <div class="form-row"><div class="col-6"><div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div></div>
+              <div class="col-6"><div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div></div></div>
+            <div class="text-right"><button class="btn btn-warning">Save</button>
+              <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% elif v == 3 %}
+  <div class="row"><div class="col-md-12"><div class="card shadow border-0"><div class="card-body">
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <div class="form-row"><div class="col-md-6"><div class="form-group"><label>Title</label>{{ form.name|safe }}</div></div>
+        <div class="col-md-6"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div></div>
+      <div class="form-row"><div class="col-md-4"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+        <div class="col-md-4"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
+        <div class="col-md-4"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div></div>
+      <div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div>
+      <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
+      <div class="form-group"><label>Trailer URL</label>{{ form.trailer_url|safe }}</div>
+      <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+      <div class="form-group"><label>Poster</label>{{ form.img }}</div>
+      <div class="text-center"><button class="btn btn-warning">Save</button>
+        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a></div>
+    </form>
+  </div></div></div></div>
+
+  {% elif v == 4 %}
+  <div class="row"><div class="col-md-4 mb-4"><div class="card shadow border-0"><div class="card-header bg-dark text-white">Poster</div><div class="card-body text-center">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid img-thumbnail mb-3" style="max-height:260px; object-fit:contain;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid img-thumbnail mb-3" style="max-height:260px; object-fit:contain;">{% endif %}{{ form.img }}</div></div></div>
+    <div class="col-md-8"><div class="card shadow border-0"><div class="card-header bg-warning text-white">Edit Movie</div><div class="card-body">
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group"><label>Title</label>{{ form.name|safe }}</div>
+        <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+        <div class="form-row"><div class="col-4"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+          <div class="col-4"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div>
+          <div class="col-4"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div>
+          <div class="col-6"><div class="form-group"><label>Trailer</label>{{ form.trailer_url|safe }}</div></div></div>
+        <div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div>
+          <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
+        <div class="text-right"><button class="btn btn-warning">Save</button>
+          <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a></div>
+      </form>
+    </div></div></div>
+  </div>
+
+  {% elif v == 5 %}
+  <div class="row"><div class="col-md-12"><div class="card shadow border-0"><div class="card-body">
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <div class="form-row"><div class="col-md-8"><div class="form-group"><label>Title</label>{{ form.name|safe }}</div></div>
+        <div class="col-md-4"><div class="form-group"><label>Poster</label>{{ form.img }}</div></div></div>
+      <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+      <div class="form-row"><div class="col-3"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+        <div class="col-3"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
+        <div class="col-3"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div>
+          <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
+        <div class="col-3"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div></div>
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div></div>
+        <div class="col-6"><div class="form-group"><label>Trailer URL</label>{{ form.trailer_url|safe }}</div></div></div>
+      <div class="text-center"><button class="btn btn-warning">Save</button>
+        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a></div>
+    </form>
+  </div></div></div></div>
+
+  {% elif v == 6 %}
+  <div class="row"><div class="col-md-6"><div class="card shadow border-0"><div class="card-body">
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <div class="form-group"><label>Title</label>{{ form.name|safe }}</div>
+      <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+        <div class="col-6"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div></div>
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div>
+        <div class="col-6"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div></div>
+      <div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div>
+      <div class="form-group"><label>Trailer URL</label>{{ form.trailer_url|safe }}</div>
+      <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
+      <button class="btn btn-warning">Save</button>
+      <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a>
+    </form>
+  </div></div>
+  <div class="col-md-6"><div class="card shadow border-0"><div class="card-header bg-dark text-white">Poster</div><div class="card-body text-center">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid img-thumbnail mb-3" style="max-height:300px; object-fit:contain;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid img-thumbnail mb-3" style="max-height:300px; object-fit:contain;">{% endif %}{{ form.img }}</div></div></div></div>
+
+  {% elif v == 7 %}
+  <div class="row"><div class="col-md-12"><div class="card shadow border-0"><div class="card-body">
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Title</label>{{ form.name|safe }}</div></div>
+        <div class="col-3"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+        <div class="col-3"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div></div>
+      <div class="form-row"><div class="col-4"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
+        <div class="col-4"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div>
+        <div class="col-4"><div class="form-group"><label>Trailer URL</label>{{ form.trailer_url|safe }}</div></div></div>
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div></div>
+        <div class="col-6"><div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div></div></div>
+      <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+      <div class="form-group"><label>Poster</label>{{ form.img }}</div>
+      <div class="text-right"><button class="btn btn-warning">Save</button>
+        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a></div>
+    </form>
+  </div></div></div></div>
+
+  {% elif v == 8 %}
+  <div class="row"><div class="col-md-3 mb-4"><div class="card shadow border-0"><div class="card-header bg-dark text-white">Poster</div><div class="card-body text-center">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid img-thumbnail mb-3" style="max-height:220px; object-fit:contain;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid img-thumbnail mb-3" style="max-height:220px; object-fit:contain;">{% endif %}{{ form.img }}</div></div></div>
+    <div class="col-md-9"><div class="card shadow border-0"><div class="card-header bg-warning text-white">Edit</div><div class="card-body">
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-row"><div class="col-8"><div class="form-group"><label>Title</label>{{ form.name|safe }}</div></div>
+          <div class="col-4"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div></div>
+        <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+        <div class="form-row"><div class="col-4"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
+          <div class="col-4"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div>
+          <div class="col-4"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div></div>
+          <div class="col-6"><div class="form-group"><label>Trailer</label>{{ form.trailer_url|safe }}</div></div></div>
+        <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
+        <button class="btn btn-warning">Save</button>
+        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a>
+      </form>
+    </div></div></div>
+  </div>
+
+  {% elif v == 9 %}
+  <div class="row"><div class="col-md-12"><div class="card shadow border-0"><div class="card-body">
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <div class="form-group"><label>Title</label>{{ form.name|safe }}</div>
+      <div class="form-row"><div class="col-4"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+        <div class="col-4"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
+        <div class="col-4"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div></div>
+      <div class="form-row"><div class="col-6"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div>
+        <div class="col-6"><div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div></div></div>
+      <div class="form-row"><div class="col-8"><div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div></div>
+        <div class="col-4"><div class="form-group"><label>Trailer</label>{{ form.trailer_url|safe }}</div></div></div>
+      <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
+      <div class="form-group"><label>Poster</label>{{ form.img }}</div>
+      <div class="text-center"><button class="btn btn-warning">Save</button>
+        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a></div>
+    </form>
+  </div></div></div></div>
+
+  {% else %}
+  <div class="row"><div class="col-md-6 order-md-2"><div class="card shadow border-0"><div class="card-header bg-dark text-white">Poster</div><div class="card-body text-center">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid img-thumbnail mb-3" style="max-height:280px; object-fit:contain;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid img-thumbnail mb-3" style="max-height:280px; object-fit:contain;">{% endif %}{{ form.img }}</div></div></div>
+    <div class="col-md-6 order-md-1"><div class="card shadow border-0"><div class="card-header bg-warning text-white">Edit Movie</div><div class="card-body">
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group"><label>Title</label>{{ form.name|safe }}</div>
+        <div class="form-group"><label>Synopsis</label>{{ form.desc|safe }}</div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Year</label>{{ form.year|safe }}</div></div>
+          <div class="col-6"><div class="form-group"><label>Rating</label>{{ form.rating|safe }}</div></div></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Duration</label>{{ form.duration|safe }}</div></div>
+          <div class="col-6"><div class="form-group"><label>Director</label>{{ form.director|safe }}</div></div></div>
+        <div class="form-row"><div class="col-6"><div class="form-group"><label>Genres</label>{{ form.genres|safe }}</div></div>
+          <div class="col-6"><div class="form-group"><label>Trailer URL</label>{{ form.trailer_url|safe }}</div></div></div>
+        <div class="form-group"><label>Cast</label>{{ form.cast|safe }}</div>
+        <button class="btn btn-warning">Save</button>
+        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary ml-2">Cancel</a>
+      </form>
+    </div></div></div>
+  </div>
+  {% endif %}
+</div>
+{% endwith %}
+
+

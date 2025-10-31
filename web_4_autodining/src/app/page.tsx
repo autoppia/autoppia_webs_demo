@@ -1,6 +1,6 @@
 "use client";
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { useState, useRef, useEffect, useMemo, Suspense } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -20,6 +20,8 @@ import {
 import React from "react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { RestaurantsData } from "@/components/library/dataset";
+import { useSeed } from "@/context/SeedContext";
+import { useSeedVariation } from "@/components/library/utils";
 
 // Create restaurants array from jsonData
 const restaurants = RestaurantsData.map((item, index) => ({
@@ -63,172 +65,168 @@ function RestaurantCard({
   people,
   time,
 }: {
-  r: (typeof restaurants)[0];
+  r: {
+    id: string;
+    name: string;
+    cuisine: string;
+    area: string;
+    reviews: number;
+    stars: number;
+    price: string;
+    bookings: number;
+    image: string;
+    times: string[];
+  };
   date: Date | undefined;
   people: number;
   time: string;
 }) {
+  const { seed } = useSeed();
+
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
+
+  // Use seed-based variations with event support
+  const restaurantCardVariation = useSeedVariation("restaurantCard");
+  const bookButtonVariation = useSeedVariation("bookButton");
+  const imageContainerVariation = useSeedVariation("imageContainer");
+  const cardContainerVariation = useSeedVariation("cardContainer");
+  
+  // Create layout based on seed
+  const layout = {
+    wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
+    justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
+    marginTop: ["mt-4", "mt-6", "mt-8", "mt-10", "mt-12"][seed % 5],
+  };
+
   return (
-    <div className="rounded-xl border shadow-sm bg-white w-[255px] flex-shrink-0 overflow-hidden flex flex-col justify-between">
-      <Link
-        href={`/restaurant/${r.id}`}
-        passHref
-        onClick={() =>
-          logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
-            restaurantId: r.id,
-            restaurantName: r.name,
-            cuisine: r.cuisine,
-            area: r.area,
-            reviews: r.reviews,
-          })
-        }
+    <div
+      className={restaurantCardVariation.className}
+      data-testid={restaurantCardVariation.dataTestId}
+      style={restaurantCardVariation.style}
+    >
+      <div
+        className={imageContainerVariation.className}
+        data-testid={imageContainerVariation.dataTestId}
+        style={{ position: imageContainerVariation.position as any }}
       >
         <img
           src={r.image}
           alt={r.name}
-          className="w-full h-[140px] object-cover rounded-t-xl border-b cursor-pointer hover:opacity-90 transition"
+          className="w-full h-full object-cover"
         />
-      </Link>
-      <div className="p-3 flex flex-col gap-1 h-full">
-        <div className="font-bold text-lg mb-1">{r.name}</div>
-        <div className="flex items-center mb-1">
-          <StarRating count={r.stars} />
-          <span className="ml-1 text-gray-600 text-sm">
-            {r.reviews} reviews
-          </span>
+      </div>
+      <div className="p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h3 className="font-semibold text-lg">{r.name}</h3>
+          <div className="flex items-center">
+            <StarRating count={r.stars} />
+            <span className="text-sm text-gray-600">({r.reviews})</span>
+          </div>
         </div>
-        <div className="text-[15px] text-gray-500 mb-1">
-          {r.cuisine} . {r.price} . {r.area}
+        <p className="text-gray-600 text-sm mb-2">{r.cuisine}</p>
+        <p className="text-gray-500 text-xs mb-3">{r.area}</p>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-600">{r.price}</span>
+          <span className="text-xs text-gray-500">{r.bookings} booked today</span>
         </div>
-        <div className="text-sm text-gray-600 mb-2 flex items-center gap-1">
-          <svg
-            height="16"
-            width="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            className="inline text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
+        <div className={`mt-3 flex ${layout.wrap ? 'flex-wrap' : 'flex-nowrap'} ${layout.justify} gap-2`}>
+          <SeedLink
+            href={`/restaurant/${r.id}`}
+            className="text-sm text-blue-600 hover:text-blue-800"
+            onClick={() => logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })}
           >
-            <path
-              d="M12.666 13.333v-2a2.667 2.667 0 00-2.666-2.666H6a2.667 2.667 0 00-2.667 2.666v2"
-              stroke="#222"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <circle
-              cx="8"
-              cy="5.333"
-              r="2.667"
-              stroke="#222"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          Booked {r.bookings} times today
-        </div>
-        <div className="flex gap-1 mt-2">
-          {r.times.map((t) => (
-            <Link
-              key={t}
-              href={`/booking/${r.id}/${encodeURIComponent(
-                time
-              )}?date=${formattedDate}&people=${people}`}
-              onClick={() =>
-                logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                  restaurantId: r.id,
-                  restaurantName: r.name,
-                  date: formattedDate,
-                  time: time,
-                  people,
-                })
-              }
-              passHref
-            >
-              <Button
-                className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
-                asChild
-              >
-                <span>Book Restaurant</span>
-              </Button>
-            </Link>
-          ))}
+            View details
+          </SeedLink>
+          <SeedLink
+            href={`/booking/${r.id}/${time}?people=${people}&date=${formattedDate}`}
+            className={`${bookButtonVariation.className} text-sm`}
+            data-testid={bookButtonVariation.dataTestId}
+            style={{ position: bookButtonVariation.position as any }}
+            onClick={() => logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })}
+          >
+            Book now
+          </SeedLink>
         </div>
       </div>
     </div>
   );
 }
 
-function CardScroller({
-  children,
-  title,
-}: {
-  children: React.ReactNode;
-  title: string;
-}) {
+function CardScroller({ children, title }: { children: React.ReactNode; title: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [showLeft, setShowLeft] = useState(false);
-  const [showRight, setShowRight] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const { seed } = useSeed();
+  const cardContainerVariation = useSeedVariation("cardContainer");
+
+  const checkScroll = () => {
+    if (ref.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = ref.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
 
   useEffect(() => {
-    function check() {
-      const el = ref.current;
-      if (!el) return;
-      setShowLeft(el.scrollLeft > 4);
-      setShowRight(el.scrollLeft + el.offsetWidth < el.scrollWidth - 4);
-    }
-    check();
-    ref.current?.addEventListener("scroll", check);
-    window.addEventListener("resize", check);
-    return () => {
-      ref.current?.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
+    checkScroll();
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
   }, []);
 
-  const scrollByAmount = 260 * 2; // scroll by two cards at a time
-  const scroll = (dir: number) => {
-    if (!ref.current) return;
-    ref.current.scrollBy({ left: dir * scrollByAmount, behavior: "smooth" });
-
-    logEvent("SCROLL_VIEW", {
-      direction: dir > 0 ? "right" : "left",
-      visibleCount: ref.current.children.length,
-      sectionTitle: title,
-    });
+  const scroll = (direction: "left" | "right") => {
+    if (ref.current) {
+      const scrollAmount = 300;
+      const newScrollLeft = ref.current.scrollLeft + (direction === "left" ? -scrollAmount : scrollAmount);
+      ref.current.scrollTo({ left: newScrollLeft, behavior: "smooth" });
+      
+      // Log scroll event
+      logEvent(EVENT_TYPES.SCROLL_VIEW, { direction, title });
+    }
   };
 
   return (
-    <div className="relative w-full" suppressHydrationWarning>
-      <button
-        onClick={() => scroll(-1)}
-        className="absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
-        style={{ marginLeft: -24 }}
-        aria-label="Scroll left"
-      >
-        <ChevronLeft className="h-6 w-6 text-[#444]" />
-      </button>
+    <div className="relative">
+      {/*{canScrollLeft && (*/}
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+          data-testid={`scroll-left-${seed}`}
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      {/*)}*/}
+      {canScrollRight && (
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+          data-testid={`scroll-right-${seed}`}
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      )}
+      {/* Scrollable Content */}
       <div
         ref={ref}
-        className="flex gap-6 overflow-x-auto pb-4 scroll-smooth scrollbar-hide pl-1 pr-10"
+        className={`${cardContainerVariation.className} pb-4 scroll-smooth scrollbar-hide pl-1 pr-10`}
+        data-testid={cardContainerVariation.dataTestId}
+        onScroll={checkScroll}
       >
         {children}
       </div>
-      <button
-        onClick={() => scroll(1)}
-        className="absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-white border shadow rounded-full p-2 flex items-center justify-center"
-        style={{ marginRight: -24 }}
-        aria-label="Scroll right"
-      >
-        <ChevronRight className="h-6 w-6 text-[#444]" />
-      </button>
     </div>
   );
 }
 
-export default function HomePage() {
+function getLayoutVariant(seed: number) {
+  return {
+    marginTop: ["mt-4", "mt-6", "mt-8", "mt-10", "mt-12"][seed % 5],
+    wrapButton: seed % 3 === 0, // Every 3rd seed wraps the button
+  };
+}
+
+// Client-only component that uses seed from context
+function HomePageContent() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
@@ -236,6 +234,20 @@ export default function HomePage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
+
+  const { seed } = useSeed();
+  const { marginTop, wrapButton } = useMemo(
+    () => getLayoutVariant(seed),
+    [seed]
+  );
+
+  // Use seed-based variations with event support
+  const searchBarVariation = useSeedVariation("searchBar");
+  const searchButtonVariation = useSeedVariation("searchButton");
+  const pageLayoutVariation = useSeedVariation("pageLayout");
+  const sectionLayoutVariation = useSeedVariation("sectionLayout");
+  
+
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -306,274 +318,326 @@ export default function HomePage() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <Link href="/">
+            <SeedLink href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">AutoDining</span>
               </div>
-            </Link>
+            </SeedLink>
           </div>
 
           <div className="flex items-center gap-4">
-            <Link
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href="/help"
             >
               Get help
-            </Link>
-            <Link
+            </SeedLink>
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="#"
+              href="/about"
             >
-              FAQs
-            </Link>
+              About
+            </SeedLink>
+            <SeedLink
+              className="text-sm text-gray-600 hover:text-[#46a758]"
+              href="/contact"
+            >
+              Contact
+            </SeedLink>
           </div>
         </div>
       </nav>
 
-      {/* Controls Bar */}
-      <section className="flex flex-wrap items-center gap-4 mt-8 mb-4 px-4">
-        {/* Date Picker */}
-        <Popover open={dateOpen} onOpenChange={setDateOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 min-w-[120px] justify-start"
-            >
-              <CalendarIcon className="h-5 w-5 text-gray-700" />
-              {date ? format(date, "MMM d") : "Pick date"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={(d) => {
-                handleDateSelect(d);
-                setDateOpen(false);
-              }}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-        {/* Time Dropdown */}
-        <Popover open={timeOpen} onOpenChange={setTimeOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 min-w-[120px] justify-start"
-            >
-              <ClockIcon className="h-5 w-5 text-gray-700" />
-              {time ? time : "Pick Time"}
-              <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-36 p-1">
-            {timeOptions.map((t) => (
+      {/* Hero Section */}
+      <section className={pageLayoutVariation.className} data-testid={pageLayoutVariation.dataTestId}>
+        <h1 className="text-4xl font-bold mb-6">Find your table for any occasion</h1>
+        
+        {/* Search and Filters */}
+        <section className="flex flex-wrap gap-4 items-end">
+          <Popover open={dateOpen} onOpenChange={setDateOpen}>
+            <PopoverTrigger asChild>
               <Button
-                key={t}
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  handleTimeSelect(t);
-                  setTimeOpen(false);
-                }}
+              id="select-date"
+                variant="outline"
+                className="w-[200px] justify-start text-left font-normal"
+                onClick={() => logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: 'open' })}
               >
-                {t}
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date ? format(date, "PPP") : <span>Pick a date</span>}
               </Button>
-            ))}
-          </PopoverContent>
-        </Popover>
-        {/* People Dropdown */}
-        <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 min-w-[120px] justify-start"
-            >
-              <UserIcon className="h-5 w-5 text-gray-700" />
-              {people ? people : "Pick People"}{" "}
-              {people === 1 ? "person" : "people"}{" "}
-              <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-36 p-1">
-            {peopleOptions.map((n) => (
-              <Button
-                key={n}
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => {
-                  handlePeopleSelect(n);
-                  setPeopleOpen(false);
-                }}
-              >
-                {n} {n === 1 ? "person" : "people"}
-              </Button>
-            ))}
-          </PopoverContent>
-        </Popover>
-        {/* Search box & button */}
-        <input
-          type="text"
-          placeholder="Location, Restaurant, or Cuisine"
-          className="rounded p-2 min-w-[250px] border border-gray-300 flex-1"
-          value={search}
-          onChange={handleSearchChange}
-        />
-        <button className="ml-2 px-5 py-2 rounded text-lg bg-[#46a758] text-white">
-          Let's go
-        </button>
-      </section>
-
-      {/* Main Content - Cards, Sections, etc. */}
-      <section className="px-4">
-        <h2 className="text-2xl font-bold mb-4 mt-8">
-          Available for lunch now
-        </h2>
-        <CardScroller title="Available for lunch now">
-          {filtered.map((r) => (
-            <RestaurantCard
-              key={r.id + "-lunch"}
-              r={r}
-              date={date}
-              people={people}
-              time={time}
-            />
-          ))}
-        </CardScroller>
-      </section>
-
-      {/* Introducing OpenDinning Icons Section */}
-      <section className="mt-8 rounded-xl bg-[#f7f7f6] border px-4">
-        <div className="flex flex-row justify-between items-center mb-1">
-          <div>
-            <h2 className="text-2xl md:text-2xl font-bold">
-              Introducing OpenDinning Icons
-            </h2>
-            <div className="text-base text-gray-600 mt-1 mb-3">
-              Book the city's award-winners, hot newcomers, and hard-to-get
-              tables.
-            </div>
-          </div>
-          <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
-            Explore Icon restaurants
-          </button>
-        </div>
-        <CardScroller title="Introducing OpenDinning Icons">
-          {iconRestaurants.map((r) => (
-            <RestaurantCard
-              key={r.id + "-icon"}
-              r={r}
-              date={date}
-              people={people}
-              time={time}
-            />
-          ))}
-        </CardScroller>
-      </section>
-
-      {/* Award-winning Section */}
-      <section className="mt-8 px-4">
-        <h2 className="text-2xl font-bold mb-4">Award-winning</h2>
-        <CardScroller title="Award-winning">
-          {awardRestaurants.map((r) => (
-            <RestaurantCard
-              key={r.id + "-award"}
-              r={r}
-              date={date}
-              time={time}
-              people={people}
-            />
-          ))}
-        </CardScroller>
-      </section>
-
-      {/* Diners' Favorite Section */}
-      <section className="mt-10 mb-6 px-4">
-        <h2 className="text-2xl font-bold mb-1">
-          Check out diners' favorite restaurants in San Francisco Bay Area
-        </h2>
-        <div className="text-base text-gray-600 mb-6">
-          Diners' Choice Awards are based on where your fellow diners book,
-          dine, and review. Only verified diners get to review restaurants on
-          OpenDinning, so our data doesn't lie.
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Top pick */}
-          <Link
-            href={`/restaurant/${restaurants[0].id}`}
-            passHref
-            className="flex-[2] min-w-[270px] cursor-pointer group"
-            onClick={() =>
-              logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
-                restaurantId: restaurants[0].id,
-                restaurantName: restaurants[0].name,
-                cuisine: restaurants[0].cuisine,
-                area: restaurants[0].area,
-                reviews: restaurants[0].reviews,
-              })
-            }
-          >
-            <div>
-              <img
-                className="rounded-lg w-full max-h-60 object-cover mb-2 group-hover:opacity-90 transition"
-                src={restaurants[0].image}
-                alt={restaurants[0].name}
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={handleDateSelect}
+                initialFocus
               />
-              <div className="font-bold text-lg">{restaurants[0].name}</div>
-              <div className="text-gray-500 text-sm mb-1">
-                Diners top pick · {restaurants[0].cuisine}{" "}
-                <StarNumber rating={restaurants[0].stars} />{" "}
-                <span className="text-gray-600">
-                  ({restaurants[0].reviews})
-                </span>
-              </div>
-              <div className="text-gray-700 text-[15px]">
-                Located in {restaurants[0].area}, {restaurants[0].name} is a
-                favorite for {restaurants[0].cuisine} cuisine lovers.
-              </div>
-            </div>
-          </Link>
+            </PopoverContent>
+          </Popover>
 
-          {/* Next two favorites */}
-          <div className="flex flex-1 flex-col gap-3 min-w-56">
-            {restaurants.slice(1, 3).map((r) => (
-              <Link
-                key={r.id}
-                href={`/restaurant/${r.id}`}
-                passHref
-                className="flex flex-row gap-3 items-start border-b pb-3 last:border-b-0 cursor-pointer group"
-                onClick={() =>
-                  logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
-                    restaurantId: r.id,
-                    restaurantName: r.name,
-                    cuisine: r.cuisine,
-                    area: r.area,
-                    reviews: r.reviews,
-                  })
-                }
+          <Popover open={timeOpen} onOpenChange={setTimeOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                id="select-time"
+                variant="outline"
+                className="w-[150px] justify-start text-left font-normal"
+                onClick={() => logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: 'open' })}
               >
-                <img
-                  className="w-24 h-20 rounded-lg object-cover group-hover:opacity-90 transition"
-                  src={r.image}
-                  alt={r.name}
+                <ClockIcon className="mr-2 h-4 w-4" />
+                {time}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <div className="p-2">
+                {timeOptions.map((t) => (
+                  <Button
+                    key={t}
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      handleTimeSelect(t);
+                      setTimeOpen(false);
+                    }}
+                  >
+                    {t}
+                  </Button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                id="select-people"
+                variant="outline"
+                className="w-[150px] justify-start text-left font-normal"
+                onClick={() => logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { action: 'open' })}
+              >
+                <UserIcon className="mr-2 h-4 w-4" />
+                {people} {people === 1 ? "person" : "people"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <div className="p-2">
+                {peopleOptions.map((n) => (
+                  <Button
+                    key={n}
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      handlePeopleSelect(n);
+                      setPeopleOpen(false);
+                    }}
+                  >
+                    {n} {n === 1 ? "person" : "people"}
+                  </Button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+          {/* Search box & button */}
+          <input
+            type="text"
+            placeholder="Location, Restaurant, or Cuisine"
+            className={`${searchBarVariation.className} min-w-[250px] flex-1`}
+            data-testid={searchBarVariation.dataTestId}
+            value={search}
+            onChange={handleSearchChange}
+          />
+          {wrapButton ? (
+            <div data-testid={`wrapper-${seed}`}>
+              <button
+                className={searchButtonVariation.className}
+                data-testid={searchButtonVariation.dataTestId}
+                style={{ position: searchButtonVariation.position as any }}
+              >
+                Let's go
+              </button>
+            </div>
+          ) : (
+            <button
+              className={searchButtonVariation.className}
+              data-testid={searchButtonVariation.dataTestId}
+              style={{ position: searchButtonVariation.position as any }}
+            >
+              Let's go
+            </button>
+          )}
+        </section>
+
+        {/* Main Content - Cards, Sections, etc. */}
+        {wrapButton ? (
+          <div data-testid={`section-wrapper-${seed}`}>
+            <section className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
+              <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
+              <CardScroller title="Available for lunch now">
+                {filtered.map((r) => (
+                  <RestaurantCard
+                    key={r.id + "-lunch"}
+                    r={r}
+                    date={date}
+                    people={people}
+                    time={time}
+                  />
+                ))}
+              </CardScroller>
+            </section>
+          </div>
+        ) : (
+          <section className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
+            <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
+            <CardScroller title="Available for lunch now">
+              {filtered.map((r) => (
+                <RestaurantCard
+                  key={r.id + "-lunch"}
+                  r={r}
+                  date={date}
+                  people={people}
+                  time={time}
                 />
-                <div className="flex-1 flex flex-col">
-                  <div className="font-semibold text-lg">{r.name}</div>
-                  <div className="text-gray-500 text-sm mb-1">
-                    {r.price} • {r.cuisine} <StarNumber rating={r.stars} />{" "}
-                    <span className="text-gray-700">({r.reviews})</span>
-                  </div>
-                  <div className="text-gray-700 text-[15px] line-clamp-2">
-                    Located in {r.area}, well-rated by {r.reviews} diners.
+              ))}
+            </CardScroller>
+          </section>
+        )}
+
+        {/* Introducing OpenDinning Icons Section */}
+        {wrapButton ? (
+          <div data-testid={`icon-section-wrapper-${seed}`}>
+            <section
+              className={`${sectionLayoutVariation.className} mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+              data-testid={sectionLayoutVariation.dataTestId}
+            >
+              <div className="flex flex-row justify-between items-center mb-1">
+                <div>
+                  <h2 className="text-2xl md:text-2xl font-bold">
+                    Introducing OpenDinning Icons
+                  </h2>
+                  <div className="text-base text-gray-600 mt-1 mb-3">
+                    Book the city's award-winners, hot newcomers, and hard-to-get
+                    tables.
                   </div>
                 </div>
-              </Link>
-            ))}
+                <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
+                  Explore Icon restaurants
+                </button>
+              </div>
+              <CardScroller title="Introducing OpenDinning Icons">
+                {iconRestaurants.map((r) => (
+                  <RestaurantCard
+                    key={r.id + "-icon"}
+                    r={r}
+                    date={date}
+                    people={people}
+                    time={time}
+                  />
+                ))}
+              </CardScroller>
+            </section>
           </div>
-        </div>
+        ) : (
+          <section
+            className={`${sectionLayoutVariation.className} mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+            data-testid={sectionLayoutVariation.dataTestId}
+          >
+            <div className="flex flex-row justify-between items-center mb-1">
+              <div>
+                <h2 className="text-2xl md:text-2xl font-bold">
+                  Introducing OpenDinning Icons
+                </h2>
+                <div className="text-base text-gray-600 mt-1 mb-3">
+                  Book the city's award-winners, hot newcomers, and hard-to-get
+                  tables.
+                </div>
+              </div>
+              <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
+                Explore Icon restaurants
+              </button>
+            </div>
+            <CardScroller title="Introducing OpenDinning Icons">
+              {iconRestaurants.map((r) => (
+                <RestaurantCard
+                  key={r.id + "-icon"}
+                  r={r}
+                  date={date}
+                  people={people}
+                  time={time}
+                />
+              ))}
+            </CardScroller>
+          </section>
+        )}
+
+        {/* Award Winners Section */}
+        {wrapButton ? (
+          <div data-testid={`award-section-wrapper-${seed}`}>
+            <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
+              <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
+              <CardScroller title="Award Winners">
+                {awardRestaurants.map((r) => (
+                  <RestaurantCard
+                    key={r.id + "-award"}
+                    r={r}
+                    date={date}
+                    people={people}
+                    time={time}
+                  />
+                ))}
+              </CardScroller>
+            </section>
+          </div>
+        ) : (
+          <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
+            <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
+            <CardScroller title="Award Winners">
+              {awardRestaurants.map((r) => (
+                <RestaurantCard
+                  key={r.id + "-award"}
+                  r={r}
+                  date={date}
+                  people={people}
+                  time={time}
+                />
+              ))}
+            </CardScroller>
+          </section>
+        )}
       </section>
     </main>
+  );
+}
+
+// Loading component for Suspense fallback
+function HomePageLoading() {
+  return (
+    <main>
+      <nav className="w-full border-b bg-white sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
+          <div className="flex items-center gap-3">
+            <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
+              <span className="font-bold text-white text-lg">AutoDining</span>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="animate-pulse">
+          <div className="h-10 bg-gray-200 rounded mb-6"></div>
+          <div className="h-8 bg-gray-200 rounded mb-4"></div>
+          <div className="h-32 bg-gray-200 rounded mb-4"></div>
+          <div className="h-32 bg-gray-200 rounded mb-4"></div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+// Main export with Suspense boundary
+export default function HomePage() {
+  return (
+    <Suspense fallback={<HomePageLoading />}>
+      <HomePageContent />
+    </Suspense>
   );
 }

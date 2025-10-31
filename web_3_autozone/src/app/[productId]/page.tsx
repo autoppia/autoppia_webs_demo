@@ -1,47 +1,140 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getProductById } from "@/data/products";
 import { type Product, useCart } from "@/context/CartContext";
+import { useSeed } from "@/context/SeedContext";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { Suspense } from "react";
+import { getProductById } from "@/utils/dynamicDataProvider";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
 const DELIVERY_ADDRESS = "Daly City 94016";
-const FREE_DELIVERY_LINE = `FREE delivery ${DELIVERY_DATE} on orders shipped by Autozon over $35`;
 
-export default function ProductPage() {
-  const router = useRouter();
+function ProductContent() {
+  const router = useSeedRouter();
   const { productId } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { seed } = useSeed();
+  const order = seed % 3;
+
   useEffect(() => {
     setIsLoading(true);
 
     if (typeof productId === "string") {
-      const foundProduct = getProductById(productId);
+      const foundProduct: any = getProductById(productId);
       if (foundProduct) {
         setProduct(foundProduct);
       }
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   }, [productId]);
+
+  // Log view event
+  useEffect(() => {
+    if (product) {
+      logEvent(EVENT_TYPES.VIEW_DETAIL, {
+        productId: product.id,
+        title: product.title,
+        price: product.price,
+        category: product.category,
+        brand: product.brand,
+        rating: product.rating,
+      });
+    }
+  }, [product]);
+
+  const quantityInput = (
+    <>
+      <label htmlFor="quantity-select" className="mt-2 mb-1 block text-[15px]">
+        Quantity:
+      </label>
+      <select
+        id="quantity-select"
+        className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
+        value={quantity}
+        onChange={(e) => {
+          const newQty = Number.parseInt(e.target.value);
+          setQuantity(newQty);
+          logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
+            product_id: product.id,
+            product_name: product.title,
+            previous_quantity: quantity,
+            new_quantity: newQty,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            price: product.price,
+            category: product.category,
+            brand: product.brand,
+            rating: product.rating,
+          });
+        }}
+        style={{ maxWidth: "170px" }}
+      >
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+          <option key={n} value={n}>
+            {n}
+          </option>
+        ))}
+      </select>
+    </>
+  );
+
+  const addToCartButton = (
+    <Button
+      className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
+      onClick={() => {
+        handleAddToCart();
+        router.push("/cart");
+      }}
+    >
+      Add to Cart
+    </Button>
+  );
+
+  const buyNowButton = (
+    <Button
+      className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
+      onClick={() => {
+        if (!product) return;
+
+        addToCart(product);
+        logEvent(EVENT_TYPES.CHECKOUT_STARTED, {
+          productId: product.id,
+          title: product.title,
+          quantity,
+          price: product.price,
+          category: product.category,
+          brand: product.brand,
+          rating: product.rating,
+        });
+        router.push("/checkout");
+      }}
+    >
+      Buy Now
+    </Button>
+  );
+
+  // Predefined orders
+  const layouts = [
+    [quantityInput, addToCartButton, buyNowButton],
+    [buyNowButton, quantityInput, addToCartButton],
+    [addToCartButton, buyNowButton, quantityInput],
+  ];
 
   const handleAddToCart = () => {
     if (!product) return;
-
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
+    Array.from({ length: quantity }).forEach(() => addToCart(product));
     logEvent(EVENT_TYPES.ADD_TO_CART, {
       productId: product.id,
       title: product.title,
@@ -123,7 +216,7 @@ export default function ProductPage() {
 
   return (
     <main
-      className="container mx-auto px-2 md:px-4 py-6 bg-white mt-20"
+      className="container mx-auto px-2 md:px-4 py-6 bg-white"
       suppressHydrationWarning
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -227,7 +320,7 @@ export default function ProductPage() {
 
         {/* Buy Box Right (Sticky on desktop, full-width mobile) */}
         <div className="md:col-span-1 w-full">
-          <aside className="border border-[#D5D9D9] bg-white rounded-lg shadow-sm p-4 md:sticky md:top-24 min-w-[275px] max-w-xs mx-auto md:mx-0 text-[15px]">
+          <aside className="border border-[#D5D9D9] bg-white rounded-lg shadow-sm p-4 md:sticky md:top-20 min-w-[275px] max-w-xs mx-auto md:mx-0 text-[15px]">
             <div className="mb-2 flex items-center">
               <span className="text-xs font-bold mr-2">Buy new:</span>
               <span className="ml-auto">
@@ -264,69 +357,9 @@ export default function ProductPage() {
             <div className="text-[#007600] font-semibold my-1 text-base">
               In Stock
             </div>
-            <label
-              htmlFor="quantity-select"
-              className="mt-2 mb-1 block text-[15px]"
-            >
-              Quantity:
-            </label>
-            <select
-              id="quantity-select"
-              className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
-              value={quantity}
-              onChange={(e) => {
-                const newQty = Number.parseInt(e.target.value);
-                setQuantity(newQty);
-                logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
-                  product_id: product.id,
-                  product_name: product.title,
-                  previous_quantity: quantity,
-                  new_quantity: newQty,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                  price: product.price,
-                  category: product.category,
-                  brand: product.brand,
-                  rating: product.rating,
-                });
-              }}
-              style={{ maxWidth: "170px" }}
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-            <Button
-              className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
-              onClick={() => {
-                handleAddToCart();
-                router.push("/cart");
-              }}
-            >
-              Add to Cart
-            </Button>
-            <Button
-              className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
-              onClick={() => {
-                if (!product) return;
-
-                addToCart(product);
-                logEvent(EVENT_TYPES.CHECKOUT_STARTED, {
-                  productId: product.id,
-                  title: product.title,
-                  quantity,
-                  price: product.price,
-                  category: product.category,
-                  brand: product.brand,
-                  rating: product.rating,
-                });
-                router.push("/checkout");
-              }}
-            >
-              Buy Now
-            </Button>
+            {layouts[order].map((element, index) => (
+              <div key={index}>{element}</div>
+            ))}
 
             <dl className="text-xs text-gray-700 mb-2 mt-2 leading-5 border-t border-b py-3 border-[#D5D9D9]">
               <div className="flex items-center py-0.5">
@@ -410,7 +443,7 @@ export default function ProductPage() {
           <h2 className="text-xl font-bold mb-4">About This Item</h2>
           <div className="pl-5 text-sm">
             <ul className="list-disc space-y-2">
-              {product.description.split("\n\n").map((paragraph, idx) => (
+              {product.description.split("\n\n").map((paragraph: string, idx: number) => (
                 <li
                   key={`bullet-${paragraph.substring(0, 10)}-${idx}`}
                   className="mb-2"
@@ -423,5 +456,13 @@ export default function ProductPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function ProductPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading product...</div>}>
+      <ProductContent />
+    </Suspense>
   );
 }

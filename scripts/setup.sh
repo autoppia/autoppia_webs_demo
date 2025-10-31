@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 # setup.sh - Deploy all web demo projects + API (webs_server) with isolation
 #------------------------------------------------------------
+# Usage:
+#   ./setup.sh [OPTIONS]
+#
+# Options:
+#   --web_port=PORT               Set base web port (default: 8000)
+#   --postgres_port=PORT          Set base postgres port (default: 5434)
+#   --webs_port=PORT              Set webs_server port (default: 8090)
+#   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
+#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
+#   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
+#   -y, --yes                     Force delete without confirmation
+#
+# Examples:
+#   ./setup.sh --demo=automail --enable_dynamic_html=true
+#   ./setup.sh --demo=all --enable_dynamic_html=true --web_port=8000
+#------------------------------------------------------------
 set -euo pipefail
 
 echo "🚀 Setting up web demos..."
@@ -37,6 +53,7 @@ WEBS_PORT_DEFAULT=8090
 WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
+ENABLE_DYNAMIC_HTML_DEFAULT=true
 
 # 5. Parse args
 for ARG in "$@"; do
@@ -46,6 +63,7 @@ for ARG in "$@"; do
     --webs_port=*)     WEBS_PORT="${ARG#*=}" ;;
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
+    --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
     -y|--yes)          FORCE_DELETE=true ;;
     *) ;; 
   esac
@@ -55,6 +73,7 @@ WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
+ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
 
 echo "🔣 Configuration:"
 echo "    movies/books base HTTP  →  $WEB_PORT"
@@ -62,6 +81,7 @@ echo "    movies/books Postgres   →  $POSTGRES_PORT"
 echo "    webs_server HTTP        →  $WEBS_PORT"
 echo "    webs_server Postgres    →  $WEBS_PG_PORT"
 echo "    Demo to deploy:         →  $WEB_DEMO"
+echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
 echo
 
 # 6. Check Docker
@@ -89,7 +109,7 @@ deploy_project() {
     return
   fi
 
-  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp)..."
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML)..."
   pushd "$dir" > /dev/null
 
     if docker compose -p "$proj" ps -q | grep -q .; then
@@ -97,12 +117,12 @@ deploy_project() {
       docker compose -p "$proj" down --volumes
     fi
 
-    # up
-    WEB_PORT="$webp" POSTGRES_PORT="$pgp" \
+    # Pass ENABLE_DYNAMIC_HTML to all webs
+    WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
-  echo "✅ $name is running on port $webp"
+  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML)"
   echo
 }
 
@@ -154,6 +174,10 @@ case "$WEB_DEMO" in
     ;;
   autolodge)
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
+    deploy_webs_server
+    ;;
+  autoconnect)
+    deploy_project "web_9_autoconnect" "$WEB_PORT" "" "autoconnect_${WEB_PORT}"
     deploy_webs_server
     ;;
   autowork)

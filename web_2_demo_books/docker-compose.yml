@@ -3,12 +3,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - .:/app
       - ./static:/app/static
       - ./media:/app/media
     ports:
-      - "${WEB_PORT}:8000" # Cambiado de 8001 a 8000
+      - "127.0.0.1:${WEB_PORT}:8001"
     environment:
       - DEBUG=0
       - DB_NAME=web2_books
@@ -16,23 +17,32 @@ services:
       - DB_PASSWORD=autoppia_2025
       - DB_HOST=db
       - DB_PORT=5432
+      - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - web2_net
 
   db:
-    image: postgres:latest
+    image: postgres:14
+    restart: always
     environment:
       - POSTGRES_DB=web2_books
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=autoppia_2025
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "127.0.0.1:${POSTGRES_PORT}:5432"
     volumes:
       - web2_db_data:/var/lib/postgresql/data
     networks:
       - web2_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d web2_books"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   web2_db_data:

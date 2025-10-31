@@ -1,0 +1,28 @@
+<form method="GET" action="{% url 'movieapp:index' %}" class="float-md-right">
+  {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
+  <div class="form-row">
+    <div class="col-md-4 mb-2">
+      <select name="genre" class="form-control form-control-sm" id="genreFilterDense">
+        <option value="">All Genres</option>
+        {% for genre in genres %}
+        <option value="{{ genre.id }}" {% if selected_genre == genre.id|stringformat:"i" %}selected{% endif %}>{{ genre.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3 mb-2">
+      <select name="year" class="form-control form-control-sm" id="yearFilterDense">
+        <option value="">All Years</option>
+        {% for year in available_years %}
+        <option value="{{ year }}" {% if selected_year == year|stringformat:"i" %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3 mb-2">
+      <input type="text" name="search" class="form-control form-control-sm" placeholder="Search..." value="{{ search_query }}">
+    </div>
+    <div class="col-md-2 mb-2">
+      <button class="btn btn-secondary btn-sm w-100" type="submit">Go</button>
+    </div>
+  </div>
+</form>
+

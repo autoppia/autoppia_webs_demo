@@ -78,54 +78,11 @@ dmypy.json
 cython_debug/
 .idea/
 
-# =========================
-# NODE / NEXT.JS ADDITIONS
-# =========================
 
-# Node modules
-node_modules/
+# Node Modules
 **/node_modules/
-
-# Next.js build output
-.next/
 **/.next/
+**/next-env.d.ts
+*/.next/
+*/node_modules/
 
-# Production build output
-out/
-**/out/
-
-# Environment files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-**/.env
-**/.env.*
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-**/npm-debug.log*
-**/yarn-debug.log*
-**/yarn-error.log*
-**/pnpm-debug.log*
-
-# IDE settings
-.vscode/
-*.swp
-
-# Cache & misc
-.DS_Store
-Thumbs.db
-coverage/
-**/coverage/
-*.tsbuildinfo
-**/*.tsbuildinfo
-
-# Vercel / Turbo
-.vercel/
-**/.vercel/
-.turbo/
-**/.turbo/
