@@ -607,9 +607,21 @@ def login_view(request):
         return redirect_with_seed(request, "booksapp:index")
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(username=username, password=password)
+        # Normalize credentials
+        raw_username = request.POST.get("username", "")
+        password = request.POST.get("password", "")
+        username = (raw_username or "").strip()
+
+        # Resolve actual username in a case-insensitive way for authentication
+        looked_up_username = username
+        try:
+            existing_user = User.objects.filter(username__iexact=username).first()
+            if existing_user:
+                looked_up_username = existing_user.username
+        except Exception:
+            pass
+
+        user = authenticate(username=looked_up_username, password=password)
         if user is not None:
             login(request, user)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
@@ -664,19 +676,21 @@ def register_view(request):
         return redirect_with_seed(request, "booksapp:index")
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
+        # Trim and normalize inputs
+        username = (request.POST.get("username", "").strip())
+        email = (request.POST.get("email", "").strip())
+        password1 = request.POST.get("password1") or ""
+        password2 = request.POST.get("password2") or ""
 
         error = False
         if not username or not email or not password1 or not password2:
             messages.error(request, "All fields are required.")
             error = True
-        if User.objects.filter(username=username).exists():
+        # Check duplicates case-insensitively
+        if User.objects.filter(username__iexact=username).exists():
             messages.error(request, "Username already exists.")
             error = True
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email__iexact=email).exists():
             messages.error(request, "Email already in use.")
             error = True
         if password1 != password2:
@@ -687,6 +701,7 @@ def register_view(request):
             error = True
 
         if not error:
+            # Use original casing for username but trimmed
             user = User.objects.create_user(
                 username=username, email=email, password=password1
             )
