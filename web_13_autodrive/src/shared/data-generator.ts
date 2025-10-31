@@ -99,6 +99,17 @@ export interface Trip {
 
 /* ---------- Helper utilities ---------- */
 
+// Optional diversity hints for AI generation
+const CITY_HINTS = [
+  'San Francisco, USA', 'New York, USA', 'Toronto, Canada', 'Vancouver, Canada',
+  'London, UK', 'Manchester, UK', 'Paris, France', 'Berlin, Germany', 'Munich, Germany',
+  'Barcelona, Spain', 'Madrid, Spain', 'Rome, Italy', 'Milan, Italy', 'Amsterdam, Netherlands',
+  'Copenhagen, Denmark', 'Stockholm, Sweden', 'Oslo, Norway', 'Helsinki, Finland',
+  'Dubai, UAE', 'Singapore', 'Tokyo, Japan', 'Osaka, Japan', 'Seoul, South Korea',
+  'Sydney, Australia', 'Melbourne, Australia', 'Auckland, New Zealand',
+  'Mexico City, Mexico', 'Buenos Aires, Argentina', 'Santiago, Chile'
+];
+
 function randInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -233,8 +244,10 @@ export async function generateProjectData(
   count: number = 10,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
+  console.log('[web13][data-generator] generateProjectData called', { projectKey, count, hasCategories: !!categories });
   const config = PROJECT_CONFIGS[projectKey];
   if (!config) {
+    console.warn('[web13][data-generator] Missing project config for', projectKey);
     return {
       success: false,
       data: [],
@@ -249,6 +262,7 @@ export async function generateProjectData(
 
   // If no data generation allowed in env, return local simulated data immediately
   if (!isDataGenerationEnabled()) {
+    console.log('[web13][data-generator] Data generation disabled via env, using local simulated data.');
     const localData = generateLocalSimulatedTrips(clampCount);
     const generationTime = (Date.now() - startTime) / 1000;
     return {
@@ -261,6 +275,19 @@ export async function generateProjectData(
 
   try {
     const baseUrl = getApiBaseUrl();
+    console.log('[web13][data-generator] Attempting AI generation via API', { baseUrl, clampCount });
+    // Attach a unique request identifier to encourage non-cached generation server-side
+    const request_id = `${projectKey}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+    // Build a dynamic diversity hint so drivers and locations vary between runs
+    const shuffledCities = [...CITY_HINTS].sort(() => Math.random() - 0.5).slice(0, 8);
+    const diversityHint = `Use diverse pickup/dropoff locations across these cities (mix them randomly, do not repeat the same city pairs): ${shuffledCities.join(", ")}. Vary driver nationalities and names across locales.`;
+
+    // Randomize categories order to encourage ride variety
+    const categoriesPayload = (categories && categories.length > 0)
+      ? categories
+      : [...config.categories].sort(() => Math.random() - 0.5);
+
     const resp = await fetch(`${baseUrl}/datasets/generate`, {
       method: 'POST',
       headers: {
@@ -270,16 +297,18 @@ export async function generateProjectData(
         interface_definition: config.interfaceDefinition,
         examples: config.examples,
         count: clampCount,
-        categories: categories || config.categories,
-        additional_requirements: config.additionalRequirements,
+        categories: categoriesPayload,
+        additional_requirements: `${config.additionalRequirements}\n\n${diversityHint}\n- Do NOT reuse the same pickup/dropoff addresses across items.\n- Use different street names and numbers per trip; mix cities.\n- Ensure at least 6 distinct drivers with varied names/nationalities.\n- Vary ride types and prices; include economy, comfort, xl, electric, business.\n- No two trips should have identical (pickup, dropoff).\nRANDOMIZATION_SALT=${request_id}`,
         naming_rules: config.namingRules,
         project_key: projectKey,
         entity_type: config.dataType,
-        save_to_db: true
+        save_to_db: false,
+        request_id
       })
     });
 
     if (!resp.ok) {
+      console.warn('[web13][data-generator] API error, falling back to local data', resp.status, resp.statusText);
       // fallback to local data if server fails
       const fallback = generateLocalSimulatedTrips(clampCount);
       const generationTime = (Date.now() - startTime) / 1000;
@@ -293,12 +322,14 @@ export async function generateProjectData(
     }
 
     const result = await resp.json();
+    console.log('[web13][data-generator] API response received', { keys: Object.keys(result || {}) });
 
     const generationTime = (Date.now() - startTime) / 1000;
 
     // If API returns generated_data (convention), use it — otherwise try a sensible fallback
     const generated = result.generated_data ?? result.data ?? [];
     if (!Array.isArray(generated) || generated.length === 0) {
+      console.warn('[web13][data-generator] API returned empty data, using local fallback');
       const fallback = generateLocalSimulatedTrips(clampCount);
       return {
         success: true,
@@ -309,6 +340,7 @@ export async function generateProjectData(
       };
     }
 
+    console.log('[web13][data-generator] Generated items', generated.length);
     return {
       success: true,
       data: generated,
@@ -316,6 +348,7 @@ export async function generateProjectData(
       generationTime
     };
   } catch (err) {
+    console.error('[web13][data-generator] Generation try/catch error, using local fallback', err);
     const generationTime = (Date.now() - startTime) / 1000;
     // on network / runtime error, return local simulated dataset as fallback
     const fallback = generateLocalSimulatedTrips(clampCount);
@@ -332,21 +365,34 @@ export async function generateProjectData(
 /* ---------- Env helpers ---------- */
 
 export function isDataGenerationEnabled(): boolean {
-  const raw =
-    (typeof process !== 'undefined' && (
-      (process.env && process.env.NEXT_PUBLIC_DATA_GENERATION) ||
-      (process.env && process.env.NEXT_ENABLE_DATA_GENERATION) ||
-      (process.env && process.env.ENABLE_DATA_GENERATION)
-    )) ?? '';
-  const str = String(raw).toLowerCase();
-  return str === 'true' || str === '1' || str === 'yes' || str === 'on';
+  let enabled = false;
+  if (typeof process !== 'undefined' && process.env) {
+    const vals = [
+      process.env.NEXT_PUBLIC_DATA_GENERATION,
+      process.env.NEXT_ENABLE_DATA_GENERATION,
+      process.env.ENABLE_DATA_GENERATION,
+    ].map(v => String(v || '').toLowerCase());
+    // Enable if ANY of the flags is a truthy "true" value
+    enabled = vals.some(v => v === 'true' || v === '1' || v === 'yes' || v === 'on');
+  }
+  try {
+    console.log('[web13][data-generator] isDataGenerationEnabled check', {
+      NEXT_PUBLIC_DATA_GENERATION: process.env?.NEXT_PUBLIC_DATA_GENERATION,
+      NEXT_ENABLE_DATA_GENERATION: process.env?.NEXT_ENABLE_DATA_GENERATION,
+      ENABLE_DATA_GENERATION: process.env?.ENABLE_DATA_GENERATION,
+      resolved: enabled
+    });
+  } catch {}
+  return enabled;
 }
 
 export function getApiBaseUrl(): string {
+  let url = 'http://localhost:8090';
   if (typeof process !== 'undefined' && process.env) {
-    return process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8090';
+    url = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || url;
   }
-  return 'http://localhost:8090';
+  try { console.log('[web13][data-generator] getApiBaseUrl ->', url); } catch {}
+  return url;
 }
 
 /* ---------- Convenience wrapper for web13 ---------- */
