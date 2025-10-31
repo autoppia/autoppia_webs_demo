@@ -4,6 +4,7 @@ import { getLayoutVariant } from './layoutVariants';
 import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 import { getLayoutClasses } from '@/utils/seedLayout';
 import { getSeedLayout, LayoutConfig } from './utils';
+import { getTextForElement, type ElementKey } from './textVariants';
 
 export function useSeedLayout() {
   const [seed, setSeed] = useState(1);
@@ -15,9 +16,10 @@ export function useSeedLayout() {
     const dynamicEnabled = isDynamicModeEnabled();
     setIsDynamicEnabled(dynamicEnabled);
     
-    // Get seed from URL parameters or localStorage
+    // Get seed from URL parameters or localStorage (prefer seed-structure)
     const searchParams = new URLSearchParams(window.location.search);
-    const seedParam = searchParams.get('seed');
+    const seedStructureParam = searchParams.get('seed-structure');
+    const seedParam = seedStructureParam ?? searchParams.get('seed');
     
     let rawSeed = 1;
     
@@ -27,21 +29,26 @@ export function useSeedLayout() {
     } else {
       // Priority 2: localStorage
       try {
-        const stored = localStorage.getItem('autoworkSeed');
-        if (stored) {
-          rawSeed = parseInt(stored);
-        }
+        const storedStructure = localStorage.getItem('autoworkSeedStructure');
+        const stored = storedStructure ?? localStorage.getItem('autoworkSeed');
+        if (stored) rawSeed = parseInt(stored);
       } catch (e) {
         // Ignore localStorage errors
       }
+    }
+    // Priority 3: default from env
+    if (!seedParam && !Number.isFinite(rawSeed)) {
+      const envDefault = parseInt(process.env.NEXT_PUBLIC_DEFAULT_SEED_STRUCTURE as string);
+      if (Number.isFinite(envDefault)) rawSeed = envDefault as unknown as number;
     }
     
     // Get effective seed (validates range and respects dynamic HTML setting)
     const effectiveSeed = getEffectiveSeed(rawSeed);
     setSeed(effectiveSeed);
     
-    // Save to localStorage
+    // Save to localStorage (both keys for compatibility)
     try {
+      localStorage.setItem('autoworkSeedStructure', effectiveSeed.toString());
       localStorage.setItem('autoworkSeed', effectiveSeed.toString());
     } catch (e) {
       // Ignore localStorage errors
@@ -94,18 +101,24 @@ export function useSeedLayout() {
     return getLayoutClasses(getLayoutConfig(seed));
   }, [seed, isDynamicEnabled]);
 
-  // Helper function to generate navigation URLs with seed parameter
+  // Function to get dynamic text for an element type with fallback
+  const getText = useCallback((key: ElementKey, fallback: string): string => {
+    if (!isDynamicEnabled) return fallback;
+    return getTextForElement(seed, key, fallback);
+  }, [seed, isDynamicEnabled]);
+
+  // Helper function to generate navigation URLs with seed parameter (prefer seed-structure)
   const getNavigationUrl = useCallback((path: string): string => {
     // If path already has query params
     if (path.includes('?')) {
       // Check if seed already exists in the URL
-      if (path.includes('seed=')) {
+      if (path.includes('seed-structure=') || path.includes('seed=')) {
         return path;
       }
-      return `${path}&seed=${seed}`;
+      return `${path}&seed-structure=${seed}`;
     }
     // Add seed as first query param
-    return `${path}?seed=${seed}`;
+    return `${path}?seed-structure=${seed}`;
   }, [seed]);
 
   return {
@@ -116,6 +129,7 @@ export function useSeedLayout() {
     getElementAttributes,
     getXPathSelector,
     getLayoutClassesForSeed,
+    getText,
     getNavigationUrl,
   };
 } 

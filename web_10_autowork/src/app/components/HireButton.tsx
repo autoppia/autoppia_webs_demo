@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useSeedLayout } from "@/library/useSeedLayout";
 
 export default function HireButton({
   expert,
@@ -14,6 +15,7 @@ export default function HireButton({
   };
 }) {
   const router = useRouter();
+  const { getElementAttributes, getText } = useSeedLayout();
 
   return (
     <button
@@ -21,8 +23,9 @@ export default function HireButton({
         router.push(`/expert/${expert.slug}/hire`);
       }}
       className="px-8 py-2 rounded-full bg-[#1fc12c] text-white text-lg font-semibold shadow-sm ml-1 text-center flex items-center justify-center"
+      {...getElementAttributes('expert-hire-button', 0)}
     >
-      Hire
+      {getText('expert-hire-button-label', 'Hire')}
     </button>
   );
 }

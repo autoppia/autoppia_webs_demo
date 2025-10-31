@@ -3,8 +3,9 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Build argument for dynamic HTML
+# Build arguments for dynamic HTML and default seed-structure
 ARG ENABLE_DYNAMIC_HTML=false
+ARG DEFAULT_SEED_STRUCTURE=1
 
 COPY package.json package-lock.json ./
 
@@ -16,6 +17,7 @@ COPY . .
 # Set environment variables for build
 ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
 ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV NEXT_PUBLIC_DEFAULT_SEED_STRUCTURE=${DEFAULT_SEED_STRUCTURE}
 ENV DOCKER_BUILD=true
 
 RUN npm run build

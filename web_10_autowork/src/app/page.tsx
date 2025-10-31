@@ -776,13 +776,18 @@ function PostJobWizard({
 
 export default function Home() {
   const [showPostJob, setShowPostJob] = useState(false);
-  const { layout, getElementAttributes } = useSeedLayout();
+  const { layout, getElementAttributes, getText } = useSeedLayout();
 
   // Create section components
   const JobsSection = () => (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-semibold">Your jobs</h2>
+        <h2
+          className="text-2xl font-semibold"
+          {...getElementAttributes('jobs-heading', 0)}
+        >
+          {getText('jobs-heading', 'Your jobs')}
+        </h2>
         <button
           {...getElementAttributes('post-job-button', 0)}
           type="button"
@@ -798,7 +803,7 @@ export default function Home() {
             });
           }}
         >
-          + Post a job
+          {getText('post-job-button-label', '+ Post a job')}
         </button>
       </div>
       <div className="grid gap-7 grid-cols-1 md:grid-cols-2">
@@ -863,7 +868,12 @@ export default function Home() {
   const HiresSection = () => (
     <section className="px-10 mt-14 px-4">
       <div className="flex items-center justify-between mb-7">
-        <h2 className="text-2xl font-semibold">Your hires</h2>
+        <h2
+          className="text-2xl font-semibold"
+          {...getElementAttributes('hires-heading', 0)}
+        >
+          {getText('hires-heading', 'Your hires')}
+        </h2>
         <a
           href="#"
           className="text-[#08b4ce] text-sm font-medium hover:underline"
@@ -922,8 +932,11 @@ export default function Home() {
 
   const ExpertsSection = () => (
     <section className="px-10 mt-16 px-4">
-      <h2 className="text-2xl font-semibold mb-7">
-        Review your project's goals with an expert, one-on-one
+      <h2
+        className="text-2xl font-semibold mb-7"
+        {...getElementAttributes('experts-heading', 0)}
+      >
+        {getText('experts-heading', "Review your project's goals with an expert, one-on-one")}
       </h2>
       <div className="grid gap-7 md:grid-cols-2">
         {experts.map((expert, i) => (
@@ -987,7 +1000,7 @@ export default function Home() {
               {...getElementAttributes('book-consultation-button', i)}
               className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
             >
-              Book a consultation
+              {getText('book-consultation-button-label', 'Book a consultation')}
             </SeedLink>
           </div>
         ))}
