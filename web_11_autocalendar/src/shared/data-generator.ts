@@ -87,7 +87,6 @@ export async function generateProjectData(
   count: number = 50,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
-  console.log("[AutoCalendar] generateProjectData() start", { projectKey, count, categories });
   const config = PROJECT_CONFIGS[projectKey];
   if (!config) {
     return {
@@ -102,7 +101,6 @@ export async function generateProjectData(
   const startTime = Date.now();
   try {
     const baseUrl = getApiBaseUrl();
-    console.log("[AutoCalendar] generateProjectData() baseUrl:", baseUrl);
     const payload = {
       interface_definition: config.interfaceDefinition,
       examples: config.examples,
@@ -114,12 +112,9 @@ export async function generateProjectData(
       entity_type: config.dataType,
       save_to_db: true,
     };
-    console.log("[AutoCalendar] generateProjectData() payload:", { ...payload, interface_definition: "<omitted>" });
-
     const controller = new AbortController();
     const timeoutMs = 30000;
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-    console.log("[AutoCalendar] generateProjectData() POST /datasets/generate with timeout", timeoutMs, "ms");
     const resp = await fetch(`${baseUrl}/datasets/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -130,18 +125,15 @@ export async function generateProjectData(
 
     if (!resp.ok) {
       const text = await resp.text().catch(() => "");
-      console.warn("[AutoCalendar] /datasets/generate error", resp.status, text);
       throw new Error(`API error ${resp.status}: ${text}`);
     }
 
     const result = await resp.json();
     const generationTime = (Date.now() - startTime) / 1000;
     const data = Array.isArray(result.generated_data) ? result.generated_data : [];
-    console.log("[AutoCalendar] generateProjectData() success", { count: data.length, generationTime });
     return { success: true, data, count: result.count || data.length || 0, generationTime };
   } catch (err) {
     const generationTime = (Date.now() - startTime) / 1000;
-    console.error("[AutoCalendar] generateProjectData() failure", err);
     return {
       success: false,
       data: [],
@@ -162,7 +154,6 @@ export function isDataGenerationEnabled(): boolean {
     .toString()
     .toLowerCase();
   const enabled = ["true", "1", "yes", "on"].includes(val);
-  console.log("[AutoCalendar] isDataGenerationEnabled()", { raw: val, enabled });
   return enabled;
 }
 
@@ -172,8 +163,65 @@ export function getApiBaseUrl(): string {
     process.env.NEXT_PUBLIC_API_URL ||
     "http://localhost:8080"
   );
-  console.log("[AutoCalendar] getApiBaseUrl()", url);
   return url;
+}
+
+// --- Client-side fallback generator (no backend) ---
+export function generateClientSideEvents(count: number = 50, categories: string[] = ["Work", "Personal", "Wellness", "Friends", "Family"]): any[] {
+  const rnd = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const sample = <T,>(arr: T[]) => arr[rnd(0, arr.length - 1)];
+  const titles = [
+    "Team Sync", "Doctor Appointment", "Project Review", "Yoga Class", "Movie Night",
+    "Lunch with Mentor", "Parent-Teacher Meeting", "Hackathon", "Morning Run",
+    "Dinner with Friends", "Design Review", "1:1 with Manager", "Game Night",
+    "Dentist Appointment", "Sprint Planning"
+  ];
+  const colors: Record<string, string> = { Work: "#1976D2", Personal: "#E53935", Wellness: "#43A047", Friends: "#8E24AA", Family: "#FB8C00" };
+  const emails = ["alice@example.com", "bob@example.com", "carol@example.com", "dave@example.com", "erin@example.com"];
+
+  const today = new Date();
+  const toISO = (d: Date) => d.toISOString().split("T")[0];
+
+  const items = Array.from({ length: Math.max(1, Math.min(200, count)) }).map((_, i) => {
+    const dayOffset = rnd(0, 30);
+    const d = new Date(today);
+    d.setDate(today.getDate() + dayOffset);
+    const startHour = rnd(7, 19);
+    const duration = sample([1, 1, 1, 2]);
+    const calendar = sample(categories);
+    const attendees = Array.from({ length: rnd(0, 3) }).map(() => sample(emails));
+    const recurrence = sample(["none", "daily", "weekly", "monthly"]) as "none" | "daily" | "weekly" | "monthly";
+    const endRec = recurrence === "none" ? null : toISO(new Date(d.getFullYear(), d.getMonth(), d.getDate() + rnd(7, 60)));
+    const title = sample(titles);
+
+    return {
+      id: `event-${Date.now()}-${i}`,
+      date: toISO(d),
+      start: startHour,
+      end: startHour + duration,
+      label: title,
+      calendar,
+      color: colors[calendar] || "#2196F3",
+      startTime: [startHour, 0],
+      endTime: [startHour + duration, 0],
+      description: `${title} auto-generated`,
+      location: sample(["Zoom", "HQ - Room A", "Cafe", "Client Office", "Home"]),
+      allDay: false,
+      recurrence,
+      recurrenceEndDate: endRec,
+      attendees,
+      reminders: sample([[15], [30], [60], []]),
+      busy: sample([true, true, true, false]),
+      visibility: sample(["default", "public", "private"]),
+      meetingLink: sample([
+        "https://meet.google.com/abc-defg-hij",
+        "https://zoom.us/j/123456789",
+        ""
+      ]),
+    };
+  });
+
+  return items;
 }
 
 /**
