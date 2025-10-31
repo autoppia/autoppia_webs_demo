@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeedLayout } from "@/library/useSeedLayout";
 import RideNavbar from "../../../../components/RideNavbar";
 import { logEvent, EVENT_TYPES } from "@/library/event";
 import {simulatedTrips, rides, DriverType, RideType, Trip} from "@/library/dataset";
@@ -18,7 +19,8 @@ function formatDateShort(date: string, time: string) {
 }
 
 function TripCard({ trip }: { trip: Trip }) {
-  const router = useRouter();
+  const router = useSeedRouter();
+  const { getElementAttributes, getText } = useSeedLayout();
   
   const handleTripDetailsClick = () => {
     // Log the TRIP_DETAILS event
@@ -60,6 +62,7 @@ function TripCard({ trip }: { trip: Trip }) {
       </div>
       <div className="flex flex-col justify-between items-end h-full gap-2">
         <button
+          {...getElementAttributes('trips-card-details', 0)}
           className="flex items-center gap-2 px-4 py-1 mt-0 bg-white border border-gray-300 rounded-lg text-black font-medium text-sm"
           onClick={handleTripDetailsClick}
         >
@@ -72,7 +75,7 @@ function TripCard({ trip }: { trip: Trip }) {
               strokeLinecap="round"
             />
           </svg>
-          Trip Details
+          {getText('trips-card-details', 'Trip Details')}
         </button>
       </div>
     </div>
@@ -80,7 +83,8 @@ function TripCard({ trip }: { trip: Trip }) {
 }
 
 function PastSection() {
-  const router = useRouter();
+  const router = useSeedRouter();
+  const { getElementAttributes, getText } = useSeedLayout();
   const featured = {
     address: "100 Van Ness",
     datetime: "7/17/2025 • 11:55:31 AM",
@@ -116,10 +120,10 @@ function PastSection() {
   return (
     <>
       <div className="mt-16 mb-5">
-        <span className="text-[2rem] font-bold text-black">Past</span>
+        <span className="text-[2rem] font-bold text-black" {...getElementAttributes('trips-past-title', 0)}>{getText('trips-past-title', 'Past')}</span>
       </div>
       <div className="flex items-center gap-4 mb-3">
-        <button className="flex items-center gap-2 text-base text-black font-medium bg-gray-100 px-4 py-2 rounded-full">
+        <button className="flex items-center gap-2 text-base text-black font-medium bg-gray-100 px-4 py-2 rounded-full" {...getElementAttributes('trips-filter-personal', 0)}>
           <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
             <circle cx="9" cy="9" r="8.5" stroke="#222" strokeWidth="1.3" />
             <path
@@ -128,14 +132,14 @@ function PastSection() {
               strokeWidth="1"
             />
           </svg>{" "}
-          Personal
+          {getText('trips-filter-personal', 'Personal')}
         </button>
-        <button className="flex items-center gap-2 text-base text-black font-medium bg-gray-100 px-4 py-2 rounded-full">
+        <button className="flex items-center gap-2 text-base text-black font-medium bg-gray-100 px-4 py-2 rounded-full" {...getElementAttributes('trips-filter-all', 0)}>
           <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
             <rect width="18" height="18" rx="4" fill="#111" />
             <path d="M5 9h8" stroke="#fff" strokeWidth="1.4" />
           </svg>{" "}
-          All Trips
+          {getText('trips-filter-all', 'All Trips')}
         </button>
       </div>
       <div className="bg-gray-100 rounded-xl flex items-center px-8 py-6 gap-7 mb-6 w-full max-w-3xl">
@@ -164,9 +168,9 @@ function PastSection() {
                 <circle cx="10" cy="10" r="5" fill="#8CB4FF" />
                 <path d="M10.5 6.5v4l3 1.5" stroke="#333" strokeWidth="1.1" />
               </svg>{" "}
-              Help
+              {getText('trips-help', 'Help')}
             </button>
-            <button className="flex items-center gap-1 text-black">
+            <button className="flex items-center gap-1 text-black" {...getElementAttributes('trips-details', 0)}>
               <svg width="16" height="16" fill="none" viewBox="0 0 20 20">
                 <rect width="20" height="20" rx="4" fill="#2095d2" />
                 <path
@@ -175,9 +179,9 @@ function PastSection() {
                   strokeWidth="1.1"
                 />
               </svg>{" "}
-              Details
+              {getText('trips-details', 'Details')}
             </button>
-            <button className="flex items-center gap-1 text-black">
+            <button className="flex items-center gap-1 text-black" {...getElementAttributes('trips-rebook', 0)}>
               <svg width="16" height="16" fill="none" viewBox="0 0 20 20">
                 <rect
                   x="3"
@@ -193,7 +197,7 @@ function PastSection() {
                   strokeWidth="1.1"
                 />
               </svg>{" "}
-              Rebook
+              {getText('trips-rebook', 'Rebook')}
             </button>
           </div>
         </div>
@@ -281,10 +285,11 @@ function PastSection() {
 }
 
 export default function TripsDashboardPage() {
+  const { getElementAttributes, getText } = useSeedLayout();
   const [loading, setLoading] = useState<boolean>(true);
   const [trips, setTrips] = useState<Trip[]>([]);
   const [cancelledIds, setCancelledIds] = useState<string[]>([]);
-  const router = useRouter();
+  const router = useSeedRouter();
 
   // Helper to read cancelledTrips from localStorage
   function readCancelledTrips(): string[] {
@@ -364,8 +369,8 @@ export default function TripsDashboardPage() {
                 strokeLinecap="round"
               />
             </svg>
-            <span className="text-xl text-gray-800 font-normal">
-              Loading trips page...
+            <span className="text-xl text-gray-800 font-normal" {...getElementAttributes('trips-loading', 0)}>
+              {getText('trips-loading', 'Loading trips page...')}
             </span>
           </div>
         </div>
@@ -373,7 +378,7 @@ export default function TripsDashboardPage() {
         <div className="flex gap-6 mt-10 max-w-[1200px] mx-auto max-md:flex-col">
           <div className="w-[60%] max-md:w-full">
             <section>
-              <div className="text-3xl font-bold mb-6">Upcoming</div>
+              <div className="text-3xl font-bold mb-6" {...getElementAttributes('trips-upcoming-title', 0)}>{getText('trips-upcoming-title', 'Upcoming')}</div>
               {upcomingDisplay.map((trip) => (
                 <TripCard key={trip.id} trip={trip} />
               ))}
@@ -387,17 +392,17 @@ export default function TripsDashboardPage() {
                 alt="Get a ride illustration"
                 className="rounded-xl mb-5 w-[300px] h-[180px] object-cover"
               />
-              <div className="font-bold text-xl mb-1 w-full">
-                Get a ride in minutes
+              <div className="font-bold text-xl mb-1 w-full" {...getElementAttributes('trips-aside-title', 0)}>
+                {getText('trips-aside-title', 'Get a ride in minutes')}
               </div>
-              <div className="text-base mb-5 w-full">
-                Book an AutoDriver from a web browser, no app install necessary.
+              <div className="text-base mb-5 w-full" {...getElementAttributes('trips-aside-desc', 0)}>
+                {getText('trips-aside-desc', 'Book an AutoDriver from a web browser, no app install necessary.')}
               </div>
               <button
                 className="bg-[#2095d2] text-white rounded-md px-5 py-3 w-full font-bold text-base shadow hover:bg-[#1273a0] transition"
                 onClick={() => router.push("/ride/trip")}
               >
-                Request a ride
+                {getText('trips-aside-cta', 'Request a ride')}
               </button>
             </div>
           </aside>
