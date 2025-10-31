@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getSeedLayout } from './layouts';
 import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { getTextForElement, type ElementKey } from '@/library/textVariants';
 
 export function useSeedLayout() {
   const [seed, setSeed] = useState(1);
@@ -13,9 +14,10 @@ export function useSeedLayout() {
     const dynamicEnabled = isDynamicModeEnabled();
     setIsDynamicEnabled(dynamicEnabled);
     
-    // Get seed from URL parameters or localStorage
+    // Get seed from URL parameters or localStorage (prefer seed-structure)
     const searchParams = new URLSearchParams(window.location.search);
-    const seedParam = searchParams.get('seed');
+    const seedStructureParam = searchParams.get('seed-structure');
+    const seedParam = seedStructureParam ?? searchParams.get('seed');
     
     let rawSeed = 1;
     
@@ -25,12 +27,18 @@ export function useSeedLayout() {
     } else {
       // Priority 2: localStorage
       try {
-        const stored = localStorage.getItem('autolistSeed');
+        const storedStructure = localStorage.getItem('autolistSeedStructure');
+        const stored = storedStructure ?? localStorage.getItem('autolistSeed');
         if (stored) {
           rawSeed = parseInt(stored);
         }
       } catch (e) {
         // Ignore localStorage errors
+      }
+      // Priority 3: env default
+      if (!Number.isFinite(rawSeed)) {
+        const envDefault = parseInt(process.env.NEXT_PUBLIC_DEFAULT_SEED_STRUCTURE as string);
+        if (Number.isFinite(envDefault)) rawSeed = envDefault as unknown as number;
       }
     }
     
@@ -40,6 +48,7 @@ export function useSeedLayout() {
     
     // Save to localStorage
     try {
+      localStorage.setItem('autolistSeedStructure', effectiveSeed.toString());
       localStorage.setItem('autolistSeed', effectiveSeed.toString());
     } catch (e) {
       // Ignore localStorage errors
@@ -183,5 +192,9 @@ export function useSeedLayout() {
     generateSeedClass,
     createDynamicStyles,
     getNavigationUrl,
+    getText: (key: ElementKey, fallback: string) => {
+      if (!isDynamicEnabled) return fallback;
+      return getTextForElement(seed, key, fallback);
+    },
   };
 }
