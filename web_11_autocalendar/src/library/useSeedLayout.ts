@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getSeedLayout } from '@/utils/seedLayout';
 import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { getTextForElement, type ElementKey } from '@/library/textVariants';
 
 export function useSeedLayout() {
   const [seed, setSeed] = useState(1);
@@ -13,14 +14,32 @@ export function useSeedLayout() {
     const dynamicEnabled = isDynamicModeEnabled();
     setIsDynamicEnabled(dynamicEnabled);
     
-    // Get seed from URL parameters
+    // Get seed from URL parameters (prefer seed-structure)
     const searchParams = new URLSearchParams(window.location.search);
-    const seedParam = searchParams.get('seed');
-    const rawSeed = seedParam ? parseInt(seedParam) : 1;
+    const seedStructureParam = searchParams.get('seed-structure');
+    const seedParam = seedStructureParam ?? searchParams.get('seed');
+    let rawSeed = seedParam ? parseInt(seedParam) : 1;
+    if (!seedParam) {
+      try {
+        const storedStructure = localStorage.getItem('autocalendarSeedStructure');
+        const stored = storedStructure ?? localStorage.getItem('autocalendarSeed');
+        if (stored) rawSeed = parseInt(stored);
+      } catch {}
+      if (!Number.isFinite(rawSeed)) {
+        const envDefault = parseInt(process.env.NEXT_PUBLIC_DEFAULT_SEED_STRUCTURE as string);
+        if (Number.isFinite(envDefault)) rawSeed = envDefault as unknown as number;
+      }
+    }
     
     // Get effective seed (validates range and respects dynamic HTML setting)
     const effectiveSeed = getEffectiveSeed(rawSeed);
     setSeed(effectiveSeed);
+    
+    // Save for compatibility
+    try {
+      localStorage.setItem('autocalendarSeedStructure', effectiveSeed.toString());
+      localStorage.setItem('autocalendarSeed', effectiveSeed.toString());
+    } catch {}
     
     // Update layout only if dynamic HTML is enabled
     if (dynamicEnabled) {
@@ -36,7 +55,7 @@ export function useSeedLayout() {
     const baseAttrs = { 
       id: `${elementType}-${index}`, 
       'data-element-type': elementType 
-    };
+    } as Record<string, string>;
     
     if (!isDynamicEnabled) {
       return baseAttrs;
@@ -131,6 +150,12 @@ export function useSeedLayout() {
     return `${baseClass} seed-${seed}`;
   }, [seed, isDynamicEnabled]);
 
+  // Get dynamic text
+  const getText = useCallback((key: ElementKey, fallback: string): string => {
+    if (!isDynamicEnabled) return fallback;
+    return getTextForElement(seed, key, fallback);
+  }, [seed, isDynamicEnabled]);
+
   return {
     seed,
     layout,
@@ -143,6 +168,7 @@ export function useSeedLayout() {
     applyCSSVariables,
     createDynamicStyles,
     getLayoutInfo,
-    reorderElements
+    reorderElements,
+    getText
   };
 }
