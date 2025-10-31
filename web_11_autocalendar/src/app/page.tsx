@@ -138,6 +138,7 @@ function usePersistedEvents() {
   // SSR-safe: initialize with EVENTS_DATASET, then hydrate from localStorage on client
   const [state, setState] = useState<Event[]>(EVENTS_DATASET as Event[]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -194,8 +195,9 @@ function usePersistedEvents() {
             setState(initialized as Event[]);
             window.localStorage.setItem("gocal_events", JSON.stringify(initialized));
           }
-        } catch {
-          // ignore; state already seeded with static dataset
+        } catch (err) {
+          console.error("[AutoCalendar] usePersistedEvents() init failure", err);
+          setGenError(err instanceof Error ? err.message : "Generation failed");
         } finally {
           setIsGenerating(false);
         }
@@ -213,7 +215,7 @@ function usePersistedEvents() {
     }
   }, [state]);
 
-  return [state, setState, isGenerating] as const;
+  return [state, setState, isGenerating, genError] as const;
 }
 
 const weekDates = [15, 16, 17, 18, 19];
@@ -368,7 +370,7 @@ function CalendarApp() {
   });
   const [myCalExpanded, setMyCalExpanded] = useState(true);
   const [viewDropdown, setViewDropdown] = useState(false);
-  const [events, setEvents, isGenerating] = usePersistedEvents();
+  const [events, setEvents, isGenerating, genError] = usePersistedEvents();
   const [miniCalMonth, setMiniCalMonth] = useState(viewDate.getMonth());
   const [miniCalYear, setMiniCalYear] = useState(viewDate.getFullYear());
   const [addCalOpen, setAddCalOpen] = useState(false);
@@ -425,6 +427,12 @@ function CalendarApp() {
           Data generation is in progress. This may take some time...
         </div>
       </div>
+    </div>
+  ) : null;
+
+  const generationErrorBanner = genError ? (
+    <div className="fixed top-2 left-1/2 z-50 -translate-x-1/2 rounded-md border border-red-300 bg-red-50 px-4 py-2 text-sm text-red-700 shadow">
+      AI data generation failed. Showing static dataset. Error: {genError}
     </div>
   ) : null;
   const [searchResults, setSearchResults] = useState<typeof EVENTS_DATASET>([]);

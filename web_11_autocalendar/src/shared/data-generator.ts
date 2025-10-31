@@ -1,8 +1,6 @@
 /**
- * Universal Data Generation Utility (Web11 Edition)
- * 
- * This utility provides consistent data generation for the Web11 AutoCalendar project.
- * It generates realistic mock event data for calendar-based applications.
+ * Web11 AutoCalendar - Data Generation Utilities
+ * Mirrors the implementation style from web_8_autolodge
  */
 
 export interface DataGenerationResponse {
@@ -23,13 +21,10 @@ export interface ProjectDataConfig {
   additionalRequirements: string;
 }
 
-/**
- * Project-specific configuration for Web11 AutoCalendar
- */
 export const PROJECT_CONFIGS: Record<string, ProjectDataConfig> = {
-  'web_11_autocalendar': {
-    projectName: 'AutoCalendar',
-    dataType: 'calendar_events',
+  web_11_autocalendar: {
+    projectName: "AutoCalendar",
+    dataType: "calendar_events",
     interfaceDefinition: `
 export interface CalendarEvent {
   id: string;
@@ -52,7 +47,7 @@ export interface CalendarEvent {
   visibility: "default" | "private" | "public";
   meetingLink: string;
 }
-    `,
+    `.trim(),
     examples: [
       {
         id: "1",
@@ -74,28 +69,25 @@ export interface CalendarEvent {
         busy: true,
         visibility: "default",
         meetingLink: "https://zoom.us/j/123456789",
-      }
+      },
     ],
     categories: ["Work", "Personal", "Wellness", "Friends", "Family"],
     namingRules: {
       id: "event-{number}",
       label: "{verb} {topic}",
-      color: "#{randomHexColor}"
+      color: "#{randomHexColor}",
     },
     additionalRequirements:
-      "Generate realistic calendar events with unique titles, time ranges, recurrence types, attendees, and locations. Include both personal and professional events. Ensure start and end times make sense (start < end). Color codes should vary. Some events should include online meeting links (Zoom, Google Meet)."
-  }
+      "Generate realistic calendar events with varied titles, logical time ranges, recurrence, attendees, meeting links, and categories.",
+  },
 };
 
-/**
- * Generate data for the Web11 AutoCalendar project
- */
 export async function generateProjectData(
-  projectKey: string = 'web_11_autocalendar',
-  count: number = 10,
+  projectKey: string = "web_11_autocalendar",
+  count: number = 50,
   categories?: string[]
 ): Promise<DataGenerationResponse> {
-  console.log('[AutoCalendar] generateProjectData called', { projectKey, count });
+  console.log("[AutoCalendar] generateProjectData() start", { projectKey, count, categories });
   const config = PROJECT_CONFIGS[projectKey];
   if (!config) {
     return {
@@ -103,82 +95,92 @@ export async function generateProjectData(
       data: [],
       count: 0,
       generationTime: 0,
-      error: `Project configuration not found for: ${projectKey}`
+      error: `Project not found: ${projectKey}`,
     };
   }
 
   const startTime = Date.now();
-
   try {
     const baseUrl = getApiBaseUrl();
-    console.log('[AutoCalendar] generateProjectData → baseUrl:', baseUrl);
-    const response = await fetch(`${baseUrl}/datasets/generate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        interface_definition: config.interfaceDefinition,
-        examples: config.examples,
-        count: Math.max(1, Math.min(200, count)),
-        categories: categories || config.categories,
-        additional_requirements: config.additionalRequirements,
-        naming_rules: config.namingRules,
-        project_key: projectKey,
-        entity_type: config.dataType,
-        save_to_db: true,
-      })
-    });
+    console.log("[AutoCalendar] generateProjectData() baseUrl:", baseUrl);
+    const payload = {
+      interface_definition: config.interfaceDefinition,
+      examples: config.examples,
+      count: Math.max(1, Math.min(200, count)),
+      categories: categories || config.categories,
+      additional_requirements: config.additionalRequirements,
+      naming_rules: config.namingRules,
+      project_key: projectKey,
+      entity_type: config.dataType,
+      save_to_db: true,
+    };
+    console.log("[AutoCalendar] generateProjectData() payload:", { ...payload, interface_definition: "<omitted>" });
 
-    if (!response.ok) {
-      const text = await response.text().catch(() => '<no body>');
-      console.warn('[AutoCalendar] API error', response.status, text);
-      throw new Error(`API request failed: ${response.status}`);
+    const controller = new AbortController();
+    const timeoutMs = 30000;
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    console.log("[AutoCalendar] generateProjectData() POST /datasets/generate with timeout", timeoutMs, "ms");
+    const resp = await fetch(`${baseUrl}/datasets/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => "");
+      console.warn("[AutoCalendar] /datasets/generate error", resp.status, text);
+      throw new Error(`API error ${resp.status}: ${text}`);
     }
 
-    const result = await response.json();
+    const result = await resp.json();
     const generationTime = (Date.now() - startTime) / 1000;
-
-    return {
-      success: true,
-      data: result.generated_data,
-      count: result.count,
-      generationTime,
-    };
-  } catch (error) {
-    console.error('[AutoCalendar] generateProjectData error:', error);
+    const data = Array.isArray(result.generated_data) ? result.generated_data : [];
+    console.log("[AutoCalendar] generateProjectData() success", { count: data.length, generationTime });
+    return { success: true, data, count: result.count || data.length || 0, generationTime };
+  } catch (err) {
     const generationTime = (Date.now() - startTime) / 1000;
+    console.error("[AutoCalendar] generateProjectData() failure", err);
     return {
       success: false,
       data: [],
       count: 0,
       generationTime,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: err instanceof Error ? err.message : "Generation failed",
     };
   }
 }
 
-/**
- * Check if data generation is enabled
- */
 export function isDataGenerationEnabled(): boolean {
-  const raw = (
+  const val = (
     process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION ??
     process.env.NEXT_PUBLIC_DATA_GENERATION ??
     process.env.ENABLE_DATA_GENERATION ??
-    ''
-  ).toString().toLowerCase();
-  const enabled = raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
-  console.log('[AutoCalendar] isDataGenerationEnabled:', enabled, '(raw=', raw, ')');
+    ""
+  )
+    .toString()
+    .toLowerCase();
+  const enabled = ["true", "1", "yes", "on"].includes(val);
+  console.log("[AutoCalendar] isDataGenerationEnabled()", { raw: val, enabled });
   return enabled;
 }
 
-/**
- * Get API base URL
- */
 export function getApiBaseUrl(): string {
-  const url = process.env.NEXT_PUBLIC_API_URL || 
-              process.env.API_URL || 
-              'http://localhost:8080';
+  const url = (
+    process.env.API_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://localhost:8080"
+  );
+  console.log("[AutoCalendar] getApiBaseUrl()", url);
   return url;
 }
+
+/**
+ * Universal Data Generation Utility (Web11 Edition)
+ * 
+ * This utility provides consistent data generation for the Web11 AutoCalendar project.
+ * It generates realistic mock event data for calendar-based applications.
+ */
+
+// (duplicate block removed)

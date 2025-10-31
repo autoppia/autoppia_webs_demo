@@ -65,7 +65,8 @@ export async function initializeEvents(): Promise<CalendarEvent[]> {
       }
       return result.data as CalendarEvent[];
     }
-    console.warn("[AutoCalendar] Generation response unsuccessful → falling back", result.error);
+    console.warn("[AutoCalendar] Generation response unsuccessful", result.error);
+    throw new Error(result.error || "Generation returned empty data");
   } catch (err) {
     console.error("[AutoCalendar] Generation error → falling back", err);
   }
