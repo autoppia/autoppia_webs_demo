@@ -9,13 +9,12 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
-#   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
+#   --demo=NAME                   Deploy specific demo or all (default: all)
+#   --enabled_dynamic_versions=[v1,v2,v3,v4]   Enable specific dynamic versions
 #   -y, --yes                     Force delete without confirmation
 #
-# Examples:
-#   ./setup.sh --demo=automail --enable_dynamic_html=true
-#   ./setup.sh --demo=all --enable_dynamic_html=true --web_port=8000
+# Example:
+#   ./setup.sh --demo=automail --enabled_dynamic_versions=[v1,v3]
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -53,7 +52,14 @@ WEBS_PORT_DEFAULT=8090
 WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
-ENABLE_DYNAMIC_HTML_DEFAULT=true
+ENABLED_DYNAMIC_VERSIONS_DEFAULT=false
+ENABLED_DYNAMIC_VERSIONS=""
+
+# Internal dynamic feature flags
+ENABLE_DYNAMIC_HTML=false
+ENABLE_DATA_GENERATION=false
+ENABLE_DYNAMIC_STRUCTURE=false
+ENABLE_DYNAMIC_POPUPS_AND_ALERTS=false
 
 # 5. Parse args
 for ARG in "$@"; do
@@ -63,7 +69,11 @@ for ARG in "$@"; do
     --webs_port=*)     WEBS_PORT="${ARG#*=}" ;;
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
-    --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
+    --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
+
+#    --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
+#    --enable_dynamic_structure=*) ENABLE_DYNAMIC_STRUCTURE="${ARG#*=}" ;;
+#    --enable_data_generation=*) ENABLE_DATA_GENERATION="${ARG#*=}" ;;
     -y|--yes)          FORCE_DELETE=true ;;
     *) ;; 
   esac
@@ -73,18 +83,48 @@ WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
-ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-$ENABLED_DYNAMIC_VERSIONS_DEFAULT}"
 
+# 6. Define version-to-variable mapping
+declare -A DYNAMIC_MAP=(
+  ["v1"]="ENABLE_DYNAMIC_HTML"
+  ["v2"]="ENABLE_DATA_GENERATION"
+  ["v3"]="ENABLE_DYNAMIC_STRUCTURE"
+  ["v4"]="ENABLE_DYNAMIC_POPUPS_AND_ALERTS"
+)
+
+# 7. Parse enabled_dynamic_versions
+if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
+  CLEANED_VERSIONS=$(echo "$ENABLED_DYNAMIC_VERSIONS" | tr -d '[] ')
+
+  IFS=',' read -ra VERSIONS <<< "$CLEANED_VERSIONS"
+
+  echo "[INFO] Processing dynamic versions: ${VERSIONS[*]}"
+  for version in "${VERSIONS[@]}"; do
+    key="${DYNAMIC_MAP[$version]:-}"
+    if [ -n "$key" ]; then
+      eval "$key=true"
+      echo "   → $version enabled → $key=true"
+    else
+      echo "[WARN] Unknown dynamic version: $version"
+    fi
+  done
+else
+  echo "[INFO] No dynamic versions enabled."
+fi
+
+# 8. Show configuration summary
+echo
 echo "🔣 Configuration:"
-echo "    movies/books base HTTP  →  $WEB_PORT"
-echo "    movies/books Postgres   →  $POSTGRES_PORT"
-echo "    webs_server HTTP        →  $WEBS_PORT"
-echo "    webs_server Postgres    →  $WEBS_PG_PORT"
-echo "    Demo to deploy:         →  $WEB_DEMO"
-echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
+echo "    Demo to deploy:           →  $WEB_DEMO"
+echo "    Enabled dynamic versions: →  $ENABLED_DYNAMIC_VERSIONS"
+echo "    ENABLE_DYNAMIC_HTML:      →  $ENABLE_DYNAMIC_HTML"
+echo "    ENABLE_DATA_GENERATION:   →  $ENABLE_DATA_GENERATION"
+echo "    ENABLE_DYNAMIC_STRUCTURE: →  $ENABLE_DYNAMIC_STRUCTURE"
+echo "    ENABLE_DYNAMIC_POPUPS_AND_ALERTS: →  $ENABLE_DYNAMIC_POPUPS_AND_ALERTS"
 echo
 
-# 6. Check Docker
+# 9. Check Docker
 if ! command -v docker &> /dev/null; then
   echo "❌ Docker not installed."
   exit 1
@@ -95,7 +135,7 @@ if ! docker info &> /dev/null; then
 fi
 echo "✅ Docker is ready."
 
-# 7. Deploy functions
+# 10. Deploy functions
 
 deploy_project() {
   local name="$1"; shift
@@ -109,7 +149,7 @@ deploy_project() {
     return
   fi
 
-  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML)..."
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp)..."
   pushd "$dir" > /dev/null
 
     if docker compose -p "$proj" ps -q | grep -q .; then
@@ -117,12 +157,15 @@ deploy_project() {
       docker compose -p "$proj" down --volumes
     fi
 
-    # Pass ENABLE_DYNAMIC_HTML to all webs
-    WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
-      docker compose -p "$proj" up -d --build
+    WEB_PORT="$webp" POSTGRES_PORT="$pgp" \
+    ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+    ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
+    ENABLE_DYNAMIC_STRUCTURE="$ENABLE_DYNAMIC_STRUCTURE" \
+    ENABLE_DYNAMIC_POPUPS_AND_ALERTS="$ENABLE_DYNAMIC_POPUPS_AND_ALERTS" \
+    docker compose -p "$proj" up -d --build
 
   popd > /dev/null
-  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML)"
+  echo "✅ $name is running on port $webp"
   echo
 }
 
@@ -140,14 +183,14 @@ deploy_webs_server() {
     docker compose -p "$name" down --volumes || true
 
     WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
-      docker compose -p "$name" up -d --build
+    docker compose -p "$name" up -d --build
 
   popd > /dev/null
   echo "✅ $name is running on HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
   echo
 }
 
-# 8. Execute
+# 11. Execute deployments
 
 case "$WEB_DEMO" in
   movies)
@@ -202,22 +245,22 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
-    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-     deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-     deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-     deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-     deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-     deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-     deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-     deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-      deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
-      deploy_webs_server
+#    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
+#    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+#    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+#    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+#    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+#    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+#    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+#    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+#    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+#    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+#    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+#    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO."
     exit 1
     ;;
 esac
