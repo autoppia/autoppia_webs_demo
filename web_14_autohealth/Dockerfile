@@ -3,6 +3,10 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+ARG ENABLE_DYNAMIC_HTML=false
+ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+
 COPY package.json package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
@@ -20,6 +24,8 @@ WORKDIR /app
 ENV NODE_ENV production
 
 ENV PORT 8013
+ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
 EXPOSE 8013
 
 COPY --from=builder /app/.next ./.next

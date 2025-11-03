@@ -9,6 +9,9 @@ import { Avatar } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
+import { useSeedLayout } from "@/library/useSeedLayout";
+import { DynamicElement } from "@/components/DynamicElement";
+import { withSeed } from "@/utils/seedRouting";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -21,6 +24,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export default function DoctorsPage() {
+  const { reorderElements } = useSeedLayout();
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
 
@@ -43,12 +47,17 @@ export default function DoctorsPage() {
     setIsBookingModalOpen(true);
   };
 
+  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
+  const hasSeed = !!sp?.get('seed');
+  const orderedDoctors = hasSeed ? reorderElements(doctors) : doctors;
+
   return (
     <div className="container py-10">
       <h1 className="text-2xl font-semibold">Doctors</h1>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {doctors.map((d) => (
-          <Card key={d.id} className="flex flex-col">
+        {orderedDoctors.map((d, i) => (
+          <DynamicElement key={d.id} elementType="doctor-card" as="div" index={i} className="flex">
+            <Card className="flex flex-col w-full">
             <CardHeader className="flex-row items-center gap-4">
               <Avatar name={d.name} />
               <div>
@@ -61,7 +70,7 @@ export default function DoctorsPage() {
               <p className="mt-3 text-sm text-muted-foreground">{d.bio}</p>
             </CardContent>
             <CardFooter className="mt-auto flex gap-2">
-              <Link href={`/doctors/${d.id}`}>
+              <Link href={withSeed(`/doctors/${d.id}`)}>
                 <Button 
                   variant="outline"
                   onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
@@ -81,7 +90,8 @@ export default function DoctorsPage() {
                 Book Now
               </Button>
             </CardFooter>
-          </Card>
+            </Card>
+          </DynamicElement>
         ))}
       </div>
 

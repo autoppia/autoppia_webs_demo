@@ -8,8 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { medicalRecords, type MedicalRecord } from "@/data/medical-records";
+import { useSeedLayout } from "@/library/useSeedLayout";
+import { DynamicElement } from "@/components/DynamicElement";
 
 export default function MedicalRecordsPage() {
+  const { reorderElements } = useSeedLayout();
   const [files, setFiles] = useState<File[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
@@ -66,10 +69,15 @@ export default function MedicalRecordsPage() {
     }
   };
 
+  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
+  const hasSeed = !!sp?.get('seed');
+
   const categories = ["all", "diagnostic", "preventive", "treatment", "monitoring"];
+  const orderedCategories = hasSeed ? reorderElements(categories) : categories;
   const filteredRecords = selectedCategory === "all" 
     ? medicalRecords 
     : medicalRecords.filter(record => record.category === selectedCategory);
+  const orderedRecords = hasSeed ? reorderElements(filteredRecords) : filteredRecords;
 
   return (
     <div className="container py-10">
@@ -77,9 +85,9 @@ export default function MedicalRecordsPage() {
 
       {/* Category Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
-        {categories.map((category) => (
+        {orderedCategories.map((category, i) => (
+          <DynamicElement key={category} elementType="records-filter" as="span" index={i}>
           <Button
-            key={category}
             variant={selectedCategory === category ? "default" : "outline"}
             size="sm"
             onClick={() => {
@@ -89,6 +97,7 @@ export default function MedicalRecordsPage() {
           >
             {category.charAt(0).toUpperCase() + category.slice(1)}
           </Button>
+          </DynamicElement>
         ))}
       </div>
 
@@ -104,8 +113,9 @@ export default function MedicalRecordsPage() {
 
       {/* Medical Records Grid */}
       <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredRecords.map((record) => (
-          <Card key={record.id} className="hover:shadow-md transition-shadow">
+        {orderedRecords.map((record, i) => (
+          <DynamicElement key={record.id} elementType="record-card" as="div" index={i}>
+            <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2">
@@ -132,7 +142,8 @@ export default function MedicalRecordsPage() {
                 View Details
               </Button>
             </CardContent>
-          </Card>
+            </Card>
+          </DynamicElement>
         ))}
       </div>
 
@@ -181,42 +192,48 @@ export default function MedicalRecordsPage() {
             </div>
             
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium">Date:</span> {selectedRecord.date}
-                </div>
-                <div>
-                  <span className="font-medium">Doctor:</span> {selectedRecord.doctorName}
-                </div>
-                <div>
-                  <span className="font-medium">Facility:</span> {selectedRecord.facility}
-                </div>
-                <div>
-                  <span className="font-medium">Status:</span> 
-                  <Badge className={`ml-2 ${getStatusColor(selectedRecord.status)}`}>
-                    {selectedRecord.status}
-                  </Badge>
-                </div>
-              </div>
-              
-              <div>
-                <span className="font-medium">Description:</span>
-                <p className="mt-1 text-muted-foreground">{selectedRecord.description}</p>
-              </div>
-
-              {selectedRecord.values && (
-                <div>
-                  <span className="font-medium">Results/Values:</span>
-                  <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {Object.entries(selectedRecord.values).map(([key, value]) => (
-                      <div key={key} className="flex justify-between p-2 bg-gray-50 rounded">
-                        <span className="font-medium">{key}:</span>
-                        <span>{value}</span>
+              {(() => {
+                const infoBlocks = [
+                  { key: 'meta' },
+                  { key: 'desc' },
+                  { key: 'values' },
+                ];
+                const orderedBlocks = hasSeed ? reorderElements(infoBlocks) : infoBlocks;
+                return orderedBlocks.map((b, bi) => (
+                  <DynamicElement key={b.key} elementType="record-modal-block" as="div" index={bi}>
+                    {b.key === 'meta' && (
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div><span className="font-medium">Date:</span> {selectedRecord.date}</div>
+                        <div><span className="font-medium">Doctor:</span> {selectedRecord.doctorName}</div>
+                        <div><span className="font-medium">Facility:</span> {selectedRecord.facility}</div>
+                        <div>
+                          <span className="font-medium">Status:</span>
+                          <Badge className={`ml-2 ${getStatusColor(selectedRecord.status)}`}>{selectedRecord.status}</Badge>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                    )}
+                    {b.key === 'desc' && (
+                      <div>
+                        <span className="font-medium">Description:</span>
+                        <p className="mt-1 text-muted-foreground">{selectedRecord.description}</p>
+                      </div>
+                    )}
+                    {b.key === 'values' && selectedRecord.values && (
+                      <div>
+                        <span className="font-medium">Results/Values:</span>
+                        <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                          {Object.entries(selectedRecord.values).map(([key, value]) => (
+                            <div key={key} className="flex justify-between p-2 bg-gray-50 rounded">
+                              <span className="font-medium">{key}:</span>
+                              <span>{value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </DynamicElement>
+                ));
+              })()}
             </div>
           </div>
         </div>

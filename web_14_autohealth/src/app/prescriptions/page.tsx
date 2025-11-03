@@ -6,8 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSeedLayout } from "@/library/useSeedLayout";
+import { DynamicElement } from "@/components/DynamicElement";
 
 export default function PrescriptionsPage() {
+  const { reorderElements } = useSeedLayout();
   const [selectedPrescription, setSelectedPrescription] = useState<Prescription | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
 
@@ -49,9 +52,13 @@ export default function PrescriptionsPage() {
   };
 
   const statuses = ["all", "active", "completed", "discontinued", "refill_needed"];
+  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
+  const hasSeed = !!sp?.get('seed');
+  const orderedStatuses = hasSeed ? reorderElements(statuses) : statuses;
   const filteredPrescriptions = selectedStatus === "all" 
     ? prescriptions 
     : prescriptions.filter(p => p.status === selectedStatus);
+  const orderedRows = hasSeed ? reorderElements(filteredPrescriptions) : filteredPrescriptions;
 
   return (
     <div className="container py-10">
@@ -59,9 +66,9 @@ export default function PrescriptionsPage() {
 
       {/* Status Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
-        {statuses.map((status) => (
+        {orderedStatuses.map((status, i) => (
+          <DynamicElement key={status} elementType="status-filter" as="span" index={i}>
           <Button
-            key={status}
             variant={selectedStatus === status ? "default" : "outline"}
             size="sm"
             onClick={() => {
@@ -71,55 +78,70 @@ export default function PrescriptionsPage() {
           >
             {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
           </Button>
+          </DynamicElement>
         ))}
       </div>
 
       <div className="mt-6">
+        {(() => {
+          const columns = [
+            { key: 'medicine', header: 'Medicine' },
+            { key: 'dosage', header: 'Dosage' },
+            { key: 'doctor', header: 'Doctor' },
+            { key: 'start', header: 'Start Date' },
+            { key: 'status', header: 'Status' },
+            { key: 'action', header: 'Action', align: 'right' as const },
+          ];
+          const orderedColumns = hasSeed ? reorderElements(columns) : columns;
+          return (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Medicine</TableHead>
-              <TableHead>Dosage</TableHead>
-              <TableHead>Doctor</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              {orderedColumns.map((c) => (
+                <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined}>{c.header}</TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredPrescriptions.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <span>{getCategoryIcon(p.category)}</span>
-                    <div>
-                      <div className="font-medium">{p.medicineName}</div>
-                      {p.genericName && (
-                        <div className="text-sm text-muted-foreground">{p.genericName}</div>
-                      )}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>{p.dosage}</TableCell>
-                <TableCell>{p.doctorName}</TableCell>
-                <TableCell>{p.startDate}</TableCell>
-                <TableCell>
-                  <Badge className={getStatusColor(p.status)}>
-                    {p.status.replace('_', ' ')}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button 
-                    onClick={() => handleViewPrescription(p)}
-                    size="sm"
-                  >
-                    View Prescription
-                  </Button>
-                </TableCell>
-              </TableRow>
+            {orderedRows.map((p, ri) => (
+              <DynamicElement key={p.id} elementType="prescription-row" as="tr" index={ri}>
+                {orderedColumns.map((c) => {
+                  if (c.key === 'medicine') return (
+                    <TableCell key={c.key}>
+                      <div className="flex items-center gap-2">
+                        <span>{getCategoryIcon(p.category)}</span>
+                        <div>
+                          <div className="font-medium">{p.medicineName}</div>
+                          {p.genericName && (
+                            <div className="text-sm text-muted-foreground">{p.genericName}</div>
+                          )}
+                        </div>
+                      </div>
+                    </TableCell>
+                  );
+                  if (c.key === 'dosage') return <TableCell key={c.key}>{p.dosage}</TableCell>;
+                  if (c.key === 'doctor') return <TableCell key={c.key}>{p.doctorName}</TableCell>;
+                  if (c.key === 'start') return <TableCell key={c.key}>{p.startDate}</TableCell>;
+                  if (c.key === 'status') return (
+                    <TableCell key={c.key}>
+                      <Badge className={getStatusColor(p.status)}>
+                        {p.status.replace('_', ' ')}
+                      </Badge>
+                    </TableCell>
+                  );
+                  if (c.key === 'action') return (
+                    <TableCell key={c.key} className="text-right">
+                      <Button onClick={() => handleViewPrescription(p)} size="sm">View Prescription</Button>
+                    </TableCell>
+                  );
+                  return null;
+                })}
+              </DynamicElement>
             ))}
           </TableBody>
         </Table>
+          );
+        })()}
       </div>
 
       {/* Prescription Detail Modal */}
@@ -142,79 +164,42 @@ export default function PrescriptionsPage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Basic Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Prescription Details</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="font-medium">Dosage:</span>
-                    <span>{selectedPrescription.dosage}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">Status:</span>
-                    <Badge className={getStatusColor(selectedPrescription.status)}>
-                      {selectedPrescription.status.replace('_', ' ')}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-medium">Start Date:</span>
-                    <span>{selectedPrescription.startDate}</span>
-                  </div>
-                  {selectedPrescription.endDate && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">End Date:</span>
-                      <span>{selectedPrescription.endDate}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="font-medium">Prescribing Doctor:</span>
-                    <span>{selectedPrescription.doctorName}</span>
-                  </div>
-                  {selectedPrescription.pharmacy && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">Pharmacy:</span>
-                      <span>{selectedPrescription.pharmacy}</span>
-                    </div>
-                  )}
-                  {selectedPrescription.prescriptionNumber && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">Prescription #:</span>
-                      <span>{selectedPrescription.prescriptionNumber}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Cost and Refills */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Cost & Refills</h3>
-                <div className="space-y-2 text-sm">
-                  {selectedPrescription.cost && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">Cost:</span>
-                      <span>${selectedPrescription.cost}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="font-medium">Insurance Coverage:</span>
-                    <Badge className={selectedPrescription.insuranceCoverage ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
-                      {selectedPrescription.insuranceCoverage ? "Covered" : "Not Covered"}
-                    </Badge>
-                  </div>
-                  {selectedPrescription.refillsRemaining !== undefined && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">Refills Remaining:</span>
-                      <span>{selectedPrescription.refillsRemaining}</span>
-                    </div>
-                  )}
-                  {selectedPrescription.totalRefills && (
-                    <div className="flex justify-between">
-                      <span className="font-medium">Total Refills:</span>
-                      <span>{selectedPrescription.totalRefills}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+              {(() => {
+                const sections = [
+                  { key: 'details' },
+                  { key: 'cost' },
+                ];
+                const orderedSections = hasSeed ? reorderElements(sections) : sections;
+                return orderedSections.map((s, si) => (
+                  <DynamicElement key={s.key} elementType="prescription-modal-section" as="div" index={si} className="space-y-4">
+                    {s.key === 'details' && (
+                      <>
+                        <h3 className="text-lg font-semibold">Prescription Details</h3>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between"><span className="font-medium">Dosage:</span><span>{selectedPrescription.dosage}</span></div>
+                          <div className="flex justify-between"><span className="font-medium">Status:</span><Badge className={getStatusColor(selectedPrescription.status)}>{selectedPrescription.status.replace('_', ' ')}</Badge></div>
+                          <div className="flex justify-between"><span className="font-medium">Start Date:</span><span>{selectedPrescription.startDate}</span></div>
+                          {selectedPrescription.endDate && (<div className="flex justify-between"><span className="font-medium">End Date:</span><span>{selectedPrescription.endDate}</span></div>)}
+                          <div className="flex justify-between"><span className="font-medium">Prescribing Doctor:</span><span>{selectedPrescription.doctorName}</span></div>
+                          {selectedPrescription.pharmacy && (<div className="flex justify-between"><span className="font-medium">Pharmacy:</span><span>{selectedPrescription.pharmacy}</span></div>)}
+                          {selectedPrescription.prescriptionNumber && (<div className="flex justify-between"><span className="font-medium">Prescription #:</span><span>{selectedPrescription.prescriptionNumber}</span></div>)}
+                        </div>
+                      </>
+                    )}
+                    {s.key === 'cost' && (
+                      <>
+                        <h3 className="text-lg font-semibold">Cost & Refills</h3>
+                        <div className="space-y-2 text-sm">
+                          {selectedPrescription.cost && (<div className="flex justify-between"><span className="font-medium">Cost:</span><span>${selectedPrescription.cost}</span></div>)}
+                          <div className="flex justify-between"><span className="font-medium">Insurance Coverage:</span><Badge className={selectedPrescription.insuranceCoverage ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>{selectedPrescription.insuranceCoverage ? "Covered" : "Not Covered"}</Badge></div>
+                          {selectedPrescription.refillsRemaining !== undefined && (<div className="flex justify-between"><span className="font-medium">Refills Remaining:</span><span>{selectedPrescription.refillsRemaining}</span></div>)}
+                          {selectedPrescription.totalRefills && (<div className="flex justify-between"><span className="font-medium">Total Refills:</span><span>{selectedPrescription.totalRefills}</span></div>)}
+                        </div>
+                      </>
+                    )}
+                  </DynamicElement>
+                ));
+              })()}
             </div>
 
             {/* Instructions */}

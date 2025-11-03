@@ -11,6 +11,8 @@ import { useState } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
+import { useSeedLayout } from "@/library/useSeedLayout";
+import { DynamicElement } from "@/components/DynamicElement";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -23,6 +25,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
+  const { reorderElements } = useSeedLayout();
   const [activeTab, setActiveTab] = useState("overview");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
@@ -64,6 +67,9 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
     setIsReviewsModalOpen(true);
   };
 
+  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
+  const hasSeed = !!sp?.get('seed');
+
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "education", label: "Education & Certifications" },
@@ -71,33 +77,47 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
     { id: "reviews", label: "Reviews" },
     { id: "procedures", label: "Procedures" }
   ];
+  const orderedTabs = hasSeed ? reorderElements(tabs) : tabs;
 
   return (
     <div className="container py-10">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex-shrink-0">
-            <Avatar name={doctor.name} className="w-24 h-24 text-2xl" />
-          </div>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold">{doctor.name}</h1>
-            <p className="text-xl text-muted-foreground mb-2">{doctor.specialty}</p>
-            <div className="flex items-center gap-4 mb-4">
-              <div className="flex items-center gap-2">
-                <Stars value={doctor.rating} />
-                <span className="text-sm font-medium">{doctor.rating}</span>
-                <span className="text-sm text-muted-foreground">({doctor.patientReviews.length} reviews)</span>
-              </div>
-              <Badge variant="outline">{doctor.experience} years experience</Badge>
-            </div>
-            <p className="text-muted-foreground mb-4">{doctor.bio}</p>
-            <div className="flex flex-wrap gap-2">
-              {doctor.specialties.map((specialty) => (
-                <Badge key={specialty} variant="secondary">{specialty}</Badge>
-              ))}
-            </div>
-          </div>
+          {(() => {
+            const headerParts = [
+              { key: 'avatar' },
+              { key: 'details' },
+            ];
+            const orderedHeader = hasSeed ? reorderElements(headerParts) : headerParts;
+            return orderedHeader.map((p, i) => (
+              <DynamicElement key={p.key} elementType={`profile-header-${p.key}`} as="div" index={i} className={p.key === 'avatar' ? 'flex-shrink-0' : 'flex-1'}>
+                {p.key === 'avatar' && (
+                  <Avatar name={doctor.name} className="w-24 h-24 text-2xl" />
+                )}
+                {p.key === 'details' && (
+                  <div>
+                    <h1 className="text-3xl font-bold">{doctor.name}</h1>
+                    <p className="text-xl text-muted-foreground mb-2">{doctor.specialty}</p>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="flex items-center gap-2">
+                        <Stars value={doctor.rating} />
+                        <span className="text-sm font-medium">{doctor.rating}</span>
+                        <span className="text-sm text-muted-foreground">({doctor.patientReviews.length} reviews)</span>
+                      </div>
+                      <Badge variant="outline">{doctor.experience} years experience</Badge>
+                    </div>
+                    <p className="text-muted-foreground mb-4">{doctor.bio}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {doctor.specialties.map((specialty) => (
+                        <Badge key={specialty} variant="secondary">{specialty}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </DynamicElement>
+            ));
+          })()}
         </div>
       </div>
 
@@ -111,34 +131,24 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <p className="font-medium">Office Location</p>
-                <p className="text-sm text-muted-foreground">{doctor.officeLocation}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Phone className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <p className="font-medium">Phone</p>
-                <p className="text-sm text-muted-foreground">{doctor.phone}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Mail className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <p className="font-medium">Email</p>
-                <p className="text-sm text-muted-foreground">{doctor.email}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-lg">💰</span>
-              <div>
-                <p className="font-medium">Consultation Fee</p>
-                <p className="text-sm text-muted-foreground">${doctor.consultationFee}</p>
-              </div>
-            </div>
+            {(() => {
+              const info = [
+                { key: 'location', icon: <MapPin className="h-4 w-4 text-muted-foreground" />, label: 'Office Location', value: doctor.officeLocation },
+                { key: 'phone', icon: <Phone className="h-4 w-4 text-muted-foreground" />, label: 'Phone', value: doctor.phone },
+                { key: 'email', icon: <Mail className="h-4 w-4 text-muted-foreground" />, label: 'Email', value: doctor.email },
+                { key: 'fee', icon: <span className="text-lg">💰</span>, label: 'Consultation Fee', value: `$${doctor.consultationFee}` },
+              ];
+              const orderedInfo = hasSeed ? reorderElements(info) : info;
+              return orderedInfo.map((it, i) => (
+                <DynamicElement key={it.key} elementType="contact-item" as="div" index={i} className="flex items-center gap-3">
+                  {it.icon}
+                  <div>
+                    <p className="font-medium">{it.label}</p>
+                    <p className="text-sm text-muted-foreground">{it.value}</p>
+                  </div>
+                </DynamicElement>
+              ));
+            })()}
           </div>
         </CardContent>
       </Card>
@@ -146,15 +156,16 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
       {/* Tabs */}
       <div className="mb-6">
         <div className="flex flex-wrap gap-2 border-b">
-          {tabs.map((tab) => (
+          {orderedTabs.map((tab, i) => (
+            <DynamicElement key={tab.id} elementType="profile-tab" as="span" index={i}>
             <Button
-              key={tab.id}
               variant={activeTab === tab.id ? "default" : "ghost"}
               onClick={() => setActiveTab(tab.id)}
               className="rounded-b-none"
             >
               {tab.label}
             </Button>
+            </DynamicElement>
           ))}
         </div>
       </div>
@@ -368,26 +379,25 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
 
       {/* Action Buttons */}
       <div className="mt-8 flex flex-col sm:flex-row gap-4">
-        <Button 
-          onClick={handleBookAppointment}
-          className="flex-1 bg-blue-600 hover:bg-blue-700"
-        >
-          Book Appointment
-        </Button>
-        <Button 
-          variant="outline" 
-          onClick={handleContactDoctor}
-          className="flex-1"
-        >
-          Contact Doctor
-        </Button>
-        <Button 
-          variant="outline" 
-          onClick={handleViewReviews}
-          className="flex-1"
-        >
-          View All Reviews
-        </Button>
+        {(() => {
+          const actions = [
+            { key: 'book', node: (
+              <Button onClick={handleBookAppointment} className="flex-1 bg-blue-600 hover:bg-blue-700">Book Appointment</Button>
+            ) },
+            { key: 'contact', node: (
+              <Button variant="outline" onClick={handleContactDoctor} className="flex-1">Contact Doctor</Button>
+            ) },
+            { key: 'reviews', node: (
+              <Button variant="outline" onClick={handleViewReviews} className="flex-1">View All Reviews</Button>
+            ) },
+          ];
+          const orderedActions = hasSeed ? reorderElements(actions) : actions;
+          return orderedActions.map((a, i) => (
+            <DynamicElement key={a.key} elementType="profile-action" as="div" index={i}>
+              {a.node}
+            </DynamicElement>
+          ));
+        })()}
       </div>
 
       {/* Modals */}

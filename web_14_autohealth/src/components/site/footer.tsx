@@ -1,50 +1,83 @@
+"use client";
+
 import Link from "next/link";
+import { useSeedLayout } from "@/library/useSeedLayout";
+import { DynamicElement } from "@/components/DynamicElement";
 
 export default function Footer() {
+  const { reorderElements } = useSeedLayout();
+
+  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
+  const hasSeed = !!sp?.get('seed');
+
+  const linkGroups = [
+    {
+      key: 'company',
+      title: 'Company',
+      items: [
+        { href: '#', label: 'About' },
+        { href: '#', label: 'Contact' },
+      ],
+    },
+    {
+      key: 'legal',
+      title: 'Legal',
+      items: [
+        { href: '#', label: 'Privacy' },
+        { href: '#', label: 'Terms' },
+      ],
+    },
+  ];
+
+  const orderedGroups = hasSeed ? reorderElements(linkGroups) : linkGroups;
+
+  const sections = [
+    { key: 'brand' },
+    { key: 'links' },
+    { key: 'copyright' },
+  ];
+  const orderedSections = hasSeed ? reorderElements(sections) : sections;
+
   return (
     <footer className="border-t">
       <div className="container grid gap-4 py-8 md:grid-cols-3">
-        <div>
-          <div className="font-semibold text-emerald-700">AutoHealth</div>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Demo healthcare portal for AI agents training.
-          </p>
-        </div>
-        <div className="flex gap-6">
-          <div className="space-y-2">
-            <div className="text-sm font-medium">Company</div>
-            <ul className="space-y-1 text-sm text-muted-foreground">
-              <li>
-                <Link href="#" className="hover:text-foreground">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-foreground">
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-2">
-            <div className="text-sm font-medium">Legal</div>
-            <ul className="space-y-1 text-sm text-muted-foreground">
-              <li>
-                <Link href="#" className="hover:text-foreground">
-                  Privacy
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-foreground">
-                  Terms
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="text-sm text-muted-foreground md:text-right">
-          © {new Date().getFullYear()} AutoHealth. Demo only.
-        </div>
+        {orderedSections.map((s, idx) => (
+          <DynamicElement key={s.key} elementType="footer-section" as="div" index={idx}>
+            {s.key === 'brand' && (
+              <div>
+                <div className="font-semibold text-emerald-700">AutoHealth</div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Demo healthcare portal for AI agents training.
+                </p>
+              </div>
+            )}
+            {s.key === 'links' && (
+              <div className="flex gap-6">
+                {orderedGroups.map((g, gi) => (
+                  <DynamicElement key={g.key} elementType="footer-group" as="div" index={gi}>
+                    <div className="space-y-2">
+                      <div className="text-sm font-medium">{g.title}</div>
+                      <ul className="space-y-1 text-sm text-muted-foreground">
+                        {g.items.map((it, ii) => (
+                          <li key={ii}>
+                            <Link href={it.href} className="hover:text-foreground">
+                              {it.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </DynamicElement>
+                ))}
+              </div>
+            )}
+            {s.key === 'copyright' && (
+              <div className="text-sm text-muted-foreground md:text-right">
+                © {new Date().getFullYear()} AutoHealth. Demo only.
+              </div>
+            )}
+          </DynamicElement>
+        ))}
       </div>
     </footer>
   );
