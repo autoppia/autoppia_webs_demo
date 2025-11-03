@@ -9,7 +9,7 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { withSeed } from "@/utils/seedRouting";
 
 export default function Home() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getText, getElementAttributes } = useSeedLayout();
   const nav = [
     { href: "/appointments", title: "Appointments", desc: "Find a slot and book online", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
     { href: "/doctors", title: "Doctors", desc: "Browse specialists and ratings", event: EVENT_TYPES.BROWSE_DOCTORS_CLICKED },
@@ -17,7 +17,7 @@ export default function Home() {
     { href: "/medical-records", title: "Medical Records", desc: "Upload and review files", event: EVENT_TYPES.BROWSE_MEDICAL_RECORDS_CLICKED },
   ];
   const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-  const hasSeed = !!sp?.get('seed');
+  const hasSeed = !!(sp?.get('seed-structure') || sp?.get('seed'));
   const reorderedNav = hasSeed ? reorderElements(nav) : nav;
 
   const heroParts = [
@@ -33,13 +33,13 @@ export default function Home() {
         {orderedHero.map((part, i) => (
           <DynamicElement key={part.key} elementType={`hero-${part.key}`} as="div" index={i}>
             {part.key === 'title' && (
-              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                Book your doctor online
+              <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl" {...getElementAttributes('hero-title', 0)}>
+                {getText('hero-title', 'Book your doctor online')}
               </h1>
             )}
             {part.key === 'desc' && (
-              <p className="mt-3 text-muted-foreground">
-                Simple, fast, and secure. Demo only — no sign-in, no backend.
+              <p className="mt-3 text-muted-foreground" {...getElementAttributes('hero-desc', 0)}>
+                {getText('hero-desc', 'Simple, fast, and secure. Demo only — no sign-in, no backend.')}
               </p>
             )}
             {part.key === 'cta' && (
@@ -49,7 +49,7 @@ export default function Home() {
                     size="lg"
                     onClick={() => logEvent(EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED, { source: "homepage_cta_button" })}
                   >
-                    Browse Appointments
+                    {getText('hero-cta', 'Browse Appointments')}
                   </Button>
                 </Link>
               </div>
@@ -71,10 +71,20 @@ export default function Home() {
                 })}
               >
                 <CardHeader>
-                  <CardTitle>{n.title}</CardTitle>
+                  <CardTitle>
+                    {n.href === '/appointments' && getText('card-appointments-title', n.title)}
+                    {n.href === '/doctors' && getText('card-doctors-title', n.title)}
+                    {n.href === '/prescriptions' && getText('card-prescriptions-title', n.title)}
+                    {n.href === '/medical-records' && getText('card-medical-records-title', n.title)}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">{n.desc}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {n.href === '/appointments' && getText('card-appointments-desc', n.desc)}
+                    {n.href === '/doctors' && getText('card-doctors-desc', n.desc)}
+                    {n.href === '/prescriptions' && getText('card-prescriptions-desc', n.desc)}
+                    {n.href === '/medical-records' && getText('card-medical-records-desc', n.desc)}
+                  </p>
                 </CardContent>
               </Card>
             </Link>

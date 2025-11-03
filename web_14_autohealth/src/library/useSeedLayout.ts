@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getEffectiveSeed, isDynamicModeEnabled } from '../utils/dynamicDataProvider';
+import { getTextForElement, type ElementKey } from './textVariants';
 
 export function useSeedLayout() {
   const [seed, setSeed] = useState(1);
@@ -10,7 +11,8 @@ export function useSeedLayout() {
     setIsDynamicEnabled(enabled);
 
     const searchParams = new URLSearchParams(window.location.search);
-    const rawSeed = searchParams.get('seed');
+    const seedStructure = searchParams.get('seed-structure');
+    const rawSeed = seedStructure ?? searchParams.get('seed');
     const effective = getEffectiveSeed(rawSeed ? parseInt(rawSeed) : 1);
     setSeed(effective);
   }, []);
@@ -75,6 +77,10 @@ export function useSeedLayout() {
     generateSeedClass,
     createDynamicStyles,
     applyCSSVariables,
+    getText: (key: ElementKey, fallback: string) => {
+      if (!isDynamicEnabled) return fallback;
+      return getTextForElement(seed, key, fallback);
+    },
   };
 }
 
