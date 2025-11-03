@@ -10,7 +10,8 @@
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
-#   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
+#   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: true)
+#   --enable_data_generation=BOOL Enable data generation (true/false, default: false)
 #   -y, --yes                     Force delete without confirmation
 #
 # Examples:
@@ -54,6 +55,7 @@ WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
 ENABLE_DYNAMIC_HTML_DEFAULT=true
+ENABLE_DATA_GENERATION_DEFAULT=false
 
 # 5. Parse args
 for ARG in "$@"; do
@@ -64,6 +66,7 @@ for ARG in "$@"; do
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
     --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
+    --enable_data_generation=*) ENABLE_DATA_GENERATION="${ARG#*=}" ;;
     -y|--yes)          FORCE_DELETE=true ;;
     *) ;; 
   esac
@@ -74,6 +77,8 @@ POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
 ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
+ENABLE_DATA_GENERATION="${ENABLE_DATA_GENERATION:-$ENABLE_DATA_GENERATION_DEFAULT}"
+NEXT_PUBLIC_DATA_GENERATION="$ENABLE_DATA_GENERATION"
 
 echo "🔣 Configuration:"
 echo "    movies/books base HTTP  →  $WEB_PORT"
@@ -82,6 +87,7 @@ echo "    webs_server HTTP        →  $WEBS_PORT"
 echo "    webs_server Postgres    →  $WEBS_PG_PORT"
 echo "    Demo to deploy:         →  $WEB_DEMO"
 echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
+echo "    Data generation:        →  $ENABLE_DATA_GENERATION"
 echo
 
 # 6. Check Docker
@@ -109,7 +115,7 @@ deploy_project() {
     return
   fi
 
-  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML)..."
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML, Data Gen→$ENABLE_DATA_GENERATION)..."
   pushd "$dir" > /dev/null
 
     if docker compose -p "$proj" ps -q | grep -q .; then
@@ -117,12 +123,13 @@ deploy_project() {
       docker compose -p "$proj" down --volumes
     fi
 
-    # Pass ENABLE_DYNAMIC_HTML to all webs
+    # Pass feature flags to compose
     WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
+      ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" NEXT_PUBLIC_DATA_GENERATION="$NEXT_PUBLIC_DATA_GENERATION" \
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null
-  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML)"
+  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML, Data Gen: $ENABLE_DATA_GENERATION)"
   echo
 }
 
