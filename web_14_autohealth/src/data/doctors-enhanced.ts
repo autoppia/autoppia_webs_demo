@@ -1,41 +1,26 @@
-import { doctors as originalDoctors } from './doctors';
-import { generateDoctors, isDataGenerationAvailable } from '@/utils/healthDataGenerator';
+import type { Doctor } from '@/data/doctors';
+import { isDataGenerationAvailable, generateDoctors } from '@/utils/healthDataGenerator';
 
-let currentDoctors = [...originalDoctors];
+const CACHE_KEY = 'autohealth_doctors_v1';
 
-function readCache(): typeof originalDoctors | null {
-  try {
-    const raw = localStorage.getItem('autohealth_doctors_v1');
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
-}
-
-function writeCache(data: typeof originalDoctors) {
-  try { localStorage.setItem('autohealth_doctors_v1', JSON.stringify(data)); } catch {}
-}
-
-export async function initializeDoctors(): Promise<typeof originalDoctors> {
+export async function initializeDoctors(): Promise<Doctor[]> {
   if (!isDataGenerationAvailable()) {
-    currentDoctors = [...originalDoctors];
-    return currentDoctors;
+    const staticData = (await import('./doctors')).default as Doctor[];
+    return staticData;
   }
-
-  const cached = readCache();
-  if (cached && cached.length > 0) {
-    currentDoctors = cached;
-    return currentDoctors;
+  if (typeof window !== 'undefined') {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (raw) {
+      try { return JSON.parse(raw) as Doctor[]; } catch {}
+    }
   }
-
   const result = await generateDoctors(12);
   if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-    currentDoctors = result.data as typeof originalDoctors;
-    writeCache(currentDoctors);
-  } else {
-    currentDoctors = [...originalDoctors];
+    const data = result.data as Doctor[];
+    if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    return data;
   }
-  return currentDoctors;
+  const staticData = (await import('./doctors')).default as Doctor[];
+  return staticData;
 }
-
-export function getDoctors() { return currentDoctors; }
-
 

@@ -1,30 +1,24 @@
-import { medicalRecords as originalRecords } from './medical-records';
-import { generateMedicalRecords, isDataGenerationAvailable } from '@/utils/healthDataGenerator';
+import type { MedicalRecord } from '@/data/medical-records';
+import { isDataGenerationAvailable, generateMedicalRecords } from '@/utils/healthDataGenerator';
 
-let currentRecords = [...originalRecords];
+const CACHE_KEY = 'autohealth_medical_records_v1';
 
-function readCache(): typeof originalRecords | null {
-  try { const raw = localStorage.getItem('autohealth_medical_records_v1'); return raw ? JSON.parse(raw) : null; } catch { return null; }
-}
-
-function writeCache(data: typeof originalRecords) {
-  try { localStorage.setItem('autohealth_medical_records_v1', JSON.stringify(data)); } catch {}
-}
-
-export async function initializeMedicalRecords(): Promise<typeof originalRecords> {
-  if (!isDataGenerationAvailable()) { currentRecords = [...originalRecords]; return currentRecords; }
-  const cached = readCache();
-  if (cached && cached.length > 0) { currentRecords = cached; return currentRecords; }
+export async function initializeMedicalRecords(): Promise<MedicalRecord[]> {
+  if (!isDataGenerationAvailable()) {
+    const staticData = (await import('./medical-records')).default as MedicalRecord[];
+    return staticData;
+  }
+  if (typeof window !== 'undefined') {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (raw) { try { return JSON.parse(raw) as MedicalRecord[]; } catch {} }
+  }
   const result = await generateMedicalRecords(24);
   if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-    currentRecords = result.data as typeof originalRecords;
-    writeCache(currentRecords);
-  } else {
-    currentRecords = [...originalRecords];
+    const data = result.data as MedicalRecord[];
+    if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    return data;
   }
-  return currentRecords;
+  const staticData = (await import('./medical-records')).default as MedicalRecord[];
+  return staticData;
 }
-
-export function getMedicalRecords() { return currentRecords; }
-
 

@@ -1,30 +1,24 @@
-import { prescriptions as originalPrescriptions } from './prescriptions';
-import { generatePrescriptions, isDataGenerationAvailable } from '@/utils/healthDataGenerator';
+import type { Prescription } from '@/data/prescriptions';
+import { isDataGenerationAvailable, generatePrescriptions } from '@/utils/healthDataGenerator';
 
-let currentPrescriptions = [...originalPrescriptions];
+const CACHE_KEY = 'autohealth_prescriptions_v1';
 
-function readCache(): typeof originalPrescriptions | null {
-  try { const raw = localStorage.getItem('autohealth_prescriptions_v1'); return raw ? JSON.parse(raw) : null; } catch { return null; }
-}
-
-function writeCache(data: typeof originalPrescriptions) {
-  try { localStorage.setItem('autohealth_prescriptions_v1', JSON.stringify(data)); } catch {}
-}
-
-export async function initializePrescriptions(): Promise<typeof originalPrescriptions> {
-  if (!isDataGenerationAvailable()) { currentPrescriptions = [...originalPrescriptions]; return currentPrescriptions; }
-  const cached = readCache();
-  if (cached && cached.length > 0) { currentPrescriptions = cached; return currentPrescriptions; }
+export async function initializePrescriptions(): Promise<Prescription[]> {
+  if (!isDataGenerationAvailable()) {
+    const staticData = (await import('./prescriptions')).default as Prescription[];
+    return staticData;
+  }
+  if (typeof window !== 'undefined') {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (raw) { try { return JSON.parse(raw) as Prescription[]; } catch {} }
+  }
   const result = await generatePrescriptions(30);
   if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-    currentPrescriptions = result.data as typeof originalPrescriptions;
-    writeCache(currentPrescriptions);
-  } else {
-    currentPrescriptions = [...originalPrescriptions];
+    const data = result.data as Prescription[];
+    if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    return data;
   }
-  return currentPrescriptions;
+  const staticData = (await import('./prescriptions')).default as Prescription[];
+  return staticData;
 }
-
-export function getPrescriptions() { return currentPrescriptions; }
-
 

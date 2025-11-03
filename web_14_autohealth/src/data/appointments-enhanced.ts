@@ -1,30 +1,24 @@
-import { appointments as originalAppointments } from './appointments';
-import { generateAppointments, isDataGenerationAvailable } from '@/utils/healthDataGenerator';
+import type { Appointment } from '@/data/appointments';
+import { isDataGenerationAvailable, generateAppointments } from '@/utils/healthDataGenerator';
 
-let currentAppointments = [...originalAppointments];
+const CACHE_KEY = 'autohealth_appointments_v1';
 
-function readCache(): typeof originalAppointments | null {
-  try { const raw = localStorage.getItem('autohealth_appointments_v1'); return raw ? JSON.parse(raw) : null; } catch { return null; }
-}
-
-function writeCache(data: typeof originalAppointments) {
-  try { localStorage.setItem('autohealth_appointments_v1', JSON.stringify(data)); } catch {}
-}
-
-export async function initializeAppointments(): Promise<typeof originalAppointments> {
-  if (!isDataGenerationAvailable()) { currentAppointments = [...originalAppointments]; return currentAppointments; }
-  const cached = readCache();
-  if (cached && cached.length > 0) { currentAppointments = cached; return currentAppointments; }
+export async function initializeAppointments(): Promise<Appointment[]> {
+  if (!isDataGenerationAvailable()) {
+    const staticData = (await import('./appointments')).appointments as Appointment[];
+    return staticData;
+  }
+  if (typeof window !== 'undefined') {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (raw) { try { return JSON.parse(raw) as Appointment[]; } catch {} }
+  }
   const result = await generateAppointments(24);
   if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-    currentAppointments = result.data as typeof originalAppointments;
-    writeCache(currentAppointments);
-  } else {
-    currentAppointments = [...originalAppointments];
+    const data = result.data as Appointment[];
+    if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    return data;
   }
-  return currentAppointments;
+  const staticData = (await import('./appointments')).appointments as Appointment[];
+  return staticData;
 }
-
-export function getAppointments() { return currentAppointments; }
-
 
