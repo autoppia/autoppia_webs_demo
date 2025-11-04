@@ -24,6 +24,7 @@ class EventName(models.TextChoices):
     PURCHASE_BOOK = "PURCHASE_BOOK", "Purchase Book"
     SHOPPING_CART = "SHOPPING_CART", "Shopping Cart"
 
+
 class EventQuerySet(models.QuerySet):
     def delete(self):
         try:
