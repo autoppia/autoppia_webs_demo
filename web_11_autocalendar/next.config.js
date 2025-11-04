@@ -55,6 +55,11 @@ const nextConfig = {
       },
     ],
   },
+  env: {
+    NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE,
+    ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
+  },
 };
 
 module.exports = nextConfig;

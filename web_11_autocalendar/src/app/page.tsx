@@ -2401,6 +2401,7 @@ function CalendarApp() {
                     };
                     logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, eventData);
                   }}
+                  {...getElementAttributes('event-modal-close', 0)}
                 >
                   {getText('wizard-cancel', 'Cancel')}
                 </Button>
