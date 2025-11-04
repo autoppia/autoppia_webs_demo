@@ -13,6 +13,7 @@ import { initializeAppointments } from "@/data/appointments-enhanced";
 import { initializePrescriptions } from "@/data/prescriptions-enhanced";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
 import { withSeed } from "@/utils/seedRouting";
+import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
 export default function Home() {
   const { reorderElements } = useSeedLayout();
@@ -50,6 +51,10 @@ export default function Home() {
           initializePrescriptions(doctors),
           initializeMedicalRecords(doctors),
         ]);
+        // Warm reviews caches for first few doctors to ensure availability in profiles
+        await Promise.allSettled(
+          doctors.slice(0, 6).map((d) => initializeDoctorReviews({ id: d.id, name: d.name, specialty: d.specialty }))
+        );
       } catch (error) {
         console.error('Error initializing data:', error);
       } finally {

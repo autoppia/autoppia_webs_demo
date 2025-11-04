@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Phone, Mail, MapPin, Clock, Award, BookOpen, Stethoscope } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
 import { useSeedLayout } from "@/library/useSeedLayout";
 import { DynamicElement } from "@/components/DynamicElement";
+import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {
@@ -30,6 +31,8 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [aiReviews, setAiReviews] = useState<Array<{ rating: number; comment: string; patientName: string; date: string }>>([]);
+  const [isReviewsLoading, setIsReviewsLoading] = useState(false);
 
   const handleBookAppointment = () => {
     logEvent(EVENT_TYPES.BOOK_APPOINTMENT, {
@@ -66,6 +69,22 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
     });
     setIsReviewsModalOpen(true);
   };
+
+  // Load AI reviews when the Reviews tab is activated
+  useEffect(() => {
+    let mounted = true;
+    if (activeTab !== "reviews") return;
+    (async () => {
+      try {
+        setIsReviewsLoading(true);
+        const data = await initializeDoctorReviews({ id: doctor.id, name: doctor.name, specialty: doctor.specialty });
+        if (mounted) setAiReviews(Array.isArray(data) ? data : []);
+      } finally {
+        if (mounted) setIsReviewsLoading(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, [activeTab, doctor.id, doctor.name, doctor.specialty]);
 
   const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
   const hasSeed = !!sp?.get('seed');
@@ -338,7 +357,13 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {(doctor.patientReviews || []).map((review, index) => (
+                {isReviewsLoading && (
+                  <div className="text-sm text-muted-foreground">Loading reviews…</div>
+                )}
+                {(!isReviewsLoading && (doctor.patientReviews || []).length + aiReviews.length === 0) && (
+                  <div className="text-sm text-muted-foreground">No reviews available yet.</div>
+                )}
+                {[...(doctor.patientReviews || []), ...aiReviews].map((review, index) => (
                   <div key={index} className="border-b pb-4 last:border-b-0">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
