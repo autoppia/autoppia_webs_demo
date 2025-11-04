@@ -2,35 +2,182 @@ import { useCallback, useEffect, useState } from 'react';
 import { getEffectiveSeed, isDynamicModeEnabled } from '../utils/dynamicDataProvider';
 import { getTextForElement, type ElementKey } from './textVariants';
 
-// Get a consistent but random-looking value based on seed and key
-function getSeededValue(seed: number, key: string): number {
-  const str = `${seed}-${key}`;
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash);
-}
+// Semantic ID mappings for each element type (10 variations per type, one for each seed 1-10)
+const semanticIdMappings: Record<string, string[]> = {
+  'nav-book-now-button': [
+    'book-appointment-btn',
+    'schedule-visit-button',
+    'start-booking',
+    'make-appointment',
+    'reserve-slot-btn',
+    'book-visit-button',
+    'schedule-now-btn',
+    'book-time-button',
+    'start-visit',
+    'appointment-btn'
+  ],
+  'view-prescription-button': [
+    'view-prescription',
+    'open-details-btn',
+    'show-medication',
+    'prescription-details',
+    'view-meds-button',
+    'open-prescription',
+    'medication-info',
+    'prescription-view',
+    'see-details-btn',
+    'view-meds'
+  ],
+  'presc-request-refill': [
+    'request-refill-btn',
+    'refill-medication',
+    'order-refill-button',
+    'get-refill-btn',
+    'refill-now',
+    'request-meds',
+    'refill-button',
+    'order-refill',
+    'refill-prescription',
+    'get-refill'
+  ],
+  'mr-view-details': [
+    'view-record-btn',
+    'open-details',
+    'record-details-button',
+    'see-record',
+    'view-file-btn',
+    'open-record',
+    'details-button',
+    'view-document',
+    'record-info-btn',
+    'show-details'
+  ],
+  'mr-upload-button': [
+    'upload-record-btn',
+    'add-document-button',
+    'upload-file',
+    'add-record-btn',
+    'upload-document',
+    'add-file-button',
+    'upload-btn',
+    'add-document',
+    'upload-record',
+    'file-upload-btn'
+  ],
+  'apts-book-button': [
+    'book-appointment',
+    'schedule-visit-btn',
+    'make-booking',
+    'reserve-slot',
+    'book-visit',
+    'schedule-appointment',
+    'book-time-btn',
+    'make-appointment-btn',
+    'reserve-visit',
+    'appointment-button'
+  ],
+  'view-profile-button': [
+    'view-profile-btn',
+    'open-profile',
+    'profile-details-button',
+    'see-profile',
+    'doctor-profile-btn',
+    'view-doctor',
+    'profile-button',
+    'open-details-btn',
+    'view-details',
+    'doctor-details'
+  ],
+  'book-now-button': [
+    'book-now-btn',
+    'schedule-button',
+    'make-booking-btn',
+    'reserve-now',
+    'book-appointment-btn',
+    'schedule-visit',
+    'book-time',
+    'make-appointment',
+    'reserve-slot-btn',
+    'appointment-button'
+  ],
+  'apts-modal-cancel': [
+    'cancel-button',
+    'close-btn',
+    'cancel-dialog',
+    'close-button',
+    'dismiss-btn',
+    'cancel-action',
+    'close-dialog-btn',
+    'dismiss-button',
+    'cancel-btn',
+    'close-action'
+  ],
+  'apts-modal-confirm': [
+    'confirm-button',
+    'submit-btn',
+    'book-appointment',
+    'confirm-booking',
+    'submit-button',
+    'confirm-btn',
+    'book-visit',
+    'submit-appointment',
+    'confirm-action-btn',
+    'book-now'
+  ],
+  'presc-modal-close': [
+    'close-modal-btn',
+    'close-button',
+    'dismiss-modal',
+    'close-dialog',
+    'close-btn',
+    'dismiss-button',
+    'close-prescription',
+    'close-details',
+    'close-modal',
+    'dismiss-btn'
+  ],
+  'mr-modal-close': [
+    'close-record-modal',
+    'close-button',
+    'dismiss-modal-btn',
+    'close-details',
+    'close-record',
+    'dismiss-button',
+    'close-modal-btn',
+    'close-file',
+    'close-dialog-btn',
+    'dismiss-modal'
+  ]
+};
 
-// Generate multiple ID patterns based on seed
+// Generate semantic ID based on element type and seed
 function generateElementId(seed: number, elementType: string, index: number = 0): string {
-  const idPatterns = [
-    `el-${elementType}-${index}-${seed}`,
-    `${elementType}_${index}_${seed}`,
-    `component-${elementType}-${index}-${getSeededValue(seed, elementType)}`,
-    `${elementType}-item-${index}-${getSeededValue(seed, 'item')}`,
-    `widget-${elementType}-${index}-${seed}`,
-    `${elementType}${index}${seed}`,
-    `ui-${elementType}-${index}-${getSeededValue(seed, 'ui')}`,
-    `${elementType}-${getSeededValue(seed, elementType)}-${index}`,
-    `element-${elementType}-${index}-${getSeededValue(seed, 'element')}`,
-    `${elementType}-${index}-${getSeededValue(seed, 'id')}`
+  // Map seed to 1-10 range
+  const variant = ((seed - 1) % 10) + 1;
+  
+  // Check if we have semantic mappings for this element type
+  if (semanticIdMappings[elementType]) {
+    const mapping = semanticIdMappings[elementType];
+    const idIndex = (variant - 1) % mapping.length;
+    return mapping[idIndex];
+  }
+  
+  // Fallback: Generate semantic-like IDs from elementType
+  const fallbackPatterns = [
+    elementType.replace(/-/g, '-'),
+    elementType.replace(/-button$/, '-btn').replace(/-button/, '-btn'),
+    elementType.replace(/^nav-/, '').replace(/^presc-/, '').replace(/^mr-/, '').replace(/^apts-/, ''),
+    elementType.replace(/-/g, '_'),
+    elementType.split('-').slice(-2).join('-'),
+    elementType.split('-').pop() || elementType,
+    elementType.replace(/-button$/, '').replace(/-btn$/, ''),
+    elementType.replace(/^[^-]+-/, ''),
+    elementType.replace(/-/g, ''),
+    elementType.split('-').reverse().slice(0, 2).reverse().join('-')
   ];
   
-  const patternIndex = getSeededValue(seed, 'idPattern') % idPatterns.length;
-  return idPatterns[patternIndex];
+  const patternIndex = (variant - 1) % fallbackPatterns.length;
+  return fallbackPatterns[patternIndex];
 }
 
 export function useSeedLayout() {

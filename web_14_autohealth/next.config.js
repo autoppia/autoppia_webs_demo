@@ -30,6 +30,8 @@ module.exports = (phase) => {
         process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ?? (isDev ? 'true' : undefined),
       ENABLE_DYNAMIC_HTML:
         process.env.ENABLE_DYNAMIC_HTML ?? (isDev ? 'true' : undefined),
+      NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:
+        process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ?? undefined,
     },
   };
 };
