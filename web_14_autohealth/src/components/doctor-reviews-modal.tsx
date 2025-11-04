@@ -84,7 +84,8 @@ export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviews
     return additionalReviews;
   };
 
-  const allReviews = doctor ? [...doctor.patientReviews, ...generateAdditionalReviews()] : [];
+  const baseReviews = Array.isArray(doctor?.patientReviews) ? doctor!.patientReviews : [];
+  const allReviews = doctor ? [...baseReviews, ...generateAdditionalReviews()] : [];
 
   const filteredAndSortedReviews = React.useMemo(() => {
     let filtered = allReviews;

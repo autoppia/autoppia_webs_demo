@@ -40,13 +40,22 @@ export default function Home() {
       return;
     }
     let mounted = true;
-    // Initialize all data types on home page load
-    Promise.allSettled([
-      initializeDoctors(),
-      initializeAppointments(),
-      initializePrescriptions(),
-      initializeMedicalRecords(),
-    ]).finally(() => { if (mounted) setIsLoading(false); });
+    // Initialize doctors first, then use them for other data types
+    (async () => {
+      try {
+        const doctors = await initializeDoctors();
+        // Now initialize other data types with the generated doctors
+        await Promise.allSettled([
+          initializeAppointments(doctors),
+          initializePrescriptions(doctors),
+          initializeMedicalRecords(doctors),
+        ]);
+      } catch (error) {
+        console.error('Error initializing data:', error);
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    })();
     return () => { mounted = false; };
   }, []);
 

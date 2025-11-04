@@ -1,9 +1,11 @@
 import type { MedicalRecord } from '@/data/medical-records';
+import type { Doctor } from '@/data/doctors';
 import { isDataGenerationAvailable, generateMedicalRecords } from '@/utils/healthDataGenerator';
 
 const CACHE_KEY = 'autohealth_medical_records_v1';
+const DOCTORS_CACHE_KEY = 'autohealth_doctors_v1';
 
-export async function initializeMedicalRecords(): Promise<MedicalRecord[]> {
+export async function initializeMedicalRecords(doctors?: Doctor[]): Promise<MedicalRecord[]> {
   if (!isDataGenerationAvailable()) {
     const staticData = (await import('./medical-records')).medicalRecords as MedicalRecord[];
     return staticData;
@@ -12,7 +14,17 @@ export async function initializeMedicalRecords(): Promise<MedicalRecord[]> {
     const raw = localStorage.getItem(CACHE_KEY);
     if (raw) { try { return JSON.parse(raw) as MedicalRecord[]; } catch {} }
   }
-  const result = await generateMedicalRecords(24);
+  
+  // Get doctors if not provided
+  let doctorsToUse = doctors;
+  if (!doctorsToUse && typeof window !== 'undefined') {
+    const doctorsRaw = localStorage.getItem(DOCTORS_CACHE_KEY);
+    if (doctorsRaw) {
+      try { doctorsToUse = JSON.parse(doctorsRaw) as Doctor[]; } catch {}
+    }
+  }
+  
+  const result = await generateMedicalRecords(24, doctorsToUse?.map(d => ({ id: d.id, name: d.name, specialty: d.specialty })) || []);
   if (result.success && Array.isArray(result.data) && result.data.length > 0) {
     const data = result.data as MedicalRecord[];
     if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(data));

@@ -103,13 +103,13 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                       <div className="flex items-center gap-2">
                         <Stars value={doctor.rating} />
                         <span className="text-sm font-medium">{doctor.rating}</span>
-                        <span className="text-sm text-muted-foreground">({doctor.patientReviews.length} reviews)</span>
+                        <span className="text-sm text-muted-foreground">({(doctor.patientReviews || []).length} reviews)</span>
                       </div>
                       <Badge variant="outline">{doctor.experience} years experience</Badge>
                     </div>
                     <p className="text-muted-foreground mb-4">{doctor.bio}</p>
                     <div className="flex flex-wrap gap-2">
-                      {doctor.specialties.map((specialty) => (
+                      {(doctor.specialties || []).map((specialty) => (
                         <Badge key={specialty} variant="secondary">{specialty}</Badge>
                       ))}
                     </div>
@@ -131,12 +131,12 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(() => {
+                {(() => {
               const info = [
-                { key: 'location', icon: <MapPin className="h-4 w-4 text-muted-foreground" />, label: 'Office Location', value: doctor.officeLocation },
-                { key: 'phone', icon: <Phone className="h-4 w-4 text-muted-foreground" />, label: 'Phone', value: doctor.phone },
-                { key: 'email', icon: <Mail className="h-4 w-4 text-muted-foreground" />, label: 'Email', value: doctor.email },
-                { key: 'fee', icon: <span className="text-lg">💰</span>, label: 'Consultation Fee', value: `$${doctor.consultationFee}` },
+                { key: 'location', icon: <MapPin className="h-4 w-4 text-muted-foreground" />, label: 'Office Location', value: doctor.officeLocation || 'N/A' },
+                { key: 'phone', icon: <Phone className="h-4 w-4 text-muted-foreground" />, label: 'Phone', value: doctor.phone || 'N/A' },
+                { key: 'email', icon: <Mail className="h-4 w-4 text-muted-foreground" />, label: 'Email', value: doctor.email || 'N/A' },
+                { key: 'fee', icon: <span className="text-lg">💰</span>, label: 'Consultation Fee', value: doctor.consultationFee != null ? `$${doctor.consultationFee}` : 'N/A' },
               ];
               const orderedInfo = hasSeed ? reorderElements(info) : info;
               return orderedInfo.map((it, i) => (
@@ -183,7 +183,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {doctor.hospitalAffiliations.map((hospital) => (
+                  {(doctor.hospitalAffiliations || []).map((hospital) => (
                     <li key={hospital} className="flex items-center gap-2">
                       <span className="text-green-500">🏥</span>
                       <span>{hospital}</span>
@@ -202,7 +202,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {doctor.languages.map((language) => (
+                  {(doctor.languages || []).map((language) => (
                     <Badge key={language} variant="outline">{language}</Badge>
                   ))}
                 </div>
@@ -218,7 +218,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {doctor.insuranceAccepted.map((insurance) => (
+                  {(doctor.insuranceAccepted || []).map((insurance) => (
                     <Badge key={insurance} variant="secondary">{insurance}</Badge>
                   ))}
                 </div>
@@ -234,7 +234,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {doctor.awards.map((award) => (
+                  {(doctor.awards || []).map((award) => (
                     <li key={award} className="flex items-center gap-2">
                       <span className="text-yellow-500">🏆</span>
                       <span className="text-sm">{award}</span>
@@ -257,7 +257,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {doctor.education.map((edu, index) => (
+                  {(doctor.education || []).map((edu, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <span className="text-blue-500 mt-1">🎓</span>
                       <span className="text-sm">{edu}</span>
@@ -276,7 +276,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {doctor.certifications.map((cert, index) => (
+                  {(doctor.certifications || []).map((cert, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <span className="text-green-500 mt-1">✅</span>
                       <span className="text-sm">{cert}</span>
@@ -295,7 +295,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {doctor.publications.map((pub, index) => (
+                  {(doctor.publications || []).map((pub, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <span className="text-purple-500 mt-1">📖</span>
                       <span className="text-sm">{pub}</span>
@@ -317,7 +317,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(doctor.availability).map(([day, hours]) => (
+                {Object.entries(doctor.availability || {}).map(([day, hours]) => (
                   <div key={day} className="flex justify-between items-center p-3 bg-gray-50 rounded">
                     <span className="font-medium capitalize">{day}</span>
                     <span className="text-sm text-muted-foreground">{hours}</span>
@@ -338,7 +338,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {doctor.patientReviews.map((review, index) => (
+                {(doctor.patientReviews || []).map((review, index) => (
                   <div key={index} className="border-b pb-4 last:border-b-0">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
@@ -365,7 +365,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {doctor.procedures.map((procedure, index) => (
+                {(doctor.procedures || []).map((procedure, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded">
                     <span className="text-blue-500">🔬</span>
                     <span className="text-sm">{procedure}</span>
