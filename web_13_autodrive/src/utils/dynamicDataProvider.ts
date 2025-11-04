@@ -1,8 +1,8 @@
 import { getSeedLayout } from "@/library/layouts";
 
-// Check if dynamic HTML is enabled via environment variable
+// Check if dynamic HTML is enabled via environment variable (seed-based structure flag)
 const isDynamicHtmlEnabled = (): boolean => {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  return process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE === 'true';
 };
 
 // Dynamic data provider that returns either seed data or empty arrays based on config

@@ -23,6 +23,8 @@ console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
+console.log('  DYNAMIC_HTML_STRUCTURE:', process.env.DYNAMIC_HTML_STRUCTURE);
+console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -61,6 +63,8 @@ const nextConfig = {
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
+    DYNAMIC_HTML_STRUCTURE: process.env.DYNAMIC_HTML_STRUCTURE,
+    NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE,
   },
 };
 
