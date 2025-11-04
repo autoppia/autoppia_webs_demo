@@ -12,12 +12,23 @@ from booksapp.models import Book
 def get_events(request):
     """
     Fetch events for the web_agent identified by the provided `X-WebAgent-Id` header.
-    """
-    web_agent_id = request.headers.get("X-WebAgent-Id")
-    if not web_agent_id:
-        return Response({"error": "X-WebAgent-Id is required."}, status=status.HTTP_400_BAD_REQUEST)
+    If `X-Validator-Id` is provided it will be used to further filter results; otherwise
+    all events for the web_agent_id are returned (backwards compatible).
 
-    events = Event.objects.filter(web_agent_id=web_agent_id).order_by("-timestamp")
+    This endpoint will also accept `web_agent_id` as a query parameter for clients that
+    cannot send custom headers (e.g. simple browsers or static pages).
+    """
+    web_agent_id = request.headers.get("X-WebAgent-Id") or request.GET.get("web_agent_id")
+    validator_id = request.headers.get("X-Validator-Id") or request.GET.get("validator_id")
+    if not web_agent_id:
+        return Response({"error": "X-WebAgent-Id header or web_agent_id query param is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Build filter depending on whether validator_id was supplied
+    filter_kwargs = {"web_agent_id": web_agent_id}
+    if validator_id:
+        filter_kwargs["validator_id"] = validator_id
+
+    events = Event.objects.filter(**filter_kwargs).order_by("-timestamp")
     serializer = EventSerializer(events, many=True)
     return Response(serializer.data)
 
@@ -35,19 +46,28 @@ def my_events(request):
 @api_view(["DELETE"])
 def reset_events(request):
     """
-    Delete events for a specific web_agent_id provided in the X-WebAgent-Id header.
+    Delete events for a specific web_agent_id provided in the X-WebAgent-Id header or as a query parameter.
+    If X-Validator-Id/query param is present we delete only events matching both; otherwise delete
+    all events for the web_agent_id.
     """
-    web_agent_id = request.headers.get("X-WebAgent-Id")
+    web_agent_id = request.headers.get("X-WebAgent-Id") or request.GET.get("web_agent_id")
+    validator_id = request.headers.get("X-Validator-Id") or request.GET.get("validator_id")
     if not web_agent_id:
-        return Response({"error": "X-WebAgent-Id is required."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "X-WebAgent-Id header or web_agent_id query param is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-    count = Event.objects.filter(web_agent_id=web_agent_id).count()
-    Event.objects.filter(web_agent_id=web_agent_id).delete()
+    filter_kwargs = {"web_agent_id": web_agent_id}
+    if validator_id:
+        filter_kwargs["validator_id"] = validator_id
 
-    return Response(
-        {"message": f"Events for web_agent '{web_agent_id}' have been deleted successfully ({count} events)."},
-        status=status.HTTP_200_OK,
-    )
+    count = Event.objects.filter(**filter_kwargs).count()
+    Event.objects.filter(**filter_kwargs).delete()
+
+    if validator_id:
+        msg = f"Events for web_agent '{web_agent_id}' and validator_id '{validator_id}' have been deleted successfully ({count} events)."
+    else:
+        msg = f"Events for web_agent '{web_agent_id}' have been deleted successfully ({count} events)."
+
+    return Response({"message": msg}, status=status.HTTP_200_OK)
 
 
 @api_view(["DELETE"])
@@ -73,10 +93,11 @@ def add_event(request):
 
     Expected JSON payload formats:
 
-    For FilmDetailEvent:
+    For BookDetailEvent:
     {
         "event_name": "BOOK_DETAIL",
         "web_agent_id": "agent123",
+        "validator_id": "val1",
         "user_id": 1,  # Optional
         "data": {
             "book_id": 42
@@ -85,8 +106,9 @@ def add_event(request):
 
     For SearchEvent:
     {
-        "event_name": "SEARCH",
+        "event_name": "SEARCH_BOOK",
         "web_agent_id": "agent123",
+        "validator_id": "val1",
         "user_id": 1,  # Optional
         "data": {
             "query": "education books"
@@ -97,6 +119,7 @@ def add_event(request):
     {
         "event_name": "REGISTRATION",
         "web_agent_id": "agent123",
+        "validator_id": "val1",
         "user_id": 1
     }
 
@@ -104,13 +127,15 @@ def add_event(request):
     {
         "event_name": "LOGIN",
         "web_agent_id": "agent123",
+        "validator_id": "val1",
         "user_id": 1
     }
 
     For ShoppingCartEvent:
     {
-        "event_name": "SHOPPINGCART",
+        "event_name": "SHOPPING_CART",
         "web_agent_id": "agent123",
+        "validator_id": "val1",
         "user_id": 1,
         "data": {
             "book_id": 42
@@ -119,8 +144,9 @@ def add_event(request):
 
     For PurchaseBookEvent:
     {
-        "event_name": "PURCHASE",
+        "event_name": "PURCHASE_BOOK",
         "web_agent_id": "agent123",
+        "validator_id": "val1",
         "user_id": 1,
         "data": {
             "book_id": 42
@@ -128,7 +154,9 @@ def add_event(request):
     }
     """
     event_name = request.data.get("event_name")
-    web_agent_id = request.data.get("web_agent_id")
+    web_agent_id = request.data.get("web_agent_id") or request.headers.get("X-WebAgent-Id")
+    # Allow validator_id to be supplied either in payload or in header
+    validator_id = request.data.get("validator_id") or request.headers.get("X-Validator-Id")
     user_id = request.data.get("user_id")
     data = request.data.get("data", {})
 
@@ -136,7 +164,9 @@ def add_event(request):
     if not event_name:
         return Response({"error": "event_name is required."}, status=status.HTTP_400_BAD_REQUEST)
     if not web_agent_id:
-        return Response({"error": "web_agent_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "web_agent_id is required (payload or X-WebAgent-Id header)."}, status=status.HTTP_400_BAD_REQUEST)
+    if not validator_id:
+        return Response({"error": "validator_id is required (payload or X-Validator-Id header)."}, status=status.HTTP_400_BAD_REQUEST)
 
     # Get user if user_id is provided
     user = None
@@ -152,22 +182,22 @@ def add_event(request):
     # Create event based on its type using factory methods
     try:
         if event_name == "BOOK_DETAIL":
-            movie_id = data.get("movie_id")
-            if not movie_id:
+            book_id = data.get("book_id") or data.get("movie_id")
+            if not book_id:
                 return Response(
-                    {"error": "movie_id is required for BOOK_DETAIL events."},
+                    {"error": "book_id is required for BOOK_DETAIL events."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
             try:
-                movie = Book.objects.get(id=movie_id)
+                book = Book.objects.get(id=book_id)
             except Book.DoesNotExist:
                 return Response(
-                    {"error": f"Movie with id {movie_id} not found."},
+                    {"error": f"Book with id {book_id} not found."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-            event = Event.create_book_detail_event(user, web_agent_id, movie)
+            event = Event.create_book_detail_event(user, web_agent_id, book, validator_id=validator_id)
 
         elif event_name == "SEARCH_BOOK":
             query = data.get("query")
@@ -177,7 +207,7 @@ def add_event(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            event = Event.create_search_book_event(user, web_agent_id, query)
+            event = Event.create_search_book_event(user, web_agent_id, query, validator_id=validator_id)
 
         elif event_name == "REGISTRATION":
             if not user:
@@ -186,7 +216,7 @@ def add_event(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            event = Event.create_registration_event(user, web_agent_id)
+            event = Event.create_registration_event(user, web_agent_id, validator_id=validator_id)
 
         elif event_name == "LOGIN":
             if not user:
@@ -195,7 +225,7 @@ def add_event(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            event = Event.create_login_event(user, web_agent_id)
+            event = Event.create_login_event(user, web_agent_id, validator_id=validator_id)
 
         elif event_name == "PURCHASE_BOOK":
             if not user:
@@ -216,7 +246,7 @@ def add_event(request):
                     {"error": f"Book with id {book_id} not found."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
-            event = Event.create_purchase_book_event(user, web_agent_id, book)
+            event = Event.create_purchase_book_event(user, web_agent_id, book, validator_id=validator_id)
 
         elif event_name == "SHOPPING_CART":
             if not user:
@@ -237,7 +267,7 @@ def add_event(request):
                     {"error": f"Book with id {book_id} not found."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
-            event = Event.create_shoppingcart_event(user, web_agent_id, book)
+            event = Event.create_shoppingcart_event(user, web_agent_id, book, validator_id=validator_id)
 
         else:
             return Response(

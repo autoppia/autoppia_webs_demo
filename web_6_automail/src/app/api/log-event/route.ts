@@ -4,9 +4,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.API_URL || "http://app:8080";
 
+interface LogEventRequestBody {
+  event_name: string;
+  user_id?: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: Record<string, any>;
+}
+
 export async function POST(req: NextRequest) {
-  const startTime = Date.now();
-  let body: any;
+  let body: LogEventRequestBody;
 
   // 1) Validar y parsear JSON
   try {
@@ -37,6 +43,7 @@ export async function POST(req: NextRequest) {
 
   // 2) Construir el evento
   const webAgentId = req.headers.get("X-WebAgent-Id") || "1";
+  const validatorId=req.headers.get("X-Validator-Id") || "1";
   const { event_name, user_id = null, data = {} } = body;
 
   const newEntry = {
@@ -45,12 +52,14 @@ export async function POST(req: NextRequest) {
     user_id,
     data,
     timestamp: new Date().toISOString(),
+    validator_id: validatorId,
   };
 
   const externalPayload = {
     web_agent_id: webAgentId,
     web_url: req.headers.get("referer") || null,
     data: newEntry,
+    validator_id: validatorId,
   };
 
   // 3) Enviar al backend real
@@ -77,12 +86,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const endTime = Date.now();
-  const elapsedMs = endTime - startTime;
-  process.stdout.write(`POST /api/log-event took ${elapsedMs}ms\n`);
-
   // 4) Responder éxito
-  return NextResponse.json({ success: true, elapsedMs });
+  return NextResponse.json({ success: true });
 }
 
 export async function GET() {
