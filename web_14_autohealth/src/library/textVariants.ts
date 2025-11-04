@@ -99,7 +99,8 @@ type ElementKey =
   | "presc-instructions-heading"
   | "presc-side-effects-heading"
   | "presc-warnings-heading"
-  | "presc-request-refill";
+  | "presc-request-refill"
+  | "nav-book-now-button";
 
 type TextVariantMap = Record<ElementKey, string>;
 import jsonVariants from './textVariants.json';
