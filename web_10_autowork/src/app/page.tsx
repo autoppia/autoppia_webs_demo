@@ -765,7 +765,7 @@ function PostJobWizard({
                 return 'bottom-4 right-4';
               })() :
             'top-4 right-4'
-          }`} id="close-post-job-btn"
+          }`}
         >
           ×
         </button>
