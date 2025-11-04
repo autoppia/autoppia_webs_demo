@@ -2,6 +2,37 @@ import { useCallback, useEffect, useState } from 'react';
 import { getEffectiveSeed, isDynamicModeEnabled } from '../utils/dynamicDataProvider';
 import { getTextForElement, type ElementKey } from './textVariants';
 
+// Get a consistent but random-looking value based on seed and key
+function getSeededValue(seed: number, key: string): number {
+  const str = `${seed}-${key}`;
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash);
+}
+
+// Generate multiple ID patterns based on seed
+function generateElementId(seed: number, elementType: string, index: number = 0): string {
+  const idPatterns = [
+    `el-${elementType}-${index}-${seed}`,
+    `${elementType}_${index}_${seed}`,
+    `component-${elementType}-${index}-${getSeededValue(seed, elementType)}`,
+    `${elementType}-item-${index}-${getSeededValue(seed, 'item')}`,
+    `widget-${elementType}-${index}-${seed}`,
+    `${elementType}${index}${seed}`,
+    `ui-${elementType}-${index}-${getSeededValue(seed, 'ui')}`,
+    `${elementType}-${getSeededValue(seed, elementType)}-${index}`,
+    `element-${elementType}-${index}-${getSeededValue(seed, 'element')}`,
+    `${elementType}-${index}-${getSeededValue(seed, 'id')}`
+  ];
+  
+  const patternIndex = getSeededValue(seed, 'idPattern') % idPatterns.length;
+  return idPatterns[patternIndex];
+}
+
 export function useSeedLayout() {
   const [seed, setSeed] = useState(1);
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
@@ -20,9 +51,10 @@ export function useSeedLayout() {
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
     const base = { id: `${elementType}-${index}`, 'data-element-type': elementType } as Record<string, string>;
     if (!isDynamicEnabled) return base;
+    const dynamicId = generateElementId(seed, elementType, index);
     return {
       ...base,
-      id: `${elementType}-${seed}-${index}`,
+      id: dynamicId,
       'data-seed': String(seed),
       'data-variant': String(seed % 10),
       'data-xpath': `//${elementType}[@data-seed='${seed}']`
@@ -48,7 +80,7 @@ export function useSeedLayout() {
 
   const generateId = useCallback((context: string, index: number = 0) => {
     if (!isDynamicEnabled) return `${context}-${index}`;
-    return `${context}-${seed}-${index}`;
+    return generateElementId(seed, context, index);
   }, [seed, isDynamicEnabled]);
 
   const generateSeedClass = useCallback((baseClass: string) => {
