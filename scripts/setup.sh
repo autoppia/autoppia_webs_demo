@@ -10,11 +10,11 @@
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo or all (default: all)
-#   --enabled_dynamic_versions=[v1,v2,v3,v4]   Enable specific dynamic versions
+#   --enable_dynamic_versions=[v1,v2,v3,v4]   Enable specific dynamic versions
 #   -y, --yes                     Force delete without confirmation
 #
 # Example:
-#   ./setup.sh --demo=automail --enabled_dynamic_versions=[v1,v3]
+#   ./setup.sh --demo=automail --enable_dynamic_versions=[v1,v3]
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -52,8 +52,8 @@ WEBS_PORT_DEFAULT=8090
 WEBS_PG_PORT_DEFAULT=5437
 WEB_DEMO="all"
 FORCE_DELETE=false
-ENABLED_DYNAMIC_VERSIONS_DEFAULT=false
-ENABLED_DYNAMIC_VERSIONS=""
+ENABLE_DYNAMIC_VERSIONS_DEFAULT=false
+ENABLE_DYNAMIC_VERSIONS=""
 
 # Internal dynamic feature flags
 ENABLE_DYNAMIC_HTML=false
@@ -69,7 +69,7 @@ for ARG in "$@"; do
     --webs_port=*)     WEBS_PORT="${ARG#*=}" ;;
     --webs_postgres=*) WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)          WEB_DEMO="${ARG#*=}" ;;
-    --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
+    --enable_dynamic_versions=*) ENABLE_DYNAMIC_VERSIONS="${ARG#*=}" ;;
 
 #    --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
 #    --enable_dynamic_structure=*) ENABLE_DYNAMIC_STRUCTURE="${ARG#*=}" ;;
@@ -83,7 +83,7 @@ WEB_PORT="${WEB_PORT:-$WEB_PORT_DEFAULT}"
 POSTGRES_PORT="${POSTGRES_PORT:-$POSTGRES_PORT_DEFAULT}"
 WEBS_PORT="${WEBS_PORT:-$WEBS_PORT_DEFAULT}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
-ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-$ENABLED_DYNAMIC_VERSIONS_DEFAULT}"
+ENABLE_DYNAMIC_VERSIONS="${ENABLE_DYNAMIC_VERSIONS:-$ENABLE_DYNAMIC_VERSIONS_DEFAULT}"
 
 # 6. Define version-to-variable mapping
 declare -A DYNAMIC_MAP=(
@@ -94,8 +94,8 @@ declare -A DYNAMIC_MAP=(
 )
 
 # 7. Parse enabled_dynamic_versions
-if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
-  CLEANED_VERSIONS=$(echo "$ENABLED_DYNAMIC_VERSIONS" | tr -d '[] ')
+if [ -n "$ENABLE_DYNAMIC_VERSIONS" ]; then
+  CLEANED_VERSIONS=$(echo "$ENABLE_DYNAMIC_VERSIONS" | tr -d '[] ')
 
   IFS=',' read -ra VERSIONS <<< "$CLEANED_VERSIONS"
 
@@ -117,7 +117,7 @@ fi
 echo
 echo "🔣 Configuration:"
 echo "    Demo to deploy:           →  $WEB_DEMO"
-echo "    Enabled dynamic versions: →  $ENABLED_DYNAMIC_VERSIONS"
+echo "    Enabled dynamic versions: →  $ENABLE_DYNAMIC_VERSIONS"
 echo "    ENABLE_DYNAMIC_HTML:      →  $ENABLE_DYNAMIC_HTML"
 echo "    ENABLE_DATA_GENERATION:   →  $ENABLE_DATA_GENERATION"
 echo "    ENABLE_DYNAMIC_STRUCTURE: →  $ENABLE_DYNAMIC_STRUCTURE"

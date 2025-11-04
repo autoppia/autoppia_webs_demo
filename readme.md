@@ -228,17 +228,17 @@ chmod +x ./scripts/setup.sh
 
 #### **🎨 Enable Dynamic HTML (AutoMail & AutoConnect)**
 
-AutoMail and AutoConnect support dynamic HTML generation for anti-scraping protection. Enable it with:
+AutoMail and AutoConnect support dynamic HTML generation for anti-scraping protection. In this repository the preferred way to enable that behavior is via `--enable_dynamic_versions` (see below) — `v1` maps to the HTML variation feature.
 
 ```bash
-# Deploy AutoMail with dynamic HTML enabled
-./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_html=true
+# Deploy AutoMail with dynamic HTML enabled (v1)
+./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_versions=v1
 
-# Deploy AutoConnect with dynamic HTML enabled
-./scripts/setup.sh --demo=autoconnect --web_port=8008 --enable_dynamic_html=true
+# Deploy AutoConnect with dynamic HTML enabled (v1)
+./scripts/setup.sh --demo=autoconnect --web_port=8008 --enable_dynamic_versions=v1
 
 # Deploy all demos with dynamic HTML enabled
-./scripts/setup.sh --demo=all --enable_dynamic_html=true
+./scripts/setup.sh --demo=all --enable_dynamic_versions=[v1]
 ```
 
 **What Dynamic HTML does:**
@@ -259,8 +259,57 @@ http://localhost:8005/?seed=200  # Asymmetric layout
 
 ---
 
+### ⚙️ Enable Dynamic Versions (`--enable_dynamic_versions`)
 
-#### **Available Setup Options**
+A more granular way to enable specific dynamic features across demos is the `--enable_dynamic_versions` option for `./scripts/setup.sh`.
+
+- Syntax: `--enable_dynamic_versions=[v1,v2,...]` or `--enable_dynamic_versions=v1,v2`
+- Default: no dynamic versions enabled
+
+This flag toggles internal feature flags inside the setup script. The mapping is:
+
+- `v1` → ENABLE_DYNAMIC_HTML
+- `v2` → ENABLE_DATA_GENERATION
+- `v3` → ENABLE_DYNAMIC_STRUCTURE
+- `v4` → ENABLE_DYNAMIC_POPUPS_AND_ALERTS
+
+Examples
+
+```bash
+# Enable HTML variations and structure changes for AutoMail
+./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_versions=[v1,v3]
+
+# Enable data generation only for the Books demo
+./scripts/setup.sh --demo=books --web_port=8001 --postgres_port=5435 --enable_dynamic_versions=v2
+
+# Enable everything and deploy all demos
+./scripts/setup.sh --demo=all --enable_dynamic_versions=[v1,v2,v3,v4]
+```
+
+How it works
+
+- The setup script parses the versions, maps each to an internal environment variable, and sets those environment variables when it runs `docker compose up` for each demo. Those variables are then available to the containers so the applications can alter behavior at runtime.
+- The script will warn about unknown versions and ignores them.
+
+Verification
+
+- During setup you will see a configuration summary showing which dynamic flags were enabled (the script prints `ENABLE_DYNAMIC_HTML`, `ENABLE_DATA_GENERATION`, `ENABLE_DYNAMIC_STRUCTURE`, `ENABLE_DYNAMIC_POPUPS_AND_ALERTS` and their values).
+- You can also inspect container environment variables (for a running container named e.g. `automail_8005`) with:
+
+```bash
+# show environment variables for a container (replace with the container ID/name)
+docker inspect -f '{{range $k,$v := .Config.Env}}{{$v}}\n{{end}}' <container_name_or_id>
+```
+
+Notes and tips
+
+- The flag parser is lenient: it accepts lists with or without square brackets and trims spaces. Unknown version tokens will be reported in the setup output.
+- Combine `--enable_dynamic_versions` with other options (ports, demo selection, `-y`) as needed.
+- If you want to enable a single feature via the older single-option flags, use the corresponding environment variables (for example `--enable_dynamic_html=true`) where available.
+
+---
+
+## **Available Setup Options**
 
 | Option | Description | Default | Example |
 |--------|-------------|---------|---------|
@@ -270,6 +319,7 @@ http://localhost:8005/?seed=200  # Asymmetric layout
 | `--webs_port=PORT` | webs_server API port | `8090` | `--webs_port=8080` |
 | `--webs_postgres=PORT` | webs_server DB port | `5437` | `--webs_postgres=5440` |
 | `--enable_dynamic_html=BOOL` | Enable dynamic HTML | `false` | `--enable_dynamic_html=true` |
+| `--enable_dynamic_versions=VERSIONS` | Enable dynamic feature versions | `[]` | `--enable_dynamic_versions=[v1,v2]` |
 | `-y, --yes` | Skip confirmation prompts | - | `-y` |
 
 **Valid demo names:** `movies`, `books`, `autozone`, `autodining`, `autocrm`, `automail`, `autoconnect`, `all`
