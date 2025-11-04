@@ -14,7 +14,9 @@ type ElementKey =
   | "sidebar-hours-label"
   | "sidebar-languages-label"
   | "sidebar-verifications-label"
-  | "expert-hire-button-label";
+  | "expert-hire-button-label"
+  | "hire-cancel-button-label"
+  | "hire-submit-button-label";
 
 type TextVariantMap = Record<ElementKey, string>;
 import jsonVariants from './textVariants.json';

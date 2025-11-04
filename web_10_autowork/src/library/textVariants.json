@@ -7,13 +7,14 @@
     "post-job-button-label": "+ Post a job",
     "expert-hire-button-label": "Hire",
     "expert-message-button-label": "Message",
-    "expert-message-button-label": "Message",
     "stats-earnings-label": "Total earnings",
     "stats-jobs-label": "Total jobs",
     "stats-hours-label": "Total hours",
     "sidebar-hours-label": "Hours per week",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Cancel",
+    "hire-submit-button-label": "Hire"
   },
   "2": {
     "experts-heading": "Get a tailored expert review of your project goals",
@@ -22,14 +23,15 @@
     "book-consultation-button-label": "Schedule a consultation",
     "post-job-button-label": "+ Create job",
     "expert-hire-button-label": "Hire now",
-    "expert-message-button-label": "Contact",
     "expert-message-button-label": "Send message",
     "stats-earnings-label": "Earnings total",
     "stats-jobs-label": "Jobs total",
     "stats-hours-label": "Hours total",
     "sidebar-hours-label": "Weekly hours",
     "sidebar-languages-label": "Spoken languages",
-    "sidebar-verifications-label": "Verification"
+    "sidebar-verifications-label": "Verification",
+    "hire-cancel-button-label": "Back",
+    "hire-submit-button-label": "Send offer"
   },
   "3": {
     "experts-heading": "Discuss your project one-on-one with a top expert",
@@ -38,14 +40,15 @@
     "book-consultation-button-label": "Start consultation",
     "post-job-button-label": "+ Post a role",
     "expert-hire-button-label": "Engage",
-    "expert-message-button-label": "Send message",
     "expert-message-button-label": "Contact",
     "stats-earnings-label": "Total earnings",
     "stats-jobs-label": "Total jobs",
     "stats-hours-label": "Total hours",
     "sidebar-hours-label": "Hours per week",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Close",
+    "hire-submit-button-label": "Confirm hire"
   },
   "4": {
     "experts-heading": "Align project goals with an expert, live",
@@ -54,14 +57,15 @@
     "book-consultation-button-label": "Book session",
     "post-job-button-label": "+ New job",
     "expert-hire-button-label": "Contract",
-    "expert-message-button-label": "Reach out",
     "expert-message-button-label": "Message",
     "stats-earnings-label": "Earnings",
     "stats-jobs-label": "Jobs",
     "stats-hours-label": "Hours",
     "sidebar-hours-label": "Weekly availability",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Cancel",
+    "hire-submit-button-label": "Proceed"
   },
   "5": {
     "experts-heading": "One-on-one expert guidance for your project goals",
@@ -70,14 +74,15 @@
     "book-consultation-button-label": "Book now",
     "post-job-button-label": "+ Post job",
     "expert-hire-button-label": "Start hire",
-    "expert-message-button-label": "Write",
     "expert-message-button-label": "Message",
     "stats-earnings-label": "Total earnings",
     "stats-jobs-label": "Total jobs",
     "stats-hours-label": "Total hours",
     "sidebar-hours-label": "Hours per week",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Back",
+    "hire-submit-button-label": "Send offer"
   },
   "6": {
     "experts-heading": "Refine your goals with an expert advisor",
@@ -86,14 +91,15 @@
     "book-consultation-button-label": "Reserve consultation",
     "post-job-button-label": "+ Add job",
     "expert-hire-button-label": "Bring onboard",
-    "expert-message-button-label": "Ping",
     "expert-message-button-label": "Send message",
     "stats-earnings-label": "Earnings",
     "stats-jobs-label": "Jobs",
     "stats-hours-label": "Hours",
     "sidebar-hours-label": "Weekly hours",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Cancel",
+    "hire-submit-button-label": "Confirm"
   },
   "7": {
     "experts-heading": "Expert one-on-one to review your goals",
@@ -102,14 +108,15 @@
     "book-consultation-button-label": "Consult an expert",
     "post-job-button-label": "+ Create posting",
     "expert-hire-button-label": "Onboard",
-    "expert-message-button-label": "Message",
     "expert-message-button-label": "Contact",
     "stats-earnings-label": "Total earnings",
     "stats-jobs-label": "Jobs done",
     "stats-hours-label": "Total hours",
     "sidebar-hours-label": "Hours per week",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Close",
+    "hire-submit-button-label": "Hire"
   },
   "8": {
     "experts-heading": "Work with an expert to validate your plan",
@@ -118,14 +125,15 @@
     "book-consultation-button-label": "Book expert",
     "post-job-button-label": "+ Post opportunity",
     "expert-hire-button-label": "Make offer",
-    "expert-message-button-label": "Contact",
     "expert-message-button-label": "Message",
     "stats-earnings-label": "Earnings",
     "stats-jobs-label": "Jobs",
     "stats-hours-label": "Hours",
     "sidebar-hours-label": "Weekly availability",
     "sidebar-languages-label": "Spoken languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Back",
+    "hire-submit-button-label": "Send"
   },
   "9": {
     "experts-heading": "Review goals with a specialized expert, one-on-one",
@@ -134,14 +142,15 @@
     "book-consultation-button-label": "Book consultation",
     "post-job-button-label": "+ Post job",
     "expert-hire-button-label": "Book hire",
-    "expert-message-button-label": "Send message",
     "expert-message-button-label": "Message",
     "stats-earnings-label": "Total earnings",
     "stats-jobs-label": "Total jobs",
     "stats-hours-label": "Total hours",
     "sidebar-hours-label": "Hours per week",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Cancel",
+    "hire-submit-button-label": "Confirm"
   },
   "10": {
     "experts-heading": "One-on-one expert session to review project goals",
@@ -150,14 +159,15 @@
     "book-consultation-button-label": "Book a consultation",
     "post-job-button-label": "+ Post a job",
     "expert-hire-button-label": "Start",
-    "expert-message-button-label": "Reach out",
     "expert-message-button-label": "Message",
     "stats-earnings-label": "Total earnings",
     "stats-jobs-label": "Total jobs",
     "stats-hours-label": "Total hours",
     "sidebar-hours-label": "Hours per week",
     "sidebar-languages-label": "Languages",
-    "sidebar-verifications-label": "Verifications"
+    "sidebar-verifications-label": "Verifications",
+    "hire-cancel-button-label": "Close",
+    "hire-submit-button-label": "Hire"
   }
 }
 
