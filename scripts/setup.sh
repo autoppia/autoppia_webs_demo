@@ -124,8 +124,13 @@ deploy_project() {
     fi
 
     # Pass feature flags to compose
+    # For projects that need API, set API URLs (webs_server uses port 8080 internally, 8090 externally)
+    local api_url_internal="${API_URL:-http://app:8080}"
+    local api_url_external="${NEXT_PUBLIC_API_URL:-http://localhost:8090}"
+    
     WEB_PORT="$webp" POSTGRES_PORT="$pgp" ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" NEXT_PUBLIC_DATA_GENERATION="$NEXT_PUBLIC_DATA_GENERATION" \
+      API_URL="$api_url_internal" NEXT_PUBLIC_API_URL="$api_url_external" \
       docker compose -p "$proj" up -d --build
 
   popd > /dev/null

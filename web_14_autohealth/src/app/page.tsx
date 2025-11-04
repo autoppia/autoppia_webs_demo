@@ -10,6 +10,8 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { initializeDoctors } from "@/data/doctors-enhanced";
 import { initializeAppointments } from "@/data/appointments-enhanced";
+import { initializePrescriptions } from "@/data/prescriptions-enhanced";
+import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
 import { withSeed } from "@/utils/seedRouting";
 
 export default function Home() {
@@ -38,9 +40,12 @@ export default function Home() {
       return;
     }
     let mounted = true;
+    // Initialize all data types on home page load
     Promise.allSettled([
       initializeDoctors(),
       initializeAppointments(),
+      initializePrescriptions(),
+      initializeMedicalRecords(),
     ]).finally(() => { if (mounted) setIsLoading(false); });
     return () => { mounted = false; };
   }, []);

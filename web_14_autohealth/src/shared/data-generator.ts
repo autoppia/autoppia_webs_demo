@@ -63,6 +63,7 @@ export function isDataGenerationEnabled(): boolean {
 }
 
 export function getApiBaseUrl(): string {
-  return process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+  // In browser, NEXT_PUBLIC_API_URL is available, API_URL is not
+  return process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8090';
 }
 

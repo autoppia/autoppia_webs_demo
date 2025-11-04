@@ -5,7 +5,7 @@ const CACHE_KEY = 'autohealth_doctors_v1';
 
 export async function initializeDoctors(): Promise<Doctor[]> {
   if (!isDataGenerationAvailable()) {
-    const staticData = (await import('./doctors')).default as Doctor[];
+    const staticData = (await import('./doctors')).doctors as Doctor[];
     return staticData;
   }
   if (typeof window !== 'undefined') {
@@ -20,7 +20,7 @@ export async function initializeDoctors(): Promise<Doctor[]> {
     if (typeof window !== 'undefined') localStorage.setItem(CACHE_KEY, JSON.stringify(data));
     return data;
   }
-  const staticData = (await import('./doctors')).default as Doctor[];
+  const staticData = (await import('./doctors')).doctors as Doctor[];
   return staticData;
 }
 
