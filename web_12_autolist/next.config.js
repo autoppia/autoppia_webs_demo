@@ -4,15 +4,21 @@
 const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
 
-// For local development, always default to true unless explicitly set to false
+// For local development, set defaults; Docker overrides
 if (!process.env.ENABLE_DYNAMIC_HTML) {
   process.env.ENABLE_DYNAMIC_HTML = isLocalDev ? 'true' : 'false';
 }
-// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_HTML to true
 if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'true';
 } else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
+}
+// Dynamic HTML structure flag (controls seed-based structure)
+if (!process.env.DYNAMIC_HTML_STRUCTURE) {
+  process.env.DYNAMIC_HTML_STRUCTURE = 'false';
+}
+if (!process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE) {
+  process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE = process.env.DYNAMIC_HTML_STRUCTURE;
 }
 
 // Debug: Print environment variables
@@ -23,6 +29,8 @@ console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
+console.log('  DYNAMIC_HTML_STRUCTURE:', process.env.DYNAMIC_HTML_STRUCTURE);
+console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -61,6 +69,8 @@ const nextConfig = {
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
+    DYNAMIC_HTML_STRUCTURE: process.env.DYNAMIC_HTML_STRUCTURE,
+    NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE,
   },
 };
 

@@ -4,6 +4,89 @@ import { getSeedLayout } from './layouts';
 import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 import { getTextForElement, type ElementKey } from '@/library/textVariants';
 
+// Semantic ID mappings (10 per type; chosen by seed mapped to 1-10)
+const SEMANTIC_ID_MAP: Record<string, string[]> = {
+  // Inputs
+  'task-name-input': [
+    'task-name', 'title-input', 'name-field', 'todo-title', 'item-name',
+    'task-title', 'entry-title', 'name-input', 'todo-name', 'task-name-field'
+  ],
+  'task-description-input': [
+    'task-desc', 'description-input', 'desc-field', 'details-input', 'notes-input',
+    'task-notes', 'item-desc', 'desc-box', 'details-field', 'todo-desc'
+  ],
+  // Pickers
+  'date-picker-button': [
+    'pick-date', 'date-btn', 'schedule-date', 'choose-date', 'set-date',
+    'date-action', 'date-select', 'select-date', 'open-date-picker', 'date-trigger'
+  ],
+  'priority-picker-button': [
+    'pick-priority', 'priority-btn', 'set-priority', 'choose-priority', 'priority-select',
+    'priority-action', 'open-priority', 'priority-trigger', 'select-priority', 'priority-choose'
+  ],
+  // Labels / headings
+  'label-inbox': [
+    'inbox-label', 'inbox-chip', 'inbox-tag', 'current-inbox', 'inbox-select',
+    'inbox-title', 'inbox-control', 'inbox-pill', 'inbox-badge', 'inbox-header'
+  ],
+  'heading-today': [
+    'today-heading', 'today-title', 'today-header', 'tasks-today', 'today-h1',
+    'today-section', 'today-head', 'heading-today', 'today-top', 'today-bar'
+  ],
+  'heading-completed': [
+    'completed-heading', 'activity-heading', 'done-title', 'activity-title', 'history-title',
+    'completed-title', 'activity-header', 'completed-header', 'done-heading', 'history-heading'
+  ],
+  'heading-inbox': [
+    'inbox-heading', 'inbox-title', 'add-tasks-heading', 'todo-inbox', 'inbox-h1',
+    'inbox-section', 'inbox-header', 'inbox-head', 'inbox-top', 'inbox-bar'
+  ],
+  // Empty state
+  'empty-inbox-title': [
+    'empty-title', 'capture-title', 'start-title', 'get-started-title', 'welcome-title',
+    'start-capturing', 'inbox-empty-title', 'inbox-start-title', 'no-tasks-title', 'first-task-title'
+  ],
+  'empty-inbox-desc': [
+    'empty-desc', 'capture-desc', 'start-desc', 'get-started-desc', 'welcome-desc',
+    'inbox-empty-desc', 'howto-desc', 'helper-desc', 'intro-desc', 'inbox-helper'
+  ],
+  'cta-add-task': [
+    'add-task-btn', 'create-task', 'new-task-btn', 'task-add', 'add-item-btn',
+    'add-todo', 'create-item', 'start-task', 'add-now', 'new-item-btn'
+  ],
+  // Footer actions
+  'cancel-button': [
+    'cancel-btn', 'dismiss-btn', 'close-btn', 'abort-btn', 'reject-btn',
+    'back-btn', 'cancel-action', 'cancel-control', 'exit-btn', 'cancel-link'
+  ],
+  'submit-button': [
+    'submit-btn', 'add-btn', 'save-btn', 'confirm-btn', 'apply-btn',
+    'create-btn', 'ok-btn', 'proceed-btn', 'done-btn', 'finish-btn'
+  ]
+};
+
+function mapSeedToVariant(seed: number): number {
+  if (!seed || seed < 1) return 1;
+  return ((seed - 1) % 10) + 1;
+}
+
+function generateElementId(seed: number, elementType: string, index: number): string {
+  const variant = mapSeedToVariant(seed);
+  const ids = SEMANTIC_ID_MAP[elementType];
+  if (ids && ids.length > 0) {
+    return ids[(variant - 1) % ids.length];
+  }
+  // Fallbacks when no explicit mapping exists
+  const bases = [
+    elementType.replace(/-button$/, '-btn'),
+    elementType.replace(/^[^-]+-/, ''),
+    elementType.split('-').slice(-2).join('-'),
+    elementType.split('-').pop() || elementType,
+    elementType.replace(/-/g, ''),
+  ];
+  return bases[(variant - 1) % bases.length];
+}
+
 export function useSeedLayout() {
   const [seed, setSeed] = useState(1);
   const [layout, setLayout] = useState(getSeedLayout(1));
@@ -74,10 +157,10 @@ export function useSeedLayout() {
       return baseAttrs;
     }
     
-    // Generate dynamic attributes based on seed
+    // Generate dynamic attributes based on seed (semantic id)
     return { 
       ...baseAttrs,
-      id: `${elementType}-${seed}-${index}`, 
+      id: generateElementId(seed, elementType, index), 
       'data-seed': seed.toString(),
       'data-variant': (seed % 10).toString(),
       'data-xpath': `//${elementType}[@data-seed='${seed}']`
@@ -111,7 +194,7 @@ export function useSeedLayout() {
     if (!isDynamicEnabled) {
       return `${context}-${index}`;
     }
-    return `${context}-${seed}-${index}`;
+    return generateElementId(seed, context, index);
   }, [seed, isDynamicEnabled]);
 
   // Function to get layout classes for specific element types
