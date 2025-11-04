@@ -76,7 +76,9 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.NOTICE("No Event records matched the provided filters."))
                 logger.info(
                     "Filtered deletion complete: web_agent_id=%s, validator_id=%s, deleted=%s",
-                    web_agent_id, validator_id, deleted,
+                    web_agent_id,
+                    validator_id,
+                    deleted,
                 )
                 self._filtered_delete_performed = True
                 return
@@ -126,10 +128,7 @@ class Command(BaseCommand):
             return True
 
         if is_filtered:
-            confirm = input(
-                f"⚠️ Delete Event records matching web_agent_id='{web_agent_id}' "
-                f"and validator_id='{validator_id}'? [y/N]: "
-            ).strip().lower()
+            confirm = input(f"⚠️ Delete Event records matching web_agent_id='{web_agent_id}' and validator_id='{validator_id}'? [y/N]: ").strip().lower()
             return confirm == "y"
 
         self.stdout.write(self.style.WARNING("\n⚠️ WARNING: This will delete ALL data in the database!"))
