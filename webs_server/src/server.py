@@ -45,26 +45,30 @@ def trim_url_to_origin(url: str) -> str:
 
 # --- SQL Query Constants ---
 INSERT_EVENT_SQL = """
-                   INSERT INTO events (web_agent_id, web_url, event_data)
-                   VALUES ($1, $2, $3) RETURNING id, created_at; \
+                   INSERT INTO events (web_agent_id, web_url, validator_id, event_data)
+                   VALUES ($1, $2, $3, $4) RETURNING id, created_at; \
                    """
 
 SELECT_EVENTS_SQL = """
-                    SELECT id, web_agent_id, web_url, event_data AS data, created_at
+                    SELECT id, web_agent_id, web_url, validator_id, event_data AS data, created_at
                     FROM events
                     WHERE web_url = $1
                       AND web_agent_id = $2
+                      AND validator_id = $3
                     ORDER BY created_at DESC; \
                     """
 
 DELETE_EVENTS_SQL = """
                     WITH deleted_rows AS (
-                    DELETE
-                    FROM events
-                    WHERE web_url = $1 RETURNING id
-    )
+                        DELETE
+                        FROM events
+                        WHERE web_url = $1
+                          AND web_agent_id = $2
+                          AND validator_id = $3
+                        RETURNING id
+                    )
                     SELECT count(*)
-                    FROM deleted_rows; \
+                    FROM deleted_rows;
                     """
 
 
@@ -72,6 +76,7 @@ DELETE_EVENTS_SQL = """
 class EventInput(BaseModel):
     web_agent_id: str = Field(default="UNKNOWN_AGENT", max_length=255)
     web_url: str
+    validator_id: str
     data: Dict[str, Any]
 
     @field_validator("web_url")
@@ -90,6 +95,7 @@ class EventOutput(BaseModel):
     id: int
     web_agent_id: str
     web_url: str
+    validator_id: str
     data: Dict[str, Any]
     created_at: datetime
 
@@ -274,7 +280,7 @@ async def save_event_endpoint(event: EventInput):
                 detail="Invalid web_url provided after trimming.",
             )
 
-        result = await app.state.pool.fetchrow(INSERT_EVENT_SQL, event.web_agent_id, trimmed_url, event_data_json_string)
+        result = await app.state.pool.fetchrow(INSERT_EVENT_SQL, event.web_agent_id, trimmed_url, event.validator_id, event_data_json_string)
         if result:
             logger.info(f"Event saved successfully with ID: {result['id']}")
             return EventSaveResponse(
@@ -328,7 +334,7 @@ async def get_events_endpoint(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid web_url provided after trimming.")
 
     try:
-        rows: List[asyncpg.Record] = await app.state.pool.fetch(SELECT_EVENTS_SQL, trimmed_url, web_agent_id)
+        rows: List[asyncpg.Record] = await app.state.pool.fetch(SELECT_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
 
         processed_rows = []
         for row in rows:
@@ -345,7 +351,7 @@ async def get_events_endpoint(
 
             processed_rows.append(row_dict)
 
-        logger.info(f"Retrieved {len(processed_rows)} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}")
+        logger.info(f"Retrieved {len(processed_rows)} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
         return processed_rows
 
     except PostgresError as e:
@@ -359,9 +365,13 @@ async def get_events_endpoint(
 
 
 @app.delete("/reset_events/", response_model=ResetResponse, summary="Delete all events for a web URL")
-async def reset_events_endpoint(web_url: str = Query(..., description="The web URL for which all events should be deleted.")):
+async def reset_events_endpoint(
+    web_url: str = Query(..., description="The web URL for which all events should be deleted."),
+    web_agent_id: str = Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID."),
+    validator_id: str = Query(..., description="The validator ID associated with the events."),
+):
     """
-    Deletes all events for a given web_url using a prepared statement.
+    Deletes all events for a given web_url, web_agent_id, and validator_id using a prepared statement.
     Deletion is based on the origin (scheme://host[:port]) of the provided web_url.
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
@@ -374,10 +384,10 @@ async def reset_events_endpoint(web_url: str = Query(..., description="The web U
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid web_url provided after trimming.")
 
     try:
-        deleted_count: Optional[int] = await app.state.pool.fetchval(DELETE_EVENTS_SQL, trimmed_url)
+        deleted_count: Optional[int] = await app.state.pool.fetchval(DELETE_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
         actual_deleted_count = deleted_count if deleted_count is not None else 0
-        logger.info(f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}")
-        return ResetResponse(message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'", web_url=web_url, deleted_count=actual_deleted_count)
+        logger.info(f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
+        return ResetResponse(message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'", web_url=web_url, deleted_count=actual_deleted_count, validator_id=validator_id)
     except PostgresError as e:
         logger.error(f"Database deletion failed for reset_events: {e} (SQLState: {e.sqlstate}).")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database operation failed during event reset: {e.pgcode}.") from e
