@@ -9,6 +9,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { searchProducts } from "@/utils/dynamicDataProvider";
+import { withSeed } from "@/utils/seedRouting";
 
 const getTopMarginClass = () => {
   const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
@@ -54,7 +55,7 @@ export default function SearchPage() {
         {results.map((product, index) => (
           <Link id={product.id}
             key={product.id}
-            href={`/${product.id}`}
+            href={withSeed(`/${product.id}`, searchParams)}
             onClick={() =>
               logEvent(EVENT_TYPES.VIEW_DETAIL, {
                 productId: product.id,

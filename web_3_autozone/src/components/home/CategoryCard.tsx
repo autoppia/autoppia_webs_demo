@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSearchParams } from "next/navigation";
+import { withSeed } from "@/utils/seedRouting";
 
 interface CategoryItem {
   image: string;
@@ -48,6 +50,7 @@ export function CategoryCard({
   seed = 1,
 }: CategoryCardProps) {
   const { getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
   
   const gridCols = {
     2: "grid-cols-2",
@@ -64,7 +67,7 @@ export function CategoryCard({
 
         {singleImage ? (
           <Link
-            href={footerLink?.href || "#"}
+            href={withSeed(footerLink?.href || "#", searchParams)}
             className="block relative h-60 w-full hover:opacity-90 transition-opacity"
           >
             <Image
@@ -78,7 +81,7 @@ export function CategoryCard({
           <div className={`grid ${gridCols[columns]} gap-4`}>
             {items.map((item, index) => (
               <Link
-                href={item.link || "#"}
+                href={withSeed(item.link || "#", searchParams)}
                 key={`${item.title}-${index}`}
                 onClick={() =>
                   logEvent(EVENT_TYPES.VIEW_DETAIL, {
@@ -110,7 +113,7 @@ export function CategoryCard({
       {footerLink && (
         <CardFooter className="px-4 pt-0 pb-4">
           <Link
-            href={footerLink.href}
+            href={withSeed(footerLink.href, searchParams)}
             className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
           >
             {footerLink.text}

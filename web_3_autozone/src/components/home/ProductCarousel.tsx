@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSearchParams } from "next/navigation";
+import { withSeed } from "@/utils/seedRouting";
 
 interface ProductCarouselProps {
   title: string;
@@ -33,6 +35,7 @@ export function ProductCarousel({
 }: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { getText, getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
   // const [showLeftButton, setShowLeftButton] = useState(false);
   // const [showRightButton, setShowRightButton] = useState(true);
 
@@ -88,7 +91,7 @@ export function ProductCarousel({
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/${product.id}`}
+              href={withSeed(`/${product.id}`, searchParams)}
               onClick={() =>
                 logEvent(EVENT_TYPES.VIEW_DETAIL, {
                   section: product.description,

@@ -18,6 +18,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
+import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -64,7 +65,7 @@ export function Header() {
           {order.map((key: string) => {
             if (key === "logo") {
               return (
-                <Link key="logo" id={getId("logo_link")} href="/" className={`${layoutConfig.navbarStyle === 'floating' ? 'mr-1' : 'mr-2'} flex-shrink-0`}>
+                <Link key="logo" id={getId("logo_link")} href={withSeed("/", searchParams)} className={`${layoutConfig.navbarStyle === 'floating' ? 'mr-1' : 'mr-2'} flex-shrink-0`}>
                   <div className={`bg-[#17A2B8] ${layoutConfig.navbarStyle === 'floating' ? 'px-2 py-1' : 'px-3 py-1'} rounded flex items-center ${layoutConfig.navbarStyle === 'floating' ? 'h-7' : 'h-9'}`}>
                     <span className={`font-bold text-white ${layoutConfig.navbarStyle === 'floating' ? 'text-sm' : 'text-lg'}`}>AUTOZONE</span>
                   </div>
@@ -88,7 +89,7 @@ export function Header() {
                             query: searchQuery,
                           });
                           router.push(
-                            `/search?q=${encodeURIComponent(searchQuery)}`
+                            withSeedAndParams("/search", { q: searchQuery }, searchParams)
                           );
                         }
                       }}
@@ -104,7 +105,7 @@ export function Header() {
                           query: searchQuery,
                         });
                         router.push(
-                          `/search?q=${encodeURIComponent(searchQuery)}`
+                          withSeedAndParams("/search", { q: searchQuery }, searchParams)
                         );
                       }}
                     >
@@ -138,7 +139,7 @@ export function Header() {
                             query: searchQuery,
                           });
                           router.push(
-                            `/search?q=${encodeURIComponent(searchQuery)}`
+                            withSeedAndParams("/search", { q: searchQuery }, searchParams)
                           );
                         }
                       }}
@@ -154,7 +155,7 @@ export function Header() {
                           query: searchQuery,
                         });
                         router.push(
-                          `/search?q=${encodeURIComponent(searchQuery)}`
+                          withSeedAndParams("/search", { q: searchQuery }, searchParams)
                         );
                       }}
                     >
@@ -172,7 +173,7 @@ export function Header() {
                   <div key="nav" className="flex items-center gap-1">
                     <Link
                       id={getId("cart_link")}
-                      href="/cart"
+                      href={withSeed("/cart", searchParams)}
                       className="text-gray-700 flex items-center"
                       onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
                     >
@@ -210,7 +211,7 @@ export function Header() {
                   </div>
                   <Link
                     id={getId("cart_link")}
-                    href="/cart"
+                    href={withSeed("/cart", searchParams)}
                     className="text-gray-700 flex items-end"
                     onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
                   >
@@ -235,7 +236,7 @@ export function Header() {
       {/* Secondary navigation - hidden for floating navbar */}
       {layoutConfig.navbarStyle !== 'floating' && (
         <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
-          <Link href="/">
+          <Link href={withSeed("/", searchParams)}>
             <button id={getId("all_menu_button")} className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
               <Menu size={18} className="mr-1" />
               <span className="font-bold">{getText("all_menu")}</span>

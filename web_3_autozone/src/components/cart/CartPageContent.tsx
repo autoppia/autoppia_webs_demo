@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSearchParams } from "next/navigation";
+import { withSeed } from "@/utils/seedRouting";
 
 interface CartItem {
   id: string;
@@ -23,6 +25,7 @@ export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
   const { getText, getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
@@ -96,7 +99,7 @@ export function CartPageContent() {
                   <p className="mb-4 text-base text-gray-400">
                     {getText("empty_cart_message")}
                   </p>
-                  <Link href="/">
+                  <Link href={withSeed("/", searchParams)}>
                     <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
                       {getText("continue_shopping")}
                     </Button>
@@ -127,7 +130,7 @@ export function CartPageContent() {
                         {/* Product Details */}
                         <div className="flex-1 flex flex-col justify-between">
                           <Link
-                            href={`/${item.id}`}
+                            href={withSeed(`/${item.id}`, searchParams)}
                             className="text-base font-medium hover:text-blue-600"
                           >
                             {item.title}
@@ -221,7 +224,7 @@ export function CartPageContent() {
                     {getText("gift_checkbox")}
                   </label>
                 </div>
-                <Link href="/checkout">
+                <Link href={withSeed("/checkout", searchParams)}>
                   <Button
                     id={getId("checkout_button")}
                     className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}

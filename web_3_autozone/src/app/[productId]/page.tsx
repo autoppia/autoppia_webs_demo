@@ -10,6 +10,7 @@ import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
 import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
+import { withSeed } from "@/utils/seedRouting";
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
@@ -103,7 +104,7 @@ function ProductContent() {
       className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
       onClick={() => {
         handleAddToCart();
-        router.push("/cart");
+        router.push(withSeed("/cart", searchParams));
       }}
     >
       {getText("add_to_cart")}
@@ -127,7 +128,7 @@ function ProductContent() {
           brand: product.brand,
           rating: product.rating,
         });
-        router.push("/checkout");
+        router.push(withSeed("/checkout", searchParams));
       }}
     >
       {getText("buy_now")}
@@ -212,7 +213,7 @@ function ProductContent() {
           <p className="mt-4">
             The product you are looking for does not exist or has been removed.
           </p>
-          <Button className="mt-4" onClick={() => router.push("/")}>
+          <Button className="mt-4" onClick={() => router.push(withSeed("/", searchParams))}>
             {getText("return_to_home")}
           </Button>
         </div>
