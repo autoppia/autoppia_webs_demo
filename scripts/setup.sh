@@ -319,6 +319,7 @@ if ! command -v docker >/dev/null 2>&1; then
   exit 1
 fi
 if ! docker info >/dev/null 2>&1; then
+if ! docker info >/dev/null 2>&1; then
   echo "❌ Docker daemon not running."
   exit 1
 fi
@@ -337,13 +338,19 @@ deploy_project() {
 
   local dir="$DEMOS_DIR/$name"
   if [[ ! -d "$dir" ]]; then
+  if [[ ! -d "$dir" ]]; then
     echo "⚠️  Directory does not exist: $dir"
+    return 0
     return 0
   fi
 
   echo "📦 Deploying $name (HTTP→$webp, DB→${pgp:-<none>})..."
   pushd "$dir" >/dev/null
 
+  if docker compose -p "$proj" ps -q | grep -q .; then
+    echo "    [INFO] Removing previous containers..."
+    docker compose -p "$proj" down --volumes
+  fi
   if docker compose -p "$proj" ps -q | grep -q .; then
     echo "    [INFO] Removing previous containers..."
     docker compose -p "$proj" down --volumes
@@ -365,6 +372,7 @@ deploy_project() {
 deploy_webs_server() {
   local name="webs_server"
   local dir="$DEMOS_DIR/$name"
+  if [[ ! -d "$dir" ]]; then
   if [[ ! -d "$dir" ]]; then
     echo "❌ Directory not found: $dir"
     exit 1
@@ -420,20 +428,20 @@ case "$WEB_DEMO" in
   autolist)      deploy_webs_server; deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}" ;;
   autodrive)     deploy_webs_server; deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}" ;;
   all)
-    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
-    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
+    deploy_webs_server
+#    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
+#    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
     deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-     deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-     deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-     deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-     deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-     deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-     deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-     deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-      deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
-      deploy_webs_server
+#    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+#    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+#    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+#    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+#    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+#    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+#    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+#    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+#    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+#    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     ;;
   *)
     echo "❌ Invalid demo option: $WEB_DEMO"
