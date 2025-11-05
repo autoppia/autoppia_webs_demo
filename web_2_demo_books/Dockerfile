@@ -21,6 +21,9 @@ COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install additional dependencies for data generation
+RUN pip install --no-cache-dir requests
+
 # Copy application code
 COPY . .
 
