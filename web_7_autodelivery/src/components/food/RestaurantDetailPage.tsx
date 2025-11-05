@@ -10,6 +10,7 @@ import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
 import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -126,7 +127,7 @@ export default function RestaurantDetailPage({
   const layout = useLayout();
   const { getText, getId, getAria, seedStructure } = useDynamicStructure();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
-  const router = useRouter();
+  const router = useSeedRouter();
   // fix restaurant
   const restaurant = useMemo(() => {
     return restaurants.find((r) => r.id === restaurantId)!;
@@ -227,11 +228,8 @@ export default function RestaurantDetailPage({
                     fromRestaurantId: restaurant.id,
                     fromRestaurantName: restaurant.name,
                   });
-                  // Navigate to restaurants page with current seed parameter
-                  const urlParams = new URLSearchParams(window.location.search);
-                  const seedParam = urlParams.get('seed');
-                  const restaurantsUrl = seedParam ? `/restaurants?seed=${seedParam}` : '/restaurants';
-                  router.push(restaurantsUrl);
+                  // Navigate to restaurants page (seed-structure will be preserved automatically)
+                  router.push('/restaurants');
                 }}
                 aria-label={getAria('back-button', 'Back to all restaurants')}
               >
@@ -367,7 +365,7 @@ export default function RestaurantDetailPage({
 
 function CartFab() {
   const items = useCartStore((s) => s.items);
-  const router = useRouter();
+  const router = useSeedRouter();
   const total = items.reduce((acc, i) => acc + i.quantity, 0);
 
   if (total === 0) return null;
