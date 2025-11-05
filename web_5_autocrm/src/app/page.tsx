@@ -9,6 +9,7 @@ import {
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed } from "@/utils/seedRouting";
 // import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
 
 // interface EventData {
@@ -31,7 +32,7 @@ function DashboardContent() {
       <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
         {/* Card 1: Matters */}
         <Link
-          href="/matters"
+          href={withSeed("/matters", searchParams)}
           id={getId("matters_link")}
           // onClick={handleClick(EVENT_TYPES.MATTERS_SIDEBAR_CLICKED, { label: "Active Matters", href: "/matters" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -46,7 +47,7 @@ function DashboardContent() {
 
         {/* Card 2: Clients */}
         <Link
-          href="/clients"
+          href={withSeed("/clients", searchParams)}
           id={getId("clients_link")}
           // onClick={handleClick(EVENT_TYPES.CLIENTS_SIDEBAR_CLICKED, { label: "Clients", href: "/clients" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -61,7 +62,7 @@ function DashboardContent() {
 
         {/* Card 3: Calendar */}
         <Link
-          href="/calendar"
+          href={withSeed("/calendar", searchParams)}
           id={getId("calendar_link")}
           // onClick={handleClick(EVENT_TYPES.CALENDAR_SIDEBAR_CLICKED, { label: "Upcoming Events", href: "/calendar" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -76,7 +77,7 @@ function DashboardContent() {
 
         {/* Card 4: Documents */}
         <Link
-          href="/documents"
+          href={withSeed("/documents", searchParams)}
           id={getId("documents_link")}
           // onClick={handleClick(EVENT_TYPES.DOCUMENTS_SIDEBAR_CLICKED, { label: "Documents", href: "/documents" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -91,7 +92,7 @@ function DashboardContent() {
 
         {/* Card 5: Time Tracking */}
         <Link
-          href="/billing"
+          href={withSeed("/billing", searchParams)}
           id={getId("billing_link")}
           // onClick={handleClick(EVENT_TYPES.TIME_AND_BILLING_SIDEBAR_CLICKED, { label: "Time & Billing", href: "/billing" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
@@ -106,7 +107,7 @@ function DashboardContent() {
 
         {/* Card 6: Settings */}
         <Link
-          href="/settings"
+          href={withSeed("/settings", searchParams)}
           id={getId("settings_link")}
           // onClick={handleClick(EVENT_TYPES.SETTINGS_SIDEBAR_CLICKED, { label: "Settings", href: "/settings" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"

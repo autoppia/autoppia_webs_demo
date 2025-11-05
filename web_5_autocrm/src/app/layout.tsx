@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import React from "react";
+import React, { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import UserNameBadge from "@/components/UserNameBadge";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
@@ -58,7 +58,16 @@ export default function RootLayout({
             </div>
           </nav>
           <div className="flex min-h-[calc(100vh-5rem)] relative">
-            <Sidebar />
+            <Suspense fallback={
+              <aside className="w-64 min-w-64 py-12 px-6 flex flex-col bg-neutral-bg-dark border-r border-zinc-200 shadow-sm" style={{ borderTopLeftRadius: 24, borderBottomLeftRadius: 24 }}>
+                <div className="mb-8 text-xl font-semibold text-zinc-700 tracking-tight">Menu</div>
+                <nav className="flex flex-col gap-6 mt-2">
+                  <div className="text-base font-medium rounded-2xl px-4 py-2 text-zinc-700">Loading...</div>
+                </nav>
+              </aside>
+            }>
+              <Sidebar />
+            </Suspense>
             <main
               className={`flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto ${layoutClasses.content}`}
               style={{

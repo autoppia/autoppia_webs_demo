@@ -1,9 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { User, Mail, CheckCircle, FileText, Briefcase, Calendar, ChevronRight, Phone } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { clients as ALL_CLIENTS } from '@/library/dataset';
+import { withSeed } from "@/utils/seedRouting";
 
 function getInitials(name: string) {
   return name
@@ -25,11 +26,12 @@ type Client = {
 
 
 
-export default function ClientProfilePage() {
+function ClientProfilePageContent() {
   const [client, setClient] = useState<Client | null>(null);
   const params = useParams();
   const clientId = params?.id as string;
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (!clientId) return;
@@ -193,7 +195,7 @@ export default function ClientProfilePage() {
                   key={m.id}
                   id={`related-matter-${m.id}`}
                   data-testid={`related-matter-${m.id}`}
-                  onClick={() => router.push(`/matters/${m.id}`)}
+                  onClick={() => router.push(withSeed(`/matters/${m.id}`, searchParams))}
                   className="rounded-2xl bg-white border border-zinc-100 shadow p-4 flex items-center gap-4 hover:shadow-lg transition cursor-pointer"
                 >
                   <FileText className="w-7 h-7 text-accent-forest/60"/>
@@ -231,5 +233,13 @@ export default function ClientProfilePage() {
         </section>
       </div>
     </section>
+  );
+}
+
+export default function ClientProfilePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+      <ClientProfilePageContent />
+    </Suspense>
   );
 }

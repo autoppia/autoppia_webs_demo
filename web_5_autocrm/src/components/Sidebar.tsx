@@ -1,8 +1,9 @@
 "use client";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed } from "@/utils/seedRouting";
 
 const NAV_ITEMS = [
   {
@@ -51,6 +52,7 @@ const NAV_ITEMS = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { getText, getId } = useDynamicStructure();
   return (
     <aside
@@ -74,7 +76,7 @@ export default function Sidebar() {
             <Link
               key={labelKey}
               id={linkId}
-              href={href}
+              href={withSeed(href, searchParams)}
               className={`text-base font-medium rounded-2xl px-4 py-2 transition-all ${
                 isActive
                   ? "text-accent-forest bg-accent-forest/10 font-bold"

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -17,6 +17,8 @@ import { DEMO_MATTERS } from "@/library/dataset";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useSearchParams } from "next/navigation";
+import { withSeed } from "@/utils/seedRouting";
 
 const STORAGE_KEY = "matters";
 
@@ -47,8 +49,9 @@ function statusPill(status: string) {
   );
 }
 
-export default function MattersListPage() {
+function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
   const [matters, setMatters] = useState<Matter[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
   const [openNew, setOpenNew] = useState(false);
@@ -150,7 +153,7 @@ export default function MattersListPage() {
               </div>
 
               <Link
-                href={`/matters/${matter.id}`}
+                href={withSeed(`/matters/${matter.id}`, searchParams)}
                 onClick={() => logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, matter)}
                 className="block p-6 pl-16"
               >
@@ -282,5 +285,13 @@ export default function MattersListPage() {
         )}
       </DynamicContainer>
     </section>
+  );
+}
+
+export default function MattersListPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+      <MattersListPageContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { clients } from "@/library/dataset";
@@ -8,6 +8,7 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed } from "@/utils/seedRouting";
 
 
 
@@ -19,9 +20,10 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-export default function ClientsDirectory() {
+function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { getText, getId } = useDynamicStructure();
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function ClientsDirectory() {
 
   const handleClientClick = (client: (typeof clients)[number]) => {
     logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, client);
-    router.push(`/clients/${client.id}`);
+    router.push(withSeed(`/clients/${client.id}`, searchParams));
   };
 
   return (
@@ -149,5 +151,13 @@ export default function ClientsDirectory() {
         </div>
       </DynamicElement>
     </DynamicContainer>
+  );
+}
+
+export default function ClientsDirectory() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+      <ClientsDirectoryContent />
+    </Suspense>
   );
 }
