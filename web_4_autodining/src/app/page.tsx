@@ -23,6 +23,7 @@ import { RestaurantsData } from "@/components/library/dataset";
 import { useSearchParams } from "next/navigation";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 
 // Create restaurants array from jsonData
 const restaurants = RestaurantsData.map((item, index) => ({
@@ -136,7 +137,7 @@ function RestaurantCard({
         <div className={`mt-3 flex ${layout.wrap ? 'flex-wrap' : 'flex-nowrap'} ${layout.justify} gap-2`}>
           <Link
             id={getId("view_details_button")}
-            href={`/restaurant/${r.id}`}
+            href={withSeed(`/restaurant/${r.id}`, searchParams)}
             className="text-sm text-blue-600 hover:text-blue-800"
             onClick={() => logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })}
           >
@@ -144,7 +145,7 @@ function RestaurantCard({
           </Link>
           <Link
             id={getId("book_button")}
-            href={`/booking/${r.id}/${time}?people=${people}&date=${formattedDate}`}
+            href={withSeedAndParams(`/booking/${r.id}/${time}`, { people: String(people), date: formattedDate }, searchParams)}
             className={`${bookButtonVariation.className} text-sm`}
             data-testid={bookButtonVariation.dataTestId}
             style={{ position: bookButtonVariation.position as any }}
@@ -332,7 +333,7 @@ function HomePageContent() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <Link href="/">
+            <Link href={withSeed("/", searchParams)}>
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
@@ -342,19 +343,19 @@ function HomePageContent() {
           <div className="flex items-center gap-4">
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/help"
+              href={withSeed("/help", searchParams)}
             >
               {getText("get_help")}
             </Link>
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/about"
+              href={withSeed("/about", searchParams)}
             >
               {getText("about")}
             </Link>
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/contact"
+              href={withSeed("/contact", searchParams)}
             >
               {getText("contact")}
             </Link>

@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { countries, RestaurantsData } from "@/components/library/dataset";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed } from "@/utils/seedRouting";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -159,7 +160,7 @@ export default function Page() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <Link href="/">
+            <Link href={withSeed("/", searchParams)}>
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
@@ -180,13 +181,13 @@ export default function Page() {
           <div className="flex items-center gap-4">
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/help"
+              href={withSeed("/help", searchParams)}
             >
               {getText("get_help")}
             </Link>
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/faqs"
+              href={withSeed("/faqs", searchParams)}
             >
               {getText("about")}
             </Link>

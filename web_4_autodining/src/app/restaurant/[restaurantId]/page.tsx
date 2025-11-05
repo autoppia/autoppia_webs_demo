@@ -23,6 +23,7 @@ import Link from "next/link";
 import { RestaurantsData } from "@/components/library/dataset";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
@@ -468,9 +469,7 @@ export default function RestaurantPage() {
                       style={{ justifyContent: layout.justify }}
                     >
                       <Link
-                        href={`/booking/${id}/${encodeURIComponent(
-                          time
-                        )}?date=${formattedDate}&people=${people ?? ""}`}
+                        href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, { date: formattedDate, people: String(people ?? "") }, searchParams)}
                         onClick={() =>
                           logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                             restaurantId: id,
@@ -507,9 +506,7 @@ export default function RestaurantPage() {
                     }}
                   >
                     <Link
-                      href={`/booking/${id}/${encodeURIComponent(
-                        time
-                      )}?date=${formattedDate}&people=${people ?? ""}`}
+                      href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, { date: formattedDate, people: String(people ?? "") }, searchParams)}
                       onClick={() =>
                         logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                           restaurantId: id,
