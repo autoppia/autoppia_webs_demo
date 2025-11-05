@@ -1,6 +1,56 @@
-import type { Product } from "@/context/CartContext";
+/**
+ * Enhanced Products Data with AI Generation Support
+ * 
+ * This file provides both static and dynamic product data generation
+ * for the AutoZone e-commerce application.
+ */
 
-export const products: Product[] = [
+import type { Product } from "@/context/CartContext";
+import { readJson, writeJson } from "@/shared/storage";
+import { 
+  generateProductsWithFallback, 
+  replaceAllProducts, 
+  addGeneratedProducts,
+  isDataGenerationAvailable 
+} from "@/utils/dataGenerator";
+import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+
+// Map some category keywords to existing local images as safe fallbacks
+function normalizeImageUrl(image: string | undefined, category?: string, nameHint?: string): string {
+  const localByCategory: Record<string, string> = {
+    Kitchen: "/images/homepage_categories/kettles.jpg",
+    Electronics: "/images/homepage_categories/smart_tv.jpg",
+    Technology: "/images/homepage_categories/laptop_stand.jpg",
+    Home: "/images/homepage_categories/sofa.jpg",
+    Fitness: "/images/homepage_categories/foam_roller.jpg",
+  };
+  const defaultLocal = "/images/homepage_categories/coffee_machine.jpg";
+
+  if (!image) return localByCategory[category || ""] || defaultLocal;
+
+  // Allow valid relative local paths
+  if (image.startsWith("/images/")) return image;
+
+  // Allow Unsplash sources but force small size and lower quality
+  const urlLower = image.toLowerCase();
+  if (urlLower.includes("images.unsplash.com") || urlLower.includes("source.unsplash.com")) {
+    const sep = image.includes("?") ? "&" : "?";
+    return `${image}${sep}w=150&h=150&fit=crop&crop=entropy&auto=format&q=60`;
+  }
+
+  // Block other http(s) unknown hosts to avoid 404 and CSP; use category fallback
+  return localByCategory[category || ""] || defaultLocal;
+}
+
+function normalizeProductImages(products: Product[]): Product[] {
+  return products.map((p) => ({
+    ...p,
+    image: normalizeImageUrl(p.image, p.category, p.title),
+  }));
+}
+
+// Original static products
+export const originalProducts: Product[] = [
   {
     id: "kitchen-1",
     title: "Espresso Machine",
@@ -516,14 +566,263 @@ export const products: Product[] = [
   },
 ];
 
-export const getProductById = (id: string): Product | undefined => {
-  return products.find((product) => product.id === id);
+// Dynamic products array that can be populated with generated data
+let dynamicProducts: Product[] = isDataGenerationAvailable() ? [] : [...originalProducts];
+
+// Client-side cache to avoid regenerating on every reload
+export function readCachedProducts(): Product[] | null {
+  return readJson<Product[]>("autozone_generated_products_v1", null);
+}
+
+export function writeCachedProducts(productsToCache: Product[]): void {
+  writeJson("autozone_generated_products_v1", productsToCache);
+}
+
+// Configuration for async data generation
+const DATA_GENERATION_CONFIG = {
+  // Default delay between category calls (in milliseconds)
+  DEFAULT_DELAY_BETWEEN_CALLS: 1000,
+  // Default products per category
+  DEFAULT_PRODUCTS_PER_CATEGORY: 10,
+  // Maximum retry attempts for failed category generation
+  MAX_RETRY_ATTEMPTS: 2,
+  // Available categories for data generation
+  AVAILABLE_CATEGORIES: ["Kitchen", "Electronics", "Home", "Fitness", "Technology"]
 };
 
-export const getProductsByCategory = (category: string): Product[] => {
-  return products.filter((product) => product.category === category);
-};
+/**
+ * Utility function to generate products for multiple categories with delays
+ * Prevents server overload by spacing out API calls
+ */
+async function generateProductsForCategories(
+  categories: string[],
+  productsPerCategory: number,
+  delayBetweenCalls: number = 200,
+  existingProducts: Product[] = []
+): Promise<Product[]> {
+  let allGeneratedProducts: Product[] = [];
 
-export const getFeaturedProducts = (count = 4): Product[] => {
-  return products.slice(0, count);
-};
+  // Bounded concurrency (e.g., 3 at a time)
+  const concurrencyLimit = 3;
+  let index = 0;
+
+  async function worker() {
+    while (index < categories.length) {
+      const currentIndex = index++;
+      const category = categories[currentIndex];
+      try {
+        console.log(`Generating ${productsPerCategory} products for ${category}...`);
+        const categoryProducts = await generateProductsWithFallback(
+          [],
+          productsPerCategory,
+          [category]
+        );
+        allGeneratedProducts = [...allGeneratedProducts, ...categoryProducts];
+        console.log(`✅ Generated ${categoryProducts.length} products for ${category}`);
+      } catch (categoryError) {
+        console.warn(`Failed to generate products for ${category}:`, categoryError);
+      }
+      // small gap to avoid burst
+      if (currentIndex < categories.length - 1 && delayBetweenCalls > 0) {
+        await new Promise((r) => setTimeout(r, delayBetweenCalls));
+      }
+    }
+  }
+
+  const workers = Array.from({ length: Math.min(concurrencyLimit, categories.length) }, () => worker());
+  await Promise.all(workers);
+
+  if (allGeneratedProducts.length > 0) {
+    return allGeneratedProducts;
+  } else {
+    console.warn('No products were generated for any category, returning existing products.');
+    return existingProducts;
+  }
+}
+
+/**
+ * Initialize products with data generation if enabled
+ * Uses async calls for each category to avoid overwhelming the server
+ */
+export async function initializeProducts(): Promise<Product[]> {
+  // Preserve existing behavior: use generation when enabled, else static data
+  if (isDataGenerationAvailable()) {
+    try {
+      // Use cached products on client to prevent re-generation on reloads
+      const cached = readCachedProducts();
+      if (cached && cached.length > 0) {
+        dynamicProducts = normalizeProductImages(cached);
+        return dynamicProducts;
+      }
+
+      console.log("🚀 Starting async data generation for each category...");
+      console.log("📡 Using API:", process.env.API_URL || "http://app:8090");
+
+      // Define categories and products per category
+      const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
+      const productsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_PRODUCTS_PER_CATEGORY;
+      const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
+
+      console.log(`📊 Will generate ${productsPerCategory} products per category`);
+      console.log(`🏷️  Categories: ${categories.join(", ")}`);
+
+      // Generate products for all categories with delays
+      let allGeneratedProducts = await generateProductsForCategories(
+        categories,
+        productsPerCategory,
+        delayBetweenCalls,
+        originalProducts
+      );
+      // Normalize category field to one of the allowed categories
+      const allowed = new Set(categories);
+      allGeneratedProducts = allGeneratedProducts.map((p) => ({
+        ...p,
+        category: allowed.has(p.category || "") ? p.category : (p.category ? p.category : "Home"),
+      }));
+      // Normalize and resolve images to concrete URLs to ensure they exist
+      allGeneratedProducts = normalizeProductImages(allGeneratedProducts);
+
+      dynamicProducts = allGeneratedProducts;
+      // Cache generated products on client
+      writeCachedProducts(dynamicProducts);
+      return dynamicProducts;
+    } catch (error) {
+      console.warn("⚠️ Failed to generate products while generation is enabled. Keeping products empty until ready. Error:", error);
+      // When data generation is enabled, do NOT fall back to static data; return empty
+      dynamicProducts = [];
+      return dynamicProducts;
+    }
+  } else {
+    console.log("ℹ️ Data generation is disabled, using original static products");
+    dynamicProducts = originalProducts;
+    return dynamicProducts;
+  }
+}
+
+// Runtime-only DB fetch for when DB mode is enabled
+export async function loadProductsFromDb(): Promise<Product[]> {
+  if (!isDbLoadModeEnabled()) {
+    return [];
+  }
+  
+  try {
+    const seed = getSeedValueFromEnv(1);
+    const limit = 100;
+    // Prefer distributed selection to avoid category dominance (e.g., Fitness only)
+    const distributed = await fetchSeededSelection<Product>({
+      projectKey: "web_3_autozone",
+      entityType: "products",
+      seedValue: seed,
+      limit,
+      method: "distribute",
+      filterKey: "category",
+    });
+    const selected = Array.isArray(distributed) && distributed.length > 0 ? distributed : await fetchSeededSelection<Product>({
+      projectKey: "web_3_autozone",
+      entityType: "products",
+      seedValue: seed,
+      limit,
+      method: "select",
+    });
+    if (selected && selected.length > 0) {
+      // Ensure we have at least some items for all primary categories by supplementing with originals if needed
+      const categories = ["Kitchen", "Electronics", "Home", "Fitness", "Technology"];
+      const byCategory: Record<string, Product[]> = {};
+      for (const p of selected) {
+        const cat = p.category || "Unknown";
+        byCategory[cat] = byCategory[cat] || [];
+        byCategory[cat].push(p);
+      }
+
+      // Pull minimal items from originals to fill missing categories
+      const supplemented: Product[] = [...selected];
+      for (const cat of categories) {
+        if (!byCategory[cat] || byCategory[cat].length === 0) {
+          const fallback = originalProducts.filter((p) => p.category === cat).slice(0, 6);
+          if (fallback.length > 0) {
+            supplemented.push(...fallback);
+          }
+        }
+      }
+
+      // Deduplicate by id
+      const seen = new Set<string>();
+      const deduped = supplemented.filter((p) => {
+        const id = p.id || `${p.title}-${p.category}`;
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      });
+
+      return normalizeProductImages(deduped);
+    }
+  } catch (e) {
+    console.warn("Failed to load seeded selection from DB:", e);
+  }
+  
+  return [];
+}
+
+/**
+ * Get products by category
+ */
+export function getProductsByCategory(category: string): Product[] {
+  return dynamicProducts.filter((product) => product.category === category);
+}
+
+/**
+ * Get a product by ID
+ */
+export function getProductById(id: string): Product | undefined {
+  return dynamicProducts.find((product) => product.id === id);
+}
+
+/**
+ * Get featured products (first N products)
+ */
+export function getFeaturedProducts(count: number = 4): Product[] {
+  return dynamicProducts.slice(0, count);
+}
+
+/**
+ * Reset to original products only
+ */
+export function resetToOriginalProducts(): void {
+  dynamicProducts = [...originalProducts];
+}
+
+/**
+ * Get statistics about current products
+ */
+export function getProductStats() {
+  const categories = dynamicProducts.reduce((acc, product) => {
+    const category = product.category || "Unknown";
+    acc[category] = (acc[category] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  return {
+    totalProducts: dynamicProducts.length,
+    originalProducts: originalProducts.length,
+    generatedProducts: dynamicProducts.length - originalProducts.length,
+    categories,
+    averageRating: dynamicProducts.reduce((sum, p) => sum + (p.rating || 0), 0) / dynamicProducts.length,
+  };
+}
+
+/**
+ * Search products by query
+ */
+export function searchProducts(query: string): Product[] {
+  const lowercaseQuery = query.toLowerCase();
+  return dynamicProducts.filter((product) =>
+    product.title.toLowerCase().includes(lowercaseQuery) ||
+    product.description?.toLowerCase().includes(lowercaseQuery) ||
+    product.category?.toLowerCase().includes(lowercaseQuery) ||
+    product.brand?.toLowerCase().includes(lowercaseQuery)
+  );
+}
+
+
+// Export the dynamic products array for direct access
+export { dynamicProducts as products };
