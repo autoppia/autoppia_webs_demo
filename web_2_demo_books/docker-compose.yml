@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - .:/app
       - ./static:/app/static
@@ -27,6 +28,7 @@ services:
 
   db:
     image: postgres:14
+    restart: always
     environment:
       - POSTGRES_DB=web2_books
       - POSTGRES_USER=postgres
