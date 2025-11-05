@@ -75,24 +75,27 @@ function PostJobWizard({
   // Stepper progress text
   const progress = `${step}/${totalSteps}`;
   
-  // Create step title map for dynamic ordering
+  // Fixed step sequence for post job wizard (consistent across all seeds)
+  const fixedStepSequence = ['skills', 'scope', 'title', 'budget', 'description'];
+  
+  // Create step title map for the fixed sequence
   const stepTitleMap = {
-    title: "Let's start with a strong title.",
     skills: "What are the main skills required for your work?",
     scope: "Next, estimate the scope of your work.",
+    title: "Let's start with a strong title.",
     budget: "Tell us about your budget.",
     description: "Start the conversation.",
   };
   
-  // Get current step key based on layout order
-  const currentStepKey = layout.postJobSections[step - 1];
-  const stepTitle = stepTitleMap[currentStepKey as keyof typeof stepTitleMap] || stepTitleMap.title;
+  // Get current step key based on fixed sequence
+  const currentStepKey = fixedStepSequence[step - 1];
+  const stepTitle = stepTitleMap[currentStepKey as keyof typeof stepTitleMap] || stepTitleMap.skills;
 
   const getButtonTitle = (step: number): string => {
     if (step === totalSteps) return "Submit Job Post";
     
-    const currentStepKey = layout.postJobSections[step - 1];
-    const nextStepKey = layout.postJobSections[step];
+    const currentStepKey = fixedStepSequence[step - 1];
+    const nextStepKey = fixedStepSequence[step];
     
     if (nextStepKey) {
       return `Next: ${nextStepKey.charAt(0).toUpperCase() + nextStepKey.slice(1)}`;

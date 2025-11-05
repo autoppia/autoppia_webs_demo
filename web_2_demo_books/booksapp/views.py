@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from events.models import Event
 from .forms import BookForm, ContactForm
 from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
-from .utils import normalize_seed, stable_shuffle, compute_variant
+from .utils import normalize_seed, stable_shuffle, compute_variant, redirect_with_seed
 
 
 def index(request):
@@ -23,7 +23,9 @@ def index(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = Book.objects.values_list("year", flat=True).distinct().order_by("-year")
+    available_years = (
+        Book.objects.values_list("year", flat=True).distinct().order_by("-year")
+    )
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -35,7 +37,11 @@ def index(request):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        books = books.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
+        books = books.filter(
+            Q(name__icontains=search_query)
+            | Q(desc__icontains=search_query)
+            | Q(director__icontains=search_query)
+        ).distinct()
 
     from events.models import Event
 
@@ -129,20 +135,33 @@ def detail(request, book_id):
     validator_id = request.headers.get("X-Validator-Id", "0")
 
     # Registrar evento de detalle de libro
-    detail_event = Event.create_book_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, book, validator_id=validator_id)
+    detail_event = Event.create_book_detail_event(
+        request.user if request.user.is_authenticated else None,
+        web_agent_id,
+        book,
+        validator_id=validator_id,
+    )
     detail_event.save()
 
     # Libros relacionados
     related_books = []
     if book.genres.exists():
-        related_books = Book.objects.filter(genres__in=book.genres.all()).exclude(id=book.id).distinct()[:4]
+        related_books = (
+            Book.objects.filter(genres__in=book.genres.all())
+            .exclude(id=book.id)
+            .distinct()[:4]
+        )
 
     if len(related_books) < 4:
-        more_books = Book.objects.filter(year=book.year).exclude(id__in=[m.id for m in list(related_books) + [book]])[: 4 - len(related_books)]
+        more_books = Book.objects.filter(year=book.year).exclude(
+            id__in=[m.id for m in list(related_books) + [book]]
+        )[: 4 - len(related_books)]
         related_books = list(related_books) + list(more_books)
 
     if len(related_books) < 4:
-        random_books = Book.objects.exclude(id__in=[m.id for m in list(related_books) + [book]]).order_by("?")[: 4 - len(related_books)]
+        random_books = Book.objects.exclude(
+            id__in=[m.id for m in list(related_books) + [book]]
+        ).order_by("?")[: 4 - len(related_books)]
         related_books = list(related_books) + list(random_books)
 
     comments = Comment.objects.filter(movie=book)
@@ -187,7 +206,9 @@ def mybook(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = Book.objects.values_list("year", flat=True).distinct().order_by("-year")
+    available_years = (
+        Book.objects.values_list("year", flat=True).distinct().order_by("-year")
+    )
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -199,7 +220,11 @@ def mybook(request):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        books = books.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query)).distinct()
+        books = books.filter(
+            Q(name__icontains=search_query)
+            | Q(desc__icontains=search_query)
+            | Q(director__icontains=search_query)
+        ).distinct()
 
     from events.models import Event
 
@@ -295,7 +320,7 @@ def delete_cart(request, id):
     cart.delete()
 
     messages.success(request, "Book has been deleted from Cart.")
-    return redirect("booksapp:shoppingcart")
+    return redirect_with_seed(request, "booksapp:shoppingcart")
 
 
 def add_book(request):
@@ -322,7 +347,7 @@ def add_book(request):
             )
             add_book_event.save()
             messages.success(request, "Book added successfully.")
-            return redirect("booksapp:index")
+            return redirect_with_seed(request, "booksapp:index")
         else:
             print("Form errors:", form.errors)
             messages.error(request, "Please fix the errors in the form.")
@@ -388,7 +413,7 @@ def update_book(request, id):
                 # updated_book.user = request.user
                 # updated_book.save()
             messages.success(request, "Book updated successfully.")
-            return redirect("booksapp:detail", book_id=id)
+            return redirect_with_seed(request, "booksapp:detail", book_id=id)
         else:
             messages.error(request, "Please correct the errors in the form.")
     else:
@@ -412,7 +437,7 @@ def delete_book(request, id):
         )
         delete_book_event.save()
         messages.success(request, "Book deleted successfully.")
-        return redirect("/")
+        return redirect_with_seed(request, "booksapp:index")
     return render(request, "delete.html", {"book": book})
 
 
@@ -436,7 +461,7 @@ def add_to_cart(request, id):
         )
         add_to_cart_event.save()
 
-        return redirect("booksapp:detail", book_id=id)
+        return redirect_with_seed(request, "booksapp:detail", book_id=id)
     return None
 
 
@@ -480,15 +505,21 @@ def add_comment(request, book_id):
                         "comment": {
                             "name": comment.name,
                             "content": comment.content,
-                            "created_at": comment.created_at.strftime("%b %d, %Y, %I:%M %p"),
-                            "time_ago": (f"{(timezone.now() - comment.created_at).days} days ago" if (timezone.now() - comment.created_at).days > 0 else "Today"),
+                            "created_at": comment.created_at.strftime(
+                                "%b %d, %Y, %I:%M %p"
+                            ),
+                            "time_ago": (
+                                f"{(timezone.now() - comment.created_at).days} days ago"
+                                if (timezone.now() - comment.created_at).days > 0
+                                else "Today"
+                            ),
                             "avatar": comment.avatar.url if comment.avatar else None,
                         },
                     }
                 )
 
             messages.success(request, "Your comment has been added successfully!")
-            return redirect("booksapp:detail", book_id=book.id)
+            return redirect_with_seed(request, "booksapp:detail", book_id=book.id)
 
     # If AJAX expects JSON, return JSON error to avoid HTML in fetch
     wants_json = (
@@ -497,10 +528,12 @@ def add_comment(request, book_id):
         or ("application/json" in (request.headers.get("Accept", "") or ""))
     )
     if wants_json:
-        return JsonResponse({"status": "error", "message": "Invalid comment."}, status=400)
+        return JsonResponse(
+            {"status": "error", "message": "Invalid comment."}, status=400
+        )
 
     messages.error(request, "There was a problem with your comment.")
-    return redirect("booksapp:detail", book_id=book.id)
+    return redirect_with_seed(request, "booksapp:detail", book_id=book.id)
 
 
 def genre_list(request):
@@ -537,7 +570,9 @@ def contact(request):
             message = form.cleaned_data["message"]
 
             # Crear el mensaje de contacto
-            contact_message = ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
+            contact_message = ContactMessage.objects.create(
+                name=name, email=email, subject=subject, message=message
+            )
 
             # Crear evento de CONTACT
             contact_event = Event.create_contact_event(
@@ -552,7 +587,7 @@ def contact(request):
                 request,
                 "Your message has been received successfully. We will review it soon!",
             )
-            return redirect("booksapp:contact")
+            return redirect_with_seed(request, "booksapp:contact")
     else:
         form = ContactForm()
     return render(request, "contact.html", {"form": form})
@@ -569,18 +604,45 @@ def login_view(request):
     Si el usuario ya está autenticado, redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("booksapp:index")
+        return redirect_with_seed(request, "booksapp:index")
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(username=username, password=password)
+        # Normalize credentials
+        raw_username = request.POST.get("username", "")
+        password = request.POST.get("password", "")
+        username = (raw_username or "").strip()
+
+        # Resolve actual username in a case-insensitive way for authentication
+        looked_up_username = username
+        try:
+            existing_user = User.objects.filter(username__iexact=username).first()
+            if existing_user:
+                looked_up_username = existing_user.username
+        except Exception:
+            pass
+
+        user = authenticate(username=looked_up_username, password=password)
         if user is not None:
             login(request, user)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-            login_event = Event.create_login_event(user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
+            login_event = Event.create_login_event(
+                user,
+                web_agent_id,
+                validator_id=request.headers.get("X-Validator-Id", "0"),
+            )
             login_event.save()
-            next_url = request.GET.get("next", reverse("booksapp:index"))
+            # Get seed from form or request
+            seed = request.POST.get("seed") or request.GET.get("seed")
+            default_url = reverse("booksapp:index")
+            next_url = (
+                request.GET.get("next") or request.POST.get("next") or default_url
+            )
+
+            # Preserve seed in redirect
+            if seed:
+                separator = "&" if "?" in next_url else "?"
+                next_url = f"{next_url}{separator}seed={seed}"
+
             messages.success(request, f"Welcome back, {username}!")
             return redirect(next_url)
         else:
@@ -594,11 +656,15 @@ def logout_view(request):
     Registra el evento de cierre de sesión antes de finalizar la sesión.
     """
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-    logout_event = Event.create_logout_event(request.user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
+    logout_event = Event.create_logout_event(
+        request.user,
+        web_agent_id,
+        validator_id=request.headers.get("X-Validator-Id", "0"),
+    )
     logout(request)
     logout_event.save()
     messages.success(request, "You have been logged out successfully.")
-    return redirect("booksapp:index")
+    return redirect_with_seed(request, "booksapp:index")
 
 
 def register_view(request):
@@ -607,22 +673,24 @@ def register_view(request):
     Valida la información, crea el usuario, registra los eventos de registro e inicio de sesión y redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("booksapp:index")
+        return redirect_with_seed(request, "booksapp:index")
 
     if request.method == "POST":
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
+        # Trim and normalize inputs
+        username = (request.POST.get("username", "").strip())
+        email = (request.POST.get("email", "").strip())
+        password1 = request.POST.get("password1") or ""
+        password2 = request.POST.get("password2") or ""
 
         error = False
         if not username or not email or not password1 or not password2:
             messages.error(request, "All fields are required.")
             error = True
-        if User.objects.filter(username=username).exists():
+        # Check duplicates case-insensitively
+        if User.objects.filter(username__iexact=username).exists():
             messages.error(request, "Username already exists.")
             error = True
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email__iexact=email).exists():
             messages.error(request, "Email already in use.")
             error = True
         if password1 != password2:
@@ -633,12 +701,21 @@ def register_view(request):
             error = True
 
         if not error:
-            user = User.objects.create_user(username=username, email=email, password=password1)
+            # Use original casing for username but trimmed
+            user = User.objects.create_user(
+                username=username, email=email, password=password1
+            )
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-            register_event = Event.create_registration_event(user, web_agent_id, validator_id=request.headers.get("X-Validator-Id", "0"))
+            register_event = Event.create_registration_event(
+                user,
+                web_agent_id,
+                validator_id=request.headers.get("X-Validator-Id", "0"),
+            )
             register_event.save()
-            messages.success(request, f"Account created successfully. Welcome, {username}!")
-            return redirect("booksapp:index")
+            messages.success(
+                request, f"Account created successfully. Welcome, {username}!"
+            )
+            return redirect_with_seed(request, "booksapp:index")
 
     return render(request, "register.html")
 
@@ -721,7 +798,7 @@ def profile_view(request):
         edit_user_event.save()
 
         messages.success(request, "Your profile has been updated successfully!")
-        return redirect("booksapp:profile")
+        return redirect_with_seed(request, "booksapp:profile")
 
     # For GET requests, display the form
     all_genres = Genre.objects.all().order_by("name")
