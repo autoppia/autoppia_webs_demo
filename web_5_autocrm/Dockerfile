@@ -50,6 +50,6 @@ COPY --from=deps /app/node_modules ./node_modules
 # app artifacts
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
+# This app has no public directory
 
 CMD ["npm", "start"]
