@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { BodyWrapper } from "@/components/layout/BodyWrapper";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -24,22 +25,24 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <SeedProvider>
-          <CartProvider>
-            {/* <NotificationBanner /> */}
-            <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
-              <Header />
-            </Suspense>
-            <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
+      <SeedProvider>
+      <CartProvider>
+          {/* <NotificationBanner /> */}
+          <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
+            <Header />
+          </Suspense>
+          <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
+            <DataReadyGate>
               <BodyWrapper>
                 {children}
               </BodyWrapper>
-            </Suspense>
-            <Suspense fallback={<div className="h-32 bg-white"></div>}>
-              <Footer />
-            </Suspense>
-          </CartProvider>
-        </SeedProvider>
+            </DataReadyGate>
+          </Suspense>
+          <Suspense fallback={<div className="h-32 bg-white"></div>}>
+            <Footer />
+          </Suspense>
+        </CartProvider>
+      </SeedProvider>
       </body>
     </html>
   );
