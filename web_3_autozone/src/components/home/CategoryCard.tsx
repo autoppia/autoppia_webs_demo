@@ -108,8 +108,9 @@ export function CategoryCard({
                   <Image
                     src={item.image}
                     alt={item.title}
-                    fill
-                    className="object-cover"
+                    width={150}
+                    height={150}
+                    className="object-cover w-auto h-auto"
                   />
                   {/* URL Display on Hover - only show if there's a valid link */}
                   {item.link && item.link !== "#" && (

@@ -111,7 +111,7 @@ export function ProductCarousel({
               }}
               className="flex-none w-[160px] md:w-[200px] group block no-underline text-inherit cursor-pointer relative"
             >
-              <div className="relative h-48 w-full bg-gray-100">
+              <div className="relative w-full bg-gray-100" style={{ height: 150 }}>
                 <Image
                   src={product.image}
                   alt={product.title || "Product image"}
