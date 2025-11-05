@@ -31,6 +31,7 @@ echo "📂 Script directory: $SCRIPT_DIR"
 echo "📂 Demos root:      $DEMOS_DIR"
 
 # 4) Defaults
+# 4) Defaults
 WEB_PORT_DEFAULT=8000
 POSTGRES_PORT_DEFAULT=5434
 WEBS_PORT_DEFAULT=8090
@@ -43,7 +44,14 @@ SEED_VALUE=""    # optional integer seed
 FORCE_DELETE=false
 
 # 5) Parse args (only one public flag, plus -y convenience)
+# 5) Parse args (only one public flag, plus -y convenience)
 for ARG in "$@"; do
+  case "$ARG" in
+    --web_port=*)        WEB_PORT="${ARG#*=}" ;;
+    --postgres_port=*)   POSTGRES_PORT="${ARG#*=}" ;;
+    --webs_port=*)       WEBS_PORT="${ARG#*=}" ;;
+    --webs_postgres=*)   WEBS_PG_PORT="${ARG#*=}" ;;
+    --demo=*)            WEB_DEMO="${ARG#*=}" ;;
   case "$ARG" in
     --web_port=*)        WEB_PORT="${ARG#*=}" ;;
     --postgres_port=*)   POSTGRES_PORT="${ARG#*=}" ;;
@@ -82,9 +90,12 @@ echo
 
 # 6) Check Docker
 if ! command -v docker >/dev/null 2>&1; then
+# 6) Check Docker
+if ! command -v docker >/dev/null 2>&1; then
   echo "❌ Docker not installed."
   exit 1
 fi
+if ! docker info >/dev/null 2>&1; then
 if ! docker info >/dev/null 2>&1; then
   echo "❌ Docker daemon not running."
   exit 1
@@ -100,13 +111,19 @@ deploy_project() {
 
   local dir="$DEMOS_DIR/$name"
   if [[ ! -d "$dir" ]]; then
+  if [[ ! -d "$dir" ]]; then
     echo "⚠️  Directory does not exist: $dir"
+    return 0
     return 0
   fi
 
   echo "📂 Deploying $name (HTTP→$webp, DB→$pgp)..."
   pushd "$dir" >/dev/null
 
+  if docker compose -p "$proj" ps -q | grep -q .; then
+    echo "    [INFO] Removing previous containers..."
+    docker compose -p "$proj" down --volumes
+  fi
   if docker compose -p "$proj" ps -q | grep -q .; then
     echo "    [INFO] Removing previous containers..."
     docker compose -p "$proj" down --volumes
@@ -129,13 +146,16 @@ deploy_webs_server() {
   local name="webs_server"
   local dir="$DEMOS_DIR/$name"
   if [[ ! -d "$dir" ]]; then
+  if [[ ! -d "$dir" ]]; then
     echo "❌ Directory not found: $dir"
     exit 1
   fi
 
   echo "📂 Deploying $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
   pushd "$dir" >/dev/null
+  pushd "$dir" >/dev/null
 
+  docker compose -p "$name" down --volumes || true
   docker compose -p "$name" down --volumes || true
 
   WEB_PORT="$WEBS_PORT" POSTGRES_PORT="$WEBS_PG_PORT" \
@@ -170,6 +190,7 @@ deploy_webs_server() {
 }
 
 # 8) Execute
+# 8) Execute
 case "$WEB_DEMO" in
   movies)
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
@@ -179,33 +200,41 @@ case "$WEB_DEMO" in
     ;;
   autozone)
     deploy_webs_server
+    deploy_webs_server
     deploy_project "web_3_autozone" "$WEB_PORT" "" "autozone_${WEB_PORT}"
     ;;
   autodining)
+    deploy_webs_server
     deploy_webs_server
     deploy_project "web_4_autodining" "$WEB_PORT" "" "autodining_${WEB_PORT}"
     ;;
   autocrm)
     deploy_webs_server
+    deploy_webs_server
     deploy_project "web_5_autocrm" "$WEB_PORT" "" "autocrm_${WEB_PORT}"
     ;;
   automail)
+    deploy_webs_server
     deploy_webs_server
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     ;;
   autodelivery)
     deploy_webs_server
+    deploy_webs_server
     deploy_project "web_7_autodelivery" "$WEB_PORT" "" "autodelivery_${WEB_PORT}"
     ;;
   autolodge)
+    deploy_webs_server
     deploy_webs_server
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
     ;;
   autoconnect)
     deploy_webs_server
+    deploy_webs_server
     deploy_project "web_9_autoconnect" "$WEB_PORT" "" "autoconnect_${WEB_PORT}"
     ;;
   autowork)
+    deploy_webs_server
     deploy_webs_server
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     ;;
