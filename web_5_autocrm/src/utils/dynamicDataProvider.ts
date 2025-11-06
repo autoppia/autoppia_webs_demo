@@ -37,11 +37,15 @@ export class DynamicDataProvider {
     this.isEnabled = isDynamicHtmlEnabled();
     this.dataGenerationEnabled = isDataGenerationEnabled();
     
-    // hydrate from cache if available to keep content stable across reloads
-    const cachedClients = readCachedClients();
-    const cachedMatters = readCachedMatters();
-    this.clients = Array.isArray(cachedClients) && cachedClients.length > 0 ? cachedClients : [];
-    this.matters = Array.isArray(cachedMatters) && cachedMatters.length > 0 ? cachedMatters : [];
+    // hydrate from cache if available to keep content stable across reloads (unless unique mode is enabled)
+    const uniqueFlag = (process.env.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || process.env.DATA_GENERATION_UNIQUE || '').toString().toLowerCase();
+    const isUnique = uniqueFlag === 'true' || uniqueFlag === '1' || uniqueFlag === 'yes' || uniqueFlag === 'on';
+    if (!isUnique) {
+      const cachedClients = readCachedClients();
+      const cachedMatters = readCachedMatters();
+      this.clients = Array.isArray(cachedClients) && cachedClients.length > 0 ? cachedClients : [];
+      this.matters = Array.isArray(cachedMatters) && cachedMatters.length > 0 ? cachedMatters : [];
+    }
     
     this.readyPromise = new Promise<void>((resolve) => {
       this.resolveReady = resolve;

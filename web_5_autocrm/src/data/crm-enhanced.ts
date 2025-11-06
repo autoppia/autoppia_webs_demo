@@ -87,6 +87,11 @@ const DATA_GENERATION_CONFIG = {
   AVAILABLE_MATTER_CATEGORIES: ["Active", "On Hold", "Archived"],
 };
 
+function isUniqueGenerationEnabled(): boolean {
+  const raw = (process.env.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || process.env.DATA_GENERATION_UNIQUE || '').toString().toLowerCase();
+  return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
+}
+
 /**
  * Normalize client data to ensure consistent structure
  */
@@ -121,11 +126,13 @@ function normalizeMatter(matter: any, index: number): any {
 export async function initializeClients(): Promise<any[]> {
   if (isDataGenerationAvailable()) {
     try {
-      // Use cached clients on client to prevent re-generation on reloads
-      const cached = readCachedClients();
-      if (cached && cached.length > 0) {
-        dynamicClients = cached.map(normalizeClient);
-        return dynamicClients;
+      // Use cache only if unique mode is disabled
+      if (!isUniqueGenerationEnabled()) {
+        const cached = readCachedClients();
+        if (cached && cached.length > 0) {
+          dynamicClients = cached.map(normalizeClient);
+          return dynamicClients;
+        }
       }
 
       console.log("🚀 Starting async data generation for clients...");
@@ -151,8 +158,10 @@ export async function initializeClients(): Promise<any[]> {
       }));
 
       dynamicClients = normalized;
-      // Cache generated products on client
-      writeCachedClients(dynamicClients);
+      // Cache only if unique mode is disabled
+      if (!isUniqueGenerationEnabled()) {
+        writeCachedClients(dynamicClients);
+      }
       return dynamicClients;
     } catch (error) {
       console.warn("⚠️ Failed to generate clients while generation is enabled. Keeping clients empty until ready. Error:", error);
@@ -172,10 +181,12 @@ export async function initializeClients(): Promise<any[]> {
 export async function initializeMatters(): Promise<any[]> {
   if (isDataGenerationAvailable()) {
     try {
-      const cached = readCachedMatters();
-      if (cached && cached.length > 0) {
-        dynamicMatters = cached.map(normalizeMatter);
-        return dynamicMatters;
+      if (!isUniqueGenerationEnabled()) {
+        const cached = readCachedMatters();
+        if (cached && cached.length > 0) {
+          dynamicMatters = cached.map(normalizeMatter);
+          return dynamicMatters;
+        }
       }
 
       console.log("🚀 Starting async data generation for matters...");
@@ -196,7 +207,9 @@ export async function initializeMatters(): Promise<any[]> {
       }));
 
       dynamicMatters = normalized;
-      writeCachedMatters(dynamicMatters);
+      if (!isUniqueGenerationEnabled()) {
+        writeCachedMatters(dynamicMatters);
+      }
       return dynamicMatters;
     } catch (error) {
       console.warn("⚠️ Failed to generate matters while generation is enabled. Error:", error);
@@ -215,17 +228,21 @@ export async function initializeMatters(): Promise<any[]> {
 export async function initializeFiles(): Promise<any[]> {
   if (isDataGenerationAvailable()) {
     try {
-      const cached = readCachedFiles();
-      if (cached && cached.length > 0) {
-        dynamicFiles = cached;
-        return dynamicFiles;
+      if (!isUniqueGenerationEnabled()) {
+        const cached = readCachedFiles();
+        if (cached && cached.length > 0) {
+          dynamicFiles = cached;
+          return dynamicFiles;
+        }
       }
 
       const count = DATA_GENERATION_CONFIG.DEFAULT_FILES_COUNT;
       const generatedFiles = await generateFilesWithFallback([], count);
       
       dynamicFiles = generatedFiles;
-      writeCachedFiles(dynamicFiles);
+      if (!isUniqueGenerationEnabled()) {
+        writeCachedFiles(dynamicFiles);
+      }
       return dynamicFiles;
     } catch (error) {
       console.warn("⚠️ Failed to generate files. Error:", error);
@@ -244,17 +261,21 @@ export async function initializeFiles(): Promise<any[]> {
 export async function initializeEvents(): Promise<any[]> {
   if (isDataGenerationAvailable()) {
     try {
-      const cached = readCachedEvents();
-      if (cached && cached.length > 0) {
-        dynamicEvents = cached;
-        return dynamicEvents;
+      if (!isUniqueGenerationEnabled()) {
+        const cached = readCachedEvents();
+        if (cached && cached.length > 0) {
+          dynamicEvents = cached;
+          return dynamicEvents;
+        }
       }
 
       const count = DATA_GENERATION_CONFIG.DEFAULT_EVENTS_COUNT;
       const generatedEvents = await generateEventsWithFallback([], count);
       
       dynamicEvents = generatedEvents;
-      writeCachedEvents(dynamicEvents);
+      if (!isUniqueGenerationEnabled()) {
+        writeCachedEvents(dynamicEvents);
+      }
       return dynamicEvents;
     } catch (error) {
       console.warn("⚠️ Failed to generate events. Error:", error);
@@ -273,17 +294,21 @@ export async function initializeEvents(): Promise<any[]> {
 export async function initializeLogs(): Promise<any[]> {
   if (isDataGenerationAvailable()) {
     try {
-      const cached = readCachedLogs();
-      if (cached && cached.length > 0) {
-        dynamicLogs = cached;
-        return dynamicLogs;
+      if (!isUniqueGenerationEnabled()) {
+        const cached = readCachedLogs();
+        if (cached && cached.length > 0) {
+          dynamicLogs = cached;
+          return dynamicLogs;
+        }
       }
 
       const count = DATA_GENERATION_CONFIG.DEFAULT_LOGS_COUNT;
       const generatedLogs = await generateLogsWithFallback([], count);
       
       dynamicLogs = generatedLogs;
-      writeCachedLogs(dynamicLogs);
+      if (!isUniqueGenerationEnabled()) {
+        writeCachedLogs(dynamicLogs);
+      }
       return dynamicLogs;
     } catch (error) {
       console.warn("⚠️ Failed to generate logs. Error:", error);

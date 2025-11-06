@@ -42,12 +42,14 @@ export interface CrmClient {
 `,
     examples: [
       { id: 'CL-1001', name: 'Acme Biotech', email: 'legal@acmebio.com', matters: 2, status: 'Active', last: '2d ago' },
+      { id: 'CL-1042', name: 'Peak Ventures', email: 'contact@peakventures.com', matters: 4, status: 'On Hold', last: '1w ago' },
+      { id: 'CL-1099', name: 'Jessica Brown', email: 'jessica.brown@mailbox.com', matters: 1, status: 'Active', last: 'Yesterday' },
     ],
     categories: ['Active','On Hold','Archived'],
     namingRules: {
       id: 'CL-{number}'
     },
-    additionalRequirements: 'Generate realistic CRM clients with unique ids, corporate/individual names, valid-looking emails, matters count 0-8, and status in {Active, On Hold, Archived}. Keep names and emails coherent.'
+    additionalRequirements: 'Generate realistic CRM clients with unique ids (use CL-####), coherent corporate/person names, and valid emails with matching domains (no placeholders). matters must be an integer 0–8. status must be one of {Active, On Hold, Archived} with a realistic distribution (≈60% Active, 25% On Hold, 15% Archived). Include a short humanized last value like "Today", "Yesterday", "2d ago", "1w ago". Avoid lorem text, dummy values, or duplicates. Ensure names and emails feel from the same entity.'
   },
   'web_5_autocrm:matters': {
     projectName: 'AutoCRM Matters',
@@ -63,10 +65,12 @@ export interface CrmMatter {
 `,
     examples: [
       { id: 'MAT-0101', name: 'Contract Review', client: 'Acme Biotech', status: 'Active', updated: 'Today' },
+      { id: 'MAT-0142', name: 'IP Filing – Software Patent', client: 'Peak Ventures', status: 'On Hold', updated: '3d ago' },
+      { id: 'MAT-0190', name: 'M&A Due Diligence', client: 'Global Reach Inc.', status: 'Archived', updated: 'Last week' },
     ],
     categories: ['Active','On Hold','Archived'],
     namingRules: { id: 'MAT-{number}' },
-    additionalRequirements: 'Return realistic legal matter items with clear names and client names; ensure status is one of {Active, On Hold, Archived} and updated is short humanized text.'
+    additionalRequirements: 'Return realistic legal matter items with specific, professional names (e.g., "Trademark Registration – Class 25"). client must look like a real client name. status ∈ {Active, On Hold, Archived} with varied mix. updated must be a short humanized string like "Today", "Yesterday", "2d ago", "Last week". No lorem, no placeholders, no duplicates. Keep naming consistent with clients.'
   },
   'web_5_autocrm:files': {
     projectName: 'AutoCRM Files',
@@ -83,10 +87,12 @@ export interface CrmFile {
 `,
     examples: [
       { id: 1, name: 'Retainer-Agreement.pdf', size: '234 KB', version: 'v2', updated: 'Today', status: 'Signed' },
+      { id: 2, name: 'NDA-Sample.docx', size: '98 KB', version: 'v1', updated: 'Yesterday', status: 'Draft' },
+      { id: 3, name: 'Patent-Application.pdf', size: '1.3 MB', version: 'v4', updated: 'Last month', status: 'Submitted' },
     ],
     categories: ['Signed','Draft','Submitted'],
     namingRules: {},
-    additionalRequirements: 'Provide diverse legal document names with plausible sizes and version strings; choose status from {Signed, Draft, Submitted}.'
+    additionalRequirements: 'Provide diverse, realistic legal document names and extensions (.pdf, .docx). Use plausible sizes 60 KB–3 MB. version strings must be in the form v1..v6. updated must be a short humanized string like "Today", "Yesterday", "2d ago", "Last week". status ∈ {Signed, Draft, Submitted}. No placeholders or duplicates.'
   },
   'web_5_autocrm:events': {
     projectName: 'AutoCRM Calendar Events',
@@ -102,11 +108,13 @@ export interface CalendarEvent {
 }
 `,
     examples: [
-      { id: 1001, date: '2025-05-21', label: 'Client Call – Jessica', time: '2:00pm', color: 'forest' },
+      { id: 1001, date: '2025-05-21', label: 'Client Call – Jessica Brown', time: '2:00pm', color: 'forest' },
+      { id: 1002, date: '2025-05-22', label: 'Court Filing – Smith v. Jones', time: '9:30am', color: 'blue' },
+      { id: 1003, date: '2025-05-25', label: 'Internal Review – M&A Diligence', time: '1:15pm', color: 'indigo' },
     ],
     categories: ['calendar'],
     namingRules: {},
-    additionalRequirements: 'Events must be reasonable law-firm items; keep times human-readable and colors limited to {forest, indigo, blue, zinc}.'
+    additionalRequirements: 'Events must be realistic law-firm items with specific labels (e.g., "Client Call – Full Name", "Court Filing – Case Name"). Dates should be within the current and next month in YYYY-MM-DD. time should be in the format like "11:00am" or "3:45pm". color ∈ {forest, indigo, blue, zinc}. Avoid placeholders.'
   },
   'web_5_autocrm:logs': {
     projectName: 'AutoCRM Billing Logs',
@@ -124,10 +132,12 @@ export interface BillingLog {
 `,
     examples: [
       { id: 5001, matter: 'Estate Planning', client: 'Smith & Co.', date: '2025-05-19', hours: 2, description: 'Consultation', status: 'Billable' },
+      { id: 5002, matter: 'Contract Review', client: 'Acme Biotech', date: '2025-05-18', hours: 1.5, description: 'Draft changes', status: 'Billed' },
+      { id: 5003, matter: 'IP Filing', client: 'Peak Ventures', date: '2025-05-17', hours: 3.25, description: 'Prepare documents', status: 'Billable' },
     ],
     categories: ['billing'],
     namingRules: {},
-    additionalRequirements: 'Mix of Billable and Billed entries with realistic hours (0.5–6) and short descriptions.'
+    additionalRequirements: 'Mix of Billable and Billed entries with realistic hours in 0.25 increments (0.5–6.0). date should be within the last 60 days in YYYY-MM-DD. description should be concise and specific (e.g., "Draft terms", "Client call", "Court filing"). Ensure matter and client names look coherent. No placeholders or duplicates.'
   },
 
 };
@@ -155,6 +165,8 @@ export async function generateProjectData(
   
   try {
     const baseUrl = getApiBaseUrl();
+    const randomSeed = Math.floor(Math.random() * 1_000_000_000);
+    const runId = `${projectKey}-${Date.now()}-${randomSeed}`;
     const response = await fetch(`${baseUrl}/datasets/generate`, {
       method: 'POST',
       headers: {
@@ -170,6 +182,9 @@ export async function generateProjectData(
         project_key: projectKey,
         entity_type: config.dataType,
         save_to_db: true,
+        // Add variability so responses differ across runs
+        random_seed: randomSeed,
+        run_id: runId,
       })
     });
 

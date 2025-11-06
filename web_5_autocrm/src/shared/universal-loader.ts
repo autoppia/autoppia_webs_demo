@@ -16,14 +16,20 @@ export async function loadDataOrGenerate<T>({ projectKey, entityType, generateCo
 
   const genFlag = (process.env.NEXT_PUBLIC_DATA_GENERATION || process.env.ENABLE_DATA_GENERATION || '').toString().toLowerCase()
   const isGen = genFlag === 'true' || genFlag === '1' || genFlag === 'yes' || genFlag === 'on'
+  const uniqueFlag = (process.env.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || process.env.DATA_GENERATION_UNIQUE || '').toString().toLowerCase()
+  const isUnique = uniqueFlag === 'true' || uniqueFlag === '1' || uniqueFlag === 'yes' || uniqueFlag === 'on'
 
   if (isGen) {
     const key = buildStorageKey({ projectKey, entityType, mode: 'gen', version })
-    const cached = readJson<{ data: T[]; savedAt: number }>(key)
-    if (cached && (!ttlMs || (Date.now() - cached.savedAt) < ttlMs)) return cached.data
+    if (!isUnique) {
+      const cached = readJson<{ data: T[]; savedAt: number }>(key)
+      if (cached && (!ttlMs || (Date.now() - cached.savedAt) < ttlMs)) return cached.data
+    }
     const resp = await generateProjectData(projectKey, generateCount, categories)
     const data = (resp.success ? resp.data : []) as T[]
-    writeJson(key, { data, savedAt: Date.now() })
+    if (!isUnique) {
+      writeJson(key, { data, savedAt: Date.now() })
+    }
     return data
   }
 
