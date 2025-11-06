@@ -86,9 +86,6 @@ export default function ClientsDirectory() {
         </DynamicButton>
       </DynamicElement>
       <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
-        {isLoading && (
-          <div className="py-6 px-6 text-zinc-400">Loading clients…</div>
-        )}
         {error && (
           <div className="py-6 px-6 text-red-600">Failed to load data: {error}</div>
         )}

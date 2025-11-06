@@ -1,4 +1,18 @@
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { 
+  initializeClients, 
+  initializeMatters, 
+  initializeFiles, 
+  initializeEvents, 
+  initializeLogs,
+  loadClientsFromDb,
+  loadMattersFromDb,
+  readCachedClients,
+  readCachedMatters,
+  writeCachedClients,
+  writeCachedMatters,
+} from "@/data/crm-enhanced";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -9,9 +23,32 @@ const isDynamicHtmlEnabled = (): boolean => {
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled: boolean = false;
+  private dataGenerationEnabled: boolean = false;
+  private ready: boolean = false;
+  private readyPromise: Promise<void>;
+  private resolveReady!: () => void;
+  private clients: any[] = [];
+  private matters: any[] = [];
+  private files: any[] = [];
+  private events: any[] = [];
+  private logs: any[] = [];
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    this.dataGenerationEnabled = isDataGenerationEnabled();
+    
+    // hydrate from cache if available to keep content stable across reloads
+    const cachedClients = readCachedClients();
+    const cachedMatters = readCachedMatters();
+    this.clients = Array.isArray(cachedClients) && cachedClients.length > 0 ? cachedClients : [];
+    this.matters = Array.isArray(cachedMatters) && cachedMatters.length > 0 ? cachedMatters : [];
+    
+    this.readyPromise = new Promise<void>((resolve) => {
+      this.resolveReady = resolve;
+    });
+    
+    // Initialize data with data generation if enabled
+    this.initializeData();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -21,8 +58,129 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
+  private async initializeData(): Promise<void> {
+    try {
+      // Try DB mode first if enabled
+      const dbClients = await loadClientsFromDb();
+      const dbMatters = await loadMattersFromDb();
+      if (dbClients.length > 0) {
+        this.clients = dbClients;
+        writeCachedClients(this.clients);
+      }
+      if (dbMatters.length > 0) {
+        this.matters = dbMatters;
+        writeCachedMatters(this.matters);
+      }
+      
+      if (dbClients.length > 0 || dbMatters.length > 0) {
+        // Still initialize other entities even if DB provided clients/matters
+        await Promise.all([
+          initializeFiles(),
+          initializeEvents(),
+          initializeLogs(),
+        ]).then(([files, events, logs]) => {
+          this.files = files;
+          this.events = events;
+          this.logs = logs;
+        });
+        
+        this.ready = true;
+        this.resolveReady();
+        return;
+      }
+      
+      // Generate all data in parallel for better performance
+      console.log("🚀 Initializing all CRM data...");
+      const [initializedClients, initializedMatters, initializedFiles, initializedEvents, initializedLogs] = await Promise.all([
+        initializeClients(),
+        initializeMatters(),
+        initializeFiles(),
+        initializeEvents(),
+        initializeLogs(),
+      ]);
+      
+      this.clients = initializedClients;
+      this.matters = initializedMatters;
+      this.files = initializedFiles;
+      this.events = initializedEvents;
+      this.logs = initializedLogs;
+      
+      // Cache primary entities to maintain stability across navigations
+      if (this.clients.length > 0) writeCachedClients(this.clients);
+      if (this.matters.length > 0) writeCachedMatters(this.matters);
+      console.log("✅ All CRM data initialized successfully");
+      
+      // Mark as ready only when either generation is disabled or we have generated data
+      if (!this.dataGenerationEnabled || this.clients.length > 0 || this.matters.length > 0) {
+        this.ready = true;
+        this.resolveReady();
+      }
+
+    } catch (error) {
+      console.error("❌ Error initializing CRM data:", error);
+      // Keep silent in production; initialize readiness when generation off
+      // If generation is enabled, do not mark ready here; the gate will continue showing loading
+      if (!this.dataGenerationEnabled) {
+        this.ready = true;
+        this.resolveReady();
+      }
+    }
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
+  }
+
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
+  }
+
+  public getClients(): any[] {
+    return this.clients;
+  }
+
+  public getMatters(): any[] {
+    return this.matters;
+  }
+
+  public getFiles(): any[] {
+    return this.files;
+  }
+
+  public getEvents(): any[] {
+    return this.events;
+  }
+
+  public getLogs(): any[] {
+    return this.logs;
+  }
+
+  public getClientById(id: string): any | undefined {
+    return this.clients.find((client) => client.id === id);
+  }
+
+  public getMatterById(id: string): any | undefined {
+    return this.matters.find((matter) => matter.id === id);
+  }
+
+  public searchClients(query: string): any[] {
+    const lowercaseQuery = query.toLowerCase();
+    return this.clients.filter((client) =>
+      client.name.toLowerCase().includes(lowercaseQuery) ||
+      client.email?.toLowerCase().includes(lowercaseQuery)
+    );
+  }
+
+  public searchMatters(query: string): any[] {
+    const lowercaseQuery = query.toLowerCase();
+    return this.matters.filter((matter) =>
+      matter.name.toLowerCase().includes(lowercaseQuery) ||
+      matter.client?.toLowerCase().includes(lowercaseQuery)
+    );
   }
 
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
@@ -223,6 +381,19 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
+
+// Data access helpers
+export const getClients = () => dynamicDataProvider.getClients();
+export const getMatters = () => dynamicDataProvider.getMatters();
+export const getFiles = () => dynamicDataProvider.getFiles();
+export const getEvents = () => dynamicDataProvider.getEvents();
+export const getLogs = () => dynamicDataProvider.getLogs();
+export const getClientById = (id: string) => dynamicDataProvider.getClientById(id);
+export const getMatterById = (id: string) => dynamicDataProvider.getMatterById(id);
+export const searchClients = (query: string) => dynamicDataProvider.searchClients(query);
+export const searchMatters = (query: string) => dynamicDataProvider.searchMatters(query);
+export const isReady = () => dynamicDataProvider.isReady();
+export const whenReady = () => dynamicDataProvider.whenReady();
 
 // Static data helpers
 export const getStaticClients = () => dynamicDataProvider.getStaticClients();

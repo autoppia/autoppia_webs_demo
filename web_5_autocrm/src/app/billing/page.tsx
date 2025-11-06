@@ -211,9 +211,6 @@ export default function BillingPage() {
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-5">Recent Logs</h2>
           <div className="flex flex-col gap-4">
-            {isLoading && (
-              <div className="text-zinc-400 px-4 py-2">Loading logs…</div>
-            )}
             {error && (
               <div className="text-red-600 px-4 py-2">Failed to load logs: {error}</div>
             )}

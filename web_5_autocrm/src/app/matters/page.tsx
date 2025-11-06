@@ -145,9 +145,6 @@ export default function MattersListPage() {
 
         {/* Matter List */}
         <div className="grid gap-4">
-          {isLoading && (
-            <div className="text-zinc-400">Loading matters…</div>
-          )}
           {error && (
             <div className="text-red-600">Failed to load matters: {error}</div>
           )}

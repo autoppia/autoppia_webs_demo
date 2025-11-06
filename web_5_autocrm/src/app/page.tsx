@@ -13,7 +13,8 @@ function DashboardContent() {
   const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
-  const { isLoading } = useProjectDataMany([
+  // Initialize data (loading handled by DataReadyGate)
+  useProjectDataMany([
     { key: 'clients', projectKey: 'web_5_autocrm', entityType: 'clients', generateCount: 60, version: 'v1' },
   ]);
 
@@ -21,7 +22,6 @@ function DashboardContent() {
     <section className={`${layoutClasses.spacing}`}>
       <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">Dashboard Overview</h1>
       <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
-        {isLoading && <div className="col-span-full text-zinc-400">Loading dashboard data…</div>}
         {/* Card 1: Matters */}
         <SeedLink
           href="/matters"
@@ -106,7 +106,7 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={null}>
       <DashboardContent />
     </Suspense>
   );

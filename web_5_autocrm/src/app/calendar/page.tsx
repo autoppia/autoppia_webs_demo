@@ -101,9 +101,6 @@ export default function CalendarPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
-        {isLoading && (
-          <div className="px-6 py-3 text-zinc-400">Loading calendar…</div>
-        )}
         {error && (
           <div className="px-6 py-3 text-red-600">Failed to load calendar: {error}</div>
         )}

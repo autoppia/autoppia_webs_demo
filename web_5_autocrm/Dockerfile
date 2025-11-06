@@ -27,6 +27,7 @@ ARG DATA_SEED_VALUE
 ARG NEXT_PUBLIC_DATA_SEED_VALUE
 ENV ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
     ENABLE_DATA_GENERATION=$ENABLE_DATA_GENERATION \
+    NEXT_PUBLIC_DATA_GENERATION=$ENABLE_DATA_GENERATION \
     ENABLE_DB_MODE=$ENABLE_DB_MODE \
     NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
     API_URL=$API_URL \
@@ -50,6 +51,7 @@ COPY --from=deps /app/node_modules ./node_modules
 # app artifacts
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/next.config.js ./next.config.js
 # This app has no public directory
 
 CMD ["npm", "start"]

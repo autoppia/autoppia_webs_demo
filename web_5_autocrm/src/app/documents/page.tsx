@@ -105,9 +105,6 @@ export default function DocumentsPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {isLoading && (
-          <div className="col-span-full text-zinc-400">Loading documents…</div>
-        )}
         {error && (
           <div className="col-span-full text-red-600">Failed to load documents: {error}</div>
         )}
