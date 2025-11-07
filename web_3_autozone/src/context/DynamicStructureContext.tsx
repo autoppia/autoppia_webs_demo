@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, Suspense, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   dynamicStructureProvider,
@@ -19,15 +19,35 @@ const DynamicStructureContext = createContext<
   DynamicStructureContextType | undefined
 >(undefined);
 
+// Internal component that handles URL params
+function DynamicStructureInitializer({
+  onSeedStructureFromUrl,
+}: {
+  onSeedStructureFromUrl: (seedStructure: number) => void;
+}) {
+  const searchParams = useSearchParams();
+  const rawSeedStructure = Number(searchParams.get("seed-structure") ?? "1");
+  const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure);
+
+  useEffect(() => {
+    onSeedStructureFromUrl(seedStructure);
+  }, [seedStructure, onSeedStructureFromUrl]);
+
+  return null;
+}
+
 export function DynamicStructureProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const searchParams = useSearchParams();
-  const rawSeedStructure = Number(searchParams.get("seed-structure") ?? "1");
-  const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure);
+  const [seedStructure, setSeedStructure] = useState<number>(1);
   const isEnabled = dynamicStructureProvider.isDynamicStructureModeEnabled();
+
+  // Handle seed structure from URL
+  const handleSeedStructureFromUrl = useCallback((urlSeedStructure: number) => {
+    setSeedStructure(urlSeedStructure);
+  }, []);
 
   // Set variation based on seed-structure from URL
   useEffect(() => {
@@ -62,6 +82,9 @@ export function DynamicStructureProvider({
         isEnabled,
       }}
     >
+      <Suspense fallback={null}>
+        <DynamicStructureInitializer onSeedStructureFromUrl={handleSeedStructureFromUrl} />
+      </Suspense>
       {children}
     </DynamicStructureContext.Provider>
   );
