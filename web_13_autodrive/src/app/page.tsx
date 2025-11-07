@@ -1,6 +1,7 @@
 "use client";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { whenDataReady, isDataReady } from "@/utils/dynamicDataProvider";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent, EventType } from "@/library/event";
 import DynamicLayout from "@/components/DynamicLayout";
@@ -289,6 +290,24 @@ function ProfileDropdown({
 function HomePage() {
   const router = useSeedRouter();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [generating, setGenerating] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    if (isDataReady()) {
+      setGenerating(false);
+      return;
+    }
+    (async () => {
+      setGenerating(true);
+      try {
+        await whenDataReady();
+      } finally {
+        if (mounted) setGenerating(false);
+      }
+    })();
+    return () => { mounted = false; };
+  }, []);
 
   // Header component
   const header = (
@@ -465,6 +484,17 @@ function HomePage() {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-[#eaf6fd] via-[#f5fbfc] to-[#eaf6fd] overflow-x-hidden">
+      {generating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="bg-white rounded-xl shadow-lg px-6 py-4 text-center">
+            <div className="flex items-center justify-center mb-3">
+              <span className="inline-block w-5 h-5 mr-2 border-2 border-[#2095d2] border-t-transparent rounded-full animate-spin"></span>
+              <span className="text-[#2095d2] font-semibold">Data Generation is in progress</span>
+            </div>
+            <div className="text-gray-600 text-sm">This may take some time…</div>
+          </div>
+        </div>
+      )}
       <DynamicLayout
         header={header}
         main={
