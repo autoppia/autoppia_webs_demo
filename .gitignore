@@ -77,15 +77,12 @@ dmypy.json
 .pytype/
 cython_debug/
 .idea/
-# =========================
-# NODE / NEXT.JS ADDITIONS
-# =========================
 
-# Node modules
-node_modules/
+
+# Node Modules
 **/node_modules/
-
-# Next.js build output
-.next/
 **/.next/
+**/next-env.d.ts
+*/.next/
+*/node_modules/
 *pnpm-lock.yaml

@@ -6,19 +6,17 @@ import { useSeed } from "@/context/SeedContext";
 import { 
   getLayoutConfig
 } from "@/utils/dynamicDataProvider";
+import { useProjectDataMany } from "@/shared/universal-loader";
 import { getLayoutClasses } from "@/utils/seedLayout";
-// import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
-
-// interface EventData {
-//   label: string;
-//   href: string;
-// }
 
 function DashboardContent() {
   const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
-  // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
+  // Initialize data (loading handled by DataReadyGate)
+  useProjectDataMany([
+    { key: 'clients', projectKey: 'web_5_autocrm', entityType: 'clients', generateCount: 60, version: 'v1' },
+  ]);
 
   return (
     <section className={`${layoutClasses.spacing}`}>
@@ -27,7 +25,6 @@ function DashboardContent() {
         {/* Card 1: Matters */}
         <SeedLink
           href="/matters"
-          // onClick={handleClick(EVENT_TYPES.MATTERS_SIDEBAR_CLICKED, { label: "Active Matters", href: "/matters" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -41,7 +38,6 @@ function DashboardContent() {
         {/* Card 2: Clients */}
         <SeedLink
           href="/clients"
-          // onClick={handleClick(EVENT_TYPES.CLIENTS_SIDEBAR_CLICKED, { label: "Clients", href: "/clients" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -55,7 +51,6 @@ function DashboardContent() {
         {/* Card 3: Calendar */}
         <SeedLink
           href="/calendar"
-          // onClick={handleClick(EVENT_TYPES.CALENDAR_SIDEBAR_CLICKED, { label: "Upcoming Events", href: "/calendar" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -69,7 +64,6 @@ function DashboardContent() {
         {/* Card 4: Documents */}
         <SeedLink
           href="/documents"
-          // onClick={handleClick(EVENT_TYPES.DOCUMENTS_SIDEBAR_CLICKED, { label: "Documents", href: "/documents" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -83,7 +77,6 @@ function DashboardContent() {
         {/* Card 5: Time Tracking */}
         <SeedLink
           href="/billing"
-          // onClick={handleClick(EVENT_TYPES.TIME_AND_BILLING_SIDEBAR_CLICKED, { label: "Time & Billing", href: "/billing" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -97,7 +90,6 @@ function DashboardContent() {
         {/* Card 6: Settings */}
         <SeedLink
           href="/settings"
-          // onClick={handleClick(EVENT_TYPES.SETTINGS_SIDEBAR_CLICKED, { label: "Settings", href: "/settings" })}
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
@@ -114,7 +106,7 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={null}>
       <DashboardContent />
     </Suspense>
   );

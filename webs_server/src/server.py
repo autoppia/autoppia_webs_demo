@@ -269,7 +269,6 @@ async def save_event_endpoint(event: EventInput):
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Database service temporarily unavailable.",
         )
-
     try:
         event_data_json_string = orjson.dumps(event.data).decode("utf-8")
         # --- Apply trimming before saving ---
