@@ -8,6 +8,7 @@ import UserNameBadge from "@/components/UserNameBadge";
 import { SeedProvider } from "@/context/SeedContext";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,20 +58,22 @@ export default function RootLayout({
               <UserNameBadge />
             </div>
           </nav>
-          <div className="flex min-h-[calc(100vh-5rem)] relative">
-            <Sidebar />
-            <main
-              className={`flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto ${layoutClasses.content}`}
-              style={{
-                paddingLeft: 60,
-                paddingRight: 60,
-                paddingTop: 40,
-                paddingBottom: 40,
-              }}
-            >
-              {children}
-            </main>
-          </div>
+          <DataReadyGate>
+            <div className="flex min-h-[calc(100vh-5rem)] relative">
+              <Sidebar />
+              <main
+                className={`flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto ${layoutClasses.content}`}
+                style={{
+                  paddingLeft: 60,
+                  paddingRight: 60,
+                  paddingTop: 40,
+                  paddingBottom: 40,
+                }}
+              >
+                {children}
+              </main>
+            </div>
+          </DataReadyGate>
         </SeedProvider>
       </body>
     </html>

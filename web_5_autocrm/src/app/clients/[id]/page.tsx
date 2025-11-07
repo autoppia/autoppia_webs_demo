@@ -60,7 +60,7 @@ export default function ClientProfilePage() {
   if (!client) {
     return (
       <section className="flex justify-center items-center h-screen">
-        <p className="text-zinc-500">Loading client details or client not found...</p>
+        <p className="text-zinc-500">Client not found</p>
       </section>
     );
   }

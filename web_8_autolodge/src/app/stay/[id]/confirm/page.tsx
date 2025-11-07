@@ -3,7 +3,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import { useState, useEffect, useMemo } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { useRef } from "react";
 import { useSeedLayout } from "@/library/utils";
 import { DynamicWrapper } from "@/components/DynamicWrapper";
@@ -28,8 +28,8 @@ function ConfirmPageContent() {
   const search = useSearchParams();
   const prop = useMemo(() => {
     const numId = Number(params.id);
-    const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
-    return hotel ?? DASHBOARD_HOTELS[0];
+    const hotel = dynamicDataProvider.getHotelById(numId);
+    return hotel ?? dynamicDataProvider.getHotels()[0];
   }, [params.id]);
   const stayFrom = new Date(prop.datesFrom);
   const stayTo = new Date(prop.datesTo);
