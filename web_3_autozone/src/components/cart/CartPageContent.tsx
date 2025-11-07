@@ -2,13 +2,11 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
-<<<<<<< HEAD
+
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import Link from "next/link";
-=======
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
->>>>>>> main
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
@@ -29,12 +27,10 @@ interface CartItem {
 export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
-<<<<<<< HEAD
+
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
-=======
   const router = useSeedRouter();
->>>>>>> main
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
@@ -108,11 +104,7 @@ export function CartPageContent() {
                   <p className="mb-4 text-base text-gray-400">
                     {getText("empty_cart_message")}
                   </p>
-<<<<<<< HEAD
-                  <Link href={withSeed("/", searchParams)}>
-=======
                   <SeedLink href="/">
->>>>>>> main
                     <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
                       {getText("continue_shopping")}
                     </Button>
@@ -146,11 +138,6 @@ export function CartPageContent() {
                         </div>
                         {/* Product Details */}
                         <div className="flex-1 flex flex-col justify-between">
-<<<<<<< HEAD
-                          <Link
-                            href={withSeed(`/${item.id}`, searchParams)}
-                            className="text-base font-medium hover:text-blue-600"
-=======
                           <a
                             href={`#${item.id}`}
                             title={`View ${item.title} - Product ID: ${item.id}`}
@@ -162,10 +149,9 @@ export function CartPageContent() {
                             }}
                             onClick={(e) => {
                               e.preventDefault();
-                              router.push(`/${item.id}`);
+                              router.push(withSeed(`/${item.id}`, searchParams));
                             }}
                             className="text-base font-medium hover:text-blue-600 no-underline cursor-pointer"
->>>>>>> main
                           >
                             {item.title}
                           </a>
@@ -258,11 +244,8 @@ export function CartPageContent() {
                     {getText("gift_checkbox")}
                   </label>
                 </div>
-<<<<<<< HEAD
-                <Link href={withSeed("/checkout", searchParams)}>
-=======
+
                 <SeedLink href="/checkout">
->>>>>>> main
                   <Button
                     id={getId("checkout_button")}
                     className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}

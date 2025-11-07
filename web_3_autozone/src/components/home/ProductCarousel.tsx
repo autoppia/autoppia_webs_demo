@@ -34,12 +34,12 @@ export function ProductCarousel({
   seed = 1,
 }: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-<<<<<<< HEAD
+
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
-=======
+
   const router = useSeedRouter();
->>>>>>> main
+
   // const [showLeftButton, setShowLeftButton] = useState(false);
   // const [showRightButton, setShowRightButton] = useState(true);
 
@@ -95,10 +95,6 @@ export function ProductCarousel({
           {products.map((product) => (
             <a
               key={product.id}
-<<<<<<< HEAD
-              href={withSeed(`/${product.id}`, searchParams)}
-              onClick={() =>
-=======
               href={`#${product.id}`}
               title={`View ${product.title} - Product ID: ${product.id}`}
               onMouseEnter={() => {
@@ -111,7 +107,6 @@ export function ProductCarousel({
               }}
               onClick={(e) => {
                 e.preventDefault();
->>>>>>> main
                 logEvent(EVENT_TYPES.VIEW_DETAIL, {
                   section: product.description,
                   title: product.title,
@@ -120,7 +115,7 @@ export function ProductCarousel({
                   rating: product.rating ?? 12,
                   brand: product.brand || "generic",
                 });
-                router.push(`/${product.id}`);
+                router.push(withSeed(`/${product.id}`, searchParams));
               }}
               className="flex-none w-[160px] md:w-[200px] group block no-underline text-inherit cursor-pointer relative"
             >

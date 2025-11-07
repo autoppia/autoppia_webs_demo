@@ -50,13 +50,11 @@ export function CategoryCard({
   singleImage,
   seed = 1,
 }: CategoryCardProps) {
-<<<<<<< HEAD
+
   const { getId } = useDynamicStructure();
   const searchParams = useSearchParams();
-  
-=======
   const router = useSeedRouter();
->>>>>>> main
+
   const gridCols = {
     2: "grid-cols-2",
     3: "grid-cols-3",
@@ -71,13 +69,8 @@ export function CategoryCard({
         <h2 className="category-title">{title}</h2>
 
         {singleImage ? (
-<<<<<<< HEAD
-          <Link
-            href={withSeed(footerLink?.href || "#", searchParams)}
-=======
           <SeedLink
             href={footerLink?.href || "#"}
->>>>>>> main
             className="block relative h-60 w-full hover:opacity-90 transition-opacity"
           >
             <Image
@@ -90,15 +83,10 @@ export function CategoryCard({
         ) : (
           <div className={`grid ${gridCols[columns]} gap-4`}>
             {items.map((item, index) => (
-<<<<<<< HEAD
-              <Link
-                href={withSeed(item.link || "#", searchParams)}
-=======
               <a
+                key={`${item.title}-${index}`}
                 href={item.link ? `#${item.link.replace('/', '')}` : "#"}
                 title={item.link ? `View ${item.title} - ${item.link}` : item.title}
->>>>>>> main
-                key={`${item.title}-${index}`}
                 onMouseEnter={() => {
                   if (item.link && item.link !== "#") {
                     window.history.replaceState(null, '', `#${item.link.replace('/', '')}`);
@@ -118,7 +106,7 @@ export function CategoryCard({
                       brand: item.brand || "Generic",
                       category: item.category || title || "Uncategorized",
                     });
-                    router.push(item.link);
+                    router.push(withSeed(item.link, searchParams));
                   }
                 }}
                 className="space-y-2 hover:opacity-90 transition-opacity block no-underline text-inherit cursor-pointer group"
@@ -147,13 +135,8 @@ export function CategoryCard({
 
       {footerLink && (
         <CardFooter className="px-4 pt-0 pb-4">
-<<<<<<< HEAD
-          <Link
-            href={withSeed(footerLink.href, searchParams)}
-=======
           <SeedLink
             href={footerLink.href}
->>>>>>> main
             className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
           >
             {footerLink.text}

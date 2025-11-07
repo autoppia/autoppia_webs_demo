@@ -6,19 +6,13 @@ import { useParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
-<<<<<<< HEAD
+
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
 import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
 import { withSeed } from "@/utils/seedRouting";
-=======
-import { useSeed } from "@/context/SeedContext";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { logEvent, EVENT_TYPES } from "@/library/events";
-import { Suspense } from "react";
-import { getProductById } from "@/utils/dynamicDataProvider";
->>>>>>> main
+
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";

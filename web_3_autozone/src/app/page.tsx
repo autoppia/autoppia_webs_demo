@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
@@ -10,21 +11,19 @@ import {
   getStaticCategories, 
   getStaticHomeEssentials, 
   getStaticRefreshSpace,
-  getLayoutConfig
+  getLayoutConfig,
+  getEffectiveSeed
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 
 function HomeContent() {
-<<<<<<< HEAD
+  
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
   const seed = getEffectiveSeed(rawSeed);
-=======
-  const { seed } = useSeed();
->>>>>>> main
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
 

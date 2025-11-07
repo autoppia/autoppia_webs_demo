@@ -57,10 +57,6 @@ export default function SearchPage() {
           <a
             id={product.id}
             key={product.id}
-<<<<<<< HEAD
-            href={withSeed(`/${product.id}`, searchParams)}
-            onClick={() =>
-=======
             href={`#${product.id}`}
             title={`View ${product.title} - Product ID: ${product.id}`}
             onMouseEnter={() => {
@@ -71,7 +67,6 @@ export default function SearchPage() {
             }}
             onClick={(e) => {
               e.preventDefault();
->>>>>>> main
               logEvent(EVENT_TYPES.VIEW_DETAIL, {
                 productId: product.id,
                 title: product.title,
@@ -80,7 +75,7 @@ export default function SearchPage() {
                 brand: product.brand || "Generic",
                 category: product.category || "Uncategorized",
               });
-              router.push(`/${product.id}`);
+              router.push(withSeed(`/${product.id}`, searchParams));
             }}
             className={`${getTopMarginClass()} block no-underline text-inherit cursor-pointer group`}
           >
