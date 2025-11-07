@@ -39,9 +39,14 @@ demo-webs/
 ├── web_4_autodining/
 ├── web_5_autocrm/
 ├── web_6_automail/
+├── web_7_autodelivery/
 ├── web_8_autolodge/
 ├── web_9_autoconnect/
 ├── web_10_autowork/
+├── web_11_autocalendar/
+├── web_12_autolist/
+├── web_13_autodrive/
+├── web_14_autohealth/
 ├── webs_server/
 └── scripts/
     ├── install_docker.sh
@@ -62,16 +67,36 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 ### **Default Port Assignments**
 
-| Demo            | Web Port | DB Port | Notes                              |
-| --------------- | -------- | ------- | ---------------------------------- |
-| **Movies**      | 8000     | 5434    | Django + PostgreSQL                |
-| **Books**       | 8001     | 5435    | Django + PostgreSQL                |
-| **AutoZone**    | 8002     | —       | Next.js, no database required      |
-| **AutoDining**  | 8003     | —       | Next.js, no database required      |
-| **AutoCRM**     | 8004     | —       | Next.js, no database required      |
-| **AutoMail**    | 8005     | —       | Next.js, no database required      |
-| **AutoLodge**   | 8007     | —       | Next.js, no database required      |
-| **webs_server** | 8090     | 5437    | API service used for event logging |
+| Demo | Web Port | DB Port | Notes |
+|------------------|----------| ------- | ---------------------------------- |
+| **Movies** | 8000 | 5434 | Django + PostgreSQL |
+| **Books** | 8001 | 5435 | Django + PostgreSQL |
+| **AutoZone** | 8002 | — | Next.js, no database required |
+| **AutoDining** | 8003 | — | Next.js, no database required |
+| **AutoCRM** | 8004 | — | Next.js, no database required |
+| **AutoMail** | 8005 | — | Next.js, no database required |
+| **AutoDelivery** | 8006 | — | Next.js, no database required |
+| **AutoLodge** | 8007 | — | Next.js, no database required |
+| **AutoConnect** | 8008 | — | Next.js, no database required |
+| **AutoWork** | 8009 | — | Next.js, no database required |
+| **AutoCalendar** | 8010 | — | Next.js, no database required |
+| **AutoList** | 8011 | — | Next.js, no database required |
+| **AutoDrive** | 8012 | — | Next.js, no database required |
+| **AutoHealth** | 8013 | — | Next.js, no database required |
+| **webs_server** | 8090 | 5437 | API service used for event logging |
+=======
+| Demo | Web Port | DB Port | Notes |
+|-----------------|----------|---------|-----------------------------------------|
+| **Movies** | 8000 | 5434 | Django + PostgreSQL |
+| **Books** | 8001 | 5435 | Django + PostgreSQL |
+| **AutoZone** | 8002 | — | Next.js, no database required |
+| **AutoDining** | 8003 | — | Next.js, no database required |
+| **AutoCRM** | 8004 | — | Next.js, no database required |
+| **AutoMail** | 8005 | — | Next.js, no database required |
+| **AutoLodge** | 8007 | — | Next.js, no database required |
+| **AutoDrive** | 8012 | — | Next.js, no database required |
+| **webs_server** | 8090 | 5437 | API service used for event logging |
+
 
 ---
 
@@ -147,15 +172,23 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=automail --web_port=8005
 ```
 
-#### **📦 Deploy AutoLodge Demo**
-
-````bash
-./scripts/setup.sh --demo=autolodge --web_port=8007
-#### **📦 Deploy AutoWork Demo**
+#### **📦 Deploy AutoDelivery Demo**
 
 ```bash
-./scripts/setup.sh --demo=autowork --web_port=8009
-````
+./scripts/setup.sh --demo=autodelivery --web_port=8006
+```
+
+#### **📦 Deploy AutoLodge Demo**
+
+```bash
+./scripts/setup.sh --demo=autolodge --web_port=8007
+```
+
+#### **📦 Deploy AutoDrive Demo**
+
+```bash
+./scripts/setup.sh --demo=autodrive --web_port=8012
+```
 
 #### **📦 Deploy AutoConnect Demo**
 
@@ -163,16 +196,130 @@ chmod +x ./scripts/setup.sh
 ./scripts/setup.sh --demo=autoconnect --web_port=8008
 ```
 
+#### **📦 Deploy AutoWork Demo**
+
+```bash
+./scripts/setup.sh --demo=autowork --web_port=8009
+```
+
+#### **📦 Deploy AutoCalendar Demo**
+
+```bash
+./scripts/setup.sh --demo=autocalendar --web_port=8010
+```
+
+#### **📦 Deploy AutoList Demo**
+
+```bash
+./scripts/setup.sh --demo=autolist --web_port=8011
+```
+
+#### **📦 Deploy AutoDrive Demo**
+
+```bash
+./scripts/setup.sh --demo=autodrive --web_port=8012
+```
+
+#### **📦 Deploy AutoHealth Demo**
+
+```bash
+./scripts/setup.sh --demo=autohealth --web_port=8013
+```
+
+#### **🎨 Enable Dynamic HTML (AutoMail & AutoConnect)**
+
+AutoMail and AutoConnect support dynamic HTML generation for anti-scraping protection. Enable it with:
+
+```bash
+# Deploy AutoMail with dynamic HTML enabled
+./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_html=true
+
+# Deploy AutoConnect with dynamic HTML enabled
+./scripts/setup.sh --demo=autoconnect --web_port=8008 --enable_dynamic_html=true
+
+# Deploy all demos with dynamic HTML enabled
+./scripts/setup.sh --demo=all --enable_dynamic_html=true
+```
+
+**What Dynamic HTML does:**
+- 🔀 Changes page layouts based on URL seed parameter (1-300)
+- 🎯 Adds dynamic attributes to confuse web scrapers
+- 🆔 Generates seed-based element IDs and XPath selectors
+- 🎨 Applies CSS variables for layout variations
+- 🔒 Enhances protection against automated data extraction
+
+**Testing different layouts:**
+```
+http://localhost:8005/?seed=1    # Default layout
+http://localhost:8005/?seed=180  # Ultra-wide layout
+http://localhost:8005/?seed=200  # Asymmetric layout
+```
+
 > ⚠️ **Note:** Autozone and Autodining run **standalone Next.js** apps. The `--postgres_port` flag is ignored if provided.
 
 ---
 
-#### **Custom Port Configuration**
+
+#### **Available Setup Options**
+
+| Option | Description | Default | Example |
+|--------|-------------|---------|---------|
+| `--demo=NAME` | Deploy specific demo or all | `all` | `--demo=automail` |
+| `--web_port=PORT` | Base web server port | `8000` | `--web_port=9000` |
+| `--postgres_port=PORT` | Base PostgreSQL port | `5434` | `--postgres_port=6000` |
+| `--webs_port=PORT` | webs_server API port | `8090` | `--webs_port=8080` |
+| `--webs_postgres=PORT` | webs_server DB port | `5437` | `--webs_postgres=5440` |
+| `--enable_dynamic_html=BOOL` | Enable dynamic HTML rendering for frontends (true/false) | `false` | `--enable_dynamic_html=true` |
+| `--enable_data_generation=BOOL` | Generate demo data where supported (true/false) | `false` | `--enable_data_generation=true` |
+| `--enable_db_mode=BOOL` | Force DB-backed mode for apps that support it (true/false) | `false` | `--enable_db_mode=true` |
+| `--enabled_dynamic_versions=[v1,v2,...]` | Enable one or more dynamic "versions" (see below) — accepts `v1,v2` or `[v1,v2]` formats | `` (none) | `--enabled_dynamic_versions=v1,v3` or `--enabled_dynamic_versions=[v1,v2]` |
+| `--seed_value=INT` | Optional integer seed used by data generation / seed-based HTML features | `` | `--seed_value=42` |
+| `--fast=BOOL` | Skip global Docker cleanup and use cached builds (true/false) | `false` | `--fast=true` |
+| `-y, --yes` | Skip confirmation prompts / force Docker cleanup (convenience flag) | - | `-y` |
+| `-h, --help` | Show help and exit | - | `-h` |
+
+**Valid demo names:** `movies`, `books`, `autozone`, `autodining`, `autocrm`, `automail`, `autoconnect`, `autodelivery`, `autolodge`, `autowork`, `autocalendar`, `autolist`, `autodrive`, `all`
+
+---
+
+### Dynamic versions (shorthand)
+
+The `--enabled_dynamic_versions` flag provides a shorthand to enable multiple dynamic features at once. Accepted formats:
+
+- Comma-separated: `--enabled_dynamic_versions=v1,v2`
+- Bracketed: `--enabled_dynamic_versions=[v1,v2]`
+
+Supported tokens and what they enable:
+
+- `v1` → ENABLE_DYNAMIC_HTML (enables dynamic HTML rendering in frontends)
+- `v2` → ENABLE_DATA_GENERATION (turns on demo data generation where supported)
+- `v3` → ENABLE_DYNAMIC_STRUCTURE (enables dynamic DOM/structure changes for anti-scraping)
+- `v4` → ENABLE_SEED_HTML (enables seed-based HTML variations)
+
+Example usages:
+
+- Enable only dynamic HTML:
 
 ```bash
-# Custom ports for specific deployment
-./scripts/setup.sh --demo=movies --web_port=9000 --postgres_port=6000
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1
 ```
+
+- Enable dynamic HTML and data generation:
+
+```bash
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1,v2 --seed_value=123
+```
+
+- Use bracketed form:
+
+```bash
+./scripts/setup.sh --demo=all --enabled_dynamic_versions=[v1,v3]
+```
+
+Notes:
+- The script normalizes boolean flags (accepts `true/false`, `yes/no`, `1/0`, `y/n`).
+- If you pass both `--enabled_dynamic_versions` and individual flags (e.g. `--enable_dynamic_html=true`), the union of enabled flags will be used.
+- `--fast=true` will skip Docker cleanup and reuse existing images/build cache; use it to speed up iterative testing.
 
 ---
 
@@ -198,15 +345,16 @@ After successful deployment, access your demo webs:
 
 ### **Default Access URLs**
 
-| Demo Application     | URL                     | Description                                   |
-| -------------------- | ----------------------- | --------------------------------------------- |
-| **Movies Demo**      | `http://localhost:8000` | Movie database interface                      |
-| **Books Demo**       | `http://localhost:8001` | Book catalog system                           |
-| **Autozone Demo**    | `http://localhost:8002` | Online Shopping for Electronics               |
-| **Autodining Demo**  | `http://localhost:8003` | Restaurant Reservation UI                     |
-| **AutoCRM Demo**     | `http://localhost:8004` | Customer Relation Management UI               |
-| **AutoMail Demo**    | `http://localhost:8005` | Modern Email Client UI                        |
-| **AutoConnect Demo** | `http://localhost:8008` | A LinkedIn-like Professional NetworkClient UI |
+| Demo Application    | URL                     | Description                       |
+| ------------------- | ----------------------- | --------------------------------- |
+| **Movies Demo**     | `http://localhost:8000` | Movie database interface          |
+| **Books Demo**      | `http://localhost:8001` | Book catalog system               |
+| **Autozone Demo**   | `http://localhost:8002` | Online Shopping for Electronics   |
+| **Autodining Demo** | `http://localhost:8003` | Restaurant Reservation UI         |
+| **AutoCRM Demo**    | `http://localhost:8004` | Customer Relation Management UI   |
+| **AutoMail Demo**   | `http://localhost:8005` | Modern Email Client UI            |
+| **AutoLodge Demo**  | `http://localhost:8007` | Book Hotels, Cabins & Retreats UI |
+| **AutoDrive Demo**  | `http://localhost:8012` | Go anywhere with AutoDriver UI    |
 
 ---
 
@@ -215,6 +363,46 @@ After successful deployment, access your demo webs:
 If you used custom ports, access via: `http://localhost:[your_web_port]`
 
 ---
+
+## Accessing the Demo Webs
+
+### Local Access
+
+After deployment, access the demo webs locally at:
+
+- Web 1 (Movies): `http://localhost:8000`
+- Web 2 (Books): `http://localhost:8001`
+- Web 3 (Autozone): `http://localhost:8002`
+- Web 4 (Autodining): `http://localhost:8003`
+- Web 5 (Autocrm): `http://localhost:8004`
+- Web 6 (Automail): `http://localhost:8005`
+- Web 7 (Autodelivery): `http://localhost:8006`
+- Web 8 (Autolodge): `http://localhost:8007`
+- Web 9 (Autoconnect): `http://localhost:8008`
+- Web 10 (Autowork): `http://localhost:8009`
+- Web 11 (Autocalendar): `http://localhost:8010`
+- Web 12 (Autolist): `http://localhost:8011`
+- Web 13 (Autodrive): `http://localhost:8012`
+- Web 14 (Autohealth): `http://localhost:8013`
+
+### Server Access
+
+Publicly deployed demo webs:
+
+- Autocinema: `https://autocinema.autoppia.com`
+- Autobooks: `https://autobooks.autoppia.com`
+- Autozone: `https://autozone.autoppia.com`
+- Autodining: `https://autodining.autoppia.com`
+- Autocrm: `https://autocrm.autoppia.com`
+- Automail: `https://automail.autoppia.com`
+- Autodelivery: `https://autodelivery.autoppia.com`
+- Autolodge: `https://autolodge.autoppia.com`
+- Autoconnect: `https://autoconnect.autoppia.com`
+- Autowork: `https://autowork.autoppia.com`
+- Autocalendar: `https://autocalendar.autoppia.com`
+- Autolist: `https://autolist.autoppia.com`
+- Autodrive: `https://autodrive.autoppia.com`
+- Autohealth: `https://autohealth.autoppia.com`
 
 ## 🔧 Management Commands
 

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { restaurants } from "@/data/restaurants";
+import { getRestaurants } from "@/utils/dynamicDataProvider";
 import RestaurantCard from "./RestaurantCard";
 import {
   Pagination,
@@ -11,6 +11,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import React from "react";
+import { useSeedLayout } from "@/hooks/use-seed-layout";
 
 interface PaginatedRestaurantsGridProps {
   filteredRestaurants?: typeof restaurants;
@@ -18,17 +19,20 @@ interface PaginatedRestaurantsGridProps {
 }
 
 export default function PaginatedRestaurantsGrid({ 
-  filteredRestaurants = restaurants, 
+  filteredRestaurants, 
   title = "All Restaurants" 
 }: PaginatedRestaurantsGridProps) {
+  const restaurants = getRestaurants() || [];
+  const defaultFilteredRestaurants = filteredRestaurants || restaurants;
   const [currentPage, setCurrentPage] = useState(1);
   const restaurantsPerPage = 12;
+  const layout = useSeedLayout();
   
   // Calculate pagination
-  const totalPages = Math.ceil(filteredRestaurants.length / restaurantsPerPage);
+  const totalPages = Math.ceil(defaultFilteredRestaurants.length / restaurantsPerPage);
   const startIndex = (currentPage - 1) * restaurantsPerPage;
   const endIndex = startIndex + restaurantsPerPage;
-  const currentRestaurants = filteredRestaurants.slice(startIndex, endIndex);
+  const currentRestaurants = defaultFilteredRestaurants.slice(startIndex, endIndex);
 
   // Generate page numbers to show
   const getPageNumbers = () => {
@@ -76,11 +80,11 @@ export default function PaginatedRestaurantsGrid({
       
       {/* Results count */}
       <div className="text-center text-zinc-600 mb-6">
-        Showing {startIndex + 1}-{Math.min(endIndex, filteredRestaurants.length)} of {filteredRestaurants.length} restaurants
+        Showing {startIndex + 1}-{Math.min(endIndex, defaultFilteredRestaurants.length)} of {defaultFilteredRestaurants.length} restaurants
       </div>
 
       {/* Restaurants Grid */}
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 max-w-6xl mx-auto mb-8">
+      <div className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 max-w-6xl mx-auto mb-8 ${layout.grid.containerClass}`}>
         {currentRestaurants.map((r) => (
           <RestaurantCard
             key={r.id}

@@ -7,8 +7,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
+import { useLayout } from "@/contexts/LayoutContext";
 // import { systemLabels } from "@/library/dataset";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
+import { DynamicElement } from "@/components/DynamicElement";
 import type { EmailFolder } from "@/types/email";
 // import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
@@ -44,6 +46,7 @@ interface NavigationItem {
 // } as const;
 
 export function Sidebar() {
+  const { currentVariant } = useLayout();
   const {
     currentFilter,
     setFilter,
@@ -144,20 +147,122 @@ export function Sidebar() {
     return currentFilter.label === item.id;
   };
 
-  return (
-    <div className="w-64 h-full sidebar-gradient border-r border-border/60 flex flex-col">
-      <div className="p-4">
-        <Button
-          onClick={() => toggleCompose(true)}
-          className="w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in"
-          size="lg"
-        >
-          <PenTool className="h-4 w-4" />
-          Compose
-        </Button>
-      </div>
+  // Get sidebar styling based on layout variant
+  const getSidebarClasses = () => {
+    switch (currentVariant.id) {
+      case 1: // Classic Gmail
+        return "w-64 h-full sidebar-gradient border-r border-border/60 flex flex-col";
+      case 2: // Right Sidebar
+        return "w-64 h-full sidebar-gradient border-l border-border/60 flex flex-col settings-panel";
+      case 3: // Top Navigation
+        return "w-full h-16 border-b border-border flex flex-row items-center justify-between px-4 floating-compose";
+      case 4: // Split View
+        return "w-64 h-full sidebar-gradient border-r border-border/60 flex flex-col sidebar-panel";
+      case 5: // Card Layout
+        return "w-64 h-full sidebar-gradient border-r border-border/60 flex flex-col header-actions";
+      case 6: // Minimalist
+        return "w-48 h-full sidebar-gradient border-r border-border/60 flex flex-col center-actions";
+      case 7: // Dashboard Style
+        return "w-72 h-full sidebar-gradient border-r border-border/60 flex flex-col floating-widget";
+      case 8: // Mobile First
+        return "w-64 h-full sidebar-gradient border-l border-border/60 flex flex-col mobile-fab";
+      case 9: // Terminal Style
+        return "w-64 h-full sidebar-gradient border-l border-border/60 flex flex-col terminal-header";
+      case 10: // Magazine Layout
+        return "w-full h-20 border-b border-border flex flex-row items-center justify-between px-4 floating-magazine";
+      default:
+        return "w-64 h-full sidebar-gradient border-r border-border/60 flex flex-col";
+    }
+  };
 
-      <ScrollArea className="flex-1 px-2">
+  // Get compose button styling based on layout variant
+  const getComposeButtonClasses = () => {
+    switch (currentVariant.id) {
+      case 1: // Classic Gmail
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in";
+      case 2: // Right Sidebar
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in compose-fab";
+      case 3: // Top Navigation
+        return "h-10 px-4 text-sm font-medium btn-primary-gradient rounded-lg floating-compose";
+      case 4: // Split View
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in compose-element";
+      case 5: // Card Layout
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in header-compose";
+      case 6: // Minimalist
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in center-compose";
+      case 7: // Dashboard Style
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in widget-compose";
+      case 8: // Mobile First
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in fab-compose";
+      case 9: // Terminal Style
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in header-compose";
+      case 10: // Magazine Layout
+        return "h-10 px-4 text-sm font-medium btn-primary-gradient rounded-lg magazine-compose";
+      default:
+        return "w-full justify-start gap-3 h-12 text-sm font-medium btn-primary-gradient rounded-xl animate-bounce-in";
+    }
+  };
+
+  return (
+    <div className={getSidebarClasses()}>
+      {currentVariant.id === 3 || currentVariant.id === 10 ? (
+        // Horizontal layout for Top Navigation and Magazine Layout
+        <div className="flex items-center gap-4 px-4">
+          <Button
+            onClick={() => toggleCompose(true)}
+            className={getComposeButtonClasses()}
+            size="lg"
+          >
+            <PenTool className="h-4 w-4" />
+            Compose
+          </Button>
+          
+          <div className="flex items-center gap-2">
+            {navigationItems.slice(0, 4).map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item);
+              return (
+                <Button
+                  id={item.id}
+                  key={item.id}
+                  variant={active ? "secondary" : "ghost"}
+                  className="h-8 px-3 text-sm font-normal rounded-lg"
+                  onClick={() => handleItemClick(item)}
+                >
+                  <Icon className="h-4 w-4" />
+                  <span className="ml-2">{item.label}</span>
+                </Button>
+              );
+            })}
+          </div>
+
+          {/* Labels section for horizontal layout */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Labels
+            </span>
+            <div className="!block !visible !opacity-100">
+              <DynamicElement elementType="create-label-button" index={0}>
+                <CreateLabelDialog />
+              </DynamicElement>
+            </div>
+          </div>
+        </div>
+      ) : (
+        // Vertical layout for other variants
+        <>
+          <div className="p-4">
+            <Button
+              onClick={() => toggleCompose(true)}
+              className={getComposeButtonClasses()}
+              size="lg"
+            >
+              <PenTool className="h-4 w-4" />
+              Compose
+            </Button>
+          </div>
+
+          <ScrollArea className="flex-1 px-2">
         <div className="space-y-1 pb-4">
           {navigationItems.map((item) => {
             const Icon = item.icon;
@@ -189,7 +294,11 @@ export function Sidebar() {
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Labels
             </span>
-            <CreateLabelDialog />
+            <div className="!block !visible !opacity-100">
+              <DynamicElement elementType="create-label-button" index={0}>
+                <CreateLabelDialog />
+              </DynamicElement>
+            </div>
           </div>
           {customLabels.map((label) => (
             <Button
@@ -241,6 +350,8 @@ export function Sidebar() {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

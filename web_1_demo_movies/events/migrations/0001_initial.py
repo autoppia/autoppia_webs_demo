@@ -24,6 +24,7 @@ class Migration(migrations.Migration):
                 ),
                 ("timestamp", models.DateTimeField(default=django.utils.timezone.now)),
                 ("web_agent_id", models.IntegerField()),
+                ("validator_id", models.CharField(max_length=100)),
                 ("data", models.JSONField(default=dict)),
                 ("search_query", models.CharField(blank=True, max_length=255, null=True)),
                 ("user", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),

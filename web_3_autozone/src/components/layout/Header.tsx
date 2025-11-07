@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import {
   Search,
   MapPin,
@@ -13,25 +13,36 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
+<<<<<<< HEAD
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+=======
+import { useSeed } from "@/context/SeedContext";
+>>>>>>> main
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useRouter, useSearchParams } from "next/navigation";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useSeedRouter();
   const { state } = useCart();
+<<<<<<< HEAD
   const cartItemCount = state.totalItems;
   const { getText, getId } = useDynamicStructure();
+=======
+  const cartItemCount = isMounted ? state.totalItems : 0;
+>>>>>>> main
 
-  const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Map layout config to component order
   const getComponentOrder = (config: any) => {
@@ -65,11 +76,15 @@ export function Header() {
           {order.map((key: string) => {
             if (key === "logo") {
               return (
+<<<<<<< HEAD
                 <Link key="logo" id={getId("logo_link")} href={withSeed("/", searchParams)} className={`${layoutConfig.navbarStyle === 'floating' ? 'mr-1' : 'mr-2'} flex-shrink-0`}>
+=======
+                <SeedLink key="logo" href="/" className={`${layoutConfig.navbarStyle === 'floating' ? 'mr-1' : 'mr-2'} flex-shrink-0`}>
+>>>>>>> main
                   <div className={`bg-[#17A2B8] ${layoutConfig.navbarStyle === 'floating' ? 'px-2 py-1' : 'px-3 py-1'} rounded flex items-center ${layoutConfig.navbarStyle === 'floating' ? 'h-7' : 'h-9'}`}>
                     <span className={`font-bold text-white ${layoutConfig.navbarStyle === 'floating' ? 'text-sm' : 'text-lg'}`}>AUTOZONE</span>
                   </div>
-                </Link>
+                </SeedLink>
               );
             }
 
@@ -171,9 +186,14 @@ export function Header() {
                 // Compact nav for floating navbar
                 return (
                   <div key="nav" className="flex items-center gap-1">
+<<<<<<< HEAD
                     <Link
                       id={getId("cart_link")}
                       href={withSeed("/cart", searchParams)}
+=======
+                    <SeedLink
+                      href="/cart"
+>>>>>>> main
                       className="text-gray-700 flex items-center"
                       onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
                     >
@@ -183,7 +203,7 @@ export function Header() {
                           {cartItemCount}
                         </span>
                       </div>
-                    </Link>
+                    </SeedLink>
                   </div>
                 );
               }
@@ -209,9 +229,14 @@ export function Header() {
                     <div>{getText("returns")}</div>
                     <div className="font-bold">{getText("orders")}</div>
                   </div>
+<<<<<<< HEAD
                   <Link
                     id={getId("cart_link")}
                     href={withSeed("/cart", searchParams)}
+=======
+                  <SeedLink
+                    href="/cart"
+>>>>>>> main
                     className="text-gray-700 flex items-end"
                     onClick={() => logEvent(EVENT_TYPES.VIEW_CART)}
                   >
@@ -224,7 +249,7 @@ export function Header() {
                     <span className="hidden md:inline-block font-bold mb-1">
                       {getText("cart")}
                     </span>
-                  </Link>
+                  </SeedLink>
                 </div>
               );
             }
@@ -236,12 +261,17 @@ export function Header() {
       {/* Secondary navigation - hidden for floating navbar */}
       {layoutConfig.navbarStyle !== 'floating' && (
         <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
+<<<<<<< HEAD
           <Link href={withSeed("/", searchParams)}>
             <button id={getId("all_menu_button")} className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
+=======
+          <SeedLink href="/">
+            <button className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
+>>>>>>> main
               <Menu size={18} className="mr-1" />
               <span className="font-bold">{getText("all_menu")}</span>
             </button>
-          </Link>
+          </SeedLink>
           <div className="flex gap-4 flex-grow overflow-x-auto no-scrollbar">
             <span className="cursor-default text-gray-300">Rufus</span>
             <span className="cursor-default text-gray-300">

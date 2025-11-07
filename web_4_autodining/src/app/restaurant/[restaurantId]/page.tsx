@@ -18,52 +18,39 @@ import {
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import Image from "next/image";
-import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { useSeed } from "@/context/SeedContext";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import Link from "next/link";
-import { RestaurantsData } from "@/components/library/dataset";
+import { initializeRestaurants, getRestaurants } from "@/library/dataset";
+import { useSeedVariation } from "@/library/utils";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 const photos = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
-  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=150&h=150",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150",
 ];
 
-const restaurantData: Record<
-  string,
-  {
-    name: string;
-    image: string;
-    rating: number;
-    reviews: number;
-    bookings: number;
-    price: string;
-    cuisine: string;
-    tags: string[];
-    desc: string;
-    photos: string[];
-  }
-> = {};
-
-// Populate restaurantData from jsonData
-RestaurantsData.forEach((item, index) => {
-  const id = `restaurant-${item.id}`;
-  restaurantData[id] = {
-    name: item.namepool,
-    image: `/images/restaurant${(index % 19) + 1}.jpg`,
-    rating: item.staticStars,
-    reviews: item.staticReviews,
-    bookings: item.staticBookings,
-    price: item.staticPrices,
-    cuisine: item.cuisine,
-    tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${item.namepool}, offering a fusion of flavors in the heart of ${item.area}.`,
-    photos,
-  };
-});
+type RestaurantView = {
+  id: string;
+  name: string;
+  image: string;
+  rating: number;
+  reviews: number;
+  bookings: number;
+  price: string;
+  cuisine: string;
+  tags: string[];
+  desc: string;
+  photos: string[];
+};
 export default function RestaurantPage() {
   const params = useParams();
   const id = params.restaurantId as string;
-  const r = restaurantData[id] || restaurantData["vintage-bites"];
+  const [r, setR] = useState<RestaurantView | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [people, setPeople] = useState<number | undefined>(undefined);
   const [time, setTime] = useState<string | undefined>(undefined);
   const [showFullMenu, setShowFullMenu] = useState(false);
@@ -71,51 +58,105 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
+
+  const { seed } = useSeed();
+
+  // Use seed-based variations
+  const bookButtonVariation = useSeedVariation("bookButton");
+  const dropdownVariation = useSeedVariation("dropdown");
+  const imageContainerVariation = useSeedVariation("imageContainer");
+  
+  // Create layout based on seed
+  const layout = {
+    wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
+    justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
+    marginTop: [0, 4, 8, 12, 16][seed % 5],
+  };
+
   useEffect(() => {
-    if (!r) return; // evita enviar si aún no hay datos
+    // Ensure data is initialized and loaded from DB or generator as configured
+    let mounted = true;
+    const run = async () => {
+      setIsLoading(true);
+      const genEnabled = isDataGenerationEnabled();
+      if (genEnabled) setIsGenerating(true);
+      try {
+        await initializeRestaurants();
+        if (!mounted) return;
+        const list = getRestaurants();
+        const found = list.find((x) => x.id === id) || list[0];
+        if (found) {
+          const mapped: RestaurantView = {
+            id: found.id,
+            name: found.name,
+            image: found.image,
+            rating: Number(found.stars ?? 4),
+            reviews: Number(found.reviews ?? 0),
+            bookings: Number(found.bookings ?? 0),
+            price: String(found.price ?? "$$"),
+            cuisine: String(found.cuisine ?? "International"),
+            tags: ["cozy", "modern", "casual"],
+            desc: `Enjoy a delightful experience at ${found.name}, offering a fusion of flavors in the heart of ${found.area ?? "Downtown"}.`,
+            photos,
+          };
+          setR(mapped);
+        }
+      } finally {
+        if (!mounted) return;
+        setIsLoading(false);
+        setIsGenerating(false);
+      }
+    };
+    run();
+    return () => { mounted = false; };
+  }, [id]);
+
+  useEffect(() => {
+    if (!r) return; // avoid sending until data is ready
     logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
       restaurantId: id,
-      restaurantName: r.name,
-      cuisine: r.cuisine,
-      desc: r.desc,
+      restaurantName: r?.name ?? "",
+      cuisine: r?.cuisine ?? "",
+      desc: r?.desc ?? "",
       area: "test",
-      reviews: r.reviews,
-      bookings: r.bookings,
-      rating: r.rating,
+      reviews: r?.reviews ?? 0,
+      bookings: r?.bookings ?? 0,
+      rating: r?.rating ?? 0,
     });
-  }, [id]);
+  }, [id, r]);
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
   const handleToggleMenu = () => {
     const newState = !showFullMenu;
     setShowFullMenu(newState);
 
+    // Define menu data that should be included in both events
+    const menuData = [
+      {
+        category: "Mains",
+        items: [
+          { name: "Coq au Vin", price: "$26.00" },
+          { name: "Ratatouille", price: "$20.00" },
+        ],
+      },
+    ];
+
     logEvent(
       newState ? EVENT_TYPES.VIEW_FULL_MENU : EVENT_TYPES.COLLAPSE_MENU,
       {
         restaurantId: id,
-        restaurantName: r.name,
-        cuisine: r.cuisine,
-        desc: r.desc,
+        restaurantName: r?.name ?? "",
+        cuisine: r?.cuisine ?? "",
+        desc: r?.desc ?? "",
         area: "test",
-        reviews: r.reviews,
-        bookings: r.bookings,
-        rating: r.rating,
+        reviews: r?.reviews ?? 0,
+        bookings: r?.bookings ?? 0,
+        rating: r?.rating ?? 0,
         action: newState ? "view_full_menu" : "collapse_menu",
         time,
         date: formattedDate,
         people,
-        menu: newState
-          ? [
-              {
-                category: "Mains",
-                items: [
-                  { name: "Coq au Vin", price: "$26.00" },
-                  { name: "Ratatouille", price: "$20.00" },
-                ],
-              },
-            ]
-          : [],
+        menu: menuData,
       }
     );
   };
@@ -160,12 +201,24 @@ export default function RestaurantPage() {
       logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { date: toLocalISO(d) });
     }
   };
+
+  const wrapperClass = `flex justify-${layout.justify} mt-${layout.marginTop} mb-7 flex-wrap`;
   return (
     <main>
+      {isGenerating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-[#46a758] animate-spin" aria-hidden="true" />
+            <div className="text-gray-700 text-base font-medium text-center">
+              Data is being generated by AI this may take some time
+            </div>
+          </div>
+        </div>
+      )}
       {/* Banner Image */}
-      <div className="w-full h-[340px] bg-gray-200 relative">
+      <div className={`w-full h-[340px] bg-gray-200 ${imageContainerVariation.position} ${imageContainerVariation.className}`} data-testid={imageContainerVariation.dataTestId}>
         <div className="relative w-full h-full">
-          <Image src={r.image} alt={r.name} fill className="object-cover" />
+          {r && <Image src={r.image} alt={r.name} fill className="object-cover" />}
         </div>
       </div>
       {/* Info and reservation */}
@@ -173,7 +226,7 @@ export default function RestaurantPage() {
         {/* Info (details section, tags, desc, photos) */}
         <div className="pt-12 pb-10 flex-1 min-w-0">
           {/* Title & details row */}
-          <h1 className="text-4xl font-bold mb-2">{r.name}</h1>
+          <h1 className="text-4xl font-bold mb-2">{r?.name ?? "Loading..."}</h1>
           <div className="flex items-center gap-4 text-lg mb-4">
             <span className="flex items-center text-[#46a758] text-xl font-semibold">
               {Array.from({ length: 4 }).map((_, i) => (
@@ -183,20 +236,20 @@ export default function RestaurantPage() {
             </span>
             <span className="text-base flex items-center gap-2">
               <span className="font-bold">
-                {r.rating?.toFixed(2) ?? "4.20"}
+                {r?.rating?.toFixed?.(2) ?? "4.20"}
               </span>{" "}
-              <span className="text-gray-700">{r.reviews ?? 20} Reviews</span>
+              <span className="text-gray-700">{r?.reviews ?? 20} Reviews</span>
             </span>
             <span className="text-base flex items-center gap-2">
-              💵 {r.price}
+              💵 {r?.price ?? "$$"}
             </span>
             <span className="text-base flex items-center gap-2">
-              {r.cuisine}
+              {r?.cuisine ?? "International"}
             </span>
           </div>
           {/* Tags/Pills */}
           <div className="flex gap-2 mb-4">
-            {(r.tags || []).map((tag: string, index: number) => (
+            {(r?.tags || []).map((tag: string, index: number) => (
               <span
                 key={tag}
                 className="py-1 px-4 bg-gray-100 rounded-full text-gray-800 font-semibold text-base border"
@@ -206,13 +259,13 @@ export default function RestaurantPage() {
             ))}
           </div>
           {/* Description */}
-          {r.desc && (
+          {r?.desc && (
             <div className="mb-7 text-[17px] text-gray-700 max-w-2xl">
               {r.desc}
             </div>
           )}
           {/* Photos Grid */}
-          {r.photos && (
+          {r?.photos && (
             <>
               <h2 className="text-2xl font-bold mb-3">
                 {r.photos.length} photos
@@ -278,12 +331,26 @@ export default function RestaurantPage() {
                 </div>
               )}
               <div className="flex justify-center my-7">
-                <Button
-                  className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
-                  onClick={handleToggleMenu}
-                >
-                  {showFullMenu ? "Collapse menu" : "View full menu"}
-                </Button>
+                {layout.wrap ? (
+                  <div className={wrapperClass}>
+                    {" "}
+                    <Button
+                      className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
+                      onClick={handleToggleMenu}
+                    >
+                      {showFullMenu ? "Collapse menu" : "View full menu"}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className={wrapperClass.replace("flex-wrap", "")}>
+                    <Button
+                      className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
+                      onClick={handleToggleMenu}
+                    >
+                      {showFullMenu ? "Collapse menu" : "View full menu"}
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -402,8 +469,14 @@ export default function RestaurantPage() {
             </div>
             {/* Time slots */}
             <div className="mt-3">
-              <div className="flex gap-1 mt-2 flex-wrap">
-                {time === "3:00 PM" ? (
+              {time === "3:00 PM" ? (
+                <div
+                  className="flex gap-1 mt-2"
+                  style={{
+                    justifyContent: layout.justify,
+                    marginTop: layout.marginTop,
+                  }}
+                >
                   <Button
                     variant="outline"
                     className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
@@ -411,41 +484,93 @@ export default function RestaurantPage() {
                     <span>{time}</span>
                     <span className="ml-2">🔔 Notify me</span>
                   </Button>
-                ) : time ? (
-                  <Link
-                    href={`/booking/${id}/${encodeURIComponent(
-                      time
-                    )}?date=${formattedDate}&people=${people ?? ""}`}
-                    onClick={() =>
-                      logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                        restaurantId: id,
-                        restaurantName: r.name,
-                        cuisine: r.cuisine,
-                        desc: r.desc,
-                        area: "test",
-                        reviews: r.reviews,
-                        bookings: r.bookings,
-                        rating: r.rating,
-                        date: formattedDate,
-                        time,
-                        people,
-                      })
-                    }
-                    passHref
+                </div>
+              ) : time ? (
+                layout.wrap ? (
+                  <div
+                    className="mt-2"
+                    style={{ marginTop: layout.marginTop }}
+                    data-testid={`book-btn-wrapper-${seed}`}
                   >
-                    <Button
-                      className="bg-[#46a758] hover:bg-[#357040] text-white font-semibold px-3 py-1 rounded-md text-sm"
-                      asChild
+                    <div
+                      className="flex gap-1"
+                      style={{ justifyContent: layout.justify }}
                     >
-                      <span>Book Restaurant</span>
-                    </Button>
-                  </Link>
-                ) : (
-                  <div className="text-gray-500 text-sm mt-2">
-                    Please select a time
+                      <Link
+                        href={`/booking/${id}/${encodeURIComponent(
+                          time
+                        )}?date=${formattedDate}&people=${people ?? ""}`}
+                        onClick={() =>
+                          logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                            restaurantId: id,
+                            restaurantName: r?.name ?? "",
+                            cuisine: r?.cuisine ?? "",
+                            desc: r?.desc ?? "",
+                            area: "test",
+                            reviews: r?.reviews ?? 0,
+                            bookings: r?.bookings ?? 0,
+                            rating: r?.rating ?? 0,
+                            date: formattedDate,
+                            time,
+                            people,
+                          })
+                        }
+                        passHref
+                      >
+                        <Button
+                          className={`${bookButtonVariation.className} font-semibold text-sm`}
+                          data-testid={bookButtonVariation.dataTestId}
+                          asChild
+                        >
+                          <span>Book Restaurant</span>
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
-                )}
-              </div>
+                ) : (
+                  <div
+                    className="flex gap-1 mt-2"
+                    style={{
+                      justifyContent: layout.justify,
+                      marginTop: layout.marginTop,
+                    }}
+                  >
+                    <SeedLink
+                      href={`/booking/${id}/${encodeURIComponent(
+                        time
+                      )}?date=${formattedDate}&people=${people ?? ""}`}
+                      onClick={() =>
+                        logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                          restaurantId: id,
+                          restaurantName: r?.name ?? "",
+                          cuisine: r?.cuisine ?? "",
+                          desc: r?.desc ?? "",
+                          area: "test",
+                          reviews: r?.reviews ?? 0,
+                          bookings: r?.bookings ?? 0,
+                          rating: r?.rating ?? 0,
+                          date: formattedDate,
+                          time,
+                          people,
+                        })
+                      }
+                      passHref
+                    >
+                      <Button
+                        className={`${bookButtonVariation.className} font-semibold text-sm`}
+                        data-testid={bookButtonVariation.dataTestId}
+                        asChild
+                      >
+                        <span>Book Restaurant</span>
+                      </Button>
+                    </SeedLink>
+                  </div>
+                )
+              ) : (
+                <div className="text-gray-500 text-sm mt-2">
+                  Please select a time
+                </div>
+              )}
             </div>
           </div>
         </div>

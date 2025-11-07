@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
@@ -34,8 +34,12 @@ export function ProductCarousel({
   seed = 1,
 }: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+<<<<<<< HEAD
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
+=======
+  const router = useSeedRouter();
+>>>>>>> main
   // const [showLeftButton, setShowLeftButton] = useState(false);
   // const [showRightButton, setShowRightButton] = useState(true);
 
@@ -89,10 +93,25 @@ export function ProductCarousel({
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {products.map((product) => (
-            <Link
+            <a
               key={product.id}
+<<<<<<< HEAD
               href={withSeed(`/${product.id}`, searchParams)}
               onClick={() =>
+=======
+              href={`#${product.id}`}
+              title={`View ${product.title} - Product ID: ${product.id}`}
+              onMouseEnter={() => {
+                // Update URL in address bar on hover
+                window.history.replaceState(null, '', `#${product.id}`);
+              }}
+              onMouseLeave={() => {
+                // Clear hash on mouse leave
+                window.history.replaceState(null, '', window.location.pathname);
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+>>>>>>> main
                 logEvent(EVENT_TYPES.VIEW_DETAIL, {
                   section: product.description,
                   title: product.title,
@@ -100,17 +119,22 @@ export function ProductCarousel({
                   category: product.category,
                   rating: product.rating ?? 12,
                   brand: product.brand || "generic",
-                })
-              }
-              className="flex-none w-[160px] md:w-[200px] group"
+                });
+                router.push(`/${product.id}`);
+              }}
+              className="flex-none w-[160px] md:w-[200px] group block no-underline text-inherit cursor-pointer relative"
             >
-              <div className="relative h-48 w-full bg-gray-100">
+              <div className="relative w-full bg-gray-100" style={{ height: 150 }}>
                 <Image
                   src={product.image}
                   alt={product.title || "Product image"}
                   fill
                   className="object-contain"
                 />
+                {/* URL Display on Hover */}
+                <div className="absolute bottom-2 left-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
+                  /{product.id}
+                </div>
               </div>
               {product.title && (
                 <div className="mt-2 text-sm truncate group-hover:text-blue-600">
@@ -120,7 +144,7 @@ export function ProductCarousel({
               {product.price && (
                 <div className="text-sm font-bold">{product.price}</div>
               )}
-            </Link>
+            </a>
           ))}
         </div>
 

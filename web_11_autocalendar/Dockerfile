@@ -1,0 +1,55 @@
+# Stage 1: Build the Next.js application
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Accept build arguments
+ARG ENABLE_DYNAMIC_HTML=false
+ARG ENABLE_DATA_GENERATION=false
+ARG NEXT_PUBLIC_ENABLE_DATA_GENERATION=false
+ARG ENABLE_DB_MODE=false
+ARG NEXT_PUBLIC_ENABLE_DB_MODE=false
+ARG NEXT_PUBLIC_API_URL=http://localhost:8080
+ARG API_URL=http://app:8080
+
+COPY package.json package-lock.json ./
+
+# Install dependencies (including dev dependencies needed for building)
+RUN npm ci
+
+COPY . .
+
+# Set environment variables for build
+ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
+ENV ENABLE_DATA_GENERATION=${ENABLE_DATA_GENERATION}
+ENV NEXT_PUBLIC_ENABLE_DATA_GENERATION=${NEXT_PUBLIC_ENABLE_DATA_GENERATION}
+ENV ENABLE_DB_MODE=${ENABLE_DB_MODE}
+ENV NEXT_PUBLIC_ENABLE_DB_MODE=${NEXT_PUBLIC_ENABLE_DB_MODE}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV API_URL=${API_URL}
+
+RUN npm run build
+
+# Stage 2: Create the lean production image
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV production
+
+ENV PORT 8010
+ENV ENABLE_DATA_GENERATION=${ENABLE_DATA_GENERATION}
+ENV NEXT_PUBLIC_ENABLE_DATA_GENERATION=${NEXT_PUBLIC_ENABLE_DATA_GENERATION}
+ENV ENABLE_DB_MODE=${ENABLE_DB_MODE}
+ENV NEXT_PUBLIC_ENABLE_DB_MODE=${NEXT_PUBLIC_ENABLE_DB_MODE}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV API_URL=${API_URL}
+EXPOSE 8010
+
+COPY --from=builder /app/.next ./.next
+#COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+CMD ["npm", "start"]

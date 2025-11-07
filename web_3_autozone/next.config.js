@@ -15,6 +15,7 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
 }
 
+<<<<<<< HEAD
 // Handle ENABLE_DYNAMIC_HTML_STRUCTURE (separate from layout control)
 if (!process.env.ENABLE_DYNAMIC_HTML_STRUCTURE) {
   process.env.ENABLE_DYNAMIC_HTML_STRUCTURE = isLocalDev ? 'true' : 'false';
@@ -26,15 +27,26 @@ if (isLocalDev) {
 }
 
 // Debug: Print environment variables
+=======
+>>>>>>> main
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
-console.log('  DOCKER_BUILD:', process.env.DOCKER_BUILD);
 console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
+console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
+<<<<<<< HEAD
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
 console.log('  ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.ENABLE_DYNAMIC_HTML_STRUCTURE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE);
+=======
+console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DATA_GENERATION);
+console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('  DATA_SEED_VALUE:', process.env.DATA_SEED_VALUE);
+console.log('  NEXT_PUBLIC_DATA_SEED_VALUE:', process.env.NEXT_PUBLIC_DATA_SEED_VALUE);
+console.log('  ENABLE_DB_MODE:', process.env.ENABLE_DB_MODE);
+console.log('  NEXT_PUBLIC_ENABLE_DB_MODE:', process.env.NEXT_PUBLIC_ENABLE_DB_MODE);
+>>>>>>> main
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -46,6 +58,14 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'ext.same-assets.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
       },
     ],
     dangerouslyAllowSVG: true,
@@ -60,9 +80,18 @@ const nextConfig = {
   },
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
+<<<<<<< HEAD
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
     ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.ENABLE_DYNAMIC_HTML_STRUCTURE,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE,
+=======
+    ENABLE_DATA_GENERATION: process.env.ENABLE_DATA_GENERATION,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    DATA_SEED_VALUE: process.env.DATA_SEED_VALUE,
+    NEXT_PUBLIC_DATA_SEED_VALUE: process.env.NEXT_PUBLIC_DATA_SEED_VALUE,
+    ENABLE_DB_MODE: process.env.ENABLE_DB_MODE,
+    NEXT_PUBLIC_ENABLE_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DB_MODE,
+>>>>>>> main
   },
   // experimental: {
   //   allowedDevOrigins: ['https://be96-72-255-23-44.ngrok-free.app'], // ← your ngrok public URL
