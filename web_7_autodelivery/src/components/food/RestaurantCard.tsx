@@ -17,6 +17,12 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
   const layout = useLayout();
 
   const handleClick = () => {
+    // Ensure id is valid before proceeding
+    if (!id) {
+      console.warn("RestaurantCard: id is undefined or null");
+      return;
+    }
+
     // Log the event
     logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
       id,
@@ -45,11 +51,11 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
     }
   };
 
-  const cardIndex = parseInt(id.replace('restaurant-', '')) || 0;
+  const cardIndex = parseInt(id?.replace('restaurant-', '') || '0') || 0;
 
   return (
     <SeedLink 
-      href={`/restaurants/${id}`}
+      href={`/restaurants/${id || 'unknown'}`}
       onClick={handleClick}
       {...layout.getElementAttributes('VIEW_DELIVERY_RESTAURANT', cardIndex)}
     >

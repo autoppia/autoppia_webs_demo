@@ -6,7 +6,7 @@ import { PropertyCard } from "@/components/PropertyCard";
 import * as React from "react";
 import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import Image from "next/image";
 import { useSeedLayout } from "@/library/utils";
 import { DynamicWrapper } from "@/components/DynamicWrapper";
@@ -160,7 +160,8 @@ function HomeContent() {
     return selFrom <= to && from <= selTo;
   }
 
-  const filtered = DASHBOARD_HOTELS.filter((card) => {
+  const hotels = dynamicDataProvider.getHotels();
+  const filtered = hotels.filter((card) => {
     if (committedSearch.trim()) {
       const term = committedSearch.toLowerCase();
       if (
@@ -633,7 +634,7 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#616882] mx-auto mb-4"></div><p className="text-neutral-600">Loading hotels...</p></div></div>}>
       <HomeContent />
     </Suspense>
   );
