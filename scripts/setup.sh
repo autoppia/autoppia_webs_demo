@@ -217,12 +217,12 @@ if [ -n "$SEED_VALUE" ] && ! is_integer "$SEED_VALUE"; then echo "❌ --seed_val
 
 is_valid_demo() {
   case "$1" in
-    movies|books|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|all) return 0;;
+    movies|books|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth|all) return 0;;
     *) return 1;;
   esac
 }
 if ! is_valid_demo "$WEB_DEMO"; then
-  echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', or 'all'."
+  echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', 'autohealth', or 'all'."
   exit 1
 fi
 
@@ -425,10 +425,6 @@ case "$WEB_DEMO" in
     deploy_webs_server
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     ;;
-  autodelivery)
-    deploy_webs_server
-    deploy_project "web_7_autodelivery" "$WEB_PORT" "" "autodelivery_${WEB_PORT}"
-    ;;
   autolodge)
     deploy_webs_server
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
@@ -441,17 +437,9 @@ case "$WEB_DEMO" in
     deploy_webs_server
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     ;;
-  autocalendar)
+  autohealth)
     deploy_webs_server
-    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
-    ;;
-  autolist)
-    deploy_webs_server
-    deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
-    ;;
-  autodrive)
-    deploy_webs_server
-    deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
+    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     ;;
   all)
     deploy_webs_server
@@ -463,14 +451,12 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
     deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
+    deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autohealth' or 'all'."
     exit 1
     ;;
 esac
