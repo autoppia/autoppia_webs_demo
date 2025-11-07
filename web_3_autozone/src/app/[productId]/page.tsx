@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
@@ -12,6 +12,8 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
 import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
 import { withSeed } from "@/utils/seedRouting";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeed } from "@/context/SeedContext";
 
 
 // Static date to avoid hydration mismatch
@@ -20,6 +22,7 @@ const DELIVERY_ADDRESS = "Daly City 94016";
 
 function ProductContent() {
   const router = useSeedRouter();
+  const searchParams = useSearchParams();
   const { productId } = useParams();
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
