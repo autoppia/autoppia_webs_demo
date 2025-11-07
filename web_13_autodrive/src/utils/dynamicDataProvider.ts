@@ -1,4 +1,6 @@
 import { getSeedLayout } from "@/library/layouts";
+import { initializeTrips } from "@/data/trips-enhanced";
+import type { Trip } from "@/library/dataset";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -9,9 +11,30 @@ const isDynamicHtmlEnabled = (): boolean => {
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled: boolean = false;
+  private trips: Trip[] = [];
+  private ready: boolean = false;
+  private readyPromise: Promise<void> | null = null;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    try {
+      console.log('[web13][provider] ctor', { dynamicHtml: this.isEnabled, env: {
+        NEXT_PUBLIC_API_URL: process.env?.NEXT_PUBLIC_API_URL,
+        ENABLE_DATA_GENERATION: process.env?.ENABLE_DATA_GENERATION,
+        NEXT_PUBLIC_DATA_GENERATION: process.env?.NEXT_PUBLIC_DATA_GENERATION,
+        NEXT_ENABLE_DATA_GENERATION: process.env?.NEXT_ENABLE_DATA_GENERATION,
+        ENABLE_DB_MODE: process.env?.ENABLE_DB_MODE,
+        NEXT_PUBLIC_ENABLE_DB_MODE: process.env?.NEXT_PUBLIC_ENABLE_DB_MODE,
+      }});
+    } catch {}
+    // Client-side async initialization for trips
+    if (typeof window !== 'undefined') {
+      console.log('[web13][provider] initializing on client...');
+      this.readyPromise = this.initialize();
+    } else {
+      console.log('[web13][provider] running on server, skipping client init');
+      this.ready = true;
+    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -21,8 +44,28 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
+  private async initialize(): Promise<void> {
+    try {
+      console.log('[web13][provider] initialize() start');
+      this.trips = await initializeTrips(30);
+      console.log('[web13][provider] initialize() loaded trips', this.trips.length);
+    } finally {
+      console.log('[web13][provider] initialize() complete');
+      this.ready = true;
+    }
+  }
+
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public async whenReady(): Promise<void> {
+    if (this.ready) return;
+    if (this.readyPromise) await this.readyPromise;
   }
 
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
@@ -43,6 +86,25 @@ export class DynamicDataProvider {
   // Get layout configuration based on seed
   public getLayoutConfig(seed?: number) {
     return getSeedLayout(seed);
+  }
+
+  // Generated trips accessors
+  public getTrips(): Trip[] {
+    return this.trips;
+  }
+
+  public getTripsByStatus(status: Trip["status"]): Trip[] {
+    return this.trips.filter(t => t.status === status);
+  }
+
+  public searchTrips(term: string): Trip[] {
+    const q = term.toLowerCase();
+    return this.trips.filter(t =>
+      t.pickup.toLowerCase().includes(q) ||
+      t.dropoff.toLowerCase().includes(q) ||
+      t.driver.name.toLowerCase().includes(q) ||
+      t.ride.name.toLowerCase().includes(q)
+    );
   }
 
   // Static rides data - always available
@@ -285,6 +347,11 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
+export const isDataReady = () => dynamicDataProvider.isReady();
+export const whenDataReady = () => dynamicDataProvider.whenReady();
+export const getTrips = () => dynamicDataProvider.getTrips();
+export const getTripsByStatus = (status: Trip["status"]) => dynamicDataProvider.getTripsByStatus(status);
+export const searchTrips = (term: string) => dynamicDataProvider.searchTrips(term);
 
 // Static data helpers
 export const getStaticRides = () => dynamicDataProvider.getStaticRides();

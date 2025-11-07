@@ -1,6 +1,5 @@
 services:
   app:
-    restart: always
     build: .
     ports:
       - "${WEB_PORT}:8080"
