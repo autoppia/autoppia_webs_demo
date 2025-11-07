@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Filter, SortAsc, SortDesc } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import type { Doctor } from "@/data/doctors";
+import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
 interface DoctorReviewsModalProps {
   open: boolean;
@@ -27,64 +28,26 @@ function Stars({ value }: { value: number }) {
 export function DoctorReviewsModal({ open, onOpenChange, doctor }: DoctorReviewsModalProps) {
   const [filterRating, setFilterRating] = React.useState<number | null>(null);
   const [sortOrder, setSortOrder] = React.useState<"newest" | "oldest" | "highest" | "lowest">("newest");
+  const [reviews, setReviews] = React.useState<Array<{ rating: number; comment: string; patientName: string; date: string }>>([]);
+  const [loading, setLoading] = React.useState(false);
 
-  // Generate additional sample reviews for demonstration
-  const generateAdditionalReviews = () => {
-    const additionalReviews = [
-      {
-        rating: 5,
-        comment: "Dr. Thompson is an exceptional cardiologist. She explained my condition clearly and provided excellent care throughout my treatment.",
-        patientName: "Robert K.",
-        date: "2024-01-08"
-      },
-      {
-        rating: 4,
-        comment: "Professional and knowledgeable. The appointment was on time and the staff was friendly.",
-        patientName: "Lisa M.",
-        date: "2024-01-05"
-      },
-      {
-        rating: 5,
-        comment: "I've been seeing Dr. Thompson for years. She's always thorough and takes time to answer all my questions.",
-        patientName: "Michael D.",
-        date: "2024-01-03"
-      },
-      {
-        rating: 4,
-        comment: "Good experience overall. The doctor was professional and the facility was clean and modern.",
-        patientName: "Jennifer L.",
-        date: "2023-12-28"
-      },
-      {
-        rating: 5,
-        comment: "Dr. Thompson saved my life! Her quick diagnosis and treatment were outstanding. Highly recommend!",
-        patientName: "David R.",
-        date: "2023-12-25"
-      },
-      {
-        rating: 3,
-        comment: "The doctor was knowledgeable but the wait time was longer than expected. Overall decent experience.",
-        patientName: "Susan W.",
-        date: "2023-12-20"
-      },
-      {
-        rating: 5,
-        comment: "Excellent bedside manner and medical expertise. Dr. Thompson is truly caring and professional.",
-        patientName: "Thomas B.",
-        date: "2023-12-18"
-      },
-      {
-        rating: 4,
-        comment: "Good doctor with solid medical knowledge. The appointment was efficient and informative.",
-        patientName: "Nancy P.",
-        date: "2023-12-15"
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      if (!open || !doctor) return;
+      setLoading(true);
+      try {
+        const data = await initializeDoctorReviews({ id: doctor.id, name: doctor.name, specialty: (doctor as any).specialty });
+        if (mounted) setReviews(Array.isArray(data) ? data : []);
+      } finally {
+        if (mounted) setLoading(false);
       }
-    ];
+    })();
+    return () => { mounted = false; };
+  }, [open, doctor]);
 
-    return additionalReviews;
-  };
-
-  const allReviews = doctor ? [...doctor.patientReviews, ...generateAdditionalReviews()] : [];
+  const baseReviews = Array.isArray(doctor?.patientReviews) ? doctor!.patientReviews : [];
+  const allReviews = doctor ? [...baseReviews, ...reviews] : [];
 
   const filteredAndSortedReviews = React.useMemo(() => {
     let filtered = allReviews;
