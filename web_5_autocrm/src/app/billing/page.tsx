@@ -3,9 +3,17 @@ import React, { useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_LOGS } from "@/library/dataset";
+import { useProjectData } from "@/shared/universal-loader";
 
 
 export default function BillingPage() {
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: 'web_5_autocrm:logs',
+    entityType: 'logs',
+    generateCount: 40,
+    version: 'v1',
+    fallback: () => DEMO_LOGS,
+  });
   const [timerActive, setTimerActive] = useState(false);
   const [timerSec, setTimerSec] = useState(0);
   const [manual, setManual] = useState({
@@ -13,7 +21,17 @@ export default function BillingPage() {
     hours: 0.5,
     description: "",
   });
-  const [logs, setLogs] = useState(DEMO_LOGS);
+  const [logs, setLogs] = useState(
+    (data && data.length ? data : DEMO_LOGS).map((l: any, i: number) => ({
+      id: l.id ?? Date.now() + i,
+      matter: l.matter ?? '—',
+      client: l.client ?? '—',
+      date: l.date ?? new Date().toISOString().slice(0,10),
+      hours: typeof l.hours === 'number' ? l.hours : 1,
+      description: l.description ?? '—',
+      status: l.status ?? 'Billable',
+    }))
+  );
   const [tab, setTab] = useState("Logs");
 
   React.useEffect(() => {
@@ -193,6 +211,9 @@ export default function BillingPage() {
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-5">Recent Logs</h2>
           <div className="flex flex-col gap-4">
+            {error && (
+              <div className="text-red-600 px-4 py-2">Failed to load logs: {error}</div>
+            )}
             {logs.length === 0 && (
               <div
                 id="no-logs-message"
@@ -267,9 +288,4 @@ export default function BillingPage() {
       )}
     </section>
   );
-	return (
-		<section>
-			<h1 className="text-3xl font-extrabold mb-10 tracking-tight">Time Tracking / Billing</h1>
-		</section>
-	);
 }

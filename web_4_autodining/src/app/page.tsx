@@ -8,38 +8,37 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format, parseISO, isValid } from "date-fns";
+import { format } from "date-fns";
 import {
   CalendarIcon,
   ClockIcon,
   UserIcon,
-  ChevronDownIcon,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import React from "react";
-import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { RestaurantsData } from "@/components/library/dataset";
 import { useSeed } from "@/context/SeedContext";
-import { useSeedVariation } from "@/components/library/utils";
+import { EVENT_TYPES, logEvent } from "@/library/events";
+import { getRestaurants, initializeRestaurants } from "@/library/dataset";
+import { useSearchParams } from "next/navigation";
+import { useSeedVariation } from "@/library/utils";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
 
-// Create restaurants array from jsonData
-const restaurants = RestaurantsData.map((item, index) => ({
-  id: `restaurant-${item.id}`,
-  name: item.namepool,
-  image: `/images/restaurant${(index % 19) + 1}.jpg`,
-  stars: item.staticStars,
-  reviews: item.staticReviews,
-  cuisine: item.cuisine,
-  price: item.staticPrices,
-  bookings: item.staticBookings,
-  area: item.area,
-  times: ["1:00 PM"],
-}));
-// Split restaurants into unique sets per section
-const lunchRestaurants = restaurants.slice(0, 15);
-const iconRestaurants = restaurants.slice(15, 30);
-const awardRestaurants = restaurants.slice(30, 50);
+// UI restaurant type with required fields
+type UiRestaurant = {
+  id: string;
+  name: string;
+  cuisine: string;
+  area: string;
+  reviews: number;
+  stars: number;
+  price: string;
+  bookings: number;
+  image: string;
+  times: string[];
+};
+
+// List will be populated only after data generation/DB fetch completes
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -100,15 +99,11 @@ function RestaurantCard({
 
   return (
     <div
-      className={restaurantCardVariation.className}
+      className={`w-[255px] flex-shrink-0 rounded-xl border shadow-sm bg-white overflow-hidden`}
       data-testid={restaurantCardVariation.dataTestId}
       style={restaurantCardVariation.style}
     >
-      <div
-        className={imageContainerVariation.className}
-        data-testid={imageContainerVariation.dataTestId}
-        style={{ position: imageContainerVariation.position as any }}
-      >
+      <div className="w-full h-40 overflow-hidden">
         <img
           src={r.image}
           alt={r.name}
@@ -156,9 +151,12 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
   const ref = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const rafIdRef = useRef<number | null>(null);
+  const tickingRef = useRef(false);
 
   const { seed } = useSeed();
   const cardContainerVariation = useSeedVariation("cardContainer");
+  const childCount = React.Children.count(children);
 
   const checkScroll = () => {
     if (ref.current) {
@@ -168,10 +166,29 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
     }
   };
 
+  const scheduleCheck = () => {
+    if (tickingRef.current) return;
+    tickingRef.current = true;
+    rafIdRef.current = window.requestAnimationFrame(() => {
+      checkScroll();
+      tickingRef.current = false;
+    });
+  };
+
   useEffect(() => {
     checkScroll();
-    window.addEventListener("resize", checkScroll);
-    return () => window.removeEventListener("resize", checkScroll);
+    let ro: ResizeObserver | null = null;
+    if (ref.current && typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => scheduleCheck());
+      ro.observe(ref.current);
+    }
+    window.addEventListener("resize", scheduleCheck);
+    return () => {
+      window.removeEventListener("resize", scheduleCheck);
+      if (ro && ref.current) ro.disconnect();
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      tickingRef.current = false;
+    };
   }, []);
 
   const scroll = (direction: "left" | "right") => {
@@ -185,32 +202,34 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
     }
   };
 
+  if (childCount === 0) {
+    return null;
+  }
+
   return (
-    <div className="relative">
-      {/*{canScrollLeft && (*/}
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
-          data-testid={`scroll-left-${seed}`}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-      {/*)}*/}
-      {canScrollRight && (
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
-          data-testid={`scroll-right-${seed}`}
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-      )}
+    <div className="relative overflow-hidden">
+      <button
+        onClick={() => scroll("left")}
+        className={`absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50 ${canScrollLeft ? '' : 'opacity-50 cursor-not-allowed'}`}
+        data-testid={`scroll-left-${seed}`}
+        disabled={!canScrollLeft}
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={() => scroll("right")}
+        className={`absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50 ${canScrollRight ? '' : 'opacity-50 cursor-not-allowed'}`}
+        data-testid={`scroll-right-${seed}`}
+        disabled={!canScrollRight}
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
       {/* Scrollable Content */}
       <div
         ref={ref}
-        className={`${cardContainerVariation.className} pb-4 scroll-smooth scrollbar-hide pl-1 pr-10`}
+        className={`flex gap-4 pb-4 scroll-smooth pl-1 pr-10 overflow-x-auto overflow-y-hidden`}
         data-testid={cardContainerVariation.dataTestId}
-        onScroll={checkScroll}
+        onScroll={scheduleCheck}
       >
         {children}
       </div>
@@ -227,6 +246,10 @@ function getLayoutVariant(seed: number) {
 
 // Client-only component that uses seed from context
 function HomePageContent() {
+  const [isReady, setIsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [list, setList] = useState<UiRestaurant[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
@@ -291,7 +314,7 @@ function HomePageContent() {
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
   };
 
-  function matches(r: (typeof restaurants)[0]): boolean {
+  function matches(r: UiRestaurant): boolean {
     const q = search.trim().toLowerCase();
     return (
       !q ||
@@ -301,7 +324,7 @@ function HomePageContent() {
     );
   }
 
-  const filtered = restaurants.filter(matches);
+  const filtered = list.filter(matches);
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const timeOptions = [
     "12:00 PM",
@@ -312,8 +335,50 @@ function HomePageContent() {
     "2:30 PM",
   ];
 
+  useEffect(() => {
+    let didRun = false;
+    const runOnce = async () => {
+      if (didRun) return; // guard
+      didRun = true;
+      setIsLoading(true);
+      const genEnabled = isDataGenerationEnabled();
+      if (genEnabled) setIsGenerating(true);
+      try {
+        await initializeRestaurants(); // waits for DB/gen
+        const fresh = getRestaurants().map((r) => ({
+          id: r.id,
+          name: r.name,
+          image: r.image,
+          cuisine: r.cuisine ?? "International",
+          area: r.area ?? "Downtown",
+          reviews: r.reviews ?? 0,
+          stars: r.stars ?? 4,
+          price: r.price ?? "$$",
+          bookings: r.bookings ?? 0,
+          times: ["1:00 PM"],
+        }));
+        setList(fresh);
+        setIsReady(true);
+      } finally {
+        setIsLoading(false);
+        setIsGenerating(false);
+      }
+    };
+    runOnce();
+  }, []);
+
   return (
     <main suppressHydrationWarning>
+      {isGenerating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-[#46a758] animate-spin" aria-hidden="true" />
+            <div className="text-gray-700 text-base font-medium text-center">
+              Data is being generated by AI this may take some time
+            </div>
+          </div>
+        </div>
+      )}
       {/* Navigation/Header */}
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
@@ -350,6 +415,9 @@ function HomePageContent() {
 
       {/* Hero Section */}
       <section className={pageLayoutVariation.className} data-testid={pageLayoutVariation.dataTestId}>
+        {(isLoading || !isReady) && (
+          <div className="text-center text-gray-500 mb-4">Loading restaurants...</div>
+        )}
         <h1 className="text-4xl font-bold mb-6">Find your table for any occasion</h1>
         
         {/* Search and Filters */}
@@ -468,8 +536,9 @@ function HomePageContent() {
         </section>
 
         {/* Main Content - Cards, Sections, etc. */}
-        {wrapButton ? (
+        {(isLoading || !isReady || list.length === 0) ? null : wrapButton ? (
           <div data-testid={`section-wrapper-${seed}`}>
+            {isReady && list.length > 0 && (
             <section className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
               <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
               <CardScroller title="Available for lunch now">
@@ -484,22 +553,25 @@ function HomePageContent() {
                 ))}
               </CardScroller>
             </section>
+            )}
           </div>
         ) : (
-          <section className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
-            <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
-            <CardScroller title="Available for lunch now">
-              {filtered.map((r) => (
-                <RestaurantCard
-                  key={r.id + "-lunch"}
-                  r={r}
-                  date={date}
-                  people={people}
-                  time={time}
-                />
-              ))}
-            </CardScroller>
-          </section>
+          isLoading || !isReady || list.length === 0 ? null : (
+            <section className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
+              <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
+              <CardScroller title="Available for lunch now">
+                {filtered.map((r) => (
+                  <RestaurantCard
+                    key={r.id + "-lunch"}
+                    r={r}
+                    date={date}
+                    people={people}
+                    time={time}
+                  />
+                ))}
+              </CardScroller>
+            </section>
+          )
         )}
 
         {/* Introducing OpenDinning Icons Section */}
@@ -524,7 +596,7 @@ function HomePageContent() {
                 </button>
               </div>
               <CardScroller title="Introducing OpenDinning Icons">
-                {iconRestaurants.map((r) => (
+                {list.slice(15, 30).map((r) => (
                   <RestaurantCard
                     key={r.id + "-icon"}
                     r={r}
@@ -556,7 +628,7 @@ function HomePageContent() {
               </button>
             </div>
             <CardScroller title="Introducing OpenDinning Icons">
-              {iconRestaurants.map((r) => (
+              {list.slice(15, 30).map((r) => (
                 <RestaurantCard
                   key={r.id + "-icon"}
                   r={r}
@@ -575,7 +647,7 @@ function HomePageContent() {
             <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
               <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
               <CardScroller title="Award Winners">
-                {awardRestaurants.map((r) => (
+                {list.slice(30, 50).map((r) => (
                   <RestaurantCard
                     key={r.id + "-award"}
                     r={r}
@@ -591,7 +663,7 @@ function HomePageContent() {
           <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
             <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
             <CardScroller title="Award Winners">
-              {awardRestaurants.map((r) => (
+              {list.slice(30, 50).map((r) => (
                 <RestaurantCard
                   key={r.id + "-award"}
                   r={r}

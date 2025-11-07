@@ -5,10 +5,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
-import { countries, RestaurantsData } from "@/components/library/dataset";
-import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
+import { countries, initializeRestaurants, getRestaurants } from "@/library/dataset";
+import { useSeedVariation, getSeedFromUrl } from "@/library/utils";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
@@ -16,36 +16,17 @@ const photos = [
   "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150",
 ];
 
-const restaurantData: Record<
-  string,
-  {
-    name: string;
-    image: string;
-    rating: number;
-    reviews: number;
-    bookings: number;
-    price: string;
-    cuisine: string;
-    tags: string[];
-    desc: string;
-    photos: string[];
-  }
-> = {};
-
-RestaurantsData.forEach((item, index) => {
-  restaurantData[`restaurant-${item.id}`] = {
-    name: item.namepool,
-    image: `/images/restaurant${(index % 19) + 1}.jpg`,
-    rating: item.staticStars,
-    reviews: item.staticReviews,
-    bookings: item.staticBookings,
-    price: item.staticPrices,
-    cuisine: item.cuisine,
-    tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${item.namepool}, offering a fusion of flavors in the heart of ${item.area}.`,
-    photos,
-  };
-});
+type RestaurantView = {
+  id: string;
+  name: string;
+  image: string;
+  rating: number;
+  reviews: number;
+  bookings: number;
+  price: string;
+  cuisine: string;
+  desc: string;
+};
 
 export default function Page() {
   const params = useParams();
@@ -75,7 +56,7 @@ export default function Page() {
   const [phoneError, setPhoneError] = useState(false);
   const [email, setEmail] = useState("user_name@gmail.com");
 
-  const data = restaurantData[restaurantId] ?? restaurantData["restaurant-1"];
+  const [data, setData] = useState<RestaurantView | null>(null);
 
   const seed = Number(searchParams?.get("seed") ?? "1");
 
@@ -94,26 +75,56 @@ export default function Page() {
 
   const restaurantInfo = {
     restaurantId,
-    restaurantName: data.name,
-    rating: data.rating,
-    reviews: data.reviews,
-    bookings: data.bookings,
-    price: data.price,
-    cuisine: data.cuisine,
-    desc: data.desc,
+    restaurantName: data?.name ?? "",
+    rating: data?.rating ?? 0,
+    reviews: data?.reviews ?? 0,
+    bookings: data?.bookings ?? 0,
+    price: data?.price ?? "",
+    cuisine: data?.cuisine ?? "",
+    desc: data?.desc ?? "",
   };
+
+  useEffect(() => {
+    initializeRestaurants().then(() => {
+      const list = getRestaurants();
+      const found = list.find((x) => x.id === restaurantId) || list[0];
+      if (found) {
+        const mapped: RestaurantView = {
+          id: found.id,
+          name: found.name,
+          image: found.image,
+          rating: Number(found.stars ?? 4),
+          reviews: Number(found.reviews ?? 0),
+          bookings: Number(found.bookings ?? 0),
+          price: String(found.price ?? "$$"),
+          cuisine: String(found.cuisine ?? "International"),
+          desc: `Enjoy a delightful experience at ${found.name}, offering a fusion of flavors in the heart of ${found.area ?? "Downtown"}.`,
+        };
+        setData(mapped);
+      }
+    });
+  }, [restaurantId]);
 
   useEffect(() => {
     const computedFullDate = reservationDateParam
       ? dayjs(reservationDateParam).format("YYYY-MM-DD")
       : null;
-    logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-      ...restaurantInfo,
-      date: computedFullDate,
-      time: reservationTime || time,
-      people: reservationPeople || people,
-    });
-  }, []);
+    if (data) {
+      logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+        restaurantId,
+        restaurantName: data.name,
+        rating: data.rating,
+        reviews: data.reviews,
+        bookings: data.bookings,
+        price: data.price,
+        cuisine: data.cuisine,
+        desc: data.desc,
+        date: computedFullDate,
+        time: reservationTime || time,
+        people: reservationPeople || people,
+      });
+    }
+  }, [data]);
 
   useEffect(() => {
     if (reservationDateParam) {
@@ -194,13 +205,13 @@ export default function Page() {
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
         <h2 className="font-bold text-lg mt-8 mb-4">You’re almost done!</h2>
         <div className="flex items-center gap-3 mb-6">
-          <img
-            src={data.image}
-            alt={data.name}
+            <img
+            src={data?.image || "/images/restaurant1.jpg"}
+            alt={data?.name || "Restaurant"}
             className="w-16 h-16 rounded-lg object-cover border"
           />
           <div className="flex flex-col gap-[2px]">
-            <span className="font-bold text-2xl">{data.name}</span>
+            <span className="font-bold text-2xl">{data?.name ?? "Loading..."}</span>
             <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
@@ -242,7 +253,7 @@ export default function Page() {
                         ...restaurantInfo,
                         countryCode: country.code,
                         countryName: country.name,
-                        restaurantName: data.name,
+                        restaurantName: data?.name ?? "",
                       });
                     }}
                   >
@@ -296,11 +307,11 @@ export default function Page() {
                       (c) => c.code === e.target.value
                     )!;
                     setSelectedCountry(country);
-                    logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                      logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
                       ...restaurantInfo,
                       countryCode: country.code,
                       countryName: country.name,
-                      restaurantName: data.name,
+                        restaurantName: data?.name ?? "",
                     });
                   }}
                 >

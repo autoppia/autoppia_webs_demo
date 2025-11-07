@@ -10,6 +10,7 @@
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
+#   --enabled_dynamic_versions=[v1,v2,v3,v4]   Enable specific dynamic versions
 #   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
 #   --enable_data_generation=BOOL Generate demo data where supported (true/false, default: false)
 #   --enable_db_mode=BOOL         Enable DB-backed mode for supported apps (true/false, default: false)
@@ -21,6 +22,7 @@
 # Examples:
 #   ./setup.sh --demo=automail --enable_dynamic_html=true
 #   ./setup.sh --demo=all --enable_dynamic_html=true --web_port=8000
+#   ./setup.sh --demo=automail --enabled_dynamic_versions=[v1,v3]
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -37,6 +39,7 @@ Options:
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, all (default: all)
+  --enabled_dynamic_versions=[v1,v2,v3,v4]   Enable specific dynamic versions
   --enable_dynamic_html=BOOL    Enable dynamic HTML (true/false, default: false)
   --enable_data_generation=BOOL Generate demo data where supported (true/false, default: false)
   --enable_db_mode=BOOL         Enable DB-backed mode for supported apps (true/false, default: false)
@@ -68,8 +71,12 @@ WEB_DEMO="all"
 ENABLE_DYNAMIC_HTML_DEFAULT=false
 ENABLE_DATA_GENERATION_DEFAULT=false
 ENABLE_DB_MODE_DEFAULT=false
+# New defaults for mapped dynamic-version features
+ENABLE_DYNAMIC_STRUCTURE_DEFAULT=false
+ENABLE_SEED_HTML_DEFAULT=false
 SEED_VALUE=""    # optional integer seed
 FAST_DEFAULT=false
+ENABLED_DYNAMIC_VERSIONS_DEFAULT="" # New default for enabled dynamic versions (comma-separated string, e.g. "v1,v3")
 
 # 5) Parse args (only one public flag, plus -y convenience)
 for ARG in "$@"; do
@@ -82,6 +89,7 @@ for ARG in "$@"; do
     --enable_dynamic_html=*) ENABLE_DYNAMIC_HTML="${ARG#*=}" ;;
     --enable_data_generation=*) ENABLE_DATA_GENERATION="${ARG#*=}" ;;
     --enable_db_mode=*)   ENABLE_DB_MODE="${ARG#*=}" ;;
+    --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
     --seed_value=*)       SEED_VALUE="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
     --fast=*)            FAST_MODE="${ARG#*=}" ;;
@@ -96,10 +104,14 @@ WEBS_PG_PORT="${WEBS_PG_PORT:-$WEBS_PG_PORT_DEFAULT}"
 ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
 ENABLE_DATA_GENERATION="${ENABLE_DATA_GENERATION:-$ENABLE_DATA_GENERATION_DEFAULT}"
 ENABLE_DB_MODE="${ENABLE_DB_MODE:-$ENABLE_DB_MODE_DEFAULT}"
+# initialize new feature flags from defaults (no direct CLI flags presently)
+ENABLE_DYNAMIC_STRUCTURE="${ENABLE_DYNAMIC_STRUCTURE:-$ENABLE_DYNAMIC_STRUCTURE_DEFAULT}"
+ENABLE_SEED_HTML="${ENABLE_SEED_HTML:-$ENABLE_SEED_HTML_DEFAULT}"
 SEED_VALUE="${SEED_VALUE:-}"
 FAST_MODE="${FAST_MODE:-$FAST_DEFAULT}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-$ENABLED_DYNAMIC_VERSIONS_DEFAULT}"
 
-# Helpers: validation and normalization
+# Helpers: validation and normalization (single copy)
 to_lower() { echo "${1:-}" | tr '[:upper:]' '[:lower:]'; }
 normalize_bool() {
   local v; v="$(to_lower "${1:-}")"
@@ -118,10 +130,82 @@ is_integer() { [[ "${1:-}" =~ ^-?[0-9]+$ ]]; }
 ENABLE_DYNAMIC_HTML="$(normalize_bool "$ENABLE_DYNAMIC_HTML")"
 ENABLE_DATA_GENERATION="$(normalize_bool "$ENABLE_DATA_GENERATION")"
 ENABLE_DB_MODE="$(normalize_bool "$ENABLE_DB_MODE")"
+ENABLE_DYNAMIC_STRUCTURE="$(normalize_bool "$ENABLE_DYNAMIC_STRUCTURE")"
+ENABLE_SEED_HTML="$(normalize_bool "$ENABLE_SEED_HTML")"
 FAST_MODE="$(normalize_bool "$FAST_MODE")"
-if [ "$ENABLE_DYNAMIC_HTML" = "__INVALID__" ] || [ "$ENABLE_DATA_GENERATION" = "__INVALID__" ] || [ "$ENABLE_DB_MODE" = "__INVALID__" ] || [ "$FAST_MODE" = "__INVALID__" ]; then
+if [ "$ENABLE_DYNAMIC_HTML" = "__INVALID__" ] || [ "$ENABLE_DATA_GENERATION" = "__INVALID__" ] || [ "$ENABLE_DB_MODE" = "__INVALID__" ] || [ "$ENABLE_DYNAMIC_STRUCTURE" = "__INVALID__" ] || [ "$ENABLE_SEED_HTML" = "__INVALID__" ] || [ "$FAST_MODE" = "__INVALID__" ]; then
   echo "❌ Invalid boolean flag. Use true/false (or yes/no, 1/0)."
   exit 1
+fi
+
+# Normalize and validate enabled dynamic versions (accepts formats like v1,v2 or [v1,v2])
+normalize_versions() {
+  local raw="$1"
+  # remove surrounding brackets and whitespace
+  raw="${raw//[[:space:]]/}"
+  raw="${raw//\[/}"
+  raw="${raw//\]/}"
+  # empty -> empty
+  if [ -z "$raw" ]; then
+    echo ""
+    return 0
+  fi
+  # split and validate each token
+  IFS=',' read -ra parts <<<"$raw"
+  local out=()
+  for p in "${parts[@]}"; do
+    # allow tokens like v1, v2, v10; reject if empty
+    if [[ -z "$p" ]]; then
+      echo "__INVALID__"
+      return 0
+    fi
+    if [[ ! "$p" =~ ^v[0-9]+$ ]]; then
+      echo "__INVALID__"
+      return 0
+    fi
+    out+=("$p")
+  done
+  # rejoin normalized list (comma-separated)
+  local IFS=','; echo "${out[*]}"
+}
+
+ENABLED_DYNAMIC_VERSIONS_NORMALIZED="$(normalize_versions "$ENABLED_DYNAMIC_VERSIONS")"
+if [ "$ENABLED_DYNAMIC_VERSIONS_NORMALIZED" = "__INVALID__" ]; then
+  echo "❌ Invalid --enabled_dynamic_versions value. Expected comma-separated tokens like v1,v2 or [v1,v2] where each token matches ^v[0-9]+$"
+  exit 1
+fi
+ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS_NORMALIZED"
+
+# Map dynamic version tokens to feature flags
+# v1 -> ENABLE_DYNAMIC_HTML
+# v2 -> ENABLE_DATA_GENERATION
+# v3 -> ENABLE_DYNAMIC_STRUCTURE
+# v4 -> ENABLE_SEED_HTML
+if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
+  IFS=',' read -ra _dv_parts <<<"$ENABLED_DYNAMIC_VERSIONS"
+  for _dv in "${_dv_parts[@]}"; do
+    case "$_dv" in
+      v1)
+        ENABLE_DYNAMIC_HTML=true
+        echo "[INFO] dynamic version $_dv enabled: ENABLE_DYNAMIC_HTML=true"
+        ;;
+      v2)
+        ENABLE_DATA_GENERATION=true
+        echo "[INFO] dynamic version $_dv enabled: ENABLE_DATA_GENERATION=true"
+        ;;
+      v3)
+        ENABLE_DYNAMIC_STRUCTURE=true
+        echo "[INFO] dynamic version $_dv enabled: ENABLE_DYNAMIC_STRUCTURE=true"
+        ;;
+      v4)
+        ENABLE_SEED_HTML=true
+        echo "[INFO] dynamic version $_dv enabled: ENABLE_SEED_HTML=true"
+        ;;
+      *)
+        echo "[WARN] Unknown dynamic version token '$_dv' — ignoring"
+        ;;
+    esac
+  done
 fi
 
 # Validate ports and seed
@@ -151,11 +235,14 @@ echo "    Demo to deploy:         →  $WEB_DEMO"
 echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
 echo "    Data generation:        →  $ENABLE_DATA_GENERATION"
 echo "    DB mode:                →  $ENABLE_DB_MODE"
+echo "    Dynamic structure:      →  $ENABLE_DYNAMIC_STRUCTURE"
+echo "    Seed HTML enabled:      →  $ENABLE_SEED_HTML"
+echo "    Enabled dynamic versions→  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Seed value:             →  ${SEED_VALUE:-<none>}"
 echo "    Fast mode:              →  $FAST_MODE"
 echo
 
-# 6) Check Docker
+# 6) Check Docker (single copy)
 if ! command -v docker >/dev/null 2>&1; then
   echo "❌ Docker not installed."
   exit 1
@@ -166,7 +253,7 @@ if ! docker info >/dev/null 2>&1; then
 fi
 echo "✅ Docker is ready."
 
-# 0/1. Global cleanup to ensure fresh deploy unless fast mode is enabled
+# 0/1. Global cleanup to ensure fresh deploy unless fast mode is enabled (single copy)
 if [ "$FAST_MODE" = true ]; then
   echo "[INFO] Fast mode enabled: skipping global Docker cleanup and using cached builds."
   # Ensure external network exists when skipping cleanup
@@ -226,19 +313,26 @@ deploy_project() {
       POSTGRES_PORT="$pgp" \
       ENABLE_DYNAMIC_HTML="$ENABLE_DYNAMIC_HTML" \
       ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
+      NEXT_PUBLIC_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
       ENABLE_DB_MODE="$ENABLE_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DB_MODE="$ENABLE_DB_MODE" \
       DATA_SEED_VALUE="$SEED_VALUE" \
       NEXT_PUBLIC_DATA_SEED_VALUE="$SEED_VALUE" \
       API_URL="http://app:8080" \
-      NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT"
+      NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
+      ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS" \
+      NEXT_PUBLIC_ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS" \
+      ENABLE_DYNAMIC_STRUCTURE="$ENABLE_DYNAMIC_STRUCTURE" \
+      NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE="$ENABLE_DYNAMIC_STRUCTURE" \
+      ENABLE_SEED_HTML="$ENABLE_SEED_HTML" \
+      NEXT_PUBLIC_ENABLE_SEED_HTML="$ENABLE_SEED_HTML"
 
     docker compose -p "$proj" build $cache_flag
     docker compose -p "$proj" up -d
   )
 
   popd >/dev/null
-  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML)"
+  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML, Data generation: $ENABLE_DATA_GENERATION, DB mode: $ENABLE_DB_MODE, Dynamic structure: $ENABLE_DYNAMIC_STRUCTURE, Seed HTML: $ENABLE_SEED_HTML)"
   echo
 }
 
@@ -349,8 +443,8 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_webs_server
-#    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
-#    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
+    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
+    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
     deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
     deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
     deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
