@@ -217,12 +217,12 @@ if [ -n "$SEED_VALUE" ] && ! is_integer "$SEED_VALUE"; then echo "❌ --seed_val
 
 is_valid_demo() {
   case "$1" in
-    movies|books|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|all) return 0;;
+    movies|books|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth|all) return 0;;
     *) return 1;;
   esac
 }
 if ! is_valid_demo "$WEB_DEMO"; then
-  echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', or 'all'."
+  echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', 'autohealth', or 'all'."
   exit 1
 fi
 
@@ -438,7 +438,7 @@ case "$WEB_DEMO" in
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     ;;
   autohealth)
-    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealthk_${WEB_PORT}"
+    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     deploy_webs_server
     ;;
   all)
