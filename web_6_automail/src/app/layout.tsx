@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 
@@ -31,7 +32,9 @@ export default function RootLayout({
       <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
         <ThemeProvider>
           <EmailProvider>
-            <LayoutProvider>{children}</LayoutProvider>
+            <LayoutProvider>
+              <DataReadyGate>{children}</DataReadyGate>
+            </LayoutProvider>
           </EmailProvider>
         </ThemeProvider>
       </body>

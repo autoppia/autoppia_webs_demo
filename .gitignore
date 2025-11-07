@@ -59,7 +59,7 @@ __pypackages__/
 celerybeat-schedule
 celerybeat.pid
 *.sage.py
-.env
+.env*
 .venv
 env/
 venv/
@@ -77,60 +77,12 @@ dmypy.json
 .pytype/
 cython_debug/
 .idea/
-# =========================
-# NODE / NEXT.JS ADDITIONS
-# =========================
 
-# Node modules
-node_modules/
+
+# Node Modules
 **/node_modules/
-
-# Next.js build output
-.next/
 **/.next/
-
-# Production build output
-out/
-**/out/
-
-# Environment files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-**/.env
-**/.env.*
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-**/npm-debug.log*
-**/yarn-debug.log*
-**/yarn-error.log*
-**/pnpm-debug.log*
-
-# IDE settings
-.vscode/
-*.swp
-
-# Cache & misc
-.DS_Store
-Thumbs.db
-coverage/
-**/coverage/
-*.tsbuildinfo
-**/*.tsbuildinfo
-
-# Vercel / Turbo
-.vercel/
-**/.vercel/
-.turbo/
-**/.turbo/
-
-*next-env.d.ts
+**/next-env.d.ts
+*/.next/
+*/node_modules/
 *pnpm-lock.yaml
-
-# Generated data files
-*/generated_data/*.json

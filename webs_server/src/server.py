@@ -46,7 +46,7 @@ def trim_url_to_origin(url: str) -> str:
 # --- SQL Query Constants ---
 INSERT_EVENT_SQL = """
                    INSERT INTO events (web_agent_id, web_url, validator_id, event_data)
-                   VALUES ($1, $2, $3, $4) RETURNING id, created_at; \
+                   VALUES ($1, $2, $3, $4) RETURNING id, created_at;
                    """
 
 SELECT_EVENTS_SQL = """
@@ -55,7 +55,7 @@ SELECT_EVENTS_SQL = """
                     WHERE web_url = $1
                       AND web_agent_id = $2
                       AND validator_id = $3
-                    ORDER BY created_at DESC; \
+                    ORDER BY created_at DESC;
                     """
 
 DELETE_EVENTS_SQL = """
@@ -212,11 +212,11 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:8002",
         "http://app:8002",
+        "http://app:8003",
         "http://localhost:8000",
         "http://localhost:8001",
+        "http://localhost:8002",
         "http://localhost:8003",
         "http://localhost:8004",
         "http://localhost:8005",
@@ -226,7 +226,6 @@ app.add_middleware(
         "http://localhost:8009",
         "http://localhost:8010",
         "http://127.0.0.1:3000",
-        "http://127.0.0.1:8002",
     ],
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
@@ -318,6 +317,11 @@ async def get_events_endpoint(
         default="UNKNOWN_AGENT",
         max_length=255,
         description="The specific web agent ID to filter events for.",
+    ),
+    validator_id: str = Query(
+        default="UNKNOWN_VALIDATOR",
+        max_length=255,
+        description="The specific validator ID to filter events for.",
     ),
 ):
     """
@@ -621,9 +625,7 @@ async def list_pools_endpoint(project_key: Optional[str] = Query(None, descripti
 
     try:
         pools = await list_available_pools(app.state.pool, project_key)
-
         return {"pools": pools, "count": len(pools), "message": "Master pools available for seeded selection"}
-
     except Exception as e:
         logger.error(f"Failed to list pools: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to list pools: {str(e)}")
@@ -661,7 +663,6 @@ class HealthResponse(BaseModel):
     version: str = "1.0.0"
     python_version: str
     debug_message: Optional[str] = None
-
 
 # --- Health Check ---
 @app.get("/health", response_model=HealthResponse, summary="Perform a health check of the API")
@@ -707,3 +708,4 @@ async def health_check_endpoint():
         python_version=f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
         debug_message=debug_message,
     )
+
