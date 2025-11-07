@@ -1,10 +1,10 @@
 import Avatar from "@/components/Avatar";
-import { mockUsers } from "@/library/dataset";
 import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses } from "@/library/layouts";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 
-const currentUser = mockUsers[2];
+const currentUser = dynamicDataProvider.getUsers()[2] || dynamicDataProvider.getUsers()[0];
 
 export default function LeftSidebar() {
   const { layout } = useSeed();

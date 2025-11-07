@@ -1,9 +1,8 @@
 "use client";
 import { useState } from "react";
 import {
-  mockPosts as defaultPosts,
-  mockUsers,
   type Post as PostType,
+  type User as UserType,
 } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
@@ -13,12 +12,18 @@ import UserSearchBar from "@/components/UserSearchBar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { DataReadyGate } from "@/components/DataReadyGate";
 
-export default function HomePage() {
+function HomeContent() {
   const { seed, layout } = useSeed();
   
+  // Get data from dynamic provider
+  const users = dynamicDataProvider.getUsers();
+  const defaultPosts = dynamicDataProvider.getPosts();
+  
   // pick a current user
-  const currentUser = mockUsers[2];
+  const currentUser = users[2] || users[0];
   const [posts, setPosts] = useState<PostType[]>(
     () => defaultPosts.map((post) => ({ ...post, liked: false })) // ensure fresh local likes
   );
@@ -341,5 +346,13 @@ export default function HomePage() {
       
       {renderMainContent()}
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <DataReadyGate>
+      <HomeContent />
+    </DataReadyGate>
   );
 }
