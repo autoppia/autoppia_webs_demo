@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 import Header from "@/components/Header";
+import { DataReadyGate } from "@/components/DataReadyGate";
 
 export default function RootLayout({
   children,
@@ -38,7 +39,11 @@ export default function RootLayout({
           <Header />
         </Suspense>
         <main className="flex justify-center w-full mt-3 px-2">
-          <div className="w-full max-w-7xl">{children}</div>
+          <div className="w-full max-w-7xl">
+            <DataReadyGate>
+              {children}
+            </DataReadyGate>
+          </div>
         </main>
       </body>
     </html>

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { MenuItem, MenuItemSize, restaurants } from "@/data/restaurants";
+import { MenuItem, MenuItemSize } from "@/data/restaurants";
+import { getRestaurants } from "@/utils/dynamicDataProvider";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
@@ -126,9 +127,10 @@ export default function RestaurantDetailPage({
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useRouter();
   // fix restaurant
+  const restaurants = getRestaurants() || [];
   const restaurant = useMemo(() => {
     return restaurants.find((r) => r.id === restaurantId)!;
-  }, [restaurantId]);
+  }, [restaurantId, restaurants]);
   useEffect(() => {
     if (restaurant) {
       const eventPayload = {
