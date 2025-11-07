@@ -438,8 +438,8 @@ case "$WEB_DEMO" in
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
     ;;
   autohealth)
-    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     deploy_webs_server
+    deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     ;;
   all)
     deploy_webs_server
