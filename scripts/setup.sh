@@ -294,7 +294,7 @@ deploy_project() {
     return 0
   fi
 
-  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML)..."
+  echo "📂 Deploying $name (HTTP→$webp, DB→$pgp, Dynamic HTML→$ENABLE_DYNAMIC_HTML, Structure→$ENABLE_DYNAMIC_HTML_STRUCTURE)..."
   pushd "$dir" > /dev/null
 
   if docker compose -p "$proj" ps -q | grep -q .; then

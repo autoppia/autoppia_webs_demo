@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
+import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, clearCart, getTotal } =
@@ -26,6 +27,7 @@ export default function CartPage() {
   const hydrated = useHasHydrated();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const layout = useSeedLayout();
+  const { getText, getPlaceholder, getId, getAria, seedStructure } = useDynamicStructure();
   const predefinedAddresses = [
     "710 Portofino Ln, Foster City, CA 94004",
     "450 Townsend St, San Francisco, CA 94107",
@@ -91,12 +93,24 @@ export default function CartPage() {
     );
   }
 
-  if (items.length === 0 && !orderSuccess)
+  if (items.length === 0 && !orderSuccess) {
+    const emptyStateAttributes = layout.getElementAttributes("cart-empty-state", 0);
+    const emptyMessage = getText("cart-empty-message", "Your cart is empty.");
+    const emptyMessageId = getId(
+      "cart-empty-message",
+      `${emptyStateAttributes.id ?? "cart-empty-message"}-${seedStructure}`
+    );
+
     return (
-      <div className={`max-w-2xl mx-auto mt-24 text-center text-lg text-zinc-500 ${layout.cart.pageContainerClass}`}>
-        Your cart is empty.
+      <div
+        className={`max-w-2xl mx-auto mt-24 text-center text-lg text-zinc-500 ${layout.cart.pageContainerClass}`}
+        {...emptyStateAttributes}
+        id={emptyMessageId}
+      >
+        {emptyMessage}
       </div>
     );
+  }
 
   // Helper for time label inline editing
   function EditableTime({
@@ -177,6 +191,27 @@ export default function CartPage() {
     clearCart();
     setTimeout(() => setOrderSuccess(false), 7000);
   };
+
+  const quantityLabel = getText("quantity-label", "Quantity");
+  const deliveryInformationTitle = getText("delivery-information-title", "Delivery Information");
+  const deliveryInfoAttributes = layout.getElementAttributes("delivery-information-title", 0);
+  const deliveryInformationId = getId(
+    "delivery-information-title",
+    `${deliveryInfoAttributes.id ?? "delivery-information-title"}-${seedStructure}`
+  );
+  const customerNamePlaceholder = getPlaceholder("customer_name_input", "Your Name");
+  const customerAddressPlaceholder = getPlaceholder("delivery_address_input", "Delivery Address");
+  const customerPhonePlaceholder = getPlaceholder("contact_phone_input", "Contact Number");
+  const customerNameId = getId("customer-name-input", `customer-name-${seedStructure}`);
+  const customerAddressId = getId("delivery-address-input", `delivery-address-${seedStructure}`);
+  const customerPhoneId = getId("contact-phone-input", `contact-phone-${seedStructure}`);
+  const placeOrderAttributes = layout.getElementAttributes("PLACE_ORDER", 0);
+  const placeOrderId = getId(
+    "place-order-button",
+    `${placeOrderAttributes.id ?? "place-order-button"}-${seedStructure}`
+  );
+  const placeOrderLabel = getText("place-order-button", "Place Order");
+  const placeOrderAria = getAria("place-order-button", "Place order");
 
   return (
     <div id="cart-page-container" className={`max-w-3xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
@@ -637,72 +672,91 @@ export default function CartPage() {
       ) : (
         <>
           <div id="cart-items-container" className="rounded-xl bg-white shadow p-4 mb-8">
-            {items.map((item, idx) => (
-              <div
-                id={`cart-item-${item.id}`}
-                key={item.id}
-                className="flex flex-col md:flex-row items-center gap-4 py-3 border-b last:border-b-0"
-              >
-                <img
-                  id={`item-image-${item.id}`}
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 rounded-lg object-cover border"
-                />
-                <div className="flex-1">
-                  <div id={`item-name-${item.id}`} className="font-semibold">{item.name}</div>
-                  <div id={`item-price-${item.id}`} className="text-zinc-500 text-sm">
-                    ${item.price.toFixed(2)} • {item.quantity}x
+            {items.map((item, idx) => {
+              const decrementAttributes = layout.getElementAttributes("ITEM_DECREMENTED", idx);
+              const incrementAttributes = layout.getElementAttributes("ITEM_INCREMENTED", idx);
+              const removeAttributes = layout.getElementAttributes("EMPTY_CART", idx);
+              const decrementId = getId(
+                "quantity-decrease-button",
+                `${decrementAttributes.id ?? "quantity-decrease"}-${seedStructure}-${idx}`
+              );
+              const incrementId = getId(
+                "quantity-increase-button",
+                `${incrementAttributes.id ?? "quantity-increase"}-${seedStructure}-${idx}`
+              );
+              const removeId = getId(
+                "empty-cart-button",
+                `${removeAttributes.id ?? "empty-cart-button"}-${seedStructure}-${idx}`
+              );
+              return (
+                <div
+                  id={`cart-item-${item.id}`}
+                  key={item.id}
+                  className="flex flex-col md:flex-row items-center gap-4 py-3 border-b last:border-b-0"
+                >
+                  <img
+                    id={`item-image-${item.id}`}
+                    src={item.image}
+                    alt={item.name}
+                    className="w-16 h-16 rounded-lg object-cover border"
+                  />
+                  <div className="flex-1">
+                    <div id={`item-name-${item.id}`} className="font-semibold">{item.name}</div>
+                    <div id={`item-price-${item.id}`} className="text-zinc-500 text-sm">
+                      ${item.price.toFixed(2)} • {item.quantity}x
+                    </div>
                   </div>
-                </div>
-                <div className="flex gap-2 items-center">
+                  <div className="flex gap-2 items-center">
+                    <span className="text-xs font-semibold text-zinc-600">
+                      {quantityLabel}
+                    </span>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className={layout.cart.buttonClass}
+                      onClick={() => {
+                        updateQuantity(item.id, item.quantity - 1);
+                        logEvent(EVENT_TYPES.ITEM_DECREMENTED, {
+                          itemId: item.id,
+                          itemName: item.name,
+                          quantity: item.quantity - 1,
+                        });
+                      }}
+                      disabled={item.quantity === 1}
+                      {...decrementAttributes}
+                      id={decrementId}
+                      aria-label={getAria("quantity-decrease-button", "Decrease quantity")}
+                      title={getAria("quantity-decrease-button", "Decrease quantity")}
+                    >
+                      -
+                    </Button>
+                    <span id={`quantity-${item.id}`} className="px-2 font-bold">{item.quantity}</span>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className={layout.cart.buttonClass}
+                      onClick={() => {
+                        updateQuantity(item.id, item.quantity + 1);
+                        logEvent(EVENT_TYPES.ITEM_INCREMENTED, {
+                          itemId: item.id,
+                          itemName: item.name,
+                          quantity: item.quantity + 1,
+                        });
+                      }}
+                      {...incrementAttributes}
+                      id={incrementId}
+                      aria-label={getAria("quantity-increase-button", "Increase quantity")}
+                      title={getAria("quantity-increase-button", "Increase quantity")}
+                    >
+                      +
+                    </Button>
+                  </div>
                   <Button
-                    id={`decrement-${item.id}`}
                     size="icon"
-                    variant="outline"
-                    className={layout.cart.buttonClass}
+                    variant="destructive"
                     onClick={() => {
-                      updateQuantity(item.id, item.quantity - 1);
-                      logEvent(EVENT_TYPES.ITEM_DECREMENTED, {
-                        itemId: item.id,
-                        itemName: item.name,
-                        quantity: item.quantity - 1,
-                      });
-                    }}
-                    disabled={item.quantity === 1}
-                    {...layout.getElementAttributes('ITEM_DECREMENTED', idx)}
-                  >
-                    -
-                  </Button>
-                  <span id={`quantity-${item.id}`} className="px-2 font-bold">{item.quantity}</span>
-                  <Button
-                    id={`increment-${item.id}`}
-                    size="icon"
-                    variant="outline"
-                    className={layout.cart.buttonClass}
-                    onClick={() => {
-                      updateQuantity(item.id, item.quantity + 1);
-                      logEvent(EVENT_TYPES.ITEM_INCREMENTED, {
-                        itemId: item.id,
-                        itemName: item.name,
-                        quantity: item.quantity + 1,
-                      });
-                    }}
-                    {...layout.getElementAttributes('ITEM_INCREMENTED', idx)}
-                  >
-                    +
-                  </Button>
-                </div>
-                <Button
-                  id={`remove-${item.id}`}
-                  size="icon"
-                  variant="destructive"
-                  onClick={() => {
-                    removeFromCart(item.id);
-                    const remainingItems = items.filter(
-                      (i) => i.id !== item.id
-                    );
-                    logEvent(EVENT_TYPES.EMPTY_CART, {
+                      removeFromCart(item.id);
+                      logEvent(EVENT_TYPES.EMPTY_CART, {
                         itemId: item.id,
                         itemName: item.name,
                         price: item.price,
@@ -711,18 +765,17 @@ export default function CartPage() {
                         restaurantName: restaurant?.name || "Unknown Restaurant",
                         cartTotal: getTotal(),
                       });
-                    // if (remainingItems.length === 0) {
-                    //   logEvent(EVENT_TYPES.EMPTY_CART, {
-                    //     message: "All items removed from cart",
-                    //   });
-                    // }
-                  }}
-                  {...layout.getElementAttributes('EMPTY_CART', idx)}
-                >
-                  ×
-                </Button>
-              </div>
-            ))}
+                    }}
+                    {...removeAttributes}
+                    id={removeId}
+                    aria-label={getAria("empty-cart-button", "Remove item from cart")}
+                    title={getAria("empty-cart-button", "Remove item from cart")}
+                  >
+                    ×
+                  </Button>
+                </div>
+              );
+            })}
             <div id="cart-total" className="flex justify-end text-lg font-bold pt-4">
               Total:{" "}
               <span id="total-amount" className="text-green-700 ml-2">
@@ -736,40 +789,47 @@ export default function CartPage() {
             onSubmit={handleSubmit}
             className="bg-white rounded-xl shadow p-6 max-w-lg mx-auto flex flex-col gap-4"
           >
-            <h2 className="font-semibold text-xl mb-2">Delivery Information</h2>
+            <h2
+              className="font-semibold text-xl mb-2"
+              {...deliveryInfoAttributes}
+              id={deliveryInformationId}
+            >
+              {deliveryInformationTitle}
+            </h2>
             <Input
-              id="customer-name-input"
+              id={customerNameId}
               required
               name="name"
-              placeholder="Your Name"
+              placeholder={customerNamePlaceholder}
               value={form.name}
               onChange={handleChange}
             />
             <Input
-              id="delivery-address-input"
+              id={customerAddressId}
               required
               name="address"
-              placeholder="Delivery Address"
+              placeholder={customerAddressPlaceholder}
               value={form.address}
               onChange={handleChange}
             />
             <Input
-              id="contact-phone-input"
+              id={customerPhoneId}
               required
               name="phone"
-              placeholder="Contact Number"
+              placeholder={customerPhonePlaceholder}
               value={form.phone}
               onChange={handleChange}
             />
             <Button
-              id="place-order-button"
+              {...placeOrderAttributes}
+              id={placeOrderId}
               size="lg"
               className={`mt-3 ${layout.cart.buttonClass}`}
               type="submit"
               disabled={items.length === 0}
-              {...layout.getElementAttributes('PLACE_ORDER', 0)}
+              aria-label={placeOrderAria}
             >
-              Place Order
+              {placeOrderLabel}
             </Button>
           </form>
         </>

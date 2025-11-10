@@ -5,9 +5,11 @@
  * It generates realistic restaurant data based on predefined types and configurations.
  */
 
+export type GeneratedRecord = Record<string, unknown>;
+
 export interface DataGenerationResponse {
   success: boolean;
-  data: any[];
+  data: GeneratedRecord[];
   count: number;
   generationTime: number;
   error?: string;
@@ -17,9 +19,9 @@ export interface ProjectDataConfig {
   projectName: string;
   dataType: string;
   interfaceDefinition: string;
-  examples: any[];
+  examples: GeneratedRecord[];
   categories: string[];
-  namingRules: Record<string, any>;
+  namingRules: Record<string, string>;
   additionalRequirements: string;
 }
 
@@ -225,7 +227,10 @@ export async function generateProjectData(
       throw new Error(`API request failed: ${response.status}`);
     }
 
-    const result = await response.json();
+    const result = (await response.json()) as {
+      generated_data: GeneratedRecord[];
+      count: number;
+    };
     const generationTime = (Date.now() - startTime) / 1000;
 
     return {
