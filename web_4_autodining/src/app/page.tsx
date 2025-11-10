@@ -1,6 +1,7 @@
 "use client";
+import React, { useState, useRef, useEffect, useMemo, Suspense } from "react";
+import Link from "next/link";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useState, useRef, useEffect, useMemo, Suspense } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -16,29 +17,49 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import React from "react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { getRestaurants, initializeRestaurants } from "@/library/dataset";
+import {
+  RestaurantsData,
+  getRestaurants,
+  initializeRestaurants,
+} from "@/library/dataset";
 import { useSearchParams } from "next/navigation";
 import { useSeedVariation } from "@/library/utils";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 
-// UI restaurant type with required fields
 type UiRestaurant = {
   id: string;
   name: string;
+  image: string;
   cuisine: string;
   area: string;
   reviews: number;
   stars: number;
   price: string;
   bookings: number;
-  image: string;
   times: string[];
 };
 
-// List will be populated only after data generation/DB fetch completes
+// Create restaurants array from jsonData
+const restaurants = RestaurantsData.map((item, index) => ({
+  id: `restaurant-${item.id}`,
+  name: item.namepool,
+  image: `/images/restaurant${(index % 19) + 1}.jpg`,
+  stars: item.staticStars,
+  reviews: item.staticReviews,
+  cuisine: item.cuisine,
+  price: item.staticPrices,
+  bookings: item.staticBookings,
+  area: item.area,
+  times: ["1:00 PM"],
+}));
+// Split restaurants into unique sets per section
+const lunchRestaurants = restaurants.slice(0, 15);
+const iconRestaurants = restaurants.slice(15, 30);
+const awardRestaurants = restaurants.slice(30, 50);
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -46,14 +67,6 @@ function StarRating({ count }: { count: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <span key={i}>{i < count ? "★" : "☆"}</span>
       ))}
-    </span>
-  );
-}
-
-function StarNumber({ rating }: { rating: number }) {
-  return (
-    <span className="text-[#46a758] font-bold inline-flex items-center ml-1 mr-1">
-      <span className="text-lg">★</span> {rating.toFixed(2)}
     </span>
   );
 }
@@ -80,21 +93,21 @@ function RestaurantCard({
   people: number;
   time: string;
 }) {
-  const { seed } = useSeed();
+  const searchParams = useSearchParams();
+  const seedParam = searchParams?.get("seed");
+  const seed = Number(seedParam) || 1;
+  const { getText, getId } = useDynamicStructure();
 
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
   // Use seed-based variations with event support
   const restaurantCardVariation = useSeedVariation("restaurantCard");
   const bookButtonVariation = useSeedVariation("bookButton");
-  const imageContainerVariation = useSeedVariation("imageContainer");
-  const cardContainerVariation = useSeedVariation("cardContainer");
-  
+
   // Create layout based on seed
   const layout = {
     wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
     justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
-    marginTop: ["mt-4", "mt-6", "mt-8", "mt-10", "mt-12"][seed % 5],
   };
 
   return (
@@ -122,25 +135,27 @@ function RestaurantCard({
         <p className="text-gray-500 text-xs mb-3">{r.area}</p>
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">{r.price}</span>
-          <span className="text-xs text-gray-500">{r.bookings} booked today</span>
+          <span className="text-xs text-gray-500">{r.bookings} {getText("booked_today")}</span>
         </div>
         <div className={`mt-3 flex ${layout.wrap ? 'flex-wrap' : 'flex-nowrap'} ${layout.justify} gap-2`}>
-          <SeedLink
-            href={`/restaurant/${r.id}`}
+          <Link
+            id={getId("view_details_button")}
+            href={withSeed(`/restaurant/${r.id}`, searchParams)}
             className="text-sm text-blue-600 hover:text-blue-800"
             onClick={() => logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })}
           >
-            View details
-          </SeedLink>
-          <SeedLink
-            href={`/booking/${r.id}/${time}?people=${people}&date=${formattedDate}`}
+            {getText("view_details")}
+          </Link>
+          <Link
+            id={getId("book_button")}
+            href={withSeedAndParams(`/booking/${r.id}/${time}`, { people: String(people), date: formattedDate }, searchParams)}
             className={`${bookButtonVariation.className} text-sm`}
             data-testid={bookButtonVariation.dataTestId}
             style={{ position: bookButtonVariation.position as any }}
             onClick={() => logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })}
           >
-            Book now
-          </SeedLink>
+            {getText("book_now")}
+          </Link>
         </div>
       </div>
     </div>
@@ -149,10 +164,11 @@ function RestaurantCard({
 
 function CardScroller({ children, title }: { children: React.ReactNode; title: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  const tickingRef = useRef(false);
+  const rafIdRef = useRef<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const rafIdRef = useRef<number | null>(null);
-  const tickingRef = useRef(false);
+  const { getText } = useDynamicStructure();
 
   const { seed } = useSeed();
   const cardContainerVariation = useSeedVariation("cardContainer");
@@ -207,23 +223,27 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
   }
 
   return (
-    <div className="relative overflow-hidden">
-      <button
-        onClick={() => scroll("left")}
-        className={`absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50 ${canScrollLeft ? '' : 'opacity-50 cursor-not-allowed'}`}
-        data-testid={`scroll-left-${seed}`}
-        disabled={!canScrollLeft}
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-      <button
-        onClick={() => scroll("right")}
-        className={`absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50 ${canScrollRight ? '' : 'opacity-50 cursor-not-allowed'}`}
-        data-testid={`scroll-right-${seed}`}
-        disabled={!canScrollRight}
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
+    <div className="relative">
+      {/*{canScrollLeft && (*/}
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+          data-testid={`scroll-left-${seed}`}
+          aria-label={getText("scroll_left")}
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      {/*)}*/}
+      {canScrollRight && (
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+          data-testid={`scroll-right-${seed}`}
+          aria-label={getText("scroll_right")}
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      )}
       {/* Scrollable Content */}
       <div
         ref={ref}
@@ -257,6 +277,8 @@ function HomePageContent() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
+  const { getText, getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
 
   const { seed } = useSeed();
   const { marginTop, wrapButton } = useMemo(
@@ -383,9 +405,9 @@ function HomePageContent() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <SeedLink href="/">
+            <SeedLink href={withSeed("/", searchParams)}>
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">AutoDining</span>
+                <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
             </SeedLink>
           </div>
@@ -393,21 +415,21 @@ function HomePageContent() {
           <div className="flex items-center gap-4">
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/help"
+              href={withSeed("/help", searchParams)}
             >
-              Get help
+              {getText("get_help")}
             </SeedLink>
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/about"
+              href={withSeed("/about", searchParams)}
             >
-              About
+              {getText("about")}
             </SeedLink>
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/contact"
+              href={withSeed("/contact", searchParams)}
             >
-              Contact
+              {getText("contact")}
             </SeedLink>
           </div>
         </div>
@@ -415,23 +437,20 @@ function HomePageContent() {
 
       {/* Hero Section */}
       <section className={pageLayoutVariation.className} data-testid={pageLayoutVariation.dataTestId}>
-        {(isLoading || !isReady) && (
-          <div className="text-center text-gray-500 mb-4">Loading restaurants...</div>
-        )}
-        <h1 className="text-4xl font-bold mb-6">Find your table for any occasion</h1>
+        <h1 className="text-4xl font-bold mb-6">{getText("hero_title")}</h1>
         
         {/* Search and Filters */}
         <section className="flex flex-wrap gap-4 items-end">
           <Popover open={dateOpen} onOpenChange={setDateOpen}>
             <PopoverTrigger asChild>
               <Button
-              id="select-date"
+                id={getId("date_picker")}
                 variant="outline"
                 className="w-[200px] justify-start text-left font-normal"
                 onClick={() => logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: 'open' })}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
+                {date ? format(date, "PPP") : <span>{getText("date_picker")}</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -447,7 +466,7 @@ function HomePageContent() {
           <Popover open={timeOpen} onOpenChange={setTimeOpen}>
             <PopoverTrigger asChild>
               <Button
-                id="select-time"
+                id={getId("time_picker")}
                 variant="outline"
                 className="w-[150px] justify-start text-left font-normal"
                 onClick={() => logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: 'open' })}
@@ -478,13 +497,13 @@ function HomePageContent() {
           <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
             <PopoverTrigger asChild>
               <Button
-                id="select-people"
+                id={getId("people_picker")}
                 variant="outline"
                 className="w-[150px] justify-start text-left font-normal"
                 onClick={() => logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { action: 'open' })}
               >
                 <UserIcon className="mr-2 h-4 w-4" />
-                {people} {people === 1 ? "person" : "people"}
+                {people} {people === 1 ? getText("person") : getText("people")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -499,7 +518,7 @@ function HomePageContent() {
                       setPeopleOpen(false);
                     }}
                   >
-                    {n} {n === 1 ? "person" : "people"}
+                    {n} {n === 1 ? getText("person") : getText("people")}
                   </Button>
                 ))}
               </div>
@@ -507,8 +526,9 @@ function HomePageContent() {
           </Popover>
           {/* Search box & button */}
           <input
+            id={getId("search_input")}
             type="text"
-            placeholder="Location, Restaurant, or Cuisine"
+            placeholder={getText("search_placeholder")}
             className={`${searchBarVariation.className} min-w-[250px] flex-1`}
             data-testid={searchBarVariation.dataTestId}
             value={search}
@@ -517,31 +537,36 @@ function HomePageContent() {
           {wrapButton ? (
             <div data-testid={`wrapper-${seed}`}>
               <button
+                id={getId("search_button")}
                 className={searchButtonVariation.className}
                 data-testid={searchButtonVariation.dataTestId}
                 style={{ position: searchButtonVariation.position as any }}
               >
-                Let's go
+                {getText("search_button")}
               </button>
             </div>
           ) : (
             <button
+              id={getId("search_button")}
               className={searchButtonVariation.className}
               data-testid={searchButtonVariation.dataTestId}
               style={{ position: searchButtonVariation.position as any }}
             >
-              Let's go
+              {getText("search_button")}
             </button>
           )}
         </section>
 
         {/* Main Content - Cards, Sections, etc. */}
-        {(isLoading || !isReady || list.length === 0) ? null : wrapButton ? (
+        {isLoading || !isReady || list.length === 0 ? null : wrapButton ? (
           <div data-testid={`section-wrapper-${seed}`}>
-            {isReady && list.length > 0 && (
-            <section className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
-              <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
-              <CardScroller title="Available for lunch now">
+            <section
+              id={getId("section_lunch")}
+              className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
+              data-testid={sectionLayoutVariation.dataTestId}
+            >
+              <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
+              <CardScroller title={getText("section_lunch")}>
                 {filtered.map((r) => (
                   <RestaurantCard
                     key={r.id + "-lunch"}
@@ -553,50 +578,51 @@ function HomePageContent() {
                 ))}
               </CardScroller>
             </section>
-            )}
           </div>
         ) : (
-          isLoading || !isReady || list.length === 0 ? null : (
-            <section className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
-              <h2 className="text-2xl font-bold mb-4">Available for lunch now</h2>
-              <CardScroller title="Available for lunch now">
-                {filtered.map((r) => (
-                  <RestaurantCard
-                    key={r.id + "-lunch"}
-                    r={r}
-                    date={date}
-                    people={people}
-                    time={time}
-                  />
-                ))}
-              </CardScroller>
-            </section>
-          )
+          <section
+            id={getId("section_lunch")}
+            className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
+            data-testid={sectionLayoutVariation.dataTestId}
+          >
+            <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
+            <CardScroller title={getText("section_lunch")}>
+              {filtered.map((r) => (
+                <RestaurantCard
+                  key={r.id + "-lunch"}
+                  r={r}
+                  date={date}
+                  people={people}
+                  time={time}
+                />
+              ))}
+            </CardScroller>
+          </section>
         )}
 
         {/* Introducing OpenDinning Icons Section */}
         {wrapButton ? (
           <div data-testid={`icon-section-wrapper-${seed}`}>
             <section
-              className={`${sectionLayoutVariation.className} mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+              id={getId("section_icons")}
+              className={`${sectionLayoutVariation.className} ${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
               data-testid={sectionLayoutVariation.dataTestId}
             >
               <div className="flex flex-row justify-between items-center mb-1">
                 <div>
                   <h2 className="text-2xl md:text-2xl font-bold">
-                    Introducing OpenDinning Icons
+                    {getText("section_icons")}
                   </h2>
                   <div className="text-base text-gray-600 mt-1 mb-3">
-                    Book the city's award-winners, hot newcomers, and hard-to-get
-                    tables.
+                    {getText("section_icons_subtitle")}
                   </div>
                 </div>
                 <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
-                  Explore Icon restaurants
+                  {getText("explore_icons")}
                 </button>
               </div>
-              <CardScroller title="Introducing OpenDinning Icons">
-                {list.slice(15, 30).map((r) => (
+              <CardScroller title={getText("section_icons")}>
+                {iconRestaurants.map((r) => (
                   <RestaurantCard
                     key={r.id + "-icon"}
                     r={r}
@@ -610,25 +636,25 @@ function HomePageContent() {
           </div>
         ) : (
           <section
-            className={`${sectionLayoutVariation.className} mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+            id={getId("section_icons")}
+            className={`${sectionLayoutVariation.className} ${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
             data-testid={sectionLayoutVariation.dataTestId}
           >
             <div className="flex flex-row justify-between items-center mb-1">
               <div>
                 <h2 className="text-2xl md:text-2xl font-bold">
-                  Introducing OpenDinning Icons
+                  {getText("section_icons")}
                 </h2>
                 <div className="text-base text-gray-600 mt-1 mb-3">
-                  Book the city's award-winners, hot newcomers, and hard-to-get
-                  tables.
+                  {getText("section_icons_subtitle")}
                 </div>
               </div>
               <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
-                Explore Icon restaurants
+                {getText("explore_icons")}
               </button>
             </div>
-            <CardScroller title="Introducing OpenDinning Icons">
-              {list.slice(15, 30).map((r) => (
+            <CardScroller title={getText("section_icons")}>
+              {iconRestaurants.map((r) => (
                 <RestaurantCard
                   key={r.id + "-icon"}
                   r={r}
@@ -644,10 +670,10 @@ function HomePageContent() {
         {/* Award Winners Section */}
         {wrapButton ? (
           <div data-testid={`award-section-wrapper-${seed}`}>
-            <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
-              <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
-              <CardScroller title="Award Winners">
-                {list.slice(30, 50).map((r) => (
+            <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
+              <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
+              <CardScroller title={getText("section_awards")}>
+                {awardRestaurants.map((r) => (
                   <RestaurantCard
                     key={r.id + "-award"}
                     r={r}
@@ -660,10 +686,10 @@ function HomePageContent() {
             </section>
           </div>
         ) : (
-          <section className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
-            <h2 className="text-2xl font-bold mb-4">Award Winners</h2>
-            <CardScroller title="Award Winners">
-              {list.slice(30, 50).map((r) => (
+          <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
+            <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
+            <CardScroller title={getText("section_awards")}>
+              {awardRestaurants.map((r) => (
                 <RestaurantCard
                   key={r.id + "-award"}
                   r={r}
