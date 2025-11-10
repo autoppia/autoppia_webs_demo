@@ -5,49 +5,28 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ClockIcon, UserIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
-import { countries, RestaurantsData } from "@/components/library/dataset";
-import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { withSeed } from "@/utils/seedRouting";
+import { countries, initializeRestaurants, getRestaurants } from "@/library/dataset";
+import { useSeedVariation, getSeedFromUrl } from "@/library/utils";
 
 const photos = [
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
-  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092",
-  "https://images.unsplash.com/photo-1551218808-94e220e084d2",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
+  "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=150&h=150",
+  "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=150&h=150",
 ];
 
-const restaurantData: Record<
-  string,
-  {
-    name: string;
-    image: string;
-    rating: number;
-    reviews: number;
-    bookings: number;
-    price: string;
-    cuisine: string;
-    tags: string[];
-    desc: string;
-    photos: string[];
-  }
-> = {};
-
-RestaurantsData.forEach((item, index) => {
-  restaurantData[`restaurant-${item.id}`] = {
-    name: item.namepool,
-    image: `/images/restaurant${(index % 19) + 1}.jpg`,
-    rating: item.staticStars,
-    reviews: item.staticReviews,
-    bookings: item.staticBookings,
-    price: item.staticPrices,
-    cuisine: item.cuisine,
-    tags: ["cozy", "modern", "casual"],
-    desc: `Enjoy a delightful experience at ${item.namepool}, offering a fusion of flavors in the heart of ${item.area}.`,
-    photos,
-  };
-});
+type RestaurantView = {
+  id: string;
+  name: string;
+  image: string;
+  rating: number;
+  reviews: number;
+  bookings: number;
+  price: string;
+  cuisine: string;
+  desc: string;
+};
 
 export default function Page() {
   const params = useParams();
@@ -78,18 +57,26 @@ export default function Page() {
   const [email, setEmail] = useState("user_name@gmail.com");
   const { getText, getId } = useDynamicStructure();
 
-  const data = restaurantData[restaurantId] ?? restaurantData["restaurant-1"];
+  const [data, setData] = useState<RestaurantView | null>(null);
 
   const seed = Number(searchParams?.get("seed") ?? "1");
 
   // Create layout based on seed
-  const layout = {
-    wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
-    justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
-    marginTop: [0, 4, 8, 12, 16][seed % 5],
-    marginBottom: [0, 4, 8, 12, 16][seed % 5],
-    gap: [2, 3, 4, 5, 6][seed % 5],
-  };
+  const layout = useMemo(() => {
+    const wrap = seed % 2 === 0;
+    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][seed % 5];
+    const gapClass = ["gap-2", "gap-3", "gap-4", "gap-5", "gap-6"][seed % 5];
+    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][seed % 5];
+    const marginBottomClass = ["mb-0", "mb-4", "mb-8", "mb-12", "mb-16"][seed % 5];
+
+    return {
+      wrap,
+      justifyClass,
+      gapClass,
+      marginTopClass,
+      marginBottomClass,
+    };
+  }, [seed]);
 
   // Use seed-based variations
   const formVariation = useSeedVariation("form");
@@ -97,26 +84,56 @@ export default function Page() {
 
   const restaurantInfo = {
     restaurantId,
-    restaurantName: data.name,
-    rating: data.rating,
-    reviews: data.reviews,
-    bookings: data.bookings,
-    price: data.price,
-    cuisine: data.cuisine,
-    desc: data.desc,
+    restaurantName: data?.name ?? "",
+    rating: data?.rating ?? 0,
+    reviews: data?.reviews ?? 0,
+    bookings: data?.bookings ?? 0,
+    price: data?.price ?? "",
+    cuisine: data?.cuisine ?? "",
+    desc: data?.desc ?? "",
   };
+
+  useEffect(() => {
+    initializeRestaurants().then(() => {
+      const list = getRestaurants();
+      const found = list.find((x) => x.id === restaurantId) || list[0];
+      if (found) {
+        const mapped: RestaurantView = {
+          id: found.id,
+          name: found.name,
+          image: found.image,
+          rating: Number(found.stars ?? 4),
+          reviews: Number(found.reviews ?? 0),
+          bookings: Number(found.bookings ?? 0),
+          price: String(found.price ?? "$$"),
+          cuisine: String(found.cuisine ?? "International"),
+          desc: `Enjoy a delightful experience at ${found.name}, offering a fusion of flavors in the heart of ${found.area ?? "Downtown"}.`,
+        };
+        setData(mapped);
+      }
+    });
+  }, [restaurantId]);
 
   useEffect(() => {
     const computedFullDate = reservationDateParam
       ? dayjs(reservationDateParam).format("YYYY-MM-DD")
       : null;
-    logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-      ...restaurantInfo,
-      date: computedFullDate,
-      time: reservationTime || time,
-      people: reservationPeople || people,
-    });
-  }, []);
+    if (data) {
+      logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+        restaurantId,
+        restaurantName: data.name,
+        rating: data.rating,
+        reviews: data.reviews,
+        bookings: data.bookings,
+        price: data.price,
+        cuisine: data.cuisine,
+        desc: data.desc,
+        date: computedFullDate,
+        time: reservationTime || time,
+        people: reservationPeople || people,
+      });
+    }
+  }, [data]);
 
   useEffect(() => {
     if (reservationDateParam) {
@@ -160,11 +177,11 @@ export default function Page() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <Link href={withSeed("/", searchParams)}>
+            <Link href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
-            </Link>
+            </SeedLink>
           </div>
           <div className="flex-1 flex items-center justify-center">
             <input
@@ -179,17 +196,17 @@ export default function Page() {
             </button>
           </div>
           <div className="flex items-center gap-4">
-            <Link
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href={withSeed("/help", searchParams)}
             >
-              {getText("get_help")}
+              Get help
             </Link>
             <Link
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href={withSeed("/faqs", searchParams)}
             >
-              {getText("about")}
+              FAQs
             </Link>
           </div>
         </div>
@@ -198,13 +215,13 @@ export default function Page() {
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
         <h2 className="font-bold text-lg mt-8 mb-4">{getText("you_almost_done")}</h2>
         <div className="flex items-center gap-3 mb-6">
-          <img
-            src={data.image}
-            alt={data.name}
+            <img
+            src={data?.image || "/images/restaurant1.jpg"}
+            alt={data?.name || "Restaurant"}
             className="w-16 h-16 rounded-lg object-cover border"
           />
           <div className="flex flex-col gap-[2px]">
-            <span className="font-bold text-2xl">{data.name}</span>
+            <span className="font-bold text-2xl">{data?.name ?? "Loading..."}</span>
             <div className="flex items-center gap-5 text-gray-700 mt-1 text-[15px]">
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-4 h-4 mr-1" />
@@ -227,9 +244,7 @@ export default function Page() {
         {layout.wrap ? (
           <div className="w-full" data-testid={`input-wrapper-${seed}`}>
             <div
-              className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
-                layout.gap
-              } mb-${layout.marginBottom}`}
+              className={`flex ${layout.wrap ? "flex-wrap" : ""} ${layout.justifyClass} ${layout.gapClass} ${layout.marginBottomClass}`}
             >
               <div className="flex-1 min-w-[220px]">
                 <div className="flex items-center space-x-2">
@@ -246,7 +261,7 @@ export default function Page() {
                         ...restaurantInfo,
                         countryCode: country.code,
                         countryName: country.name,
-                        restaurantName: data.name,
+                        restaurantName: data?.name ?? "",
                       });
                     }}
                   >
@@ -285,9 +300,7 @@ export default function Page() {
           </div>
         ) : (
           <div
-            className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
-              layout.gap
-            } mb-${layout.marginBottom}`}
+            className={`flex ${layout.wrap ? "flex-wrap" : ""} ${layout.justifyClass} ${layout.gapClass} ${layout.marginBottomClass}`}
           >
             <div className="flex-1 min-w-[220px]">
               <div className="flex items-center space-x-2">
@@ -300,11 +313,11 @@ export default function Page() {
                       (c) => c.code === e.target.value
                     )!;
                     setSelectedCountry(country);
-                    logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
+                      logEvent(EVENT_TYPES.COUNTRY_SELECTED, {
                       ...restaurantInfo,
                       countryCode: country.code,
                       countryName: country.name,
-                      restaurantName: data.name,
+                        restaurantName: data?.name ?? "",
                     });
                   }}
                 >
@@ -345,9 +358,7 @@ export default function Page() {
         {layout.wrap ? (
           <div className="w-full" data-testid={`occasion-wrapper-${seed}`}>
             <div
-              className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
-                layout.gap
-              } mb-${layout.marginBottom}`}
+              className={`flex ${layout.wrap ? "flex-wrap" : ""} ${layout.justifyClass} ${layout.gapClass} ${layout.marginBottomClass}`}
             >
               <select
                 id = "select-occasion"
@@ -378,9 +389,7 @@ export default function Page() {
           </div>
         ) : (
           <div
-            className={`flex ${layout.wrap ? "flex-wrap" : ""} gap-${
-              layout.gap
-            } mb-${layout.marginBottom}`}
+            className={`flex ${layout.wrap ? "flex-wrap" : ""} ${layout.justifyClass} ${layout.gapClass} ${layout.marginBottomClass}`}
           >
             <select
             id="select-occasion"
@@ -418,7 +427,7 @@ export default function Page() {
           >
             <Button
               onClick={handleReservation}
-              className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+              className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded ${layout.marginTopClass} ${layout.marginBottomClass}`}
               data-testid={bookButtonVariation.dataTestId}
             >
               Complete reservation
@@ -428,7 +437,7 @@ export default function Page() {
           <Button
             id={getId("confirm_button")}
             onClick={handleReservation}
-            className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded mt-${layout.marginTop} mb-${layout.marginBottom}`}
+            className={`w-full ${bookButtonVariation.className} py-6 text-lg rounded ${layout.marginTopClass} ${layout.marginBottomClass}`}
             data-testid={bookButtonVariation.dataTestId}
           >
             {getText("confirm_booking")}

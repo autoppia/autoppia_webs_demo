@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 import Header from "@/components/Header";
+import { DataReadyGate } from "@/components/DataReadyGate";
 
 export default function RootLayout({
   children,
@@ -33,9 +35,15 @@ export default function RootLayout({
         className="bg-neutral-50 min-h-screen font-sans"
         suppressHydrationWarning
       >
-        <Header />
+        <Suspense fallback={<div className="w-full h-16 bg-white border-b animate-pulse" />}>
+          <Header />
+        </Suspense>
         <main className="flex justify-center w-full mt-3 px-2">
-          <div className="w-full max-w-7xl">{children}</div>
+          <div className="w-full max-w-7xl">
+            <DataReadyGate>
+              {children}
+            </DataReadyGate>
+          </div>
         </main>
       </body>
     </html>

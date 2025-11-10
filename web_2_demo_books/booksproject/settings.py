@@ -28,6 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# Consolidated trusted origins for CSRF (keeps all needed entries and avoids overwriting)
+CSRF_TRUSTED_ORIGINS = [
+    "https://autocinema.autoppia.com",
+    "https://autobooks.autoppia.com",
+]
 
 # Application definition
 
@@ -66,6 +71,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "booksapp.context.dynamic_context",
             ],
         },
     },
@@ -142,4 +148,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CSRF_TRUSTED_ORIGINS = ["https://48f295a17849.ngrok.app"]
+# Dynamic HTML toggle wired from docker-compose/env
+DYNAMIC_HTML_ENABLED = os.environ.get("ENABLE_DYNAMIC_HTML", "false").lower() == "true"

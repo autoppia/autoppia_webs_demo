@@ -30,7 +30,7 @@
                             <button type="submit" class="btn btn-danger btn-lg mr-2">
                                 <i class="fas fa-trash mr-2"></i>Yes, Delete
                             </button>
-                            <a href="{% url 'booksapp:detail' book.id %}" class="btn btn-secondary btn-lg">
+                            <a href="{% url 'booksapp:detail' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary btn-lg">
                                 <i class="fas fa-times mr-2"></i>Cancel
                             </a>
                         </div>

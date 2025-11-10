@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useState, useRef, useEffect, useMemo, Suspense } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -8,18 +8,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format, parseISO, isValid } from "date-fns";
+import { format } from "date-fns";
 import {
   CalendarIcon,
   ClockIcon,
   UserIcon,
-  ChevronDownIcon,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import React from "react";
-import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { RestaurantsData } from "@/components/library/dataset";
+import { useSeed } from "@/context/SeedContext";
+import { EVENT_TYPES, logEvent } from "@/library/events";
+import { getRestaurants, initializeRestaurants } from "@/library/dataset";
 import { useSearchParams } from "next/navigation";
 import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
@@ -105,15 +105,11 @@ function RestaurantCard({
 
   return (
     <div
-      className={restaurantCardVariation.className}
+      className={`w-[255px] flex-shrink-0 rounded-xl border shadow-sm bg-white overflow-hidden`}
       data-testid={restaurantCardVariation.dataTestId}
       style={restaurantCardVariation.style}
     >
-      <div
-        className={imageContainerVariation.className}
-        data-testid={imageContainerVariation.dataTestId}
-        style={{ position: imageContainerVariation.position as any }}
-      >
+      <div className="w-full h-40 overflow-hidden">
         <img
           src={r.image}
           alt={r.name}
@@ -165,11 +161,9 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
   const [canScrollRight, setCanScrollRight] = useState(false);
   const { getText } = useDynamicStructure();
 
-  const searchParams = useSearchParams();
-  const seedParam = searchParams?.get("seed");
-  const seed = Number(seedParam) || 1;
-
+  const { seed } = useSeed();
   const cardContainerVariation = useSeedVariation("cardContainer");
+  const childCount = React.Children.count(children);
 
   const checkScroll = () => {
     if (ref.current) {
@@ -179,10 +173,29 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
     }
   };
 
+  const scheduleCheck = () => {
+    if (tickingRef.current) return;
+    tickingRef.current = true;
+    rafIdRef.current = window.requestAnimationFrame(() => {
+      checkScroll();
+      tickingRef.current = false;
+    });
+  };
+
   useEffect(() => {
     checkScroll();
-    window.addEventListener("resize", checkScroll);
-    return () => window.removeEventListener("resize", checkScroll);
+    let ro: ResizeObserver | null = null;
+    if (ref.current && typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => scheduleCheck());
+      ro.observe(ref.current);
+    }
+    window.addEventListener("resize", scheduleCheck);
+    return () => {
+      window.removeEventListener("resize", scheduleCheck);
+      if (ro && ref.current) ro.disconnect();
+      if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
+      tickingRef.current = false;
+    };
   }, []);
 
   const scroll = (direction: "left" | "right") => {
@@ -195,6 +208,10 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
       logEvent(EVENT_TYPES.SCROLL_VIEW, { direction, title });
     }
   };
+
+  if (childCount === 0) {
+    return null;
+  }
 
   return (
     <div className="relative">
@@ -221,9 +238,9 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
       {/* Scrollable Content */}
       <div
         ref={ref}
-        className={`${cardContainerVariation.className} pb-4 scroll-smooth scrollbar-hide pl-1 pr-10`}
+        className={`flex gap-4 pb-4 scroll-smooth pl-1 pr-10 overflow-x-auto overflow-y-hidden`}
         data-testid={cardContainerVariation.dataTestId}
-        onScroll={checkScroll}
+        onScroll={scheduleCheck}
       >
         {children}
       </div>
@@ -238,8 +255,12 @@ function getLayoutVariant(seed: number) {
   };
 }
 
-// Client-only component that uses useSearchParams
+// Client-only component that uses seed from context
 function HomePageContent() {
+  const [isReady, setIsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [list, setList] = useState<UiRestaurant[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
@@ -249,8 +270,7 @@ function HomePageContent() {
   const [peopleOpen, setPeopleOpen] = useState(false);
   const { getText, getId } = useDynamicStructure();
 
-  const searchParams = useSearchParams();
-  const seed = parseInt(searchParams.get("seed") || "1", 10);
+  const { seed } = useSeed();
   const { marginTop, wrapButton } = useMemo(
     () => getLayoutVariant(seed),
     [seed]
@@ -306,7 +326,7 @@ function HomePageContent() {
     logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { people: n });
   };
 
-  function matches(r: (typeof restaurants)[0]): boolean {
+  function matches(r: UiRestaurant): boolean {
     const q = search.trim().toLowerCase();
     return (
       !q ||
@@ -316,7 +336,7 @@ function HomePageContent() {
     );
   }
 
-  const filtered = restaurants.filter(matches);
+  const filtered = list.filter(matches);
   const peopleOptions = [1, 2, 3, 4, 5, 6, 7, 8];
   const timeOptions = [
     "12:00 PM",
@@ -327,8 +347,50 @@ function HomePageContent() {
     "2:30 PM",
   ];
 
+  useEffect(() => {
+    let didRun = false;
+    const runOnce = async () => {
+      if (didRun) return; // guard
+      didRun = true;
+      setIsLoading(true);
+      const genEnabled = isDataGenerationEnabled();
+      if (genEnabled) setIsGenerating(true);
+      try {
+        await initializeRestaurants(); // waits for DB/gen
+        const fresh = getRestaurants().map((r) => ({
+          id: r.id,
+          name: r.name,
+          image: r.image,
+          cuisine: r.cuisine ?? "International",
+          area: r.area ?? "Downtown",
+          reviews: r.reviews ?? 0,
+          stars: r.stars ?? 4,
+          price: r.price ?? "$$",
+          bookings: r.bookings ?? 0,
+          times: ["1:00 PM"],
+        }));
+        setList(fresh);
+        setIsReady(true);
+      } finally {
+        setIsLoading(false);
+        setIsGenerating(false);
+      }
+    };
+    runOnce();
+  }, []);
+
   return (
     <main suppressHydrationWarning>
+      {isGenerating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-[#46a758] animate-spin" aria-hidden="true" />
+            <div className="text-gray-700 text-base font-medium text-center">
+              Data is being generated by AI this may take some time
+            </div>
+          </div>
+        </div>
+      )}
       {/* Navigation/Header */}
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
@@ -337,11 +399,11 @@ function HomePageContent() {
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
-            </Link>
+            </SeedLink>
           </div>
 
           <div className="flex items-center gap-4">
-            <Link
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href={withSeed("/help", searchParams)}
             >
@@ -486,7 +548,7 @@ function HomePageContent() {
         </section>
 
         {/* Main Content - Cards, Sections, etc. */}
-        {wrapButton ? (
+        {(isLoading || !isReady || list.length === 0) ? null : wrapButton ? (
           <div data-testid={`section-wrapper-${seed}`}>
             <section id={getId("section_lunch")} className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
               <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
@@ -502,6 +564,7 @@ function HomePageContent() {
                 ))}
               </CardScroller>
             </section>
+            )}
           </div>
         ) : (
           <section id={getId("section_lunch")} className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
