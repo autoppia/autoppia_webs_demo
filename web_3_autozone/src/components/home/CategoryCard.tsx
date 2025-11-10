@@ -4,7 +4,10 @@ import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSearchParams } from "next/navigation";
+import { withSeed } from "@/utils/seedRouting";
 
 interface CategoryItem {
   image: string;
@@ -47,7 +50,11 @@ export function CategoryCard({
   singleImage,
   seed = 1,
 }: CategoryCardProps) {
+
+  const { getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
   const router = useSeedRouter();
+
   const gridCols = {
     2: "grid-cols-2",
     3: "grid-cols-3",
@@ -57,7 +64,7 @@ export function CategoryCard({
   const { horizontal, vertical } = getCardShiftClasses(seed);
 
   return (
-    <Card className={`category-card ${horizontal} ${vertical}`}>
+    <Card id={getId("category_card")} className={`category-card ${horizontal} ${vertical}`}>
       <CardContent className="p-4">
         <h2 className="category-title">{title}</h2>
 
@@ -77,9 +84,9 @@ export function CategoryCard({
           <div className={`grid ${gridCols[columns]} gap-4`}>
             {items.map((item, index) => (
               <a
+                key={`${item.title}-${index}`}
                 href={item.link ? `#${item.link.replace('/', '')}` : "#"}
                 title={item.link ? `View ${item.title} - ${item.link}` : item.title}
-                key={`${item.title}-${index}`}
                 onMouseEnter={() => {
                   if (item.link && item.link !== "#") {
                     window.history.replaceState(null, '', `#${item.link.replace('/', '')}`);
@@ -99,7 +106,7 @@ export function CategoryCard({
                       brand: item.brand || "Generic",
                       category: item.category || title || "Uncategorized",
                     });
-                    router.push(item.link);
+                    router.push(withSeed(item.link, searchParams));
                   }
                 }}
                 className="space-y-2 hover:opacity-90 transition-opacity block no-underline text-inherit cursor-pointer group"

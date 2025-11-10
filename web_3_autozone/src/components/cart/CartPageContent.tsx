@@ -2,12 +2,17 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import Link from "next/link";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSearchParams } from "next/navigation";
+import { withSeed } from "@/utils/seedRouting";
 
 interface CartItem {
   id: string;
@@ -22,6 +27,9 @@ interface CartItem {
 export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
+
+  const { getText, getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
   const router = useSeedRouter();
 
   const handleRemoveItem = (id: string) => {
@@ -77,14 +85,14 @@ export function CartPageContent() {
         <div className="flex-1">
           <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200">
             <h1 className="text-2xl md:text-3xl font-semibold leading-tight mb-4">
-              Shopping Cart
+              {getText("shopping_cart")}
             </h1>
             {items.length > 0 && (
               <div className="hidden md:flex items-center border-b border-gray-200 pb-2 font-medium text-gray-700">
-                <div className="flex-1">Product</div>
-                <div className="w-32 text-center">Quantity</div>
-                <div className="w-32 text-right">Price</div>
-                <div className="w-32 text-right">Total</div>
+                <div className="flex-1">{getText("product")}</div>
+                <div className="w-32 text-center">{getText("quantity")}</div>
+                <div className="w-32 text-right">{getText("price")}</div>
+                <div className="w-32 text-right">{getText("total")}</div>
               </div>
             )}
 
@@ -92,15 +100,13 @@ export function CartPageContent() {
             <div className="my-8">
               {items.length === 0 ? (
                 <div className="text-center p-8 text-lg text-gray-500">
-                  <p className="mb-2">Your Autozon Cart is empty</p>
+                  <p className="mb-2">{getText("empty_cart")}</p>
                   <p className="mb-4 text-base text-gray-400">
-                    Your shopping cart is waiting. Give it purpose – fill it
-                    with groceries, clothing, household supplies, electronics,
-                    and more.
+                    {getText("empty_cart_message")}
                   </p>
                   <SeedLink href="/">
                     <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
-                      Continue Shopping
+                      {getText("continue_shopping")}
                     </Button>
                   </SeedLink>
                 </div>
@@ -143,24 +149,25 @@ export function CartPageContent() {
                             }}
                             onClick={(e) => {
                               e.preventDefault();
-                              router.push(`/${item.id}`);
+                              router.push(withSeed(`/${item.id}`, searchParams));
                             }}
                             className="text-base font-medium hover:text-blue-600 no-underline cursor-pointer"
                           >
                             {item.title}
                           </a>
                           <div className="text-xs text-gray-500 mt-1">
-                            {item.brand && `Brand: ${item.brand}`}
-                            {item.color && `, Color: ${item.color}`}
+                            {item.brand && `${getText("brand")}: ${item.brand}`}
+                            {item.color && `, ${getText("color")}: ${item.color}`}
                           </div>
                           <div className="text-green-600 text-sm mt-1">
-                            In Stock
+                            {getText("in_stock")}
                           </div>
                           <button
+                            id={getId("remove_button")}
                             onClick={() => handleRemoveItem(item.id)}
                             className="text-xs text-blue-500 hover:text-blue-700 hover:underline mt-2 flex items-center w-fit"
                           >
-                            <X size={12} className="mr-1" /> Remove
+                            <X size={12} className="mr-1" /> {getText("remove")}
                           </button>
                         </div>
                         {/* Quantity */}
@@ -209,7 +216,7 @@ export function CartPageContent() {
             {items.length > 0 && (
               <div className="flex flex-col md:flex-row justify-end items-end py-4 text-lg">
                 <span className="font-medium text-right">
-                  Subtotal ({totalItems} items):
+                  {getText("subtotal")} ({totalItems} {getText("items")}):
                 </span>
                 <span className="ml-2 font-bold text-right">
                   ${totalAmount.toFixed(2)}
@@ -222,38 +229,41 @@ export function CartPageContent() {
         <div className={`w-full md:w-80 ${getTopMarginClass()}`}>
           <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200 flex flex-col gap-4">
             <div className="text-md md:text-lg text-gray-700">
-              Subtotal (<span>{totalItems}</span> items):
+              {getText("subtotal")} (<span>{totalItems}</span> {getText("items")}):
               <span className="font-bold ml-1">${totalAmount.toFixed(2)}</span>
             </div>
             {items.length > 0 && (
               <>
                 <div className="text-green-700 text-sm mb-2">
-                  Your order qualifies for{" "}
-                  <span className="font-semibold">FREE Delivery</span>
+                  {getText("qualifies_for_delivery")}{" "}
+                  <span className="font-semibold">{getText("free_delivery")}</span>
                 </div>
                 <div className="flex items-center mb-2">
                   <input type="checkbox" className="rounded mr-2" id="gift" />
                   <label htmlFor="gift" className="text-sm">
-                    This order contains a gift
+                    {getText("gift_checkbox")}
                   </label>
                 </div>
+
                 <SeedLink href="/checkout">
                   <Button
+                    id={getId("checkout_button")}
                     className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
                     onClick={handleProceedToCheckout}
                   >
-                    Proceed to checkout
+                    {getText("proceed_to_checkout")}
                   </Button>
                 </SeedLink>
               </>
             )}
             {items.length === 0 && (
               <Button
+                id={getId("checkout_button")}
                 className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
                 disabled
                 onClick={handleProceedToCheckout}
               >
-                Proceed to checkout
+                {getText("proceed_to_checkout")}
               </Button>
             )}
           </div>
