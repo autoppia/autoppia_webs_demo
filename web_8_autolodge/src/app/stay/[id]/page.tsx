@@ -1,76 +1,136 @@
 "use client";
+
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Calendar } from "@/components/ui/calendar";
+import type { DateRange } from "react-day-picker";
 import {
   addDays,
+  differenceInCalendarDays,
   format,
-  eachDayOfInterval,
-  isSameDay,
   isWithinInterval,
-  setHours,
 } from "date-fns";
-import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useRef } from "react";
-import {DASHBOARD_HOTELS} from "@/library/dataset";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { DASHBOARD_HOTELS } from "@/library/dataset";
+import type { Hotel } from "@/types/hotel";
 
-function toStartOfDay(date: Date) {
-  if (!date) return date;
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
+function parseLocalDate(dateString: string | undefined) {
+  if (!dateString) {
+    return null;
+  }
+
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day)
+  ) {
+    return null;
+  }
+
+  return new Date(year, month - 1, day);
+}
+
+function toStartOfDay(date: Date): Date {
+  const copy = new Date(date);
+  copy.setHours(0, 0, 0, 0);
+  return copy;
 }
 
 function toUtcIsoWithTimezone(date: Date) {
-  return date.toISOString().replace("Z", "+00:00");
+  const utc = new Date(date.getTime());
+  return utc.toISOString().replace("Z", "+00:00");
 }
 
-export default function PropertyDetail() {
+function getFallbackHotel(): Hotel {
+  const [firstDynamic] = dynamicDataProvider.getHotels();
+  if (firstDynamic) {
+    return firstDynamic;
+  }
+  return DASHBOARD_HOTELS[0] as Hotel;
+}
+
+function PropertyDetailContent() {
   const { getText, getId } = useDynamicStructure();
+  const router = useRouter();
+  const params = useParams<{ id: string }>();
+
+  const prop = useMemo<Hotel>(() => {
+    const numId = Number(params.id);
+    if (Number.isFinite(numId)) {
+      const fromProvider = dynamicDataProvider.getHotelById(numId);
+      if (fromProvider) {
+        return fromProvider;
+      }
+
+      const fromDataset = DASHBOARD_HOTELS.find(
+        (hotel) => hotel.id === numId
+      ) as Hotel | undefined;
+      if (fromDataset) {
+        return fromDataset;
+      }
+    }
+
+    return getFallbackHotel();
+  }, [params.id]);
+
+  const stayFrom = useMemo(() => {
+    const parsed = parseLocalDate(prop.datesFrom);
+    return parsed ? toStartOfDay(parsed) : toStartOfDay(new Date());
+  }, [prop.datesFrom]);
+
+  const stayTo = useMemo(() => {
+    const parsed = parseLocalDate(prop.datesTo);
+    if (parsed) {
+      return toStartOfDay(parsed);
+    }
+    return addDays(stayFrom, 1);
+  }, [prop.datesTo, stayFrom]);
+
+  const initialRange = useMemo<DateRange | undefined>(
+    () => ({
+      from: stayFrom,
+      to: stayTo,
+    }),
+    [stayFrom, stayTo]
+  );
+
+  const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(
+    initialRange
+  );
+  useEffect(() => {
+    setSelectedRange(initialRange);
+  }, [initialRange]);
+
+  const [guests, setGuests] = useState(() => {
+    const maxGuests = prop.maxGuests ?? prop.guests ?? 1;
+    return Math.min(Math.max(1, prop.guests ?? 1), maxGuests);
+  });
+
+  useEffect(() => {
+    const maxGuests = prop.maxGuests ?? prop.guests ?? 1;
+    setGuests(Math.min(Math.max(1, prop.guests ?? 1), maxGuests));
+  }, [prop.guests, prop.maxGuests]);
+
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [receiverEmail, setReceiverEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  const router = useRouter();
-  const didTrack = useRef(false);
-  const params = useParams<{ id: string }>();
-  const { id } = params;
-  const prop = useMemo(() => {
-    const numId = Number(id);
-    const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
-    return hotel ?? DASHBOARD_HOTELS[0];
-  }, [id]);
-  const stayFrom = new Date(prop.datesFrom);
-  const stayTo = new Date(prop.datesTo);
-  const availableDates = useMemo(
-    () => eachDayOfInterval({ start: stayFrom, end: addDays(stayTo, -1) }),
-    [stayFrom, stayTo]
-  );
-  // Booking calendar state
-  const [selected, setSelected] = useState<{
-    from: Date | null;
-    to: Date | null;
-  }>({ from: stayFrom, to: stayTo });
-  const [guests, setGuests] = useState(1);
-
-  // Selection helpers
-  const rangeIsExact =
-    selected.from &&
-    selected.to &&
-    toStartOfDay(selected.from).getTime() ===
-      toStartOfDay(stayFrom).getTime() &&
-    toStartOfDay(selected.to).getTime() === toStartOfDay(stayTo).getTime();
-
-  // Button states
   const nights =
-    selected.from && selected.to
-      ? (toStartOfDay(addDays(selected.to, -1)).getTime() -
-          toStartOfDay(selected.from).getTime()) /
-        (1000 * 60 * 60 * 24)
+    selectedRange?.from && selectedRange?.to
+      ? Math.max(
+          0,
+          differenceInCalendarDays(
+            selectedRange.to,
+            selectedRange.from
+          )
+        )
       : 0;
 
   const cleaningFee = 15;
@@ -83,33 +143,99 @@ export default function PropertyDetail() {
       end: addDays(stayTo, -1),
     });
   }
-  // ✅ Trigger VIEW_HOTEL on mount
+
+  const didTrack = useRef(false);
   useEffect(() => {
-    if (!didTrack.current) {
-      logEvent(EVENT_TYPES.VIEW_HOTEL, {
-        id,
-        title: prop.title,
-        location: prop.location,
-        rating: prop.rating,
-        reviews: prop.reviews,
-        price: prop.price,
-        dates: { from: prop.datesFrom, to: prop.datesTo },
-        guests: prop.guests,
-        host: prop.host,
-        amenities: prop.amenities?.map((a) => a.title),
-      });
-      didTrack.current = true;
+    if (didTrack.current) {
+      return;
     }
-  }, [id]);
+
+    logEvent(EVENT_TYPES.VIEW_HOTEL, {
+      id: prop.id,
+      title: prop.title,
+      location: prop.location,
+      rating: prop.rating,
+      reviews: prop.reviews,
+      price: prop.price,
+      dates: { from: prop.datesFrom, to: prop.datesTo },
+      guests: prop.guests,
+      host: prop.host,
+      amenities: prop.amenities?.map((a) => a.title),
+    });
+    didTrack.current = true;
+  }, [
+    prop.amenities,
+    prop.datesFrom,
+    prop.datesTo,
+    prop.guests,
+    prop.host,
+    prop.id,
+    prop.location,
+    prop.price,
+    prop.rating,
+    prop.reviews,
+    prop.title,
+  ]);
 
   useEffect(() => {
-    if (toastMessage) {
-      const timeout = setTimeout(() => setToastMessage(null), 3000);
-      return () => clearTimeout(timeout);
+    if (!toastMessage) {
+      return;
     }
+    const timer = setTimeout(() => setToastMessage(null), 3000);
+    return () => clearTimeout(timer);
   }, [toastMessage]);
 
-  // For calendar: disable all outside available, highlight selection
+  const handleCalendarSelect = (range: DateRange | undefined) => {
+    if (!range) {
+      setSelectedRange(undefined);
+      return;
+    }
+
+    const normalizedFrom = range.from ? toStartOfDay(range.from) : undefined;
+    const normalizedTo = range.to ? toStartOfDay(range.to) : undefined;
+
+    setSelectedRange({
+      from: normalizedFrom,
+      to: normalizedTo,
+    });
+  };
+
+  const maxGuestsAllowed = prop.maxGuests ?? prop.guests ?? 1;
+  const hasValidSelection =
+    Boolean(selectedRange?.from) && Boolean(selectedRange?.to);
+
+  const handleReserve = async () => {
+    if (!selectedRange?.from || !selectedRange?.to) {
+      return;
+    }
+
+    const checkinDate = selectedRange.from;
+    const checkoutDate = selectedRange.to;
+
+    try {
+      await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
+        id: prop.id,
+        guests_set: guests,
+        hotel: prop,
+        selected_checkin: format(checkinDate, "yyyy-MM-dd"),
+        selected_checkout: format(checkoutDate, "yyyy-MM-dd"),
+        selected_dates_from: format(checkinDate, "yyyy-MM-dd"),
+        selected_dates_to: format(checkoutDate, "yyyy-MM-dd"),
+      });
+      sessionStorage.setItem("reserveEventLogged", "true");
+    } catch (error) {
+      console.error("❌ logEvent failed", error);
+    }
+
+    router.push(
+      `/stay/${params.id}/confirm?checkin=${encodeURIComponent(
+        toUtcIsoWithTimezone(checkinDate)
+      )}&checkout=${encodeURIComponent(
+        toUtcIsoWithTimezone(checkoutDate)
+      )}&guests=${guests}`
+    );
+  };
+
   return (
     <div className="relative flex flex-row gap-10 w-full max-w-6xl mx-auto mt-7">
       {toastMessage && (
@@ -117,6 +243,7 @@ export default function PropertyDetail() {
           {toastMessage}
         </div>
       )}
+
       {showShareModal && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md animate-fade-in">
@@ -126,15 +253,20 @@ export default function PropertyDetail() {
 
             <input
               type="email"
-              placeholder={getText("share_email_placeholder", "Receiver's email")}
+              placeholder={getText(
+                "share_email_placeholder",
+                "Receiver's email"
+              )}
               value={receiverEmail}
-              onChange={(e) => {
-                const value = e.target.value;
+              onChange={(event) => {
+                const value = event.target.value;
                 setReceiverEmail(value);
 
                 const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
                 setEmailError(
-                  isValidEmail || value === "" ? "" : getText("invalid_email", "Invalid email address")
+                  isValidEmail || value === ""
+                    ? ""
+                    : getText("invalid_email", "Invalid email address")
                 );
               }}
               className="w-full border px-4 py-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-300"
@@ -160,7 +292,9 @@ export default function PropertyDetail() {
                 disabled={!!emailError || !receiverEmail}
                 onClick={() => {
                   setShowShareModal(false);
-                  setToastMessage(getText("share_link_sent", `Link sent to ${receiverEmail}`));
+                  setToastMessage(
+                    getText("share_link_sent", `Link sent to ${receiverEmail}`)
+                  );
                   logEvent("SHARE_HOTEL", {
                     title: prop.title,
                     location: prop.location,
@@ -218,11 +352,8 @@ export default function PropertyDetail() {
               const newState = !isWishlisted;
               setIsWishlisted(newState);
 
-              if(newState) {
-
-              logEvent(
-                  EVENT_TYPES.ADD_TO_WISHLIST,
-                {
+              if (newState) {
+                logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
                   title: prop.title,
                   location: prop.location,
                   rating: prop.rating,
@@ -232,12 +363,13 @@ export default function PropertyDetail() {
                   guests: prop.guests,
                   host: prop.host,
                   amenities: prop.amenities?.map((a) => a.title),
-                }
-              );
-               }
+                });
+              }
 
               setToastMessage(
-                newState ? getText("added_to_wishlist", "Added to wishlist ❤️") : getText("removed_from_wishlist", "Removed from wishlist 💔")
+                newState
+                  ? getText("added_to_wishlist", "Added to wishlist ❤️")
+                  : getText("removed_from_wishlist", "Removed from wishlist 💔")
               );
             }}
             className="p-2 bg-white border border-neutral-200 rounded-full hover:shadow transition"
@@ -290,25 +422,41 @@ export default function PropertyDetail() {
         </div>
         <hr className="my-3" />
         <div className="flex flex-col gap-7 mt-4">
-          {prop.amenities?.map((f, i) => (
+          {prop.amenities?.map((amenity, index) => (
             <div
               className="flex items-start gap-4"
-              key={f.title}
-              id={`amenity-${i}`}
+              key={amenity.title}
+              id={`amenity-${index}`}
             >
-              <span className="text-2xl pt-1">{f.icon}</span>
+              <span className="text-2xl pt-1">{amenity.icon}</span>
               <div>
                 <div className="font-semibold text-neutral-900 text-[17px]">
-                  {f.title}
+                  {amenity.title}
                 </div>
-                <div className="text-neutral-500 text-sm -mt-0.5">{f.desc}</div>
+                <div className="text-neutral-500 text-sm -mt-0.5">
+                  {amenity.desc}
+                </div>
               </div>
             </div>
           ))}
         </div>
+
+        <div className="mt-8 border rounded-2xl p-4 bg-white shadow-sm">
+          <h2 className="font-semibold text-lg mb-3">
+            {getText("select_dates", "Select your stay")}
+          </h2>
+          <Calendar
+            numberOfMonths={2}
+            mode="range"
+            defaultMonth={selectedRange?.from ?? stayFrom}
+            selected={selectedRange}
+            onSelect={handleCalendarSelect}
+            disabled={(date) => !isWithinAvailable(date)}
+            initialFocus
+          />
+        </div>
       </div>
 
-      {/* Sidebar/summary */}
       <div className="w-[350px] min-w-[300px] bg-white shadow-md rounded-2xl border flex flex-col p-6 sticky top-8 h-fit">
         <div id="pricePerNight" className="text-2xl font-bold mb-1">
           ${prop.price.toFixed(2)}{" "}
@@ -322,7 +470,7 @@ export default function PropertyDetail() {
               {getText("check_in", "CHECK-IN")}
             </div>
             <div className="tracking-wide text-[15px]">
-              {selected.from ? format(selected.from, "MM/dd/yyyy") : "–"}
+              {selectedRange?.from ? format(selectedRange.from, "MM/dd/yyyy") : "–"}
             </div>
           </div>
           <div id="checkOut" className="flex-1 border rounded-md px-3 py-2">
@@ -330,78 +478,50 @@ export default function PropertyDetail() {
               {getText("check_out", "CHECK-OUT")}
             </div>
             <div className="tracking-wide text-[15px]">
-              {selected.to ? format(selected.to, "MM/dd/yyyy") : "–"}
+              {selectedRange?.to ? format(selectedRange.to, "MM/dd/yyyy") : "–"}
             </div>
           </div>
         </div>
         <div className="border rounded-md px-3 py-2 mb-3">
-          <div className="text-xs text-neutral-500 font-semibold">{getText("guests", "GUESTS")}</div>
+          <div className="text-xs text-neutral-500 font-semibold">
+            {getText("guests", "GUESTS")}
+          </div>
           <input
             id={getId("guests_count")}
             className="bg-transparent text-[15px] w-full p-0 border-none outline-none"
             value={guests}
             type="number"
             min={1}
-            max={prop.guests}
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (value > guests) {
+            max={maxGuestsAllowed}
+            onChange={(event) => {
+              const rawValue = Number(event.target.value);
+              if (!Number.isFinite(rawValue)) {
+                return;
+              }
+
+              const nextValue = Math.max(1, Math.min(maxGuestsAllowed, rawValue));
+
+              if (nextValue > guests) {
                 logEvent(EVENT_TYPES.INCREASE_NUMBER_OF_GUESTS, {
                   from: guests,
-                  to: value,
-                  hotel: prop, // Pass the whole hotel object
+                  to: nextValue,
+                  hotel: prop,
                 });
-              } else if (value < guests) {
-                // logEvent(EVENT_TYPES.DECREASE_NUMBER_OF_GUESTS, {
-                //   from: guests,
-                //   to: value,
-                //   hotel: prop, // Pass the whole hotel object
-                // });
               }
-              setGuests(value);
+
+              setGuests(nextValue);
             }}
           />
         </div>
-        {selected.from && selected.to && (
+        {hasValidSelection ? (
           <button
             id={getId("reserve_button")}
             className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
-            onClick={async () => {
-              const checkinDate = selected.from!;
-              const checkoutDate = selected.to!;
-
-
-              try {
-                await logEvent(EVENT_TYPES.RESERVE_HOTEL, {
-                  id: prop.id,
-                  guests_set: guests,
-                  hotel: prop,
-                  // Include actual selected dates in local timezone (not UTC)
-                  selected_checkin: checkinDate.toLocaleDateString('en-CA'), // YYYY-MM-DD format
-                  selected_checkout: checkoutDate.toLocaleDateString('en-CA'), // YYYY-MM-DD format
-                  selected_dates_from: checkinDate.toLocaleDateString('en-CA'),
-                  selected_dates_to: checkoutDate.toLocaleDateString('en-CA'),
-                });
-                
-                // Set flag to prevent duplicate logging on confirm page
-                sessionStorage.setItem('reserveEventLogged', 'true');
-              } catch (err) {
-                console.error("❌ logEvent failed", err);
-              }
-
-              router.push(
-                `/stay/${params.id}/confirm?checkin=${encodeURIComponent(
-                  toUtcIsoWithTimezone(checkinDate)
-                )}&checkout=${encodeURIComponent(
-                  toUtcIsoWithTimezone(checkoutDate)
-                )}&guests=${guests}`
-              );
-            }}
+            onClick={handleReserve}
           >
             {getText("reserve", "Reserve")}
           </button>
-        )}
-        {(!selected.from || !selected.to) && (
+        ) : (
           <button
             id={getId("check_availability_button")}
             disabled
@@ -416,20 +536,33 @@ export default function PropertyDetail() {
         <div className="flex flex-col gap-2 text-[15px]">
           <div className="flex items-center justify-between">
             <span className="underline">
-              ${prop.price.toFixed(2)} USD x {nights} nights
+              ${prop.price.toFixed(2)} USD x {nights}{" "}
+              {nights === 1 ? getText("night", "night") : getText("nights", "nights")}
             </span>
             <span>${priceSubtotal.toFixed(2)} USD</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="underline">{getText("cleaning_fee", "Cleaning fee")}</span>{" "}
+            <span className="underline">
+              {getText("cleaning_fee", "Cleaning fee")}
+            </span>
             <span>${cleaningFee} USD</span>
           </div>
           <hr />
           <div className="flex items-center justify-between font-bold text-neutral-900">
-            <span>{getText("total", "Total")}</span> <span>${total.toFixed(2)} USD</span>
+            <span>{getText("total", "Total")}</span>{" "}
+            <span>${total.toFixed(2)} USD</span>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default function PropertyDetail() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PropertyDetailContent />
+    </Suspense>
+  );
+}
+

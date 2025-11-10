@@ -14,6 +14,10 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { useEmail } from '@/contexts/EmailContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLayout } from '@/contexts/LayoutContext';
+import { useDynamicStructure } from '@/contexts/DynamicStructureContext';
+import { cn } from '@/library/utils';
+import { TextStructureConfig } from '@/utils/textStructureProvider';
 import {
   Search,
   Menu,
@@ -30,9 +34,12 @@ import {
 import { EVENT_TYPES, logEvent } from "@/library/events";
 interface ToolbarProps {
   onMenuClick?: () => void;
+  textStructure?: TextStructureConfig;
 }
 
-export function Toolbar({ onMenuClick }: ToolbarProps) {
+export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
+  const { currentVariant } = useLayout();
+  const { getText, getId } = useDynamicStructure();
   const { searchQuery, setSearchQuery, filteredEmails } = useEmail();
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [searchValue, setSearchValue] = useState(searchQuery);
@@ -116,7 +123,18 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
   };
 
   return (
-    <div className="h-16 toolbar-glass">
+    <div className={cn(
+      "h-16 toolbar-glass",
+      currentVariant.id === 2 && "search-container",
+      currentVariant.id === 3 && "search-header",
+      currentVariant.id === 4 && "toolbar-header",
+      currentVariant.id === 5 && "search-wrapper",
+      currentVariant.id === 6 && "bottom-toolbar",
+      currentVariant.id === 7 && "dashboard-header",
+      currentVariant.id === 8 && "mobile-header",
+      currentVariant.id === 9 && "terminal-header",
+      currentVariant.id === 10 && "magazine-header"
+    )}>
       <div className="flex items-center justify-between h-full px-4 gap-4">
         {/* Left Section - Menu and Logo */}
         <div className="flex items-center gap-4">
@@ -133,7 +151,9 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
             <div className="w-8 h-8 bg-gradient-to-br from-primary via-primary/80 to-primary/60 rounded-xl flex items-center justify-center shadow-lg">
               <span className="text-white font-bold text-sm">A</span>
             </div>
-            <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">AutoMail</span>
+            <span className="font-bold text-xl text-foreground hidden sm:block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              {textStructure?.app_name || 'AutoMail'}
+            </span>
           </div>
         </div>
 
@@ -143,11 +163,23 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search mail (try: from:, to:, subject:, has:attachment, is:unread)"
+              id={textStructure?.ids.search_input || getId("search_input")}
+              placeholder={textStructure?.search_placeholder || getText("search_placeholder")}
               value={searchValue}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
-              className="pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring"
+              className={cn(
+                "pl-10 pr-12 h-12 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-ring",
+                currentVariant.id === 2 && "search-field",
+                currentVariant.id === 3 && "header-search",
+                currentVariant.id === 4 && "search-element",
+                currentVariant.id === 5 && "search-field",
+                currentVariant.id === 6 && "bottom-search",
+                currentVariant.id === 7 && "header-search",
+                currentVariant.id === 8 && "header-search",
+                currentVariant.id === 9 && "header-search",
+                currentVariant.id === 10 && "header-search"
+              )}
             />
 
             {/* Clear Search Button */}
@@ -194,7 +226,13 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button id="user-menu-btn" variant="ghost" size="icon" className="relative">
+              <Button 
+                id={textStructure?.ids.user_menu || "user-menu-btn"} 
+                variant="ghost" 
+                size="icon" 
+                className="relative"
+                aria-label={textStructure?.aria_labels.user_menu || "User account menu"}
+              >
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                   <span className="text-white font-medium text-sm">U</span>
                 </div>
@@ -206,7 +244,7 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
                   <span className="text-white font-medium">U</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">User Account</p>
+                  <p className="text-sm font-medium">{textStructure?.user_account || 'User Account'}</p>
                   <p className="text-xs text-muted-foreground">user@gmail.com</p>
                 </div>
               </div>
@@ -214,51 +252,86 @@ export function Toolbar({ onMenuClick }: ToolbarProps) {
               <DropdownMenuSeparator />
 
               {/* Theme Selection */}
-              <div className="p-2">
+              <div className="p-2" data-testid="theme-toggle">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">Theme</span>
                   {getThemeIcon()}
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Light</span>
+                    <span className="text-sm">{textStructure?.theme_light || 'Light'}</span>
                     <Button
-                      id="theme-light-btn"
+                      id={textStructure?.ids.theme_light_btn || "theme-light-btn"}
                       variant={theme === 'light' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
                         setTheme('light');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'light' });
                       }}
-                      
+                      aria-label={textStructure?.aria_labels.theme_toggle || "Toggle theme"}
+                      className={cn(
+                        currentVariant.id === 2 && "theme-toggle",
+                        currentVariant.id === 3 && "theme-btn",
+                        currentVariant.id === 4 && "theme-element",
+                        currentVariant.id === 5 && "header-theme",
+                        currentVariant.id === 6 && "bottom-theme",
+                        currentVariant.id === 7 && "header-theme",
+                        currentVariant.id === 8 && "header-theme",
+                        currentVariant.id === 9 && "header-theme",
+                        currentVariant.id === 10 && "header-theme"
+                      )}
                     >
                       <Sun className="h-3 w-3" />
                     </Button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Dark</span>
+                    <span className="text-sm">{textStructure?.theme_dark || 'Dark'}</span>
                     <Button
-                      id="theme-dark-btn"
+                      id={textStructure?.ids.theme_dark_btn || "theme-dark-btn"}
                       variant={theme === 'dark' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
                         setTheme('dark');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'dark' });
-                      }}                      
+                      }}
+                      aria-label={textStructure?.aria_labels.theme_toggle || "Toggle theme"}
+                      className={cn(
+                        currentVariant.id === 2 && "theme-toggle",
+                        currentVariant.id === 3 && "theme-btn",
+                        currentVariant.id === 4 && "theme-element",
+                        currentVariant.id === 5 && "header-theme",
+                        currentVariant.id === 6 && "bottom-theme",
+                        currentVariant.id === 7 && "header-theme",
+                        currentVariant.id === 8 && "header-theme",
+                        currentVariant.id === 9 && "header-theme",
+                        currentVariant.id === 10 && "header-theme"
+                      )}
                     >
                       <Moon className="h-3 w-3" />
                     </Button>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">System</span>
+                    <span className="text-sm">{textStructure?.theme_system || 'System'}</span>
                     <Button
-                      id="theme-system-btn"
+                      id={textStructure?.ids.theme_system_btn || "theme-system-btn"}
                       variant={theme === 'system' ? 'secondary' : 'ghost'}
                       size="sm"
                       onClick={() => {
                         setTheme('system');
                         logEvent(EVENT_TYPES.THEME_CHANGED, { theme: 'system' });
-                      }}                      
+                      }}
+                      aria-label={textStructure?.aria_labels.theme_toggle || "Toggle theme"}
+                      className={cn(
+                        currentVariant.id === 2 && "theme-toggle",
+                        currentVariant.id === 3 && "theme-btn",
+                        currentVariant.id === 4 && "theme-element",
+                        currentVariant.id === 5 && "header-theme",
+                        currentVariant.id === 6 && "bottom-theme",
+                        currentVariant.id === 7 && "header-theme",
+                        currentVariant.id === 8 && "header-theme",
+                        currentVariant.id === 9 && "header-theme",
+                        currentVariant.id === 10 && "header-theme"
+                      )}
                     >
                       <Monitor className="h-3 w-3" />
                     </Button>

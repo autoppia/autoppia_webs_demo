@@ -1,23 +1,25 @@
 "use client";
 import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
-import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useSeed } from "@/context/SeedContext";
 import { 
-  getEffectiveSeed, 
   getProductsByCategory, 
   getStaticCategories, 
   getStaticHomeEssentials, 
   getStaticRefreshSpace,
-  getLayoutConfig
+  getLayoutConfig,
+  getEffectiveSeed
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 
 function HomeContent() {
+  
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
@@ -36,6 +38,9 @@ function HomeContent() {
   const HomeProducts = getProductsByCategory("Home");
   const ElectronicProducts = getProductsByCategory("Electronics");
   const FitnessProducts = getProductsByCategory("Fitness");
+
+  const isLoadingProducts =
+    kitchenProducts.length + techProducts.length + HomeProducts.length + ElectronicProducts.length + FitnessProducts.length === 0;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -56,6 +61,9 @@ function HomeContent() {
       <HeroSlider />
       {/* Main Content Grid */}
       <div className={`px-4 py-4 -mt-20 relative z-10 ${layoutClasses.content}`}>
+        {isLoadingProducts && (
+          <div className="omnizon-container text-center text-zinc-500 mb-4">Loading products...</div>
+        )}
         <div className={`omnizon-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${layoutClasses.cards}`}>
           {/* Kitchen Categories */}
           <CategoryCard

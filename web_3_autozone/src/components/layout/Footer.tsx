@@ -1,15 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { useSeed } from "@/context/SeedContext";
+import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export function Footer() {
-  const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
   const { getText } = useDynamicStructure();

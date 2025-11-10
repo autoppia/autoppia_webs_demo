@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from movieapp.models import Genre
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class EventName(models.TextChoices):
@@ -20,16 +23,57 @@ class EventName(models.TextChoices):
     FILTER_FILM = "FILTER_FILM", "Filter Films"
 
 
+class EventQuerySet(models.QuerySet):
+    def delete(self):
+        # Capture a readable representation of the queryset criteria
+        try:
+            criteria = str(self.query)
+        except Exception:
+            criteria = "<unrepresentable queryset>"
+
+        # Count how many objects will be deleted (this executes a COUNT query)
+        try:
+            count = self.count()
+        except Exception:
+            count = None
+
+        # Update class-level counters on Event if available
+        try:
+            Event._deletion_counters.setdefault(criteria, 0)
+            if count is not None:
+                Event._deletion_counters[criteria] += count
+                total = Event._deletion_counters[criteria]
+            else:
+                total = Event._deletion_counters[criteria]
+        except Exception:
+            total = None
+
+        logger.info(
+            "Deleting events: count=%s, criteria=%s, total_deleted_for_criteria=%s",
+            count,
+            criteria,
+            total,
+        )
+
+        # Proceed with actual deletion
+        return super().delete()
+
+
 class Event(models.Model):
     """
     Modelo para almacenar distintos tipos de eventos
     relacionados con películas y acciones de usuario.
     """
 
+    # Add a class-level dict to accumulate deletion counters by criteria
+    _deletion_counters = {}
+
     # Campos básicos comunes a todos los eventos
     event_name = models.CharField(max_length=50, choices=EventName.choices)
     timestamp = models.DateTimeField(default=timezone.now)
-    web_agent_id = models.CharField()
+    web_agent_id = models.CharField(max_length=100)
+    validator_id = models.CharField(max_length=100)
+
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Campo JSON para datos específicos del evento
@@ -51,9 +95,9 @@ class Event(models.Model):
     # -------------------- EVENTOS RELACIONADOS CON PELÍCULAS --------------------
 
     @classmethod
-    def create_film_detail_event(cls, user, web_agent_id, movie):
+    def create_film_detail_event(cls, user, web_agent_id, movie, validator_id):
         """Factory method para crear un evento de detalles de película."""
-        event = cls(event_name=EventName.FILM_DETAIL, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.FILM_DETAIL, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
         event.data = {
             "id": movie.id,
@@ -73,12 +117,13 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_search_film_event(cls, user, web_agent_id, query):
+    def create_search_film_event(cls, user, web_agent_id, query, validator_id):
         """Factory method para crear un evento de búsqueda de película."""
         event = cls(
             event_name=EventName.SEARCH_FILM,
             user=user,
             web_agent_id=web_agent_id,
+            validator_id=validator_id,
         )
         event.data = {
             "query": query,
@@ -86,9 +131,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_add_film_event(cls, user, web_agent_id, movie_data):
+    def create_add_film_event(cls, user, web_agent_id, movie_data, validator_id):
         """Factory method para crear un evento de añadir película."""
-        event = cls(event_name=EventName.ADD_FILM, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.ADD_FILM, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         genres = movie_data.get("genres", [])
         processed_genres = []
@@ -109,11 +154,11 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_edit_film_event(cls, user, web_agent_id, movie, previous_values=None, changed_fields=None, new_values=None):
+    def create_edit_film_event(cls, user, web_agent_id, movie, previous_values=None, changed_fields=None, new_values=None, validator_id=None):
         """
         Factory method para crear un evento de editar película, incorporando los nuevos valores sin persistirlos.
         """
-        event = cls(event_name=EventName.EDIT_FILM, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.EDIT_FILM, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         # Obtiene los géneros actuales de la película
         genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
@@ -146,9 +191,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_delete_film_event(cls, user, web_agent_id, movie):
+    def create_delete_film_event(cls, user, web_agent_id, movie, validator_id):
         """Factory method para crear un evento de eliminar película."""
-        event = cls(event_name=EventName.DELETE_FILM, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.DELETE_FILM, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         genres = [{"id": genre.id, "name": genre.name} for genre in movie.genres.all()]
         event.data = {
             "id": movie.id,
@@ -168,9 +213,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_filter_film_event(cls, user, web_agent_id, genre=None, year=None):
+    def create_filter_film_event(cls, user, web_agent_id, genre=None, year=None, validator_id=None):
         """Factory method to create a filter films event"""
-        event = cls(event_name=EventName.FILTER_FILM, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.FILTER_FILM, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         # Get genre information if provided
         genre_data = None
@@ -190,9 +235,9 @@ class Event(models.Model):
         return event
 
     @classmethod
-    def create_add_comment_event(cls, user, web_agent_id, comment, movie):
+    def create_add_comment_event(cls, user, web_agent_id, comment, movie, validator_id):
         """Factory method para crear un evento de añadir comentario."""
-        event = cls(event_name=EventName.ADD_COMMENT, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.ADD_COMMENT, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "comment_id": comment.id,
             "name": comment.name,
@@ -204,9 +249,9 @@ class Event(models.Model):
 
     # --------------------- CONTACT --------------------------------
     @classmethod
-    def create_contact_event(cls, user, web_agent_id, contact):
+    def create_contact_event(cls, user, web_agent_id, contact, validator_id):
         """Factory method para crear un evento de contacto"""
-        event = cls(event_name=EventName.CONTACT, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.CONTACT, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         # Guardar datos del mensaje de contacto en formato JSON
         event.data = {
@@ -223,36 +268,36 @@ class Event(models.Model):
     # -------------------- EVENTOS DE USUARIO --------------------
 
     @classmethod
-    def create_registration_event(cls, user, web_agent_id):
+    def create_registration_event(cls, user, web_agent_id, validator_id):
         """Factory method para crear un evento de registro."""
-        event = cls(event_name=EventName.REGISTRATION, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.REGISTRATION, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "username": user.username,
         }
         return event
 
     @classmethod
-    def create_login_event(cls, user, web_agent_id):
+    def create_login_event(cls, user, web_agent_id, validator_id):
         """Factory method para crear un evento de inicio de sesión."""
-        event = cls(event_name=EventName.LOGIN, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.LOGIN, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "username": user.username,
         }
         return event
 
     @classmethod
-    def create_logout_event(cls, user, web_agent_id):
+    def create_logout_event(cls, user, web_agent_id, validator_id):
         """Factory method para crear un evento de cierre de sesión."""
-        event = cls(event_name=EventName.LOGOUT, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.LOGOUT, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
         event.data = {
             "username": user.username,
         }
         return event
 
     @classmethod
-    def create_edit_user_event(cls, user, web_agent_id, profile, previous_values=None):
+    def create_edit_user_event(cls, user, web_agent_id, profile, previous_values=None, validator_id=None):
         """Factory method to create an edit user profile event"""
-        event = cls(event_name=EventName.EDIT_USER, user=user, web_agent_id=web_agent_id)
+        event = cls(event_name=EventName.EDIT_USER, user=user, web_agent_id=web_agent_id, validator_id=validator_id)
 
         # Get favorite genres as a list of dictionaries
         favorite_genres = []
@@ -276,3 +321,53 @@ class Event(models.Model):
         }
 
         return event
+
+    @classmethod
+    def create_search_event(cls, user, web_agent_id, query, validator_id):
+        """Compatibility wrapper for older code that calls create_search_event."""
+        return cls.create_search_film_event(user, web_agent_id, query, validator_id)
+
+    def save(self, *args, **kwargs):
+        """Override save to log when an event is created or updated."""
+        is_create = self.pk is None
+        super().save(*args, **kwargs)
+
+        try:
+            logger.info(
+                "Event %s saved (id=%s) name=%s web_agent_id=%s validator_id=%s timestamp=%s",
+                "created" if is_create else "updated",
+                self.pk,
+                getattr(self, "event_name", None),
+                getattr(self, "web_agent_id", None),
+                getattr(self, "validator_id", None),
+                getattr(self, "timestamp", None),
+            )
+        except Exception:
+            # Avoid raising from logging
+            pass
+
+    def delete(self, *args, **kwargs):
+        """Log single-instance deletions and update deletion counters."""
+        try:
+            criteria = f"id={self.pk}"
+        except Exception:
+            criteria = "<unrepresentable instance>"
+
+        try:
+            Event._deletion_counters.setdefault(criteria, 0)
+            Event._deletion_counters[criteria] += 1
+            total = Event._deletion_counters[criteria]
+        except Exception:
+            total = None
+
+        logger.info(
+            "Deleting single event: id=%s criteria=%s total_deleted_for_criteria=%s",
+            getattr(self, "pk", None),
+            criteria,
+            total,
+        )
+
+        return super().delete(*args, **kwargs)
+
+    # Attach a custom manager that uses EventQuerySet so QuerySet.delete() is intercepted
+    objects = models.Manager.from_queryset(EventQuerySet)()

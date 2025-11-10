@@ -1,13 +1,31 @@
 "use client";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Calendar } from "@/components/ui/calendar";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
-import { useState, useEffect, useMemo } from "react";
+import type { DateRange } from "react-day-picker";
+import { Calendar } from "@/components/ui/calendar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
-import { useRef } from "react";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { useSeedStructureNavigation } from "@/hooks/useSeedStructureNavigation";
+import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
+
+function parseLocalDate(dateString: string | undefined) {
+  if (!dateString) {
+    return null;
+  }
+
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day)
+  ) {
+    return null;
+  }
+
+  return new Date(year, month - 1, day);
+}
 
 function toStartOfDay(date: Date): Date {
   const d = new Date(date);
@@ -15,20 +33,26 @@ function toStartOfDay(date: Date): Date {
   return d;
 }
 
-export default function ConfirmPage() {
+
+function ConfirmPageContent() {
   const { getText, getId } = useDynamicStructure();
   const { navigateWithSeedStructure } = useSeedStructureNavigation();
-  const guestsRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
   const prop = useMemo(() => {
     const numId = Number(params.id);
-    const hotel = DASHBOARD_HOTELS.find(hotel => hotel.id === numId);
-    return hotel ?? DASHBOARD_HOTELS[0];
+    const hotel = dynamicDataProvider.getHotelById(numId);
+    return hotel ?? dynamicDataProvider.getHotels()[0];
   }, [params.id]);
-  const stayFrom = new Date(prop.datesFrom);
-  const stayTo = new Date(prop.datesTo);
+  const stayFrom = useMemo(() => {
+    const parsed = parseLocalDate(prop.datesFrom);
+    return parsed ? toStartOfDay(parsed) : toStartOfDay(new Date());
+  }, [prop.datesFrom]);
+  const stayTo = useMemo(() => {
+    const parsed = parseLocalDate(prop.datesTo);
+    return parsed ? toStartOfDay(parsed) : addDays(stayFrom, 1);
+  }, [prop.datesTo, stayFrom]);
   // Load selection from search params (or defaults)
   const urlCheckin = search.get("checkin");
   const urlCheckout = search.get("checkout");
@@ -47,6 +71,11 @@ export default function ConfirmPage() {
     }
   };
 
+  const guests = useMemo(() => {
+    const parsed = Number(urlGuests);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+  }, [urlGuests]);
+
   const [dateRange, setDateRange] = useState<{
     from: Date | null;
     to: Date | null;
@@ -54,17 +83,17 @@ export default function ConfirmPage() {
     from: parseDateSafely(urlCheckin) ?? toStartOfDay(stayFrom),
     to: parseDateSafely(urlCheckout) ?? toStartOfDay(stayTo),
   });
-  const [guests, setGuests] = useState(Number(urlGuests) || 1);
-  const [prevGuests, setPrevGuests] = useState(1);
   const [dateOpen, setDateOpen] = useState(false);
-  const [guestsOpen, setGuestsOpen] = useState(false);
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   // For pricing
   const nights =
     dateRange.from && dateRange.to
-      ? (toStartOfDay(dateRange.to).getTime() -
-          toStartOfDay(dateRange.from).getTime()) /
-        (1000 * 60 * 60 * 24)
+      ? Math.max(
+          0,
+          (toStartOfDay(dateRange.to).getTime() -
+            toStartOfDay(dateRange.from).getTime()) /
+            (1000 * 60 * 60 * 24)
+        )
       : 0;
 
   const cleaningFee = 15;
@@ -96,7 +125,6 @@ export default function ConfirmPage() {
 
   const [hostMessage, setHostMessage] = useState("");
   const [toast, setToast] = useState<string | null>(null);
-  const hostYear = 2014;
 
   function showToast(msg: string) {
     setToast(msg);
@@ -110,31 +138,21 @@ export default function ConfirmPage() {
     }
   }, [toast]);
 
-  // Close popovers on outside click
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (guestsRef.current && !guestsRef.current.contains(e.target as Node)) {
-        setGuestsOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
+  // Payment form state
   const [cardNumber, setCardNumber] = useState("");
   const [exp, setExp] = useState("");
   const [cvv, setCvv] = useState("");
   const [zip, setZip] = useState("");
   const [country, setCountry] = useState("United States");
 
-  const cardFilled = cardNumber.trim().replace(/\s/g, "").length >= 14; // lenient for demo
-  const expFilled = exp.trim().length >= 3;
-  const cvvFilled = cvv.trim().length >= 3;
-  const zipFilled = zip.trim().length > 0;
+  const sanitizedCardNumber = cardNumber.replace(/\D/g, "");
+  const cardFilled = sanitizedCardNumber.length >= 12;
+  const expFilled = /^\d{2}\s?\/\s?\d{2}$/.test(exp.trim());
+  const cvvFilled = /^\d{3,4}$/.test(cvv.trim());
+  const zipFilled = zip.trim().length >= 4;
   const countryFilled = country.trim().length > 0;
+
+  // Validation
   const canPay =
     cardFilled && expFilled && cvvFilled && zipFilled && countryFilled;
   const showCardError = hasTriedSubmit && !cardFilled;
@@ -144,7 +162,11 @@ export default function ConfirmPage() {
   const showCountryError = hasTriedSubmit && !countryFilled;
 
   useEffect(() => {
-    const alreadyLogged = sessionStorage.getItem("reserveEventLogged");
+    const storageKey = "reserveEventLogged";
+    const alreadyLogged =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem(storageKey)
+        : null;
 
     if (
       dateRange.from &&
@@ -158,13 +180,18 @@ export default function ConfirmPage() {
         guests_set: guests,
         hotel: prop,
         selected_checkin: format(dateRange.from, "yyyy-MM-dd"),
-        selected_checkout: format(dateRange.to, "yyyy-MM-dd"), // Log actual checkout date
+        selected_checkout: format(dateRange.to, "yyyy-MM-dd"),
         selected_dates_from: format(dateRange.from, "yyyy-MM-dd"),
-        selected_dates_to: format(dateRange.to, "yyyy-MM-dd"), // Log actual checkout date
+        selected_dates_to: format(dateRange.to, "yyyy-MM-dd"),
       });
+      sessionStorage.setItem(storageKey, "true");
     }
 
-    sessionStorage.removeItem("reserveEventLogged");
+    return () => {
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem(storageKey);
+      }
+    };
   }, [dateRange.from, dateRange.to, guests, params.id, prop]);
 
   return (
@@ -216,8 +243,6 @@ export default function ConfirmPage() {
 
                       return willOpen;
                     });
-
-                    setGuestsOpen(false);
                   }}
                   id={getId("edit_dates_button")}
                   className="ml-2 text-[#ff5a5f] text-base font-medium hover:underline focus:underline focus:outline-none px-1"
@@ -231,12 +256,13 @@ export default function ConfirmPage() {
                   >
                     <Calendar
                       numberOfMonths={2}
+                      disabled={(date) => !isWithinAvailable(date)}
                       selected={{
                         from: dateRange.from ?? undefined,
                         to: dateRange.to ?? undefined,
                       }}
                       mode="range"
-                      onSelect={(range) => {
+                      onSelect={(range: DateRange | undefined) => {
                         if (!range) return;
 
                         const { from, to } = range;
@@ -399,17 +425,17 @@ export default function ConfirmPage() {
             <div className="flex items-center gap-4 mb-2 bg-neutral-100 rounded-lg p-3 w-fit">
               <img
                 src={prop.host.avatar}
-                alt={prop.title}
-                width={44}
-                height={44}
+                alt={prop.host.name}
+                width={40}
+                height={40}
                 className="rounded-full border"
               />
               <div>
-                <div className="font-medium text-neutral-900">
+                <div className="font-medium text-gray-900">
                   {prop.host.name}
                 </div>
-                <div className="text-neutral-500 text-xs">
-                  Joined in {hostYear}
+                <div className="text-gray-500 text-sm">
+                  Host
                 </div>
               </div>
             </div>
@@ -436,7 +462,7 @@ export default function ConfirmPage() {
                   setHostMessage("");
                 }
               }}
-              className="bg-[#616882] hover:bg-[#504546] text-white font-semibold px-6 py-2 rounded-lg mb-2 transition disabled:opacity-50 disabled:pointer-events-none"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition disabled:opacity-50 disabled:pointer-events-none"
               disabled={!hostMessage.trim()}
             >
               {getText("send", "Send")}
@@ -513,7 +539,7 @@ export default function ConfirmPage() {
               setHasTriedSubmit(true);
 
               if (!canPay) {
-                return; // Don't proceed if any field is incomplete
+                return;
               }
               logEvent(EVENT_TYPES.CONFIRM_AND_PAY, {
                 guests_set: guests,
@@ -545,5 +571,13 @@ export default function ConfirmPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConfirmPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmPageContent />
+    </Suspense>
   );
 }

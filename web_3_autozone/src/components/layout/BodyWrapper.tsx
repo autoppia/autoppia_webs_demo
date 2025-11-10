@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { useSeed } from "@/context/SeedContext";
+import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 
 export function BodyWrapper({ children }: { children: React.ReactNode }) {
-  const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
 
   useEffect(() => {

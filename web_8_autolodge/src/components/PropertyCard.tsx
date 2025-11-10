@@ -2,17 +2,55 @@ import * as React from "react";
 import Image from "next/image";
 import SeedStructureLink from "./SeedStructureLink";
 
-function formatDateRange(datesFrom: string, datesTo: string) {
-  const fromDate = new Date(datesFrom);
-  const toDate = new Date(datesTo);
+function parseLocalDate(dateString: string | undefined) {
+  if (!dateString) {
+    return null;
+  }
 
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day)
+  ) {
+    return null;
+  }
+
+  return new Date(year, month - 1, day);
+}
+
+function formatDateRange(datesFrom: string, datesTo: string) {
   const options: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
   };
 
+  const fromDate = parseLocalDate(datesFrom);
+  const toDate = parseLocalDate(datesTo);
+
+  if (!fromDate && !toDate) {
+    return "";
+  }
+
+  if (fromDate && !toDate) {
+    return fromDate.toLocaleDateString("en-US", options);
+  }
+
+  if (!fromDate && toDate) {
+    return toDate.toLocaleDateString("en-US", options);
+  }
+
+  if (!fromDate || !toDate) {
+    return "";
+  }
+
   const fromFormatted = fromDate.toLocaleDateString("en-US", options);
   const toFormatted = toDate.toLocaleDateString("en-US", options);
+
+  if (fromFormatted === toFormatted) {
+    return fromFormatted;
+  }
 
   return `${fromFormatted} - ${toFormatted}`;
 }

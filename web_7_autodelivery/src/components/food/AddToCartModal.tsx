@@ -21,6 +21,8 @@ import {
   type MenuItemOption,
 } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "../library/events";
+import { useSeedLayout } from "@/hooks/use-seed-layout";
+import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 
 export type AddToCartModalProps = {
   open: boolean;
@@ -46,6 +48,8 @@ export function AddToCartModal({
   const [checkedOptions, setCheckedOptions] = React.useState<string[]>([]);
   const [preferences, setPreferences] = React.useState("");
   const [qty, setQty] = React.useState(1);
+  const layout = useSeedLayout();
+  const { getText, getPlaceholder, getId, getAria, seedStructure } = useDynamicStructure();
 
   React.useEffect(() => {
     setSize(item.sizes?.[0]);
@@ -84,12 +88,47 @@ export function AddToCartModal({
     onOpenChange(false);
   }
 
+  const modalTitleId = getId("add-to-cart-modal-title", `add-to-cart-modal-title-${seedStructure}`);
+  const modalSubtitleId = `${modalTitleId}-item`;
+  const sizeHeadingText = getText("select-size-heading", "Select Size");
+  const sizeHeadingId = getId("select-size-heading", `select-size-heading-${seedStructure}`);
+  const optionsHeadingText = getText("select-options-heading", "Select Options");
+  const optionsHeadingId = getId("select-options-heading", `select-options-heading-${seedStructure}`);
+  const preferencesHeadingText = getText("preferences-heading", "Preferences (Optional)");
+  const preferencesHeadingId = getId("preferences-heading", `preferences-heading-${seedStructure}`);
+  const preferencesPlaceholder = getPlaceholder("preferences_input", "Add special instructions");
+  const preferencesTextareaId = getId("preferences-textarea", `preferences-textarea-${seedStructure}`);
+  const quantityLabel = getText("quantity-label", "Quantity");
+  const addToCartLabel = getText("add-to-cart-btn", "Add to cart");
+  const addButtonAttributes = layout.getElementAttributes("ADD_TO_CART_MENU_ITEM", 0);
+  const addButtonId = getId("add-to-cart-btn", `${addButtonAttributes.id ?? "add-to-cart-btn"}-${seedStructure}`);
+  const addButtonAria = getAria("add-to-cart-btn", "Add item to cart");
+  const decrementAttributes = layout.getElementAttributes("ITEM_DECREMENTED", 0);
+  const decrementButtonId = getId("quantity-decrease-button", `${decrementAttributes.id ?? "quantity-decrease"}-${seedStructure}`);
+  const decrementAria = getAria("quantity-decrease-button", "Decrease quantity");
+  const incrementAttributes = layout.getElementAttributes("ITEM_INCREMENTED", 0);
+  const incrementButtonId = getId("quantity-increase-button", `${incrementAttributes.id ?? "quantity-increase"}-${seedStructure}`);
+  const incrementAria = getAria("quantity-increase-button", "Increase quantity");
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl rounded-2xl px-0 sm:px-0 p-0">
-        <div className="max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="px-6 pt-6 pb-0">
-            <DialogTitle>{item.name}</DialogTitle>
+      <DialogContent className={`max-w-xl rounded-2xl px-0 sm:px-0 p-0 ${layout.modal.containerClass}`}>
+        <div className={`max-h-[90vh] overflow-y-auto ${layout.modal.contentClass}`}>
+          <DialogHeader className={`px-6 pt-6 pb-0 ${layout.modal.headerClass}`}>
+            <DialogTitle
+              className={`${layout.modal.headerClass} space-y-1`}
+              id={modalTitleId}
+            >
+              <span className="block text-base md:text-lg font-semibold">
+                {getText("add-to-cart-modal-title", "Customize your order")}
+              </span>
+              <span
+                id={modalSubtitleId}
+                className="block text-sm text-zinc-500 font-normal"
+              >
+                {item.name}
+              </span>
+            </DialogTitle>
           </DialogHeader>
           <div className="px-6 flex gap-3 items-center mb-2">
             <div className="rounded-xl overflow-hidden w-16 h-16 relative">
@@ -110,7 +149,9 @@ export function AddToCartModal({
 
           {item.sizes && (
             <div className="px-6 mt-4">
-              <div className="font-semibold mb-2">Select Size</div>
+              <div className="font-semibold mb-2" id={sizeHeadingId}>
+                {sizeHeadingText}
+              </div>
               <RadioGroup
                 value={size?.name || ""}
                 onValueChange={(name) =>
@@ -142,7 +183,9 @@ export function AddToCartModal({
 
           {item.options && item.options.length > 0 && (
             <div className="px-6 mt-3">
-              <div className="font-semibold mb-2">Select Options</div>
+              <div className="font-semibold mb-2" id={optionsHeadingId}>
+                {optionsHeadingText}
+              </div>
               <div className="flex flex-col gap-2">
                 {item.options.map((opt) => (
                   <label
@@ -163,9 +206,12 @@ export function AddToCartModal({
           )}
 
           <div className="px-6 mt-4">
-            <div className="font-semibold mb-2">Preferences (Optional)</div>
+            <div className="font-semibold mb-2" id={preferencesHeadingId}>
+              {preferencesHeadingText}
+            </div>
             <Textarea
-              placeholder="Add special instructions"
+              id={preferencesTextareaId}
+              placeholder={preferencesPlaceholder}
               value={preferences}
               onChange={(e) => setPreferences(e.target.value)}
               className="resize-none"
@@ -175,6 +221,9 @@ export function AddToCartModal({
           <DialogFooter className="flex flex-col gap-3 mt-4 px-6 pb-6">
             <div className="flex items-center mt-4 mb-2 w-full gap-4">
               <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-zinc-600">
+                  {quantityLabel}
+                </span>
                 <Button
                   size="icon"
                   variant="outline"
@@ -189,7 +238,9 @@ export function AddToCartModal({
                       setQty(newQty);
                     }
                   }}
-                  aria-label="Decrease"
+                  aria-label={decrementAria}
+                  {...decrementAttributes}
+                  id={decrementButtonId}
                 >
                   <Minus size={16} />
                 </Button>
@@ -206,7 +257,9 @@ export function AddToCartModal({
                     });
                     setQty(newQty);
                   }}
-                  aria-label="Increase"
+                  aria-label={incrementAria}
+                  {...incrementAttributes}
+                  id={incrementButtonId}
                 >
                   <Plus size={16} />
                 </Button>
@@ -214,9 +267,11 @@ export function AddToCartModal({
               <Button
                 className="ml-auto px-6 py-2.5 text-lg rounded-full font-bold bg-orange-500 hover:bg-orange-600"
                 onClick={handleAdd}
-                id="add-to-cart-confirm"
+                {...addButtonAttributes}
+                id={addButtonId}
+                aria-label={addButtonAria}
               >
-                Add to cart ${price.toFixed(2)}
+                {`${addToCartLabel} $${price.toFixed(2)}`}
               </Button>
             </div>
           </DialogFooter>

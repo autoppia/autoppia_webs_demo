@@ -1,136 +1,214 @@
 "use client";
+
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { format } from "date-fns";
 import { WherePopover } from "@/components/WherePopover";
 import { DateRangePopover } from "@/components/DateRangePopover";
 import { GuestSelectorPopover } from "@/components/GuestSelectorPopover";
 import { PropertyCard } from "@/components/PropertyCard";
-import * as React from "react";
-import { addDays } from "date-fns";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
-import Image from "next/image";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { DASHBOARD_HOTELS } from "@/library/dataset";
+import type { Hotel } from "@/types/hotel";
 
-export default function Home() {
-  const { getText, getId, getClass } = useDynamicStructure();
-  // Range state: { from, to }
-  const [dateRange, setDateRange] = React.useState<{
-    from: Date | null;
-    to: Date | null;
-  }>({ from: null, to: null });
-  const [guests, setGuests] = React.useState({
+type GuestsCount = {
+  adults: number;
+  children: number;
+  infants: number;
+  pets: number;
+};
+
+function parseDateParam(value: string | null): Date | null {
+  if (!value) {
+    return null;
+  }
+
+  const [year, month, day] = value.split("-").map(Number);
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day)
+  ) {
+    return null;
+  }
+
+  return new Date(year, month - 1, day);
+}
+
+function normalizeHotelDates(hotel: Hotel): Hotel {
+  return {
+    ...hotel,
+    datesFrom: hotel.datesFrom,
+    datesTo: hotel.datesTo,
+  };
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function HomeContent() {
+  const { getText, getId, getClass, seedStructure } = useDynamicStructure();
+  const searchParams = useSearchParams();
+
+  const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
+    from: null,
+    to: null,
+  });
+  const [guests, setGuests] = useState<GuestsCount>({
     adults: 0,
     children: 0,
     infants: 0,
     pets: 0,
   });
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [committedSearch, setCommittedSearch] = React.useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [committedSearch, setCommittedSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const calendarLabel = (kind: "in" | "out") => {
-    if (kind === "in" && dateRange.from)
-      return dateRange.from.toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-      });
-    if (kind === "out" && dateRange.to)
-      return dateRange.to.toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-      });
-    return getText("add_dates");
-  };
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") ?? "";
+    const urlFrom = parseDateParam(searchParams.get("from")) ?? null;
+    const urlTo = parseDateParam(searchParams.get("to")) ?? null;
 
-  const guestSummary = () => {
-    const g = guests.adults + guests.children;
-    const i = guests.infants;
-    const p = guests.pets;
-    let str = g > 0 ? `${g} guest${g > 1 ? "s" : ""}` : getText("add_guests");
-    if (i > 0) str += `, ${i} infant${i > 1 ? "s" : ""}`;
-    if (p > 0) str += `, ${p} pet${p > 1 ? "s" : ""}`;
-    return str;
-  };
+    const nextGuests: GuestsCount = {
+      adults: Number(searchParams.get("adults") ?? 0),
+      children: Number(searchParams.get("children") ?? 0),
+      infants: Number(searchParams.get("infants") ?? 0),
+      pets: Number(searchParams.get("pets") ?? 0),
+    };
 
-  // Filtering logic
-  const totalSelectedGuests = guests.adults + guests.children;
+    setSearchTerm(urlSearch);
+    setCommittedSearch(urlSearch);
+    setDateRange({
+      from: urlFrom,
+      to: urlTo,
+    });
+    setGuests(nextGuests);
+  }, [searchParams]);
 
-
-  function toStartOfDay(date: Date): Date {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }
-
-  function inDateRange(
-    propFrom: Date,
-    propTo: Date,
-    selectedFrom: Date,
-    selectedTo: Date
-  ): boolean {
-    const from = toStartOfDay(propFrom);
-    const to = toStartOfDay(propTo);
-    const selFrom = toStartOfDay(selectedFrom);
-    const selTo = toStartOfDay(selectedTo);
-    
-    // Check if there's any overlap between the selected date range and property's available range
-    // Two date ranges overlap if: start1 <= end2 AND start2 <= end1
-    // In our case: selFrom <= to AND from <= selTo
-    return selFrom <= to && from <= selTo;
-  }
-
-  const filtered = DASHBOARD_HOTELS.filter((card) => {
-    if (committedSearch.trim()) {
-      const term = committedSearch.toLowerCase();
-      if (
-        !(
-          card.location.toLowerCase().includes(term) ||
-          card.title.toLowerCase().includes(term)
-        )
-      ) {
-        return false;
-      }
-    }
-
-    if (
-      dateRange.from &&
-      dateRange.to &&
-      !inDateRange(
-        new Date(card.datesFrom),
-        new Date(card.datesTo),
-        dateRange.from,
-        dateRange.to
-      )
-    ) {
-      return false;
-    }
-
-    if (totalSelectedGuests > 0 && totalSelectedGuests > card.maxGuests) {
-      return false;
-    }
-
-    return true;
-  });
-
-  const itemsPerPage = 8;
-  const [currentPage, setCurrentPage] = React.useState(1);
-
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-
-  const paginatedResults = filtered.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  React.useEffect(() => {
-    // Reset to first page when filters change
+  useEffect(() => {
     setCurrentPage(1);
   }, [committedSearch, dateRange, guests]);
 
+  const hotels = useMemo(() => {
+    const providerHotels = dynamicDataProvider.getHotels();
+    if (providerHotels.length > 0) {
+      return providerHotels.map(normalizeHotelDates);
+    }
+    return DASHBOARD_HOTELS as Hotel[];
+  }, []);
+
+  const filteredHotels = useMemo(() => {
+    return hotels.filter((hotel) => {
+      if (committedSearch.trim()) {
+        const term = committedSearch.toLowerCase();
+        const matches =
+          hotel.location.toLowerCase().includes(term) ||
+          hotel.title.toLowerCase().includes(term);
+        if (!matches) {
+          return false;
+        }
+      }
+
+      if (dateRange.from && dateRange.to) {
+        const hotelFrom = parseDateParam(hotel.datesFrom);
+        const hotelTo = parseDateParam(hotel.datesTo);
+        if (!hotelFrom || !hotelTo) {
+          return false;
+        }
+
+        const selectedFrom = dateRange.from;
+        const selectedTo = dateRange.to;
+
+        if (!selectedFrom || !selectedTo) {
+          return false;
+        }
+
+        const overlaps =
+          selectedFrom.getTime() <= hotelTo.getTime() &&
+          hotelFrom.getTime() <= selectedTo.getTime();
+        if (!overlaps) {
+          return false;
+        }
+      }
+
+      const totalGuests = guests.adults + guests.children;
+      if (totalGuests > 0 && totalGuests > hotel.maxGuests) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [hotels, committedSearch, dateRange, guests]);
+
+  const itemsPerPage = 8;
+  const totalPages = Math.max(1, Math.ceil(filteredHotels.length / itemsPerPage));
+  const paginatedResults = useMemo(
+    () =>
+      filteredHotels.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      ),
+    [filteredHotels, currentPage]
+  );
+
+  const summaryGuests = useMemo(() => {
+    const guestCount = guests.adults + guests.children;
+    const parts: string[] = [];
+
+    if (guestCount > 0) {
+      parts.push(
+        `${guestCount} ${guestCount === 1 ? getText("guest", "guest") : getText("guests", "guests")}`
+      );
+    } else {
+      return getText("add_guests");
+    }
+
+    if (guests.infants > 0) {
+      parts.push(
+        `${guests.infants} ${
+          guests.infants === 1
+            ? getText("infant", "infant")
+            : getText("infants", "infants")
+        }`
+      );
+    }
+
+    if (guests.pets > 0) {
+      parts.push(
+        `${guests.pets} ${
+          guests.pets === 1 ? getText("pet", "pet") : getText("pets", "pets")
+        }`
+      );
+    }
+
+    return parts.join(", ");
+  }, [guests, getText]);
+
+  const handleSearch = () => {
+    setCommittedSearch(searchTerm);
+    logEvent(EVENT_TYPES.SEARCH_HOTEL, {
+      searchTerm,
+      dateRange: {
+        from: dateRange.from ? format(dateRange.from, "yyyy-MM-dd") : null,
+        to: dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : null,
+      },
+      guests: {
+        adults: guests.adults,
+        children: guests.children,
+        infants: guests.infants,
+        pets: guests.pets,
+      },
+      seedStructure,
+    });
+  };
+
   return (
     <div className="flex flex-col w-full items-center mt-4 pb-12">
-      {/* Search/Filter Bar */}
       <section className="w-full flex justify-center">
         <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
-          {/* Where */}
           <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
             <div
               id={getId("search_field")}
@@ -140,7 +218,7 @@ export default function Home() {
                 {getText("where_label")}
               </span>
               <span className="text-sm text-neutral-700">
-                {searchTerm ? searchTerm : getText("where_placeholder")}
+                {searchTerm || getText("where_placeholder")}
               </span>
               {searchTerm && (
                 <button
@@ -149,13 +227,10 @@ export default function Home() {
                   style={{ lineHeight: 1, background: "none" }}
                   tabIndex={0}
                   aria-label={getText("clear_search")}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setSearchTerm("");
                     setCommittedSearch("");
-                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, {
-                    //   source: "location",
-                    // });
                   }}
                 >
                   ×
@@ -163,11 +238,8 @@ export default function Home() {
               )}
             </div>
           </WherePopover>
-          {/* Check in */}
-          <DateRangePopover
-            selectedRange={dateRange}
-            setSelectedRange={setDateRange}
-          >
+
+          <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
             <div
               id={getId("check_in_field")}
               className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
@@ -176,7 +248,9 @@ export default function Home() {
                 {getText("check_in")}
               </span>
               <span className="text-sm text-neutral-700">
-                {calendarLabel("in")}
+                {dateRange.from
+                  ? format(dateRange.from, "MMM d")
+                  : getText("add_dates")}
               </span>
               {dateRange.from && (
                 <button
@@ -185,10 +259,9 @@ export default function Home() {
                   style={{ lineHeight: 1, background: "none" }}
                   tabIndex={0}
                   aria-label={getText("clear_dates")}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setDateRange({ from: null, to: null });
-                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "date" });
                   }}
                 >
                   ×
@@ -196,24 +269,38 @@ export default function Home() {
               )}
             </div>
           </DateRangePopover>
-          {/* Check out */}
-          <DateRangePopover
-            selectedRange={dateRange}
-            setSelectedRange={setDateRange}
-          >
+
+          <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
             <div
               id={getId("check_out_field")}
-              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all"
+              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
             >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 {getText("check_out")}
               </span>
               <span className="text-sm text-neutral-700">
-                {calendarLabel("out")}
+                {dateRange.to
+                  ? format(dateRange.to, "MMM d")
+                  : getText("add_dates")}
               </span>
+              {dateRange.to && (
+                <button
+                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+                  type="button"
+                  style={{ lineHeight: 1, background: "none" }}
+                  tabIndex={0}
+                  aria-label={getText("clear_dates")}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setDateRange({ from: null, to: null });
+                  }}
+                >
+                  ×
+                </button>
+              )}
             </div>
           </DateRangePopover>
-          {/* Who */}
+
           <GuestSelectorPopover counts={guests} setCounts={setGuests}>
             <div
               id={getId("guests_field")}
@@ -222,7 +309,7 @@ export default function Home() {
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 {getText("who")}
               </span>
-              <span className="text-sm text-neutral-700">{guestSummary()}</span>
+              <span className="text-sm text-neutral-700">{summaryGuests}</span>
               {(guests.adults > 0 ||
                 guests.children > 0 ||
                 guests.infants > 0 ||
@@ -233,10 +320,9 @@ export default function Home() {
                   style={{ lineHeight: 1, background: "none" }}
                   tabIndex={0}
                   aria-label={getText("clear_guests")}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={(event) => {
+                    event.stopPropagation();
                     setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
-                    // logEvent(EVENT_TYPES.SEARCH_CLEARED, { source: "guests" });
                   }}
                 >
                   ×
@@ -244,38 +330,14 @@ export default function Home() {
               )}
             </div>
           </GuestSelectorPopover>
-          {/* Search button */}
+
           <button
             id={getId("search_button")}
-            className={getClass("search_button", "ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all")}
-            onClick={() => {
-              setCommittedSearch(searchTerm);
-              logEvent(EVENT_TYPES.SEARCH_HOTEL, {
-                searchTerm,
-                dateRange: {
-                  from: dateRange.from
-                    ? (() => {
-                        const fromDate = new Date(dateRange.from);
-                        fromDate.setDate(fromDate.getDate() + 1);
-                        return fromDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
-                      })()
-                    : null,
-                  to: dateRange.to
-                    ? (() => {
-                        const toDate = new Date(dateRange.to);
-                        toDate.setDate(toDate.getDate() + 1);
-                        return toDate.toISOString().split('T')[0] + 'T00:00:00.000Z';
-                      })()
-                    : null,
-                },
-                guests: {
-                  adults: guests.adults,
-                  children: guests.children,
-                  infants: guests.infants,
-                  pets: guests.pets,
-                },
-              });
-            }}
+            className={getClass(
+              "search_button",
+              "ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
+            )}
+            onClick={handleSearch}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -295,7 +357,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Results grid placeholder */}
       <section className="w-full flex flex-col items-center mt-8">
         {paginatedResults.length === 0 ? (
           <div
@@ -306,16 +367,19 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-            {paginatedResults.map((prop, i) => (
-              <PropertyCard key={i + prop.title} {...prop} />
+            {paginatedResults.map((hotel, index) => (
+              <PropertyCard key={`${hotel.id}-${index}`} {...hotel} />
             ))}
           </div>
         )}
       </section>
+
       {totalPages > 1 && (
         <div className="flex mt-6 gap-2 items-center justify-center">
           <button
-            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+            onClick={() =>
+              setCurrentPage((prev) => clamp(prev - 1, 1, totalPages))
+            }
             disabled={currentPage === 1}
             className="px-3 py-1 rounded border disabled:opacity-50"
           >
@@ -323,7 +387,7 @@ export default function Home() {
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
-              key={index + 1}
+              key={`page-${index + 1}`}
               onClick={() => setCurrentPage(index + 1)}
               className={`px-3 py-1 rounded border ${
                 currentPage === index + 1 ? "bg-gray-300" : ""
@@ -334,7 +398,7 @@ export default function Home() {
           ))}
           <button
             onClick={() =>
-              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+              setCurrentPage((prev) => clamp(prev + 1, 1, totalPages))
             }
             disabled={currentPage === totalPages}
             className="px-3 py-1 rounded border disabled:opacity-50"
@@ -346,3 +410,21 @@ export default function Home() {
     </div>
   );
 }
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#616882] mx-auto mb-4" />
+            <p className="text-neutral-600">Loading hotels...</p>
+          </div>
+        </div>
+      }
+    >
+      <HomeContent />
+    </Suspense>
+  );
+}
+

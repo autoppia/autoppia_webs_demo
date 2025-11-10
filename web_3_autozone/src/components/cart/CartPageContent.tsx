@@ -2,12 +2,17 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSearchParams } from "next/navigation";
+import { withSeed } from "@/utils/seedRouting";
 
 interface CartItem {
   id: string;
@@ -22,7 +27,10 @@ interface CartItem {
 export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
+
   const { getText, getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
+  const router = useSeedRouter();
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
@@ -96,11 +104,11 @@ export function CartPageContent() {
                   <p className="mb-4 text-base text-gray-400">
                     {getText("empty_cart_message")}
                   </p>
-                  <Link href="/">
+                  <SeedLink href="/">
                     <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
                       {getText("continue_shopping")}
                     </Button>
-                  </Link>
+                  </SeedLink>
                 </div>
               ) : (
                 <div className="flex flex-col gap-6">
@@ -115,7 +123,7 @@ export function CartPageContent() {
                         className="flex flex-col md:flex-row items-center md:items-stretch gap-4 border-b border-gray-100 pb-6 last:border-b-0"
                       >
                         {/* Product Image */}
-                        <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded">
+                        <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded relative group">
                           <Image
                             src={item.image}
                             alt={item.title}
@@ -123,15 +131,30 @@ export function CartPageContent() {
                             height={80}
                             className="object-contain max-h-20 max-w-20"
                           />
+                          {/* URL Display on Hover */}
+                          <div className="absolute bottom-1 left-1 right-1 bg-black/80 text-white text-xs px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
+                            /{item.id}
+                          </div>
                         </div>
                         {/* Product Details */}
                         <div className="flex-1 flex flex-col justify-between">
-                          <Link
-                            href={`/${item.id}`}
-                            className="text-base font-medium hover:text-blue-600"
+                          <a
+                            href={`#${item.id}`}
+                            title={`View ${item.title} - Product ID: ${item.id}`}
+                            onMouseEnter={() => {
+                              window.history.replaceState(null, '', `#${item.id}`);
+                            }}
+                            onMouseLeave={() => {
+                              window.history.replaceState(null, '', window.location.pathname);
+                            }}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              router.push(withSeed(`/${item.id}`, searchParams));
+                            }}
+                            className="text-base font-medium hover:text-blue-600 no-underline cursor-pointer"
                           >
                             {item.title}
-                          </Link>
+                          </a>
                           <div className="text-xs text-gray-500 mt-1">
                             {item.brand && `${getText("brand")}: ${item.brand}`}
                             {item.color && `, ${getText("color")}: ${item.color}`}
@@ -221,7 +244,8 @@ export function CartPageContent() {
                     {getText("gift_checkbox")}
                   </label>
                 </div>
-                <Link href="/checkout">
+
+                <SeedLink href="/checkout">
                   <Button
                     id={getId("checkout_button")}
                     className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
@@ -229,7 +253,7 @@ export function CartPageContent() {
                   >
                     {getText("proceed_to_checkout")}
                   </Button>
-                </Link>
+                </SeedLink>
               </>
             )}
             {items.length === 0 && (

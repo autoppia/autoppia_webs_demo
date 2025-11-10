@@ -26,8 +26,12 @@ SECRET_KEY = "django-insecure-_r^nsyw@&+qjw7)m1*0yzt2_+wg+l5_66_k(2dl(%1)e$2r8r6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://autocinema.autoppia.com",
+    "https://autobooks.autoppia.com",
+]
 
 # Application definition
 
@@ -66,6 +70,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "movieapp.context.dynamic_context",
             ],
         },
     },
@@ -141,3 +146,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Dynamic HTML toggle wired from docker-compose/env
+DYNAMIC_HTML_ENABLED = os.environ.get("ENABLE_DYNAMIC_HTML", "false").lower() == "true"

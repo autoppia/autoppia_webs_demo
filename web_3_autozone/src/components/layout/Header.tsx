@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import {
   Search,
   MapPin,
@@ -14,23 +14,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useSeed } from "@/context/SeedContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useRouter, useSearchParams } from "next/navigation";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
+import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
+import { useSearchParams } from "next/navigation";
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const router = useRouter();
-  const { state } = useCart();
-  const cartItemCount = state.totalItems;
-  const { getText, getId } = useDynamicStructure();
-
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useSeedRouter();
   const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { state } = useCart();
+  const cartItemCount = isMounted ? state.totalItems : 0;
+  const { getText, getId } = useDynamicStructure();
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Map layout config to component order
   const getComponentOrder = (config: any) => {
@@ -64,11 +70,11 @@ export function Header() {
           {order.map((key: string) => {
             if (key === "logo") {
               return (
-                <Link key="logo" id={getId("logo_link")} href="/" className={`${layoutConfig.navbarStyle === 'floating' ? 'mr-1' : 'mr-2'} flex-shrink-0`}>
+                <SeedLink key="logo" id={getId("logo_link")} href="/" className={`${layoutConfig.navbarStyle === 'floating' ? 'mr-1' : 'mr-2'} flex-shrink-0`}>
                   <div className={`bg-[#17A2B8] ${layoutConfig.navbarStyle === 'floating' ? 'px-2 py-1' : 'px-3 py-1'} rounded flex items-center ${layoutConfig.navbarStyle === 'floating' ? 'h-7' : 'h-9'}`}>
                     <span className={`font-bold text-white ${layoutConfig.navbarStyle === 'floating' ? 'text-sm' : 'text-lg'}`}>AUTOZONE</span>
                   </div>
-                </Link>
+                </SeedLink>
               );
             }
 
@@ -88,7 +94,7 @@ export function Header() {
                             query: searchQuery,
                           });
                           router.push(
-                            `/search?q=${encodeURIComponent(searchQuery)}`
+                            withSeedAndParams("/search", { q: searchQuery }, searchParams)
                           );
                         }
                       }}
@@ -104,7 +110,7 @@ export function Header() {
                           query: searchQuery,
                         });
                         router.push(
-                          `/search?q=${encodeURIComponent(searchQuery)}`
+                          withSeedAndParams("/search", { q: searchQuery }, searchParams)
                         );
                       }}
                     >
@@ -138,7 +144,7 @@ export function Header() {
                             query: searchQuery,
                           });
                           router.push(
-                            `/search?q=${encodeURIComponent(searchQuery)}`
+                            withSeedAndParams("/search", { q: searchQuery }, searchParams)
                           );
                         }
                       }}
@@ -154,7 +160,7 @@ export function Header() {
                           query: searchQuery,
                         });
                         router.push(
-                          `/search?q=${encodeURIComponent(searchQuery)}`
+                          withSeedAndParams("/search", { q: searchQuery }, searchParams)
                         );
                       }}
                     >
@@ -170,7 +176,7 @@ export function Header() {
                 // Compact nav for floating navbar
                 return (
                   <div key="nav" className="flex items-center gap-1">
-                    <Link
+                    <SeedLink
                       id={getId("cart_link")}
                       href="/cart"
                       className="text-gray-700 flex items-center"
@@ -182,7 +188,7 @@ export function Header() {
                           {cartItemCount}
                         </span>
                       </div>
-                    </Link>
+                    </SeedLink>
                   </div>
                 );
               }
@@ -208,7 +214,7 @@ export function Header() {
                     <div>{getText("returns")}</div>
                     <div className="font-bold">{getText("orders")}</div>
                   </div>
-                  <Link
+                  <SeedLink
                     id={getId("cart_link")}
                     href="/cart"
                     className="text-gray-700 flex items-end"
@@ -223,7 +229,7 @@ export function Header() {
                     <span className="hidden md:inline-block font-bold mb-1">
                       {getText("cart")}
                     </span>
-                  </Link>
+                  </SeedLink>
                 </div>
               );
             }
@@ -235,12 +241,12 @@ export function Header() {
       {/* Secondary navigation - hidden for floating navbar */}
       {layoutConfig.navbarStyle !== 'floating' && (
         <div className="bg-amazon-lightBlue text-white px-2 py-1 flex items-center text-sm overflow-x-auto">
-          <Link href="/">
+          <SeedLink href="/">
             <button id={getId("all_menu_button")} className="flex items-center mr-3 p-1 hover:bg-gray-700 rounded">
               <Menu size={18} className="mr-1" />
               <span className="font-bold">{getText("all_menu")}</span>
             </button>
-          </Link>
+          </SeedLink>
           <div className="flex gap-4 flex-grow overflow-x-auto no-scrollbar">
             <span className="cursor-default text-gray-300">Rufus</span>
             <span className="cursor-default text-gray-300">

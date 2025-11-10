@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useEmail } from "@/contexts/EmailContext";
 import { LabelSelector } from "@/components/LabelSelector";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { TextStructureConfig } from "@/utils/textStructureProvider";
 import {
   Star,
   Reply,
@@ -25,7 +26,11 @@ import {
   Mail,
 } from "lucide-react";
 
-export function EmailView() {
+interface EmailViewProps {
+  textStructure?: TextStructureConfig;
+}
+
+export function EmailView({ textStructure }: EmailViewProps) {
   const {
     currentEmail,
     setCurrentEmail,
@@ -113,6 +118,7 @@ export function EmailView() {
   return (
     <div
       className="h-full flex flex-col bg-background"
+      data-testid="email-view"
       suppressHydrationWarning
     >
       {/* Top Toolbar */}
@@ -133,7 +139,7 @@ export function EmailView() {
             </Button>
 
             <Button
-              id="spam-button"
+              id= {textStructure?.email_ids.spam_btn || "spam-button"}
               variant="ghost"
               size="icon"
               onClick={handleMarkAsSpam}
@@ -143,7 +149,7 @@ export function EmailView() {
             </Button>
 
             <Button
-              id="unread-button"
+              id= {textStructure?.email_ids.unread_btn || "unread-button"}
               variant="ghost"
               size="icon"
               onClick={handleMarkAsUnread}
@@ -153,7 +159,7 @@ export function EmailView() {
             </Button>
 
             <Button
-              id="delete-button"
+              id= {textStructure?.email_ids.delete_btn || "delete-button"}
               variant="ghost"
               size="icon"
               onClick={handleDeleteClick}
@@ -171,11 +177,12 @@ export function EmailView() {
             </Button>
 
             <Button
-              id="star-button"
+              id={textStructure?.email_ids.important_btn || "star-button"}
               variant="ghost"
               size="icon"
               onClick={handleStarClick}
               title={currentEmail.isStarred ? "Remove star" : "Add star"}
+              aria-label={textStructure?.email_aria_labels.important_btn || "Mark as important"}
             >
               <Star
                 className={cn(
@@ -356,17 +363,28 @@ export function EmailView() {
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-6 border-t border-border">
-            <Button id="reply-button">
+            <Button 
+              id={textStructure?.email_ids.reply_btn || "reply-button"}
+              aria-label={textStructure?.email_aria_labels.reply_btn || "Reply to this email"}
+            >
               <Reply className="h-4 w-4 mr-2" />
-              Reply
+              {textStructure?.email_content.reply_button || "Reply"}
             </Button>
-            <Button id="reply-all-button" variant="outline">
+            <Button 
+              id={textStructure?.email_ids.reply_all_btn || "reply-all-button"} 
+              variant="outline"
+              aria-label={textStructure?.email_aria_labels.reply_all_btn || "Reply to all recipients"}
+            >
               <ReplyAll className="h-4 w-4 mr-2" />
-              Reply All
+              {textStructure?.email_content.reply_all_button || "Reply All"}
             </Button>
-            <Button id="forward-button" variant="outline">
+            <Button 
+              id={textStructure?.email_ids.forward_btn || "forward-button"} 
+              variant="outline"
+              aria-label={textStructure?.email_aria_labels.forward_btn || "Forward this email"}
+            >
               <Forward className="h-4 w-4 mr-2" />
-              Forward
+              {textStructure?.email_content.forward_button || "Forward"}
             </Button>
           </div>
         </div>

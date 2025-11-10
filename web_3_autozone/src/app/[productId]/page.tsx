@@ -2,21 +2,27 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
+
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
 import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
+import { withSeed } from "@/utils/seedRouting";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeed } from "@/context/SeedContext";
+
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
 const DELIVERY_ADDRESS = "Daly City 94016";
 
 function ProductContent() {
-  const router = useRouter();
+  const router = useSeedRouter();
+  const searchParams = useSearchParams();
   const { productId } = useParams();
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
@@ -25,14 +31,7 @@ function ProductContent() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const searchParams = useSearchParams();
-
-  const seed = useMemo(() => {
-    const s = searchParams.get("seed") ?? "1";
-    const rawSeed = s ? parseInt(s) : Math.floor(Math.random() * 1000);
-    return getEffectiveSeed(rawSeed);
-  }, [searchParams]);
-
+  const { seed } = useSeed();
   const order = seed % 3;
 
   useEffect(() => {
@@ -103,7 +102,7 @@ function ProductContent() {
       className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
       onClick={() => {
         handleAddToCart();
-        router.push("/cart");
+        router.push(withSeed("/cart", searchParams));
       }}
     >
       {getText("add_to_cart")}
@@ -127,7 +126,7 @@ function ProductContent() {
           brand: product.brand,
           rating: product.rating,
         });
-        router.push("/checkout");
+        router.push(withSeed("/checkout", searchParams));
       }}
     >
       {getText("buy_now")}
@@ -212,7 +211,7 @@ function ProductContent() {
           <p className="mt-4">
             The product you are looking for does not exist or has been removed.
           </p>
-          <Button className="mt-4" onClick={() => router.push("/")}>
+          <Button className="mt-4" onClick={() => router.push(withSeed("/", searchParams))}>
             {getText("return_to_home")}
           </Button>
         </div>

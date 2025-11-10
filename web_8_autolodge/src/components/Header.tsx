@@ -29,7 +29,7 @@ export default function Header() {
         </div>
         <div className="flex-1 flex justify-center">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || (item.href === '/' && pathname === '/');
             return (
               <SeedStructureLink
                 key={item.name}
