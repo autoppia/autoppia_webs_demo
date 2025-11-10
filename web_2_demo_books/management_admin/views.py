@@ -5,7 +5,6 @@ from django.core.management import call_command
 from django.conf import settings
 import time
 import logging
-import json
 
 logger = logging.getLogger(__name__)
 

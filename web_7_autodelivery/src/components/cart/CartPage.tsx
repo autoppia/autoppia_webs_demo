@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import { useHasHydrated } from "@/hooks/use-hydrated";
-import { restaurants } from "@/data/restaurants";
+import { getRestaurants } from "@/utils/dynamicDataProvider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar, Clock, Home, Phone, Gift, ChevronRight } from "lucide-react";
 import { useRef } from "react";
@@ -51,6 +51,7 @@ export default function CartPage() {
   const [deliveryTime, setDeliveryTime] = useState<
     "express" | "standard" | "scheduled"
   >("standard");
+  const restaurants = getRestaurants() || [];
   const restaurant =
     items.length > 0
       ? restaurants.find((r) => r.id === items[0].restaurantId)

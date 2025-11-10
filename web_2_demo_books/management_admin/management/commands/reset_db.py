@@ -74,14 +74,9 @@ or performs a filtered deletion of Event records."
         # Confirm destructive operation
         if not options["force"]:
             if is_filtered_delete:
-                confirm = input(
-                    f"⚠️ Delete Event records matching web_agent_id='{web_agent_id}' "
-                    f"and validator_id='{validator_id}'? [y/N] "
-                )
+                confirm = input(f"⚠️ Delete Event records matching web_agent_id='{web_agent_id}' and validator_id='{validator_id}'? [y/N] ")
             else:
-                confirm = input(
-                    f"⚠️ DESTROY ALL DATA in database '{db_name}' (alias: '{db_alias}')? [y/N] "
-                )
+                confirm = input(f"⚠️ DESTROY ALL DATA in database '{db_name}' (alias: '{db_alias}')? [y/N] ")
 
             if confirm.strip().lower() != "y":
                 self.stdout.write(self.style.WARNING("Operation cancelled"))
@@ -93,20 +88,9 @@ or performs a filtered deletion of Event records."
                 deleted_count = self.delete_events_filtered(web_agent_id, validator_id)
                 elapsed = time.monotonic() - start_time
                 if deleted_count:
-                    self.stdout.write(
-                        self.style.SUCCESS(
-                            f"✅ Deleted {deleted_count} Event records "
-                            f"matching web_agent_id='{web_agent_id}', validator_id='{validator_id}' "
-                            f"in {elapsed:.2f}s."
-                        )
-                    )
+                    self.stdout.write(self.style.SUCCESS(f"✅ Deleted {deleted_count} Event records matching web_agent_id='{web_agent_id}', validator_id='{validator_id}' in {elapsed:.2f}s."))
                 else:
-                    self.stdout.write(
-                        self.style.NOTICE(
-                            f"No Event records matched the provided filters "
-                            f"(web_agent_id='{web_agent_id}', validator_id='{validator_id}')."
-                        )
-                    )
+                    self.stdout.write(self.style.NOTICE(f"No Event records matched the provided filters (web_agent_id='{web_agent_id}', validator_id='{validator_id}')."))
                 return
 
             # ─── Full destructive reset path ─────────────────
@@ -115,11 +99,7 @@ or performs a filtered deletion of Event records."
             self.seed_database()
 
             elapsed = time.monotonic() - start_time
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"Database '{db_name}' (alias: '{db_alias}') reset successfully in {elapsed:.2f} seconds."
-                )
-            )
+            self.stdout.write(self.style.SUCCESS(f"Database '{db_name}' (alias: '{db_alias}') reset successfully in {elapsed:.2f} seconds."))
 
         except Exception as e:
             self.stderr.write(self.style.ERROR(f"An error occurred during reset: {e}"))
@@ -150,15 +130,9 @@ or performs a filtered deletion of Event records."
             pre_count = Event.objects.filter(**filters).count()
             if pre_count:
                 Event.objects.filter(**filters).delete()
-                logger.info(
-                    "Deleted %s Event records with web_agent_id=%s, validator_id=%s",
-                    pre_count, web_agent_id, validator_id
-                )
+                logger.info("Deleted %s Event records with web_agent_id=%s, validator_id=%s", pre_count, web_agent_id, validator_id)
             else:
-                logger.info(
-                    "No Event records matched filters: web_agent_id=%s, validator_id=%s",
-                    web_agent_id, validator_id
-                )
+                logger.info("No Event records matched filters: web_agent_id=%s, validator_id=%s", web_agent_id, validator_id)
 
             # Optional: show counters if Event defines deletion tracking
             # try:
@@ -198,11 +172,7 @@ or performs a filtered deletion of Event records."
         elif "mysql" in db_engine:
             self.drop_mysql(db_alias, db_config)
         else:
-            self.stdout.write(
-                self.style.WARNING(
-                    f"Unsupported database engine '{db_engine}' - falling back to 'flush' on the '{db_alias}' database"
-                )
-            )
+            self.stdout.write(self.style.WARNING(f"Unsupported database engine '{db_engine}' - falling back to 'flush' on the '{db_alias}' database"))
             try:
                 # Flush often requires the connection to be open
                 # call_command handles connections internally, but ensure it's logical
@@ -227,9 +197,7 @@ or performs a filtered deletion of Event records."
             except OSError as e:
                 raise ValueError(f"Couldn't delete SQLite file '{db_path}': {e}")
         else:
-            self.stdout.write(
-                self.style.WARNING(f"SQLite file not found at {db_path} (might be in-memory or already deleted)")
-            )
+            self.stdout.write(self.style.WARNING(f"SQLite file not found at {db_path} (might be in-memory or already deleted)"))
 
     def drop_postgresql(self, db_alias, db_config):
         """PostgreSQL-specific data destruction."""
@@ -323,8 +291,8 @@ or performs a filtered deletion of Event records."
         """Applies all migrations."""
         self.stdout.write("\n🛠️ Applying migrations...")
         try:
-            call_command("makemigrations", "--noinput")
-            call_command("migrate", "--noinput")
+            call_command("makemigrations", interactive=False, verbosity=1)
+            call_command("migrate", database=db_alias, interactive=False, verbosity=1)
             self.stdout.write(self.style.SUCCESS("Migrations applied successfully."))
         except Exception as e:
             raise ValueError(f"Error applying migrations: {e}")

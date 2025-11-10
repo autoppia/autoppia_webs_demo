@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { MenuItem, MenuItemSize, restaurants } from "@/data/restaurants";
+import { MenuItem, MenuItemSize, type Restaurant } from "@/data/restaurants";
+import { getRestaurants } from "@/utils/dynamicDataProvider";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
@@ -43,7 +44,7 @@ function ReviewsSection({
 }: {
   reviews: Review[];
   isAdmin?: boolean;
-  restaurant: typeof restaurants[number];
+  restaurant: Restaurant;
 }) {
   const layout = useLayout();
   const { getText, getId, getAria, seedStructure } = useDynamicStructure();
@@ -140,10 +141,10 @@ export default function RestaurantDetailPage({
   const { getText, getId, getAria, seedStructure } = useDynamicStructure();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useSeedRouter();
-  // fix restaurant
+  const restaurants = useMemo(() => getRestaurants() ?? [], []);
   const restaurant = useMemo(() => {
     return restaurants.find((r) => r.id === restaurantId)!;
-  }, [restaurantId]);
+  }, [restaurantId, restaurants]);
   useEffect(() => {
     if (restaurant) {
       const eventPayload = {

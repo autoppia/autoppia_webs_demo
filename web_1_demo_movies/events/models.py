@@ -371,4 +371,3 @@ class Event(models.Model):
 
     # Attach a custom manager that uses EventQuerySet so QuerySet.delete() is intercepted
     objects = models.Manager.from_queryset(EventQuerySet)()
-

@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { title } from "process";
 import { ToastContainer, toast } from "react-toastify";
-import { jobs,hires, experts  } from "@/library/dataset";
+// import { jobs,hires, experts  } from "@/library/dataset";
 import { useSeedLayout } from "@/library/useSeedLayout";
+import { useAutoworkData } from "@/hooks/useAutoworkData";
+import { writeJson } from "@/shared/storage";
 
 function PostJobWizard({
   open,
@@ -75,24 +77,27 @@ function PostJobWizard({
   // Stepper progress text
   const progress = `${step}/${totalSteps}`;
   
-  // Create step title map for dynamic ordering
+  // Fixed step sequence for post job wizard (consistent across all seeds)
+  const fixedStepSequence = ['skills', 'scope', 'title', 'budget', 'description'];
+  
+  // Create step title map for the fixed sequence
   const stepTitleMap = {
-    title: "Let's start with a strong title.",
     skills: "What are the main skills required for your work?",
     scope: "Next, estimate the scope of your work.",
+    title: "Let's start with a strong title.",
     budget: "Tell us about your budget.",
     description: "Start the conversation.",
   };
   
-  // Get current step key based on layout order
-  const currentStepKey = layout.postJobSections[step - 1];
-  const stepTitle = stepTitleMap[currentStepKey as keyof typeof stepTitleMap] || stepTitleMap.title;
+  // Get current step key based on fixed sequence
+  const currentStepKey = fixedStepSequence[step - 1];
+  const stepTitle = stepTitleMap[currentStepKey as keyof typeof stepTitleMap] || stepTitleMap.skills;
 
   const getButtonTitle = (step: number): string => {
     if (step === totalSteps) return "Submit Job Post";
     
-    const currentStepKey = layout.postJobSections[step - 1];
-    const nextStepKey = layout.postJobSections[step];
+    const currentStepKey = fixedStepSequence[step - 1];
+    const nextStepKey = fixedStepSequence[step];
     
     if (nextStepKey) {
       return `Next: ${nextStepKey.charAt(0).toUpperCase() + nextStepKey.slice(1)}`;
@@ -772,244 +777,283 @@ function PostJobWizard({
 }
 
 export default function Home() {
-  const [showPostJob, setShowPostJob] = useState(false);
-  const { layout, getElementAttributes } = useSeedLayout();
+	const [showPostJob, setShowPostJob] = useState(false);
+	const { layout, getElementAttributes } = useSeedLayout();
 
-  // Create section components
-  const JobsSection = () => (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-semibold">Your jobs</h2>
-        <button
-          {...getElementAttributes('post-job-button', 0)}
-          type="button"
-          className={`inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
-            layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
-            layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
-          }`}
-          onClick={() => {
-            setShowPostJob(true);
-            logEvent(EVENT_TYPES.POST_A_JOB, {
-              source: "button",
-              page: "home",
-            });
-          }}
-        >
-          + Post a job
-        </button>
-      </div>
-      <div className="grid gap-7 grid-cols-1 md:grid-cols-2">
-        {jobs.map((job, i) => (
-          <div
-            key={i}
-            {...getElementAttributes('job-item', i)}
-            className="bg-white shadow rounded-xl px-7 py-6 flex flex-col gap-2 border border-gray-100"
-          >
-            <div className="flex flex-wrap justify-between items-center gap-4">
-              <span className="text-lg font-medium text-[#253037]">
-                {job.title}
-              </span>
-              <span
-                className="inline-block px-3 py-1 rounded-full text-xs font-semibold"
-                style={{
-                  background:
-                    job.status === "Completed"
-                      ? "#ebcf95"
-                      : job.status === "In progress"
-                      ? "#08b4ce10"
-                      : job.status === "Pending"
-                      ? "#b0627510"
-                      : job.status === "In review"
-                      ? "#cea2ab50"
-                      : "#cad2d0",
-                  color:
-                    job.status === "Completed"
-                      ? "#253037"
-                      : job.status === "In progress"
-                      ? "#08b4ce"
-                      : job.status === "Pending"
-                      ? "#b06275"
-                      : job.status === "In review"
-                      ? "#b06275"
-                      : "#253037",
-                }}
-              >
-                {job.status}
-              </span>
-            </div>
-            <div className="text-xs text-gray-500 mb-2">
-              Date started {job.start}
-            </div>
-            <div className="flex flex-wrap justify-between items-end">
-              <div>
-                <span className="block text-sm font-medium text-gray-600">
-                  {job.timestr}{" "}
-                  <span className="font-bold text-black">{job.time}</span>
-                </span>
-                <span className="block text-xs text-gray-400 mt-1">
-                  {job.activity}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+	const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
+	const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
+	const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
 
-  const HiresSection = () => (
-    <section className="px-10 mt-14 px-4">
-      <div className="flex items-center justify-between mb-7">
-        <h2 className="text-2xl font-semibold">Your hires</h2>
-        <a
-          href="#"
-          className="text-[#08b4ce] text-sm font-medium hover:underline"
-        >
-          View all your hires
-        </a>
-      </div>
-      <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-        {hires.map((hire) => (
-          <div
-            key={hire.name}
-            className="bg-white rounded-xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100"
-          >
-            <div className="flex items-center gap-4 mb-1">
-              <img
-                src={hire.avatar}
-                alt={hire.name}
-                className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-              />
-              <div>
-                <div className="font-semibold text-lg text-[#253037]">
-                  {hire.name}
-                </div>
-                <div className="text-xs text-gray-500">{hire.country}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-[#08b4ce] font-semibold mb-1">
-              {hire.rate}
-              <span className="text-gray-400 font-normal ml-2">
-                • {hire.role}
-              </span>
-            </div>
-            <div className="flex items-center gap-4 text-xs mt-1 text-gray-500">
-              <span className="flex items-center gap-1">
-                <svg
-                  className="w-4 h-4 text-[#ebcf95]"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-                </svg>{" "}
-                {hire.rating}
-              </span>
-              <span> {hire.jobs} jobs</span>
-            </div>
-            {hire.rehire && (
-              <span className="mt-2 w-32 inline-block text-xs bg-[#e6f9fb] text-[#08b4ce] font-medium px-2 py-1 rounded">
-                Available for rehire
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+	const isLoading = jobsState.isLoading || hiresState.isLoading || expertsState.isLoading;
+	const errorMessage = jobsState.error || hiresState.error || expertsState.error;
+	const statusMessage = jobsState.statusMessage || hiresState.statusMessage || expertsState.statusMessage;
 
-  const ExpertsSection = () => (
-    <section className="px-10 mt-16 px-4">
-      <h2 className="text-2xl font-semibold mb-7">
-        Review your project's goals with an expert, one-on-one
-      </h2>
-      <div className="grid gap-7 md:grid-cols-2">
-        {experts.map((expert, i) => (
-          <div
-            key={expert.name}
-            className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
-          >
-            <div className="flex items-center gap-3 mb-3 mt-2">
-              <img
-                src={expert.avatar}
-                alt={expert.name}
-                className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-              />
-              <div>
-                <div className="font-semibold text-lg text-[#253037] leading-tight">
-                  {expert.name}
-                </div>
-                <div className="text-xs text-gray-500">{expert.country}</div>
-              </div>
-            </div>
-            <div className="text-sm font-semibold text-[#253037] mb-1">
-              {expert.role}
-            </div>
-            <div className="flex items-center gap-4 text-[#6c7280] text-xs mb-1">
-              <span>
-                <span className="font-bold text-base text-[#253037]">
-                  {expert.rate}
-                </span>
-              </span>
-              <span className="flex items-center gap-1">
-                <svg
-                  className="w-4 h-4 text-[#ebcf95]"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-                </svg>{" "}
-                {expert.rating}
-              </span>
-              <span className="ml-1">{expert.jobs}</span>
-            </div>
-            <div className="text-[15px] text-gray-700 mb-2 leading-tight">
-              {expert.desc}
-            </div>
-            <div className="flex items-center gap-2 text-[#1964e2] text-base font-semibold py-2 mb-2">
-              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                <path
-                  stroke="#1964e2"
-                  strokeWidth="1.4"
-                  d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
-                />
-              </svg>
-              <span>{expert.consultation}</span>
-            </div>
-            <SeedLink
-              href={`/expert/${expert.name
-                .toLowerCase()
-                .replace(/\s+/g, "-")
-                .replace(/\./g, "")}`}
-              passHref
-              {...getElementAttributes('book-consultation-button', i)}
-              className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
-            >
-              Book a consultation
-            </SeedLink>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+	// Persist combined dataset once loaded
+	useEffect(() => {
+		if (!isLoading) {
+			const combined = {
+				jobs: jobsState.data,
+				hires: hiresState.data,
+				experts: expertsState.data,
+			};
+			writeJson("autowork_all", combined);
+		}
+	}, [isLoading, jobsState.data, hiresState.data, expertsState.data]);
 
-  // Create section map for dynamic ordering
-  const sectionMap = {
-    jobs: <JobsSection key="jobs" />,
-    hires: <HiresSection key="hires" />,
-    experts: <ExpertsSection key="experts" />,
-  };
+	// Create section components
+	const JobsSection = () => (
+		<div>
+			<div className="flex items-center justify-between mb-8">
+				<h2 className="text-2xl font-semibold">Your jobs</h2>
+				<button
+					{...getElementAttributes('post-job-button', 0)}
+					type="button"
+					className={`inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
+						layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
+						layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
+					}`}
+					onClick={() => {
+						setShowPostJob(true);
+						logEvent(EVENT_TYPES.POST_A_JOB, {
+							source: "button",
+							page: "home",
+						});
+					}}
+				>
+					+ Post a job
+				</button>
+			</div>
+			<div className="grid gap-7 grid-cols-1 md:grid-cols-2">
+				{jobsState.data.map((job: any, i: number) => (
+					<div
+						key={i}
+						{...getElementAttributes('job-item', i)}
+						className="bg-white shadow rounded-xl px-7 py-6 flex flex-col gap-2 border border-gray-100"
+					>
+						<div className="flex flex-wrap justify-between items-center gap-4">
+							<span className="text-lg font-medium text-[#253037]">
+								{job.title}
+							</span>
+							<span
+								className="inline-block px-3 py-1 rounded-full text-xs font-semibold"
+								style={{
+									background:
+										job.status === "Completed"
+											? "#ebcf95"
+											: job.status === "In progress"
+											? "#08b4ce10"
+											: job.status === "Pending"
+											? "#b0627510"
+											: job.status === "In review"
+											? "#cea2ab50"
+											: "#cad2d0",
+									color:
+										job.status === "Completed"
+											? "#253037"
+											: job.status === "In progress"
+											? "#08b4ce"
+											: job.status === "Pending"
+											? "#b06275"
+											: job.status === "In review"
+											? "#b06275"
+											: "#253037",
+								}}
+							>
+								{job.status}
+							</span>
+						</div>
+						<div className="text-xs text-gray-500 mb-2">
+							Date started {job.start}
+						</div>
+						<div className="flex flex-wrap justify-between items-end">
+							<div>
+								<span className="block text-sm font-medium text-gray-600">
+									{job.timestr}{" "}
+									<span className="font-bold text-black">{job.time}</span>
+								</span>
+								<span className="block text-xs text-gray-400 mt-1">
+									{job.activity}
+								</span>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
 
-  // Render sections in the order specified by layout
-  const renderSections = () => {
-    return layout.mainSections.map((sectionKey) => {
-      return sectionMap[sectionKey as keyof typeof sectionMap];
-    });
-  };
+	const HiresSection = () => (
+		<section className="px-10 mt-14 px-4">
+			<div className="flex items-center justify-between mb-7">
+				<h2 className="text-2xl font-semibold">Your hires</h2>
+				<a
+					href="#"
+					className="text-[#08b4ce] text-sm font-medium hover:underline"
+				>
+					View all your hires
+				</a>
+			</div>
+			<div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+				{hiresState.data.map((hire: any) => (
+					<div
+						key={hire.name}
+						className="bg-white rounded-xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100"
+					>
+						<div className="flex items-center gap-4 mb-1">
+							<img
+								src={hire.avatar}
+								alt={hire.name}
+								className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
+							/>
+							<div>
+								<div className="font-semibold text-lg text-[#253037]">
+									{hire.name}
+								</div>
+								<div className="text-xs text-gray-500">{hire.country}</div>
+							</div>
+						</div>
+						<div className="flex items-center gap-2 text-sm text-[#08b4ce] font-semibold mb-1">
+							{hire.rate}
+							<span className="text-gray-400 font-normal ml-2">
+								• {hire.role}
+							</span>
+						</div>
+						<div className="flex items-center gap-4 text-xs mt-1 text-gray-500">
+							<span className="flex items-center gap-1">
+								<svg
+									className="w-4 h-4 text-[#ebcf95]"
+									fill="currentColor"
+									viewBox="0 0 20 20"
+								>
+									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+								</svg>{" "}
+								{hire.rating}
+							</span>
+							<span> {hire.jobs} jobs</span>
+						</div>
+						{hire.rehire && (
+							<span className="mt-2 w-32 inline-block text-xs bg-[#e6f9fb] text-[#08b4ce] font-medium px-2 py-1 rounded">
+								Available for rehire
+							</span>
+						)}
+					</div>
+				))}
+			</div>
+		</section>
+	);
 
-  return (
-    <main className="px-10 mt-12 pb-16 text-[#253037]">
-      {renderSections()}
-      <PostJobWizard open={showPostJob} onClose={() => setShowPostJob(false)} />
-    </main>
-  );
+	const ExpertsSection = () => (
+		<section className="px-10 mt-16 px-4">
+			<h2 className="text-2xl font-semibold mb-7">
+				Review your project's goals with an expert, one-on-one
+			</h2>
+			<div className="grid gap-7 md:grid-cols-2">
+				{expertsState.data.map((expert: any, i: number) => (
+					<div
+						key={expert.name}
+						className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
+					>
+						<div className="flex items-center gap-3 mb-3 mt-2">
+							<img
+								src={expert.avatar}
+								alt={expert.name}
+								className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
+							/>
+							<div>
+								<div className="font-semibold text-lg text-[#253037] leading-tight">
+									{expert.name}
+								</div>
+								<div className="text-xs text-gray-500">{expert.country}</div>
+							</div>
+						</div>
+						<div className="text-sm font-semibold text-[#253037] mb-1">
+							{expert.role}
+						</div>
+						<div className="flex items-center gap-4 text-[#6c7280] text-xs mb-1">
+							<span>
+								<span className="font-bold text-base text-[#253037]">
+									{expert.rate}
+								</span>
+							</span>
+							<span className="flex items-center gap-1">
+								<svg
+									className="w-4 h-4 text-[#ebcf95]"
+									fill="currentColor"
+									viewBox="0 0 20 20"
+								>
+									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+								</svg>{" "}
+								{expert.rating}
+							</span>
+							<span className="ml-1">{expert.jobs}</span>
+						</div>
+						<div className="text-[15px] text-gray-700 mb-2 leading-tight">
+							{expert.desc}
+						</div>
+						<div className="flex items-center gap-2 text-[#1964e2] text-base font-semibold py-2 mb-2">
+							<svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+								<path
+									stroke="#1964e2"
+									strokeWidth="1.4"
+									d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
+								/>
+							</svg>
+							<span>{expert.consultation}</span>
+						</div>
+						<SeedLink
+							href={`/expert/${(expert as any).slug ?? expert.name
+								.toLowerCase()
+								.replace(/\s+/g, "-")
+								.replace(/\./g, "")}`}
+							passHref
+							preserveSeed={false}
+							prefetch={false}
+							{...getElementAttributes('book-consultation-button', i)}
+							className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
+						>
+							Book a consultation
+						</SeedLink>
+					</div>
+				))}
+			</div>
+		</section>
+	);
+
+	// Create section map for dynamic ordering
+	const sectionMap = {
+		jobs: <JobsSection key="jobs" />,
+		hires: <HiresSection key="hires" />,
+		experts: <ExpertsSection key="experts" />,
+	};
+
+	// Render sections in the order specified by layout
+	const renderSections = () => {
+		return layout.mainSections.map((sectionKey) => {
+			return sectionMap[sectionKey as keyof typeof sectionMap];
+		});
+	};
+
+	return (
+		<main className="px-10 mt-12 pb-16 text-[#253037]">
+			{(isLoading || statusMessage) && (
+				<div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6">
+					<div className="w-14 h-14 rounded-full border-4 border-[#08b4ce] border-t-transparent animate-spin mb-5" aria-label="Loading" />
+					<div className="text-xl font-semibold text-[#253037] mb-2">Generating data with AI</div>
+					<div className="text-sm text-gray-600">It may take some time. Please wait…</div>
+				</div>
+			)}
+			{statusMessage && (
+				<div className="mb-6 rounded-lg border border-[#08b4ce30] bg-[#e6f9fb] text-[#056b79] px-4 py-3 text-sm">
+					{statusMessage}
+				</div>
+			)}
+			{errorMessage && (
+				<div className="mb-6 rounded-lg border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm">
+					{errorMessage}
+				</div>
+			)}
+			{renderSections()}
+			<PostJobWizard open={showPostJob} onClose={() => setShowPostJob(false)} />
+		</main>
+	);
 }
