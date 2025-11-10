@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - .:/app
       - ./static:/app/static
@@ -17,6 +18,8 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
+      - DATA_GENERATION=${DATA_GENERATION:-false}
+      - API_URL=http://app:8080
     depends_on:
       db:
         condition: service_healthy
@@ -25,6 +28,7 @@ services:
 
   db:
     image: postgres:14
+    restart: always
     environment:
       - POSTGRES_DB=web2_books
       - POSTGRES_USER=postgres

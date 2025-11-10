@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import { mockUsers } from "@/library/dataset";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export default function UserSearchBar() {
@@ -13,11 +13,7 @@ export default function UserSearchBar() {
   const matches =
     q.length === 0
       ? []
-      : mockUsers.filter(
-          (u) =>
-            u.name.toLowerCase().includes(q.toLowerCase()) ||
-            u.title.toLowerCase().includes(q.toLowerCase())
-        );
+      : dynamicDataProvider.searchUsers(q);
   const router = useRouter();
   return (
     <div className="relative flex-1 max-w-lg">
