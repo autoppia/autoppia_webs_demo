@@ -177,8 +177,8 @@ function generateElementId(seed: number, elementType: string, index: number): st
 }
 
 export function useSeedLayout() {
-  const [seed, setSeed] = useState(1);
-  const [layout, setLayout] = useState<LayoutConfig>(getSeedLayout(1));
+  const [seed, setSeed] = useState(36);
+  const [layout, setLayout] = useState<LayoutConfig>(getSeedLayout(36));
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
 
   useEffect(() => {
@@ -191,7 +191,7 @@ export function useSeedLayout() {
     const seedStructureParam = searchParams.get('seed-structure');
     const seedParam = seedStructureParam ?? searchParams.get('seed');
     
-    let rawSeed = 1;
+    let rawSeed = 36;
     
     if (seedParam) {
       // Priority 1: URL parameter
@@ -229,7 +229,7 @@ export function useSeedLayout() {
       setLayout(getSeedLayout(effectiveSeed));
     } else {
       // Use default layout when dynamic HTML is disabled
-      setLayout(getSeedLayout(1));
+      setLayout(getSeedLayout(36));
     }
   }, []);
 
@@ -270,7 +270,7 @@ export function useSeedLayout() {
   // Function to get layout classes based on current seed
   const getLayoutClassesForSeed = useCallback(() => {
     if (!isDynamicEnabled) {
-      return getLayoutClasses(getLayoutConfig(1));
+      return getLayoutClasses(getLayoutConfig(36));
     }
     return getLayoutClasses(getLayoutConfig(seed));
   }, [seed, isDynamicEnabled]);
