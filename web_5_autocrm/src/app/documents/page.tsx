@@ -3,29 +3,15 @@ import { useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_FILES } from "@/library/dataset";
-import { useProjectData } from "@/shared/universal-loader";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export default function DocumentsPage() {
-  const { data, isLoading, error } = useProjectData<any>({
-    projectKey: 'web_5_autocrm:files',
-    entityType: 'files',
-    generateCount: 30,
-    version: 'v1',
-    fallback: () => DEMO_FILES,
-  });
-  const [files, setFiles] = useState(
-    (data && data.length ? data : DEMO_FILES).map((f: any, idx: number) => ({
-      id: f.id ?? idx + 1,
-      name: f.name ?? `Document-${idx + 1}.pdf`,
-      size: f.size ?? '200 KB',
-      version: f.version ?? 'v1',
-      updated: f.updated ?? 'Today',
-      status: f.status ?? 'Draft',
-    }))
-  );
+  const { getText, getId } = useDynamicStructure();
+  const [files, setFiles] = useState(DEMO_FILES);
+  const [error] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -81,7 +67,7 @@ export default function DocumentsPage() {
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
-          Documents
+          {getText("documents_title")}
           <span className="ml-2 text-base font-medium text-zinc-400 align-middle">
             (Demo)
           </span>
@@ -96,12 +82,14 @@ export default function DocumentsPage() {
         onDrop={onDrop}
         onClick={() => fileInput.current && fileInput.current.click()}
         style={{ minHeight: 140 }}
+        id={getId("upload_area")}
+        aria-label={getText("upload_documents")}
       >
         <UploadCloud className="w-9 h-9 text-accent-forest/60 mb-2" />
-        <span id="upload-instructions" className="font-semibold text-accent-forest">
-          Drag & drop to upload, or <span className="underline">browse files</span>
+        <span id={getId("upload_instructions")} className="font-semibold text-accent-forest">
+          {getText("upload_instructions")}
         </span>
-        <input id="file-input" data-testid="file-input" type="file" multiple ref={fileInput} onChange={onUpload} className="hidden" />
+        <input id={getId("file_input")} data-testid="file-input" type="file" multiple ref={fileInput} onChange={onUpload} className="hidden" />
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -129,7 +117,15 @@ export default function DocumentsPage() {
               {file.status === "Signed" && <CheckCircle id={`signed-icon-${file.id}`} className="w-4 h-4 text-accent-forest ml-1" />}
             </div>
 
-            <DynamicButton eventType="DOCUMENT_DELETED" index={index} onClick={() => deleteFile(file.id)} className="absolute right-5 top-5 text-zinc-400 rounded-full hover:bg-zinc-100 p-2 opacity-70 group-hover:opacity-100 transition" title="Delete" aria-label={`Delete ${file.name}`}>
+            <DynamicButton 
+              eventType="DOCUMENT_DELETED" 
+              index={index} 
+              onClick={() => deleteFile(file.id)} 
+              className="absolute right-5 top-5 text-zinc-400 rounded-full hover:bg-zinc-100 p-2 opacity-70 group-hover:opacity-100 transition" 
+              id={`${getId("delete_document_button")}-${file.id}`}
+              title={getText("delete_button")} 
+              aria-label={`${getText("delete_button")} ${file.name}`}
+            >
               <Trash2 className="w-5 h-5" />
             </DynamicButton>
           </DynamicItem>

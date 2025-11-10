@@ -2,13 +2,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import React from "react";
+import React, { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import UserNameBadge from "@/components/UserNameBadge";
 import { SeedProvider } from "@/context/SeedContext";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
-import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import ClientProviders from "./ClientProviders";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +42,7 @@ export default function RootLayout({
         className="font-sans bg-neutral text-[#1A1A1A] min-h-screen"
         suppressHydrationWarning
       >
-        <SeedProvider>
+        <ClientProviders>
           <nav
             className={`w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30 ${layoutClasses.header}`}
             style={{
@@ -58,23 +58,30 @@ export default function RootLayout({
               <UserNameBadge />
             </div>
           </nav>
-          <DataReadyGate>
-            <div className="flex min-h-[calc(100vh-5rem)] relative">
+          <div className="flex min-h-[calc(100vh-5rem)] relative">
+            <Suspense fallback={
+              <aside className="w-64 min-w-64 py-12 px-6 flex flex-col bg-neutral-bg-dark border-r border-zinc-200 shadow-sm" style={{ borderTopLeftRadius: 24, borderBottomLeftRadius: 24 }}>
+                <div className="mb-8 text-xl font-semibold text-zinc-700 tracking-tight">Menu</div>
+                <nav className="flex flex-col gap-6 mt-2">
+                  <div className="text-base font-medium rounded-2xl px-4 py-2 text-zinc-700">Loading...</div>
+                </nav>
+              </aside>
+            }>
               <Sidebar />
-              <main
-                className={`flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto ${layoutClasses.content}`}
-                style={{
-                  paddingLeft: 60,
-                  paddingRight: 60,
-                  paddingTop: 40,
-                  paddingBottom: 40,
-                }}
-              >
-                {children}
-              </main>
-            </div>
-          </DataReadyGate>
-        </SeedProvider>
+            </Suspense>
+            <main
+              className={`flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto ${layoutClasses.content}`}
+              style={{
+                paddingLeft: 60,
+                paddingRight: 60,
+                paddingTop: 40,
+                paddingBottom: 40,
+              }}
+            >
+              {children}
+            </main>
+          </div>
+        </ClientProviders>
       </body>
     </html>
   );
