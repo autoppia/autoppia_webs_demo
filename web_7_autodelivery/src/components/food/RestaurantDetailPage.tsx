@@ -4,7 +4,6 @@ import { MenuItem, MenuItemSize, restaurants } from "@/data/restaurants";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Trash } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
@@ -47,6 +46,7 @@ function ReviewsSection({
   restaurant: typeof restaurants[number];
 }) {
   const layout = useLayout();
+  const { getText, getId, getAria, seedStructure } = useDynamicStructure();
   const [localReviews, setLocalReviews] = useState(reviews);
   const handleDelete = (idx: number) => {
     const deleted = localReviews[idx];
@@ -67,16 +67,26 @@ function ReviewsSection({
   };
 
   if (!localReviews?.length) return null;
+
+  const reviewsTitleAttributes = layout.getElementAttributes("reviews-title", 0);
+  const reviewsTitleId = getId(
+    "reviews-title",
+    `${reviewsTitleAttributes.id ?? "reviews-title"}-${seedStructure}`
+  );
+  const reviewsTitleText = getText("reviews-title", "Customer Reviews");
+
   return (
-    <section 
+    <section
       className={`mt-12 ${layout.restaurantDetail.reviewsClass}`}
-      {...layout.getElementAttributes('reviews-section', 0)}
+      {...layout.getElementAttributes("reviews-section", 0)}
     >
-      <h3 
-        className={`text-xl font-bold mb-4 ${layout.generateSeedClass('reviews-title')}`}
-        {...layout.getElementAttributes('reviews-title', 0)}
+      <h3
+        className={`text-xl font-bold mb-4 ${layout.generateSeedClass("reviews-title")}`}
+        {...reviewsTitleAttributes}
+        id={reviewsTitleId}
+        aria-label={getAria("reviews-title", reviewsTitleText)}
       >
-        Customer Reviews
+        {reviewsTitleText}
       </h3>
       <div 
         className={`space-y-4 ${layout.generateSeedClass('reviews-list')}`}
@@ -104,8 +114,10 @@ function ReviewsSection({
             </div>
             {isAdmin && (
               <button
-                aria-label="Delete review"
-                title="Delete review"
+                {...layout.getElementAttributes("delete-review-button", i)}
+                id={getId("delete-review-button", `delete-review-${seedStructure}-${i}`)}
+                aria-label={getAria("delete-review-button", "Delete review")}
+                title={getAria("delete-review-button", "Delete review")}
                 className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full shadow bg-zinc-100 text-zinc-400 hover:bg-red-100 hover:text-red-700 transition duration-150"
                 onClick={() => handleDelete(i)}
               >
