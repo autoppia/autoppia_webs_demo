@@ -23,7 +23,7 @@ services:
     environment:
       - API_URL=${API_URL:-http://app:8080}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8090}
-      - PORT=8002
+      - PORT=8005
       - NODE_ENV=production
       - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
       - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
