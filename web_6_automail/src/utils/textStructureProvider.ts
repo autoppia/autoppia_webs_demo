@@ -84,6 +84,7 @@ export interface TextStructureConfig {
     forward_btn: string;
     archive_btn: string;
     delete_btn: string;
+    spam_btn: string;
     important_btn: string;
     unread_btn: string;
     read_btn: string;

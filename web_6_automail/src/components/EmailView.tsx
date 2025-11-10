@@ -139,7 +139,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id="spam-button"
+              id= {textStructure?.email_ids.spam_btn || "spam-button"}
               variant="ghost"
               size="icon"
               onClick={handleMarkAsSpam}
@@ -149,7 +149,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id="unread-button"
+              id= {textStructure?.email_ids.unread_btn || "unread-button"}
               variant="ghost"
               size="icon"
               onClick={handleMarkAsUnread}
@@ -159,7 +159,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             </Button>
 
             <Button
-              id="delete-button"
+              id= {textStructure?.email_ids.delete_btn || "delete-button"}
               variant="ghost"
               size="icon"
               onClick={handleDeleteClick}

@@ -254,7 +254,7 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
           {/* Message Body */}
           <div className="flex-1 px-4 py-3">
             <Textarea
-              id={getId("message_textarea")}
+              id={textStructure?.email_ids.message_textarea || "body-content"}
               value={composeData.body}
               onChange={(e) => updateComposeData({ body: e.target.value })}
               placeholder={getText("message")}
@@ -298,7 +298,7 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
             </div>
 
             <Button
-              id={getId("save_draft_button")}
+              id={textStructure?.email_ids.save_btn || "draft-button"}
               variant="ghost"
               onClick={handleSaveDraft}
               className={cn(
