@@ -16,12 +16,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import Image from "next/image";
-import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import Link from "next/link";
-import { RestaurantsData } from "@/components/library/dataset";
-import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
+import { useSeed } from "@/context/SeedContext";
+import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useSeedVariation } from "@/library/utils";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
+import { withSeedAndParams } from "@/utils/seedRouting";
+import { initializeRestaurants, getRestaurants } from "@/library/dataset";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
@@ -68,7 +70,9 @@ export default function RestaurantPage() {
     const wrap = seed % 2 === 0;
     const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][seed % 5];
     const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][seed % 5];
-    return { wrap, justifyClass, marginTopClass };
+    const justify = ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5];
+    const marginTop = [0, 16, 32, 48, 64][seed % 5];
+    return { wrap, justifyClass, marginTopClass, justify, marginTop };
   }, [seed]);
 
   useEffect(() => {
@@ -235,15 +239,17 @@ export default function RestaurantPage() {
             </span>
             <span className="text-base flex items-center gap-2">
               <span className="font-bold">
-                {r.rating?.toFixed(2) ?? "4.20"}
-              </span>{" "}
-              <span className="text-gray-700">{r.reviews ?? 20} Reviews</span>
+                {r?.rating?.toFixed(2) ?? "4.20"}
+              </span>
+              <span className="text-gray-700">
+                {r?.reviews ?? 20} Reviews
+              </span>
             </span>
             <span className="text-base flex items-center gap-2">
-              💵 {r.price}
+              💵 {r?.price ?? "$$"}
             </span>
             <span className="text-base flex items-center gap-2">
-              {r.cuisine}
+              {r?.cuisine ?? "International"}
             </span>
           </div>
           {/* Tags/Pills */}
@@ -492,23 +498,25 @@ export default function RestaurantPage() {
                       style={{ justifyContent: layout.justify }}
                     >
                       <Link
-                        href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, { date: formattedDate, people: String(people ?? "") }, searchParams)}
+                        href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, {
+                          date: formattedDate,
+                          people: String(people ?? ""),
+                        })}
                         onClick={() =>
                           logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                             restaurantId: id,
-                            restaurantName: r.name,
-                            cuisine: r.cuisine,
-                            desc: r.desc,
+                            restaurantName: r?.name ?? "",
+                            cuisine: r?.cuisine ?? "",
+                            desc: r?.desc ?? "",
                             area: "test",
-                            reviews: r.reviews,
-                            bookings: r.bookings,
-                            rating: r.rating,
+                            reviews: r?.reviews ?? 0,
+                            bookings: r?.bookings ?? 0,
+                            rating: r?.rating ?? 0,
                             date: formattedDate,
                             time,
                             people,
                           })
                         }
-                        passHref
                       >
                         <Button
                           className={`${bookButtonVariation.className} font-semibold text-sm`}
@@ -529,23 +537,25 @@ export default function RestaurantPage() {
                     }}
                   >
                     <Link
-                      href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, { date: formattedDate, people: String(people ?? "") }, searchParams)}
+                      href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, {
+                        date: formattedDate,
+                        people: String(people ?? ""),
+                      })}
                       onClick={() =>
                         logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                           restaurantId: id,
-                          restaurantName: r.name,
-                          cuisine: r.cuisine,
-                          desc: r.desc,
+                          restaurantName: r?.name ?? "",
+                          cuisine: r?.cuisine ?? "",
+                          desc: r?.desc ?? "",
                           area: "test",
-                          reviews: r.reviews,
-                          bookings: r.bookings,
-                          rating: r.rating,
+                          reviews: r?.reviews ?? 0,
+                          bookings: r?.bookings ?? 0,
+                          rating: r?.rating ?? 0,
                           date: formattedDate,
                           time,
                           people,
                         })
                       }
-                      passHref
                     >
                       <Button
                         id={getId("book_button")}

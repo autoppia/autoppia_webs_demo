@@ -1,6 +1,7 @@
 "use client";
+import React, { useState, useRef, useEffect, useMemo, Suspense } from "react";
+import Link from "next/link";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useState, useRef, useEffect, useMemo, Suspense } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -16,14 +17,31 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import React from "react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { getRestaurants, initializeRestaurants } from "@/library/dataset";
+import {
+  RestaurantsData,
+  getRestaurants,
+  initializeRestaurants,
+} from "@/library/dataset";
 import { useSearchParams } from "next/navigation";
-import { useSeedVariation, getSeedFromUrl } from "@/components/library/utils";
+import { useSeedVariation } from "@/library/utils";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
+
+type UiRestaurant = {
+  id: string;
+  name: string;
+  image: string;
+  cuisine: string;
+  area: string;
+  reviews: number;
+  stars: number;
+  price: string;
+  bookings: number;
+  times: string[];
+};
 
 // Create restaurants array from jsonData
 const restaurants = RestaurantsData.map((item, index) => ({
@@ -49,14 +67,6 @@ function StarRating({ count }: { count: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <span key={i}>{i < count ? "★" : "☆"}</span>
       ))}
-    </span>
-  );
-}
-
-function StarNumber({ rating }: { rating: number }) {
-  return (
-    <span className="text-[#46a758] font-bold inline-flex items-center ml-1 mr-1">
-      <span className="text-lg">★</span> {rating.toFixed(2)}
     </span>
   );
 }
@@ -93,14 +103,11 @@ function RestaurantCard({
   // Use seed-based variations with event support
   const restaurantCardVariation = useSeedVariation("restaurantCard");
   const bookButtonVariation = useSeedVariation("bookButton");
-  const imageContainerVariation = useSeedVariation("imageContainer");
-  const cardContainerVariation = useSeedVariation("cardContainer");
-  
+
   // Create layout based on seed
   const layout = {
     wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
     justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
-    marginTop: ["mt-4", "mt-6", "mt-8", "mt-10", "mt-12"][seed % 5],
   };
 
   return (
@@ -157,6 +164,8 @@ function RestaurantCard({
 
 function CardScroller({ children, title }: { children: React.ReactNode; title: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  const tickingRef = useRef(false);
+  const rafIdRef = useRef<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const { getText } = useDynamicStructure();
@@ -269,6 +278,7 @@ function HomePageContent() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
   const { getText, getId } = useDynamicStructure();
+  const searchParams = useSearchParams();
 
   const { seed } = useSeed();
   const { marginTop, wrapButton } = useMemo(
@@ -395,7 +405,7 @@ function HomePageContent() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <Link href={withSeed("/", searchParams)}>
+            <SeedLink href={withSeed("/", searchParams)}>
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
@@ -408,19 +418,19 @@ function HomePageContent() {
               href={withSeed("/help", searchParams)}
             >
               {getText("get_help")}
-            </Link>
-            <Link
+            </SeedLink>
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href={withSeed("/about", searchParams)}
             >
               {getText("about")}
-            </Link>
-            <Link
+            </SeedLink>
+            <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
               href={withSeed("/contact", searchParams)}
             >
               {getText("contact")}
-            </Link>
+            </SeedLink>
           </div>
         </div>
       </nav>
@@ -548,9 +558,13 @@ function HomePageContent() {
         </section>
 
         {/* Main Content - Cards, Sections, etc. */}
-        {(isLoading || !isReady || list.length === 0) ? null : wrapButton ? (
+        {isLoading || !isReady || list.length === 0 ? null : wrapButton ? (
           <div data-testid={`section-wrapper-${seed}`}>
-            <section id={getId("section_lunch")} className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
+            <section
+              id={getId("section_lunch")}
+              className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
+              data-testid={sectionLayoutVariation.dataTestId}
+            >
               <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
               <CardScroller title={getText("section_lunch")}>
                 {filtered.map((r) => (
@@ -564,10 +578,13 @@ function HomePageContent() {
                 ))}
               </CardScroller>
             </section>
-            )}
           </div>
         ) : (
-          <section id={getId("section_lunch")} className={`${sectionLayoutVariation.className} px-4 mt-${marginTop}`} data-testid={sectionLayoutVariation.dataTestId}>
+          <section
+            id={getId("section_lunch")}
+            className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
+            data-testid={sectionLayoutVariation.dataTestId}
+          >
             <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
             <CardScroller title={getText("section_lunch")}>
               {filtered.map((r) => (
@@ -588,7 +605,7 @@ function HomePageContent() {
           <div data-testid={`icon-section-wrapper-${seed}`}>
             <section
               id={getId("section_icons")}
-              className={`${sectionLayoutVariation.className} mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+              className={`${sectionLayoutVariation.className} ${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
               data-testid={sectionLayoutVariation.dataTestId}
             >
               <div className="flex flex-row justify-between items-center mb-1">
@@ -620,7 +637,7 @@ function HomePageContent() {
         ) : (
           <section
             id={getId("section_icons")}
-            className={`${sectionLayoutVariation.className} mt-${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
+            className={`${sectionLayoutVariation.className} ${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
             data-testid={sectionLayoutVariation.dataTestId}
           >
             <div className="flex flex-row justify-between items-center mb-1">
@@ -653,7 +670,7 @@ function HomePageContent() {
         {/* Award Winners Section */}
         {wrapButton ? (
           <div data-testid={`award-section-wrapper-${seed}`}>
-            <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
+            <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
               <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
               <CardScroller title={getText("section_awards")}>
                 {awardRestaurants.map((r) => (
@@ -669,7 +686,7 @@ function HomePageContent() {
             </section>
           </div>
         ) : (
-          <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} mt-${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
+          <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
             <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
             <CardScroller title={getText("section_awards")}>
               {awardRestaurants.map((r) => (
