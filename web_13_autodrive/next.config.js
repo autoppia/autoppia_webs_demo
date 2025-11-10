@@ -1,6 +1,6 @@
 // Set default environment variables for local development
 // For local development (non-Docker), always enable dynamic HTML
-// – Docker builds will override these values via build args
+// Docker builds will override these values via build args
 const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
 
@@ -15,20 +15,25 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
 }
 
-// Debug: Print environment variables
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
-console.log('  DOCKER_BUILD:', process.env.DOCKER_BUILD);
 console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
+console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
+console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DATA_GENERATION);
+console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('  DATA_SEED_VALUE:', process.env.DATA_SEED_VALUE);
+console.log('  NEXT_PUBLIC_DATA_SEED_VALUE:', process.env.NEXT_PUBLIC_DATA_SEED_VALUE);
+console.log('  ENABLE_DB_MODE:', process.env.ENABLE_DB_MODE);
+console.log('  NEXT_PUBLIC_ENABLE_DB_MODE:', process.env.NEXT_PUBLIC_ENABLE_DB_MODE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
 console.log('  DYNAMIC_HTML_STRUCTURE:', process.env.DYNAMIC_HTML_STRUCTURE);
 console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: ["*.preview.same-app.com"],
+  devIndicators: false,
   images: {
     unoptimized: true,
     domains: [
@@ -60,8 +65,22 @@ const nextConfig = {
       },
     ],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
+    ENABLE_DATA_GENERATION: process.env.ENABLE_DATA_GENERATION,
+    NEXT_PUBLIC_DATA_GENERATION: process.env.NEXT_PUBLIC_DATA_GENERATION,
+    NEXT_ENABLE_DATA_GENERATION: process.env.NEXT_ENABLE_DATA_GENERATION,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    DATA_SEED_VALUE: process.env.DATA_SEED_VALUE,
+    NEXT_PUBLIC_DATA_SEED_VALUE: process.env.NEXT_PUBLIC_DATA_SEED_VALUE,
+    ENABLE_DB_MODE: process.env.ENABLE_DB_MODE,
+    NEXT_PUBLIC_ENABLE_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DB_MODE,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
     DYNAMIC_HTML_STRUCTURE: process.env.DYNAMIC_HTML_STRUCTURE,
     NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE,

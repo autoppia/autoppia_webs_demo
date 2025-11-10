@@ -3,37 +3,39 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const sliderImages = [
-  {
-    id: 1,
-    url: "/images/slider/amazon_slider_1.jpg",
-    alt: "$5 flat delivery fee on international orders",
-  },
-  {
-    id: 2,
-    url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
-    alt: "Exclusive deals on electronics",
-  },
-  {
-    id: 3,
-    url: "/images/slider/amazon_slider_3.jpg",
-    alt: "Kitchen and home essentials",
-  },
-  {
-    id: 4,
-    url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
-    alt: "Tech gadgets for everyone",
-  },
-  {
-    id: 5,
-    url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80",
-    alt: "Apparel and more - big savings!",
-  },
-];
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { getText, getId } = useDynamicStructure();
+  
+  const sliderImages = [
+    {
+      id: 1,
+      url: "/images/slider/amazon_slider_1.jpg",
+      altKey: "slider_alt_1",
+    },
+    {
+      id: 2,
+      url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
+      altKey: "slider_alt_2",
+    },
+    {
+      id: 3,
+      url: "/images/slider/amazon_slider_3.jpg",
+      altKey: "slider_alt_3",
+    },
+    {
+      id: 4,
+      url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
+      altKey: "slider_alt_4",
+    },
+    {
+      id: 5,
+      url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80",
+      altKey: "slider_alt_5",
+    },
+  ];
 
   const nextSlide = () => {
     setCurrentSlide((prev) =>
@@ -56,7 +58,7 @@ export function HeroSlider() {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div id={getId("hero_slider")} className="relative w-full overflow-hidden">
       <div className="relative h-[300px] md:h-[400px] w-full">
         {sliderImages.map((slide, index) => (
           <div
@@ -67,7 +69,7 @@ export function HeroSlider() {
           >
             <Image
               src={slide.url}
-              alt={slide.alt}
+              alt={getText(slide.altKey)}
               fill
               className="object-cover"
               priority={index === 0}
@@ -89,14 +91,14 @@ export function HeroSlider() {
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 opacity-70 hover:opacity-100 z-10 shadow"
-        aria-label="Previous slide"
+        aria-label={getText("previous_slide")}
       >
         <ChevronLeft size={36} />
       </button>
       <button
         onClick={nextSlide}
         className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 opacity-70 hover:opacity-100 z-10 shadow"
-        aria-label="Next slide"
+        aria-label={getText("next_slide")}
       >
         <ChevronRight size={36} />
       </button>
