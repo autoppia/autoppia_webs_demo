@@ -1,132 +1,121 @@
 "use client";
-import { useSearchParams } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from "lucide-react";
 import { Suspense } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { withSeed } from "@/utils/seedRouting";
 
 function DashboardContent() {
   const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
-  const { getText, getId } = useDynamicStructure();
-  const searchParams = useSearchParams();
 
   return (
     <section className={`${layoutClasses.spacing}`}>
       <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
-        {getText("dashboard_title")}
+        Dashboard Overview
       </h1>
       <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
         {/* Card 1: Matters */}
         <SeedLink
-          href={withSeed("/matters", searchParams)}
-          id={getId("matters_link")}
+          href="/matters"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
             <span className="font-semibold text-zinc-600 text-lg">
-              {getText("matters_title")}
+              Active Matters
             </span>
             <Briefcase className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">41</span>
           <span className="text-sm text-zinc-400">
-            {getText("total_matters")}
+            Matters currently open
           </span>
         </SeedLink>
 
         {/* Card 2: Clients */}
         <SeedLink
-          href={withSeed("/clients", searchParams)}
-          id={getId("clients_link")}
+          href="/clients"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
             <span className="font-semibold text-zinc-600 text-lg">
-              {getText("clients_title")}
+              Clients
             </span>
             <Users className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">44</span>
           <span className="text-sm text-zinc-400">
-            {getText("total_clients")}
+            Total clients
           </span>
         </SeedLink>
 
         {/* Card 3: Calendar */}
         <SeedLink
-          href={withSeed("/calendar", searchParams)}
-          id={getId("calendar_link")}
+          href="/calendar"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
             <span className="font-semibold text-zinc-600 text-lg">
-              {getText("upcoming_events")}
+              Upcoming Events
             </span>
             <Calendar className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">6</span>
           <span className="text-sm text-zinc-400">
-            {getText("event_date")}
+            Events this week
           </span>
         </SeedLink>
 
         {/* Card 4: Documents */}
         <SeedLink
-          href={withSeed("/documents", searchParams)}
-          id={getId("documents_link")}
+          href="/documents"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
             <span className="font-semibold text-zinc-600 text-lg">
-              {getText("documents_title")}
+              Documents
             </span>
             <FileText className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">50</span>
           <span className="text-sm text-zinc-400">
-            {getText("document_name")}
+            Files managed
           </span>
         </SeedLink>
 
         {/* Card 5: Time Tracking */}
         <SeedLink
-          href={withSeed("/billing", searchParams)}
-          id={getId("billing_link")}
+          href="/billing"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
             <span className="font-semibold text-zinc-600 text-lg">
-              {getText("billing_title")}
+              Time Tracked
             </span>
             <Clock className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">36</span>
           <span className="text-sm text-zinc-400">
-            {getText("hours_logged")}
+            Billable hours
           </span>
         </SeedLink>
 
         {/* Card 6: Settings */}
         <SeedLink
-          href={withSeed("/settings", searchParams)}
-          id={getId("settings_link")}
+          href="/settings"
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
             <span className="font-semibold text-zinc-600 text-lg">
-              {getText("settings_title")}
+              Settings
             </span>
             <Settings2 className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-5xl font-bold tracking-tight text-[#1A1A1A] select-none">--</span>
           <span className="text-sm text-zinc-400">
-            {getText("notes")}
+            Customize CRM
           </span>
         </SeedLink>
       </div>
