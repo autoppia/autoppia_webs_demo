@@ -2,15 +2,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
-import { useSeed } from "@/context/SeedContext";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
+
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
-import { getProductById } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
+import { withSeed } from "@/utils/seedRouting";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeed } from "@/context/SeedContext";
+
 
 // Static date to avoid hydration mismatch
 const DELIVERY_DATE = "Sunday, October 13";
@@ -18,10 +22,12 @@ const DELIVERY_ADDRESS = "Daly City 94016";
 
 function ProductContent() {
   const router = useSeedRouter();
+  const searchParams = useSearchParams();
   const { productId } = useParams();
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { getText, getId } = useDynamicStructure();
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -56,11 +62,11 @@ function ProductContent() {
 
   const quantityInput = (
     <>
-      <label htmlFor="quantity-select" className="mt-2 mb-1 block text-[15px]">
-        Quantity:
+      <label htmlFor={getId("quantity_select")} className="mt-2 mb-1 block text-[15px]">
+        {getText("quantity")}:
       </label>
       <select
-        id="quantity-select"
+        id={getId("quantity_select")}
         className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
         value={quantity}
         onChange={(e) => {
@@ -92,18 +98,20 @@ function ProductContent() {
 
   const addToCartButton = (
     <Button
+      id={getId("add_to_cart_button")}
       className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
       onClick={() => {
         handleAddToCart();
-        router.push("/cart");
+        router.push(withSeed("/cart", searchParams));
       }}
     >
-      Add to Cart
+      {getText("add_to_cart")}
     </Button>
   );
 
   const buyNowButton = (
     <Button
+      id={getId("buy_now_button")}
       className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
       onClick={() => {
         if (!product) return;
@@ -118,10 +126,10 @@ function ProductContent() {
           brand: product.brand,
           rating: product.rating,
         });
-        router.push("/checkout");
+        router.push(withSeed("/checkout", searchParams));
       }}
     >
-      Buy Now
+      {getText("buy_now")}
     </Button>
   );
 
@@ -180,7 +188,7 @@ function ProductContent() {
             }`}
           />
         ))}
-        <span className="ml-2 text-blue-600">{rating} ratings</span>
+        <span className="ml-2 text-blue-600">{rating} {getText("ratings")}</span>
       </div>
     );
   };
@@ -189,7 +197,7 @@ function ProductContent() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <p className="mt-4">Loading product information...</p>
+          <p className="mt-4">{getText("loading_product")}...</p>
         </div>
       </div>
     );
@@ -199,12 +207,12 @@ function ProductContent() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Product not found</h1>
+          <h1 className="text-2xl font-bold">{getText("product_not_found")}</h1>
           <p className="mt-4">
             The product you are looking for does not exist or has been removed.
           </p>
-          <Button className="mt-4" onClick={() => router.push("/")}>
-            Return to Home
+          <Button className="mt-4" onClick={() => router.push(withSeed("/", searchParams))}>
+            {getText("return_to_home")}
           </Button>
         </div>
       </div>
@@ -250,7 +258,7 @@ function ProductContent() {
             {product.title}
           </h1>
           <div className="text-sm text-blue-600 mb-2">
-            Visit the {product.brand} Store
+            {getText("visit_store")} {product.brand} {getText("store")}
           </div>
 
           <div className="mb-4">{renderStars(rating)}</div>
@@ -269,18 +277,18 @@ function ProductContent() {
           <table className="min-w-full text-sm mb-4">
             <tbody>
               <tr>
-                <td className="py-1 font-medium text-gray-500 pr-4">Brand</td>
+                <td className="py-1 font-medium text-gray-500 pr-4">{getText("brand")}</td>
                 <td className="py-1">{product.brand}</td>
               </tr>
               {product.color && (
                 <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">Color</td>
+                  <td className="py-1 font-medium text-gray-500 pr-4">{getText("color")}</td>
                   <td className="py-1">{product.color}</td>
                 </tr>
               )}
               {product.size && (
                 <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">Size</td>
+                  <td className="py-1 font-medium text-gray-500 pr-4">{getText("size")}</td>
                   <td className="py-1">{product.size}</td>
                 </tr>
               )}
@@ -322,7 +330,7 @@ function ProductContent() {
         <div className="md:col-span-1 w-full">
           <aside className="border border-[#D5D9D9] bg-white rounded-lg shadow-sm p-4 md:sticky md:top-20 min-w-[275px] max-w-xs mx-auto md:mx-0 text-[15px]">
             <div className="mb-2 flex items-center">
-              <span className="text-xs font-bold mr-2">Buy new:</span>
+              <span className="text-xs font-bold mr-2">{getText("buy_new")}:</span>
               <span className="ml-auto">
                 <input type="radio" checked readOnly aria-label="selected" />
               </span>
@@ -332,7 +340,7 @@ function ProductContent() {
             </div>
             <div className="leading-snug text-sm mb-1">
               <span className="text-[#007185] leading-tight font-medium">
-                FREE delivery <b>{DELIVERY_DATE}</b>
+                {getText("free_delivery")} <b>{DELIVERY_DATE}</b>
               </span>
               <span className="block text-[13px] mt-1 mb-0">
                 on orders shipped by Autozon over $35
@@ -352,10 +360,10 @@ function ProductContent() {
                 <circle cx="12" cy="10" r="8" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <span>Deliver to {DELIVERY_ADDRESS}</span>
+              <span>{getText("deliver_to")} {DELIVERY_ADDRESS}</span>
             </div>
             <div className="text-[#007600] font-semibold my-1 text-base">
-              In Stock
+              {getText("in_stock")}
             </div>
             {layouts[order].map((element, index) => (
               <div key={index}>{element}</div>
@@ -363,11 +371,11 @@ function ProductContent() {
 
             <dl className="text-xs text-gray-700 mb-2 mt-2 leading-5 border-t border-b py-3 border-[#D5D9D9]">
               <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">Ships from</dt>
+                <dt className="w-20 font-normal">{getText("ships_from")}</dt>
                 <dd className="flex-1 pl-1 font-normal">Autozon.com</dd>
               </div>
               <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">Sold by</dt>
+                <dt className="w-20 font-normal">{getText("sold_by")}</dt>
                 <dd className="flex-1 pl-1">
                   <span className="text-[#007185] hover:underline cursor-pointer">
                     Autozon.com
@@ -375,24 +383,24 @@ function ProductContent() {
                 </dd>
               </div>
               <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">Returns</dt>
+                <dt className="w-20 font-normal">{getText("returns_policy")}</dt>
                 <dd className="flex-1 pl-1">
                   <span className="text-[#007185] hover:underline cursor-pointer">
-                    30-day refund/replacement
+                    {getText("day_refund")}
                   </span>
                 </dd>
               </div>
               <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">Payment</dt>
+                <dt className="w-20 font-normal">{getText("payment")}</dt>
                 <dd className="flex-1 pl-1">
                   <span className="text-[#007185] underline">
-                    Secure transaction
+                    {getText("secure_transaction")}
                   </span>
                 </dd>
               </div>
             </dl>
             <div className="mb-2 text-xs text-[#007185] cursor-pointer flex items-center gap-1">
-              <span>&#9660;</span> See more
+              <span>&#9660;</span> {getText("see_more")}
             </div>
             <div className="flex items-center text-sm mb-2 mt-1">
               <input
@@ -401,7 +409,7 @@ function ProductContent() {
                 id="gift-receipt"
               />
               <label htmlFor="gift-receipt" className="text-xs">
-                Add a gift receipt for easy returns
+                {getText("add_gift_receipt")}
               </label>
             </div>
             <div className="border-t border-[#D5D9D9] pt-3 mt-4">
@@ -411,13 +419,13 @@ function ProductContent() {
                   htmlFor="used-like-new"
                   className="text-[13px] text-[#111] font-semibold"
                 >
-                  Save with Used - Like new:
+                  {getText("save_with_used")}:
                 </label>
               </div>
               <div className="mb-1 text-xl font-bold">$10.49</div>
               <div className="mb-1 text-sm">
                 <span className="text-[#007185] font-medium">
-                  FREE delivery <b>{DELIVERY_DATE}</b>
+                  {getText("free_delivery")} <b>{DELIVERY_DATE}</b>
                 </span>
                 <br />
                 <span className="text-[13px]">
@@ -425,7 +433,7 @@ function ProductContent() {
                 </span>
               </div>
               <div className="text-xs mt-1">
-                Ships from <span className="text-[#007185]">Autozon.com</span>
+                {getText("ships_from")} <span className="text-[#007185]">Autozon.com</span>
               </div>
             </div>
             {addedToCart && (
@@ -440,7 +448,7 @@ function ProductContent() {
       {/* About This Item section */}
       {product.description && (
         <div className="mt-8 border-t border-gray-200 pt-6">
-          <h2 className="text-xl font-bold mb-4">About This Item</h2>
+          <h2 className="text-xl font-bold mb-4">{getText("about_this_item")}</h2>
           <div className="pl-5 text-sm">
             <ul className="list-disc space-y-2">
               {product.description.split("\n\n").map((paragraph: string, idx: number) => (

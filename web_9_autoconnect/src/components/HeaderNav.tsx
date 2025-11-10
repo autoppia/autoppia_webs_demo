@@ -7,6 +7,7 @@ import UserSearchBar from "./UserSearchBar";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 
 export default function HeaderNav() {
   const pathname = usePathname();
@@ -39,16 +40,10 @@ export default function HeaderNav() {
       eventData: { label: "Recommendations", source: "navbar" }
     },
     {
-      href: "/profile/alexsmith",
+      href: `/profile/${(dynamicDataProvider.getUsers()[0]?.username) || "alexsmith"}`,
       label: "Profile",
       eventType: EVENT_TYPES.PROFILE_NAVBAR,
-      eventData: { label: "Profile", username: "alexsmith" }
-    },
-    {
-      href: "/demo",
-      label: "Demo",
-      eventType: EVENT_TYPES.HOME_NAVBAR,
-      eventData: { label: "Demo" }
+      eventData: { label: "Profile", username: dynamicDataProvider.getUsers()[0]?.username || "alexsmith" }
     }
   ];
 
