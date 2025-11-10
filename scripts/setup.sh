@@ -72,7 +72,7 @@ ENABLE_DYNAMIC_HTML_DEFAULT=false
 ENABLE_DATA_GENERATION_DEFAULT=false
 ENABLE_DB_MODE_DEFAULT=false
 # New defaults for mapped dynamic-version features
-ENABLE_DYNAMIC_STRUCTURE_DEFAULT=false
+ENABLE_DYNAMIC_HTML_STRUCTURE_DEFAULT=false
 ENABLE_SEED_HTML_DEFAULT=false
 SEED_VALUE=""    # optional integer seed
 FAST_DEFAULT=false
@@ -105,7 +105,7 @@ ENABLE_DYNAMIC_HTML="${ENABLE_DYNAMIC_HTML:-$ENABLE_DYNAMIC_HTML_DEFAULT}"
 ENABLE_DATA_GENERATION="${ENABLE_DATA_GENERATION:-$ENABLE_DATA_GENERATION_DEFAULT}"
 ENABLE_DB_MODE="${ENABLE_DB_MODE:-$ENABLE_DB_MODE_DEFAULT}"
 # initialize new feature flags from defaults (no direct CLI flags presently)
-ENABLE_DYNAMIC_STRUCTURE="${ENABLE_DYNAMIC_STRUCTURE:-$ENABLE_DYNAMIC_STRUCTURE_DEFAULT}"
+ENABLE_DYNAMIC_HTML_STRUCTURE="${ENABLE_DYNAMIC_HTML_STRUCTURE:-$ENABLE_DYNAMIC_HTML_STRUCTURE_DEFAULT}"
 ENABLE_SEED_HTML="${ENABLE_SEED_HTML:-$ENABLE_SEED_HTML_DEFAULT}"
 SEED_VALUE="${SEED_VALUE:-}"
 FAST_MODE="${FAST_MODE:-$FAST_DEFAULT}"
@@ -130,10 +130,10 @@ is_integer() { [[ "${1:-}" =~ ^-?[0-9]+$ ]]; }
 ENABLE_DYNAMIC_HTML="$(normalize_bool "$ENABLE_DYNAMIC_HTML")"
 ENABLE_DATA_GENERATION="$(normalize_bool "$ENABLE_DATA_GENERATION")"
 ENABLE_DB_MODE="$(normalize_bool "$ENABLE_DB_MODE")"
-ENABLE_DYNAMIC_STRUCTURE="$(normalize_bool "$ENABLE_DYNAMIC_STRUCTURE")"
+ENABLE_DYNAMIC_HTML_STRUCTURE="$(normalize_bool "$ENABLE_DYNAMIC_HTML_STRUCTURE")"
 ENABLE_SEED_HTML="$(normalize_bool "$ENABLE_SEED_HTML")"
 FAST_MODE="$(normalize_bool "$FAST_MODE")"
-if [ "$ENABLE_DYNAMIC_HTML" = "__INVALID__" ] || [ "$ENABLE_DATA_GENERATION" = "__INVALID__" ] || [ "$ENABLE_DB_MODE" = "__INVALID__" ] || [ "$ENABLE_DYNAMIC_STRUCTURE" = "__INVALID__" ] || [ "$ENABLE_SEED_HTML" = "__INVALID__" ] || [ "$FAST_MODE" = "__INVALID__" ]; then
+if [ "$ENABLE_DYNAMIC_HTML" = "__INVALID__" ] || [ "$ENABLE_DATA_GENERATION" = "__INVALID__" ] || [ "$ENABLE_DB_MODE" = "__INVALID__" ] || [ "$ENABLE_DYNAMIC_HTML_STRUCTURE" = "__INVALID__" ] || [ "$ENABLE_SEED_HTML" = "__INVALID__" ] || [ "$FAST_MODE" = "__INVALID__" ]; then
   echo "❌ Invalid boolean flag. Use true/false (or yes/no, 1/0)."
   exit 1
 fi
@@ -179,7 +179,7 @@ ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS_NORMALIZED"
 # Map dynamic version tokens to feature flags
 # v1 -> ENABLE_DYNAMIC_HTML
 # v2 -> ENABLE_DATA_GENERATION
-# v3 -> ENABLE_DYNAMIC_STRUCTURE
+# v3 -> ENABLE_DYNAMIC_HTML_STRUCTURE
 # v4 -> ENABLE_SEED_HTML
 if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
   IFS=',' read -ra _dv_parts <<<"$ENABLED_DYNAMIC_VERSIONS"
@@ -194,8 +194,8 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         echo "[INFO] dynamic version $_dv enabled: ENABLE_DATA_GENERATION=true"
         ;;
       v3)
-        ENABLE_DYNAMIC_STRUCTURE=true
-        echo "[INFO] dynamic version $_dv enabled: ENABLE_DYNAMIC_STRUCTURE=true"
+        ENABLE_DYNAMIC_HTML_STRUCTURE=true
+        echo "[INFO] dynamic version $_dv enabled: ENABLE_DYNAMIC_HTML_STRUCTURE=true"
         ;;
       v4)
         ENABLE_SEED_HTML=true
@@ -235,7 +235,7 @@ echo "    Demo to deploy:         →  $WEB_DEMO"
 echo "    Dynamic HTML enabled:   →  $ENABLE_DYNAMIC_HTML"
 echo "    Data generation:        →  $ENABLE_DATA_GENERATION"
 echo "    DB mode:                →  $ENABLE_DB_MODE"
-echo "    Dynamic structure:      →  $ENABLE_DYNAMIC_STRUCTURE"
+echo "    Dynamic structure:      →  $ENABLE_DYNAMIC_HTML_STRUCTURE"
 echo "    Seed HTML enabled:      →  $ENABLE_SEED_HTML"
 echo "    Enabled dynamic versions→  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Seed value:             →  ${SEED_VALUE:-<none>}"
@@ -322,8 +322,8 @@ deploy_project() {
       NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
       ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS" \
       NEXT_PUBLIC_ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS" \
-      ENABLE_DYNAMIC_STRUCTURE="$ENABLE_DYNAMIC_STRUCTURE" \
-      NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE="$ENABLE_DYNAMIC_STRUCTURE" \
+      ENABLE_DYNAMIC_HTML_STRUCTURE="$ENABLE_DYNAMIC_HTML_STRUCTURE" \
+      NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE="$ENABLE_DYNAMIC_HTML_STRUCTURE" \
       ENABLE_SEED_HTML="$ENABLE_SEED_HTML" \
       NEXT_PUBLIC_ENABLE_SEED_HTML="$ENABLE_SEED_HTML"
 
@@ -332,7 +332,7 @@ deploy_project() {
   )
 
   popd >/dev/null
-  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML, Data generation: $ENABLE_DATA_GENERATION, DB mode: $ENABLE_DB_MODE, Dynamic structure: $ENABLE_DYNAMIC_STRUCTURE, Seed HTML: $ENABLE_SEED_HTML)"
+  echo "✅ $name is running on port $webp (Dynamic HTML: $ENABLE_DYNAMIC_HTML, Data generation: $ENABLE_DATA_GENERATION, DB mode: $ENABLE_DB_MODE, Dynamic structure: $ENABLE_DYNAMIC_HTML_STRUCTURE, Seed HTML: $ENABLE_SEED_HTML)"
   echo
 }
 
@@ -425,6 +425,10 @@ case "$WEB_DEMO" in
     deploy_webs_server
     deploy_project "web_6_automail" "$WEB_PORT" "" "automail_${WEB_PORT}"
     ;;
+  autodelivery)
+    deploy_webs_server
+    deploy_project "web_7_autodelivery" "$WEB_PORT" "" "autodelivery_${WEB_PORT}"
+    ;;
   autolodge)
     deploy_webs_server
     deploy_project "web_8_autolodge" "$WEB_PORT" "" "autolodge_${WEB_PORT}"
@@ -436,6 +440,18 @@ case "$WEB_DEMO" in
   autowork)
     deploy_webs_server
     deploy_project "web_10_autowork" "$WEB_PORT" "" "autowork_${WEB_PORT}"
+    ;;
+  autocalendar)
+    deploy_webs_server
+    deploy_project "web_11_autocalendar" "$WEB_PORT" "" "autocalendar_${WEB_PORT}"
+    ;;
+  autolist)
+    deploy_webs_server
+    deploy_project "web_12_autolist" "$WEB_PORT" "" "autolist_${WEB_PORT}"
+    ;;
+  autodrive)
+    deploy_webs_server
+    deploy_project "web_13_autodrive" "$WEB_PORT" "" "autodrive_${WEB_PORT}"
     ;;
   autohealth)
     deploy_webs_server
@@ -451,12 +467,15 @@ case "$WEB_DEMO" in
     deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
     deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
     deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
     deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
-    deploy_webs_server
     ;;
   *)
-    echo "❌ Invalid demo option: $WEB_DEMO. Use 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autolodge', 'autohealth' or 'all'."
+    echo "❌ Invalid demo option: $WEB_DEMO. Use one of: 'movies', 'books', 'autozone', 'autodining', 'autocrm', 'automail', 'autodelivery', 'autolodge', 'autoconnect', 'autowork', 'autocalendar', 'autolist', 'autodrive', 'autohealth', or 'all'."
     exit 1
     ;;
 esac
