@@ -1,4 +1,7 @@
+import type { Email, EmailFolder } from "@/types/email";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -8,10 +11,25 @@ const isDynamicHtmlEnabled = (): boolean => {
 // Dynamic data provider that returns either seed data or empty arrays based on config
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
+  private emails: Email[] = [];
   private isEnabled: boolean = false;
+  private dataGenerationEnabled: boolean = false;
+  private ready: boolean = false;
+  private readyPromise: Promise<void>;
+  private resolveReady!: () => void;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    this.dataGenerationEnabled = isDataGenerationEnabled();
+    // hydrate from cache if available to keep content stable across reloads
+    const cached = readCachedEmails();
+    this.emails = Array.isArray(cached) && cached.length > 0 ? cached : emails;
+    this.readyPromise = new Promise<void>((resolve) => {
+      this.resolveReady = resolve;
+    });
+    
+    // Initialize emails with data generation if enabled
+    this.initializeEmails();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -19,6 +37,93 @@ export class DynamicDataProvider {
       DynamicDataProvider.instance = new DynamicDataProvider();
     }
     return DynamicDataProvider.instance;
+  }
+
+  private async initializeEmails(): Promise<void> {
+    try {
+      // Try DB mode first if enabled
+      const dbEmails = await loadEmailsFromDb();
+      if (dbEmails.length > 0) {
+        this.emails = dbEmails;
+        writeCachedEmails(this.emails);
+        this.ready = true;
+        this.resolveReady();
+        return;
+      }
+      
+      // Fallback to existing behavior
+      const initializedEmails = await initializeEmails();
+      this.emails = initializedEmails;
+      if (this.emails.length > 0) {
+        writeCachedEmails(this.emails);
+      }
+
+      // Mark as ready only when either generation is disabled or we have generated data
+      if (!this.dataGenerationEnabled || this.emails.length > 0) {
+        this.ready = true;
+        this.resolveReady();
+      }
+
+    } catch (error) {
+      // Keep silent in production; initialize readiness when generation off
+      // If generation is enabled, do not mark ready here; the gate will continue showing loading
+      if (!this.dataGenerationEnabled) {
+        this.ready = true;
+        this.resolveReady();
+      }
+    }
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
+  }
+
+  public getEmails(): Email[] {
+    return this.emails; // Return empty until ready when generation is enabled
+  }
+
+  public getEmailById(id: string): Email | undefined {
+    return this.emails.find((email) => email.id === id);
+  }
+
+  public getEmailsByCategory(category: string): Email[] {
+    return this.emails.filter((email) => email.category === category);
+  }
+
+  public getEmailsByFolder(folder: EmailFolder): Email[] {
+    return this.emails.filter((email) => this.matchesFolder(email, folder));
+  }
+
+  public getUnreadEmails(): Email[] {
+    return this.emails.filter((email) => !email.isRead);
+  }
+
+  public getStarredEmails(): Email[] {
+    return this.emails.filter((email) => email.isStarred);
+  }
+
+  public getImportantEmails(): Email[] {
+    return this.emails.filter((email) => email.isImportant);
+  }
+
+  public searchEmails(query: string): Email[] {
+    const lowercaseQuery = query.toLowerCase();
+    return this.emails.filter((email) => 
+      email.subject.toLowerCase().includes(lowercaseQuery) ||
+      email.body.toLowerCase().includes(lowercaseQuery) ||
+      email.from.name?.toLowerCase().includes(lowercaseQuery) ||
+      email.from.email?.toLowerCase().includes(lowercaseQuery)
+    );
+  }
+
+  public getEmailsByLabel(labelId: string): Email[] {
+    return this.emails.filter((email) =>
+      email.labels?.some((label) => label.id === labelId)
+    );
   }
 
   public isDynamicModeEnabled(): boolean {
@@ -293,82 +398,38 @@ export class DynamicDataProvider {
     ];
   }
 
-  // Get emails by folder
-  public getEmailsByFolder(folder: string) {
-    return this.getStaticEmails().filter(email => email.folder === folder);
-  }
-
-  // Get unread emails
-  public getUnreadEmails() {
-    return this.getStaticEmails().filter(email => !email.isRead);
-  }
-
-  // Get starred emails
-  public getStarredEmails() {
-    return this.getStaticEmails().filter(email => email.isStarred);
-  }
-
-  // Get important emails
-  public getImportantEmails() {
-    return this.getStaticEmails().filter(email => email.isImportant);
-  }
-
-  // Search emails
-  public searchEmails(query: string) {
-    const lowercaseQuery = query.toLowerCase();
-    return this.getStaticEmails().filter(email => 
-      email.subject.toLowerCase().includes(lowercaseQuery) ||
-      email.from.toLowerCase().includes(lowercaseQuery) ||
-      email.to.toLowerCase().includes(lowercaseQuery) ||
-      email.body?.toLowerCase().includes(lowercaseQuery) ||
-      email.labels?.some(label => label.toLowerCase().includes(lowercaseQuery))
-    );
-  }
-
-  // Get email by ID
-  public getEmailById(id: string) {
-    return this.getStaticEmails().find(email => email.id === id);
-  }
-
-  // Get emails by label
-  public getEmailsByLabel(label: string) {
-    return this.getStaticEmails().filter(email => 
-      email.labels?.includes(label)
-    );
-  }
-
   // Get email statistics
   public getEmailStats() {
-    const emails = this.getStaticEmails();
+    const emails = this.emails;
     return {
       total: emails.length,
       unread: emails.filter(e => !e.isRead).length,
       starred: emails.filter(e => e.isStarred).length,
       important: emails.filter(e => e.isImportant).length,
       byFolder: {
-        inbox: emails.filter(e => e.folder === 'inbox').length,
-        sent: emails.filter(e => e.folder === 'sent').length,
-        drafts: emails.filter(e => e.folder === 'drafts').length,
-        trash: emails.filter(e => e.folder === 'trash').length,
-        spam: emails.filter(e => e.folder === 'spam').length
+        inbox: emails.filter((e) => this.matchesFolder(e, "inbox")).length,
+        sent: emails.filter((e) => this.matchesFolder(e, "sent")).length,
+        drafts: emails.filter((e) => this.matchesFolder(e, "drafts")).length,
+        trash: emails.filter((e) => this.matchesFolder(e, "trash")).length,
+        spam: emails.filter((e) => this.matchesFolder(e, "spam")).length,
       }
     };
   }
 
   // Get recent emails (last 7 days)
-  public getRecentEmails() {
+  public getRecentEmails(days: number = 7) {
     const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - days);
     
-    return this.getStaticEmails().filter(email => {
-      const emailDate = new Date(email.date);
+    return this.emails.filter(email => {
+      const emailDate = new Date(email.timestamp);
       return emailDate >= sevenDaysAgo;
     });
   }
 
   // Get email threads
   public getEmailThreads() {
-    const emails = this.getStaticEmails();
+    const emails = this.emails;
     const threadMap = new Map<string, typeof emails>();
     
     emails.forEach(email => {
@@ -382,12 +443,56 @@ export class DynamicDataProvider {
     
     return Array.from(threadMap.values());
   }
+
+  private matchesFolder(email: Email, folder: EmailFolder): boolean {
+    const hasLabel = (labelId: string) =>
+      email.labels?.some((label) => label.id === labelId);
+
+    switch (folder) {
+      case "inbox":
+        return (
+          !email.isDraft &&
+          !hasLabel("trash") &&
+          !hasLabel("spam") &&
+          !hasLabel("sent")
+        );
+      case "starred":
+        return email.isStarred && !hasLabel("trash") && !hasLabel("spam");
+      case "snoozed":
+        return email.isSnoozed && !hasLabel("trash") && !hasLabel("spam");
+      case "sent":
+        return (
+          hasLabel("sent") ||
+          (!email.isDraft &&
+            email.from.email?.toLowerCase() === "me@gmail.com" &&
+            !hasLabel("trash"))
+        );
+      case "drafts":
+        return email.isDraft && !hasLabel("trash");
+      case "spam":
+        return hasLabel("spam");
+      case "trash":
+        return hasLabel("trash");
+      case "important":
+        return email.isImportant && !hasLabel("trash") && !hasLabel("spam");
+      default:
+        return false;
+    }
+  }
 }
 
 // Export singleton instance
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Helper functions for easy access
+export const getEmails = () => dynamicDataProvider.getEmails();
+export const getEmailById = (id: string) => dynamicDataProvider.getEmailById(id);
+export const getEmailsByCategory = (category: string) => dynamicDataProvider.getEmailsByCategory(category);
+export const getEmailsByFolder = (folder: EmailFolder) => dynamicDataProvider.getEmailsByFolder(folder);
+export const getUnreadEmails = () => dynamicDataProvider.getUnreadEmails();
+export const getStarredEmails = () => dynamicDataProvider.getStarredEmails();
+export const getImportantEmails = () => dynamicDataProvider.getImportantEmails();
+export const searchEmails = (query: string) => dynamicDataProvider.searchEmails(query);
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
@@ -397,14 +502,6 @@ export const getStaticEmails = () => dynamicDataProvider.getStaticEmails();
 export const getStaticLabels = () => dynamicDataProvider.getStaticLabels();
 export const getStaticFolders = () => dynamicDataProvider.getStaticFolders();
 export const getStaticThemes = () => dynamicDataProvider.getStaticThemes();
-
-// Email data helpers
-export const getEmailsByFolder = (folder: string) => dynamicDataProvider.getEmailsByFolder(folder);
-export const getUnreadEmails = () => dynamicDataProvider.getUnreadEmails();
-export const getStarredEmails = () => dynamicDataProvider.getStarredEmails();
-export const getImportantEmails = () => dynamicDataProvider.getImportantEmails();
-export const searchEmails = (query: string) => dynamicDataProvider.searchEmails(query);
-export const getEmailById = (id: string) => dynamicDataProvider.getEmailById(id);
 export const getEmailsByLabel = (label: string) => dynamicDataProvider.getEmailsByLabel(label);
 export const getEmailStats = () => dynamicDataProvider.getEmailStats();
 export const getRecentEmails = () => dynamicDataProvider.getRecentEmails();

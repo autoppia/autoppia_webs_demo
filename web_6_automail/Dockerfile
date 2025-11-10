@@ -4,6 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Accept build arguments
+# Accept build arguments
 ARG ENABLE_DYNAMIC_HTML=false
 ARG ENABLE_DYNAMIC_HTML_STRUCTURE=false
 
@@ -14,7 +15,7 @@ RUN npm ci
 
 COPY . .
 
-# Set environment variables for build
+# Set environment variables for build (NEXT_PUBLIC_* vars are embedded in the build)
 ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
 ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
 ENV ENABLE_DYNAMIC_HTML_STRUCTURE=${ENABLE_DYNAMIC_HTML_STRUCTURE}
