@@ -38,6 +38,9 @@
       ],
       "@/library/*": [
         "src/library/*"
+      ],
+      "@/shared/*": [
+        "src/shared/*"
       ]
     }
   },

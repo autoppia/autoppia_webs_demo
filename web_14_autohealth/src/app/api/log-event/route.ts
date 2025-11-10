@@ -4,10 +4,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.API_URL || "http://app:8080";
 
-export async function POST(req: NextRequest) {
-  let body: Record<string, unknown>;
+interface LogEventRequestBody {
+  event_name: string;
+  user_id?: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: Record<string, any>;
+}
 
-  // 1) Validate and parse JSON
+export async function POST(req: NextRequest) {
+  let body: LogEventRequestBody;
+
+  // 1) Validar y parsear JSON
   try {
     const ct = req.headers.get("content-type") || "";
     if (!ct.includes("application/json")) {
@@ -34,8 +41,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 2) Build the event
+  // 2) Construir el evento
   const webAgentId = req.headers.get("X-WebAgent-Id") || "1";
+  const validatorId=req.headers.get("X-Validator-Id") || "1";
   const { event_name, user_id = null, data = {} } = body;
 
   const newEntry = {
@@ -44,15 +52,17 @@ export async function POST(req: NextRequest) {
     user_id,
     data,
     timestamp: new Date().toISOString(),
+    validator_id: validatorId,
   };
 
   const externalPayload = {
     web_agent_id: webAgentId,
     web_url: req.headers.get("referer") || null,
     data: newEntry,
+    validator_id: validatorId,
   };
 
-  // 3) Send to backend
+  // 3) Enviar al backend real
   try {
     const res = await fetch(`${BACKEND_URL}/save_events/`, {
       method: "POST",
@@ -76,7 +86,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 4) Return success
+  // 4) Responder éxito
   return NextResponse.json({ success: true });
 }
 
@@ -85,5 +95,8 @@ export async function GET() {
 }
 
 export async function DELETE() {
-  return NextResponse.json({ message: "Logs cleared" });
+  return NextResponse.json({
+    success: true,
+    message: "Event log deletion is disabled",
+  });
 }

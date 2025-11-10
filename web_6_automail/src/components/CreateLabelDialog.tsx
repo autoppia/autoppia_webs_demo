@@ -102,7 +102,6 @@ export function CreateLabelDialog({ trigger }: CreateLabelDialogProps) {
           <Button
             id="create-label-button"
             onClick={handleCreate}
-            disabled={!labelName.trim()}
             className="btn-primary-gradient"
           >
             Create Label
