@@ -1,4 +1,4 @@
-import type { Email } from "@/types/email";
+import type { Email, EmailFolder } from "@/types/email";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
 import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
@@ -94,6 +94,10 @@ export class DynamicDataProvider {
     return this.emails.filter((email) => email.category === category);
   }
 
+  public getEmailsByFolder(folder: EmailFolder): Email[] {
+    return this.emails.filter((email) => this.matchesFolder(email, folder));
+  }
+
   public getUnreadEmails(): Email[] {
     return this.emails.filter((email) => !email.isRead);
   }
@@ -102,13 +106,23 @@ export class DynamicDataProvider {
     return this.emails.filter((email) => email.isStarred);
   }
 
+  public getImportantEmails(): Email[] {
+    return this.emails.filter((email) => email.isImportant);
+  }
+
   public searchEmails(query: string): Email[] {
     const lowercaseQuery = query.toLowerCase();
     return this.emails.filter((email) => 
       email.subject.toLowerCase().includes(lowercaseQuery) ||
-      email.body?.toLowerCase().includes(lowercaseQuery) ||
+      email.body.toLowerCase().includes(lowercaseQuery) ||
       email.from.name?.toLowerCase().includes(lowercaseQuery) ||
       email.from.email?.toLowerCase().includes(lowercaseQuery)
+    );
+  }
+
+  public getEmailsByLabel(labelId: string): Email[] {
+    return this.emails.filter((email) =>
+      email.labels?.some((label) => label.id === labelId)
     );
   }
 
@@ -147,6 +161,13 @@ export class DynamicDataProvider {
     isStarred: boolean;
     isImportant: boolean;
     folder: string;
+    body?: string;
+    attachments?: Array<{ name: string; size: string; type: string }>;
+    labels?: string[];
+    threadId?: string;
+    replyTo?: string;
+    cc?: string[];
+    bcc?: string[];
   }> {
     return [
       {
@@ -158,7 +179,10 @@ export class DynamicDataProvider {
         isRead: false,
         isStarred: false,
         isImportant: true,
-        folder: "inbox"
+        folder: "inbox",
+        body: "Welcome to AutoMail! This is your new email client with advanced features and modern design.",
+        labels: ["welcome", "system"],
+        threadId: "thread-1"
       },
       {
         id: "2",
@@ -169,7 +193,13 @@ export class DynamicDataProvider {
         isRead: true,
         isStarred: true,
         isImportant: false,
-        folder: "inbox"
+        folder: "inbox",
+        body: "Don't forget about our project review meeting tomorrow at 2 PM. Please prepare your presentation.",
+        labels: ["work", "meeting"],
+        threadId: "thread-2",
+        attachments: [
+          { name: "project_review.pdf", size: "2.3 MB", type: "application/pdf" }
+        ]
       },
       {
         id: "3",
@@ -180,7 +210,10 @@ export class DynamicDataProvider {
         isRead: false,
         isStarred: false,
         isImportant: true,
-        folder: "inbox"
+        folder: "inbox",
+        body: "Your invoice #12345 is due for payment. Amount: $299.99. Please pay by January 20th.",
+        labels: ["billing", "urgent"],
+        threadId: "thread-3"
       },
       {
         id: "4",
@@ -191,7 +224,68 @@ export class DynamicDataProvider {
         isRead: true,
         isStarred: false,
         isImportant: false,
-        folder: "inbox"
+        folder: "inbox",
+        body: "This week's tech newsletter includes updates on AI, web development, and new tools.",
+        labels: ["newsletter", "tech"],
+        threadId: "thread-4"
+      },
+      {
+        id: "5",
+        subject: "Team Collaboration Update",
+        from: "team@company.com",
+        to: "user@example.com",
+        date: "2024-01-11",
+        isRead: true,
+        isStarred: false,
+        isImportant: false,
+        folder: "inbox",
+        body: "The team has made great progress this week. Here's what we accomplished...",
+        labels: ["team", "update"],
+        threadId: "thread-5",
+        cc: ["colleague1@company.com", "colleague2@company.com"]
+      },
+      {
+        id: "6",
+        subject: "Security Alert - Login from New Device",
+        from: "security@automail.com",
+        to: "user@example.com",
+        date: "2024-01-10",
+        isRead: false,
+        isStarred: false,
+        isImportant: true,
+        folder: "inbox",
+        body: "We detected a login from a new device. If this wasn't you, please secure your account.",
+        labels: ["security", "alert"],
+        threadId: "thread-6"
+      },
+      {
+        id: "7",
+        subject: "Draft: Project Proposal",
+        from: "user@example.com",
+        to: "client@company.com",
+        date: "2024-01-09",
+        isRead: true,
+        isStarred: false,
+        isImportant: false,
+        folder: "drafts",
+        body: "Here's the project proposal we discussed. Please review and let me know your thoughts.",
+        labels: ["draft", "proposal"],
+        threadId: "thread-7"
+      },
+      {
+        id: "8",
+        subject: "Re: Meeting Follow-up",
+        from: "colleague@company.com",
+        to: "user@example.com",
+        date: "2024-01-08",
+        isRead: true,
+        isStarred: true,
+        isImportant: false,
+        folder: "inbox",
+        body: "Thanks for the great meeting yesterday. I'll send over the documents we discussed.",
+        labels: ["work", "follow-up"],
+        threadId: "thread-8",
+        replyTo: "user@example.com"
       }
     ];
   }
@@ -303,6 +397,88 @@ export class DynamicDataProvider {
       }
     ];
   }
+
+  // Get email statistics
+  public getEmailStats() {
+    const emails = this.emails;
+    return {
+      total: emails.length,
+      unread: emails.filter(e => !e.isRead).length,
+      starred: emails.filter(e => e.isStarred).length,
+      important: emails.filter(e => e.isImportant).length,
+      byFolder: {
+        inbox: emails.filter((e) => this.matchesFolder(e, "inbox")).length,
+        sent: emails.filter((e) => this.matchesFolder(e, "sent")).length,
+        drafts: emails.filter((e) => this.matchesFolder(e, "drafts")).length,
+        trash: emails.filter((e) => this.matchesFolder(e, "trash")).length,
+        spam: emails.filter((e) => this.matchesFolder(e, "spam")).length,
+      }
+    };
+  }
+
+  // Get recent emails (last 7 days)
+  public getRecentEmails(days: number = 7) {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - days);
+    
+    return this.emails.filter(email => {
+      const emailDate = new Date(email.timestamp);
+      return emailDate >= sevenDaysAgo;
+    });
+  }
+
+  // Get email threads
+  public getEmailThreads() {
+    const emails = this.emails;
+    const threadMap = new Map<string, typeof emails>();
+    
+    emails.forEach(email => {
+      if (email.threadId) {
+        if (!threadMap.has(email.threadId)) {
+          threadMap.set(email.threadId, []);
+        }
+        threadMap.get(email.threadId)!.push(email);
+      }
+    });
+    
+    return Array.from(threadMap.values());
+  }
+
+  private matchesFolder(email: Email, folder: EmailFolder): boolean {
+    const hasLabel = (labelId: string) =>
+      email.labels?.some((label) => label.id === labelId);
+
+    switch (folder) {
+      case "inbox":
+        return (
+          !email.isDraft &&
+          !hasLabel("trash") &&
+          !hasLabel("spam") &&
+          !hasLabel("sent")
+        );
+      case "starred":
+        return email.isStarred && !hasLabel("trash") && !hasLabel("spam");
+      case "snoozed":
+        return email.isSnoozed && !hasLabel("trash") && !hasLabel("spam");
+      case "sent":
+        return (
+          hasLabel("sent") ||
+          (!email.isDraft &&
+            email.from.email?.toLowerCase() === "me@gmail.com" &&
+            !hasLabel("trash"))
+        );
+      case "drafts":
+        return email.isDraft && !hasLabel("trash");
+      case "spam":
+        return hasLabel("spam");
+      case "trash":
+        return hasLabel("trash");
+      case "important":
+        return email.isImportant && !hasLabel("trash") && !hasLabel("spam");
+      default:
+        return false;
+    }
+  }
 }
 
 // Export singleton instance
@@ -312,8 +488,10 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 export const getEmails = () => dynamicDataProvider.getEmails();
 export const getEmailById = (id: string) => dynamicDataProvider.getEmailById(id);
 export const getEmailsByCategory = (category: string) => dynamicDataProvider.getEmailsByCategory(category);
+export const getEmailsByFolder = (folder: EmailFolder) => dynamicDataProvider.getEmailsByFolder(folder);
 export const getUnreadEmails = () => dynamicDataProvider.getUnreadEmails();
 export const getStarredEmails = () => dynamicDataProvider.getStarredEmails();
+export const getImportantEmails = () => dynamicDataProvider.getImportantEmails();
 export const searchEmails = (query: string) => dynamicDataProvider.searchEmails(query);
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
@@ -324,3 +502,7 @@ export const getStaticEmails = () => dynamicDataProvider.getStaticEmails();
 export const getStaticLabels = () => dynamicDataProvider.getStaticLabels();
 export const getStaticFolders = () => dynamicDataProvider.getStaticFolders();
 export const getStaticThemes = () => dynamicDataProvider.getStaticThemes();
+export const getEmailsByLabel = (label: string) => dynamicDataProvider.getEmailsByLabel(label);
+export const getEmailStats = () => dynamicDataProvider.getEmailStats();
+export const getRecentEmails = () => dynamicDataProvider.getRecentEmails();
+export const getEmailThreads = () => dynamicDataProvider.getEmailThreads();

@@ -8,17 +8,20 @@ import {
   getLayoutConfig
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
+import { getEffectiveTextStructure } from "@/utils/textStructureProvider";
 
 function GmailContent() {
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
+  const seedStructure = Number(searchParams.get("seed-structure") ?? "1");
   const effectiveSeed = getEffectiveSeed(rawSeed);
   const layoutConfig = getLayoutConfig(effectiveSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+  const textStructure = getEffectiveTextStructure(seedStructure);
 
   return (
     <div className={`min-h-screen bg-background ${layoutClasses.spacing}`}>
-      <DynamicLayout key={effectiveSeed} />
+      <DynamicLayout key={`${effectiveSeed}-${seedStructure}`} textStructure={textStructure} />
     </div>
   );
 }
