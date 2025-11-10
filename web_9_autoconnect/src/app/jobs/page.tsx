@@ -1,10 +1,12 @@
 "use client";
 import { useState, useMemo } from "react";
-import { mockJobs } from "@/library/dataset";
+import { type Job } from "@/library/dataset";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { DataReadyGate } from "@/components/DataReadyGate";
 
 interface Filters {
   search: string;
@@ -14,7 +16,7 @@ interface Filters {
   remote: boolean;
 }
 
-export default function JobsPage() {
+function JobsContent() {
   const { layout } = useSeed();
   const [filters, setFilters] = useState<Filters>({
     search: "",
@@ -23,6 +25,9 @@ export default function JobsPage() {
     location: "",
     remote: false,
   });
+
+  // Get jobs from dynamic provider
+  const mockJobs = dynamicDataProvider.getJobs();
 
   // Get unique values for filter options
   const uniqueLocations = useMemo(() => {
@@ -297,5 +302,13 @@ export default function JobsPage() {
 
 
     </section>
+  );
+}
+
+export default function JobsPage() {
+  return (
+    <DataReadyGate>
+      <JobsContent />
+    </DataReadyGate>
   );
 }

@@ -1,16 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
-import { mockUsers, mockPosts } from "@/library/dataset";
+import { type User, type Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { DataReadyGate } from "@/components/DataReadyGate";
 
-export default function ProfileClient({ username }: { username: string }) {
+function ProfileContent({ username }: { username: string }) {
   const { layout } = useSeed();
-  const user = mockUsers.find((u) => u.username === username);
-  const currentUser = mockUsers[2];
+  
+  // Get data from dynamic provider
+  const users = dynamicDataProvider.getUsers();
+  const mockPosts = dynamicDataProvider.getPosts();
+  
+  const user = users.find((u) => u.username === username);
+  const currentUser = users[2] || users[0];
   const isSelf = user?.username === currentUser.username;
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"
@@ -170,5 +177,13 @@ export default function ProfileClient({ username }: { username: string }) {
       {renderExperience()}
       {renderPosts()}
     </section>
+  );
+}
+
+export default function ProfileClient({ username }: { username: string }) {
+  return (
+    <DataReadyGate>
+      <ProfileContent username={username} />
+    </DataReadyGate>
   );
 }
