@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { clients as staticClients } from "@/library/dataset";
@@ -8,6 +8,8 @@ import { useProjectData } from "@/shared/universal-loader";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { withSeed } from "@/utils/seedRouting";
 
 
 
@@ -19,7 +21,7 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-export default function ClientsDirectory() {
+function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: 'web_5_autocrm',
@@ -38,6 +40,8 @@ export default function ClientsDirectory() {
     last: c.last ?? 'Today',
   }));
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { getText, getId } = useDynamicStructure();
 
   useEffect(() => {
     if (query.trim()) {
@@ -53,14 +57,14 @@ export default function ClientsDirectory() {
 
   const handleClientClick = (client: (typeof clients)[number]) => {
     logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, client);
-    router.push(`/clients/${client.id}`);
+    router.push(withSeed(`/clients/${client.id}`, searchParams));
   };
 
   return (
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
-          Clients Directory
+          {getText("clients_title")}
         </h1>
       </DynamicElement>
       
@@ -70,8 +74,9 @@ export default function ClientsDirectory() {
             <Search className="w-5 h-5" />
           </span>
           <input
+            id={getId("search_input")}
             className="w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium"
-            placeholder="Search clients..."
+            placeholder={getText("search_placeholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search clients"
@@ -81,8 +86,10 @@ export default function ClientsDirectory() {
           eventType="SEARCH_CLIENT"
           index={0}
           className="flex-shrink-0 flex items-center gap-2 px-5 h-12 ml-0 md:ml-4 font-medium rounded-2xl bg-white border border-zinc-200 text-zinc-700 shadow-sm hover:bg-zinc-50 transition"
+          id={getId("filter_button")}
+          aria-label={getText("filter_by")}
         >
-          <Filter className="w-4 h-4" /> Filter
+          <Filter className="w-4 h-4" /> {getText("filter_by")}
         </DynamicButton>
       </DynamicElement>
       <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
@@ -93,10 +100,10 @@ export default function ClientsDirectory() {
           className="hidden md:grid grid-cols-7 px-10 pt-6 pb-2 text-zinc-500 text-xs uppercase tracking-wide select-none"
           style={{ letterSpacing: "0.08em" }}
         >
-          <span className="col-span-3">Client</span>
-          <span className="">Matters</span>
-          <span className="">Status</span>
-          <span className="">Last Updated</span>
+          <span className="col-span-3">{getText("client_name")}</span>
+          <span className="">{getText("matters_title")}</span>
+          <span className="">{getText("matter_status")}</span>
+          <span className="">{getText("modified_date")}</span>
           <span className=""></span>
         </div>
         <div className="flex flex-col divide-y divide-zinc-100">
@@ -164,5 +171,13 @@ export default function ClientsDirectory() {
         </div>
       </DynamicElement>
     </DynamicContainer>
+  );
+}
+
+export default function ClientsDirectory() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+      <ClientsDirectoryContent />
+    </Suspense>
   );
 }
