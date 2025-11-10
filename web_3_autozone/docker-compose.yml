@@ -5,13 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML:-false}
-<<<<<<< HEAD
         ENABLE_DYNAMIC_HTML_STRUCTURE: ${ENABLE_DYNAMIC_HTML_STRUCTURE:-false}
-    # En producción NO montes tu código: deja que la imagen lleve la build
-    # volumes:
-    #   - .:/app
-    #   - /app/node_modules
-=======
         ENABLE_DATA_GENERATION: ${ENABLE_DATA_GENERATION:-false}
         ENABLE_DB_MODE: ${ENABLE_DB_MODE:-false}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8090}
@@ -19,8 +13,10 @@ services:
         NEXT_PUBLIC_ENABLE_DB_MODE: ${NEXT_PUBLIC_ENABLE_DB_MODE:-false}
         DATA_SEED_VALUE: ${DATA_SEED_VALUE:-}
         NEXT_PUBLIC_DATA_SEED_VALUE: ${NEXT_PUBLIC_DATA_SEED_VALUE:-}
-
->>>>>>> main
+    # En producción NO montes tu código: deja que la imagen lleve la build
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules
     ports:
       - "127.0.0.1:${WEB_PORT}:8002"
     restart: always
@@ -30,17 +26,14 @@ services:
       - PORT=8002
       - NODE_ENV=production
       - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
-<<<<<<< HEAD
       - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-false}
       - ENABLE_DYNAMIC_HTML_STRUCTURE=${ENABLE_DYNAMIC_HTML_STRUCTURE:-false}
       - NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE=${ENABLE_DYNAMIC_HTML_STRUCTURE:-false}
-=======
       - ENABLE_DATA_GENERATION=${ENABLE_DATA_GENERATION:-false}
       - ENABLE_DB_MODE=${ENABLE_DB_MODE:-false}
       - NEXT_PUBLIC_ENABLE_DB_MODE=${NEXT_PUBLIC_ENABLE_DB_MODE:-false}
       - DATA_SEED_VALUE=${DATA_SEED_VALUE:-}
       - NEXT_PUBLIC_DATA_SEED_VALUE=${NEXT_PUBLIC_DATA_SEED_VALUE:-}
->>>>>>> main
     networks:
       - apps_net
 
