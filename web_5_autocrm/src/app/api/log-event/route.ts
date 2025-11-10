@@ -43,6 +43,7 @@ export async function POST(req: NextRequest) {
 
   // 2) Construir el evento
   const webAgentId = req.headers.get("X-WebAgent-Id") || "1";
+  const validatorId=req.headers.get("X-Validator-Id") || "1";
   const { event_name, user_id = null, data = {} } = body;
 
   const newEntry = {
@@ -51,12 +52,14 @@ export async function POST(req: NextRequest) {
     user_id,
     data,
     timestamp: new Date().toISOString(),
+    validator_id: validatorId,
   };
 
   const externalPayload = {
     web_agent_id: webAgentId,
     web_url: req.headers.get("referer") || null,
     data: newEntry,
+    validator_id: validatorId,
   };
 
   // 3) Enviar al backend real

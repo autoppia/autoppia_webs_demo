@@ -2,7 +2,7 @@
 import Avatar from "./Avatar";
 import type { Post as PostType } from "@/library/dataset";
 import { useState } from "react";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import Image from "next/image";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 
@@ -28,7 +28,7 @@ export default function Post({
   return (
     <article className="bg-white rounded-lg shadow p-4">
       <div className="flex gap-3 items-start mb-2">
-        <Link
+        <SeedLink
           href={`/profile/${post.user.username}`}
           className="shrink-0"
           onClick={() =>
@@ -41,9 +41,9 @@ export default function Post({
           }
         >
           <Avatar src={post.user.avatar} alt={post.user.name} size={40} />
-        </Link>
+        </SeedLink>
         <div>
-          <Link
+          <SeedLink
             href={`/profile/${post.user.username}`}
             className="font-semibold text-sm hover:underline"
             onClick={() =>
@@ -55,7 +55,7 @@ export default function Post({
             }
           >
             {post.user.name}
-          </Link>
+          </SeedLink>
           <div className="text-xs text-gray-500">{timeAgo(post.timestamp)}</div>
         </div>
       </div>

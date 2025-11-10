@@ -10,10 +10,11 @@ from django.utils import timezone
 
 from events.models import Event
 from .forms import MovieForm, ContactForm
+from .utils import normalize_seed, stable_shuffle, compute_variant, redirect_with_seed
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
 
 
-def index(request):
+def index(request, variant=None):
     """
     Vista principal que muestra la lista de películas con opciones de búsqueda y filtrado.
     """
@@ -21,25 +22,33 @@ def index(request):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
+    available_years = (
+        Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
+    )
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
     genre_filter = request.GET.get("genre", "")
     year_filter = request.GET.get("year", "")
 
-    # Comenzar con todas las películas
-    movies = Movie.objects.all()
+    # Comenzar con todas las películas (prefetch genres to avoid N+1 in templates)
+    movies = Movie.objects.all().prefetch_related("genres")
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query) | Q(cast__icontains=search_query)).distinct()
+        movies = movies.filter(
+            Q(name__icontains=search_query)
+            | Q(desc__icontains=search_query)
+            | Q(director__icontains=search_query)
+            | Q(cast__icontains=search_query)
+        ).distinct()
 
         from events.models import Event
 
         search_event = Event.create_search_film_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             query=search_query,
         )
         search_event.save()
@@ -77,18 +86,32 @@ def index(request):
         filter_event = Event.create_filter_film_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             genre=genre_obj,
             year=year_value,
         )
         filter_event.save()
 
+    # Server-side dynamic order and variant based on seed / explicit variant
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    movie_list = stable_shuffle(movies, seed, salt="movies")
+    genre_list = stable_shuffle(all_genres, seed, salt="genres")
+    years_list = stable_shuffle(available_years, seed, salt="years")
+
     context = {
-        "movie_list": movies,
+        "movie_list": movie_list,
         "search_query": search_query,
-        "genres": all_genres,
-        "available_years": available_years,
+        "genres": genre_list,
+        "available_years": years_list,
         "selected_genre": genre_filter,
         "selected_year": year_filter,
+        "LAYOUT_VARIANT": variant_val,
+        "INITIAL_SEED": seed,
     }
     return render(request, "index.html", context)
 
@@ -103,38 +126,83 @@ def about(request):
 # =============================================================================
 
 
-def detail(request, movie_id):
+def detail(request, movie_id, variant=None):
     """
     Vista de detalle de película: muestra información, películas relacionadas y comentarios.
     Además, registra el evento de visualización de detalle.
     """
     movie = get_object_or_404(Movie, id=movie_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
+    validator_id = request.headers.get("X-Validator-Id", "0")
 
     # Registrar evento de detalle de película
-    detail_event = Event.create_film_detail_event(request.user if request.user.is_authenticated else None, web_agent_id, movie)
+    detail_event = Event.create_film_detail_event(
+        request.user if request.user.is_authenticated else None,
+        web_agent_id,
+        movie,
+        validator_id=validator_id,
+    )
     detail_event.save()
 
     # Películas relacionadas
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
     related_movies = []
     if movie.genres.exists():
-        related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct()[:4]
+        related_movies = (
+            Movie.objects.filter(genres__in=movie.genres.all())
+            .exclude(id=movie.id)
+            .distinct()
+            .prefetch_related("genres")[:4]
+        )
 
     if len(related_movies) < 4:
-        more_movies = Movie.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]])[: 4 - len(related_movies)]
+        more_movies = (
+            Movie.objects.filter(year=movie.year)
+            .exclude(id__in=[m.id for m in list(related_movies) + [movie]])
+            .prefetch_related("genres")[: 4 - len(related_movies)]
+        )
         related_movies = list(related_movies) + list(more_movies)
 
     if len(related_movies) < 4:
-        random_movies = Movie.objects.exclude(id__in=[m.id for m in list(related_movies) + [movie]]).order_by("?")[: 4 - len(related_movies)]
-        related_movies = list(related_movies) + list(random_movies)
+        remaining_needed = 4 - len(related_movies)
+        # Avoid DB-level random ordering which is slow; pick a capped candidate pool and deterministically shuffle it
+        excluded_ids = [m.id for m in list(related_movies) + [movie]]
+        candidate_ids = list(
+            Movie.objects.exclude(id__in=excluded_ids)
+            .order_by("id")
+            .values_list("id", flat=True)[:100]
+        )
+        shuffled_ids = stable_shuffle(candidate_ids, seed, salt="related-fallback")
+        extra_ids = shuffled_ids[:remaining_needed]
+        extra_movies_qs = Movie.objects.filter(id__in=extra_ids).prefetch_related(
+            "genres"
+        )
+        id_to_movie = {m.id: m for m in extra_movies_qs}
+        related_movies = list(related_movies) + [
+            id_to_movie[i] for i in extra_ids if i in id_to_movie
+        ]
+
+    # Server-side shuffle related movies by seed for deterministic order
+    related_movies = stable_shuffle(related_movies, seed, salt="related")
 
     comments = movie.comments.all()
 
-    context = {"movie": movie, "related_movies": related_movies, "comments": comments}
+    context = {
+        "movie": movie,
+        "related_movies": related_movies,
+        "comments": comments,
+        "LAYOUT_VARIANT": variant_val,
+        "INITIAL_SEED": seed,
+    }
     return render(request, "details.html", context)
 
 
-def add_movie(request):
+def add_movie(request, variant=None):
     """
     Vista para registrar un evento de ADD_FILM sin guardar la película.
     """
@@ -150,29 +218,50 @@ def add_movie(request):
                 "cast": form.cleaned_data.get("cast"),
                 "duration": form.cleaned_data.get("duration"),
                 "trailer_url": form.cleaned_data.get("trailer_url"),
-                "rating": float(form.cleaned_data.get("rating")) if form.cleaned_data.get("rating") else 0,
-                "genres": ([form.cleaned_data.get("genres")] if isinstance(form.cleaned_data.get("genres"), Genre) else [genre for genre in form.cleaned_data.get("genres", [])]),
+                "rating": (
+                    float(form.cleaned_data.get("rating"))
+                    if form.cleaned_data.get("rating")
+                    else 0
+                ),
+                "genres": (
+                    [form.cleaned_data.get("genres")]
+                    if isinstance(form.cleaned_data.get("genres"), Genre)
+                    else [genre for genre in form.cleaned_data.get("genres", [])]
+                ),
             }
 
             # Crear el evento de añadir película
             add_film_event = Event.create_add_film_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validator_id=request.headers.get("X-Validator-Id", "0"),
                 movie_data=new_values,
             )
             add_film_event.save()
 
-            messages.success(request, "Evento de añadir película registrado exitosamente.")
-            return redirect("movieapp:index")
+            messages.success(
+                request, "Evento de añadir película registrado exitosamente."
+            )
+            return redirect_with_seed(request, "movieapp:index")
         else:
             messages.error(request, "Por favor, corrige los errores en el formulario.")
     else:
         form = MovieForm()
 
-    return render(request, "add.html", {"form": form})
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    return render(
+        request,
+        "add.html",
+        {"form": form, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed},
+    )
 
 
-def update_movie(request, id):
+def update_movie(request, id, variant=None):
     """
     Vista para actualizar una película existente.
     Registra el evento de EDIT_FILM si se detectan cambios, pero NO guarda los cambios en la BD.
@@ -221,7 +310,11 @@ def update_movie(request, id):
                 changed_fields.append("trailer_url")
                 new_values["trailer_url"] = form.cleaned_data.get("trailer_url")
 
-            current_rating = float(form.cleaned_data.get("rating")) if form.cleaned_data.get("rating") else None
+            current_rating = (
+                float(form.cleaned_data.get("rating"))
+                if form.cleaned_data.get("rating")
+                else None
+            )
             if current_rating != original_values["rating"]:
                 changed_fields.append("rating")
                 new_values["rating"] = current_rating
@@ -238,6 +331,7 @@ def update_movie(request, id):
                 event = Event.create_edit_film_event(
                     user=request.user if request.user.is_authenticated else None,
                     web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                    validator_id=request.headers.get("X-Validator-Id", "0"),
                     movie=movie,
                     previous_values=original_values,
                     changed_fields=changed_fields,
@@ -251,16 +345,31 @@ def update_movie(request, id):
                 request,
                 "Event added successfully ",
             )
-            return redirect("movieapp:detail", movie_id=id)
+            return redirect_with_seed(request, "movieapp:detail", movie_id=id)
         else:
             messages.error(request, "Please, fix your bugs in the form")
     else:
         form = MovieForm(instance=movie)
 
-    return render(request, "edit.html", {"form": form, "movie": movie})
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    return render(
+        request,
+        "edit.html",
+        {
+            "form": form,
+            "movie": movie,
+            "LAYOUT_VARIANT": variant_val,
+            "INITIAL_SEED": seed,
+        },
+    )
 
 
-def delete_movie(request, id):
+def delete_movie(request, id, variant=None):
     """
     Vista para eliminar una película y registrar el evento de DELETE_FILM.
     """
@@ -270,13 +379,24 @@ def delete_movie(request, id):
         delete_film_event = Event.create_delete_film_event(
             user=request.user if request.user.is_authenticated else None,
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+            validator_id=request.headers.get("X-Validator-Id", "0"),
             movie=movie,
         )
         delete_film_event.save()
         # movie.delete()
         messages.success(request, "Movie deleted successfully.")
-        return redirect("/")
-    return render(request, "delete.html", {"movie": movie})
+        return redirect_with_seed(request, "movieapp:index")
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    return render(
+        request,
+        "delete.html",
+        {"movie": movie, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed},
+    )
 
 
 def add_comment(request, movie_id):
@@ -299,6 +419,7 @@ def add_comment(request, movie_id):
             add_comment_event = Event.create_add_comment_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validator_id=request.headers.get("X-Validator-Id", "0"),
                 comment=comment,
                 movie=movie,
             )
@@ -311,42 +432,71 @@ def add_comment(request, movie_id):
                         "comment": {
                             "name": comment.name,
                             "content": comment.content,
-                            "created_at": comment.created_at.strftime("%b %d, %Y, %I:%M %p"),
-                            "time_ago": f"{(timezone.now() - comment.created_at).days} days ago" if (timezone.now() - comment.created_at).days > 0 else "Today",
+                            "created_at": comment.created_at.strftime(
+                                "%b %d, %Y, %I:%M %p"
+                            ),
+                            "time_ago": (
+                                f"{(timezone.now() - comment.created_at).days} days ago"
+                                if (timezone.now() - comment.created_at).days > 0
+                                else "Today"
+                            ),
                             "avatar": comment.avatar.url if comment.avatar else None,
                         },
                     }
                 )
 
             messages.success(request, "Your comment has been added successfully!")
-            return redirect("movieapp:detail", movie_id=movie.id)
+            return redirect_with_seed(request, "movieapp:detail", movie_id=movie.id)
 
     messages.error(request, "There was a problem with your comment.")
-    return redirect("movieapp:detail", movie_id=movie.id)
+    return redirect_with_seed(request, "movieapp:detail", movie_id=movie.id)
 
 
-def genre_list(request):
+def genre_list(request, variant=None):
     """
     Vista que muestra la lista de géneros.
     """
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
     genres = Genre.objects.all()
-    return render(request, "genres.html", {"genres": genres})
+    genres_list = stable_shuffle(genres, seed, salt="genres-page")
+    return render(
+        request,
+        "genres.html",
+        {"genres": genres_list, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed},
+    )
 
 
-def genre_detail(request, genre_id):
+def genre_detail(request, genre_id, variant=None):
     """
     Vista que muestra los detalles de un género y las películas asociadas.
     """
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
     genre = get_object_or_404(Genre, id=genre_id)
-    movies = Movie.objects.filter(genres=genre)
-    context = {"genre": genre, "movies": movies}
+    movies = Movie.objects.filter(genres=genre).prefetch_related("genres")
+    movies_list = stable_shuffle(movies, seed, salt="genre-detail")
+    context = {
+        "genre": genre,
+        "movies": movies_list,
+        "LAYOUT_VARIANT": variant_val,
+        "INITIAL_SEED": seed,
+    }
     return render(request, "genres_detail.html", context)
 
 
 # =============================================================================
 #                        CONTACT
 # =============================================================================
-def contact(request):
+def contact(request, variant=None):
     """
     Vista de contacto: guarda el mensaje en la base de datos y crea un evento.
     """
@@ -359,12 +509,15 @@ def contact(request):
             message = form.cleaned_data["message"]
 
             # Crear el mensaje de contacto
-            contact_message = ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
+            contact_message = ContactMessage.objects.create(
+                name=name, email=email, subject=subject, message=message
+            )
 
             # Crear evento de CONTACT
             contact_event = Event.create_contact_event(
                 user=request.user if request.user.is_authenticated else None,
                 web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
+                validator_id=request.headers.get("X-Validator-Id", "0"),
                 contact=contact_message,
             )
             contact_event.save()
@@ -373,10 +526,20 @@ def contact(request):
                 request,
                 "Your message has been received successfully. We will review it soon!",
             )
-            return redirect("movieapp:contact")
+            return redirect_with_seed(request, "movieapp:contact")
     else:
         form = ContactForm()
-    return render(request, "contact.html", {"form": form})
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    return render(
+        request,
+        "contact.html",
+        {"form": form, "LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed},
+    )
 
 
 # =============================================================================
@@ -384,13 +547,13 @@ def contact(request):
 # =============================================================================
 
 
-def login_view(request):
+def login_view(request, variant=None):
     """
     Vista para iniciar sesión.
     Si el usuario ya está autenticado, redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("movieapp:index")
+        return redirect_with_seed(request, "movieapp:index")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -399,36 +562,67 @@ def login_view(request):
         if user is not None:
             login(request, user)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-            login_event = Event.create_login_event(user, web_agent_id)
+            # login_event = Event.create_login_event(user, web_agent_id)
+            # login_event.save()
+            # add validation id to login event
+            # (login_event already created above; create a new one with validator_id for backward compatibility)
+            login_event = Event.create_login_event(
+                user,
+                web_agent_id,
+                validator_id=request.headers.get("X-Validator-Id", "0"),
+            )
             login_event.save()
-            next_url = request.GET.get("next", reverse("movieapp:index"))
+            # Get seed from form or request
+            seed = request.POST.get("seed") or request.GET.get("seed")
+
+            # Handle next URL (where to redirect after login)
+            next_url = request.GET.get("next") or request.POST.get("next")
+
             messages.success(request, f"Welcome back, {username}!")
-            return redirect(next_url)
+
+            # Use redirect_with_seed to preserve seed across redirect
+            if next_url:
+                # If there's a specific next URL, redirect there with seed
+                return redirect_with_seed(request, next_url, seed=seed)
+            else:
+                # Otherwise go to index with seed
+                return redirect_with_seed(request, "movieapp:index", seed=seed)
         else:
             messages.error(request, "Invalid username or password.")
-    return render(request, "login.html")
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    return render(
+        request, "login.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed}
+    )
 
 
-def logout_view(request):
+def logout_view(request, variant=None):
     """
     Vista para cerrar sesión.
     Registra el evento de cierre de sesión antes de finalizar la sesión.
     """
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-    logout_event = Event.create_logout_event(request.user, web_agent_id)
+    validator_id = request.headers.get("X-Validator-Id", "0")
+    logout_event = Event.create_logout_event(
+        request.user, web_agent_id, validator_id=validator_id
+    )
     logout(request)
     logout_event.save()
     messages.success(request, "You have been logged out successfully.")
-    return redirect("movieapp:index")
+    return redirect_with_seed(request, "movieapp:index")
 
 
-def register_view(request):
+def register_view(request, variant=None):
     """
     Vista para registrar un nuevo usuario.
     Valida la información, crea el usuario, registra los eventos de registro e inicio de sesión y redirige a la página principal.
     """
     if request.user.is_authenticated:
-        return redirect("movieapp:index")
+        return redirect_with_seed(request, "movieapp:index")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -454,21 +648,37 @@ def register_view(request):
             error = True
 
         if not error:
-            user = User.objects.create_user(username=username, email=email, password=password1)
+            user = User.objects.create_user(
+                username=username, email=email, password=password1
+            )
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
-            register_event = Event.create_registration_event(user, web_agent_id)
+            register_event = Event.create_registration_event(
+                user,
+                web_agent_id,
+                validator_id=request.headers.get("X-Validator-Id", "0"),
+            )
             register_event.save()
             # login(request, user)
             # login_event = Event.create_login_event(user, web_agent_id)
             # login_event.save()
-            messages.success(request, f"Account created successfully. Welcome, {username}!")
-            return redirect("movieapp:index")
+            messages.success(
+                request, f"Account created successfully. Welcome, {username}!"
+            )
+            return redirect_with_seed(request, "movieapp:index")
 
-    return render(request, "register.html")
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    return render(
+        request, "register.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed}
+    )
 
 
 @login_required
-def profile_view(request):
+def profile_view(request, variant=None):
     """
     Vista para mostrar y actualizar el perfil del usuario.
     Permite actualizar datos personales, email, imagen y géneros favoritos.
@@ -540,11 +750,12 @@ def profile_view(request):
             web_agent_id=request.headers.get("X-WebAgent-Id", "0"),
             profile=profile,
             previous_values=previous_values,
+            validator_id=request.headers.get("X-Validator-Id", "0"),
         )
         edit_user_event.save()
 
         messages.success(request, "Your profile has been updated successfully!")
-        return redirect("movieapp:profile")
+        return redirect_with_seed(request, "movieapp:profile")
 
     # For GET requests, display the form
     all_genres = Genre.objects.all().order_by("name")
@@ -553,4 +764,11 @@ def profile_view(request):
         "genres": all_genres,
         "selected_genres": [g.id for g in profile.favorite_genres.all()],
     }
+    # Use dynamic_context to get seed (from URL or session) instead of reading directly
+    from movieapp.context import dynamic_context
+
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    context.update({"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
     return render(request, "profile.html", context)

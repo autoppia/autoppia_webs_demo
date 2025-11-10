@@ -1,38 +1,69 @@
 // src/components/DynamicButton.tsx
-import React, { ButtonHTMLAttributes } from "react";
+
+import { useState, useEffect, ButtonHTMLAttributes, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { generateElementAttributes, generateButtonLayout } from "@/library/layoutVariants";
+import { useSeedLayout } from "@/library/useSeedLayout";
 import { EVENT_TYPES } from "@/library/events";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "outline" | "ghost" | "link" | "destructive";
-  size?: "default" | "sm" | "lg" | "icon";
+interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  eventType: keyof typeof EVENT_TYPES;
+  variant?: "default" | "outline" | "ghost";
   className?: string;
   children: React.ReactNode;
-}
-
-export interface DynamicButtonProps extends ButtonProps {
-  eventType: keyof typeof EVENT_TYPES;
+  index?: number;
 }
 
 export function DynamicButton({
   eventType,
   variant = "default",
-  size = "default",
   className = "",
   children,
+  index = 0,
   ...props
 }: DynamicButtonProps) {
-  const attributes = generateElementAttributes(eventType);
-  const layout = generateButtonLayout(eventType);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const {
+    getElementAttributes,
+    getLayoutClasses,
+    generateId,
+    generateSeedClass,
+    applyCSSVariables,
+    createDynamicStyles
+  } = useSeedLayout();
+
+  const [attributes, setAttributes] = useState<Record<string, string>>({});
+  const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
+
+  useEffect(() => {
+    // Generate dynamic attributes and styles based on seed
+    const elementAttrs = getElementAttributes(eventType, index);
+    const buttonClasses = getLayoutClasses('button');
+    const elementId = generateId(eventType, index);
+    const seedClass = generateSeedClass('dynamic-button');
+    
+    setAttributes({
+      ...elementAttrs,
+      id: elementId,
+      className: `${buttonClasses} ${seedClass} ${className}`.trim()
+    });
+    
+    setDynamicStyles(createDynamicStyles());
+  }, [eventType, index, className, getElementAttributes, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
+
+  useEffect(() => {
+    // Apply CSS variables to the button element
+    if (buttonRef.current) {
+      applyCSSVariables(buttonRef.current);
+    }
+  }, [dynamicStyles, applyCSSVariables]);
 
   return (
     <Button
-      {...props}
+      ref={buttonRef}
       {...attributes}
+      {...props}
       variant={variant}
-      size={size}
-      className={`${layout} ${className}`}
+      style={dynamicStyles}
     >
       {children}
     </Button>

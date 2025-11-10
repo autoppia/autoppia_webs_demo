@@ -5,7 +5,6 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_LOGS } from "@/library/dataset";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
-
 export default function BillingPage() {
   const { getText, getId } = useDynamicStructure();
   const [timerActive, setTimerActive] = useState(false);
@@ -15,15 +14,28 @@ export default function BillingPage() {
     hours: 0.5,
     description: "",
   });
-  const [logs, setLogs] = useState(DEMO_LOGS);
+  const [logs, setLogs] = useState(() =>
+    DEMO_LOGS.map((l: any, i: number) => ({
+      id: l.id ?? Date.now() + i,
+      matter: l.matter ?? "—",
+      client: l.client ?? "—",
+      date: l.date ?? new Date().toISOString().slice(0, 10),
+      hours: typeof l.hours === "number" ? l.hours : 1,
+      description: l.description ?? "—",
+      status: l.status ?? "Billable",
+    }))
+  );
+  const [error] = useState<string | null>(null);
   const [tab, setTab] = useState("Logs");
 
   React.useEffect(() => {
-    let id: NodeJS.Timeout;
+    let id: ReturnType<typeof setInterval> | undefined;
     if (timerActive) {
       id = setInterval(() => setTimerSec((s) => s + 1), 1000);
     }
-    return () => id && clearInterval(id);
+    return () => {
+      if (id) clearInterval(id);
+    };
   }, [timerActive]);
 
   function startTimer() {
@@ -44,7 +56,8 @@ export default function BillingPage() {
         description: "Timed entry",
         status: "Billable",
       };
-      setLogs([entry, ...logs]);
+      setLogs((prev) => [entry, ...prev]);
+      logEvent(EVENT_TYPES.NEW_LOG_ADDED, entry);
     }
   }
 
@@ -59,7 +72,7 @@ export default function BillingPage() {
       description: manual.description,
       status: "Billable",
     };
-    setLogs([entry, ...logs]);
+    setLogs((prev) => [entry, ...prev]);
     setManual({ matter: "", hours: 0.5, description: "" });
     logEvent(EVENT_TYPES.NEW_LOG_ADDED, entry);
   }
@@ -200,6 +213,9 @@ export default function BillingPage() {
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-5">{getText("recent_activity")}</h2>
           <div className="flex flex-col gap-4">
+            {error && (
+              <div className="text-red-600 px-4 py-2">Failed to load logs: {error}</div>
+            )}
             {logs.length === 0 && (
               <div
                 id={getId("no_logs_message")}

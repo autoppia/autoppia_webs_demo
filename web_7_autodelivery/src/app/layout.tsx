@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
+import { LayoutProvider } from "@/contexts/LayoutProvider";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import { RestaurantProvider } from "@/contexts/RestaurantContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,11 +32,17 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50`}
     >
       <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
-        <Navbar />
-        {/* Optionally add persistent cart ui/button here */}
-        <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
-          {children}
-        </div>
+        <LayoutProvider>
+          <RestaurantProvider>
+            <DataReadyGate>
+              <Navbar />
+              {/* Optionally add persistent cart ui/button here */}
+              <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
+                {children}
+              </div>
+            </DataReadyGate>
+          </RestaurantProvider>
+        </LayoutProvider>
       </body>
     </html>
   );

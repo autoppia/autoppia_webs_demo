@@ -1,7 +1,10 @@
+import type React from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
+import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="antialiased" suppressHydrationWarning>
-        <ClientBody>{children}</ClientBody>
+        <ClientBody>
+          <Suspense fallback={<div>Loading...</div>}>
+            <DynamicStructureProvider>
+              {children}
+            </DynamicStructureProvider>
+          </Suspense>
+        </ClientBody>
       </body>
     </html>
   );

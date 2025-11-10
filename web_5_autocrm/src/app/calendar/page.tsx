@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,7 +14,6 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 function getMonthMatrix(year: number, month: number) {
-  // returns [[date, ...], ...weeks] covering 6 weeks
   const matrix = [];
   const firstDayOfWeek = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -36,17 +35,28 @@ function pad(num: number) {
 
 export default function CalendarPage() {
   const { getText, getId } = useDynamicStructure();
+  const [error] = useState<string | null>(null);
   const today = new Date();
   const [curMonth, setCurMonth] = useState(today.getMonth());
   const [curYear, setCurYear] = useState(today.getFullYear());
   const [openEventDate, setOpenEventDate] = useState<string | null>(null);
-  const [events, setEvents] = useState<CalendarEvent[]>(EVENTS);
+  const [events, setEvents] = useState<CalendarEvent[]>(() =>
+    EVENTS.map((ev: any, i: number) => ({
+      id: ev.id ?? i + 1,
+      date: ev.date ?? new Date().toISOString().slice(0, 10),
+      label: ev.label ?? "Event",
+      time: ev.time ?? "2:00pm",
+      color: (["forest", "indigo", "blue", "zinc"].includes(ev.color)
+        ? ev.color
+        : "forest") as keyof typeof COLORS,
+    }))
+  );
 
   const monthLabel = new Date(curYear, curMonth).toLocaleString("default", {
     month: "long",
     year: "numeric",
   });
-  const weeks = getMonthMatrix(curYear, curMonth);
+  const weeks = useMemo(() => getMonthMatrix(curYear, curMonth), [curYear, curMonth]);
   const getDateStr = (d: number) => `${curYear}-${pad(curMonth + 1)}-${pad(d)}`;
 
   return (
@@ -90,6 +100,9 @@ export default function CalendarPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
+        {error && (
+          <div className="px-6 py-3 text-red-600">Failed to load calendar: {error}</div>
+        )}
         <div className="grid grid-cols-7 bg-neutral-bg-dark text-zinc-500 text-xs font-semibold uppercase tracking-wider">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
             <div

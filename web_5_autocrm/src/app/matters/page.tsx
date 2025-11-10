@@ -53,6 +53,8 @@ function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
   const [matters, setMatters] = useState<Matter[]>([]);
+  const data = DEMO_MATTERS;
+  const error: string | null = null;
   const [selected, setSelected] = useState<string[]>([]);
   const [openNew, setOpenNew] = useState(false);
   const [newMatter, setNewMatter] = useState({
@@ -63,13 +65,21 @@ function MattersListPageContent() {
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
+    const base = (data && data.length ? data : DEMO_MATTERS) as any[];
+    const normalized = base.map((m: any) => ({
+      id: m.id ?? `MAT-${Math.floor(Math.random() * 9000 + 1000)}`,
+      name: m.name ?? 'Untitled Matter',
+      client: m.client ?? '—',
+      status: m.status ?? 'Active',
+      updated: m.updated ?? 'Today',
+    })) as Matter[];
     if (saved) {
       setMatters(JSON.parse(saved));
     } else {
-      setMatters(DEMO_MATTERS);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEMO_MATTERS));
+      setMatters(normalized);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
     }
-  }, []);
+  }, [data]);
 
   const updateMatters = (newList: Matter[]) => {
     setMatters(newList);
@@ -136,6 +146,9 @@ function MattersListPageContent() {
 
         {/* Matter List */}
         <div className="grid gap-4">
+          {error && (
+            <div className="text-red-600">Failed to load matters: {error}</div>
+          )}
           {matters.map((matter) => (
             <DynamicItem
               key={matter.id}
@@ -177,7 +190,7 @@ function MattersListPageContent() {
 
         {/* Batch Actions */}
         {selected.length > 0 && (
-          <div className="flex justify-end gap-2 mt-4">
+          <div className="flex flex-wrap justify-end gap-3 mt-4 p-4 bg-zinc-50 rounded-lg border border-zinc-200">
             <DynamicButton
               eventType="ARCHIVE_MATTER"
               onClick={archiveSelected}

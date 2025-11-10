@@ -6,12 +6,16 @@ from pathlib import Path
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
-from django.db import connections, DEFAULT_DB_ALIAS
+from django.db import connections, DEFAULT_DB_ALIAS, connection
 from django.db.utils import OperationalError
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = f"Completely drops all data from the '{DEFAULT_DB_ALIAS}' database configured in settings."
+    help = f"Completely drops all data from the '{DEFAULT_DB_ALIAS}' database configured in settings, \
+or performs a filtered deletion of Event records."
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -30,10 +34,36 @@ class Command(BaseCommand):
             default=4,
             help="Number of parallel workers for seeding",
         )
+        # new optional filters
+        parser.add_argument(
+            "--web-agent-id",
+            dest="web_agent_id",
+            help="If provided with --validator-id, only delete events matching this web_agent_id",
+            type=str,
+            default=None,
+        )
+        parser.add_argument(
+            "--validator-id",
+            dest="validator_id",
+            help="If provided with --web-agent-id, only delete events matching this validator_id",
+            type=str,
+            default=None,
+        )
+
+    # ───────────────────────────────────────────────
+    # MAIN ENTRY
+    # ───────────────────────────────────────────────
 
     def handle(self, *args, **options):
         start_time = time.monotonic()
         db_alias = options["database"]
+        web_agent_id = options.get("web_agent_id")
+        validator_id = options.get("validator_id")
+
+        is_filtered_delete = bool(web_agent_id and validator_id)
+
+        logger.debug("reset_db (web2) called with options: %s", options)
+
         try:
             db_config = settings.DATABASES[db_alias]
         except KeyError:
@@ -41,29 +71,92 @@ class Command(BaseCommand):
 
         db_name = db_config.get("NAME", "unknown")
 
+        # Confirm destructive operation
         if not options["force"]:
-            confirm = input(f"⚠️ DESTROY ALL DATA in database '{db_name}' (alias: '{db_alias}')? [y/N] ")
-            if confirm.lower() != "y":
+            if is_filtered_delete:
+                confirm = input(f"⚠️ Delete Event records matching web_agent_id='{web_agent_id}' and validator_id='{validator_id}'? [y/N] ")
+            else:
+                confirm = input(f"⚠️ DESTROY ALL DATA in database '{db_name}' (alias: '{db_alias}')? [y/N] ")
+
+            if confirm.strip().lower() != "y":
                 self.stdout.write(self.style.WARNING("Operation cancelled"))
                 return
 
         try:
-            self.drop_database_data(db_alias, db_config)
+            # ─── Filtered deletion path ─────────────────────
+            if is_filtered_delete:
+                deleted_count = self.delete_events_filtered(web_agent_id, validator_id)
+                elapsed = time.monotonic() - start_time
+                if deleted_count:
+                    self.stdout.write(self.style.SUCCESS(f"✅ Deleted {deleted_count} Event records matching web_agent_id='{web_agent_id}', validator_id='{validator_id}' in {elapsed:.2f}s."))
+                else:
+                    self.stdout.write(self.style.NOTICE(f"No Event records matched the provided filters (web_agent_id='{web_agent_id}', validator_id='{validator_id}')."))
+                return
 
+            # ─── Full destructive reset path ─────────────────
+            self.drop_database_data(db_alias, db_config)
             self.apply_migrations(db_alias)
             self.seed_database()
 
-            end_time = time.monotonic()
-            total_time = end_time - start_time
-            self.stdout.write(self.style.SUCCESS(f"Database '{db_name}' (alias: '{db_alias}') reset successfully in {total_time:.2f} seconds"))
+            elapsed = time.monotonic() - start_time
+            self.stdout.write(self.style.SUCCESS(f"Database '{db_name}' (alias: '{db_alias}') reset successfully in {elapsed:.2f} seconds."))
 
-        except (ValueError, OperationalError, Exception) as e:
+        except Exception as e:
             self.stderr.write(self.style.ERROR(f"An error occurred during reset: {e}"))
             self.stderr.write(traceback.format_exc())
             sys.exit(1)
 
+    # ───────────────────────────────────────────────
+    # FILTERED DELETION
+    # ───────────────────────────────────────────────
+
+    def delete_events_filtered(self, web_agent_id: str, validator_id: str) -> int:
+        """Deletes Event records that match both filters. Returns count."""
+        try:
+            from events.models import Event
+
+            def _table_exists(model):
+                try:
+                    table = model._meta.db_table
+                    return table in connection.introspection.table_names()
+                except Exception:
+                    return False
+
+            if not _table_exists(Event):
+                self.stdout.write(self.style.NOTICE("Events table does not exist yet; skipping filtered deletion."))
+                return 0
+
+            filters = {"web_agent_id": web_agent_id, "validator_id": validator_id}
+            pre_count = Event.objects.filter(**filters).count()
+            if pre_count:
+                Event.objects.filter(**filters).delete()
+                logger.info("Deleted %s Event records with web_agent_id=%s, validator_id=%s", pre_count, web_agent_id, validator_id)
+            else:
+                logger.info("No Event records matched filters: web_agent_id=%s, validator_id=%s", web_agent_id, validator_id)
+
+            # Optional: show counters if Event defines deletion tracking
+            # try:
+            #     counters = getattr(Event, "_deletion_counters", None)
+            #     if counters:
+            #         self.stdout.write(self.style.NOTICE("Event deletion counters summary:"))
+            #         for crit, total in counters.items():
+            #             self.stdout.write(self.style.NOTICE(f"  - {crit}: {total}"))
+            # except Exception:
+            #     pass
+
+            return pre_count
+
+        except Exception as e:
+            logger.exception("Filtered Event deletion failed: %s", e)
+            self.stdout.write(self.style.ERROR(f"Filtered Event deletion failed: {e}"))
+            return 0
+
+    # ───────────────────────────────────────────────
+    # DATABASE RESET (UNCHANGED CORE LOGIC)
+    # ───────────────────────────────────────────────
+
     def drop_database_data(self, db_alias, db_config):
-        """Database-engine specific data destruction"""
+        """Database-engine specific data destruction."""
         db_engine = db_config["ENGINE"]
         db_name = db_config.get("NAME", "unknown")
         self.stdout.write(f"\n🔴 Destroying data in {db_engine} database: {db_name} (alias: {db_alias})")
@@ -87,12 +180,12 @@ class Command(BaseCommand):
                 # For flush, it usually expects an open connection.
                 connections.ensure_connection(db_alias)
                 call_command("flush", "--no-input", database=db_alias, interactive=False)
-                self.stdout.write(self.style.SUCCESS(f"'flush' command executed successfully for database '{db_name}'"))
+                self.stdout.write(self.style.SUCCESS(f"'flush' executed successfully for '{db_name}'"))
             except Exception as e:
                 raise ValueError(f"Error running flush command: {e}")
 
     def drop_sqlite(self, db_config):
-        """Nuclear option for SQLite - delete the file"""
+        """Delete SQLite file."""
         db_path_str = db_config.get("NAME")
         if not db_path_str:
             raise ValueError("SQLite database 'NAME' not configured in settings.")
@@ -107,7 +200,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING(f"SQLite file not found at {db_path} (might be in-memory or already deleted)"))
 
     def drop_postgresql(self, db_alias, db_config):
-        """PostgreSQL-specific data destruction"""
+        """PostgreSQL-specific data destruction."""
         db_name = db_config.get("NAME", "unknown")
         try:
             with connections[db_alias].cursor() as cursor:
@@ -198,8 +291,8 @@ class Command(BaseCommand):
         """Applies all migrations."""
         self.stdout.write("\n🛠️ Applying migrations...")
         try:
-            call_command("makemigrations", "--noinput")
-            call_command("migrate", "--noinput")
+            call_command("makemigrations", interactive=False, verbosity=1)
+            call_command("migrate", database=db_alias, interactive=False, verbosity=1)
             self.stdout.write(self.style.SUCCESS("Migrations applied successfully."))
         except Exception as e:
             raise ValueError(f"Error applying migrations: {e}")

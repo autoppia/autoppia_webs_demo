@@ -14,10 +14,12 @@ def get_events(request):
     Fetch events for the web_agent identified by the provided `X-WebAgent-Id` header.
     """
     web_agent_id = request.headers.get("X-WebAgent-Id")
+    validator_id = request.headers.get("X-Validator-Id")
     if not web_agent_id:
         return Response({"error": "X-WebAgent-Id is required."}, status=status.HTTP_400_BAD_REQUEST)
-
-    events = Event.objects.filter(web_agent_id=web_agent_id).order_by("-timestamp")
+    if not validator_id:
+        return Response({"error": "X-Validator-Id is required."}, status=status.HTTP_400_BAD_REQUEST)
+    events = Event.objects.filter(web_agent_id=web_agent_id, validator_id=validator_id).order_by("-timestamp")
     serializer = EventSerializer(events, many=True)
     return Response(serializer.data)
 
@@ -38,14 +40,17 @@ def reset_events(request):
     Delete events for a specific web_agent_id provided in the X-WebAgent-Id header.
     """
     web_agent_id = request.headers.get("X-WebAgent-Id")
+    validator_id = request.headers.get("X-Validator-Id")
     if not web_agent_id:
         return Response({"error": "X-WebAgent-Id is required."}, status=status.HTTP_400_BAD_REQUEST)
+    if not validator_id:
+        return Response({"error": "X-Validator-Id is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-    count = Event.objects.filter(web_agent_id=web_agent_id).count()
-    Event.objects.filter(web_agent_id=web_agent_id).delete()
+    count = Event.objects.filter(web_agent_id=web_agent_id, validator_id=validator_id).count()
+    Event.objects.filter(web_agent_id=web_agent_id, validator_id=validator_id).delete()
 
     return Response(
-        {"message": f"Events for web_agent '{web_agent_id}' have been deleted successfully ({count} events)."},
+        {"message": f"Events for web_agent '{web_agent_id}' and validator_id '{validator_id}' have been deleted successfully ({count} events)."},
         status=status.HTTP_200_OK,
     )
 
@@ -109,6 +114,7 @@ def add_event(request):
     """
     event_name = request.data.get("event_name")
     web_agent_id = request.data.get("web_agent_id")
+    validator_id = request.data.get("validator_id")
     user_id = request.data.get("user_id")
     data = request.data.get("data", {})
 
@@ -117,6 +123,8 @@ def add_event(request):
         return Response({"error": "event_name is required."}, status=status.HTTP_400_BAD_REQUEST)
     if not web_agent_id:
         return Response({"error": "web_agent_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+    if not validator_id:
+        return Response({"error": "validator_id is required."}, status=status.HTTP_400_BAD_REQUEST)
 
     # Get user if user_id is provided
     user = None
@@ -138,26 +146,26 @@ def add_event(request):
             except Movie.DoesNotExist:
                 return Response({"error": f"Movie with id {movie_id} not found."}, status=status.HTTP_404_NOT_FOUND)
 
-            event = Event.create_film_detail_event(user, web_agent_id, movie)
+            event = Event.create_film_detail_event(user, web_agent_id, movie, validator_id=validator_id)
 
         elif event_name == "SEARCH":
             query = data.get("query")
             if not query:
                 return Response({"error": "query is required for SEARCH events."}, status=status.HTTP_400_BAD_REQUEST)
 
-            event = Event.create_search_event(user, web_agent_id, query)
+            event = Event.create_search_event(user, web_agent_id, query, validator_id=validator_id)
 
         elif event_name == "REGISTRATION":
             if not user:
                 return Response({"error": "user_id is required for REGISTRATION events."}, status=status.HTTP_400_BAD_REQUEST)
 
-            event = Event.create_registration_event(user, web_agent_id)
+            event = Event.create_registration_event(user, web_agent_id, validator_id=validator_id)
 
         elif event_name == "LOGIN":
             if not user:
                 return Response({"error": "user_id is required for LOGIN events."}, status=status.HTTP_400_BAD_REQUEST)
 
-            event = Event.create_login_event(user, web_agent_id)
+            event = Event.create_login_event(user, web_agent_id, validator_id=validator_id)
 
         else:
             return Response({"error": f"Unknown event_name: {event_name}"}, status=status.HTTP_400_BAD_REQUEST)

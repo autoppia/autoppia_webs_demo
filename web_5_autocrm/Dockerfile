@@ -1,4 +1,10 @@
-# Stage 1: Build the Next.js application
+# Stage 0: prod deps only (no dev deps like biome)
+FROM node:20-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+# Stage 1: build with dev deps
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -9,7 +15,7 @@ ARG ENABLE_DYNAMIC_STRUCTURE=true
 
 COPY package.json package-lock.json ./
 
-# Install dependencies (including dev libraries needed for building)
+# Install dependencies (including dev dependencies needed for building)
 RUN npm ci
 
 COPY . .
@@ -33,15 +39,17 @@ RUN npm run build
 FROM node:20-alpine AS runner
 
 WORKDIR /app
-
-ENV NODE_ENV production
-
-ENV PORT 8004
+ENV NODE_ENV=production
+ENV PORT=8004
 EXPOSE 8004
 
-COPY --from=builder /app/.next ./.next
-#COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
+# prod deps only (from deps stage)
+COPY --from=deps /app/node_modules ./node_modules
+
+# app artifacts
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/next.config.js ./next.config.js
+# This app has no public directory
 
 CMD ["npm", "start"]

@@ -11,6 +11,7 @@ import { useDynamicStructure } from "@/context/DynamicStructureContext";
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
   const [files, setFiles] = useState(DEMO_FILES);
+  const [error] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -92,6 +93,9 @@ export default function DocumentsPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {error && (
+          <div className="col-span-full text-red-600">Failed to load documents: {error}</div>
+        )}
         {files.map((file, index) => (
           <DynamicItem key={file.id} index={index} className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition">
             <div className="flex items-center gap-3 mb-2">
