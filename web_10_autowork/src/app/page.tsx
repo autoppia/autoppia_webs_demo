@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { title } from "process";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,6 +10,37 @@ import { useSeedLayout } from "@/library/useSeedLayout";
 import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { writeJson } from "@/shared/storage";
 
+const POPULAR_SKILLS = [
+  "JavaScript",
+  "TypeScript",
+  "Python",
+  "Java",
+  "C#",
+  "C++",
+  "Ruby",
+  "Go",
+  "Swift",
+  "Kotlin",
+  "Objective-C",
+  "PHP",
+  "HTML",
+  "CSS",
+  "React",
+  "Angular",
+  "Vue.js",
+  "Node.js",
+  "Django",
+  "Flask",
+] as const;
+
+const SCOPE_SIZE_OPTIONS = ["Large", "Medium", "Small"] as const;
+const SCOPE_DURATION_OPTIONS = ["More than 6 months", "3 to 6 months"] as const;
+
+const BUDGET_TYPE_OPTIONS = [
+  { key: "hourly", label: "Hourly rate" },
+  { key: "fixed", label: "Fixed price" },
+] as const;
+
 function PostJobWizard({
   open,
   onClose,
@@ -17,7 +48,11 @@ function PostJobWizard({
   open: boolean;
   onClose: () => void;
 }) {
+<<<<<<< HEAD
   const { layout, getElementAttributes, getText } = useSeedLayout();
+=======
+  const { layout, getElementAttributes, shuffleList } = useSeedLayout();
+>>>>>>> fixes/web10
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -32,6 +67,23 @@ function PostJobWizard({
     attachments: [] as File[],
   });
   const totalSteps = 5;
+
+  const popularSkillOptions = useMemo(
+    () => shuffleList([...POPULAR_SKILLS], "postjob_popular_skills"),
+    [shuffleList]
+  );
+  const scopeSizeOptions = useMemo(
+    () => shuffleList([...SCOPE_SIZE_OPTIONS], "postjob_scope_size"),
+    [shuffleList]
+  );
+  const scopeDurationOptions = useMemo(
+    () => shuffleList([...SCOPE_DURATION_OPTIONS], "postjob_scope_duration"),
+    [shuffleList]
+  );
+  const budgetTypeOptions = useMemo(
+    () => shuffleList(BUDGET_TYPE_OPTIONS.map((option) => ({ ...option })), "postjob_budget_type"),
+    [shuffleList]
+  );
 
   function setValue<K extends keyof typeof form>(
     key: K,
@@ -49,30 +101,6 @@ function PostJobWizard({
     setStep(1);
     onClose();
   }
-
-  // Popular skills step 2
-  const popularSkills = [
-    "JavaScript",
-    "TypeScript",
-    "Python",
-    "Java",
-    "C#",
-    "C++",
-    "Ruby",
-    "Go",
-    "Swift",
-    "Kotlin",
-    "Objective-C",
-    "PHP",
-    "HTML",
-    "CSS",
-    "React",
-    "Angular",
-    "Vue.js",
-    "Node.js",
-    "Django",
-    "Flask",
-  ];
 
   // Stepper progress text
   const progress = `${step}/${totalSteps}`;
@@ -333,6 +361,7 @@ function PostJobWizard({
               </>
             )}
             {currentStepKey === 'skills' && (
+<<<<<<< HEAD
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
                   {getText(
@@ -547,80 +576,352 @@ function PostJobWizard({
                   </div>
                 </div>
               </>
+=======
+              <div className="space-y-8">
+                {(layout.formFields?.skills ?? ["search", "popular", "selected"]).map((sectionKey) => {
+                  if (sectionKey === "search") {
+                    return (
+                      <section key="skills-search">
+                        <label className="font-semibold mb-2 block text-[#253037]">
+                          Search skills or add your own
+                        </label>
+                        <div className="flex gap-2 items-start" ref={dropdownRef}>
+                          <input
+                            {...getElementAttributes('skill-search-input', 0)}
+                            className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
+                            placeholder="Type a skill and press Enter or Add button"
+                            type="text"
+                            value={form.customSkill}
+                            onChange={(e) => {
+                              const query = e.target.value;
+                              setValue("customSkill", query);
+                              if (query.length > 0) {
+                                const matches = POPULAR_SKILLS.filter((s) =>
+                                  s.toLowerCase().includes(query.toLowerCase())
+                                );
+                                setFilteredSkills(matches);
+                                setShowDropdown(true);
+                                logEvent(EVENT_TYPES.SEARCH_SKILL, {
+                                  query,
+                                  timestamp: Date.now(),
+                                });
+                              } else {
+                                setShowDropdown(false);
+                                setFilteredSkills([]);
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && form.customSkill.trim()) {
+                                const skill = form.customSkill.trim();
+                                if (!form.skills.includes(skill)) {
+                                  setValue("skills", [...form.skills, skill]);
+                                  logEvent(EVENT_TYPES.ADD_SKILL, {
+                                    skill,
+                                    method: "custom_input",
+                                    timestamp: Date.now(),
+                                  });
+                                }
+                                setValue("customSkill", "");
+                                e.preventDefault();
+                              }
+                            }}
+                          />
+                          {showDropdown && filteredSkills.length > 0 && (
+                            <ul className="absolute z-10 bg-white border border-gray-300 w-40 mt-10 rounded shadow-sm max-h-52 overflow-y-auto">
+                              {filteredSkills.map((skill) => (
+                                <li
+                                  key={skill}
+                                  onClick={() => {
+                                    if (!form.skills.includes(skill)) {
+                                      setValue("skills", [...form.skills, skill]);
+                                    }
+                                    setValue("customSkill", "");
+                                    setFilteredSkills([]);
+                                    setShowDropdown(false);
+                                  }}
+                                  className="px-4 py-2 hover:bg-[#e6f9fb] cursor-pointer text-sm"
+                                >
+                                  {skill}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                          <button
+                            {...getElementAttributes('add-skill-button', 0)}
+                            className="rounded bg-[#08b4ce] text-white px-4 py-2 h-11 ml-2 font-bold hover:bg-[#0999ac]"
+                            type="button"
+                            onClick={() => {
+                              const skill = form.customSkill.trim();
+                              if (skill) {
+                                if (!form.skills.includes(skill)) {
+                                  setValue("skills", [...form.skills, skill]);
+                                  logEvent(EVENT_TYPES.ADD_SKILL, {
+                                    skill,
+                                    method: "custom_input",
+                                    timestamp: Date.now(),
+                                  });
+                                }
+                                setValue("customSkill", "");
+                              }
+                            }}
+                          >
+                            Add
+                          </button>
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  if (sectionKey === "selected") {
+                    return (
+                      <section key="skills-selected">
+                        <div className="mb-2 text-xs text-[#4a545b]">
+                          For the best results, add 3-5 skills
+                        </div>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          {form.skills.map((skill, i) => (
+                            <span
+                              key={skill + i}
+                              className="px-3 py-1 bg-[#e6f9fb] border border-[#08b4ce88] rounded-full text-[#08b4ce] font-medium text-sm flex items-center gap-1"
+                            >
+                              {skill}
+                              <button
+                                {...getElementAttributes('remove-skill-button', i)}
+                                type="button"
+                                className="ml-1 text-xs font-bold"
+                                onClick={() => {
+                                  const updatedSkills = form.skills.filter(
+                                    (s) => s !== skill
+                                  );
+                                  setValue("skills", updatedSkills);
+                                  logEvent(EVENT_TYPES.REMOVE_SKILL, {
+                                    skill,
+                                    timestamp: Date.now(),
+                                  });
+                                }}
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                        {form.skills.length === 0 && (
+                          <div className="text-sm text-[#4a545b]">
+                            Selected skills will appear here once you add them.
+                          </div>
+                        )}
+                      </section>
+                    );
+                  }
+
+                  if (sectionKey === "popular") {
+                    return (
+                      <section key="skills-popular">
+                        <span className="font-medium">
+                          Popular skills for Software Development
+                        </span>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {popularSkillOptions.map((skill, idx) => (
+                            <button
+                              key={skill}
+                              {...getElementAttributes('popular-skill-button', idx)}
+                              type="button"
+                              className="px-3 py-1 bg-gray-100 hover:bg-[#e6f9fb] border border-[#cad2d0] rounded-full text-[#253037] text-sm"
+                              onClick={() => {
+                                if (!form.skills.includes(skill)) {
+                                  setValue("skills", [...form.skills, skill]);
+                                  logEvent(EVENT_TYPES.ADD_SKILL, {
+                                    skill,
+                                    method: "popular_skill",
+                                  });
+                                }
+                              }}
+                            >
+                              {skill} +
+                            </button>
+                          ))}
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  return null;
+                })}
+              </div>
+            )}
+            {currentStepKey === 'scope' && (
+              <div className="space-y-8">
+                {(layout.formFields?.scope ?? ["size", "duration"]).map((sectionKey) => {
+                  if (sectionKey === "size") {
+                    return (
+                      <section key="scope-size">
+                        <label className="font-semibold mb-2 block text-[#253037]">
+                          Estimate the size of your project
+                        </label>
+                        <div className="space-y-4">
+                          {scopeSizeOptions.map((opt) => (
+                            <label
+                              key={opt}
+                              className="flex items-start gap-3 cursor-pointer select-none"
+                            >
+                              <input
+                                type="radio"
+                                name="scope"
+                                value={opt}
+                                checked={form.scope === opt}
+                                onChange={() => setValue("scope", opt)}
+                                required
+                                className="mt-1 accent-[#08b4ce]"
+                              />
+                              <span className="font-bold mr-1">{opt}</span>
+                              <span className="text-sm text-[#4a545b]">
+                                {opt === "Large"
+                                  ? "Longer term or complex initiatives (ex. design and build a full website)"
+                                  : opt === "Medium"
+                                  ? "Well-defined projects (ex. a landing page)"
+                                  : "Quick and straightforward tasks (ex. update text and images on a webpage)"}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  if (sectionKey === "duration") {
+                    return (
+                      <section key="scope-duration">
+                        <span className="font-semibold mb-2 block text-[#253037]">
+                          How long will your work take?
+                        </span>
+                        <div className="space-y-2 mt-4">
+                          {scopeDurationOptions.map((opt) => (
+                            <label
+                              key={opt}
+                              className="flex items-center gap-2 cursor-pointer select-none"
+                            >
+                              <input
+                                type="radio"
+                                name="duration"
+                                value={opt}
+                                checked={form.duration === opt}
+                                onChange={() => setValue("duration", opt)}
+                                required
+                                className="accent-[#08b4ce]"
+                              />
+                              <span className="text-base text-[#4a545b]">{opt}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  return null;
+                })}
+              </div>
+>>>>>>> fixes/web10
             )}
             {currentStepKey === 'budget' && (
-              <>
-                <span className="font-semibold mb-2 text-[#253037]">
-                  Choose a budget type
-                </span>
-                <div className="flex gap-6 mb-7 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setValue("budgetType", "hourly")}
-                    className={`flex-1 px-6 py-5 rounded-xl border text-left ${
-                      form.budgetType === "hourly"
-                        ? "border-green-600 bg-[#f8fff8]"
-                        : "border-gray-200 bg-white"
-                    }`}
-                  >
-                    <span className="block mb-1 font-bold text-lg flex items-center gap-2">
-                      <span
-                        className={`inline-block w-5 h-5 mr-1 rounded-full border-2 ${
-                          form.budgetType === "hourly"
-                            ? "border-green-600 bg-[#1fc12c]"
-                            : "border-gray-200 bg-white"
-                        }`}
-                      ></span>
-                      Hourly rate
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setValue("budgetType", "fixed")}
-                    className={`flex-1 px-6 py-5 rounded-xl border text-left ${
-                      form.budgetType === "fixed"
-                        ? "border-green-600 bg-[#f8fff8]"
-                        : "border-gray-200 bg-white"
-                    }`}
-                  >
-                    <span className="block mb-1 font-bold text-lg flex items-center gap-2">
-                      <span
-                        className={`inline-block w-5 h-5 mr-1 rounded-full border-2 ${
-                          form.budgetType === "fixed"
-                            ? "border-green-600 bg-[#1fc12c]"
-                            : "border-gray-200 bg-white"
-                        }`}
-                      ></span>
-                      Fixed price
-                    </span>
-                  </button>
-                </div>
-                <div className="flex gap-4 items-end mb-2">
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="From"
-                    className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
-                    value={form.rateFrom}
-                    onChange={(e) => setValue("rateFrom", e.target.value)}
-                  />
-                  <span className="text-gray-500 font-medium mb-2">/hr</span>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="To"
-                    className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
-                    value={form.rateTo}
-                    onChange={(e) => setValue("rateTo", e.target.value)}
-                  />
-                  <span className="text-gray-500 font-medium mb-2">/hr</span>
-                </div>
-                <div className="text-xs text-[#4a545b] mb-2">
-                  This is the average rate for similar projects.
-                </div>
-              </>
+              <div className="space-y-8">
+                {(layout.formFields?.budget ?? ["type", "rate", "increase"]).map((sectionKey) => {
+                  if (sectionKey === "type") {
+                    return (
+                      <section key="budget-type">
+                        <span className="font-semibold mb-2 block text-[#253037]">
+                          Choose a budget type
+                        </span>
+                        <div className="flex flex-col md:flex-row gap-4 md:gap-6 mt-2">
+                          {budgetTypeOptions.map((option, optionIndex) => (
+                            <button
+                              key={option.key}
+                              type="button"
+                              onClick={() => setValue("budgetType", option.key)}
+                              className={`flex-1 px-6 py-5 rounded-xl border text-left ${
+                                form.budgetType === option.key
+                                  ? "border-green-600 bg-[#f8fff8]"
+                                  : "border-gray-200 bg-white"
+                              }`}
+                              {...getElementAttributes('budget-type-button', optionIndex)}
+                            >
+                              <span className="block mb-1 font-bold text-lg flex items-center gap-2">
+                                <span
+                                  className={`inline-block w-5 h-5 mr-1 rounded-full border-2 ${
+                                    form.budgetType === option.key
+                                      ? "border-green-600 bg-[#1fc12c]"
+                                      : "border-gray-200 bg-white"
+                                  }`}
+                                ></span>
+                                {option.label}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  if (sectionKey === "rate") {
+                    return (
+                      <section key="budget-rate">
+                        <div className="flex flex-wrap gap-4 items-end">
+                          <div className="flex flex-col">
+                            <label className="text-xs uppercase tracking-wide text-gray-500 mb-1">
+                              From
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              placeholder="0"
+                              className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
+                              value={form.rateFrom}
+                              onChange={(e) => setValue("rateFrom", e.target.value)}
+                            />
+                          </div>
+                          <span className="text-gray-500 font-medium pb-2">/hr</span>
+                          <div className="flex flex-col">
+                            <label className="text-xs uppercase tracking-wide text-gray-500 mb-1">
+                              To
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              placeholder="0"
+                              className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
+                              value={form.rateTo}
+                              onChange={(e) => setValue("rateTo", e.target.value)}
+                            />
+                          </div>
+                          <span className="text-gray-500 font-medium pb-2">/hr</span>
+                        </div>
+                        <div className="text-xs text-[#4a545b] mt-2">
+                          This is the average rate for similar projects.
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  if (sectionKey === "increase") {
+                    return (
+                      <section
+                        key="budget-increase"
+                        className="rounded-xl border border-dashed border-gray-200 p-4 bg-gray-50"
+                      >
+                        <span className="font-semibold text-[#253037]">
+                          Optional: Plan a future rate increase
+                        </span>
+                        <p className="text-sm text-[#4a545b] mt-2">
+                          You can add rate adjustments later in your contract details if your work grows in scope.
+                        </p>
+                      </section>
+                    );
+                  }
+
+                  return null;
+                })}
+              </div>
             )}
             {currentStepKey === 'description' && (
               <>
@@ -836,7 +1137,12 @@ function PostJobWizard({
 
 export default function Home() {
 	const [showPostJob, setShowPostJob] = useState(false);
+<<<<<<< HEAD
 	const { layout, getElementAttributes, getText } = useSeedLayout();
+=======
+	const [hasSeenInitialLoad, setHasSeenInitialLoad] = useState(false);
+	const { layout, getElementAttributes } = useSeedLayout();
+>>>>>>> fixes/web10
 
 	const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
 	const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
@@ -845,6 +1151,36 @@ export default function Home() {
 	const isLoading = jobsState.isLoading || hiresState.isLoading || expertsState.isLoading;
 	const errorMessage = jobsState.error || hiresState.error || expertsState.error;
 	const statusMessage = jobsState.statusMessage || hiresState.statusMessage || expertsState.statusMessage;
+
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		try {
+			if (localStorage.getItem("autoworkInitialLoadComplete") === "true") {
+				setHasSeenInitialLoad(true);
+			}
+		} catch {
+			// ignore storage access errors
+		}
+	}, []);
+
+	useEffect(() => {
+		if (
+			!hasSeenInitialLoad &&
+			!isLoading &&
+			jobsState.data.length > 0 &&
+			hiresState.data.length > 0 &&
+			expertsState.data.length > 0
+		) {
+			setHasSeenInitialLoad(true);
+			try {
+				localStorage.setItem("autoworkInitialLoadComplete", "true");
+			} catch {
+				// ignore storage access errors
+			}
+		}
+	}, [hasSeenInitialLoad, isLoading, jobsState.data.length, hiresState.data.length, expertsState.data.length]);
+
+	const showInitialLoading = !hasSeenInitialLoad && (isLoading || Boolean(statusMessage));
 
 	// Persist combined dataset once loaded
 	useEffect(() => {
@@ -1077,6 +1413,10 @@ export default function Home() {
 								.replace(/\s+/g, "-")
 								.replace(/\./g, "")}`}
 							passHref
+<<<<<<< HEAD
+=======
+							prefetch={false}
+>>>>>>> fixes/web10
 							{...getElementAttributes('book-consultation-button', i)}
 							className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
 						>
@@ -1104,7 +1444,7 @@ export default function Home() {
 
 	return (
 		<main className="px-10 mt-12 pb-16 text-[#253037]">
-			{(isLoading || statusMessage) && (
+			{showInitialLoading && (
 				<div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6">
 					<div className="w-14 h-14 rounded-full border-4 border-[#08b4ce] border-t-transparent animate-spin mb-5" aria-label="Loading" />
 					<div className="text-xl font-semibold text-[#253037] mb-2">Generating data with AI</div>

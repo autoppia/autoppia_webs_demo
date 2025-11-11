@@ -1,6 +1,5 @@
 // src/library/useSeedLayout.ts
 import { useState, useEffect, useCallback } from 'react';
-import { getLayoutVariant } from './layoutVariants';
 import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 import { getLayoutClasses } from '@/utils/seedLayout';
 import { getSeedLayout, LayoutConfig } from './utils';
@@ -176,6 +175,29 @@ function generateElementId(seed: number, elementType: string, index: number): st
   return bases[(variant - 1) % bases.length];
 }
 
+function createSeededRandom(seed: number, salt: string) {
+  let h = 1779033703 ^ seed;
+  for (let i = 0; i < salt.length; i++) {
+    h = Math.imul(h ^ salt.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return () => {
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    const result = (h ^= h >>> 16) >>> 0;
+    return result / 4294967296;
+  };
+}
+
+function shuffleWithRandom<T>(items: T[], randomFn: () => number): T[] {
+  const copy = items.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(randomFn() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export function useSeedLayout() {
   const [seed, setSeed] = useState(36);
   const [layout, setLayout] = useState<LayoutConfig>(getSeedLayout(36));
@@ -275,6 +297,7 @@ export function useSeedLayout() {
     return getLayoutClasses(getLayoutConfig(seed));
   }, [seed, isDynamicEnabled]);
 
+<<<<<<< HEAD
   // Function to get dynamic text for an element type with fallback
   const getText = useCallback((key: ElementKey, fallback: string): string => {
     if (!isDynamicEnabled) return fallback;
@@ -282,6 +305,17 @@ export function useSeedLayout() {
   }, [seed, isDynamicEnabled]);
 
   // Helper function to generate navigation URLs with seed parameter (prefer seed-structure)
+=======
+  const shuffleList = useCallback(<T,>(items: T[], context: string) => {
+    if (!isDynamicEnabled) {
+      return items;
+    }
+    const random = createSeededRandom(seed, context);
+    return shuffleWithRandom(items, random);
+  }, [seed, isDynamicEnabled]);
+
+  // Helper function to generate navigation URLs with seed parameter
+>>>>>>> fixes/web10
   const getNavigationUrl = useCallback((path: string): string => {
     // If path already has query params
     if (path.includes('?')) {
@@ -303,7 +337,11 @@ export function useSeedLayout() {
     getElementAttributes,
     getXPathSelector,
     getLayoutClassesForSeed,
+<<<<<<< HEAD
     getText,
+=======
+    shuffleList,
+>>>>>>> fixes/web10
     getNavigationUrl,
   };
 } 
