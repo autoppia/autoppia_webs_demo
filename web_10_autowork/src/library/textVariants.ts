@@ -16,7 +16,27 @@ type ElementKey =
   | "sidebar-verifications-label"
   | "expert-hire-button-label"
   | "hire-cancel-button-label"
-  | "hire-submit-button-label";
+  | "hire-submit-button-label"
+  | "job-title-heading"
+  | "job-title-placeholder"
+  | "wizard-step-skills-title"
+  | "wizard-step-scope-title"
+  | "wizard-step-title-title"
+  | "wizard-step-budget-title"
+  | "wizard-step-description-title"
+  | "skill-search-label"
+  | "skill-search-placeholder"
+  | "add-skill-button-label"
+  | "skills-helper-text"
+  | "popular-skills-heading"
+  | "scope-step-heading"
+  | "duration-heading"
+  | "job-description-heading"
+  | "job-description-placeholder"
+  | "attach-file-button-label"
+  | "wizard-back-button-label"
+  | "wizard-next-button-label"
+  | "wizard-submit-button-label";
 
 type TextVariantMap = Record<ElementKey, string>;
 import jsonVariants from './textVariants.json';

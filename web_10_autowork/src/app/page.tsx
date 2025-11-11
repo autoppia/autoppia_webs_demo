@@ -17,7 +17,7 @@ function PostJobWizard({
   open: boolean;
   onClose: () => void;
 }) {
-  const { layout, getElementAttributes } = useSeedLayout();
+  const { layout, getElementAttributes, getText } = useSeedLayout();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -80,18 +80,44 @@ function PostJobWizard({
   // Fixed step sequence for post job wizard (consistent across all seeds)
   const fixedStepSequence = ['skills', 'scope', 'title', 'budget', 'description'];
   
-  // Create step title map for the fixed sequence
-  const stepTitleMap = {
-    skills: "What are the main skills required for your work?",
-    scope: "Next, estimate the scope of your work.",
-    title: "Let's start with a strong title.",
-    budget: "Tell us about your budget.",
-    description: "Start the conversation.",
-  };
-  
   // Get current step key based on fixed sequence
   const currentStepKey = fixedStepSequence[step - 1];
-  const stepTitle = stepTitleMap[currentStepKey as keyof typeof stepTitleMap] || stepTitleMap.skills;
+  const stepTitle = (() => {
+    switch (currentStepKey) {
+      case "skills":
+        return getText(
+          "wizard-step-skills-title",
+          "What are the main skills required for your work?"
+        );
+      case "scope":
+        return getText(
+          "wizard-step-scope-title",
+          "Next, estimate the scope of your work."
+        );
+      case "title":
+        return getText(
+          "wizard-step-title-title",
+          "Let's start with a strong title."
+        );
+      case "budget":
+        return getText(
+          "wizard-step-budget-title",
+          "Tell us about your budget."
+        );
+      case "description":
+        return getText(
+          "wizard-step-description-title",
+          "Start the conversation."
+        );
+      default:
+        return getText(
+          "wizard-step-skills-title",
+          "What are the main skills required for your work?"
+        );
+    }
+  })();
+
+  const backButtonLabel = getText("wizard-back-button-label", "Back");
 
   const getButtonTitle = (step: number): string => {
     if (step === totalSteps) return "Submit Job Post";
@@ -106,6 +132,10 @@ function PostJobWizard({
   };
 
   const buttonTitle = getButtonTitle(step);
+  const nextButtonLabel = getText(
+    step === totalSteps ? "wizard-submit-button-label" : "wizard-next-button-label",
+    buttonTitle
+  );
   // Define the EventData interface
   interface EventData {
     step: number;
@@ -130,7 +160,7 @@ function PostJobWizard({
   const handleStepNext = () => {
     const eventData: EventData = {
       step,
-      buttonText: buttonTitle,
+      buttonText: nextButtonLabel,
     };
 
     // Add relevant data based on step
@@ -262,13 +292,16 @@ function PostJobWizard({
                   htmlFor="job-title"
                   className="font-semibold mb-2 text-[#253037]"
                 >
-                  Write a title for your job post
+                  {getText(
+                    "job-title-heading",
+                    "Write a title for your job post"
+                  )}
                 </label>
                 <input
                   id="job-title"
                   {...getElementAttributes('job-title-input', 0)}
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-lg focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none mt-1"
-                  placeholder=""
+                  placeholder={getText("job-title-placeholder", "")}
                   type="text"
                   value={form.title}
                   onChange={(e) => {
@@ -302,13 +335,19 @@ function PostJobWizard({
             {currentStepKey === 'skills' && (
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
-                  Search skills or add your own
+                  {getText(
+                    "skill-search-label",
+                    "Search skills or add your own"
+                  )}
                 </label>
                 <div className="flex gap-2 items-start mb-2" ref={dropdownRef}>
                   <input
                     {...getElementAttributes('skill-search-input', 0)}
                     className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
-                    placeholder="Type a skill and press Enter or Add button"
+                    placeholder={getText(
+                      "skill-search-placeholder",
+                      "Type a skill and press Enter or Add button"
+                    )}
                     type="text"
                     value={form.customSkill}
                     onChange={(e) => {
@@ -379,11 +418,14 @@ function PostJobWizard({
                       }
                     }}
                   >
-                    Add
+                    {getText("add-skill-button-label", "Add")}
                   </button>
                 </div>
                 <div className="mb-2 text-xs text-[#4a545b]">
-                  For the best results, add 3-5 skills
+                  {getText(
+                    "skills-helper-text",
+                    "For the best results, add 3-5 skills"
+                  )}
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {form.skills.map((skill, i) => (
@@ -414,7 +456,10 @@ function PostJobWizard({
                 </div>
                 <div>
                   <span className="font-medium">
-                    Popular skills for Software Development
+                    {getText(
+                      "popular-skills-heading",
+                      "Popular skills for Software Development"
+                    )}
                   </span>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {popularSkills.map((skill) => (
@@ -443,7 +488,10 @@ function PostJobWizard({
             {currentStepKey === 'scope' && (
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
-                  Estimate the size of your project
+                  {getText(
+                    "scope-step-heading",
+                    "Estimate the size of your project"
+                  )}
                 </label>
                 <div className="space-y-4 mb-8">
                   {["Large", "Medium", "Small"].map((opt) => (
@@ -473,7 +521,10 @@ function PostJobWizard({
                 </div>
                 <div className="mt-8">
                   <span className="font-semibold mb-2 text-[#253037]">
-                    How long will your work take?
+                    {getText(
+                      "duration-heading",
+                      "How long will your work take?"
+                    )}
                   </span>
                   <div className="space-y-2 mt-4">
                     {["More than 6 months", "3 to 6 months"].map((opt) => (
@@ -577,7 +628,10 @@ function PostJobWizard({
                   htmlFor="desc"
                   className="font-semibold mb-2 text-[#253037]"
                 >
-                  Describe what you need
+                  {getText(
+                    "job-description-heading",
+                    "Describe what you need"
+                  )}
                 </label>
                 <textarea
                   id="desc"
@@ -585,7 +639,10 @@ function PostJobWizard({
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none h-28 resize-vertical"
                   value={form.description}
                   onChange={(e) => setValue("description", e.target.value)}
-                  placeholder="Already have a description? Paste it here!"
+                  placeholder={getText(
+                    "job-description-placeholder",
+                    "Already have a description? Paste it here!"
+                  )}
                   maxLength={50000}
                 />
                 <div className="text-xs text-gray-400 mt-1">
@@ -610,7 +667,8 @@ function PostJobWizard({
                     onClick={() => fileInputRef.current?.click()}
                     className="rounded border px-5 py-2 text-[#199225] border-[#1fc12c] bg-white hover:bg-[#e6f9fb] font-semibold flex items-center gap-2"
                   >
-                    <span className="text-lg">📎</span> Attach file
+                    <span className="text-lg">📎</span>{" "}
+                    {getText("attach-file-button-label", "Attach file")}
                   </button>
                   <input
                     ref={fileInputRef}
@@ -670,7 +728,7 @@ function PostJobWizard({
             }`}
             disabled={step === 1}
           >
-            Back
+            {backButtonLabel}
           </button>
 
           {step < totalSteps ? (
@@ -682,7 +740,7 @@ function PostJobWizard({
               }`}
               onClick={handleStepNext}
             >
-              {buttonTitle}
+              {nextButtonLabel}
             </button>
           ) : (
             <button
@@ -706,7 +764,7 @@ function PostJobWizard({
                 layout.buttonPositions.submit === 'center' ? 'order-1' : 'ml-2'
               }`}
             >
-              Submit Job Post
+              {nextButtonLabel}
             </button>
           )}
         </div>
