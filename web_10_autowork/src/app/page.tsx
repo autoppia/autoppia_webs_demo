@@ -48,11 +48,7 @@ function PostJobWizard({
   open: boolean;
   onClose: () => void;
 }) {
-<<<<<<< HEAD
-  const { layout, getElementAttributes, getText } = useSeedLayout();
-=======
-  const { layout, getElementAttributes, shuffleList } = useSeedLayout();
->>>>>>> fixes/web10
+  const { layout, getElementAttributes, getText, shuffleList } = useSeedLayout();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -113,39 +109,21 @@ function PostJobWizard({
   const stepTitle = (() => {
     switch (currentStepKey) {
       case "skills":
-        return getText(
-          "wizard-step-skills-title",
-          "What are the main skills required for your work?"
-        );
+        return "What are the main skills required for your work?";
       case "scope":
-        return getText(
-          "wizard-step-scope-title",
-          "Next, estimate the scope of your work."
-        );
+        return "Next, estimate the scope of your work.";
       case "title":
-        return getText(
-          "wizard-step-title-title",
-          "Let's start with a strong title."
-        );
+        return "Let's start with a strong title.";
       case "budget":
-        return getText(
-          "wizard-step-budget-title",
-          "Tell us about your budget."
-        );
+        return "Tell us about your budget.";
       case "description":
-        return getText(
-          "wizard-step-description-title",
-          "Start the conversation."
-        );
+        return "Start the conversation.";
       default:
-        return getText(
-          "wizard-step-skills-title",
-          "What are the main skills required for your work?"
-        );
+        return "What are the main skills required for your work?";
     }
   })();
 
-  const backButtonLabel = getText("wizard-back-button-label", "Back");
+  const backButtonLabel = "Back";
 
   const getButtonTitle = (step: number): string => {
     if (step === totalSteps) return "Submit Job Post";
@@ -160,10 +138,7 @@ function PostJobWizard({
   };
 
   const buttonTitle = getButtonTitle(step);
-  const nextButtonLabel = getText(
-    step === totalSteps ? "wizard-submit-button-label" : "wizard-next-button-label",
-    buttonTitle
-  );
+  const nextButtonLabel = step === totalSteps ? "Submit Job Post" : buttonTitle;
   // Define the EventData interface
   interface EventData {
     step: number;
@@ -361,7 +336,6 @@ function PostJobWizard({
               </>
             )}
             {currentStepKey === 'skills' && (
-<<<<<<< HEAD
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
                   {getText(
@@ -383,7 +357,7 @@ function PostJobWizard({
                       const query = e.target.value;
                       setValue("customSkill", query);
                       if (query.length > 0) {
-                        const matches = popularSkills.filter((s) =>
+                        const matches = popularSkillOptions.filter((s) =>
                           s.toLowerCase().includes(query.toLowerCase())
                         );
                         setFilteredSkills(matches);
@@ -491,10 +465,10 @@ function PostJobWizard({
                     )}
                   </span>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {popularSkills.map((skill) => (
+                    {popularSkillOptions.map((skill) => (
                       <button
                         key={skill}
-                        {...getElementAttributes('popular-skill-button', popularSkills.indexOf(skill))}
+                        {...getElementAttributes('popular-skill-button', popularSkillOptions.indexOf(skill))}
                         type="button"
                         className="px-3 py-1 bg-gray-100 hover:bg-[#e6f9fb] border border-[#cad2d0] rounded-full text-[#253037] text-sm"
                         onClick={() => {
@@ -576,251 +550,6 @@ function PostJobWizard({
                   </div>
                 </div>
               </>
-=======
-              <div className="space-y-8">
-                {(layout.formFields?.skills ?? ["search", "popular", "selected"]).map((sectionKey) => {
-                  if (sectionKey === "search") {
-                    return (
-                      <section key="skills-search">
-                        <label className="font-semibold mb-2 block text-[#253037]">
-                          Search skills or add your own
-                        </label>
-                        <div className="flex gap-2 items-start" ref={dropdownRef}>
-                          <input
-                            {...getElementAttributes('skill-search-input', 0)}
-                            className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
-                            placeholder="Type a skill and press Enter or Add button"
-                            type="text"
-                            value={form.customSkill}
-                            onChange={(e) => {
-                              const query = e.target.value;
-                              setValue("customSkill", query);
-                              if (query.length > 0) {
-                                const matches = POPULAR_SKILLS.filter((s) =>
-                                  s.toLowerCase().includes(query.toLowerCase())
-                                );
-                                setFilteredSkills(matches);
-                                setShowDropdown(true);
-                                logEvent(EVENT_TYPES.SEARCH_SKILL, {
-                                  query,
-                                  timestamp: Date.now(),
-                                });
-                              } else {
-                                setShowDropdown(false);
-                                setFilteredSkills([]);
-                              }
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && form.customSkill.trim()) {
-                                const skill = form.customSkill.trim();
-                                if (!form.skills.includes(skill)) {
-                                  setValue("skills", [...form.skills, skill]);
-                                  logEvent(EVENT_TYPES.ADD_SKILL, {
-                                    skill,
-                                    method: "custom_input",
-                                    timestamp: Date.now(),
-                                  });
-                                }
-                                setValue("customSkill", "");
-                                e.preventDefault();
-                              }
-                            }}
-                          />
-                          {showDropdown && filteredSkills.length > 0 && (
-                            <ul className="absolute z-10 bg-white border border-gray-300 w-40 mt-10 rounded shadow-sm max-h-52 overflow-y-auto">
-                              {filteredSkills.map((skill) => (
-                                <li
-                                  key={skill}
-                                  onClick={() => {
-                                    if (!form.skills.includes(skill)) {
-                                      setValue("skills", [...form.skills, skill]);
-                                    }
-                                    setValue("customSkill", "");
-                                    setFilteredSkills([]);
-                                    setShowDropdown(false);
-                                  }}
-                                  className="px-4 py-2 hover:bg-[#e6f9fb] cursor-pointer text-sm"
-                                >
-                                  {skill}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                          <button
-                            {...getElementAttributes('add-skill-button', 0)}
-                            className="rounded bg-[#08b4ce] text-white px-4 py-2 h-11 ml-2 font-bold hover:bg-[#0999ac]"
-                            type="button"
-                            onClick={() => {
-                              const skill = form.customSkill.trim();
-                              if (skill) {
-                                if (!form.skills.includes(skill)) {
-                                  setValue("skills", [...form.skills, skill]);
-                                  logEvent(EVENT_TYPES.ADD_SKILL, {
-                                    skill,
-                                    method: "custom_input",
-                                    timestamp: Date.now(),
-                                  });
-                                }
-                                setValue("customSkill", "");
-                              }
-                            }}
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </section>
-                    );
-                  }
-
-                  if (sectionKey === "selected") {
-                    return (
-                      <section key="skills-selected">
-                        <div className="mb-2 text-xs text-[#4a545b]">
-                          For the best results, add 3-5 skills
-                        </div>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {form.skills.map((skill, i) => (
-                            <span
-                              key={skill + i}
-                              className="px-3 py-1 bg-[#e6f9fb] border border-[#08b4ce88] rounded-full text-[#08b4ce] font-medium text-sm flex items-center gap-1"
-                            >
-                              {skill}
-                              <button
-                                {...getElementAttributes('remove-skill-button', i)}
-                                type="button"
-                                className="ml-1 text-xs font-bold"
-                                onClick={() => {
-                                  const updatedSkills = form.skills.filter(
-                                    (s) => s !== skill
-                                  );
-                                  setValue("skills", updatedSkills);
-                                  logEvent(EVENT_TYPES.REMOVE_SKILL, {
-                                    skill,
-                                    timestamp: Date.now(),
-                                  });
-                                }}
-                              >
-                                ×
-                              </button>
-                            </span>
-                          ))}
-                        </div>
-                        {form.skills.length === 0 && (
-                          <div className="text-sm text-[#4a545b]">
-                            Selected skills will appear here once you add them.
-                          </div>
-                        )}
-                      </section>
-                    );
-                  }
-
-                  if (sectionKey === "popular") {
-                    return (
-                      <section key="skills-popular">
-                        <span className="font-medium">
-                          Popular skills for Software Development
-                        </span>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {popularSkillOptions.map((skill, idx) => (
-                            <button
-                              key={skill}
-                              {...getElementAttributes('popular-skill-button', idx)}
-                              type="button"
-                              className="px-3 py-1 bg-gray-100 hover:bg-[#e6f9fb] border border-[#cad2d0] rounded-full text-[#253037] text-sm"
-                              onClick={() => {
-                                if (!form.skills.includes(skill)) {
-                                  setValue("skills", [...form.skills, skill]);
-                                  logEvent(EVENT_TYPES.ADD_SKILL, {
-                                    skill,
-                                    method: "popular_skill",
-                                  });
-                                }
-                              }}
-                            >
-                              {skill} +
-                            </button>
-                          ))}
-                        </div>
-                      </section>
-                    );
-                  }
-
-                  return null;
-                })}
-              </div>
-            )}
-            {currentStepKey === 'scope' && (
-              <div className="space-y-8">
-                {(layout.formFields?.scope ?? ["size", "duration"]).map((sectionKey) => {
-                  if (sectionKey === "size") {
-                    return (
-                      <section key="scope-size">
-                        <label className="font-semibold mb-2 block text-[#253037]">
-                          Estimate the size of your project
-                        </label>
-                        <div className="space-y-4">
-                          {scopeSizeOptions.map((opt) => (
-                            <label
-                              key={opt}
-                              className="flex items-start gap-3 cursor-pointer select-none"
-                            >
-                              <input
-                                type="radio"
-                                name="scope"
-                                value={opt}
-                                checked={form.scope === opt}
-                                onChange={() => setValue("scope", opt)}
-                                required
-                                className="mt-1 accent-[#08b4ce]"
-                              />
-                              <span className="font-bold mr-1">{opt}</span>
-                              <span className="text-sm text-[#4a545b]">
-                                {opt === "Large"
-                                  ? "Longer term or complex initiatives (ex. design and build a full website)"
-                                  : opt === "Medium"
-                                  ? "Well-defined projects (ex. a landing page)"
-                                  : "Quick and straightforward tasks (ex. update text and images on a webpage)"}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      </section>
-                    );
-                  }
-
-                  if (sectionKey === "duration") {
-                    return (
-                      <section key="scope-duration">
-                        <span className="font-semibold mb-2 block text-[#253037]">
-                          How long will your work take?
-                        </span>
-                        <div className="space-y-2 mt-4">
-                          {scopeDurationOptions.map((opt) => (
-                            <label
-                              key={opt}
-                              className="flex items-center gap-2 cursor-pointer select-none"
-                            >
-                              <input
-                                type="radio"
-                                name="duration"
-                                value={opt}
-                                checked={form.duration === opt}
-                                onChange={() => setValue("duration", opt)}
-                                required
-                                className="accent-[#08b4ce]"
-                              />
-                              <span className="text-base text-[#4a545b]">{opt}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </section>
-                    );
-                  }
-
-                  return null;
-                })}
-              </div>
->>>>>>> fixes/web10
             )}
             {currentStepKey === 'budget' && (
               <div className="space-y-8">
@@ -1137,12 +866,8 @@ function PostJobWizard({
 
 export default function Home() {
 	const [showPostJob, setShowPostJob] = useState(false);
-<<<<<<< HEAD
-	const { layout, getElementAttributes, getText } = useSeedLayout();
-=======
 	const [hasSeenInitialLoad, setHasSeenInitialLoad] = useState(false);
-	const { layout, getElementAttributes } = useSeedLayout();
->>>>>>> fixes/web10
+	const { layout, getElementAttributes, getText } = useSeedLayout();
 
 	const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
 	const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
@@ -1413,10 +1138,7 @@ export default function Home() {
 								.replace(/\s+/g, "-")
 								.replace(/\./g, "")}`}
 							passHref
-<<<<<<< HEAD
-=======
 							prefetch={false}
->>>>>>> fixes/web10
 							{...getElementAttributes('book-consultation-button', i)}
 							className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
 						>

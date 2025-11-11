@@ -1,6 +1,6 @@
 // src/library/useSeedLayout.ts
 import { useState, useEffect, useCallback } from 'react';
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 import { getLayoutClasses } from '@/utils/seedLayout';
 import { getSeedLayout, LayoutConfig } from './utils';
 import { getTextForElement, type ElementKey } from './textVariants';
@@ -198,9 +198,24 @@ function shuffleWithRandom<T>(items: T[], randomFn: () => number): T[] {
   return copy;
 }
 
+const DEFAULT_STRUCTURE_SEED = 36;
+const DEFAULT_DYNAMIC_SEED = 36;
+
+const parseSeedValue = (value?: string | null): number => {
+  if (!value) return NaN;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : NaN;
+};
+
+const clampSeed = (value: number, fallback: number): number =>
+  value >= 1 && value <= 300 ? value : fallback;
+
 export function useSeedLayout() {
-  const [seed, setSeed] = useState(36);
-  const [layout, setLayout] = useState<LayoutConfig>(getSeedLayout(36));
+  const [structureSeed, setStructureSeed] = useState(DEFAULT_STRUCTURE_SEED);
+  const [dynamicSeed, setDynamicSeed] = useState(DEFAULT_DYNAMIC_SEED);
+  const [structureSeedActive, setStructureSeedActive] = useState(false);
+  const [dynamicSeedActive, setDynamicSeedActive] = useState(false);
+  const [layout, setLayout] = useState<LayoutConfig>(getSeedLayout(DEFAULT_STRUCTURE_SEED));
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
 
   useEffect(() => {
@@ -208,52 +223,59 @@ export function useSeedLayout() {
     const dynamicEnabled = isDynamicModeEnabled();
     setIsDynamicEnabled(dynamicEnabled);
     
-    // Get seed from URL parameters or localStorage (prefer seed-structure)
-    const searchParams = new URLSearchParams(window.location.search);
-    const seedStructureParam = searchParams.get('seed-structure');
-    const seedParam = seedStructureParam ?? searchParams.get('seed');
-    
-    let rawSeed = 36;
-    
-    if (seedParam) {
-      // Priority 1: URL parameter
-      rawSeed = parseInt(seedParam);
-    } else {
-      // Priority 2: localStorage
-      try {
-        const storedStructure = localStorage.getItem('autoworkSeedStructure');
-        const stored = storedStructure ?? localStorage.getItem('autoworkSeed');
-        if (stored) rawSeed = parseInt(stored);
-      } catch (e) {
-        // Ignore localStorage errors
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const url = new URL(window.location.href);
+    let urlChanged = false;
+
+    const rawStructureSeed = parseSeedValue(url.searchParams.get('seed'));
+    const structureActive = dynamicEnabled && Number.isFinite(rawStructureSeed);
+    const resolvedStructureSeed = structureActive
+      ? clampSeed(rawStructureSeed as number, DEFAULT_STRUCTURE_SEED)
+      : DEFAULT_STRUCTURE_SEED;
+
+    const rawDynamicSeed = parseSeedValue(url.searchParams.get('seed-structure'));
+    const dynamicActive = dynamicEnabled && Number.isFinite(rawDynamicSeed);
+    const resolvedDynamicSeed = dynamicActive
+      ? clampSeed(rawDynamicSeed as number, DEFAULT_DYNAMIC_SEED)
+      : DEFAULT_DYNAMIC_SEED;
+
+    if (structureActive) {
+      const structureString = resolvedStructureSeed.toString();
+      if (url.searchParams.get('seed') !== structureString) {
+        url.searchParams.set('seed', structureString);
+        urlChanged = true;
       }
     }
-    // Priority 3: default from env
-    if (!seedParam && !Number.isFinite(rawSeed)) {
-      const envDefault = parseInt(process.env.NEXT_PUBLIC_DEFAULT_SEED_STRUCTURE as string);
-      if (Number.isFinite(envDefault)) rawSeed = envDefault as unknown as number;
+
+    if (dynamicActive) {
+      const dynamicString = resolvedDynamicSeed.toString();
+      if (url.searchParams.get('seed-structure') !== dynamicString) {
+        url.searchParams.set('seed-structure', dynamicString);
+        urlChanged = true;
+      }
     }
-    
-    // Get effective seed (validates range and respects dynamic HTML setting)
-    const effectiveSeed = getEffectiveSeed(rawSeed);
-    setSeed(effectiveSeed);
-    
-    // Save to localStorage (both keys for compatibility)
-    try {
-      localStorage.setItem('autoworkSeedStructure', effectiveSeed.toString());
-      localStorage.setItem('autoworkSeed', effectiveSeed.toString());
-    } catch (e) {
-      // Ignore localStorage errors
-    }
-    
-    // Update layout only if dynamic HTML is enabled
-    if (dynamicEnabled) {
-      setLayout(getSeedLayout(effectiveSeed));
+
+    setStructureSeed(resolvedStructureSeed);
+    setDynamicSeed(resolvedDynamicSeed);
+    setStructureSeedActive(structureActive);
+    setDynamicSeedActive(dynamicActive);
+
+    if (dynamicEnabled && structureActive) {
+      setLayout(getSeedLayout(resolvedStructureSeed));
     } else {
-      // Use default layout when dynamic HTML is disabled
-      setLayout(getSeedLayout(36));
+      setLayout(getSeedLayout(DEFAULT_STRUCTURE_SEED));
+    }
+
+    if (urlChanged) {
+      window.history.replaceState(null, '', url.toString());
     }
   }, []);
+
+  const isDynamicStructureActive = isDynamicEnabled && structureSeedActive;
+  const isDynamicHtmlActive = isDynamicEnabled && dynamicSeedActive;
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
@@ -262,86 +284,90 @@ export function useSeedLayout() {
       'data-element-type': elementType 
     } as Record<string, string>;
     
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return baseAttrs;
     }
     
     // Use semantic ID pattern based on seed (like web5)
-    const dynamicId = generateElementId(seed, elementType, index);
+    const dynamicId = generateElementId(dynamicSeed, elementType, index);
     
     // Dynamic attributes
     return { 
       ...baseAttrs,
       id: dynamicId, 
-      'data-seed': seed.toString(),
-      'data-variant': (seed % 10).toString(),
-      'data-xpath': `//*[@data-element-type='${elementType}' and @data-seed='${seed}']`
+      'data-seed': dynamicSeed.toString(),
+      'data-variant': (dynamicSeed % 10).toString(),
+      'data-xpath': `//*[@data-element-type='${elementType}' and @data-seed='${dynamicSeed}']`
     };
-  }, [seed, isDynamicEnabled]);
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to get XPath selector for an element
   const getXPathSelector = useCallback((elementType: string) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return `//*[@data-element-type='${elementType}']`;
     }
     
     // Generate XPath with dynamic attributes for scraper confusion
-    return `//*[@data-element-type='${elementType}' and @data-seed='${seed}']`;
-  }, [seed, isDynamicEnabled]);
+    return `//*[@data-element-type='${elementType}' and @data-seed='${dynamicSeed}']`;
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to get layout classes based on current seed
   const getLayoutClassesForSeed = useCallback(() => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicStructureActive) {
       return getLayoutClasses(getLayoutConfig(36));
     }
-    return getLayoutClasses(getLayoutConfig(seed));
-  }, [seed, isDynamicEnabled]);
+    return getLayoutClasses(getLayoutConfig(structureSeed));
+  }, [structureSeed, isDynamicStructureActive]);
 
-<<<<<<< HEAD
-  // Function to get dynamic text for an element type with fallback
   const getText = useCallback((key: ElementKey, fallback: string): string => {
-    if (!isDynamicEnabled) return fallback;
-    return getTextForElement(seed, key, fallback);
-  }, [seed, isDynamicEnabled]);
+    if (!isDynamicHtmlActive) return fallback;
+    return getTextForElement(dynamicSeed, key, fallback);
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
-  // Helper function to generate navigation URLs with seed parameter (prefer seed-structure)
-=======
   const shuffleList = useCallback(<T,>(items: T[], context: string) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return items;
     }
-    const random = createSeededRandom(seed, context);
+    const random = createSeededRandom(dynamicSeed, context);
     return shuffleWithRandom(items, random);
-  }, [seed, isDynamicEnabled]);
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Helper function to generate navigation URLs with seed parameter
->>>>>>> fixes/web10
   const getNavigationUrl = useCallback((path: string): string => {
-    // If path already has query params
-    if (path.includes('?')) {
-      // Check if seed already exists in the URL
-      if (path.includes('seed-structure=') || path.includes('seed=')) {
-        return path;
-      }
-      return `${path}&seed-structure=${seed}`;
+    const [pathWithoutHash, hashFragment] = path.split('#', 2);
+    const [basePath, queryString] = pathWithoutHash.split('?', 2);
+    const params = new URLSearchParams(queryString || '');
+
+    if (isDynamicStructureActive) {
+      params.set('seed', structureSeed.toString());
+    } else {
+      params.delete('seed');
     }
-    // Add seed as first query param
-    return `${path}?seed-structure=${seed}`;
-  }, [seed]);
+
+    if (isDynamicHtmlActive) {
+      params.set('seed-structure', dynamicSeed.toString());
+    } else {
+      params.delete('seed-structure');
+    }
+
+    const query = params.toString();
+    const rebuilt = `${basePath}${query ? `?${query}` : ''}`;
+    return hashFragment ? `${rebuilt}#${hashFragment}` : rebuilt;
+  }, [structureSeed, dynamicSeed, isDynamicStructureActive, isDynamicHtmlActive]);
 
   return {
-    seed,
+    seed: dynamicSeed,
+    structureSeed,
+    dynamicSeed,
+    isDynamicStructureActive,
+    isDynamicHtmlActive,
     layout,
-    setSeed,
     isDynamicEnabled,
     getElementAttributes,
     getXPathSelector,
     getLayoutClassesForSeed,
-<<<<<<< HEAD
     getText,
-=======
     shuffleList,
->>>>>>> fixes/web10
     getNavigationUrl,
   };
 } 

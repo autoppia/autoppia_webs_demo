@@ -14,12 +14,8 @@ export default function HireButton({
     country: string;
   };
 }) {
-<<<<<<< HEAD
-  const router = useRouter();
-  const { getElementAttributes, getText } = useSeedLayout();
-=======
   const router = useSeedRouter();
->>>>>>> fixes/web10
+  const { getElementAttributes, getText } = useSeedLayout();
 
   return (
     <button
