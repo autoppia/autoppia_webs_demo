@@ -5,6 +5,7 @@ import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
@@ -18,6 +19,7 @@ interface Filters {
 
 function JobsContent() {
   const { layout } = useSeed();
+  const { getText } = useDynamicStructure();
   const [filters, setFilters] = useState<Filters>({
     search: "",
     experience: "",
@@ -170,7 +172,7 @@ function JobsContent() {
 
   return (
     <section>
-      <h1 className="font-bold text-2xl mb-6">Job Search</h1>
+      <h1 className="font-bold text-2xl mb-6">{getText("jobs_title", "Job Search")}</h1>
       
       {/* Search Bar */}
       <div className="mb-6">
@@ -178,20 +180,20 @@ function JobsContent() {
           className="w-full rounded-full border border-gray-300 px-4 py-2 outline-blue-500"
           value={filters.search}
           onChange={handleSearchInput}
-          placeholder="Search jobs by title or company..."
+          placeholder={getText("jobs_search_placeholder", "Search jobs by title or company...")}
         />
       </div>
 
       {/* Filters */}
       <div className={`bg-white rounded-lg shadow p-4 ${filtersClasses}`}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-lg">Filters</h2>
+          <h2 className="font-semibold text-lg">{getText("jobs_filters_title", "Filters")}</h2>
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
               className="text-blue-600 hover:text-blue-800 text-sm"
               >
-              Clear all filters
+              {getText("jobs_clear_filters", "Clear all filters")}
             </button>
           )}
         </div>
@@ -200,14 +202,14 @@ function JobsContent() {
           {/* Experience Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Experience Level
+              {getText("jobs_experience_label", "Experience Level")}
             </label>
             <select
               value={filters.experience}
               onChange={(e) => handleFilterChange("experience", e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">Any Experience</option>
+              <option value="">{getText("jobs_experience_any", "Any Experience")}</option>
               {uniqueExperiences.map((experience) => (
                 <option key={experience} value={experience}>
                   {experience}
@@ -219,7 +221,7 @@ function JobsContent() {
           {/* Salary Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Salary Range
+              {getText("jobs_salary_label", "Salary Range")}
             </label>
             <select
               value={filters.salary}
@@ -228,7 +230,7 @@ function JobsContent() {
             >
               {salaryRanges.map((range) => (
                 <option key={range.value} value={range.value}>
-                  {range.label}
+                  {range.value === "" ? getText("jobs_salary_any", "Any Salary") : range.label}
                 </option>
               ))}
             </select>
@@ -237,14 +239,14 @@ function JobsContent() {
           {/* Location Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Location
+              {getText("jobs_location_label", "Location")}
             </label>
             <select
               value={filters.location}
               onChange={(e) => handleFilterChange("location", e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">Any Location</option>
+              <option value="">{getText("jobs_location_any", "Any Location")}</option>
               {uniqueLocations.map((location) => (
                 <option key={location} value={location}>
                   {location}
@@ -263,7 +265,7 @@ function JobsContent() {
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <span className="ml-2 text-sm font-medium text-gray-700">
-                Remote Only
+                {getText("jobs_remote_only", "Remote Only")}
               </span>
             </label>
           </div>
@@ -276,7 +278,7 @@ function JobsContent() {
             onClick={triggerSearchEvent}
             className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
          >
-          Search
+          {getText("jobs_search_button", "Search")}
         </button>
       </div>
       {/* Results Count */}
