@@ -1,7 +1,7 @@
 // src/library/useSeedLayout.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { getSeedLayout } from './layouts';
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 import { getTextForElement, type ElementKey } from '@/library/textVariants';
 
 // Semantic ID mappings (10 per type; chosen by seed mapped to 1-10)
@@ -87,64 +87,120 @@ function generateElementId(seed: number, elementType: string, index: number): st
   return bases[(variant - 1) % bases.length];
 }
 
+const parseSeedValue = (value?: string | null): number => {
+  if (!value) return NaN;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : NaN;
+};
+
+const clampSeed = (value: number): number => (value >= 1 && value <= 300 ? value : 1);
+
 export function useSeedLayout() {
-  const [seed, setSeed] = useState(1);
+  const [structureSeed, setStructureSeed] = useState(1);
+  const [dynamicSeed, setDynamicSeed] = useState(1);
+  const [hasStructureSeedParam, setHasStructureSeedParam] = useState(false);
+  const [hasDynamicSeedParam, setHasDynamicSeedParam] = useState(false);
   const [layout, setLayout] = useState(getSeedLayout(1));
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
+  const [searchSnapshot, setSearchSnapshot] = useState('');
 
   useEffect(() => {
-    // Check if dynamic HTML is enabled
+    if (typeof window === 'undefined') return;
+
+    const updateSearch = () => setSearchSnapshot(window.location.search ?? '');
+
+    const originalPushState = history.pushState;
+    const originalReplaceState = history.replaceState;
+
+    const dispatchLocationChange = () => {
+      window.dispatchEvent(new Event('locationchange'));
+    };
+
+    const patchedPushState: typeof history.pushState = (...args) => {
+      originalPushState.apply(window.history, args);
+      dispatchLocationChange();
+    };
+    const patchedReplaceState: typeof history.replaceState = (...args) => {
+      originalReplaceState.apply(window.history, args);
+      dispatchLocationChange();
+    };
+
+    history.pushState = patchedPushState;
+    history.replaceState = patchedReplaceState;
+
+    window.addEventListener('popstate', updateSearch);
+    window.addEventListener('locationchange', updateSearch);
+
+    updateSearch();
+
+    return () => {
+      history.pushState = originalPushState;
+      history.replaceState = originalReplaceState;
+      window.removeEventListener('popstate', updateSearch);
+      window.removeEventListener('locationchange', updateSearch);
+    };
+  }, []);
+
+  const dynamicParamValue = useMemo(() => {
+    const params = new URLSearchParams(searchSnapshot);
+    return params.get('seed');
+  }, [searchSnapshot]);
+
+  const structureParamValue = useMemo(() => {
+    const params = new URLSearchParams(searchSnapshot);
+    return params.get('seed-structure');
+  }, [searchSnapshot]);
+
+  useEffect(() => {
     const dynamicEnabled = isDynamicModeEnabled();
     setIsDynamicEnabled(dynamicEnabled);
-    
-    // Get seed from URL parameters or localStorage (prefer seed-structure)
-    const searchParams = new URLSearchParams(window.location.search);
-    const seedStructureParam = searchParams.get('seed-structure');
-    const seedParam = seedStructureParam ?? searchParams.get('seed');
-    
-    let rawSeed = 1;
-    
-    if (seedParam) {
-      // Priority 1: URL parameter
-      rawSeed = parseInt(seedParam);
-    } else {
-      // Priority 2: localStorage
-      try {
-        const storedStructure = localStorage.getItem('autolistSeedStructure');
-        const stored = storedStructure ?? localStorage.getItem('autolistSeed');
-        if (stored) {
-          rawSeed = parseInt(stored);
-        }
-      } catch (e) {
-        // Ignore localStorage errors
-      }
-      // Priority 3: env default
-      if (!Number.isFinite(rawSeed)) {
-        const envDefault = parseInt(process.env.NEXT_PUBLIC_DEFAULT_SEED_STRUCTURE as string);
-        if (Number.isFinite(envDefault)) rawSeed = envDefault as unknown as number;
+
+    const url = new URL(window.location.href);
+    let urlChanged = false;
+
+    const rawStructureSeed = parseSeedValue(dynamicParamValue);
+    const structureParamProvided = Number.isFinite(rawStructureSeed);
+    setHasStructureSeedParam(dynamicEnabled && structureParamProvided);
+
+    const resolvedStructureSeed = dynamicEnabled && structureParamProvided
+      ? clampSeed(rawStructureSeed as number)
+      : 1;
+
+    if (structureParamProvided) {
+      const structureString = resolvedStructureSeed.toString();
+      if (url.searchParams.get('seed') !== structureString) {
+        url.searchParams.set('seed', structureString);
+        urlChanged = true;
       }
     }
-    
-    // Get effective seed (validates range and respects dynamic HTML setting)
-    const effectiveSeed = getEffectiveSeed(rawSeed);
-    setSeed(effectiveSeed);
-    
-    // Save to localStorage
-    try {
-      localStorage.setItem('autolistSeedStructure', effectiveSeed.toString());
-      localStorage.setItem('autolistSeed', effectiveSeed.toString());
-    } catch (e) {
-      // Ignore localStorage errors
+
+    setStructureSeed(resolvedStructureSeed);
+    setLayout(dynamicEnabled ? getSeedLayout(resolvedStructureSeed) : getSeedLayout(1));
+
+    const rawDynamicSeed = parseSeedValue(structureParamValue);
+    const dynamicParamProvided = Number.isFinite(rawDynamicSeed);
+    const resolvedDynamicSeed = dynamicEnabled && dynamicParamProvided
+      ? clampSeed(rawDynamicSeed as number)
+      : 1;
+
+    setHasDynamicSeedParam(dynamicEnabled && dynamicParamProvided);
+    setDynamicSeed(resolvedDynamicSeed);
+
+    if (dynamicParamProvided) {
+      const dynamicString = resolvedDynamicSeed.toString();
+      if (url.searchParams.get('seed-structure') !== dynamicString) {
+        url.searchParams.set('seed-structure', dynamicString);
+        urlChanged = true;
+      }
     }
-    
-    // Update layout only if dynamic HTML is enabled
-    if (dynamicEnabled) {
-      setLayout(getSeedLayout(effectiveSeed));
-    } else {
-      // Use default layout when dynamic HTML is disabled
-      setLayout(getSeedLayout(1));
+
+    if (urlChanged) {
+      window.history.replaceState(null, '', url.toString());
     }
-  }, []);
+  }, [dynamicParamValue, structureParamValue, isDynamicEnabled]);
+
+  const isDynamicStructureActive = isDynamicEnabled && hasStructureSeedParam;
+  const isDynamicHtmlActive = isDynamicEnabled && hasDynamicSeedParam;
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
@@ -153,116 +209,138 @@ export function useSeedLayout() {
       'data-element-type': elementType 
     };
     
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return baseAttrs;
     }
     
     // Generate dynamic attributes based on seed (semantic id)
     return { 
       ...baseAttrs,
-      id: generateElementId(seed, elementType, index), 
-      'data-seed': seed.toString(),
-      'data-variant': (seed % 10).toString(),
-      'data-xpath': `//${elementType}[@data-seed='${seed}']`
+      id: generateElementId(dynamicSeed, elementType, index), 
+      'data-seed': dynamicSeed.toString(),
+      'data-variant': (dynamicSeed % 10).toString(),
+      'data-xpath': `//${elementType}[@data-seed='${dynamicSeed}']`
     };
-  }, [seed, isDynamicEnabled]);
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to get XPath selector for an element
   const getElementXPath = useCallback((elementType: string) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return `//${elementType}[@id='${elementType}-0']`;
     }
     // Generate dynamic XPath based on seed
-    return `//${elementType}[@data-seed='${seed}']`;
-  }, [seed, isDynamicEnabled]);
+    return `//${elementType}[@data-seed='${dynamicSeed}']`;
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to reorder elements
   const reorderElements = useCallback(<T extends { id?: string; name?: string }>(elements: T[]) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive || elements.length === 0) {
       return elements;
     }
-    // Simple reordering based on seed
+
+    const rotations = dynamicSeed > 1 ? ((dynamicSeed - 1) % elements.length) : 0;
+    if (rotations === 0) {
+      return elements;
+    }
+
     const reordered = [...elements];
-    for (let i = 0; i < seed % elements.length; i++) {
+    for (let i = 0; i < rotations; i++) {
       reordered.push(reordered.shift()!);
     }
     return reordered;
-  }, [seed, isDynamicEnabled]);
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to generate element ID
   const generateId = useCallback((context: string, index: number = 0) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return `${context}-${index}`;
     }
-    return generateElementId(seed, context, index);
-  }, [seed, isDynamicEnabled]);
+    return generateElementId(dynamicSeed, context, index);
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to get layout classes for specific element types
   const getLayoutClasses = useCallback((elementType: 'container' | 'item' | 'button' | 'checkbox') => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return '';
     }
     // Generate dynamic classes based on seed
-    return `dynamic-${elementType} seed-${seed}`;
-  }, [seed, isDynamicEnabled]);
+    return `dynamic-${elementType} seed-${dynamicSeed}`;
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to apply CSS variables to an element
   const applyCSSVariables = useCallback((element: HTMLElement) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return;
     }
     // Apply basic dynamic CSS variables
-    element.style.setProperty('--seed', seed.toString());
-    element.style.setProperty('--variant', (seed % 10).toString());
-  }, [seed, isDynamicEnabled]);
+    element.style.setProperty('--seed', dynamicSeed.toString());
+    element.style.setProperty('--variant', (dynamicSeed % 10).toString());
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to get current layout information
   const getLayoutInfo = useCallback(() => {
     return {
-      seed,
+      structureSeed,
+      dynamicSeed,
+      seed: dynamicSeed,
       layout,
       isDynamicEnabled,
       layoutType: layout.container.type,
       elementOrder: layout.elements
     };
-  }, [seed, layout, isDynamicEnabled]);
+  }, [structureSeed, dynamicSeed, layout, isDynamicEnabled]);
 
   // Function to generate a unique class name based on seed
   const generateSeedClass = useCallback((baseClass: string) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return baseClass;
     }
-    return `${baseClass}-seed-${seed}`;
-  }, [seed, isDynamicEnabled]);
+    return `${baseClass}-seed-${dynamicSeed}`;
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Function to create a dynamic style object
   const createDynamicStyles = useCallback((baseStyles: React.CSSProperties = {}) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicHtmlActive) {
       return baseStyles;
     }
     return {
       ...baseStyles,
-      '--seed': seed.toString(),
-      '--variant': (seed % 10).toString()
+      '--seed': dynamicSeed.toString(),
+      '--variant': (dynamicSeed % 10).toString()
     };
-  }, [seed, isDynamicEnabled]);
+  }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Helper function to generate navigation URLs with seed parameter
   const getNavigationUrl = useCallback((path: string): string => {
-    // If path already has query params
-    if (path.includes('?')) {
-      // Check if seed already exists in the URL
-      if (path.includes('seed=')) {
-        return path;
-      }
-      return `${path}&seed=${seed}`;
+    const [pathWithoutHash, hashFragment] = path.split('#', 2);
+    const [basePath, queryString] = pathWithoutHash.split('?', 2);
+    const params = new URLSearchParams(queryString || '');
+
+    if (isDynamicStructureActive) {
+      params.set('seed', structureSeed.toString());
+    } else {
+      params.delete('seed');
     }
-    // Add seed as first query param
-    return `${path}?seed=${seed}`;
-  }, [seed]);
+
+    if (isDynamicHtmlActive) {
+      params.set('seed-structure', dynamicSeed.toString());
+    } else {
+      params.delete('seed-structure');
+    }
+
+    const query = params.toString();
+    const rebuilt = `${basePath}${query ? `?${query}` : ''}`;
+    return hashFragment ? `${rebuilt}#${hashFragment}` : rebuilt;
+  }, [structureSeed, dynamicSeed, isDynamicStructureActive, isDynamicHtmlActive]);
 
   return {
-    seed,
+    seed: dynamicSeed,
+    structureSeed,
+    dynamicSeed,
+    hasStructureSeedParam: isDynamicStructureActive,
+    hasDynamicSeedParam: isDynamicHtmlActive,
+    isDynamicStructureActive,
+    isDynamicHtmlActive,
     layout,
     isDynamicEnabled,
     getElementAttributes,
@@ -276,8 +354,8 @@ export function useSeedLayout() {
     createDynamicStyles,
     getNavigationUrl,
     getText: (key: ElementKey, fallback: string) => {
-      if (!isDynamicEnabled) return fallback;
-      return getTextForElement(seed, key, fallback);
+      if (!isDynamicHtmlActive) return fallback;
+      return getTextForElement(dynamicSeed, key, fallback);
     },
   };
 }

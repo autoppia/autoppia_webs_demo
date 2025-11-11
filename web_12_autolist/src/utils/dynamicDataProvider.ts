@@ -2,7 +2,16 @@ import { getSeedLayout } from "@/library/layouts";
 
 // Check if dynamic HTML is enabled via environment variable (strictly use dynamic_html_structure flag)
 const isDynamicHtmlEnabled = (): boolean => {
-  return process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE === 'true';
+  const rawFlag =
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
+    process.env.ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ??
+    process.env.ENABLE_DYNAMIC_HTML ??
+    '';
+
+  const normalized = rawFlag.toString().trim().toLowerCase();
+  return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';
 };
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
