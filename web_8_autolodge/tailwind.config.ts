@@ -7,6 +7,25 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    // Dynamic button classes from structureVariations.json
+    "ml-3", "px-4", "py-2", "rounded-full", "text-white", "font-semibold", "text-lg", "flex", "items-center", "shadow-md", "shadow-sm", "border", "border-neutral-200", "hover:bg-[#9ba6ce]", "focus:outline-none", "transition-all",
+    "bg-[#616882]",
+    "bg-[#4f46e5]", "hover:bg-[#6366f1]",
+    "bg-neutral-800", "hover:bg-neutral-700",
+    "bg-[#EA580C]", "hover:bg-[#F97316]",
+    "bg-[#0EA5E9]", "hover:bg-[#38BDF8]",
+    "bg-[#0284C7]", "hover:bg-[#0EA5E9]",
+    "bg-[#16A34A]", "hover:bg-[#22C55E]",
+    "bg-[#F59E0B]", "hover:bg-[#FBBF24]",
+    "bg-black", "hover:bg-neutral-800",
+    "bg-[#A78BFA]", "hover:bg-[#C4B5FD]",
+    "bg-[#D97706]", "hover:bg-[#B45309]",
+    "bg-[#BE123C]", "hover:bg-[#E11D48]",
+    "bg-[#334155]", "hover:bg-[#475569]",
+    "bg-[#10B981]", "hover:bg-[#34D399]",
+    "bg-[#7C3AED]", "hover:bg-[#8B5CF6]",
+  ],
   theme: {
     extend: {
       colors: {
