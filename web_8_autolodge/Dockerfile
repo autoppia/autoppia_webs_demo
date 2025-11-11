@@ -45,8 +45,8 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 ENV NODE_ENV=production
-ENV PORT=8002
-EXPOSE 8002
+ENV PORT=8007
+EXPOSE 8007
 
 # prod deps only (from deps stage)
 COPY --from=deps /app/node_modules ./node_modules
