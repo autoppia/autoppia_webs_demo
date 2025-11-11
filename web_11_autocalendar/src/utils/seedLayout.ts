@@ -509,7 +509,16 @@ function getDefaultLayout(): SeedLayoutConfig {
 
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE === 'true';
+  const rawFlag =
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
+    process.env.ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ??
+    process.env.ENABLE_DYNAMIC_HTML ??
+    '';
+
+  const normalized = rawFlag.toString().trim().toLowerCase();
+  return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';
 }
 
 // Helper function to get effective layout config
