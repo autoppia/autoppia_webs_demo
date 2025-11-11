@@ -120,7 +120,7 @@ function RecommendationsContent() {
                   : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
             >
-              {following[c.name]
+              {following[rec.id]
                 ? getText("follow_following", "Following")
                 : getText("follow_button", "+ Follow")}
             </button>
