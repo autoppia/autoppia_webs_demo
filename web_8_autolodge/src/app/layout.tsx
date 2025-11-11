@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ClientBody from "./ClientBody";
-import Link from "next/link";
-import { Suspense } from "react";
+import Header from "@/components/Header";
+import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,30 +22,22 @@ export const metadata: Metadata = {
     "Autolodge is your trusted platform for booking hotels, cabins, and unique stays worldwide. Find your perfect getaway with flexible dates, real guest reviews, and seamless booking.",
 };
 
-import Header from "@/components/Header";
-import { DataReadyGate } from "@/components/DataReadyGate";
-
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body
-        className="bg-neutral-50 min-h-screen font-sans"
-        suppressHydrationWarning
-      >
-        <Suspense fallback={<div className="w-full h-16 bg-white border-b animate-pulse" />}>
-          <Header />
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="bg-neutral-50 min-h-screen font-sans" suppressHydrationWarning>
+        <Suspense fallback={<div className="h-16" />}>
+          <DynamicStructureProvider>
+            <Header />
+            <main className="flex justify-center w-full mt-3 px-2">
+              <div className="w-full max-w-7xl">{children}</div>
+            </main>
+          </DynamicStructureProvider>
         </Suspense>
-        <main className="flex justify-center w-full mt-3 px-2">
-          <div className="w-full max-w-7xl">
-            <DataReadyGate>
-              {children}
-            </DataReadyGate>
-          </div>
-        </main>
       </body>
     </html>
   );

@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { addMonths, addDays, isAfter } from "date-fns";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export function DateRangePopover({
   placeholder = "Add dates",
@@ -21,6 +22,7 @@ export function DateRangePopover({
 }) {
   const [open, setOpen] = React.useState(false);
   const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null);
+  const { getText, getId } = useDynamicStructure();
 
   // Handles click on a calendar cell to set range
   const handleSelect = (date: Date) => {
@@ -53,7 +55,7 @@ export function DateRangePopover({
   };
 
   // Labels
-  let label = placeholder;
+  let label = getText("add_dates", placeholder);
   if (selectedRange.from && selectedRange.to) {
     label = `${selectedRange.from.toLocaleDateString(undefined, {
       month: "short",
@@ -73,9 +75,9 @@ export function DateRangePopover({
   const today = new Date();
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>{React.cloneElement(children as React.ReactElement, { id: "dateRangePopoverTrigger" })}</PopoverTrigger>
+      <PopoverTrigger asChild>{React.cloneElement(children as React.ReactElement, { id: getId("date_popover_trigger") })}</PopoverTrigger>
       <PopoverContent
-        id="dateRangePopoverContent"
+        id={getId("date_popover_content")}
         sideOffset={12}
         align="start"
         className="w-[520px] p-6 bg-white rounded-3xl border shadow-xl"
@@ -84,7 +86,7 @@ export function DateRangePopover({
           <div className="flex flex-row gap-8">
             {/* First month */}
             <Calendar
-              id="dateRangeCalendar"
+              id={getId("date_calendar")}
               mode="range"
               numberOfMonths={2}
               selected={{
