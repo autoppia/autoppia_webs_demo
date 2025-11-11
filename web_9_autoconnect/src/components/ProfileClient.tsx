@@ -20,8 +20,6 @@ function ProfileContent({ username }: { username: string }) {
   const user = users.find((u) => u.username === username);
   const currentUser = users[2] || users[0];
   const { getText } = useDynamicStructure();
-  const user = mockUsers.find((u) => u.username === username);
-  const currentUser = mockUsers[2];
   const isSelf = user?.username === currentUser.username;
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"
