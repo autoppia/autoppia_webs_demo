@@ -212,6 +212,46 @@ export default function CartPage() {
   );
   const placeOrderLabel = getText("place-order-button", "Place Order");
   const placeOrderAria = getAria("place-order-button", "Place order");
+  const addressSelectorAttributes = layout.getElementAttributes("address-selector", 0);
+  const addressSelectorId = getId(
+    "address-selector",
+    `${addressSelectorAttributes.id ?? "address-selector"}-${seedStructure}`
+  );
+  const addressSelectorLabel = getText("address-selector-label", "Select Address");
+  const addressSelectorAria = getAria("address-selector", "Select delivery address");
+  const dropoffSectionAttributes = layout.getElementAttributes("dropoff-section", 0);
+  const dropoffSectionId = getId(
+    "dropoff-section",
+    `${dropoffSectionAttributes.id ?? "dropoff-section"}-${seedStructure}`
+  );
+  const dropoffSectionAria = getAria("dropoff-section", "Dropoff preferences");
+  const dropoffSelectorAttributes = layout.getElementAttributes("dropoff-preferences-selector", 0);
+  const dropoffSelectorId = getId(
+    "dropoff-preferences-selector",
+    `${dropoffSelectorAttributes.id ?? "dropoff-preferences-selector"}-${seedStructure}`
+  );
+  const dropoffSelectorLabel = getText("dropoff-selector-label", "Leave it at my door");
+  const dropoffSelectorAria = getAria("dropoff-preferences-selector", "Change dropoff preference");
+  const dropoffInstructionsAttributes = layout.getElementAttributes("dropoff-instructions", 0);
+  const dropoffInstructionsText = getText(
+    "dropoff-instructions",
+    "Please ring the bell and drop off at the door."
+  );
+  const dropoffInstructionsId = getId(
+    "dropoff-instructions",
+    `${dropoffInstructionsAttributes.id ?? "dropoff-instructions"}-${seedStructure}`
+  );
+  const dropoffInstructionsAria = getAria("dropoff-instructions", "Dropoff instructions");
+  const contactSelectorAttributes = layout.getElementAttributes("contact-number-selector", 0);
+  const contactSelectorId = getId(
+    "contact-number-selector",
+    `${contactSelectorAttributes.id ?? "contact-number-selector"}-${seedStructure}`
+  );
+  const contactSelectorLabel = getText("contact-number-label", "Add contact number");
+  const contactSelectorAria = getAria("contact-number-selector", "Add contact number");
+  const defaultDropoffOption = "Leave it at my door";
+  const isDefaultDropoffSelected = selectedDropoff === defaultDropoffOption;
+  const dropoffDisplayLabel = isDefaultDropoffSelected ? dropoffSelectorLabel : selectedDropoff;
 
   return (
     <div id="cart-page-container" className={`max-w-3xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
@@ -411,15 +451,17 @@ export default function CartPage() {
               <div id="address-section" className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
                 <Home className="w-5 h-5 text-zinc-500" />
                 <div
-                  id="address-selector"
+                  {...addressSelectorAttributes}
+                  id={addressSelectorId}
                   className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                   onClick={() => {
                     setCustomAddress(form.address);
                     setIsAddressModalOpen(true);
                   }}
+                  aria-label={addressSelectorAria}
                 >
                   <span className="font-semibold">
-                    {form.address || "Select Address"}
+                    {form.address || addressSelectorLabel}
                   </span>
                   <ChevronRight className="w-4 h-4 text-zinc-400 ml-auto" />
                 </div>
@@ -490,21 +532,32 @@ export default function CartPage() {
                   </DialogContent>
                 </Dialog>
               </div>
-              <div id="dropoff-section" className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2">
+              <div
+                {...dropoffSectionAttributes}
+                id={dropoffSectionId}
+                className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
+                aria-label={dropoffSectionAria}
+              >
                 <Home className="w-5 h-5 text-zinc-500 mt-3" />
                 <div
-                  id="dropoff-preferences-selector"
+                  {...dropoffSelectorAttributes}
+                  id={dropoffSelectorId}
                   className="flex items-start gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                   onClick={() => setIsDropoffModalOpen(true)}
+                  aria-label={dropoffSelectorAria}
                 >
                   <div>
                     <span className="font-semibold block">
-                      {selectedDropoff}
+                      {dropoffDisplayLabel}
                     </span>
-                    {selectedDropoff === "Leave it at my door" && (
-                      <span id="dropoff-instructions" className="block text-xs text-zinc-500">
-                        Please ring the bell and drop off at the door, thank
-                        you. Its around the corner on the ground floor
+                    {isDefaultDropoffSelected && (
+                      <span
+                        {...dropoffInstructionsAttributes}
+                        id={dropoffInstructionsId}
+                        className="block text-xs text-zinc-500"
+                        aria-label={dropoffInstructionsAria}
+                      >
+                        {dropoffInstructionsText}
                       </span>
                     )}
                   </div>
@@ -553,15 +606,17 @@ export default function CartPage() {
                 </Dialog>
               </div>
               <div
-                id="contact-number-selector"
+                {...contactSelectorAttributes}
+                id={contactSelectorId}
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
                 onClick={() =>
                   formRef.current?.scrollIntoView({ behavior: "smooth" })
                 }
+                aria-label={contactSelectorAria}
               >
                 <Phone className="w-5 h-5 text-zinc-500" />
                 <span className="font-semibold">
-                  {form.phone || "Add contact number"}
+                  {form.phone || contactSelectorLabel}
                 </span>
                 <ChevronRight className="w-4 h-4 text-zinc-400" />
               </div>
