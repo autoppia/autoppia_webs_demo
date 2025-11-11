@@ -11,8 +11,9 @@ ARG NEXT_PUBLIC_API_URL=http://localhost:8008
 ARG API_URL=http://app:8080
 ARG NEXT_PUBLIC_ENABLE_DB_MODE=false
 ARG NEXT_PUBLIC_ENABLE_DATA_GENERATION=false
-ARG DATA_SEED_VALUE=
-ARG NEXT_PUBLIC_DATA_SEED_VALUE=
+ARG DATA_SEED_VALUE
+ARG NEXT_PUBLIC_DATA_SEED_VALUE
+ARG NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE=false
 
 COPY package.json package-lock.json ./
 
@@ -32,6 +33,7 @@ ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV API_URL=${API_URL}
 ENV DATA_SEED_VALUE=${DATA_SEED_VALUE}
 ENV NEXT_PUBLIC_DATA_SEED_VALUE=${NEXT_PUBLIC_DATA_SEED_VALUE}
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE=${NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE}
 
 RUN npm run build
 
@@ -46,7 +48,7 @@ ENV PORT 8008
 EXPOSE 8008
 
 COPY --from=builder /app/.next ./.next
-#COPY --from=builder /app/public ./public
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 

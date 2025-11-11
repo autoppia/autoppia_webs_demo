@@ -4,6 +4,7 @@ import { type User, type Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
@@ -11,13 +12,14 @@ import { DataReadyGate } from "@/components/DataReadyGate";
 
 function ProfileContent({ username }: { username: string }) {
   const { layout } = useSeed();
-  
+
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
   const mockPosts = dynamicDataProvider.getPosts();
-  
+
   const user = users.find((u) => u.username === username);
   const currentUser = users[2] || users[0];
+  const { getText } = useDynamicStructure();
   const isSelf = user?.username === currentUser.username;
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"
@@ -38,7 +40,7 @@ function ProfileContent({ username }: { username: string }) {
   }, [user]);
 
   if (!user)
-    return <div className="text-center text-red-600 mt-8">User not found.</div>;
+    return <div className="text-center text-red-600 mt-8">{getText("profile_not_found", "User not found.")}</div>;
 
   const posts = mockPosts.filter((p) => p.user.username === user.username);
   const shuffledPosts = getShuffledItems(posts, layout.feedOrder);
@@ -73,18 +75,18 @@ function ProfileContent({ username }: { username: string }) {
                 className="ml-2 px-4 py-1 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700"
                 onClick={handleConnect}
               >
-                Connect
+                {getText("profile_connect", "Connect")}
               </button>
             ) : connectState === "pending" ? (
               <button
                 className="ml-2 px-4 py-1 rounded-full font-medium transition-colors text-white bg-gray-400 cursor-wait"
                 disabled
               >
-                Pending...
+                {getText("profile_pending", "Pending...")}
               </button>
             ) : (
               <span className="ml-2 px-4 py-1 rounded-full font-medium transition-colors text-white bg-green-600 cursor-default select-none">
-                Message
+                {getText("profile_message", "Message")}
               </span>
             ))}
         </div>
@@ -96,7 +98,7 @@ function ProfileContent({ username }: { username: string }) {
   const renderAbout = () => (
     user.about && (
       <div className="bg-gray-100 border rounded-lg p-5 mb-6">
-        <h3 className="font-bold text-lg mb-2">About</h3>
+        <h3 className="font-bold text-lg mb-2">{getText("profile_about", "About")}</h3>
         <p className="whitespace-pre-line text-gray-900">{user.about}</p>
       </div>
     )
@@ -105,7 +107,7 @@ function ProfileContent({ username }: { username: string }) {
   const renderExperience = () => (
     user.experience && user.experience.length > 0 && (
       <div className="bg-gray-100 border rounded-lg p-5 mb-8">
-        <h3 className="font-bold text-lg mb-4">Experience</h3>
+        <h3 className="font-bold text-lg mb-4">{getText("profile_experience", "Experience")}</h3>
         <div className="flex flex-col gap-6">
           {user.experience.map((exp, i) => (
             <div
@@ -137,10 +139,10 @@ function ProfileContent({ username }: { username: string }) {
 
   const renderPosts = () => (
     <div>
-      <h2 className="font-semibold text-lg mb-4">Posts by {user.name}:</h2>
+      <h2 className="font-semibold text-lg mb-4">{getText("profile_posts_by", "Posts by")} {user.name}:</h2>
       <div className="space-y-4">
         {shuffledPosts.length === 0 ? (
-          <div className="text-gray-500 italic">No posts yet.</div>
+          <div className="text-gray-500 italic">{getText("profile_no_posts", "No posts yet.")}</div>
         ) : (
           shuffledPosts.map((post) => (
             <Post
