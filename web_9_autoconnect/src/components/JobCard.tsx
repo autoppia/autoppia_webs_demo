@@ -4,6 +4,7 @@ import type { Job } from "@/library/dataset";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export default function JobCard({
   job,
@@ -13,6 +14,7 @@ export default function JobCard({
   onApply?: (id: string) => void;
 }) {
   const [applied, setApplied] = useState<"none" | "pending" | "done">("none");
+  const { getText } = useDynamicStructure();
 
   const handleApply = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -78,10 +80,10 @@ export default function JobCard({
         disabled={applied !== "none"}
       >
         {applied === "none"
-          ? "Apply"
+          ? getText("jobs_apply_button", "Apply")
           : applied === "pending"
-          ? "Pending..."
-          : "Applied"}
+          ? getText("jobs_apply_pending", "Pending...")
+          : getText("jobs_apply_done", "Applied")}
       </button>
     </SeedLink>
   );

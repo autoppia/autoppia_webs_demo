@@ -4,10 +4,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export default function UserSearchBar() {
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
+  const { getText, getClass } = useDynamicStructure();
   const matches =
     q.length === 0
       ? []
@@ -17,9 +19,9 @@ export default function UserSearchBar() {
     <div className="relative flex-1 max-w-lg">
       <input
         type="text"
-        aria-label="Search users"
-        className="w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-        placeholder="Search users"
+        aria-label={getText("search_aria_label", "Search users")}
+        className={getClass("search_input", "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50")}
+        placeholder={getText("search_placeholder", "Search users")}
         value={q}
         onChange={(e) => {
           const val = e.target.value;
