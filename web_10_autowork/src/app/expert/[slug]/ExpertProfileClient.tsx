@@ -3,6 +3,8 @@
 import { useSeedLayout } from "@/library/useSeedLayout";
 import HireButton from "@/app/components/HireButton";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface Expert {
   name: string;
@@ -10,13 +12,14 @@ interface Expert {
   role: string;
   country: string;
   avatar: string;
-  about: string;
-  stats: {
-    earnings: string;
-    jobs: number;
-    hours: number;
+  about?: string;
+  bio?: string;
+  stats?: {
+    earnings?: string;
+    jobs?: number;
+    hours?: number;
   };
-  lastReview: {
+  lastReview?: {
     title: string;
     dates: string;
     text: string;
@@ -24,23 +27,73 @@ interface Expert {
     rate: string;
     time: string;
   };
-  hoursPerWeek: string;
-  languages: string[];
+  hoursPerWeek?: string;
+  languages?: string[];
+  rate?: string;
+  rating?: number;
+  jobs?: number;
 }
 
-export default function ExpertProfileClient({ expert }: { expert: Expert }) {
-  const { layout } = useSeedLayout();
+export default function ExpertProfileClient({ slug }: { slug: string }) {
+  const { layout, getElementAttributes, getText } = useSeedLayout();
+  const [expertState, setExpertState] = useState<Expert | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem("autowork_experts");
+      if (raw) {
+        const arr = JSON.parse(raw) as Expert[];
+        const found = Array.isArray(arr) ? arr.find((e) => e.slug === slug) : null;
+        if (found) {
+          setExpertState(found);
+          logEvent(EVENT_TYPES.BOOK_A_CONSULTATION, {
+            expertName: found.name,
+            expertSlug: found.slug,
+            role: found.role,
+            rate: found.rate,
+            country: found.country,
+            rating: found.rating,
+            jobs: found.jobs,
+            timestamp: Date.now(),
+          });
+        }
+      }
+    } catch {}
+  }, [slug]);
+
+  const normalized = useMemo(() => {
+    const e = expertState;
+    if (!e) return null;
+    const stats = {
+      earnings: e.stats?.earnings ?? "$0",
+      jobs: typeof e.stats?.jobs === "number" ? e.stats!.jobs! : (e.jobs ?? 0),
+      hours: typeof e.stats?.hours === "number" ? e.stats!.hours! : 0,
+    };
+    const about = e.about || e.bio || "";
+    const languages = Array.isArray(e.languages) ? e.languages : [];
+    return { ...e, stats, about, languages } as Required<Expert>;
+  }, [expertState]);
+
+  if (!normalized) {
+    return (
+      <main className="max-w-6xl mx-auto px-5 py-5">
+        <div className="bg-white rounded-2xl shadow border border-gray-100 p-8 flex items-center justify-center text-gray-500">
+          Loading expert...
+        </div>
+      </main>
+    );
+  }
 
   // Create section components
   const ProfileSection = () => (
-    <div className="flex items-center gap-4 mb-6">
+    <div className="flex items-center gap-4 mb-6" {...getElementAttributes('expert-profile-section', 0)}>
       <img
-        src={expert.avatar}
-        alt={expert.name}
+        src={normalized.avatar}
+        alt={normalized.name}
         className="w-20 h-20 rounded-full object-cover border border-[#cad2d0] shadow"
       />
       <div>
-        <h1 className="text-3xl font-bold text-[#253037]">{expert.name}</h1>
+        <h1 className="text-3xl font-bold text-[#253037]" {...getElementAttributes('expert-name', 0)}>{normalized.name}</h1>
         <div className="text-[#4a545b] flex items-center gap-2 text-[16px] font-medium mt-2">
           <svg
             className="inline-block mr-1"
@@ -69,24 +122,25 @@ export default function ExpertProfileClient({ expert }: { expert: Expert }) {
               strokeWidth="2"
             />
           </svg>
-          {expert.country}{" "}
+          {normalized.country}{" "}
           <span className="text-gray-400">– 1:24 pm local time</span>
         </div>
       </div>
       <div className="ml-auto flex gap-2">
-        <button className="w-12 h-12 rounded-full bg-white border border-[#08b4ce] flex items-center justify-center text-2xl text-[#08b4ce] hover:bg-[#e6f9fb]">
+        <button className="w-12 h-12 rounded-full bg-white border border-[#08b4ce] flex items-center justify-center text-2xl text-[#08b4ce] hover:bg-[#e6f9fb]" {...getElementAttributes('expert-menu-button', 0)}>
           …
         </button>
 
-        <HireButton expert={expert} />
+        <HireButton expert={normalized} />
         <Link
           href={`#`}
           passHref
           className="px-7 py-2 rounded-full border-2 border-[#08b4ce] text-[#08b4ce] bg-white text-lg ml-1 font-semibold hover:bg-[#e6f9fb]"
+          {...getElementAttributes('expert-message-button', 0)}
         >
-          Message
+          {getText('expert-message-button-label', 'Message')}
         </Link>
-        <button className="w-12 h-12 rounded-full border border-green-700 flex items-center justify-center text-2xl text-green-700 ml-1">
+        <button className="w-12 h-12 rounded-full border border-green-700 flex items-center justify-center text-2xl text-green-700 ml-1" {...getElementAttributes('expert-favorite-button', 0)}>
           ♡
         </button>
       </div>
@@ -94,85 +148,86 @@ export default function ExpertProfileClient({ expert }: { expert: Expert }) {
   );
 
   const StatsSection = () => (
-    <div className="grid grid-cols-3 md:gap-8 bg-[#fafcff] rounded-xl border border-gray-100 py-3 px-2 text-center mb-5">
+    <div className="grid grid-cols-3 md:gap-8 bg-[#fafcff] rounded-xl border border-gray-100 py-3 px-2 text-center mb-5" {...getElementAttributes('expert-stats-section', 0)}>
       <div>
         <div className="text-lg font-bold text-[#253037]">
-          {expert.stats.earnings}
+          {normalized.stats.earnings}
         </div>
-        <div className="text-xs text-gray-500 mt-1">Total earnings</div>
+        <div className="text-xs text-gray-500 mt-1">{getText('stats-earnings-label', 'Total earnings')}</div>
       </div>
       <div>
         <div className="text-lg font-bold text-[#253037]">
-          {expert.stats.jobs}
+          {normalized.stats.jobs}
         </div>
-        <div className="text-xs text-gray-500 mt-1">Total jobs</div>
+        <div className="text-xs text-gray-500 mt-1">{getText('stats-jobs-label', 'Total jobs')}</div>
       </div>
       <div>
         <div className="text-lg font-bold text-[#253037]">
-          {expert.stats.hours}
+          {normalized.stats.hours}
         </div>
-        <div className="text-xs text-gray-500 mt-1">Total hours</div>
+        <div className="text-xs text-gray-500 mt-1">{getText('stats-hours-label', 'Total hours')}</div>
       </div>
     </div>
   );
 
   const AboutSection = () => (
-    <div className="mb-4">
+    <div className="mb-4" {...getElementAttributes('expert-about-section', 0)}>
       <h2 className="font-bold text-xl text-[#253037] mb-1">
-        {expert.role}
+        {normalized.role}
       </h2>
-      <p className="text-gray-700 text-base mb-2">{expert.about}</p>
+      <p className="text-gray-700 text-base mb-2">{normalized.about}</p>
     </div>
   );
 
   const ReviewsSection = () => (
-    <div className="bg-[#f6fff7] border border-[#dbf6e6] rounded-xl py-5 px-6 flex flex-col gap-2">
+    !normalized.lastReview ? null : (
+    <div className="bg-[#f6fff7] border border-[#dbf6e6] rounded-xl py-5 px-6 flex flex-col gap-2" {...getElementAttributes('expert-reviews-section', 0)}>
       <div className="text-[#27ab43] font-bold text-lg mb-1">
-        {expert.lastReview.title}
+        {normalized.lastReview.title}
       </div>
       <div className="flex items-center gap-3 mb-1">
         <span className="flex text-[#ebcf95] text-lg">{"★★★★★"}</span>
         <span className="text-[#199225] ml-2 font-semibold">5</span>
         <span className="text-gray-500 ml-2 text-sm">
-          {expert.lastReview.dates}
+          {normalized.lastReview.dates}
         </span>
       </div>
       <div className="mb-2 text-base text-[#253037]">
-        {expert.lastReview.text}
+        {normalized.lastReview.text}
       </div>
       <div className="flex gap-6 text-[#555] text-sm mt-2">
         <div>
           <span className="font-semibold">
-            {expert.lastReview.price}
+            {normalized.lastReview.price}
           </span>
         </div>
         <div>
           <span className="font-semibold">
-            {expert.lastReview.rate}
+            {normalized.lastReview.rate}
           </span>
         </div>
         <div>
           <span className="font-semibold">
-            {expert.lastReview.time}
+            {normalized.lastReview.time}
           </span>
         </div>
       </div>
-    </div>
+    </div>)
   );
 
   const SidebarSection = () => (
-    <div className="md:w-60 flex flex-col gap-7">
+    <div className="md:w-60 flex flex-col gap-7" {...getElementAttributes('expert-sidebar-section', 0)}>
       <div className="bg-[#fafcff] border border-gray-100 rounded-xl p-4">
         <div className="font-semibold text-md mb-2 text-[#253037]">
-          Hours per week
+          {getText('sidebar-hours-label', 'Hours per week')}
         </div>
-        <div className="text-gray-600">{expert.hoursPerWeek}</div>
+        <div className="text-gray-600">{normalized.hoursPerWeek || "N/A"}</div>
       </div>
       <div className="bg-[#fafcff] border border-gray-100 rounded-xl p-4">
         <div className="font-semibold text-md mb-2 text-[#253037]">
-          Languages
+          {getText('sidebar-languages-label', 'Languages')}
         </div>
-        {expert.languages.map((lng) => (
+        {(normalized.languages || []).map((lng) => (
           <div key={lng} className="text-gray-600">
             {lng}
           </div>
@@ -180,7 +235,7 @@ export default function ExpertProfileClient({ expert }: { expert: Expert }) {
       </div>
       <div className="bg-[#fafcff] border border-gray-100 rounded-xl p-4">
         <div className="font-semibold text-md mb-2 text-[#253037]">
-          Verifications
+          {getText('sidebar-verifications-label', 'Verifications')}
         </div>
         <div className="text-gray-600">
           Verified as full-stack developer

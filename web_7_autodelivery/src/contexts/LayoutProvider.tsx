@@ -129,18 +129,30 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     return `${baseClass}-seed-${seed}`;
   };
 
-  // Helper function to generate navigation URLs with seed parameter
+  // Helper function to generate navigation URLs with seed-structure parameter
   const getNavigationUrl = (path: string): string => {
+    // Get seed-structure from current URL
+    let seedStructure: string | null = null;
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      seedStructure = urlParams.get('seed-structure');
+    }
+    
+    // If no seed-structure in URL, don't add it
+    if (!seedStructure) {
+      return path;
+    }
+    
     // If path already has query params
     if (path.includes('?')) {
-      // Check if seed already exists in the URL
-      if (path.includes('seed=')) {
+      // Check if seed-structure already exists in the URL
+      if (path.includes('seed-structure=')) {
         return path;
       }
-      return `${path}&seed=${seed}`;
+      return `${path}&seed-structure=${seedStructure}`;
     }
-    // Add seed as first query param
-    return `${path}?seed=${seed}`;
+    // Add seed-structure as first query param
+    return `${path}?seed-structure=${seedStructure}`;
   };
 
   const value: LayoutContextType = {

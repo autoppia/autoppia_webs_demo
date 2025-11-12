@@ -1,6 +1,7 @@
 import type { Product } from "@/context/CartContext";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
-import { products } from "@/data/products";
+import { products, initializeProducts, loadProductsFromDb, writeCachedProducts, readCachedProducts } from "@/data/products-enhanced";
+import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -12,10 +13,23 @@ export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private products: Product[] = [];
   private isEnabled: boolean = false;
+  private dataGenerationEnabled: boolean = false;
+  private ready: boolean = false;
+  private readyPromise: Promise<void>;
+  private resolveReady!: () => void;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
-    this.products = products;
+    this.dataGenerationEnabled = isDataGenerationEnabled();
+    // hydrate from cache if available to keep content stable across reloads
+    const cached = readCachedProducts();
+    this.products = Array.isArray(cached) && cached.length > 0 ? cached : products;
+    this.readyPromise = new Promise<void>((resolve) => {
+      this.resolveReady = resolve;
+    });
+    
+    // Initialize products with data generation if enabled
+    this.initializeProducts();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -25,8 +39,51 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
+  private async initializeProducts(): Promise<void> {
+    try {
+      // Try DB mode first if enabled
+      const dbProducts = await loadProductsFromDb();
+      if (dbProducts.length > 0) {
+        this.products = dbProducts;
+        writeCachedProducts(this.products);
+        this.ready = true;
+        this.resolveReady();
+        return;
+      }
+      
+      // Fallback to existing behavior
+      const initializedProducts = await initializeProducts();
+      this.products = initializedProducts;
+      if (this.products.length > 0) {
+        writeCachedProducts(this.products);
+      }
+
+      // Mark as ready only when either generation is disabled or we have generated data
+      if (!this.dataGenerationEnabled || this.products.length > 0) {
+        this.ready = true;
+        this.resolveReady();
+      }
+
+    } catch (error) {
+      // Keep silent in production; initialize readiness when generation off
+      // If generation is enabled, do not mark ready here; the gate will continue showing loading
+      if (!this.dataGenerationEnabled) {
+        this.ready = true;
+        this.resolveReady();
+      }
+    }
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
+  }
+
   public getProducts(): Product[] {
-    return this.products; // Always return products
+    return this.products; // Return empty until ready when generation is enabled
   }
 
   public getProductById(id: string): Product | undefined {

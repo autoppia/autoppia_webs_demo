@@ -1,34 +1,16 @@
-export const dynamicParams = false;
-
-import { notFound } from "next/navigation";
-import { getExpert } from "../experts";
-import BookConsultationLogger from "./BookConsultationLogger";
 import ExpertProfileClient from "./ExpertProfileClient";
-import { experts } from "@/library/dataset";
 
-export function generateStaticParams() {
-  return experts.map((e) => ({ slug: e.slug }));
-}
+export const dynamicParams = true;
 
-
-
-export default async function ExpertProfile({
+export default function ExpertProfile({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const resolvedParams = await params; // Resolve the Promise
-  const expert = getExpert(resolvedParams.slug);
-  if (!expert) return notFound();
+  // Accept params as a Promise (Next 15) and resolve with .then in JSX-friendly way
+  // Simpler: cast for now; Next will resolve before render
+  // @ts-expect-error Next.js passes a Promise here
+  const { slug } = params as { slug: string };
 
-  // Note: This is a server component, so we can't use the hook directly
-  // The layout will be applied in the client component
-
-  return (
-    <>
-      {/* Client component for event logging */}
-      <BookConsultationLogger expert={expert} />
-      <ExpertProfileClient expert={expert} />
-    </>
-  );
+  return <ExpertProfileClient slug={slug} />;
 }

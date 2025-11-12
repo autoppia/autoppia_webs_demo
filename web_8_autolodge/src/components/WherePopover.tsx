@@ -5,6 +5,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import Image from "next/image";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 // Example static data
 const RECENT_SEARCHES = [
@@ -56,6 +57,7 @@ export function WherePopover({
 }) {
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState(searchTerm);
+  const { getText, getId } = useDynamicStructure();
 
   // sync with parent
   React.useEffect(() => setInput(searchTerm), [searchTerm]);
@@ -69,6 +71,7 @@ export function WherePopover({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent
+        id={getId("where_popover_content", "wherePopover")}
         sideOffset={12}
         align="start"
         className="min-w-[650px] shadow-xl px-0 py-4 rounded-3xl border bg-white"
@@ -77,7 +80,7 @@ export function WherePopover({
           <div className="min-w-[220px]">
             <input
               className="mb-5 w-full px-3 py-2 border rounded-xl text-[15px] focus:outline-none focus:ring-2 ring-neutral-200 transition"
-              placeholder="Search destinations"
+              placeholder={getText("where_placeholder")}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
@@ -85,7 +88,7 @@ export function WherePopover({
               }}
             />
             <h3 className="font-semibold mb-3 text-neutral-800">
-              Recent searches
+              {getText("recent_searches")}
             </h3>
             <div className="flex flex-col gap-2">
               {RECENT_SEARCHES.map((r) => (
@@ -113,7 +116,7 @@ export function WherePopover({
           </div>
           <div>
             <h3 className="font-semibold mb-3 text-neutral-800">
-              Search by region
+              {getText("search_by_region")}
             </h3>
             <div className="grid grid-cols-3 gap-5">
               {REGIONS.map((r) => (

@@ -1,12 +1,45 @@
 "use client";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { title } from "process";
 import { ToastContainer, toast } from "react-toastify";
-import { jobs,hires, experts  } from "@/library/dataset";
+// import { jobs,hires, experts  } from "@/library/dataset";
 import { useSeedLayout } from "@/library/useSeedLayout";
+import { useAutoworkData } from "@/hooks/useAutoworkData";
+import { writeJson } from "@/shared/storage";
+
+const POPULAR_SKILLS = [
+  "JavaScript",
+  "TypeScript",
+  "Python",
+  "Java",
+  "C#",
+  "C++",
+  "Ruby",
+  "Go",
+  "Swift",
+  "Kotlin",
+  "Objective-C",
+  "PHP",
+  "HTML",
+  "CSS",
+  "React",
+  "Angular",
+  "Vue.js",
+  "Node.js",
+  "Django",
+  "Flask",
+] as const;
+
+const SCOPE_SIZE_OPTIONS = ["Large", "Medium", "Small"] as const;
+const SCOPE_DURATION_OPTIONS = ["More than 6 months", "3 to 6 months"] as const;
+
+const BUDGET_TYPE_OPTIONS = [
+  { key: "hourly", label: "Hourly rate" },
+  { key: "fixed", label: "Fixed price" },
+] as const;
 
 function PostJobWizard({
   open,
@@ -15,7 +48,7 @@ function PostJobWizard({
   open: boolean;
   onClose: () => void;
 }) {
-  const { layout, getElementAttributes } = useSeedLayout();
+  const { layout, getElementAttributes, getText, shuffleList } = useSeedLayout();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -30,6 +63,23 @@ function PostJobWizard({
     attachments: [] as File[],
   });
   const totalSteps = 5;
+
+  const popularSkillOptions = useMemo(
+    () => shuffleList([...POPULAR_SKILLS], "postjob_popular_skills"),
+    [shuffleList]
+  );
+  const scopeSizeOptions = useMemo(
+    () => shuffleList([...SCOPE_SIZE_OPTIONS], "postjob_scope_size"),
+    [shuffleList]
+  );
+  const scopeDurationOptions = useMemo(
+    () => shuffleList([...SCOPE_DURATION_OPTIONS], "postjob_scope_duration"),
+    [shuffleList]
+  );
+  const budgetTypeOptions = useMemo(
+    () => shuffleList(BUDGET_TYPE_OPTIONS.map((option) => ({ ...option })), "postjob_budget_type"),
+    [shuffleList]
+  );
 
   function setValue<K extends keyof typeof form>(
     key: K,
@@ -48,48 +98,32 @@ function PostJobWizard({
     onClose();
   }
 
-  // Popular skills step 2
-  const popularSkills = [
-    "JavaScript",
-    "TypeScript",
-    "Python",
-    "Java",
-    "C#",
-    "C++",
-    "Ruby",
-    "Go",
-    "Swift",
-    "Kotlin",
-    "Objective-C",
-    "PHP",
-    "HTML",
-    "CSS",
-    "React",
-    "Angular",
-    "Vue.js",
-    "Node.js",
-    "Django",
-    "Flask",
-  ];
-
   // Stepper progress text
   const progress = `${step}/${totalSteps}`;
   
   // Fixed step sequence for post job wizard (consistent across all seeds)
   const fixedStepSequence = ['skills', 'scope', 'title', 'budget', 'description'];
   
-  // Create step title map for the fixed sequence
-  const stepTitleMap = {
-    skills: "What are the main skills required for your work?",
-    scope: "Next, estimate the scope of your work.",
-    title: "Let's start with a strong title.",
-    budget: "Tell us about your budget.",
-    description: "Start the conversation.",
-  };
-  
   // Get current step key based on fixed sequence
   const currentStepKey = fixedStepSequence[step - 1];
-  const stepTitle = stepTitleMap[currentStepKey as keyof typeof stepTitleMap] || stepTitleMap.skills;
+  const stepTitle = (() => {
+    switch (currentStepKey) {
+      case "skills":
+        return "What are the main skills required for your work?";
+      case "scope":
+        return "Next, estimate the scope of your work.";
+      case "title":
+        return "Let's start with a strong title.";
+      case "budget":
+        return "Tell us about your budget.";
+      case "description":
+        return "Start the conversation.";
+      default:
+        return "What are the main skills required for your work?";
+    }
+  })();
+
+  const backButtonLabel = "Back";
 
   const getButtonTitle = (step: number): string => {
     if (step === totalSteps) return "Submit Job Post";
@@ -104,6 +138,7 @@ function PostJobWizard({
   };
 
   const buttonTitle = getButtonTitle(step);
+  const nextButtonLabel = step === totalSteps ? "Submit Job Post" : buttonTitle;
   // Define the EventData interface
   interface EventData {
     step: number;
@@ -128,7 +163,7 @@ function PostJobWizard({
   const handleStepNext = () => {
     const eventData: EventData = {
       step,
-      buttonText: buttonTitle,
+      buttonText: nextButtonLabel,
     };
 
     // Add relevant data based on step
@@ -260,13 +295,16 @@ function PostJobWizard({
                   htmlFor="job-title"
                   className="font-semibold mb-2 text-[#253037]"
                 >
-                  Write a title for your job post
+                  {getText(
+                    "job-title-heading",
+                    "Write a title for your job post"
+                  )}
                 </label>
                 <input
                   id="job-title"
                   {...getElementAttributes('job-title-input', 0)}
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-lg focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none mt-1"
-                  placeholder=""
+                  placeholder={getText("job-title-placeholder", "")}
                   type="text"
                   value={form.title}
                   onChange={(e) => {
@@ -300,20 +338,26 @@ function PostJobWizard({
             {currentStepKey === 'skills' && (
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
-                  Search skills or add your own
+                  {getText(
+                    "skill-search-label",
+                    "Search skills or add your own"
+                  )}
                 </label>
                 <div className="flex gap-2 items-start mb-2" ref={dropdownRef}>
                   <input
                     {...getElementAttributes('skill-search-input', 0)}
                     className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
-                    placeholder="Type a skill and press Enter or Add button"
+                    placeholder={getText(
+                      "skill-search-placeholder",
+                      "Type a skill and press Enter or Add button"
+                    )}
                     type="text"
                     value={form.customSkill}
                     onChange={(e) => {
                       const query = e.target.value;
                       setValue("customSkill", query);
                       if (query.length > 0) {
-                        const matches = popularSkills.filter((s) =>
+                        const matches = popularSkillOptions.filter((s) =>
                           s.toLowerCase().includes(query.toLowerCase())
                         );
                         setFilteredSkills(matches);
@@ -377,11 +421,14 @@ function PostJobWizard({
                       }
                     }}
                   >
-                    Add
+                    {getText("add-skill-button-label", "Add")}
                   </button>
                 </div>
                 <div className="mb-2 text-xs text-[#4a545b]">
-                  For the best results, add 3-5 skills
+                  {getText(
+                    "skills-helper-text",
+                    "For the best results, add 3-5 skills"
+                  )}
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {form.skills.map((skill, i) => (
@@ -412,13 +459,16 @@ function PostJobWizard({
                 </div>
                 <div>
                   <span className="font-medium">
-                    Popular skills for Software Development
+                    {getText(
+                      "popular-skills-heading",
+                      "Popular skills for Software Development"
+                    )}
                   </span>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {popularSkills.map((skill) => (
+                    {popularSkillOptions.map((skill) => (
                       <button
                         key={skill}
-                        {...getElementAttributes('popular-skill-button', popularSkills.indexOf(skill))}
+                        {...getElementAttributes('popular-skill-button', popularSkillOptions.indexOf(skill))}
                         type="button"
                         className="px-3 py-1 bg-gray-100 hover:bg-[#e6f9fb] border border-[#cad2d0] rounded-full text-[#253037] text-sm"
                         onClick={() => {
@@ -441,7 +491,10 @@ function PostJobWizard({
             {currentStepKey === 'scope' && (
               <>
                 <label className="font-semibold mb-2 text-[#253037]">
-                  Estimate the size of your project
+                  {getText(
+                    "scope-step-heading",
+                    "Estimate the size of your project"
+                  )}
                 </label>
                 <div className="space-y-4 mb-8">
                   {["Large", "Medium", "Small"].map((opt) => (
@@ -471,7 +524,10 @@ function PostJobWizard({
                 </div>
                 <div className="mt-8">
                   <span className="font-semibold mb-2 text-[#253037]">
-                    How long will your work take?
+                    {getText(
+                      "duration-heading",
+                      "How long will your work take?"
+                    )}
                   </span>
                   <div className="space-y-2 mt-4">
                     {["More than 6 months", "3 to 6 months"].map((opt) => (
@@ -496,78 +552,105 @@ function PostJobWizard({
               </>
             )}
             {currentStepKey === 'budget' && (
-              <>
-                <span className="font-semibold mb-2 text-[#253037]">
-                  Choose a budget type
-                </span>
-                <div className="flex gap-6 mb-7 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setValue("budgetType", "hourly")}
-                    className={`flex-1 px-6 py-5 rounded-xl border text-left ${
-                      form.budgetType === "hourly"
-                        ? "border-green-600 bg-[#f8fff8]"
-                        : "border-gray-200 bg-white"
-                    }`}
-                  >
-                    <span className="block mb-1 font-bold text-lg flex items-center gap-2">
-                      <span
-                        className={`inline-block w-5 h-5 mr-1 rounded-full border-2 ${
-                          form.budgetType === "hourly"
-                            ? "border-green-600 bg-[#1fc12c]"
-                            : "border-gray-200 bg-white"
-                        }`}
-                      ></span>
-                      Hourly rate
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setValue("budgetType", "fixed")}
-                    className={`flex-1 px-6 py-5 rounded-xl border text-left ${
-                      form.budgetType === "fixed"
-                        ? "border-green-600 bg-[#f8fff8]"
-                        : "border-gray-200 bg-white"
-                    }`}
-                  >
-                    <span className="block mb-1 font-bold text-lg flex items-center gap-2">
-                      <span
-                        className={`inline-block w-5 h-5 mr-1 rounded-full border-2 ${
-                          form.budgetType === "fixed"
-                            ? "border-green-600 bg-[#1fc12c]"
-                            : "border-gray-200 bg-white"
-                        }`}
-                      ></span>
-                      Fixed price
-                    </span>
-                  </button>
-                </div>
-                <div className="flex gap-4 items-end mb-2">
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="From"
-                    className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
-                    value={form.rateFrom}
-                    onChange={(e) => setValue("rateFrom", e.target.value)}
-                  />
-                  <span className="text-gray-500 font-medium mb-2">/hr</span>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="To"
-                    className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
-                    value={form.rateTo}
-                    onChange={(e) => setValue("rateTo", e.target.value)}
-                  />
-                  <span className="text-gray-500 font-medium mb-2">/hr</span>
-                </div>
-                <div className="text-xs text-[#4a545b] mb-2">
-                  This is the average rate for similar projects.
-                </div>
-              </>
+              <div className="space-y-8">
+                {(layout.formFields?.budget ?? ["type", "rate", "increase"]).map((sectionKey) => {
+                  if (sectionKey === "type") {
+                    return (
+                      <section key="budget-type">
+                        <span className="font-semibold mb-2 block text-[#253037]">
+                          Choose a budget type
+                        </span>
+                        <div className="flex flex-col md:flex-row gap-4 md:gap-6 mt-2">
+                          {budgetTypeOptions.map((option, optionIndex) => (
+                            <button
+                              key={option.key}
+                              type="button"
+                              onClick={() => setValue("budgetType", option.key)}
+                              className={`flex-1 px-6 py-5 rounded-xl border text-left ${
+                                form.budgetType === option.key
+                                  ? "border-green-600 bg-[#f8fff8]"
+                                  : "border-gray-200 bg-white"
+                              }`}
+                              {...getElementAttributes('budget-type-button', optionIndex)}
+                            >
+                              <span className="block mb-1 font-bold text-lg flex items-center gap-2">
+                                <span
+                                  className={`inline-block w-5 h-5 mr-1 rounded-full border-2 ${
+                                    form.budgetType === option.key
+                                      ? "border-green-600 bg-[#1fc12c]"
+                                      : "border-gray-200 bg-white"
+                                  }`}
+                                ></span>
+                                {option.label}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  if (sectionKey === "rate") {
+                    return (
+                      <section key="budget-rate">
+                        <div className="flex flex-wrap gap-4 items-end">
+                          <div className="flex flex-col">
+                            <label className="text-xs uppercase tracking-wide text-gray-500 mb-1">
+                              From
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              placeholder="0"
+                              className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
+                              value={form.rateFrom}
+                              onChange={(e) => setValue("rateFrom", e.target.value)}
+                            />
+                          </div>
+                          <span className="text-gray-500 font-medium pb-2">/hr</span>
+                          <div className="flex flex-col">
+                            <label className="text-xs uppercase tracking-wide text-gray-500 mb-1">
+                              To
+                            </label>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              placeholder="0"
+                              className="rounded border border-gray-300 px-4 py-2 w-28 text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none"
+                              value={form.rateTo}
+                              onChange={(e) => setValue("rateTo", e.target.value)}
+                            />
+                          </div>
+                          <span className="text-gray-500 font-medium pb-2">/hr</span>
+                        </div>
+                        <div className="text-xs text-[#4a545b] mt-2">
+                          This is the average rate for similar projects.
+                        </div>
+                      </section>
+                    );
+                  }
+
+                  if (sectionKey === "increase") {
+                    return (
+                      <section
+                        key="budget-increase"
+                        className="rounded-xl border border-dashed border-gray-200 p-4 bg-gray-50"
+                      >
+                        <span className="font-semibold text-[#253037]">
+                          Optional: Plan a future rate increase
+                        </span>
+                        <p className="text-sm text-[#4a545b] mt-2">
+                          You can add rate adjustments later in your contract details if your work grows in scope.
+                        </p>
+                      </section>
+                    );
+                  }
+
+                  return null;
+                })}
+              </div>
             )}
             {currentStepKey === 'description' && (
               <>
@@ -575,7 +658,10 @@ function PostJobWizard({
                   htmlFor="desc"
                   className="font-semibold mb-2 text-[#253037]"
                 >
-                  Describe what you need
+                  {getText(
+                    "job-description-heading",
+                    "Describe what you need"
+                  )}
                 </label>
                 <textarea
                   id="desc"
@@ -583,7 +669,10 @@ function PostJobWizard({
                   className="rounded border border-gray-300 px-4 py-2 w-full max-w-lg text-base focus:ring-2 focus:ring-[#08b4ce] focus:border-[#08b4ce] outline-none h-28 resize-vertical"
                   value={form.description}
                   onChange={(e) => setValue("description", e.target.value)}
-                  placeholder="Already have a description? Paste it here!"
+                  placeholder={getText(
+                    "job-description-placeholder",
+                    "Already have a description? Paste it here!"
+                  )}
                   maxLength={50000}
                 />
                 <div className="text-xs text-gray-400 mt-1">
@@ -608,7 +697,8 @@ function PostJobWizard({
                     onClick={() => fileInputRef.current?.click()}
                     className="rounded border px-5 py-2 text-[#199225] border-[#1fc12c] bg-white hover:bg-[#e6f9fb] font-semibold flex items-center gap-2"
                   >
-                    <span className="text-lg">📎</span> Attach file
+                    <span className="text-lg">📎</span>{" "}
+                    {getText("attach-file-button-label", "Attach file")}
                   </button>
                   <input
                     ref={fileInputRef}
@@ -668,7 +758,7 @@ function PostJobWizard({
             }`}
             disabled={step === 1}
           >
-            Back
+            {backButtonLabel}
           </button>
 
           {step < totalSteps ? (
@@ -680,7 +770,7 @@ function PostJobWizard({
               }`}
               onClick={handleStepNext}
             >
-              {buttonTitle}
+              {nextButtonLabel}
             </button>
           ) : (
             <button
@@ -704,7 +794,7 @@ function PostJobWizard({
                 layout.buttonPositions.submit === 'center' ? 'order-1' : 'ml-2'
               }`}
             >
-              Submit Job Post
+              {nextButtonLabel}
             </button>
           )}
         </div>
@@ -765,7 +855,7 @@ function PostJobWizard({
                 return 'bottom-4 right-4';
               })() :
             'top-4 right-4'
-          }`} id="close-post-job-btn"
+          }`}
         >
           ×
         </button>
@@ -775,244 +865,326 @@ function PostJobWizard({
 }
 
 export default function Home() {
-  const [showPostJob, setShowPostJob] = useState(false);
-  const { layout, getElementAttributes } = useSeedLayout();
+	const [showPostJob, setShowPostJob] = useState(false);
+	const [hasSeenInitialLoad, setHasSeenInitialLoad] = useState(false);
+	const { layout, getElementAttributes, getText } = useSeedLayout();
 
-  // Create section components
-  const JobsSection = () => (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-semibold">Your jobs</h2>
-        <button
-          {...getElementAttributes('post-job-button', 0)}
-          type="button"
-          className={`inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
-            layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
-            layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
-          }`}
-          onClick={() => {
-            setShowPostJob(true);
-            logEvent(EVENT_TYPES.POST_A_JOB, {
-              source: "button",
-              page: "home",
-            });
-          }}
-        >
-          + Post a job
-        </button>
-      </div>
-      <div className="grid gap-7 grid-cols-1 md:grid-cols-2">
-        {jobs.map((job, i) => (
-          <div
-            key={i}
-            {...getElementAttributes('job-item', i)}
-            className="bg-white shadow rounded-xl px-7 py-6 flex flex-col gap-2 border border-gray-100"
-          >
-            <div className="flex flex-wrap justify-between items-center gap-4">
-              <span className="text-lg font-medium text-[#253037]">
-                {job.title}
-              </span>
-              <span
-                className="inline-block px-3 py-1 rounded-full text-xs font-semibold"
-                style={{
-                  background:
-                    job.status === "Completed"
-                      ? "#ebcf95"
-                      : job.status === "In progress"
-                      ? "#08b4ce10"
-                      : job.status === "Pending"
-                      ? "#b0627510"
-                      : job.status === "In review"
-                      ? "#cea2ab50"
-                      : "#cad2d0",
-                  color:
-                    job.status === "Completed"
-                      ? "#253037"
-                      : job.status === "In progress"
-                      ? "#08b4ce"
-                      : job.status === "Pending"
-                      ? "#b06275"
-                      : job.status === "In review"
-                      ? "#b06275"
-                      : "#253037",
-                }}
-              >
-                {job.status}
-              </span>
-            </div>
-            <div className="text-xs text-gray-500 mb-2">
-              Date started {job.start}
-            </div>
-            <div className="flex flex-wrap justify-between items-end">
-              <div>
-                <span className="block text-sm font-medium text-gray-600">
-                  {job.timestr}{" "}
-                  <span className="font-bold text-black">{job.time}</span>
-                </span>
-                <span className="block text-xs text-gray-400 mt-1">
-                  {job.activity}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+	const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
+	const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
+	const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
 
-  const HiresSection = () => (
-    <section className="px-10 mt-14 px-4">
-      <div className="flex items-center justify-between mb-7">
-        <h2 className="text-2xl font-semibold">Your hires</h2>
-        <a
-          href="#"
-          className="text-[#08b4ce] text-sm font-medium hover:underline"
-        >
-          View all your hires
-        </a>
-      </div>
-      <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-        {hires.map((hire) => (
-          <div
-            key={hire.name}
-            className="bg-white rounded-xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100"
-          >
-            <div className="flex items-center gap-4 mb-1">
-              <img
-                src={hire.avatar}
-                alt={hire.name}
-                className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-              />
-              <div>
-                <div className="font-semibold text-lg text-[#253037]">
-                  {hire.name}
-                </div>
-                <div className="text-xs text-gray-500">{hire.country}</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-[#08b4ce] font-semibold mb-1">
-              {hire.rate}
-              <span className="text-gray-400 font-normal ml-2">
-                • {hire.role}
-              </span>
-            </div>
-            <div className="flex items-center gap-4 text-xs mt-1 text-gray-500">
-              <span className="flex items-center gap-1">
-                <svg
-                  className="w-4 h-4 text-[#ebcf95]"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-                </svg>{" "}
-                {hire.rating}
-              </span>
-              <span> {hire.jobs} jobs</span>
-            </div>
-            {hire.rehire && (
-              <span className="mt-2 w-32 inline-block text-xs bg-[#e6f9fb] text-[#08b4ce] font-medium px-2 py-1 rounded">
-                Available for rehire
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+	const isLoading = jobsState.isLoading || hiresState.isLoading || expertsState.isLoading;
+	const errorMessage = jobsState.error || hiresState.error || expertsState.error;
+	const statusMessage = jobsState.statusMessage || hiresState.statusMessage || expertsState.statusMessage;
 
-  const ExpertsSection = () => (
-    <section className="px-10 mt-16 px-4">
-      <h2 className="text-2xl font-semibold mb-7">
-        Review your project's goals with an expert, one-on-one
-      </h2>
-      <div className="grid gap-7 md:grid-cols-2">
-        {experts.map((expert, i) => (
-          <div
-            key={expert.name}
-            className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
-          >
-            <div className="flex items-center gap-3 mb-3 mt-2">
-              <img
-                src={expert.avatar}
-                alt={expert.name}
-                className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-              />
-              <div>
-                <div className="font-semibold text-lg text-[#253037] leading-tight">
-                  {expert.name}
-                </div>
-                <div className="text-xs text-gray-500">{expert.country}</div>
-              </div>
-            </div>
-            <div className="text-sm font-semibold text-[#253037] mb-1">
-              {expert.role}
-            </div>
-            <div className="flex items-center gap-4 text-[#6c7280] text-xs mb-1">
-              <span>
-                <span className="font-bold text-base text-[#253037]">
-                  {expert.rate}
-                </span>
-              </span>
-              <span className="flex items-center gap-1">
-                <svg
-                  className="w-4 h-4 text-[#ebcf95]"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-                </svg>{" "}
-                {expert.rating}
-              </span>
-              <span className="ml-1">{expert.jobs}</span>
-            </div>
-            <div className="text-[15px] text-gray-700 mb-2 leading-tight">
-              {expert.desc}
-            </div>
-            <div className="flex items-center gap-2 text-[#1964e2] text-base font-semibold py-2 mb-2">
-              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                <path
-                  stroke="#1964e2"
-                  strokeWidth="1.4"
-                  d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
-                />
-              </svg>
-              <span>{expert.consultation}</span>
-            </div>
-            <SeedLink
-              href={`/expert/${expert.name
-                .toLowerCase()
-                .replace(/\s+/g, "-")
-                .replace(/\./g, "")}`}
-              passHref
-              {...getElementAttributes('book-consultation-button', i)}
-              className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
-            >
-              Book a consultation
-            </SeedLink>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		try {
+			if (localStorage.getItem("autoworkInitialLoadComplete") === "true") {
+				setHasSeenInitialLoad(true);
+			}
+		} catch {
+			// ignore storage access errors
+		}
+	}, []);
 
-  // Create section map for dynamic ordering
-  const sectionMap = {
-    jobs: <JobsSection key="jobs" />,
-    hires: <HiresSection key="hires" />,
-    experts: <ExpertsSection key="experts" />,
-  };
+	useEffect(() => {
+		if (
+			!hasSeenInitialLoad &&
+			!isLoading &&
+			jobsState.data.length > 0 &&
+			hiresState.data.length > 0 &&
+			expertsState.data.length > 0
+		) {
+			setHasSeenInitialLoad(true);
+			try {
+				localStorage.setItem("autoworkInitialLoadComplete", "true");
+			} catch {
+				// ignore storage access errors
+			}
+		}
+	}, [hasSeenInitialLoad, isLoading, jobsState.data.length, hiresState.data.length, expertsState.data.length]);
 
-  // Render sections in the order specified by layout
-  const renderSections = () => {
-    return layout.mainSections.map((sectionKey) => {
-      return sectionMap[sectionKey as keyof typeof sectionMap];
-    });
-  };
+	const showInitialLoading = !hasSeenInitialLoad && (isLoading || Boolean(statusMessage));
 
-  return (
-    <main className="px-10 mt-12 pb-16 text-[#253037]">
-      {renderSections()}
-      <PostJobWizard open={showPostJob} onClose={() => setShowPostJob(false)} />
-    </main>
-  );
+	// Persist combined dataset once loaded
+	useEffect(() => {
+		if (!isLoading) {
+			const combined = {
+				jobs: jobsState.data,
+				hires: hiresState.data,
+				experts: expertsState.data,
+			};
+			writeJson("autowork_all", combined);
+		}
+	}, [isLoading, jobsState.data, hiresState.data, expertsState.data]);
+
+	// Create section components
+	const JobsSection = () => (
+		<div>
+			<div className="flex items-center justify-between mb-8">
+				<h2
+					className="text-2xl font-semibold"
+					{...getElementAttributes('jobs-heading', 0)}
+				>
+					{getText('jobs-heading', 'Your jobs')}
+				</h2>
+				<button
+					{...getElementAttributes('post-job-button', 0)}
+					type="button"
+					className={`inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
+						layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
+						layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
+					}`}
+					onClick={() => {
+						setShowPostJob(true);
+						logEvent(EVENT_TYPES.POST_A_JOB, {
+							source: "button",
+							page: "home",
+						});
+					}}
+				>
+					{getText('post-job-button-label', '+ Post a job')}
+				</button>
+			</div>
+			<div className="grid gap-7 grid-cols-1 md:grid-cols-2">
+				{jobsState.data.map((job: any, i: number) => (
+					<div
+						key={i}
+						{...getElementAttributes('job-item', i)}
+						className="bg-white shadow rounded-xl px-7 py-6 flex flex-col gap-2 border border-gray-100"
+					>
+						<div className="flex flex-wrap justify-between items-center gap-4">
+							<span className="text-lg font-medium text-[#253037]">
+								{job.title}
+							</span>
+							<span
+								className="inline-block px-3 py-1 rounded-full text-xs font-semibold"
+								style={{
+									background:
+										job.status === "Completed"
+											? "#ebcf95"
+											: job.status === "In progress"
+											? "#08b4ce10"
+											: job.status === "Pending"
+											? "#b0627510"
+											: job.status === "In review"
+											? "#cea2ab50"
+											: "#cad2d0",
+									color:
+										job.status === "Completed"
+											? "#253037"
+											: job.status === "In progress"
+											? "#08b4ce"
+											: job.status === "Pending"
+											? "#b06275"
+											: job.status === "In review"
+											? "#b06275"
+											: "#253037",
+								}}
+							>
+								{job.status}
+							</span>
+						</div>
+						<div className="text-xs text-gray-500 mb-2">
+							Date started {job.start}
+						</div>
+						<div className="flex flex-wrap justify-between items-end">
+							<div>
+								<span className="block text-sm font-medium text-gray-600">
+									{job.timestr}{" "}
+									<span className="font-bold text-black">{job.time}</span>
+								</span>
+								<span className="block text-xs text-gray-400 mt-1">
+									{job.activity}
+								</span>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
+
+	const HiresSection = () => (
+		<section className="px-10 mt-14 px-4">
+			<div className="flex items-center justify-between mb-7">
+				<h2
+					className="text-2xl font-semibold"
+					{...getElementAttributes('hires-heading', 0)}
+				>
+					{getText('hires-heading', 'Your hires')}
+				</h2>
+				<a
+					href="#"
+					className="text-[#08b4ce] text-sm font-medium hover:underline"
+				>
+					View all your hires
+				</a>
+			</div>
+			<div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+				{hiresState.data.map((hire: any) => (
+					<div
+						key={hire.name}
+						className="bg-white rounded-xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100"
+					>
+						<div className="flex items-center gap-4 mb-1">
+							<img
+								src={hire.avatar}
+								alt={hire.name}
+								className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
+							/>
+							<div>
+								<div className="font-semibold text-lg text-[#253037]">
+									{hire.name}
+								</div>
+								<div className="text-xs text-gray-500">{hire.country}</div>
+							</div>
+						</div>
+						<div className="flex items-center gap-2 text-sm text-[#08b4ce] font-semibold mb-1">
+							{hire.rate}
+							<span className="text-gray-400 font-normal ml-2">
+								• {hire.role}
+							</span>
+						</div>
+						<div className="flex items-center gap-4 text-xs mt-1 text-gray-500">
+							<span className="flex items-center gap-1">
+								<svg
+									className="w-4 h-4 text-[#ebcf95]"
+									fill="currentColor"
+									viewBox="0 0 20 20"
+								>
+									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+								</svg>{" "}
+								{hire.rating}
+							</span>
+							<span> {hire.jobs} jobs</span>
+						</div>
+						{hire.rehire && (
+							<span className="mt-2 w-32 inline-block text-xs bg-[#e6f9fb] text-[#08b4ce] font-medium px-2 py-1 rounded">
+								Available for rehire
+							</span>
+						)}
+					</div>
+				))}
+			</div>
+		</section>
+	);
+
+	const ExpertsSection = () => (
+		<section className="px-10 mt-16 px-4">
+			<h2
+				className="text-2xl font-semibold mb-7"
+				{...getElementAttributes('experts-heading', 0)}
+			>
+				{getText('experts-heading', "Review your project's goals with an expert, one-on-one")}
+			</h2>
+			<div className="grid gap-7 md:grid-cols-2">
+				{expertsState.data.map((expert: any, i: number) => (
+					<div
+						key={expert.name}
+						className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
+					>
+						<div className="flex items-center gap-3 mb-3 mt-2">
+							<img
+								src={expert.avatar}
+								alt={expert.name}
+								className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
+							/>
+							<div>
+								<div className="font-semibold text-lg text-[#253037] leading-tight">
+									{expert.name}
+								</div>
+								<div className="text-xs text-gray-500">{expert.country}</div>
+							</div>
+						</div>
+						<div className="text-sm font-semibold text-[#253037] mb-1">
+							{expert.role}
+						</div>
+						<div className="flex items-center gap-4 text-[#6c7280] text-xs mb-1">
+							<span>
+								<span className="font-bold text-base text-[#253037]">
+									{expert.rate}
+								</span>
+							</span>
+							<span className="flex items-center gap-1">
+								<svg
+									className="w-4 h-4 text-[#ebcf95]"
+									fill="currentColor"
+									viewBox="0 0 20 20"
+								>
+									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+								</svg>{" "}
+								{expert.rating}
+							</span>
+							<span className="ml-1">{expert.jobs}</span>
+						</div>
+						<div className="text-[15px] text-gray-700 mb-2 leading-tight">
+							{expert.desc}
+						</div>
+						<div className="flex items-center gap-2 text-[#1964e2] text-base font-semibold py-2 mb-2">
+							<svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+								<path
+									stroke="#1964e2"
+									strokeWidth="1.4"
+									d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
+								/>
+							</svg>
+							<span>{expert.consultation}</span>
+						</div>
+						<SeedLink
+							href={`/expert/${(expert as any).slug ?? expert.name
+								.toLowerCase()
+								.replace(/\s+/g, "-")
+								.replace(/\./g, "")}`}
+							passHref
+							prefetch={false}
+							{...getElementAttributes('book-consultation-button', i)}
+							className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
+						>
+							{getText('book-consultation-button-label', 'Book a consultation')}
+						</SeedLink>
+					</div>
+				))}
+			</div>
+		</section>
+	);
+
+	// Create section map for dynamic ordering
+	const sectionMap = {
+		jobs: <JobsSection key="jobs" />,
+		hires: <HiresSection key="hires" />,
+		experts: <ExpertsSection key="experts" />,
+	};
+
+	// Render sections in the order specified by layout
+	const renderSections = () => {
+		return layout.mainSections.map((sectionKey) => {
+			return sectionMap[sectionKey as keyof typeof sectionMap];
+		});
+	};
+
+	return (
+		<main className="px-10 mt-12 pb-16 text-[#253037]">
+			{showInitialLoading && (
+				<div className="fixed inset-0 z-[9999] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-6">
+					<div className="w-14 h-14 rounded-full border-4 border-[#08b4ce] border-t-transparent animate-spin mb-5" aria-label="Loading" />
+					<div className="text-xl font-semibold text-[#253037] mb-2">Generating data with AI</div>
+					<div className="text-sm text-gray-600">It may take some time. Please wait…</div>
+				</div>
+			)}
+			{statusMessage && (
+				<div className="mb-6 rounded-lg border border-[#08b4ce30] bg-[#e6f9fb] text-[#056b79] px-4 py-3 text-sm">
+					{statusMessage}
+				</div>
+			)}
+			{errorMessage && (
+				<div className="mb-6 rounded-lg border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm">
+					{errorMessage}
+				</div>
+			)}
+			{renderSections()}
+			<PostJobWizard open={showPostJob} onClose={() => setShowPostJob(false)} />
+		</main>
+	);
 }

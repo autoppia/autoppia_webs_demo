@@ -21,8 +21,8 @@ import {
     // generateDraftEmails,
     userLabels,
     systemLabels,
-    emails,
 } from "@/library/dataset";
+import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface EmailState {
@@ -352,10 +352,11 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
     // Initialize emails on client side to avoid hydration mismatch
     useEffect(() => {
         if (state.emails.length === 0) {
-            // Generate only 10 emails for inbox - no other folder emails
-            // const mockEmails = generateMockEmails(50);
-            const mockEmails = emails;
-            dispatch({type: "SET_EMAILS", payload: mockEmails});
+            // Wait for data to be ready, then load from DynamicDataProvider
+            dynamicDataProvider.whenReady().then(() => {
+                const loadedEmails = dynamicDataProvider.getEmails();
+                dispatch({type: "SET_EMAILS", payload: loadedEmails});
+            });
         }
     }, [state.emails.length]);
 

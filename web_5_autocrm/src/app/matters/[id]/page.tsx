@@ -118,11 +118,11 @@ export default function MatterDetailPage() {
     }
   }, [matterId, customMatters]);
 
-  // If the matter is not found or still loading, you might want to show a loading state or an error
+  // If the matter is not found, show error
   if (!currentMatter) {
     return (
       <section className="flex justify-center items-center h-screen">
-        <p className="text-zinc-500">Loading matter details or matter not found...</p>
+        <p className="text-zinc-500">Matter not found</p>
       </section>
     );
   }

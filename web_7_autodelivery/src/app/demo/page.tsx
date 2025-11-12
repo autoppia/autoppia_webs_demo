@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLayout } from '@/contexts/LayoutProvider';
+import { useSeedRouter } from '@/hooks/useSeedRouter';
 
 function DemoPageContent() {
-  const router = useRouter();
+  const router = useSeedRouter();
   const searchParams = useSearchParams();
   const currentSeed = parseInt(searchParams.get('seed') || '1', 10);
   const layout = useLayout();

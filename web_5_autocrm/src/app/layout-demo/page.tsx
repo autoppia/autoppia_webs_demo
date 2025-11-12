@@ -4,7 +4,6 @@ import { useSeedLayout } from "@/library/useSeedLayout";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
-import { EVENT_TYPES } from "@/library/events";
 
 export default function LayoutDemoPage() {
   const [currentSeed, setCurrentSeed] = useState(1);

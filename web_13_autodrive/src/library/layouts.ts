@@ -18,7 +18,7 @@ export interface LayoutConfig {
  * @returns boolean indicating if dynamic HTML is enabled
  */
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  return process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE === 'true';
 }
 
 export function getSeedLayout(seed?: number): LayoutConfig {

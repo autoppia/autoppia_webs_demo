@@ -9,6 +9,12 @@ export interface SeedLayoutConfig {
   cardLayout: 'grid' | 'row' | 'column' | 'masonry';
   buttonStyle: 'default' | 'rounded' | 'outlined' | 'minimal';
   
+  // Email-specific layout
+  emailLayout: 'list' | 'card' | 'compact' | 'preview' | 'split';
+  sidebarPosition: 'left' | 'right' | 'top' | 'bottom' | 'hidden';
+  emailDensity: 'compact' | 'comfortable' | 'cozy';
+  threadView: 'single' | 'conversation' | 'split';
+  
   // Footer layout
   footerStyle: 'default' | 'minimal' | 'expanded' | 'centered';
   
@@ -18,6 +24,11 @@ export interface SeedLayoutConfig {
   
   // Color scheme variations
   colorScheme: 'default' | 'inverted' | 'monochrome' | 'accent';
+  
+  // Email-specific styling
+  emailPreview: 'inline' | 'popup' | 'sidebar' | 'fullscreen';
+  attachmentDisplay: 'list' | 'grid' | 'preview' | 'hidden';
+  labelDisplay: 'inline' | 'badges' | 'chips' | 'hidden';
 }
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
@@ -79,6 +90,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'medium',
         colorScheme: 'default',
+        emailLayout: 'list',
+        sidebarPosition: 'left',
+        emailDensity: 'comfortable',
+        threadView: 'single',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'list',
+        labelDisplay: 'badges',
       };
 
     case 2:
@@ -94,6 +112,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'loose',
         borderRadius: 'large',
         colorScheme: 'monochrome',
+        emailLayout: 'card',
+        sidebarPosition: 'left',
+        emailDensity: 'cozy',
+        threadView: 'conversation',
+        emailPreview: 'inline',
+        attachmentDisplay: 'preview',
+        labelDisplay: 'chips',
       };
 
     case 3:
@@ -109,6 +134,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'small',
         colorScheme: 'accent',
+        emailLayout: 'preview',
+        sidebarPosition: 'left',
+        emailDensity: 'compact',
+        threadView: 'conversation',
+        emailPreview: 'inline',
+        attachmentDisplay: 'grid',
+        labelDisplay: 'chips',
       };
 
     case 4:
@@ -124,6 +156,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'tight',
         borderRadius: 'large',
         colorScheme: 'inverted',
+        emailLayout: 'split',
+        sidebarPosition: 'top',
+        emailDensity: 'compact',
+        threadView: 'single',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'list',
+        labelDisplay: 'inline',
       };
 
     case 5:
@@ -139,6 +178,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'tight',
         borderRadius: 'small',
         colorScheme: 'default',
+        emailLayout: 'compact',
+        sidebarPosition: 'left',
+        emailDensity: 'compact',
+        threadView: 'single',
+        emailPreview: 'popup',
+        attachmentDisplay: 'hidden',
+        labelDisplay: 'inline',
       };
 
     case 6:
@@ -154,6 +200,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'medium',
         colorScheme: 'accent',
+        emailLayout: 'card',
+        sidebarPosition: 'left',
+        emailDensity: 'comfortable',
+        threadView: 'conversation',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'preview',
+        labelDisplay: 'badges',
       };
 
     case 7:
@@ -169,6 +222,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'loose',
         borderRadius: 'none',
         colorScheme: 'monochrome',
+        emailLayout: 'preview',
+        sidebarPosition: 'hidden',
+        emailDensity: 'cozy',
+        threadView: 'conversation',
+        emailPreview: 'fullscreen',
+        attachmentDisplay: 'grid',
+        labelDisplay: 'chips',
       };
 
     case 8:
@@ -184,6 +244,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'medium',
         colorScheme: 'inverted',
+        emailLayout: 'split',
+        sidebarPosition: 'right',
+        emailDensity: 'comfortable',
+        threadView: 'split',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'list',
+        labelDisplay: 'badges',
       };
 
     case 9:
@@ -199,6 +266,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'medium',
         colorScheme: 'default',
+        emailLayout: 'list',
+        sidebarPosition: 'left',
+        emailDensity: 'comfortable',
+        threadView: 'single',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'list',
+        labelDisplay: 'badges',
       };
 
     case 10:
@@ -214,6 +288,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'loose',
         borderRadius: 'large',
         colorScheme: 'accent',
+        emailLayout: 'card',
+        sidebarPosition: 'left',
+        emailDensity: 'cozy',
+        threadView: 'conversation',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'preview',
+        labelDisplay: 'chips',
       };
 
     case 11:
@@ -229,6 +310,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'tight',
         borderRadius: 'none',
         colorScheme: 'monochrome',
+        emailLayout: 'split',
+        sidebarPosition: 'left',
+        emailDensity: 'compact',
+        threadView: 'split',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'list',
+        labelDisplay: 'inline',
       };
 
     case 12:
@@ -244,6 +332,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'tight',
         borderRadius: 'small',
         colorScheme: 'default',
+        emailLayout: 'compact',
+        sidebarPosition: 'left',
+        emailDensity: 'compact',
+        threadView: 'single',
+        emailPreview: 'popup',
+        attachmentDisplay: 'hidden',
+        labelDisplay: 'inline',
       };
 
     case 13:
@@ -259,6 +354,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'loose',
         borderRadius: 'large',
         colorScheme: 'monochrome',
+        emailLayout: 'preview',
+        sidebarPosition: 'hidden',
+        emailDensity: 'cozy',
+        threadView: 'conversation',
+        emailPreview: 'fullscreen',
+        attachmentDisplay: 'grid',
+        labelDisplay: 'chips',
       };
 
     case 14:
@@ -274,6 +376,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'medium',
         colorScheme: 'inverted',
+        emailLayout: 'card',
+        sidebarPosition: 'left',
+        emailDensity: 'comfortable',
+        threadView: 'conversation',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'preview',
+        labelDisplay: 'badges',
       };
 
     case 15:
@@ -289,6 +398,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'loose',
         borderRadius: 'large',
         colorScheme: 'accent',
+        emailLayout: 'card',
+        sidebarPosition: 'left',
+        emailDensity: 'cozy',
+        threadView: 'conversation',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'preview',
+        labelDisplay: 'chips',
       };
 
     case 16:
@@ -304,6 +420,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'medium',
         colorScheme: 'default',
+        emailLayout: 'list',
+        sidebarPosition: 'bottom',
+        emailDensity: 'comfortable',
+        threadView: 'single',
+        emailPreview: 'popup',
+        attachmentDisplay: 'list',
+        labelDisplay: 'badges',
       };
 
     case 17:
@@ -319,6 +442,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'loose',
         borderRadius: 'large',
         colorScheme: 'accent',
+        emailLayout: 'card',
+        sidebarPosition: 'left',
+        emailDensity: 'cozy',
+        threadView: 'conversation',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'preview',
+        labelDisplay: 'chips',
       };
 
     case 18:
@@ -334,6 +464,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'normal',
         borderRadius: 'medium',
         colorScheme: 'inverted',
+        emailLayout: 'split',
+        sidebarPosition: 'left',
+        emailDensity: 'comfortable',
+        threadView: 'split',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'list',
+        labelDisplay: 'badges',
       };
 
     case 19:
@@ -349,6 +486,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'loose',
         borderRadius: 'large',
         colorScheme: 'accent',
+        emailLayout: 'card',
+        sidebarPosition: 'left',
+        emailDensity: 'cozy',
+        threadView: 'conversation',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'preview',
+        labelDisplay: 'chips',
       };
 
     case 20:
@@ -364,6 +508,13 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
         spacing: 'tight',
         borderRadius: 'small',
         colorScheme: 'monochrome',
+        emailLayout: 'list',
+        sidebarPosition: 'right',
+        emailDensity: 'compact',
+        threadView: 'single',
+        emailPreview: 'sidebar',
+        attachmentDisplay: 'list',
+        labelDisplay: 'inline',
       };
 
     default:
@@ -383,6 +534,13 @@ function getDefaultLayout(): SeedLayoutConfig {
     spacing: 'normal',
     borderRadius: 'medium',
     colorScheme: 'default',
+    emailLayout: 'list',
+    sidebarPosition: 'left',
+    emailDensity: 'comfortable',
+    threadView: 'single',
+    emailPreview: 'sidebar',
+    attachmentDisplay: 'list',
+    labelDisplay: 'badges',
   };
 }
 
@@ -407,6 +565,12 @@ export function getLayoutClasses(config: SeedLayoutConfig): {
   buttons: string;
   footer: string;
   spacing: string;
+  email: string;
+  sidebar: string;
+  density: string;
+  preview: string;
+  attachments: string;
+  labels: string;
 } {
   return {
     header: getHeaderClasses(config),
@@ -415,6 +579,12 @@ export function getLayoutClasses(config: SeedLayoutConfig): {
     buttons: getButtonClasses(config),
     footer: getFooterClasses(config),
     spacing: getSpacingClasses(config),
+    email: getEmailClasses(config),
+    sidebar: getSidebarClasses(config),
+    density: getDensityClasses(config),
+    preview: getPreviewClasses(config),
+    attachments: getAttachmentClasses(config),
+    labels: getLabelClasses(config),
   };
 }
 
@@ -549,6 +719,129 @@ function getSpacingClasses(config: SeedLayoutConfig): string {
       break;
     default:
       classes.push('spacing-normal');
+  }
+  
+  return classes.join(' ');
+}
+
+function getEmailClasses(config: SeedLayoutConfig): string {
+  const classes = [];
+  
+  switch (config.emailLayout) {
+    case 'card':
+      classes.push('email-card');
+      break;
+    case 'compact':
+      classes.push('email-compact');
+      break;
+    case 'preview':
+      classes.push('email-preview');
+      break;
+    case 'split':
+      classes.push('email-split');
+      break;
+    default:
+      classes.push('email-list');
+  }
+  
+  return classes.join(' ');
+}
+
+function getSidebarClasses(config: SeedLayoutConfig): string {
+  const classes = [];
+  
+  switch (config.sidebarPosition) {
+    case 'right':
+      classes.push('sidebar-right');
+      break;
+    case 'top':
+      classes.push('sidebar-top');
+      break;
+    case 'bottom':
+      classes.push('sidebar-bottom');
+      break;
+    case 'hidden':
+      classes.push('sidebar-hidden');
+      break;
+    default:
+      classes.push('sidebar-left');
+  }
+  
+  return classes.join(' ');
+}
+
+function getDensityClasses(config: SeedLayoutConfig): string {
+  const classes = [];
+  
+  switch (config.emailDensity) {
+    case 'compact':
+      classes.push('density-compact');
+      break;
+    case 'cozy':
+      classes.push('density-cozy');
+      break;
+    default:
+      classes.push('density-comfortable');
+  }
+  
+  return classes.join(' ');
+}
+
+function getPreviewClasses(config: SeedLayoutConfig): string {
+  const classes = [];
+  
+  switch (config.emailPreview) {
+    case 'popup':
+      classes.push('preview-popup');
+      break;
+    case 'sidebar':
+      classes.push('preview-sidebar');
+      break;
+    case 'fullscreen':
+      classes.push('preview-fullscreen');
+      break;
+    default:
+      classes.push('preview-inline');
+  }
+  
+  return classes.join(' ');
+}
+
+function getAttachmentClasses(config: SeedLayoutConfig): string {
+  const classes = [];
+  
+  switch (config.attachmentDisplay) {
+    case 'grid':
+      classes.push('attachments-grid');
+      break;
+    case 'preview':
+      classes.push('attachments-preview');
+      break;
+    case 'hidden':
+      classes.push('attachments-hidden');
+      break;
+    default:
+      classes.push('attachments-list');
+  }
+  
+  return classes.join(' ');
+}
+
+function getLabelClasses(config: SeedLayoutConfig): string {
+  const classes = [];
+  
+  switch (config.labelDisplay) {
+    case 'badges':
+      classes.push('labels-badges');
+      break;
+    case 'chips':
+      classes.push('labels-chips');
+      break;
+    case 'hidden':
+      classes.push('labels-hidden');
+      break;
+    default:
+      classes.push('labels-inline');
   }
   
   return classes.join(' ');

@@ -27,14 +27,14 @@ export class DynamicDataProvider {
 
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
   // Validates seed is between 1-300, defaults to 1 if invalid
-  public getEffectiveSeed(providedSeed: number = 1): number {
+  public getEffectiveSeed(providedSeed: number = 36): number {
     if (!this.isEnabled) {
-      return 1;
+      return 36;
     }
     
     // Validate seed range (1-300)
     if (providedSeed < 1 || providedSeed > 300) {
-      return 1;
+      return 36;
     }
     
     return providedSeed;

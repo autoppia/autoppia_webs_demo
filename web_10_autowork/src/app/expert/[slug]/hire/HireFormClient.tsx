@@ -15,7 +15,7 @@ interface Expert {
 }
 
 export default function HireFormClient({ expert }: { expert: Expert }) {
-  const { layout } = useSeedLayout();
+  const { layout, getElementAttributes, getText } = useSeedLayout();
   const [paymentType, setPaymentType] = useState("hourly");
   const [rate, setRate] = useState("50"); // demo value
   const [increaseWhen, setIncreaseWhen] = useState("Never");
@@ -33,10 +33,10 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
     <>
       <ToastContainer />
       <main className="px-40 py-12">
-        <h1 className="text-5xl font-extrabold text-[#253037] mb-8">
+        <h1 className="text-5xl font-extrabold text-[#253037] mb-8" {...getElementAttributes('hire-heading', 0)}>
           Send an offer
         </h1>
-        <div className="bg-[#fafbfc] p-4 rounded-lg border mb-10 flex items-center w-[50%]">
+        <div className="bg-[#fafbfc] p-4 rounded-lg border mb-10 flex items-center w-[50%]" {...getElementAttributes('hire-tip', 0)}>
           <svg
             className="inline-block mr-3 w-7 h-7 text-[#08b4ce]"
             fill="none"
@@ -70,14 +70,15 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
               });
               toast.success("Hired successfully!");
             }}
+            {...getElementAttributes('hire-form', 0)}
           >
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Job details</h2>
-              <label className="block mb-2 font-medium text-base text-[#253037]">
+            <div {...getElementAttributes('hire-job-details-section', 0)}>
+              <h2 className="text-2xl font-semibold mb-4" {...getElementAttributes('hire-job-details-heading', 0)}>Job details</h2>
+              <label className="block mb-2 font-medium text-base text-[#253037]" {...getElementAttributes('hire-team-label', 0)}>
                 Hiring team
               </label>
               <select
-                className="border rounded-lg px-4 py-2 w-full mb-5"
+                className="border rounded-lg px-4 py-2 w/full mb-5"
                 id="select-team"
                 onChange={(e) => {
                   const team = e.target.value;
@@ -88,30 +89,32 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                     expertSlug: expert.slug,
                   });
                 }}
+                {...getElementAttributes('hire-team-select', 0)}
               >
                 <option value="Microsoft">Microsoft</option>
                 <option value="Apple">Apple</option>
                 <option value="Google">Google</option>
               </select>
-              <label className="block mb-2 font-medium text-base text-[#253037]">
+              <label className="block mb-2 font-medium text-base text-[#253037]" {...getElementAttributes('hire-title-label', 0)}>
                 Contract title
               </label>
               <input
                 className="border rounded-lg px-4 py-2 w-full text-base mb-1"
                 placeholder="Enter the contract title"
+                {...getElementAttributes('hire-title-input', 0)}
               />
             </div>
             <hr className="my-9" />
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Contract terms</h2>
-              <p className="mb-5 text-[#199225] font-semibold">
+            <div {...getElementAttributes('hire-terms-section', 0)}>
+              <h2 className="text-2xl font-semibold mb-4" {...getElementAttributes('hire-terms-heading', 0)}>Contract terms</h2>
+              <p className="mb-5 text-[#199225] font-semibold" {...getElementAttributes('hire-payment-protection', 0)}>
                 Topwork payment protection
                 <span className="text-[#353b3f] font-normal ml-3">
                   Only pay for the work you authorize.
                 </span>
               </p>
               <div>
-                <div className="flex items-center mb-2">
+                <div className="flex items-center mb-2" {...getElementAttributes('hire-payment-option-label', 0)}>
                   <label className="block font-medium text-base text-[#253037] mr-2">
                     Payment option
                   </label>
@@ -129,6 +132,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                         ? "border-green-600 bg-[#fafdfa] shadow-[0_0_0_2px_#1fc12c33]"
                         : "border-gray-200 bg-white hover:bg-gray-50"
                     }`}
+                    {...getElementAttributes('hire-payment-hourly', 0)}
                   >
                     <div className="absolute top-5 right-5 flex items-center gap-2">
                       <span
@@ -138,33 +142,12 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                             : "border-gray-400 bg-white"
                         }`}
                       >
-                        {" "}
                         {paymentType === "hourly" && (
                           <span className="block m-1 rounded-full w-3 h-3 bg-green-600" />
-                        )}{" "}
+                        )}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 mb-2 text-[22px] font-bold text-[#253037]">
-                      <svg
-                        className="inline-block"
-                        width={22}
-                        height={22}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="#08b4ce"
-                          strokeWidth="2"
-                        />
-                        <path
-                          stroke="#08b4ce"
-                          strokeWidth="2"
-                          d="M12 8v4l3 2"
-                        />
-                      </svg>
                       Pay by the hour
                     </div>
                     <div className="text-gray-500 text-[15px] font-normal">
@@ -180,6 +163,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                         ? "border-green-600 bg-[#fafdfa] shadow-[0_0_0_2px_#1fc12c33]"
                         : "border-gray-200 bg-white hover:bg-gray-50"
                     }`}
+                    {...getElementAttributes('hire-payment-fixed', 0)}
                   >
                     <div className="absolute top-5 right-5 flex items-center gap-2">
                       <span
@@ -189,35 +173,12 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                             : "border-gray-400 bg-white"
                         }`}
                       >
-                        {" "}
                         {paymentType === "fixed" && (
                           <span className="block m-1 rounded-full w-3 h-3 bg-green-600" />
-                        )}{" "}
+                        )}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 mb-2 text-[22px] font-bold text-[#253037]">
-                      <svg
-                        className="inline-block"
-                        width={22}
-                        height={22}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <rect
-                          x="4"
-                          y="7"
-                          width="16"
-                          height="10"
-                          rx="2"
-                          stroke="#0999ac"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="M8 11h8M8 15h4"
-                          stroke="#0999ac"
-                          strokeWidth="2"
-                        />
-                      </svg>
                       Pay a fixed price
                     </div>
                     <div className="text-gray-500 text-[15px] font-normal">
@@ -227,7 +188,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                 </div>
               </div>
               {paymentType === "hourly" && (
-                <div className="mt-6 mb-3">
+                <div className="mt-6 mb-3" {...getElementAttributes('hire-rate-summary', 0)}>
                   <div className="flex items-center gap-2">
                     <div className="text-lg font-semibold text-[#253037]">
                       ${rate}{" "}
@@ -236,6 +197,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                     <button
                       type="button"
                       className="text-[#08b4ce] ml-2 p-1 rounded hover:bg-[#08b4ce11]"
+                      {...getElementAttributes('hire-edit-rate-button', 0)}
                     >
                       ✎
                     </button>
@@ -246,8 +208,8 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                 </div>
               )}
               {/* Rate increase section */}
-              <div className="mt-8">
-                <div className="text-lg font-semibold mb-2 text-[#253037]">
+              <div className="mt-8" {...getElementAttributes('hire-rate-increase-section', 0)}>
+                <div className="text-lg font-semibold mb-2 text-[#253037]" {...getElementAttributes('hire-rate-increase-heading', 0)}>
                   Schedule a rate increase
                 </div>
                 <div className="mb-1 text-[13px] text-gray-500">
@@ -261,6 +223,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                     onChange={(e) => setIncreaseWhen(e.target.value)}
                     className="border border-gray-300 rounded-lg px-4 py-2 text-base"
                     id="rate-increase-when"
+                    {...getElementAttributes('hire-increase-when', 0)}
                   >
                     <option>Never</option>
                     <option>After 3 months</option>
@@ -272,6 +235,7 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
                     onChange={(e) => setIncreaseHowMuch(e.target.value)}
                     className="border border-gray-300 rounded-lg px-4 py-2 text-base"
                     id="rate-increase"
+                    {...getElementAttributes('hire-increase-howmuch', 0)}
                   >
                     <option>5%</option>
                     <option>10%</option>
@@ -285,41 +249,46 @@ export default function HireFormClient({ expert }: { expert: Expert }) {
               layout.buttonPositions.cancel === 'center' && layout.buttonPositions.hire === 'center' ? 'justify-center' :
               layout.buttonPositions.cancel === 'right' && layout.buttonPositions.hire === 'left' ? 'justify-between flex-row-reverse' :
               'justify-end'
-            }`}>
+            }`}
+            {...getElementAttributes('hire-actions', 0)}
+            >
               <button
                 type="button"
                 className={`border border-green-600 text-green-700 hover:bg-green-50 px-6 py-2 rounded-lg font-semibold transition ${
                   layout.buttonPositions.cancel === 'center' ? 'order-2' : ''
                 }`}
                 onClick={handleCancel}
+                {...getElementAttributes('hire-cancel-button', 0)}
               >
-                Cancel
+                {getText('hire-cancel-button-label', 'Cancel')}
               </button>
               <button
                 type="submit"
                 className={`bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition ${
                   layout.buttonPositions.hire === 'center' ? 'order-1' : ''
                 }`}
+                {...getElementAttributes('hire-submit-button', 0)}
               >
-                Hire
+                {getText('hire-submit-button-label', 'Hire')}
               </button>
             </div>
           </form>
           {/* Right: Expert summary */}
-          <div className="md:w-96 shrink-0 border rounded-2xl bg-white flex flex-col items-center py-9 px-7 mt-10 md:mt-0 h-96">
+          <div className="md:w-96 shrink-0 border rounded-2xl bg-white flex flex-col items-center py-9 px-7 mt-10 md:mt-0 h-96" {...getElementAttributes('hire-expert-summary', 0)}>
             <div className="relative mb-4">
               <img
                 src={expert.avatar}
                 alt={expert.name}
                 className="w-20 h-20 rounded-full object-cover border-2 border-white shadow-xl"
+                {...getElementAttributes('hire-expert-avatar', 0)}
               />
               <span className="absolute bottom-1 right-4 w-4 h-4 bg-[#1fc12c] border-2 border-white rounded-full" />
             </div>
-            <div className="font-bold text-2xl text-[#199225] leading-tight mb-1">
+            <div className="font-bold text-2xl text-[#199225] leading-tight mb-1" {...getElementAttributes('hire-expert-name', 0)}>
               {expert.name}
             </div>
-            <div className="text-[#4a545b] text-lg mb-1">{expert.role}</div>
-            <div className="mb-1 text-gray-600 flex items-center">
+            <div className="text-[#4a545b] text-lg mb-1" {...getElementAttributes('hire-expert-role', 0)}>{expert.role}</div>
+            <div className="mb-1 text-gray-600 flex items-center" {...getElementAttributes('hire-expert-country', 0)}>
               <svg
                 className="inline-block mr-1"
                 width={20}

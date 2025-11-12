@@ -59,7 +59,7 @@ __pypackages__/
 celerybeat-schedule
 celerybeat.pid
 *.sage.py
-.env
+.env*
 .venv
 env/
 venv/
@@ -85,4 +85,4 @@ cython_debug/
 **/next-env.d.ts
 */.next/
 */node_modules/
-
+*pnpm-lock.yaml

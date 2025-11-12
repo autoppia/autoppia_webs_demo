@@ -3,11 +3,13 @@
 import { useSearchParams } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useCart } from "@/context/CartContext";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
 import { searchProducts } from "@/utils/dynamicDataProvider";
+import { withSeed } from "@/utils/seedRouting";
 
 const getTopMarginClass = () => {
   const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
@@ -19,6 +21,7 @@ export default function SearchPage() {
   const router = useSeedRouter();
   const query = searchParams.get("q")?.toLowerCase() || "1";
   const { addToCart } = useCart();
+  const { getText, getId } = useDynamicStructure();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
 
   const results = searchProducts(query);
@@ -42,9 +45,9 @@ export default function SearchPage() {
   return (
     <div className="p-4 mt-28">
       <h2 className="text-lg font-bold mb-4">
-        Search Results for: <span className="text-blue-600">{query}</span>
+        {getText("search_results_for")}: <span className="text-blue-600">{query}</span>
       </h2>
-      {results.length === 0 && <p>No products found.</p>}
+      {results.length === 0 && <p>{getText("no_products_found")}</p>}
 
       {/* Add top margin to shift the whole grid block */}
       <div
@@ -72,7 +75,7 @@ export default function SearchPage() {
                 brand: product.brand || "Generic",
                 category: product.category || "Uncategorized",
               });
-              router.push(`/${product.id}`);
+              router.push(withSeed(`/${product.id}`, searchParams));
             }}
             className={`${getTopMarginClass()} block no-underline text-inherit cursor-pointer group`}
           >
@@ -91,17 +94,18 @@ export default function SearchPage() {
               <h3 className="text-sm font-medium">{product.title}</h3>
               <p className="text-sm text-gray-500 mb-2">{product.price}</p>
               <Button
+                id={getId("add_to_cart_button")}
                 className="w-full bg-amazon-yellow hover:bg-amazon-darkYellow text-black text-sm font-semibold"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleAddToCart(product);
                 }}
               >
-                Add to Cart
+                {getText("add_to_cart")}
               </Button>
               {addedToCartId === product.id && (
                 <p className="text-green-600 text-xs text-center mt-1">
-                  ✓ Added to cart
+                  ✓ {getText("add_to_cart")}
                 </p>
               )}
             </div>

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { restaurants } from "@/data/restaurants";
+import { getRestaurants } from "@/utils/dynamicDataProvider";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { Search, Clock, Star, MapPin, Zap } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
@@ -22,6 +22,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   const [activeTab, setActiveTab] = useState<"popular" | "search" | "recent">("popular");
   const addToCart = useCartStore((s) => s.addToCart);
   const layout = useSeedLayout();
+  const restaurants = getRestaurants() || [];
   
   // Get popular restaurants (those with high ratings or featured)
   const popularRestaurants = restaurants

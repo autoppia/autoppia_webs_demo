@@ -5,6 +5,7 @@ import { useState } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import Image from "next/image";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
 export default function Post({
   post,
@@ -16,14 +17,16 @@ export default function Post({
   onAddComment: (postId: string, text: string) => void;
 }) {
   const [comment, setComment] = useState("");
+  const { getText, getClass } = useDynamicStructure();
   function timeAgo(dateString: string) {
     const seconds = Math.floor(
       (Date.now() - new Date(dateString).getTime()) / 1000
     );
-    if (seconds < 60) return `${seconds}s ago`;
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    return `${Math.floor(seconds / 86400)}d ago`;
+    const suffix = getText("time_ago_suffix", "ago");
+    if (seconds < 60) return `${seconds}s ${suffix}`;
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ${suffix}`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ${suffix}`;
+    return `${Math.floor(seconds / 86400)}d ${suffix}`;
   }
   return (
     <article className="bg-white rounded-lg shadow p-4">
@@ -78,7 +81,7 @@ export default function Post({
       )}
     <div className="flex gap-4 items-center text-gray-500 text-sm mb-2">
       <button
-        className={`like-btn flex items-center gap-1 group ${
+        className={`${getClass("like_button", "like-btn flex items-center gap-1 group")} ${
           post.liked ? "text-blue-600 font-bold" : "hover:text-blue-600"
         }`}
         onClick={(e) => {
@@ -100,7 +103,7 @@ export default function Post({
         </svg>
         {post.likes}
       </button>
-      <span>Comments: {post.comments.length}</span>
+      <span>{getText("comments_label", "Comments")}: {post.comments.length}</span>
     </div>
     <div className="pl-2 space-y-2">
         {post.comments.map((c) => (
@@ -127,17 +130,17 @@ export default function Post({
         className="flex gap-2 mt-2"
       >
         <input
-          className="flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm"
-          placeholder="Add a comment..."
+          className={getClass("comment_input", "flex-1 rounded-full border border-gray-200 px-3 py-1 text-sm")}
+          placeholder={getText("comment_placeholder", "Add a comment...")}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
         <button
           type="submit"
-          className="px-3 py-1 text-sm rounded-full bg-blue-50 hover:bg-blue-100 font-medium"
+          className={getClass("comment_button", "px-3 py-1 text-sm rounded-full bg-blue-50 hover:bg-blue-100 font-medium")}
           disabled={!comment.trim()}
         >
-          Post
+          {getText("comment_button", "Post")}
         </button>
       </form>
     </article>

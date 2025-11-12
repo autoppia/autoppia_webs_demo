@@ -269,20 +269,57 @@ http://localhost:8005/?seed=200  # Asymmetric layout
 | `--postgres_port=PORT` | Base PostgreSQL port | `5434` | `--postgres_port=6000` |
 | `--webs_port=PORT` | webs_server API port | `8090` | `--webs_port=8080` |
 | `--webs_postgres=PORT` | webs_server DB port | `5437` | `--webs_postgres=5440` |
-| `--enable_dynamic_html=BOOL` | Enable dynamic HTML | `false` | `--enable_dynamic_html=true` |
-| `-y, --yes` | Skip confirmation prompts | - | `-y` |
+| `--enable_dynamic_html=BOOL` | Enable dynamic HTML rendering for frontends (true/false) | `false` | `--enable_dynamic_html=true` |
+| `--enable_data_generation=BOOL` | Generate demo data where supported (true/false) | `false` | `--enable_data_generation=true` |
+| `--enable_db_mode=BOOL` | Force DB-backed mode for apps that support it (true/false) | `false` | `--enable_db_mode=true` |
+| `--enabled_dynamic_versions=[v1,v2,...]` | Enable one or more dynamic "versions" (see below) — accepts `v1,v2` or `[v1,v2]` formats | `` (none) | `--enabled_dynamic_versions=v1,v3` or `--enabled_dynamic_versions=[v1,v2]` |
+| `--seed_value=INT` | Optional integer seed used by data generation / seed-based HTML features | `` | `--seed_value=42` |
+| `--fast=BOOL` | Skip global Docker cleanup and use cached builds (true/false) | `false` | `--fast=true` |
+| `-y, --yes` | Skip confirmation prompts / force Docker cleanup (convenience flag) | - | `-y` |
+| `-h, --help` | Show help and exit | - | `-h` |
 
-**Valid demo names:** `movies`, `books`, `autozone`, `autodining`, `autocrm`, `automail`, `autoconnect`, `all`
+**Valid demo names:** `movies`, `books`, `autozone`, `autodining`, `autocrm`, `automail`, `autoconnect`, `autodelivery`, `autolodge`, `autowork`, `autocalendar`, `autolist`, `autodrive`, `all`
 
-#### **Custom Port Configuration**
+---
+
+### Dynamic versions (shorthand)
+
+The `--enabled_dynamic_versions` flag provides a shorthand to enable multiple dynamic features at once. Accepted formats:
+
+- Comma-separated: `--enabled_dynamic_versions=v1,v2`
+- Bracketed: `--enabled_dynamic_versions=[v1,v2]`
+
+Supported tokens and what they enable:
+
+- `v1` → ENABLE_DYNAMIC_HTML (enables dynamic HTML rendering in frontends)
+- `v2` → ENABLE_DATA_GENERATION (turns on demo data generation where supported)
+- `v3` → ENABLE_DYNAMIC_STRUCTURE (enables dynamic DOM/structure changes for anti-scraping)
+- `v4` → ENABLE_SEED_HTML (enables seed-based HTML variations)
+
+Example usages:
+
+- Enable only dynamic HTML:
 
 ```bash
-# Custom ports for specific deployment
-./scripts/setup.sh --demo=movies --web_port=9000 --postgres_port=6000
-
-# Multiple options combined
-./scripts/setup.sh --demo=automail --web_port=8005 --enable_dynamic_html=true --webs_port=8090
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1
 ```
+
+- Enable dynamic HTML and data generation:
+
+```bash
+./scripts/setup.sh --demo=automail --enabled_dynamic_versions=v1,v2 --seed_value=123
+```
+
+- Use bracketed form:
+
+```bash
+./scripts/setup.sh --demo=all --enabled_dynamic_versions=[v1,v3]
+```
+
+Notes:
+- The script normalizes boolean flags (accepts `true/false`, `yes/no`, `1/0`, `y/n`).
+- If you pass both `--enabled_dynamic_versions` and individual flags (e.g. `--enable_dynamic_html=true`), the union of enabled flags will be used.
+- `--fast=true` will skip Docker cleanup and reuse existing images/build cache; use it to speed up iterative testing.
 
 ---
 

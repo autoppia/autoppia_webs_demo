@@ -1,163 +1,149 @@
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { initializeHotels } from "@/data/hotels-enhanced";
+import { Hotel } from "@/types/hotel";
 
-// Check if dynamic HTML is enabled via environment variable
-const isDynamicHtmlEnabled = (): boolean => {
-  return isDynamicEnabled();
-};
+/**
+ * Dynamic Data Provider for Autolodge
+ * Manages hotel data loading with caching and fallback support
+ */
+class DynamicDataProvider {
+  private hotels: Hotel[] = [];
+  private ready = false;
+  private readyPromise: Promise<void>;
 
-// Dynamic data provider that returns either seed data or empty arrays based on config
-export class DynamicDataProvider {
-  private static instance: DynamicDataProvider;
-  private isEnabled: boolean = false;
-
-  private constructor() {
-    this.isEnabled = isDynamicHtmlEnabled();
+  constructor() {
+    this.readyPromise = this.initialize();
   }
 
-  public static getInstance(): DynamicDataProvider {
-    if (!DynamicDataProvider.instance) {
-      DynamicDataProvider.instance = new DynamicDataProvider();
+  /**
+   * Initialize the data provider
+   */
+  async initialize(): Promise<void> {
+    try {
+      this.hotels = await initializeHotels();
+      this.ready = true;
+      console.log('🎯 DynamicDataProvider initialized with', this.hotels.length, 'hotels');
+    } catch (error) {
+      console.error('❌ Failed to initialize DynamicDataProvider:', error);
+      this.ready = true; // Mark as ready even if failed to prevent infinite loading
     }
-    return DynamicDataProvider.instance;
   }
 
-  public isDynamicModeEnabled(): boolean {
-    return this.isEnabled;
+  /**
+   * Get all hotels
+   */
+  getHotels(): Hotel[] {
+    return this.hotels;
   }
 
-  // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
-  // Validates seed is between 1-300, defaults to 1 if invalid
-  public getEffectiveSeed(providedSeed: number = 1): number {
-    if (!this.isEnabled) {
-      return 1;
-    }
-    
-    // Validate seed range (1-300)
-    if (providedSeed < 1 || providedSeed > 300) {
-      return 1;
-    }
-    
-    return providedSeed;
+  /**
+   * Get hotels filtered by location
+   */
+  getHotelsByLocation(location: string): Hotel[] {
+    return this.hotels.filter(hotel => 
+      hotel.location.toLowerCase().includes(location.toLowerCase())
+    );
   }
 
-  // Get layout configuration based on seed
-  public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
+  /**
+   * Get hotel by ID
+   */
+  getHotelById(id: number): Hotel | undefined {
+    return this.hotels.find(hotel => hotel.id === id);
   }
 
-  // Static Hotel data - always available
-  public getStaticHotels(): Array<{
-    id: string;
-    title: string;
-    location: string;
-    rating: number;
-    price: number;
-    image: string;
-  }> {
-    return [
-      {
-        id: "1",
-        title: "Luxury Beach Resort",
-        location: "Malibu, CA",
-        rating: 4.8,
-        price: 350,
-        image: "/images/hotel1.jpeg"
-      },
-      {
-        id: "2",
-        title: "Mountain View Lodge",
-        location: "Aspen, CO",
-        rating: 4.7,
-        price: 280,
-        image: "/images/hotel2.jpeg"
-      },
-      {
-        id: "3",
-        title: "Downtown City Hotel",
-        location: "New York, NY",
-        rating: 4.5,
-        price: 220,
-        image: "/images/hotel3.png"
-      },
-      {
-        id: "4",
-        title: "Countryside Retreat",
-        location: "Napa Valley, CA",
-        rating: 4.9,
-        price: 400,
-        image: "/images/hotel4.png"
-      }
-    ];
+  /**
+   * Get hotels filtered by price range
+   */
+  getHotelsByPriceRange(minPrice: number, maxPrice: number): Hotel[] {
+    return this.hotels.filter(hotel => 
+      hotel.price >= minPrice && hotel.price <= maxPrice
+    );
   }
 
-  public getStaticAmenities(): Array<{
-    id: string;
-    name: string;
-    icon: string;
-  }> {
-    return [
-      {
-        id: "1",
-        name: "Free WiFi",
-        icon: "wifi"
-      },
-      {
-        id: "2",
-        name: "Swimming Pool",
-        icon: "pool"
-      },
-      {
-        id: "3",
-        name: "Parking",
-        icon: "parking"
-      },
-      {
-        id: "4",
-        name: "Gym",
-        icon: "fitness"
-      }
-    ];
+  /**
+   * Get hotels filtered by rating
+   */
+  getHotelsByRating(minRating: number): Hotel[] {
+    return this.hotels.filter(hotel => hotel.rating >= minRating);
   }
 
-  public getStaticRoomTypes(): Array<{
-    id: string;
-    name: string;
-    capacity: number;
-    price: number;
-  }> {
-    return [
-      {
-        id: "1",
-        name: "Standard Room",
-        capacity: 2,
-        price: 150
-      },
-      {
-        id: "2",
-        name: "Deluxe Suite",
-        capacity: 4,
-        price: 300
-      },
-      {
-        id: "3",
-        name: "Penthouse",
-        capacity: 6,
-        price: 600
-      }
-    ];
+  /**
+   * Search hotels by title or location
+   */
+  searchHotels(query: string): Hotel[] {
+    const searchTerm = query.toLowerCase();
+    return this.hotels.filter(hotel => 
+      hotel.title.toLowerCase().includes(searchTerm) ||
+      hotel.location.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  /**
+   * Check if data is ready
+   */
+  isReady(): boolean {
+    return this.ready;
+  }
+
+  /**
+   * Wait for data to be ready
+   */
+  async whenReady(): Promise<void> {
+    await this.readyPromise;
+  }
+
+  /**
+   * Get data loading status
+   */
+  getStatus(): { ready: boolean; count: number } {
+    return {
+      ready: this.ready,
+      count: this.hotels.length
+    };
   }
 }
 
 // Export singleton instance
-export const dynamicDataProvider = DynamicDataProvider.getInstance();
+export const dynamicDataProvider = new DynamicDataProvider();
 
-// Helper functions for easy access
-export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
+/**
+ * Check if dynamic mode is enabled
+ */
+export function isDynamicModeEnabled(): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  const val = (
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ??
+    process.env.ENABLE_DYNAMIC_HTML ??
+    ''
+  ).toString().toLowerCase();
 
-// Static data helpers
-export const getStaticHotels = () => dynamicDataProvider.getStaticHotels();
-export const getStaticAmenities = () => dynamicDataProvider.getStaticAmenities();
-export const getStaticRoomTypes = () => dynamicDataProvider.getStaticRoomTypes();
+  return ['true', '1', 'yes', 'on'].includes(val);
+}
 
+/**
+ * Get effective seed value (1-300 range)
+ */
+export function getEffectiveSeed(seed: number): number {
+  if (isNaN(seed) || seed < 1) return 1;
+  return ((seed - 1) % 300) + 1;
+}
+
+/**
+ * Get layout configuration
+ */
+export function getLayoutConfig(seed?: number, pageType: 'stay' | 'confirm' = 'stay') {
+  // This would typically import from utils, but to avoid circular imports,
+  // we'll return a basic config here
+  return {
+    searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center mb-6' },
+    propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
+    eventElements: { 
+      order: pageType === 'confirm' 
+        ? ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'confirm']
+        : ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'], 
+      wrapper: 'div', 
+      className: 'flex flex-col gap-6' 
+    }
+  };
+}

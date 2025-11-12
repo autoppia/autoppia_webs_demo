@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
+import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -14,6 +15,7 @@ const getTopMarginClass = () => {
 export default function CheckoutPage() {
   const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
+  const { getText, getId } = useDynamicStructure();
 
   const shipping = parseFloat((Math.random() * 5 + 2).toFixed(2));
   const tax = parseFloat((totalAmount * 0.08).toFixed(2));
@@ -33,9 +35,9 @@ export default function CheckoutPage() {
           </div>
           <div className="relative w-full">
             <div className="text-center mx-auto text-2xl font-light mt-2 mb-1 tracking-tight">
-              Checkout{" "}
+              {getText("checkout")}{" "}
               <span className="text-[#017185] text-xl align-middle">
-                ({totalItems} items)
+                ({totalItems} {getText("items")})
               </span>
             </div>
           </div>
@@ -47,7 +49,7 @@ export default function CheckoutPage() {
               <div className="flex items-start mb-2">
                 <span className="font-bold text-lg text-gray-900 mr-3">1</span>
                 <div className="flex-1 font-semibold text-base leading-7 text-black">
-                  Shipping Address
+                  {getText("shipping_address")}
                 </div>
               </div>
               <div className="ml-8 text-sm text-black">
@@ -58,7 +60,7 @@ export default function CheckoutPage() {
                 Cityville, ST 12345
                 <br />
                 <span className="text-[#017185] hover:underline cursor-pointer text-xs mt-1 block">
-                  Add delivery instructions
+                  {getText("add_delivery_instructions")}
                 </span>
               </div>
             </div>
@@ -69,12 +71,12 @@ export default function CheckoutPage() {
               <div className="flex items-start mb-2">
                 <span className="font-bold text-lg text-gray-900 mr-3">2</span>
                 <div className="flex-1 font-semibold text-base leading-7 text-black">
-                  Payment Method
+                  {getText("payment_method")}
                 </div>
               </div>
               <div className="ml-8 text-sm">
-                Paying with MasterCard ending in 1234
-                <div className="mt-2">Billing address same as shipping</div>
+                {getText("paying_with")} MasterCard ending in 1234
+                <div className="mt-2">{getText("billing_address_same")}</div>
               </div>
             </div>
 
@@ -84,7 +86,7 @@ export default function CheckoutPage() {
               <div className="flex items-start mb-2">
                 <span className="font-bold text-lg text-gray-900 mr-3">3</span>
                 <div className="flex-1 font-semibold text-base leading-7 text-black">
-                  Review Items and Shipping
+                  {getText("review_items")}
                 </div>
               </div>
 
@@ -104,10 +106,10 @@ export default function CheckoutPage() {
                         {item.title}
                       </div>
                       <div className="text-xs text-gray-500">
-                        Quantity: {item.quantity}
+                        {getText("quantity")}: {item.quantity}
                       </div>
                       <div className="text-xs text-gray-500">
-                        Price: ${item.price}
+                        {getText("price")}: ${item.price}
                       </div>
                     </div>
                   </div>
@@ -121,6 +123,7 @@ export default function CheckoutPage() {
           >
             <div className="bg-white border border-[#d5d9d9] shadow-sm rounded-md p-5 pt-6 min-h-[350px] flex flex-col">
               <Button
+                id={getId("checkout_button")}
                 className="bg-amazon-yellow hover:bg-amazon-darkYellow text-white font-semibold w-full mb-2 py-2 rounded"
                 onClick={() => {
                   logEvent(EVENT_TYPES.ORDER_COMPLETED, {
@@ -140,39 +143,39 @@ export default function CheckoutPage() {
                   clearCart();
                 }}
               >
-                Place your order
+                {getText("place_order")}
               </Button>
               <div className="text-xs text-[#565959] text-center mt-2">
-                By placing your order, you agree to Autozon's{" "}
+                {getText("by_placing_order")}{" "}
                 <a href="#" className="underline text-[#017185]">
-                  privacy notice
+                  {getText("privacy_notice")}
                 </a>{" "}
                 and{" "}
                 <a href="#" className="underline text-[#017185]">
-                  conditions of use
+                  {getText("conditions_of_use")}
                 </a>
                 .
               </div>
               <hr className="my-4 border-[#e6e7e9]" />
-              <div className="text-base font-semibold mb-2">Order Summary</div>
+              <div className="text-base font-semibold mb-2">{getText("order_summary")}</div>
               <div className="flex justify-between text-sm">
-                <span>Items:</span>
+                <span>{getText("items")}:</span>
                 <span>${totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span>Shipping & handling:</span>
+                <span>{getText("shipping_handling")}:</span>
                 <span>${shipping.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm mt-2">
-                <span>Total before tax:</span>
+                <span>{getText("total_before_tax")}:</span>
                 <span>${totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span>Estimated tax:</span>
+                <span>{getText("estimated_tax")}:</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-base font-bold mt-3">
-                <span className="text-[#b12704]">Order Total:</span>
+                <span className="text-[#b12704]">{getText("order_total")}:</span>
                 <span className="text-[#b12704]">${orderTotal.toFixed(2)}</span>
               </div>
             </div>

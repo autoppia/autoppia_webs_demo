@@ -14,3 +14,9 @@ orjson==3.10.18
 
 # Environment Variables
 python-dotenv==1.1.0
+
+# AI Data Generation
+openai==1.57.2
+
+# Optional JSON Schema validation
+fastjsonschema==2.21.1

@@ -16,8 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { EVENTS_DATASET } from "@/library/dataset";
+import { initializeEvents } from "@/data/events-enhanced";
 import { getEffectiveLayoutConfig, getSeedFromUrl, SeedLayoutConfig } from "@/utils/seedLayout";
 import { LayoutProvider, useLayout } from "@/contexts/LayoutContext";
+import { useSeedLayout } from "@/library/useSeedLayout";
 import {
   addDays,
   startOfWeek,
@@ -136,6 +138,8 @@ interface Calendar {
 function usePersistedEvents() {
   // SSR-safe: initialize with EVENTS_DATASET, then hydrate from localStorage on client
   const [state, setState] = useState<Event[]>(EVENTS_DATASET as Event[]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -183,6 +187,22 @@ function usePersistedEvents() {
           );
         setState(validEvents.length > 0 ? validEvents : EVENTS_DATASET as Event[]);
       }
+      // If nothing in local storage, try enhanced initializer (DB or generation)
+      (async () => {
+        setIsGenerating(true);
+        try {
+          const initialized = await initializeEvents();
+          if (Array.isArray(initialized) && initialized.length > 0) {
+            setState(initialized as Event[]);
+            window.localStorage.setItem("gocal_events", JSON.stringify(initialized));
+          }
+        } catch (err) {
+          console.error("[AutoCalendar] usePersistedEvents() init failure", err);
+          setGenError(err instanceof Error ? err.message : "Generation failed");
+        } finally {
+          setIsGenerating(false);
+        }
+      })();
     } catch (error) {
       console.error("Error parsing localStorage events:", error);
       window.localStorage.removeItem("gocal_events");
@@ -196,7 +216,7 @@ function usePersistedEvents() {
     }
   }, [state]);
 
-  return [state, setState] as const;
+  return [state, setState, isGenerating, genError] as const;
 }
 
 const weekDates = [15, 16, 17, 18, 19];
@@ -341,6 +361,7 @@ function expandRecurringEvents(
 
 function CalendarApp() {
   const { currentVariant, seed, isDynamicHTMLEnabled } = useLayout();
+  const { getElementAttributes, getText } = useSeedLayout();
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
     const nowInPKT = new Date(
@@ -351,7 +372,7 @@ function CalendarApp() {
   });
   const [myCalExpanded, setMyCalExpanded] = useState(true);
   const [viewDropdown, setViewDropdown] = useState(false);
-  const [events, setEvents] = usePersistedEvents();
+  const [events, setEvents, isGenerating, genError] = usePersistedEvents();
   const [miniCalMonth, setMiniCalMonth] = useState(viewDate.getMonth());
   const [miniCalYear, setMiniCalYear] = useState(viewDate.getFullYear());
   const [addCalOpen, setAddCalOpen] = useState(false);
@@ -398,6 +419,24 @@ function CalendarApp() {
   const [hasOpenedSearch, setHasOpenedSearch] = useState(false);
   const [submittedSearch, setSubmittedSearch] = useState("");
   const [searchDropdownOpen, setSearchDropdownOpen] = useState(false);
+
+  // Loader overlay while AI data generation is in progress
+  const generationOverlay = isGenerating ? (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="flex items-center space-x-3 rounded-lg bg-white p-4 shadow-lg">
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-indigo-600"></div>
+        <div className="text-sm text-gray-700">
+          Data generation is in progress. This may take some time...
+        </div>
+      </div>
+    </div>
+  ) : null;
+
+  const generationErrorBanner = genError ? (
+    <div className="fixed top-2 left-1/2 z-50 -translate-x-1/2 rounded-md border border-red-300 bg-red-50 px-4 py-2 text-sm text-red-700 shadow">
+      AI data generation failed. Showing static dataset. Error: {genError}
+    </div>
+  ) : null;
   const [searchResults, setSearchResults] = useState<typeof EVENTS_DATASET>([]);
 
 
@@ -946,6 +985,7 @@ function CalendarApp() {
             : 'flex flex-row items-center px-4 mt-2 mb-4'
         }`}>
           <button
+            {...getElementAttributes('create-button', 0)}
             className="bg-white shadow-md rounded-2xl h-[44px] w-full flex items-center px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition"
             onClick={() =>
               openEventModal({
@@ -972,7 +1012,7 @@ function CalendarApp() {
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </span>
-            <span className="ml-0.5">Create</span>
+            <span className="ml-0.5">{getText('create-button-label', 'Create')}</span>
             <svg
               className="ml-auto"
               width="20"
@@ -1203,6 +1243,7 @@ function CalendarApp() {
       components.push(
         <button
           key="create-button"
+          {...getElementAttributes('create-button', 1)}
           className="bg-white shadow-md rounded-2xl h-[44px] px-4 font-semibold text-[#383e4d] text-base gap-3 border border-[#ececec] hover:shadow-lg transition flex items-center"
           onClick={() =>
             openEventModal({
@@ -1229,7 +1270,7 @@ function CalendarApp() {
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
           </span>
-          <span className="ml-0.5">Create</span>
+          <span className="ml-0.5">{getText('create-button-label', 'Create')}</span>
         </button>
       );
     }
@@ -1448,11 +1489,12 @@ function CalendarApp() {
           <nav className={`w-full flex flex-wrap items-center justify-between ${layoutClasses.navHeight} px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer} gap-2`}>
             <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? 'flex-row gap-2 flex-1 min-w-[280px]' : 'flex-1 min-w-[320px]'}`}>
               <button
+                {...getElementAttributes('today-button', 0)}
                 className="border border-[#e5e5e5] bg-white rounded px-3 h-9 text-[15px] font-medium shadow-sm hover:bg-[#f5f5f5]"
                 onClick={handleSetToday}
                 aria-label="Go to today"
               >
-                Today
+                {getText('today-button-label', 'Today')}
               </button>
               <button
                 className="rounded-full hover:bg-gray-100 p-4 text-3xl text-black"
@@ -1475,10 +1517,11 @@ function CalendarApp() {
               {(currentVariant.layout.search === 'top' || seed === 6 || seed === 9) && (
                 <div className={`relative z-20 ${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full flex-1 min-w-[200px]' : (seed === 6 || seed === 9 ? 'w-[240px]' : 'hidden md:block')} max-w-[360px]`}>
                   <Input
+                    {...getElementAttributes('search-input', 0)}
                     value={searchQuery}
                     onChange={handleSearchChange}
                     onKeyDown={handleSearchKeyDown}
-                    placeholder="Search events"
+                    placeholder={getText('search-placeholder', 'Search events')}
                     className={`${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full' : 'w-[240px]'} bg-white border border-[#e5e5e5] shadow-sm`}
                     aria-label="Search events"
                     onFocus={() => {
@@ -1913,11 +1956,11 @@ function CalendarApp() {
 
       {/* Add Calendar Dialog */}
       <Dialog open={addCalOpen} onOpenChange={setAddCalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">
-              Create new calendar
-            </DialogTitle>
+        <DialogContent className="max-w-md" {...getElementAttributes('add-calendar-modal', 0)}>
+            <DialogHeader>
+              <DialogTitle className="text-[#1b1a1a] font-normal text-xl mb-2">
+                {getText('add-calendar-title', 'Create new calendar')}
+              </DialogTitle>
           </DialogHeader>
           <form
             onSubmit={(e) => {
@@ -1946,6 +1989,7 @@ function CalendarApp() {
             className="flex flex-col gap-4"
           >
             <Input
+              {...getElementAttributes('add-calendar-name-input', 0)}
               placeholder="Name"
               required
               value={addCalName}
@@ -1953,6 +1997,7 @@ function CalendarApp() {
               className="bg-[#eee] border-none text-base py-2"
             />
             <Textarea
+              {...getElementAttributes('add-calendar-description-input', 0)}
               placeholder="Description"
               value={addCalDesc}
               onChange={(e) => setAddCalDesc(e.target.value)}
@@ -1966,30 +2011,31 @@ function CalendarApp() {
               </span>
             </div>
             <Button
+              {...getElementAttributes('add-calendar-submit-button', 0)}
               className="mt-1 bg-[#1976d2] hover:bg-[#1660b2] px-6 py-2"
               type="submit"
             >
-              Create calendar
+              {getText('add-calendar-submit', 'Create calendar')}
             </Button>
           </form>
         </DialogContent>
       </Dialog>
 
       <Dialog open={eventModal.open} onOpenChange={onModalClose}>
-        <DialogContent className="max-w-xl">
+        <DialogContent className="max-w-xl" {...getElementAttributes('add-event-modal', 0)}>
           <form onSubmit={handleModalSave} className="space-y-5">
             <DialogHeader>
               <DialogTitle>
-                {eventModal.editing ? "Edit event" : "Add event"}
+                {eventModal.editing ? getText('event-dialog-edit-title', 'Edit event') : getText('event-dialog-add-title', 'Add event')}
               </DialogTitle>
             </DialogHeader>
 
             {/* Stepper */}
             <div className="flex items-center gap-2 text-sm">
               {[
-                { label: "Details", idx: 0 },
-                { label: "People", idx: 1 },
-                { label: "Options", idx: 2 },
+                { label: getText('wizard-step-details', 'Details'), idx: 0 },
+                { label: getText('wizard-step-people', 'People'), idx: 1 },
+                { label: getText('wizard-step-options', 'Options'), idx: 2 },
               ].map((s) => (
                 <button
                   type="button"
@@ -2000,6 +2046,7 @@ function CalendarApp() {
                       ? "bg-[#1976d2] text-white border-[#1976d2]"
                       : "bg-white text-[#383e4d] border-[#e5e5e5]"
                   }`}
+                  {...getElementAttributes('event-wizard-step', s.idx)}
                   aria-label={`Go to ${s.label} step`}
                 >
                   {s.label}
@@ -2011,7 +2058,7 @@ function CalendarApp() {
             {eventModal.step === 0 && (
               <div className="space-y-5">
                 <div className="flex flex-col mb-2">
-                  <Label htmlFor="calendar-select">Calendar</Label>
+                  <Label htmlFor="calendar-select">{getText('label-calendar', 'Calendar')}</Label>
                   <select
                     id="calendar-select"
                     className="px-3 py-2 border rounded w-full mt-1"
@@ -2027,8 +2074,9 @@ function CalendarApp() {
                   </select>
                 </div>
                 <div>
-                  <Label htmlFor="event-title">Title</Label>
+                  <Label htmlFor="event-title">{getText('label-title', 'Title')}</Label>
                   <Input
+                    {...getElementAttributes('event-title-input', 0)}
                     id="event-title"
                     value={eventModal.label}
                     onChange={(e) => handleModalField("label", e.target.value)}
@@ -2040,8 +2088,9 @@ function CalendarApp() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="event-date">Date</Label>
+                    <Label htmlFor="event-date">{getText('label-date', 'Date')}</Label>
                     <Input
+                      {...getElementAttributes('event-date-input', 0)}
                       id="event-date"
                       type="date"
                       value={eventModal.date ?? viewDate.toISOString().split("T")[0]}
@@ -2050,8 +2099,9 @@ function CalendarApp() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="event-location">Location</Label>
+                    <Label htmlFor="event-location">{getText('label-location', 'Location')}</Label>
                     <Input
+                      {...getElementAttributes('event-location-input', 0)}
                       id="event-location"
                       value={eventModal.location}
                       onChange={(e) => handleModalField("location", e.target.value)}
@@ -2065,11 +2115,11 @@ function CalendarApp() {
                     checked={eventModal.allDay}
                     onChange={(e) => handleModalField("allDay", e.target.checked)}
                   />
-                  <Label htmlFor="allday">All day</Label>
+                  <Label htmlFor="allday">{getText('label-all-day', 'All day')}</Label>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-1 opacity-100">
-                    <Label htmlFor="start-time-hour">Start Time</Label>
+                    <Label htmlFor="start-time-hour">{getText('label-start-time', 'Start Time')}</Label>
                     <div className="flex gap-2 mt-1">
                       <select
                         id="start-time-hour"
@@ -2117,7 +2167,7 @@ function CalendarApp() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <Label htmlFor="end-time-hour">End Time</Label>
+                    <Label htmlFor="end-time-hour">{getText('label-end-time', 'End Time')}</Label>
                     <div className="flex gap-2 mt-1">
                       <select
                         id="end-time-hour"
@@ -2167,7 +2217,7 @@ function CalendarApp() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="recurrence">Repeat</Label>
+                    <Label htmlFor="recurrence">{getText('label-repeat', 'Repeat')}</Label>
                     <select
                       id="recurrence"
                       className="px-3 py-2 border rounded w-full mt-1"
@@ -2186,7 +2236,7 @@ function CalendarApp() {
                     </select>
                   </div>
                   <div>
-                    <Label htmlFor="recurrence-end">Repeat until</Label>
+                    <Label htmlFor="recurrence-end">{getText('label-repeat-until', 'Repeat until')}</Label>
                     <Input
                       id="recurrence-end"
                       type="date"
@@ -2209,16 +2259,16 @@ function CalendarApp() {
             {eventModal.step === 1 && (
               <div className="space-y-5">
                 <div>
-                  <Label htmlFor="attendee">Add attendee (email)</Label>
+                  <Label htmlFor="attendee">{getText('attendee-label', 'Add attendee (email)')}</Label>
                   <div className="flex gap-2 mt-1">
                     <Input
                       id="attendee"
                       value={eventModal.attendeesInput}
                       onChange={(e) => handleModalField("attendeesInput", e.target.value)}
-                      placeholder="name@example.com"
+                      placeholder={getText('attendee-placeholder', 'name@example.com')}
                     />
-                    <Button type="button" onClick={addAttendee}>
-                      Add
+                    <Button type="button" onClick={addAttendee} {...getElementAttributes('attendee-add-button', 0)}>
+                      {getText('attendee-add', 'Add')}
                     </Button>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -2336,18 +2386,18 @@ function CalendarApp() {
             <DialogFooter>
               <div className="flex-1" />
               {eventModal.step > 0 && (
-                <Button type="button" variant="outline" onClick={goPrevStep}>
-                  Back
+                <Button type="button" variant="outline" onClick={goPrevStep} {...getElementAttributes('event-wizard-back', 0)}>
+                  {getText('wizard-back', 'Back')}
                 </Button>
               )}
               {eventModal.step < 2 && (
-                <Button type="button" onClick={goNextStep}>
-                  Next
+                <Button type="button" onClick={goNextStep} {...getElementAttributes('event-wizard-next', 0)}>
+                  {getText('wizard-next', 'Next')}
                 </Button>
               )}
               {eventModal.step === 2 && (
-                <Button variant="default" type="submit">
-                  Save
+                <Button variant="default" type="submit" {...getElementAttributes('event-wizard-save', 0)}>
+                  {getText('wizard-save', 'Save')}
                 </Button>
               )}
               {eventModal.editing && eventModal.step === 2 && (
@@ -2355,8 +2405,9 @@ function CalendarApp() {
                   variant="destructive"
                   type="button"
                   onClick={handleEventDelete}
+                  {...getElementAttributes('event-wizard-delete', 0)}
                 >
-                  Delete
+                  {getText('wizard-delete', 'Delete')}
                 </Button>
               )}
               <DialogClose asChild>
@@ -2387,8 +2438,9 @@ function CalendarApp() {
                     };
                     logEvent(EVENT_TYPES.CANCEL_ADD_EVENT, eventData);
                   }}
+                  {...getElementAttributes('event-modal-close', 0)}
                 >
-                  Cancel
+                  {getText('wizard-cancel', 'Cancel')}
                 </Button>
               </DialogClose>
             </DialogFooter>

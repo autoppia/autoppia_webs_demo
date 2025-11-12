@@ -360,7 +360,16 @@ const LAYOUTS: Record<number, LayoutConfig> = {
  * @returns boolean indicating if dynamic HTML is enabled
  */
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  const rawFlag =
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
+    process.env.ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ??
+    process.env.ENABLE_DYNAMIC_HTML ??
+    '';
+
+  const normalized = rawFlag.toString().trim().toLowerCase();
+  return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';
 }
 
 /**

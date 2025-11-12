@@ -1,29 +1,13 @@
-import { notFound } from "next/navigation";
-import HireFormClient from "./HireFormClient";
-import { experts } from "@/library/dataset";
-import HireButtonLogger from "./HireButtonLogger";
+import HireFormWrapperClient from "./HireFormWrapperClient";
 
-// ✅ Make sure this export is here for static generation
-export const dynamicParams = false;
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return experts.map((expert) => ({ slug: expert.slug }));
-}
-
-export default async function HireExpertPage({
+export default function HireExpertPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const resolvedParams = await params; // Resolve the Promise
-  const expert = experts.find((e) => e.slug === resolvedParams.slug);
-
-  if (!expert) return notFound();
-
-  return (
-    <>
-      <HireButtonLogger expert={expert} />
-      <HireFormClient expert={expert} />
-    </>
-  );
+  // @ts-expect-error Next passes Promise for params; treated as resolved at runtime
+  const { slug } = params as { slug: string };
+  return <HireFormWrapperClient slug={slug} />;
 }

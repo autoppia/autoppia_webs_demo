@@ -6,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { useSearchStore } from "@/store/search-store";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
+import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
 
 export default function Navbar() {
   const search = useSearchStore((s) => s.search);
   const setSearch = useSearchStore((s) => s.setSearch);
   const layout = useSeedLayout();
+  const { getText, getPlaceholder, getId, getAria } = useDynamicStructure();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -81,17 +83,22 @@ export default function Navbar() {
         href="/"
         className={`font-extrabold text-xl text-zinc-800 tracking-tight ${getLogoPosition()}`}
       >
-        Auto<span className="text-green-600">Delivery</span>
+        {getText("brand_name", "Auto")}<span className="text-green-600">{getText("brand_suffix", "Delivery")}</span>
       </SeedLink>
       
-      <h1 className={`text-zinc-700 hover:text-green-600 font-medium px-3 py-1 ${getMenuPosition()}`}>
-        Restaurants
+      <h1
+        className={`text-zinc-700 hover:text-green-600 font-medium px-3 py-1 ${getMenuPosition()}`}
+        aria-label={getAria("nav_menu", "Main navigation")}
+      >
+        {getText("menu_restaurants", "Restaurants")}
       </h1>
       
       <div className={`hidden md:flex items-center ${getSearchBarPosition()} ${layout.searchBar.wrapperClass}`} role="search">
         <Input
           type="search"
-          placeholder="Search restaurants..."
+          id={getId("search_box", "search-box")}
+          aria-label={getAria("search_input", "Search restaurants input")}
+          placeholder={getPlaceholder("search_input", "Search restaurants...")}
           value={search}
           onChange={handleSearchChange}
           className={`w-96 rounded-full text-sm ${layout.searchBar.inputClass}`}

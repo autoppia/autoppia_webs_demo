@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { createContext, useContext, useReducer, useEffect } from "react";
+import { readJson, writeJson } from "@/shared/storage";
 
 // Define types
 export interface Product {
@@ -132,38 +133,20 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Load cart from localStorage on initial load
   useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem("omnizonCart");
-      if (savedCart) {
-        const parsedCart = JSON.parse(savedCart);
-        // Recalculate totals to ensure consistency
-        const { totalItems, totalAmount } = calculateTotals(parsedCart.items);
-        dispatch({
-          type: "CLEAR_CART",
-        });
-
-        // Use for...of instead of forEach for better performance
-        for (const item of parsedCart.items) {
-          for (let i = 0; i < item.quantity; i++) {
-            dispatch({
-              type: "ADD_TO_CART",
-              payload: item,
-            });
-          }
+    const parsedCart = readJson<CartState>("omnizonCart", null);
+    if (parsedCart && parsedCart.items) {
+      dispatch({ type: "CLEAR_CART" });
+      for (const item of parsedCart.items) {
+        for (let i = 0; i < item.quantity; i++) {
+          dispatch({ type: "ADD_TO_CART", payload: item });
         }
       }
-    } catch (error) {
-      console.error("Error loading cart from localStorage:", error);
     }
   }, []);
 
   // Save cart to localStorage when it changes
   useEffect(() => {
-    try {
-      localStorage.setItem("omnizonCart", JSON.stringify(state));
-    } catch (error) {
-      console.error("Error saving cart to localStorage:", error);
-    }
+    writeJson("omnizonCart", state);
   }, [state]);
 
   // Helper functions

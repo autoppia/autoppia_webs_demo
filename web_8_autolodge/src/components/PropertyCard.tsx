@@ -1,18 +1,56 @@
 import * as React from "react";
-import { SeedLink } from "@/components/ui/SeedLink";
 import Image from "next/image";
+import SeedStructureLink from "./SeedStructureLink";
+
+function parseLocalDate(dateString: string | undefined) {
+  if (!dateString) {
+    return null;
+  }
+
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day)
+  ) {
+    return null;
+  }
+
+  return new Date(year, month - 1, day);
+}
 
 function formatDateRange(datesFrom: string, datesTo: string) {
-  const fromDate = new Date(datesFrom);
-  const toDate = new Date(datesTo);
-
   const options: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
   };
 
+  const fromDate = parseLocalDate(datesFrom);
+  const toDate = parseLocalDate(datesTo);
+
+  if (!fromDate && !toDate) {
+    return "";
+  }
+
+  if (fromDate && !toDate) {
+    return fromDate.toLocaleDateString("en-US", options);
+  }
+
+  if (!fromDate && toDate) {
+    return toDate.toLocaleDateString("en-US", options);
+  }
+
+  if (!fromDate || !toDate) {
+    return "";
+  }
+
   const fromFormatted = fromDate.toLocaleDateString("en-US", options);
   const toFormatted = toDate.toLocaleDateString("en-US", options);
+
+  if (fromFormatted === toFormatted) {
+    return fromFormatted;
+  }
 
   return `${fromFormatted} - ${toFormatted}`;
 }
@@ -37,8 +75,8 @@ export function PropertyCard({
   datesTo: string;
 }) {
   return (
-    <SeedLink href={`/stay/${id}`} className="block">
-      <div className="bg-white rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
+    <SeedStructureLink href={`/stay/${id}`} className="block">
+      <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
             src={image}
@@ -97,6 +135,6 @@ export function PropertyCard({
           </div>
         </div>
       </div>
-    </SeedLink>
+    </SeedStructureLink>
   );
 }
