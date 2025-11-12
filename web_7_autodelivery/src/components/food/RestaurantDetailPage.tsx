@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { MenuItem, MenuItemSize, type Restaurant } from "@/data/restaurants";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
+import { useRestaurants } from "@/contexts/RestaurantContext";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
@@ -141,10 +141,10 @@ export default function RestaurantDetailPage({
   const { getText, getId, getAria, seedStructure } = useDynamicStructure();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useSeedRouter();
-  const restaurants = useMemo(() => getRestaurants() ?? [], []);
+  const { restaurants, getRestaurantById } = useRestaurants();
   const restaurant = useMemo(() => {
-    return restaurants.find((r) => r.id === restaurantId)!;
-  }, [restaurantId, restaurants]);
+    return getRestaurantById(restaurantId) || restaurants.find((r) => r.id === restaurantId);
+  }, [restaurantId, restaurants, getRestaurantById]);
   useEffect(() => {
     if (restaurant) {
       const eventPayload = {
@@ -164,8 +164,13 @@ export default function RestaurantDetailPage({
   // Delivery/Pickup toggle state
   const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
 
-  if (!restaurant)
+  if (!restaurant) {
     return <div className="text-lg text-zinc-500">Restaurant not found.</div>;
+  }
+
+  // TypeScript guard: restaurant is now guaranteed to be defined after the check above
+  // Use non-null assertion since we've already checked
+  const safeRestaurant: Restaurant = restaurant;
 
   type CartCustomItem = {
     size?: MenuItemSize;
@@ -174,7 +179,7 @@ export default function RestaurantDetailPage({
     quantity: number;
   };
   function handleAddToCart(custom: CartCustomItem) {
-    if (modalItem) {
+    if (modalItem && safeRestaurant) {
       const transformedOptions =
         custom.options?.map((label) => ({ label })) ?? [];
 
@@ -184,7 +189,7 @@ export default function RestaurantDetailPage({
         options: transformedOptions,
       };
 
-      addToCart(payload, restaurant.id, custom.quantity);
+      addToCart(payload, safeRestaurant.id, custom.quantity);
       setModalOpen(false);
       setModalItem(null);
     }
@@ -202,8 +207,8 @@ export default function RestaurantDetailPage({
           >
             <div className="relative w-full md:w-72 h-48 rounded-xl overflow-hidden shadow">
               <Image
-                src={restaurant.image}
-                alt={restaurant.name}
+                src={safeRestaurant.image}
+                alt={safeRestaurant.name}
                 fill
                 style={{ objectFit: "cover" }}
                 sizes="(max-width: 768px) 100vw, 400px"
@@ -213,23 +218,23 @@ export default function RestaurantDetailPage({
               <h1 
                 className={`text-3xl font-bold mb-1 ${layout.generateSeedClass('restaurant-name')} ds-${seedStructure}`}
                 id={getId('restaurant-name', `restaurant-name-${seedStructure}`)}
-                aria-label={getAria('restaurant-name', restaurant.name)}
+                aria-label={getAria('restaurant-name', safeRestaurant.name)}
               >
-                {getText('restaurant-name', restaurant.name)}
+                {getText('restaurant-name', safeRestaurant.name)}
               </h1>
               <div 
                 className={`text-zinc-500 mb-2 ${layout.generateSeedClass('restaurant-meta')} ds-${seedStructure}`}
                 id={getId('restaurant-meta', `restaurant-meta-${seedStructure}`)}
-                aria-label={getAria('restaurant-meta', `${restaurant.cuisine} · ${restaurant.rating}`)}
+                aria-label={getAria('restaurant-meta', `${safeRestaurant.cuisine} · ${safeRestaurant.rating}`)}
               >
-                {getText('restaurant-meta', `${restaurant.cuisine} · ★ ${restaurant.rating}`)}
+                {getText('restaurant-meta', `${safeRestaurant.cuisine} · ★ ${safeRestaurant.rating}`)}
               </div>
               <p 
                 className={`text-zinc-600 mb-2 ${layout.generateSeedClass('restaurant-description')} ds-${seedStructure}`}
                 id={getId('restaurant-description', `restaurant-description-${seedStructure}`)}
-                aria-label={getAria('restaurant-description', restaurant.description)}
+                aria-label={getAria('restaurant-description', safeRestaurant.description)}
               >
-                {getText('restaurant-description', restaurant.description)}
+                {getText('restaurant-description', safeRestaurant.description)}
               </p>
               <Button
                 variant="outline"
@@ -238,8 +243,8 @@ export default function RestaurantDetailPage({
                 id={getId('back-button', `back-button-${seedStructure}`)}
                 onClick={() => {
                   logEvent(EVENT_TYPES.BACK_TO_ALL_RESTAURANTS, {
-                    fromRestaurantId: restaurant.id,
-                    fromRestaurantName: restaurant.name,
+                    fromRestaurantId: safeRestaurant.id,
+                    fromRestaurantName: safeRestaurant.name,
                   });
                   // Navigate to restaurants page (seed-structure will be preserved automatically)
                   router.push('/restaurants');
@@ -266,7 +271,7 @@ export default function RestaurantDetailPage({
               className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${layout.restaurantDetail.menuClass}`}
               {...layout.getElementAttributes('menu-grid', 0)}
             >
-              {restaurant.menu.map((item, index) => (
+              {safeRestaurant.menu.map((item, index) => (
                 <div
                   key={item.id}
                   className={`bg-white rounded-lg shadow p-4 flex flex-col ${layout.generateSeedClass('menu-item')} ds-${seedStructure}`}
@@ -308,16 +313,16 @@ export default function RestaurantDetailPage({
                       className={`${layout.generateSeedClass('add-to-cart-btn')} ds-${seedStructure}`}
                       onClick={() => {
                         logEvent(EVENT_TYPES.ADD_TO_CART_MODAL_OPEN, {
-                          restaurantId: restaurant.id,
-                          restaurantName: restaurant.name,
+                          restaurantId: safeRestaurant.id,
+                          restaurantName: safeRestaurant.name,
                           itemId: item.id,
                           itemName: item.name,
                           itemPrice: item.price,
                         });
                         const itemWithRestaurant = {
                           ...item,
-                          restaurantId: restaurant.id,
-                          restaurantName: restaurant.name
+                          restaurantId: safeRestaurant.id,
+                          restaurantName: safeRestaurant.name
                         };
 
                         setModalOpen(true);
@@ -338,9 +343,9 @@ export default function RestaurantDetailPage({
         return (
           <ReviewsSection 
             key="reviews"
-            reviews={restaurant.reviews} 
+            reviews={safeRestaurant.reviews} 
             isAdmin={isAdmin} 
-            restaurant={restaurant} 
+            restaurant={safeRestaurant} 
           />
         );
       
