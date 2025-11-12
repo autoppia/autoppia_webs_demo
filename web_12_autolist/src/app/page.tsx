@@ -18,6 +18,7 @@ import { useState, useRef, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useSeedLayout } from "@/library/useSeedLayout";
 
 // Import debug utilities in development
 if (process.env.NODE_ENV === 'development') {
@@ -75,6 +76,7 @@ function AddTaskCard({
   } | null;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { getElementAttributes, getText } = useSeedLayout();
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -314,15 +316,17 @@ function AddTaskCard({
       <div className="rounded-xl border border-gray-200 overflow-hidden bg-white shadow-sm">
         <div className="pt-5 px-5">
           <input
+            {...getElementAttributes('task-name-input', 0)}
             ref={inputRef}
             className="w-full text-base font-normal border-0 outline-none focus:ring-0 bg-transparent placeholder-gray-600 placeholder-opacity-80 font-sans mb-1"
-            placeholder="Task name"
+            placeholder={getText('input-task-name-placeholder', 'Task name')}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <input
+            {...getElementAttributes('task-description-input', 0)}
             className="w-full text-base border-0 outline-none focus:ring-0 bg-transparent text-gray-700 placeholder-gray-400 mt-1 mb-3 py-5"
-            placeholder="Description"
+            placeholder={getText('input-description-placeholder', 'Description')}
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
           />
@@ -334,6 +338,7 @@ function AddTaskCard({
               overlayClassName="!p-0"
             >
               <button
+                {...getElementAttributes('date-picker-button', 0)}
                 type="button"
                 className={`group flex items-center gap-2 border transition focus:outline-none px-4 py-[10px] rounded-lg text-base font-semibold border-gray-200 ${
                   selectedDate ? "text-[#d1453b]" : "text-gray-700"
@@ -342,7 +347,7 @@ function AddTaskCard({
               >
                 <CalendarOutlined className="mr-2 text-xl" />
                 <span className="font-bold">
-                  {selectedDate ? selectedDate.format("D MMM") : "Date"}
+                  {selectedDate ? selectedDate.format("D MMM") : getText('picker-date-label', 'Date')}
                 </span>
               </button>
             </Popover>
@@ -355,6 +360,7 @@ function AddTaskCard({
               overlayClassName="!p-0"
             >
               <button
+                {...getElementAttributes('priority-picker-button', 0)}
                 className="text-gray-600 hover:bg-gray-50 transition px-2 py-1 text-md font-medium rounded border border-gray-200 flex items-center"
                 type="button"
               >
@@ -372,18 +378,19 @@ function AddTaskCard({
                         : "#94a3b8",
                   }}
                 />
-                Priority
+                {getText('picker-priority-label', 'Priority')}
               </button>
             </Popover>
           </div>
         </div>
         <div className="flex items-center justify-between px-4 py-3 bg-[#fbfaf9] border-t border-gray-100">
-          <div className="flex items-center gap-2 text-md font-medium text-gray-700">
-            <InboxOutlined style={{ fontSize: 16 }} /> Inbox{" "}
+          <div className="flex items-center gap-2 text-md font-medium text-gray-700" {...getElementAttributes('label-inbox', 0)}>
+            <InboxOutlined style={{ fontSize: 16 }} /> {getText('label-inbox', 'Inbox')} {" "}
             <DownOutlined style={{ fontSize: 11 }} className="ml-0.5" />
           </div>
           <div className="flex gap-2">
             <button
+              {...getElementAttributes('cancel-button', 0)}
               onClick={() => {
                 logEvent(EVENT_TYPES.CANCEL_TASK, {
                   currentName: name,
@@ -396,9 +403,10 @@ function AddTaskCard({
               }}
               className="text-gray-700 bg-white border border-gray-200 px-5 py-1.5 rounded font-semibold hover:bg-gray-50"
             >
-              Cancel
+              {getText('button-cancel', 'Cancel')}
             </button>
             <button
+              {...getElementAttributes('submit-button', 0)}
               className="bg-[#d1453b] hover:bg-[#ef7363] text-white px-6 py-1.5 rounded font-semibold"
               onClick={() => {
                 if (!name.trim()) return;
@@ -423,7 +431,7 @@ function AddTaskCard({
               }}
               disabled={!name.trim()}
             >
-              {editingTask ? "Save changes" : "Add"}
+              {editingTask ? getText('button-save', 'Save changes') : getText('button-add', 'Add')}
             </button>
           </div>
         </div>
@@ -433,6 +441,7 @@ function AddTaskCard({
 }
 
 export default function Home() {
+  const { getElementAttributes, getText } = useSeedLayout();
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
@@ -495,8 +504,8 @@ export default function Home() {
     );
     return (
       <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
-          Tasks Scheduled Today
+        <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-today', 0)}>
+          {getText('heading-today', 'Tasks Scheduled Today')}
         </h1>
         {todayTasks.length === 0 ? (
           <div className="mt-14 text-lg text-gray-400 text-center">
@@ -562,7 +571,7 @@ export default function Home() {
                           fontSize: 14,
                         }}
                       />
-                      Priority {task.priority}
+                      {getText('label-priority-badge', 'Priority')} {task.priority}
                     </span>
                   </div>
                 </div>
@@ -593,8 +602,8 @@ export default function Home() {
   function renderCompleted() {
     return (
       <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
-          Activity: All projects
+        <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-completed', 0)}>
+          {getText('heading-completed', 'Activity: All projects')}
         </h1>
         {completedTasks.length === 0 ? (
           <div className="mt-14 text-lg text-gray-400">
@@ -634,7 +643,7 @@ export default function Home() {
                 </span>
                 <div className="flex-1">
                   <div className="font-semibold text-base text-gray-700">
-                    <b>You</b> completed a task:{" "}
+                    <b>You</b> completed a task: {""}
                     <span className="underline hover:text-[#d1453b]">
                       {task.name}
                     </span>
@@ -673,15 +682,15 @@ export default function Home() {
           renderCompleted()
         ) : (
           <div className="flex-1 flex flex-col items-center w-full text-center pt-36 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">
-              Add Tasks To Your Todo List
+            <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-inbox', 0)}>
+              {getText('heading-inbox', 'Add Tasks To Your Todo List')}
             </h1>
             <Modal
               open={editIndex !== null}
               footer={null}
               centered
               onCancel={() => setEditIndex(null)}
-              title="Edit Task"
+              title={getText('modal-edit-title', 'Edit Task')}
               destroyOnClose
               width={530}
             >
@@ -718,15 +727,14 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <div className="font-semibold text-xl mb-1 text-gray-900">
-                  Capture now, plan later
+                <div className="font-semibold text-xl mb-1 text-gray-900" {...getElementAttributes('empty-inbox-title', 0)}>
+                  {getText('empty-inbox-title', 'Capture now, plan later')}
                 </div>
-                <div className="text-gray-500 mb-7 text-base leading-normal">
-                  Inbox is your go-to spot for quick task entry.
-                  <br />
-                  Clear your mind now, organize when you're ready.
+                <div className="text-gray-500 mb-7 text-base leading-normal" {...getElementAttributes('empty-inbox-desc', 0)}>
+                  {getText('empty-inbox-desc', "Inbox is your go-to spot for quick task entry.\nClear your mind now, organize when you're ready.")}
                 </div>
                 <button
+                  {...getElementAttributes('cta-add-task', 0)}
                   className="flex items-center gap-2 bg-[#d1453b] hover:bg-[#c0342f] text-white font-semibold px-6 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fdede7] focus:ring-offset-2 shadow transition"
                   onClick={() => {
                     logEvent(EVENT_TYPES.ADD_TASK, {
@@ -735,7 +743,7 @@ export default function Home() {
                     setShowForm(true);
                   }}
                 >
-                  <PlusOutlined /> Add task
+                  <PlusOutlined /> {getText('cta-add-task', 'Add task')}
                 </button>
               </div>
             )}
