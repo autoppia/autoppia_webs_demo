@@ -16,6 +16,8 @@ import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
+import { useSeedLayout } from "@/library/utils";
+import { getSeedLayout as getLayoutVariantConfig } from "@/library/layoutVariants";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {
@@ -56,6 +58,12 @@ function getFallbackHotel(): Hotel {
 
 function PropertyDetailContent() {
   const { getText, getId } = useDynamicStructure();
+  const { seed } = useSeedLayout();
+  const layoutVariant = useMemo(
+    () => getLayoutVariantConfig(seed ?? 1),
+    [seed],
+  );
+  const { propertyDetail, buttons, forms } = layoutVariant;
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
@@ -237,7 +245,7 @@ function PropertyDetailContent() {
   };
 
   return (
-    <div className="relative flex flex-row gap-10 w-full max-w-6xl mx-auto mt-7">
+    <div className={propertyDetail.mainClass}>
       {toastMessage && (
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded text-sm shadow-lg z-50">
           {toastMessage}
@@ -320,7 +328,7 @@ function PropertyDetailContent() {
         </div>
       )}
 
-      <div className="flex-1 min-w-0 pr-6">
+      <div className={propertyDetail.infoClass}>
         <h1 className="text-2xl font-bold mb-2 leading-7">
           Entire Rental Unit in {prop.location}
         </h1>
@@ -372,7 +380,7 @@ function PropertyDetailContent() {
                   : getText("removed_from_wishlist", "Removed from wishlist 💔")
               );
             }}
-            className="p-2 bg-white border border-neutral-200 rounded-full hover:shadow transition"
+            className={buttons.iconClass}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -396,7 +404,7 @@ function PropertyDetailContent() {
           <button
             id={getId("share_button")}
             onClick={() => setShowShareModal(true)}
-            className="px-4 py-2 text-sm rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
+            className={buttons.secondaryClass}
           >
             {getText("share", "Share")}
           </button>
@@ -457,7 +465,7 @@ function PropertyDetailContent() {
         </div>
       </div>
 
-      <div className="w-[350px] min-w-[300px] bg-white shadow-md rounded-2xl border flex flex-col p-6 sticky top-8 h-fit">
+      <div className={propertyDetail.sidebarClass}>
         <div id="pricePerNight" className="text-2xl font-bold mb-1">
           ${prop.price.toFixed(2)}{" "}
           <span className="text-base text-neutral-600 font-medium">
@@ -465,16 +473,16 @@ function PropertyDetailContent() {
           </span>
         </div>
         <div className="flex gap-3 mt-3 mb-4">
-          <div id="checkIn" className="flex-1 border rounded-md px-3 py-2">
-            <div className="text-xs text-neutral-500 font-semibold">
+          <div id="checkIn" className={forms.groupClass}>
+            <div className={forms.labelClass}>
               {getText("check_in", "CHECK-IN")}
             </div>
             <div className="tracking-wide text-[15px]">
               {selectedRange?.from ? format(selectedRange.from, "MM/dd/yyyy") : "–"}
             </div>
           </div>
-          <div id="checkOut" className="flex-1 border rounded-md px-3 py-2">
-            <div className="text-xs text-neutral-500 font-semibold">
+          <div id="checkOut" className={forms.groupClass}>
+            <div className={forms.labelClass}>
               {getText("check_out", "CHECK-OUT")}
             </div>
             <div className="tracking-wide text-[15px]">
@@ -482,13 +490,13 @@ function PropertyDetailContent() {
             </div>
           </div>
         </div>
-        <div className="border rounded-md px-3 py-2 mb-3">
-          <div className="text-xs text-neutral-500 font-semibold">
+        <div className={`${forms.groupClass} mb-3`}>
+          <div className={forms.labelClass}>
             {getText("guests", "GUESTS")}
           </div>
           <input
             id={getId("guests_count")}
-            className="bg-transparent text-[15px] w-full p-0 border-none outline-none"
+            className={forms.inputClass}
             value={guests}
             type="number"
             min={1}
@@ -516,7 +524,7 @@ function PropertyDetailContent() {
         {hasValidSelection ? (
           <button
             id={getId("reserve_button")}
-            className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
+            className={buttons.primaryClass}
             onClick={handleReserve}
           >
             {getText("reserve", "Reserve")}

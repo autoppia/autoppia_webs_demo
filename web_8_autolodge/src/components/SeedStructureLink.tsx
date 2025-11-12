@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useSeedLayout } from "@/library/utils";
 import { ReactNode } from "react";
 
 interface SeedStructureLinkProps {
@@ -22,18 +23,24 @@ export default function SeedStructureLink({
   style
 }: SeedStructureLinkProps) {
   const { seedStructure } = useDynamicStructure();
+  const { seed } = useSeedLayout();
 
   const getHrefWithSeedStructure = (href: string): string => {
-    if (typeof window === 'undefined') return href;
+    if (typeof window === "undefined") {
+      return appendParams(href, seedStructure, seed);
+    }
     
     try {
       const url = new URL(href, window.location.origin);
-      url.searchParams.set('seed-structure', seedStructure.toString());
-      return url.pathname + url.search;
+      if (seedStructure) {
+        url.searchParams.set("seed-structure", seedStructure.toString());
+      }
+      if (seed) {
+        url.searchParams.set("seed", seed.toString());
+      }
+      return url.pathname + url.search + url.hash;
     } catch {
-      // If href is not a valid URL, just append the parameter
-      const separator = href.includes('?') ? '&' : '?';
-      return `${href}${separator}seed-structure=${seedStructure}`;
+      return appendParams(href, seedStructure, seed);
     }
   };
 
@@ -48,4 +55,18 @@ export default function SeedStructureLink({
       {children}
     </Link>
   );
+}
+
+function appendParams(href: string, seedStructure?: number, seed?: number) {
+  const hasQuery = href.includes("?");
+  const params = new URLSearchParams(hasQuery ? href.split("?")[1] : "");
+  if (seedStructure) {
+    params.set("seed-structure", seedStructure.toString());
+  }
+  if (seed) {
+    params.set("seed", seed.toString());
+  }
+  const base = hasQuery ? href.split("?")[0] : href;
+  const query = params.toString();
+  return query ? `${base}?${query}` : base;
 }
