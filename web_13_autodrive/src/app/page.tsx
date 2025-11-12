@@ -6,6 +6,7 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent, EventType } from "@/library/event";
 import DynamicLayout from "@/components/DynamicLayout";
 import SiteElements from "@/components/SiteElements";
+import { useSeedLayout } from "@/library/useSeedLayout";
 
 const SUGGESTIONS = [
   "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
@@ -290,6 +291,7 @@ function ProfileDropdown({
 function HomePage() {
   const router = useSeedRouter();
   const [profileOpen, setProfileOpen] = useState(false);
+  const { getElementAttributes, getText } = useSeedLayout();
   const [generating, setGenerating] = useState(true);
 
   useEffect(() => {
@@ -325,17 +327,17 @@ function HomePage() {
               className="hover:text-[#2095d2] transition"
               onClick={() => router.push("/ride/trip")}
             >
-              Ride
+              {getText('nav-ride', 'Ride')}
             </button>
           </li>
           <li>
             <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
-              Drive
+              {getText('nav-drive', 'Drive')}
             </SeedLink>
           </li>
           <li>
             <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
-              Business
+              {getText('nav-business', 'Business')}
             </SeedLink>
           </li>
           <li>
@@ -361,7 +363,7 @@ function HomePage() {
             href="/help"
             className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
           >
-            Help
+            {getText('nav-help', 'Help')}
           </SeedLink>
           <button
             className="bg-[#2095d2] text-white text-sm px-4 py-1 rounded-md font-semibold shadow hover:bg-[#1273a0] transition relative"
@@ -393,15 +395,15 @@ function HomePage() {
     <section className="flex flex-col md:flex-row items-center justify-center min-h-[calc(100vh-80px)] px-4 max-w-7xl mx-auto w-full gap-10">
       {/* Hero text and form */}
       <div className="flex-1 flex flex-col items-center md:items-start justify-center z-10">
-        <h1 className="font-extrabold text-4xl md:text-5xl mb-2 text-[#2095d2] text-center md:text-left drop-shadow">
-          Go anywhere with AutoDriver
+        <h1 className="font-extrabold text-4xl md:text-5xl mb-2 text-[#2095d2] text-center md:text-left drop-shadow" {...getElementAttributes('hero-title', 0)}>
+          {getText('hero-title', 'Go anywhere with AutoDriver')}
         </h1>
-        <h2 className="text-2xl md:text-3xl mb-7 text-gray-900 text-center md:text-left font-medium">
-          Your ride, your way.
-          <br className="hidden md:inline" /> Request, explore, arrive.
+        <h2 className="text-2xl md:text-3xl mb-7 text-gray-900 text-center md:text-left font-medium" {...getElementAttributes('hero-subtitle', 0)}>
+          {getText('hero-subtitle', 'Your ride, your way.\nRequest, explore, arrive.')}
         </h2>
         <div className="w-full max-w-md mx-auto md:mx-0 mt-2 bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 mb-8 border border-gray-100">
           <button
+            {...getElementAttributes('get-trip-button', 0)}
             className="bg-[#2095d2] text-white px-6 py-4 rounded-md font-bold text-xl hover:bg-[#1273a0] transition shadow-lg"
             onClick={() => {
               console.log("Logging GET_TRIP_CLICK");
@@ -414,7 +416,7 @@ function HomePage() {
               router.push("/ride/trip");
             }}
           >
-            Get a Trip
+            {getText('get-trip-button', 'Get a Trip')}
           </button>
         </div>
       </div>
@@ -432,8 +434,9 @@ function HomePage() {
   // Booking section component (placeholder for now)
   const booking = (
     <div className="w-full max-w-md mx-auto bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 border border-gray-100">
-      <h3 className="text-lg font-semibold mb-3">Quick Booking</h3>
+      <h3 className="text-lg font-semibold mb-3" {...getElementAttributes('quick-booking-title', 0)}>{getText('quick-booking-title', 'Quick Booking')}</h3>
       <button
+        {...getElementAttributes('book-now-button', 0)}
         className="bg-[#2095d2] text-white px-6 py-3 rounded-md font-bold hover:bg-[#1273a0] transition"
         onClick={() => {
           logEvent(EVENT_TYPES.EXPLORE_FEATURES, { 
@@ -444,22 +447,22 @@ function HomePage() {
           router.push("/ride/trip");
         }}
       >
-        Book Now
+        {getText('book-now-button', 'Book Now')}
       </button>
     </div>
   );
 
   // Map section component (placeholder for now)
   const map = (
-    <div className="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center">
-      <div className="text-gray-500">Map View</div>
+    <div className="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center" {...getElementAttributes('map-view', 0)}>
+      <div className="text-gray-500">{getText('map-view-label', 'Map View')}</div>
     </div>
   );
 
   // Rides section component (placeholder for now)
   const rides = (
     <div className="w-full bg-white rounded-xl shadow-md p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold mb-3">Available Rides</h3>
+      <h3 className="text-lg font-semibold mb-3" {...getElementAttributes('available-rides-title', 0)}>{getText('available-rides-title', 'Available Rides')}</h3>
       <div className="space-y-2">
         <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
           <span>AutoDriverX</span>
@@ -475,9 +478,9 @@ function HomePage() {
 
   // Footer component (placeholder for now)
   const footer = (
-    <footer className="bg-gray-100 py-8 px-4">
+    <footer className="bg-gray-100 py-8 px-4" {...getElementAttributes('footer', 0)}>
       <div className="max-w-7xl mx-auto text-center text-gray-600">
-        <p>&copy; 2024 AutoDriver. All rights reserved.</p>
+        <p>{getText('footer-copy', '© 2024 AutoDriver. All rights reserved.')}</p>
       </div>
     </footer>
   );

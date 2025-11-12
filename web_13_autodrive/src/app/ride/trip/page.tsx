@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeedLayout } from "@/library/useSeedLayout";
 import RideNavbar from "../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "../../../components/DynamicLayout";
@@ -710,7 +711,8 @@ function Spinner() {
 }
 
 export default function RideTripPage() {
-  const router = useRouter();
+  const router = useSeedRouter();
+  const { getElementAttributes, getText } = useSeedLayout();
   const [pickupOpen, setPickupOpen] = useState(false);
   const [dropoffOpen, setDropoffOpen] = useState(false);
   const [pickup, setPickup] = useState<string | null>(null);
@@ -805,18 +807,18 @@ export default function RideTripPage() {
   // Booking section component
   const booking = (
     <section className="w-[340px] bg-white rounded-xl shadow p-6 flex flex-col gap-2 max-lg:w-full">
-      <div className="text-lg font-semibold mb-3">Get a trip</div>
+      <div className="text-lg font-semibold mb-3" {...getElementAttributes('trip-get-trip-heading', 0)}>{getText('trip-get-trip-heading', 'Get a trip')}</div>
       <PlaceSelect
         value={pickup}
         setValue={setPickup}
-        placeholder="Pickup location"
+        placeholder={getText('pickup-placeholder', 'Pickup location')}
         open={pickupOpen}
         setOpen={setPickupOpen}
       />
       <PlaceSelect
         value={dropoff}
         setValue={setDropoff}
-        placeholder="Dropoff location"
+        placeholder={getText('dropoff-placeholder', 'Dropoff location')}
         open={dropoffOpen}
         setOpen={setDropoffOpen}
       />
@@ -847,7 +849,7 @@ export default function RideTripPage() {
           />
         </svg>
         <span className="font-bold mr-1 text-[#2095d2]">
-          {pickupScheduled ? "Pick up:" : "Pickup now"}
+          {pickupScheduled ? getText('pickup-label', 'Pick up:') : getText('pickup-now-label', 'Pickup now')}
         </span>
         {pickupScheduled ? (
           <span className="ml-1 font-[500]">
@@ -890,7 +892,7 @@ export default function RideTripPage() {
             fill="#2095d2"
           />
         </svg>
-        <span>For me</span>
+        <span>{getText('for-me-label', 'For me')}</span>
         <svg
           width="10"
           height="10"
@@ -902,6 +904,7 @@ export default function RideTripPage() {
         </svg>
       </div>
       <button
+        {...getElementAttributes('search-button', 0)}
         onClick={handleSearch}
         className={`rounded-md h-10 font-bold mb-2 transition ${
           !pickup || !dropoff || loading
@@ -910,7 +913,7 @@ export default function RideTripPage() {
         }`}
         disabled={!pickup || !dropoff || loading}
       >
-        {loading ? "Searching..." : "Search"}
+        {loading ? getText('searching-label', 'Searching...') : getText('search-button', 'Search')}
       </button>
     </section>
   );
@@ -922,8 +925,8 @@ export default function RideTripPage() {
     </section>
   ) : pickup && dropoff && showRides ? (
     <section className="flex-1 max-w-2xl max-lg:max-w-full">
-      <h1 className="text-3xl font-bold mb-2">Choose a ride</h1>
-      <div className="text-lg font-semibold mb-4">Recommended</div>
+      <h1 className="text-3xl font-bold mb-2" {...getElementAttributes('choose-ride-title', 0)}>{getText('choose-ride-title', 'Choose a ride')}</h1>
+      <div className="text-lg font-semibold mb-4" {...getElementAttributes('recommended-label', 0)}>{getText('recommended-label', 'Recommended')}</div>
       <div className="space-y-3">
         {rides.map((ride, idx) => (
           <div
@@ -1032,8 +1035,8 @@ export default function RideTripPage() {
   // Hero section component (placeholder for trip page)
   const hero = (
     <div className="w-full bg-white rounded-xl shadow p-6">
-      <h2 className="text-2xl font-bold mb-4">Plan Your Trip</h2>
-      <p className="text-gray-600">Choose your pickup and destination to get started.</p>
+      <h2 className="text-2xl font-bold mb-4" {...getElementAttributes('trip-hero-title', 0)}>{getText('trip-hero-title', 'Plan Your Trip')}</h2>
+      <p className="text-gray-600" {...getElementAttributes('trip-hero-subtitle', 0)}>{getText('trip-hero-subtitle', 'Choose your pickup and destination to get started.')}</p>
     </div>
   );
 
@@ -1041,7 +1044,7 @@ export default function RideTripPage() {
   const footer = (
     <footer className="bg-gray-100 py-4 px-4">
       <div className="max-w-7xl mx-auto text-center text-gray-600 text-sm">
-        <p>&copy; 2024 AutoDriver. All rights reserved.</p>
+        <p>{getText('footer-copy', '© 2024 AutoDriver. All rights reserved.')}</p>
       </div>
     </footer>
   );
@@ -1141,7 +1144,7 @@ export default function RideTripPage() {
                 }
               }}
             >
-              {selectedRideIdx === null ? "Select a ride" : "Reserve ride"}
+              {selectedRideIdx === null ? getText('select-ride-label', 'Select a ride') : getText('reserve-ride-label', 'Reserve ride')}
             </button>
           </div>
         </div>

@@ -35,7 +35,7 @@ interface Expert {
 }
 
 export default function ExpertProfileClient({ slug }: { slug: string }) {
-  const { layout } = useSeedLayout();
+  const { layout, getElementAttributes, getText } = useSeedLayout();
   const [expertState, setExpertState] = useState<Expert | null>(null);
 
   useEffect(() => {
@@ -86,14 +86,14 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
 
   // Create section components
   const ProfileSection = () => (
-    <div className="flex items-center gap-4 mb-6">
+    <div className="flex items-center gap-4 mb-6" {...getElementAttributes('expert-profile-section', 0)}>
       <img
         src={normalized.avatar}
         alt={normalized.name}
         className="w-20 h-20 rounded-full object-cover border border-[#cad2d0] shadow"
       />
       <div>
-        <h1 className="text-3xl font-bold text-[#253037]">{normalized.name}</h1>
+        <h1 className="text-3xl font-bold text-[#253037]" {...getElementAttributes('expert-name', 0)}>{normalized.name}</h1>
         <div className="text-[#4a545b] flex items-center gap-2 text-[16px] font-medium mt-2">
           <svg
             className="inline-block mr-1"
@@ -127,7 +127,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
         </div>
       </div>
       <div className="ml-auto flex gap-2">
-        <button className="w-12 h-12 rounded-full bg-white border border-[#08b4ce] flex items-center justify-center text-2xl text-[#08b4ce] hover:bg-[#e6f9fb]">
+        <button className="w-12 h-12 rounded-full bg-white border border-[#08b4ce] flex items-center justify-center text-2xl text-[#08b4ce] hover:bg-[#e6f9fb]" {...getElementAttributes('expert-menu-button', 0)}>
           …
         </button>
 
@@ -136,10 +136,11 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           href={`#`}
           passHref
           className="px-7 py-2 rounded-full border-2 border-[#08b4ce] text-[#08b4ce] bg-white text-lg ml-1 font-semibold hover:bg-[#e6f9fb]"
+          {...getElementAttributes('expert-message-button', 0)}
         >
-          Message
+          {getText('expert-message-button-label', 'Message')}
         </Link>
-        <button className="w-12 h-12 rounded-full border border-green-700 flex items-center justify-center text-2xl text-green-700 ml-1">
+        <button className="w-12 h-12 rounded-full border border-green-700 flex items-center justify-center text-2xl text-green-700 ml-1" {...getElementAttributes('expert-favorite-button', 0)}>
           ♡
         </button>
       </div>
@@ -147,30 +148,30 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
   );
 
   const StatsSection = () => (
-    <div className="grid grid-cols-3 md:gap-8 bg-[#fafcff] rounded-xl border border-gray-100 py-3 px-2 text-center mb-5">
+    <div className="grid grid-cols-3 md:gap-8 bg-[#fafcff] rounded-xl border border-gray-100 py-3 px-2 text-center mb-5" {...getElementAttributes('expert-stats-section', 0)}>
       <div>
         <div className="text-lg font-bold text-[#253037]">
           {normalized.stats.earnings}
         </div>
-        <div className="text-xs text-gray-500 mt-1">Total earnings</div>
+        <div className="text-xs text-gray-500 mt-1">{getText('stats-earnings-label', 'Total earnings')}</div>
       </div>
       <div>
         <div className="text-lg font-bold text-[#253037]">
           {normalized.stats.jobs}
         </div>
-        <div className="text-xs text-gray-500 mt-1">Total jobs</div>
+        <div className="text-xs text-gray-500 mt-1">{getText('stats-jobs-label', 'Total jobs')}</div>
       </div>
       <div>
         <div className="text-lg font-bold text-[#253037]">
           {normalized.stats.hours}
         </div>
-        <div className="text-xs text-gray-500 mt-1">Total hours</div>
+        <div className="text-xs text-gray-500 mt-1">{getText('stats-hours-label', 'Total hours')}</div>
       </div>
     </div>
   );
 
   const AboutSection = () => (
-    <div className="mb-4">
+    <div className="mb-4" {...getElementAttributes('expert-about-section', 0)}>
       <h2 className="font-bold text-xl text-[#253037] mb-1">
         {normalized.role}
       </h2>
@@ -180,7 +181,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
 
   const ReviewsSection = () => (
     !normalized.lastReview ? null : (
-    <div className="bg-[#f6fff7] border border-[#dbf6e6] rounded-xl py-5 px-6 flex flex-col gap-2">
+    <div className="bg-[#f6fff7] border border-[#dbf6e6] rounded-xl py-5 px-6 flex flex-col gap-2" {...getElementAttributes('expert-reviews-section', 0)}>
       <div className="text-[#27ab43] font-bold text-lg mb-1">
         {normalized.lastReview.title}
       </div>
@@ -215,16 +216,16 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
   );
 
   const SidebarSection = () => (
-    <div className="md:w-60 flex flex-col gap-7">
+    <div className="md:w-60 flex flex-col gap-7" {...getElementAttributes('expert-sidebar-section', 0)}>
       <div className="bg-[#fafcff] border border-gray-100 rounded-xl p-4">
         <div className="font-semibold text-md mb-2 text-[#253037]">
-          Hours per week
+          {getText('sidebar-hours-label', 'Hours per week')}
         </div>
         <div className="text-gray-600">{normalized.hoursPerWeek || "N/A"}</div>
       </div>
       <div className="bg-[#fafcff] border border-gray-100 rounded-xl p-4">
         <div className="font-semibold text-md mb-2 text-[#253037]">
-          Languages
+          {getText('sidebar-languages-label', 'Languages')}
         </div>
         {(normalized.languages || []).map((lng) => (
           <div key={lng} className="text-gray-600">
@@ -234,7 +235,7 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
       </div>
       <div className="bg-[#fafcff] border border-gray-100 rounded-xl p-4">
         <div className="font-semibold text-md mb-2 text-[#253037]">
-          Verifications
+          {getText('sidebar-verifications-label', 'Verifications')}
         </div>
         <div className="text-gray-600">
           Verified as full-stack developer
