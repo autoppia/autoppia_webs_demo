@@ -1,20 +1,18 @@
 # Stage 0: prod deps only (no dev deps like biome)
 FROM node:20-alpine AS deps
 WORKDIR /app
+# Update npm to latest version to avoid registry issues
+RUN npm install -g npm@latest
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev --legacy-peer-deps
 
 # Stage 1: build with dev deps
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-
-# Install dependencies (including dev dependencies needed for building)
-RUN npm ci
-
-COPY . .
+# Update npm to latest version to avoid registry issues
+RUN npm install -g npm@latest
 
 # Build args for environment flags and API URL
 ARG ENABLE_DYNAMIC_HTML=false
@@ -26,11 +24,15 @@ ARG API_URL
 ARG NEXT_PUBLIC_ENABLE_DB_MODE=false
 ARG DATA_SEED_VALUE
 ARG NEXT_PUBLIC_DATA_SEED_VALUE
+ARG NEXT_PUBLIC_ENABLE_DATA_GENERATION=false
+
+# Set environment variables
 ENV ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
     ENABLE_DYNAMIC_HTML_STRUCTURE=$ENABLE_DYNAMIC_HTML_STRUCTURE \
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE=$ENABLE_DYNAMIC_HTML_STRUCTURE \
     ENABLE_DATA_GENERATION=$ENABLE_DATA_GENERATION \
+    NEXT_PUBLIC_ENABLE_DATA_GENERATION=$NEXT_PUBLIC_ENABLE_DATA_GENERATION \
     ENABLE_DB_MODE=$ENABLE_DB_MODE \
     NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
     API_URL=$API_URL \
@@ -38,7 +40,21 @@ ENV ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
     DATA_SEED_VALUE=$DATA_SEED_VALUE \
     NEXT_PUBLIC_DATA_SEED_VALUE=$NEXT_PUBLIC_DATA_SEED_VALUE
 
-RUN npm run build
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
+
+# Install dependencies (including dev dependencies needed for building)
+# Use npm install instead of npm ci to handle optional dependencies across platforms
+RUN npm install --legacy-peer-deps
+
+# Verify next is installed
+RUN npm list next || (echo "ERROR: next not found in node_modules" && npm list && exit 1)
+
+# Copy source code
+COPY . .
+
+# Build the application using npx to ensure correct path
+RUN npx next build
 
 # Stage 2: Create the lean production image
 FROM node:20-alpine AS runner

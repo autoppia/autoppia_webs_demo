@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useSeedLayout } from "@/library/utils";
+import { isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
 import { ReactNode } from "react";
 
 interface SeedStructureLinkProps {
@@ -14,39 +15,30 @@ interface SeedStructureLinkProps {
   style?: React.CSSProperties;
 }
 
-export default function SeedStructureLink({ 
-  href, 
-  children, 
-  className, 
+export default function SeedStructureLink({
+  href,
+  children,
+  className,
   onClick,
   id,
-  style
+  style,
 }: SeedStructureLinkProps) {
-  const { seedStructure } = useDynamicStructure();
+  const { seedStructure, isEnabled: isStructureEnabled } = useDynamicStructure();
   const { seed } = useSeedLayout();
+  const dynamicEnabled =
+    typeof window !== "undefined" ? isDynamicModeEnabled() : false;
 
-  const getHrefWithSeedStructure = (href: string): string => {
-    if (typeof window === "undefined") {
-      return appendParams(href, seedStructure, seed);
-    }
-    
-    try {
-      const url = new URL(href, window.location.origin);
-      if (seedStructure) {
-        url.searchParams.set("seed-structure", seedStructure.toString());
-      }
-      if (seed) {
-        url.searchParams.set("seed", seed.toString());
-      }
-      return url.pathname + url.search + url.hash;
-    } catch {
-      return appendParams(href, seedStructure, seed);
-    }
-  };
+  const shouldIncludeSeed = dynamicEnabled && !!seed;
+  const shouldIncludeStructure = isStructureEnabled && !!seedStructure;
+
+  const resolvedHref = updateHrefWithParams(href, {
+    seed: shouldIncludeSeed ? seed : undefined,
+    seedStructure: shouldIncludeStructure ? seedStructure : undefined,
+  });
 
   return (
     <Link
-      href={getHrefWithSeedStructure(href)}
+      href={resolvedHref}
       className={className}
       onClick={onClick}
       id={id}
@@ -57,16 +49,46 @@ export default function SeedStructureLink({
   );
 }
 
-function appendParams(href: string, seedStructure?: number, seed?: number) {
-  const hasQuery = href.includes("?");
-  const params = new URLSearchParams(hasQuery ? href.split("?")[1] : "");
-  if (seedStructure) {
-    params.set("seed-structure", seedStructure.toString());
+function updateHrefWithParams(
+  href: string,
+  paramsToApply: { seed?: number; seedStructure?: number },
+) {
+  const [base, queryString = "", hash = ""] = splitHref(href);
+  const params = new URLSearchParams(queryString);
+
+  if (paramsToApply.seed !== undefined) {
+    params.set("seed", paramsToApply.seed.toString());
+  } else {
+    params.delete("seed");
   }
-  if (seed) {
-    params.set("seed", seed.toString());
+
+  if (paramsToApply.seedStructure !== undefined) {
+    params.set("seed-structure", paramsToApply.seedStructure.toString());
+  } else {
+    params.delete("seed-structure");
   }
-  const base = hasQuery ? href.split("?")[0] : href;
+
   const query = params.toString();
-  return query ? `${base}?${query}` : base;
+  const hashPart = hash ? `#${hash}` : "";
+  return query ? `${base}?${query}${hashPart}` : `${base}${hashPart}`;
+}
+
+function splitHref(href: string): [string, string, string] {
+  const hashIndex = href.indexOf("#");
+  const queryIndex = href.indexOf("?");
+  let base = href;
+  let query = "";
+  let hash = "";
+
+  if (hashIndex >= 0) {
+    hash = href.slice(hashIndex + 1);
+    base = href.slice(0, hashIndex);
+  }
+
+  if (queryIndex >= 0 && (queryIndex < hashIndex || hashIndex === -1)) {
+    query = href.slice(queryIndex + 1, hashIndex >= 0 ? hashIndex : undefined);
+    base = href.slice(0, queryIndex);
+  }
+
+  return [base, query, hash];
 }

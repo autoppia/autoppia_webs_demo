@@ -3,25 +3,23 @@
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useRouter } from "next/navigation";
 import { useSeedLayout } from "@/library/utils";
+import { isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
 
 export function useSeedStructureNavigation() {
-  const { seedStructure } = useDynamicStructure();
+  const { seedStructure, isEnabled: isStructureEnabled } = useDynamicStructure();
   const router = useRouter();
   const { seed } = useSeedLayout();
+  const dynamicEnabled =
+    typeof window !== "undefined" ? isDynamicModeEnabled() : false;
 
-  const buildUrl = (href: string) => {
-    if (typeof window === "undefined") {
-      return appendParams(href, seedStructure, seed);
-    }
-    const url = new URL(href, window.location.origin);
-    if (seedStructure) {
-      url.searchParams.set("seed-structure", seedStructure.toString());
-    }
-    if (seed) {
-      url.searchParams.set("seed", seed.toString());
-    }
-    return url.pathname + url.search + url.hash;
-  };
+  const shouldIncludeSeed = dynamicEnabled && !!seed;
+  const shouldIncludeStructure = isStructureEnabled && !!seedStructure;
+
+  const buildUrl = (href: string) =>
+    updateHrefWithParams(href, {
+      seed: shouldIncludeSeed ? seed : undefined,
+      seedStructure: shouldIncludeStructure ? seedStructure : undefined,
+    });
 
   const navigateWithSeedStructure = (href: string) => {
     router.push(buildUrl(href));
@@ -34,19 +32,29 @@ export function useSeedStructureNavigation() {
   return {
     navigateWithSeedStructure,
     getHrefWithSeedStructure,
-    seedStructure
+    seedStructure,
   };
 }
 
-function appendParams(href: string, seedStructure?: number, seed?: number) {
+function updateHrefWithParams(
+  href: string,
+  paramsToApply: { seed?: number; seedStructure?: number },
+) {
   const [base, queryString = "", hash = ""] = splitHref(href);
   const params = new URLSearchParams(queryString);
-  if (seedStructure) {
-    params.set("seed-structure", seedStructure.toString());
+
+  if (paramsToApply.seed !== undefined) {
+    params.set("seed", paramsToApply.seed.toString());
+  } else {
+    params.delete("seed");
   }
-  if (seed) {
-    params.set("seed", seed.toString());
+
+  if (paramsToApply.seedStructure !== undefined) {
+    params.set("seed-structure", paramsToApply.seedStructure.toString());
+  } else {
+    params.delete("seed-structure");
   }
+
   const query = params.toString();
   const hashPart = hash ? `#${hash}` : "";
   return query ? `${base}?${query}${hashPart}` : `${base}${hashPart}`;

@@ -69,15 +69,31 @@ export function DynamicStructureProvider({
 
   // Persist seed-structure to localStorage when it changes
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("autolodge-seed-structure", seedStructure.toString());
+    if (typeof window === "undefined") return;
+    if (!isEnabled) {
+      localStorage.removeItem("autolodge-seed-structure");
+      return;
     }
-  }, [seedStructure]);
+    localStorage.setItem("autolodge-seed-structure", seedStructure.toString());
+  }, [seedStructure, isEnabled]);
 
   // Update URL with seed-structure if it's missing or invalid
   useEffect(() => {
     if (typeof window === "undefined") return;
     const url = new URL(window.location.href);
+
+    if (!isEnabled) {
+      if (url.searchParams.has("seed-structure")) {
+        url.searchParams.delete("seed-structure");
+        const nextSearch = url.searchParams.toString();
+        router.replace(
+          url.pathname + (nextSearch ? `?${nextSearch}` : "") + url.hash,
+          { scroll: false },
+        );
+      }
+      return;
+    }
+
     const currentParam = url.searchParams.get("seed-structure");
     const parsedParam = parseSeedStructureParam(currentParam);
     if (
@@ -86,13 +102,17 @@ export function DynamicStructureProvider({
       currentParam !== seedStructure.toString()
     ) {
       url.searchParams.set("seed-structure", seedStructure.toString());
-      router.replace(url.pathname + url.search, { scroll: false });
+      router.replace(url.pathname + url.search + url.hash, { scroll: false });
     }
-  }, [seedStructure, router, pathname]);
+  }, [seedStructure, router, pathname, isEnabled]);
 
   useEffect(() => {
+    if (!isEnabled) {
+      dynamicStructureProvider.setVariation(1);
+      return;
+    }
     dynamicStructureProvider.setVariation(seedStructure);
-  }, [seedStructure]);
+  }, [seedStructure, isEnabled]);
 
   const [currentVariation, setCurrentVariation] = useState<StructureVariation>(
     dynamicStructureProvider.getCurrentVariation()
@@ -116,6 +136,7 @@ export function DynamicStructureProvider({
   };
 
   const setSeedStructure = (value: number): void => {
+    if (!isEnabled) return;
     const normalized = dynamicStructureProvider.getEffectiveSeedStructure(
       sanitizeSeedStructure(value),
     );
@@ -123,7 +144,7 @@ export function DynamicStructureProvider({
       localStorage.setItem("autolodge-seed-structure", normalized.toString());
       const url = new URL(window.location.href);
       url.searchParams.set("seed-structure", normalized.toString());
-      router.push(url.pathname + url.search);
+      router.push(url.pathname + url.search + url.hash);
     }
   };
 

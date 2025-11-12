@@ -14,7 +14,6 @@ import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
 import { useSeedLayout } from "@/library/utils";
 import { getSeedLayout as getLayoutVariantConfig } from "@/library/layoutVariants";
@@ -53,7 +52,8 @@ function getFallbackHotel(): Hotel {
   if (firstDynamic) {
     return firstDynamic;
   }
-  return DASHBOARD_HOTELS[0] as Hotel;
+  // If no AI-generated hotels available, throw error rather than using dataset
+  throw new Error("No AI-generated hotels available. Please ensure data generation is enabled.");
 }
 
 function PropertyDetailContent() {
@@ -66,38 +66,72 @@ function PropertyDetailContent() {
   const { propertyDetail, buttons, forms } = layoutVariant;
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const [prop, setProp] = useState<Hotel | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const prop = useMemo<Hotel>(() => {
-    const numId = Number(params.id);
-    if (Number.isFinite(numId)) {
-      const fromProvider = dynamicDataProvider.getHotelById(numId);
-      if (fromProvider) {
-        return fromProvider;
+  // Load hotel data - always use AI-generated data, never dataset
+  useEffect(() => {
+    async function loadHotel() {
+      setIsLoading(true);
+      const numId = Number(params.id);
+      
+      if (Number.isFinite(numId)) {
+        // First try to get from provider
+        let hotel = dynamicDataProvider.getHotelById(numId);
+        
+        // If not found, try to generate on-demand
+        if (!hotel) {
+          hotel = await dynamicDataProvider.getHotelByIdOrGenerate(numId);
+        }
+        
+        // If still not found, use first available AI-generated hotel
+        if (!hotel) {
+          const allDynamicHotels = dynamicDataProvider.getHotels();
+          if (allDynamicHotels.length > 0) {
+            hotel = allDynamicHotels[0];
+          }
+        }
+        
+        if (hotel) {
+          setProp(hotel);
+          setIsLoading(false);
+          return;
+        }
       }
-
-      const fromDataset = DASHBOARD_HOTELS.find(
-        (hotel) => hotel.id === numId
-      ) as Hotel | undefined;
-      if (fromDataset) {
-        return fromDataset;
+      
+      // Final fallback - but this should never use dataset
+      try {
+        const fallback = getFallbackHotel();
+        setProp(fallback);
+      } catch (error) {
+        console.error("Failed to load hotel:", error);
+        // Use first available AI-generated hotel as last resort
+        const allDynamicHotels = dynamicDataProvider.getHotels();
+        if (allDynamicHotels.length > 0) {
+          setProp(allDynamicHotels[0]);
+        }
       }
+      setIsLoading(false);
     }
-
-    return getFallbackHotel();
+    
+    loadHotel();
   }, [params.id]);
 
+  // All hooks must be called before any conditional returns
   const stayFrom = useMemo(() => {
+    if (!prop) return toStartOfDay(new Date());
     const parsed = parseLocalDate(prop.datesFrom);
     return parsed ? toStartOfDay(parsed) : toStartOfDay(new Date());
-  }, [prop.datesFrom]);
+  }, [prop?.datesFrom]);
 
   const stayTo = useMemo(() => {
+    if (!prop) return addDays(toStartOfDay(new Date()), 1);
     const parsed = parseLocalDate(prop.datesTo);
     if (parsed) {
       return toStartOfDay(parsed);
     }
     return addDays(stayFrom, 1);
-  }, [prop.datesTo, stayFrom]);
+  }, [prop?.datesTo, stayFrom]);
 
   const initialRange = useMemo<DateRange | undefined>(
     () => ({
@@ -115,21 +149,75 @@ function PropertyDetailContent() {
   }, [initialRange]);
 
   const [guests, setGuests] = useState(() => {
+    if (!prop) return 1;
     const maxGuests = prop.maxGuests ?? prop.guests ?? 1;
     return Math.min(Math.max(1, prop.guests ?? 1), maxGuests);
   });
 
   useEffect(() => {
+    if (!prop) return;
     const maxGuests = prop.maxGuests ?? prop.guests ?? 1;
     setGuests(Math.min(Math.max(1, prop.guests ?? 1), maxGuests));
-  }, [prop.guests, prop.maxGuests]);
+  }, [prop?.guests, prop?.maxGuests]);
 
+  // All remaining hooks must be called before conditional return
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [receiverEmail, setReceiverEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
+  const didTrack = useRef(false);
+  useEffect(() => {
+    if (!prop || didTrack.current) {
+      return;
+    }
+
+    logEvent(EVENT_TYPES.VIEW_HOTEL, {
+      id: prop.id,
+      title: prop.title,
+      location: prop.location,
+      rating: prop.rating,
+      reviews: prop.reviews,
+      price: prop.price,
+      dates: { from: prop.datesFrom, to: prop.datesTo },
+      guests: prop.guests,
+      host: prop.host,
+      amenities: prop.amenities?.map((a) => a.title),
+    });
+    didTrack.current = true;
+  }, [
+    prop?.amenities,
+    prop?.datesFrom,
+    prop?.datesTo,
+    prop?.guests,
+    prop?.host,
+    prop?.id,
+    prop?.location,
+    prop?.price,
+    prop?.rating,
+    prop?.reviews,
+    prop?.title,
+  ]);
+
+  useEffect(() => {
+    if (!toastMessage) {
+      return;
+    }
+    const timer = setTimeout(() => setToastMessage(null), 3000);
+    return () => clearTimeout(timer);
+  }, [toastMessage]);
+
+  // Show loading state - must be after all hooks
+  if (isLoading || !prop) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Loading hotel details...</div>
+      </div>
+    );
+  }
+
+  // These calculations can happen after the early return check since they're not hooks
   const nights =
     selectedRange?.from && selectedRange?.to
       ? Math.max(
@@ -151,47 +239,6 @@ function PropertyDetailContent() {
       end: addDays(stayTo, -1),
     });
   }
-
-  const didTrack = useRef(false);
-  useEffect(() => {
-    if (didTrack.current) {
-      return;
-    }
-
-    logEvent(EVENT_TYPES.VIEW_HOTEL, {
-      id: prop.id,
-      title: prop.title,
-      location: prop.location,
-      rating: prop.rating,
-      reviews: prop.reviews,
-      price: prop.price,
-      dates: { from: prop.datesFrom, to: prop.datesTo },
-      guests: prop.guests,
-      host: prop.host,
-      amenities: prop.amenities?.map((a) => a.title),
-    });
-    didTrack.current = true;
-  }, [
-    prop.amenities,
-    prop.datesFrom,
-    prop.datesTo,
-    prop.guests,
-    prop.host,
-    prop.id,
-    prop.location,
-    prop.price,
-    prop.rating,
-    prop.reviews,
-    prop.title,
-  ]);
-
-  useEffect(() => {
-    if (!toastMessage) {
-      return;
-    }
-    const timer = setTimeout(() => setToastMessage(null), 3000);
-    return () => clearTimeout(timer);
-  }, [toastMessage]);
 
   const handleCalendarSelect = (range: DateRange | undefined) => {
     if (!range) {

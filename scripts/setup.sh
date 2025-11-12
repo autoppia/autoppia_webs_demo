@@ -306,7 +306,10 @@ if [ "$FAST_MODE" = true ]; then
   fi
 else
   echo "[INFO] Removing all containers..."
+  # Remove all containers (running and stopped)
   docker ps -aq | xargs -r docker rm -f || true
+  # Also try to remove by name pattern in case some weren't caught
+  docker ps -a --filter "name=webs_server" --format "{{.ID}}" | xargs -r docker rm -f || true
 
   echo "[INFO] Pruning volumes, images and networks..."
   docker volume ls -q | xargs -r docker volume rm 2>/dev/null || true
@@ -391,7 +394,10 @@ deploy_webs_server() {
   echo "📂 Deploying $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
   pushd "$dir" >/dev/null
 
-  docker compose -p "$name" down --volumes || true
+  # Forcefully remove any existing containers with this project name
+  docker compose -p "$name" down --volumes --remove-orphans || true
+  # Also remove containers by name pattern as a fallback
+  docker ps -a --filter "name=${name}-" --format "{{.ID}}" | xargs -r docker rm -f || true
 
   local cache_flag=""
   if [ "$FAST_MODE" = false ]; then
