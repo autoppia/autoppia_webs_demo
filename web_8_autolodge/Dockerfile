@@ -46,6 +46,8 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8007
+# Note: NEXT_PUBLIC_* variables are baked into the build at build time
+# Runtime env vars are set via docker-compose.yml environment section
 EXPOSE 8007
 
 # prod deps only (from deps stage)
