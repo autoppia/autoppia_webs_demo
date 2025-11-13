@@ -15,7 +15,6 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
 }
 
-
 // Handle ENABLE_DYNAMIC_HTML_STRUCTURE (separate from layout control)
 if (!process.env.ENABLE_DYNAMIC_HTML_STRUCTURE) {
   process.env.ENABLE_DYNAMIC_HTML_STRUCTURE = isLocalDev ? 'true' : 'false';
@@ -33,7 +32,6 @@ console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
 console.log('  API_URL:', process.env.API_URL);
 console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
-
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
 console.log('  ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.ENABLE_DYNAMIC_HTML_STRUCTURE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE);
@@ -47,33 +45,37 @@ console.log('  NEXT_PUBLIC_ENABLE_DB_MODE:', process.env.NEXT_PUBLIC_ENABLE_DB_M
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
   devIndicators: false,
   images: {
-    unoptimized: true, // To fix hydration crossorigin issues
+    unoptimized: true,
+    domains: [
+      "source.unsplash.com",
+      "images.unsplash.com",
+      "ext.same-assets.com",
+      "ugc.same-assets.com",
+    ],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'ext.same-assets.com',
+        protocol: "https",
+        hostname: "source.unsplash.com",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'source.unsplash.com',
+        protocol: "https",
+        hostname: "ext.same-assets.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "ugc.same-assets.com",
+        pathname: "/**",
       },
     ],
-    dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   env: {
     ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
