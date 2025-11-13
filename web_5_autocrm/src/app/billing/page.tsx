@@ -2,11 +2,12 @@
 import React, { useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DEMO_LOGS } from "@/library/dataset";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useLogs } from "@/contexts/LogContext";
 
 export default function BillingPage() {
   const { getText, getId } = useDynamicStructure();
+  const { logs: contextLogs, isLoading } = useLogs();
   const [timerActive, setTimerActive] = useState(false);
   const [timerSec, setTimerSec] = useState(0);
   const [manual, setManual] = useState({
@@ -14,8 +15,9 @@ export default function BillingPage() {
     hours: 0.5,
     description: "",
   });
-  const [logs, setLogs] = useState(() =>
-    DEMO_LOGS.map((l: any, i: number) => ({
+  const [logs, setLogs] = useState(() => {
+    const baseLogs = contextLogs && contextLogs.length > 0 ? contextLogs : [];
+    return baseLogs.map((l: any, i: number) => ({
       id: l.id ?? Date.now() + i,
       matter: l.matter ?? "—",
       client: l.client ?? "—",
@@ -23,10 +25,25 @@ export default function BillingPage() {
       hours: typeof l.hours === "number" ? l.hours : 1,
       description: l.description ?? "—",
       status: l.status ?? "Billable",
-    }))
-  );
-  const [error] = useState<string | null>(null);
+    }));
+  });
   const [tab, setTab] = useState("Logs");
+
+  // Update logs when context data changes
+  React.useEffect(() => {
+    if (contextLogs) {
+      const normalized = contextLogs.map((l: any, i: number) => ({
+        id: l.id ?? Date.now() + i,
+        matter: l.matter ?? "—",
+        client: l.client ?? "—",
+        date: l.date ?? new Date().toISOString().slice(0, 10),
+        hours: typeof l.hours === "number" ? l.hours : 1,
+        description: l.description ?? "—",
+        status: l.status ?? "Billable",
+      }));
+      setLogs(normalized);
+    }
+  }, [contextLogs]);
 
   React.useEffect(() => {
     let id: ReturnType<typeof setInterval> | undefined;
@@ -213,10 +230,10 @@ export default function BillingPage() {
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-5">{getText("recent_activity")}</h2>
           <div className="flex flex-col gap-4">
-            {error && (
-              <div className="text-red-600 px-4 py-2">Failed to load logs: {error}</div>
+            {isLoading && logs.length === 0 && (
+              <div className="text-zinc-500 px-4 py-2">Loading logs...</div>
             )}
-            {logs.length === 0 && (
+            {!isLoading && logs.length === 0 && (
               <div
                 id={getId("no_logs_message")}
                 data-testid="no-logs-message"
