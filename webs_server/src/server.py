@@ -8,9 +8,10 @@ from typing import List, Dict, Any, Optional
 from urllib.parse import urlparse
 
 import asyncpg
+import uvicorn
 from asyncpg.exceptions import PostgresError
 import orjson
-from fastapi import FastAPI, HTTPException, Query, status
+from fastapi import FastAPI, HTTPException, Query, status, Body
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
@@ -26,6 +27,8 @@ except ImportError:
     HAS_FASTJSONSCHEMA = False
 
 from master_dataset_handler import save_master_pool, select_from_pool, get_pool_info, list_available_pools
+from data_handler import save_data_file, load_all_data
+from seeded_selector import seeded_select, seeded_shuffle, seeded_filter_and_select, seeded_distribution
 
 # --- Configuration ---
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
@@ -494,35 +497,18 @@ Output strictly a JSON array only.
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Data generation failed: {str(e)}")
 
 
-# --- Helper Function to Save Data to JSON ---
-def save_data_to_json(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
+# --- Helper Function to Save Data to File Storage (/app/data) ---
+def save_generated_data_file_storage(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
     """
-    Save generated data to a JSON file in the project's generated_data directory.
-    Returns the relative path where the file was saved.
+    Save generated data to file storage using the new persistent volume structure:
+    /app/data/<project_key>/data/<entity_type>_<timestamp>.json
+    Returns the absolute path where the file was saved.
     """
-    # Get the base directory (parent of webs_server)
-    base_dir = Path(__file__).parent.parent.parent
-
-    # Create the path: <project_key>/generated_data/<entity_type>_<timestamp>.json
-    project_dir = base_dir / project_key / "generated_data"
-    project_dir.mkdir(parents=True, exist_ok=True)
-
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"{entity_type}_{timestamp}.json"
-    filepath = project_dir / filename
-
-    # Create data container with metadata
-    data_container = {"metadata": {"projectKey": project_key, "entityType": entity_type, "generatedAt": datetime.now().isoformat(), "count": len(data), "version": "1.0"}, "data": data}
-
-    # Save to file
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(data_container, f, indent=2, ensure_ascii=False)
-
-    # Return relative path from base directory
-    relative_path = str(filepath.relative_to(base_dir))
-    logger.info(f"Saved {len(data)} items to {relative_path}")
-
-    return relative_path
+    saved_path = save_data_file(project_key, filename, data, entity_type)
+    logger.info(f"Saved {len(data)} items to file storage: {saved_path}")
+    return saved_path
 
 
 # --- Data Generation Endpoint (generic) ---
@@ -534,24 +520,16 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     logger.info(f"Generated {len(data)} items in {elapsed:.2f}s")
     logger.debug("=" * 60 + f"DATA: {data}" + "=" * 60)
 
-    # Save to file if requested
+    # Always save to file storage (files-only mode)
     saved_path = None
-    if request.save_to_file and request.project_key and request.entity_type:
+    if request.project_key and request.entity_type:
         try:
-            saved_path = save_data_to_json(data, request.project_key, request.entity_type)
+            # Use new file-storage saver under /app/data (persistent volume)
+            saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
         except Exception as e:
-            logger.error(f"Failed to save data to file: {e}")
+            logger.error(f"Failed to save data to file storage: {e}")
             # Don't fail the request if saving fails
-
-    # Save to master pool if requested (replaces or appends)
-    pool_id = None
-    if request.save_to_db and request.project_key and request.entity_type and hasattr(app.state, "pool"):
-        try:
-            pool_id = await save_master_pool(app.state.pool, request.project_key, request.entity_type, data)
-            logger.info(f"Saved to master pool with ID: {pool_id}")
-        except Exception as e:
-            logger.error(f"Failed to save data to master pool: {e}")
-            # Don't fail the request if saving fails
+    # Ignore DB save in files-only mode
 
     return DataGenerationResponse(
         message=f"Successfully generated {len(data)} items",
@@ -595,19 +573,44 @@ async def load_dataset_endpoint(
 
     This endpoint is used when projects are deployed with --load_from_db parameter.
     """
-    if not hasattr(app.state, "pool") or app.state.pool is None:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
-
     try:
-        # Parse filter values if provided
-        filter_list = filter_values.split(",") if filter_values else None
+        # Load from file-based storage under /app/data only (files-only mode)
+        file_data_pool = load_all_data(project_key, entity_type)
 
-        result = await select_from_pool(app.state.pool, project_key, entity_type, seed_value, limit, method=method, filter_key=filter_key, filter_values=filter_list, log_usage=True)
+        if not file_data_pool:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No file-based data found for project={project_key}. Generate data first.")
 
-        if not result["data"]:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No master pool found for project={project_key}, entity={entity_type}")
+        # Apply seeded selection based on requested method
+        method_normalized = (method or "select").lower()
+        selected: List[Dict[str, Any]]
 
-        return DatasetLoadResponse(message=f"Successfully selected {len(result['data'])} items using seed={seed_value}", metadata=result["metadata"], data=result["data"], count=len(result["data"]))
+        # Parse filters
+        filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
+
+        if method_normalized == "shuffle":
+            selected = seeded_shuffle(file_data_pool, seed_value, limit=limit)
+        elif method_normalized == "filter":
+            selected = seeded_filter_and_select(file_data_pool, seed_value, limit, filter_key=filter_key, filter_values=filter_list)
+        elif method_normalized == "distribute":
+            # Use filter_key as category_key for distribution if provided, else default 'category'
+            category_key = filter_key or "category"
+            selected = seeded_distribution(file_data_pool, seed_value, category_key=category_key, total_count=limit)
+        else:
+            # Default 'select' method
+            selected = seeded_select(file_data_pool, seed=seed_value, count=limit, allow_duplicates=False)
+
+        metadata = {
+            "source": "file_storage",
+            "projectKey": project_key,
+            "entityType": entity_type,
+            "seed": seed_value,
+            "limit": limit,
+            "method": method_normalized,
+            "filterKey": filter_key,
+            "filterValues": filter_list,
+            "totalAvailable": len(file_data_pool),
+        }
+        return DatasetLoadResponse(message=f"Successfully selected {len(selected)} items from file storage using seed={seed_value}", metadata=metadata, data=selected, count=len(selected))
 
     except HTTPException:
         raise
@@ -712,3 +715,8 @@ async def health_check_endpoint():
         debug_message=debug_message,
     )
 
+
+if __name__ == "__main__":
+    app_host = os.environ.get("APP_HOST", "0.0.0.0")
+    app_port = int(os.environ.get("APP_PORT", 8000))
+    uvicorn.run(app, host=app_host, port=app_port)

@@ -40,7 +40,8 @@ COPY ./src .
 COPY ./scripts/ .
 
 # Set proper permissions
-RUN chmod +x ./run_api.sh && \
+RUN mkdir -p /app/data && \
+    chmod +x ./run_api.sh && \
     chown -R appuser:appuser /app
 
 # Switch to non-root user
