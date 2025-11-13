@@ -80,12 +80,16 @@ export async function generateClientsWithFallback(
   try {
     const result = await generateClients(count, categories);
     if (result.success && result.data.length > 0) {
+      console.log(`✅ Successfully generated ${result.data.length} clients`);
       return result.data;
+    } else {
+      console.warn(`⚠️ Data generation returned empty or failed. Success: ${result.success}, Count: ${result.count}, Error: ${result.error || 'none'}`);
     }
   } catch (error) {
-    console.warn('Data generation failed, using original clients:', error);
+    console.error('❌ Data generation failed with exception:', error);
   }
 
+  console.warn('⚠️ Falling back to original clients');
   return originalClients;
 }
 

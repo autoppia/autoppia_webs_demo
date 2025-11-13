@@ -12,7 +12,8 @@ import {
   generateFilesWithFallback,
   generateEventsWithFallback,
   generateLogsWithFallback,
-  isDataGenerationAvailable 
+  isDataGenerationAvailable,
+  getApiUrl
 } from "@/utils/dataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { clients as originalClients, DEMO_MATTERS, DEMO_FILES, EVENTS, DEMO_LOGS } from "@/library/dataset";
@@ -136,7 +137,8 @@ export async function initializeClients(): Promise<any[]> {
       }
 
       console.log("🚀 Starting async data generation for clients...");
-      console.log("📡 Using API:", process.env.API_URL || "http://app:8080");
+      const apiUrl = getApiUrl();
+      console.log("📡 Using API:", apiUrl);
 
       const count = DATA_GENERATION_CONFIG.DEFAULT_CLIENTS_COUNT;
       const categories = DATA_GENERATION_CONFIG.AVAILABLE_CLIENT_CATEGORIES;
