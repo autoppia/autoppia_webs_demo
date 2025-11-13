@@ -40,6 +40,19 @@ def compute_variant(seed: int) -> int:
     return ((s - 1) % 10) + 1
 
 
+def compute_structure_variant(seed_structure: int) -> int:
+    """Map any seed-structure (1..300) deterministically into a structure variant 1..10."""
+    try:
+        s = int(seed_structure or 1)
+    except Exception:
+        s = 1
+    # Normalize to 1-300 range
+    if s < 1 or s > 300:
+        s = 1
+    # ((seed_structure - 1) % 10) + 1 yields range 1..10
+    return ((s - 1) % 10) + 1
+
+
 def normalize_variant(raw) -> int:
     """Deprecated. No longer used."""
     return 1
