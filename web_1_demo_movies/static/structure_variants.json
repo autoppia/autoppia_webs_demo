@@ -243,6 +243,56 @@
           "ariaLabel": "Contact the CineStore team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Contact CineStore",
+      "heroSubtitle": "We'd love to hear from you",
+      "formSection": {
+        "title": "Send us a message",
+        "nameLabel": "Your Name",
+        "emailLabel": "Email Address",
+        "subjectLabel": "Subject",
+        "messageLabel": "Message",
+        "submitButton": {
+          "text": "Send Message",
+          "id": "contact-submit-btn",
+          "ariaLabel": "Send message to CineStore"
+        }
+      },
+      "infoSection": {
+        "title": "Find Us",
+        "locationHeading": "Our Location",
+        "locationLines": [
+          "123 Movie Street, Cinema District",
+          "Los Angeles, CA 90001"
+        ],
+        "phoneHeading": "Phone Number",
+        "phoneText": "(555) 123-4567",
+        "emailHeading": "Email Address",
+        "emailText": "info@cinestore.com",
+        "hoursHeading": "Business Hours",
+        "hoursLines": [
+          "Monday - Friday: 9AM - 5PM",
+          "Saturday - Sunday: Closed"
+        ]
+      },
+      "faqSection": {
+        "title": "FAQs",
+        "items": [
+          {
+            "question": "How do I add a new movie?",
+            "answer": "You can add a new movie by clicking on the \\\"Add Movie\\\" button in the navigation menu or on the homepage. Fill out the form with the movie details and submit it."
+          },
+          {
+            "question": "Do I need an account to add comments?",
+            "answer": "No, you don't need an account to add comments to movies. However, creating an account allows you to keep track of your activities and personalize your experience."
+          },
+          {
+            "question": "How can I contribute to CineStore?",
+            "answer": "You can contribute by adding new movies, writing thoughtful comments, and sharing CineStore with fellow movie enthusiasts. We also welcome feedback for improving our platform."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "No movies found",
         "message": "Try changing your search criteria or add a new movie",
@@ -495,6 +545,56 @@
           "ariaLabel": "Connect with the AI Film Marketplace team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Connect with AI Film Marketplace",
+      "heroSubtitle": "Our curators are ready to assist your cinematic journey",
+      "formSection": {
+        "title": "Send a quick inquiry",
+        "nameLabel": "Full Name",
+        "emailLabel": "Contact Email",
+        "subjectLabel": "Topic",
+        "messageLabel": "Your Message",
+        "submitButton": {
+          "text": "Submit Inquiry",
+          "id": "contact-submit-btn-2",
+          "ariaLabel": "Submit inquiry to AI Film Marketplace"
+        }
+      },
+      "infoSection": {
+        "title": "Visit Our Office",
+        "locationHeading": "Studio Address",
+        "locationLines": [
+          "456 Innovation Avenue, Suite 200",
+          "San Francisco, CA 94107"
+        ],
+        "phoneHeading": "Direct Line",
+        "phoneText": "(555) 234-6789",
+        "emailHeading": "Support Email",
+        "emailText": "support@aifilmmarketplace.com",
+        "hoursHeading": "Office Hours",
+        "hoursLines": [
+          "Monday - Friday: 8AM - 6PM",
+          "Saturday: 10AM - 2PM"
+        ]
+      },
+      "faqSection": {
+        "title": "Need quick answers?",
+        "items": [
+          {
+            "question": "Can I request a custom film list?",
+            "answer": "Absolutely. Mention your favorite genres in the message and our team will craft a curated AI film playlist for you."
+          },
+          {
+            "question": "How fast do you respond?",
+            "answer": "We typically reply within 24 hours on weekdays. Weekend messages are answered first thing Monday morning."
+          },
+          {
+            "question": "Do you host community events?",
+            "answer": "Yes! We organize monthly watch parties and creator panels. Let us know if you'd like to receive invitations."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "No results",
         "message": "Adjust filters or add a movie",
@@ -747,6 +847,56 @@
           "ariaLabel": "Reach out to AI Cinema Hub"
         }
       },
+    "contactPage": {
+      "heroTitle": "Reach AI Cinema Hub",
+      "heroSubtitle": "Tell us how we can enhance your viewing experience",
+      "formSection": {
+        "title": "Drop us a note",
+        "nameLabel": "Viewer Name",
+        "emailLabel": "Reply Email",
+        "subjectLabel": "Inquiry Topic",
+        "messageLabel": "Details",
+        "submitButton": {
+          "text": "Send Inquiry",
+          "id": "contact-submit-btn-3",
+          "ariaLabel": "Send inquiry to AI Cinema Hub"
+        }
+      },
+      "infoSection": {
+        "title": "Contact Information",
+        "locationHeading": "Studio Hub",
+        "locationLines": [
+          "78 Neural Lane, Floor 3",
+          "Seattle, WA 98101"
+        ],
+        "phoneHeading": "Studio Line",
+        "phoneText": "(555) 345-7890",
+        "emailHeading": "General Inquiries",
+        "emailText": "hello@aicinemahub.com",
+        "hoursHeading": "Availability",
+        "hoursLines": [
+          "Monday - Friday: 9AM - 7PM",
+          "Weekends: By appointment"
+        ]
+      },
+      "faqSection": {
+        "title": "Common questions",
+        "items": [
+          {
+            "question": "Can I suggest a feature?",
+            "answer": "Yes, share feature ideas in your message and our product team will review them for upcoming releases."
+          },
+          {
+            "question": "Do you collaborate with creators?",
+            "answer": "We do! Provide your portfolio link and we'll reach out about collaboration opportunities."
+          },
+          {
+            "question": "Where can I report an issue?",
+            "answer": "Describe the issue in your note and include screenshots if possible. We'll troubleshoot and respond quickly."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "Nothing found",
         "message": "Modify search or post a movie",
@@ -999,6 +1149,55 @@
           "ariaLabel": "Talk with the AI Movie Platform team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Connect with AI Movie Platform",
+      "heroSubtitle": "We're here to support your cinematic projects",
+      "formSection": {
+        "title": "Contact our platform team",
+        "nameLabel": "Your Name",
+        "emailLabel": "Best Email",
+        "subjectLabel": "Subject",
+        "messageLabel": "How can we help?",
+        "submitButton": {
+          "text": "Send Support Request",
+          "id": "contact-submit-btn-4",
+          "ariaLabel": "Send support request to AI Movie Platform"
+        }
+      },
+      "infoSection": {
+        "title": "Visit or call us",
+        "locationHeading": "HQ Address",
+        "locationLines": [
+          "890 Spectrum Road, Suite 12",
+          "Austin, TX 73301"
+        ],
+        "phoneHeading": "Support Line",
+        "phoneText": "(555) 678-9012",
+        "emailHeading": "Help Desk",
+        "emailText": "help@synthscreens.com",
+        "hoursHeading": "Customer Hours",
+        "hoursLines": [
+          "Daily: 9AM - 8PM CT"
+        ]
+      },
+      "faqSection": {
+        "title": "Support FAQs",
+        "items": [
+          {
+            "question": "Where can I track my submissions?",
+            "answer": "We email you once your film is approved. You can also ask us for a status update anytime."
+          },
+          {
+            "question": "Do you review all messages?",
+            "answer": "Yes, every message is read by our support specialists to ensure the best possible response."
+          },
+          {
+            "question": "Can I schedule a demo?",
+            "answer": "Absolutely! Mention your availability in the message and we'll schedule a personalized walkthrough."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "Empty",
         "message": "Change filters or upload a movie",
@@ -1251,6 +1450,56 @@
           "ariaLabel": "Chat with the AI Film Collection team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Contact AI Film Collection",
+      "heroSubtitle": "Tell the PixelPlays team what you need",
+      "formSection": {
+        "title": "Send a support ticket",
+        "nameLabel": "Your Full Name",
+        "emailLabel": "Email",
+        "subjectLabel": "Support Topic",
+        "messageLabel": "Ticket Details",
+        "submitButton": {
+          "text": "Send Ticket",
+          "id": "contact-submit-btn-5",
+          "ariaLabel": "Send support ticket to PixelPlays"
+        }
+      },
+      "infoSection": {
+        "title": "PixelPlays Support",
+        "locationHeading": "Studios",
+        "locationLines": [
+          "250 Pixel Plaza, Level 5",
+          "Chicago, IL 60601"
+        ],
+        "phoneHeading": "Customer Care",
+        "phoneText": "(555) 789-0123",
+        "emailHeading": "Support Email",
+        "emailText": "care@pixplays.com",
+        "hoursHeading": "Support Hours",
+        "hoursLines": [
+          "Monday - Friday: 7AM - 7PM CT",
+          "Saturday: 9AM - 1PM CT"
+        ]
+      },
+      "faqSection": {
+        "title": "Support knowledge base",
+        "items": [
+          {
+            "question": "How do I reset my password?",
+            "answer": "Use the \"Forgot password\" link on the login page. If you still need help, mention it here and we will reset it manually."
+          },
+          {
+            "question": "Can I pause my membership?",
+            "answer": "Yes, request a pause in this form and let us know the timeframe you prefer."
+          },
+          {
+            "question": "Where can I send partnership ideas?",
+            "answer": "Include your pitch deck or overview in the message and our partnerships team will follow up."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "No matches",
         "message": "Update search or submit a movie",
@@ -1503,6 +1752,56 @@
           "ariaLabel": "Start a conversation with the AI Cinema Network team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Message AI Cinema Network",
+      "heroSubtitle": "Let FrameForge support your creative pipeline",
+      "formSection": {
+        "title": "Send a network request",
+        "nameLabel": "Contact Name",
+        "emailLabel": "Preferred Email",
+        "subjectLabel": "Request Type",
+        "messageLabel": "Request Details",
+        "submitButton": {
+          "text": "Send Request",
+          "id": "contact-submit-btn-6",
+          "ariaLabel": "Send request to AI Cinema Network"
+        }
+      },
+      "infoSection": {
+        "title": "FrameForge Network Desk",
+        "locationHeading": "Network Hub",
+        "locationLines": [
+          "410 Aurora Loop, Suite 410",
+          "Denver, CO 80202"
+        ],
+        "phoneHeading": "Network Line",
+        "phoneText": "(555) 890-1234",
+        "emailHeading": "Network Email",
+        "emailText": "network@frameforge.ai",
+        "hoursHeading": "Availability",
+        "hoursLines": [
+          "Weekdays: 8AM - 6PM MT",
+          "Weekends: Community coverage only"
+        ]
+      },
+      "faqSection": {
+        "title": "Network FAQs",
+        "items": [
+          {
+            "question": "Can I feature my festival?",
+            "answer": "Yes, include festival details and dates in your message. We highlight community events in our newsletter."
+          },
+          {
+            "question": "Do you offer API access?",
+            "answer": "We provide beta API keys to partners. Let us know your use case and we'll follow up."
+          },
+          {
+            "question": "How do I request moderation help?",
+            "answer": "Describe the issue and share relevant links. Our moderators will review and respond promptly."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "No titles yet",
         "message": "Adjust your filters or contribute a new AI film.",
@@ -1755,6 +2054,55 @@
           "ariaLabel": "Join the AI Film Universe conversation"
         }
       },
+    "contactPage": {
+      "heroTitle": "Talk with AI Film Universe",
+      "heroSubtitle": "StorySynth community managers are ready to help",
+      "formSection": {
+        "title": "Share your thoughts",
+        "nameLabel": "Community Name",
+        "emailLabel": "Reach-back Email",
+        "subjectLabel": "Conversation Topic",
+        "messageLabel": "Message",
+        "submitButton": {
+          "text": "Send Message",
+          "id": "contact-submit-btn-7",
+          "ariaLabel": "Send message to StorySynth"
+        }
+      },
+      "infoSection": {
+        "title": "Community HQ",
+        "locationHeading": "Universe Hub",
+        "locationLines": [
+          "640 Storyline Ave, 8th Floor",
+          "New York, NY 10018"
+        ],
+        "phoneHeading": "Community Phone",
+        "phoneText": "(555) 901-2345",
+        "emailHeading": "Community Email",
+        "emailText": "community@storysynth.io",
+        "hoursHeading": "Community Hours",
+        "hoursLines": [
+          "Daily: 10AM - 8PM ET"
+        ]
+      },
+      "faqSection": {
+        "title": "Community FAQs",
+        "items": [
+          {
+            "question": "How do I join the ambassador program?",
+            "answer": "Mention your favorite genres in the message and our ambassador lead will invite you to the next onboarding."
+          },
+          {
+            "question": "Can I submit fan art?",
+            "answer": "Yes! Attach a link in your message and we may feature it in our socials."
+          },
+          {
+            "question": "Do you take feature requests?",
+            "answer": "We track every suggestion. Detail your idea and the team will evaluate it for the roadmap."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "No data",
         "message": "Update query or create a movie",
@@ -2007,6 +2355,55 @@
           "ariaLabel": "Contact the AI Film Ecosystem team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Reach the AI Film Ecosystem",
+      "heroSubtitle": "LuminaFlix stewards are ready to respond",
+      "formSection": {
+        "title": "Send ecosystem feedback",
+        "nameLabel": "Name",
+        "emailLabel": "Email",
+        "subjectLabel": "Feedback Topic",
+        "messageLabel": "Feedback Details",
+        "submitButton": {
+          "text": "Share Feedback",
+          "id": "contact-submit-btn-8",
+          "ariaLabel": "Share feedback with LuminaFlix"
+        }
+      },
+      "infoSection": {
+        "title": "LuminaFlix HQ",
+        "locationHeading": "Archive Center",
+        "locationLines": [
+          "1200 Lumina Way, Suite 900",
+          "Portland, OR 97204"
+        ],
+        "phoneHeading": "Archive Line",
+        "phoneText": "(555) 012-3456",
+        "emailHeading": "Archive Email",
+        "emailText": "archive@luminaflix.com",
+        "hoursHeading": "Office Hours",
+        "hoursLines": [
+          "Monday - Friday: 9AM - 5PM PT"
+        ]
+      },
+      "faqSection": {
+        "title": "Ecosystem FAQs",
+        "items": [
+          {
+            "question": "Can I access legacy archives?",
+            "answer": "Yes, mention the film titles you need and we will grant temporary access credentials."
+          },
+          {
+            "question": "How do I report metadata issues?",
+            "answer": "Include the film URL and describe the discrepancy. Our archivists will address it promptly."
+          },
+          {
+            "question": "Do you accept internship applications?",
+            "answer": "We do! Provide your background and interests and we'll share upcoming openings."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "No items",
         "message": "Adjust parameters or share a movie",
@@ -2254,11 +2651,60 @@
         "teamSubtitle": "Film specialists helping you navigate AI cinema",
         "storyHeading": "Our Story",
         "contactButton": {
-          "text": "Contact Support",
+        "text": "Contact Support",
           "id": "about-contact-btn-9",
           "ariaLabel": "Contact the AI Film World support team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Contact AI Film World",
+      "heroSubtitle": "OrbitFilms support orbits around your needs",
+      "formSection": {
+        "title": "Send an orbit inquiry",
+        "nameLabel": "Name",
+        "emailLabel": "Email",
+        "subjectLabel": "Subject",
+        "messageLabel": "Inquiry",
+        "submitButton": {
+          "text": "Launch Message",
+          "id": "contact-submit-btn-9",
+          "ariaLabel": "Launch message to OrbitFilms"
+        }
+      },
+      "infoSection": {
+        "title": "OrbitFilms Command",
+        "locationHeading": "Command Center",
+        "locationLines": [
+          "987 Orbit Lane, Suite 5",
+          "Houston, TX 77002"
+        ],
+        "phoneHeading": "Mission Control",
+        "phoneText": "(555) 135-7913",
+        "emailHeading": "Mission Email",
+        "emailText": "mission@orbitfilms.io",
+        "hoursHeading": "Mission Hours",
+        "hoursLines": [
+          "Weekdays: 9AM - 9PM CT"
+        ]
+      },
+      "faqSection": {
+        "title": "Mission FAQs",
+        "items": [
+          {
+            "question": "How do I join beta screenings?",
+            "answer": "Mention your favorite genres and we will notify you about upcoming beta screenings."
+          },
+          {
+            "question": "Can I license AI Film World content?",
+            "answer": "Yes, provide the project details and our licensing team will reach out."
+          },
+          {
+            "question": "Who do I contact about press?",
+            "answer": "Use this form, select press as the topic, and our communications team will follow up quickly."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "No results found",
         "message": "Change filters or add a film",
@@ -2511,6 +2957,56 @@
           "ariaLabel": "Request a demo from the AI Film Portal team"
         }
       },
+    "contactPage": {
+      "heroTitle": "Contact AI Film Portal",
+      "heroSubtitle": "Portal specialists will respond promptly",
+      "formSection": {
+        "title": "Schedule a portal chat",
+        "nameLabel": "Full Name",
+        "emailLabel": "Business Email",
+        "subjectLabel": "Interest Area",
+        "messageLabel": "Notes",
+        "submitButton": {
+          "text": "Request Callback",
+          "id": "contact-submit-btn-10",
+          "ariaLabel": "Request callback from AI Film Portal"
+        }
+      },
+      "infoSection": {
+        "title": "Portal Headquarters",
+        "locationHeading": "Main Office",
+        "locationLines": [
+          "200 Portal Parkway, Suite 300",
+          "Boston, MA 02110"
+        ],
+        "phoneHeading": "Portal Phone",
+        "phoneText": "(555) 246-8101",
+        "emailHeading": "Portal Email",
+        "emailText": "hello@aifilmportal.com",
+        "hoursHeading": "Portal Hours",
+        "hoursLines": [
+          "Monday - Friday: 8AM - 8PM ET",
+          "Saturday: 9AM - 3PM ET"
+        ]
+      },
+      "faqSection": {
+        "title": "Portal FAQs",
+        "items": [
+          {
+            "question": "Can I request a live demo?",
+            "answer": "Yes, include your availability and we will arrange a personalized walkthrough."
+          },
+          {
+            "question": "Do you integrate with enterprise tools?",
+            "answer": "We integrate with major identity and analytics platforms. Describe your stack and we'll confirm compatibility."
+          },
+          {
+            "question": "Is onboarding available?",
+            "answer": "We offer guided onboarding. Let us know the size of your team and we will tailor a launch plan."
+          }
+        ]
+      }
+    },
       "emptyState": {
         "title": "Nothing to show",
         "message": "Modify search or publish a movie",
