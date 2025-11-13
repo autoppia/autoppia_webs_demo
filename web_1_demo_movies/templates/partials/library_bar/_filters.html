@@ -1,25 +1,54 @@
 <form method="GET" action="{% url 'movieapp:index' %}" class="float-md-right">
   {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
+  {% if DYNAMIC_HTML_STRUCTURE %}<input type="hidden" name="seed-structure" value="{{ INITIAL_SEED_STRUCTURE }}">{% endif %}
   {% if search_query %}<input type="hidden" name="search" value="{{ search_query }}">{% endif %}
   <div class="form-row" data-dynamic-group="library-filters-row">
     <div class="col-md-5 mb-2 mb-md-0">
+      {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}
+        {% with filters=STRUCTURE_DATA.filters %}
+      <select name="{{ filters.genreSelect.name }}" class="form-control" id="{{ filters.genreSelect.id }}" aria-label="{{ filters.genreSelect.ariaLabel }}">
+        <option value="">{{ filters.genreSelect.defaultOption }}</option>
+        {% for genre in genres %}
+        <option value="{{ genre.id }}" {% if selected_genre == genre.id|stringformat:"i" %}selected{% endif %}>{{ genre.name }}</option>
+        {% endfor %}
+      </select>
+        {% endwith %}
+      {% else %}
       <select name="genre" class="form-control" id="genreFilter">
         <option value="">All Genres</option>
         {% for genre in genres %}
         <option value="{{ genre.id }}" {% if selected_genre == genre.id|stringformat:"i" %}selected{% endif %}>{{ genre.name }}</option>
         {% endfor %}
       </select>
+      {% endif %}
     </div>
     <div class="col-md-4 mb-2 mb-md-0">
+      {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}
+        {% with filters=STRUCTURE_DATA.filters %}
+      <select name="{{ filters.yearSelect.name }}" class="form-control" id="{{ filters.yearSelect.id }}" style="min-width: 120px; margin-right: 2em;" aria-label="{{ filters.yearSelect.ariaLabel }}">
+        <option value="">{{ filters.yearSelect.defaultOption }}</option>
+        {% for year in available_years %}
+        <option value="{{ year }}" {% if selected_year == year|stringformat:"i" %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+      </select>
+        {% endwith %}
+      {% else %}
       <select name="year" class="form-control" id="yearFilter" style="min-width: 120px; margin-right: 2em;">
         <option value="">All Years</option>
         {% for year in available_years %}
         <option value="{{ year }}" {% if selected_year == year|stringformat:"i" %}selected{% endif %}>{{ year }}</option>
         {% endfor %}
       </select>
+      {% endif %}
     </div>
     <div class="col-md-3">
+      {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}
+        {% with filters=STRUCTURE_DATA.filters %}
+      <button class="btn btn-outline-secondary w-100" type="submit" id="{{ filters.filterButton.id }}" aria-label="{{ filters.filterButton.ariaLabel }}">{{ filters.filterButton.text }}</button>
+        {% endwith %}
+      {% else %}
       <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
+      {% endif %}
     </div>
   </div>
 </form>

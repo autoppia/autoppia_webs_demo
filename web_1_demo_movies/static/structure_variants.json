@@ -1,0 +1,3021 @@
+{
+  "variants": {
+    "1": {
+      "navbar": {
+        "loginButton": {
+          "text": "Login",
+          "id": "login-btn",
+          "ariaLabel": "Sign in to your account"
+        },
+        "registerButton": {
+          "text": "Register",
+          "id": "register-btn",
+          "ariaLabel": "Create a new account"
+        },
+        "homeLink": {
+          "text": "Home",
+          "id": "nav-home",
+          "ariaLabel": "Go to home page"
+        },
+        "aboutLink": {
+          "text": "About Us",
+          "id": "nav-about",
+          "ariaLabel": "Learn about us"
+        },
+        "contactLink": {
+          "text": "Contact",
+          "id": "nav-contact",
+          "ariaLabel": "Contact us"
+        },
+        "toggleButton": {
+          "id": "navbarNav",
+          "ariaLabel": "Toggle navigation"
+        }
+      },
+      "loginForm": {
+        "title": "Sign In",
+        "usernameInput": {
+          "id": "username",
+          "name": "username",
+          "placeholder": "Enter your username",
+          "label": "Username",
+          "ariaLabel": "Enter your username"
+        },
+        "passwordInput": {
+          "id": "password",
+          "name": "password",
+          "placeholder": "Enter your password",
+          "label": "Password",
+          "ariaLabel": "Enter your password"
+        },
+        "submitButton": {
+          "text": "Sign In",
+          "id": "login-submit",
+          "ariaLabel": "Submit login form"
+        },
+        "registerLink": {
+          "text": "Register",
+          "prompt": "Don't have an account?"
+        }
+      },
+      "registerForm": {
+        "title": "Create an Account",
+        "usernameInput": {
+          "id": "username",
+          "name": "username",
+          "placeholder": "Choose a username",
+          "label": "Username",
+          "ariaLabel": "Choose a username"
+        },
+        "emailInput": {
+          "id": "email",
+          "name": "email",
+          "placeholder": "Enter your email",
+          "label": "Email",
+          "ariaLabel": "Enter your email address"
+        },
+        "password1Input": {
+          "id": "password1",
+          "name": "password1",
+          "placeholder": "Create a password",
+          "label": "Password",
+          "ariaLabel": "Create a password"
+        },
+        "password2Input": {
+          "id": "password2",
+          "name": "password2",
+          "placeholder": "Confirm your password",
+          "label": "Confirm Password",
+          "ariaLabel": "Confirm your password"
+        },
+        "submitButton": {
+          "text": "Create Account",
+          "id": "register-submit",
+          "ariaLabel": "Submit registration form"
+        },
+        "loginLink": {
+          "text": "Sign In",
+          "prompt": "Already have an account?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "search-input",
+          "name": "search",
+          "placeholder": "Search movies...",
+          "ariaLabel": "Search for movies"
+        },
+        "button": {
+          "text": "Search",
+          "id": "search-btn",
+          "ariaLabel": "Search movies"
+        }
+      },
+      "hero": {
+        "title": "Decentralized Store for AI Films",
+        "subtitle": "The Revolution of AI Films",
+        "addMovieButton": {
+          "text": "Add new movie",
+          "id": "add-movie-btn",
+          "ariaLabel": "Add a new movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "CineStore",
+          "description": "Your favorite online movie store with the best selection and quality."
+        },
+        "linksTitle": "Quick Links",
+        "homeLink": {
+          "text": "Home",
+          "ariaLabel": "Go to home page"
+        },
+        "addMovieLink": {
+          "text": "Add Movie",
+          "ariaLabel": "Add a new movie"
+        },
+        "categoriesLink": {
+          "text": "Categories",
+          "ariaLabel": "Browse movie categories"
+        },
+        "aboutLink": {
+          "text": "About Us",
+          "ariaLabel": "Learn about us"
+        },
+        "contactLink": {
+          "text": "Contact",
+          "ariaLabel": "Contact us"
+        },
+        "profileLink": {
+          "text": "My Profile",
+          "ariaLabel": "View your profile"
+        },
+        "signInLink": {
+          "text": "Sign In",
+          "ariaLabel": "Sign in to your account"
+        },
+        "followTitle": "Follow Us",
+        "copyright": "© 2025 Autoppia AIcinema. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Our Collection"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "genreFilter",
+          "name": "genre",
+          "defaultOption": "All Genres",
+          "ariaLabel": "Filter by genre"
+        },
+        "yearSelect": {
+          "id": "yearFilter",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Filter by year"
+        },
+        "filterButton": {
+          "text": "Filter",
+          "id": "filter-btn",
+          "ariaLabel": "Apply filters"
+        }
+      },
+      "detailsButton": {
+        "text": "Details",
+        "id": "details-btn",
+        "ariaLabel": "View movie details"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Watch Trailer",
+          "id": "detail-trailer-btn",
+          "ariaLabel": "Watch trailer"
+        },
+        "editButton": {
+          "text": "Edit Movie",
+          "id": "detail-edit-btn",
+          "ariaLabel": "Edit movie"
+        },
+        "deleteButton": {
+          "text": "Delete Movie",
+          "id": "detail-delete-btn",
+          "ariaLabel": "Delete movie"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Submit comment",
+          "id": "comment-submit-btn",
+          "ariaLabel": "Submit comment"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About CineStore",
+        "heroSubtitle": "Your Ultimate Destination for Quality Movies",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "Our Values",
+        "values": [
+          {
+            "title": "Passion for Cinema",
+            "description": "We are driven by our love for storytelling on screen.",
+            "icon": "fas fa-film",
+            "iconColor": "text-primary"
+          },
+          {
+            "title": "Community",
+            "description": "We grow stronger by sharing discoveries with fellow movie lovers.",
+            "icon": "fas fa-users",
+            "iconColor": "text-primary"
+          },
+          {
+            "title": "Diversity",
+            "description": "We celebrate films from every culture, era, and voice.",
+            "icon": "fas fa-globe",
+            "iconColor": "text-primary"
+          }
+        ],
+        "teamHeading": "Meet Our Team",
+        "teamSubtitle": "The passionate film lovers behind CineStore",
+        "storyHeading": "Our Story",
+        "contactButton": {
+          "text": "Get in Touch",
+          "id": "about-contact-btn",
+          "ariaLabel": "Contact the CineStore team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Contact CineStore",
+      "heroSubtitle": "We'd love to hear from you",
+      "formSection": {
+        "title": "Send us a message",
+        "nameLabel": "Your Name",
+        "emailLabel": "Email Address",
+        "subjectLabel": "Subject",
+        "messageLabel": "Message",
+        "submitButton": {
+          "text": "Send Message",
+          "id": "contact-submit-btn",
+          "ariaLabel": "Send message to CineStore"
+        }
+      },
+      "infoSection": {
+        "title": "Find Us",
+        "locationHeading": "Our Location",
+        "locationLines": [
+          "123 Movie Street, Cinema District",
+          "Los Angeles, CA 90001"
+        ],
+        "phoneHeading": "Phone Number",
+        "phoneText": "(555) 123-4567",
+        "emailHeading": "Email Address",
+        "emailText": "info@cinestore.com",
+        "hoursHeading": "Business Hours",
+        "hoursLines": [
+          "Monday - Friday: 9AM - 5PM",
+          "Saturday - Sunday: Closed"
+        ]
+      },
+      "faqSection": {
+        "title": "FAQs",
+        "items": [
+          {
+            "question": "How do I add a new movie?",
+            "answer": "You can add a new movie by clicking on the \\\"Add Movie\\\" button in the navigation menu or on the homepage. Fill out the form with the movie details and submit it."
+          },
+          {
+            "question": "Do I need an account to add comments?",
+            "answer": "No, you don't need an account to add comments to movies. However, creating an account allows you to keep track of your activities and personalize your experience."
+          },
+          {
+            "question": "How can I contribute to CineStore?",
+            "answer": "You can contribute by adding new movies, writing thoughtful comments, and sharing CineStore with fellow movie enthusiasts. We also welcome feedback for improving our platform."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "No movies found",
+        "message": "Try changing your search criteria or add a new movie",
+        "button": {
+          "text": "Add movie",
+          "ariaLabel": "Add a new movie"
+        }
+      }
+    },
+    "2": {
+      "navbar": {
+        "loginButton": {
+          "text": "Sign In",
+          "id": "signin-btn",
+          "ariaLabel": "Access your account"
+        },
+        "registerButton": {
+          "text": "Sign Up",
+          "id": "signup-btn",
+          "ariaLabel": "Join our platform"
+        },
+        "homeLink": {
+          "text": "Homepage",
+          "id": "nav-homepage",
+          "ariaLabel": "Navigate to homepage"
+        },
+        "aboutLink": {
+          "text": "About",
+          "id": "nav-about-page",
+          "ariaLabel": "View about page"
+        },
+        "contactLink": {
+          "text": "Get in Touch",
+          "id": "nav-contact-page",
+          "ariaLabel": "Reach out to us"
+        },
+        "toggleButton": {
+          "id": "navToggle",
+          "ariaLabel": "Expand navigation menu"
+        }
+      },
+      "loginForm": {
+        "title": "Login",
+        "usernameInput": {
+          "id": "user-name",
+          "name": "username",
+          "placeholder": "Type your username",
+          "label": "User Name",
+          "ariaLabel": "Type your username"
+        },
+        "passwordInput": {
+          "id": "pass-word",
+          "name": "password",
+          "placeholder": "Type your password",
+          "label": "Pass Word",
+          "ariaLabel": "Type your password"
+        },
+        "submitButton": {
+          "text": "Login",
+          "id": "submit-login",
+          "ariaLabel": "Login to your account"
+        },
+        "registerLink": {
+          "text": "Sign Up",
+          "prompt": "New user?"
+        }
+      },
+      "registerForm": {
+        "title": "Register",
+        "usernameInput": {
+          "id": "reg-username",
+          "name": "username",
+          "placeholder": "Pick a username",
+          "label": "User Name",
+          "ariaLabel": "Pick a username"
+        },
+        "emailInput": {
+          "id": "reg-email",
+          "name": "email",
+          "placeholder": "Your email address",
+          "label": "Email Address",
+          "ariaLabel": "Your email address"
+        },
+        "password1Input": {
+          "id": "reg-password",
+          "name": "password1",
+          "placeholder": "Set a password",
+          "label": "Pass Word",
+          "ariaLabel": "Set a password"
+        },
+        "password2Input": {
+          "id": "reg-password-confirm",
+          "name": "password2",
+          "placeholder": "Retype password",
+          "label": "Confirm Pass Word",
+          "ariaLabel": "Retype password"
+        },
+        "submitButton": {
+          "text": "Register",
+          "id": "submit-register",
+          "ariaLabel": "Complete registration"
+        },
+        "loginLink": {
+          "text": "Login",
+          "prompt": "Already registered?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "movie-search",
+          "name": "search",
+          "placeholder": "Find movies...",
+          "ariaLabel": "Search movies"
+        },
+        "button": {
+          "text": "Find",
+          "id": "find-btn",
+          "ariaLabel": "Find movies"
+        }
+      },
+      "hero": {
+        "title": "AI Film Marketplace",
+        "subtitle": "Discover AI-Generated Cinema",
+        "addMovieButton": {
+          "text": "Add Movie",
+          "id": "add-film-btn",
+          "ariaLabel": "Add a new film"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "AI Flicks",
+          "description": "Discover AI-crafted stories curated daily."
+        },
+        "linksTitle": "Explore Links",
+        "homeLink": {
+          "text": "Homepage",
+          "ariaLabel": "Navigate to homepage"
+        },
+        "addMovieLink": {
+          "text": "Add Film",
+          "ariaLabel": "Add a new film"
+        },
+        "categoriesLink": {
+          "text": "Genres",
+          "ariaLabel": "Browse genres"
+        },
+        "aboutLink": {
+          "text": "About",
+          "ariaLabel": "View about page"
+        },
+        "contactLink": {
+          "text": "Get in Touch",
+          "ariaLabel": "Reach out to us"
+        },
+        "profileLink": {
+          "text": "Profile",
+          "ariaLabel": "View profile"
+        },
+        "signInLink": {
+          "text": "Login",
+          "ariaLabel": "Access your account"
+        },
+        "followTitle": "Connect With Us",
+        "copyright": "© 2025 AI Flicks Studio. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Movie Library"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "movie-genre-filter",
+          "name": "genre",
+          "defaultOption": "All Genres",
+          "ariaLabel": "Select genre"
+        },
+        "yearSelect": {
+          "id": "movie-year-filter",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Select year"
+        },
+        "filterButton": {
+          "text": "Find",
+          "id": "find-filter-btn",
+          "ariaLabel": "Find movies"
+        }
+      },
+      "detailsButton": {
+        "text": "View",
+        "id": "view-details-btn",
+        "ariaLabel": "View film details"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Play Preview",
+          "id": "detail-trailer-btn-2",
+          "ariaLabel": "Play preview trailer"
+        },
+        "editButton": {
+          "text": "Modify Entry",
+          "id": "detail-edit-btn-2",
+          "ariaLabel": "Modify movie"
+        },
+        "deleteButton": {
+          "text": "Remove Film",
+          "id": "detail-delete-btn-2",
+          "ariaLabel": "Remove movie"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Post comment",
+          "id": "comment-submit-btn-2",
+          "ariaLabel": "Post comment"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Film Marketplace",
+        "heroSubtitle": "A smart hub for next-gen cinema lovers",
+        "missionHeading": "Our Mission Statement",
+        "visionHeading": "Our Vision Blueprint",
+        "valuesHeading": "Core Values",
+        "values": [
+          {
+            "title": "Innovation First",
+            "description": "We push cinematic technology to deliver fresh experiences.",
+            "icon": "fas fa-rocket",
+            "iconColor": "text-warning"
+          },
+          {
+            "title": "Collaborative Spirit",
+            "description": "Creators and fans unite to elevate storytelling together.",
+            "icon": "fas fa-handshake",
+            "iconColor": "text-warning"
+          },
+          {
+            "title": "Inclusive Stories",
+            "description": "We amplify diverse perspectives from every corner of the world.",
+            "icon": "fas fa-globe-americas",
+            "iconColor": "text-warning"
+          }
+        ],
+        "teamHeading": "Meet the Crew",
+        "teamSubtitle": "Engineers, curators, and dreamers powering the marketplace",
+        "storyHeading": "Our Journey",
+        "contactButton": {
+          "text": "Connect With Us",
+          "id": "about-contact-btn-2",
+          "ariaLabel": "Connect with the AI Film Marketplace team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Connect with AI Film Marketplace",
+      "heroSubtitle": "Our curators are ready to assist your cinematic journey",
+      "formSection": {
+        "title": "Send a quick inquiry",
+        "nameLabel": "Full Name",
+        "emailLabel": "Contact Email",
+        "subjectLabel": "Topic",
+        "messageLabel": "Your Message",
+        "submitButton": {
+          "text": "Submit Inquiry",
+          "id": "contact-submit-btn-2",
+          "ariaLabel": "Submit inquiry to AI Film Marketplace"
+        }
+      },
+      "infoSection": {
+        "title": "Visit Our Office",
+        "locationHeading": "Studio Address",
+        "locationLines": [
+          "456 Innovation Avenue, Suite 200",
+          "San Francisco, CA 94107"
+        ],
+        "phoneHeading": "Direct Line",
+        "phoneText": "(555) 234-6789",
+        "emailHeading": "Support Email",
+        "emailText": "support@aifilmmarketplace.com",
+        "hoursHeading": "Office Hours",
+        "hoursLines": [
+          "Monday - Friday: 8AM - 6PM",
+          "Saturday: 10AM - 2PM"
+        ]
+      },
+      "faqSection": {
+        "title": "Need quick answers?",
+        "items": [
+          {
+            "question": "Can I request a custom film list?",
+            "answer": "Absolutely. Mention your favorite genres in the message and our team will craft a curated AI film playlist for you."
+          },
+          {
+            "question": "How fast do you respond?",
+            "answer": "We typically reply within 24 hours on weekdays. Weekend messages are answered first thing Monday morning."
+          },
+          {
+            "question": "Do you host community events?",
+            "answer": "Yes! We organize monthly watch parties and creator panels. Let us know if you'd like to receive invitations."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "No results",
+        "message": "Adjust filters or add a movie",
+        "button": {
+          "text": "Add Film",
+          "ariaLabel": "Add a new film"
+        }
+      }
+    },
+    "3": {
+      "navbar": {
+        "loginButton": {
+          "text": "Log In",
+          "id": "log-in-button",
+          "ariaLabel": "Log into account"
+        },
+        "registerButton": {
+          "text": "Create Account",
+          "id": "create-account-button",
+          "ariaLabel": "Create new account"
+        },
+        "homeLink": {
+          "text": "Main",
+          "id": "nav-main",
+          "ariaLabel": "Go to main page"
+        },
+        "aboutLink": {
+          "text": "Info",
+          "id": "nav-info",
+          "ariaLabel": "View information"
+        },
+        "contactLink": {
+          "text": "Support",
+          "id": "nav-support",
+          "ariaLabel": "Contact support"
+        },
+        "toggleButton": {
+          "id": "menuToggle",
+          "ariaLabel": "Toggle menu"
+        }
+      },
+      "loginForm": {
+        "title": "Access Account",
+        "usernameInput": {
+          "id": "login-username-field",
+          "name": "username",
+          "placeholder": "Your username here",
+          "label": "User",
+          "ariaLabel": "Your username here"
+        },
+        "passwordInput": {
+          "id": "login-password-field",
+          "name": "password",
+          "placeholder": "Your password here",
+          "label": "Pass",
+          "ariaLabel": "Your password here"
+        },
+        "submitButton": {
+          "text": "Access",
+          "id": "access-button",
+          "ariaLabel": "Access account"
+        },
+        "registerLink": {
+          "text": "Create Account",
+          "prompt": "Need an account?"
+        }
+      },
+      "registerForm": {
+        "title": "Join Us",
+        "usernameInput": {
+          "id": "join-username",
+          "name": "username",
+          "placeholder": "Select username",
+          "label": "User",
+          "ariaLabel": "Select username"
+        },
+        "emailInput": {
+          "id": "join-email",
+          "name": "email",
+          "placeholder": "Your email",
+          "label": "Email",
+          "ariaLabel": "Your email"
+        },
+        "password1Input": {
+          "id": "join-password",
+          "name": "password1",
+          "placeholder": "Choose password",
+          "label": "Pass",
+          "ariaLabel": "Choose password"
+        },
+        "password2Input": {
+          "id": "join-password-verify",
+          "name": "password2",
+          "placeholder": "Verify password",
+          "label": "Verify Pass",
+          "ariaLabel": "Verify password"
+        },
+        "submitButton": {
+          "text": "Join",
+          "id": "join-button",
+          "ariaLabel": "Join platform"
+        },
+        "loginLink": {
+          "text": "Log In",
+          "prompt": "Member already?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "film-search-input",
+          "name": "search",
+          "placeholder": "Look for films...",
+          "ariaLabel": "Look for films"
+        },
+        "button": {
+          "text": "Go",
+          "id": "go-search-btn",
+          "ariaLabel": "Search films"
+        }
+      },
+      "hero": {
+        "title": "AI Cinema Hub",
+        "subtitle": "Explore AI-Generated Films",
+        "addMovieButton": {
+          "text": "Post Movie",
+          "id": "post-movie-button",
+          "ariaLabel": "Post a movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "NeuroCinema",
+          "description": "Immersive AI cinema experiences from neural storytellers."
+        },
+        "linksTitle": "Cinema Links",
+        "homeLink": {
+          "text": "Main",
+          "ariaLabel": "Go to main page"
+        },
+        "addMovieLink": {
+          "text": "Post Movie",
+          "ariaLabel": "Post a movie"
+        },
+        "categoriesLink": {
+          "text": "Types",
+          "ariaLabel": "Browse movie types"
+        },
+        "aboutLink": {
+          "text": "Info",
+          "ariaLabel": "View information"
+        },
+        "contactLink": {
+          "text": "Support",
+          "ariaLabel": "Contact support"
+        },
+        "profileLink": {
+          "text": "Account",
+          "ariaLabel": "View account"
+        },
+        "signInLink": {
+          "text": "Log In",
+          "ariaLabel": "Log into account"
+        },
+        "followTitle": "Stay Connected",
+        "copyright": "© 2025 NeuroCinema Labs. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Film Collection"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "film-genre-select",
+          "name": "genre",
+          "defaultOption": "All Types",
+          "ariaLabel": "Filter by type"
+        },
+        "yearSelect": {
+          "id": "film-year-select",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Filter by year"
+        },
+        "filterButton": {
+          "text": "Go",
+          "id": "go-filter-btn",
+          "ariaLabel": "Apply filters"
+        }
+      },
+      "detailsButton": {
+        "text": "Open",
+        "id": "open-details-btn",
+        "ariaLabel": "Open film"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Play Preview",
+          "id": "detail-trailer-btn-3",
+          "ariaLabel": "Play preview"
+        },
+        "editButton": {
+          "text": "Refine Entry",
+          "id": "detail-edit-btn-3",
+          "ariaLabel": "Refine movie entry"
+        },
+        "deleteButton": {
+          "text": "Remove Listing",
+          "id": "detail-delete-btn-3",
+          "ariaLabel": "Remove listing"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Share thoughts",
+          "id": "comment-submit-btn-3",
+          "ariaLabel": "Share your thoughts"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Cinema Hub",
+        "heroSubtitle": "Exploring the future of storytelling",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "Guiding Principles",
+        "values": [
+          {
+            "title": "Curated Insights",
+            "description": "We surface the hidden gems of AI-generated cinema.",
+            "icon": "fas fa-lightbulb",
+            "iconColor": "text-info"
+          },
+          {
+            "title": "Open Dialogue",
+            "description": "We invite every voice to contribute to the conversation.",
+            "icon": "fas fa-comments",
+            "iconColor": "text-info"
+          },
+          {
+            "title": "Timeless Classics",
+            "description": "We honor the past while championing the future of film.",
+            "icon": "fas fa-history",
+            "iconColor": "text-info"
+          }
+        ],
+        "teamHeading": "Meet the Hosts",
+        "teamSubtitle": "Curators guiding your discovery journey",
+        "storyHeading": "Our Origins",
+        "contactButton": {
+          "text": "Reach Out",
+          "id": "about-contact-btn-3",
+          "ariaLabel": "Reach out to AI Cinema Hub"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Reach AI Cinema Hub",
+      "heroSubtitle": "Tell us how we can enhance your viewing experience",
+      "formSection": {
+        "title": "Drop us a note",
+        "nameLabel": "Viewer Name",
+        "emailLabel": "Reply Email",
+        "subjectLabel": "Inquiry Topic",
+        "messageLabel": "Details",
+        "submitButton": {
+          "text": "Send Inquiry",
+          "id": "contact-submit-btn-3",
+          "ariaLabel": "Send inquiry to AI Cinema Hub"
+        }
+      },
+      "infoSection": {
+        "title": "Contact Information",
+        "locationHeading": "Studio Hub",
+        "locationLines": [
+          "78 Neural Lane, Floor 3",
+          "Seattle, WA 98101"
+        ],
+        "phoneHeading": "Studio Line",
+        "phoneText": "(555) 345-7890",
+        "emailHeading": "General Inquiries",
+        "emailText": "hello@aicinemahub.com",
+        "hoursHeading": "Availability",
+        "hoursLines": [
+          "Monday - Friday: 9AM - 7PM",
+          "Weekends: By appointment"
+        ]
+      },
+      "faqSection": {
+        "title": "Common questions",
+        "items": [
+          {
+            "question": "Can I suggest a feature?",
+            "answer": "Yes, share feature ideas in your message and our product team will review them for upcoming releases."
+          },
+          {
+            "question": "Do you collaborate with creators?",
+            "answer": "We do! Provide your portfolio link and we'll reach out about collaboration opportunities."
+          },
+          {
+            "question": "Where can I report an issue?",
+            "answer": "Describe the issue in your note and include screenshots if possible. We'll troubleshoot and respond quickly."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "Nothing found",
+        "message": "Modify search or post a movie",
+        "button": {
+          "text": "Post Movie",
+          "ariaLabel": "Post a movie"
+        }
+      }
+    },
+    "4": {
+      "navbar": {
+        "loginButton": {
+          "text": "Enter",
+          "id": "enter-btn",
+          "ariaLabel": "Enter site"
+        },
+        "registerButton": {
+          "text": "Join",
+          "id": "join-btn",
+          "ariaLabel": "Join platform"
+        },
+        "homeLink": {
+          "text": "Start",
+          "id": "nav-start",
+          "ariaLabel": "Go to start"
+        },
+        "aboutLink": {
+          "text": "Details",
+          "id": "nav-details",
+          "ariaLabel": "View details"
+        },
+        "contactLink": {
+          "text": "Message",
+          "id": "nav-message",
+          "ariaLabel": "Send message"
+        },
+        "toggleButton": {
+          "id": "navMenu",
+          "ariaLabel": "Open navigation"
+        }
+      },
+      "loginForm": {
+        "title": "Welcome Back",
+        "usernameInput": {
+          "id": "user-field",
+          "name": "username",
+          "placeholder": "Username",
+          "label": "Username",
+          "ariaLabel": "Username"
+        },
+        "passwordInput": {
+          "id": "pass-field",
+          "name": "password",
+          "placeholder": "Password",
+          "label": "Password",
+          "ariaLabel": "Password"
+        },
+        "submitButton": {
+          "text": "Enter",
+          "id": "enter-submit",
+          "ariaLabel": "Enter site"
+        },
+        "registerLink": {
+          "text": "Join",
+          "prompt": "Not a member?"
+        }
+      },
+      "registerForm": {
+        "title": "Become a Member",
+        "usernameInput": {
+          "id": "member-username",
+          "name": "username",
+          "placeholder": "Username",
+          "label": "Username",
+          "ariaLabel": "Username"
+        },
+        "emailInput": {
+          "id": "member-email",
+          "name": "email",
+          "placeholder": "Email",
+          "label": "Email",
+          "ariaLabel": "Email"
+        },
+        "password1Input": {
+          "id": "member-password",
+          "name": "password1",
+          "placeholder": "Password",
+          "label": "Password",
+          "ariaLabel": "Password"
+        },
+        "password2Input": {
+          "id": "member-password-check",
+          "name": "password2",
+          "placeholder": "Repeat password",
+          "label": "Repeat Password",
+          "ariaLabel": "Repeat password"
+        },
+        "submitButton": {
+          "text": "Join",
+          "id": "join-submit",
+          "ariaLabel": "Join platform"
+        },
+        "loginLink": {
+          "text": "Enter",
+          "prompt": "Already a member?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "search-field",
+          "name": "search",
+          "placeholder": "Search...",
+          "ariaLabel": "Search"
+        },
+        "button": {
+          "text": "Search",
+          "id": "search-submit",
+          "ariaLabel": "Search"
+        }
+      },
+      "hero": {
+        "title": "AI Movie Platform",
+        "subtitle": "Your Gateway to AI Cinema",
+        "addMovieButton": {
+          "text": "Upload Movie",
+          "id": "upload-movie-btn",
+          "ariaLabel": "Upload a movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "SynthScreens",
+          "description": "Curated selections of synthetic cinema highlights."
+        },
+        "linksTitle": "Featured Links",
+        "homeLink": {
+          "text": "Start",
+          "ariaLabel": "Go to start"
+        },
+        "addMovieLink": {
+          "text": "Upload Movie",
+          "ariaLabel": "Upload a movie"
+        },
+        "categoriesLink": {
+          "text": "Browse",
+          "ariaLabel": "Browse movies"
+        },
+        "aboutLink": {
+          "text": "Details",
+          "ariaLabel": "View details"
+        },
+        "contactLink": {
+          "text": "Message",
+          "ariaLabel": "Send message"
+        },
+        "profileLink": {
+          "text": "Settings",
+          "ariaLabel": "View settings"
+        },
+        "signInLink": {
+          "text": "Enter",
+          "ariaLabel": "Enter site"
+        },
+        "followTitle": "Join the Conversation",
+        "copyright": "© 2025 SynthScreens Media. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Movies"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "genre-select",
+          "name": "genre",
+          "defaultOption": "All",
+          "ariaLabel": "Genre"
+        },
+        "yearSelect": {
+          "id": "year-select",
+          "name": "year",
+          "defaultOption": "All",
+          "ariaLabel": "Year"
+        },
+        "filterButton": {
+          "text": "Search",
+          "id": "search-filter-btn",
+          "ariaLabel": "Search"
+        }
+      },
+      "detailsButton": {
+        "text": "More",
+        "id": "more-details-btn",
+        "ariaLabel": "More info"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Watch Preview",
+          "id": "detail-trailer-btn-4",
+          "ariaLabel": "Watch preview"
+        },
+        "editButton": {
+          "text": "Adjust Details",
+          "id": "detail-edit-btn-4",
+          "ariaLabel": "Adjust movie details"
+        },
+        "deleteButton": {
+          "text": "Remove Entry",
+          "id": "detail-delete-btn-4",
+          "ariaLabel": "Remove entry"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Share comment",
+          "id": "comment-submit-btn-4",
+          "ariaLabel": "Share comment"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Movie Platform",
+        "heroSubtitle": "Building the ultimate cinematic playground",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "What We Believe",
+        "values": [
+          {
+            "title": "Storytelling Excellence",
+            "description": "We deliver unforgettable narratives shaped by intelligent tools.",
+            "icon": "fas fa-feather-alt",
+            "iconColor": "text-primary"
+          },
+          {
+            "title": "Audience Connection",
+            "description": "We nurture a global network of film fans and creators.",
+            "icon": "fas fa-users-cog",
+            "iconColor": "text-primary"
+          },
+          {
+            "title": "Creative Freedom",
+            "description": "We empower experimentation across every genre and format.",
+            "icon": "fas fa-palette",
+            "iconColor": "text-primary"
+          }
+        ],
+        "teamHeading": "Meet the Visionaries",
+        "teamSubtitle": "Strategists, technologists, and curators working together",
+        "storyHeading": "Our Story",
+        "contactButton": {
+          "text": "Talk With Us",
+          "id": "about-contact-btn-4",
+          "ariaLabel": "Talk with the AI Movie Platform team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Connect with AI Movie Platform",
+      "heroSubtitle": "We're here to support your cinematic projects",
+      "formSection": {
+        "title": "Contact our platform team",
+        "nameLabel": "Your Name",
+        "emailLabel": "Best Email",
+        "subjectLabel": "Subject",
+        "messageLabel": "How can we help?",
+        "submitButton": {
+          "text": "Send Support Request",
+          "id": "contact-submit-btn-4",
+          "ariaLabel": "Send support request to AI Movie Platform"
+        }
+      },
+      "infoSection": {
+        "title": "Visit or call us",
+        "locationHeading": "HQ Address",
+        "locationLines": [
+          "890 Spectrum Road, Suite 12",
+          "Austin, TX 73301"
+        ],
+        "phoneHeading": "Support Line",
+        "phoneText": "(555) 678-9012",
+        "emailHeading": "Help Desk",
+        "emailText": "help@synthscreens.com",
+        "hoursHeading": "Customer Hours",
+        "hoursLines": [
+          "Daily: 9AM - 8PM CT"
+        ]
+      },
+      "faqSection": {
+        "title": "Support FAQs",
+        "items": [
+          {
+            "question": "Where can I track my submissions?",
+            "answer": "We email you once your film is approved. You can also ask us for a status update anytime."
+          },
+          {
+            "question": "Do you review all messages?",
+            "answer": "Yes, every message is read by our support specialists to ensure the best possible response."
+          },
+          {
+            "question": "Can I schedule a demo?",
+            "answer": "Absolutely! Mention your availability in the message and we'll schedule a personalized walkthrough."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "Empty",
+        "message": "Change filters or upload a movie",
+        "button": {
+          "text": "Upload Movie",
+          "ariaLabel": "Upload a movie"
+        }
+      }
+    },
+    "5": {
+      "navbar": {
+        "loginButton": {
+          "text": "Sign In",
+          "id": "sign-in-nav",
+          "ariaLabel": "Sign in"
+        },
+        "registerButton": {
+          "text": "Get Started",
+          "id": "get-started-nav",
+          "ariaLabel": "Get started"
+        },
+        "homeLink": {
+          "text": "Dashboard",
+          "id": "nav-dashboard",
+          "ariaLabel": "Go to dashboard"
+        },
+        "aboutLink": {
+          "text": "Learn More",
+          "id": "nav-learn",
+          "ariaLabel": "Learn more"
+        },
+        "contactLink": {
+          "text": "Help",
+          "id": "nav-help",
+          "ariaLabel": "Get help"
+        },
+        "toggleButton": {
+          "id": "mainNav",
+          "ariaLabel": "Toggle main navigation"
+        }
+      },
+      "loginForm": {
+        "title": "Account Login",
+        "usernameInput": {
+          "id": "account-username",
+          "name": "username",
+          "placeholder": "Account username",
+          "label": "Account",
+          "ariaLabel": "Account username"
+        },
+        "passwordInput": {
+          "id": "account-password",
+          "name": "password",
+          "placeholder": "Account password",
+          "label": "Security",
+          "ariaLabel": "Account password"
+        },
+        "submitButton": {
+          "text": "Continue",
+          "id": "continue-btn",
+          "ariaLabel": "Continue to account"
+        },
+        "registerLink": {
+          "text": "Get Started",
+          "prompt": "New here?"
+        }
+      },
+      "registerForm": {
+        "title": "Start Your Journey",
+        "usernameInput": {
+          "id": "journey-username",
+          "name": "username",
+          "placeholder": "Your account name",
+          "label": "Account Name",
+          "ariaLabel": "Your account name"
+        },
+        "emailInput": {
+          "id": "journey-email",
+          "name": "email",
+          "placeholder": "Your email",
+          "label": "Email",
+          "ariaLabel": "Your email"
+        },
+        "password1Input": {
+          "id": "journey-password",
+          "name": "password1",
+          "placeholder": "Secure password",
+          "label": "Security",
+          "ariaLabel": "Secure password"
+        },
+        "password2Input": {
+          "id": "journey-password-match",
+          "name": "password2",
+          "placeholder": "Match password",
+          "label": "Match Security",
+          "ariaLabel": "Match password"
+        },
+        "submitButton": {
+          "text": "Get Started",
+          "id": "start-journey-btn",
+          "ariaLabel": "Start your journey"
+        },
+        "loginLink": {
+          "text": "Sign In",
+          "prompt": "Have an account?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "query-input",
+          "name": "search",
+          "placeholder": "Enter search query...",
+          "ariaLabel": "Enter search query"
+        },
+        "button": {
+          "text": "Query",
+          "id": "query-btn",
+          "ariaLabel": "Execute search"
+        }
+      },
+      "hero": {
+        "title": "AI Film Collection",
+        "subtitle": "Experience Next-Gen Cinema",
+        "addMovieButton": {
+          "text": "Submit Movie",
+          "id": "submit-movie-btn",
+          "ariaLabel": "Submit a movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "PixelPlays",
+          "description": "AI-powered blockbusters and indie gems."
+        },
+        "linksTitle": "Navigate",
+        "homeLink": {
+          "text": "Dashboard",
+          "ariaLabel": "Go to dashboard"
+        },
+        "addMovieLink": {
+          "text": "Submit Movie",
+          "ariaLabel": "Submit a movie"
+        },
+        "categoriesLink": {
+          "text": "Explore",
+          "ariaLabel": "Explore movies"
+        },
+        "aboutLink": {
+          "text": "Learn More",
+          "ariaLabel": "Learn more"
+        },
+        "contactLink": {
+          "text": "Help",
+          "ariaLabel": "Get help"
+        },
+        "profileLink": {
+          "text": "Dashboard",
+          "ariaLabel": "View dashboard"
+        },
+        "signInLink": {
+          "text": "Sign In",
+          "ariaLabel": "Sign in"
+        },
+        "followTitle": "Follow PixelPlays",
+        "copyright": "© 2025 PixelPlays Entertainment. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Browse Films"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "browse-genre",
+          "name": "genre",
+          "defaultOption": "Any Genre",
+          "ariaLabel": "Browse by genre"
+        },
+        "yearSelect": {
+          "id": "browse-year",
+          "name": "year",
+          "defaultOption": "Any Year",
+          "ariaLabel": "Browse by year"
+        },
+        "filterButton": {
+          "text": "Query",
+          "id": "query-filter-btn",
+          "ariaLabel": "Execute search"
+        }
+      },
+      "detailsButton": {
+        "text": "Explore",
+        "id": "explore-details-btn",
+        "ariaLabel": "Explore film"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Launch Trailer",
+          "id": "detail-trailer-btn-5",
+          "ariaLabel": "Launch trailer"
+        },
+        "editButton": {
+          "text": "Edit Listing",
+          "id": "detail-edit-btn-5",
+          "ariaLabel": "Edit listing"
+        },
+        "deleteButton": {
+          "text": "Delete Listing",
+          "id": "detail-delete-btn-5",
+          "ariaLabel": "Delete listing"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Submit review",
+          "id": "comment-submit-btn-5",
+          "ariaLabel": "Submit review"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Film Collection",
+        "heroSubtitle": "Experience next-gen cinema curation",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "Values We Live By",
+        "values": [
+          {
+            "title": "Quality First",
+            "description": "We spotlight the finest AI-enhanced films from every genre.",
+            "icon": "fas fa-star",
+            "iconColor": "text-warning"
+          },
+          {
+            "title": "Member Focus",
+            "description": "We listen to feedback to tailor unforgettable viewing journeys.",
+            "icon": "fas fa-user-friends",
+            "iconColor": "text-warning"
+          },
+          {
+            "title": "Continuous Discovery",
+            "description": "We constantly refresh collections to keep curiosity alive.",
+            "icon": "fas fa-compass",
+            "iconColor": "text-warning"
+          }
+        ],
+        "teamHeading": "Meet the Makers",
+        "teamSubtitle": "Curators crafting tomorrow's playlists",
+        "storyHeading": "Our Story",
+        "contactButton": {
+          "text": "Chat With Us",
+          "id": "about-contact-btn-5",
+          "ariaLabel": "Chat with the AI Film Collection team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Contact AI Film Collection",
+      "heroSubtitle": "Tell the PixelPlays team what you need",
+      "formSection": {
+        "title": "Send a support ticket",
+        "nameLabel": "Your Full Name",
+        "emailLabel": "Email",
+        "subjectLabel": "Support Topic",
+        "messageLabel": "Ticket Details",
+        "submitButton": {
+          "text": "Send Ticket",
+          "id": "contact-submit-btn-5",
+          "ariaLabel": "Send support ticket to PixelPlays"
+        }
+      },
+      "infoSection": {
+        "title": "PixelPlays Support",
+        "locationHeading": "Studios",
+        "locationLines": [
+          "250 Pixel Plaza, Level 5",
+          "Chicago, IL 60601"
+        ],
+        "phoneHeading": "Customer Care",
+        "phoneText": "(555) 789-0123",
+        "emailHeading": "Support Email",
+        "emailText": "care@pixplays.com",
+        "hoursHeading": "Support Hours",
+        "hoursLines": [
+          "Monday - Friday: 7AM - 7PM CT",
+          "Saturday: 9AM - 1PM CT"
+        ]
+      },
+      "faqSection": {
+        "title": "Support knowledge base",
+        "items": [
+          {
+            "question": "How do I reset my password?",
+            "answer": "Use the \"Forgot password\" link on the login page. If you still need help, mention it here and we will reset it manually."
+          },
+          {
+            "question": "Can I pause my membership?",
+            "answer": "Yes, request a pause in this form and let us know the timeframe you prefer."
+          },
+          {
+            "question": "Where can I send partnership ideas?",
+            "answer": "Include your pitch deck or overview in the message and our partnerships team will follow up."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "No matches",
+        "message": "Update search or submit a movie",
+        "button": {
+          "text": "Submit Movie",
+          "ariaLabel": "Submit a movie"
+        }
+      }
+    },
+    "6": {
+      "navbar": {
+        "loginButton": {
+          "text": "Access",
+          "id": "access-nav-btn",
+          "ariaLabel": "Access account"
+        },
+        "registerButton": {
+          "text": "New User",
+          "id": "new-user-nav",
+          "ariaLabel": "Create new user"
+        },
+        "homeLink": {
+          "text": "Index",
+          "id": "nav-index",
+          "ariaLabel": "Go to index"
+        },
+        "aboutLink": {
+          "text": "Story",
+          "id": "nav-story",
+          "ariaLabel": "Read our story"
+        },
+        "contactLink": {
+          "text": "Connect",
+          "id": "nav-connect",
+          "ariaLabel": "Connect with us"
+        },
+        "toggleButton": {
+          "id": "navigationMenu",
+          "ariaLabel": "Show navigation menu"
+        }
+      },
+      "loginForm": {
+        "title": "User Access",
+        "usernameInput": {
+          "id": "access-user",
+          "name": "username",
+          "placeholder": "User identifier",
+          "label": "User ID",
+          "ariaLabel": "User identifier"
+        },
+        "passwordInput": {
+          "id": "access-key",
+          "name": "password",
+          "placeholder": "Access key",
+          "label": "Key",
+          "ariaLabel": "Access key"
+        },
+        "submitButton": {
+          "text": "Access",
+          "id": "access-submit",
+          "ariaLabel": "Access account"
+        },
+        "registerLink": {
+          "text": "New User",
+          "prompt": "First time?"
+        }
+      },
+      "registerForm": {
+        "title": "New User Registration",
+        "usernameInput": {
+          "id": "new-user-id",
+          "name": "username",
+          "placeholder": "User ID",
+          "label": "User ID",
+          "ariaLabel": "User ID"
+        },
+        "emailInput": {
+          "id": "new-user-email",
+          "name": "email",
+          "placeholder": "Email ID",
+          "label": "Email ID",
+          "ariaLabel": "Email ID"
+        },
+        "password1Input": {
+          "id": "new-user-key",
+          "name": "password1",
+          "placeholder": "Access key",
+          "label": "Key",
+          "ariaLabel": "Access key"
+        },
+        "password2Input": {
+          "id": "new-user-key-confirm",
+          "name": "password2",
+          "placeholder": "Confirm key",
+          "label": "Confirm Key",
+          "ariaLabel": "Confirm key"
+        },
+        "submitButton": {
+          "text": "Register",
+          "id": "register-user-btn",
+          "ariaLabel": "Register new user"
+        },
+        "loginLink": {
+          "text": "Access",
+          "prompt": "Existing user?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "lookup-input",
+          "name": "search",
+          "placeholder": "Lookup films...",
+          "ariaLabel": "Lookup films"
+        },
+        "button": {
+          "text": "Lookup",
+          "id": "lookup-btn",
+          "ariaLabel": "Lookup films"
+        }
+      },
+      "hero": {
+        "title": "AI Cinema Network",
+        "subtitle": "Connect with AI Films",
+        "addMovieButton": {
+          "text": "New Movie",
+          "id": "new-movie-btn",
+          "ariaLabel": "Add new movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "FrameForge",
+          "description": "Building cinematic universes with machine imagination."
+        },
+        "linksTitle": "Quick Access",
+        "homeLink": {
+          "text": "Index",
+          "ariaLabel": "Go to index"
+        },
+        "addMovieLink": {
+          "text": "New Movie",
+          "ariaLabel": "Add new movie"
+        },
+        "categoriesLink": {
+          "text": "Library",
+          "ariaLabel": "Browse library"
+        },
+        "aboutLink": {
+          "text": "Story",
+          "ariaLabel": "Read our story"
+        },
+        "contactLink": {
+          "text": "Connect",
+          "ariaLabel": "Connect with us"
+        },
+        "profileLink": {
+          "text": "User",
+          "ariaLabel": "View user"
+        },
+        "signInLink": {
+          "text": "Access",
+          "ariaLabel": "Access account"
+        },
+        "followTitle": "Stay in Touch",
+        "copyright": "© 2025 FrameForge Studios. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Film Index"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "index-genre",
+          "name": "genre",
+          "defaultOption": "All Types",
+          "ariaLabel": "Filter type"
+        },
+        "yearSelect": {
+          "id": "index-year",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Filter year"
+        },
+        "filterButton": {
+          "text": "Lookup",
+          "id": "lookup-filter-btn",
+          "ariaLabel": "Lookup films"
+        }
+      },
+      "detailsButton": {
+        "text": "Info",
+        "id": "info-details-btn",
+        "ariaLabel": "Film info"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Open Trailer",
+          "id": "detail-trailer-btn-6",
+          "ariaLabel": "Open trailer"
+        },
+        "editButton": {
+          "text": "Revise Movie",
+          "id": "detail-edit-btn-6",
+          "ariaLabel": "Revise movie"
+        },
+        "deleteButton": {
+          "text": "Archive Movie",
+          "id": "detail-delete-btn-6",
+          "ariaLabel": "Archive movie"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Send review",
+          "id": "comment-submit-btn-6",
+          "ariaLabel": "Send review"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Cinema Network",
+        "heroSubtitle": "Connecting film fans across the grid",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "Network Values",
+        "values": [
+          {
+            "title": "Trustworthy Data",
+            "description": "We surface reliable recommendations backed by passionate viewers.",
+            "icon": "fas fa-database",
+            "iconColor": "text-info"
+          },
+          {
+            "title": "Global Community",
+            "description": "We link cinephiles worldwide into one collaborative space.",
+            "icon": "fas fa-network-wired",
+            "iconColor": "text-info"
+          },
+          {
+            "title": "Creative Signals",
+            "description": "We amplify emerging voices and bold cinematic experiments.",
+            "icon": "fas fa-broadcast-tower",
+            "iconColor": "text-info"
+          }
+        ],
+        "teamHeading": "Meet the Network",
+        "teamSubtitle": "Analysts, moderators, and storytellers keeping the network thriving",
+        "storyHeading": "Our Story",
+        "contactButton": {
+          "text": "Start a Conversation",
+          "id": "about-contact-btn-6",
+          "ariaLabel": "Start a conversation with the AI Cinema Network team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Message AI Cinema Network",
+      "heroSubtitle": "Let FrameForge support your creative pipeline",
+      "formSection": {
+        "title": "Send a network request",
+        "nameLabel": "Contact Name",
+        "emailLabel": "Preferred Email",
+        "subjectLabel": "Request Type",
+        "messageLabel": "Request Details",
+        "submitButton": {
+          "text": "Send Request",
+          "id": "contact-submit-btn-6",
+          "ariaLabel": "Send request to AI Cinema Network"
+        }
+      },
+      "infoSection": {
+        "title": "FrameForge Network Desk",
+        "locationHeading": "Network Hub",
+        "locationLines": [
+          "410 Aurora Loop, Suite 410",
+          "Denver, CO 80202"
+        ],
+        "phoneHeading": "Network Line",
+        "phoneText": "(555) 890-1234",
+        "emailHeading": "Network Email",
+        "emailText": "network@frameforge.ai",
+        "hoursHeading": "Availability",
+        "hoursLines": [
+          "Weekdays: 8AM - 6PM MT",
+          "Weekends: Community coverage only"
+        ]
+      },
+      "faqSection": {
+        "title": "Network FAQs",
+        "items": [
+          {
+            "question": "Can I feature my festival?",
+            "answer": "Yes, include festival details and dates in your message. We highlight community events in our newsletter."
+          },
+          {
+            "question": "Do you offer API access?",
+            "answer": "We provide beta API keys to partners. Let us know your use case and we'll follow up."
+          },
+          {
+            "question": "How do I request moderation help?",
+            "answer": "Describe the issue and share relevant links. Our moderators will review and respond promptly."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "No titles yet",
+        "message": "Adjust your filters or contribute a new AI film.",
+        "button": {
+          "text": "Share Film",
+          "ariaLabel": "Share a film with the network"
+        }
+      }
+    },
+    "7": {
+      "navbar": {
+        "loginButton": {
+          "text": "Log In",
+          "id": "log-in-nav",
+          "ariaLabel": "Log in to site"
+        },
+        "registerButton": {
+          "text": "Become Member",
+          "id": "become-member-nav",
+          "ariaLabel": "Become a member"
+        },
+        "homeLink": {
+          "text": "Landing",
+          "id": "nav-landing",
+          "ariaLabel": "Go to landing page"
+        },
+        "aboutLink": {
+          "text": "Who We Are",
+          "id": "nav-who",
+          "ariaLabel": "Who we are"
+        },
+        "contactLink": {
+          "text": "Reach Us",
+          "id": "nav-reach",
+          "ariaLabel": "Reach us"
+        },
+        "toggleButton": {
+          "id": "siteNav",
+          "ariaLabel": "Toggle site navigation"
+        }
+      },
+      "loginForm": {
+        "title": "Member Login",
+        "usernameInput": {
+          "id": "member-login-user",
+          "name": "username",
+          "placeholder": "Member username",
+          "label": "Member",
+          "ariaLabel": "Member username"
+        },
+        "passwordInput": {
+          "id": "member-login-pass",
+          "name": "password",
+          "placeholder": "Member password",
+          "label": "Code",
+          "ariaLabel": "Member password"
+        },
+        "submitButton": {
+          "text": "Log In",
+          "id": "member-login-btn",
+          "ariaLabel": "Log in to site"
+        },
+        "registerLink": {
+          "text": "Become Member",
+          "prompt": "Not a member?"
+        }
+      },
+      "registerForm": {
+        "title": "Member Registration",
+        "usernameInput": {
+          "id": "member-reg-user",
+          "name": "username",
+          "placeholder": "Member name",
+          "label": "Member Name",
+          "ariaLabel": "Member name"
+        },
+        "emailInput": {
+          "id": "member-reg-email",
+          "name": "email",
+          "placeholder": "Member email",
+          "label": "Member Email",
+          "ariaLabel": "Member email"
+        },
+        "password1Input": {
+          "id": "member-reg-code",
+          "name": "password1",
+          "placeholder": "Member code",
+          "label": "Code",
+          "ariaLabel": "Member code"
+        },
+        "password2Input": {
+          "id": "member-reg-code-check",
+          "name": "password2",
+          "placeholder": "Confirm code",
+          "label": "Confirm Code",
+          "ariaLabel": "Confirm code"
+        },
+        "submitButton": {
+          "text": "Become Member",
+          "id": "become-member-btn",
+          "ariaLabel": "Become a member"
+        },
+        "loginLink": {
+          "text": "Log In",
+          "prompt": "Already a member?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "discover-input",
+          "name": "search",
+          "placeholder": "Discover films...",
+          "ariaLabel": "Discover films"
+        },
+        "button": {
+          "text": "Discover",
+          "id": "discover-btn",
+          "ariaLabel": "Discover films"
+        }
+      },
+      "hero": {
+        "title": "AI Film Universe",
+        "subtitle": "Your Portal to AI Cinema",
+        "addMovieButton": {
+          "text": "Create Movie",
+          "id": "create-movie-btn",
+          "ariaLabel": "Create a movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "StorySynth",
+          "description": "Story-driven AI cinema curated for you."
+        },
+        "linksTitle": "Essential Links",
+        "homeLink": {
+          "text": "Landing",
+          "ariaLabel": "Go to landing page"
+        },
+        "addMovieLink": {
+          "text": "Create Movie",
+          "ariaLabel": "Create a movie"
+        },
+        "categoriesLink": {
+          "text": "Catalog",
+          "ariaLabel": "Browse catalog"
+        },
+        "aboutLink": {
+          "text": "Who We Are",
+          "ariaLabel": "Who we are"
+        },
+        "contactLink": {
+          "text": "Reach Us",
+          "ariaLabel": "Reach us"
+        },
+        "profileLink": {
+          "text": "Member",
+          "ariaLabel": "View member"
+        },
+        "signInLink": {
+          "text": "Log In",
+          "ariaLabel": "Log in to site"
+        },
+        "followTitle": "Follow StorySynth",
+        "copyright": "© 2025 StorySynth Collective. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Movie Catalog"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "catalog-genre",
+          "name": "genre",
+          "defaultOption": "All Categories",
+          "ariaLabel": "Category filter"
+        },
+        "yearSelect": {
+          "id": "catalog-year",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Year filter"
+        },
+        "filterButton": {
+          "text": "Discover",
+          "id": "discover-filter-btn",
+          "ariaLabel": "Discover films"
+        }
+      },
+      "detailsButton": {
+        "text": "View",
+        "id": "view-film-btn",
+        "ariaLabel": "View film"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Stream Trailer",
+          "id": "detail-trailer-btn-7",
+          "ariaLabel": "Stream trailer"
+        },
+        "editButton": {
+          "text": "Tweak Details",
+          "id": "detail-edit-btn-7",
+          "ariaLabel": "Tweak details"
+        },
+        "deleteButton": {
+          "text": "Erase Film",
+          "id": "detail-delete-btn-7",
+          "ariaLabel": "Erase film"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Post feedback",
+          "id": "comment-submit-btn-7",
+          "ariaLabel": "Post feedback"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Film Universe",
+        "heroSubtitle": "Your portal to limitless cinematic worlds",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "What Guides Us",
+        "values": [
+          {
+            "title": "Fan-Led Discovery",
+            "description": "We spotlight recommendations sourced from passionate viewers.",
+            "icon": "fas fa-star-half-alt",
+            "iconColor": "text-info"
+          },
+          {
+            "title": "Creative Collaboration",
+            "description": "We connect artists and audiences to co-create memorable journeys.",
+            "icon": "fas fa-hands-helping",
+            "iconColor": "text-info"
+          },
+          {
+            "title": "Global Storylines",
+            "description": "We champion narratives that reflect voices across the planet.",
+            "icon": "fas fa-globe-asia",
+            "iconColor": "text-info"
+          }
+        ],
+        "teamHeading": "Meet the Explorers",
+        "teamSubtitle": "Community leaders elevating every viewing experience",
+        "storyHeading": "Our Story",
+        "contactButton": {
+          "text": "Join the Conversation",
+          "id": "about-contact-btn-7",
+          "ariaLabel": "Join the AI Film Universe conversation"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Talk with AI Film Universe",
+      "heroSubtitle": "StorySynth community managers are ready to help",
+      "formSection": {
+        "title": "Share your thoughts",
+        "nameLabel": "Community Name",
+        "emailLabel": "Reach-back Email",
+        "subjectLabel": "Conversation Topic",
+        "messageLabel": "Message",
+        "submitButton": {
+          "text": "Send Message",
+          "id": "contact-submit-btn-7",
+          "ariaLabel": "Send message to StorySynth"
+        }
+      },
+      "infoSection": {
+        "title": "Community HQ",
+        "locationHeading": "Universe Hub",
+        "locationLines": [
+          "640 Storyline Ave, 8th Floor",
+          "New York, NY 10018"
+        ],
+        "phoneHeading": "Community Phone",
+        "phoneText": "(555) 901-2345",
+        "emailHeading": "Community Email",
+        "emailText": "community@storysynth.io",
+        "hoursHeading": "Community Hours",
+        "hoursLines": [
+          "Daily: 10AM - 8PM ET"
+        ]
+      },
+      "faqSection": {
+        "title": "Community FAQs",
+        "items": [
+          {
+            "question": "How do I join the ambassador program?",
+            "answer": "Mention your favorite genres in the message and our ambassador lead will invite you to the next onboarding."
+          },
+          {
+            "question": "Can I submit fan art?",
+            "answer": "Yes! Attach a link in your message and we may feature it in our socials."
+          },
+          {
+            "question": "Do you take feature requests?",
+            "answer": "We track every suggestion. Detail your idea and the team will evaluate it for the roadmap."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "No data",
+        "message": "Update query or create a movie",
+        "button": {
+          "text": "Create Movie",
+          "ariaLabel": "Create a movie"
+        }
+      }
+    },
+    "8": {
+      "navbar": {
+        "loginButton": {
+          "text": "Authenticate",
+          "id": "auth-nav-btn",
+          "ariaLabel": "Authenticate user"
+        },
+        "registerButton": {
+          "text": "Enroll",
+          "id": "enroll-nav-btn",
+          "ariaLabel": "Enroll now"
+        },
+        "homeLink": {
+          "text": "Hub",
+          "id": "nav-hub",
+          "ariaLabel": "Go to hub"
+        },
+        "aboutLink": {
+          "text": "Background",
+          "id": "nav-background",
+          "ariaLabel": "View background"
+        },
+        "contactLink": {
+          "text": "Feedback",
+          "id": "nav-feedback",
+          "ariaLabel": "Send feedback"
+        },
+        "toggleButton": {
+          "id": "hubNav",
+          "ariaLabel": "Toggle hub navigation"
+        }
+      },
+      "loginForm": {
+        "title": "Authentication",
+        "usernameInput": {
+          "id": "auth-username",
+          "name": "username",
+          "placeholder": "Your identifier",
+          "label": "Identifier",
+          "ariaLabel": "Your identifier"
+        },
+        "passwordInput": {
+          "id": "auth-password",
+          "name": "password",
+          "placeholder": "Your secret",
+          "label": "Secret",
+          "ariaLabel": "Your secret"
+        },
+        "submitButton": {
+          "text": "Authenticate",
+          "id": "auth-submit",
+          "ariaLabel": "Authenticate user"
+        },
+        "registerLink": {
+          "text": "Enroll",
+          "prompt": "Need to enroll?"
+        }
+      },
+      "registerForm": {
+        "title": "Enrollment",
+        "usernameInput": {
+          "id": "enroll-username",
+          "name": "username",
+          "placeholder": "Choose identifier",
+          "label": "Identifier",
+          "ariaLabel": "Choose identifier"
+        },
+        "emailInput": {
+          "id": "enroll-email",
+          "name": "email",
+          "placeholder": "Contact email",
+          "label": "Contact",
+          "ariaLabel": "Contact email"
+        },
+        "password1Input": {
+          "id": "enroll-password",
+          "name": "password1",
+          "placeholder": "Choose secret",
+          "label": "Secret",
+          "ariaLabel": "Choose secret"
+        },
+        "password2Input": {
+          "id": "enroll-password-verify",
+          "name": "password2",
+          "placeholder": "Verify secret",
+          "label": "Verify Secret",
+          "ariaLabel": "Verify secret"
+        },
+        "submitButton": {
+          "text": "Enroll",
+          "id": "enroll-submit",
+          "ariaLabel": "Enroll now"
+        },
+        "loginLink": {
+          "text": "Authenticate",
+          "prompt": "Already enrolled?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "explore-input",
+          "name": "search",
+          "placeholder": "Explore films...",
+          "ariaLabel": "Explore films"
+        },
+        "button": {
+          "text": "Explore",
+          "id": "explore-btn",
+          "ariaLabel": "Explore films"
+        }
+      },
+      "hero": {
+        "title": "AI Film Ecosystem",
+        "subtitle": "Immerse in AI Cinema",
+        "addMovieButton": {
+          "text": "Share Movie",
+          "id": "share-movie-btn",
+          "ariaLabel": "Share a movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "LuminaFlix",
+          "description": "Light-filled journeys through AI-crafted worlds."
+        },
+        "linksTitle": "Browse Links",
+        "homeLink": {
+          "text": "Hub",
+          "ariaLabel": "Go to hub"
+        },
+        "addMovieLink": {
+          "text": "Share Movie",
+          "ariaLabel": "Share a movie"
+        },
+        "categoriesLink": {
+          "text": "Archive",
+          "ariaLabel": "Browse archive"
+        },
+        "aboutLink": {
+          "text": "Background",
+          "ariaLabel": "View background"
+        },
+        "contactLink": {
+          "text": "Feedback",
+          "ariaLabel": "Send feedback"
+        },
+        "profileLink": {
+          "text": "Identity",
+          "ariaLabel": "View identity"
+        },
+        "signInLink": {
+          "text": "Authenticate",
+          "ariaLabel": "Authenticate user"
+        },
+        "followTitle": "Connect with Lumina",
+        "copyright": "© 2025 LuminaFlix Network. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Film Archive"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "archive-genre",
+          "name": "genre",
+          "defaultOption": "All Genres",
+          "ariaLabel": "Archive genre"
+        },
+        "yearSelect": {
+          "id": "archive-year",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Archive year"
+        },
+        "filterButton": {
+          "text": "Explore",
+          "id": "explore-filter-btn",
+          "ariaLabel": "Explore archive"
+        }
+      },
+      "detailsButton": {
+        "text": "Access",
+        "id": "access-details-btn",
+        "ariaLabel": "Access film"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Preview Clip",
+          "id": "detail-trailer-btn-8",
+          "ariaLabel": "Preview clip"
+        },
+        "editButton": {
+          "text": "Update Entry",
+          "id": "detail-edit-btn-8",
+          "ariaLabel": "Update entry"
+        },
+        "deleteButton": {
+          "text": "Remove Listing",
+          "id": "detail-delete-btn-8",
+          "ariaLabel": "Remove listing"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Leave comment",
+          "id": "comment-submit-btn-8",
+          "ariaLabel": "Leave comment"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Film Ecosystem",
+        "heroSubtitle": "Immerse in a living network of cinematic ideas",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "Ecosystem Values",
+        "values": [
+          {
+            "title": "Sustainable Creativity",
+            "description": "We nurture long-term growth for experimental storytellers.",
+            "icon": "fas fa-leaf",
+            "iconColor": "text-success"
+          },
+          {
+            "title": "Community Stewardship",
+            "description": "We safeguard inclusive spaces for discussion and debate.",
+            "icon": "fas fa-hands",
+            "iconColor": "text-success"
+          },
+          {
+            "title": "Open Access",
+            "description": "We ensure every viewer can explore and contribute freely.",
+            "icon": "fas fa-unlock-alt",
+            "iconColor": "text-success"
+          }
+        ],
+        "teamHeading": "Meet the Stewards",
+        "teamSubtitle": "Archivists, engineers, and advocates preserving the ecosystem",
+        "storyHeading": "Our Story",
+        "contactButton": {
+          "text": "Contact the Team",
+          "id": "about-contact-btn-8",
+          "ariaLabel": "Contact the AI Film Ecosystem team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Reach the AI Film Ecosystem",
+      "heroSubtitle": "LuminaFlix stewards are ready to respond",
+      "formSection": {
+        "title": "Send ecosystem feedback",
+        "nameLabel": "Name",
+        "emailLabel": "Email",
+        "subjectLabel": "Feedback Topic",
+        "messageLabel": "Feedback Details",
+        "submitButton": {
+          "text": "Share Feedback",
+          "id": "contact-submit-btn-8",
+          "ariaLabel": "Share feedback with LuminaFlix"
+        }
+      },
+      "infoSection": {
+        "title": "LuminaFlix HQ",
+        "locationHeading": "Archive Center",
+        "locationLines": [
+          "1200 Lumina Way, Suite 900",
+          "Portland, OR 97204"
+        ],
+        "phoneHeading": "Archive Line",
+        "phoneText": "(555) 012-3456",
+        "emailHeading": "Archive Email",
+        "emailText": "archive@luminaflix.com",
+        "hoursHeading": "Office Hours",
+        "hoursLines": [
+          "Monday - Friday: 9AM - 5PM PT"
+        ]
+      },
+      "faqSection": {
+        "title": "Ecosystem FAQs",
+        "items": [
+          {
+            "question": "Can I access legacy archives?",
+            "answer": "Yes, mention the film titles you need and we will grant temporary access credentials."
+          },
+          {
+            "question": "How do I report metadata issues?",
+            "answer": "Include the film URL and describe the discrepancy. Our archivists will address it promptly."
+          },
+          {
+            "question": "Do you accept internship applications?",
+            "answer": "We do! Provide your background and interests and we'll share upcoming openings."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "No items",
+        "message": "Adjust parameters or share a movie",
+        "button": {
+          "text": "Share Movie",
+          "ariaLabel": "Share a movie"
+        }
+      }
+    },
+    "9": {
+      "navbar": {
+        "loginButton": {
+          "text": "Sign In",
+          "id": "signin-button",
+          "ariaLabel": "Sign in here"
+        },
+        "registerButton": {
+          "text": "Open Account",
+          "id": "open-account-button",
+          "ariaLabel": "Open an account"
+        },
+        "homeLink": {
+          "text": "Base",
+          "id": "nav-base",
+          "ariaLabel": "Go to base"
+        },
+        "aboutLink": {
+          "text": "Overview",
+          "id": "nav-overview",
+          "ariaLabel": "View overview"
+        },
+        "contactLink": {
+          "text": "Inquiry",
+          "id": "nav-inquiry",
+          "ariaLabel": "Make inquiry"
+        },
+        "toggleButton": {
+          "id": "baseNav",
+          "ariaLabel": "Toggle base navigation"
+        }
+      },
+      "loginForm": {
+        "title": "Sign In Here",
+        "usernameInput": {
+          "id": "signin-user",
+          "name": "username",
+          "placeholder": "Enter username",
+          "label": "Username",
+          "ariaLabel": "Enter username"
+        },
+        "passwordInput": {
+          "id": "signin-pass",
+          "name": "password",
+          "placeholder": "Enter password",
+          "label": "Password",
+          "ariaLabel": "Enter password"
+        },
+        "submitButton": {
+          "text": "Sign In",
+          "id": "signin-submit",
+          "ariaLabel": "Sign in here"
+        },
+        "registerLink": {
+          "text": "Open Account",
+          "prompt": "No account yet?"
+        }
+      },
+      "registerForm": {
+        "title": "Open Your Account",
+        "usernameInput": {
+          "id": "account-user",
+          "name": "username",
+          "placeholder": "Account username",
+          "label": "Username",
+          "ariaLabel": "Account username"
+        },
+        "emailInput": {
+          "id": "account-email",
+          "name": "email",
+          "placeholder": "Account email",
+          "label": "Email",
+          "ariaLabel": "Account email"
+        },
+        "password1Input": {
+          "id": "account-pass",
+          "name": "password1",
+          "placeholder": "Account password",
+          "label": "Password",
+          "ariaLabel": "Account password"
+        },
+        "password2Input": {
+          "id": "account-pass-check",
+          "name": "password2",
+          "placeholder": "Re-enter password",
+          "label": "Re-enter Password",
+          "ariaLabel": "Re-enter password"
+        },
+        "submitButton": {
+          "text": "Open Account",
+          "id": "open-account-submit",
+          "ariaLabel": "Open an account"
+        },
+        "loginLink": {
+          "text": "Sign In",
+          "prompt": "Have an account?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "browse-input",
+          "name": "search",
+          "placeholder": "Browse films...",
+          "ariaLabel": "Browse films"
+        },
+        "button": {
+          "text": "Browse",
+          "id": "browse-btn",
+          "ariaLabel": "Browse films"
+        }
+      },
+      "hero": {
+        "title": "AI Film World",
+        "subtitle": "Step into AI Cinema",
+        "addMovieButton": {
+          "text": "Add Film",
+          "id": "add-film-button",
+          "ariaLabel": "Add a film"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "OrbitFilms",
+          "description": "Galactic tales generated by intelligent storytellers."
+        },
+        "linksTitle": "Orbit Links",
+        "homeLink": {
+          "text": "Base",
+          "ariaLabel": "Go to base"
+        },
+        "addMovieLink": {
+          "text": "Add Film",
+          "ariaLabel": "Add a film"
+        },
+        "categoriesLink": {
+          "text": "Showcase",
+          "ariaLabel": "Browse showcase"
+        },
+        "aboutLink": {
+          "text": "Overview",
+          "ariaLabel": "View overview"
+        },
+        "contactLink": {
+          "text": "Inquiry",
+          "ariaLabel": "Make inquiry"
+        },
+        "profileLink": {
+          "text": "Account",
+          "ariaLabel": "View account"
+        },
+        "signInLink": {
+          "text": "Sign In",
+          "ariaLabel": "Sign in here"
+        },
+        "followTitle": "Orbit Social",
+        "copyright": "© 2025 OrbitFilms Studios. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Film Showcase"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "showcase-genre",
+          "name": "genre",
+          "defaultOption": "All Categories",
+          "ariaLabel": "Showcase category"
+        },
+        "yearSelect": {
+          "id": "showcase-year",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Showcase year"
+        },
+        "filterButton": {
+          "text": "Browse",
+          "id": "browse-filter-btn",
+          "ariaLabel": "Browse showcase"
+        }
+      },
+      "detailsButton": {
+        "text": "See",
+        "id": "see-details-btn",
+        "ariaLabel": "See film"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Play Teaser",
+          "id": "detail-trailer-btn-9",
+          "ariaLabel": "Play teaser"
+        },
+        "editButton": {
+          "text": "Modify Film",
+          "id": "detail-edit-btn-9",
+          "ariaLabel": "Modify film"
+        },
+        "deleteButton": {
+          "text": "Delete Record",
+          "id": "detail-delete-btn-9",
+          "ariaLabel": "Delete record"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Share feedback",
+          "id": "comment-submit-btn-9",
+          "ariaLabel": "Share feedback"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Film World",
+        "heroSubtitle": "Step into endlessly evolving AI cinema",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "Our Core Values",
+        "values": [
+          {
+            "title": "Trusted Guidance",
+            "description": "We curate reliable watchlists for every kind of movie lover.",
+            "icon": "fas fa-compass",
+            "iconColor": "text-primary"
+          },
+          {
+            "title": "Member Empowerment",
+            "description": "We equip our community with the tools to share and shine.",
+            "icon": "fas fa-user-shield",
+            "iconColor": "text-primary"
+          },
+          {
+            "title": "Boundless Stories",
+            "description": "We believe great narratives can come from anywhere and anyone.",
+            "icon": "fas fa-infinity",
+            "iconColor": "text-primary"
+          }
+        ],
+        "teamHeading": "Meet the Guides",
+        "teamSubtitle": "Film specialists helping you navigate AI cinema",
+        "storyHeading": "Our Story",
+        "contactButton": {
+        "text": "Contact Support",
+          "id": "about-contact-btn-9",
+          "ariaLabel": "Contact the AI Film World support team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Contact AI Film World",
+      "heroSubtitle": "OrbitFilms support orbits around your needs",
+      "formSection": {
+        "title": "Send an orbit inquiry",
+        "nameLabel": "Name",
+        "emailLabel": "Email",
+        "subjectLabel": "Subject",
+        "messageLabel": "Inquiry",
+        "submitButton": {
+          "text": "Launch Message",
+          "id": "contact-submit-btn-9",
+          "ariaLabel": "Launch message to OrbitFilms"
+        }
+      },
+      "infoSection": {
+        "title": "OrbitFilms Command",
+        "locationHeading": "Command Center",
+        "locationLines": [
+          "987 Orbit Lane, Suite 5",
+          "Houston, TX 77002"
+        ],
+        "phoneHeading": "Mission Control",
+        "phoneText": "(555) 135-7913",
+        "emailHeading": "Mission Email",
+        "emailText": "mission@orbitfilms.io",
+        "hoursHeading": "Mission Hours",
+        "hoursLines": [
+          "Weekdays: 9AM - 9PM CT"
+        ]
+      },
+      "faqSection": {
+        "title": "Mission FAQs",
+        "items": [
+          {
+            "question": "How do I join beta screenings?",
+            "answer": "Mention your favorite genres and we will notify you about upcoming beta screenings."
+          },
+          {
+            "question": "Can I license AI Film World content?",
+            "answer": "Yes, provide the project details and our licensing team will reach out."
+          },
+          {
+            "question": "Who do I contact about press?",
+            "answer": "Use this form, select press as the topic, and our communications team will follow up quickly."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "No results found",
+        "message": "Change filters or add a film",
+        "button": {
+          "text": "Add Film",
+          "ariaLabel": "Add a film"
+        }
+      }
+    },
+    "10": {
+      "navbar": {
+        "loginButton": {
+          "text": "Login",
+          "id": "login-button-nav",
+          "ariaLabel": "Login to platform"
+        },
+        "registerButton": {
+          "text": "Sign Up Now",
+          "id": "signup-now-button",
+          "ariaLabel": "Sign up now"
+        },
+        "homeLink": {
+          "text": "Portal",
+          "id": "nav-portal",
+          "ariaLabel": "Go to portal"
+        },
+        "aboutLink": {
+          "text": "Mission",
+          "id": "nav-mission",
+          "ariaLabel": "View mission"
+        },
+        "contactLink": {
+          "text": "Contact Us",
+          "id": "nav-contact-us",
+          "ariaLabel": "Contact us"
+        },
+        "toggleButton": {
+          "id": "portalNav",
+          "ariaLabel": "Toggle portal navigation"
+        }
+      },
+      "loginForm": {
+        "title": "Platform Login",
+        "usernameInput": {
+          "id": "platform-user",
+          "name": "username",
+          "placeholder": "Platform username",
+          "label": "Platform User",
+          "ariaLabel": "Platform username"
+        },
+        "passwordInput": {
+          "id": "platform-pass",
+          "name": "password",
+          "placeholder": "Platform password",
+          "label": "Platform Pass",
+          "ariaLabel": "Platform password"
+        },
+        "submitButton": {
+          "text": "Login",
+          "id": "platform-login-btn",
+          "ariaLabel": "Login to platform"
+        },
+        "registerLink": {
+          "text": "Sign Up Now",
+          "prompt": "Want to join?"
+        }
+      },
+      "registerForm": {
+        "title": "Platform Sign Up",
+        "usernameInput": {
+          "id": "platform-signup-user",
+          "name": "username",
+          "placeholder": "Platform username",
+          "label": "Platform User",
+          "ariaLabel": "Platform username"
+        },
+        "emailInput": {
+          "id": "platform-signup-email",
+          "name": "email",
+          "placeholder": "Platform email",
+          "label": "Platform Email",
+          "ariaLabel": "Platform email"
+        },
+        "password1Input": {
+          "id": "platform-signup-pass",
+          "name": "password1",
+          "placeholder": "Platform password",
+          "label": "Platform Pass",
+          "ariaLabel": "Platform password"
+        },
+        "password2Input": {
+          "id": "platform-signup-pass-confirm",
+          "name": "password2",
+          "placeholder": "Confirm platform password",
+          "label": "Confirm Platform Pass",
+          "ariaLabel": "Confirm platform password"
+        },
+        "submitButton": {
+          "text": "Sign Up Now",
+          "id": "platform-signup-btn",
+          "ariaLabel": "Sign up now"
+        },
+        "loginLink": {
+          "text": "Login",
+          "prompt": "On the platform?"
+        }
+      },
+      "searchForm": {
+        "input": {
+          "id": "platform-search",
+          "name": "search",
+          "placeholder": "Search platform films...",
+          "ariaLabel": "Search platform films"
+        },
+        "button": {
+          "text": "Search",
+          "id": "platform-search-btn",
+          "ariaLabel": "Search platform films"
+        }
+      },
+      "hero": {
+        "title": "AI Film Portal",
+        "subtitle": "Enter the World of AI Cinema",
+        "addMovieButton": {
+          "text": "Publish Movie",
+          "id": "publish-movie-btn",
+          "ariaLabel": "Publish a movie"
+        }
+      },
+      "footer": {
+        "brand": {
+          "title": "CortexCinema",
+          "description": "Brain-crafted cinema for the curious."
+        },
+        "linksTitle": "Cinema Hub",
+        "homeLink": {
+          "text": "Portal",
+          "ariaLabel": "Go to portal"
+        },
+        "addMovieLink": {
+          "text": "Publish Movie",
+          "ariaLabel": "Publish a movie"
+        },
+        "categoriesLink": {
+          "text": "Gallery",
+          "ariaLabel": "Browse gallery"
+        },
+        "aboutLink": {
+          "text": "Mission",
+          "ariaLabel": "View mission"
+        },
+        "contactLink": {
+          "text": "Contact Us",
+          "ariaLabel": "Contact us"
+        },
+        "profileLink": {
+          "text": "Portal",
+          "ariaLabel": "View portal"
+        },
+        "signInLink": {
+          "text": "Login",
+          "ariaLabel": "Login to platform"
+        },
+        "followTitle": "Connect with Cortex",
+        "copyright": "© 2025 CortexCinema Media. All rights reserved."
+      },
+      "libraryBar": {
+        "title": "Film Gallery"
+      },
+      "filters": {
+        "genreSelect": {
+          "id": "gallery-genre",
+          "name": "genre",
+          "defaultOption": "All Genres",
+          "ariaLabel": "Gallery genre"
+        },
+        "yearSelect": {
+          "id": "gallery-year",
+          "name": "year",
+          "defaultOption": "All Years",
+          "ariaLabel": "Gallery year"
+        },
+        "filterButton": {
+          "text": "Search",
+          "id": "gallery-filter-btn",
+          "ariaLabel": "Search gallery"
+        }
+      },
+      "detailsButton": {
+        "text": "Preview",
+        "id": "preview-details-btn",
+        "ariaLabel": "Preview film"
+      },
+      "detailsActions": {
+        "trailerButton": {
+          "text": "Start Trailer",
+          "id": "detail-trailer-btn-10",
+          "ariaLabel": "Start trailer"
+        },
+        "editButton": {
+          "text": "Edit Story",
+          "id": "detail-edit-btn-10",
+          "ariaLabel": "Edit story"
+        },
+        "deleteButton": {
+          "text": "Remove Story",
+          "id": "detail-delete-btn-10",
+          "ariaLabel": "Remove story"
+        }
+      },
+      "commentForm": {
+        "submitButton": {
+          "text": "Send message",
+          "id": "comment-submit-btn-10",
+          "ariaLabel": "Send message"
+        }
+      },
+      "aboutPage": {
+        "heroTitle": "About AI Film Portal",
+        "heroSubtitle": "Enter the world of AI cinema experiences",
+        "missionHeading": "Our Mission",
+        "visionHeading": "Our Vision",
+        "valuesHeading": "Portal Principles",
+        "values": [
+          {
+            "title": "Customer Success",
+            "description": "We focus on delighting members with every release.",
+            "icon": "fas fa-smile",
+            "iconColor": "text-warning"
+          },
+          {
+            "title": "Innovation Pipeline",
+            "description": "We iterate quickly to deliver cutting-edge film experiences.",
+            "icon": "fas fa-project-diagram",
+            "iconColor": "text-warning"
+          },
+          {
+            "title": "Seamless Access",
+            "description": "We make discovery effortless across every device.",
+            "icon": "fas fa-door-open",
+            "iconColor": "text-warning"
+          }
+        ],
+        "teamHeading": "Meet the Portal Team",
+        "teamSubtitle": "Product thinkers, engineers, and curators powering the portal",
+        "storyHeading": "Our Story",
+        "contactButton": {
+          "text": "Request a Demo",
+          "id": "about-contact-btn-10",
+          "ariaLabel": "Request a demo from the AI Film Portal team"
+        }
+      },
+    "contactPage": {
+      "heroTitle": "Contact AI Film Portal",
+      "heroSubtitle": "Portal specialists will respond promptly",
+      "formSection": {
+        "title": "Schedule a portal chat",
+        "nameLabel": "Full Name",
+        "emailLabel": "Business Email",
+        "subjectLabel": "Interest Area",
+        "messageLabel": "Notes",
+        "submitButton": {
+          "text": "Request Callback",
+          "id": "contact-submit-btn-10",
+          "ariaLabel": "Request callback from AI Film Portal"
+        }
+      },
+      "infoSection": {
+        "title": "Portal Headquarters",
+        "locationHeading": "Main Office",
+        "locationLines": [
+          "200 Portal Parkway, Suite 300",
+          "Boston, MA 02110"
+        ],
+        "phoneHeading": "Portal Phone",
+        "phoneText": "(555) 246-8101",
+        "emailHeading": "Portal Email",
+        "emailText": "hello@aifilmportal.com",
+        "hoursHeading": "Portal Hours",
+        "hoursLines": [
+          "Monday - Friday: 8AM - 8PM ET",
+          "Saturday: 9AM - 3PM ET"
+        ]
+      },
+      "faqSection": {
+        "title": "Portal FAQs",
+        "items": [
+          {
+            "question": "Can I request a live demo?",
+            "answer": "Yes, include your availability and we will arrange a personalized walkthrough."
+          },
+          {
+            "question": "Do you integrate with enterprise tools?",
+            "answer": "We integrate with major identity and analytics platforms. Describe your stack and we'll confirm compatibility."
+          },
+          {
+            "question": "Is onboarding available?",
+            "answer": "We offer guided onboarding. Let us know the size of your team and we will tailor a launch plan."
+          }
+        ]
+      }
+    },
+      "emptyState": {
+        "title": "Nothing to show",
+        "message": "Modify search or publish a movie",
+        "button": {
+          "text": "Publish Movie",
+          "ariaLabel": "Publish a movie"
+        }
+      }
+    }
+  }
+}
+
