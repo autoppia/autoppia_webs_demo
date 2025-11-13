@@ -1,6 +1,6 @@
 import { isDataGenerationEnabled, generateProjectData, getRandomHotelImage } from "@/shared/data-generator";
-import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
-import { Hotel } from "@/types/hotel";
+import { isDbLoadModeEnabled, fetchSeededSelection, getSeedValueFromEnv } from "@/shared/seeded-loader";
+import type { Hotel } from "@/types/hotel";
 
 /**
  * Initialize hotels data - either from database, AI generation, or fallback to static data
@@ -10,10 +10,11 @@ export async function initializeHotels(): Promise<Hotel[]> {
   if (isDbLoadModeEnabled() && typeof window !== "undefined") {
     console.log('🗄️ Database mode enabled, loading hotels from database...');
     try {
+      const seed = getSeedValueFromEnv(1);
       const dbData = await fetchSeededSelection({
         projectKey: "web_8_autolodge",
         entityType: "hotels",
-        seedValue: 1, // Use default seed when no seed is provided
+        seedValue: seed,
         limit: 50
       });
       
@@ -31,7 +32,7 @@ export async function initializeHotels(): Promise<Hotel[]> {
   // If DB mode is enabled but we're server-side (during build), use static data with proper images
   if (isDbLoadModeEnabled() && typeof window === "undefined") {
     console.log('📊 DB mode enabled but running server-side, using static hotel data with Unsplash images');
-    const staticData = await import("./hotels").then(m => m.default);
+    const staticData: Hotel[] = (await import("./hotels")).default;
     // Update static data with proper images
     return staticData.map((hotel: Hotel, index: number) => ({
       ...hotel,
@@ -42,7 +43,7 @@ export async function initializeHotels(): Promise<Hotel[]> {
   // Check if data generation is enabled
   if (!isDataGenerationEnabled()) {
     console.log('📊 Data generation disabled, using static hotel data');
-    const staticData = await import("./hotels").then(m => m.default);
+    const staticData: Hotel[] = (await import("./hotels")).default;
     // Update static data with proper images
     return staticData.map((hotel: Hotel, index: number) => ({
       ...hotel,
@@ -56,9 +57,9 @@ export async function initializeHotels(): Promise<Hotel[]> {
   
   if (cached) {
     try {
-      const parsedData = JSON.parse(cached);
+      const parsedData = JSON.parse(cached) as Hotel[];
       console.log('💾 Using cached hotel data:', parsedData.length, 'hotels');
-      return parsedData;
+      return parsedData as Hotel[];
     } catch (error) {
       console.warn('⚠️ Failed to parse cached data, regenerating...', error);
     }
@@ -81,7 +82,7 @@ export async function initializeHotels(): Promise<Hotel[]> {
       return result.data;
     } else {
       console.warn('⚠️ Data generation failed, falling back to static data:', result.error);
-      const staticData = await import("./hotels").then(m => m.default);
+      const staticData: Hotel[] = (await import("./hotels")).default;
       // Update static data with proper images
       return staticData.map((hotel: Hotel, index: number) => ({
         ...hotel,
@@ -90,7 +91,7 @@ export async function initializeHotels(): Promise<Hotel[]> {
     }
   } catch (error) {
     console.error('❌ Data generation error, falling back to static data:', error);
-    const staticData = await import("./hotels").then(m => m.default);
+    const staticData: Hotel[] = (await import("./hotels")).default;
     // Update static data with proper images
     return staticData.map((hotel: Hotel, index: number) => ({
       ...hotel,
@@ -99,12 +100,3 @@ export async function initializeHotels(): Promise<Hotel[]> {
   }
 }
 
-/**
- * Clear cached hotel data
- */
-export function clearHotelCache(): void {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("autolodge_generated_hotels_v1");
-    console.log('🗑️ Cleared hotel cache');
-  }
-}
