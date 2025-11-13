@@ -195,7 +195,7 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
     
     // Prefer distributed selection to avoid category dominance
     const distributed = await fetchSeededSelection<Restaurant>({
-      projectKey: "web_7_auto_delivery",
+      projectKey: "web_7_autodelivery",
       entityType: "restaurants",
       seedValue: seed,
       limit,
@@ -208,7 +208,7 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
     const selected = Array.isArray(distributed) && distributed.length > 0
       ? distributed
       : await fetchSeededSelection<Restaurant>({
-          projectKey: "web_7_auto_delivery",
+          projectKey: "web_7_autodelivery",
           entityType: "restaurants",
           seedValue: seed,
           limit,
