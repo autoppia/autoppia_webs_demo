@@ -143,7 +143,7 @@
             <p>CineStore began as a small project between friends who shared a passion for movies. What started as a simple database quickly grew into a platform where thousands of film enthusiasts could come together to share their thoughts and discoveries.</p>
             <p>Today, we're proud to host one of the most engaged film communities online, with users from over 50 countries contributing to our growing database of movies, reviews, and discussions.</p>
             <p>Our journey is just beginning, and we're excited to continue growing and improving with the help of our dedicated community.</p>
-            <a href="{% url 'movieapp:contact' %}" class="btn btn-primary btn-lg mt-3">
+            <a href="{% url 'movieapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-lg mt-3">
                 <i class="fas fa-envelope mr-2"></i>Get in Touch
             </a>
         </div>
