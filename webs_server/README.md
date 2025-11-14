@@ -262,6 +262,110 @@ DELETE /reset_events/?web_url=[https://anothersite.org/path/to/resource](https:/
 
   * **503 Service Unavailable:** Database pool is not initialized or available.
 
+### 5\. Generate Dataset (files-only storage)
+
+Generate a JSON dataset with OpenAI and save it to file storage under `/app/data`.
+
+  * **URL:** `/datasets/generate`
+  * **Method:** `POST`
+  * **Summary:** Generate synthetic data and (optionally) save to file storage
+
+Requirements:
+  * Set `OPENAI_API_KEY` in your environment.
+  * To save, provide both `project_key` and `entity_type`. The server saves to `/app/data/<project_key>/data/`.
+
+Request Body (DataGenerationRequest):
+  * `interface_definition` (string, required): TypeScript interface describing the target shape.
+  * `examples` (array<object>, required): Few-shot JSON examples to match style/shape.
+  * `count` (int, 1–200): Number of items.
+  * `categories` (array<string>, optional): Topical hints.
+  * `additional_requirements` (string, optional): Free-form guidance.
+  * `json_schema` (object, optional): If provided and `fastjsonschema` is installed, response is validated.
+  * `naming_rules` (object, optional): Rules for IDs or paths.
+  * `project_key` (string, optional): Project directory under `/app/data`.
+  * `entity_type` (string, optional): Logical entity (e.g., `products`, `movies`).
+  * `save_to_file` / `save_to_db` (bool, optional): DB save is ignored; file save occurs when `project_key` and `entity_type` are provided.
+
+Example Request:
+
+```json
+{
+  "interface_definition": "interface Product { id: string; name: string; price: number; category?: string; }",
+  "examples": [
+    { "id": "p-1001", "name": "Widget Alpha", "price": 19.99, "category": "gadgets" }
+  ],
+  "count": 25,
+  "categories": ["gadgets", "tools"],
+  "additional_requirements": "Make items realistic; vary prices and categories.",
+  "project_key": "demo_shop",
+  "entity_type": "products"
+}
+```
+
+Success Response (200):
+```json
+{
+  "message": "Successfully generated 25 items",
+  "generated_data": [ /* array of Product */ ],
+  "count": 25,
+  "generation_time": 1.82,
+  "saved_path": "/app/data/demo_shop/data/products_20250101_123456.json"
+}
+```
+
+Notes on File Storage:
+  * Files are stored under `/app/data/<project_key>/data/`.
+  * The server maintains `/app/data/<project_key>/main.json` as an index:
+    ```json
+    { "products": ["./data/products_20250101_123456.json", "./data/products_20250101_133000.json"] }
+    ```
+  * New data is appended to the latest file for the entity; when the file would exceed `DATA_FILE_MAX_BYTES`, the server rolls over to a new file automatically.
+  * Writes use file locks (if `filelock` is installed) and atomic replace to avoid partial JSON on disk.
+
+### 6\. Load Dataset (seeded selection from files)
+
+Load data from file storage for a project/entity and return a deterministic selection using a seed.
+
+  * **URL:** `/datasets/load`
+  * **Method:** `GET`
+  * **Summary:** Load dataset using seeded selection
+
+Query Parameters:
+  * `project_key` (string, required): Project directory under `/app/data`.
+  * `entity_type` (string, required): Entity key as saved (e.g., `products`).
+  * `seed_value` (int, required): Seed for deterministic selection.
+  * `limit` (int, default 50): Max items to return (1–500).
+  * `method` (string, default `select`): One of `select`, `shuffle`, `filter`, `distribute`.
+  * `filter_key` (string, optional): Key to filter on (for `filter`/`distribute`).
+  * `filter_values` (string, optional): Comma-separated values for `filter` (e.g., `tools,gadgets`).
+
+Examples:
+```
+GET /datasets/load?project_key=demo_shop&entity_type=products&seed_value=42&limit=50&method=select
+GET /datasets/load?project_key=demo_shop&entity_type=products&seed_value=42&limit=20&method=filter&filter_key=category&filter_values=tools,gadgets
+GET /datasets/load?project_key=demo_shop&entity_type=products&seed_value=7&limit=30&method=distribute&filter_key=category
+```
+
+Success Response (200):
+```json
+{
+  "message": "Successfully selected 20 items from file storage using seed=42",
+  "metadata": {
+    "source": "file_storage",
+    "projectKey": "demo_shop",
+    "entityType": "products",
+    "seed": 42,
+    "limit": 20,
+    "method": "filter",
+    "filterKey": "category",
+    "filterValues": ["tools", "gadgets"],
+    "totalAvailable": 250
+  },
+  "data": [ /* selected items */ ],
+  "count": 20
+}
+```
+
 ## Database Schema
 
 ```sql
@@ -289,7 +393,17 @@ CREATE INDEX idx_events_web_agent_id ON events(web_agent_id);
 | `DB_POOL_MAX` | 50 | Maximum active database connections in the pool |
 | `GZIP_MIN_SIZE` | 1000 | Minimum response size (in bytes) before applying GZIP compression |
 | `LOG_LEVEL` | info | Logging level for the application (`DEBUG`, `INFO`, `WARNING`, `ERROR`) |
+| `OPENAI_API_KEY` | — | Required for `/datasets/generate` |
+| `DATA_BASE_PATH` | `/app/data` | Base path for file storage (mounted volume) |
+| `DATA_FILE_MAX_BYTES` | `2097152` | Max JSON file size before rollover (bytes, default 2 MiB) |
 
+Mounting file storage (Docker Compose):
+  * The app expects a volume mounted at `/app/data`. Example:
+    ```
+    volumes:
+      - ~/webs_data:/app/data
+    ```
+  * The server maintains an index at `<DATA_BASE_PATH>/<project_key>/main.json`. Do not edit it manually.
 
 ## Troubleshooting
 
