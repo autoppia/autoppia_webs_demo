@@ -12,7 +12,8 @@ import {
   generateFilesWithFallback,
   generateEventsWithFallback,
   generateLogsWithFallback,
-  isDataGenerationAvailable 
+  isDataGenerationAvailable,
+  getApiUrl
 } from "@/utils/dataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { clients as originalClients, DEMO_MATTERS, DEMO_FILES, EVENTS, DEMO_LOGS } from "@/library/dataset";
@@ -42,12 +43,32 @@ export function writeCachedClients(clientsToCache: any[]): void {
   writeJson(CACHE_KEYS.clients, clientsToCache);
 }
 
+export function clearCachedClients(): void {
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage.removeItem(CACHE_KEYS.clients);
+    } catch (error) {
+      console.warn("Failed to clear clients cache:", error);
+    }
+  }
+}
+
 export function readCachedMatters(): any[] | null {
   return readJson<any[]>(CACHE_KEYS.matters, null);
 }
 
 export function writeCachedMatters(mattersToCache: any[]): void {
   writeJson(CACHE_KEYS.matters, mattersToCache);
+}
+
+export function clearCachedMatters(): void {
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage.removeItem(CACHE_KEYS.matters);
+    } catch (error) {
+      console.warn("Failed to clear matters cache:", error);
+    }
+  }
 }
 
 export function readCachedFiles(): any[] | null {
@@ -129,14 +150,21 @@ export async function initializeClients(): Promise<any[]> {
       // Use cache only if unique mode is disabled
       if (!isUniqueGenerationEnabled()) {
         const cached = readCachedClients();
-        if (cached && cached.length > 0) {
+        // Only use cache if it has actual data (not empty array)
+        if (cached && Array.isArray(cached) && cached.length > 0) {
           dynamicClients = cached.map(normalizeClient);
+          console.log(`✅ Loaded ${dynamicClients.length} clients from cache`);
           return dynamicClients;
+        } else if (cached && Array.isArray(cached) && cached.length === 0) {
+          // If cache has empty array, clear it to allow retry
+          console.log("⚠️ Cache contains empty array, clearing cache to allow retry");
+          clearCachedClients();
         }
       }
 
       console.log("🚀 Starting async data generation for clients...");
-      console.log("📡 Using API:", process.env.API_URL || "http://app:8080");
+      const apiUrl = getApiUrl();
+      console.log("📡 Using API:", apiUrl);
 
       const count = DATA_GENERATION_CONFIG.DEFAULT_CLIENTS_COUNT;
       const categories = DATA_GENERATION_CONFIG.AVAILABLE_CLIENT_CATEGORIES;
@@ -150,6 +178,14 @@ export async function initializeClients(): Promise<any[]> {
         categories
       );
 
+      // Only proceed if we got actual data
+      if (!generatedClients || generatedClients.length === 0) {
+        console.warn("⚠️ Data generation returned empty array, will retry on next call");
+        dynamicClients = [];
+        // Don't cache empty arrays - let it retry next time
+        return dynamicClients;
+      }
+
       // Normalize status field to one of the allowed categories
       const allowed = new Set(categories);
       const normalized = generatedClients.map((c, i) => ({
@@ -158,8 +194,8 @@ export async function initializeClients(): Promise<any[]> {
       }));
 
       dynamicClients = normalized;
-      // Cache only if unique mode is disabled
-      if (!isUniqueGenerationEnabled()) {
+      // Cache only if unique mode is disabled and we have data
+      if (!isUniqueGenerationEnabled() && dynamicClients.length > 0) {
         writeCachedClients(dynamicClients);
       }
       return dynamicClients;
@@ -183,9 +219,15 @@ export async function initializeMatters(): Promise<any[]> {
     try {
       if (!isUniqueGenerationEnabled()) {
         const cached = readCachedMatters();
-        if (cached && cached.length > 0) {
+        // Only use cache if it has actual data (not empty array)
+        if (cached && Array.isArray(cached) && cached.length > 0) {
           dynamicMatters = cached.map(normalizeMatter);
+          console.log(`✅ Loaded ${dynamicMatters.length} matters from cache`);
           return dynamicMatters;
+        } else if (cached && Array.isArray(cached) && cached.length === 0) {
+          // If cache has empty array, clear it to allow retry
+          console.log("⚠️ Cache contains empty array for matters, clearing cache to allow retry");
+          clearCachedMatters();
         }
       }
 
@@ -200,6 +242,14 @@ export async function initializeMatters(): Promise<any[]> {
         categories
       );
 
+      // Only proceed if we got actual data
+      if (!generatedMatters || generatedMatters.length === 0) {
+        console.warn("⚠️ Data generation returned empty array for matters, will retry on next call");
+        dynamicMatters = [];
+        // Don't cache empty arrays - let it retry next time
+        return dynamicMatters;
+      }
+
       const allowed = new Set(categories);
       const normalized = generatedMatters.map((m, i) => ({
         ...normalizeMatter(m, i),
@@ -207,8 +257,10 @@ export async function initializeMatters(): Promise<any[]> {
       }));
 
       dynamicMatters = normalized;
-      if (!isUniqueGenerationEnabled()) {
+      // Cache only if unique mode is disabled and we have data
+      if (!isUniqueGenerationEnabled() && dynamicMatters.length > 0) {
         writeCachedMatters(dynamicMatters);
+        console.log(`✅ Cached ${dynamicMatters.length} generated matters`);
       }
       return dynamicMatters;
     } catch (error) {

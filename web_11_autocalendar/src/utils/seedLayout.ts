@@ -521,15 +521,59 @@ export function isDynamicEnabled(): boolean {
   return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';
 }
 
-// Helper function to get effective layout config
+// Helper function to check if seed parameter is present in URL (for layout changes)
+export function hasSeedInUrl(): boolean {
+  if (typeof window === 'undefined') return false;
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.has('seed');
+}
+
+// Helper function to check if seed-structure parameter is present in URL (for HTML structure changes)
+export function hasSeedStructureInUrl(): boolean {
+  if (typeof window === 'undefined') return false;
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.has('seed-structure');
+}
+
+// Helper function to check if layout should be dynamic (requires env var and seed in URL)
+export function isLayoutDynamicActive(): boolean {
+  // Must have both: environment variable enabled AND seed in URL
+  return isDynamicEnabled() && hasSeedInUrl();
+}
+
+// Helper function to check if HTML structure should be dynamic (requires env var and seed-structure in URL)
+export function isStructureDynamicActive(): boolean {
+  // Must have both: environment variable enabled AND seed-structure in URL
+  return isDynamicEnabled() && hasSeedStructureInUrl();
+}
+
+// Helper function to get effective layout config (uses seed parameter)
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled()) {
+  if (!isLayoutDynamicActive()) {
     return getDefaultLayout();
   }
   return getSeedLayout(seed);
 }
 
-// Helper function to get URL search params with seed validation
+// Helper function to get seed-structure from URL (prefers seed-structure over seed)
+export function getSeedStructureFromUrl(): number | null {
+  if (typeof window === 'undefined') return null;
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const seedStructureParam = urlParams.get('seed-structure');
+  
+  if (seedStructureParam) {
+    const seed = parseInt(seedStructureParam, 10);
+    // Validate seed range (1-300)
+    if (seed >= 1 && seed <= 300) {
+      return seed;
+    }
+  }
+  
+  return null;
+}
+
+// Helper function to get seed parameter from URL (for layout)
 export function getSeedFromUrl(): number {
   if (typeof window === 'undefined') return 1;
   

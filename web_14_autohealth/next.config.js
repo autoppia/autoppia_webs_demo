@@ -76,7 +76,11 @@ const nextConfig = {
     NEXT_PUBLIC_DATA_SEED_VALUE: process.env.NEXT_PUBLIC_DATA_SEED_VALUE,
     ENABLE_DB_MODE: process.env.ENABLE_DB_MODE,
     NEXT_PUBLIC_ENABLE_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DB_MODE,
-  },
+      NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:
+        process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ?? (isDev ? 'true' : undefined),
+     NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:
+        process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ?? undefined,
+    },
 };
 
 module.exports = nextConfig;
