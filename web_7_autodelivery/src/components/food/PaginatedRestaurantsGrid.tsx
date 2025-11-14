@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
+import { useRestaurants } from "@/contexts/RestaurantContext";
 import RestaurantCard from "./RestaurantCard";
 import {
   Pagination,
@@ -23,7 +23,7 @@ export default function PaginatedRestaurantsGrid({
   filteredRestaurants, 
   title = "All Restaurants" 
 }: PaginatedRestaurantsGridProps) {
-  const restaurants = useMemo(() => getRestaurants() ?? [], []);
+  const { restaurants } = useRestaurants();
   const defaultFilteredRestaurants = filteredRestaurants || restaurants;
   const [currentPage, setCurrentPage] = useState(1);
   const restaurantsPerPage = 12;
