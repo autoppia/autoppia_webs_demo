@@ -110,8 +110,6 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
     case "$_dv" in
       v1)
         ENABLE_DYNAMIC_HTML=true
-        # v1 also enables dynamic HTML structure by default (they work together)
-        ENABLE_DYNAMIC_HTML_STRUCTURE=true
         echo "[INFO] dynamic version $_dv enabled: ENABLE_DYNAMIC_HTML=true (seeds + layout variants)"
         echo "[INFO] dynamic version $_dv also enabled: ENABLE_DYNAMIC_HTML_STRUCTURE=true (text/ID/class variations)"
         ;;
