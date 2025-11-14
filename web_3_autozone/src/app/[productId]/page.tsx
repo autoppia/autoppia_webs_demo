@@ -10,10 +10,11 @@ import { type Product, useCart } from "@/context/CartContext";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
-import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
 import { withSeed } from "@/utils/seedRouting";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
+import { useProducts } from "@/context/ProductsContext";
 
 
 // Static date to avoid hydration mismatch
@@ -24,27 +25,21 @@ function ProductContent() {
   const router = useSeedRouter();
   const searchParams = useSearchParams();
   const { productId } = useParams();
-  const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { getText, getId } = useDynamicStructure();
   const [addedToCart, setAddedToCart] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const { seed } = useSeed();
   const order = seed % 3;
+  const { products, isLoading: productsLoading } = useProducts();
 
-  useEffect(() => {
-    setIsLoading(true);
+  const product = useMemo(() => {
+    if (typeof productId !== "string") return null;
+    return products.find((item) => item.id === productId) ?? null;
+  }, [productId, products]);
 
-    if (typeof productId === "string") {
-      const foundProduct: any = getProductById(productId);
-      if (foundProduct) {
-        setProduct(foundProduct);
-      }
-      setIsLoading(false);
-    }
-  }, [productId]);
+  const isLoading = productsLoading && !product;
 
   // Log view event
   useEffect(() => {

@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
 import { SeedProvider } from "@/context/SeedContext";
+import { ProductsProvider } from "@/context/ProductsContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
@@ -33,13 +34,15 @@ export default function RootLayout({
               <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
                 <Header />
               </Suspense>
-              <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
-                <DataReadyGate>
-                  <BodyWrapper>
-                    {children}
-                  </BodyWrapper>
-                </DataReadyGate>
-              </Suspense>
+              <ProductsProvider>
+                <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
+                  <DataReadyGate>
+                    <BodyWrapper>
+                      {children}
+                    </BodyWrapper>
+                  </DataReadyGate>
+                </Suspense>
+              </ProductsProvider>
               <Suspense fallback={<div className="h-32 bg-white"></div>}>
                 <Footer />
               </Suspense>

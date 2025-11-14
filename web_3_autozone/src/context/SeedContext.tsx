@@ -25,8 +25,13 @@ function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | nul
     const urlSeed = searchParams.get("seed");
     if (urlSeed) {
       const parsedSeed = Number.parseInt(urlSeed, 10);
-      const effectiveSeed = getEffectiveSeed(parsedSeed);
-      onSeedFromUrl(effectiveSeed);
+      // Validate seed is between 1-300
+      if (!isNaN(parsedSeed) && parsedSeed >= 1 && parsedSeed <= 300) {
+        onSeedFromUrl(parsedSeed);
+      } else {
+        // Invalid seed, use default
+        onSeedFromUrl(1);
+      }
     } else {
       onSeedFromUrl(null);
     }
@@ -39,36 +44,39 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   const [seed, setSeedState] = useState<number>(1);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize seed from localStorage on mount
-  useEffect(() => {
-    if (isInitialized) return;
-
-    try {
-      const savedSeed = localStorage.getItem("autozoneSeed");
-      if (savedSeed) {
-        const parsedSeed = Number.parseInt(savedSeed, 10);
-        const effectiveSeed = getEffectiveSeed(parsedSeed);
-        setSeedState(effectiveSeed);
-      }
-    } catch (error) {
-      console.error("Error loading seed:", error);
-    }
-    setIsInitialized(true);
-  }, [isInitialized]);
-
-  // Handle seed from URL
+  // Handle seed from URL (priority over localStorage)
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
-      setSeedState(urlSeed);
+      // URL has seed - use it and save to localStorage
+      const effectiveSeed = getEffectiveSeed(urlSeed);
+      setSeedState(effectiveSeed);
       try {
-        localStorage.setItem("autozoneSeed", urlSeed.toString());
+        localStorage.setItem("autozoneSeed", effectiveSeed.toString());
       } catch (error) {
         console.error("Error saving seed to localStorage:", error);
       }
+      if (!isInitialized) {
+        setIsInitialized(true);
+      }
+    } else if (!isInitialized) {
+      // No seed in URL - try localStorage, fallback to 1
+      try {
+        const savedSeed = localStorage.getItem("autozoneSeed");
+        if (savedSeed) {
+          const parsedSeed = Number.parseInt(savedSeed, 10);
+          if (!isNaN(parsedSeed) && parsedSeed >= 1 && parsedSeed <= 300) {
+            const effectiveSeed = getEffectiveSeed(parsedSeed);
+            setSeedState(effectiveSeed);
+          }
+        }
+      } catch (error) {
+        console.error("Error loading seed:", error);
+      }
+      setIsInitialized(true);
     }
-  }, []);
+  }, [isInitialized]);
 
-  // Update localStorage when seed changes
+  // Update localStorage when seed changes (but only after initialization)
   useEffect(() => {
     if (!isInitialized) return;
     try {
@@ -77,6 +85,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Error saving seed to localStorage:", error);
     }
   }, [seed, isInitialized]);
+
 
   // Function to set seed and persist it
   const setSeed = useCallback((newSeed: number) => {

@@ -110,7 +110,7 @@ export async function generateProjectData(
         naming_rules: config.namingRules,
         project_key: projectKey,
         entity_type: config.dataType,
-        save_to_db: true,
+        save_to_file: true,
       })
     });
 

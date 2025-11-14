@@ -11,7 +11,7 @@
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
-#                                            v2 requires choosing: DB mode OR AI generation (see examples)
+#                                            v2 now maps directly to DB mode (seeded datasets)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
 #   --data_seed_value=INT         Seed value for v2 data generation (required for DB mode, optional for AI)
 #   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
@@ -21,17 +21,11 @@
 # Examples:
 #   ./setup.sh --demo=automail  # v1 enabled by default (seeds + layout variants)
 #   
-#   # v2: AI Generation mode (generates data on-the-fly)
+#   # v2: DB Mode (loads seeded data from database)
 #   ./setup.sh --enabled_dynamic_versions=v2
 #   
-#   # v2: DB Mode (loads pre-generated data from database)
-#   ./setup.sh --enabled_dynamic_versions=v2 --enable_db_mode=true --data_seed_value=42
-#   
-#   # v1 + v2: Layouts + AI Generation
+#   # v1 + v2: Layouts + Seeded DB data
 #   ./setup.sh --enabled_dynamic_versions=v1,v2
-#   
-#   # v1 + v2: Layouts + DB Mode
-#   ./setup.sh --enabled_dynamic_versions=v1,v2 --enable_db_mode=true --data_seed_value=42
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -49,7 +43,7 @@ Options:
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
-                                            v2 requires choosing: DB mode OR AI generation
+                                           v2 automatically enables DB mode (seeded datasets)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
   --data_seed_value=INT         Seed value for v2 (required for DB mode, optional for AI)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
@@ -58,17 +52,11 @@ Options:
 Examples:
   ./setup.sh --demo=automail  # v1 enabled by default (seeds + layout variants)
   
-  # v2: AI Generation mode (generates data on-the-fly)
+  # v2: DB Mode (loads seeded data from database)
   ./setup.sh --enabled_dynamic_versions=v2
   
-  # v2: DB Mode (loads pre-generated data from database)
-  ./setup.sh --enabled_dynamic_versions=v2 --enable_db_mode=true --data_seed_value=42
-  
-  # v1 + v2: Layouts + AI Generation
+  # v1 + v2: Layouts + Seeded DB data
   ./setup.sh --enabled_dynamic_versions=v1,v2
-  
-  # v1 + v2: Layouts + DB Mode
-  ./setup.sh --enabled_dynamic_versions=v1,v2 --enable_db_mode=true --data_seed_value=42
 USAGE
 }
 
@@ -211,17 +199,10 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         echo "[INFO] dynamic version $_dv enabled: ENABLE_DYNAMIC_HTML=true (seeds + layout variants)"
         ;;
       v2)
-        # v2 enables data generation system
-        # Mode selection:
-        #   - If ENABLE_DB_MODE=true: DB mode (load from database)
-        #   - If ENABLE_DB_MODE=false: AI generation mode (generate on-the-fly)
-        # By default, if no --enable_db_mode specified, use AI generation
-        if [ "$ENABLE_DB_MODE" != "true" ]; then
-          ENABLE_DATA_GENERATION=true
-          echo "[INFO] dynamic version $_dv enabled: Data generation system (AI generation mode)"
-        else
-          echo "[INFO] dynamic version $_dv enabled: Data generation system (DB mode)"
-        fi
+        # v2 now maps directly to DB mode with seeded dataset loading
+        ENABLE_DB_MODE=true
+        ENABLE_DATA_GENERATION=false
+        echo "[INFO] dynamic version $_dv enabled: Data generation system (DB mode with seeded datasets)"
         ;;
       v3)
         ENABLE_DYNAMIC_HTML_STRUCTURE=true

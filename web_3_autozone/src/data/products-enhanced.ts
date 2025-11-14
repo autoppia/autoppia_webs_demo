@@ -700,13 +700,13 @@ export async function initializeProducts(): Promise<Product[]> {
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
-export async function loadProductsFromDb(): Promise<Product[]> {
+export async function loadProductsFromDb(seedOverride?: number): Promise<Product[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
   
   try {
-    const seed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" ? seedOverride : getSeedValueFromEnv(1);
     const limit = 100;
     // Prefer distributed selection to avoid category dominance (e.g., Fitness only)
     const distributed = await fetchSeededSelection<Product>({
@@ -724,6 +724,7 @@ export async function loadProductsFromDb(): Promise<Product[]> {
       limit,
       method: "select",
     });
+    
     if (selected && selected.length > 0) {
       // Ensure we have at least some items for all primary categories by supplementing with originals if needed
       const categories = ["Kitchen", "Electronics", "Home", "Fitness", "Technology"];

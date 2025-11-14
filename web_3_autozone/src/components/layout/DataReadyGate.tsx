@@ -1,34 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { useProducts } from "@/context/ProductsContext";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
-  const [ready, setReady] = useState(dynamicDataProvider.isReady());
+  const { isLoading } = useProducts();
   const dataGen = isDataGenerationEnabled();
+  const dbMode = isDbLoadModeEnabled();
 
-  useEffect(() => {
-    if (ready) return;
-    let mounted = true;
-    dynamicDataProvider.whenReady().then(() => {
-      if (!mounted) return;
-      setReady(true);
-    });
-    return () => {
-      mounted = false;
-    };
-  }, [ready]);
-
-  if (dataGen && !ready) {
+  if ((dbMode || dataGen) && isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center text-gray-700">
-        Generating data… please wait
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center text-gray-700 space-y-2 px-4 text-center">
+        <p>{dbMode ? "Loading seeded dataset…" : "Generating data… please wait"}</p>
+        {dbMode && (
+          <p className="text-sm text-gray-500">
+            Using seed values from the URL (1-300) for deterministic results.
+          </p>
+        )}
       </div>
     );
   }
 
   return <>{children}</>;
 }
-
 

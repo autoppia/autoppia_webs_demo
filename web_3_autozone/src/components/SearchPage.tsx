@@ -1,15 +1,15 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useCart } from "@/context/CartContext";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { useState } from "react";
 import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
-import { searchProducts } from "@/utils/dynamicDataProvider";
 import { withSeed } from "@/utils/seedRouting";
+import { useProducts } from "@/context/ProductsContext";
 
 const getTopMarginClass = () => {
   const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
@@ -23,8 +23,23 @@ export default function SearchPage() {
   const { addToCart } = useCart();
   const { getText, getId } = useDynamicStructure();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
+  const { products, isLoading } = useProducts();
 
-  const results = searchProducts(query);
+  const results = useMemo(() => {
+    if (!query) return products;
+    return products.filter((product) => {
+      const haystack = `${product.title ?? ""} ${product.description ?? ""} ${product.category ?? ""} ${product.brand ?? ""}`.toLowerCase();
+      return haystack.includes(query);
+    });
+  }, [products, query]);
+
+  if (isLoading) {
+    return (
+      <div className="p-4 mt-28 text-center text-gray-600">
+        {getText("loading_product")}…
+      </div>
+    );
+  }
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);

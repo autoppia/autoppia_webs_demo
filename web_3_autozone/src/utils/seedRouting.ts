@@ -1,42 +1,42 @@
 /**
- * Utility functions for preserving seed-structure query parameter in navigation
+ * Utility functions for preserving seed query parameter in navigation
  */
 
 /**
- * Preserves seed-structure query parameter when building URLs
+ * Preserves seed query parameter when building URLs
  * @param path - The path to navigate to (e.g., "/", "/cart", "/product-id")
  * @param searchParams - Current search params from useSearchParams()
- * @returns URL with seed-structure preserved if present
+ * @returns URL with seed preserved if present
  */
 export function withSeed(path: string, searchParams: URLSearchParams | null = null): string {
   if (!searchParams) {
     // If no searchParams provided, try to get from window (client-side only)
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      const seedStructure = params.get('seed-structure');
-      if (seedStructure) {
+      const seed = params.get('seed');
+      if (seed) {
         const separator = path.includes('?') ? '&' : '?';
-        return `${path}${separator}seed-structure=${seedStructure}`;
+        return `${path}${separator}seed=${seed}`;
       }
     }
     return path;
   }
 
-  const seedStructure = searchParams.get('seed-structure');
-  if (seedStructure) {
+  const seed = searchParams.get('seed');
+  if (seed) {
     const separator = path.includes('?') ? '&' : '?';
-    return `${path}${separator}seed-structure=${seedStructure}`;
+    return `${path}${separator}seed=${seed}`;
   }
   
   return path;
 }
 
 /**
- * Preserves seed-structure query parameter when building URLs with additional query params
+ * Preserves seed query parameter when building URLs with additional query params
  * @param basePath - The base path (e.g., "/search")
  * @param queryParams - Additional query parameters as an object
  * @param searchParams - Current search params from useSearchParams()
- * @returns URL with seed-structure and other params preserved
+ * @returns URL with seed and other params preserved
  */
 export function withSeedAndParams(
   basePath: string,
@@ -50,17 +50,17 @@ export function withSeedAndParams(
     params.set(key, value);
   });
   
-  // Preserve seed-structure if present
+  // Preserve seed if present
   if (searchParams) {
-    const seedStructure = searchParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
+    const seed = searchParams.get('seed');
+    if (seed) {
+      params.set('seed', seed);
     }
   } else if (typeof window !== 'undefined') {
     const currentParams = new URLSearchParams(window.location.search);
-    const seedStructure = currentParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
+    const seed = currentParams.get('seed');
+    if (seed) {
+      params.set('seed', seed);
     }
   }
   

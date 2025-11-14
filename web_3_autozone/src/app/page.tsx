@@ -1,45 +1,51 @@
 "use client";
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo } from "react";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { Suspense } from "react";
-import { useSeed } from "@/context/SeedContext";
 import { 
-  getProductsByCategory, 
   getStaticCategories, 
   getStaticHomeEssentials, 
   getStaticRefreshSpace,
-  getLayoutConfig,
-  getEffectiveSeed
+  getLayoutConfig
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useProducts } from "@/context/ProductsContext";
+import { useSeed } from "@/context/SeedContext";
 
 
 function HomeContent() {
   
   const { getText, getId } = useDynamicStructure();
-  const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
+  const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+
+  const { products, isLoading: productsLoading } = useProducts();
 
   // Always use static data for consistent content - only layout changes based on seed
   const kitchenCategoriesData = getStaticCategories();
   const homeEssentialsData = getStaticHomeEssentials();
   const refreshYourSpaceData = getStaticRefreshSpace();
 
-  // Always get products by category - content is the same, layout varies
-  const kitchenProducts = getProductsByCategory("Kitchen");
-  const techProducts = getProductsByCategory("Technology");
-  const HomeProducts = getProductsByCategory("Home");
-  const ElectronicProducts = getProductsByCategory("Electronics");
-  const FitnessProducts = getProductsByCategory("Fitness");
+  const groupedProducts = useMemo(() => {
+    const categories = ["Kitchen", "Technology", "Home", "Electronics", "Fitness"];
+    return categories.reduce<Record<string, typeof products>>((acc, category) => {
+      acc[category] = products.filter((product) => product.category === category);
+      return acc;
+    }, {});
+  }, [products]);
+
+  const kitchenProducts = groupedProducts["Kitchen"] || [];
+  const techProducts = groupedProducts["Technology"] || [];
+  const HomeProducts = groupedProducts["Home"] || [];
+  const ElectronicProducts = groupedProducts["Electronics"] || [];
+  const FitnessProducts = groupedProducts["Fitness"] || [];
 
   const isLoadingProducts =
+    productsLoading ||
     kitchenProducts.length + techProducts.length + HomeProducts.length + ElectronicProducts.length + FitnessProducts.length === 0;
 
   useEffect(() => {
