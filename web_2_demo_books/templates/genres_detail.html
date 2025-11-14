@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block body %}
 <div class="container mt-5">
     <div class="row">
@@ -26,7 +27,12 @@
                     <p class="card-text movie-desc">{{ book.desc|truncatechars:100 }}</p>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
-                    <a href="{% url 'booksapp:detail' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-block">View Details</a>
+                    <a href="{% url 'booksapp:detail' book.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}{% if DYNAMIC_HTML_ENABLED %}&{% else %}?{% endif %}seed-structure={{ SEED_STRUCTURE }}{% endif %}" 
+                       class="btn btn-primary btn-block"
+                       {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                       id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'buttons.view_details.id' }}"
+                       aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'buttons.view_details.aria-label' }}"
+                       {% endif %}>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'buttons.view_details.text' }}{% else %}View Details{% endif %}</a>
                 </div>
             </div>
         </div>
