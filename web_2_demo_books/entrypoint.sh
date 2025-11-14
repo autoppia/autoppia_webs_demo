@@ -50,4 +50,4 @@ else
 fi
 
 # 4. Start Gunicorn on port 8001
-exec gunicorn --bind 0.0.0.0:8000 booksproject.wsgi:application
+exec gunicorn --bind 0.0.0.0:8001 booksproject.wsgi:application
