@@ -1,5 +1,7 @@
 import { initializeHotels } from "@/data/hotels-enhanced";
 import { Hotel } from "@/types/hotel";
+import { isDataGenerationEnabled, generateProjectData } from "@/shared/data-generator";
+import { getRandomHotelImage } from "@/shared/data-generator";
 
 /**
  * Dynamic Data Provider for Autolodge
@@ -46,9 +48,48 @@ class DynamicDataProvider {
 
   /**
    * Get hotel by ID
+   * If not found and data generation is enabled, will attempt to generate on-demand
    */
   getHotelById(id: number): Hotel | undefined {
     return this.hotels.find(hotel => hotel.id === id);
+  }
+
+  /**
+   * Get hotel by ID, generating on-demand if not found and data generation is enabled
+   */
+  async getHotelByIdOrGenerate(id: number): Promise<Hotel | undefined> {
+    // First check if hotel exists
+    const existing = this.getHotelById(id);
+    if (existing) {
+      return existing;
+    }
+
+    // If data generation is enabled, try to generate a hotel
+    if (isDataGenerationEnabled() && typeof window !== "undefined") {
+      try {
+        console.log(`🔄 Generating hotel on-demand for ID: ${id}`);
+        const result = await generateProjectData("web_8_autolodge", 1);
+        
+        if (result.success && result.data.length > 0) {
+          const generatedHotel = result.data[0];
+          // Set the ID to match the requested ID
+          const hotelWithCorrectId: Hotel = {
+            ...generatedHotel,
+            id: id,
+            image: getRandomHotelImage(id - 1)
+          };
+          
+          // Add to cache
+          this.hotels.push(hotelWithCorrectId);
+          console.log(`✅ Generated and cached hotel with ID: ${id}`);
+          return hotelWithCorrectId;
+        }
+      } catch (error) {
+        console.error(`❌ Failed to generate hotel on-demand for ID ${id}:`, error);
+      }
+    }
+
+    return undefined;
   }
 
   /**

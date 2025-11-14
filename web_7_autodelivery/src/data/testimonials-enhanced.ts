@@ -133,27 +133,3 @@ export function readCachedTestimonials(): Testimonial[] | null {
 export function writeCachedTestimonials(testimonials: Testimonial[]): void {
   writeJson(TESTIMONIALS_CONFIG.CACHE_KEY, testimonials);
 }
-
-export function clearCachedTestimonials(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem(TESTIMONIALS_CONFIG.CACHE_KEY);
-  }
-}
-
-// Helper functions for testimonials data access
-export function getTestimonialById(id: string, testimonials: Testimonial[] = originalTestimonials): Testimonial | undefined {
-  return testimonials.find(testimonial => testimonial.id === id);
-}
-
-export function getRandomTestimonials(count: number = 3, testimonials: Testimonial[] = originalTestimonials): Testimonial[] {
-  const shuffled = [...testimonials].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, Math.min(count, testimonials.length));
-}
-
-export function getTestimonialsStats(testimonials: Testimonial[] = originalTestimonials) {
-  return {
-    totalTestimonials: testimonials.length,
-    averageFeedbackLength: testimonials.reduce((sum, t) => sum + t.feedback.length, 0) / testimonials.length,
-    uniqueNames: [...new Set(testimonials.map(t => t.name))].length
-  };
-}

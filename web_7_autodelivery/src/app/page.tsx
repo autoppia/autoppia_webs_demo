@@ -4,12 +4,12 @@ import TestimonialsSection from '@/components/food/TestimonialsSection';
 import PaginatedRestaurantsGrid from '@/components/food/PaginatedRestaurantsGrid';
 import QuickReorderSection from '@/components/food/QuickReorderSection';
 import { useSearchStore } from '@/store/search-store';
-import { getRestaurants } from '@/utils/dynamicDataProvider';
+import { useRestaurants } from '@/contexts/RestaurantContext';
 
 export default function HomePage() {
   // Read global search state
   const search = useSearchStore(s => s.search);
-  const restaurants = getRestaurants() || [];
+  const { restaurants } = useRestaurants();
   const filtered = restaurants.filter(r => {
     const text = search.trim().toLowerCase();
     return (

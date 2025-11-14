@@ -19,7 +19,11 @@
         "quantity-label": "Quantity",
         "cart-empty-message": "Your cart is empty.",
         "delivery-information-title": "Delivery Information",
-        "place-order-button": "Place Order"
+        "place-order-button": "Place Order",
+        "address-selector-label": "Select Address",
+        "dropoff-selector-label": "Leave it at my door",
+        "dropoff-instructions": "Please ring the bell and drop the order at the front door.",
+        "contact-number-label": "Add contact number"
       },
       "placeholders": {
         "search_input": "Search for cuisine, dish, or restaurant",
@@ -49,7 +53,12 @@
         "place-order-button": "place-order-default",
         "customer-name-input": "customer-name-default",
         "delivery-address-input": "delivery-address-default",
-        "contact-phone-input": "contact-phone-default"
+        "contact-phone-input": "contact-phone-default",
+        "address-selector": "address-selector-default",
+        "dropoff-section": "dropoff-section-default",
+        "dropoff-preferences-selector": "dropoff-selector-default",
+        "dropoff-instructions": "dropoff-instructions-default",
+        "contact-number-selector": "contact-number-selector-default"
       },
       "aria": {
         "nav_menu": "Main navigation",
@@ -60,7 +69,12 @@
         "quantity-increase-button": "Increase quantity",
         "empty-cart-button": "Remove item from cart",
         "delete-review-button": "Delete this review",
-        "place-order-button": "Place your order"
+        "place-order-button": "Place your order",
+        "address-selector": "Select a delivery address",
+        "dropoff-section": "Delivery dropoff preferences",
+        "dropoff-preferences-selector": "Change dropoff preference",
+        "dropoff-instructions": "Dropoff instructions",
+        "contact-number-selector": "Add contact number"
       }
     },
     {
@@ -82,7 +96,11 @@
         "quantity-label": "Qty",
         "cart-empty-message": "Cart is empty.",
         "delivery-information-title": "Delivery Details",
-        "place-order-button": "Submit Order"
+        "place-order-button": "Submit Order",
+        "address-selector-label": "Choose Address",
+        "dropoff-selector-label": "Door drop-off",
+        "dropoff-instructions": "Ring the bell and leave the meal at the entrance.",
+        "contact-number-label": "Add contact info"
       },
       "placeholders": {
         "search_input": "Try 'pizza' or 'sushi'",
@@ -112,7 +130,12 @@
         "place-order-button": "place-order-concise",
         "customer-name-input": "customer-name-concise",
         "delivery-address-input": "delivery-address-concise",
-        "contact-phone-input": "contact-phone-concise"
+        "contact-phone-input": "contact-phone-concise",
+        "address-selector": "address-selector-concise",
+        "dropoff-section": "dropoff-section-concise",
+        "dropoff-preferences-selector": "dropoff-selector-concise",
+        "dropoff-instructions": "dropoff-instructions-concise",
+        "contact-number-selector": "contact-number-selector-concise"
       },
       "aria": {
         "nav_menu": "Primary site navigation",
@@ -123,7 +146,12 @@
         "quantity-increase-button": "Increase quantity",
         "empty-cart-button": "Remove item",
         "delete-review-button": "Discard review",
-        "place-order-button": "Submit order"
+        "place-order-button": "Submit order",
+        "address-selector": "Choose delivery address",
+        "dropoff-section": "Dropoff preference options",
+        "dropoff-preferences-selector": "Update dropoff preference",
+        "dropoff-instructions": "Current dropoff instructions",
+        "contact-number-selector": "Add contact info"
       }
     },
     {
@@ -145,7 +173,11 @@
         "quantity-label": "How many?",
         "cart-empty-message": "Your basket is empty.",
         "delivery-information-title": "Delivery Details",
-        "place-order-button": "Send Order"
+        "place-order-button": "Send Order",
+        "address-selector-label": "Where should we deliver?",
+        "dropoff-selector-label": "Drop it at my door",
+        "dropoff-instructions": "Give a knock and set it by the front mat, please!",
+        "contact-number-label": "Add a phone number"
       },
       "placeholders": {
         "search_input": "What are you craving today?",
@@ -175,7 +207,12 @@
         "place-order-button": "place-order-friendly",
         "customer-name-input": "customer-name-friendly",
         "delivery-address-input": "delivery-address-friendly",
-        "contact-phone-input": "contact-phone-friendly"
+        "contact-phone-input": "contact-phone-friendly",
+        "address-selector": "address-selector-friendly",
+        "dropoff-section": "dropoff-section-friendly",
+        "dropoff-preferences-selector": "dropoff-selector-friendly",
+        "dropoff-instructions": "dropoff-instructions-friendly",
+        "contact-number-selector": "contact-number-selector-friendly"
       },
       "aria": {
         "nav_menu": "Main menu",
@@ -186,7 +223,12 @@
         "quantity-increase-button": "Make it more",
         "empty-cart-button": "Remove this item",
         "delete-review-button": "Remove this review",
-        "place-order-button": "Send the order"
+        "place-order-button": "Send the order",
+        "address-selector": "Pick delivery spot",
+        "dropoff-section": "Dropoff preferences",
+        "dropoff-preferences-selector": "Change dropoff choice",
+        "dropoff-instructions": "Dropoff directions",
+        "contact-number-selector": "Add phone number"
       }
     },
     {
@@ -208,7 +250,11 @@
         "quantity-label": "Item count",
         "cart-empty-message": "Cart currently empty.",
         "delivery-information-title": "Shipping Info",
-        "place-order-button": "Complete Order"
+        "place-order-button": "Complete Order",
+        "address-selector-label": "Select delivery address",
+        "dropoff-selector-label": "Front door drop",
+        "dropoff-instructions": "Tap the bell and leave the order at reception.",
+        "contact-number-label": "Add contact number"
       },
       "placeholders": {
         "search_input": "Search meals or restaurants",
@@ -238,7 +284,12 @@
         "place-order-button": "place-order-express",
         "customer-name-input": "customer-name-express",
         "delivery-address-input": "delivery-address-express",
-        "contact-phone-input": "contact-phone-express"
+        "contact-phone-input": "contact-phone-express",
+        "address-selector": "address-selector-express",
+        "dropoff-section": "dropoff-section-express",
+        "dropoff-preferences-selector": "dropoff-selector-express",
+        "dropoff-instructions": "dropoff-instructions-express",
+        "contact-number-selector": "contact-number-selector-express"
       },
       "aria": {
         "nav_menu": "Express navigation",
@@ -249,7 +300,12 @@
         "quantity-increase-button": "Increase item count",
         "empty-cart-button": "Remove from cart",
         "delete-review-button": "Delete review",
-        "place-order-button": "Complete the order"
+        "place-order-button": "Complete the order",
+        "address-selector": "Select delivery address",
+        "dropoff-section": "Dropoff instructions section",
+        "dropoff-preferences-selector": "Adjust dropoff instructions",
+        "dropoff-instructions": "Dropoff instructions text",
+        "contact-number-selector": "Add contact number"
       }
     },
     {
@@ -271,7 +327,11 @@
         "quantity-label": "Course Count",
         "cart-empty-message": "Your basket awaits selection.",
         "delivery-information-title": "Guest Information",
-        "place-order-button": "Finalize Order"
+        "place-order-button": "Finalize Order",
+        "address-selector-label": "Select service address",
+        "dropoff-selector-label": "Concierge drop-off",
+        "dropoff-instructions": "Ring concierge and leave with the front desk attendant.",
+        "contact-number-label": "Add concierge contact"
       },
       "placeholders": {
         "search_input": "Search by chef, dish, or cuisine",
@@ -301,7 +361,12 @@
         "place-order-button": "place-order-gourmet",
         "customer-name-input": "customer-name-gourmet",
         "delivery-address-input": "delivery-address-gourmet",
-        "contact-phone-input": "contact-phone-gourmet"
+        "contact-phone-input": "contact-phone-gourmet",
+        "address-selector": "address-selector-gourmet",
+        "dropoff-section": "dropoff-section-gourmet",
+        "dropoff-preferences-selector": "dropoff-selector-gourmet",
+        "dropoff-instructions": "dropoff-instructions-gourmet",
+        "contact-number-selector": "contact-number-selector-gourmet"
       },
       "aria": {
         "nav_menu": "Gourmet navigation",
@@ -312,7 +377,12 @@
         "quantity-increase-button": "Increase course count",
         "empty-cart-button": "Remove course from basket",
         "delete-review-button": "Remove review",
-        "place-order-button": "Finalize order"
+        "place-order-button": "Finalize order",
+        "address-selector": "Select service address",
+        "dropoff-section": "Dropoff preference controls",
+        "dropoff-preferences-selector": "Update concierge instructions",
+        "dropoff-instructions": "Current concierge instructions",
+        "contact-number-selector": "Add concierge contact"
       }
     },
     {
@@ -334,7 +404,11 @@
         "quantity-label": "Qty",
         "cart-empty-message": "Nothing in your cart yet.",
         "delivery-information-title": "Delivery Info",
-        "place-order-button": "Place Order"
+        "place-order-button": "Place Order",
+        "address-selector-label": "Choose address",
+        "dropoff-selector-label": "Leave at door",
+        "dropoff-instructions": "Knock once and leave the deal at the doorstep.",
+        "contact-number-label": "Add phone number"
       },
       "placeholders": {
         "search_input": "Search by budget or cuisine",
@@ -364,7 +438,12 @@
         "place-order-button": "place-order-budget",
         "customer-name-input": "customer-name-budget",
         "delivery-address-input": "delivery-address-budget",
-        "contact-phone-input": "contact-phone-budget"
+        "contact-phone-input": "contact-phone-budget",
+        "address-selector": "address-selector-budget",
+        "dropoff-section": "dropoff-section-budget",
+        "dropoff-preferences-selector": "dropoff-selector-budget",
+        "dropoff-instructions": "dropoff-instructions-budget",
+        "contact-number-selector": "contact-number-selector-budget"
       },
       "aria": {
         "nav_menu": "Deals navigation",
@@ -375,7 +454,12 @@
         "quantity-increase-button": "Increase quantity",
         "empty-cart-button": "Remove item",
         "delete-review-button": "Delete review",
-        "place-order-button": "Place order"
+        "place-order-button": "Place order",
+        "address-selector": "Choose address",
+        "dropoff-section": "Dropoff preference area",
+        "dropoff-preferences-selector": "Change dropoff preference",
+        "dropoff-instructions": "Dropoff instructions",
+        "contact-number-selector": "Add phone number"
       }
     },
     {
@@ -397,7 +481,11 @@
         "quantity-label": "Servings",
         "cart-empty-message": "Your tray is empty.",
         "delivery-information-title": "Delivery Details",
-        "place-order-button": "Confirm Order"
+        "place-order-button": "Confirm Order",
+        "address-selector-label": "Select delivery address",
+        "dropoff-selector-label": "Healthy drop",
+        "dropoff-instructions": "Knock softly and leave the meal on the doorstep.",
+        "contact-number-label": "Add wellness contact"
       },
       "placeholders": {
         "search_input": "Search salads, bowls, and more",
@@ -427,7 +515,12 @@
         "place-order-button": "place-order-healthy",
         "customer-name-input": "customer-name-healthy",
         "delivery-address-input": "delivery-address-healthy",
-        "contact-phone-input": "contact-phone-healthy"
+        "contact-phone-input": "contact-phone-healthy",
+        "address-selector": "address-selector-healthy",
+        "dropoff-section": "dropoff-section-healthy",
+        "dropoff-preferences-selector": "dropoff-selector-healthy",
+        "dropoff-instructions": "dropoff-instructions-healthy",
+        "contact-number-selector": "contact-number-selector-healthy"
       },
       "aria": {
         "nav_menu": "Healthy navigation",
@@ -438,7 +531,12 @@
         "quantity-increase-button": "Increase servings",
         "empty-cart-button": "Remove item",
         "delete-review-button": "Delete review",
-        "place-order-button": "Confirm order"
+        "place-order-button": "Confirm order",
+        "address-selector": "Select delivery address",
+        "dropoff-section": "Dropoff preference panel",
+        "dropoff-preferences-selector": "Adjust dropoff instructions",
+        "dropoff-instructions": "Dropoff instructions text",
+        "contact-number-selector": "Add wellness contact"
       }
     },
     {
@@ -460,7 +558,11 @@
         "quantity-label": "Qty",
         "cart-empty-message": "Empty after-hours cart.",
         "delivery-information-title": "Delivery Info",
-        "place-order-button": "Order Now"
+        "place-order-button": "Order Now",
+        "address-selector-label": "Late-night address",
+        "dropoff-selector-label": "Leave it outside",
+        "dropoff-instructions": "Text on arrival and leave the snack outside the door.",
+        "contact-number-label": "Add after-hours phone"
       },
       "placeholders": {
         "search_input": "Search 24/7 kitchens",
@@ -490,7 +592,12 @@
         "place-order-button": "place-order-late",
         "customer-name-input": "customer-name-late",
         "delivery-address-input": "delivery-address-late",
-        "contact-phone-input": "contact-phone-late"
+        "contact-phone-input": "contact-phone-late",
+        "address-selector": "address-selector-late",
+        "dropoff-section": "dropoff-section-late",
+        "dropoff-preferences-selector": "dropoff-selector-late",
+        "dropoff-instructions": "dropoff-instructions-late",
+        "contact-number-selector": "contact-number-selector-late"
       },
       "aria": {
         "nav_menu": "Late navigation",
@@ -501,7 +608,12 @@
         "quantity-increase-button": "Increase quantity",
         "empty-cart-button": "Remove item",
         "delete-review-button": "Delete review",
-        "place-order-button": "Order now"
+        "place-order-button": "Order now",
+        "address-selector": "Late-night address selector",
+        "dropoff-section": "Dropoff preferences",
+        "dropoff-preferences-selector": "Adjust dropoff preference",
+        "dropoff-instructions": "Dropoff instructions text",
+        "contact-number-selector": "Add after-hours phone"
       }
     },
     {
@@ -523,7 +635,11 @@
         "quantity-label": "Servings",
         "cart-empty-message": "Family cart is empty.",
         "delivery-information-title": "Family Delivery Details",
-        "place-order-button": "Feed the Family"
+        "place-order-button": "Feed the Family",
+        "address-selector-label": "Select family address",
+        "dropoff-selector-label": "Family doorstep drop",
+        "dropoff-instructions": "Ring the bell and leave the feast at the porch bench.",
+        "contact-number-label": "Add family contact"
       },
       "placeholders": {
         "search_input": "Search family bundles",
@@ -553,7 +669,12 @@
         "place-order-button": "place-order-family",
         "customer-name-input": "customer-name-family",
         "delivery-address-input": "delivery-address-family",
-        "contact-phone-input": "contact-phone-family"
+        "contact-phone-input": "contact-phone-family",
+        "address-selector": "address-selector-family",
+        "dropoff-section": "dropoff-section-family",
+        "dropoff-preferences-selector": "dropoff-selector-family",
+        "dropoff-instructions": "dropoff-instructions-family",
+        "contact-number-selector": "contact-number-selector-family"
       },
       "aria": {
         "nav_menu": "Family navigation",
@@ -564,7 +685,12 @@
         "quantity-increase-button": "Increase servings",
         "empty-cart-button": "Remove family item",
         "delete-review-button": "Delete review",
-        "place-order-button": "Feed the family"
+        "place-order-button": "Feed the family",
+        "address-selector": "Select family address",
+        "dropoff-section": "Family dropoff settings",
+        "dropoff-preferences-selector": "Change family dropoff",
+        "dropoff-instructions": "Family dropoff instructions",
+        "contact-number-selector": "Add family contact"
       }
     },
     {
@@ -586,7 +712,11 @@
         "quantity-label": "Course Count",
         "cart-empty-message": "Your curated cart is empty.",
         "delivery-information-title": "Guest Details",
-        "place-order-button": "Reserve Now"
+        "place-order-button": "Reserve Now",
+        "address-selector-label": "Select delivery suite",
+        "dropoff-selector-label": "Concierge reception",
+        "dropoff-instructions": "Phone ahead and leave with the concierge desk.",
+        "contact-number-label": "Add concierge phone"
       },
       "placeholders": {
         "search_input": "Discover curated menus",
@@ -616,7 +746,12 @@
         "place-order-button": "place-order-premium",
         "customer-name-input": "customer-name-premium",
         "delivery-address-input": "delivery-address-premium",
-        "contact-phone-input": "contact-phone-premium"
+        "contact-phone-input": "contact-phone-premium",
+        "address-selector": "address-selector-premium",
+        "dropoff-section": "dropoff-section-premium",
+        "dropoff-preferences-selector": "dropoff-selector-premium",
+        "dropoff-instructions": "dropoff-instructions-premium",
+        "contact-number-selector": "contact-number-selector-premium"
       },
       "aria": {
         "nav_menu": "Premium navigation",
@@ -627,7 +762,12 @@
         "quantity-increase-button": "Increase course count",
         "empty-cart-button": "Remove selection",
         "delete-review-button": "Delete review",
-        "place-order-button": "Reserve now"
+        "place-order-button": "Reserve now",
+        "address-selector": "Select delivery suite",
+        "dropoff-section": "Concierge dropoff settings",
+        "dropoff-preferences-selector": "Adjust concierge dropoff",
+        "dropoff-instructions": "Concierge instructions",
+        "contact-number-selector": "Add concierge phone"
       }
     }
   ]

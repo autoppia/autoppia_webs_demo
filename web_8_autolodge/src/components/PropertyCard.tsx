@@ -1,6 +1,8 @@
 import * as React from "react";
 import Image from "next/image";
 import SeedStructureLink from "./SeedStructureLink";
+import { useSeedLayout } from "@/library/utils";
+import { getSeedLayout as getLayoutVariantConfig } from "@/library/layoutVariants";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {
@@ -74,10 +76,17 @@ export function PropertyCard({
   datesFrom: string;
   datesTo: string;
 }) {
+  const { seed } = useSeedLayout();
+  const layoutVariant = React.useMemo(
+    () => getLayoutVariantConfig(seed ?? 1),
+    [seed],
+  );
+  const { propertyCards } = layoutVariant;
+
   return (
     <SeedStructureLink href={`/stay/${id}`} className="block">
-      <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
-        <div className="relative aspect-[1.25/1] overflow-hidden">
+      <div className={propertyCards.cardClass}>
+        <div className={propertyCards.imageClass}>
           <Image
             src={image}
             alt={title}
@@ -105,7 +114,7 @@ export function PropertyCard({
             </svg>
           </button> */}
         </div>
-        <div className="p-4 flex flex-col gap-1 pb-2">
+        <div className={propertyCards.contentClass}>
           <div className="flex items-center gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import type { Appointment } from "@/data/appointments";
+import { useSeedLayout } from "@/library/useSeedLayout";
 
 interface AppointmentBookingModalProps {
   open: boolean;
@@ -27,6 +28,7 @@ interface BookingFormData {
 }
 
 export function AppointmentBookingModal({ open, onOpenChange, appointment }: AppointmentBookingModalProps) {
+  const { getText, getElementAttributes } = useSeedLayout();
   const [formData, setFormData] = React.useState<BookingFormData>({
     patientName: "",
     patientEmail: "",
@@ -170,9 +172,9 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Book Appointment</DialogTitle>
-          <DialogDescription>
-            Book an appointment with {appointment.doctorName} ({appointment.specialty}) 
+          <DialogTitle {...getElementAttributes('apts-modal-title', 0)}>{getText('apts-modal-title', 'Book Appointment')}</DialogTitle>
+          <DialogDescription {...getElementAttributes('apts-modal-desc', 0)}>
+            {getText('apts-modal-desc-prefix', 'Book an appointment with')} {appointment.doctorName} ({appointment.specialty}) 
             on {appointment.date} at {appointment.time}
           </DialogDescription>
         </DialogHeader>
@@ -180,44 +182,44 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
         <div className="space-y-6">
           {/* Patient Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Patient Information</h3>
+            <h3 className="text-lg font-medium" {...getElementAttributes('apts-modal-section', 0)}>{getText('apts-modal-patient-info', 'Patient Information')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="patientName">Full Name *</Label>
+                <Label htmlFor="patientName">{getText('apts-modal-name-label', 'Full Name *')}</Label>
                 <Input
                   id="patientName"
                   value={formData.patientName}
                   onChange={(e) => handleInputChange("patientName", e.target.value)}
-                  placeholder="Enter your full name"
+                  placeholder={getText('apts-modal-name-ph', 'Enter your full name')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="patientEmail">Email Address *</Label>
+                <Label htmlFor="patientEmail">{getText('apts-modal-email-label', 'Email Address *')}</Label>
                 <Input
                   id="patientEmail"
                   type="email"
                   value={formData.patientEmail}
                   onChange={(e) => handleInputChange("patientEmail", e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={getText('apts-modal-email-ph', 'Enter your email')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="patientPhone">Phone Number *</Label>
+                <Label htmlFor="patientPhone">{getText('apts-modal-phone-label', 'Phone Number *')}</Label>
                 <Input
                   id="patientPhone"
                   type="tel"
                   value={formData.patientPhone}
                   onChange={(e) => handleInputChange("patientPhone", e.target.value)}
-                  placeholder="Enter your phone number"
+                  placeholder={getText('apts-modal-phone-ph', 'Enter your phone number')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="reasonForVisit">Reason for Visit *</Label>
+                <Label htmlFor="reasonForVisit">{getText('apts-modal-reason-label', 'Reason for Visit *')}</Label>
                 <Input
                   id="reasonForVisit"
                   value={formData.reasonForVisit}
                   onChange={(e) => handleInputChange("reasonForVisit", e.target.value)}
-                  placeholder="Brief description of your concern"
+                  placeholder={getText('apts-modal-reason-ph', 'Brief description of your concern')}
                 />
               </div>
             </div>
@@ -225,24 +227,24 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
 
           {/* Insurance Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Insurance Information (Optional)</h3>
+            <h3 className="text-lg font-medium" {...getElementAttributes('apts-modal-section', 1)}>{getText('apts-modal-insurance', 'Insurance Information (Optional)')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="insuranceProvider">Insurance Provider</Label>
+                <Label htmlFor="insuranceProvider">{getText('apts-modal-ins-provider', 'Insurance Provider')}</Label>
                 <Input
                   id="insuranceProvider"
                   value={formData.insuranceProvider}
                   onChange={(e) => handleInputChange("insuranceProvider", e.target.value)}
-                  placeholder="e.g., Blue Cross Blue Shield"
+                  placeholder={getText('apts-modal-ins-provider-ph', 'e.g., Blue Cross Blue Shield')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="insuranceNumber">Policy Number</Label>
+                <Label htmlFor="insuranceNumber">{getText('apts-modal-ins-number', 'Policy Number')}</Label>
                 <Input
                   id="insuranceNumber"
                   value={formData.insuranceNumber}
                   onChange={(e) => handleInputChange("insuranceNumber", e.target.value)}
-                  placeholder="Enter policy number"
+                  placeholder={getText('apts-modal-ins-number-ph', 'Enter policy number')}
                 />
               </div>
             </div>
@@ -250,25 +252,25 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
 
           {/* Emergency Contact */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Emergency Contact (Optional)</h3>
+            <h3 className="text-lg font-medium" {...getElementAttributes('apts-modal-section', 2)}>{getText('apts-modal-emergency', 'Emergency Contact (Optional)')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="emergencyContact">Emergency Contact Name</Label>
+                <Label htmlFor="emergencyContact">{getText('apts-modal-em-name', 'Emergency Contact Name')}</Label>
                 <Input
                   id="emergencyContact"
                   value={formData.emergencyContact}
                   onChange={(e) => handleInputChange("emergencyContact", e.target.value)}
-                  placeholder="Emergency contact name"
+                  placeholder={getText('apts-modal-em-name-ph', 'Emergency contact name')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="emergencyPhone">Emergency Contact Phone</Label>
+                <Label htmlFor="emergencyPhone">{getText('apts-modal-em-phone', 'Emergency Contact Phone')}</Label>
                 <Input
                   id="emergencyPhone"
                   type="tel"
                   value={formData.emergencyPhone}
                   onChange={(e) => handleInputChange("emergencyPhone", e.target.value)}
-                  placeholder="Emergency contact phone"
+                  placeholder={getText('apts-modal-em-phone-ph', 'Emergency contact phone')}
                 />
               </div>
             </div>
@@ -276,30 +278,31 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
 
           {/* Additional Notes */}
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Additional Notes (Optional)</h3>
+            <h3 className="text-lg font-medium" {...getElementAttributes('apts-modal-section', 3)}>{getText('apts-modal-notes', 'Additional Notes (Optional)')}</h3>
             <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="notes">{getText('apts-modal-notes-label', 'Notes')}</Label>
               <textarea
                 id="notes"
                 className="w-full min-h-[100px] p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={formData.notes}
                 onChange={(e) => handleInputChange("notes", e.target.value)}
-                placeholder="Any additional information you'd like to share with the doctor..."
+                placeholder={getText('apts-modal-notes-ph', "Any additional information you'd like to share with the doctor...")}
               />
             </div>
           </div>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={handleCancel} disabled={isSubmitting}>
-            Cancel
+          <Button variant="outline" onClick={handleCancel} disabled={isSubmitting} {...getElementAttributes('apts-modal-cancel', 0)}>
+            {getText('apts-modal-cancel', 'Cancel')}
           </Button>
           <Button 
             onClick={handleConfirmAppointment} 
             disabled={isSubmitting || !validateForm()}
             className="bg-blue-600 hover:bg-blue-700"
+            {...getElementAttributes('apts-modal-confirm', 0)}
           >
-            {isSubmitting ? "Booking..." : "Confirm Appointment"}
+            {isSubmitting ? getText('apts-modal-booking', 'Booking...') : getText('apts-modal-confirm', 'Confirm Appointment')}
           </Button>
         </DialogFooter>
       </DialogContent>

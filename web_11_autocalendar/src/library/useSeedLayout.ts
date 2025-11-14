@@ -1,7 +1,7 @@
 // src/library/useSeedLayout.ts
 import { useState, useEffect, useCallback } from 'react';
 import { getSeedLayout } from '@/utils/seedLayout';
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled, isLayoutDynamicActive, isStructureDynamicActive } from '@/utils/dynamicDataProvider';
 import { getTextForElement, type ElementKey } from '@/library/textVariants';
 
 // Semantic ID mappings (10 per type; selected by seed mapped to 1-10)
@@ -116,24 +116,29 @@ function generateElementId(seed: number, elementType: string, index: number): st
 }
 
 export function useSeedLayout() {
-  const [seed, setSeed] = useState(1);
+  const [seed, setSeed] = useState(1); // For layout (from seed parameter)
+  const [structureSeed, setStructureSeed] = useState(1); // For HTML structure (from seed-structure parameter)
   const [layout, setLayout] = useState(getSeedLayout(1));
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
 
   useEffect(() => {
-    // Check if dynamic HTML is enabled
+    // Check if dynamic HTML is enabled (environment variable)
     const dynamicEnabled = isDynamicModeEnabled();
     setIsDynamicEnabled(dynamicEnabled);
     
-    // Get seed from URL parameters (prefer seed-structure)
+    // Check if layout is dynamic (requires seed in URL)
+    const layoutActive = isLayoutDynamicActive();
+    
+    // Check if HTML structure is dynamic (requires seed-structure in URL)
+    const structureActive = isStructureDynamicActive();
+    
+    // Get seed parameter from URL (for layout)
     const searchParams = new URLSearchParams(window.location.search);
-    const seedStructureParam = searchParams.get('seed-structure');
-    const seedParam = seedStructureParam ?? searchParams.get('seed');
+    const seedParam = searchParams.get('seed');
     let rawSeed = seedParam ? parseInt(seedParam) : 1;
     if (!seedParam) {
       try {
-        const storedStructure = localStorage.getItem('autocalendarSeedStructure');
-        const stored = storedStructure ?? localStorage.getItem('autocalendarSeed');
+        const stored = localStorage.getItem('autocalendarSeed');
         if (stored) rawSeed = parseInt(stored);
       } catch {}
       if (!Number.isFinite(rawSeed)) {
@@ -142,21 +147,36 @@ export function useSeedLayout() {
       }
     }
     
-    // Get effective seed (validates range and respects dynamic HTML setting)
+    // Get seed-structure parameter from URL (for HTML structure)
+    const seedStructureParam = searchParams.get('seed-structure');
+    let rawStructureSeed = seedStructureParam ? parseInt(seedStructureParam) : 1;
+    if (!seedStructureParam) {
+      try {
+        const storedStructure = localStorage.getItem('autocalendarSeedStructure');
+        if (storedStructure) rawStructureSeed = parseInt(storedStructure);
+      } catch {}
+      if (!Number.isFinite(rawStructureSeed)) {
+        rawStructureSeed = 1;
+      }
+    }
+    
+    // Get effective seeds (validates range and respects dynamic HTML setting)
     const effectiveSeed = getEffectiveSeed(rawSeed);
+    const effectiveStructureSeed = getEffectiveSeed(rawStructureSeed);
     setSeed(effectiveSeed);
+    setStructureSeed(effectiveStructureSeed);
     
     // Save for compatibility
     try {
-      localStorage.setItem('autocalendarSeedStructure', effectiveSeed.toString());
       localStorage.setItem('autocalendarSeed', effectiveSeed.toString());
+      localStorage.setItem('autocalendarSeedStructure', effectiveStructureSeed.toString());
     } catch {}
     
-    // Update layout only if dynamic HTML is enabled
-    if (dynamicEnabled) {
+    // Update layout only if layout is dynamic (both env var enabled AND seed in URL)
+    if (layoutActive) {
       setLayout(getSeedLayout(effectiveSeed));
     } else {
-      // Use default layout when dynamic HTML is disabled
+      // Use default layout when layout is not dynamic
       setLayout(getSeedLayout(1));
     }
   }, []);
@@ -168,110 +188,125 @@ export function useSeedLayout() {
       'data-element-type': elementType 
     } as Record<string, string>;
     
-    if (!isDynamicEnabled) {
+    // Check if HTML structure is dynamic (requires seed-structure in URL)
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return baseAttrs;
     }
     
-    // Use semantic seed-based ID
-    const dynamicId = generateElementId(seed, elementType, index);
+    // Use semantic seed-based ID (use structureSeed for HTML structure)
+    const dynamicId = generateElementId(structureSeed, elementType, index);
     
-    // Generate dynamic attributes based on seed
+    // Generate dynamic attributes based on structureSeed
     return { 
       ...baseAttrs,
       id: dynamicId, 
-      'data-seed': seed.toString(),
-      'data-variant': (seed % 10).toString()
+      'data-seed': structureSeed.toString(),
+      'data-variant': (structureSeed % 10).toString()
     };
-  }, [seed, isDynamicEnabled]);
+  }, [structureSeed]);
 
   const getElementXPath = useCallback((elementType: string) => {
-    if (!isDynamicEnabled) {
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return `//${elementType}[@id='${elementType}-0']`;
     }
-    // Generate dynamic XPath based on seed
-    return `//${elementType}[@data-seed='${seed}']`;
-  }, [seed, isDynamicEnabled]);
+    // Generate dynamic XPath based on structureSeed
+    return `//${elementType}[@data-seed='${structureSeed}']`;
+  }, [structureSeed]);
 
   // Function to reorder elements
   const reorderElements = useCallback(<T extends { id?: string; name?: string }>(elements: T[]) => {
-    if (!isDynamicEnabled) {
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return elements;
     }
-    // Simple reordering based on seed
+    // Simple reordering based on structureSeed
     const reordered = [...elements];
-    for (let i = 0; i < seed % elements.length; i++) {
+    for (let i = 0; i < structureSeed % elements.length; i++) {
       reordered.push(reordered.shift()!);
     }
     return reordered;
-  }, [seed, isDynamicEnabled]);
+  }, [structureSeed]);
 
   // Function to generate element ID
   const generateId = useCallback((context: string, index: number = 0) => {
-    if (!isDynamicEnabled) {
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return `${context}-${index}`;
     }
-    return generateElementId(seed, context, index);
-  }, [seed, isDynamicEnabled]);
+    return generateElementId(structureSeed, context, index);
+  }, [structureSeed]);
 
   // Function to get layout classes for specific element types
   const getLayoutClasses = useCallback((elementType: 'container' | 'item' | 'button' | 'checkbox') => {
-    if (!isDynamicEnabled) {
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return '';
     }
-    // Generate dynamic classes based on seed
-    return `dynamic-${elementType} seed-${seed}`;
-  }, [seed, isDynamicEnabled]);
+    // Generate dynamic classes based on structureSeed
+    return `dynamic-${elementType} seed-${structureSeed}`;
+  }, [structureSeed]);
 
   // Function to apply CSS variables to an element
   const applyCSSVariables = useCallback((element: HTMLElement) => {
-    if (!isDynamicEnabled) {
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return;
     }
     // Apply basic dynamic CSS variables
-    element.style.setProperty('--seed', seed.toString());
-    element.style.setProperty('--variant', (seed % 10).toString());
-  }, [seed, isDynamicEnabled]);
+    element.style.setProperty('--seed', structureSeed.toString());
+    element.style.setProperty('--variant', (structureSeed % 10).toString());
+  }, [structureSeed]);
 
   // Function to get current layout information
   const getLayoutInfo = useCallback(() => {
+    const layoutActive = isLayoutDynamicActive();
+    const structureActive = isStructureDynamicActive();
     return {
       id: layout.id,
       name: layout.name,
       description: layout.description,
-      isDynamic: isDynamicEnabled,
-      seed: seed
+      isLayoutDynamic: layoutActive,
+      isStructureDynamic: structureActive,
+      seed: seed,
+      structureSeed: structureSeed
     };
-  }, [layout, isDynamicEnabled, seed]);
+  }, [layout, seed, structureSeed]);
 
   // Function to create dynamic styles
   const createDynamicStyles = useCallback(() => {
-    if (!isDynamicEnabled) {
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return {};
     }
     
     return {
-      // Dynamic properties based on seed
-      '--dynamic-seed': seed,
-      '--dynamic-variant': (seed % 10),
+      // Dynamic properties based on structureSeed
+      '--dynamic-seed': structureSeed,
+      '--dynamic-variant': (structureSeed % 10),
     } as React.CSSProperties;
-  }, [seed, isDynamicEnabled]);
+  }, [structureSeed]);
 
   // Function to generate seed-specific CSS class names
   const generateSeedClass = useCallback((baseClass: string) => {
-    if (!isDynamicEnabled) {
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) {
       return baseClass;
     }
-    return `${baseClass} seed-${seed}`;
-  }, [seed, isDynamicEnabled]);
+    return `${baseClass} seed-${structureSeed}`;
+  }, [structureSeed]);
 
   // Get dynamic text
   const getText = useCallback((key: ElementKey, fallback: string): string => {
-    if (!isDynamicEnabled) return fallback;
-    return getTextForElement(seed, key, fallback);
-  }, [seed, isDynamicEnabled]);
+    const structureActive = isStructureDynamicActive();
+    if (!structureActive) return fallback;
+    return getTextForElement(structureSeed, key, fallback);
+  }, [structureSeed]);
 
   return {
-    seed,
+    seed, // For layout
+    structureSeed, // For HTML structure
     layout,
     isDynamicEnabled,
     getElementAttributes,

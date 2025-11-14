@@ -3,8 +3,7 @@
 import React, { createContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { LayoutVariant } from '@/library/layoutVariants';
 import { getLayoutVariant } from '@/library/layoutVariants';
-import { getSeedFromUrl, getSeedLayout } from '@/utils/seedLayout';
-import { isDynamicEnabled } from '@/utils/seedLayout';
+import { getSeedFromUrl, getSeedLayout, isDynamicEnabled, isLayoutDynamicActive } from '@/utils/seedLayout';
 
 interface LayoutContextType {
   currentVariant: LayoutVariant;
@@ -70,11 +69,14 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
   }, [isDynamicHTMLEnabled]);
 
   useEffect(() => {
-    // Check if dynamic HTML is enabled
+    // Check if dynamic HTML is enabled (environment variable)
     const dynamicEnabled = isDynamicEnabled();
     setIsDynamicHTMLEnabled(dynamicEnabled);
     
-    // Get seed from URL or localStorage
+    // Check if layout is dynamic (requires seed in URL)
+    const layoutActive = isLayoutDynamicActive();
+    
+    // Get seed from URL (for layout)
     const urlSeed = getSeedFromUrl();
     const effectiveSeed = urlSeed;
     
@@ -87,11 +89,11 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
       // Ignore localStorage errors
     }
     
-    // Set layout based on dynamic HTML setting
-    if (dynamicEnabled) {
+    // Set layout based on layout active state (both env var enabled AND seed in URL)
+    if (layoutActive) {
       updateLayout(effectiveSeed);
     } else {
-      // Always use default layout when dynamic HTML is disabled
+      // Always use default layout when layout is not dynamic
       setCurrentVariant(getLayoutVariant(1));
     }
   }, [updateLayout]);

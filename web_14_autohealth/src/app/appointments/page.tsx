@@ -12,7 +12,7 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 
 export default function AppointmentsPage() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getText, getElementAttributes } = useSeedLayout();
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [appointmentList, setAppointmentList] = useState<Appointment[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,19 +56,19 @@ export default function AppointmentsPage() {
   }
   return (
     <div className="container py-10">
-      <h1 className="text-2xl font-semibold">Available Appointments</h1>
+      <h1 className="text-2xl font-semibold" {...getElementAttributes('apts-heading', 0)}>{getText('apts-heading', 'Available Appointments')}</h1>
       <div className="mt-6">
         {(() => {
           const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-          const hasSeed = !!sp?.get('seed');
+          const hasSeed = !!(sp?.get('seed-structure') || sp?.get('seed'));
 
           // Column definitions (keys drive order of headers/cells)
           const columns = [
-            { key: 'doctor', header: 'Doctor' },
-            { key: 'specialty', header: 'Specialty' },
-            { key: 'date', header: 'Date' },
-            { key: 'time', header: 'Time' },
-            { key: 'action', header: 'Action', align: 'right' as const },
+            { key: 'doctor', header: getText('apts-col-doctor', 'Doctor') },
+            { key: 'specialty', header: getText('apts-col-specialty', 'Specialty') },
+            { key: 'date', header: getText('apts-col-date', 'Date') },
+            { key: 'time', header: getText('apts-col-time', 'Time') },
+            { key: 'action', header: getText('apts-col-action', 'Action'), align: 'right' as const },
           ];
           const orderedColumns = hasSeed ? reorderElements(columns) : columns;
 
@@ -80,7 +80,7 @@ export default function AppointmentsPage() {
           <TableHeader>
             <TableRow>
               {orderedColumns.map((c, ci) => (
-                <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined}>
+                <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined} {...getElementAttributes('apts-col', ci)}>
                   {c.header}
                 </TableHead>
               ))}
@@ -99,8 +99,9 @@ export default function AppointmentsPage() {
                       <Button 
                         onClick={() => handleBookAppointment(a)}
                         className="bg-blue-600 hover:bg-blue-700"
+                        {...getElementAttributes('apts-book-button', ri)}
                       >
-                        Book Appointment
+                        {getText('apts-book-button', 'Book Appointment')}
                       </Button>
                     </TableCell>
                   );

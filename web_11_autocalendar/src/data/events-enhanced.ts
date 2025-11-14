@@ -1,5 +1,5 @@
 import { isDataGenerationEnabled, generateProjectData, generateClientSideEvents } from "@/shared/data-generator";
-import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
+import { isDbLoadModeEnabled, fetchSeededSelection, getSeedValueFromEnv } from "@/shared/seeded-loader";
 import { EVENTS_DATASET, CalendarEvent } from "@/library/dataset";
 
 /**
@@ -12,7 +12,7 @@ export async function initializeEvents(): Promise<CalendarEvent[]> {
       const dbData = await fetchSeededSelection<CalendarEvent>({
         projectKey: "web_11_autocalendar",
         entityType: "calendar_events",
-        seedValue: 1,
+        seedValue: getSeedValueFromEnv(1),
         limit: 200
       });
       if (dbData && dbData.length > 0) {

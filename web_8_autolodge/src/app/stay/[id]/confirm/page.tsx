@@ -8,6 +8,8 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
+import { useSeedLayout } from "@/library/utils";
+import { getSeedLayout as getLayoutVariantConfig } from "@/library/layoutVariants";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {

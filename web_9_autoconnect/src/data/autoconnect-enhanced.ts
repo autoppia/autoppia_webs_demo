@@ -1,5 +1,5 @@
 import { isDataGenerationEnabled, generateProjectData } from "@/shared/data-generator";
-import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
+import { isDbLoadModeEnabled, fetchSeededSelection, getSeedValueFromEnv } from "@/shared/seeded-loader";
 import type { User, Post, Job, Recommendation } from "@/library/dataset";
 
 /**
@@ -13,7 +13,7 @@ export async function initializeUsers(): Promise<User[]> {
       const dbData = await fetchSeededSelection({
         projectKey: "web_9_autoconnect_users",
         entityType: "users",
-        seedValue: 1, // Use default seed when no seed is provided
+        seedValue: getSeedValueFromEnv(1),
         limit: 50
       });
       
@@ -90,7 +90,7 @@ export async function initializePosts(): Promise<Post[]> {
       const dbData = await fetchSeededSelection({
         projectKey: "web_9_autoconnect_posts",
         entityType: "posts",
-        seedValue: 1,
+        seedValue: getSeedValueFromEnv(1),
         limit: 50
       });
       
@@ -167,7 +167,7 @@ export async function initializeJobs(): Promise<Job[]> {
       const dbData = await fetchSeededSelection({
         projectKey: "web_9_autoconnect_jobs",
         entityType: "jobs",
-        seedValue: 1,
+        seedValue: getSeedValueFromEnv(1),
         limit: 50
       });
       
@@ -465,7 +465,7 @@ export async function initializeRecommendations(): Promise<Recommendation[]> {
       const dbData = await fetchSeededSelection({
         projectKey,
         entityType,
-        seedValue: 1,
+        seedValue: getSeedValueFromEnv(1),
         limit: 50
       });
       if (dbData && dbData.length > 0) {

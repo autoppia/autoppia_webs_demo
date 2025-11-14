@@ -12,7 +12,7 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 
 export default function PrescriptionsPage() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getText, getElementAttributes } = useSeedLayout();
   const [selectedPrescription, setSelectedPrescription] = useState<Prescription | null>(null);
   const [prescriptionList, setPrescriptionList] = useState<Prescription[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,7 +57,7 @@ export default function PrescriptionsPage() {
 
   const statuses = ["all", "active", "completed", "discontinued", "refill_needed"];
   const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-  const hasSeed = !!sp?.get('seed');
+  const hasSeed = !!(sp?.get('seed-structure') || sp?.get('seed'));
   const orderedStatuses = hasSeed ? reorderElements(statuses) : statuses;
   useEffect(() => {
     let mounted = true;
@@ -84,7 +84,7 @@ export default function PrescriptionsPage() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-2xl font-semibold">Prescriptions</h1>
+      <h1 className="text-2xl font-semibold" {...getElementAttributes('prescriptions-heading', 0)}>{getText('prescriptions-heading', 'Prescriptions')}</h1>
 
       {/* Status Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
@@ -97,8 +97,13 @@ export default function PrescriptionsPage() {
               setSelectedStatus(status);
               logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { status });
             }}
+            {...getElementAttributes('prescriptions-status-filter', i)}
           >
-            {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+            {status === 'all' && getText('presc-filter-all', 'All')}
+            {status === 'active' && getText('presc-filter-active', 'Active')}
+            {status === 'completed' && getText('presc-filter-completed', 'Completed')}
+            {status === 'discontinued' && getText('presc-filter-discontinued', 'Discontinued')}
+            {status === 'refill_needed' && getText('presc-filter-refill', 'Refill needed')}
           </Button>
           </DynamicElement>
         ))}
@@ -107,20 +112,20 @@ export default function PrescriptionsPage() {
       <div className="mt-6">
         {(() => {
           const columns = [
-            { key: 'medicine', header: 'Medicine' },
-            { key: 'dosage', header: 'Dosage' },
-            { key: 'doctor', header: 'Doctor' },
-            { key: 'start', header: 'Start Date' },
-            { key: 'status', header: 'Status' },
-            { key: 'action', header: 'Action', align: 'right' as const },
+            { key: 'medicine', header: getText('presc-col-medicine', 'Medicine') },
+            { key: 'dosage', header: getText('presc-col-dosage', 'Dosage') },
+            { key: 'doctor', header: getText('presc-col-doctor', 'Doctor') },
+            { key: 'start', header: getText('presc-col-start', 'Start Date') },
+            { key: 'status', header: getText('presc-col-status', 'Status') },
+            { key: 'action', header: getText('presc-col-action', 'Action'), align: 'right' as const },
           ];
           const orderedColumns = hasSeed ? reorderElements(columns) : columns;
           return (
         <Table>
           <TableHeader>
             <TableRow>
-              {orderedColumns.map((c) => (
-                <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined}>{c.header}</TableHead>
+              {orderedColumns.map((c, ci) => (
+                <TableHead key={c.key} className={c.align === 'right' ? 'text-right' : undefined} {...getElementAttributes('presc-col', ci)}>{c.header}</TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -153,7 +158,7 @@ export default function PrescriptionsPage() {
                   );
                   if (c.key === 'action') return (
                     <TableCell key={c.key} className="text-right">
-                      <Button onClick={() => handleViewPrescription(p)} size="sm">View Prescription</Button>
+                      <Button onClick={() => handleViewPrescription(p)} size="sm" {...getElementAttributes('view-prescription-button', ri)}>{getText('view-prescription-button', 'View Prescription')}</Button>
                     </TableCell>
                   );
                   return null;
@@ -180,8 +185,8 @@ export default function PrescriptionsPage() {
                   )}
                 </div>
               </div>
-              <Button variant="outline" onClick={() => setSelectedPrescription(null)}>
-                Close
+              <Button variant="outline" onClick={() => setSelectedPrescription(null)} {...getElementAttributes('presc-modal-close', 0)}>
+                {getText('presc-modal-close', 'Close')}
               </Button>
             </div>
             
@@ -196,26 +201,26 @@ export default function PrescriptionsPage() {
                   <DynamicElement key={s.key} elementType="prescription-modal-section" as="div" index={si} className="space-y-4">
                     {s.key === 'details' && (
                       <>
-                        <h3 className="text-lg font-semibold">Prescription Details</h3>
+                        <h3 className="text-lg font-semibold" {...getElementAttributes('presc-details-heading', 0)}>{getText('presc-details-heading', 'Prescription Details')}</h3>
                         <div className="space-y-2 text-sm">
-                          <div className="flex justify-between"><span className="font-medium">Dosage:</span><span>{selectedPrescription.dosage}</span></div>
-                          <div className="flex justify-between"><span className="font-medium">Status:</span><Badge className={getStatusColor(selectedPrescription.status)}>{selectedPrescription.status.replace('_', ' ')}</Badge></div>
-                          <div className="flex justify-between"><span className="font-medium">Start Date:</span><span>{selectedPrescription.startDate}</span></div>
-                          {selectedPrescription.endDate && (<div className="flex justify-between"><span className="font-medium">End Date:</span><span>{selectedPrescription.endDate}</span></div>)}
-                          <div className="flex justify-between"><span className="font-medium">Prescribing Doctor:</span><span>{selectedPrescription.doctorName}</span></div>
-                          {selectedPrescription.pharmacy && (<div className="flex justify-between"><span className="font-medium">Pharmacy:</span><span>{selectedPrescription.pharmacy}</span></div>)}
-                          {selectedPrescription.prescriptionNumber && (<div className="flex justify-between"><span className="font-medium">Prescription #:</span><span>{selectedPrescription.prescriptionNumber}</span></div>)}
+                          <div className="flex justify-between"><span className="font-medium">{getText('presc-label-dosage', 'Dosage:')}</span><span>{selectedPrescription.dosage}</span></div>
+                          <div className="flex justify-between"><span className="font-medium">{getText('presc-label-status', 'Status:')}</span><Badge className={getStatusColor(selectedPrescription.status)}>{selectedPrescription.status.replace('_', ' ')}</Badge></div>
+                          <div className="flex justify-between"><span className="font-medium">{getText('presc-label-start', 'Start Date:')}</span><span>{selectedPrescription.startDate}</span></div>
+                          {selectedPrescription.endDate && (<div className="flex justify-between"><span className="font-medium">{getText('presc-label-end', 'End Date:')}</span><span>{selectedPrescription.endDate}</span></div>)}
+                          <div className="flex justify-between"><span className="font-medium">{getText('presc-label-doctor', 'Prescribing Doctor:')}</span><span>{selectedPrescription.doctorName}</span></div>
+                          {selectedPrescription.pharmacy && (<div className="flex justify-between"><span className="font-medium">{getText('presc-label-pharmacy', 'Pharmacy:')}</span><span>{selectedPrescription.pharmacy}</span></div>)}
+                          {selectedPrescription.prescriptionNumber && (<div className="flex justify-between"><span className="font-medium">{getText('presc-label-number', 'Prescription #:')}</span><span>{selectedPrescription.prescriptionNumber}</span></div>)}
                         </div>
                       </>
                     )}
                     {s.key === 'cost' && (
                       <>
-                        <h3 className="text-lg font-semibold">Cost & Refills</h3>
+                        <h3 className="text-lg font-semibold" {...getElementAttributes('presc-cost-heading', 0)}>{getText('presc-cost-heading', 'Cost & Refills')}</h3>
                         <div className="space-y-2 text-sm">
-                          {selectedPrescription.cost && (<div className="flex justify-between"><span className="font-medium">Cost:</span><span>${selectedPrescription.cost}</span></div>)}
-                          <div className="flex justify-between"><span className="font-medium">Insurance Coverage:</span><Badge className={selectedPrescription.insuranceCoverage ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>{selectedPrescription.insuranceCoverage ? "Covered" : "Not Covered"}</Badge></div>
-                          {selectedPrescription.refillsRemaining !== undefined && (<div className="flex justify-between"><span className="font-medium">Refills Remaining:</span><span>{selectedPrescription.refillsRemaining}</span></div>)}
-                          {selectedPrescription.totalRefills && (<div className="flex justify-between"><span className="font-medium">Total Refills:</span><span>{selectedPrescription.totalRefills}</span></div>)}
+                          {selectedPrescription.cost && (<div className="flex justify-between"><span className="font-medium">{getText('presc-label-cost', 'Cost:')}</span><span>${selectedPrescription.cost}</span></div>)}
+                          <div className="flex justify-between"><span className="font-medium">{getText('presc-label-insurance', 'Insurance Coverage:')}</span><Badge className={selectedPrescription.insuranceCoverage ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>{selectedPrescription.insuranceCoverage ? getText('presc-badge-covered', 'Covered') : getText('presc-badge-not-covered', 'Not Covered')}</Badge></div>
+                          {selectedPrescription.refillsRemaining !== undefined && (<div className="flex justify-between"><span className="font-medium">{getText('presc-label-refills-remaining', 'Refills Remaining:')}</span><span>{selectedPrescription.refillsRemaining}</span></div>)}
+                          {selectedPrescription.totalRefills && (<div className="flex justify-between"><span className="font-medium">{getText('presc-label-total-refills', 'Total Refills:')}</span><span>{selectedPrescription.totalRefills}</span></div>)}
                         </div>
                       </>
                     )}
@@ -226,14 +231,14 @@ export default function PrescriptionsPage() {
 
             {/* Instructions */}
             <div className="mt-6">
-              <h3 className="text-lg font-semibold mb-2">Instructions</h3>
+              <h3 className="text-lg font-semibold mb-2" {...getElementAttributes('presc-instructions-heading', 0)}>{getText('presc-instructions-heading', 'Instructions')}</h3>
               <p className="text-sm bg-gray-50 p-3 rounded">{selectedPrescription.instructions}</p>
             </div>
 
             {/* Side Effects */}
             {selectedPrescription.sideEffects && selectedPrescription.sideEffects.length > 0 && (
               <div className="mt-6">
-                <h3 className="text-lg font-semibold mb-2">Possible Side Effects</h3>
+                <h3 className="text-lg font-semibold mb-2" {...getElementAttributes('presc-side-effects-heading', 0)}>{getText('presc-side-effects-heading', 'Possible Side Effects')}</h3>
                 <ul className="text-sm space-y-1">
                   {selectedPrescription.sideEffects.map((effect, index) => (
                     <li key={index} className="flex items-center gap-2">
@@ -248,7 +253,7 @@ export default function PrescriptionsPage() {
             {/* Warnings */}
             {selectedPrescription.warnings && selectedPrescription.warnings.length > 0 && (
               <div className="mt-6">
-                <h3 className="text-lg font-semibold mb-2">Important Warnings</h3>
+                <h3 className="text-lg font-semibold mb-2" {...getElementAttributes('presc-warnings-heading', 0)}>{getText('presc-warnings-heading', 'Important Warnings')}</h3>
                 <ul className="text-sm space-y-1">
                   {selectedPrescription.warnings.map((warning, index) => (
                     <li key={index} className="flex items-center gap-2">
@@ -271,8 +276,9 @@ export default function PrescriptionsPage() {
                 }}
                 disabled={selectedPrescription.refillsRemaining === 0}
                 className="w-full"
+                {...getElementAttributes('presc-request-refill', 0)}
               >
-                Request Refill
+                {getText('presc-request-refill', 'Request Refill')}
               </Button>
             </div>
           </div>

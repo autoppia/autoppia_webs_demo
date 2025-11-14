@@ -4,6 +4,8 @@ import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { LayoutProvider } from "@/contexts/LayoutProvider";
 import { DynamicStructureProvider } from "@/contexts/DynamicStructureContext";
+import { RestaurantProvider } from "@/contexts/RestaurantContext";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { Suspense } from "react";
 // import DebugVariationBadge from "@/components/debug/DebugVariationBadge";
 
@@ -36,12 +38,16 @@ export default function RootLayout({
         <LayoutProvider>
           <Suspense fallback={<div className="min-h-screen" /> }>
             <DynamicStructureProvider>
-              <Navbar />
-              {/* Debug badge removed */}
-              {/* Optionally add persistent cart ui/button here */}
-              <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
-                {children}
-              </div>
+              <RestaurantProvider>
+                <DataReadyGate>
+                  <Navbar />
+                  {/* Debug badge removed */}
+                  {/* Optionally add persistent cart ui/button here */}
+                  <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
+                    {children}
+                  </div>
+                </DataReadyGate>
+              </RestaurantProvider>
             </DynamicStructureProvider>
           </Suspense>
         </LayoutProvider>
