@@ -28,14 +28,22 @@ def _safe_write(path: str, data: Any) -> None:
     Write JSON to path with optional file lock to avoid concurrent write corruption.
     """
     try:
+        def _atomic_write(p: str, payload: Any) -> None:
+            directory = os.path.dirname(p) or "."
+            tmp_path = p + ".tmp"
+            # Ensure directory exists before writing
+            os.makedirs(directory, exist_ok=True)
+            with open(tmp_path, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2, ensure_ascii=False)
+            # Atomic replace on POSIX
+            os.replace(tmp_path, p)
+
         if HAS_FILELOCK:
             lock = FileLock(path + ".lock")
             with lock:
-                with open(path, "w", encoding="utf-8") as f:
-                    json.dump(data, f, indent=2, ensure_ascii=False)
+                _atomic_write(path, data)
         else:
-            with open(path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
+            _atomic_write(path, data)
     except FileNotFoundError as e:
         raise IOError(f"Directory does not exist for path: {path}") from e
     except PermissionError as e:
@@ -164,59 +172,71 @@ def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[D
     data_dir = get_data_dir(web_name)
     _ensure_dir(data_dir)
 
-    # Load or initialize main index
-    main_path = get_main_path(web_name)
-    main: Dict[str, Any] = {}
-    if os.path.exists(main_path):
-        try:
-            with open(main_path, "r", encoding="utf-8") as f:
-                loaded = json.load(f)
-                main = loaded if isinstance(loaded, dict) else {}
-        except Exception:
-            # Corrupted index: reset to keep system operational
-            main = {}
-
-    entity_files: List[str] = main.setdefault(entity_type, [])
-    current_rel: Optional[str] = entity_files[-1] if entity_files else None
-    current_abs: Optional[str] = _get_rel_and_abs(web_name, current_rel) if current_rel else None
-
     def _serialize(items: List[Dict[str, Any]]) -> bytes:
         try:
             return json.dumps(items, ensure_ascii=False, indent=2).encode("utf-8")
         except Exception as e:
             raise ValueError(f"Failed to serialize data to JSON: {e}") from e
 
-    # Try to append to current file if exists and is a list
-    if current_abs and os.path.exists(current_abs):
-        existing = _load_json(current_abs)
-        if isinstance(existing, list):
-            # Compute prospective size after append
-            combined = existing + data
-            prospective_size = len(_serialize(combined))
-            if prospective_size <= MAX_FILE_SIZE_BYTES:
-                _safe_write(current_abs, combined)
-                return current_abs
-        # Fallthrough: need to roll over
+    def _entity_lock_path() -> str:
+        # Per-entity lock to serialize append/rollover across concurrent requests
+        return f"{data_dir}/.{entity_type}.lock"
 
-    # Create a new file (first file for entity or rollover)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"{entity_type}_{timestamp}.json"
-    abs_path = f"{data_dir}/{filename}"
-    rel_path = f"./data/{filename}"
+    def _append_under_lock() -> str:
+        # Load or initialize main index
+        main_path = get_main_path(web_name)
+        main: Dict[str, Any] = {}
+        if os.path.exists(main_path):
+            try:
+                with open(main_path, "r", encoding="utf-8") as f:
+                    loaded = json.load(f)
+                    main = loaded if isinstance(loaded, dict) else {}
+            except Exception:
+                # Corrupted index: reset to keep system operational
+                main = {}
 
-    # Write only the new data into new file
-    payload_size = len(_serialize(data))
-    if payload_size > MAX_FILE_SIZE_BYTES:
-        # If a single batch exceeds limit, still write it to its own file to avoid data loss
-        # This is logged by callers as needed.
-        pass
+        entity_files: List[str] = main.setdefault(entity_type, [])
+        current_rel: Optional[str] = entity_files[-1] if entity_files else None
+        current_abs: Optional[str] = _get_rel_and_abs(web_name, current_rel) if current_rel else None
 
-    _safe_write(abs_path, data)
+        # Try to append to current file if exists and is a list
+        if current_abs and os.path.exists(current_abs):
+            existing = _load_json(current_abs)
+            if isinstance(existing, list):
+                combined = existing + data
+                prospective_size = len(_serialize(combined))
+                if prospective_size <= MAX_FILE_SIZE_BYTES:
+                    _safe_write(current_abs, combined)
+                    return current_abs
+            # Fallthrough: need to roll over
 
-    # Update index
-    if rel_path not in entity_files:
-        entity_files.append(rel_path)
-    _safe_write(main_path, main)
+        # Create a new file (first file for entity or rollover)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{entity_type}_{timestamp}.json"
+        abs_path = f"{data_dir}/{filename}"
+        rel_path = f"./data/{filename}"
 
-    return abs_path
+        # Write only the new data into new file
+        payload_size = len(_serialize(data))
+        if payload_size > MAX_FILE_SIZE_BYTES:
+            # If a single batch exceeds limit, still write it to its own file to avoid data loss
+            pass
+
+        _safe_write(abs_path, data)
+
+        # Update index
+        if rel_path not in entity_files:
+            entity_files.append(rel_path)
+        _safe_write(main_path, main)
+        return abs_path
+
+    if HAS_FILELOCK:
+        # Ensure directory exists for the lock file too
+        _ensure_dir(data_dir)
+        lock = FileLock(_entity_lock_path())
+        with lock:
+            return _append_under_lock()
+    else:
+        # Best-effort without process-level locking
+        return _append_under_lock()
 
