@@ -27,7 +27,7 @@ except ImportError:
     HAS_FASTJSONSCHEMA = False
 
 from master_dataset_handler import save_master_pool, select_from_pool, get_pool_info, list_available_pools
-from data_handler import save_data_file, load_all_data
+from data_handler import load_all_data, append_or_rollover_entity_data
 from seeded_selector import seeded_select, seeded_shuffle, seeded_filter_and_select, seeded_distribution
 
 # --- Configuration ---
@@ -504,9 +504,7 @@ def save_generated_data_file_storage(data: List[Dict[str, Any]], project_key: st
     /app/data/<project_key>/data/<entity_type>_<timestamp>.json
     Returns the absolute path where the file was saved.
     """
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"{entity_type}_{timestamp}.json"
-    saved_path = save_data_file(project_key, filename, data, entity_type)
+    saved_path = append_or_rollover_entity_data(project_key, entity_type, data)
     logger.info(f"Saved {len(data)} items to file storage: {saved_path}")
     return saved_path
 
