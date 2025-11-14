@@ -20,9 +20,16 @@ interface DynamicStructureContextType {
 
 // Check if dynamic structure is enabled via environment variable
 const isDynamicStructureEnabled = (): boolean => {
-  const envValue = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE;
-  // Default to true if not set, or if explicitly set to "true"
-  return envValue === undefined || envValue === "true" || envValue === "1";
+  const rawFlag =
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
+    process.env.ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ??
+    process.env.ENABLE_DYNAMIC_HTML ??
+    '';
+
+  const normalized = rawFlag.toString().trim().toLowerCase();
+  return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';  // Default to true if not set, or if explicitly set to "true"
 };
 
 // Create context with default values

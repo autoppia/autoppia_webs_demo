@@ -1,5 +1,5 @@
 import { generateWeb13Trips, isDataGenerationEnabled } from "@/shared/data-generator";
-import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
+import { isDbLoadModeEnabled, fetchSeededSelection, getSeedValueFromEnv } from "@/shared/seeded-loader";
 import { simulatedTrips, Trip } from "@/library/dataset";
 
 /**
@@ -22,7 +22,7 @@ export async function initializeTrips(limit: number = 30): Promise<Trip[]> {
       const dbData = await fetchSeededSelection<Trip>({
         projectKey: "web_13_autodrive",
         entityType: "trips",
-        seedValue: 1,
+        seedValue: getSeedValueFromEnv(1),
         limit,
         method: "select",
       });

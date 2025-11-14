@@ -19,6 +19,7 @@ import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useSearchParams } from "next/navigation";
 import { withSeed } from "@/utils/seedRouting";
+import { useMatters } from "@/contexts/MatterContext";
 
 const STORAGE_KEY = "matters";
 
@@ -52,9 +53,8 @@ function statusPill(status: string) {
 function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
+  const { matters: contextMatters, isLoading } = useMatters();
   const [matters, setMatters] = useState<Matter[]>([]);
-  const data = DEMO_MATTERS;
-  const error: string | null = null;
   const [selected, setSelected] = useState<string[]>([]);
   const [openNew, setOpenNew] = useState(false);
   const [newMatter, setNewMatter] = useState({
@@ -63,23 +63,39 @@ function MattersListPageContent() {
     status: "Active",
   });
 
+  // Merge generated matters with custom matters from localStorage
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    const base = (data && data.length ? data : DEMO_MATTERS) as any[];
-    const normalized = base.map((m: any) => ({
-      id: m.id ?? `MAT-${Math.floor(Math.random() * 9000 + 1000)}`,
-      name: m.name ?? 'Untitled Matter',
-      client: m.client ?? '—',
-      status: m.status ?? 'Active',
-      updated: m.updated ?? 'Today',
-    })) as Matter[];
-    if (saved) {
-      setMatters(JSON.parse(saved));
-    } else {
-      setMatters(normalized);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    const customMatters = saved ? JSON.parse(saved) : [];
+    
+    // If data generation is enabled, prioritize generated data
+    // Only use DEMO_MATTERS if generation is disabled or has completed with no data
+    const useStaticData = !isLoading && (!contextMatters || contextMatters.length === 0);
+    const baseMatters = (contextMatters && contextMatters.length > 0 ? contextMatters : (useStaticData ? DEMO_MATTERS : [])) as any[];
+    
+    // Only process if we have data (either generated or static)
+    if (baseMatters.length > 0 || customMatters.length > 0) {
+      const normalized = baseMatters.map((m: any) => ({
+        id: m.id ?? `MAT-${Math.floor(Math.random() * 9000 + 1000)}`,
+        name: m.name ?? 'Untitled Matter',
+        client: m.client ?? '—',
+        status: m.status ?? 'Active',
+        updated: m.updated ?? 'Today',
+      })) as Matter[];
+      
+      // Merge with custom matters (custom matters take precedence if same ID)
+      const customIds = new Set(customMatters.map((m: Matter) => m.id));
+      const merged = [
+        ...customMatters,
+        ...normalized.filter(m => !customIds.has(m.id))
+      ];
+      
+      setMatters(merged);
+    } else if (!isLoading) {
+      // If loading is complete and we have no data, show empty state
+      setMatters([]);
     }
-  }, [data]);
+  }, [contextMatters, isLoading]);
 
   const updateMatters = (newList: Matter[]) => {
     setMatters(newList);
@@ -146,8 +162,11 @@ function MattersListPageContent() {
 
         {/* Matter List */}
         <div className="grid gap-4">
-          {error && (
-            <div className="text-red-600">Failed to load matters: {error}</div>
+          {isLoading && matters.length === 0 && (
+            <div className="text-zinc-500 py-8 text-center">Loading matters...</div>
+          )}
+          {!isLoading && matters.length === 0 && (
+            <div className="text-zinc-400 py-8 text-center">No matters found.</div>
           )}
           {matters.map((matter) => (
             <DynamicItem
