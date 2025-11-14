@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block body %}
 
 <div class="hero-section" data-dynamic-group="hero-content" data-dynamic="off">
@@ -8,22 +9,43 @@
                 <h1 class="display-4 text-white">Online Book Store
                     </h1>
                 <p class="lead text-light">Free worldwide delivery with every order</p>
-                <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="search-form">
+                <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}{% if DYNAMIC_HTML_ENABLED %}&{% else %}?{% endif %}seed-structure={{ SEED_STRUCTURE }}{% endif %}" class="search-form">
                     {% if selected_genre %}
                     <input type="hidden" name="genre" value="{{ selected_genre }}">
                     {% endif %}
                     {% if DYNAMIC_HTML_ENABLED %}
                     <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
                     {% endif %}
+                    {% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}
+                    <input type="hidden" name="seed-structure" value="{{ SEED_STRUCTURE }}">
+                    {% endif %}
                     <div class="input-group mb-3">
-                        <input type="text" name="search" class="form-control" placeholder="Search books..." value="{{ search_query }}">
+                        <input type="text" 
+                               name="search" 
+                               class="form-control" 
+                               placeholder="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_placeholder:'inputs.search.placeholder' }}{% else %}Search books...{% endif %}" 
+                               {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                               id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'inputs.search.id' }}"
+                               aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'inputs.search.aria-label' }}"
+                               {% endif %}
+                               value="{{ search_query }}">
                         <div class="input-group-append">
-                            <button class="btn btn-success" type="submit">Search</button>
+                            <button class="btn btn-success" 
+                                    type="submit"
+                                    {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                                    id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'buttons.search.id' }}"
+                                    aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'buttons.search.aria-label' }}"
+                                    {% endif %}>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'buttons.search.text' }}{% else %}Search{% endif %}</button>
                         </div>
                     </div>
                 </form>
                 {% if user.is_authenticated %}
-                <a href="{% url 'booksapp:add_book' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn  btn-autoppia-color">Add new book</a>
+                <a href="{% url 'booksapp:add_book' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}{% if DYNAMIC_HTML_ENABLED %}&{% else %}?{% endif %}seed-structure={{ SEED_STRUCTURE }}{% endif %}" 
+                   class="btn  btn-autoppia-color"
+                   {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                   id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'buttons.add_book.id' }}"
+                   aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'buttons.add_book.aria-label' }}"
+                   {% endif %}>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'buttons.add_book.text' }}{% else %}Add new book{% endif %}</a>
                 {% endif %}
 
             </div>
@@ -41,32 +63,47 @@
             <h2 class="section-title">Our Library</h2>
         </div>
         <div class="col-md-6">
-            <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="float-md-right">
+            <form method="GET" action="{% url 'booksapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}{% if DYNAMIC_HTML_ENABLED %}&{% else %}?{% endif %}seed-structure={{ SEED_STRUCTURE }}{% endif %}" class="float-md-right">
                 {% if search_query %}
                 <input type="hidden" name="search" value="{{ search_query }}">
                 {% endif %}
                 {% if DYNAMIC_HTML_ENABLED %}
                 <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
                 {% endif %}
+                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}
+                <input type="hidden" name="seed-structure" value="{{ SEED_STRUCTURE }}">
+                {% endif %}
                 <div class="form-row">
                     <div class="col-md-5 mb-2 mb-md-0">
-                        <select name="genre" class="form-control" id="genreFilter">
-                            <option value="">All Categories</option>
+                        <select name="genre" 
+                                class="form-control" 
+                                id="genreFilter"
+                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'inputs.all_categories.aria-label' }}"{% endif %}>
+                            <option value="">{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'inputs.all_categories.text' }}{% else %}All Categories{% endif %}</option>
                             {% for genre in genres %}
                             <option value="{{ genre.id }}" {% if selected_genre == genre.id|stringformat:"i" %}selected{% endif %}>{{ genre.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-4 mb-2 mb-md-0">
-                        <select name="year" class="form-control" id="yearFilter" style="min-width: 120px; margin-right: 2em;">
-                            <option value="">All Years</option>
+                        <select name="year" 
+                                class="form-control" 
+                                id="yearFilter" 
+                                style="min-width: 120px; margin-right: 2em;"
+                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'inputs.all_years.aria-label' }}"{% endif %}>
+                            <option value="">{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'inputs.all_years.text' }}{% else %}All Years{% endif %}</option>
                             {% for year in available_years %}
                             <option value="{{ year }}" {% if selected_year == year|stringformat:"i" %}selected{% endif %}>{{ year }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
+                        <button class="btn btn-outline-secondary w-100" 
+                                type="submit"
+                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'buttons.filter.id' }}"
+                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'buttons.filter.aria-label' }}"
+                                {% endif %}>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'buttons.filter.text' }}{% else %}Filter{% endif %}</button>
                     </div>
                 </div>
             </form>
