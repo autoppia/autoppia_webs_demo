@@ -49,5 +49,5 @@ else
     echo "Data generation is disabled. Using original seed data."
 fi
 
-# 4. Start Gunicorn on port 8001
-exec gunicorn --bind 0.0.0.0:8000 booksproject.wsgi:application
+# 4. Start Gunicorn on port 8001 (matches docker-compose.yml port mapping)
+exec gunicorn --bind 0.0.0.0:8001 booksproject.wsgi:application
