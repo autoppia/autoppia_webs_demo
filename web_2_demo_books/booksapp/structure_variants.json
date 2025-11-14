@@ -2,414 +2,3123 @@
   "variants": {
     "1": {
       "navbar": {
-        "home": {"text": "Home", "id": "nav-home", "aria-label": "Navigate to home page"},
-        "about": {"text": "About Us", "id": "nav-about", "aria-label": "Navigate to about page"},
-        "contact": {"text": "Contact", "id": "nav-contact", "aria-label": "Navigate to contact page"},
-        "brand": {"text": "BookStore", "id": "navbar-brand", "aria-label": "BookStore home"}
+        "home": {
+          "text": "Home",
+          "id": "nav-home",
+          "aria-label": "Navigate to home page"
+        },
+        "about": {
+          "text": "About Us",
+          "id": "nav-about",
+          "aria-label": "Navigate to about page"
+        },
+        "contact": {
+          "text": "Contact",
+          "id": "nav-contact",
+          "aria-label": "Navigate to contact page"
+        },
+        "brand": {
+          "text": "BookStore",
+          "id": "navbar-brand",
+          "aria-label": "BookStore home"
+        }
       },
       "login": {
-        "button": {"text": "Login", "id": "login-btn", "aria-label": "Sign in to your account"},
-        "username": {"label": "Username", "placeholder": "Enter your username", "id": "username", "aria-label": "Username input field"},
-        "password": {"label": "Password", "placeholder": "Enter your password", "id": "password", "aria-label": "Password input field"},
-        "submit": {"text": "Sign In", "id": "signin-submit", "aria-label": "Submit login form"},
-        "link": {"text": "Register", "id": "register-link", "aria-label": "Create a new account"}
+        "button": {
+          "text": "Login",
+          "id": "login-btn",
+          "aria-label": "Sign in to your account"
+        },
+        "username": {
+          "label": "Username",
+          "placeholder": "Enter your username",
+          "id": "username",
+          "aria-label": "Username input field"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password",
+          "id": "password",
+          "aria-label": "Password input field"
+        },
+        "submit": {
+          "text": "Sign In",
+          "id": "signin-submit",
+          "aria-label": "Submit login form"
+        },
+        "link": {
+          "text": "Register",
+          "id": "register-link",
+          "aria-label": "Create a new account"
+        }
       },
       "register": {
-        "button": {"text": "Register", "id": "register-btn", "aria-label": "Create a new account"},
-        "username": {"label": "Username", "placeholder": "Choose a username", "id": "username", "aria-label": "Username input field"},
-        "email": {"label": "Email", "placeholder": "Enter your email", "id": "email", "aria-label": "Email input field"},
-        "password1": {"label": "Password", "placeholder": "Create a password", "id": "password1", "aria-label": "Password input field"},
-        "password2": {"label": "Confirm Password", "placeholder": "Confirm your password", "id": "password2", "aria-label": "Confirm password input field"},
-        "submit": {"text": "Create Account", "id": "register-submit", "aria-label": "Submit registration form"},
-        "link": {"text": "Sign In", "id": "login-link", "aria-label": "Sign in to existing account"}
+        "button": {
+          "text": "Register",
+          "id": "register-btn",
+          "aria-label": "Create a new account"
+        },
+        "username": {
+          "label": "Username",
+          "placeholder": "Choose a username",
+          "id": "username",
+          "aria-label": "Username input field"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email",
+          "id": "email",
+          "aria-label": "Email input field"
+        },
+        "password1": {
+          "label": "Password",
+          "placeholder": "Create a password",
+          "id": "password1",
+          "aria-label": "Password input field"
+        },
+        "password2": {
+          "label": "Confirm Password",
+          "placeholder": "Confirm your password",
+          "id": "password2",
+          "aria-label": "Confirm password input field"
+        },
+        "submit": {
+          "text": "Create Account",
+          "id": "register-submit",
+          "aria-label": "Submit registration form"
+        },
+        "link": {
+          "text": "Sign In",
+          "id": "login-link",
+          "aria-label": "Sign in to existing account"
+        }
       },
       "buttons": {
-        "search": {"text": "Search", "id": "search-btn", "aria-label": "Search books"},
-        "filter": {"text": "Filter", "id": "filter-btn", "aria-label": "Apply filters"},
-        "add_book": {"text": "Add new book", "id": "add-book-btn", "aria-label": "Add a new book"},
-        "buy": {"text": "Buy Now", "id": "buy-btn", "aria-label": "Purchase this book"},
-        "add_to_cart": {"text": "Add to Cart", "id": "add-cart-btn", "aria-label": "Add book to shopping cart"},
-        "submit": {"text": "Submit", "id": "submit-btn", "aria-label": "Submit form"},
-        "cancel": {"text": "Cancel", "id": "cancel-btn", "aria-label": "Cancel operation"},
-        "save": {"text": "Save", "id": "save-btn", "aria-label": "Save changes"},
-        "delete": {"text": "Delete", "id": "delete-btn", "aria-label": "Delete item"},
-        "edit": {"text": "Edit", "id": "edit-btn", "aria-label": "Edit item"}
+        "search": {
+          "text": "Search",
+          "id": "search-btn",
+          "aria-label": "Search books"
+        },
+        "filter": {
+          "text": "Filter",
+          "id": "filter-btn",
+          "aria-label": "Apply filters"
+        },
+        "add_book": {
+          "text": "Add new book",
+          "id": "add-book-btn",
+          "aria-label": "Add a new book"
+        },
+        "buy": {
+          "text": "Buy Now",
+          "id": "buy-btn",
+          "aria-label": "Purchase this book"
+        },
+        "add_to_cart": {
+          "text": "Add to Cart",
+          "id": "add-cart-btn",
+          "aria-label": "Add book to shopping cart"
+        },
+        "submit": {
+          "text": "Submit",
+          "id": "submit-btn",
+          "aria-label": "Submit form"
+        },
+        "cancel": {
+          "text": "Cancel",
+          "id": "cancel-btn",
+          "aria-label": "Cancel operation"
+        },
+        "save": {
+          "text": "Save",
+          "id": "save-btn",
+          "aria-label": "Save changes"
+        },
+        "delete": {
+          "text": "Delete",
+          "id": "delete-btn",
+          "aria-label": "Delete item"
+        },
+        "edit": {
+          "text": "Edit",
+          "id": "edit-btn",
+          "aria-label": "Edit item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Search books...", "id": "search-input", "aria-label": "Search for books"},
-        "all_categories": {"text": "All Categories", "id": "all-categories", "aria-label": "Select category"},
-        "all_years": {"text": "All Years", "id": "all-years", "aria-label": "Select year"}
+        "search": {
+          "placeholder": "Search books...",
+          "id": "search-input",
+          "aria-label": "Search for books"
+        },
+        "all_categories": {
+          "text": "All Categories",
+          "id": "all-categories",
+          "aria-label": "Select category"
+        },
+        "all_years": {
+          "text": "All Years",
+          "id": "all-years",
+          "aria-label": "Select year"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "About BookStore",
+          "id": "about-title",
+          "aria-label": "About BookStore page"
+        },
+        "subtitle": {
+          "text": "Your Ultimate Destination for Quality Books",
+          "id": "about-subtitle",
+          "aria-label": "Page subtitle"
+        },
+        "mission": {
+          "text": "Our Mission",
+          "id": "mission-title",
+          "aria-label": "Our mission section"
+        },
+        "vision": {
+          "text": "Our Vision",
+          "id": "vision-title",
+          "aria-label": "Our vision section"
+        },
+        "values": {
+          "text": "Our Values",
+          "id": "values-title",
+          "aria-label": "Our values section"
+        },
+        "value_passion": {
+          "text": "Passion for BookStore",
+          "id": "value-passion",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Community",
+          "id": "value-community",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Diversity",
+          "id": "value-diversity",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "Meet Our Team",
+          "id": "team-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "The passionate book writers behind BookStore",
+          "id": "team-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "Our Story",
+          "id": "story-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Get in Touch",
+          "id": "get-in-touch-btn",
+          "aria-label": "Contact us button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Contact Us",
+          "id": "contact-title",
+          "aria-label": "Contact us page"
+        },
+        "subtitle": {
+          "text": "We'd love to hear from you!",
+          "id": "contact-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Send us a message",
+          "id": "form-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Your Name",
+          "id": "name-label",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "Email Address",
+          "id": "email-label",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Subject",
+          "id": "subject-label",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Message",
+          "id": "message-label",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Send Message",
+          "id": "send-message-btn",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "Find Us",
+          "id": "find-us-title",
+          "aria-label": "Find us section"
+        },
+        "location": {
+          "text": "Our Location",
+          "id": "location-title",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Phone Number",
+          "id": "phone-title",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "Email Address",
+          "id": "contact-email-title",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Business Hours",
+          "id": "hours-title",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "FAQs",
+          "id": "faq-title",
+          "aria-label": "Frequently asked questions"
+        },
+        "faq_add_book": {
+          "text": "How do I add a new book?",
+          "id": "faq-add-book",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Do I need an account to add comments?",
+          "id": "faq-comments",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "How can I contribute to BookStore?",
+          "id": "faq-contribute",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "2": {
       "navbar": {
-        "home": {"text": "Main Page", "id": "main-page-nav", "aria-label": "Go to main page"},
-        "about": {"text": "About", "id": "about-nav", "aria-label": "View about information"},
-        "contact": {"text": "Get in Touch", "id": "contact-nav", "aria-label": "Contact us"},
-        "brand": {"text": "Library", "id": "brand-logo", "aria-label": "Library homepage"}
+        "home": {
+          "text": "Main Page",
+          "id": "main-page-nav",
+          "aria-label": "Go to main page"
+        },
+        "about": {
+          "text": "About",
+          "id": "about-nav",
+          "aria-label": "View about information"
+        },
+        "contact": {
+          "text": "Get in Touch",
+          "id": "contact-nav",
+          "aria-label": "Contact us"
+        },
+        "brand": {
+          "text": "Library",
+          "id": "brand-logo",
+          "aria-label": "Library homepage"
+        }
       },
       "login": {
-        "button": {"text": "Sign In", "id": "signin-button", "aria-label": "Access your account"},
-        "username": {"label": "User Name", "placeholder": "Type your username", "id": "user-input", "aria-label": "Enter username"},
-        "password": {"label": "Passcode", "placeholder": "Type your passcode", "id": "pass-input", "aria-label": "Enter password"},
-        "submit": {"text": "Log In", "id": "login-submit-btn", "aria-label": "Confirm login"},
-        "link": {"text": "Sign Up", "id": "signup-link", "aria-label": "Join now"}
+        "button": {
+          "text": "Sign In",
+          "id": "signin-button",
+          "aria-label": "Access your account"
+        },
+        "username": {
+          "label": "User Name",
+          "placeholder": "Type your username",
+          "id": "user-input",
+          "aria-label": "Enter username"
+        },
+        "password": {
+          "label": "Passcode",
+          "placeholder": "Type your passcode",
+          "id": "pass-input",
+          "aria-label": "Enter password"
+        },
+        "submit": {
+          "text": "Log In",
+          "id": "login-submit-btn",
+          "aria-label": "Confirm login"
+        },
+        "link": {
+          "text": "Sign Up",
+          "id": "signup-link",
+          "aria-label": "Join now"
+        }
       },
       "register": {
-        "button": {"text": "Sign Up", "id": "signup-button", "aria-label": "Join our platform"},
-        "username": {"label": "User Name", "placeholder": "Pick a username", "id": "user-name", "aria-label": "Choose username"},
-        "email": {"label": "Email Address", "placeholder": "Type your email", "id": "email-addr", "aria-label": "Enter email"},
-        "password1": {"label": "Passcode", "placeholder": "Set a passcode", "id": "pass1", "aria-label": "Create password"},
-        "password2": {"label": "Re-enter Passcode", "placeholder": "Re-type passcode", "id": "pass2", "aria-label": "Confirm password"},
-        "submit": {"text": "Join Now", "id": "join-submit", "aria-label": "Complete registration"},
-        "link": {"text": "Log In", "id": "login-redirect", "aria-label": "Already have account"}
+        "button": {
+          "text": "Sign Up",
+          "id": "signup-button",
+          "aria-label": "Join our platform"
+        },
+        "username": {
+          "label": "User Name",
+          "placeholder": "Pick a username",
+          "id": "user-name",
+          "aria-label": "Choose username"
+        },
+        "email": {
+          "label": "Email Address",
+          "placeholder": "Type your email",
+          "id": "email-addr",
+          "aria-label": "Enter email"
+        },
+        "password1": {
+          "label": "Passcode",
+          "placeholder": "Set a passcode",
+          "id": "pass1",
+          "aria-label": "Create password"
+        },
+        "password2": {
+          "label": "Re-enter Passcode",
+          "placeholder": "Re-type passcode",
+          "id": "pass2",
+          "aria-label": "Confirm password"
+        },
+        "submit": {
+          "text": "Join Now",
+          "id": "join-submit",
+          "aria-label": "Complete registration"
+        },
+        "link": {
+          "text": "Log In",
+          "id": "login-redirect",
+          "aria-label": "Already have account"
+        }
       },
       "buttons": {
-        "search": {"text": "Find", "id": "find-button", "aria-label": "Find books"},
-        "filter": {"text": "Apply", "id": "apply-btn", "aria-label": "Apply filters"},
-        "add_book": {"text": "New Book", "id": "new-book-button", "aria-label": "Create new book"},
-        "buy": {"text": "Purchase", "id": "purchase-btn", "aria-label": "Buy this item"},
-        "add_to_cart": {"text": "Add to Basket", "id": "basket-btn", "aria-label": "Add to basket"},
-        "submit": {"text": "Send", "id": "send-button", "aria-label": "Send form"},
-        "cancel": {"text": "Close", "id": "close-btn", "aria-label": "Close dialog"},
-        "save": {"text": "Store", "id": "store-btn", "aria-label": "Store changes"},
-        "delete": {"text": "Remove", "id": "remove-btn", "aria-label": "Remove item"},
-        "edit": {"text": "Modify", "id": "modify-btn", "aria-label": "Modify item"}
+        "search": {
+          "text": "Find",
+          "id": "find-button",
+          "aria-label": "Find books"
+        },
+        "filter": {
+          "text": "Apply",
+          "id": "apply-btn",
+          "aria-label": "Apply filters"
+        },
+        "add_book": {
+          "text": "New Book",
+          "id": "new-book-button",
+          "aria-label": "Create new book"
+        },
+        "buy": {
+          "text": "Purchase",
+          "id": "purchase-btn",
+          "aria-label": "Buy this item"
+        },
+        "add_to_cart": {
+          "text": "Add to Basket",
+          "id": "basket-btn",
+          "aria-label": "Add to basket"
+        },
+        "submit": {
+          "text": "Send",
+          "id": "send-button",
+          "aria-label": "Send form"
+        },
+        "cancel": {
+          "text": "Close",
+          "id": "close-btn",
+          "aria-label": "Close dialog"
+        },
+        "save": {
+          "text": "Store",
+          "id": "store-btn",
+          "aria-label": "Store changes"
+        },
+        "delete": {
+          "text": "Remove",
+          "id": "remove-btn",
+          "aria-label": "Remove item"
+        },
+        "edit": {
+          "text": "Modify",
+          "id": "modify-btn",
+          "aria-label": "Modify item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Find books...", "id": "find-input", "aria-label": "Search books"},
-        "all_categories": {"text": "All Genres", "id": "all-genres", "aria-label": "Choose genre"},
-        "all_years": {"text": "Any Year", "id": "any-year", "aria-label": "Select year"}
+        "search": {
+          "placeholder": "Find books...",
+          "id": "find-input",
+          "aria-label": "Search books"
+        },
+        "all_categories": {
+          "text": "All Genres",
+          "id": "all-genres",
+          "aria-label": "Choose genre"
+        },
+        "all_years": {
+          "text": "Any Year",
+          "id": "any-year",
+          "aria-label": "Select year"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "About Library",
+          "id": "about-lib-title",
+          "aria-label": "About Library page"
+        },
+        "subtitle": {
+          "text": "Your Premier Book Collection Platform",
+          "id": "about-lib-subtitle",
+          "aria-label": "Library subtitle"
+        },
+        "mission": {
+          "text": "Our Purpose",
+          "id": "purpose-title",
+          "aria-label": "Our purpose section"
+        },
+        "vision": {
+          "text": "Our Goal",
+          "id": "goal-title",
+          "aria-label": "Our goal section"
+        },
+        "values": {
+          "text": "What We Stand For",
+          "id": "stand-for-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Love for Books",
+          "id": "value-love",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Togetherness",
+          "id": "value-together",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Variety",
+          "id": "value-variety",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "Our Team",
+          "id": "team-title-v2",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "The dedicated team behind Library",
+          "id": "team-subtitle-v2",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "How We Started",
+          "id": "story-title-v2",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Reach Out",
+          "id": "reach-out-btn",
+          "aria-label": "Contact us button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Get in Touch",
+          "id": "contact-title-v2",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "We're here to help!",
+          "id": "contact-subtitle-v2",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Drop us a line",
+          "id": "form-title-v2",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Name",
+          "id": "name-label-v2",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "E-mail",
+          "id": "email-label-v2",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Topic",
+          "id": "subject-label-v2",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Your Message",
+          "id": "message-label-v2",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Submit",
+          "id": "submit-contact-btn",
+          "aria-label": "Submit contact message"
+        },
+        "find_us": {
+          "text": "Contact Info",
+          "id": "contact-info-title",
+          "aria-label": "Contact info section"
+        },
+        "location": {
+          "text": "Address",
+          "id": "address-title",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Call Us",
+          "id": "phone-title-v2",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "E-mail Us",
+          "id": "email-us-title",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Opening Times",
+          "id": "hours-title-v2",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "Common Questions",
+          "id": "faq-title-v2",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "How can I add books?",
+          "id": "faq-add-book-v2",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Can I comment without an account?",
+          "id": "faq-comments-v2",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "How do I help Library?",
+          "id": "faq-contribute-v2",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "3": {
       "navbar": {
-        "home": {"text": "Dashboard", "id": "dash-link", "aria-label": "View dashboard"},
-        "about": {"text": "Who We Are", "id": "about-link", "aria-label": "Learn about us"},
-        "contact": {"text": "Reach Out", "id": "reach-link", "aria-label": "Get in contact"},
-        "brand": {"text": "BookHub", "id": "hub-brand", "aria-label": "BookHub website"}
+        "home": {
+          "text": "Dashboard",
+          "id": "dash-link",
+          "aria-label": "View dashboard"
+        },
+        "about": {
+          "text": "Who We Are",
+          "id": "about-link",
+          "aria-label": "Learn about us"
+        },
+        "contact": {
+          "text": "Reach Out",
+          "id": "reach-link",
+          "aria-label": "Get in contact"
+        },
+        "brand": {
+          "text": "BookHub",
+          "id": "hub-brand",
+          "aria-label": "BookHub website"
+        }
       },
       "login": {
-        "button": {"text": "Access", "id": "access-btn", "aria-label": "Access account"},
-        "username": {"label": "Account Name", "placeholder": "Your account name", "id": "account-name", "aria-label": "Account identifier"},
-        "password": {"label": "Security Key", "placeholder": "Your security key", "id": "security-key", "aria-label": "Password field"},
-        "submit": {"text": "Enter", "id": "enter-btn", "aria-label": "Enter system"},
-        "link": {"text": "Create Account", "id": "create-account", "aria-label": "New account"}
+        "button": {
+          "text": "Access",
+          "id": "access-btn",
+          "aria-label": "Access account"
+        },
+        "username": {
+          "label": "Account Name",
+          "placeholder": "Your account name",
+          "id": "account-name",
+          "aria-label": "Account identifier"
+        },
+        "password": {
+          "label": "Security Key",
+          "placeholder": "Your security key",
+          "id": "security-key",
+          "aria-label": "Password field"
+        },
+        "submit": {
+          "text": "Enter",
+          "id": "enter-btn",
+          "aria-label": "Enter system"
+        },
+        "link": {
+          "text": "Create Account",
+          "id": "create-account",
+          "aria-label": "New account"
+        }
       },
       "register": {
-        "button": {"text": "Create Account", "id": "create-btn", "aria-label": "Start registration"},
-        "username": {"label": "Account Name", "placeholder": "Your account name", "id": "account-id", "aria-label": "Account username"},
-        "email": {"label": "E-mail", "placeholder": "Your e-mail address", "id": "e-mail", "aria-label": "Email address"},
-        "password1": {"label": "Security Key", "placeholder": "Choose security key", "id": "key1", "aria-label": "Password field"},
-        "password2": {"label": "Verify Key", "placeholder": "Verify security key", "id": "key2", "aria-label": "Password confirmation"},
-        "submit": {"text": "Register", "id": "reg-submit", "aria-label": "Complete signup"},
-        "link": {"text": "Access", "id": "access-link", "aria-label": "Sign in"}
+        "button": {
+          "text": "Create Account",
+          "id": "create-btn",
+          "aria-label": "Start registration"
+        },
+        "username": {
+          "label": "Account Name",
+          "placeholder": "Your account name",
+          "id": "account-id",
+          "aria-label": "Account username"
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "Your e-mail address",
+          "id": "e-mail",
+          "aria-label": "Email address"
+        },
+        "password1": {
+          "label": "Security Key",
+          "placeholder": "Choose security key",
+          "id": "key1",
+          "aria-label": "Password field"
+        },
+        "password2": {
+          "label": "Verify Key",
+          "placeholder": "Verify security key",
+          "id": "key2",
+          "aria-label": "Password confirmation"
+        },
+        "submit": {
+          "text": "Register",
+          "id": "reg-submit",
+          "aria-label": "Complete signup"
+        },
+        "link": {
+          "text": "Access",
+          "id": "access-link",
+          "aria-label": "Sign in"
+        }
       },
       "buttons": {
-        "search": {"text": "Lookup", "id": "lookup-btn", "aria-label": "Lookup books"},
-        "filter": {"text": "Sort", "id": "sort-btn", "aria-label": "Sort results"},
-        "add_book": {"text": "Post Book", "id": "post-book", "aria-label": "Post new book"},
-        "buy": {"text": "Get It", "id": "get-btn", "aria-label": "Get this book"},
-        "add_to_cart": {"text": "Cart", "id": "cart-button", "aria-label": "Add to cart"},
-        "submit": {"text": "Confirm", "id": "confirm-btn", "aria-label": "Confirm action"},
-        "cancel": {"text": "Back", "id": "back-btn", "aria-label": "Go back"},
-        "save": {"text": "Update", "id": "update-btn", "aria-label": "Update information"},
-        "delete": {"text": "Erase", "id": "erase-btn", "aria-label": "Erase item"},
-        "edit": {"text": "Change", "id": "change-btn", "aria-label": "Change item"}
+        "search": {
+          "text": "Lookup",
+          "id": "lookup-btn",
+          "aria-label": "Lookup books"
+        },
+        "filter": {
+          "text": "Sort",
+          "id": "sort-btn",
+          "aria-label": "Sort results"
+        },
+        "add_book": {
+          "text": "Post Book",
+          "id": "post-book",
+          "aria-label": "Post new book"
+        },
+        "buy": {
+          "text": "Get It",
+          "id": "get-btn",
+          "aria-label": "Get this book"
+        },
+        "add_to_cart": {
+          "text": "Cart",
+          "id": "cart-button",
+          "aria-label": "Add to cart"
+        },
+        "submit": {
+          "text": "Confirm",
+          "id": "confirm-btn",
+          "aria-label": "Confirm action"
+        },
+        "cancel": {
+          "text": "Back",
+          "id": "back-btn",
+          "aria-label": "Go back"
+        },
+        "save": {
+          "text": "Update",
+          "id": "update-btn",
+          "aria-label": "Update information"
+        },
+        "delete": {
+          "text": "Erase",
+          "id": "erase-btn",
+          "aria-label": "Erase item"
+        },
+        "edit": {
+          "text": "Change",
+          "id": "change-btn",
+          "aria-label": "Change item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Look for books...", "id": "lookup-input", "aria-label": "Book lookup"},
-        "all_categories": {"text": "Every Category", "id": "every-cat", "aria-label": "All categories"},
-        "all_years": {"text": "All Time", "id": "all-time", "aria-label": "All years"}
+        "search": {
+          "placeholder": "Look for books...",
+          "id": "lookup-input",
+          "aria-label": "Book lookup"
+        },
+        "all_categories": {
+          "text": "Every Category",
+          "id": "every-cat",
+          "aria-label": "All categories"
+        },
+        "all_years": {
+          "text": "All Time",
+          "id": "all-time",
+          "aria-label": "All years"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "Who We Are",
+          "id": "who-we-are-title",
+          "aria-label": "About BookHub page"
+        },
+        "subtitle": {
+          "text": "Connecting Book Lovers Worldwide",
+          "id": "bookhub-subtitle",
+          "aria-label": "BookHub subtitle"
+        },
+        "mission": {
+          "text": "What We Do",
+          "id": "what-we-do-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Where We're Going",
+          "id": "where-going-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "Our Principles",
+          "id": "principles-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Dedication to Books",
+          "id": "value-dedication",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Unity",
+          "id": "value-unity",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Inclusivity",
+          "id": "value-inclusivity",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "The BookHub Team",
+          "id": "team-hub-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "The people building BookHub",
+          "id": "team-hub-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "The BookHub Journey",
+          "id": "hub-journey-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Connect With Us",
+          "id": "connect-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Reach Out",
+          "id": "reach-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "Let's start a conversation!",
+          "id": "conversation-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Message Us",
+          "id": "message-form-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Full Name",
+          "id": "fullname-label",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "Your E-mail",
+          "id": "your-email-label",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Message Topic",
+          "id": "topic-label",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Write Your Message",
+          "id": "write-message-label",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Send",
+          "id": "send-contact-btn",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "Our Details",
+          "id": "our-details-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Where We Are",
+          "id": "where-are-title",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Call",
+          "id": "call-title",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "Write Us",
+          "id": "write-us-title",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Office Hours",
+          "id": "office-hours-title",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "Questions & Answers",
+          "id": "qa-title",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "How do I post a book?",
+          "id": "faq-post-book",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Is an account required for comments?",
+          "id": "faq-comments-v3",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "What can I do to help BookHub?",
+          "id": "faq-help-hub",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "4": {
       "navbar": {
-        "home": {"text": "Start", "id": "start-nav", "aria-label": "Go to start"},
-        "about": {"text": "Our Story", "id": "story-nav", "aria-label": "Read our story"},
-        "contact": {"text": "Message Us", "id": "message-nav", "aria-label": "Send message"},
-        "brand": {"text": "ReadSpace", "id": "read-brand", "aria-label": "ReadSpace platform"}
+        "home": {
+          "text": "Start",
+          "id": "start-nav",
+          "aria-label": "Go to start"
+        },
+        "about": {
+          "text": "Our Story",
+          "id": "story-nav",
+          "aria-label": "Read our story"
+        },
+        "contact": {
+          "text": "Message Us",
+          "id": "message-nav",
+          "aria-label": "Send message"
+        },
+        "brand": {
+          "text": "ReadSpace",
+          "id": "read-brand",
+          "aria-label": "ReadSpace platform"
+        }
       },
       "login": {
-        "button": {"text": "Enter", "id": "enter-button", "aria-label": "Enter account"},
-        "username": {"label": "Login ID", "placeholder": "Input login ID", "id": "login-id", "aria-label": "Login identifier"},
-        "password": {"label": "PIN", "placeholder": "Input PIN", "id": "pin-input", "aria-label": "Personal identification"},
-        "submit": {"text": "Go", "id": "go-btn", "aria-label": "Proceed"},
-        "link": {"text": "Become Member", "id": "member-link", "aria-label": "Become member"}
+        "button": {
+          "text": "Enter",
+          "id": "enter-button",
+          "aria-label": "Enter account"
+        },
+        "username": {
+          "label": "Login ID",
+          "placeholder": "Input login ID",
+          "id": "login-id",
+          "aria-label": "Login identifier"
+        },
+        "password": {
+          "label": "PIN",
+          "placeholder": "Input PIN",
+          "id": "pin-input",
+          "aria-label": "Personal identification"
+        },
+        "submit": {
+          "text": "Go",
+          "id": "go-btn",
+          "aria-label": "Proceed"
+        },
+        "link": {
+          "text": "Become Member",
+          "id": "member-link",
+          "aria-label": "Become member"
+        }
       },
       "register": {
-        "button": {"text": "Become Member", "id": "member-btn", "aria-label": "Join membership"},
-        "username": {"label": "Login ID", "placeholder": "Create login ID", "id": "login-id-input", "aria-label": "Login name"},
-        "email": {"label": "Mail", "placeholder": "Input mail address", "id": "mail-field", "aria-label": "Email field"},
-        "password1": {"label": "PIN", "placeholder": "Set PIN", "id": "pin1", "aria-label": "Set password"},
-        "password2": {"label": "PIN Again", "placeholder": "Re-enter PIN", "id": "pin2", "aria-label": "Verify PIN"},
-        "submit": {"text": "Sign Up", "id": "signup-submit", "aria-label": "Finish signup"},
-        "link": {"text": "Enter", "id": "enter-link", "aria-label": "Already member"}
+        "button": {
+          "text": "Become Member",
+          "id": "member-btn",
+          "aria-label": "Join membership"
+        },
+        "username": {
+          "label": "Login ID",
+          "placeholder": "Create login ID",
+          "id": "login-id-input",
+          "aria-label": "Login name"
+        },
+        "email": {
+          "label": "Mail",
+          "placeholder": "Input mail address",
+          "id": "mail-field",
+          "aria-label": "Email field"
+        },
+        "password1": {
+          "label": "PIN",
+          "placeholder": "Set PIN",
+          "id": "pin1",
+          "aria-label": "Set password"
+        },
+        "password2": {
+          "label": "PIN Again",
+          "placeholder": "Re-enter PIN",
+          "id": "pin2",
+          "aria-label": "Verify PIN"
+        },
+        "submit": {
+          "text": "Sign Up",
+          "id": "signup-submit",
+          "aria-label": "Finish signup"
+        },
+        "link": {
+          "text": "Enter",
+          "id": "enter-link",
+          "aria-label": "Already member"
+        }
       },
       "buttons": {
-        "search": {"text": "Browse", "id": "browse-btn", "aria-label": "Browse collection"},
-        "filter": {"text": "Refine", "id": "refine-btn", "aria-label": "Refine search"},
-        "add_book": {"text": "Upload Book", "id": "upload-book", "aria-label": "Upload book"},
-        "buy": {"text": "Order", "id": "order-btn", "aria-label": "Order book"},
-        "add_to_cart": {"text": "Save for Later", "id": "save-later", "aria-label": "Save item"},
-        "submit": {"text": "Process", "id": "process-btn", "aria-label": "Process form"},
-        "cancel": {"text": "Exit", "id": "exit-btn", "aria-label": "Exit"},
-        "save": {"text": "Keep", "id": "keep-btn", "aria-label": "Keep changes"},
-        "delete": {"text": "Drop", "id": "drop-btn", "aria-label": "Drop item"},
-        "edit": {"text": "Adjust", "id": "adjust-btn", "aria-label": "Adjust item"}
+        "search": {
+          "text": "Browse",
+          "id": "browse-btn",
+          "aria-label": "Browse collection"
+        },
+        "filter": {
+          "text": "Refine",
+          "id": "refine-btn",
+          "aria-label": "Refine search"
+        },
+        "add_book": {
+          "text": "Upload Book",
+          "id": "upload-book",
+          "aria-label": "Upload book"
+        },
+        "buy": {
+          "text": "Order",
+          "id": "order-btn",
+          "aria-label": "Order book"
+        },
+        "add_to_cart": {
+          "text": "Save for Later",
+          "id": "save-later",
+          "aria-label": "Save item"
+        },
+        "submit": {
+          "text": "Process",
+          "id": "process-btn",
+          "aria-label": "Process form"
+        },
+        "cancel": {
+          "text": "Exit",
+          "id": "exit-btn",
+          "aria-label": "Exit"
+        },
+        "save": {
+          "text": "Keep",
+          "id": "keep-btn",
+          "aria-label": "Keep changes"
+        },
+        "delete": {
+          "text": "Drop",
+          "id": "drop-btn",
+          "aria-label": "Drop item"
+        },
+        "edit": {
+          "text": "Adjust",
+          "id": "adjust-btn",
+          "aria-label": "Adjust item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Browse library...", "id": "browse-input", "aria-label": "Browse books"},
-        "all_categories": {"text": "All Types", "id": "all-types", "aria-label": "All types"},
-        "all_years": {"text": "Any Date", "id": "any-date", "aria-label": "Any date"}
+        "search": {
+          "placeholder": "Browse library...",
+          "id": "browse-input",
+          "aria-label": "Browse books"
+        },
+        "all_categories": {
+          "text": "All Types",
+          "id": "all-types",
+          "aria-label": "All types"
+        },
+        "all_years": {
+          "text": "Any Date",
+          "id": "any-date",
+          "aria-label": "Any date"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "Our Story",
+          "id": "story-title-v4",
+          "aria-label": "About ReadSpace page"
+        },
+        "subtitle": {
+          "text": "Discover Amazing Books",
+          "id": "readspace-subtitle",
+          "aria-label": "ReadSpace subtitle"
+        },
+        "mission": {
+          "text": "Our Commitment",
+          "id": "commitment-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Future Plans",
+          "id": "future-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "Core Values",
+          "id": "core-values-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Book Enthusiasm",
+          "id": "value-enthusiasm",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Collaboration",
+          "id": "value-collab",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Multicultural",
+          "id": "value-multicultural",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "Meet the Team",
+          "id": "team-readspace-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "The ReadSpace creators",
+          "id": "team-readspace-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "ReadSpace Origins",
+          "id": "origins-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Message Us",
+          "id": "message-us-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Message Us",
+          "id": "message-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "We want to hear from you!",
+          "id": "hear-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Get in touch",
+          "id": "get-touch-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Your Full Name",
+          "id": "full-name-label",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "E-mail Address",
+          "id": "email-addr-label",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Subject Line",
+          "id": "subject-line-label",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Your Message Here",
+          "id": "message-here-label",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Submit Message",
+          "id": "submit-msg-btn",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "Contact Details",
+          "id": "contact-details-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Physical Address",
+          "id": "physical-addr-title",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Telephone",
+          "id": "telephone-title",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "E-mail Contact",
+          "id": "email-contact-title",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Available Hours",
+          "id": "available-hours-title",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "Frequently Asked",
+          "id": "frequent-qa-title",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "Adding books to ReadSpace?",
+          "id": "faq-add-readspace",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Comments without registration?",
+          "id": "faq-comments-v4",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "Ways to support ReadSpace?",
+          "id": "faq-support-readspace",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "5": {
       "navbar": {
-        "home": {"text": "Welcome", "id": "welcome-nav", "aria-label": "Welcome page"},
-        "about": {"text": "Information", "id": "info-nav", "aria-label": "Information page"},
-        "contact": {"text": "Support", "id": "support-nav", "aria-label": "Support contact"},
-        "brand": {"text": "BookVault", "id": "vault-brand", "aria-label": "BookVault site"}
+        "home": {
+          "text": "Welcome",
+          "id": "welcome-nav",
+          "aria-label": "Welcome page"
+        },
+        "about": {
+          "text": "Information",
+          "id": "info-nav",
+          "aria-label": "Information page"
+        },
+        "contact": {
+          "text": "Support",
+          "id": "support-nav",
+          "aria-label": "Support contact"
+        },
+        "brand": {
+          "text": "BookVault",
+          "id": "vault-brand",
+          "aria-label": "BookVault site"
+        }
       },
       "login": {
-        "button": {"text": "Log In", "id": "log-in-btn", "aria-label": "Log into account"},
-        "username": {"label": "User ID", "placeholder": "Your user ID", "id": "user-id", "aria-label": "User identifier"},
-        "password": {"label": "Password", "placeholder": "Your password", "id": "pwd-field", "aria-label": "Password entry"},
-        "submit": {"text": "Authenticate", "id": "auth-btn", "aria-label": "Authenticate user"},
-        "link": {"text": "New User", "id": "new-user-link", "aria-label": "New user registration"}
+        "button": {
+          "text": "Log In",
+          "id": "log-in-btn",
+          "aria-label": "Log into account"
+        },
+        "username": {
+          "label": "User ID",
+          "placeholder": "Your user ID",
+          "id": "user-id",
+          "aria-label": "User identifier"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Your password",
+          "id": "pwd-field",
+          "aria-label": "Password entry"
+        },
+        "submit": {
+          "text": "Authenticate",
+          "id": "auth-btn",
+          "aria-label": "Authenticate user"
+        },
+        "link": {
+          "text": "New User",
+          "id": "new-user-link",
+          "aria-label": "New user registration"
+        }
       },
       "register": {
-        "button": {"text": "New User", "id": "new-user-btn", "aria-label": "Register new user"},
-        "username": {"label": "User ID", "placeholder": "Select user ID", "id": "uid-input", "aria-label": "User ID"},
-        "email": {"label": "Contact Email", "placeholder": "Contact email", "id": "contact-email", "aria-label": "Contact email"},
-        "password1": {"label": "Password", "placeholder": "Define password", "id": "pwd1", "aria-label": "Password"},
-        "password2": {"label": "Repeat Password", "placeholder": "Repeat password", "id": "pwd2", "aria-label": "Password repeat"},
-        "submit": {"text": "Create", "id": "create-submit", "aria-label": "Create account"},
-        "link": {"text": "Log In", "id": "login-redirect-link", "aria-label": "Existing user"}
+        "button": {
+          "text": "New User",
+          "id": "new-user-btn",
+          "aria-label": "Register new user"
+        },
+        "username": {
+          "label": "User ID",
+          "placeholder": "Select user ID",
+          "id": "uid-input",
+          "aria-label": "User ID"
+        },
+        "email": {
+          "label": "Contact Email",
+          "placeholder": "Contact email",
+          "id": "contact-email",
+          "aria-label": "Contact email"
+        },
+        "password1": {
+          "label": "Password",
+          "placeholder": "Define password",
+          "id": "pwd1",
+          "aria-label": "Password"
+        },
+        "password2": {
+          "label": "Repeat Password",
+          "placeholder": "Repeat password",
+          "id": "pwd2",
+          "aria-label": "Password repeat"
+        },
+        "submit": {
+          "text": "Create",
+          "id": "create-submit",
+          "aria-label": "Create account"
+        },
+        "link": {
+          "text": "Log In",
+          "id": "login-redirect-link",
+          "aria-label": "Existing user"
+        }
       },
       "buttons": {
-        "search": {"text": "Query", "id": "query-btn", "aria-label": "Query database"},
-        "filter": {"text": "Select", "id": "select-btn", "aria-label": "Select options"},
-        "add_book": {"text": "Create Book", "id": "create-book", "aria-label": "Create book entry"},
-        "buy": {"text": "Acquire", "id": "acquire-btn", "aria-label": "Acquire book"},
-        "add_to_cart": {"text": "Add Item", "id": "add-item", "aria-label": "Add item"},
-        "submit": {"text": "Execute", "id": "execute-btn", "aria-label": "Execute action"},
-        "cancel": {"text": "Abort", "id": "abort-btn", "aria-label": "Abort operation"},
-        "save": {"text": "Commit", "id": "commit-btn", "aria-label": "Commit changes"},
-        "delete": {"text": "Destroy", "id": "destroy-btn", "aria-label": "Destroy item"},
-        "edit": {"text": "Revise", "id": "revise-btn", "aria-label": "Revise item"}
+        "search": {
+          "text": "Query",
+          "id": "query-btn",
+          "aria-label": "Query database"
+        },
+        "filter": {
+          "text": "Select",
+          "id": "select-btn",
+          "aria-label": "Select options"
+        },
+        "add_book": {
+          "text": "Create Book",
+          "id": "create-book",
+          "aria-label": "Create book entry"
+        },
+        "buy": {
+          "text": "Acquire",
+          "id": "acquire-btn",
+          "aria-label": "Acquire book"
+        },
+        "add_to_cart": {
+          "text": "Add Item",
+          "id": "add-item",
+          "aria-label": "Add item"
+        },
+        "submit": {
+          "text": "Execute",
+          "id": "execute-btn",
+          "aria-label": "Execute action"
+        },
+        "cancel": {
+          "text": "Abort",
+          "id": "abort-btn",
+          "aria-label": "Abort operation"
+        },
+        "save": {
+          "text": "Commit",
+          "id": "commit-btn",
+          "aria-label": "Commit changes"
+        },
+        "delete": {
+          "text": "Destroy",
+          "id": "destroy-btn",
+          "aria-label": "Destroy item"
+        },
+        "edit": {
+          "text": "Revise",
+          "id": "revise-btn",
+          "aria-label": "Revise item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Query books...", "id": "query-input", "aria-label": "Book query"},
-        "all_categories": {"text": "All Groups", "id": "all-groups", "aria-label": "All groups"},
-        "all_years": {"text": "Any Period", "id": "any-period", "aria-label": "Any period"}
+        "search": {
+          "placeholder": "Query books...",
+          "id": "query-input",
+          "aria-label": "Book query"
+        },
+        "all_categories": {
+          "text": "All Groups",
+          "id": "all-groups",
+          "aria-label": "All groups"
+        },
+        "all_years": {
+          "text": "Any Period",
+          "id": "any-period",
+          "aria-label": "Any period"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "About BookVault",
+          "id": "vault-about-title",
+          "aria-label": "About BookVault page"
+        },
+        "subtitle": {
+          "text": "Your Trusted Book Platform",
+          "id": "vault-subtitle",
+          "aria-label": "BookVault subtitle"
+        },
+        "mission": {
+          "text": "What Drives Us",
+          "id": "drives-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Where We Aim",
+          "id": "aim-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "Our Beliefs",
+          "id": "beliefs-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Book Devotion",
+          "id": "value-devotion",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Partnership",
+          "id": "value-partnership",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Global Perspective",
+          "id": "value-global",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "BookVault Team",
+          "id": "team-vault-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "The minds behind BookVault",
+          "id": "team-vault-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "The BookVault Story",
+          "id": "vault-story-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Contact BookVault",
+          "id": "contact-vault-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Support",
+          "id": "support-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "We are here for you!",
+          "id": "here-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Contact our team",
+          "id": "contact-team-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Name",
+          "id": "name-simple-label",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "E-mail",
+          "id": "email-simple-label",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "What is this about?",
+          "id": "about-label",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Tell us more",
+          "id": "tell-more-label",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Send It",
+          "id": "send-it-btn",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "Reach BookVault",
+          "id": "reach-vault-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Office Location",
+          "id": "office-loc-title",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Phone Contact",
+          "id": "phone-contact-title",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "E-mail Support",
+          "id": "email-support-title",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Support Hours",
+          "id": "support-hours-title",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "Help & Support",
+          "id": "help-support-title",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "How to add books in BookVault?",
+          "id": "faq-add-vault",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Can I comment without signing up?",
+          "id": "faq-comments-v5",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "How can I contribute to BookVault?",
+          "id": "faq-contribute-vault",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "6": {
       "navbar": {
-        "home": {"text": "Hub", "id": "hub-nav", "aria-label": "Main hub"},
-        "about": {"text": "Learn More", "id": "learn-nav", "aria-label": "Learn more"},
-        "contact": {"text": "Help", "id": "help-nav", "aria-label": "Get help"},
-        "brand": {"text": "LitHub", "id": "lit-brand", "aria-label": "LitHub platform"}
+        "home": {
+          "text": "Hub",
+          "id": "hub-nav",
+          "aria-label": "Main hub"
+        },
+        "about": {
+          "text": "Learn More",
+          "id": "learn-nav",
+          "aria-label": "Learn more"
+        },
+        "contact": {
+          "text": "Help",
+          "id": "help-nav",
+          "aria-label": "Get help"
+        },
+        "brand": {
+          "text": "LitHub",
+          "id": "lit-brand",
+          "aria-label": "LitHub platform"
+        }
       },
       "login": {
-        "button": {"text": "Connect", "id": "connect-btn", "aria-label": "Connect to account"},
-        "username": {"label": "Handle", "placeholder": "Your handle", "id": "handle-input", "aria-label": "User handle"},
-        "password": {"label": "Secret", "placeholder": "Your secret", "id": "secret-input", "aria-label": "Secret code"},
-        "submit": {"text": "Continue", "id": "continue-btn", "aria-label": "Continue login"},
-        "link": {"text": "Register Here", "id": "register-here", "aria-label": "Register now"}
+        "button": {
+          "text": "Connect",
+          "id": "connect-btn",
+          "aria-label": "Connect to account"
+        },
+        "username": {
+          "label": "Handle",
+          "placeholder": "Your handle",
+          "id": "handle-input",
+          "aria-label": "User handle"
+        },
+        "password": {
+          "label": "Secret",
+          "placeholder": "Your secret",
+          "id": "secret-input",
+          "aria-label": "Secret code"
+        },
+        "submit": {
+          "text": "Continue",
+          "id": "continue-btn",
+          "aria-label": "Continue login"
+        },
+        "link": {
+          "text": "Register Here",
+          "id": "register-here",
+          "aria-label": "Register now"
+        }
       },
       "register": {
-        "button": {"text": "Register Here", "id": "register-here-btn", "aria-label": "Registration page"},
-        "username": {"label": "Handle", "placeholder": "Choose handle", "id": "handle-field", "aria-label": "User handle"},
-        "email": {"label": "Email", "placeholder": "Your email", "id": "email-field", "aria-label": "Email"},
-        "password1": {"label": "Secret", "placeholder": "Pick secret", "id": "secret1", "aria-label": "Password"},
-        "password2": {"label": "Confirm Secret", "placeholder": "Confirm secret", "id": "secret2", "aria-label": "Confirm password"},
-        "submit": {"text": "Finish", "id": "finish-btn", "aria-label": "Finish registration"},
-        "link": {"text": "Connect", "id": "connect-link", "aria-label": "Already registered"}
+        "button": {
+          "text": "Register Here",
+          "id": "register-here-btn",
+          "aria-label": "Registration page"
+        },
+        "username": {
+          "label": "Handle",
+          "placeholder": "Choose handle",
+          "id": "handle-field",
+          "aria-label": "User handle"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Your email",
+          "id": "email-field",
+          "aria-label": "Email"
+        },
+        "password1": {
+          "label": "Secret",
+          "placeholder": "Pick secret",
+          "id": "secret1",
+          "aria-label": "Password"
+        },
+        "password2": {
+          "label": "Confirm Secret",
+          "placeholder": "Confirm secret",
+          "id": "secret2",
+          "aria-label": "Confirm password"
+        },
+        "submit": {
+          "text": "Finish",
+          "id": "finish-btn",
+          "aria-label": "Finish registration"
+        },
+        "link": {
+          "text": "Connect",
+          "id": "connect-link",
+          "aria-label": "Already registered"
+        }
       },
       "buttons": {
-        "search": {"text": "Discover", "id": "discover-btn", "aria-label": "Discover books"},
-        "filter": {"text": "Organize", "id": "organize-btn", "aria-label": "Organize view"},
-        "add_book": {"text": "Share Book", "id": "share-book", "aria-label": "Share book"},
-        "buy": {"text": "Checkout", "id": "checkout-btn", "aria-label": "Proceed to checkout"},
-        "add_to_cart": {"text": "Wishlist", "id": "wishlist-btn", "aria-label": "Add to wishlist"},
-        "submit": {"text": "Proceed", "id": "proceed-btn", "aria-label": "Proceed"},
-        "cancel": {"text": "Dismiss", "id": "dismiss-btn", "aria-label": "Dismiss"},
-        "save": {"text": "Retain", "id": "retain-btn", "aria-label": "Retain changes"},
-        "delete": {"text": "Clear", "id": "clear-btn", "aria-label": "Clear item"},
-        "edit": {"text": "Update", "id": "update-button", "aria-label": "Update item"}
+        "search": {
+          "text": "Discover",
+          "id": "discover-btn",
+          "aria-label": "Discover books"
+        },
+        "filter": {
+          "text": "Organize",
+          "id": "organize-btn",
+          "aria-label": "Organize view"
+        },
+        "add_book": {
+          "text": "Share Book",
+          "id": "share-book",
+          "aria-label": "Share book"
+        },
+        "buy": {
+          "text": "Checkout",
+          "id": "checkout-btn",
+          "aria-label": "Proceed to checkout"
+        },
+        "add_to_cart": {
+          "text": "Wishlist",
+          "id": "wishlist-btn",
+          "aria-label": "Add to wishlist"
+        },
+        "submit": {
+          "text": "Proceed",
+          "id": "proceed-btn",
+          "aria-label": "Proceed"
+        },
+        "cancel": {
+          "text": "Dismiss",
+          "id": "dismiss-btn",
+          "aria-label": "Dismiss"
+        },
+        "save": {
+          "text": "Retain",
+          "id": "retain-btn",
+          "aria-label": "Retain changes"
+        },
+        "delete": {
+          "text": "Clear",
+          "id": "clear-btn",
+          "aria-label": "Clear item"
+        },
+        "edit": {
+          "text": "Update",
+          "id": "update-button",
+          "aria-label": "Update item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Discover books...", "id": "discover-input", "aria-label": "Discover library"},
-        "all_categories": {"text": "All Sections", "id": "all-sections", "aria-label": "All sections"},
-        "all_years": {"text": "Every Year", "id": "every-year", "aria-label": "Every year"}
+        "search": {
+          "placeholder": "Discover books...",
+          "id": "discover-input",
+          "aria-label": "Discover library"
+        },
+        "all_categories": {
+          "text": "All Sections",
+          "id": "all-sections",
+          "aria-label": "All sections"
+        },
+        "all_years": {
+          "text": "Every Year",
+          "id": "every-year",
+          "aria-label": "Every year"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "Learn More",
+          "id": "learn-more-title",
+          "aria-label": "About LitHub page"
+        },
+        "subtitle": {
+          "text": "Explore the World of Books",
+          "id": "lithub-subtitle",
+          "aria-label": "LitHub subtitle"
+        },
+        "mission": {
+          "text": "Our Promise",
+          "id": "promise-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Our Aspiration",
+          "id": "aspiration-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "What Matters",
+          "id": "matters-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Literary Passion",
+          "id": "value-literary",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Collective Spirit",
+          "id": "value-collective",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Cultural Richness",
+          "id": "value-cultural",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "LitHub Crew",
+          "id": "team-lithub-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "The LitHub team members",
+          "id": "team-lithub-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "LitHub History",
+          "id": "lithub-history-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Get Help",
+          "id": "get-help-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Help",
+          "id": "help-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "How can we assist you?",
+          "id": "assist-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Write to us",
+          "id": "write-us-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Full Name",
+          "id": "fullname-label-v6",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "Email",
+          "id": "email-label-v6",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Subject",
+          "id": "subject-label-v6",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Message",
+          "id": "message-label-v6",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Send Now",
+          "id": "send-now-btn",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "LitHub Contact",
+          "id": "lithub-contact-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Address",
+          "id": "addr-title",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Phone",
+          "id": "phone-title-v6",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "Email",
+          "id": "email-title-v6",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Working Hours",
+          "id": "working-hours-title",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "Need Help?",
+          "id": "need-help-title",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "How do I add a book to LitHub?",
+          "id": "faq-add-lithub",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Do I need an account to comment?",
+          "id": "faq-comments-v6",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "How to help LitHub?",
+          "id": "faq-help-lithub",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "7": {
       "navbar": {
-        "home": {"text": "Portal", "id": "portal-nav", "aria-label": "Main portal"},
-        "about": {"text": "Details", "id": "details-nav", "aria-label": "View details"},
-        "contact": {"text": "Feedback", "id": "feedback-nav", "aria-label": "Send feedback"},
-        "brand": {"text": "BookPortal", "id": "portal-brand", "aria-label": "BookPortal"}
+        "home": {
+          "text": "Portal",
+          "id": "portal-nav",
+          "aria-label": "Main portal"
+        },
+        "about": {
+          "text": "Details",
+          "id": "details-nav",
+          "aria-label": "View details"
+        },
+        "contact": {
+          "text": "Feedback",
+          "id": "feedback-nav",
+          "aria-label": "Send feedback"
+        },
+        "brand": {
+          "text": "BookPortal",
+          "id": "portal-brand",
+          "aria-label": "BookPortal"
+        }
       },
       "login": {
-        "button": {"text": "Welcome Back", "id": "welcome-back", "aria-label": "Welcome back login"},
-        "username": {"label": "Username", "placeholder": "Enter username here", "id": "uname-field", "aria-label": "Username entry"},
-        "password": {"label": "Password", "placeholder": "Enter password here", "id": "pword-field", "aria-label": "Password entry"},
-        "submit": {"text": "Sign Me In", "id": "sign-me-in", "aria-label": "Sign in action"},
-        "link": {"text": "Join Us", "id": "join-us-link", "aria-label": "Join our community"}
+        "button": {
+          "text": "Welcome Back",
+          "id": "welcome-back",
+          "aria-label": "Welcome back login"
+        },
+        "username": {
+          "label": "Username",
+          "placeholder": "Enter username here",
+          "id": "uname-field",
+          "aria-label": "Username entry"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter password here",
+          "id": "pword-field",
+          "aria-label": "Password entry"
+        },
+        "submit": {
+          "text": "Sign Me In",
+          "id": "sign-me-in",
+          "aria-label": "Sign in action"
+        },
+        "link": {
+          "text": "Join Us",
+          "id": "join-us-link",
+          "aria-label": "Join our community"
+        }
       },
       "register": {
-        "button": {"text": "Join Us", "id": "join-us-btn", "aria-label": "Join community"},
-        "username": {"label": "Username", "placeholder": "Enter username here", "id": "username-entry", "aria-label": "Username"},
-        "email": {"label": "Email", "placeholder": "Enter email here", "id": "email-entry", "aria-label": "Email address"},
-        "password1": {"label": "Password", "placeholder": "Enter password here", "id": "pword1", "aria-label": "Password"},
-        "password2": {"label": "Confirm Password", "placeholder": "Re-enter password here", "id": "pword2", "aria-label": "Confirm password"},
-        "submit": {"text": "Become Member", "id": "become-member", "aria-label": "Become member"},
-        "link": {"text": "Welcome Back", "id": "welcome-back-link", "aria-label": "Existing member"}
+        "button": {
+          "text": "Join Us",
+          "id": "join-us-btn",
+          "aria-label": "Join community"
+        },
+        "username": {
+          "label": "Username",
+          "placeholder": "Enter username here",
+          "id": "username-entry",
+          "aria-label": "Username"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter email here",
+          "id": "email-entry",
+          "aria-label": "Email address"
+        },
+        "password1": {
+          "label": "Password",
+          "placeholder": "Enter password here",
+          "id": "pword1",
+          "aria-label": "Password"
+        },
+        "password2": {
+          "label": "Confirm Password",
+          "placeholder": "Re-enter password here",
+          "id": "pword2",
+          "aria-label": "Confirm password"
+        },
+        "submit": {
+          "text": "Become Member",
+          "id": "become-member",
+          "aria-label": "Become member"
+        },
+        "link": {
+          "text": "Welcome Back",
+          "id": "welcome-back-link",
+          "aria-label": "Existing member"
+        }
       },
       "buttons": {
-        "search": {"text": "Explore", "id": "explore-btn", "aria-label": "Explore collection"},
-        "filter": {"text": "Customize", "id": "customize-btn", "aria-label": "Customize view"},
-        "add_book": {"text": "Include Book", "id": "include-book", "aria-label": "Include new book"},
-        "buy": {"text": "Obtain", "id": "obtain-btn", "aria-label": "Obtain book"},
-        "add_to_cart": {"text": "Reserve", "id": "reserve-btn", "aria-label": "Reserve book"},
-        "submit": {"text": "Finalize", "id": "finalize-btn", "aria-label": "Finalize"},
-        "cancel": {"text": "Quit", "id": "quit-btn", "aria-label": "Quit"},
-        "save": {"text": "Apply", "id": "apply-button", "aria-label": "Apply changes"},
-        "delete": {"text": "Eliminate", "id": "eliminate-btn", "aria-label": "Eliminate item"},
-        "edit": {"text": "Alter", "id": "alter-btn", "aria-label": "Alter item"}
+        "search": {
+          "text": "Explore",
+          "id": "explore-btn",
+          "aria-label": "Explore collection"
+        },
+        "filter": {
+          "text": "Customize",
+          "id": "customize-btn",
+          "aria-label": "Customize view"
+        },
+        "add_book": {
+          "text": "Include Book",
+          "id": "include-book",
+          "aria-label": "Include new book"
+        },
+        "buy": {
+          "text": "Obtain",
+          "id": "obtain-btn",
+          "aria-label": "Obtain book"
+        },
+        "add_to_cart": {
+          "text": "Reserve",
+          "id": "reserve-btn",
+          "aria-label": "Reserve book"
+        },
+        "submit": {
+          "text": "Finalize",
+          "id": "finalize-btn",
+          "aria-label": "Finalize"
+        },
+        "cancel": {
+          "text": "Quit",
+          "id": "quit-btn",
+          "aria-label": "Quit"
+        },
+        "save": {
+          "text": "Apply",
+          "id": "apply-button",
+          "aria-label": "Apply changes"
+        },
+        "delete": {
+          "text": "Eliminate",
+          "id": "eliminate-btn",
+          "aria-label": "Eliminate item"
+        },
+        "edit": {
+          "text": "Alter",
+          "id": "alter-btn",
+          "aria-label": "Alter item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Explore collection...", "id": "explore-input", "aria-label": "Explore books"},
-        "all_categories": {"text": "All Classes", "id": "all-classes", "aria-label": "All classes"},
-        "all_years": {"text": "All Periods", "id": "all-periods", "aria-label": "All periods"}
+        "search": {
+          "placeholder": "Explore collection...",
+          "id": "explore-input",
+          "aria-label": "Explore books"
+        },
+        "all_categories": {
+          "text": "All Classes",
+          "id": "all-classes",
+          "aria-label": "All classes"
+        },
+        "all_years": {
+          "text": "All Periods",
+          "id": "all-periods",
+          "aria-label": "All periods"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "Details",
+          "id": "details-title",
+          "aria-label": "About BookPortal page"
+        },
+        "subtitle": {
+          "text": "Your Gateway to Books",
+          "id": "portal-subtitle",
+          "aria-label": "BookPortal subtitle"
+        },
+        "mission": {
+          "text": "Our Objective",
+          "id": "objective-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Our Dream",
+          "id": "dream-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "Core Principles",
+          "id": "core-principles-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Book Affection",
+          "id": "value-affection",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Teamwork",
+          "id": "value-teamwork",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Worldwide Reach",
+          "id": "value-worldwide",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "Portal Team",
+          "id": "team-portal-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "BookPortal developers",
+          "id": "team-portal-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "Portal Beginnings",
+          "id": "portal-beginnings-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Send Feedback",
+          "id": "send-feedback-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Feedback",
+          "id": "feedback-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "Share your thoughts!",
+          "id": "thoughts-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Contact form",
+          "id": "contact-form-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Name",
+          "id": "name-label-v7",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "Email",
+          "id": "email-label-v7",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Subject",
+          "id": "subject-label-v7",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Your Message",
+          "id": "message-label-v7",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Submit",
+          "id": "submit-contact-btn",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "BookPortal Info",
+          "id": "portal-info-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Location",
+          "id": "location-title-v7",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Call Us",
+          "id": "call-us-title",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "Email Us",
+          "id": "email-us-title",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Hours",
+          "id": "hours-title-v7",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "FAQ",
+          "id": "faq-title-v7",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "How to add books?",
+          "id": "faq-add-portal",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Comments without account?",
+          "id": "faq-comments-v7",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "Contributing to BookPortal?",
+          "id": "faq-contribute-portal",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "8": {
       "navbar": {
-        "home": {"text": "Base", "id": "base-nav", "aria-label": "Base page"},
-        "about": {"text": "Background", "id": "background-nav", "aria-label": "Background info"},
-        "contact": {"text": "Inquiry", "id": "inquiry-nav", "aria-label": "Make inquiry"},
-        "brand": {"text": "ReadBase", "id": "readbase-brand", "aria-label": "ReadBase"}
+        "home": {
+          "text": "Base",
+          "id": "base-nav",
+          "aria-label": "Base page"
+        },
+        "about": {
+          "text": "Background",
+          "id": "background-nav",
+          "aria-label": "Background info"
+        },
+        "contact": {
+          "text": "Inquiry",
+          "id": "inquiry-nav",
+          "aria-label": "Make inquiry"
+        },
+        "brand": {
+          "text": "ReadBase",
+          "id": "readbase-brand",
+          "aria-label": "ReadBase"
+        }
       },
       "login": {
-        "button": {"text": "Sign In Now", "id": "sign-in-now", "aria-label": "Sign in immediately"},
-        "username": {"label": "User", "placeholder": "Input user name", "id": "user-field", "aria-label": "User name"},
-        "password": {"label": "Code", "placeholder": "Input code", "id": "code-field", "aria-label": "Access code"},
-        "submit": {"text": "Access Account", "id": "access-account", "aria-label": "Access your account"},
-        "link": {"text": "Get Started", "id": "get-started-link", "aria-label": "Get started"}
+        "button": {
+          "text": "Sign In Now",
+          "id": "sign-in-now",
+          "aria-label": "Sign in immediately"
+        },
+        "username": {
+          "label": "User",
+          "placeholder": "Input user name",
+          "id": "user-field",
+          "aria-label": "User name"
+        },
+        "password": {
+          "label": "Code",
+          "placeholder": "Input code",
+          "id": "code-field",
+          "aria-label": "Access code"
+        },
+        "submit": {
+          "text": "Access Account",
+          "id": "access-account",
+          "aria-label": "Access your account"
+        },
+        "link": {
+          "text": "Get Started",
+          "id": "get-started-link",
+          "aria-label": "Get started"
+        }
       },
       "register": {
-        "button": {"text": "Get Started", "id": "get-started-btn", "aria-label": "Start registration"},
-        "username": {"label": "User", "placeholder": "Create user name", "id": "user-name-input", "aria-label": "User name"},
-        "email": {"label": "Email ID", "placeholder": "Input email ID", "id": "email-id", "aria-label": "Email ID"},
-        "password1": {"label": "Code", "placeholder": "Create code", "id": "code1", "aria-label": "Access code"},
-        "password2": {"label": "Code Again", "placeholder": "Re-input code", "id": "code2", "aria-label": "Verify code"},
-        "submit": {"text": "Get Started", "id": "start-submit", "aria-label": "Complete start"},
-        "link": {"text": "Sign In Now", "id": "sign-in-now-link", "aria-label": "Already started"}
+        "button": {
+          "text": "Get Started",
+          "id": "get-started-btn",
+          "aria-label": "Start registration"
+        },
+        "username": {
+          "label": "User",
+          "placeholder": "Create user name",
+          "id": "user-name-input",
+          "aria-label": "User name"
+        },
+        "email": {
+          "label": "Email ID",
+          "placeholder": "Input email ID",
+          "id": "email-id",
+          "aria-label": "Email ID"
+        },
+        "password1": {
+          "label": "Code",
+          "placeholder": "Create code",
+          "id": "code1",
+          "aria-label": "Access code"
+        },
+        "password2": {
+          "label": "Code Again",
+          "placeholder": "Re-input code",
+          "id": "code2",
+          "aria-label": "Verify code"
+        },
+        "submit": {
+          "text": "Get Started",
+          "id": "start-submit",
+          "aria-label": "Complete start"
+        },
+        "link": {
+          "text": "Sign In Now",
+          "id": "sign-in-now-link",
+          "aria-label": "Already started"
+        }
       },
       "buttons": {
-        "search": {"text": "Hunt", "id": "hunt-btn", "aria-label": "Hunt for books"},
-        "filter": {"text": "Adjust", "id": "adjust-button", "aria-label": "Adjust filters"},
-        "add_book": {"text": "List Book", "id": "list-book", "aria-label": "List new book"},
-        "buy": {"text": "Take", "id": "take-btn", "aria-label": "Take book"},
-        "add_to_cart": {"text": "Collect", "id": "collect-btn", "aria-label": "Collect item"},
-        "submit": {"text": "Activate", "id": "activate-btn", "aria-label": "Activate"},
-        "cancel": {"text": "Stop", "id": "stop-btn", "aria-label": "Stop action"},
-        "save": {"text": "Preserve", "id": "preserve-btn", "aria-label": "Preserve changes"},
-        "delete": {"text": "Discard", "id": "discard-btn", "aria-label": "Discard item"},
-        "edit": {"text": "Correct", "id": "correct-btn", "aria-label": "Correct item"}
+        "search": {
+          "text": "Hunt",
+          "id": "hunt-btn",
+          "aria-label": "Hunt for books"
+        },
+        "filter": {
+          "text": "Adjust",
+          "id": "adjust-button",
+          "aria-label": "Adjust filters"
+        },
+        "add_book": {
+          "text": "List Book",
+          "id": "list-book",
+          "aria-label": "List new book"
+        },
+        "buy": {
+          "text": "Take",
+          "id": "take-btn",
+          "aria-label": "Take book"
+        },
+        "add_to_cart": {
+          "text": "Collect",
+          "id": "collect-btn",
+          "aria-label": "Collect item"
+        },
+        "submit": {
+          "text": "Activate",
+          "id": "activate-btn",
+          "aria-label": "Activate"
+        },
+        "cancel": {
+          "text": "Stop",
+          "id": "stop-btn",
+          "aria-label": "Stop action"
+        },
+        "save": {
+          "text": "Preserve",
+          "id": "preserve-btn",
+          "aria-label": "Preserve changes"
+        },
+        "delete": {
+          "text": "Discard",
+          "id": "discard-btn",
+          "aria-label": "Discard item"
+        },
+        "edit": {
+          "text": "Correct",
+          "id": "correct-btn",
+          "aria-label": "Correct item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Hunt for books...", "id": "hunt-input", "aria-label": "Search books"},
-        "all_categories": {"text": "All Kinds", "id": "all-kinds", "aria-label": "All kinds"},
-        "all_years": {"text": "Any Time", "id": "any-time", "aria-label": "Any time"}
+        "search": {
+          "placeholder": "Hunt for books...",
+          "id": "hunt-input",
+          "aria-label": "Search books"
+        },
+        "all_categories": {
+          "text": "All Kinds",
+          "id": "all-kinds",
+          "aria-label": "All kinds"
+        },
+        "all_years": {
+          "text": "Any Time",
+          "id": "any-time",
+          "aria-label": "Any time"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "Background",
+          "id": "background-title",
+          "aria-label": "About ReadBase page"
+        },
+        "subtitle": {
+          "text": "The Book Platform You Need",
+          "id": "readbase-subtitle",
+          "aria-label": "ReadBase subtitle"
+        },
+        "mission": {
+          "text": "Our Focus",
+          "id": "focus-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Our Hope",
+          "id": "hope-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "Key Values",
+          "id": "key-values-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Book Commitment",
+          "id": "value-commitment",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Solidarity",
+          "id": "value-solidarity",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "International Scope",
+          "id": "value-international",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "ReadBase Members",
+          "id": "team-readbase-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "ReadBase contributors",
+          "id": "team-readbase-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "ReadBase Evolution",
+          "id": "readbase-evolution-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Make Inquiry",
+          "id": "make-inquiry-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Inquiry",
+          "id": "inquiry-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "Ask us anything!",
+          "id": "ask-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Send inquiry",
+          "id": "send-inquiry-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Your Name",
+          "id": "name-label-v8",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "E-mail",
+          "id": "email-label-v8",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Inquiry Topic",
+          "id": "inquiry-topic-label",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Your Inquiry",
+          "id": "inquiry-message-label",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Send Inquiry",
+          "id": "send-inquiry-btn",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "ReadBase Contact",
+          "id": "readbase-contact-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Our Address",
+          "id": "our-addr-title",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Contact Number",
+          "id": "contact-num-title",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "Contact Email",
+          "id": "contact-email-title-v8",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Business Times",
+          "id": "business-times-title",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "Questions",
+          "id": "questions-title",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "How to post books on ReadBase?",
+          "id": "faq-add-readbase",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Can I comment without signing in?",
+          "id": "faq-comments-v8",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "How can I help ReadBase?",
+          "id": "faq-help-readbase",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "9": {
       "navbar": {
-        "home": {"text": "Homepage", "id": "homepage-nav", "aria-label": "Visit homepage"},
-        "about": {"text": "Mission", "id": "mission-nav", "aria-label": "Our mission"},
-        "contact": {"text": "Connect", "id": "connect-nav", "aria-label": "Connect with us"},
-        "brand": {"text": "BookNest", "id": "nest-brand", "aria-label": "BookNest"}
+        "home": {
+          "text": "Homepage",
+          "id": "homepage-nav",
+          "aria-label": "Visit homepage"
+        },
+        "about": {
+          "text": "Mission",
+          "id": "mission-nav",
+          "aria-label": "Our mission"
+        },
+        "contact": {
+          "text": "Connect",
+          "id": "connect-nav",
+          "aria-label": "Connect with us"
+        },
+        "brand": {
+          "text": "BookNest",
+          "id": "nest-brand",
+          "aria-label": "BookNest"
+        }
       },
       "login": {
-        "button": {"text": "Open Session", "id": "open-session", "aria-label": "Open login session"},
-        "username": {"label": "Account", "placeholder": "Your account name", "id": "account-field", "aria-label": "Account name"},
-        "password": {"label": "Passphrase", "placeholder": "Your passphrase", "id": "passphrase-field", "aria-label": "Security passphrase"},
-        "submit": {"text": "Launch", "id": "launch-btn", "aria-label": "Launch session"},
-        "link": {"text": "Open Account", "id": "open-account-link", "aria-label": "Open new account"}
+        "button": {
+          "text": "Open Session",
+          "id": "open-session",
+          "aria-label": "Open login session"
+        },
+        "username": {
+          "label": "Account",
+          "placeholder": "Your account name",
+          "id": "account-field",
+          "aria-label": "Account name"
+        },
+        "password": {
+          "label": "Passphrase",
+          "placeholder": "Your passphrase",
+          "id": "passphrase-field",
+          "aria-label": "Security passphrase"
+        },
+        "submit": {
+          "text": "Launch",
+          "id": "launch-btn",
+          "aria-label": "Launch session"
+        },
+        "link": {
+          "text": "Open Account",
+          "id": "open-account-link",
+          "aria-label": "Open new account"
+        }
       },
       "register": {
-        "button": {"text": "Open Account", "id": "open-account-btn", "aria-label": "Open account"},
-        "username": {"label": "Account", "placeholder": "Pick account name", "id": "account-name-field", "aria-label": "Account name"},
-        "email": {"label": "Email Address", "placeholder": "Your email address", "id": "email-address", "aria-label": "Email"},
-        "password1": {"label": "Passphrase", "placeholder": "Create passphrase", "id": "passphrase1", "aria-label": "Passphrase"},
-        "password2": {"label": "Repeat Passphrase", "placeholder": "Repeat passphrase", "id": "passphrase2", "aria-label": "Confirm passphrase"},
-        "submit": {"text": "Activate Account", "id": "activate-account", "aria-label": "Activate account"},
-        "link": {"text": "Open Session", "id": "open-session-link", "aria-label": "Existing account"}
+        "button": {
+          "text": "Open Account",
+          "id": "open-account-btn",
+          "aria-label": "Open account"
+        },
+        "username": {
+          "label": "Account",
+          "placeholder": "Pick account name",
+          "id": "account-name-field",
+          "aria-label": "Account name"
+        },
+        "email": {
+          "label": "Email Address",
+          "placeholder": "Your email address",
+          "id": "email-address",
+          "aria-label": "Email"
+        },
+        "password1": {
+          "label": "Passphrase",
+          "placeholder": "Create passphrase",
+          "id": "passphrase1",
+          "aria-label": "Passphrase"
+        },
+        "password2": {
+          "label": "Repeat Passphrase",
+          "placeholder": "Repeat passphrase",
+          "id": "passphrase2",
+          "aria-label": "Confirm passphrase"
+        },
+        "submit": {
+          "text": "Activate Account",
+          "id": "activate-account",
+          "aria-label": "Activate account"
+        },
+        "link": {
+          "text": "Open Session",
+          "id": "open-session-link",
+          "aria-label": "Existing account"
+        }
       },
       "buttons": {
-        "search": {"text": "Seek", "id": "seek-btn", "aria-label": "Seek books"},
-        "filter": {"text": "Modify", "id": "modify-button", "aria-label": "Modify filters"},
-        "add_book": {"text": "Publish Book", "id": "publish-book", "aria-label": "Publish book"},
-        "buy": {"text": "Secure", "id": "secure-btn", "aria-label": "Secure purchase"},
-        "add_to_cart": {"text": "Hold", "id": "hold-btn", "aria-label": "Hold item"},
-        "submit": {"text": "Validate", "id": "validate-btn", "aria-label": "Validate"},
-        "cancel": {"text": "Undo", "id": "undo-btn", "aria-label": "Undo action"},
-        "save": {"text": "Confirm", "id": "confirm-button", "aria-label": "Confirm changes"},
-        "delete": {"text": "Wipe", "id": "wipe-btn", "aria-label": "Wipe item"},
-        "edit": {"text": "Refine", "id": "refine-button", "aria-label": "Refine item"}
+        "search": {
+          "text": "Seek",
+          "id": "seek-btn",
+          "aria-label": "Seek books"
+        },
+        "filter": {
+          "text": "Modify",
+          "id": "modify-button",
+          "aria-label": "Modify filters"
+        },
+        "add_book": {
+          "text": "Publish Book",
+          "id": "publish-book",
+          "aria-label": "Publish book"
+        },
+        "buy": {
+          "text": "Secure",
+          "id": "secure-btn",
+          "aria-label": "Secure purchase"
+        },
+        "add_to_cart": {
+          "text": "Hold",
+          "id": "hold-btn",
+          "aria-label": "Hold item"
+        },
+        "submit": {
+          "text": "Validate",
+          "id": "validate-btn",
+          "aria-label": "Validate"
+        },
+        "cancel": {
+          "text": "Undo",
+          "id": "undo-btn",
+          "aria-label": "Undo action"
+        },
+        "save": {
+          "text": "Confirm",
+          "id": "confirm-button",
+          "aria-label": "Confirm changes"
+        },
+        "delete": {
+          "text": "Wipe",
+          "id": "wipe-btn",
+          "aria-label": "Wipe item"
+        },
+        "edit": {
+          "text": "Refine",
+          "id": "refine-button",
+          "aria-label": "Refine item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Seek in library...", "id": "seek-input", "aria-label": "Seek books"},
-        "all_categories": {"text": "All Categories", "id": "all-cats", "aria-label": "All categories"},
-        "all_years": {"text": "All Dates", "id": "all-dates", "aria-label": "All dates"}
+        "search": {
+          "placeholder": "Seek in library...",
+          "id": "seek-input",
+          "aria-label": "Seek books"
+        },
+        "all_categories": {
+          "text": "All Categories",
+          "id": "all-cats",
+          "aria-label": "All categories"
+        },
+        "all_years": {
+          "text": "All Dates",
+          "id": "all-dates",
+          "aria-label": "All dates"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "Mission",
+          "id": "mission-about-title",
+          "aria-label": "About BookNest page"
+        },
+        "subtitle": {
+          "text": "Your Book Community Hub",
+          "id": "nest-subtitle",
+          "aria-label": "BookNest subtitle"
+        },
+        "mission": {
+          "text": "Our Drive",
+          "id": "drive-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Our Ambition",
+          "id": "ambition-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "Fundamental Values",
+          "id": "fundamental-values-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Book Adoration",
+          "id": "value-adoration",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Mutual Support",
+          "id": "value-mutual",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Universal Access",
+          "id": "value-universal",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "BookNest Family",
+          "id": "team-nest-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "BookNest family members",
+          "id": "team-nest-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "Nest Foundation",
+          "id": "nest-foundation-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Connect",
+          "id": "connect-nest-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Connect",
+          "id": "connect-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "Lets chat!",
+          "id": "chat-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Contact us",
+          "id": "contact-us-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Name",
+          "id": "name-label-v9",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "Email",
+          "id": "email-label-v9",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Subject",
+          "id": "subject-label-v9",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Message",
+          "id": "message-label-v9",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Send Message",
+          "id": "send-message-btn-v9",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "BookNest Contact",
+          "id": "nest-contact-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Location",
+          "id": "location-title-v9",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Phone",
+          "id": "phone-title-v9",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "Email",
+          "id": "email-title-v9",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Hours",
+          "id": "hours-title-v9",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "FAQ",
+          "id": "faq-title-v9",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "Adding books to BookNest?",
+          "id": "faq-add-nest",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Commenting without account?",
+          "id": "faq-comments-v9",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "Supporting BookNest?",
+          "id": "faq-support-nest",
+          "aria-label": "FAQ about contributing"
+        }
       }
     },
     "10": {
       "navbar": {
-        "home": {"text": "Index", "id": "index-nav", "aria-label": "Go to index"},
-        "about": {"text": "Overview", "id": "overview-nav", "aria-label": "Site overview"},
-        "contact": {"text": "Inbox", "id": "inbox-nav", "aria-label": "Contact inbox"},
-        "brand": {"text": "PageTurner", "id": "turner-brand", "aria-label": "PageTurner"}
+        "home": {
+          "text": "Index",
+          "id": "index-nav",
+          "aria-label": "Go to index"
+        },
+        "about": {
+          "text": "Overview",
+          "id": "overview-nav",
+          "aria-label": "Site overview"
+        },
+        "contact": {
+          "text": "Inbox",
+          "id": "inbox-nav",
+          "aria-label": "Contact inbox"
+        },
+        "brand": {
+          "text": "PageTurner",
+          "id": "turner-brand",
+          "aria-label": "PageTurner"
+        }
       },
       "login": {
-        "button": {"text": "Launch", "id": "launch-button", "aria-label": "Launch application"},
-        "username": {"label": "Identifier", "placeholder": "Your identifier", "id": "identifier-field", "aria-label": "User identifier"},
-        "password": {"label": "Access Code", "placeholder": "Your access code", "id": "access-code-field", "aria-label": "Access code"},
-        "submit": {"text": "Initiate", "id": "initiate-btn", "aria-label": "Initiate login"},
-        "link": {"text": "Register Account", "id": "register-account-link", "aria-label": "Register account"}
+        "button": {
+          "text": "Launch",
+          "id": "launch-button",
+          "aria-label": "Launch application"
+        },
+        "username": {
+          "label": "Identifier",
+          "placeholder": "Your identifier",
+          "id": "identifier-field",
+          "aria-label": "User identifier"
+        },
+        "password": {
+          "label": "Access Code",
+          "placeholder": "Your access code",
+          "id": "access-code-field",
+          "aria-label": "Access code"
+        },
+        "submit": {
+          "text": "Initiate",
+          "id": "initiate-btn",
+          "aria-label": "Initiate login"
+        },
+        "link": {
+          "text": "Register Account",
+          "id": "register-account-link",
+          "aria-label": "Register account"
+        }
       },
       "register": {
-        "button": {"text": "Register Account", "id": "register-account-btn", "aria-label": "Account registration"},
-        "username": {"label": "Identifier", "placeholder": "Create identifier", "id": "identifier-input", "aria-label": "Identifier"},
-        "email": {"label": "E-mail Address", "placeholder": "Your e-mail address", "id": "e-mail-addr", "aria-label": "Email"},
-        "password1": {"label": "Access Code", "placeholder": "Set access code", "id": "access-code1", "aria-label": "Access code"},
-        "password2": {"label": "Re-enter Code", "placeholder": "Re-enter access code", "id": "access-code2", "aria-label": "Verify code"},
-        "submit": {"text": "Complete Setup", "id": "complete-setup", "aria-label": "Complete setup"},
-        "link": {"text": "Launch", "id": "launch-link", "aria-label": "Already registered"}
+        "button": {
+          "text": "Register Account",
+          "id": "register-account-btn",
+          "aria-label": "Account registration"
+        },
+        "username": {
+          "label": "Identifier",
+          "placeholder": "Create identifier",
+          "id": "identifier-input",
+          "aria-label": "Identifier"
+        },
+        "email": {
+          "label": "E-mail Address",
+          "placeholder": "Your e-mail address",
+          "id": "e-mail-addr",
+          "aria-label": "Email"
+        },
+        "password1": {
+          "label": "Access Code",
+          "placeholder": "Set access code",
+          "id": "access-code1",
+          "aria-label": "Access code"
+        },
+        "password2": {
+          "label": "Re-enter Code",
+          "placeholder": "Re-enter access code",
+          "id": "access-code2",
+          "aria-label": "Verify code"
+        },
+        "submit": {
+          "text": "Complete Setup",
+          "id": "complete-setup",
+          "aria-label": "Complete setup"
+        },
+        "link": {
+          "text": "Launch",
+          "id": "launch-link",
+          "aria-label": "Already registered"
+        }
       },
       "buttons": {
-        "search": {"text": "Scan", "id": "scan-btn", "aria-label": "Scan collection"},
-        "filter": {"text": "Configure", "id": "configure-btn", "aria-label": "Configure view"},
-        "add_book": {"text": "Add Entry", "id": "add-entry", "aria-label": "Add book entry"},
-        "buy": {"text": "Claim", "id": "claim-btn", "aria-label": "Claim book"},
-        "add_to_cart": {"text": "Tag", "id": "tag-btn", "aria-label": "Tag for later"},
-        "submit": {"text": "Complete", "id": "complete-btn", "aria-label": "Complete"},
-        "cancel": {"text": "Cancel", "id": "cancel-button", "aria-label": "Cancel"},
-        "save": {"text": "Record", "id": "record-btn", "aria-label": "Record changes"},
-        "delete": {"text": "Purge", "id": "purge-btn", "aria-label": "Purge item"},
-        "edit": {"text": "Amend", "id": "amend-btn", "aria-label": "Amend item"}
+        "search": {
+          "text": "Scan",
+          "id": "scan-btn",
+          "aria-label": "Scan collection"
+        },
+        "filter": {
+          "text": "Configure",
+          "id": "configure-btn",
+          "aria-label": "Configure view"
+        },
+        "add_book": {
+          "text": "Add Entry",
+          "id": "add-entry",
+          "aria-label": "Add book entry"
+        },
+        "buy": {
+          "text": "Claim",
+          "id": "claim-btn",
+          "aria-label": "Claim book"
+        },
+        "add_to_cart": {
+          "text": "Tag",
+          "id": "tag-btn",
+          "aria-label": "Tag for later"
+        },
+        "submit": {
+          "text": "Complete",
+          "id": "complete-btn",
+          "aria-label": "Complete"
+        },
+        "cancel": {
+          "text": "Cancel",
+          "id": "cancel-button",
+          "aria-label": "Cancel"
+        },
+        "save": {
+          "text": "Record",
+          "id": "record-btn",
+          "aria-label": "Record changes"
+        },
+        "delete": {
+          "text": "Purge",
+          "id": "purge-btn",
+          "aria-label": "Purge item"
+        },
+        "edit": {
+          "text": "Amend",
+          "id": "amend-btn",
+          "aria-label": "Amend item"
+        }
       },
       "inputs": {
-        "search": {"placeholder": "Scan books...", "id": "scan-input", "aria-label": "Scan library"},
-        "all_categories": {"text": "All Categories", "id": "all-categories-dropdown", "aria-label": "All categories"},
-        "all_years": {"text": "Any Year", "id": "any-year-dropdown", "aria-label": "Any year"}
+        "search": {
+          "placeholder": "Scan books...",
+          "id": "scan-input",
+          "aria-label": "Scan library"
+        },
+        "all_categories": {
+          "text": "All Categories",
+          "id": "all-categories-dropdown",
+          "aria-label": "All categories"
+        },
+        "all_years": {
+          "text": "Any Year",
+          "id": "any-year-dropdown",
+          "aria-label": "Any year"
+        }
+      },
+      "about": {
+        "title": {
+          "text": "Overview",
+          "id": "overview-about-title",
+          "aria-label": "About PageTurner page"
+        },
+        "subtitle": {
+          "text": "Turn Pages, Discover Worlds",
+          "id": "turner-subtitle",
+          "aria-label": "PageTurner subtitle"
+        },
+        "mission": {
+          "text": "Our Purpose",
+          "id": "purpose-title",
+          "aria-label": "Mission section"
+        },
+        "vision": {
+          "text": "Our Target",
+          "id": "target-title",
+          "aria-label": "Vision section"
+        },
+        "values": {
+          "text": "Essential Values",
+          "id": "essential-values-title",
+          "aria-label": "Values section"
+        },
+        "value_passion": {
+          "text": "Literary Love",
+          "id": "value-literary-love",
+          "aria-label": "Passion value"
+        },
+        "value_community": {
+          "text": "Shared Journey",
+          "id": "value-shared",
+          "aria-label": "Community value"
+        },
+        "value_diversity": {
+          "text": "Cross-Cultural",
+          "id": "value-cross-cultural",
+          "aria-label": "Diversity value"
+        },
+        "team": {
+          "text": "PageTurner Squad",
+          "id": "team-turner-title",
+          "aria-label": "Team section"
+        },
+        "team_subtitle": {
+          "text": "PageTurner squad members",
+          "id": "team-turner-subtitle",
+          "aria-label": "Team subtitle"
+        },
+        "story": {
+          "text": "PageTurner Legacy",
+          "id": "turner-legacy-title",
+          "aria-label": "Our story section"
+        },
+        "get_in_touch": {
+          "text": "Contact Inbox",
+          "id": "contact-inbox-btn",
+          "aria-label": "Contact button"
+        }
+      },
+      "contact": {
+        "title": {
+          "text": "Inbox",
+          "id": "inbox-title",
+          "aria-label": "Contact page"
+        },
+        "subtitle": {
+          "text": "Drop us a message!",
+          "id": "drop-subtitle",
+          "aria-label": "Contact subtitle"
+        },
+        "form_title": {
+          "text": "Send message",
+          "id": "send-msg-title",
+          "aria-label": "Contact form title"
+        },
+        "name_label": {
+          "text": "Name",
+          "id": "name-label-v10",
+          "aria-label": "Name field label"
+        },
+        "email_label": {
+          "text": "Email",
+          "id": "email-label-v10",
+          "aria-label": "Email field label"
+        },
+        "subject_label": {
+          "text": "Subject",
+          "id": "subject-label-v10",
+          "aria-label": "Subject field label"
+        },
+        "message_label": {
+          "text": "Message",
+          "id": "message-label-v10",
+          "aria-label": "Message field label"
+        },
+        "send_button": {
+          "text": "Send",
+          "id": "send-btn-v10",
+          "aria-label": "Send contact message"
+        },
+        "find_us": {
+          "text": "PageTurner Contact",
+          "id": "turner-contact-title",
+          "aria-label": "Contact details section"
+        },
+        "location": {
+          "text": "Location",
+          "id": "location-title-v10",
+          "aria-label": "Location info"
+        },
+        "phone": {
+          "text": "Phone",
+          "id": "phone-title-v10",
+          "aria-label": "Phone info"
+        },
+        "contact_email": {
+          "text": "Email",
+          "id": "email-title-v10",
+          "aria-label": "Contact email info"
+        },
+        "hours": {
+          "text": "Hours",
+          "id": "hours-title-v10",
+          "aria-label": "Business hours info"
+        },
+        "faq": {
+          "text": "FAQ",
+          "id": "faq-title-v10",
+          "aria-label": "FAQ section"
+        },
+        "faq_add_book": {
+          "text": "How to add books on PageTurner?",
+          "id": "faq-add-turner",
+          "aria-label": "FAQ about adding books"
+        },
+        "faq_comments": {
+          "text": "Commenting without registration?",
+          "id": "faq-comments-v10",
+          "aria-label": "FAQ about comments"
+        },
+        "faq_contribute": {
+          "text": "Helping PageTurner grow?",
+          "id": "faq-help-turner",
+          "aria-label": "FAQ about contributing"
+        }
       }
     }
   }
 }
-
