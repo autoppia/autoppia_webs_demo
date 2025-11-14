@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block body %}
 <div class="container mt-5" data-dynamic-group="login-container">
     <div class="row justify-content-center" data-dynamic-group="login-row">
         <div class="col-md-6 col-lg-5" data-dynamic-group="login-column">
             <div class="card shadow border-0" data-dynamic-group="login-card">
                 <div class="card-header bg-primary text-white text-center py-3" data-dynamic-group="login-header">
-                    <h3 class="mb-0"><i class="fas fa-sign-in-alt mr-2"></i>Sign In</h3>
+                    <h3 class="mb-0"><i class="fas fa-sign-in-alt mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'login.submit.text' }}{% else %}Sign In{% endif %}</h3>
                 </div>
 
                 <div class="card-body p-4" data-dynamic-group="login-body">
@@ -14,26 +15,46 @@
                         {% if DYNAMIC_HTML_ENABLED %}
                         <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
                         {% endif %}
+                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}
+                        <input type="hidden" name="seed-structure" value="{{ SEED_STRUCTURE }}">
+                        {% endif %}
 
                         <div class="form-group" data-dynamic-group="login-form-fields">
                             <div class="form-group" data-dynamic-group="username-field">
-                                <label for="username">
-                                    <i class="fas fa-user mr-1"></i> Username
+                                <label for="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'login.username.id' }}{% else %}username{% endif %}">
+                                    <i class="fas fa-user mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_label:'login.username.label' }}{% else %}Username{% endif %}
                                 </label>
-                                <input type="text" name="username" id="username" class="form-control" placeholder="Enter your username" required autofocus>
+                                <input type="text" 
+                                       name="username" 
+                                       id="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'login.username.id' }}{% else %}username{% endif %}" 
+                                       class="form-control" 
+                                       placeholder="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_placeholder:'login.username.placeholder' }}{% else %}Enter your username{% endif %}" 
+                                       {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'login.username.aria-label' }}"{% endif %}
+                                       required autofocus>
                             </div>
 
                             <div class="form-group" data-dynamic-group="password-field">
-                                <label for="password">
-                                    <i class="fas fa-lock mr-1"></i> Password
+                                <label for="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'login.password.id' }}{% else %}password{% endif %}">
+                                    <i class="fas fa-lock mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_label:'login.password.label' }}{% else %}Password{% endif %}
                                 </label>
-                                <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+                                <input type="password" 
+                                       name="password" 
+                                       id="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'login.password.id' }}{% else %}password{% endif %}" 
+                                       class="form-control" 
+                                       placeholder="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_placeholder:'login.password.placeholder' }}{% else %}Enter your password{% endif %}" 
+                                       {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'login.password.aria-label' }}"{% endif %}
+                                       required>
                             </div>
                         </div>
 
                         <div class="form-group mt-4" data-dynamic-group="login-button">
-                            <button type="submit" class="btn btn-primary btn-block">
-                                <i class="fas fa-sign-in-alt mr-1"></i> Sign In
+                            <button type="submit" 
+                                    class="btn btn-primary btn-block"
+                                    {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                                    id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'login.submit.id' }}"
+                                    aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'login.submit.aria-label' }}"
+                                    {% endif %}>
+                                <i class="fas fa-sign-in-alt mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'login.submit.text' }}{% else %}Sign In{% endif %}
                             </button>
                         </div>
 
@@ -44,7 +65,11 @@
                 </div>
 
                 <div class="card-footer bg-light text-center py-3" data-dynamic-group="login-footer">
-                    <p class="mb-0">Don't have an account? <a href="{% url 'booksapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Register</a></p>
+                    <p class="mb-0">Don't have an account? <a href="{% url 'booksapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}{% if DYNAMIC_HTML_ENABLED %}&{% else %}?{% endif %}seed-structure={{ SEED_STRUCTURE }}{% endif %}"
+                           {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                           id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'login.link.id' }}"
+                           aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'login.link.aria-label' }}"
+                           {% endif %}>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'login.link.text' }}{% else %}Register{% endif %}</a></p>
                 </div>
             </div>
         </div>

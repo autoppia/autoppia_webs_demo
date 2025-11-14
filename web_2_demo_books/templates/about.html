@@ -1,10 +1,23 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block body %}
 <div class="container mt-5">
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 mb-4">About BookStore</h1>
-            <p class="lead">Your Ultimate Destination for Quality Books</p>
+            <h1 class="display-4 mb-4" 
+                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.title.id' }}"
+                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.title.aria-label' }}"
+                {% endif %}>
+                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.title.text' }}{% else %}About BookStore{% endif %}
+            </h1>
+            <p class="lead"
+               {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+               id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.subtitle.id' }}"
+               aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.subtitle.aria-label' }}"
+               {% endif %}>
+                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.subtitle.text' }}{% else %}Your Ultimate Destination for Quality Books{% endif %}
+            </p>
             <hr class="my-4">
             <p class="mb-4">BookStore was founded in 2020 with a simple mission: to create a community where book enthusiasts can discover, share, and discuss their favorite books. We believe in the power of book store to inspire, educate, and transform lives.</p>
         </div>
@@ -14,7 +27,13 @@
         <div class="col-md-6">
             <div class="card border-0 shadow h-100">
                 <div class="card-body p-4">
-                    <h2 class="h3 mb-4 text-success"><i class="fas fa-bullseye mr-2"></i>Our Mission</h2>
+                    <h2 class="h3 mb-4 text-success" 
+                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                        id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.mission.id' }}"
+                        aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.mission.aria-label' }}"
+                        {% endif %}>
+                        <i class="fas fa-bullseye mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.mission.text' }}{% else %}Our Mission{% endif %}
+                    </h2>
                     <p>At BookStore, we are dedicated to providing book lovers with a platform to explore and share their passion for book store. We strive to create a comprehensive database of books from all categories, eras, and countries.</p>
                     <p>Our goal is to foster a community where people can discover new books, share their opinions, and engage in meaningful discussions.</p>
                 </div>
@@ -23,7 +42,13 @@
         <div class="col-md-6">
             <div class="card border-0 shadow h-100">
                 <div class="card-body p-4">
-                    <h2 class="h3 mb-4 text-success"><i class="fas fa-eye mr-2"></i>Our Vision</h2>
+                    <h2 class="h3 mb-4 text-success" 
+                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                        id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.vision.id' }}"
+                        aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.vision.aria-label' }}"
+                        {% endif %}>
+                        <i class="fas fa-eye mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.vision.text' }}{% else %}Our Vision{% endif %}
+                    </h2>
                     <p>We envision BookStore as the go-to resource for book enthusiasts around the world. We aim to build the most comprehensive, user-friendly, and community-driven book platform on the internet.</p>
                     <p>We believe in the democratization of book criticism and appreciation, where everyone's voice can be heard and valued.</p>
                 </div>
@@ -33,13 +58,24 @@
 
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h2 class="mb-4"><i class="fas fa-heart text-danger mr-2"></i>Our Values</h2>
+            <h2 class="mb-4" 
+                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.values.id' }}"
+                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.values.aria-label' }}"
+                {% endif %}>
+                <i class="fas fa-heart text-danger mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.values.text' }}{% else %}Our Values{% endif %}
+            </h2>
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow hover-card">
                         <div class="card-body text-center p-4">
                             <i class="fas fa-book fa-3x mb-3 text-success"></i>
-                            <h5>Passion for BookStore</h5>
+                            <h5 {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.value_passion.id' }}"
+                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.value_passion.aria-label' }}"
+                                {% endif %}>
+                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.value_passion.text' }}{% else %}Passion for BookStore{% endif %}
+                            </h5>
                             <p class="small">We are driven by our love for books and the art of storytelling</p>
                         </div>
                     </div>
@@ -48,7 +84,12 @@
                     <div class="card h-100 border-0 shadow hover-card">
                         <div class="card-body text-center p-4">
                             <i class="fas fa-users fa-3x mb-3 text-success"></i>
-                            <h5>Community</h5>
+                            <h5 {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.value_community.id' }}"
+                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.value_community.aria-label' }}"
+                                {% endif %}>
+                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.value_community.text' }}{% else %}Community{% endif %}
+                            </h5>
                             <p class="small">We believe in the power of shared experiences and collective knowledge</p>
                         </div>
                     </div>
@@ -57,7 +98,12 @@
                     <div class="card h-100 border-0 shadow hover-card">
                         <div class="card-body text-center p-4">
                             <i class="fas fa-globe fa-3x mb-3 text-success"></i>
-                            <h5>Diversity</h5>
+                            <h5 {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.value_diversity.id' }}"
+                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.value_diversity.aria-label' }}"
+                                {% endif %}>
+                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.value_diversity.text' }}{% else %}Diversity{% endif %}
+                            </h5>
                             <p class="small">We celebrate the rich diversity of books from around the world</p>
                         </div>
                     </div>
@@ -68,8 +114,19 @@
 
     <div class="row mb-5">
         <div class="col-12 text-center mb-4">
-            <h2><i class="fas fa-user-friends text-info mr-2"></i>Meet Our Team</h2>
-            <p class="lead">The passionate book writers behind BookStore</p>
+            <h2 {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.team.id' }}"
+                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.team.aria-label' }}"
+                {% endif %}>
+                <i class="fas fa-user-friends text-info mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.team.text' }}{% else %}Meet Our Team{% endif %}
+            </h2>
+            <p class="lead"
+               {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+               id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.team_subtitle.id' }}"
+               aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.team_subtitle.aria-label' }}"
+               {% endif %}>
+                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.team_subtitle.text' }}{% else %}The passionate book writers behind BookStore{% endif %}
+            </p>
         </div>
 
         <div class="col-lg-3 col-md-6 mb-4">
@@ -139,12 +196,23 @@
 
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h2 class="mb-4"><i class="fas fa-book-open text-success mr-2"></i>Our Story</h2>
+            <h2 class="mb-4" 
+                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.story.id' }}"
+                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.story.aria-label' }}"
+                {% endif %}>
+                <i class="fas fa-book-open text-success mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.story.text' }}{% else %}Our Story{% endif %}
+            </h2>
             <p>BookStore began as a small project between friends who shared a passion for books. What started as a simple database quickly grew into a platform where thousands of book enthusiasts could come together to share their thoughts and discoveries.</p>
             <p>Today, we're proud to host one of the most engaged book communities online, with users from over 50 countries contributing to our growing database of books, reviews, and discussions.</p>
             <p>Our journey is just beginning, and we're excited to continue growing and improving with the help of our dedicated community.</p>
-            <a href="{% url 'booksapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-success btn-lg mt-3">
-                <i class="fas fa-envelope mr-2"></i>Get in Touch
+            <a href="{% url 'booksapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}{% if DYNAMIC_HTML_ENABLED %}&{% else %}?{% endif %}seed-structure={{ SEED_STRUCTURE }}{% endif %}" 
+               class="btn btn-success btn-lg mt-3"
+               {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
+               id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'about.get_in_touch.id' }}"
+               aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'about.get_in_touch.aria-label' }}"
+               {% endif %}>
+                <i class="fas fa-envelope mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'about.get_in_touch.text' }}{% else %}Get in Touch{% endif %}
             </a>
         </div>
     </div>
