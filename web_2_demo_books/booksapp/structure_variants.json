@@ -310,6 +310,68 @@
           "id": "faq-contribute",
           "aria-label": "FAQ about contributing"
         }
+      },
+      "footer": {
+        "brand": {
+          "text": "BookStore",
+          "id": "footer-brand",
+          "aria-label": "BookStore brand"
+        },
+        "description": {
+          "text": "Your favorite online book store with the best selection and quality.",
+          "id": "footer-desc",
+          "aria-label": "BookStore description"
+        },
+        "quick_links": {
+          "text": "Quick Links",
+          "id": "quick-links-title",
+          "aria-label": "Quick links section"
+        },
+        "home_link": {
+          "text": "Home",
+          "id": "footer-home",
+          "aria-label": "Navigate to home"
+        },
+        "add_book_link": {
+          "text": "Add Book",
+          "id": "footer-add-book",
+          "aria-label": "Add a book"
+        },
+        "categories_link": {
+          "text": "Categories",
+          "id": "footer-categories",
+          "aria-label": "View categories"
+        },
+        "about_link": {
+          "text": "About Us",
+          "id": "footer-about",
+          "aria-label": "About us page"
+        },
+        "contact_link": {
+          "text": "Contact",
+          "id": "footer-contact",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "My Profile",
+          "id": "footer-profile",
+          "aria-label": "View profile"
+        },
+        "signin_link": {
+          "text": "Sign In",
+          "id": "footer-signin",
+          "aria-label": "Sign in"
+        },
+        "follow_us": {
+          "text": "Follow Us",
+          "id": "follow-us-title",
+          "aria-label": "Follow us section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia BookStore. All rights reserved.",
+          "id": "footer-copyright",
+          "aria-label": "Copyright notice"
+        }
       }
     },
     "2": {
@@ -621,6 +683,68 @@
           "text": "How do I help Library?",
           "id": "faq-contribute-v2",
           "aria-label": "FAQ about contributing"
+        }
+      },
+      "footer": {
+        "brand": {
+          "text": "Library",
+          "id": "footer-library",
+          "aria-label": "Library brand"
+        },
+        "description": {
+          "text": "Your premier destination for discovering and sharing great books.",
+          "id": "footer-desc-v2",
+          "aria-label": "Library description"
+        },
+        "quick_links": {
+          "text": "Navigation",
+          "id": "nav-title",
+          "aria-label": "Navigation section"
+        },
+        "home_link": {
+          "text": "Main Page",
+          "id": "footer-main",
+          "aria-label": "Go to main"
+        },
+        "add_book_link": {
+          "text": "New Book",
+          "id": "footer-new-book",
+          "aria-label": "Create book"
+        },
+        "categories_link": {
+          "text": "Genres",
+          "id": "footer-genres",
+          "aria-label": "View genres"
+        },
+        "about_link": {
+          "text": "About",
+          "id": "footer-about-v2",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Get in Touch",
+          "id": "footer-contact-v2",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "Profile",
+          "id": "footer-profile-v2",
+          "aria-label": "View profile"
+        },
+        "signin_link": {
+          "text": "Log In",
+          "id": "footer-login",
+          "aria-label": "Log in"
+        },
+        "follow_us": {
+          "text": "Connect",
+          "id": "connect-title",
+          "aria-label": "Connect section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia Library. All rights reserved.",
+          "id": "footer-copyright-v2",
+          "aria-label": "Copyright notice"
         }
       }
     },
@@ -934,6 +1058,68 @@
           "id": "faq-help-hub",
           "aria-label": "FAQ about contributing"
         }
+      },
+      "footer": {
+        "brand": {
+          "text": "BookHub",
+          "id": "footer-hub",
+          "aria-label": "BookHub brand"
+        },
+        "description": {
+          "text": "Connecting book lovers worldwide with quality content.",
+          "id": "footer-desc-v3",
+          "aria-label": "BookHub description"
+        },
+        "quick_links": {
+          "text": "Site Map",
+          "id": "sitemap-title",
+          "aria-label": "Site map section"
+        },
+        "home_link": {
+          "text": "Dashboard",
+          "id": "footer-dash",
+          "aria-label": "Go to dashboard"
+        },
+        "add_book_link": {
+          "text": "Post Book",
+          "id": "footer-post-book",
+          "aria-label": "Post book"
+        },
+        "categories_link": {
+          "text": "Types",
+          "id": "footer-types",
+          "aria-label": "View types"
+        },
+        "about_link": {
+          "text": "Who We Are",
+          "id": "footer-about-v3",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Reach Out",
+          "id": "footer-contact-v3",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "Account",
+          "id": "footer-account",
+          "aria-label": "View account"
+        },
+        "signin_link": {
+          "text": "Access",
+          "id": "footer-access",
+          "aria-label": "Access account"
+        },
+        "follow_us": {
+          "text": "Stay Connected",
+          "id": "stay-connected-title",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia BookHub. All rights reserved.",
+          "id": "footer-copyright-v3",
+          "aria-label": "Copyright notice"
+        }
       }
     },
     "4": {
@@ -1245,6 +1431,68 @@
           "text": "Ways to support ReadSpace?",
           "id": "faq-support-readspace",
           "aria-label": "FAQ about contributing"
+        }
+      },
+      "footer": {
+        "brand": {
+          "text": "ReadSpace",
+          "id": "footer-readspace",
+          "aria-label": "ReadSpace brand"
+        },
+        "description": {
+          "text": "Explore amazing books and share your literary passion.",
+          "id": "footer-desc-v4",
+          "aria-label": "ReadSpace description"
+        },
+        "quick_links": {
+          "text": "Links",
+          "id": "links-title",
+          "aria-label": "Links section"
+        },
+        "home_link": {
+          "text": "Start",
+          "id": "footer-start",
+          "aria-label": "Go to start"
+        },
+        "add_book_link": {
+          "text": "Upload Book",
+          "id": "footer-upload",
+          "aria-label": "Upload book"
+        },
+        "categories_link": {
+          "text": "Collections",
+          "id": "footer-collections",
+          "aria-label": "View collections"
+        },
+        "about_link": {
+          "text": "Our Story",
+          "id": "footer-about-v4",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Message Us",
+          "id": "footer-contact-v4",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "My Account",
+          "id": "footer-my-account",
+          "aria-label": "View account"
+        },
+        "signin_link": {
+          "text": "Enter",
+          "id": "footer-enter",
+          "aria-label": "Enter account"
+        },
+        "follow_us": {
+          "text": "Social Media",
+          "id": "social-media-title",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia ReadSpace. All rights reserved.",
+          "id": "footer-copyright-v4",
+          "aria-label": "Copyright notice"
         }
       }
     },
@@ -1558,6 +1806,68 @@
           "id": "faq-contribute-vault",
           "aria-label": "FAQ about contributing"
         }
+      },
+      "footer": {
+        "brand": {
+          "text": "BookVault",
+          "id": "footer-vault",
+          "aria-label": "BookVault brand"
+        },
+        "description": {
+          "text": "Your trusted platform for books and literary content.",
+          "id": "footer-desc-v5",
+          "aria-label": "BookVault description"
+        },
+        "quick_links": {
+          "text": "Menu",
+          "id": "menu-title",
+          "aria-label": "Menu section"
+        },
+        "home_link": {
+          "text": "Welcome",
+          "id": "footer-welcome",
+          "aria-label": "Go to welcome"
+        },
+        "add_book_link": {
+          "text": "Create Book",
+          "id": "footer-create",
+          "aria-label": "Create book"
+        },
+        "categories_link": {
+          "text": "Groups",
+          "id": "footer-groups",
+          "aria-label": "View groups"
+        },
+        "about_link": {
+          "text": "Information",
+          "id": "footer-about-v5",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Support",
+          "id": "footer-contact-v5",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "User Profile",
+          "id": "footer-user-profile",
+          "aria-label": "View profile"
+        },
+        "signin_link": {
+          "text": "Log In",
+          "id": "footer-login-v5",
+          "aria-label": "Log in"
+        },
+        "follow_us": {
+          "text": "Social Networks",
+          "id": "social-networks-title",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia BookVault. All rights reserved.",
+          "id": "footer-copyright-v5",
+          "aria-label": "Copyright notice"
+        }
       }
     },
     "6": {
@@ -1869,6 +2179,68 @@
           "text": "How to help LitHub?",
           "id": "faq-help-lithub",
           "aria-label": "FAQ about contributing"
+        }
+      },
+      "footer": {
+        "brand": {
+          "text": "LitHub",
+          "id": "footer-lithub",
+          "aria-label": "LitHub brand"
+        },
+        "description": {
+          "text": "Discover and share books in our vibrant community.",
+          "id": "footer-desc-v6",
+          "aria-label": "LitHub description"
+        },
+        "quick_links": {
+          "text": "Browse",
+          "id": "browse-title",
+          "aria-label": "Browse section"
+        },
+        "home_link": {
+          "text": "Hub",
+          "id": "footer-hub-v6",
+          "aria-label": "Go to hub"
+        },
+        "add_book_link": {
+          "text": "Share Book",
+          "id": "footer-share",
+          "aria-label": "Share book"
+        },
+        "categories_link": {
+          "text": "Sections",
+          "id": "footer-sections",
+          "aria-label": "View sections"
+        },
+        "about_link": {
+          "text": "Learn More",
+          "id": "footer-about-v6",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Help",
+          "id": "footer-contact-v6",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "Account Info",
+          "id": "footer-account-info",
+          "aria-label": "View account"
+        },
+        "signin_link": {
+          "text": "Connect",
+          "id": "footer-connect",
+          "aria-label": "Connect account"
+        },
+        "follow_us": {
+          "text": "Join Us",
+          "id": "join-us-title",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia LitHub. All rights reserved.",
+          "id": "footer-copyright-v6",
+          "aria-label": "Copyright notice"
         }
       }
     },
@@ -2182,6 +2554,68 @@
           "id": "faq-contribute-portal",
           "aria-label": "FAQ about contributing"
         }
+      },
+      "footer": {
+        "brand": {
+          "text": "BookPortal",
+          "id": "footer-portal",
+          "aria-label": "BookPortal brand"
+        },
+        "description": {
+          "text": "Your gateway to the world of books and reading.",
+          "id": "footer-desc-v7",
+          "aria-label": "BookPortal description"
+        },
+        "quick_links": {
+          "text": "Explore",
+          "id": "explore-title",
+          "aria-label": "Explore section"
+        },
+        "home_link": {
+          "text": "Portal",
+          "id": "footer-portal-v7",
+          "aria-label": "Go to portal"
+        },
+        "add_book_link": {
+          "text": "Include Book",
+          "id": "footer-include",
+          "aria-label": "Include book"
+        },
+        "categories_link": {
+          "text": "Classes",
+          "id": "footer-classes",
+          "aria-label": "View classes"
+        },
+        "about_link": {
+          "text": "Details",
+          "id": "footer-about-v7",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Feedback",
+          "id": "footer-contact-v7",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "User Details",
+          "id": "footer-user-details",
+          "aria-label": "View details"
+        },
+        "signin_link": {
+          "text": "Welcome Back",
+          "id": "footer-welcome-back",
+          "aria-label": "Welcome back"
+        },
+        "follow_us": {
+          "text": "Find Us",
+          "id": "find-us-title-footer",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia BookPortal. All rights reserved.",
+          "id": "footer-copyright-v7",
+          "aria-label": "Copyright notice"
+        }
       }
     },
     "8": {
@@ -2493,6 +2927,68 @@
           "text": "How can I help ReadBase?",
           "id": "faq-help-readbase",
           "aria-label": "FAQ about contributing"
+        }
+      },
+      "footer": {
+        "brand": {
+          "text": "ReadBase",
+          "id": "footer-readbase",
+          "aria-label": "ReadBase brand"
+        },
+        "description": {
+          "text": "The book platform built for passionate readers.",
+          "id": "footer-desc-v8",
+          "aria-label": "ReadBase description"
+        },
+        "quick_links": {
+          "text": "Options",
+          "id": "options-title",
+          "aria-label": "Options section"
+        },
+        "home_link": {
+          "text": "Base",
+          "id": "footer-base",
+          "aria-label": "Go to base"
+        },
+        "add_book_link": {
+          "text": "List Book",
+          "id": "footer-list",
+          "aria-label": "List book"
+        },
+        "categories_link": {
+          "text": "Kinds",
+          "id": "footer-kinds",
+          "aria-label": "View kinds"
+        },
+        "about_link": {
+          "text": "Background",
+          "id": "footer-about-v8",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Inquiry",
+          "id": "footer-contact-v8",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "Personal Info",
+          "id": "footer-personal",
+          "aria-label": "View info"
+        },
+        "signin_link": {
+          "text": "Sign In Now",
+          "id": "footer-signin-now",
+          "aria-label": "Sign in now"
+        },
+        "follow_us": {
+          "text": "Social",
+          "id": "social-title",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia ReadBase. All rights reserved.",
+          "id": "footer-copyright-v8",
+          "aria-label": "Copyright notice"
         }
       }
     },
@@ -2806,6 +3302,68 @@
           "id": "faq-support-nest",
           "aria-label": "FAQ about contributing"
         }
+      },
+      "footer": {
+        "brand": {
+          "text": "BookNest",
+          "id": "footer-nest",
+          "aria-label": "BookNest brand"
+        },
+        "description": {
+          "text": "Where book enthusiasts gather and share their passion.",
+          "id": "footer-desc-v9",
+          "aria-label": "BookNest description"
+        },
+        "quick_links": {
+          "text": "Resources",
+          "id": "resources-title",
+          "aria-label": "Resources section"
+        },
+        "home_link": {
+          "text": "Homepage",
+          "id": "footer-homepage",
+          "aria-label": "Go to homepage"
+        },
+        "add_book_link": {
+          "text": "Publish Book",
+          "id": "footer-publish",
+          "aria-label": "Publish book"
+        },
+        "categories_link": {
+          "text": "Categories",
+          "id": "footer-cats",
+          "aria-label": "View categories"
+        },
+        "about_link": {
+          "text": "Mission",
+          "id": "footer-about-v9",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Connect",
+          "id": "footer-contact-v9",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "Profile Settings",
+          "id": "footer-profile-settings",
+          "aria-label": "View settings"
+        },
+        "signin_link": {
+          "text": "Open Session",
+          "id": "footer-open-session",
+          "aria-label": "Open session"
+        },
+        "follow_us": {
+          "text": "Get Social",
+          "id": "get-social-title",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia BookNest. All rights reserved.",
+          "id": "footer-copyright-v9",
+          "aria-label": "Copyright notice"
+        }
       }
     },
     "10": {
@@ -3117,6 +3675,68 @@
           "text": "Helping PageTurner grow?",
           "id": "faq-help-turner",
           "aria-label": "FAQ about contributing"
+        }
+      },
+      "footer": {
+        "brand": {
+          "text": "PageTurner",
+          "id": "footer-turner",
+          "aria-label": "PageTurner brand"
+        },
+        "description": {
+          "text": "Turn pages and discover worlds of literary adventure.",
+          "id": "footer-desc-v10",
+          "aria-label": "PageTurner description"
+        },
+        "quick_links": {
+          "text": "Directory",
+          "id": "directory-title",
+          "aria-label": "Directory section"
+        },
+        "home_link": {
+          "text": "Index",
+          "id": "footer-index",
+          "aria-label": "Go to index"
+        },
+        "add_book_link": {
+          "text": "Add Entry",
+          "id": "footer-add-entry",
+          "aria-label": "Add entry"
+        },
+        "categories_link": {
+          "text": "Catalog",
+          "id": "footer-catalog",
+          "aria-label": "View catalog"
+        },
+        "about_link": {
+          "text": "Overview",
+          "id": "footer-about-v10",
+          "aria-label": "About page"
+        },
+        "contact_link": {
+          "text": "Inbox",
+          "id": "footer-contact-v10",
+          "aria-label": "Contact page"
+        },
+        "profile_link": {
+          "text": "User Settings",
+          "id": "footer-user-settings",
+          "aria-label": "View settings"
+        },
+        "signin_link": {
+          "text": "Launch",
+          "id": "footer-launch",
+          "aria-label": "Launch account"
+        },
+        "follow_us": {
+          "text": "Social Links",
+          "id": "social-links-title",
+          "aria-label": "Social section"
+        },
+        "copyright": {
+          "text": "© 2025 Autoppia PageTurner. All rights reserved.",
+          "id": "footer-copyright-v10",
+          "aria-label": "Copyright notice"
         }
       }
     }
