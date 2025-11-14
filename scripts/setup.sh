@@ -402,7 +402,9 @@ deploy_webs_server() {
       NEXT_PUBLIC_ENABLE_DB_MODE="$ENABLE_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
       DATA_SEED_VALUE="$DATA_SEED_VALUE" \
-      NEXT_PUBLIC_DATA_SEED_VALUE="$DATA_SEED_VALUE"
+      NEXT_PUBLIC_DATA_SEED_VALUE="$DATA_SEED_VALUE" \
+      HOST_UID=$(id -u) \
+      HOST_GID=$(id -g)
 
     docker compose -p "$name" build $cache_flag
     docker compose -p "$name" up -d
