@@ -3,12 +3,13 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { withSeed } from "@/utils/seedRouting";
+import { useProjectData } from "@/shared/universal-loader";
 // import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
 
 // interface EventData {
@@ -17,11 +18,27 @@ import { withSeed } from "@/utils/seedRouting";
 // }
 
 function DashboardContent() {
-  const { seed } = useSeed();
+  const { seed, v2Seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
+  
+  // Load dynamic counts for all entities
+  const { data: clientsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'clients', seedValue: v2Seed ?? undefined });
+  const { data: mattersData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'matters', seedValue: v2Seed ?? undefined });
+  const { data: eventsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'events', seedValue: v2Seed ?? undefined });
+  const { data: filesData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'files', seedValue: v2Seed ?? undefined });
+  const { data: logsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'logs', seedValue: v2Seed ?? undefined });
+  
+  const counters = {
+    matters: mattersData?.length || 41,
+    clients: clientsData?.length || 44,
+    events: eventsData?.length || 6,
+    files: filesData?.length || 50,
+    logs: logsData?.length || 36,
+  };
+  
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
 
   return (
@@ -39,7 +56,7 @@ function DashboardContent() {
             <span className="font-semibold text-zinc-600 text-lg">{getText("matters_title")}</span>
             <Briefcase className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">41</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.matters}</span>
           <span className="text-sm text-zinc-400">{getText("total_matters")}</span>
         </SeedLink>
 
@@ -54,7 +71,7 @@ function DashboardContent() {
             <span className="font-semibold text-zinc-600 text-lg">{getText("clients_title")}</span>
             <Users className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">44</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.clients}</span>
           <span className="text-sm text-zinc-400">{getText("total_clients")}</span>
         </SeedLink>
 
@@ -69,7 +86,7 @@ function DashboardContent() {
             <span className="font-semibold text-zinc-600 text-lg">{getText("upcoming_events")}</span>
             <Calendar className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">6</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.events}</span>
           <span className="text-sm text-zinc-400">{getText("event_date")}</span>
         </SeedLink>
 
@@ -84,7 +101,7 @@ function DashboardContent() {
             <span className="font-semibold text-zinc-600 text-lg">{getText("documents_title")}</span>
             <FileText className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">50</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.files}</span>
           <span className="text-sm text-zinc-400">{getText("document_name")}</span>
         </SeedLink>
 
@@ -99,7 +116,7 @@ function DashboardContent() {
             <span className="font-semibold text-zinc-600 text-lg">{getText("billing_title")}</span>
             <Clock className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
-          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">36</span>
+          <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.logs}</span>
           <span className="text-sm text-zinc-400">{getText("hours_logged")}</span>
         </SeedLink>
 

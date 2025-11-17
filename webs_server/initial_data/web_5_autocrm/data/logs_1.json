@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "LOG-1000",
+    "action": "commented",
+    "entity": "matter",
+    "entityId": "CL-1056",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-17 07:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1001",
+    "action": "downloaded",
+    "entity": "note",
+    "entityId": "CL-1016",
+    "user": "David Wilson",
+    "timestamp": "2025-11-06 22:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1002",
+    "action": "created",
+    "entity": "event",
+    "entityId": "EVT-673",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-05 07:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1003",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "CL-1051",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-26 16:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1004",
+    "action": "shared",
+    "entity": "event",
+    "entityId": "MAT-705",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-23 14:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1005",
+    "action": "updated",
+    "entity": "matter",
+    "entityId": "FILE-757",
+    "user": "David Wilson",
+    "timestamp": "2025-10-31 03:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1006",
+    "action": "viewed",
+    "entity": "event",
+    "entityId": "FILE-693",
+    "user": "David Wilson",
+    "timestamp": "2025-10-26 07:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1007",
+    "action": "viewed",
+    "entity": "file",
+    "entityId": "CL-1142",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-04 08:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1008",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "FILE-1134",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-05 08:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1009",
+    "action": "created",
+    "entity": "event",
+    "entityId": "MAT-855",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-11 13:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1010",
+    "action": "uploaded",
+    "entity": "matter",
+    "entityId": "FILE-324",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-01 07:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1011",
+    "action": "uploaded",
+    "entity": "event",
+    "entityId": "MAT-454",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-24 05:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1012",
+    "action": "deleted",
+    "entity": "event",
+    "entityId": "CL-533",
+    "user": "David Wilson",
+    "timestamp": "2025-11-08 09:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1013",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "EVT-764",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-07 05:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1014",
+    "action": "created",
+    "entity": "client",
+    "entityId": "MAT-360",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-13 12:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1015",
+    "action": "updated",
+    "entity": "matter",
+    "entityId": "MAT-732",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-21 09:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1016",
+    "action": "deleted",
+    "entity": "event",
+    "entityId": "CL-687",
+    "user": "John Smith",
+    "timestamp": "2025-10-22 16:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1017",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "EVT-328",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-06 13:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1018",
+    "action": "deleted",
+    "entity": "note",
+    "entityId": "MAT-1164",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-20 09:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1019",
+    "action": "shared",
+    "entity": "event",
+    "entityId": "MAT-903",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-29 16:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1020",
+    "action": "downloaded",
+    "entity": "event",
+    "entityId": "CL-552",
+    "user": "John Smith",
+    "timestamp": "2025-10-21 03:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1021",
+    "action": "uploaded",
+    "entity": "matter",
+    "entityId": "MAT-850",
+    "user": "David Wilson",
+    "timestamp": "2025-10-25 22:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1022",
+    "action": "updated",
+    "entity": "file",
+    "entityId": "CL-586",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-26 18:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1023",
+    "action": "downloaded",
+    "entity": "note",
+    "entityId": "EVT-602",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-30 05:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1024",
+    "action": "downloaded",
+    "entity": "client",
+    "entityId": "MAT-1100",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-12 16:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1025",
+    "action": "viewed",
+    "entity": "client",
+    "entityId": "CL-605",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-07 07:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1026",
+    "action": "downloaded",
+    "entity": "file",
+    "entityId": "CL-1134",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-19 21:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1027",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "EVT-1155",
+    "user": "John Smith",
+    "timestamp": "2025-11-17 07:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1028",
+    "action": "shared",
+    "entity": "file",
+    "entityId": "MAT-672",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-07 18:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1029",
+    "action": "shared",
+    "entity": "file",
+    "entityId": "MAT-643",
+    "user": "David Wilson",
+    "timestamp": "2025-11-11 16:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1030",
+    "action": "deleted",
+    "entity": "matter",
+    "entityId": "FILE-1039",
+    "user": "John Smith",
+    "timestamp": "2025-11-10 09:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1031",
+    "action": "deleted",
+    "entity": "file",
+    "entityId": "FILE-605",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-06 02:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1032",
+    "action": "shared",
+    "entity": "event",
+    "entityId": "EVT-1144",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-30 11:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1033",
+    "action": "updated",
+    "entity": "event",
+    "entityId": "FILE-616",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-24 13:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1034",
+    "action": "viewed",
+    "entity": "event",
+    "entityId": "FILE-336",
+    "user": "David Wilson",
+    "timestamp": "2025-11-17 16:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1035",
+    "action": "created",
+    "entity": "client",
+    "entityId": "MAT-202",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-14 00:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1036",
+    "action": "updated",
+    "entity": "note",
+    "entityId": "CL-330",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-06 15:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1037",
+    "action": "uploaded",
+    "entity": "note",
+    "entityId": "MAT-169",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-25 04:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1038",
+    "action": "viewed",
+    "entity": "event",
+    "entityId": "FILE-672",
+    "user": "John Smith",
+    "timestamp": "2025-11-15 22:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1039",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "MAT-713",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-17 06:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1040",
+    "action": "downloaded",
+    "entity": "matter",
+    "entityId": "CL-329",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-11 07:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1041",
+    "action": "created",
+    "entity": "note",
+    "entityId": "FILE-356",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-16 19:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1042",
+    "action": "commented",
+    "entity": "matter",
+    "entityId": "MAT-1101",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-28 10:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1043",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "CL-154",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-07 01:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1044",
+    "action": "viewed",
+    "entity": "file",
+    "entityId": "MAT-581",
+    "user": "John Smith",
+    "timestamp": "2025-10-18 21:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1045",
+    "action": "downloaded",
+    "entity": "file",
+    "entityId": "FILE-641",
+    "user": "David Wilson",
+    "timestamp": "2025-10-20 21:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1046",
+    "action": "downloaded",
+    "entity": "file",
+    "entityId": "MAT-490",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-08 12:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1047",
+    "action": "downloaded",
+    "entity": "event",
+    "entityId": "CL-300",
+    "user": "John Smith",
+    "timestamp": "2025-10-29 08:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1048",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "CL-965",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-14 05:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1049",
+    "action": "deleted",
+    "entity": "matter",
+    "entityId": "EVT-1038",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-22 05:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1050",
+    "action": "created",
+    "entity": "client",
+    "entityId": "FILE-930",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-12 13:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1051",
+    "action": "uploaded",
+    "entity": "file",
+    "entityId": "CL-1185",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-03 17:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1052",
+    "action": "uploaded",
+    "entity": "note",
+    "entityId": "CL-1174",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-30 04:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1053",
+    "action": "shared",
+    "entity": "file",
+    "entityId": "CL-796",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-17 17:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1054",
+    "action": "uploaded",
+    "entity": "note",
+    "entityId": "EVT-555",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-31 00:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1055",
+    "action": "viewed",
+    "entity": "note",
+    "entityId": "CL-212",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-13 10:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1056",
+    "action": "created",
+    "entity": "event",
+    "entityId": "EVT-188",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-27 17:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1057",
+    "action": "commented",
+    "entity": "file",
+    "entityId": "MAT-249",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-28 20:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1058",
+    "action": "created",
+    "entity": "matter",
+    "entityId": "CL-1165",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-10 23:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1059",
+    "action": "shared",
+    "entity": "event",
+    "entityId": "EVT-622",
+    "user": "John Smith",
+    "timestamp": "2025-10-20 01:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1060",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "CL-666",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-10 15:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1061",
+    "action": "uploaded",
+    "entity": "matter",
+    "entityId": "EVT-270",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-14 05:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1062",
+    "action": "updated",
+    "entity": "file",
+    "entityId": "FILE-524",
+    "user": "John Smith",
+    "timestamp": "2025-11-14 01:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1063",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "CL-133",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-29 23:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1064",
+    "action": "shared",
+    "entity": "file",
+    "entityId": "MAT-895",
+    "user": "John Smith",
+    "timestamp": "2025-11-07 04:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1065",
+    "action": "shared",
+    "entity": "file",
+    "entityId": "FILE-822",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-20 09:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1066",
+    "action": "downloaded",
+    "entity": "client",
+    "entityId": "MAT-455",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-27 10:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1067",
+    "action": "shared",
+    "entity": "file",
+    "entityId": "EVT-698",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-19 11:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1068",
+    "action": "shared",
+    "entity": "note",
+    "entityId": "MAT-570",
+    "user": "David Wilson",
+    "timestamp": "2025-10-27 12:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1069",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "EVT-955",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-14 16:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1070",
+    "action": "deleted",
+    "entity": "event",
+    "entityId": "FILE-104",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-16 11:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1071",
+    "action": "shared",
+    "entity": "event",
+    "entityId": "MAT-687",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-05 12:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1072",
+    "action": "deleted",
+    "entity": "matter",
+    "entityId": "EVT-997",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-08 06:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1073",
+    "action": "downloaded",
+    "entity": "matter",
+    "entityId": "MAT-241",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-24 20:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1074",
+    "action": "created",
+    "entity": "matter",
+    "entityId": "MAT-1027",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-03 16:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1075",
+    "action": "commented",
+    "entity": "client",
+    "entityId": "FILE-1051",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-01 11:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1076",
+    "action": "deleted",
+    "entity": "note",
+    "entityId": "MAT-343",
+    "user": "David Wilson",
+    "timestamp": "2025-10-20 01:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1077",
+    "action": "deleted",
+    "entity": "matter",
+    "entityId": "CL-395",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-30 12:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1078",
+    "action": "downloaded",
+    "entity": "event",
+    "entityId": "CL-342",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-24 01:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1079",
+    "action": "uploaded",
+    "entity": "note",
+    "entityId": "CL-1094",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-10 02:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1080",
+    "action": "downloaded",
+    "entity": "note",
+    "entityId": "EVT-849",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-14 05:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1081",
+    "action": "viewed",
+    "entity": "client",
+    "entityId": "MAT-137",
+    "user": "David Wilson",
+    "timestamp": "2025-11-16 10:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1082",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "MAT-625",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-21 17:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1083",
+    "action": "uploaded",
+    "entity": "matter",
+    "entityId": "EVT-1157",
+    "user": "David Wilson",
+    "timestamp": "2025-10-24 16:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1084",
+    "action": "downloaded",
+    "entity": "note",
+    "entityId": "EVT-248",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-16 20:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1085",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "FILE-292",
+    "user": "David Wilson",
+    "timestamp": "2025-10-20 06:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1086",
+    "action": "downloaded",
+    "entity": "file",
+    "entityId": "CL-1194",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-17 05:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1087",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "EVT-326",
+    "user": "John Smith",
+    "timestamp": "2025-10-20 00:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1088",
+    "action": "shared",
+    "entity": "note",
+    "entityId": "EVT-808",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-22 22:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1089",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "FILE-1037",
+    "user": "John Smith",
+    "timestamp": "2025-11-01 21:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1090",
+    "action": "downloaded",
+    "entity": "event",
+    "entityId": "EVT-898",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-12 17:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1091",
+    "action": "deleted",
+    "entity": "matter",
+    "entityId": "MAT-1067",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-20 18:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1092",
+    "action": "downloaded",
+    "entity": "event",
+    "entityId": "FILE-128",
+    "user": "John Smith",
+    "timestamp": "2025-11-09 04:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1093",
+    "action": "updated",
+    "entity": "note",
+    "entityId": "CL-242",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-05 15:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1094",
+    "action": "shared",
+    "entity": "note",
+    "entityId": "EVT-621",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-16 03:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1095",
+    "action": "updated",
+    "entity": "event",
+    "entityId": "MAT-1015",
+    "user": "John Smith",
+    "timestamp": "2025-11-11 23:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1096",
+    "action": "viewed",
+    "entity": "event",
+    "entityId": "EVT-884",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-21 10:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1097",
+    "action": "uploaded",
+    "entity": "matter",
+    "entityId": "MAT-152",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-05 00:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1098",
+    "action": "shared",
+    "entity": "matter",
+    "entityId": "CL-725",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-08 19:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1099",
+    "action": "updated",
+    "entity": "matter",
+    "entityId": "CL-878",
+    "user": "David Wilson",
+    "timestamp": "2025-11-08 19:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1100",
+    "action": "viewed",
+    "entity": "event",
+    "entityId": "MAT-724",
+    "user": "John Smith",
+    "timestamp": "2025-11-11 01:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1101",
+    "action": "viewed",
+    "entity": "file",
+    "entityId": "EVT-812",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-25 07:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1102",
+    "action": "shared",
+    "entity": "event",
+    "entityId": "FILE-913",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-23 14:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1103",
+    "action": "updated",
+    "entity": "client",
+    "entityId": "FILE-196",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-25 04:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1104",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "MAT-967",
+    "user": "John Smith",
+    "timestamp": "2025-10-23 04:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1105",
+    "action": "created",
+    "entity": "matter",
+    "entityId": "EVT-288",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-09 03:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1106",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "MAT-526",
+    "user": "David Wilson",
+    "timestamp": "2025-10-21 02:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1107",
+    "action": "viewed",
+    "entity": "file",
+    "entityId": "MAT-991",
+    "user": "David Wilson",
+    "timestamp": "2025-11-13 06:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1108",
+    "action": "viewed",
+    "entity": "client",
+    "entityId": "CL-281",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-15 21:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1109",
+    "action": "updated",
+    "entity": "note",
+    "entityId": "FILE-499",
+    "user": "David Wilson",
+    "timestamp": "2025-10-31 14:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1110",
+    "action": "updated",
+    "entity": "file",
+    "entityId": "CL-246",
+    "user": "John Smith",
+    "timestamp": "2025-10-20 23:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1111",
+    "action": "downloaded",
+    "entity": "client",
+    "entityId": "MAT-277",
+    "user": "David Wilson",
+    "timestamp": "2025-11-15 05:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1112",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "EVT-666",
+    "user": "John Smith",
+    "timestamp": "2025-10-26 18:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1113",
+    "action": "commented",
+    "entity": "client",
+    "entityId": "FILE-849",
+    "user": "David Wilson",
+    "timestamp": "2025-10-24 08:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1114",
+    "action": "created",
+    "entity": "note",
+    "entityId": "EVT-700",
+    "user": "John Smith",
+    "timestamp": "2025-10-25 11:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1115",
+    "action": "created",
+    "entity": "file",
+    "entityId": "CL-202",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-24 01:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1116",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "MAT-445",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-23 23:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1117",
+    "action": "downloaded",
+    "entity": "file",
+    "entityId": "FILE-517",
+    "user": "John Smith",
+    "timestamp": "2025-11-07 03:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1118",
+    "action": "downloaded",
+    "entity": "file",
+    "entityId": "CL-1004",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-13 13:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1119",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "CL-561",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-06 05:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1120",
+    "action": "uploaded",
+    "entity": "event",
+    "entityId": "CL-901",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-20 02:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1121",
+    "action": "downloaded",
+    "entity": "matter",
+    "entityId": "CL-881",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-10 11:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1122",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "CL-231",
+    "user": "John Smith",
+    "timestamp": "2025-11-14 19:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1123",
+    "action": "shared",
+    "entity": "event",
+    "entityId": "EVT-757",
+    "user": "David Wilson",
+    "timestamp": "2025-10-28 19:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1124",
+    "action": "uploaded",
+    "entity": "file",
+    "entityId": "FILE-299",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-14 08:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1125",
+    "action": "viewed",
+    "entity": "client",
+    "entityId": "CL-550",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-23 01:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1126",
+    "action": "commented",
+    "entity": "client",
+    "entityId": "CL-194",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-25 20:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1127",
+    "action": "uploaded",
+    "entity": "matter",
+    "entityId": "MAT-1028",
+    "user": "David Wilson",
+    "timestamp": "2025-10-25 18:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1128",
+    "action": "commented",
+    "entity": "file",
+    "entityId": "FILE-867",
+    "user": "David Wilson",
+    "timestamp": "2025-10-19 14:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1129",
+    "action": "shared",
+    "entity": "note",
+    "entityId": "MAT-175",
+    "user": "David Wilson",
+    "timestamp": "2025-10-18 22:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1130",
+    "action": "commented",
+    "entity": "file",
+    "entityId": "FILE-810",
+    "user": "David Wilson",
+    "timestamp": "2025-11-07 21:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1131",
+    "action": "uploaded",
+    "entity": "note",
+    "entityId": "EVT-1103",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-30 22:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1132",
+    "action": "deleted",
+    "entity": "note",
+    "entityId": "FILE-1197",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-15 17:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1133",
+    "action": "downloaded",
+    "entity": "matter",
+    "entityId": "CL-666",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-11 12:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1134",
+    "action": "deleted",
+    "entity": "note",
+    "entityId": "FILE-680",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-22 19:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1135",
+    "action": "viewed",
+    "entity": "note",
+    "entityId": "FILE-178",
+    "user": "David Wilson",
+    "timestamp": "2025-10-23 23:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1136",
+    "action": "uploaded",
+    "entity": "note",
+    "entityId": "EVT-1020",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-27 06:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1137",
+    "action": "commented",
+    "entity": "matter",
+    "entityId": "FILE-1194",
+    "user": "John Smith",
+    "timestamp": "2025-10-22 07:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1138",
+    "action": "updated",
+    "entity": "file",
+    "entityId": "EVT-590",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-03 06:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1139",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "EVT-1153",
+    "user": "John Smith",
+    "timestamp": "2025-11-01 17:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1140",
+    "action": "shared",
+    "entity": "client",
+    "entityId": "FILE-654",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-22 23:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1141",
+    "action": "updated",
+    "entity": "event",
+    "entityId": "FILE-697",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-29 14:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1142",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "FILE-553",
+    "user": "John Smith",
+    "timestamp": "2025-11-02 11:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1143",
+    "action": "uploaded",
+    "entity": "file",
+    "entityId": "MAT-127",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-30 06:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1144",
+    "action": "downloaded",
+    "entity": "file",
+    "entityId": "EVT-548",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-12 08:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1145",
+    "action": "updated",
+    "entity": "client",
+    "entityId": "MAT-604",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-09 09:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1146",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "FILE-113",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-27 02:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1147",
+    "action": "updated",
+    "entity": "event",
+    "entityId": "EVT-338",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-07 20:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1148",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "EVT-950",
+    "user": "David Wilson",
+    "timestamp": "2025-10-29 01:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1149",
+    "action": "deleted",
+    "entity": "file",
+    "entityId": "FILE-140",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-16 15:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1150",
+    "action": "downloaded",
+    "entity": "matter",
+    "entityId": "EVT-1057",
+    "user": "John Smith",
+    "timestamp": "2025-10-27 04:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1151",
+    "action": "shared",
+    "entity": "matter",
+    "entityId": "CL-469",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-01 19:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1152",
+    "action": "shared",
+    "entity": "file",
+    "entityId": "CL-1037",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-10 14:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1153",
+    "action": "viewed",
+    "entity": "file",
+    "entityId": "EVT-488",
+    "user": "John Smith",
+    "timestamp": "2025-11-14 15:37:23",
+    "details": "User viewed client"
+  },
+  {
+    "id": "LOG-1154",
+    "action": "viewed",
+    "entity": "event",
+    "entityId": "CL-455",
+    "user": "David Wilson",
+    "timestamp": "2025-10-19 21:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1155",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "EVT-338",
+    "user": "John Smith",
+    "timestamp": "2025-10-24 02:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1156",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "MAT-383",
+    "user": "David Wilson",
+    "timestamp": "2025-10-23 05:37:23",
+    "details": "User viewed matter"
+  },
+  {
+    "id": "LOG-1157",
+    "action": "shared",
+    "entity": "note",
+    "entityId": "CL-207",
+    "user": "David Wilson",
+    "timestamp": "2025-10-24 19:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1158",
+    "action": "created",
+    "entity": "client",
+    "entityId": "MAT-1185",
+    "user": "John Smith",
+    "timestamp": "2025-11-06 06:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1159",
+    "action": "updated",
+    "entity": "client",
+    "entityId": "MAT-695",
+    "user": "John Smith",
+    "timestamp": "2025-10-25 13:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1160",
+    "action": "viewed",
+    "entity": "client",
+    "entityId": "CL-1070",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-30 03:37:23",
+    "details": "User created file"
+  },
+  {
+    "id": "LOG-1161",
+    "action": "uploaded",
+    "entity": "matter",
+    "entityId": "EVT-365",
+    "user": "David Wilson",
+    "timestamp": "2025-11-04 17:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1162",
+    "action": "updated",
+    "entity": "file",
+    "entityId": "FILE-818",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-30 19:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1163",
+    "action": "created",
+    "entity": "client",
+    "entityId": "FILE-499",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-21 12:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1164",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "MAT-498",
+    "user": "John Smith",
+    "timestamp": "2025-11-02 03:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1165",
+    "action": "downloaded",
+    "entity": "client",
+    "entityId": "MAT-1081",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-24 12:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1166",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "CL-135",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-09 02:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1167",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "CL-263",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-27 01:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1168",
+    "action": "downloaded",
+    "entity": "client",
+    "entityId": "MAT-732",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-11 06:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1169",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "CL-384",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-03 06:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1170",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "CL-672",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-28 21:37:23",
+    "details": "User created note"
+  },
+  {
+    "id": "LOG-1171",
+    "action": "downloaded",
+    "entity": "matter",
+    "entityId": "EVT-567",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-09 21:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1172",
+    "action": "viewed",
+    "entity": "matter",
+    "entityId": "MAT-1126",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-20 17:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1173",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "EVT-241",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-21 04:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1174",
+    "action": "updated",
+    "entity": "matter",
+    "entityId": "FILE-258",
+    "user": "David Wilson",
+    "timestamp": "2025-11-10 15:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1175",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "MAT-1068",
+    "user": "Emily Davis",
+    "timestamp": "2025-11-01 15:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1176",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "MAT-1045",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-31 11:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1177",
+    "action": "updated",
+    "entity": "event",
+    "entityId": "EVT-719",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-21 21:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1178",
+    "action": "commented",
+    "entity": "matter",
+    "entityId": "CL-347",
+    "user": "John Smith",
+    "timestamp": "2025-10-20 15:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1179",
+    "action": "downloaded",
+    "entity": "matter",
+    "entityId": "FILE-1147",
+    "user": "John Smith",
+    "timestamp": "2025-11-05 17:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1180",
+    "action": "shared",
+    "entity": "matter",
+    "entityId": "FILE-718",
+    "user": "David Wilson",
+    "timestamp": "2025-10-31 07:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1181",
+    "action": "uploaded",
+    "entity": "note",
+    "entityId": "MAT-1155",
+    "user": "John Smith",
+    "timestamp": "2025-10-20 17:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1182",
+    "action": "deleted",
+    "entity": "client",
+    "entityId": "CL-925",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-04 03:37:23",
+    "details": "User viewed event"
+  },
+  {
+    "id": "LOG-1183",
+    "action": "uploaded",
+    "entity": "file",
+    "entityId": "MAT-177",
+    "user": "Emily Davis",
+    "timestamp": "2025-10-19 03:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1184",
+    "action": "created",
+    "entity": "event",
+    "entityId": "FILE-663",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-22 05:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1185",
+    "action": "shared",
+    "entity": "client",
+    "entityId": "EVT-389",
+    "user": "John Smith",
+    "timestamp": "2025-11-14 00:37:23",
+    "details": "User updated client"
+  },
+  {
+    "id": "LOG-1186",
+    "action": "shared",
+    "entity": "client",
+    "entityId": "EVT-1052",
+    "user": "David Wilson",
+    "timestamp": "2025-10-25 18:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1187",
+    "action": "commented",
+    "entity": "event",
+    "entityId": "MAT-217",
+    "user": "David Wilson",
+    "timestamp": "2025-11-01 00:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1188",
+    "action": "updated",
+    "entity": "note",
+    "entityId": "EVT-470",
+    "user": "John Smith",
+    "timestamp": "2025-10-29 16:37:23",
+    "details": "User created client"
+  },
+  {
+    "id": "LOG-1189",
+    "action": "updated",
+    "entity": "client",
+    "entityId": "FILE-1066",
+    "user": "David Wilson",
+    "timestamp": "2025-11-11 01:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1190",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "CL-259",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-06 22:37:23",
+    "details": "User updated file"
+  },
+  {
+    "id": "LOG-1191",
+    "action": "created",
+    "entity": "client",
+    "entityId": "MAT-424",
+    "user": "David Wilson",
+    "timestamp": "2025-10-31 00:37:23",
+    "details": "User created event"
+  },
+  {
+    "id": "LOG-1192",
+    "action": "viewed",
+    "entity": "note",
+    "entityId": "FILE-1052",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-11-05 13:37:23",
+    "details": "User created matter"
+  },
+  {
+    "id": "LOG-1193",
+    "action": "deleted",
+    "entity": "event",
+    "entityId": "EVT-741",
+    "user": "John Smith",
+    "timestamp": "2025-10-21 09:37:23",
+    "details": "User updated event"
+  },
+  {
+    "id": "LOG-1194",
+    "action": "commented",
+    "entity": "note",
+    "entityId": "EVT-315",
+    "user": "Sarah Johnson",
+    "timestamp": "2025-10-21 10:37:23",
+    "details": "User updated matter"
+  },
+  {
+    "id": "LOG-1195",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "EVT-559",
+    "user": "David Wilson",
+    "timestamp": "2025-10-25 12:37:23",
+    "details": "User viewed note"
+  },
+  {
+    "id": "LOG-1196",
+    "action": "shared",
+    "entity": "matter",
+    "entityId": "MAT-728",
+    "user": "David Wilson",
+    "timestamp": "2025-11-13 12:37:23",
+    "details": "User updated note"
+  },
+  {
+    "id": "LOG-1197",
+    "action": "created",
+    "entity": "event",
+    "entityId": "MAT-1150",
+    "user": "Michael Brown",
+    "timestamp": "2025-10-30 13:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1198",
+    "action": "deleted",
+    "entity": "event",
+    "entityId": "FILE-857",
+    "user": "Michael Brown",
+    "timestamp": "2025-11-04 07:37:23",
+    "details": "User viewed file"
+  },
+  {
+    "id": "LOG-1199",
+    "action": "uploaded",
+    "entity": "client",
+    "entityId": "CL-139",
+    "user": "John Smith",
+    "timestamp": "2025-11-15 01:37:23",
+    "details": "User viewed event"
+  }
+]
