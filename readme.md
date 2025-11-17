@@ -321,6 +321,14 @@ Notes:
 - If you pass both `--enabled_dynamic_versions` and individual flags (e.g. `--enable_dynamic_html=true`), the union of enabled flags will be used.
 - `--fast=true` will skip Docker cleanup and reuse existing images/build cache; use it to speed up iterative testing.
 
+📦 Data generation storage (v2): If you enable `v2` (data generation) using `--enabled_dynamic_versions=v2` or `--enable_data_generation=true`, ensure a host directory `~/webs_data` exists and is writable. The webs-server mounts `~/webs_data` to `/app/data` to store generated datasets.
+
+Create it if missing:
+ ```bash
+ mkdir -p ~/webs_data
+ ```
+Generated files will appear under `~/webs_data/<project_key>/data/...`.
+
 ---
 
 ### **Step 3: Verify Installation**
