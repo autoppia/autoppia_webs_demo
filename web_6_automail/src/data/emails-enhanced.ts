@@ -270,61 +270,59 @@ async function generateEmailsForCategories(
  * Initialize emails with data generation if enabled
  * Uses async calls for each category to avoid overwhelming the server
  */
-export async function initializeEmails(): Promise<Email[]> {
-  // Preserve existing behavior: use generation when enabled, else static data
-  if (isDataGenerationAvailable()) {
+export async function initializeEmails(v2SeedValue?: number | null): Promise<Email[]> {
+  // Check if v2 (DB mode) is enabled
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+
+  // Determine the seed to use
+  let effectiveSeed: number | null;
+  
+  if (dbModeEnabled) {
+    // If v2 is enabled, use the v2-seed provided (or null if not provided)
+    effectiveSeed = v2SeedValue ?? null;
+  } else {
+    // If v2 is NOT enabled, automatically use seed=1
+    effectiveSeed = 1;
+  }
+
+  // Always try to load from DB with the determined seed
+  if (effectiveSeed !== null && effectiveSeed !== undefined) {
     try {
-      // Use cached emails on client to prevent re-generation on reloads
-      const cached = readCachedEmails();
-      if (cached && cached.length > 0) {
-        dynamicEmails = normalizeEmailTimestamps(cached);
-        return dynamicEmails;
-      }
-
-      console.log("🚀 Starting async email data generation for each category...");
-      console.log("📡 Using API:", process.env.API_URL || "http://app:8090");
-
-      // Define categories and emails per category
-      const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
-      const emailsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_EMAILS_PER_CATEGORY;
-      const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
-
-      console.log(`📊 Will generate ${emailsPerCategory} emails per category`);
-      console.log(`🏷️  Categories: ${categories.join(", ")}`);
-
-      // Generate emails for all categories with delays
-      let allGeneratedEmails = await generateEmailsForCategories(
-        categories,
-        emailsPerCategory,
-        delayBetweenCalls,
-        originalEmails
-      );
-
-      // Normalize category field to one of the allowed categories
-      const allowed = new Set(categories);
-      allGeneratedEmails = allGeneratedEmails.map((e) => ({
-        ...e,
-        category: allowed.has(e.category || "") ? e.category : (e.category ? e.category : "primary"),
-      }));
-
-      // Normalize timestamps
-      allGeneratedEmails = normalizeEmailTimestamps(allGeneratedEmails);
-
-      dynamicEmails = allGeneratedEmails;
-      // Cache generated emails on client
-      writeCachedEmails(dynamicEmails);
-      return dynamicEmails;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate emails while generation is enabled. Keeping emails empty until ready. Error:", error);
-      // When data generation is enabled, do NOT fall back to static data; return empty
+      // Clear existing emails to force fresh load
       dynamicEmails = [];
-      return dynamicEmails;
+      const fromDb = await fetchSeededSelection<Email>({
+        projectKey: "web_6_automail",
+        entityType: "emails",
+        seedValue: effectiveSeed,
+        limit: 100,
+        method: "distribute",
+        filterKey: "category",
+      });
+      
+      console.log(`[automail] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+      
+      if (fromDb && fromDb.length > 0) {
+        dynamicEmails = normalizeEmailTimestamps(fromDb);
+        return dynamicEmails;
+      } else {
+        console.warn(`[automail] No data returned from DB with seed=${effectiveSeed}`);
+      }
+    } catch (err) {
+      console.error(`[automail] Failed to load from DB with seed=${effectiveSeed}:`, err);
+      throw err; // Throw error instead of falling back
     }
   } else {
-    console.log("ℹ️ Data generation is disabled, using original static emails");
-    dynamicEmails = originalEmails;
-    return dynamicEmails;
+    // If we reach here without a valid seed and v2 is enabled, it's an error
+    if (dbModeEnabled) {
+      throw new Error("[automail] v2 is enabled but no valid seed provided");
+    }
   }
+
+  // If we reach here, something went wrong
+  throw new Error("[automail] Failed to load emails from database");
 }
 
 // Runtime-only DB fetch for when DB mode is enabled

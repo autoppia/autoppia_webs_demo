@@ -20,11 +20,10 @@ export class DynamicDataProvider {
     try {
       console.log('[web13][provider] ctor', { dynamicHtml: this.isEnabled, env: {
         NEXT_PUBLIC_API_URL: process.env?.NEXT_PUBLIC_API_URL,
-        ENABLE_DATA_GENERATION: process.env?.ENABLE_DATA_GENERATION,
-        NEXT_PUBLIC_DATA_GENERATION: process.env?.NEXT_PUBLIC_DATA_GENERATION,
-        NEXT_ENABLE_DATA_GENERATION: process.env?.NEXT_ENABLE_DATA_GENERATION,
-        ENABLE_DB_MODE: process.env?.ENABLE_DB_MODE,
-        NEXT_PUBLIC_ENABLE_DB_MODE: process.env?.NEXT_PUBLIC_ENABLE_DB_MODE,
+        ENABLE_DYNAMIC_V2_AI_GENERATE: process.env?.ENABLE_DYNAMIC_V2_AI_GENERATE,
+        NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE: process.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE,
+        ENABLE_DYNAMIC_V2_DB_MODE: process.env?.ENABLE_DYNAMIC_V2_DB_MODE,
+        NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: process.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE,
       }});
     } catch {}
     // Client-side async initialization for trips

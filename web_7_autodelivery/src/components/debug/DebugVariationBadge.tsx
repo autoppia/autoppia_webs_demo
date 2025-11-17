@@ -5,7 +5,7 @@ import React from "react";
 
 export default function DebugVariationBadge() {
   const { currentVariation, isEnabled, seedStructure } = useDynamicStructure();
-  if (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE !== "true") {
+  if (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE !== "true") {
     return null;
   }
   return (

@@ -1,0 +1,241 @@
+[
+  {
+    "id": "email1",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@company.com",
+      "avatar": "https://example.com/avatars/alice.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Kickoff Meeting",
+    "body": "Dear Me,\n\nLooking forward to our project kickoff meeting next week. Please review the attached agenda.\n\nBest,\nAlice",
+    "snippet": "Looking forward to our project kickoff meeting next week...",
+    "timestamp": "2025-07-08T10:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread1",
+    "attachments": [
+      {
+        "id": "attach1",
+        "name": "agenda.pdf",
+        "size": 1048576,
+        "type": "application/pdf",
+        "url": "https://example.com/agenda.pdf"
+      }
+    ]
+  },
+  {
+    "id": "email2",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@tech.org",
+      "avatar": "https://example.com/avatars/bob.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Lunch Plans",
+    "body": "Hey,\n\nWant to grab lunch this Friday? Let me know what works for you!\n\nCheers,\nBob",
+    "snippet": "Want to grab lunch this Friday?...",
+    "timestamp": "2025-07-07T12:30:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "personal",
+        "name": "Personal",
+        "color": "#0f9d58",
+        "type": "user"
+      }
+    ],
+    "category": "social",
+    "threadId": "thread2"
+  },
+  {
+    "id": "email3",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@outlook.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Newsletter Subscription",
+    "body": "Dear Me,\n\nThank you for subscribing to our newsletter! Here are the latest updates.\n\nBest,\nCarol",
+    "snippet": "Thank you for subscribing to our newsletter!...",
+    "timestamp": "2025-07-06T09:15:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [],
+    "category": "promotions",
+    "threadId": "thread3"
+  },
+  {
+    "id": "email4",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@company.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q2 Report Feedback",
+    "body": "Hi,\n\nPlease review the Q2 report and share your feedback by EOD.\n\nThanks,\nDavid",
+    "snippet": "Please review the Q2 report and share your feedback...",
+    "timestamp": "2025-07-05T14:20:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": true,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread4"
+  },
+  {
+    "id": "email5",
+    "from": {
+      "name": "Emma Davis",
+      "email": "emma.davis@yahoo.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Community Forum Update",
+    "body": "Hello,\n\nThere's a new reply to your post in the community forum.\n\nRegards,\nEmma",
+    "snippet": "There's a new reply to your post in the community forum...",
+    "timestamp": "2025-07-04T11:45:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [],
+    "category": "forums",
+    "threadId": "thread5"
+  },
+  {
+    "id": "email6",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@startup.io"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Support Ticket #1234",
+    "body": "Dear Me,\n\nYour support ticket has been resolved. Please let us know if you need further assistance.\n\nBest,\nFrank",
+    "snippet": "Your support ticket has been resolved...",
+    "timestamp": "2025-07-03T16:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [],
+    "category": "support",
+    "threadId": "thread6"
+  },
+  {
+    "id": "email7",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@gmail.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekend Plans",
+    "body": "Hi,\n\nWhat are your plans for the weekend? Let's catch up!\n\nGrace",
+    "snippet": "What are your plans for the weekend?...",
+    "timestamp": "2025-07-02T18:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "personal",
+        "name": "Personal",
+        "color": "#0f9d58",
+        "type": "user"
+      }
+    ],
+    "category": "social",
+    "threadId": "thread7"
+  },
+  {
+    "id": "email8",
+    "from": {
+      "name": "Henry Adams",
+      "email": "henry.adams@deals.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Special Offer: 50% Off!",
+    "body": "Dear Me,\n\nDon't miss our biggest sale of the year! 50% off on all items.\n\nShop Now,\nHenry",
+    "snippet": "Don't miss our biggest sale of the year!...",
+    "timestamp": "2025-07-01T08:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [],
+    "category": "promotions",
+    "threadId": "thread8"
+  }
+]

@@ -141,56 +141,59 @@ function normalizeMatter(matter: any, index: number): any {
 /**
  * Initialize clients with data generation if enabled
  */
-export async function initializeClients(): Promise<any[]> {
-  if (isDataGenerationAvailable()) {
+export async function initializeClients(v2SeedValue?: number | null): Promise<any[]> {
+  // Check if v2 (DB mode) is enabled
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+
+  // Determine the seed to use
+  let effectiveSeed: number | null;
+  
+  if (dbModeEnabled) {
+    // If v2 is enabled, use the v2-seed provided (or null if not provided)
+    effectiveSeed = v2SeedValue ?? null;
+  } else {
+    // If v2 is NOT enabled, automatically use seed=1
+    effectiveSeed = 1;
+  }
+
+  // Always try to load from DB with the determined seed
+  if (effectiveSeed !== null && effectiveSeed !== undefined) {
     try {
-      // Use cache only if unique mode is disabled
-      if (!isUniqueGenerationEnabled()) {
-        const cached = readCachedClients();
-        if (cached && cached.length > 0) {
-          dynamicClients = cached.map(normalizeClient);
-          return dynamicClients;
-        }
-      }
-
-      console.log("🚀 Starting async data generation for clients...");
-      console.log("📡 Using API:", process.env.API_URL || "http://app:8080");
-
-      const count = DATA_GENERATION_CONFIG.DEFAULT_CLIENTS_COUNT;
-      const categories = DATA_GENERATION_CONFIG.AVAILABLE_CLIENT_CATEGORIES;
-
-      console.log(`📊 Will generate ${count} clients`);
-      console.log(`🏷️  Categories: ${categories.join(", ")}`);
-
-      const generatedClients = await generateClientsWithFallback(
-        [],
-        count,
-        categories
-      );
-
-      // Normalize status field to one of the allowed categories
-      const allowed = new Set(categories);
-      const normalized = generatedClients.map((c, i) => ({
-        ...normalizeClient(c, i),
-        status: allowed.has(c.status || "") ? c.status : "Active",
-      }));
-
-      dynamicClients = normalized;
-      // Cache only if unique mode is disabled
-      if (!isUniqueGenerationEnabled()) {
-        writeCachedClients(dynamicClients);
-      }
-      return dynamicClients;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate clients while generation is enabled. Keeping clients empty until ready. Error:", error);
+      // Clear existing clients to force fresh load
       dynamicClients = [];
-      return dynamicClients;
+      const fromDb = await fetchSeededSelection<any>({
+        projectKey: "web_5_autocrm",
+        entityType: "clients",
+        seedValue: effectiveSeed,
+        limit: 100,
+        method: "distribute",
+        filterKey: "status",
+      });
+      
+      console.log(`[autocrm] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+      
+      if (fromDb && fromDb.length > 0) {
+        dynamicClients = fromDb.map(normalizeClient);
+        return dynamicClients;
+      } else {
+        console.warn(`[autocrm] No data returned from DB with seed=${effectiveSeed}`);
+      }
+    } catch (err) {
+      console.error(`[autocrm] Failed to load from DB with seed=${effectiveSeed}:`, err);
+      throw err; // Throw error instead of falling back
     }
   } else {
-    console.log("ℹ️ Data generation is disabled, using original static clients");
-    dynamicClients = originalClients;
-    return dynamicClients;
+    // If we reach here without a valid seed and v2 is enabled, it's an error
+    if (dbModeEnabled) {
+      throw new Error("[autocrm] v2 is enabled but no valid seed provided");
+    }
   }
+
+  // If we reach here, something went wrong
+  throw new Error("[autocrm] Failed to load clients from database");
 }
 
 /**

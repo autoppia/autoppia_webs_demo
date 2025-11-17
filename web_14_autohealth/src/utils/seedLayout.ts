@@ -6,7 +6,7 @@ export interface SeedLayoutConfig {
 }
 
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
 }
 
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {

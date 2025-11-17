@@ -75,7 +75,7 @@ export interface SeedLayout {
 }
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
 }
 // Generate class name variations based on seed
 const generateVariations = (baseClass: string, seed: number): string => {

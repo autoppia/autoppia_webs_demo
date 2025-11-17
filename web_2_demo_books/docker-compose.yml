@@ -17,14 +17,15 @@ services:
       - DB_PASSWORD=autoppia_2025
       - DB_HOST=db
       - DB_PORT=5432
-      - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
-      - DATA_GENERATION=${DATA_GENERATION:-false}
+      - ENABLE_DYNAMIC_V1=${ENABLE_DYNAMIC_V1:-true}
+      - ENABLE_DYNAMIC_V2_AI_GENERATE=${ENABLE_DYNAMIC_V2_AI_GENERATE:-false}
       - API_URL=http://app:8080
     depends_on:
       db:
         condition: service_healthy
     networks:
       - web2_net
+      - apps_net
 
   db:
     image: postgres:14
@@ -52,3 +53,5 @@ volumes:
 networks:
   web2_net:
     driver: bridge
+  apps_net:
+    external: true

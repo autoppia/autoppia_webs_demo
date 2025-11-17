@@ -24,7 +24,7 @@ python manage.py migrate --noinput
 python manage.py seed_users_with_books --start=1 --end=256 --prefix="user" --password="PASSWORD"
 
 # 3. Data Generation (if enabled)
-if [ "$DATA_GENERATION" = "true" ]; then
+if [ "$ENABLE_DYNAMIC_V2_AI_GENERATE" = "true" ]; then
     echo "Data generation is enabled. Waiting for API server..."
     
     # Wait for API server to be ready

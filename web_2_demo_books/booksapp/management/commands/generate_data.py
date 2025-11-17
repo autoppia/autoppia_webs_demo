@@ -24,11 +24,11 @@ class Command(BaseCommand):
         force = options["force"]
 
         if not is_data_generation_enabled() and not force:
-            self.stdout.write(self.style.WARNING("Data generation is disabled. Set DATA_GENERATION=true or use --force"))
+            self.stdout.write(self.style.WARNING("Data generation is disabled. Set ENABLE_DYNAMIC_V2_AI_GENERATE=true or use --force"))
             return
 
         if not force and not is_data_generation_enabled():
-            self.stdout.write(self.style.ERROR("Data generation is not enabled. Set DATA_GENERATION=true"))
+            self.stdout.write(self.style.ERROR("Data generation is not enabled. Set ENABLE_DYNAMIC_V2_AI_GENERATE=true"))
             return
 
         self.stdout.write(f"Generating {count} books with categories: {', '.join(categories)}")

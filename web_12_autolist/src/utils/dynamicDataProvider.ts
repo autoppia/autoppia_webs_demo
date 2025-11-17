@@ -3,11 +3,11 @@ import { getSeedLayout } from "@/library/layouts";
 // Check if dynamic HTML is enabled via environment variable (strictly use dynamic_html_structure flag)
 const isDynamicHtmlEnabled = (): boolean => {
   const rawFlag =
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE ??
     process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
-    process.env.ENABLE_DYNAMIC_HTML_STRUCTURE ??
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ??
-    process.env.ENABLE_DYNAMIC_HTML ??
+    process.env.ENABLE_DYNAMIC_V1_STRUCTURE ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
+    process.env.ENABLE_DYNAMIC_V1 ??
     '';
 
   const normalized = rawFlag.toString().trim().toLowerCase();

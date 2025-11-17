@@ -13,7 +13,7 @@ export interface StructureVariation {
 
 // Check if dynamic HTML structure is enabled via environment variable
 const isDynamicStructureEnabled = (): boolean => {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE === 'true';
 };
 
 // Dynamic structure provider that returns text and IDs based on seed-structure

@@ -9,53 +9,40 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Accept build arguments
-ARG ENABLE_DYNAMIC_HTML=false
-ARG ENABLE_DYNAMIC_STRUCTURE=false
-ARG ENABLE_DATA_GENERATION=false
-ARG ENABLE_DB_MODE=false
-ARG NEXT_PUBLIC_API_URL
-ARG API_URL
-ARG NEXT_PUBLIC_ENABLE_DB_MODE=false
-ARG DATA_SEED_VALUE
-ARG NEXT_PUBLIC_DATA_SEED_VALUE
-
 COPY package.json package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
-RUN npm ci
+RUN npm install
 
 COPY . .
 
-# Ensure public directory exists (even if empty) so COPY succeeds
-RUN mkdir -p public
+# Build args for environment flags and API URL
+# Build arguments for dynamic versions
+ARG ENABLE_DYNAMIC_V1=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V1=$ENABLE_DYNAMIC_V1
 
-# Set environment variables for build (Next.js embeds NEXT_PUBLIC_* at build time)
-ENV ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
-    ENABLE_DYNAMIC_STRUCTURE=$ENABLE_DYNAMIC_STRUCTURE \
-    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
-    NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE=$ENABLE_DYNAMIC_STRUCTURE \
-    ENABLE_DATA_GENERATION=$ENABLE_DATA_GENERATION \
-    ENABLE_DB_MODE=$ENABLE_DB_MODE \
-    NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-    API_URL=$API_URL \
-    NEXT_PUBLIC_ENABLE_DB_MODE=$NEXT_PUBLIC_ENABLE_DB_MODE \
-    DATA_SEED_VALUE=$DATA_SEED_VALUE \
-    NEXT_PUBLIC_DATA_SEED_VALUE=$NEXT_PUBLIC_DATA_SEED_VALUE \
-    DOCKER_BUILD=true
+ARG ENABLE_DYNAMIC_V2_AI_GENERATE=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE=$ENABLE_DYNAMIC_V2_AI_GENERATE
 
-# Debug: Print environment variables
-RUN echo "🔍 Build environment variables:" && \
-    echo "  ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}" && \
-    echo "  ENABLE_DYNAMIC_STRUCTURE: ${ENABLE_DYNAMIC_STRUCTURE}" && \
-    echo "  ENABLE_DATA_GENERATION: ${ENABLE_DATA_GENERATION}" && \
-    echo "  ENABLE_DB_MODE: ${ENABLE_DB_MODE}" && \
-    echo "  NEXT_PUBLIC_ENABLE_DB_MODE: ${NEXT_PUBLIC_ENABLE_DB_MODE}" && \
-    echo "  DATA_SEED_VALUE: ${DATA_SEED_VALUE}" && \
-    echo "  NEXT_PUBLIC_DATA_SEED_VALUE: ${NEXT_PUBLIC_DATA_SEED_VALUE}" && \
-    echo "  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}" && \
-    echo "  API_URL: ${API_URL}" && \
-    echo "  DOCKER_BUILD: ${DOCKER_BUILD}"
+ARG ENABLE_DYNAMIC_V2_DB_MODE=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE=$ENABLE_DYNAMIC_V2_DB_MODE
+
+ARG ENABLE_DYNAMIC_V3=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V3=$ENABLE_DYNAMIC_V3
+
+ARG ENABLE_DYNAMIC_V4=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V4=$ENABLE_DYNAMIC_V4
+ARG API_URL=http://app:8080
+ENV API_URL=$API_URL
+
+ARG NEXT_PUBLIC_API_URL=http://localhost:8090
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
+# Debug: Print the environment variables
+RUN echo "🔍 Build-time ENABLE_DYNAMIC_V1: $ENABLE_DYNAMIC_V1"
+RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V1: $NEXT_PUBLIC_ENABLE_DYNAMIC_V1"
+RUN echo "🔍 Build-time ENABLE_DYNAMIC_V2_DB_MODE: $ENABLE_DYNAMIC_V2_DB_MODE"
+RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: $NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE"
 
 RUN npm run build
 
@@ -66,6 +53,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8004
 EXPOSE 8004
+
+# Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
+# so they don't need to be set here. They're already in the JavaScript code.
 
 # prod deps only (from deps stage)
 COPY --from=deps /app/node_modules ./node_modules

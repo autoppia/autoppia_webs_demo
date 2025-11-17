@@ -84,18 +84,6 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 | **AutoDrive** | 8012 | — | Next.js, no database required |
 | **AutoHealth** | 8013 | — | Next.js, no database required |
 | **webs_server** | 8090 | 5437 | API service used for event logging |
-=======
-| Demo | Web Port | DB Port | Notes |
-|-----------------|----------|---------|-----------------------------------------|
-| **Movies** | 8000 | 5434 | Django + PostgreSQL |
-| **Books** | 8001 | 5435 | Django + PostgreSQL |
-| **AutoZone** | 8002 | — | Next.js, no database required |
-| **AutoDining** | 8003 | — | Next.js, no database required |
-| **AutoCRM** | 8004 | — | Next.js, no database required |
-| **AutoMail** | 8005 | — | Next.js, no database required |
-| **AutoLodge** | 8007 | — | Next.js, no database required |
-| **AutoDrive** | 8012 | — | Next.js, no database required |
-| **webs_server** | 8090 | 5437 | API service used for event logging |
 
 
 ---

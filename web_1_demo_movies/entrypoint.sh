@@ -30,7 +30,7 @@ python manage.py seed_users
 python manage.py seed_movies
 
 # Step 5 - Data Generation (if enabled)
-if [ "$DATA_GENERATION" = "true" ]; then
+if [ "$ENABLE_DYNAMIC_V2_AI_GENERATE" = "true" ]; then
     echo "Data generation is enabled. Waiting for API server..."
     
     # Wait for API server to be ready

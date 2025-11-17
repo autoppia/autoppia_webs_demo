@@ -19,7 +19,7 @@ export async function loadDataOrGenerate<T>({ projectKey, entityType, generateCo
     return await fetchSeededSelection<T>({ projectKey, entityType, seedValue: seed })
   }
 
-  const genFlag = (process.env.NEXT_PUBLIC_DATA_GENERATION || process.env.ENABLE_DATA_GENERATION || '').toString().toLowerCase()
+  const genFlag = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE || process.env.ENABLE_DYNAMIC_V2_AI_GENERATE || '').toString().toLowerCase()
   const isGen = genFlag === 'true' || genFlag === '1' || genFlag === 'yes' || genFlag === 'on'
   const uniqueFlag = (process.env.NEXT_PUBLIC_DATA_GENERATION_UNIQUE || process.env.DATA_GENERATION_UNIQUE || '').toString().toLowerCase()
   const isUnique = uniqueFlag === 'true' || uniqueFlag === '1' || uniqueFlag === 'yes' || uniqueFlag === 'on'
@@ -64,7 +64,7 @@ export function useProjectData<T>(params: Parameters<typeof loadDataOrGenerate<T
     version: params.version,
     ttlMs: params.ttlMs,
     seedValue: params.seedValue ?? null,
-    flags: { gen: process.env.NEXT_PUBLIC_DATA_GENERATION, db: process.env.NEXT_PUBLIC_ENABLE_DB_MODE },
+    flags: { gen: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE, db: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE },
   })])
   return state
 }

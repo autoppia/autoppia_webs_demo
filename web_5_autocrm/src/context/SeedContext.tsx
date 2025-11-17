@@ -38,7 +38,7 @@ function SeedInitializer({
   useEffect(() => {
     const isV1Enabled = (): boolean => {
       if (typeof window === "undefined") return false;
-      const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML || process.env.ENABLE_DYNAMIC_HTML || "").toString().toLowerCase();
+      const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 || process.env.ENABLE_DYNAMIC_V1 || "").toString().toLowerCase();
       const enabled = raw === "true";
       console.log("[SeedContext:web5] isV1Enabled", { raw, enabled });
       return enabled;
@@ -46,11 +46,11 @@ function SeedInitializer({
 
     const isV2Enabled = (): boolean => {
       if (typeof window === "undefined") return false;
-      const raw = (process.env.NEXT_PUBLIC_ENABLE_DB_MODE || process.env.ENABLE_DB_MODE || "").toString().toLowerCase();
+      const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
       const enabled = raw === "true";
       console.log("[SeedContext:web5] isV2Enabled", {
-        NEXT_PUBLIC_ENABLE_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DB_MODE,
-        ENABLE_DB_MODE: process.env.ENABLE_DB_MODE,
+        NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE,
+        ENABLE_DYNAMIC_V2_DB_MODE: process.env.ENABLE_DYNAMIC_V2_DB_MODE,
         raw,
         enabled,
       });
@@ -117,7 +117,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
   const isV1Enabled = useCallback((): boolean => {
     if (typeof window === "undefined") return false;
-    const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML || process.env.ENABLE_DYNAMIC_HTML || "").toString().toLowerCase();
+    const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 || process.env.ENABLE_DYNAMIC_V1 || "").toString().toLowerCase();
     return raw === "true";
   }, []);
 

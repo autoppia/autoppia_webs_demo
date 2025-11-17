@@ -19,7 +19,7 @@ import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
-  return process.env.ENABLE_DYNAMIC_HTML === 'true' || process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  return process.env.ENABLE_DYNAMIC_V1 === 'true' || process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
 };
 
 // Dynamic data provider that returns either seed data or empty arrays based on config

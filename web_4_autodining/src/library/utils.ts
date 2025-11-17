@@ -1155,7 +1155,7 @@ export class SeedVariationManager {
 
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicModeEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
 }
 
 // Helper function to map seed to layout index (1-10)

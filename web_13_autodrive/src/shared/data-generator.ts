@@ -368,18 +368,16 @@ export function isDataGenerationEnabled(): boolean {
   let enabled = false;
   if (typeof process !== 'undefined' && process.env) {
     const vals = [
-      process.env.NEXT_PUBLIC_DATA_GENERATION,
-      process.env.NEXT_ENABLE_DATA_GENERATION,
-      process.env.ENABLE_DATA_GENERATION,
+      process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE,
+      process.env.ENABLE_DYNAMIC_V2_AI_GENERATE,
     ].map(v => String(v || '').toLowerCase());
     // Enable if ANY of the flags is a truthy "true" value
     enabled = vals.some(v => v === 'true' || v === '1' || v === 'yes' || v === 'on');
   }
   try {
     console.log('[web13][data-generator] isDataGenerationEnabled check', {
-      NEXT_PUBLIC_DATA_GENERATION: process.env?.NEXT_PUBLIC_DATA_GENERATION,
-      NEXT_ENABLE_DATA_GENERATION: process.env?.NEXT_ENABLE_DATA_GENERATION,
-      ENABLE_DATA_GENERATION: process.env?.ENABLE_DATA_GENERATION,
+      NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE: process.env?.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE,
+      ENABLE_DYNAMIC_V2_AI_GENERATE: process.env?.ENABLE_DYNAMIC_V2_AI_GENERATE,
       resolved: enabled
     });
   } catch {}

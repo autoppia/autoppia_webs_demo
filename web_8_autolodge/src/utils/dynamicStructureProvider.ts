@@ -12,7 +12,7 @@ interface StructureVariationsFile {
 }
 
 const isDynamicStructureEnabled = (): boolean => {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE === "true";
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE === "true";
 };
 
 export class DynamicStructureProvider {

@@ -25,7 +25,7 @@ interface LayoutContextType extends SeedLayout {
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 const isDbModeEnabled = () => {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DB_MODE || process.env.ENABLE_DB_MODE || "").toString().toLowerCase();
+  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
   return raw === "true";
 };
 

@@ -113,8 +113,8 @@ export function isDynamicModeEnabled(): boolean {
   if (typeof window === 'undefined') return false;
   
   const val = (
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML ??
-    process.env.ENABLE_DYNAMIC_HTML ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
+    process.env.ENABLE_DYNAMIC_V1 ??
     ''
   ).toString().toLowerCase();
 

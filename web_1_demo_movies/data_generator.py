@@ -11,7 +11,7 @@ from typing import List, Dict, Any, Optional
 
 # Configuration
 API_URL = os.getenv("API_URL", "http://localhost:8000")
-DATA_GENERATION = os.getenv("DATA_GENERATION", "false").lower() == "true"
+DATA_GENERATION = os.getenv("ENABLE_DYNAMIC_V2_AI_GENERATE", "false").lower() == "true"
 
 # Movie interface definition
 MOVIE_INTERFACE = """

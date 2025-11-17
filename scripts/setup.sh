@@ -361,6 +361,27 @@ deploy_webs_server() {
     exit 1
   fi
 
+  # Initialize master data pools if they don't exist
+  echo "📦 Checking for initial data pools..."
+  mkdir -p ~/webs_data
+  
+  for project in web_4_autodining web_5_autocrm web_6_automail; do
+    if [ ! -f ~/webs_data/$project/main.json ]; then
+      echo "  → Initializing $project master pool (100 records)..."
+      mkdir -p ~/webs_data/$project/data
+      if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
+        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* ~/webs_data/$project/
+        echo "  ✅ $project master pool initialized"
+      else
+        echo "  ⚠️  No initial data found for $project (will need to generate)"
+      fi
+    else
+      echo "  ✓ $project master pool already exists ($(cat ~/webs_data/$project/main.json | grep -o '"./data/[^"]*"' | wc -l) files)"
+    fi
+  done
+  
+  echo "✅ Master pools ready"
+
   popd >/dev/null
   echo "✅ $name running on HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
   echo ""
