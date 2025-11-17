@@ -288,59 +288,26 @@ function ProfileDropdown({
   );
 }
 
-const LOADER_SEEN_KEY = "web13_generation_loader_seen";
-
-function hasLoaderBeenSeen() {
-  if (typeof window === "undefined") return false;
-  try {
-    return sessionStorage.getItem(LOADER_SEEN_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function markLoaderSeen() {
-  if (typeof window === "undefined") return;
-  try {
-    sessionStorage.setItem(LOADER_SEEN_KEY, "1");
-  } catch {
-    // ignore storage errors (private mode, etc.)
-  }
-}
-
 function HomePage() {
   const router = useSeedRouter();
   const [profileOpen, setProfileOpen] = useState(false);
   const { getElementAttributes, getText } = useSeedLayout();
-  const [generating, setGenerating] = useState(() => {
-    if (typeof window === "undefined") return false;
-    if (hasLoaderBeenSeen()) return false;
-    return !isDataReady();
-  });
+  const [generating, setGenerating] = useState(true);
 
   useEffect(() => {
     let mounted = true;
-    const alreadySeen = hasLoaderBeenSeen();
-
-    const finish = () => {
-      if (mounted) {
-        setGenerating(false);
-        markLoaderSeen();
-      }
-    };
-
     if (isDataReady()) {
-      finish();
-    } else if (alreadySeen) {
-      // Data still preparing but we've already shown the loader before.
-      whenDataReady().finally(() => {
-        if (mounted) setGenerating(false);
-      });
-    } else {
-      setGenerating(true);
-      whenDataReady().finally(finish);
+      setGenerating(false);
+      return;
     }
-
+    (async () => {
+      setGenerating(true);
+      try {
+        await whenDataReady();
+      } finally {
+        if (mounted) setGenerating(false);
+      }
+    })();
     return () => { mounted = false; };
   }, []);
 

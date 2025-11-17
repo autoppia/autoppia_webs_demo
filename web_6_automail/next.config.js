@@ -25,46 +25,6 @@ if (isLocalDev) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE = 'false';
 }
 
-// Data generation / v2 flags (used by setup.sh and Docker build args)
-// ENABLE_DATA_GENERATION: server-side flag (string 'true'/'false')
-// NEXT_PUBLIC_DATA_GENERATION: client-side public flag
-// NEXT_PUBLIC_ENABLE_DATA_GENERATION: alternate client flag used in some deploy scripts
-if (!process.env.ENABLE_DATA_GENERATION) {
-  process.env.ENABLE_DATA_GENERATION = isLocalDev ? 'true' : 'false';
-}
-if (isLocalDev) {
-  process.env.NEXT_PUBLIC_DATA_GENERATION = 'true';
-  process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION = 'true';
-} else {
-  if (!process.env.NEXT_PUBLIC_DATA_GENERATION) {
-    process.env.NEXT_PUBLIC_DATA_GENERATION = 'false';
-  }
-  if (!process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION) {
-    process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION = process.env.ENABLE_DATA_GENERATION;
-  }
-}
-
-// DB mode flag for v2 (ENABLE_DB_MODE). Expose NEXT_PUBLIC_ENABLE_DB_MODE for client-side reads if needed.
-if (!process.env.ENABLE_DB_MODE) {
-  process.env.ENABLE_DB_MODE = 'false';
-}
-if (!process.env.NEXT_PUBLIC_ENABLE_DB_MODE) {
-  process.env.NEXT_PUBLIC_ENABLE_DB_MODE = process.env.ENABLE_DB_MODE;
-}
-
-// DATA_SEED_VALUE (optional numeric seed) and public copy
-if (typeof process.env.DATA_SEED_VALUE === 'undefined') {
-  process.env.DATA_SEED_VALUE = '';
-}
-if (typeof process.env.NEXT_PUBLIC_DATA_SEED_VALUE === 'undefined') {
-  process.env.NEXT_PUBLIC_DATA_SEED_VALUE = process.env.DATA_SEED_VALUE;
-}
-
-// Compatibility fallback: some code (e.g., data-generator.ts) checks NEXT_ENABLE_DATA_GENERATION (without PUBLIC)
-if (!process.env.NEXT_ENABLE_DATA_GENERATION) {
-  process.env.NEXT_ENABLE_DATA_GENERATION = process.env.NEXT_PUBLIC_DATA_GENERATION || process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION || process.env.ENABLE_DATA_GENERATION;
-}
-
 // Debug: Print environment variables
 console.log('🔍 Next.js config - Environment variables:');
 console.log('  NODE_ENV:', process.env.NODE_ENV);
@@ -75,14 +35,6 @@ console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
 console.log('  ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.ENABLE_DYNAMIC_HTML_STRUCTURE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE);
-console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DATA_GENERATION);
-console.log('  NEXT_PUBLIC_DATA_GENERATION:', process.env.NEXT_PUBLIC_DATA_GENERATION);
-console.log('  NEXT_PUBLIC_ENABLE_DATA_GENERATION:', process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION);
-console.log('  NEXT_ENABLE_DATA_GENERATION:', process.env.NEXT_ENABLE_DATA_GENERATION);
-console.log('  ENABLE_DB_MODE:', process.env.ENABLE_DB_MODE);
-console.log('  NEXT_PUBLIC_ENABLE_DB_MODE:', process.env.NEXT_PUBLIC_ENABLE_DB_MODE);
-console.log('  DATA_SEED_VALUE:', process.env.DATA_SEED_VALUE);
-console.log('  NEXT_PUBLIC_DATA_SEED_VALUE:', process.env.NEXT_PUBLIC_DATA_SEED_VALUE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -129,14 +81,6 @@ const nextConfig = {
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
     ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.ENABLE_DYNAMIC_HTML_STRUCTURE,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE,
-    ENABLE_DATA_GENERATION: process.env.ENABLE_DATA_GENERATION,
-    NEXT_PUBLIC_DATA_GENERATION: process.env.NEXT_PUBLIC_DATA_GENERATION,
-    NEXT_PUBLIC_ENABLE_DATA_GENERATION: process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION,
-    NEXT_ENABLE_DATA_GENERATION: process.env.NEXT_ENABLE_DATA_GENERATION,
-    ENABLE_DB_MODE: process.env.ENABLE_DB_MODE,
-    NEXT_PUBLIC_ENABLE_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DB_MODE,
-    DATA_SEED_VALUE: process.env.DATA_SEED_VALUE,
-    NEXT_PUBLIC_DATA_SEED_VALUE: process.env.NEXT_PUBLIC_DATA_SEED_VALUE,
   },
 };
 

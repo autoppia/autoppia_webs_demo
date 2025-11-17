@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -12,7 +12,6 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { useEvents } from "@/contexts/EventContext";
 
 function getMonthMatrix(year: number, month: number) {
   const matrix = [];
@@ -36,53 +35,22 @@ function pad(num: number) {
 
 export default function CalendarPage() {
   const { getText, getId } = useDynamicStructure();
-  const { events: contextEvents, isLoading } = useEvents();
-  const generationEnabled = process.env.NEXT_PUBLIC_DATA_GENERATION === "true";
+  const [error] = useState<string | null>(null);
   const today = new Date();
   const [curMonth, setCurMonth] = useState(today.getMonth());
   const [curYear, setCurYear] = useState(today.getFullYear());
   const [openEventDate, setOpenEventDate] = useState<string | null>(null);
-
-  const normalizeEvent = (ev: any, index: number): CalendarEvent => {
-    const rawDate = ev.date ?? new Date().toISOString().slice(0, 10);
-    const formattedDate = typeof rawDate === "string" ? rawDate.slice(0, 10) : new Date(rawDate).toISOString().slice(0, 10);
-    const rawTime = ev.time ?? ev.start_time ?? "2:00pm";
-    const normalizedColor = (typeof ev.color === "string" && ["forest", "indigo", "blue", "zinc"].includes(ev.color))
-      ? ev.color
-      : "forest";
-
-    return {
-      id: ev.id ?? ev.event_id ?? index + 1,
-      date: formattedDate,
-      label: ev.label ?? ev.title ?? "Event",
-      time: rawTime,
-      color: normalizedColor as keyof typeof COLORS,
-    };
-  };
-
-  const [events, setEvents] = useState<CalendarEvent[]>(() => {
-    if (!generationEnabled) {
-      return EVENTS.map((ev, i) => normalizeEvent(ev, i));
-    }
-    return [];
-  });
-
-  useEffect(() => {
-    if (contextEvents && contextEvents.length > 0) {
-      const normalized = contextEvents.map((ev: any, i: number) => normalizeEvent(ev, i));
-      setEvents(prev => {
-        const prevKey = JSON.stringify(prev);
-        const nextKey = JSON.stringify(normalized);
-        if (prevKey !== nextKey) {
-          console.log(`📅 Calendar received ${normalized.length} events`);
-          return normalized;
-        }
-        return prev;
-      });
-    } else if (!generationEnabled && !isLoading && events.length === 0) {
-      setEvents(EVENTS.map((ev, i) => normalizeEvent(ev, i)));
-    }
-  }, [contextEvents, generationEnabled, isLoading, events.length]);
+  const [events, setEvents] = useState<CalendarEvent[]>(() =>
+    EVENTS.map((ev: any, i: number) => ({
+      id: ev.id ?? i + 1,
+      date: ev.date ?? new Date().toISOString().slice(0, 10),
+      label: ev.label ?? "Event",
+      time: ev.time ?? "2:00pm",
+      color: (["forest", "indigo", "blue", "zinc"].includes(ev.color)
+        ? ev.color
+        : "forest") as keyof typeof COLORS,
+    }))
+  );
 
   const monthLabel = new Date(curYear, curMonth).toLocaleString("default", {
     month: "long",
@@ -132,11 +100,8 @@ export default function CalendarPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
-        {isLoading && events.length === 0 && (
-          <div className="px-6 py-3 text-zinc-500">Loading calendar events...</div>
-        )}
-        {!isLoading && events.length === 0 && (
-          <div className="px-6 py-3 text-zinc-400">No events found.</div>
+        {error && (
+          <div className="px-6 py-3 text-red-600">Failed to load calendar: {error}</div>
         )}
         <div className="grid grid-cols-7 bg-neutral-bg-dark text-zinc-500 text-xs font-semibold uppercase tracking-wider">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (

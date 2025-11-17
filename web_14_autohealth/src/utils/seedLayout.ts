@@ -6,8 +6,7 @@ export interface SeedLayoutConfig {
 }
 
 export function isDynamicEnabled(): boolean {
-  // Only enable seed-based dynamic structure when DYNAMIC_HTML_STRUCTURE is explicitly set to 'true'
-  return process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
 }
 
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {

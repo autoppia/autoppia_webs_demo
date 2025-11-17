@@ -1,8 +1,5 @@
-import json
-import os
 import random
-from pathlib import Path
-from typing import Dict, Iterable, List, Optional, TypeVar
+from typing import Iterable, List, TypeVar
 
 
 T = TypeVar("T")
@@ -41,55 +38,6 @@ def compute_variant(seed: int) -> int:
         s = 1
     # ((seed - 1) % 10) + 1 yields range 1..10
     return ((s - 1) % 10) + 1
-
-
-def compute_structure_variant(seed_structure: int) -> int:
-    """Map seed-structure (1..300) deterministically into a structure variant 1..10.
-    
-    Uses a deterministic mapping that ensures seed-structure values 1-300 always 
-    return a value between 1-10 in a pseudo-random but consistent way.
-    """
-    try:
-        s = int(seed_structure or 1)
-    except Exception:
-        s = 1
-    
-    # Normalize to 1-300 range
-    if s < 1 or s > 300:
-        s = 1
-    
-    # Use modulo 10 to map to 1-10 range
-    # This ensures seed-structure 1 -> variant 1, 2 -> 2, ..., 10 -> 10, 11 -> 1, etc.
-    variant = ((s - 1) % 10) + 1
-    return variant
-
-
-def load_structure_variants() -> Optional[Dict]:
-    """Load structure variants from JSON file."""
-    try:
-        # Get the directory where this file (utils.py) is located
-        current_dir = Path(__file__).parent
-        json_path = current_dir / "structure_variants.json"
-        
-        if not json_path.exists():
-            return None
-        
-        with open(json_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            return data.get('variants', {})
-    except Exception as e:
-        print(f"Error loading structure variants: {e}")
-        return None
-
-
-def get_structure_variant_data(variant: int) -> Optional[Dict]:
-    """Get structure variant data for a specific variant (1-10)."""
-    variants = load_structure_variants()
-    if not variants:
-        return None
-    
-    variant_key = str(variant)
-    return variants.get(variant_key, None)
 
 
 def normalize_variant(raw) -> int:
