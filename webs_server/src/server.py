@@ -26,12 +26,32 @@ try:
 except ImportError:
     HAS_FASTJSONSCHEMA = False
 
-from master_dataset_handler import save_master_pool, select_from_pool, get_pool_info, list_available_pools
-from data_handler import load_all_data, append_or_rollover_entity_data
-from seeded_selector import seeded_select, seeded_shuffle, seeded_filter_and_select, seeded_distribution
+from master_dataset_handler import (
+    save_master_pool,
+    select_from_pool,
+    get_pool_info,
+    list_available_pools,
+)
+from data_handler import (
+    load_all_data,
+    append_or_rollover_entity_data,
+    append_to_entity_data,
+)
+from seeded_selector import (
+    seeded_select,
+    seeded_shuffle,
+    seeded_filter_and_select,
+    seeded_distribution,
+)
+from generators.smart_generator import (
+    build_generation_prompt_from_examples,
+    get_project_entity_metadata,
+)
 
 # --- Configuration ---
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", "postgresql://user:password@localhost:5433/database"
+)
 DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "10"))
 DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "50"))
 GZIP_MIN_SIZE = int(os.getenv("GZIP_MIN_SIZE", "1000"))
@@ -117,18 +137,38 @@ class ResetResponse(BaseModel):
 
 # --- Data Generation Models (generic) ---
 class DataGenerationRequest(BaseModel):
-    interface_definition: str = Field(..., description="TypeScript interface definition")
+    interface_definition: str = Field(
+        ..., description="TypeScript interface definition"
+    )
     examples: List[Dict[str, Any]] = Field(..., description="Few-shot JSON examples")
     count: int = Field(..., ge=1, le=200, description="How many objects to generate")
-    categories: Optional[List[str]] = Field(None, description="Optional categories/themes")
-    additional_requirements: Optional[str] = Field(None, description="Free-form guidance")
-    json_schema: Optional[Dict[str, Any]] = Field(None, description="Optional JSON Schema to validate the result shape")
-    naming_rules: Optional[Dict[str, Any]] = Field(None, description="Optional rules e.g. id or image path patterns")
-    project_key: Optional[str] = Field(None, description="Project key for saving data to specific project directory")
-    entity_type: Optional[str] = Field(None, description="Entity type (e.g., 'products', 'movies', 'tasks')")
-    save_to_file: bool = Field(default=False, description="Whether to save generated data to JSON file")
-    save_to_db: bool = Field(default=False, description="Whether to save generated data to database")
-    seed_value: Optional[int] = Field(None, description="Seed value for reproducible generation")
+    categories: Optional[List[str]] = Field(
+        None, description="Optional categories/themes"
+    )
+    additional_requirements: Optional[str] = Field(
+        None, description="Free-form guidance"
+    )
+    json_schema: Optional[Dict[str, Any]] = Field(
+        None, description="Optional JSON Schema to validate the result shape"
+    )
+    naming_rules: Optional[Dict[str, Any]] = Field(
+        None, description="Optional rules e.g. id or image path patterns"
+    )
+    project_key: Optional[str] = Field(
+        None, description="Project key for saving data to specific project directory"
+    )
+    entity_type: Optional[str] = Field(
+        None, description="Entity type (e.g., 'products', 'movies', 'tasks')"
+    )
+    save_to_file: bool = Field(
+        default=False, description="Whether to save generated data to JSON file"
+    )
+    save_to_db: bool = Field(
+        default=False, description="Whether to save generated data to database"
+    )
+    seed_value: Optional[int] = Field(
+        None, description="Seed value for reproducible generation"
+    )
 
 
 class DataGenerationResponse(BaseModel):
@@ -136,7 +176,9 @@ class DataGenerationResponse(BaseModel):
     generated_data: List[Dict[str, Any]]
     count: int
     generation_time: float
-    saved_path: Optional[str] = Field(None, description="Path where data was saved (if save_to_file=True)")
+    saved_path: Optional[str] = Field(
+        None, description="Path where data was saved (if save_to_file=True)"
+    )
 
 
 # --- Database Initialization ---
@@ -146,7 +188,9 @@ async def init_db_pool():
     max_retries = 5
     retry_delay = 5  # seconds
 
-    logger.info(f"Initializing database connection pool to: {DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else 'localhost'}")
+    logger.info(
+        f"Initializing database connection pool to: {DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else 'localhost'}"
+    )
 
     while retry_count < max_retries:
         try:
@@ -166,21 +210,31 @@ async def init_db_pool():
             async with app.state.pool.acquire() as conn:
                 await conn.fetchval("SELECT 1")
 
-            logger.success(f"Database connection pool established (min: {DB_POOL_MIN}, max: {DB_POOL_MAX})")
+            logger.success(
+                f"Database connection pool established (min: {DB_POOL_MIN}, max: {DB_POOL_MAX})"
+            )
             return
         except asyncpg.PostgresError as e:
             retry_count += 1
-            logger.warning(f"Database pool creation failed (attempt {retry_count}/{max_retries}): {str(e)}")
+            logger.warning(
+                f"Database pool creation failed (attempt {retry_count}/{max_retries}): {str(e)}"
+            )
             if retry_count >= max_retries:
                 logger.error("Failed to create database pool after multiple attempts.")
                 raise RuntimeError(f"Database pool creation failed: {str(e)}")
             await asyncio.sleep(retry_delay)
         except Exception as e:
             retry_count += 1
-            logger.error(f"An unexpected error occurred during database pool creation (attempt {retry_count}/{max_retries}): {e}")
+            logger.error(
+                f"An unexpected error occurred during database pool creation (attempt {retry_count}/{max_retries}): {e}"
+            )
             if retry_count >= max_retries:
-                logger.error("Failed to create database pool after multiple attempts due to unexpected error.")
-                raise RuntimeError(f"Database pool creation failed due to unexpected error: {str(e)}")
+                logger.error(
+                    "Failed to create database pool after multiple attempts due to unexpected error."
+                )
+                raise RuntimeError(
+                    f"Database pool creation failed due to unexpected error: {str(e)}"
+                )
             await asyncio.sleep(retry_delay)
 
 
@@ -257,13 +311,20 @@ async def root():
             "get_events": "/get_events/",
             "reset_events": "/reset_events/",
             "generate_dataset": "/datasets/generate",
+            "generate_smart": "/datasets/generate-smart",
+            "load_dataset": "/datasets/load",
         },
         "status": "operational",
     }
 
 
 # --- API Endpoints ---
-@app.post("/save_events/", response_model=EventSaveResponse, status_code=status.HTTP_201_CREATED, summary="Save a single event")
+@app.post(
+    "/save_events/",
+    response_model=EventSaveResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Save a single event",
+)
 async def save_event_endpoint(event: EventInput):
     """
     Saves a single event using a prepared statement obtained from the pool.
@@ -285,7 +346,13 @@ async def save_event_endpoint(event: EventInput):
                 detail="Invalid web_url provided after trimming.",
             )
 
-        result = await app.state.pool.fetchrow(INSERT_EVENT_SQL, event.web_agent_id, trimmed_url, event.validator_id, event_data_json_string)
+        result = await app.state.pool.fetchrow(
+            INSERT_EVENT_SQL,
+            event.web_agent_id,
+            trimmed_url,
+            event.validator_id,
+            event_data_json_string,
+        )
         if result:
             logger.info(f"Event saved successfully with ID: {result['id']}")
             return EventSaveResponse(
@@ -316,7 +383,11 @@ async def save_event_endpoint(event: EventInput):
         ) from e
 
 
-@app.get("/get_events/", response_model=List[EventOutput], summary="Get events for a web agent and URL")
+@app.get(
+    "/get_events/",
+    response_model=List[EventOutput],
+    summary="Get events for a web agent and URL",
+)
 async def get_events_endpoint(
     web_url: str = Query(..., description="The specific web URL to filter events for."),
     web_agent_id: str = Query(
@@ -336,15 +407,23 @@ async def get_events_endpoint(
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
         logger.error("Database pool not available for fetching events.")
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database service temporarily unavailable.")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service temporarily unavailable.",
+        )
 
     # --- Apply trimming to the query parameter before using it in the WHERE clause ---
     trimmed_url = trim_url_to_origin(web_url)
     if not trimmed_url:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid web_url provided after trimming.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid web_url provided after trimming.",
+        )
 
     try:
-        rows: List[asyncpg.Record] = await app.state.pool.fetch(SELECT_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
+        rows: List[asyncpg.Record] = await app.state.pool.fetch(
+            SELECT_EVENTS_SQL, trimmed_url, web_agent_id, validator_id
+        )
 
         processed_rows = []
         for row in rows:
@@ -354,31 +433,55 @@ async def get_events_endpoint(
                 try:
                     row_dict["data"] = orjson.loads(raw_data)
                 except orjson.JSONDecodeError as e:
-                    logger.error(f"Failed to parse JSON data for event ID {row_dict.get('id', 'unknown')}: {e}")
+                    logger.error(
+                        f"Failed to parse JSON data for event ID {row_dict.get('id', 'unknown')}: {e}"
+                    )
                     row_dict["data"] = {}
             elif raw_data is None:
                 row_dict["data"] = {}
 
             processed_rows.append(row_dict)
 
-        logger.info(f"Retrieved {len(processed_rows)} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
+        logger.info(
+            f"Retrieved {len(processed_rows)} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}"
+        )
         return processed_rows
 
     except PostgresError as e:
-        logger.error(f"Database query failed for get_events: {e} (SQLState: {e.sqlstate})")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database operation failed during event retrieval: {e.pgcode}.") from e
+        logger.error(
+            f"Database query failed for get_events: {e} (SQLState: {e.sqlstate})"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database operation failed during event retrieval: {e.pgcode}.",
+        ) from e
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Unexpected error during get_events: {e}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An internal server error occurred while fetching events.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An internal server error occurred while fetching events.",
+        ) from e
 
 
-@app.delete("/reset_events/", response_model=ResetResponse, summary="Delete all events for a web URL")
+@app.delete(
+    "/reset_events/",
+    response_model=ResetResponse,
+    summary="Delete all events for a web URL",
+)
 async def reset_events_endpoint(
-    web_url: str = Query(..., description="The web URL for which all events should be deleted."),
-    web_agent_id: str = Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID."),
-    validator_id: str = Query(..., description="The validator ID associated with the events."),
+    web_url: str = Query(
+        ..., description="The web URL for which all events should be deleted."
+    ),
+    web_agent_id: str = Query(
+        default="UNKNOWN_AGENT",
+        max_length=255,
+        description="The specific web agent ID.",
+    ),
+    validator_id: str = Query(
+        ..., description="The validator ID associated with the events."
+    ),
 ):
     """
     Deletes all events for a given web_url, web_agent_id, and validator_id using a prepared statement.
@@ -386,37 +489,67 @@ async def reset_events_endpoint(
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
         logger.error("Database pool not available for resetting events.")
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database service temporarily unavailable.")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service temporarily unavailable.",
+        )
 
     # --- Apply trimming to the query parameter before using it in the WHERE clause ---
     trimmed_url = trim_url_to_origin(web_url)
     if not trimmed_url:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid web_url provided after trimming.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid web_url provided after trimming.",
+        )
 
     try:
-        deleted_count: Optional[int] = await app.state.pool.fetchval(DELETE_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
+        deleted_count: Optional[int] = await app.state.pool.fetchval(
+            DELETE_EVENTS_SQL, trimmed_url, web_agent_id, validator_id
+        )
         actual_deleted_count = deleted_count if deleted_count is not None else 0
-        logger.info(f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
-        return ResetResponse(message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'", web_url=web_url, deleted_count=actual_deleted_count, validator_id=validator_id)
+        logger.info(
+            f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}"
+        )
+        return ResetResponse(
+            message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'",
+            web_url=web_url,
+            deleted_count=actual_deleted_count,
+            validator_id=validator_id,
+        )
     except PostgresError as e:
-        logger.error(f"Database deletion failed for reset_events: {e} (SQLState: {e.sqlstate}).")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database operation failed during event reset: {e.pgcode}.") from e
+        logger.error(
+            f"Database deletion failed for reset_events: {e} (SQLState: {e.sqlstate})."
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database operation failed during event reset: {e.pgcode}.",
+        ) from e
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Unexpected error during reset_events: {e}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An internal server error occurred while resetting events.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An internal server error occurred while resetting events.",
+        ) from e
 
 
 # --- Data Generation Functions (generic) ---
 async def generate_with_openai(request: DataGenerationRequest) -> List[Dict[str, Any]]:
     if not OPENAI_API_KEY:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="OpenAI API key not configured")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="OpenAI API key not configured",
+        )
 
     client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
-    examples_json = orjson.dumps(request.examples, option=orjson.OPT_INDENT_2).decode("utf-8")
-    naming_rules = orjson.dumps(request.naming_rules or {}, option=orjson.OPT_INDENT_2).decode("utf-8")
+    examples_json = orjson.dumps(request.examples, option=orjson.OPT_INDENT_2).decode(
+        "utf-8"
+    )
+    naming_rules = orjson.dumps(
+        request.naming_rules or {}, option=orjson.OPT_INDENT_2
+    ).decode("utf-8")
 
     prompt = f"""
 You generate strictly valid JSON arrays for synthetic datasets.
@@ -472,13 +605,21 @@ Output strictly a JSON array only.
             # Log raw content for debugging
             logger.error(f"Failed to parse generation as JSON array: {e}")
             logger.error(f"Raw content: {content[:1000]}...")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Generated output is not valid JSON")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Generated output is not valid JSON",
+            )
 
         # Optional JSON Schema validation if provided
         if request.json_schema:
             if not HAS_FASTJSONSCHEMA:
-                logger.warning("JSON Schema validation requested but fastjsonschema not available")
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="JSON Schema validation not available - fastjsonschema not installed")
+                logger.warning(
+                    "JSON Schema validation requested but fastjsonschema not available"
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="JSON Schema validation not available - fastjsonschema not installed",
+                )
 
             try:
                 validate = fastjsonschema.compile(request.json_schema)
@@ -486,7 +627,10 @@ Output strictly a JSON array only.
                     validate(item)
             except Exception as e:
                 logger.error(f"Schema validation failed: {e}")
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"JSON Schema validation failed: {e}")
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail=f"JSON Schema validation failed: {e}",
+                )
 
         return data
 
@@ -494,11 +638,16 @@ Output strictly a JSON array only.
         raise
     except Exception as e:
         logger.error(f"OpenAI generation failed: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Data generation failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Data generation failed: {str(e)}",
+        )
 
 
 # --- Helper Function to Save Data to File Storage (/app/data) ---
-def save_generated_data_file_storage(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
+def save_generated_data_file_storage(
+    data: List[Dict[str, Any]], project_key: str, entity_type: str
+) -> str:
     """
     Save generated data to file storage using the new persistent volume structure:
     /app/data/<project_key>/data/<entity_type>_<timestamp>.json
@@ -510,7 +659,11 @@ def save_generated_data_file_storage(data: List[Dict[str, Any]], project_key: st
 
 
 # --- Data Generation Endpoint (generic) ---
-@app.post("/datasets/generate", response_model=DataGenerationResponse, status_code=status.HTTP_200_OK)
+@app.post(
+    "/datasets/generate",
+    response_model=DataGenerationResponse,
+    status_code=status.HTTP_200_OK,
+)
 async def generate_dataset_endpoint(request: DataGenerationRequest):
     start = datetime.now()
     data = await generate_with_openai(request)
@@ -523,7 +676,9 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     if request.project_key and request.entity_type:
         try:
             # Use new file-storage saver under /app/data (persistent volume)
-            saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
+            saved_path = save_generated_data_file_storage(
+                data, request.project_key, request.entity_type
+            )
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
             # Don't fail the request if saving fails
@@ -538,12 +693,134 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     )
 
 
+# --- Smart Data Generation Models ---
+class SmartGenerationRequest(BaseModel):
+    project_key: str = Field(..., description="Project key (e.g., 'web_5_autocrm')")
+    entity_type: str = Field(..., description="Entity type (e.g., 'logs', 'clients')")
+    count: int = Field(
+        default=200, ge=1, le=500, description="How many objects to generate"
+    )
+    mode: str = Field(
+        default="append",
+        description="Generation mode: 'append' (add to existing) or 'replace' (create new)",
+    )
+    additional_requirements: Optional[str] = Field(
+        None, description="Optional additional requirements"
+    )
+    seed_value: Optional[int] = Field(
+        None, description="Seed value for reproducible generation"
+    )
+
+
+# --- Smart Data Generation Endpoint ---
+@app.post(
+    "/datasets/generate-smart",
+    response_model=DataGenerationResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
+    """
+    Smart data generation endpoint that automatically infers structure from existing data.
+
+    Usage:
+        POST /datasets/generate-smart
+        {
+            "project_key": "web_5_autocrm",
+            "entity_type": "logs",
+            "count": 200
+        }
+
+    The system will:
+    1. Read existing examples from initial_data/{project_key}/data/{entity_type}_1.json
+    2. Infer the TypeScript interface from those examples
+    3. Use OpenAI to generate new data with the same structure
+    4. Save to initial_data/{project_key}/data/{entity_type}_N.json
+    """
+    start = datetime.now()
+
+    try:
+        # Build prompt from existing examples
+        interface_definition, examples = build_generation_prompt_from_examples(
+            request.project_key, request.entity_type, count=request.count
+        )
+
+        # Get metadata for this project/entity
+        metadata = get_project_entity_metadata(request.project_key, request.entity_type)
+
+        # Build the full generation request
+        gen_request = DataGenerationRequest(
+            interface_definition=interface_definition,
+            examples=examples,
+            count=request.count,
+            categories=metadata.get("categories"),
+            additional_requirements=request.additional_requirements
+            or metadata.get("requirements"),
+            project_key=request.project_key,
+            entity_type=request.entity_type,
+            seed_value=request.seed_value,
+        )
+
+        # Generate data using OpenAI
+        data = await generate_with_openai(gen_request)
+        elapsed = (datetime.now() - start).total_seconds()
+
+        logger.info(
+            f"[Smart Generation] Generated {len(data)} items for {request.project_key}/{request.entity_type} in {elapsed:.2f}s"
+        )
+
+        # Save to file storage based on mode
+        saved_path = None
+        mode = request.mode.lower()
+
+        try:
+            if mode == "append":
+                # Append to existing {entity_type}_1.json
+                saved_path = append_to_entity_data(
+                    request.project_key, request.entity_type, data
+                )
+                logger.info(
+                    f"[Smart Generation] Appended {len(data)} items to {saved_path}"
+                )
+            else:
+                # Replace mode: create new file with timestamp
+                saved_path = save_generated_data_file_storage(
+                    data, request.project_key, request.entity_type
+                )
+                logger.info(f"[Smart Generation] Created new file {saved_path}")
+        except Exception as e:
+            logger.error(f"Failed to save data to file storage: {e}")
+            # Don't fail the request if saving fails
+
+        action_msg = "appended to" if mode == "append" else "generated for"
+        return DataGenerationResponse(
+            message=f"Successfully {action_msg} {request.project_key}/{request.entity_type}: {len(data)} items",
+            generated_data=data,
+            count=len(data),
+            generation_time=elapsed,
+            saved_path=saved_path,
+        )
+
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No example data found for {request.project_key}/{request.entity_type}. Error: {str(e)}",
+        )
+    except Exception as e:
+        logger.error(f"Smart generation failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Generation failed: {str(e)}",
+        )
+
+
 # --- Data Loading Models ---
 class DatasetLoadRequest(BaseModel):
     project_key: str = Field(..., description="Project key")
     entity_type: str = Field(..., description="Entity type")
     seed_value: int = Field(..., description="Seed value to load")
-    limit: int = Field(default=50, ge=1, le=500, description="Maximum number of items to return")
+    limit: int = Field(
+        default=50, ge=1, le=500, description="Maximum number of items to return"
+    )
 
 
 class DatasetLoadResponse(BaseModel):
@@ -554,15 +831,26 @@ class DatasetLoadResponse(BaseModel):
 
 
 # --- Data Loading Endpoint (Seeded Selection) ---
-@app.get("/datasets/load", response_model=DatasetLoadResponse, summary="Load dataset using seeded selection")
+@app.get(
+    "/datasets/load",
+    response_model=DatasetLoadResponse,
+    summary="Load dataset using seeded selection",
+)
 async def load_dataset_endpoint(
     project_key: str = Query(..., description="Project key"),
     entity_type: str = Query(..., description="Entity type"),
     seed_value: int = Query(..., description="Seed value for deterministic selection"),
     limit: int = Query(default=50, ge=1, le=500, description="Maximum items to return"),
-    method: str = Query(default="select", description="Selection method: select, shuffle, filter, distribute"),
-    filter_key: Optional[str] = Query(None, description="Key to filter on (for filter method)"),
-    filter_values: Optional[str] = Query(None, description="Comma-separated values to filter (for filter method)"),
+    method: str = Query(
+        default="select",
+        description="Selection method: select, shuffle, filter, distribute",
+    ),
+    filter_key: Optional[str] = Query(
+        None, description="Key to filter on (for filter method)"
+    ),
+    filter_values: Optional[str] = Query(
+        None, description="Comma-separated values to filter (for filter method)"
+    ),
 ):
     """
     Select data from master pool using seed for reproducible selection.
@@ -576,26 +864,41 @@ async def load_dataset_endpoint(
         file_data_pool = load_all_data(project_key, entity_type)
 
         if not file_data_pool:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No file-based data found for project={project_key}. Generate data first.")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No file-based data found for project={project_key}. Generate data first.",
+            )
 
         # Apply seeded selection based on requested method
         method_normalized = (method or "select").lower()
         selected: List[Dict[str, Any]]
 
         # Parse filters
-        filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
+        filter_list = (
+            [v.strip() for v in filter_values.split(",")] if filter_values else None
+        )
 
         if method_normalized == "shuffle":
             selected = seeded_shuffle(file_data_pool, seed_value, limit=limit)
         elif method_normalized == "filter":
-            selected = seeded_filter_and_select(file_data_pool, seed_value, limit, filter_key=filter_key, filter_values=filter_list)
+            selected = seeded_filter_and_select(
+                file_data_pool,
+                seed_value,
+                limit,
+                filter_key=filter_key,
+                filter_values=filter_list,
+            )
         elif method_normalized == "distribute":
             # Use filter_key as category_key for distribution if provided, else default 'category'
             category_key = filter_key or "category"
-            selected = seeded_distribution(file_data_pool, seed_value, category_key=category_key, total_count=limit)
+            selected = seeded_distribution(
+                file_data_pool, seed_value, category_key=category_key, total_count=limit
+            )
         else:
             # Default 'select' method
-            selected = seeded_select(file_data_pool, seed=seed_value, count=limit, allow_duplicates=False)
+            selected = seeded_select(
+                file_data_pool, seed=seed_value, count=limit, allow_duplicates=False
+            )
 
         metadata = {
             "source": "file_storage",
@@ -608,47 +911,76 @@ async def load_dataset_endpoint(
             "filterValues": filter_list,
             "totalAvailable": len(file_data_pool),
         }
-        return DatasetLoadResponse(message=f"Successfully selected {len(selected)} items from file storage using seed={seed_value}", metadata=metadata, data=selected, count=len(selected))
+        return DatasetLoadResponse(
+            message=f"Successfully selected {len(selected)} items from file storage using seed={seed_value}",
+            metadata=metadata,
+            data=selected,
+            count=len(selected),
+        )
 
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Failed to load dataset: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to load dataset: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to load dataset: {str(e)}",
+        )
 
 
 # --- List Pools Endpoint ---
 @app.get("/datasets/pools", summary="List available master pools")
-async def list_pools_endpoint(project_key: Optional[str] = Query(None, description="Optional project key filter")):
+async def list_pools_endpoint(
+    project_key: Optional[str] = Query(None, description="Optional project key filter")
+):
     """
     List all available master data pools.
     Each pool can be queried with any seed value for reproducible selection.
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database pool not available",
+        )
 
     try:
         pools = await list_available_pools(app.state.pool, project_key)
-        return {"pools": pools, "count": len(pools), "message": "Master pools available for seeded selection"}
+        return {
+            "pools": pools,
+            "count": len(pools),
+            "message": "Master pools available for seeded selection",
+        }
     except Exception as e:
         logger.error(f"Failed to list pools: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to list pools: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to list pools: {str(e)}",
+        )
 
 
 # --- Get Pool Info Endpoint ---
 @app.get("/datasets/pool/info", summary="Get master pool information")
-async def get_pool_info_endpoint(project_key: str = Query(..., description="Project key"), entity_type: str = Query(..., description="Entity type")):
+async def get_pool_info_endpoint(
+    project_key: str = Query(..., description="Project key"),
+    entity_type: str = Query(..., description="Entity type"),
+):
     """
     Get information about a master pool without loading all data.
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database pool not available",
+        )
 
     try:
         info = await get_pool_info(app.state.pool, project_key, entity_type)
 
         if not info:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No pool found for project={project_key}, entity={entity_type}")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No pool found for project={project_key}, entity={entity_type}",
+            )
 
         return info
 
@@ -656,7 +988,10 @@ async def get_pool_info_endpoint(project_key: str = Query(..., description="Proj
         raise
     except Exception as e:
         logger.error(f"Failed to get pool info: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to get pool info: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get pool info: {str(e)}",
+        )
 
 
 # --- Health Check Models ---
@@ -668,8 +1003,13 @@ class HealthResponse(BaseModel):
     python_version: str
     debug_message: Optional[str] = None
 
+
 # --- Health Check ---
-@app.get("/health", response_model=HealthResponse, summary="Perform a health check of the API")
+@app.get(
+    "/health",
+    response_model=HealthResponse,
+    summary="Perform a health check of the API",
+)
 async def health_check_endpoint():
     """
     Provides a comprehensive health check, including the status of the database pool,
@@ -697,7 +1037,9 @@ async def health_check_endpoint():
             logger.error(f"Health check DB query failed with PostgresError: {e}")
         except Exception as e:
             db_pool_operational = False
-            debug_message = f"Database connection pool exists but failed health check query: {e}"
+            debug_message = (
+                f"Database connection pool exists but failed health check query: {e}"
+            )
             logger.error(f"Health check DB query failed: {e}")
 
     # Determine overall health status

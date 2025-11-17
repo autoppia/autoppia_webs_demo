@@ -1,116 +1,116 @@
-import json
-import os
-from datetime import datetime
-from typing import List, Dict, Any, Optional
+"""
+File-based data storage handler for webs_server.
+Manages reading/writing JSON data files under /app/data.
+"""
 
-# Base path inside the container for persistent data storage (mounted volume)
-BASE_PATH = os.getenv("DATA_BASE_PATH", "/app/data")
-MAX_FILE_SIZE_BYTES = int(os.getenv("DATA_FILE_MAX_BYTES", "2097152"))  # 2 MiB default
+import os
+import json
+import fcntl
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, Any, List, Optional
 
 try:
-    from filelock import FileLock  # Optional locking to avoid concurrent write races
+    from filelock import FileLock
 
     HAS_FILELOCK = True
-except Exception:
+except ImportError:
     HAS_FILELOCK = False
 
+# Base path for file storage (inside container)
+BASE_PATH = os.getenv("BASE_DATA_PATH", "/app/data")
 
-def get_data_dir(web_name: str) -> str:
-    return f"{BASE_PATH}/{web_name}/data"
+# Maximum size for a single data file (10 MB)
+DATA_FILE_MAX_BYTES = int(os.getenv("DATA_FILE_MAX_BYTES", 10 * 1024 * 1024))
 
 
 def get_main_path(web_name: str) -> str:
+    """Return path to main.json for a given web_name."""
     return f"{BASE_PATH}/{web_name}/main.json"
 
 
-def _safe_write(path: str, data: Any) -> None:
-    """
-    Write JSON to path with optional file lock to avoid concurrent write corruption.
-    """
-    try:
-        def _atomic_write(p: str, payload: Any) -> None:
-            directory = os.path.dirname(p) or "."
-            tmp_path = p + ".tmp"
-            # Ensure directory exists before writing
-            os.makedirs(directory, exist_ok=True)
-            with open(tmp_path, "w", encoding="utf-8") as f:
-                json.dump(payload, f, indent=2, ensure_ascii=False)
-            # Atomic replace on POSIX
-            os.replace(tmp_path, p)
-
-        if HAS_FILELOCK:
-            lock = FileLock(path + ".lock")
-            with lock:
-                _atomic_write(path, data)
-        else:
-            _atomic_write(path, data)
-    except FileNotFoundError as e:
-        raise IOError(f"Directory does not exist for path: {path}") from e
-    except PermissionError as e:
-        raise IOError(f"Permission denied writing file: {path}") from e
-    except OSError as e:
-        raise IOError(f"OS error while writing file: {path}: {e}") from e
-
-
-def _load_json(path: str) -> Any:
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return None
-    except json.JSONDecodeError:
-        return None
-    except Exception:
-        return None
-
-
-def _get_rel_and_abs(web_name: str, rel_path: str) -> str:
-    normalized_rel = rel_path.lstrip("./")
-    return f"{BASE_PATH}/{web_name}/{normalized_rel}"
+def get_data_dir(web_name: str) -> str:
+    """Return path to data directory for a given web_name."""
+    return f"{BASE_PATH}/{web_name}/data"
 
 
 def _ensure_dir(path: str) -> None:
+    """Ensure directory exists, creating it if necessary."""
     try:
         os.makedirs(path, exist_ok=True)
-    except PermissionError as e:
-        raise IOError(f"Permission denied creating directory: {path}") from e
     except OSError as e:
         raise IOError(f"OS error while creating directory: {path}: {e}") from e
 
 
-def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], entity_type: str) -> str:
+def save_data_file(
+    web_name: str, filename: str, data: List[Dict[str, Any]], entity_type: str
+) -> str:
     """
-    Save a payload list into a data file and update main.json index for the given entity_type.
-    Returns the absolute file path to the saved file.
+    Save data to a single file under {BASE_PATH}/{web_name}/data/{filename}.
+    Also updates main.json to reference this file under the entity_type key.
+
+    Args:
+        web_name: Project name (e.g., 'web_5_autocrm')
+        filename: File name (e.g., 'logs_20250117.json')
+        data: List of objects to save
+        entity_type: Entity type (e.g., 'logs')
+
+    Returns:
+        Path to saved file
     """
-    _ensure_dir(get_data_dir(web_name))
-    file_path = f"{get_data_dir(web_name)}/{filename}"
+    data_dir = get_data_dir(web_name)
+    _ensure_dir(data_dir)
 
-    # Write the actual data
-    _safe_write(file_path, data)
+    file_path = f"{data_dir}/{filename}"
 
-    # Update main.json with reference
+    # Write data atomically
+    temp_path = f"{file_path}.tmp"
+    try:
+        with open(temp_path, "w", encoding="utf-8") as f:
+            if HAS_FILELOCK:
+                lock = FileLock(f"{temp_path}.lock")
+                with lock:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+            else:
+                fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                json.dump(data, f, indent=2, ensure_ascii=False)
+                fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+
+        # Atomic replace
+        os.replace(temp_path, file_path)
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+
+    # Update main.json to reference this file
     main_path = get_main_path(web_name)
-    main: Dict[str, Any] = {}
+    _ensure_dir(os.path.dirname(main_path))
+
+    # Read existing main.json or create new
     if os.path.exists(main_path):
-        try:
-            with open(main_path, "r", encoding="utf-8") as f:
-                main = json.load(f)
-            if not isinstance(main, dict):
-                main = {}
-        except Exception:
-            # If corrupted, reset to a new index to avoid blocking writes
-            main = {}
+        with open(main_path, "r", encoding="utf-8") as f:
+            main = json.load(f)
+    else:
+        main = {}
 
-    rel_path = f"./data/{filename}"
-    if rel_path not in main.setdefault(entity_type, []):
-        main[entity_type].append(rel_path)
+    # Add file reference under entity_type
+    relative_path = f"./data/{filename}"
+    if entity_type not in main:
+        main[entity_type] = []
 
-    _safe_write(main_path, main)
+    if relative_path not in main[entity_type]:
+        main[entity_type].append(relative_path)
+
+    # Save updated main.json
+    with open(main_path, "w", encoding="utf-8") as f:
+        json.dump(main, f, indent=2, ensure_ascii=False)
+
     return file_path
 
 
-def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
+def load_all_data(
+    web_name: str, entity_type: Optional[str] = None
+) -> List[Dict[str, Any]]:
     """
     Load and return all JSON objects referenced in main.json for a given web_name.
     If entity_type is provided, only load files listed under that entity key.
@@ -159,84 +159,141 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
     return all_data
 
 
-def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[Dict[str, Any]]) -> str:
+def append_or_rollover_entity_data(
+    web_name: str, entity_type: str, data: List[Dict[str, Any]]
+) -> str:
     """
-    Append data to the most recent file for an entity. If appending would exceed the
-    size limit, roll over to a new file and write the new data there.
-    Returns the absolute path where data was written.
-    """
-    if not isinstance(data, list):
-        raise ValueError("Data must be a list of JSON-serializable objects")
+    Append data to the latest file for this entity, or create a new file if:
+    - No files exist yet
+    - The latest file would exceed DATA_FILE_MAX_BYTES after appending
 
-    # Ensure target directory exists
+    Returns:
+        Path to the file where data was saved
+    """
+    main_path = get_main_path(web_name)
+
+    # Load or create main.json
+    if os.path.exists(main_path):
+        with open(main_path, "r", encoding="utf-8") as f:
+            main = json.load(f)
+    else:
+        main = {}
+
+    # Get existing files for this entity
+    entity_files = main.get(entity_type, [])
+
+    # Determine if we append to existing or create new
+    should_create_new = True
+    target_file = None
+
+    if entity_files:
+        # Get the last file
+        last_file_rel = entity_files[-1].lstrip("./")
+        last_file_abs = f"{BASE_PATH}/{web_name}/{last_file_rel}"
+
+        if os.path.exists(last_file_abs):
+            # Check file size
+            file_size = os.path.getsize(last_file_abs)
+            estimated_new_size = file_size + len(json.dumps(data))
+
+            if estimated_new_size < DATA_FILE_MAX_BYTES:
+                # Append to existing file
+                should_create_new = False
+                target_file = last_file_abs
+
+    if should_create_new:
+        # Create new file with timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{entity_type}_{timestamp}.json"
+        return save_data_file(web_name, filename, data, entity_type)
+    else:
+        # Append to existing file
+        with open(target_file, "r", encoding="utf-8") as f:
+            existing_data = json.load(f)
+
+        if isinstance(existing_data, list):
+            existing_data.extend(data)
+        else:
+            # If not a list, convert to list
+            existing_data = [existing_data] + data
+
+        # Write back
+        with open(target_file, "w", encoding="utf-8") as f:
+            json.dump(existing_data, f, indent=2, ensure_ascii=False)
+
+        return target_file
+
+
+def append_to_entity_data(
+    web_name: str, entity_type: str, data: List[Dict[str, Any]]
+) -> str:
+    """
+    Append data to the FIRST file for this entity (e.g., {entity_type}_1.json).
+    If the file doesn't exist, creates it.
+
+    This is useful for appending to initial_data files.
+
+    Args:
+        web_name: Project name (e.g., 'web_4_autodining')
+        entity_type: Entity type (e.g., 'restaurants')
+        data: New data to append
+
+    Returns:
+        Path to the updated file
+    """
+    # Target file is always {entity_type}_1.json
     data_dir = get_data_dir(web_name)
     _ensure_dir(data_dir)
 
-    def _serialize(items: List[Dict[str, Any]]) -> bytes:
+    filename = f"{entity_type}_1.json"
+    file_path = f"{data_dir}/{filename}"
+
+    # Read existing data if file exists
+    existing_data = []
+    if os.path.exists(file_path):
         try:
-            return json.dumps(items, ensure_ascii=False, indent=2).encode("utf-8")
+            with open(file_path, "r", encoding="utf-8") as f:
+                existing_data = json.load(f)
+                if not isinstance(existing_data, list):
+                    existing_data = [existing_data]
         except Exception as e:
-            raise ValueError(f"Failed to serialize data to JSON: {e}") from e
+            print(f"Warning: Could not read existing file {file_path}: {e}")
+            existing_data = []
 
-    def _entity_lock_path() -> str:
-        # Per-entity lock to serialize append/rollover across concurrent requests
-        return f"{data_dir}/.{entity_type}.lock"
+    # Append new data
+    combined_data = existing_data + data
 
-    def _append_under_lock() -> str:
-        # Load or initialize main index
-        main_path = get_main_path(web_name)
-        main: Dict[str, Any] = {}
-        if os.path.exists(main_path):
-            try:
-                with open(main_path, "r", encoding="utf-8") as f:
-                    loaded = json.load(f)
-                    main = loaded if isinstance(loaded, dict) else {}
-            except Exception:
-                # Corrupted index: reset to keep system operational
-                main = {}
+    # Write combined data
+    temp_path = f"{file_path}.tmp"
+    try:
+        with open(temp_path, "w", encoding="utf-8") as f:
+            json.dump(combined_data, f, indent=2, ensure_ascii=False)
+        os.replace(temp_path, file_path)
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
-        entity_files: List[str] = main.setdefault(entity_type, [])
-        current_rel: Optional[str] = entity_files[-1] if entity_files else None
-        current_abs: Optional[str] = _get_rel_and_abs(web_name, current_rel) if current_rel else None
+    # Update main.json to reference this file (if not already)
+    main_path = get_main_path(web_name)
+    _ensure_dir(os.path.dirname(main_path))
 
-        # Try to append to current file if exists and is a list
-        if current_abs and os.path.exists(current_abs):
-            existing = _load_json(current_abs)
-            if isinstance(existing, list):
-                combined = existing + data
-                prospective_size = len(_serialize(combined))
-                if prospective_size <= MAX_FILE_SIZE_BYTES:
-                    _safe_write(current_abs, combined)
-                    return current_abs
-            # Fallthrough: need to roll over
-
-        # Create a new file (first file for entity or rollover)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{entity_type}_{timestamp}.json"
-        abs_path = f"{data_dir}/{filename}"
-        rel_path = f"./data/{filename}"
-
-        # Write only the new data into new file
-        payload_size = len(_serialize(data))
-        if payload_size > MAX_FILE_SIZE_BYTES:
-            # If a single batch exceeds limit, still write it to its own file to avoid data loss
-            pass
-
-        _safe_write(abs_path, data)
-
-        # Update index
-        if rel_path not in entity_files:
-            entity_files.append(rel_path)
-        _safe_write(main_path, main)
-        return abs_path
-
-    if HAS_FILELOCK:
-        # Ensure directory exists for the lock file too
-        _ensure_dir(data_dir)
-        lock = FileLock(_entity_lock_path())
-        with lock:
-            return _append_under_lock()
+    if os.path.exists(main_path):
+        with open(main_path, "r", encoding="utf-8") as f:
+            main = json.load(f)
     else:
-        # Best-effort without process-level locking
-        return _append_under_lock()
+        main = {}
 
+    relative_path = f"./data/{filename}"
+    if entity_type not in main:
+        main[entity_type] = []
+
+    if relative_path not in main[entity_type]:
+        main[entity_type].append(relative_path)
+
+    with open(main_path, "w", encoding="utf-8") as f:
+        json.dump(main, f, indent=2, ensure_ascii=False)
+
+    print(
+        f"✅ Appended {len(data)} records to {file_path} (total: {len(combined_data)})"
+    )
+    return file_path
