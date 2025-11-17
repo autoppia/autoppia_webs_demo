@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
+import { SeedProvider } from "@/context/SeedContext";
 import { Suspense } from "react";
 
 const geistSans = Geist({
@@ -32,9 +33,11 @@ export default function RootLayout({
       <body className="antialiased" suppressHydrationWarning>
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
-            <DynamicStructureProvider>
-              {children}
-            </DynamicStructureProvider>
+            <SeedProvider>
+              <DynamicStructureProvider>
+                {children}
+              </DynamicStructureProvider>
+            </SeedProvider>
           </Suspense>
         </ClientBody>
       </body>

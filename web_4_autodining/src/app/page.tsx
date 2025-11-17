@@ -43,8 +43,8 @@ type UiRestaurant = {
   times: string[];
 };
 
-// Create restaurants array from jsonData
-const restaurants = RestaurantsData.map((item, index) => ({
+// Default restaurants array from jsonData (fallback when dynamic data unavailable)
+const defaultRestaurants = RestaurantsData.map((item, index) => ({
   id: `restaurant-${item.id}`,
   name: item.namepool,
   image: `/images/restaurant${(index % 19) + 1}.jpg`,
@@ -56,10 +56,6 @@ const restaurants = RestaurantsData.map((item, index) => ({
   area: item.area,
   times: ["1:00 PM"],
 }));
-// Split restaurants into unique sets per section
-const lunchRestaurants = restaurants.slice(0, 15);
-const iconRestaurants = restaurants.slice(15, 30);
-const awardRestaurants = restaurants.slice(30, 50);
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -269,7 +265,7 @@ function HomePageContent() {
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [list, setList] = useState<UiRestaurant[]>([]);
+  const [list, setList] = useState<UiRestaurant[]>(defaultRestaurants);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("1:00 PM");
   const [people, setPeople] = useState(2);
@@ -280,7 +276,7 @@ function HomePageContent() {
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
 
-  const { seed } = useSeed();
+  const { seed, v2Seed } = useSeed();
   const { marginTop, wrapButton } = useMemo(
     () => getLayoutVariant(seed),
     [seed]
@@ -358,15 +354,14 @@ function HomePageContent() {
   ];
 
   useEffect(() => {
-    let didRun = false;
-    const runOnce = async () => {
-      if (didRun) return; // guard
-      didRun = true;
+    const loadRestaurants = async () => {
+      console.log("[autodining] Loading restaurants with v2Seed:", v2Seed);
       setIsLoading(true);
       const genEnabled = isDataGenerationEnabled();
       if (genEnabled) setIsGenerating(true);
       try {
-        await initializeRestaurants(); // waits for DB/gen
+        // Pass v2Seed to initializeRestaurants when v2 is enabled
+        await initializeRestaurants(v2Seed ?? undefined); // waits for DB/gen
         const fresh = getRestaurants().map((r) => ({
           id: r.id,
           name: r.name,
@@ -379,15 +374,19 @@ function HomePageContent() {
           bookings: r.bookings ?? 0,
           times: ["1:00 PM"],
         }));
-        setList(fresh);
-        setIsReady(true);
+        const mapped = fresh.length > 0 ? fresh : defaultRestaurants;
+        setList(mapped);
+        setIsReady(mapped.length > 0);
       } finally {
         setIsLoading(false);
         setIsGenerating(false);
       }
     };
-    runOnce();
-  }, []);
+    loadRestaurants();
+  }, [v2Seed]);
+
+  const iconRestaurants = useMemo(() => list.slice(15, 30), [list]);
+  const awardRestaurants = useMemo(() => list.slice(30, 50), [list]);
 
   return (
     <main suppressHydrationWarning>

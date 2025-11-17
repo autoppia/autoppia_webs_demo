@@ -59,7 +59,7 @@ export default function RestaurantPage() {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const { getText, getId } = useDynamicStructure();
 
-  const { seed } = useSeed();
+  const { seed, v2Seed } = useSeed();
 
   // Use seed-based variations
   const bookButtonVariation = useSeedVariation("bookButton");
@@ -83,7 +83,7 @@ export default function RestaurantPage() {
       const genEnabled = isDataGenerationEnabled();
       if (genEnabled) setIsGenerating(true);
       try {
-        await initializeRestaurants();
+        await initializeRestaurants(v2Seed ?? undefined);
         if (!mounted) return;
         const list = getRestaurants();
         const found = list.find((x) => x.id === id) || list[0];
@@ -111,7 +111,7 @@ export default function RestaurantPage() {
     };
     run();
     return () => { mounted = false; };
-  }, [id]);
+  }, [id, v2Seed]);
 
   useEffect(() => {
     if (!r) return; // evita enviar si aún no hay datos

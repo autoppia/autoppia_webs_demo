@@ -48,6 +48,9 @@ ENV NODE_ENV=production
 ENV PORT=8003
 EXPOSE 8003
 
+# Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
+# so they don't need to be set here. They're already in the JavaScript code.
+
 # prod deps only (from deps stage)
 COPY --from=deps /app/node_modules ./node_modules
 
