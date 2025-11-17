@@ -187,8 +187,17 @@ fi
 echo ""
 echo "🔣 Configuration:"
 echo "    Ports:"
-echo "      movies/books HTTP    →  $WEB_PORT"
-echo "      movies/books DB      →  $POSTGRES_PORT"
+if [ "$WEB_DEMO" = "all" ]; then
+  echo "      Base web port         →  $WEB_PORT"
+  echo "      Base DB port          →  $POSTGRES_PORT"
+else
+  echo "      $WEB_DEMO HTTP         →  $WEB_PORT"
+  if [ "$WEB_DEMO" = "movies" ] || [ "$WEB_DEMO" = "books" ]; then
+    echo "      $WEB_DEMO DB           →  $POSTGRES_PORT"
+  else
+    echo "      $WEB_DEMO DB           →  N/A (uses webs_server)"
+  fi
+fi
 echo "      webs_server HTTP    →  $WEBS_PORT"
 echo "      webs_server DB      →  $WEBS_PG_PORT"
 echo "    Demo:                  →  $WEB_DEMO"
