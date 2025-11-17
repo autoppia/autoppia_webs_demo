@@ -4,28 +4,17 @@
   <div class="row justify-content-center">
     <div class="col-md-7 col-lg-6">
       <div class="card shadow border-0">
-        <div class="card-header bg-success text-white text-center py-3"><h3 class="mb-0"><i class="fas fa-user-plus mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.registerForm.title }}{% else %}Create an Account{% endif %}</h3></div>
+        <div class="card-header bg-success text-white text-center py-3"><h3 class="mb-0"><i class="fas fa-user-plus mr-2"></i>Create an Account</h3></div>
         <div class="card-body p-4">
           <form method="post" action="{% url 'movieapp:register' %}">{% csrf_token %}
-            {% if DYNAMIC_HTML_STRUCTURE %}<input type="hidden" name="seed-structure" value="{{ INITIAL_SEED_STRUCTURE }}">{% endif %}
-            {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}
-              {% with form=STRUCTURE_DATA.registerForm %}
-            <div class="form-group"><label for="{{ form.usernameInput.id }}"><i class="fas fa-user mr-1"></i> {{ form.usernameInput.label }}</label><input type="text" name="{{ form.usernameInput.name }}" id="{{ form.usernameInput.id }}" class="form-control" placeholder="{{ form.usernameInput.placeholder }}" aria-label="{{ form.usernameInput.ariaLabel }}" required autofocus></div>
-            <div class="form-group"><label for="{{ form.emailInput.id }}"><i class="fas fa-envelope mr-1"></i> {{ form.emailInput.label }}</label><input type="email" name="{{ form.emailInput.name }}" id="{{ form.emailInput.id }}" class="form-control" placeholder="{{ form.emailInput.placeholder }}" aria-label="{{ form.emailInput.ariaLabel }}" required></div>
-            <div class="form-group"><label for="{{ form.password1Input.id }}"><i class="fas fa-lock mr-1"></i> {{ form.password1Input.label }}</label><input type="password" name="{{ form.password1Input.name }}" id="{{ form.password1Input.id }}" class="form-control" placeholder="{{ form.password1Input.placeholder }}" aria-label="{{ form.password1Input.ariaLabel }}" required></div>
-            <div class="form-group"><label for="{{ form.password2Input.id }}"><i class="fas fa-lock mr-1"></i> {{ form.password2Input.label }}</label><input type="password" name="{{ form.password2Input.name }}" id="{{ form.password2Input.id }}" class="form-control" placeholder="{{ form.password2Input.placeholder }}" aria-label="{{ form.password2Input.ariaLabel }}" required></div>
-            <button type="submit" class="btn btn-success btn-block" id="{{ form.submitButton.id }}" aria-label="{{ form.submitButton.ariaLabel }}"><i class="fas fa-user-plus mr-1"></i> {{ form.submitButton.text }}</button>
-              {% endwith %}
-            {% else %}
             <div class="form-group"><label for="username"><i class="fas fa-user mr-1"></i> Username</label><input type="text" name="username" id="username" class="form-control" placeholder="Choose a username" required autofocus></div>
             <div class="form-group"><label for="email"><i class="fas fa-envelope mr-1"></i> Email</label><input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required></div>
             <div class="form-group"><label for="password1"><i class="fas fa-lock mr-1"></i> Password</label><input type="password" name="password1" id="password1" class="form-control" placeholder="Create a password" required></div>
             <div class="form-group"><label for="password2"><i class="fas fa-lock mr-1"></i> Confirm Password</label><input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm your password" required></div>
             <button type="submit" class="btn btn-success btn-block"><i class="fas fa-user-plus mr-1"></i> Create Account</button>
-            {% endif %}
           </form>
         </div>
-        <div class="card-footer bg-light text-center py-3">{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.registerForm.loginLink.prompt }}{% else %}Already have an account?{% endif %} <a href="{% url 'movieapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% if DYNAMIC_HTML_STRUCTURE %}&seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}{% elif DYNAMIC_HTML_STRUCTURE %}?seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}">{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.registerForm.loginLink.text }}{% else %}Sign In{% endif %}</a></div>
+        <div class="card-footer bg-light text-center py-3">Already have an account? <a href="{% url 'movieapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Sign In</a></div>
       </div>
     </div>
   </div>

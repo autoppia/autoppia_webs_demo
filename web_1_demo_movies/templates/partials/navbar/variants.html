@@ -1,37 +1,20 @@
 {% with v=LAYOUT_VARIANT %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% if DYNAMIC_HTML_STRUCTURE %}&seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}{% elif DYNAMIC_HTML_STRUCTURE %}?seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}">
+    <a class="navbar-brand" href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">
       <img src="/media/gallery/autoppia_logo.png" alt="AutoPpia" height="30">
     </a>
-    {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}
-      {% with nav=STRUCTURE_DATA.navbar %}
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#{{ nav.toggleButton.id }}" aria-controls="{{ nav.toggleButton.id }}" aria-expanded="false" aria-label="{{ nav.toggleButton.ariaLabel }}">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="{{ nav.toggleButton.id }}">
-      {% endwith %}
-    {% else %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-    {% endif %}
 
       {# Build 10 layout variants by changing UL alignment and item order #}
       {% if v == 1 %}
       <ul class="navbar-nav mr-auto" data-dynamic-group="navbar">
-        {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}
-          {% with nav=STRUCTURE_DATA.navbar %}
-        <li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}"><a class="nav-link" id="{{ nav.homeLink.id }}" href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% if DYNAMIC_HTML_STRUCTURE %}&seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}{% elif DYNAMIC_HTML_STRUCTURE %}?seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" aria-label="{{ nav.homeLink.ariaLabel }}">{{ nav.homeLink.text }}</a></li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}"><a class="nav-link" id="{{ nav.aboutLink.id }}" href="{% url 'movieapp:about' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% if DYNAMIC_HTML_STRUCTURE %}&seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}{% elif DYNAMIC_HTML_STRUCTURE %}?seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" aria-label="{{ nav.aboutLink.ariaLabel }}">{{ nav.aboutLink.text }}</a></li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"><a class="nav-link" id="{{ nav.contactLink.id }}" href="{% url 'movieapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% if DYNAMIC_HTML_STRUCTURE %}&seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}{% elif DYNAMIC_HTML_STRUCTURE %}?seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" aria-label="{{ nav.contactLink.ariaLabel }}">{{ nav.contactLink.text }}</a></li>
-          {% endwith %}
-        {% else %}
         <li class="nav-item {% if request.resolver_match.url_name == 'index' %}active{% endif %}"><a class="nav-link" href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Home</a></li>
         <li class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}"><a class="nav-link" href="{% url 'movieapp:about' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">About Us</a></li>
         <li class="nav-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"><a class="nav-link" href="{% url 'movieapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Contact</a></li>
-        {% endif %}
       </ul>
       {% elif v == 2 %}
       <ul class="navbar-nav ml-auto" data-dynamic-group="navbar">
@@ -109,15 +92,8 @@
       </div>
       {% else %}
       <div class="auth-buttons ml-md-3">
-        {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}
-          {% with nav=STRUCTURE_DATA.navbar %}
-        <a href="{% url 'movieapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% if DYNAMIC_HTML_STRUCTURE %}&seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}{% elif DYNAMIC_HTML_STRUCTURE %}?seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="btn btn-signin" id="{{ nav.loginButton.id }}" aria-label="{{ nav.loginButton.ariaLabel }}"><i class="fas fa-sign-in-alt mr-1"></i>{{ nav.loginButton.text }}</a>
-        <a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% if DYNAMIC_HTML_STRUCTURE %}&seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}{% elif DYNAMIC_HTML_STRUCTURE %}?seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="btn btn-register" id="{{ nav.registerButton.id }}" aria-label="{{ nav.registerButton.ariaLabel }}"><i class="fas fa-user-plus mr-1"></i>{{ nav.registerButton.text }}</a>
-          {% endwith %}
-        {% else %}
         <a href="{% url 'movieapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-signin"><i class="fas fa-sign-in-alt mr-1"></i>Login</a>
         <a href="{% url 'movieapp:register' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-register"><i class="fas fa-user-plus mr-1"></i>Register</a>
-        {% endif %}
       </div>
       {% endif %}
     </div>

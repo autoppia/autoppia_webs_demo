@@ -14,7 +14,7 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 
 export default function MedicalRecordsPage() {
-  const { reorderElements, getElementAttributes, getText } = useSeedLayout();
+  const { reorderElements } = useSeedLayout();
   const [files, setFiles] = useState<File[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
@@ -74,7 +74,7 @@ export default function MedicalRecordsPage() {
   };
 
   const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-  const hasSeed = !!(sp?.get('seed-structure') || sp?.get('seed'));
+  const hasSeed = !!sp?.get('seed');
 
   const categories = ["all", "diagnostic", "preventive", "treatment", "monitoring"];
   const orderedCategories = hasSeed ? reorderElements(categories) : categories;
@@ -103,7 +103,7 @@ export default function MedicalRecordsPage() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-2xl font-semibold" {...getElementAttributes('mr-heading', 0)}>{getText('mr-heading', 'Medical Records')}</h1>
+      <h1 className="text-2xl font-semibold">Medical Records</h1>
 
       {/* Category Filter */}
       <div className="mt-6 flex flex-wrap gap-2">
@@ -117,11 +117,7 @@ export default function MedicalRecordsPage() {
               logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { category });
             }}
           >
-            {category === 'all' && getText('mr-filter-all', 'All')}
-            {category === 'diagnostic' && getText('mr-filter-diagnostic', 'Diagnostic')}
-            {category === 'preventive' && getText('mr-filter-preventive', 'Preventive')}
-            {category === 'treatment' && getText('mr-filter-treatment', 'Treatment')}
-            {category === 'monitoring' && getText('mr-filter-monitoring', 'Monitoring')}
+            {category.charAt(0).toUpperCase() + category.slice(1)}
           </Button>
           </DynamicElement>
         ))}
@@ -129,12 +125,12 @@ export default function MedicalRecordsPage() {
 
       {/* Upload Section */}
       <div className="mt-8 max-w-xl space-y-2">
-        <Label htmlFor="records">{getText('mr-upload-label', 'Upload additional files (PDF or images)')}</Label>
+        <Label htmlFor="records">Upload additional files (PDF or images)</Label>
         <div className="flex gap-2">
           <Input id="records" type="file" accept="application/pdf,image/*" multiple ref={fileRef} />
-          <Button {...getElementAttributes('mr-upload-button', 0)} onClick={() => addFiles(fileRef.current?.files ?? null)}>{getText('mr-upload-button', 'Upload Record')}</Button>
+          <Button onClick={() => addFiles(fileRef.current?.files ?? null)}>Upload Record</Button>
         </div>
-        <p className="text-sm text-muted-foreground">{getText('mr-files-note', 'Files are not stored. They only appear in the list below for this session.')}</p>
+        <p className="text-sm text-muted-foreground">Files are not stored. They only appear in the list below for this session.</p>
       </div>
 
       {/* Medical Records Grid */}
@@ -165,7 +161,7 @@ export default function MedicalRecordsPage() {
                 onClick={() => handleViewRecord(record)}
                 className="w-full"
               >
-                {getText('mr-view-details', 'View Details')}
+                View Details
               </Button>
             </CardContent>
             </Card>
@@ -176,7 +172,7 @@ export default function MedicalRecordsPage() {
       {/* Uploaded Files Section */}
       {files.length > 0 && (
         <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-4" {...getElementAttributes('mr-uploaded-heading', 0)}>{getText('mr-uploaded-heading', 'Uploaded Files')}</h2>
+          <h2 className="text-lg font-semibold mb-4">Uploaded Files</h2>
           <ul className="divide-y rounded-md border">
             {files.map((f, idx) => (
               <li key={`${f.name}-${idx}`} className="flex items-center justify-between gap-4 p-4">
@@ -195,7 +191,7 @@ export default function MedicalRecordsPage() {
                     });
                   }}
                 >
-                  {getText('mr-view-record', 'View Record')}
+                  View Record
                 </Button>
               </li>
             ))}
@@ -207,13 +203,13 @@ export default function MedicalRecordsPage() {
       {selectedRecord && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-start justify-between mb-4">
+            <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">{getTypeIcon(selectedRecord.type)}</span>
                 <h2 className="text-xl font-semibold">{selectedRecord.title}</h2>
               </div>
-                <Button variant="outline" onClick={() => setSelectedRecord(null)} {...getElementAttributes('mr-modal-close', 0)}>
-                  {getText('mr-modal-close', 'Close')}
+              <Button variant="outline" onClick={() => setSelectedRecord(null)}>
+                Close
               </Button>
             </div>
             
@@ -229,24 +225,24 @@ export default function MedicalRecordsPage() {
                   <DynamicElement key={b.key} elementType="record-modal-block" as="div" index={bi}>
                     {b.key === 'meta' && (
                       <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div><span className="font-medium">{getText('mr-modal-date', 'Date:')}</span> {selectedRecord.date}</div>
-                        <div><span className="font-medium">{getText('mr-modal-doctor', 'Doctor:')}</span> {selectedRecord.doctorName}</div>
-                        <div><span className="font-medium">{getText('mr-modal-facility', 'Facility:')}</span> {selectedRecord.facility}</div>
+                        <div><span className="font-medium">Date:</span> {selectedRecord.date}</div>
+                        <div><span className="font-medium">Doctor:</span> {selectedRecord.doctorName}</div>
+                        <div><span className="font-medium">Facility:</span> {selectedRecord.facility}</div>
                         <div>
-                          <span className="font-medium">{getText('mr-modal-status', 'Status:')}</span>
+                          <span className="font-medium">Status:</span>
                           <Badge className={`ml-2 ${getStatusColor(selectedRecord.status)}`}>{selectedRecord.status}</Badge>
                         </div>
                       </div>
                     )}
                     {b.key === 'desc' && (
                       <div>
-                        <span className="font-medium">{getText('mr-modal-description', 'Description:')}</span>
+                        <span className="font-medium">Description:</span>
                         <p className="mt-1 text-muted-foreground">{selectedRecord.description}</p>
                       </div>
                     )}
                     {b.key === 'values' && selectedRecord.values && (
                       <div>
-                        <span className="font-medium">{getText('mr-modal-results', 'Results/Values:')}</span>
+                        <span className="font-medium">Results/Values:</span>
                         <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
                           {Object.entries(selectedRecord.values).map(([key, value]) => (
                             <div key={key} className="flex justify-between p-2 bg-gray-50 rounded">

@@ -2,13 +2,15 @@
  * Enhanced Restaurants Data with AI Generation Support
  * 
  * This file provides both static and dynamic restaurant data generation
- * for the Auto Delivery application.
+ * for the Food Delivery application.
  */
 
 import type { Restaurant } from "@/data/restaurants";
 import { readJson, writeJson } from "@/shared/storage";
 import { 
-  generateRestaurantsWithFallback,
+  generateRestaurantsWithFallback, 
+  replaceAllRestaurants, 
+  addGeneratedRestaurants,
   isDataGenerationAvailable 
 } from "@/utils/restaurantDataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
@@ -195,7 +197,7 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
     
     // Prefer distributed selection to avoid category dominance
     const distributed = await fetchSeededSelection<Restaurant>({
-      projectKey: "web_7_autodelivery",
+      projectKey: "web_7_food_delivery",
       entityType: "restaurants",
       seedValue: seed,
       limit,
@@ -208,7 +210,7 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
     const selected = Array.isArray(distributed) && distributed.length > 0
       ? distributed
       : await fetchSeededSelection<Restaurant>({
-          projectKey: "web_7_autodelivery",
+          projectKey: "web_7_food_delivery",
           entityType: "restaurants",
           seedValue: seed,
           limit,
@@ -258,7 +260,7 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
 }
 
 // Cache management
-const CACHE_KEY = 'autodelivery_generated_restaurants_v1';
+const CACHE_KEY = 'fooddelivery_generated_restaurants_v1';
 
 export function readCachedRestaurants(): Restaurant[] | null {
   return readJson<Restaurant[]>(CACHE_KEY);
@@ -266,4 +268,57 @@ export function readCachedRestaurants(): Restaurant[] | null {
 
 export function writeCachedRestaurants(restaurants: Restaurant[]): void {
   writeJson(CACHE_KEY, restaurants);
+}
+
+export function clearCachedRestaurants(): void {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(CACHE_KEY);
+  }
+}
+
+// Helper functions for restaurant data access
+export function getRestaurantsByCuisine(cuisine: string, restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.cuisine === cuisine);
+}
+
+export function getRestaurantById(id: string, restaurants: Restaurant[] = originalRestaurants): Restaurant | undefined {
+  return restaurants.find(restaurant => restaurant.id === id);
+}
+
+export function getFeaturedRestaurants(restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.featured);
+}
+
+export function getTopRatedRestaurants(restaurants: Restaurant[] = originalRestaurants, minRating: number = 4.5): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.rating >= minRating);
+}
+
+export function searchRestaurants(query: string, restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  const lowercaseQuery = query.toLowerCase();
+  return restaurants.filter(restaurant => 
+    restaurant.name.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.description.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.cuisine.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.menu.some(item => 
+      item.name.toLowerCase().includes(lowercaseQuery) ||
+      item.description.toLowerCase().includes(lowercaseQuery)
+    )
+  );
+}
+
+export function getRestaurantStats(restaurants: Restaurant[] = originalRestaurants) {
+  const cuisines = [...new Set(restaurants.map(r => r.cuisine))];
+  const totalMenuItems = restaurants.reduce((sum, r) => sum + r.menu.length, 0);
+  const totalReviews = restaurants.reduce((sum, r) => sum + r.reviews.length, 0);
+  const averageRating = restaurants.reduce((sum, r) => sum + r.rating, 0) / restaurants.length;
+  
+  return {
+    totalRestaurants: restaurants.length,
+    totalCuisines: cuisines.length,
+    cuisines,
+    totalMenuItems,
+    totalReviews,
+    averageRating: Math.round(averageRating * 10) / 10,
+    featuredCount: restaurants.filter(r => r.featured).length
+  };
 }

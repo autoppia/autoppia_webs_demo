@@ -1,4 +1,9 @@
-import { getEffectiveLayoutConfig, isDynamicEnabled, hasSeedInUrl, hasSeedStructureInUrl } from "./seedLayout";
+import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+
+// Check if dynamic HTML is enabled via environment variable
+const isDynamicHtmlEnabled = (): boolean => {
+  return isDynamicEnabled();
+};
 
 // Dynamic data provider that manages calendar data and dynamic HTML state
 export class DynamicDataProvider {
@@ -6,7 +11,7 @@ export class DynamicDataProvider {
   private isEnabled: boolean = false;
 
   private constructor() {
-    this.isEnabled = isDynamicEnabled();
+    this.isEnabled = isDynamicHtmlEnabled();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -18,18 +23,6 @@ export class DynamicDataProvider {
 
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
-  }
-
-  // Check if layout is dynamic (requires seed in URL)
-  public isLayoutDynamicActive(): boolean {
-    // this.isEnabled already checks isDynamicEnabled(), so just check URL
-    return this.isEnabled && hasSeedInUrl();
-  }
-
-  // Check if HTML structure is dynamic (requires seed-structure in URL)
-  public isStructureDynamicActive(): boolean {
-    // this.isEnabled already checks isDynamicEnabled(), so just check URL
-    return this.isEnabled && hasSeedStructureInUrl();
   }
 
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
@@ -179,8 +172,6 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Helper functions for easy access
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const isLayoutDynamicActive = () => dynamicDataProvider.isLayoutDynamicActive();
-export const isStructureDynamicActive = () => dynamicDataProvider.isStructureDynamicActive();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
 

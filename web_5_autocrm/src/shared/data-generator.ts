@@ -165,13 +165,9 @@ export async function generateProjectData(
   
   try {
     const baseUrl = getApiBaseUrl();
-    console.log(`🔗 Generating data for project: ${projectKey}, entity: ${config.dataType}, count: ${count}`);
-    console.log(`🌐 API Base URL: ${baseUrl}`);
     const randomSeed = Math.floor(Math.random() * 1_000_000_000);
     const runId = `${projectKey}-${Date.now()}-${randomSeed}`;
-    const url = `${baseUrl}/datasets/generate`;
-    console.log(`📤 Making request to: ${url}`);
-    const response = await fetch(url, {
+    const response = await fetch(`${baseUrl}/datasets/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -193,31 +189,26 @@ export async function generateProjectData(
     });
 
     if (!response.ok) {
-      const errorText = await response.text().catch(() => 'Unable to read error response');
-      console.error(`❌ API request failed with status ${response.status}: ${errorText}`);
-      throw new Error(`API request failed: ${response.status} - ${errorText}`);
+      throw new Error(`API request failed: ${response.status}`);
     }
 
     const result = await response.json();
     const generationTime = (Date.now() - startTime) / 1000;
-    console.log(`✅ Data generation successful: ${result.count || 0} items generated in ${generationTime.toFixed(2)}s`);
 
     return {
       success: true,
-      data: result.generated_data || [],
-      count: result.count || 0,
+      data: result.generated_data,
+      count: result.count,
       generationTime,
     };
   } catch (error) {
     const generationTime = (Date.now() - startTime) / 1000;
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    console.error(`❌ Data generation failed for ${projectKey}:`, errorMessage);
     return {
       success: false,
       data: [],
       count: 0,
       generationTime,
-      error: errorMessage
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 }

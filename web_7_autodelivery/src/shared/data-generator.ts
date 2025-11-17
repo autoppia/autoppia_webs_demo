@@ -27,7 +27,7 @@ export interface ProjectDataConfig {
 
 // Project-specific configurations
 export const PROJECT_CONFIGS: Record<string, ProjectDataConfig> = {
-  'web_7_auto_delivery': {
+  'web_7_food_delivery': {
     projectName: 'Food Delivery Platform',
     dataType: 'restaurants',
     interfaceDefinition: `

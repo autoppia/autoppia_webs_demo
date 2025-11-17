@@ -1,23 +1,10 @@
 {% extends 'base.html' %}
-{% load custom_filters %}
 {% block body %}
 <div class="container mt-5 mb-5">
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 mb-4" 
-                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.title.id' }}"
-                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.title.aria-label' }}"
-                {% endif %}>
-                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.title.text' }}{% else %}Contact Us{% endif %}
-            </h1>
-            <p class="lead"
-               {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-               id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.subtitle.id' }}"
-               aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.subtitle.aria-label' }}"
-               {% endif %}>
-                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.subtitle.text' }}{% else %}We'd love to hear from you!{% endif %}
-            </p>
+            <h1 class="display-4 mb-4">Contact Us</h1>
+            <p class="lead">We'd love to hear from you!</p>
             <hr class="my-4">
             <p class="mb-4">Have questions, feedback, or suggestions? Fill out the form below and our team will get back to you as soon as possible. We value your input and are committed to making BookStore the best platform for book enthusiasts.</p>
         </div>
@@ -27,13 +14,7 @@
         <div class="col-md-6">
             <div class="card border-0 shadow mb-4">
                 <div class="card-body p-4">
-                    <h2 class="h3 mb-4" 
-                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                        id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.form_title.id' }}"
-                        aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.form_title.aria-label' }}"
-                        {% endif %}>
-                        <i class="fas fa-envelope mr-2 text-success"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.form_title.text' }}{% else %}Send us a message{% endif %}
-                    </h2>
+                    <h2 class="h3 mb-4"><i class="fas fa-envelope mr-2 text-success"></i>Send us a message</h2>
 
                     {% if messages %}
                         {% for message in messages %}
@@ -48,17 +29,10 @@
 
                     <form method="POST">
                         {% csrf_token %}
-                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}
-                        <input type="hidden" name="seed-structure" value="{{ SEED_STRUCTURE }}">
-                        {% endif %}
 
                         <div class="form-group">
-                            <label for="{{ form.name.id_for_label }}"
-                                   {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                   id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.name_label.id' }}"
-                                   aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.name_label.aria-label' }}"
-                                   {% endif %}>
-                                <i class="fas fa-user mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.name_label.text' }}{% else %}Your Name{% endif %}
+                            <label for="{{ form.name.id_for_label }}">
+                                <i class="fas fa-user mr-1"></i> Your Name
                             </label>
                             {{ form.name }}
                             {% if form.name.errors %}
@@ -67,12 +41,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="{{ form.email.id_for_label }}"
-                                   {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                   id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.email_label.id' }}"
-                                   aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.email_label.aria-label' }}"
-                                   {% endif %}>
-                                <i class="fas fa-envelope mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.email_label.text' }}{% else %}Email Address{% endif %}
+                            <label for="{{ form.email.id_for_label }}">
+                                <i class="fas fa-envelope mr-1"></i> Email Address
                             </label>
                             {{ form.email }}
                             {% if form.email.errors %}
@@ -81,12 +51,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="{{ form.subject.id_for_label }}"
-                                   {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                   id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.subject_label.id' }}"
-                                   aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.subject_label.aria-label' }}"
-                                   {% endif %}>
-                                <i class="fas fa-tag mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.subject_label.text' }}{% else %}Subject{% endif %}
+                            <label for="{{ form.subject.id_for_label }}">
+                                <i class="fas fa-tag mr-1"></i> Subject
                             </label>
                             {{ form.subject }}
                             {% if form.subject.errors %}
@@ -95,12 +61,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="{{ form.message.id_for_label }}"
-                                   {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                   id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.message_label.id' }}"
-                                   aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.message_label.aria-label' }}"
-                                   {% endif %}>
-                                <i class="fas fa-comment mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.message_label.text' }}{% else %}Message{% endif %}
+                            <label for="{{ form.message.id_for_label }}">
+                                <i class="fas fa-comment mr-1"></i> Message
                             </label>
                             {{ form.message }}
                             {% if form.message.errors %}
@@ -109,13 +71,8 @@
                         </div>
 
                         <div class="form-group mt-4">
-                            <button type="submit" 
-                                    class="btn btn-success btn-block"
-                                    {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                    id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.send_button.id' }}"
-                                    aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.send_button.aria-label' }}"
-                                    {% endif %}>
-                                <i class="fas fa-paper-plane mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.send_button.text' }}{% else %}Send Message{% endif %}
+                            <button type="submit" class="btn btn-success btn-block">
+                                <i class="fas fa-paper-plane mr-2"></i>Send Message
                             </button>
                         </div>
                     </form>
@@ -126,26 +83,14 @@
         <div class="col-md-6">
             <div class="card border-0 shadow mb-4">
                 <div class="card-body p-4">
-                    <h2 class="h3 mb-4" 
-                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                        id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.find_us.id' }}"
-                        aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.find_us.aria-label' }}"
-                        {% endif %}>
-                        <i class="fas fa-map-marker-alt mr-2 text-success"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.find_us.text' }}{% else %}Find Us{% endif %}
-                    </h2>
+                    <h2 class="h3 mb-4"><i class="fas fa-map-marker-alt mr-2 text-success"></i>Find Us</h2>
 
                     <div class="contact-info-item">
                         <div class="icon">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
                         <div>
-                            <h5 class="mb-1" 
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.location.id' }}"
-                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.location.aria-label' }}"
-                                {% endif %}>
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.location.text' }}{% else %}Our Location{% endif %}
-                            </h5>
+                            <h5 class="mb-1">Our Location</h5>
                             <p class="mb-0">123 Movie Street, Cinema District<br>Los Angeles, CA 90001</p>
                         </div>
                     </div>
@@ -155,13 +100,7 @@
                             <i class="fas fa-phone"></i>
                         </div>
                         <div>
-                            <h5 class="mb-1" 
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.phone.id' }}"
-                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.phone.aria-label' }}"
-                                {% endif %}>
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.phone.text' }}{% else %}Phone Number{% endif %}
-                            </h5>
+                            <h5 class="mb-1">Phone Number</h5>
                             <p class="mb-0">(555) 123-4567</p>
                         </div>
                     </div>
@@ -171,13 +110,7 @@
                             <i class="fas fa-envelope"></i>
                         </div>
                         <div>
-                            <h5 class="mb-1" 
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.contact_email.id' }}"
-                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.contact_email.aria-label' }}"
-                                {% endif %}>
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.contact_email.text' }}{% else %}Email Address{% endif %}
-                            </h5>
+                            <h5 class="mb-1">Email Address</h5>
                             <p class="mb-0">info@cinestore.com</p>
                         </div>
                     </div>
@@ -187,13 +120,7 @@
                             <i class="fas fa-clock"></i>
                         </div>
                         <div>
-                            <h5 class="mb-1" 
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.hours.id' }}"
-                                aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.hours.aria-label' }}"
-                                {% endif %}>
-                                {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.hours.text' }}{% else %}Business Hours{% endif %}
-                            </h5>
+                            <h5 class="mb-1">Business Hours</h5>
                             <p class="mb-0">Monday - Friday: 9AM - 5PM<br>Saturday - Sunday: Closed</p>
                         </div>
                     </div>
@@ -202,29 +129,14 @@
 
             <div class="card border-0 shadow">
                 <div class="card-body p-4">
-                    <h2 class="h3 mb-4" 
-                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                        id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.faq.id' }}"
-                        aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.faq.aria-label' }}"
-                        {% endif %}>
-                        <i class="fas fa-question-circle mr-2 text-success"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.faq.text' }}{% else %}FAQs{% endif %}
-                    </h2>
+                    <h2 class="h3 mb-4"><i class="fas fa-question-circle mr-2 text-success"></i>FAQs</h2>
 
                     <div class="accordion" id="faqAccordion">
                         <div class="card border-0 mb-3">
                             <div class="card-header bg-light" id="faqOne">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link text-dark collapsed" 
-                                            type="button" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseOne" 
-                                            aria-expanded="false" 
-                                            aria-controls="collapseOne"
-                                            {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                            id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.faq_add_book.id' }}"
-                                            aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.faq_add_book.aria-label' }}"
-                                            {% endif %}>
-                                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.faq_add_book.text' }}{% else %}How do I add a new book?{% endif %}
+                                    <button class="btn btn-link text-dark collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        How do I add a new book?
                                     </button>
                                 </h5>
                             </div>
@@ -238,17 +150,8 @@
                         <div class="card border-0 mb-3">
                             <div class="card-header bg-light" id="faqTwo">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link text-dark collapsed" 
-                                            type="button" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseTwo" 
-                                            aria-expanded="false" 
-                                            aria-controls="collapseTwo"
-                                            {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                            id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.faq_comments.id' }}"
-                                            aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.faq_comments.aria-label' }}"
-                                            {% endif %}>
-                                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.faq_comments.text' }}{% else %}Do I need an account to add comments?{% endif %}
+                                    <button class="btn btn-link text-dark collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Do I need an account to add comments?
                                     </button>
                                 </h5>
                             </div>
@@ -262,17 +165,8 @@
                         <div class="card border-0">
                             <div class="card-header bg-light" id="faqThree">
                                 <h5 class="mb-0">
-                                    <button class="btn btn-link text-dark collapsed" 
-                                            type="button" 
-                                            data-toggle="collapse" 
-                                            data-target="#collapseThree" 
-                                            aria-expanded="false" 
-                                            aria-controls="collapseThree"
-                                            {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                            id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'contact.faq_contribute.id' }}"
-                                            aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'contact.faq_contribute.aria-label' }}"
-                                            {% endif %}>
-                                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'contact.faq_contribute.text' }}{% else %}How can I contribute to BookStore?{% endif %}
+                                    <button class="btn btn-link text-dark collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        How can I contribute to BookStore?
                                     </button>
                                 </h5>
                             </div>
