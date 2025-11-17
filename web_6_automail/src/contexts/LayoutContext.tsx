@@ -4,15 +4,40 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { LayoutVariant, getLayoutVariant, getSeedFromUrl } from '@/library/layoutVariants';
 import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 
+declare global {
+  interface Window {
+    __automailV2Seed?: number | null;
+  }
+  interface WindowEventMap {
+    "automail:v2SeedChange": CustomEvent<{ seed: number | null }>;
+  }
+}
+
 interface LayoutContextType {
   currentVariant: LayoutVariant;
   seed: number;
   setSeed: (seed: number) => void;
   updateUrlManually: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
+  v2Seed: number | null;
 }
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
+
+const isDbModeEnabled = (): boolean => {
+  const raw = (process.env.NEXT_PUBLIC_ENABLE_DB_MODE || process.env.ENABLE_DB_MODE || "").toString().toLowerCase();
+  return raw === "true";
+};
+
+const getV2SeedFromUrl = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("v2-seed");
+  if (!raw) return null;
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isFinite(parsed) || parsed < 1 || parsed > 300) return null;
+  return parsed;
+};
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
   // Initialize with seed from localStorage or URL
@@ -40,6 +65,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
   };
 
   const [seed, setSeed] = useState(getInitialSeed);
+  const [v2Seed, setV2Seed] = useState<number | null>(() => (isDbModeEnabled() ? getV2SeedFromUrl() : null));
   const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(getInitialSeed()));
   const [isUserAction, setIsUserAction] = useState(false);
 
@@ -61,6 +87,27 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run only once on mount
+
+  useEffect(() => {
+    if (!isDbModeEnabled()) {
+      setV2Seed(null);
+      return;
+    }
+    const syncV2Seed = () => {
+      const nextSeed = getV2SeedFromUrl();
+      setV2Seed(nextSeed);
+    };
+    syncV2Seed();
+    window.addEventListener("popstate", syncV2Seed);
+    return () => window.removeEventListener("popstate", syncV2Seed);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.__automailV2Seed = v2Seed ?? null;
+    window.dispatchEvent(new CustomEvent("automail:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
+    console.log("[LayoutContext] v2-seed set", { v2Seed });
+  }, [v2Seed]);
 
   // Listen for URL changes (back/forward buttons)
   useEffect(() => {
@@ -153,20 +200,43 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
 
   // Helper function to generate navigation URLs with seed parameter
   const getNavigationUrl = (path: string): string => {
-    // If path already has query params
-    if (path.includes('?')) {
-      // Check if seed already exists in the URL
-      if (path.includes('seed=')) {
-        return path;
-      }
-      return `${path}&seed=${seed}`;
+    if (!path) return path;
+    if (path.startsWith("http")) return path;
+
+    const [base, queryString] = path.split("?");
+    const params = new URLSearchParams(queryString || "");
+
+    if (!params.has("seed")) {
+      params.set("seed", seed.toString());
     }
-    // Add seed as first query param
-    return `${path}?seed=${seed}`;
+
+    if (typeof window !== "undefined") {
+      const current = new URLSearchParams(window.location.search);
+      const seedStructure = current.get("seed-structure");
+      if (seedStructure && !params.has("seed-structure")) {
+        params.set("seed-structure", seedStructure);
+      }
+    }
+
+    if (v2Seed !== null) {
+      params.set("v2-seed", v2Seed.toString());
+    } else {
+      params.delete("v2-seed");
+    }
+
+    const finalQuery = params.toString();
+    return finalQuery ? `${base}?${finalQuery}` : base;
   };
 
   return (
-    <LayoutContext.Provider value={{ currentVariant, seed, setSeed: handleSetSeed, updateUrlManually, getNavigationUrl }}>
+    <LayoutContext.Provider value={{
+      currentVariant,
+      seed,
+      setSeed: handleSetSeed,
+      updateUrlManually,
+      getNavigationUrl,
+      v2Seed,
+    }}>
       {children}
     </LayoutContext.Provider>
   );

@@ -24,6 +24,7 @@ import {
 } from "@/library/dataset";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useLayout } from "@/contexts/LayoutContext";
 
 interface EmailState {
   emails: Email[];
@@ -348,17 +349,34 @@ const tokenize = (str: string) => {
 
 export function EmailProvider({children}: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(emailReducer, initialState);
+    const { v2Seed } = useLayout();
 
-    // Initialize emails on client side to avoid hydration mismatch
     useEffect(() => {
-        if (state.emails.length === 0) {
-            // Wait for data to be ready, then load from DynamicDataProvider
+        let isMounted = true;
+        const unsubscribe = dynamicDataProvider.subscribe((emails) => {
+            if (isMounted) {
+                dispatch({ type: "SET_EMAILS", payload: emails });
+            }
+        });
+
+        if (dynamicDataProvider.isReady()) {
+            dispatch({ type: "SET_EMAILS", payload: dynamicDataProvider.getEmails() });
+        } else {
             dynamicDataProvider.whenReady().then(() => {
-                const loadedEmails = dynamicDataProvider.getEmails();
-                dispatch({type: "SET_EMAILS", payload: loadedEmails});
+                if (!isMounted) return;
+                dispatch({ type: "SET_EMAILS", payload: dynamicDataProvider.getEmails() });
             });
         }
-    }, [state.emails.length]);
+
+        return () => {
+            isMounted = false;
+            unsubscribe();
+        };
+    }, []);
+
+    useEffect(() => {
+        dynamicDataProvider.refreshEmailsForSeed(v2Seed ?? null);
+    }, [v2Seed]);
 
     // Email actions
     const toggleStar = useCallback(

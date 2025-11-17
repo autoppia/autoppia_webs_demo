@@ -1,6 +1,7 @@
 import type { Email, EmailFolder } from "@/types/email";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
 import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 // Check if dynamic HTML is enabled via environment variable
@@ -17,6 +18,7 @@ export class DynamicDataProvider {
   private ready: boolean = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
+  private listeners = new Set<(emails: Email[]) => void>();
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
@@ -30,6 +32,13 @@ export class DynamicDataProvider {
     
     // Initialize emails with data generation if enabled
     this.initializeEmails();
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("automail:v2SeedChange", (event) => {
+        const detail = (event as CustomEvent<{ seed: number | null }>).detail;
+        this.refreshEmailsForSeed(detail?.seed ?? null);
+      });
+    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -42,27 +51,16 @@ export class DynamicDataProvider {
   private async initializeEmails(): Promise<void> {
     try {
       // Try DB mode first if enabled
-      const dbEmails = await loadEmailsFromDb();
+      const runtimeSeed = this.getRuntimeV2Seed();
+      const dbEmails = await loadEmailsFromDb(runtimeSeed ?? undefined);
       if (dbEmails.length > 0) {
-        this.emails = dbEmails;
-        writeCachedEmails(this.emails);
-        this.ready = true;
-        this.resolveReady();
+        this.setEmails(dbEmails);
         return;
       }
       
       // Fallback to existing behavior
       const initializedEmails = await initializeEmails();
-      this.emails = initializedEmails;
-      if (this.emails.length > 0) {
-        writeCachedEmails(this.emails);
-      }
-
-      // Mark as ready only when either generation is disabled or we have generated data
-      if (!this.dataGenerationEnabled || this.emails.length > 0) {
-        this.ready = true;
-        this.resolveReady();
-      }
+      this.setEmails(initializedEmails);
 
     } catch (error) {
       // Keep silent in production; initialize readiness when generation off
@@ -84,6 +82,13 @@ export class DynamicDataProvider {
 
   public getEmails(): Email[] {
     return this.emails; // Return empty until ready when generation is enabled
+  }
+
+  public subscribe(listener: (emails: Email[]) => void): () => void {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   public getEmailById(id: string): Email | undefined {
@@ -442,6 +447,50 @@ export class DynamicDataProvider {
     });
     
     return Array.from(threadMap.values());
+  }
+
+  private getRuntimeV2Seed(): number | null {
+    if (typeof window === "undefined") return null;
+    const seed = (window as any).__automailV2Seed;
+    if (typeof seed === "number" && Number.isFinite(seed) && seed >= 1 && seed <= 300) {
+      return seed;
+    }
+    return null;
+  }
+
+  private setEmails(nextEmails: Email[]): void {
+    this.emails = nextEmails;
+    if (this.emails.length > 0) {
+      writeCachedEmails(this.emails);
+    }
+    this.ready = true;
+    this.resolveReady();
+    this.notifyListeners();
+  }
+
+  private notifyListeners(): void {
+    const snapshot = [...this.emails];
+    this.listeners.forEach((listener) => {
+      try {
+        listener(snapshot);
+      } catch (err) {
+        console.warn("[dynamicDataProvider] listener error", err);
+      }
+    });
+  }
+
+  public async refreshEmailsForSeed(seedOverride?: number | null): Promise<void> {
+    if (!isDbLoadModeEnabled()) return;
+    try {
+      const runtimeSeed = typeof seedOverride === "number" ? seedOverride : this.getRuntimeV2Seed();
+      console.log("[dynamicDataProvider] refreshing emails for v2 seed", runtimeSeed);
+      const dbEmails = await loadEmailsFromDb(runtimeSeed ?? undefined);
+      if (dbEmails.length > 0) {
+        this.setEmails(dbEmails);
+      }
+    } catch (err) {
+      console.warn("[dynamicDataProvider] refreshEmailsForSeed failed", err);
+    }
   }
 
   private matchesFolder(email: Email, folder: EmailFolder): boolean {

@@ -31,11 +31,13 @@ export default function RootLayout({
       <head />
       <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
         <ThemeProvider>
-          <EmailProvider>
-            <DynamicStructureProvider>
-              <LayoutProvider>{children}</LayoutProvider>
-            </DynamicStructureProvider>
-          </EmailProvider>
+          <LayoutProvider>
+            <EmailProvider>
+              <DynamicStructureProvider>
+                {children}
+              </DynamicStructureProvider>
+            </EmailProvider>
+          </LayoutProvider>
         </ThemeProvider>
       </body>
     </html>

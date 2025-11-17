@@ -328,16 +328,17 @@ export async function initializeEmails(): Promise<Email[]> {
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
-export async function loadEmailsFromDb(): Promise<Email[]> {
+export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Email[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
   
   try {
-    const seed = getSeedValueFromEnv(1);
+    const fallbackSeed = getSeedValueFromEnv(1);
+    const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : fallbackSeed;
     const limit = 100;
     // Prefer distributed selection to avoid category dominance (e.g., primary only)
-    const distributed = await fetchSeededSelection<Email>({
+      const distributed = await fetchSeededSelection<Email>({
       projectKey: "web_6_automail",
       entityType: "emails",
       seedValue: seed,
