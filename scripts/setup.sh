@@ -211,17 +211,10 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         echo "[INFO] dynamic version $_dv enabled: ENABLE_DYNAMIC_HTML=true (seeds + layout variants)"
         ;;
       v2)
-        # v2 enables data generation system
-        # Mode selection:
-        #   - If ENABLE_DB_MODE=true: DB mode (load from database)
-        #   - If ENABLE_DB_MODE=false: AI generation mode (generate on-the-fly)
-        # By default, if no --enable_db_mode specified, use AI generation
-        if [ "$ENABLE_DB_MODE" != "true" ]; then
-          ENABLE_DATA_GENERATION=true
-          echo "[INFO] dynamic version $_dv enabled: Data generation system (AI generation mode)"
-        else
-          echo "[INFO] dynamic version $_dv enabled: Data generation system (DB mode)"
-        fi
+        # v2 now maps directly to DB mode (seeded datasets)
+        ENABLE_DB_MODE=true
+        ENABLE_DATA_GENERATION=false
+        echo "[INFO] dynamic version $_dv enabled: Data generation system (DB mode with seeded datasets)"
         ;;
       v3)
         ENABLE_DYNAMIC_HTML_STRUCTURE=true
