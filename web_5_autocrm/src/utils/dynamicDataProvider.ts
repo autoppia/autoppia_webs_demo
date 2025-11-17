@@ -65,8 +65,12 @@ export class DynamicDataProvider {
   private async initializeData(): Promise<void> {
     try {
       // Try DB mode first if enabled
-      const dbClients = await loadClientsFromDb();
-      const dbMatters = await loadMattersFromDb();
+      const runtimeSeed = (typeof window !== "undefined" ? (window as any).__autocrmV2Seed : null) as number | null;
+      if (runtimeSeed) {
+        console.log("[DynamicDataProvider] Using runtime v2Seed for DB load:", runtimeSeed);
+      }
+      const dbClients = await loadClientsFromDb(runtimeSeed ?? undefined);
+      const dbMatters = await loadMattersFromDb(runtimeSeed ?? undefined);
       if (dbClients.length > 0) {
         this.clients = dbClients;
         writeCachedClients(this.clients);

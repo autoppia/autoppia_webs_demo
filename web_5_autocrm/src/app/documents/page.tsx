@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_FILES } from "@/library/dataset";
@@ -7,11 +7,49 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useProjectData } from "@/shared/universal-loader";
+import { useSeed } from "@/context/SeedContext";
+
+const normalizeFile = (file: any, index: number) => ({
+  id: file?.id ?? index,
+  name: file?.name ?? `Document ${index + 1}`,
+  size: file?.size ?? "—",
+  version: file?.version ?? "v1",
+  updated: file?.updated ?? "Today",
+  status: file?.status ?? "Draft",
+});
+
+const LoadingNotice = ({ message }: { message: string }) => (
+  <div className="flex items-center gap-2 text-sm text-zinc-500">
+    <span className="h-2 w-2 rounded-full bg-accent-forest animate-ping" />
+    <span>{message}</span>
+  </div>
+);
 
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
-  const [files, setFiles] = useState(DEMO_FILES);
-  const [error] = useState<string | null>(null);
+  const { v2Seed } = useSeed();
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "files",
+    seedValue: v2Seed ?? undefined,
+  });
+  console.log("[DocumentsPage] API response", {
+    seed: v2Seed ?? null,
+    count: data?.length ?? 0,
+    isLoading,
+    error,
+    sample: (data || []).slice(0, 3),
+  });
+  const normalizedDemo = useMemo(() => DEMO_FILES.map((f, idx) => normalizeFile(f, idx)), []);
+  const normalizedApi = useMemo(() => (data || []).map((f, idx) => normalizeFile(f, idx)), [data]);
+  const resolvedFiles = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const [files, setFiles] = useState(resolvedFiles);
+  useEffect(() => {
+    if (isLoading) return;
+    setFiles(resolvedFiles);
+  }, [resolvedFiles, isLoading]);
+  const apiError: string | null = error ?? null;
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -74,6 +112,10 @@ export default function DocumentsPage() {
         </h1>
       </DynamicElement>
 
+      {isLoading && (
+        <LoadingNotice message={getText("loading_message") ?? "Loading documents..."} />
+      )}
+
       <DynamicElement
         elementType="section"
         index={1}
@@ -93,8 +135,11 @@ export default function DocumentsPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {error && (
-          <div className="col-span-full text-red-600">Failed to load documents: {error}</div>
+        {apiError && (
+          <div className="col-span-full text-red-600">Failed to load documents: {apiError}</div>
+        )}
+        {isLoading && files.length === 0 && (
+          <div className="col-span-full text-zinc-500">{getText("loading_message") ?? "Loading documents..."}</div>
         )}
         {files.map((file, index) => (
           <DynamicItem key={file.id} index={index} className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition">

@@ -12,6 +12,7 @@ import { useSeedVariation } from "@/library/utils";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
+import { useSeed } from "@/context/SeedContext";
 
 type RestaurantView = {
   id: string;
@@ -28,6 +29,7 @@ type RestaurantView = {
 export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const { v2Seed } = useSeed();
 
   const restaurantId = params.restaurantId as string;
   const reservationTimeParam = decodeURIComponent(params.time as string);
@@ -91,7 +93,7 @@ export default function Page() {
   };
 
   useEffect(() => {
-    initializeRestaurants().then(() => {
+    initializeRestaurants(v2Seed ?? undefined).then(() => {
       const list = getRestaurants();
       const found = list.find((x) => x.id === restaurantId) || list[0];
       if (found) {
@@ -109,7 +111,7 @@ export default function Page() {
         setData(mapped);
       }
     });
-  }, [restaurantId]);
+  }, [restaurantId, v2Seed]);
 
   useEffect(() => {
     const computedFullDate = reservationDateParam

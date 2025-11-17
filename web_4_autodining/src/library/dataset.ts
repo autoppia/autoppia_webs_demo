@@ -619,17 +619,32 @@ function writeCachedRestaurants(items: RestaurantGenerated[]): void {
 
 // Normalization
 function normalizeRestaurants(items: RestaurantGenerated[]): RestaurantGenerated[] {
-  return items.map((r, index) => ({
-    id: r.id || `gen-${index + 1}`,
-    name: r.name || `Restaurant ${index + 1}`,
-    image: r.image?.startsWith("/images/") ? r.image : `/images/restaurant${(index % 19) + 1}.jpg`,
-    cuisine: r.cuisine || "International",
-    area: r.area || "Downtown",
-    reviews: r.reviews ?? 0,
-    stars: r.stars ?? 4,
-    price: r.price || "$$",
-    bookings: r.bookings ?? 0,
-  }));
+  return items.map((r, index) => {
+    const fallbackName = (r as any)?.namepool;
+    const normalizedName = typeof r.name === "string" && r.name.trim().length > 0
+      ? r.name.trim()
+      : typeof fallbackName === "string" && fallbackName.trim().length > 0
+        ? fallbackName.trim()
+        : `Restaurant ${index + 1}`;
+
+    const providedImage = r.image;
+    const normalizedImage =
+      typeof providedImage === "string" && providedImage.trim().length > 0
+        ? providedImage
+        : `/images/restaurant${(index % 19) + 1}.jpg`;
+
+    return {
+      id: r.id || `gen-${index + 1}`,
+      name: normalizedName,
+      image: normalizedImage,
+      cuisine: r.cuisine || (r as any)?.cuisine || "International",
+      area: r.area || (r as any)?.area || "Downtown",
+      reviews: r.reviews ?? 0,
+      stars: r.stars ?? 4,
+      price: r.price || (r as any)?.staticPrices || "$$",
+      bookings: r.bookings ?? (r as any)?.staticBookings ?? 0,
+    };
+  });
 }
 
 export let dynamicRestaurants: RestaurantGenerated[] = [];
@@ -650,8 +665,61 @@ export function getRestaurants(): RestaurantGenerated[] {
     }));
 }
 
-export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
-  // If DB mode is enabled, skip the local cache so changes take effect immediately
+export async function initializeRestaurants(v2SeedValue?: number | null): Promise<RestaurantGenerated[]> {
+  // Check if v2 (DB mode) is enabled
+  let dbModeEnabled = false;
+  try {
+    const { isDbLoadModeEnabled } = await import("@/shared/seeded-loader");
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+
+  // If v2 is enabled, check if v2-seed is provided
+  if (dbModeEnabled) {
+    // If v2-seed is provided, load from DB (skip cache to ensure fresh data for each seed)
+    if (v2SeedValue !== null && v2SeedValue !== undefined) {
+      try {
+        // Clear existing restaurants to force fresh load
+        dynamicRestaurants = [];
+        const { fetchSeededSelection } = await import("@/shared/seeded-loader");
+        const fromDb = await fetchSeededSelection<RestaurantGenerated>({
+          projectKey: "web_4_autodining",
+          entityType: "restaurants",
+          seedValue: v2SeedValue,
+          limit: 100,
+          method: "distribute",
+          filterKey: "cuisine",
+        });
+        console.log("Fetched from DB with v2-seed:", v2SeedValue, fromDb);
+        if (fromDb && fromDb.length > 0) {
+          dynamicRestaurants = normalizeRestaurants(fromDb);
+          // Don't cache when using v2-seed to ensure each seed gets fresh data
+          // writeCachedRestaurants(dynamicRestaurants);
+          return dynamicRestaurants;
+        }
+      } catch (err) {
+        console.warn("[autodining] DB load with v2-seed failed:", err);
+      }
+    }
+    // If v2 is enabled but no v2-seed provided, use static data
+    console.log("[autodining] v2 enabled but no v2-seed provided, using static data");
+    dynamicRestaurants = normalizeRestaurants(
+      RestaurantsData.map((item, index) => ({
+        id: `restaurant-${item.id}`,
+        name: item.namepool,
+        image: `/images/restaurant${(index % 19) + 1}.jpg`,
+        stars: item.staticStars,
+        reviews: item.staticReviews,
+        cuisine: item.cuisine,
+        price: item.staticPrices,
+        bookings: item.staticBookings,
+        area: item.area,
+      })) as unknown as RestaurantGenerated[]
+    );
+    writeCachedRestaurants(dynamicRestaurants);
+    return dynamicRestaurants;
+  }
+
+  // If DB mode is enabled (legacy check), skip the local cache so changes take effect immediately
   let skipCache = false;
   try {
     const { isDbLoadModeEnabled } = await import("@/shared/seeded-loader");
@@ -666,7 +734,7 @@ export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
       return dynamicRestaurants;
     }
   }
-  // DB mode check and fetch
+  // DB mode check and fetch (legacy path - when DB mode is enabled but not v2)
   try {
     const { isDbLoadModeEnabled, fetchPoolInfo, fetchSeededSelection, getSeedValueFromEnv } = await import("@/shared/seeded-loader");
     console.log("isDbLoadModeEnabled: ", isDbLoadModeEnabled());
@@ -703,7 +771,7 @@ export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
   } catch (err) {
     console.warn("[autodining] DB load attempt failed:", err);
   }
-  // Generation fallback
+  // Generation fallback (only if data generation is enabled, which should be false when v2 is enabled)
   try {
     const { isDataGenerationEnabled, generateProjectData } = await import("@/shared/data-generator");
     console.log("isDataGenerationEnabled: ", isDataGenerationEnabled());
@@ -736,6 +804,19 @@ export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
   } catch (err) {
     console.warn("[autodining] Data generation request failed:", err);
   }
-  dynamicRestaurants = [];
+  // Final fallback to static data
+  dynamicRestaurants = normalizeRestaurants(
+    RestaurantsData.map((item, index) => ({
+      id: `restaurant-${item.id}`,
+      name: item.namepool,
+      image: `/images/restaurant${(index % 19) + 1}.jpg`,
+      stars: item.staticStars,
+      reviews: item.staticReviews,
+      cuisine: item.cuisine,
+      price: item.staticPrices,
+      bookings: item.staticBookings,
+      area: item.area,
+    })) as unknown as RestaurantGenerated[]
+  );
   return dynamicRestaurants;
 }

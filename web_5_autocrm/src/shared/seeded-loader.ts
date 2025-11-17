@@ -40,12 +40,23 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
   }
 
   const url = `${baseUrl}/datasets/load?${params.toString()}`;
+  console.log("[fetchSeededSelection] request", { url, projectKey: options.projectKey, entityType: options.entityType, seed });
   const resp = await fetch(url, { method: "GET" });
   if (!resp.ok) {
+    const body = await resp.text().catch(() => "");
+    console.error("[fetchSeededSelection] request failed", { status: resp.status, body });
     throw new Error(`Seeded selection request failed: ${resp.status}`);
   }
   const json = await resp.json();
-  return (json?.data ?? []) as T[];
+  const data = (json?.data ?? []) as T[];
+  console.log("[fetchSeededSelection] response", {
+    projectKey: options.projectKey,
+    entityType: options.entityType,
+    seed,
+    count: data.length,
+    sample: data.slice(0, 3),
+  });
+  return data;
 }
 
 
