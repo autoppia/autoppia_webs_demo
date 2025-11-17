@@ -1,11 +1,28 @@
 import type { Product } from "@/context/CartContext";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
-import { products, initializeProducts, loadProductsFromDb, writeCachedProducts, readCachedProducts } from "@/data/products-enhanced";
-import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { initializeProducts } from "@/data/products-enhanced";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
   return isDynamicEnabled();
+};
+
+const isV2DbModeEnabled = (): boolean => {
+  const raw =
+    (
+      process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE ||
+      process.env.ENABLE_DYNAMIC_V2_DB_MODE ||
+      ""
+    ).toString().toLowerCase();
+  return raw === "true" || raw === "1" || raw === "yes" || raw === "on";
+};
+
+const parseSeedValue = (value: string | null): number | null => {
+  if (!value) return null;
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return null;
+  if (parsed < 1 || parsed > 300) return null;
+  return parsed;
 };
 
 // Dynamic data provider that returns either seed data or empty arrays based on config
@@ -13,23 +30,17 @@ export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private products: Product[] = [];
   private isEnabled: boolean = false;
-  private dataGenerationEnabled: boolean = false;
   private ready: boolean = false;
   private readyPromise: Promise<void>;
-  private resolveReady!: () => void;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
-    this.dataGenerationEnabled = isDataGenerationEnabled();
-    // hydrate from cache if available to keep content stable across reloads
-    const cached = readCachedProducts();
-    this.products = Array.isArray(cached) && cached.length > 0 ? cached : products;
-    this.readyPromise = new Promise<void>((resolve) => {
-      this.resolveReady = resolve;
-    });
-    
-    // Initialize products with data generation if enabled
-    this.initializeProducts();
+    if (typeof window === "undefined") {
+      this.ready = true;
+      this.readyPromise = Promise.resolve();
+      return;
+    }
+    this.readyPromise = this.initializeProducts();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -39,38 +50,37 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
+  private getV2SeedFromUrl(): number | null {
+    if (!isV2DbModeEnabled() || typeof window === "undefined") {
+      return null;
+    }
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = parseSeedValue(params.get("v2-seed"));
+      if (fromUrl !== null) {
+        return fromUrl;
+      }
+      const stored = parseSeedValue(
+        window.localStorage.getItem("autozone_v2_seed")
+      );
+      if (stored !== null) {
+        return stored;
+      }
+    } catch (error) {
+      console.warn("[autozone] Failed to read v2-seed from URL/localStorage", error);
+    }
+    return null;
+  }
+
   private async initializeProducts(): Promise<void> {
     try {
-      // Try DB mode first if enabled
-      const dbProducts = await loadProductsFromDb();
-      if (dbProducts.length > 0) {
-        this.products = dbProducts;
-        writeCachedProducts(this.products);
-        this.ready = true;
-        this.resolveReady();
-        return;
-      }
-      
-      // Fallback to existing behavior
-      const initializedProducts = await initializeProducts();
-      this.products = initializedProducts;
-      if (this.products.length > 0) {
-        writeCachedProducts(this.products);
-      }
-
-      // Mark as ready only when either generation is disabled or we have generated data
-      if (!this.dataGenerationEnabled || this.products.length > 0) {
-        this.ready = true;
-        this.resolveReady();
-      }
-
+      const v2Seed = this.getV2SeedFromUrl();
+      this.products = await initializeProducts(v2Seed);
     } catch (error) {
-      // Keep silent in production; initialize readiness when generation off
-      // If generation is enabled, do not mark ready here; the gate will continue showing loading
-      if (!this.dataGenerationEnabled) {
-        this.ready = true;
-        this.resolveReady();
-      }
+      console.error("[autozone] Failed to initialize products", error);
+      throw error;
+    } finally {
+      this.ready = true;
     }
   }
 

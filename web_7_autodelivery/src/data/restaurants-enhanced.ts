@@ -137,44 +137,38 @@ export async function initializeRestaurants(v2SeedValue?: number | null): Promis
     dbModeEnabled = isDbLoadModeEnabled();
   } catch {}
 
-  let effectiveSeed: number | null;
+  let effectiveSeed: number;
 
   if (dbModeEnabled) {
-    effectiveSeed = v2SeedValue ?? null;
+    effectiveSeed = v2SeedValue ?? 1; // Default to 1 if no v2-seed provided
   } else {
     effectiveSeed = 1; // If v2 is NOT enabled, automatically use seed=1
   }
 
-  if (effectiveSeed !== null && effectiveSeed !== undefined) {
-    try {
-      const { fetchSeededSelection } = await import("@/shared/seeded-loader");
-      const fromDb = await fetchSeededSelection<Restaurant>({
-        projectKey: "web_7_autodelivery",
-        entityType: "restaurants",
-        seedValue: effectiveSeed,
-        limit: 100,
-        method: "distribute",
-        filterKey: "cuisine",
-      });
+  try {
+    const { fetchSeededSelection } = await import("@/shared/seeded-loader");
+    const fromDb = await fetchSeededSelection<Restaurant>({
+      projectKey: "web_7_autodelivery",
+      entityType: "restaurants",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "cuisine",
+    });
 
-      console.log(`[autodelivery] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+    console.log(`[autodelivery] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
 
-      if (fromDb && fromDb.length > 0) {
-        const normalized = normalizeRestaurantImages(fromDb);
-        return normalized;
-      } else {
-        console.warn(`[autodelivery] No data returned from DB with seed=${effectiveSeed}`);
-      }
-    } catch (err) {
-      console.error(`[autodelivery] Failed to load from DB with seed=${effectiveSeed}:`, err);
-      throw err;
+    if (fromDb && fromDb.length > 0) {
+      const normalized = normalizeRestaurantImages(fromDb);
+      return normalized;
+    } else {
+      console.warn(`[autodelivery] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[autodelivery] No data found for seed=${effectiveSeed}`);
     }
-  } else {
-    if (dbModeEnabled) {
-      throw new Error("[autodelivery] v2 is enabled but no valid seed provided");
-    }
+  } catch (err) {
+    console.error(`[autodelivery] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    throw err;
   }
-  throw new Error("[autodelivery] Failed to load restaurants from database");
 }
 
 /**

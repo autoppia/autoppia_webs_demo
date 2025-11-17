@@ -4,6 +4,8 @@ services:
     build: .
     ports:
       - "127.0.0.1:${WEB_PORT}:8080"
+    env_file:
+      - .env
     environment:
       # ======== Core Settings ========
       LOG_LEVEL: info
@@ -24,8 +26,7 @@ services:
       # Minimum response size (in bytes) before applying GZIP compression
       GZIP_MIN_SIZE: 1000
 
-      # ======== Data Generation ========
-      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      # Additional data-gen settings come from .env via env_file
     depends_on:
       db:
         condition: service_healthy

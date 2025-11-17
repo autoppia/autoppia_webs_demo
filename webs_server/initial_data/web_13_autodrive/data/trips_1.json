@@ -1,0 +1,117 @@
+[
+  {
+    "id": "trip-001",
+    "status": "upcoming",
+    "ride": {
+      "name": "AutoDriverX",
+      "icon": "https://ext.same-assets.com/407674263/3757967630.png",
+      "image": "/car1.jpg",
+      "price": 26.6
+    },
+    "pickup": "100 Van Ness Ave, San Francisco, CA 94102, USA",
+    "dropoff": "1030 Post St, San Francisco, CA 94109, USA",
+    "date": "2025-07-18",
+    "time": "13:00",
+    "price": 26.6,
+    "payment": "Visa ••••1270",
+    "driver": {
+      "name": "Alexei Ivanov",
+      "car": "Toyota Camry (Blue)",
+      "plate": "CBA 123",
+      "phone": "+1 415-555-0100",
+      "photo": "https://randomuser.me/api/portraits/men/32.jpg"
+    }
+  },
+  {
+    "id": "trip-002",
+    "status": "upcoming",
+    "ride": {
+      "name": "Comfort",
+      "icon": "https://ext.same-assets.com/407674263/2600779409.svg",
+      "image": "/car2.jpg",
+      "price": 31.5
+    },
+    "pickup": "8 Mission St, San Francisco, CA 94105, USA",
+    "dropoff": "1000 Chestnut St, San Francisco, CA 94109, USA",
+    "date": "2025-07-19",
+    "time": "09:30",
+    "price": 31.5,
+    "payment": "Visa ••••1270",
+    "driver": {
+      "name": "Maria Chen",
+      "car": "Honda Accord (White)",
+      "plate": "XYZ 789",
+      "phone": "+1 415-555-0185",
+      "photo": "https://randomuser.me/api/portraits/women/44.jpg"
+    }
+  },
+  {
+    "id": "trip-003",
+    "status": "completed",
+    "ride": {
+      "name": "AutoDriverXL",
+      "icon": "https://ext.same-assets.com/407674263/2882408466.svg",
+      "image": "/car3.jpg",
+      "price": 38.75
+    },
+    "pickup": "1 Market St, San Francisco, CA 94105, USA",
+    "dropoff": "Golden Gate Park, San Francisco, CA 94122, USA",
+    "date": "2025-07-12",
+    "time": "18:15",
+    "price": 38.75,
+    "payment": "Visa ••••1270",
+    "driver": {
+      "name": "Samir Patel",
+      "car": "Tesla Model 3 (Red)",
+      "plate": "TES 333",
+      "phone": "+1 415-555-0142",
+      "photo": "https://randomuser.me/api/portraits/men/85.jpg"
+    }
+  },
+  {
+    "id": "trip-004",
+    "status": "completed",
+    "ride": {
+      "name": "Business",
+      "icon": "https://ext.same-assets.com/407674263/1771890580.svg",
+      "image": "/dashboard.jpg",
+      "price": 65.2
+    },
+    "pickup": "SFO International Airport, San Francisco, CA",
+    "dropoff": "Hotel Nikko, 222 Mason St, San Francisco, CA 94102, USA",
+    "date": "2025-07-08",
+    "time": "22:45",
+    "price": 65.2,
+    "payment": "Visa ••••1270",
+    "driver": {
+      "name": "Carlos Mendez",
+      "car": "Mercedes S-Class (Black)",
+      "plate": "LUX 902",
+      "phone": "+1 415-555-0199",
+      "photo": "https://randomuser.me/api/portraits/men/12.jpg"
+    }
+  },
+  {
+    "id": "trip-005",
+    "status": "cancelled",
+    "ride": {
+      "name": "Comfort",
+      "icon": "https://ext.same-assets.com/407674263/2600779409.svg",
+      "image": "/car2.jpg",
+      "price": 29.4
+    },
+    "pickup": "Pier 39, San Francisco, CA 94133, USA",
+    "dropoff": "Palace of Fine Arts, San Francisco, CA 94123, USA",
+    "date": "2025-07-10",
+    "time": "15:45",
+    "price": 0,
+    "payment": "Visa ••••1270",
+    "driver": {
+      "name": "Sarah Johnson",
+      "car": "Audi Q5 (Silver)",
+      "plate": "AUD 204",
+      "phone": "+1 415-555-0166",
+      "photo": "https://randomuser.me/api/portraits/women/21.jpg"
+    }
+  }
+]

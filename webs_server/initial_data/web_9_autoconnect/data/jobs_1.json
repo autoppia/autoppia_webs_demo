@@ -1,0 +1,52 @@
+[
+  {
+    "id": "j1",
+    "title": "Senior Frontend Developer",
+    "company": "Tech Innovations",
+    "location": "Remote",
+    "logo": "https://logo.clearbit.com/techinnovations.com",
+    "salary": "$120,000 - $150,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "Build performant web apps with React, TypeScript, and modern tooling.",
+    "requirements": [
+      "5+ years building production React apps",
+      "Expertise with TypeScript and testing"
+    ],
+    "benefits": [
+      "Competitive salary and equity",
+      "Flexible remote policy"
+    ],
+    "postedDate": "2025-01-10",
+    "applicationCount": 47,
+    "companySize": "50-100 employees",
+    "industry": "Technology",
+    "remote": true
+  },
+  {
+    "id": "j2",
+    "title": "Product Manager",
+    "company": "StartupCo",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/startupco.com",
+    "salary": "$130,000 - $160,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "Lead product discovery and delivery for a fast-growing fintech team.",
+    "requirements": [
+      "3+ years PM experience",
+      "Strong analytical mindset",
+      "Comfortable with user research"
+    ],
+    "benefits": [
+      "Hybrid work setup",
+      "Learning stipend",
+      "Health and wellness budget"
+    ],
+    "postedDate": "2025-01-12",
+    "applicationCount": 23,
+    "companySize": "10-50 employees",
+    "industry": "Fintech",
+    "remote": false
+  }
+]

@@ -134,6 +134,14 @@ const parseSeedValue = (value?: string | null): number => {
 };
 
 const clampSeed = (value: number): number => (value >= 1 && value <= 300 ? value : 1);
+const V2_STORAGE_KEY = 'autodrive_v2_seed';
+const isV2DbModeEnabled = (
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE ||
+  process.env.ENABLE_DYNAMIC_V2_DB_MODE ||
+  ''
+)
+  .toString()
+  .toLowerCase() === 'true';
 
 export function useSeedLayout() {
   const [structureSeed, setStructureSeed] = useState(1);
@@ -142,6 +150,7 @@ export function useSeedLayout() {
   const [dynamicSeedActive, setDynamicSeedActive] = useState(false);
   const [layout, setLayout] = useState(getSeedLayout(1));
   const [isDynamicEnabledState, setIsDynamicEnabledState] = useState(false);
+  const [v2Seed, setV2Seed] = useState<number | null>(null);
 
   useEffect(() => {
     // Check if dynamic HTML is enabled
@@ -179,8 +188,53 @@ export function useSeedLayout() {
       }
     }
 
+    let resolvedV2Seed: number | null = null;
+    if (isV2DbModeEnabled) {
+      const rawV2 = parseSeedValue(url.searchParams.get('v2-seed'));
+      if (Number.isFinite(rawV2)) {
+        resolvedV2Seed = clampSeed(rawV2 as number);
+      } else {
+        try {
+          const stored = localStorage.getItem(V2_STORAGE_KEY);
+          if (stored) {
+            const parsedStored = parseSeedValue(stored);
+            if (Number.isFinite(parsedStored)) {
+              resolvedV2Seed = clampSeed(parsedStored as number);
+            }
+          }
+        } catch {
+          resolvedV2Seed = null;
+        }
+      }
+      if (resolvedV2Seed !== null) {
+        const v2String = resolvedV2Seed.toString();
+        if (url.searchParams.get('v2-seed') !== v2String) {
+          url.searchParams.set('v2-seed', v2String);
+          urlChanged = true;
+        }
+        try {
+          localStorage.setItem(V2_STORAGE_KEY, v2String);
+        } catch {
+          // ignore storage errors
+        }
+      } else if (url.searchParams.has('v2-seed')) {
+        url.searchParams.delete('v2-seed');
+        urlChanged = true;
+        try {
+          localStorage.removeItem(V2_STORAGE_KEY);
+        } catch {}
+      }
+    } else if (url.searchParams.has('v2-seed')) {
+      url.searchParams.delete('v2-seed');
+      urlChanged = true;
+      try {
+        localStorage.removeItem(V2_STORAGE_KEY);
+      } catch {}
+    }
+
     setStructureSeed(resolvedStructureSeed);
     setDynamicSeed(resolvedDynamicSeed);
+    setV2Seed(isV2DbModeEnabled ? resolvedV2Seed : null);
     setStructureSeedActive(structureActive);
     setDynamicSeedActive(dynamicActive);
 
@@ -330,15 +384,22 @@ export function useSeedLayout() {
       params.delete('seed-structure');
     }
 
+    if (isV2DbModeEnabled && v2Seed !== null) {
+      params.set('v2-seed', v2Seed.toString());
+    } else {
+      params.delete('v2-seed');
+    }
+
     const query = params.toString();
     const rebuilt = `${basePath}${query ? `?${query}` : ''}`;
     return hashFragment ? `${rebuilt}#${hashFragment}` : rebuilt;
-  }, [structureSeed, dynamicSeed, isDynamicStructureActive, isDynamicHtmlActive]);
+  }, [structureSeed, dynamicSeed, v2Seed, isDynamicStructureActive, isDynamicHtmlActive]);
 
   return {
     seed: dynamicSeed,
     structureSeed,
     dynamicSeed,
+    v2Seed,
     isDynamicStructureActive,
     isDynamicHtmlActive,
     layout,

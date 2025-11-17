@@ -278,51 +278,42 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
   } catch {}
 
   // Determine the seed to use
-  let effectiveSeed: number | null;
+  let effectiveSeed: number;
   
   if (dbModeEnabled) {
-    // If v2 is enabled, use the v2-seed provided (or null if not provided)
-    effectiveSeed = v2SeedValue ?? null;
+    // If v2 is enabled, use the v2-seed provided OR default to 1
+    effectiveSeed = v2SeedValue ?? 1;
   } else {
     // If v2 is NOT enabled, automatically use seed=1
     effectiveSeed = 1;
   }
 
-  // Always try to load from DB with the determined seed
-  if (effectiveSeed !== null && effectiveSeed !== undefined) {
-    try {
-      // Clear existing emails to force fresh load
-      dynamicEmails = [];
-      const fromDb = await fetchSeededSelection<Email>({
-        projectKey: "web_6_automail",
-        entityType: "emails",
-        seedValue: effectiveSeed,
-        limit: 100,
-        method: "distribute",
-        filterKey: "category",
-      });
-      
-      console.log(`[automail] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
-      
-      if (fromDb && fromDb.length > 0) {
-        dynamicEmails = normalizeEmailTimestamps(fromDb);
-        return dynamicEmails;
-      } else {
-        console.warn(`[automail] No data returned from DB with seed=${effectiveSeed}`);
-      }
-    } catch (err) {
-      console.error(`[automail] Failed to load from DB with seed=${effectiveSeed}:`, err);
-      throw err; // Throw error instead of falling back
+  // Load from DB with the determined seed
+  try {
+    // Clear existing emails to force fresh load
+    dynamicEmails = [];
+    const fromDb = await fetchSeededSelection<Email>({
+      projectKey: "web_6_automail",
+      entityType: "emails",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "category",
+    });
+    
+    console.log(`[automail] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+    
+    if (fromDb && fromDb.length > 0) {
+      dynamicEmails = normalizeEmailTimestamps(fromDb);
+      return dynamicEmails;
+    } else {
+      console.warn(`[automail] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[automail] No data found for seed=${effectiveSeed}`);
     }
-  } else {
-    // If we reach here without a valid seed and v2 is enabled, it's an error
-    if (dbModeEnabled) {
-      throw new Error("[automail] v2 is enabled but no valid seed provided");
-    }
+  } catch (err) {
+    console.error(`[automail] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    throw err;
   }
-
-  // If we reach here, something went wrong
-  throw new Error("[automail] Failed to load emails from database");
 }
 
 // Runtime-only DB fetch for when DB mode is enabled

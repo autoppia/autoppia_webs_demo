@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "image": "https://source.unsplash.com/featured/?hotel,luxury?w=800&h=600",
+    "title": "The Pinewood Chalet",
+    "location": "Lake Tahoe, USA",
+    "rating": 4.7,
+    "reviews": 124,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 2,
+    "baths": 2,
+    "datesFrom": "2025-05-03",
+    "datesTo": "2025-07-15",
+    "price": 189,
+    "host": {
+      "name": "Emily",
+      "since": 3,
+      "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "💻",
+        "title": "Dedicated workspace",
+        "desc": "A common area with wifi that's well-suited for working."
+      },
+      {
+        "icon": "📍",
+        "title": "Great location",
+        "desc": "Close to hiking trails and the lake shore."
+      },
+      {
+        "icon": "🔍",
+        "title": "Easy check-in",
+        "desc": "Guests loved the seamless self-check-in process."
+      }
+    ]
+  }
+]

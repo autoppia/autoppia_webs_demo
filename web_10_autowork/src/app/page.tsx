@@ -916,6 +916,11 @@ export default function Home() {
 				experts: expertsState.data,
 			};
 			writeJson("autowork_all", combined);
+			
+			// Also save experts separately for ExpertProfileClient
+			if (expertsState.data.length > 0) {
+				window.localStorage.setItem("autowork_experts", JSON.stringify(expertsState.data));
+			}
 		}
 	}, [isLoading, jobsState.data, hiresState.data, expertsState.data]);
 

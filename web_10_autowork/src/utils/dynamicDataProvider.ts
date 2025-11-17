@@ -1,11 +1,12 @@
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
   return isDynamicEnabled();
 };
 
-// Dynamic data provider that returns either seed data or empty arrays based on config
+// Dynamic data provider with v2-seed support
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled: boolean = false;
@@ -21,12 +22,25 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
+  /**
+   * Get v2 seed directly from URL
+   */
+  private getV2SeedFromUrl(): number | null {
+    if (typeof window === "undefined") return null;
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("v2-seed");
+    if (!raw) return null;
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isFinite(parsed) || parsed < 1 || parsed > 300) return null;
+    return parsed;
+  }
+
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
   }
 
-  // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
-  // Validates seed is between 1-300, defaults to 1 if invalid
+  // Get effective seed value - returns 36 (default) when dynamic HTML is disabled
+  // Validates seed is between 1-300, defaults to 36 if invalid
   public getEffectiveSeed(providedSeed: number = 36): number {
     if (!this.isEnabled) {
       return 36;
@@ -100,90 +114,93 @@ export class DynamicDataProvider {
     return [
       {
         id: "1",
-        name: "Sarah Johnson",
-        avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+        name: "John D.",
+        avatar: "https://randomuser.me/api/portraits/men/1.jpg",
         country: "United States",
-        rate: "$45/hr",
+        rate: "$50/hr",
         role: "Frontend Developer",
-        rating: "4.9",
-        jobs: "12",
+        rating: "4.8",
+        jobs: "25 jobs",
         rehire: true
       },
       {
         id: "2",
-        name: "Michael Chen",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-        country: "Canada",
-        rate: "$60/hr",
-        role: "Full Stack Developer",
-        rating: "4.8",
-        jobs: "8",
+        name: "Maria S.",
+        avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+        country: "Spain",
+        rate: "$45/hr",
+        role: "UI Designer",
+        rating: "4.9",
+        jobs: "18 jobs",
         rehire: false
       },
       {
         id: "3",
-        name: "Emily Rodriguez",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-        country: "Spain",
-        rate: "$35/hr",
-        role: "UI/UX Designer",
-        rating: "4.9",
-        jobs: "15",
+        name: "Ahmed K.",
+        avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+        country: "UAE",
+        rate: "$40/hr",
+        role: "Content Writer",
+        rating: "4.7",
+        jobs: "30 jobs",
         rehire: true
       }
     ];
   }
 
   public getStaticExperts(): Array<{
-    id: string;
+    slug: string;
     name: string;
-    avatar: string;
     country: string;
     role: string;
+    avatar: string;
     rate: string;
-    rating: string;
-    jobs: string;
-    desc: string;
-    consultation: string;
+    rating: number;
+    jobs: number;
   }> {
     return [
       {
-        id: "1",
-        name: "David Kim",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-        country: "South Korea",
-        role: "Senior Software Architect",
-        rate: "$120/hr",
-        rating: "4.9",
-        jobs: "25+",
-        desc: "Expert in scalable system design and cloud architecture. Specializes in microservices and DevOps practices.",
-        consultation: "30 min consultation"
+        slug: "john-d",
+        name: "John D.",
+        country: "United States",
+        role: "Frontend Developer",
+        avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+        rate: "$50/hr",
+        rating: 4.8,
+        jobs: 25
       },
       {
-        id: "2",
-        name: "Lisa Wang",
-        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-        country: "China",
-        role: "Product Strategy Consultant",
-        rate: "$95/hr",
-        rating: "4.8",
-        jobs: "18+",
-        desc: "Helps startups and enterprises define product strategy, user research, and go-to-market planning.",
-        consultation: "45 min consultation"
+        slug: "maria-s",
+        name: "Maria S.",
+        country: "Spain",
+        role: "UI Designer",
+        avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+        rate: "$45/hr",
+        rating: 4.9,
+        jobs: 18
+      },
+      {
+        slug: "ahmed-k",
+        name: "Ahmed K.",
+        country: "UAE",
+        role: "Content Writer",
+        avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+        rate: "$40/hr",
+        rating: 4.7,
+        jobs: 30
       }
     ];
   }
 }
 
-// Export singleton instance
+// Export singleton
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
-// Helper functions for easy access
-export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
+// Export helper functions
+export function isDynamicModeEnabled(): boolean {
+  return dynamicDataProvider.isDynamicModeEnabled();
+}
 
-// Static data helpers
-export const getStaticJobs = () => dynamicDataProvider.getStaticJobs();
-export const getStaticHires = () => dynamicDataProvider.getStaticHires();
-export const getStaticExperts = () => dynamicDataProvider.getStaticExperts();
+export function getLayoutConfig(seed?: number) {
+  return dynamicDataProvider.getLayoutConfig(seed);
+}

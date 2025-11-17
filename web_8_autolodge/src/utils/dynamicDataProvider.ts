@@ -15,13 +15,27 @@ class DynamicDataProvider {
   }
 
   /**
+   * Get v2 seed directly from URL (more reliable than window.__autolodgeV2Seed)
+   */
+  private getV2SeedFromUrl(): number | null {
+    if (typeof window === "undefined") return null;
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("v2-seed");
+    if (!raw) return null;
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isFinite(parsed) || parsed < 1 || parsed > 300) return null;
+    return parsed;
+  }
+
+  /**
    * Initialize the data provider
    */
   async initialize(): Promise<void> {
     try {
-      this.hotels = await initializeHotels();
+      const v2Seed = this.getV2SeedFromUrl();
+      this.hotels = await initializeHotels(v2Seed ?? undefined);
       this.ready = true;
-      console.log('🎯 DynamicDataProvider initialized with', this.hotels.length, 'hotels');
+      console.log('🎯 DynamicDataProvider initialized with', this.hotels.length, 'hotels, seed:', v2Seed ?? 1);
     } catch (error) {
       console.error('❌ Failed to initialize DynamicDataProvider:', error);
       this.ready = true; // Mark as ready even if failed to prevent infinite loading
@@ -101,10 +115,36 @@ class DynamicDataProvider {
       count: this.hotels.length
     };
   }
+
+  /**
+   * Refresh data when v2-seed changes
+   */
+  async refreshDataForSeed(seedOverride?: number | null): Promise<void> {
+    try {
+      const v2Seed = typeof seedOverride === "number" ? seedOverride : this.getV2SeedFromUrl();
+      console.log('[DynamicDataProvider] Refreshing data for v2-seed:', v2Seed ?? 1);
+      
+      const newHotels = await initializeHotels(v2Seed ?? undefined);
+      this.hotels = newHotels;
+      
+      console.log('✅ Data refreshed:', newHotels.length, 'hotels for seed:', v2Seed ?? 1);
+    } catch (error) {
+      console.error('[DynamicDataProvider] Failed to refresh data:', error);
+    }
+  }
 }
 
 // Export singleton instance
 export const dynamicDataProvider = new DynamicDataProvider();
+
+// Listen for v2-seed changes
+if (typeof window !== "undefined") {
+  window.addEventListener("autolodge:v2SeedChange", (event: any) => {
+    const newSeed = event.detail?.seed ?? null;
+    console.log('[DynamicDataProvider] v2-seed changed to:', newSeed);
+    dynamicDataProvider.refreshDataForSeed(newSeed);
+  });
+}
 
 /**
  * Check if dynamic mode is enabled

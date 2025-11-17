@@ -170,6 +170,13 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
                 "requirements": "Include realistic restaurant names, cuisines, areas, ratings, and prices."
             }
         },
+        "web_3_autozone": {
+            "products": {
+                "description": "E-commerce products across kitchen, electronics, home, fitness, and technology",
+                "categories": ["Kitchen", "Electronics", "Home", "Fitness", "Technology"],
+                "requirements": "Return objects with id, title, $price string, description, category, rating (1-5), brand, boolean inStock, and image paths that can be local (/images/...) or Unsplash URLs."
+            }
+        },
         "web_6_automail": {
             "emails": {
                 "description": "Email messages",
@@ -183,6 +190,78 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
                 "categories": ["Fast Food", "Pizza", "Asian", "Healthy", "Desserts"],
                 "requirements": "Include realistic restaurant names, cuisines, delivery times, and ratings."
             }
+        },
+        "web_9_autoconnect": {
+            "users": {
+                "description": "Professional network users",
+                "categories": ["Engineering", "Design", "Product", "Marketing"],
+                "requirements": "Include usernames, names, avatars, bios, titles, and 1-3 experience entries with company, duration, and description."
+            },
+            "posts": {
+                "description": "Social feed posts",
+                "categories": ["Announcement", "Advice", "Highlight", "Launch"],
+                "requirements": "Include linked user info, 1-3 sentence content, timestamps in the last week, likes count, comments array, and optional image URLs."
+            },
+            "jobs": {
+                "description": "Job listings",
+                "categories": ["Full-time", "Contract", "Remote"],
+                "requirements": "Include title, company, location, salary, requirements list, benefits, posted date, application count, company size, industry, and remote flag."
+            },
+            "recommendations": {
+                "description": "Recommended people or opportunities",
+                "categories": ["User", "Job", "Learning", "Event"],
+                "requirements": "Include title, description, reason, relevance score, category, hero image, and metadata such as location, company, or skills."
+            }
+        },
+        "web_10_autowork": {
+            "jobs": {
+                "description": "Freelance job listings",
+                "categories": ["Open", "Assigned", "In progress", "Completed"],
+                "requirements": "Include project titles, statuses, start dates, tracked time, activity summaries, and whether the job is currently active."
+            },
+            "hires": {
+                "description": "Freelancer profiles",
+                "categories": ["Developers", "Designers", "Data", "Marketing"],
+                "requirements": "Include name, country, hourly rate, rating, job count, role, avatar, and a boolean rehire flag."
+            },
+            "experts": {
+                "description": "Expert talent marketplace profiles",
+                "categories": ["Product", "Design", "Engineering", "Marketing", "Data"],
+                "requirements": "Include slug, consultation rate, stats (earnings/jobs/hours), languages, availability, and nested lastReview information."
+            },
+            "skills": {
+                "description": "Popular marketplace skills",
+                "categories": ["Programming", "Design", "Cloud", "AI", "Security"],
+                "requirements": "Return diverse skill names as simple strings."
+            }
+        },
+        "web_11_autocalendar": {
+            "calendar_events": {
+                "description": "Calendar events with recurrence and attendees",
+                "categories": ["Work", "Personal", "Wellness", "Friends", "Family"],
+                "requirements": "Include date, start/end, calendars, attendance list, recurrence details, reminders, and meeting links."
+            }
+        },
+        "web_12_autolist": {
+            "tasks": {
+                "description": "Productivity tasks with priorities and due dates",
+                "categories": ["Inbox", "Today", "Upcoming", "Completed"],
+                "requirements": "Include title, description, due_date, priority (1-4), and optional completed_at timestamp."
+            }
+        },
+        "web_13_autodrive": {
+            "trips": {
+                "description": "Ride bookings (upcoming/completed/cancelled)",
+                "categories": ["upcoming", "completed", "cancelled"],
+                "requirements": "Include ride info (pickup, dropoff, date, time, price, driver details, payment) with realistic strings and status."
+            }
+        },
+        "web_8_autolodge": {
+            "hotels": {
+                "description": "Hotel and accommodation listings",
+                "categories": ["Lake Tahoe", "Goa", "Zermatt", "Bali", "Tokyo", "Paris", "New York", "Barcelona"],
+                "requirements": "Include realistic hotel titles, locations, ratings, reviews, guest capacity, bedrooms, beds, baths, dates, prices, host info (name, since years, avatar), and amenities array with icon, title, and desc."
+            }
         }
     }
     
@@ -194,4 +273,3 @@ def get_project_entity_metadata(project_key: str, entity_type: str) -> Dict[str,
     })
     
     return entity_meta
-

@@ -1,91 +1,85 @@
-import { generateWeb13Trips, isDataGenerationEnabled } from "@/shared/data-generator";
-import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
-import { simulatedTrips, Trip } from "@/library/dataset";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { Trip } from "@/library/dataset";
+
+const clampSeed = (value: number, fallback: number = 1): number =>
+  value >= 1 && value <= 300 ? value : fallback;
+
+const readV2SeedFromClient = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("v2-seed");
+  if (raw) {
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isNaN(parsed)) {
+      return clampSeed(parsed);
+    }
+  }
+  try {
+    const stored = localStorage.getItem("autodrive_v2_seed");
+    if (stored) {
+      const parsedStored = Number.parseInt(stored, 10);
+      if (!Number.isNaN(parsedStored)) {
+        return clampSeed(parsedStored);
+      }
+    }
+  } catch {
+    // ignore storage issues
+  }
+  return null;
+};
+
+const resolveSeed = (
+  dbEnabled: boolean,
+  v2SeedValue?: number | null
+): number => {
+  if (!dbEnabled) {
+    return 1;
+  }
+  if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
+    return clampSeed(v2SeedValue);
+  }
+  if (typeof window !== "undefined") {
+    const fromClient = readV2SeedFromClient();
+    if (typeof fromClient === "number") {
+      return fromClient;
+    }
+  }
+  throw new Error("[autodrive] v2 is enabled but no valid v2-seed was provided");
+};
 
 /**
- * Initialize trips data for Web13 (client-side first design)
- * Priority:
- * 1) If DB mode enabled (and in browser): load seeded selection from backend
- * 2) If cached in localStorage: use cache
- * 3) If data-generation enabled: call /datasets/generate via shared generator (with local fallback)
- * 4) Fallback: static simulatedTrips from dataset
+ * Initialize trips data for Web13 with deterministic pools.
+ * Always load from the seeded dataset and throw when it is unavailable,
+ * ensuring seed selections stay consistent across reloads.
  */
-export async function initializeTrips(limit: number = 30): Promise<Trip[]> {
-  // Ensure this runs only on client for cache/localStorage usage
-  const isBrowser = typeof window !== "undefined";
-  console.log('[web13][trips-enhanced] initializeTrips()', { limit, isBrowser });
+export async function initializeTrips(
+  limit: number = 30,
+  seedOverride?: number | null
+): Promise<Trip[]> {
+  const dbEnabled = isDbLoadModeEnabled();
+  const effectiveSeed = resolveSeed(dbEnabled, seedOverride);
 
-  // 1) DB Mode: load from backend using seeded-loader (client only)
-  if (isDbLoadModeEnabled() && isBrowser) {
-    console.log('[web13][trips-enhanced] DB mode enabled, attempting seeded load...');
-    try {
-      const dbData = await fetchSeededSelection<Trip>({
-        projectKey: "web_13_autodrive",
-        entityType: "trips",
-        seedValue: 1,
-        limit,
-        method: "select",
-      });
-      if (dbData && dbData.length > 0) {
-        console.log('[web13][trips-enhanced] Loaded trips from DB', dbData.length);
-        return dbData;
-      }
-    } catch {
-      console.warn('[web13][trips-enhanced] DB load failed, will try cache/gen/fallback');
-      // ignore and continue to next fallback
-    }
-  }
-
-  // 2) Cache: seed-agnostic caching so data does NOT depend on seed value
-  //    Use a single cache key regardless of URL seed; support optional forceRefresh param
-  const cacheKey = "autodrive_generated_trips_v1";
-  if (isBrowser) {
-    const url = new URL(window.location.href);
-    const forceRefresh = url.searchParams.get('forceRefresh') === '1';
-    if (!forceRefresh) {
-      const cachedRaw = localStorage.getItem(cacheKey);
-      if (cachedRaw) {
-        try {
-          const parsed: Trip[] = JSON.parse(cachedRaw);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            console.log('[web13][trips-enhanced] Using cached trips (seed-agnostic)', parsed.length);
-            return parsed.slice(0, limit);
-          }
-        } catch {
-          console.warn('[web13][trips-enhanced] Failed to parse cached trips, regenerating');
-        }
-      }
-    } else {
-      console.log('[web13][trips-enhanced] forceRefresh=1 detected, bypassing cache');
-    }
-  }
-
-  // 2) Generation: via shared generator (falls back to local simulated if API fails or disabled)
   try {
-    const result = await generateWeb13Trips(limit);
-    const data = (result?.data as Trip[]) || [];
-    if (Array.isArray(data) && data.length > 0) {
-      console.log('[web13][trips-enhanced] Generated trips (AI or local fallback)', data.length, { success: result?.success, error: result?.error });
-      if (isBrowser) {
-        localStorage.setItem(cacheKey, JSON.stringify(data));
-        console.log('[web13][trips-enhanced] Cached trips (seed-agnostic)');
-      }
+    const trips = await fetchSeededSelection<Trip>({
+      projectKey: "web_13_autodrive",
+      entityType: "trips",
+      seedValue: effectiveSeed,
+      limit,
+      method: "shuffle",
+    });
+
+    if (Array.isArray(trips) && trips.length > 0) {
+      console.log(
+        `[autodrive] Loaded ${trips.length} trips from dataset (seed=${effectiveSeed})`
+      );
+      return trips;
     }
-    if (data.length > 0) return data;
-  } catch {
-    console.error('[web13][trips-enhanced] Generation threw, using static fallback');
-    // continue to static fallback
-  }
 
-  // 4) Fallback: static simulated dataset bundled with the app
-  console.log('[web13][trips-enhanced] Using static simulatedTrips fallback', simulatedTrips.length);
-  return simulatedTrips.slice(0, limit);
-}
-
-export function clearTripsCache(): void {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("autodrive_generated_trips_v1");
+    throw new Error(
+      `[autodrive] No trips returned from dataset (seed=${effectiveSeed})`
+    );
+  } catch (error) {
+    console.error("[autodrive] Failed to load trips from dataset", error);
+    throw error;
   }
 }
-
-

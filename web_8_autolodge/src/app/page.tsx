@@ -66,6 +66,8 @@ function HomeContent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [committedSearch, setCommittedSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [isLoadingHotels, setIsLoadingHotels] = useState(true);
 
   useEffect(() => {
     const urlSearch = searchParams.get("search") ?? "";
@@ -92,12 +94,44 @@ function HomeContent() {
     setCurrentPage(1);
   }, [committedSearch, dateRange, guests]);
 
-  const hotels = useMemo(() => {
-    const providerHotels = dynamicDataProvider.getHotels();
-    if (providerHotels.length > 0) {
-      return providerHotels.map(normalizeHotelDates);
-    }
-    return DASHBOARD_HOTELS as Hotel[];
+  // Listen for data refresh events from DynamicDataProvider
+  useEffect(() => {
+    const loadHotels = async () => {
+      // Wait for provider to be ready
+      await dynamicDataProvider.whenReady();
+      
+      const providerHotels = dynamicDataProvider.getHotels();
+      if (providerHotels.length > 0) {
+        setHotels(providerHotels.map(normalizeHotelDates));
+        console.log('[HomeContent] Hotels loaded:', providerHotels.length);
+      } else {
+        console.warn('[HomeContent] No hotels from provider, using fallback');
+        setHotels(DASHBOARD_HOTELS as Hotel[]);
+      }
+      setIsLoadingHotels(false);
+    };
+
+    const handleDataRefresh = () => {
+      console.log('[HomeContent] Handling v2-seed change event');
+      // Add small delay to ensure DynamicDataProvider has finished refreshing
+      setTimeout(() => {
+        const providerHotels = dynamicDataProvider.getHotels();
+        if (providerHotels.length > 0) {
+          setHotels(providerHotels.map(normalizeHotelDates));
+          console.log('[HomeContent] Hotels refreshed:', providerHotels.length);
+        }
+      }, 100);
+    };
+
+    // Initial load
+    loadHotels();
+
+    // Listen for v2-seed changes
+    window.addEventListener("autolodge:v2SeedChange", handleDataRefresh);
+
+    return () => {
+      window.removeEventListener("autolodge:v2SeedChange", handleDataRefresh);
+    };
   }, []);
 
   const filteredHotels = useMemo(() => {

@@ -161,16 +161,16 @@ export function getSeedLayout(seed?: number): LayoutConfig {
 // Helper function to get URL search params
 export function getSeedFromUrl(): number | undefined {
   if (typeof window === 'undefined') return undefined;
-  
+
   const urlParams = new URLSearchParams(window.location.search);
-  const seedParam = urlParams.get('seed');
-  
+  const seedParam = urlParams.get('seed-structure') ?? urlParams.get('seed');
+
   if (seedParam) {
     const seed = parseInt(seedParam, 10);
-    if (seed >= 1 && seed <= 10) {
+    if (seed >= 1 && seed <= 300) {
       return seed;
     }
   }
-  
+
   return undefined;
 }

@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Build front-end of e-commerce website",
+    "status": "In progress",
+    "start": "Mar 26",
+    "activity": "last active yesterday on Time logged this week: 36:00 hrs ($576)",
+    "time": "36:00 hrs ($576)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Develop mobile app for social networking",
+    "status": "Pending",
+    "start": "Mar 27",
+    "activity": "last active 3 days ago on Initial project setup",
+    "time": "0:00 hrs ($0)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Create backend API for payment processing",
+    "status": "Completed",
+    "start": "Mar 20",
+    "activity": "last active 1 week ago on Deployed to production",
+    "time": "120:00 hrs ($1920)",
+    "timestr": "Total time logged:",
+    "active": false
+  },
+  {
+    "title": "Design UI/UX for a fintech application",
+    "status": "In review",
+    "start": "Mar 22",
+    "activity": "last active 2 days ago on Submitted final designs for review",
+    "time": "42:00 hrs ($672)",
+    "timestr": "Time logged this week:",
+    "active": false
+  }
+]

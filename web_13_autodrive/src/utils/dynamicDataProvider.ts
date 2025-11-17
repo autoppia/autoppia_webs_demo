@@ -43,11 +43,48 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
+  private parseSeed(raw: string | null): number | null {
+    if (!raw) return null;
+    const parsed = Number.parseInt(raw, 10);
+    if (Number.isNaN(parsed) || parsed < 1 || parsed > 300) {
+      console.warn("[web13][provider] Ignoring invalid v2-seed value:", raw);
+      return null;
+    }
+    return parsed;
+  }
+
+  private getV2SeedFromUrl(): number | null {
+    if (typeof window === "undefined") {
+      return null;
+    }
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = this.parseSeed(params.get("v2-seed"));
+      if (fromUrl !== null) {
+        return fromUrl;
+      }
+      const stored = this.parseSeed(localStorage.getItem("autodrive_v2_seed"));
+      if (stored !== null) {
+        return stored;
+      }
+    } catch (error) {
+      console.warn("[web13][provider] Failed to read v2-seed from URL/localStorage:", error);
+    }
+    return null;
+  }
+
   private async initialize(): Promise<void> {
     try {
       console.log('[web13][provider] initialize() start');
-      this.trips = await initializeTrips(30);
-      console.log('[web13][provider] initialize() loaded trips', this.trips.length);
+      const v2Seed = this.getV2SeedFromUrl();
+      this.trips = await initializeTrips(30, v2Seed);
+      console.log('[web13][provider] initialize() loaded trips', {
+        count: this.trips.length,
+        seed: v2Seed ?? "default",
+      });
+    } catch (error) {
+      console.error("[web13][provider] Failed to initialize trips", error);
+      throw error;
     } finally {
       console.log('[web13][provider] initialize() complete');
       this.ready = true;

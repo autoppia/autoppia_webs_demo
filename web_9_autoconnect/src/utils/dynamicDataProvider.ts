@@ -170,16 +170,35 @@ export class DynamicDataProvider {
   /**
    * Initialize the data provider
    */
+  private getV2SeedFromUrl(): number | null {
+    if (typeof window === "undefined") return null;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get("v2-seed");
+      if (!raw) return null;
+      const parsed = Number.parseInt(raw, 10);
+      if (Number.isNaN(parsed) || parsed < 1 || parsed > 300) {
+        console.warn(`[autoconnect] Ignoring invalid v2-seed parameter: ${raw}`);
+        return null;
+      }
+      return parsed;
+    } catch (err) {
+      console.warn("[autoconnect] Failed to parse v2-seed from URL:", err);
+      return null;
+    }
+  }
+
   async initialize(): Promise<void> {
     try {
       console.log('🚀 Initializing Autoconnect data provider...');
+      const v2Seed = this.getV2SeedFromUrl();
       
       // Load all data types in parallel
       const [users, posts, jobs, recommendations] = await Promise.all([
-        initializeUsers(),
-        initializePosts(),
-        initializeJobs(),
-        initializeRecommendations()
+        initializeUsers(v2Seed),
+        initializePosts(v2Seed),
+        initializeJobs(v2Seed),
+        initializeRecommendations(v2Seed)
       ]);
       
       const merged = this.mergeUsersFromSources(users, posts);
@@ -341,4 +360,3 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
-

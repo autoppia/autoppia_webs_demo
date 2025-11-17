@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import SeedStructureLink from "./SeedStructureLink";
+import { SeedLink } from "./ui/SeedLink";
 
 export default function Header() {
   const pathname = usePathname();
@@ -15,7 +15,7 @@ export default function Header() {
     <header className="w-full flex flex-col items-center border-b bg-white sticky top-0 z-20">
       <nav className="w-full max-w-7xl flex items-center justify-between py-2 px-3 md:px-0">
         <div className="flex items-center gap-2 min-w-[130px]">
-          <SeedStructureLink id={getId("logo_link")} href="/" className="flex items-center gap-1 select-none">
+          <SeedLink id={getId("logo_link")} href="/" className="flex items-center gap-1 select-none">
             <span className="font-logo font-bold text-2xl text-[#18181b] tracking-tight">
               Auto
             </span>
@@ -25,13 +25,13 @@ export default function Header() {
             >
               Lodge
             </span>
-          </SeedStructureLink>
+          </SeedLink>
         </div>
         <div className="flex-1 flex justify-center">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href === '/' && pathname === '/');
             return (
-              <SeedStructureLink
+              <SeedLink
                 key={item.name}
                 href={item.href}
                 id={item.id}
@@ -45,7 +45,7 @@ export default function Header() {
                 }
               >
                 {item.name}
-              </SeedStructureLink>
+              </SeedLink>
             );
           })}
         </div>

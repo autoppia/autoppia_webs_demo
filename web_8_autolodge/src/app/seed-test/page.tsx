@@ -2,7 +2,7 @@
 
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useSeedStructureNavigation } from "@/hooks/useSeedStructureNavigation";
-import SeedStructureLink from "@/components/SeedStructureLink";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function SeedTestPage() {
   const { seedStructure, setSeedStructure, currentVariation } = useDynamicStructure();
@@ -42,15 +42,15 @@ export default function SeedTestPage() {
         <h2 className="text-xl font-semibold mb-4">Navigation Test</h2>
         <p className="mb-4">These links should maintain the seed-structure parameter:</p>
         <div className="flex gap-4 flex-wrap">
-          <SeedStructureLink href="/" className="text-blue-600 hover:underline">
+          <SeedLink href="/" className="text-blue-600 hover:underline">
             Go to Home
-          </SeedStructureLink>
-          <SeedStructureLink href="/stay/1" className="text-blue-600 hover:underline">
+          </SeedLink>
+          <SeedLink href="/stay/1" className="text-blue-600 hover:underline">
             Go to Stay Detail
-          </SeedStructureLink>
-          <SeedStructureLink href="/stay/1/confirm" className="text-blue-600 hover:underline">
+          </SeedLink>
+          <SeedLink href="/stay/1/confirm" className="text-blue-600 hover:underline">
             Go to Confirm Page
-          </SeedStructureLink>
+          </SeedLink>
           <button
             onClick={() => navigateWithSeedStructure("/")}
             className="text-blue-600 hover:underline"

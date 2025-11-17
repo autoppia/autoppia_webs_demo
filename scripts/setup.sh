@@ -369,7 +369,7 @@ deploy_webs_server() {
   echo "📦 Checking for initial data pools..."
   mkdir -p ~/webs_data
   
-  for project in web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery; do
+  for project in web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
     if [ ! -f ~/webs_data/$project/main.json ]; then
       echo "  → Initializing $project master pool (100 records)..."
       mkdir -p ~/webs_data/$project/data
@@ -389,7 +389,7 @@ deploy_webs_server() {
   # Copy data to container if webs_server is running
   if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
     echo "📦 Copying data pools to webs_server container..."
-    for project in web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery; do
+    for project in web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
       if [ -f ~/webs_data/$project/main.json ]; then
         echo "  → Copying $project to container..."
         docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true

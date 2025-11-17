@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Brian K.",
+    "country": "Colombia",
+    "rate": "$15.00/hr",
+    "rating": 4.5,
+    "jobs": 120,
+    "role": "Full Stack Developer",
+    "avatar": "https://ext.same-assets.com/1836270417/1435009301.png",
+    "rehire": true
+  },
+  {
+    "name": "Carol A.",
+    "country": "Spain",
+    "rate": "$40.00/hr",
+    "rating": 4.8,
+    "jobs": 95,
+    "role": "UI/UX Designer",
+    "avatar": "https://ext.same-assets.com/1836270417/1791229698.png",
+    "rehire": true
+  },
+  {
+    "name": "Charles D.",
+    "country": "China",
+    "rate": "$60.00/hr",
+    "rating": 4.7,
+    "jobs": 110,
+    "role": "Data Scientist",
+    "avatar": "https://ext.same-assets.com/1836270417/1118120895.png",
+    "rehire": true
+  },
+  {
+    "name": "Chris O.",
+    "country": "Morocco",
+    "rate": "$70.00/hr",
+    "rating": 4.9,
+    "jobs": 80,
+    "role": "Blockchain Expert",
+    "avatar": "https://ext.same-assets.com/1836270417/3108172840.png",
+    "rehire": true
+  }
+]

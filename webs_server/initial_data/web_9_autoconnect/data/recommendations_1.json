@@ -1,0 +1,33 @@
+[
+  {
+    "id": "r1",
+    "type": "user",
+    "title": "Sarah Chen - UX Designer",
+    "description": "Senior UX Designer at Google with 8+ years of mobile design experience.",
+    "reason": "Based on your interest in design and mobile development",
+    "relevanceScore": 0.92,
+    "category": "Design",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face&auto=format&q=80",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "company": "Google",
+      "skills": ["Figma", "User Research", "Mobile Design"]
+    }
+  },
+  {
+    "id": "r2",
+    "type": "job",
+    "title": "Senior Product Manager",
+    "description": "Lead product strategy for a high-growth fintech startup.",
+    "reason": "Matches your product management background and fintech interest",
+    "relevanceScore": 0.88,
+    "category": "Product Management",
+    "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "New York, NY",
+      "company": "FinTech Startup",
+      "salary": "$140,000 - $180,000",
+      "experience": "5+ years"
+    }
+  }
+]

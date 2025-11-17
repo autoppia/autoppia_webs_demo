@@ -1,4 +1,11 @@
-import { getApiBaseUrl } from "./data-generator";
+function getApiBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    // Browser: use NEXT_PUBLIC_API_URL or default to localhost:8090
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+  }
+  // Server-side: use API_URL or default
+  return process.env.API_URL || "http://app:8080";
+}
 
 export interface SeededLoadOptions {
   projectKey: string;
@@ -11,7 +18,13 @@ export interface SeededLoadOptions {
 }
 
 export function isDbLoadModeEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
+  const raw = (
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE ||
+    process.env.ENABLE_DYNAMIC_V2_DB_MODE ||
+    ""
+  )
+    .toString()
+    .toLowerCase();
   return raw === "true";
 }
 
@@ -20,7 +33,9 @@ export function getSeedValueFromEnv(defaultSeed: number = 1): number {
   return defaultSeed;
 }
 
-export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
+export async function fetchSeededSelection<T = any>(
+  options: SeededLoadOptions
+): Promise<T[]> {
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? getSeedValueFromEnv(1);
   const limit = options.limit ?? 50;
@@ -46,10 +61,14 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
   return (json?.data ?? []) as T[];
 }
 
-
-export async function fetchPoolInfo(projectKey: string, entityType: string): Promise<{ pool_size: number } | null> {
+export async function fetchPoolInfo(
+  projectKey: string,
+  entityType: string
+): Promise<{ pool_size: number } | null> {
   const baseUrl = getApiBaseUrl();
-  const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(projectKey)}&entity_type=${encodeURIComponent(entityType)}`;
+  const url = `${baseUrl}/datasets/pool/info?project_key=${encodeURIComponent(
+    projectKey
+  )}&entity_type=${encodeURIComponent(entityType)}`;
   try {
     const resp = await fetch(url, { method: "GET" });
     if (!resp.ok) return null;
@@ -62,5 +81,3 @@ export async function fetchPoolInfo(projectKey: string, entityType: string): Pro
     return null;
   }
 }
-
-

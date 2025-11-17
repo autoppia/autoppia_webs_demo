@@ -1,0 +1,56 @@
+[
+  {
+    "username": "johndoe",
+    "name": "John Doe",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "bio": "Software Engineer passionate about building products.",
+    "title": "Software Engineer",
+    "about": "Hello, I'm John! I specialize in frontend engineering and building delightful web experiences. I love JavaScript, React, and solving interesting UI problems.",
+    "experience": [
+      {
+        "title": "Software Engineer",
+        "company": "Google",
+        "logo": "https://logo.clearbit.com/google.com",
+        "duration": "Sep 2018 - Present • 5 yrs 9 mos",
+        "location": "Mountain View, CA",
+        "description": "Building dashboards for Google Cloud with React and TypeScript."
+      }
+    ]
+  },
+  {
+    "username": "janedoe",
+    "name": "Jane Doe",
+    "avatar": "https://randomuser.me/api/portraits/women/68.jpg",
+    "bio": "Product Manager & startup enthusiast.",
+    "title": "Senior Product Manager",
+    "about": "Product leader focused on user research, experimentation, and shipping lovable products.",
+    "experience": [
+      {
+        "title": "Senior Product Manager",
+        "company": "Meta",
+        "logo": "https://logo.clearbit.com/meta.com",
+        "duration": "Jan 2020 - Present • 4 yrs 1 mo",
+        "location": "Menlo Park, CA",
+        "description": "Leading social commerce initiatives with cross-functional teams."
+      }
+    ]
+  },
+  {
+    "username": "mikejohnson",
+    "name": "Mike Johnson",
+    "avatar": "https://randomuser.me/api/portraits/men/45.jpg",
+    "bio": "UX Designer focused on intuitive experiences.",
+    "title": "Senior UX Designer",
+    "about": "I design experiences that balance aesthetics and usability for global audiences.",
+    "experience": [
+      {
+        "title": "Senior UX Designer",
+        "company": "Apple",
+        "logo": "https://logo.clearbit.com/apple.com",
+        "duration": "Mar 2019 - Present • 4 yrs 11 mos",
+        "location": "Cupertino, CA",
+        "description": "Designing interfaces for iOS and macOS productivity tools."
+      }
+    ]
+  }
+]

@@ -135,7 +135,7 @@ interface Calendar {
   color: string;
 }
 
-function usePersistedEvents() {
+function usePersistedEvents(v2Seed?: number | null) {
   // SSR-safe: initialize with EVENTS_DATASET, then hydrate from localStorage on client
   const [state, setState] = useState<Event[]>(EVENTS_DATASET as Event[]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -191,7 +191,7 @@ function usePersistedEvents() {
       (async () => {
         setIsGenerating(true);
         try {
-          const initialized = await initializeEvents();
+          const initialized = await initializeEvents(v2Seed ?? undefined);
           if (Array.isArray(initialized) && initialized.length > 0) {
             setState(initialized as Event[]);
             window.localStorage.setItem("gocal_events", JSON.stringify(initialized));
@@ -360,7 +360,7 @@ function expandRecurringEvents(
 }
 
 function CalendarApp() {
-  const { currentVariant, seed, isDynamicHTMLEnabled } = useLayout();
+  const { currentVariant, seed, v2Seed, isDynamicHTMLEnabled } = useLayout();
   const { getElementAttributes, getText } = useSeedLayout();
   const [viewDate, setViewDate] = useState(() => {
     const now = new Date();
@@ -372,7 +372,7 @@ function CalendarApp() {
   });
   const [myCalExpanded, setMyCalExpanded] = useState(true);
   const [viewDropdown, setViewDropdown] = useState(false);
-  const [events, setEvents, isGenerating, genError] = usePersistedEvents();
+  const [events, setEvents, isGenerating, genError] = usePersistedEvents(v2Seed);
   const [miniCalMonth, setMiniCalMonth] = useState(viewDate.getMonth());
   const [miniCalYear, setMiniCalYear] = useState(viewDate.getFullYear());
   const [addCalOpen, setAddCalOpen] = useState(false);

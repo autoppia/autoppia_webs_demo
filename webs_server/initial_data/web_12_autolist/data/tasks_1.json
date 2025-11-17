@@ -1,0 +1,122 @@
+[
+  {
+    "id": "task-001",
+    "name": "Draft onboarding checklist",
+    "description": "Create a detailed onboarding plan for new hires joining in Q2.",
+    "due_date": "2025-01-21",
+    "priority": 1,
+    "completed_at": null
+  },
+  {
+    "id": "task-002",
+    "name": "Review contract updates",
+    "description": "Legal requested feedback on the vendor contract revisions.",
+    "due_date": "2025-01-18",
+    "priority": 2,
+    "completed_at": null
+  },
+  {
+    "id": "task-003",
+    "name": "Design sprint retro notes",
+    "description": "Summarize outcomes from the previous design sprint retro.",
+    "due_date": "2025-01-20",
+    "priority": 3,
+    "completed_at": null
+  },
+  {
+    "id": "task-004",
+    "name": "Prepare quarterly planning deck",
+    "description": "Compile roadmap highlights, risks, and dependencies for Q1 planning.",
+    "due_date": "2025-01-25",
+    "priority": 2,
+    "completed_at": null
+  },
+  {
+    "id": "task-005",
+    "name": "Schedule team offsite",
+    "description": "Coordinate logistics for the hybrid team offsite in March.",
+    "due_date": "2025-01-30",
+    "priority": 4,
+    "completed_at": null
+  },
+  {
+    "id": "task-006",
+    "name": "Publish API change log",
+    "description": "Document and publish the January API updates to the developer portal.",
+    "due_date": "2025-01-17",
+    "priority": 2,
+    "completed_at": null
+  },
+  {
+    "id": "task-007",
+    "name": "Interview: Product Designer",
+    "description": "Prepare questions and review portfolio for candidate #PD-482.",
+    "due_date": "2025-01-19",
+    "priority": 3,
+    "completed_at": null
+  },
+  {
+    "id": "task-008",
+    "name": "Customer feedback digest",
+    "description": "Summarize top 10 customer insights from January support tickets.",
+    "due_date": "2025-01-22",
+    "priority": 3,
+    "completed_at": null
+  },
+  {
+    "id": "task-009",
+    "name": "Finalize hiring budget",
+    "description": "Align with finance on final headcount budget for H1.",
+    "due_date": "2025-01-24",
+    "priority": 1,
+    "completed_at": null
+  },
+  {
+    "id": "task-010",
+    "name": "QA automation backlog",
+    "description": "Clean up automation backlog, close duplicate tickets, and reassign owners.",
+    "due_date": "2025-01-27",
+    "priority": 4,
+    "completed_at": null
+  },
+  {
+    "id": "task-011",
+    "name": "Launch blog announcement",
+    "description": "Coordinate with marketing to ship the productivity tips blog post.",
+    "due_date": "2025-01-16",
+    "priority": 3,
+    "completed_at": "2025-01-15"
+  },
+  {
+    "id": "task-012",
+    "name": "CRM data cleanup",
+    "description": "Remove stale leads and add lifecycle tags for high-fit accounts.",
+    "due_date": "2025-01-29",
+    "priority": 4,
+    "completed_at": null
+  },
+  {
+    "id": "task-013",
+    "name": "Update OKR tracker",
+    "description": "Refresh the OKR dashboard with updated metrics for each squad.",
+    "due_date": "2025-01-23",
+    "priority": 2,
+    "completed_at": null
+  },
+  {
+    "id": "task-014",
+    "name": "Security patch rollout",
+    "description": "Verify patch rollout across staging and production clusters.",
+    "due_date": "2025-01-18",
+    "priority": 1,
+    "completed_at": null
+  },
+  {
+    "id": "task-015",
+    "name": "Plan mentorship sessions",
+    "description": "Pair mentors/mentees for the upcoming growth program.",
+    "due_date": "2025-01-28",
+    "priority": 3,
+    "completed_at": null
+  }
+]

@@ -532,17 +532,16 @@ export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
 // Helper function to get URL search params with seed validation
 export function getSeedFromUrl(): number {
   if (typeof window === 'undefined') return 1;
-  
+
   const urlParams = new URLSearchParams(window.location.search);
-  const seedParam = urlParams.get('seed');
-  
+  const seedParam = urlParams.get('seed-structure') ?? urlParams.get('seed');
+
   if (seedParam) {
     const seed = parseInt(seedParam, 10);
-    // Validate seed range (1-300)
     if (seed >= 1 && seed <= 300) {
       return seed;
     }
   }
-  
-  return 1; // Default to 1
+
+  return 1;
 }

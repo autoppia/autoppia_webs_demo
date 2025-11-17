@@ -1,0 +1,46 @@
+[
+  {
+    "id": "p1",
+    "user": {
+      "username": "johndoe",
+      "name": "John Doe",
+      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+      "bio": "Software Engineer passionate about building products.",
+      "title": "Software Engineer"
+    },
+    "content": "Just shipped a new feature that our users have been asking for! Amazing to see the impact of good engineering on UX.",
+    "timestamp": "2025-01-20T15:00:00Z",
+    "likes": 12,
+    "liked": false,
+    "comments": [
+      {
+        "id": "c1",
+        "user": {
+          "username": "janedoe",
+          "name": "Jane Doe",
+          "avatar": "https://randomuser.me/api/portraits/women/68.jpg",
+          "bio": "Product Manager & startup enthusiast.",
+          "title": "Product Manager"
+        },
+        "text": "Great work John! The beta testers love it.",
+        "timestamp": "2025-01-20T15:20:00Z"
+      }
+    ],
+    "image": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=720&h=420&fit=crop&crop=entropy&auto=format&q=80"
+  },
+  {
+    "id": "p2",
+    "user": {
+      "username": "janedoe",
+      "name": "Jane Doe",
+      "avatar": "https://randomuser.me/api/portraits/women/68.jpg",
+      "bio": "Product Manager & startup enthusiast.",
+      "title": "Product Manager"
+    },
+    "content": "Excited to speak at the Product Management Summit about building user-centric roadmaps. See you in SF!",
+    "timestamp": "2025-01-19T18:00:00Z",
+    "likes": 8,
+    "liked": false,
+    "comments": []
+  }
+]

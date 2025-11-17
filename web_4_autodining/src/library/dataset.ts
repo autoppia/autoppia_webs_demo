@@ -674,51 +674,42 @@ export async function initializeRestaurants(v2SeedValue?: number | null): Promis
   } catch {}
 
   // Determine the seed to use
-  let effectiveSeed: number | null;
+  let effectiveSeed: number;
   
   if (dbModeEnabled) {
-    // If v2 is enabled, use the v2-seed provided (or null if not provided)
-    effectiveSeed = v2SeedValue ?? null;
+    // If v2 is enabled, use the v2-seed provided OR default to 1
+    effectiveSeed = v2SeedValue ?? 1;
   } else {
     // If v2 is NOT enabled, automatically use seed=1
     effectiveSeed = 1;
   }
 
-  // Always try to load from DB with the determined seed
-  if (effectiveSeed !== null && effectiveSeed !== undefined) {
-    try {
-      // Clear existing restaurants to force fresh load
-      dynamicRestaurants = [];
-      const { fetchSeededSelection } = await import("@/shared/seeded-loader");
-      const fromDb = await fetchSeededSelection<RestaurantGenerated>({
-        projectKey: "web_4_autodining",
-        entityType: "restaurants",
-        seedValue: effectiveSeed,
-        limit: 100,
-        method: "distribute",
-        filterKey: "cuisine",
-      });
-      
-      console.log(`[autodining] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
-      
-      if (fromDb && fromDb.length > 0) {
-        dynamicRestaurants = normalizeRestaurants(fromDb);
-        // Don't cache when using seeds to ensure each seed gets fresh data
-        return dynamicRestaurants;
-      } else {
-        console.warn(`[autodining] No data returned from DB with seed=${effectiveSeed}`);
-      }
-    } catch (err) {
-      console.error(`[autodining] Failed to load from DB with seed=${effectiveSeed}:`, err);
-      throw err; // Throw error instead of falling back
+  // Load from DB with the determined seed
+  try {
+    // Clear existing restaurants to force fresh load
+    dynamicRestaurants = [];
+    const { fetchSeededSelection } = await import("@/shared/seeded-loader");
+    const fromDb = await fetchSeededSelection<RestaurantGenerated>({
+      projectKey: "web_4_autodining",
+      entityType: "restaurants",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "cuisine",
+    });
+    
+    console.log(`[autodining] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+    
+    if (fromDb && fromDb.length > 0) {
+      dynamicRestaurants = normalizeRestaurants(fromDb);
+      // Don't cache when using seeds to ensure each seed gets fresh data
+      return dynamicRestaurants;
+    } else {
+      console.warn(`[autodining] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[autodining] No data found for seed=${effectiveSeed}`);
     }
-  } else {
-    // If we reach here without a valid seed and v2 is enabled, it's an error
-    if (dbModeEnabled) {
-      throw new Error("[autodining] v2 is enabled but no valid seed provided");
-    }
+  } catch (err) {
+    console.error(`[autodining] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    throw err;
   }
-
-  // If we reach here, something went wrong
-  throw new Error("[autodining] Failed to load restaurants from database");
 }

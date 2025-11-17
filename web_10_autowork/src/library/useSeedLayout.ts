@@ -200,6 +200,17 @@ function shuffleWithRandom<T>(items: T[], randomFn: () => number): T[] {
 
 const DEFAULT_STRUCTURE_SEED = 36;
 const DEFAULT_DYNAMIC_SEED = 36;
+const DEFAULT_V2_SEED = 1;
+const V2_SEED_STORAGE_KEY = "autowork_v2_seed";
+
+const isV2DbModeEnabled =
+  (
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE ||
+    process.env.ENABLE_DYNAMIC_V2_DB_MODE ||
+    ""
+  )
+    .toString()
+    .toLowerCase() === "true";
 
 const parseSeedValue = (value?: string | null): number => {
   if (!value) return NaN;
@@ -213,6 +224,7 @@ const clampSeed = (value: number, fallback: number): number =>
 export function useSeedLayout() {
   const [structureSeed, setStructureSeed] = useState(DEFAULT_STRUCTURE_SEED);
   const [dynamicSeed, setDynamicSeed] = useState(DEFAULT_DYNAMIC_SEED);
+  const [v2Seed, setV2Seed] = useState<number | null>(null);
   const [structureSeedActive, setStructureSeedActive] = useState(false);
   const [dynamicSeedActive, setDynamicSeedActive] = useState(false);
   const [layout, setLayout] = useState<LayoutConfig>(getSeedLayout(DEFAULT_STRUCTURE_SEED));
@@ -242,6 +254,31 @@ export function useSeedLayout() {
       ? clampSeed(rawDynamicSeed as number, DEFAULT_DYNAMIC_SEED)
       : DEFAULT_DYNAMIC_SEED;
 
+    let storedV2Seed: number | null = null;
+    if (isV2DbModeEnabled) {
+      try {
+        const stored = localStorage.getItem(V2_SEED_STORAGE_KEY);
+        if (stored) {
+          const parsedStored = parseSeedValue(stored);
+          if (Number.isFinite(parsedStored)) {
+            storedV2Seed = clampSeed(parsedStored as number, DEFAULT_V2_SEED);
+          }
+        }
+      } catch {
+        storedV2Seed = null;
+      }
+    }
+
+    let resolvedV2Seed: number | null = null;
+    if (isV2DbModeEnabled) {
+      const rawV2Seed = parseSeedValue(url.searchParams.get('v2-seed'));
+      if (Number.isFinite(rawV2Seed)) {
+        resolvedV2Seed = clampSeed(rawV2Seed as number, DEFAULT_V2_SEED);
+      } else if (storedV2Seed !== null) {
+        resolvedV2Seed = storedV2Seed;
+      }
+    }
+
     if (structureActive) {
       const structureString = resolvedStructureSeed.toString();
       if (url.searchParams.get('seed') !== structureString) {
@@ -258,8 +295,25 @@ export function useSeedLayout() {
       }
     }
 
+    if (isV2DbModeEnabled && resolvedV2Seed !== null) {
+      const v2SeedString = resolvedV2Seed.toString();
+      if (url.searchParams.get('v2-seed') !== v2SeedString) {
+        url.searchParams.set('v2-seed', v2SeedString);
+        urlChanged = true;
+      }
+      try {
+        localStorage.setItem(V2_SEED_STORAGE_KEY, v2SeedString);
+      } catch {
+        // ignore storage errors
+      }
+    } else if (url.searchParams.has('v2-seed')) {
+      url.searchParams.delete('v2-seed');
+      urlChanged = true;
+    }
+
     setStructureSeed(resolvedStructureSeed);
     setDynamicSeed(resolvedDynamicSeed);
+    setV2Seed(isV2DbModeEnabled ? resolvedV2Seed : null);
     setStructureSeedActive(structureActive);
     setDynamicSeedActive(dynamicActive);
 
@@ -350,15 +404,22 @@ export function useSeedLayout() {
       params.delete('seed-structure');
     }
 
+    if (isV2DbModeEnabled && v2Seed !== null) {
+      params.set('v2-seed', v2Seed.toString());
+    } else {
+      params.delete('v2-seed');
+    }
+
     const query = params.toString();
     const rebuilt = `${basePath}${query ? `?${query}` : ''}`;
     return hashFragment ? `${rebuilt}#${hashFragment}` : rebuilt;
-  }, [structureSeed, dynamicSeed, isDynamicStructureActive, isDynamicHtmlActive]);
+  }, [structureSeed, dynamicSeed, v2Seed, isDynamicStructureActive, isDynamicHtmlActive]);
 
   return {
     seed: dynamicSeed,
     structureSeed,
     dynamicSeed,
+    v2Seed,
     isDynamicStructureActive,
     isDynamicHtmlActive,
     layout,
