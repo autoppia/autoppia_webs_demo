@@ -2,12 +2,71 @@
 import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHasHydrated } from "@/hooks/use-hydrated";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
+import { useRestaurants } from "@/contexts/RestaurantContext";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Calendar, Clock, Home, Phone, Gift, ChevronRight } from "lucide-react";
+import { Calendar, Clock, Home, Phone, Gift, ChevronRight, Loader2 } from "lucide-react";
 import { useRef } from "react";
+
+interface EditableTimeProps {
+  value: string;
+  onChange: (v: string) => void;
+  editing: boolean;
+  setEditing: (edit: boolean) => void;
+  className?: string;
+  id?: string;
+}
+
+function EditableTime({
+  value,
+  onChange,
+  editing,
+  setEditing,
+  className,
+  id,
+}: EditableTimeProps) {
+  const [tmp, setTmp] = useState(value);
+  useEffect(() => {
+    setTmp(value);
+  }, [value]);
+
+  if (editing) {
+    return (
+      <input
+        id={id ? `${id}-input` : undefined}
+        className={
+          "border-b outline-none w-auto font-mono py-0.5 px-1 bg-zinc-50 " +
+          (className || "")
+        }
+        value={tmp}
+        onChange={(e) => setTmp(e.target.value)}
+        onBlur={() => {
+          setEditing(false);
+          if (tmp.trim()) onChange(tmp);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setEditing(false);
+            if (tmp.trim()) onChange(tmp);
+          }
+        }}
+        autoFocus
+      />
+    );
+  }
+
+  return (
+    <span
+      id={id}
+      className={"cursor-pointer hover:underline " + (className || "")}
+      tabIndex={0}
+      onClick={() => setEditing(true)}
+    >
+      {value}
+    </span>
+  );
+}
 
 import {
   Dialog,
@@ -51,13 +110,12 @@ export default function CartPage() {
   const [deliveryTime, setDeliveryTime] = useState<
     "express" | "standard" | "scheduled"
   >("standard");
-  const restaurants = getRestaurants() || [];
+  const { restaurants, isLoading } = useRestaurants();
   const restaurant =
     items.length > 0
       ? restaurants.find((r) => r.id === items[0].restaurantId)
       : null;
 
-  // Dynamic demo time values
   const [expressTime, setExpressTime] = useState(
     restaurant?.deliveryTime || "20-30 min"
   );
@@ -67,12 +125,19 @@ export default function CartPage() {
   const [pickupTime, setPickupTime] = useState(
     restaurant?.pickupTime || "10-20 min"
   );
-  // Editable UI state
+
   const [editing, setEditing] = useState<{
     field: "express" | "standard" | "scheduled" | "pickup" | null;
   }>({ field: null });
   const [scheduledInput, setScheduledInput] = useState("");
-  React.useEffect(() => {
+
+  useEffect(() => {
+    setExpressTime(restaurant?.deliveryTime || "20-30 min");
+    setStandardTime(restaurant?.deliveryTime || "20-30 min");
+    setPickupTime(restaurant?.pickupTime || "10-20 min");
+  }, [restaurant?.deliveryTime, restaurant?.pickupTime]);
+
+  useEffect(() => {
     if (hydrated && items.length > 0) {
       logEvent(EVENT_TYPES.OPEN_CHECKOUT_PAGE, {
         itemCount: items.reduce((acc: number, i: { quantity: number }) => acc + i.quantity, 0),
@@ -85,6 +150,14 @@ export default function CartPage() {
       });
     }
   }, [hydrated, items]);
+
+  if (isLoading && items.length > 0 && !restaurant) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      </div>
+    );
+  }
   if (!hydrated) {
     return (
       <div className="flex justify-center py-16">
@@ -109,59 +182,6 @@ export default function CartPage() {
       >
         {emptyMessage}
       </div>
-    );
-  }
-
-  // Helper for time label inline editing
-  function EditableTime({
-    value,
-    onChange,
-    editing,
-    setEditing,
-    className,
-    id,
-  }: {
-    value: string;
-    onChange: (v: string) => void;
-    editing: boolean;
-    setEditing: (edit: boolean) => void;
-    className?: string;
-    id?: string;
-  }) {
-    const [tmp, setTmp] = useState(value);
-    React.useEffect(() => {
-      setTmp(value);
-    }, [value]);
-    return editing ? (
-      <input
-        id={id ? `${id}-input` : undefined}
-        className={
-          "border-b outline-none w-auto font-mono py-0.5 px-1 bg-zinc-50 " +
-          (className || "")
-        }
-        value={tmp}
-        onChange={(e) => setTmp(e.target.value)}
-        onBlur={() => {
-          setEditing(false);
-          if (tmp.trim()) onChange(tmp);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            setEditing(false);
-            if (tmp.trim()) onChange(tmp);
-          }
-        }}
-        autoFocus
-      />
-    ) : (
-      <span
-        id={id}
-        className={"cursor-pointer hover:underline " + (className || "")}
-        tabIndex={0}
-        onClick={() => setEditing(true)}
-      >
-        {value}
-      </span>
     );
   }
 

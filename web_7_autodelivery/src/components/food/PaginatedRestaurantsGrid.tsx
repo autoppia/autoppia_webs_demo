@@ -1,6 +1,5 @@
 "use client";
 import { useMemo, useState } from "react";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
 import RestaurantCard from "./RestaurantCard";
 import {
   Pagination,
@@ -13,6 +12,8 @@ import {
 import React from "react";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
 import type { Restaurant } from "@/data/restaurants";
+import { useRestaurants } from "@/contexts/RestaurantContext";
+import { Loader2 } from "lucide-react";
 
 interface PaginatedRestaurantsGridProps {
   filteredRestaurants?: Restaurant[];
@@ -23,11 +24,19 @@ export default function PaginatedRestaurantsGrid({
   filteredRestaurants, 
   title = "All Restaurants" 
 }: PaginatedRestaurantsGridProps) {
-  const restaurants = useMemo(() => getRestaurants() ?? [], []);
+  const { restaurants, isLoading } = useRestaurants();
   const defaultFilteredRestaurants = filteredRestaurants || restaurants;
   const [currentPage, setCurrentPage] = useState(1);
   const restaurantsPerPage = 12;
   const layout = useSeedLayout();
+
+  if (isLoading && !defaultFilteredRestaurants.length) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      </div>
+    );
+  }
   
   // Calculate pagination
   const totalPages = Math.ceil(defaultFilteredRestaurants.length / restaurantsPerPage);
