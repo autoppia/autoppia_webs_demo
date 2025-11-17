@@ -11,6 +11,11 @@ export function buildStorageKey({ projectKey, entityType, mode, seed, version }:
 export async function loadDataOrGenerate<T>({ projectKey, entityType, generateCount = 50, categories, version = 'v1', ttlMs, fallback, seedValue }: { projectKey: string; entityType: string; generateCount?: number; categories?: string[]; version?: string; ttlMs?: number; fallback?: () => Promise<T[]>|T[]; seedValue?: number | null }) : Promise<T[]> {
   if (isDbLoadModeEnabled()) {
     const seed = typeof seedValue === 'number' ? seedValue : getSeedValueFromEnv(1)
+    console.log("[universal-loader] DB mode enabled → fetching seeded selection", {
+      projectKey,
+      entityType,
+      seed,
+    })
     return await fetchSeededSelection<T>({ projectKey, entityType, seedValue: seed })
   }
 
@@ -41,8 +46,12 @@ export function useProjectData<T>(params: Parameters<typeof loadDataOrGenerate<T
   const [state, setState] = useState<{ data: T[]; isLoading: boolean; error: string|null }>({ data: [], isLoading: true, error: null })
   useEffect(() => {
     let cancelled = false
+    console.log("[useProjectData] loading", { projectKey: params.projectKey, entityType: params.entityType, seedValue: params.seedValue ?? null })
     loadDataOrGenerate<T>(params).then(
-      data => { if (!cancelled) setState({ data, isLoading: false, error: null }) },
+      data => { 
+        console.log("[useProjectData] loaded data", { projectKey: params.projectKey, entityType: params.entityType, count: data.length, sample: (data as unknown as any[]).slice?.(0, 3) ?? [] })
+        if (!cancelled) setState({ data, isLoading: false, error: null }) 
+      },
       err => { if (!cancelled) setState({ data: [], isLoading: false, error: err?.message || 'Failed to load data' }) },
     )
     return () => { cancelled = true }

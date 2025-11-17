@@ -8,27 +8,45 @@
  * @param searchParams - Current search params from useSearchParams()
  * @returns URL with seed-structure preserved if present
  */
+function appendParam(path: string, key: string, value: string | null): string {
+  if (!value) return path;
+  const separator = path.includes("?") ? "&" : "?";
+  const encoded = encodeURIComponent(value);
+  return `${path}${separator}${key}=${encoded}`;
+}
+
+function getUrlParam(searchParams: URLSearchParams | null, key: string): string | null {
+  if (searchParams) {
+    return searchParams.get(key);
+  }
+  if (typeof window !== "undefined") {
+    return new URLSearchParams(window.location.search).get(key);
+  }
+  return null;
+}
+
 export function withSeed(path: string, searchParams: URLSearchParams | null = null): string {
   if (!searchParams) {
-    // If no searchParams provided, try to get from window (client-side only)
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const seedStructure = params.get('seed-structure');
-      if (seedStructure) {
-        const separator = path.includes('?') ? '&' : '?';
-        return `${path}${separator}seed-structure=${seedStructure}`;
-      }
-    }
-    return path;
+    const seed = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("seed") : null;
+    const seedStructure =
+      typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("seed-structure") : null;
+    const v2Seed = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("v2-seed") : null;
+    let newPath = path;
+    newPath = appendParam(newPath, "seed", seed);
+    newPath = appendParam(newPath, "seed-structure", seedStructure);
+    newPath = appendParam(newPath, "v2-seed", v2Seed);
+    return newPath;
   }
 
-  const seedStructure = searchParams.get('seed-structure');
-  if (seedStructure) {
-    const separator = path.includes('?') ? '&' : '?';
-    return `${path}${separator}seed-structure=${seedStructure}`;
-  }
-  
-  return path;
+  const seed = searchParams.get("seed");
+  const seedStructure = searchParams.get("seed-structure");
+  const v2Seed = searchParams.get("v2-seed");
+
+  let newPath = path;
+  newPath = appendParam(newPath, "seed", seed);
+  newPath = appendParam(newPath, "seed-structure", seedStructure);
+  newPath = appendParam(newPath, "v2-seed", v2Seed);
+  return newPath;
 }
 
 /**
@@ -44,26 +62,21 @@ export function withSeedAndParams(
   searchParams: URLSearchParams | null = null
 ): string {
   const params = new URLSearchParams();
-  
+
   // Add provided query params
   Object.entries(queryParams).forEach(([key, value]) => {
     params.set(key, value);
   });
-  
-  // Preserve seed-structure if present
-  if (searchParams) {
-    const seedStructure = searchParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
-    }
-  } else if (typeof window !== 'undefined') {
-    const currentParams = new URLSearchParams(window.location.search);
-    const seedStructure = currentParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
-    }
-  }
-  
+
+  // Preserve seed, seed-structure, and v2-seed if present
+  const seedStructure = getUrlParam(searchParams, "seed-structure");
+  const seed = getUrlParam(searchParams, "seed");
+  const v2Seed = getUrlParam(searchParams, "v2-seed");
+
+  if (seedStructure) params.set("seed-structure", seedStructure);
+  if (seed) params.set("seed", seed);
+  if (v2Seed) params.set("v2-seed", v2Seed);
+
   const queryString = params.toString();
   return queryString ? `${basePath}?${queryString}` : basePath;
 }

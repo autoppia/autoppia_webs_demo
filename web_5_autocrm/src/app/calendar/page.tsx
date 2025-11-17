@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -12,6 +12,23 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useProjectData } from "@/shared/universal-loader";
+import { useSeed } from "@/context/SeedContext";
+
+const normalizeEvent = (ev: any, index: number): CalendarEvent => ({
+  id: ev?.id ?? index + 1,
+  date: ev?.date ?? new Date().toISOString().slice(0, 10),
+  label: ev?.label ?? "Event",
+  time: ev?.time ?? "2:00pm",
+  color: (["forest", "indigo", "blue", "zinc"].includes(ev?.color) ? ev.color : "forest") as keyof typeof COLORS,
+});
+
+const LoadingNotice = ({ message }: { message: string }) => (
+  <div className="flex items-center gap-2 text-sm text-zinc-500">
+    <span className="h-2 w-2 rounded-full bg-accent-forest animate-ping" />
+    <span>{message}</span>
+  </div>
+);
 
 function getMonthMatrix(year: number, month: number) {
   const matrix = [];
@@ -35,22 +52,32 @@ function pad(num: number) {
 
 export default function CalendarPage() {
   const { getText, getId } = useDynamicStructure();
-  const [error] = useState<string | null>(null);
+  const { v2Seed } = useSeed();
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "events",
+    seedValue: v2Seed ?? undefined,
+  });
+  console.log("[CalendarPage] API response", {
+    seed: v2Seed ?? null,
+    count: data?.length ?? 0,
+    isLoading,
+    error,
+    sample: (data || []).slice(0, 3),
+  });
   const today = new Date();
   const [curMonth, setCurMonth] = useState(today.getMonth());
   const [curYear, setCurYear] = useState(today.getFullYear());
   const [openEventDate, setOpenEventDate] = useState<string | null>(null);
-  const [events, setEvents] = useState<CalendarEvent[]>(() =>
-    EVENTS.map((ev: any, i: number) => ({
-      id: ev.id ?? i + 1,
-      date: ev.date ?? new Date().toISOString().slice(0, 10),
-      label: ev.label ?? "Event",
-      time: ev.time ?? "2:00pm",
-      color: (["forest", "indigo", "blue", "zinc"].includes(ev.color)
-        ? ev.color
-        : "forest") as keyof typeof COLORS,
-    }))
-  );
+  const normalizedDemo = useMemo(() => EVENTS.map((ev, idx) => normalizeEvent(ev, idx)), []);
+  const normalizedApi = useMemo(() => (data || []).map((ev, idx) => normalizeEvent(ev, idx)), [data]);
+  const resolvedEvents = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const [events, setEvents] = useState<CalendarEvent[]>(resolvedEvents);
+  useEffect(() => {
+    if (isLoading) return;
+    setEvents(resolvedEvents);
+  }, [resolvedEvents, isLoading]);
+  const apiError: string | null = error ?? null;
 
   const monthLabel = new Date(curYear, curMonth).toLocaleString("default", {
     month: "long",
@@ -64,6 +91,10 @@ export default function CalendarPage() {
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight">{getText("calendar_title")}</h1>
       </DynamicElement>
+
+      {isLoading && (
+        <LoadingNotice message={getText("loading_message") ?? "Loading calendar..."} />
+      )}
 
       <DynamicElement elementType="section" index={1} className="flex items-center gap-2 mb-6">
         <DynamicButton
@@ -100,8 +131,8 @@ export default function CalendarPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="w-full mx-auto rounded-2xl overflow-hidden border border-zinc-100 bg-white shadow-card">
-        {error && (
-          <div className="px-6 py-3 text-red-600">Failed to load calendar: {error}</div>
+        {apiError && (
+          <div className="px-6 py-3 text-red-600">Failed to load calendar: {apiError}</div>
         )}
         <div className="grid grid-cols-7 bg-neutral-bg-dark text-zinc-500 text-xs font-semibold uppercase tracking-wider">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (

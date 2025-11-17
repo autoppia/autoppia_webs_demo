@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -19,6 +19,8 @@ import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useSearchParams } from "next/navigation";
 import { withSeed } from "@/utils/seedRouting";
+import { useProjectData } from "@/shared/universal-loader";
+import { useSeed } from "@/context/SeedContext";
 
 const STORAGE_KEY = "matters";
 
@@ -29,6 +31,21 @@ type Matter = {
   status: string;
   updated: string;
 };
+
+const normalizeMatter = (matter: any, index: number): Matter => ({
+  id: matter?.id ?? matter?.matterId ?? `MAT-${1000 + index}`,
+  name: matter?.name ?? matter?.title ?? matter?.matter ?? `Matter ${index + 1}`,
+  client: matter?.client ?? matter?.clientName ?? "—",
+  status: matter?.status ?? "Active",
+  updated: matter?.updated ?? matter?.updated_at ?? matter?.lastUpdated ?? "Today",
+});
+
+const LoadingNotice = ({ message }: { message: string }) => (
+  <div className="flex items-center gap-2 text-sm text-zinc-500">
+    <span className="h-2 w-2 rounded-full bg-accent-forest animate-ping" />
+    <span>{message}</span>
+  </div>
+);
 
 function statusPill(status: string) {
   let color = "bg-accent-forest/10 text-accent-forest";
@@ -52,9 +69,25 @@ function statusPill(status: string) {
 function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
-  const [matters, setMatters] = useState<Matter[]>([]);
-  const data = DEMO_MATTERS;
-  const error: string | null = null;
+  const { v2Seed } = useSeed();
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "matters",
+    seedValue: v2Seed ?? undefined,
+  });
+  console.log("[MattersPage] API response", {
+    seed: v2Seed ?? null,
+    count: data?.length ?? 0,
+    isLoading,
+    error,
+    sample: (data || []).slice(0, 3),
+  });
+  const normalizedDemo = useMemo(() => DEMO_MATTERS.map((m, idx) => normalizeMatter(m, idx)), []);
+  const normalizedApi = useMemo(() => (data || []).map((m, idx) => normalizeMatter(m, idx)), [data]);
+  const resolvedMatters = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const storageKey = useMemo(() => `${STORAGE_KEY}_${v2Seed ?? 0}`, [v2Seed]);
+  const [matters, setMatters] = useState<Matter[]>(resolvedMatters);
+  const [seedSnapshot, setSeedSnapshot] = useState<number | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
   const [openNew, setOpenNew] = useState(false);
   const [newMatter, setNewMatter] = useState({
@@ -64,28 +97,34 @@ function MattersListPageContent() {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const base = (data && data.length ? data : DEMO_MATTERS) as any[];
-    const normalized = base.map((m: any) => ({
-      id: m.id ?? `MAT-${Math.floor(Math.random() * 9000 + 1000)}`,
-      name: m.name ?? 'Untitled Matter',
-      client: m.client ?? '—',
-      status: m.status ?? 'Active',
-      updated: m.updated ?? 'Today',
-    })) as Matter[];
-    if (saved) {
-      setMatters(JSON.parse(saved));
-    } else {
-      setMatters(normalized);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    if (isLoading) return;
+    const currentSeed = v2Seed ?? 0;
+    if (seedSnapshot === currentSeed) return;
+    let next = resolvedMatters;
+    if (typeof window !== "undefined") {
+      const saved = window.localStorage.getItem(storageKey);
+      if (saved) {
+        try {
+          next = JSON.parse(saved);
+        } catch (err) {
+          console.warn("[MattersPage] Unable to parse cached matters", err);
+        }
+      } else {
+        window.localStorage.setItem(storageKey, JSON.stringify(resolvedMatters));
+      }
     }
-  }, [data]);
+    setMatters(next);
+    setSeedSnapshot(currentSeed);
+  }, [resolvedMatters, storageKey, v2Seed, isLoading, seedSnapshot]);
 
   const updateMatters = (newList: Matter[]) => {
     setMatters(newList);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newList));
-    const custom = newList.filter(m => !DEMO_MATTERS.some(d => d.id === m.id));
-    Cookies.set("custom_matters", JSON.stringify(custom), {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(storageKey, JSON.stringify(newList));
+    }
+    const baseIds = new Set(resolvedMatters.map((m) => m.id));
+    const custom = newList.filter((m) => !baseIds.has(m.id));
+    Cookies.set(`custom_matters_${v2Seed ?? 0}`, JSON.stringify(custom), {
       expires: 7,
       path: "/",
     });
@@ -144,10 +183,19 @@ function MattersListPageContent() {
           </DynamicButton>
         </div>
 
+        {isLoading && (
+          <LoadingNotice message={getText("loading_message") ?? "Loading matters..."} />
+        )}
+
         {/* Matter List */}
         <div className="grid gap-4">
           {error && (
             <div className="text-red-600">Failed to load matters: {error}</div>
+          )}
+          {isLoading && matters.length === 0 && (
+            <div className="text-zinc-500">
+              {getText("loading_message") ?? "Loading matters..."}
+            </div>
           )}
           {matters.map((matter) => (
             <DynamicItem

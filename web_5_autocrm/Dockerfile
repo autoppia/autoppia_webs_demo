@@ -10,8 +10,15 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Accept build arguments
-ARG ENABLE_DYNAMIC_HTML=true
-ARG ENABLE_DYNAMIC_STRUCTURE=true
+ARG ENABLE_DYNAMIC_HTML=false
+ARG ENABLE_DYNAMIC_STRUCTURE=false
+ARG ENABLE_DATA_GENERATION=false
+ARG ENABLE_DB_MODE=false
+ARG NEXT_PUBLIC_API_URL
+ARG API_URL
+ARG NEXT_PUBLIC_ENABLE_DB_MODE=false
+ARG DATA_SEED_VALUE
+ARG NEXT_PUBLIC_DATA_SEED_VALUE
 
 COPY package.json package-lock.json ./
 
@@ -20,18 +27,35 @@ RUN npm ci
 
 COPY . .
 
-# Set environment variables for build
-ENV ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
-ENV NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML}
-ENV NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE=${ENABLE_DYNAMIC_STRUCTURE}
-ENV DOCKER_BUILD=true
+# Ensure public directory exists (even if empty) so COPY succeeds
+RUN mkdir -p public
+
+# Set environment variables for build (Next.js embeds NEXT_PUBLIC_* at build time)
+ENV ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
+    ENABLE_DYNAMIC_STRUCTURE=$ENABLE_DYNAMIC_STRUCTURE \
+    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML=$ENABLE_DYNAMIC_HTML \
+    NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE=$ENABLE_DYNAMIC_STRUCTURE \
+    ENABLE_DATA_GENERATION=$ENABLE_DATA_GENERATION \
+    ENABLE_DB_MODE=$ENABLE_DB_MODE \
+    NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+    API_URL=$API_URL \
+    NEXT_PUBLIC_ENABLE_DB_MODE=$NEXT_PUBLIC_ENABLE_DB_MODE \
+    DATA_SEED_VALUE=$DATA_SEED_VALUE \
+    NEXT_PUBLIC_DATA_SEED_VALUE=$NEXT_PUBLIC_DATA_SEED_VALUE \
+    DOCKER_BUILD=true
 
 # Debug: Print environment variables
-RUN echo "🔍 Build environment variables:"
-RUN echo "  ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}"
-RUN echo "  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}"
-RUN echo "  NEXT_PUBLIC_ENABLE_DYNAMIC_STRUCTURE: ${ENABLE_DYNAMIC_STRUCTURE}"
-RUN echo "  DOCKER_BUILD: ${DOCKER_BUILD}"
+RUN echo "🔍 Build environment variables:" && \
+    echo "  ENABLE_DYNAMIC_HTML: ${ENABLE_DYNAMIC_HTML}" && \
+    echo "  ENABLE_DYNAMIC_STRUCTURE: ${ENABLE_DYNAMIC_STRUCTURE}" && \
+    echo "  ENABLE_DATA_GENERATION: ${ENABLE_DATA_GENERATION}" && \
+    echo "  ENABLE_DB_MODE: ${ENABLE_DB_MODE}" && \
+    echo "  NEXT_PUBLIC_ENABLE_DB_MODE: ${NEXT_PUBLIC_ENABLE_DB_MODE}" && \
+    echo "  DATA_SEED_VALUE: ${DATA_SEED_VALUE}" && \
+    echo "  NEXT_PUBLIC_DATA_SEED_VALUE: ${NEXT_PUBLIC_DATA_SEED_VALUE}" && \
+    echo "  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}" && \
+    echo "  API_URL: ${API_URL}" && \
+    echo "  DOCKER_BUILD: ${DOCKER_BUILD}"
 
 RUN npm run build
 
@@ -49,7 +73,6 @@ COPY --from=deps /app/node_modules ./node_modules
 # app artifacts
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/next.config.js ./next.config.js
-# This app has no public directory
+COPY --from=builder /app/public ./public
 
 CMD ["npm", "start"]

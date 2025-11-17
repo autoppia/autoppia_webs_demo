@@ -1,12 +1,47 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_LOGS } from "@/library/dataset";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useProjectData } from "@/shared/universal-loader";
+import { useSeed } from "@/context/SeedContext";
+
+const normalizeLog = (log: any, index: number) => ({
+  id: log?.id ?? Date.now() + index,
+  matter: log?.matter ?? "—",
+  client: log?.client ?? "—",
+  date: log?.date ?? new Date().toISOString().slice(0, 10),
+  hours: typeof log?.hours === "number" ? log.hours : 1,
+  description: log?.description ?? "—",
+  status: log?.status ?? "Billable",
+});
+
+const LoadingNotice = ({ message }: { message: string }) => (
+  <div className="flex items-center gap-2 text-sm text-zinc-500">
+    <span className="h-2 w-2 rounded-full bg-accent-forest animate-ping" />
+    <span>{message}</span>
+  </div>
+);
 
 export default function BillingPage() {
   const { getText, getId } = useDynamicStructure();
+  const { v2Seed } = useSeed();
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "logs",
+    seedValue: v2Seed ?? undefined,
+  });
+  console.log("[BillingPage] API response", {
+    seed: v2Seed ?? null,
+    count: data?.length ?? 0,
+    isLoading,
+    error,
+    sample: (data || []).slice(0, 3),
+  });
+  const normalizedDemo = useMemo(() => DEMO_LOGS.map((l, idx) => normalizeLog(l, idx)), []);
+  const normalizedApi = useMemo(() => (data || []).map((l, idx) => normalizeLog(l, idx)), [data]);
+  const resolvedLogs = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
   const [timerActive, setTimerActive] = useState(false);
   const [timerSec, setTimerSec] = useState(0);
   const [manual, setManual] = useState({
@@ -14,18 +49,12 @@ export default function BillingPage() {
     hours: 0.5,
     description: "",
   });
-  const [logs, setLogs] = useState(() =>
-    DEMO_LOGS.map((l: any, i: number) => ({
-      id: l.id ?? Date.now() + i,
-      matter: l.matter ?? "—",
-      client: l.client ?? "—",
-      date: l.date ?? new Date().toISOString().slice(0, 10),
-      hours: typeof l.hours === "number" ? l.hours : 1,
-      description: l.description ?? "—",
-      status: l.status ?? "Billable",
-    }))
-  );
-  const [error] = useState<string | null>(null);
+  const [logs, setLogs] = useState(resolvedLogs);
+  useEffect(() => {
+    if (isLoading) return;
+    setLogs(resolvedLogs);
+  }, [resolvedLogs, isLoading]);
+  const apiError: string | null = error ?? null;
   const [tab, setTab] = useState("Logs");
 
   React.useEffect(() => {
@@ -88,6 +117,9 @@ export default function BillingPage() {
       <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
         {getText("billing_title")}
       </h1>
+      {isLoading && (
+        <LoadingNotice message={getText("loading_message") ?? "Loading logs..."} />
+      )}
       <div className="flex gap-4 mb-8">
         <button
           onClick={() => setTab("Logs")}
@@ -213,8 +245,8 @@ export default function BillingPage() {
         <div className="mb-8">
           <h2 className="text-lg font-semibold mb-5">{getText("recent_activity")}</h2>
           <div className="flex flex-col gap-4">
-            {error && (
-              <div className="text-red-600 px-4 py-2">Failed to load logs: {error}</div>
+            {apiError && (
+              <div className="text-red-600 px-4 py-2">Failed to load logs: {apiError}</div>
             )}
             {logs.length === 0 && (
               <div

@@ -22,9 +22,18 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
+const LoadingNotice = ({ message }: { message: string }) => (
+  <div className="flex items-center gap-2 text-sm text-zinc-500">
+    <span className="h-2 w-2 rounded-full bg-accent-forest animate-ping" />
+    <span>{message}</span>
+  </div>
+);
+
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const { v2Seed } = useSeed();
+  console.log("[ClientsPage] current v2Seed", v2Seed);
+
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: 'web_5_autocrm',
     entityType: 'clients',
@@ -33,6 +42,8 @@ function ClientsDirectoryContent() {
     fallback: () => staticClients,
     seedValue: v2Seed ?? undefined,
   });
+  console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
+
   const clients = (data && data.length ? data : staticClients).map((c: any, i: number) => ({
     id: c.id ?? `CL-${1000 + i}`,
     name: c.name ?? c.title ?? `Client ${i+1}`,
@@ -95,6 +106,9 @@ function ClientsDirectoryContent() {
           <Filter className="w-4 h-4" /> {getText("filter_by")}
         </DynamicButton>
       </DynamicElement>
+      {isLoading && (
+        <LoadingNotice message={getText("loading_message") ?? "Loading clients..."} />
+      )}
       <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
         {error && (
           <div className="py-6 px-6 text-red-600">Failed to load data: {error}</div>

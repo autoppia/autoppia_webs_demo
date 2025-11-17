@@ -26,6 +26,24 @@ const CACHE_KEYS = {
   logs: "autocrm_generated_logs_v1",
 };
 
+// Track runtime v2 seed propagated from SeedContext (client-side)
+let runtimeV2Seed: number | null = null;
+
+if (typeof window !== "undefined") {
+  runtimeV2Seed = (window as any).__autocrmV2Seed ?? null;
+  window.addEventListener("autocrm:v2SeedChange", (event: Event) => {
+    const detail = (event as CustomEvent<{ seed: number | null }>).detail;
+    runtimeV2Seed = typeof detail?.seed === "number" ? detail.seed : null;
+  });
+}
+
+function getActiveSeed(defaultSeed: number = 1): number {
+  if (typeof runtimeV2Seed === "number" && runtimeV2Seed >= 1 && runtimeV2Seed <= 300) {
+    return runtimeV2Seed;
+  }
+  return getSeedValueFromEnv(defaultSeed);
+}
+
 // Dynamic data arrays
 let dynamicClients: any[] = isDataGenerationAvailable() ? [] : [...originalClients];
 let dynamicMatters: any[] = isDataGenerationAvailable() ? [] : [...DEMO_MATTERS];
@@ -322,13 +340,13 @@ export async function initializeLogs(): Promise<any[]> {
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
-export async function loadClientsFromDb(): Promise<any[]> {
+export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
   
   try {
-    const seed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
     const limit = 100;
     const selected = await fetchSeededSelection<any>({
       projectKey: "web_5_autocrm",
@@ -375,16 +393,16 @@ export async function loadClientsFromDb(): Promise<any[]> {
   return [];
 }
 
-export async function loadMattersFromDb(): Promise<any[]> {
+export async function loadMattersFromDb(seedOverride?: number): Promise<any[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
   
   try {
-    const seed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
     const limit = 100;
     const selected = await fetchSeededSelection<any>({
-      projectKey: "web_5_autocrm:matters",
+      projectKey: "web_5_autocrm",
       entityType: "matters",
       seedValue: seed,
       limit,
