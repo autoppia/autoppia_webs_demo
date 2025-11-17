@@ -11,9 +11,8 @@
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
 #   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
-#                                            v2 requires choosing: DB mode OR AI generation (see examples)
+#                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
-#   --data_seed_value=INT         Seed value for v2 data generation (required for DB mode, optional for AI)
 #   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
 #   -h, --help                    Show this help and exit
@@ -21,17 +20,11 @@
 # Examples:
 #   ./setup.sh --demo=automail  # v1 enabled by default (seeds + layout variants)
 #   
-#   # v2: AI Generation mode (generates data on-the-fly)
+#   # v2: DB Mode (loads pre-generated data from database via ?v2-seed=X in URL)
 #   ./setup.sh --enabled_dynamic_versions=v2
 #   
-#   # v2: DB Mode (loads pre-generated data from database)
-#   ./setup.sh --enabled_dynamic_versions=v2 --enable_db_mode=true --data_seed_value=42
-#   
-#   # v1 + v2: Layouts + AI Generation
-#   ./setup.sh --enabled_dynamic_versions=v1,v2
-#   
 #   # v1 + v2: Layouts + DB Mode
-#   ./setup.sh --enabled_dynamic_versions=v1,v2 --enable_db_mode=true --data_seed_value=42
+#   ./setup.sh --enabled_dynamic_versions=v1,v2
 #------------------------------------------------------------
 set -euo pipefail
 
@@ -49,26 +42,19 @@ Options:
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
   --demo=NAME                   One of: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
-                                            v2 requires choosing: DB mode OR AI generation
+                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
-  --data_seed_value=INT         Seed value for v2 (required for DB mode, optional for AI)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
   -h, --help                    Show this help and exit
 
 Examples:
   ./setup.sh --demo=automail  # v1 enabled by default (seeds + layout variants)
   
-  # v2: AI Generation mode (generates data on-the-fly)
+  # v2: DB Mode (loads pre-generated data from database via ?v2-seed=X in URL)
   ./setup.sh --enabled_dynamic_versions=v2
   
-  # v2: DB Mode (loads pre-generated data from database)
-  ./setup.sh --enabled_dynamic_versions=v2 --enable_db_mode=true --data_seed_value=42
-  
-  # v1 + v2: Layouts + AI Generation
-  ./setup.sh --enabled_dynamic_versions=v1,v2
-  
   # v1 + v2: Layouts + DB Mode
-  ./setup.sh --enabled_dynamic_versions=v1,v2 --enable_db_mode=true --data_seed_value=42
+  ./setup.sh --enabled_dynamic_versions=v1,v2
 USAGE
 }
 
@@ -91,9 +77,8 @@ WEB_DEMO="all"
 # Individual defaults removed - now controlled by ENABLED_DYNAMIC_VERSIONS_DEFAULT
 ENABLE_DB_MODE_DEFAULT=false
 ENABLE_SEED_HTML_DEFAULT=false
-DATA_SEED_VALUE=""    # Optional integer seed for v2 data generation
 FAST_DEFAULT=false
-ENABLED_DYNAMIC_VERSIONS_DEFAULT="v1" # v1 enabled by default (seeds + layout variants)
+ENABLED_DYNAMIC_VERSIONS_DEFAULT="v2" # v1 enabled by default (seeds + layout variants)
 
 # 5) Parse args (only one public flag, plus -y convenience)
 for ARG in "$@"; do
@@ -105,13 +90,13 @@ for ARG in "$@"; do
     --demo=*)            WEB_DEMO="${ARG#*=}" ;;
     --enable_db_mode=*)   ENABLE_DB_MODE="${ARG#*=}" ;;
     --enabled_dynamic_versions=*) ENABLED_DYNAMIC_VERSIONS="${ARG#*=}" ;;
-    --data_seed_value=*)  DATA_SEED_VALUE="${ARG#*=}" ;;
     -h|--help)           print_usage; exit 0 ;;
     --fast=*)            FAST_MODE="${ARG#*=}" ;;
     # Deprecated flags (kept for backward compatibility, but ignored)
     --enable_dynamic_html=*) echo "[WARN] --enable_dynamic_html is deprecated. Use --enabled_dynamic_versions=v1" ;;
     --enable_data_generation=*) echo "[WARN] --enable_data_generation is deprecated. Use --enabled_dynamic_versions=v2" ;;
-    --seed_value=*)       DATA_SEED_VALUE="${ARG#*=}"; echo "[WARN] --seed_value is deprecated. Use --data_seed_value" ;;
+    --data_seed_value=*) echo "[WARN] --data_seed_value is deprecated. Use ?v2-seed=X in URL instead" ;;
+    --seed_value=*) echo "[WARN] --seed_value is deprecated. Use ?v2-seed=X in URL instead" ;;
     *) ;;
   esac
 done
@@ -126,7 +111,6 @@ ENABLE_DATA_GENERATION="${ENABLE_DATA_GENERATION:-false}"
 ENABLE_DB_MODE="${ENABLE_DB_MODE:-$ENABLE_DB_MODE_DEFAULT}"
 ENABLE_DYNAMIC_HTML_STRUCTURE="${ENABLE_DYNAMIC_HTML_STRUCTURE:-false}"
 ENABLE_SEED_HTML="${ENABLE_SEED_HTML:-$ENABLE_SEED_HTML_DEFAULT}"
-DATA_SEED_VALUE="${DATA_SEED_VALUE:-}"
 FAST_MODE="${FAST_MODE:-$FAST_DEFAULT}"
 ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-$ENABLED_DYNAMIC_VERSIONS_DEFAULT}"
 
@@ -197,9 +181,7 @@ ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS_NORMALIZED"
 
 # Map dynamic version tokens to feature flags
 # v1 -> ENABLE_DYNAMIC_HTML (seeds + layout variants)
-# v2 -> Enables data generation system (you must choose: DB mode OR AI generation)
-#       - If --enable_db_mode=true: Loads pre-generated data from DB (requires --data_seed_value)
-#       - If --enable_db_mode=false: Generates data with AI (--data_seed_value optional)
+# v2 -> Enables DB mode (loads pre-generated data from DB via ?v2-seed=X in URL, or static data if no seed)
 # v3 -> ENABLE_DYNAMIC_HTML_STRUCTURE (changes classes, IDs, structure)
 # v4 -> ENABLE_SEED_HTML
 if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
@@ -212,9 +194,10 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         ;;
       v2)
         # v2 now maps directly to DB mode (seeded datasets)
+        # Seed is controlled via ?v2-seed=X in URL, or uses static data if no seed
         ENABLE_DB_MODE=true
         ENABLE_DATA_GENERATION=false
-        echo "[INFO] dynamic version $_dv enabled: Data generation system (DB mode with seeded datasets)"
+        echo "[INFO] dynamic version $_dv enabled: Data generation system (DB mode - use ?v2-seed=X in URL)"
         ;;
       v3)
         ENABLE_DYNAMIC_HTML_STRUCTURE=true
@@ -231,20 +214,11 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
   done
 fi
 
-# Set default DATA_SEED_VALUE for v2 DB mode
-if echo "$ENABLED_DYNAMIC_VERSIONS" | grep -q "v2"; then
-  if [ "$ENABLE_DB_MODE" = "true" ] && [ -z "$DATA_SEED_VALUE" ]; then
-    DATA_SEED_VALUE="1"
-    echo "[INFO] v2 DB mode: Using default DATA_SEED_VALUE=1 (specify --data_seed_value=X to override)"
-  fi
-fi
-
-# Validate ports and seed
+# Validate ports
 if ! is_valid_port "$WEB_PORT"; then echo "❌ Invalid --web_port: $WEB_PORT"; exit 1; fi
 if ! is_valid_port "$POSTGRES_PORT"; then echo "❌ Invalid --postgres_port: $POSTGRES_PORT"; exit 1; fi
 if ! is_valid_port "$WEBS_PORT"; then echo "❌ Invalid --webs_port: $WEBS_PORT"; exit 1; fi
 if ! is_valid_port "$WEBS_PG_PORT"; then echo "❌ Invalid --webs_postgres: $WEBS_PG_PORT"; exit 1; fi
-if [ -n "$DATA_SEED_VALUE" ] && ! is_integer "$DATA_SEED_VALUE"; then echo "❌ --data_seed_value must be an integer"; exit 1; fi
 
 is_valid_demo() {
   case "$1" in
@@ -269,7 +243,6 @@ echo "    DB mode:                →  $ENABLE_DB_MODE"
 echo "    Dynamic structure:      →  $ENABLE_DYNAMIC_HTML_STRUCTURE"
 echo "    Seed HTML enabled:      →  $ENABLE_SEED_HTML"
 echo "    Enabled dynamic versions→  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
-echo "    Data seed value (v2):   →  ${DATA_SEED_VALUE:-<none>}"
 echo "    Fast mode:              →  $FAST_MODE"
 echo
 
@@ -348,8 +321,6 @@ deploy_project() {
       ENABLE_DB_MODE="$ENABLE_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DB_MODE="$ENABLE_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
-      DATA_SEED_VALUE="$DATA_SEED_VALUE" \
-      NEXT_PUBLIC_DATA_SEED_VALUE="$DATA_SEED_VALUE" \
       API_URL="http://app:8080" \
       NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
       ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS" \
@@ -394,8 +365,6 @@ deploy_webs_server() {
       OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
       NEXT_PUBLIC_ENABLE_DB_MODE="$ENABLE_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DATA_GENERATION="$ENABLE_DATA_GENERATION" \
-      DATA_SEED_VALUE="$DATA_SEED_VALUE" \
-      NEXT_PUBLIC_DATA_SEED_VALUE="$DATA_SEED_VALUE" \
       HOST_UID=$(id -u) \
       HOST_GID=$(id -g)
 
@@ -499,19 +468,19 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_webs_server
-    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
-    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    # deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
+    # deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
+    # deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
     deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    # deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    # deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    # deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    # deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    # deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    # deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    # deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    # deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    # deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
     #deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)
