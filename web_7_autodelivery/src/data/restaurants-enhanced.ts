@@ -184,20 +184,21 @@ export async function initializeRestaurants(): Promise<Restaurant[]> {
 /**
  * Load restaurants from database with seeded selection
  */
-export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
+export async function loadRestaurantsFromDb(seedOverride?: number | null): Promise<Restaurant[]> {
   if (!isDbLoadModeEnabled()) {
     console.log("🔍 DB mode not enabled, returning empty array");
     return [];
   }
 
   try {
-    const seed = getSeedValueFromEnv(1);
+    const fallbackSeed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" && Number.isFinite(seedOverride) ? seedOverride : fallbackSeed;
     const limit = 100;
     console.log("🔍 Attempting to load restaurants from DB with seed:", seed, "limit:", limit);
     
     // Prefer distributed selection to avoid category dominance
     const distributed = await fetchSeededSelection<Restaurant>({
-      projectKey: "web_7_food_delivery",
+      projectKey: "web_7_autodelivery",
       entityType: "restaurants",
       seedValue: seed,
       limit,
@@ -210,7 +211,7 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
     const selected = Array.isArray(distributed) && distributed.length > 0
       ? distributed
       : await fetchSeededSelection<Restaurant>({
-          projectKey: "web_7_food_delivery",
+          projectKey: "web_7_autodelivery",
           entityType: "restaurants",
           seedValue: seed,
           limit,

@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { MenuItem, MenuItemSize, type Restaurant } from "@/data/restaurants";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
+import { useRestaurants } from "@/contexts/RestaurantContext";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import Image from "next/image";
-import { Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
@@ -141,10 +141,16 @@ export default function RestaurantDetailPage({
   const { getText, getId, getAria, seedStructure } = useDynamicStructure();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useSeedRouter();
-  const restaurants = useMemo(() => getRestaurants() ?? [], []);
+  const { restaurants, isLoading } = useRestaurants();
   const restaurant = useMemo(() => {
-    return restaurants.find((r) => r.id === restaurantId)!;
+    return restaurants.find((r) => r.id === restaurantId);
   }, [restaurantId, restaurants]);
+
+  const addToCart = useCartStore((state) => state.addToCart);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalItem, setModalItem] = useState<MenuItem | null>(null);
+  const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
+
   useEffect(() => {
     if (restaurant) {
       const eventPayload = {
@@ -157,12 +163,14 @@ export default function RestaurantDetailPage({
       logEvent(EVENT_TYPES.VIEW_RESTAURANT, eventPayload);
     }
   }, [restaurant]);
-  const addToCart = useCartStore((state) => state.addToCart);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalItem, setModalItem] = useState<MenuItem | null>(null);
 
-  // Delivery/Pickup toggle state
-  const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
+  if (isLoading && !restaurant) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      </div>
+    );
+  }
 
   if (!restaurant)
     return <div className="text-lg text-zinc-500">Restaurant not found.</div>;
@@ -174,7 +182,7 @@ export default function RestaurantDetailPage({
     quantity: number;
   };
   function handleAddToCart(custom: CartCustomItem) {
-    if (modalItem) {
+    if (modalItem && restaurant) {
       const transformedOptions =
         custom.options?.map((label) => ({ label })) ?? [];
 

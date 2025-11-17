@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useCartStore } from "@/store/cart-store";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { Clock, Star, RotateCcw } from "lucide-react";
+import { Clock, RotateCcw } from "lucide-react";
+import { useLayout } from "@/contexts/LayoutProvider";
 
 interface RecentOrder {
   id: string;
@@ -22,6 +23,7 @@ interface RecentOrder {
 export default function QuickReorderSection() {
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const addToCart = useCartStore((s) => s.addToCart);
+  const { getNavigationUrl } = useLayout();
 
   useEffect(() => {
     // Load recent orders from localStorage
@@ -66,7 +68,7 @@ export default function QuickReorderSection() {
       name: order.restaurantName,
       source: "quick_reorder"
     });
-    window.location.href = `/restaurants/${order.restaurantId}`;
+    window.location.href = getNavigationUrl(`/restaurants/${order.restaurantId}`);
   };
 
   if (recentOrders.length === 0) {

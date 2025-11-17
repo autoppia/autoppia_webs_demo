@@ -1,10 +1,21 @@
 import type { Restaurant } from "@/data/restaurants";
 import type { Testimonial } from "@/data/testimonials";
-import { initializeRestaurants, loadRestaurantsFromDb, writeCachedRestaurants, readCachedRestaurants } from "@/data/restaurants-enhanced";
-import { initializeTestimonials, loadTestimonialsFromDb, writeCachedTestimonials, readCachedTestimonials } from "@/data/testimonials-enhanced";
+import {
+  initializeRestaurants,
+  loadRestaurantsFromDb,
+  writeCachedRestaurants,
+  readCachedRestaurants,
+} from "@/data/restaurants-enhanced";
+import {
+  initializeTestimonials,
+  loadTestimonialsFromDb,
+  writeCachedTestimonials,
+  readCachedTestimonials,
+} from "@/data/testimonials-enhanced";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { restaurants } from "@/data/restaurants";
 import { testimonials } from "@/data/testimonials";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -21,6 +32,8 @@ export class DynamicDataProvider {
   private ready: boolean = false;
   private readyPromise: Promise<void>;
   private resolveReady!: () => void;
+  private restaurantListeners = new Set<(restaurants: Restaurant[]) => void>();
+  private testimonialListeners = new Set<(testimonials: Testimonial[]) => void>();
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
@@ -36,6 +49,12 @@ export class DynamicDataProvider {
     
     // Initialize restaurants and testimonials with data generation if enabled
     this.initializeData();
+    if (typeof window !== "undefined") {
+      window.addEventListener("autodelivery:v2SeedChange", (event) => {
+        const detail = (event as CustomEvent<{ seed: number | null }>).detail;
+        this.refreshDataForSeed(detail?.seed ?? null);
+      });
+    }
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -53,18 +72,16 @@ export class DynamicDataProvider {
         this.initializeTestimonials()
       ]);
 
-      this.restaurants = initializedRestaurants;
-      this.testimonials = initializedTestimonials;
-
-      // Mark as ready when both are loaded
+      this.setRestaurants(initializedRestaurants, false);
+      this.setTestimonials(initializedTestimonials, false);
       this.ready = true;
       this.resolveReady();
       console.log("✅ Data initialization complete");
     } catch (error) {
       console.error("Failed to initialize data:", error);
       // Use static data as fallback
-      this.restaurants = restaurants;
-      this.testimonials = testimonials;
+      this.setRestaurants(restaurants, false);
+      this.setTestimonials(testimonials, false);
       this.ready = true;
       this.resolveReady();
     }
@@ -72,8 +89,9 @@ export class DynamicDataProvider {
 
   private async initializeRestaurants(): Promise<Restaurant[]> {
     try {
+      const runtimeSeed = this.getRuntimeV2Seed();
       // Try DB mode first if enabled
-      const dbRestaurants = await loadRestaurantsFromDb();
+      const dbRestaurants = await loadRestaurantsFromDb(runtimeSeed ?? undefined);
       if (dbRestaurants.length > 0) {
         console.log("🔍 DB restaurants loaded:", dbRestaurants.length, "items");
         writeCachedRestaurants(dbRestaurants);
@@ -100,8 +118,9 @@ export class DynamicDataProvider {
 
   private async initializeTestimonials(): Promise<Testimonial[]> {
     try {
+      const runtimeSeed = this.getRuntimeV2Seed();
       // Try DB mode first if enabled
-      const dbTestimonials = await loadTestimonialsFromDb();
+      const dbTestimonials = await loadTestimonialsFromDb(runtimeSeed ?? undefined);
       if (dbTestimonials.length > 0) {
         console.log("🔍 DB testimonials loaded:", dbTestimonials.length, "items");
         writeCachedTestimonials(dbTestimonials);
@@ -130,6 +149,14 @@ export class DynamicDataProvider {
     return this.restaurants || [];
   }
 
+  public subscribeRestaurants(listener: (restaurants: Restaurant[]) => void): () => void {
+    this.restaurantListeners.add(listener);
+    listener([...this.restaurants]);
+    return () => {
+      this.restaurantListeners.delete(listener);
+    };
+  }
+
   public getRestaurantById(id: string): Restaurant | undefined {
     return (this.restaurants || []).find((restaurant) => restaurant.id === id);
   }
@@ -156,6 +183,14 @@ export class DynamicDataProvider {
     return this.testimonials || [];
   }
 
+  public subscribeTestimonials(listener: (testimonials: Testimonial[]) => void): () => void {
+    this.testimonialListeners.add(listener);
+    listener([...this.testimonials]);
+    return () => {
+      this.testimonialListeners.delete(listener);
+    };
+  }
+
   public getTestimonialById(id: string): Testimonial | undefined {
     return (this.testimonials || []).find((testimonial) => testimonial.id === id);
   }
@@ -176,6 +211,75 @@ export class DynamicDataProvider {
 
   public getLayoutConfig() {
     return { isEnabled: this.isEnabled };
+  }
+
+  private getRuntimeV2Seed(): number | null {
+    if (typeof window === "undefined") return null;
+    const value = window.__autodeliveryV2Seed;
+    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+      return value;
+    }
+    return null;
+  }
+
+  private setRestaurants(restaurants: Restaurant[], notifyCache: boolean = true) {
+    this.restaurants = restaurants;
+    if (notifyCache) {
+      try {
+        writeCachedRestaurants(restaurants);
+      } catch {
+        /* ignore */
+      }
+    }
+    const snapshot = [...this.restaurants];
+    this.restaurantListeners.forEach((listener) => {
+      try {
+        listener(snapshot);
+      } catch (err) {
+        console.warn("[dynamicDataProvider] restaurant listener error", err);
+      }
+    });
+  }
+
+  private setTestimonials(testimonials: Testimonial[], notifyCache: boolean = true) {
+    this.testimonials = testimonials;
+    if (notifyCache) {
+      try {
+        writeCachedTestimonials(testimonials);
+      } catch {
+        /* ignore */
+      }
+    }
+    const snapshot = [...this.testimonials];
+    this.testimonialListeners.forEach((listener) => {
+      try {
+        listener(snapshot);
+      } catch (err) {
+        console.warn("[dynamicDataProvider] testimonial listener error", err);
+      }
+    });
+  }
+
+  public async refreshDataForSeed(seedOverride?: number | null): Promise<void> {
+    if (!isDbLoadModeEnabled()) {
+      return;
+    }
+    try {
+      const runtimeSeed = typeof seedOverride === "number" ? seedOverride : this.getRuntimeV2Seed();
+      console.log("[dynamicDataProvider] refreshing data for v2 seed", runtimeSeed);
+      const [restaurantsData, testimonialsData] = await Promise.all([
+        loadRestaurantsFromDb(runtimeSeed ?? undefined),
+        loadTestimonialsFromDb(runtimeSeed ?? undefined),
+      ]);
+      if (restaurantsData.length > 0) {
+        this.setRestaurants(restaurantsData);
+      }
+      if (testimonialsData.length > 0) {
+        this.setTestimonials(testimonialsData);
+      }
+    } catch (error) {
+      console.warn("[dynamicDataProvider] refreshDataForSeed failed", error);
+    }
   }
 }
 

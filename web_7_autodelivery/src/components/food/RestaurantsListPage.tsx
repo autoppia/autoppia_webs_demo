@@ -1,11 +1,12 @@
 "use client";
-import { getRestaurants } from '@/utils/dynamicDataProvider';
 import RestaurantCard from './RestaurantCard';
 import { Input } from "@/components/ui/input";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useSearchStore } from '@/store/search-store';
 import { useLayout } from '@/contexts/LayoutProvider';
+import { useRestaurants } from '@/contexts/RestaurantContext';
+import { Loader2 } from "lucide-react";
 
 export default function RestaurantsListPage() {
   const layout = useLayout();
@@ -16,24 +17,31 @@ export default function RestaurantsListPage() {
   const rating = useSearchStore(s => s.rating);
   const setRating = useSearchStore(s => s.setRating);
 
-  const restaurants = getRestaurants() || [];
-  const cuisineOptions = Array.from(new Set(restaurants.map(r => r.cuisine)));
+  const { restaurants, isLoading } = useRestaurants();
+  const cuisineOptions = Array.from(new Set(restaurants.map((r) => r.cuisine)));
   const ratingOptions = [4, 4.5, 5];
 
-  const filtered = restaurants.filter(r => {
+  const filtered = restaurants.filter((r) => {
     const text = search.trim().toLowerCase();
     return (
       (!text ||
         r.name.toLowerCase().includes(text) ||
         r.cuisine.toLowerCase().includes(text) ||
-        (Array.isArray(r.menu) && r.menu.some(m => m.name.toLowerCase().includes(text)))
-      ) &&
+        (Array.isArray(r.menu) && r.menu.some((m) => m.name.toLowerCase().includes(text)))) &&
       (!cuisine || r.cuisine === cuisine) &&
       (!rating || r.rating >= parseFloat(rating))
     );
   });
 
   const isFiltered = !!search || cuisine || rating;
+
+  if (isLoading && restaurants.length === 0) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      </div>
+    );
+  }
 
   return (
     <section 

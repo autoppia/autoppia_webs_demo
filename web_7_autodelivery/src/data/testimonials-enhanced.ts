@@ -91,19 +91,20 @@ export async function initializeTestimonials(): Promise<Testimonial[]> {
 /**
  * Load testimonials from database with seeded selection
  */
-export async function loadTestimonialsFromDb(): Promise<Testimonial[]> {
+export async function loadTestimonialsFromDb(seedOverride?: number | null): Promise<Testimonial[]> {
   if (!isDbLoadModeEnabled()) {
     console.log("🔍 DB mode not enabled for testimonials, returning empty array");
     return [];
   }
 
   try {
-    const seed = getSeedValueFromEnv(1);
+    const fallbackSeed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" && Number.isFinite(seedOverride) ? seedOverride : fallbackSeed;
     const limit = 10;
     console.log("🔍 Attempting to load testimonials from DB with seed:", seed, "limit:", limit);
     
     const selected = await fetchSeededSelection<Testimonial>({
-      projectKey: "web_7_food_delivery",
+      projectKey: "web_7_autodelivery",
       entityType: "testimonials",
       seedValue: seed,
       limit,
