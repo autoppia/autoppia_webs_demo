@@ -20,37 +20,13 @@ export function RestaurantProvider({ children }: { children: React.ReactNode }) 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-    
-    // Initial load - wait for data to be ready
-    const loadData = async () => {
-      await dynamicDataProvider.whenReady();
-      if (!isMounted) return;
+    // Wait for data to be ready
+    dynamicDataProvider.whenReady().then(() => {
       const loadedRestaurants = dynamicDataProvider.getRestaurants();
       setRestaurants(loadedRestaurants);
       setIsLoading(false);
-    };
-
-    loadData();
-
-    // Poll for data updates (in case data generation completes after initial load)
-    // Only poll if data generation is enabled
-    const pollInterval = setInterval(() => {
-      if (!isMounted) return;
-      const currentRestaurants = dynamicDataProvider.getRestaurants();
-      // Only update if data length has changed (more efficient than full comparison)
-      // This handles the case where data generation adds new restaurants
-      if (currentRestaurants.length > 0 && currentRestaurants.length !== restaurants.length) {
-        setRestaurants([...currentRestaurants]);
-        setIsLoading(false);
-      }
-    }, 2000); // Check every 2 seconds to reduce overhead
-
-    return () => {
-      isMounted = false;
-      clearInterval(pollInterval);
-    };
-  }, [restaurants.length]); // Only depend on length to avoid unnecessary re-runs
+    });
+  }, []);
 
   const getRestaurantById = (id: string) => {
     return dynamicDataProvider.getRestaurantById(id);

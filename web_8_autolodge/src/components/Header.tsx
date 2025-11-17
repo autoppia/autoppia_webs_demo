@@ -9,6 +9,7 @@ export default function Header() {
   const navItems = [
     { name: getText("nav_stays"), href: "/", id: getId("nav_stays_link") },
     { name: getText("nav_experiences"), href: "#", id: getId("nav_experiences_link") },
+    { name: "Seed Test", href: "/seed-test", id: "seed-test-link" },
   ];
   return (
     <header className="w-full flex flex-col items-center border-b bg-white sticky top-0 z-20">

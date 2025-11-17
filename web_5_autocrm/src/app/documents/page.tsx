@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_FILES } from "@/library/dataset";
@@ -7,23 +7,12 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { useFiles } from "@/contexts/FileContext";
 
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
-  const { files: contextFiles, isLoading } = useFiles();
-  const generationEnabled = process.env.NEXT_PUBLIC_DATA_GENERATION === "true";
-  const [files, setFiles] = useState(() => (generationEnabled ? [] : DEMO_FILES));
+  const [files, setFiles] = useState(DEMO_FILES);
+  const [error] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
-
-  // Update files when context data changes
-  useEffect(() => {
-    if (contextFiles && contextFiles.length > 0) {
-      setFiles(contextFiles);
-    } else if (!generationEnabled && !isLoading && files.length === 0) {
-      setFiles(DEMO_FILES);
-    }
-  }, [contextFiles, generationEnabled, isLoading, files.length]);
 
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
@@ -104,11 +93,8 @@ export default function DocumentsPage() {
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {isLoading && files.length === 0 && (
-          <div className="col-span-full text-zinc-500">Loading documents...</div>
-        )}
-        {!isLoading && files.length === 0 && (
-          <div className="col-span-full text-zinc-400 text-center">No documents found.</div>
+        {error && (
+          <div className="col-span-full text-red-600">Failed to load documents: {error}</div>
         )}
         {files.map((file, index) => (
           <DynamicItem key={file.id} index={index} className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition">

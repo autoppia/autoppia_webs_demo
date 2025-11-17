@@ -20,17 +20,9 @@ console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
 console.log('  ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.ENABLE_DYNAMIC_HTML_STRUCTURE);
 console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE);
-console.log('  ENABLE_DATA_GENERATION:', process.env.ENABLE_DATA_GENERATION);
-console.log('  NEXT_PUBLIC_DATA_GENERATION:', process.env.NEXT_PUBLIC_DATA_GENERATION);
-console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
-console.log('  DATA_SEED_VALUE:', process.env.DATA_SEED_VALUE);
-console.log('  NEXT_PUBLIC_DATA_SEED_VALUE:', process.env.NEXT_PUBLIC_DATA_SEED_VALUE);
-console.log('  ENABLE_DB_MODE:', process.env.ENABLE_DB_MODE);
-console.log('  NEXT_PUBLIC_ENABLE_DB_MODE:', process.env.NEXT_PUBLIC_ENABLE_DB_MODE);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
   devIndicators: false,
   images: {
     unoptimized: true,
@@ -62,9 +54,6 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
-    dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   typescript: {
     ignoreBuildErrors: true,
@@ -73,17 +62,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   env: {
-    ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
-    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
     ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.ENABLE_DYNAMIC_HTML_STRUCTURE,
     NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE,
-    ENABLE_DATA_GENERATION: process.env.ENABLE_DATA_GENERATION,
-    NEXT_PUBLIC_DATA_GENERATION: process.env.NEXT_PUBLIC_DATA_GENERATION,
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-    DATA_SEED_VALUE: process.env.DATA_SEED_VALUE,
-    NEXT_PUBLIC_DATA_SEED_VALUE: process.env.NEXT_PUBLIC_DATA_SEED_VALUE,
-    ENABLE_DB_MODE: process.env.ENABLE_DB_MODE,
-    NEXT_PUBLIC_ENABLE_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DB_MODE,
   },
 };
 

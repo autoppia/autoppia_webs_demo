@@ -3,8 +3,8 @@
 <div class="container mt-5">
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 mb-4">{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.heroTitle }}{% else %}About CineStore{% endif %}</h1>
-            <p class="lead">{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.heroSubtitle }}{% else %}Your Ultimate Destination for Quality Movies{% endif %}</p>
+            <h1 class="display-4 mb-4">About CineStore</h1>
+            <p class="lead">Your Ultimate Destination for Quality Movies</p>
             <hr class="my-4">
             <p class="mb-4">CineStore was founded in 2020 with a simple mission: to create a community where movie enthusiasts can discover, share, and discuss their favorite films. We believe in the power of cinema to inspire, educate, and transform lives.</p>
         </div>
@@ -14,7 +14,7 @@
         <div class="col-md-6">
             <div class="card border-0 shadow h-100">
                 <div class="card-body p-4">
-                    <h2 class="h3 mb-4 text-primary"><i class="fas fa-bullseye mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.missionHeading }}{% else %}Our Mission{% endif %}</h2>
+                    <h2 class="h3 mb-4 text-primary"><i class="fas fa-bullseye mr-2"></i>Our Mission</h2>
                     <p>At CineStore, we are dedicated to providing movie lovers with a platform to explore and share their passion for cinema. We strive to create a comprehensive database of films from all genres, eras, and countries.</p>
                     <p>Our goal is to foster a community where people can discover new movies, share their opinions, and engage in meaningful discussions about the art of filmmaking.</p>
                 </div>
@@ -23,7 +23,7 @@
         <div class="col-md-6">
             <div class="card border-0 shadow h-100">
                 <div class="card-body p-4">
-                    <h2 class="h3 mb-4 text-primary"><i class="fas fa-eye mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.visionHeading }}{% else %}Our Vision{% endif %}</h2>
+                    <h2 class="h3 mb-4 text-primary"><i class="fas fa-eye mr-2"></i>Our Vision</h2>
                     <p>We envision CineStore as the go-to resource for movie enthusiasts around the world. We aim to build the most comprehensive, user-friendly, and community-driven movie platform on the internet.</p>
                     <p>We believe in the democratization of film criticism and appreciation, where everyone's voice can be heard and valued.</p>
                 </div>
@@ -33,7 +33,7 @@
     
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h2 class="mb-4"><i class="fas fa-heart text-danger mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.valuesHeading }}{% else %}Our Values{% endif %}</h2>
+            <h2 class="mb-4"><i class="fas fa-heart text-danger mr-2"></i>Our Values</h2>
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow hover-card">
@@ -68,8 +68,8 @@
     
     <div class="row mb-5">
         <div class="col-12 text-center mb-4">
-            <h2><i class="fas fa-user-friends text-info mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.teamHeading }}{% else %}Meet Our Team{% endif %}</h2>
-            <p class="lead">{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.teamSubtitle }}{% else %}The passionate film lovers behind CineStore{% endif %}</p>
+            <h2><i class="fas fa-user-friends text-info mr-2"></i>Meet Our Team</h2>
+            <p class="lead">The passionate film lovers behind CineStore</p>
         </div>
         
         <div class="col-lg-3 col-md-6 mb-4">
@@ -139,22 +139,13 @@
     
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h2 class="mb-4"><i class="fas fa-book-open text-success mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}{{ STRUCTURE_DATA.aboutPage.storyHeading }}{% else %}Our Story{% endif %}</h2>
+            <h2 class="mb-4"><i class="fas fa-book-open text-success mr-2"></i>Our Story</h2>
             <p>CineStore began as a small project between friends who shared a passion for movies. What started as a simple database quickly grew into a platform where thousands of film enthusiasts could come together to share their thoughts and discoveries.</p>
             <p>Today, we're proud to host one of the most engaged film communities online, with users from over 50 countries contributing to our growing database of movies, reviews, and discussions.</p>
             <p>Our journey is just beginning, and we're excited to continue growing and improving with the help of our dedicated community.</p>
-            {% url 'movieapp:contact' as contact_url %}
-            {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA and STRUCTURE_DATA.aboutPage %}
-              {% with btn=STRUCTURE_DATA.aboutPage.contactButton %}
-            <a href="{{ contact_url }}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="btn btn-primary btn-lg mt-3" id="{{ btn.id }}" aria-label="{{ btn.ariaLabel }}">
-                <i class="fas fa-envelope mr-2"></i>{{ btn.text }}
-            </a>
-              {% endwith %}
-            {% else %}
-            <a href="{{ contact_url }}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-lg mt-3">
+            <a href="{% url 'movieapp:contact' %}" class="btn btn-primary btn-lg mt-3">
                 <i class="fas fa-envelope mr-2"></i>Get in Touch
             </a>
-            {% endif %}
         </div>
     </div>
 </div>

@@ -12,10 +12,6 @@ import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
-import { useSeedLayout } from "@/library/utils";
-import { DynamicWrapper } from "@/components/DynamicWrapper";
-import { getSeedLayout as getLayoutVariantConfig } from "@/library/layoutVariants";
-import { DataReadyGate } from "@/components/DataReadyGate";
 
 type GuestsCount = {
   adults: number;
@@ -55,15 +51,6 @@ function clamp(value: number, min: number, max: number) {
 
 function HomeContent() {
   const { getText, getId, getClass, seedStructure } = useDynamicStructure();
-  const { seed, layout } = useSeedLayout();
-  const effectiveSeed = seed ?? 1;
-  const layoutVariant = useMemo(
-    () => getLayoutVariantConfig(effectiveSeed),
-    [effectiveSeed],
-  );
-  const searchFieldClass = layoutVariant.searchBar.fieldClass;
-  const groupFieldClass = layoutVariant.forms.groupClass;
-  const searchButtonClass = layoutVariant.searchBar.buttonClass;
   const searchParams = useSearchParams();
 
   const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
@@ -219,14 +206,14 @@ function HomeContent() {
   };
 
   return (
-    <DynamicWrapper className="flex flex-col w-full items-center mt-4 pb-12">
-      <DynamicWrapper
-        as={layout.searchBar.wrapper}
-        className={layoutVariant.searchBar.containerClass}
-      >
-        <div className={layoutVariant.searchBar.wrapperClass}>
+    <div className="flex flex-col w-full items-center mt-4 pb-12">
+      <section className="w-full flex justify-center">
+        <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
           <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <div id={getId("search_field")} className={searchFieldClass}>
+            <div
+              id={getId("search_field")}
+              className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 {getText("where_label")}
               </span>
@@ -253,7 +240,10 @@ function HomeContent() {
           </WherePopover>
 
           <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
-            <div id={getId("check_in_field")} className={groupFieldClass}>
+            <div
+              id={getId("check_in_field")}
+              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 {getText("check_in")}
               </span>
@@ -281,7 +271,10 @@ function HomeContent() {
           </DateRangePopover>
 
           <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
-            <div id={getId("check_out_field")} className={groupFieldClass}>
+            <div
+              id={getId("check_out_field")}
+              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 {getText("check_out")}
               </span>
@@ -309,7 +302,10 @@ function HomeContent() {
           </DateRangePopover>
 
           <GuestSelectorPopover counts={guests} setCounts={setGuests}>
-            <div id={getId("guests_field")} className={groupFieldClass}>
+            <div
+              id={getId("guests_field")}
+              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+            >
               <span className="text-xs font-semibold text-neutral-500 pb-0.5">
                 {getText("who")}
               </span>
@@ -337,7 +333,10 @@ function HomeContent() {
 
           <button
             id={getId("search_button")}
-            className={getClass("search_button", searchButtonClass)}
+            className={getClass(
+              "search_button",
+              "ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
+            )}
             onClick={handleSearch}
           >
             <svg
@@ -356,7 +355,7 @@ function HomeContent() {
             {getText("search_button")}
           </button>
         </div>
-      </DynamicWrapper>
+      </section>
 
       <section className="w-full flex flex-col items-center mt-8">
         {paginatedResults.length === 0 ? (
@@ -367,7 +366,7 @@ function HomeContent() {
             {getText("no_results")}
           </div>
         ) : (
-          <div className={layoutVariant.propertyCards.gridClass}>
+          <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
             {paginatedResults.map((hotel, index) => (
               <PropertyCard key={`${hotel.id}-${index}`} {...hotel} />
             ))}
@@ -408,26 +407,24 @@ function HomeContent() {
           </button>
         </div>
       )}
-    </DynamicWrapper>
+    </div>
   );
 }
 
 export default function Home() {
   return (
-    <DataReadyGate>
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#616882] mx-auto mb-4" />
-              <p className="text-neutral-600">Loading hotels...</p>
-            </div>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#616882] mx-auto mb-4" />
+            <p className="text-neutral-600">Loading hotels...</p>
           </div>
-        }
-      >
-        <HomeContent />
-      </Suspense>
-    </DataReadyGate>
+        </div>
+      }
+    >
+      <HomeContent />
+    </Suspense>
   );
 }
 

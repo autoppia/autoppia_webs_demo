@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
 
 export function cn(...inputs: ClassValue[]) {
@@ -219,28 +219,6 @@ export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
   }, [seedParam]);
   
   const layout = useMemo(() => getSeedLayout(seed, pageType), [seed, pageType]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (isDynamicModeEnabled()) return;
-
-    try {
-      localStorage.removeItem("autolodgeSeed");
-    } catch {
-      // ignore
-    }
-
-    const url = new URL(window.location.href);
-    if (url.searchParams.has("seed")) {
-      url.searchParams.delete("seed");
-      const nextSearch = url.searchParams.toString();
-      window.history.replaceState(
-        null,
-        "",
-        url.pathname + (nextSearch ? `?${nextSearch}` : "") + url.hash,
-      );
-    }
-  }, []);
   
   return { seed, layout };
 }

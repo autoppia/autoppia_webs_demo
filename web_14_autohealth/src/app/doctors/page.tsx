@@ -26,7 +26,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export default function DoctorsPage() {
-  const { reorderElements, getText, getElementAttributes } = useSeedLayout();
+  const { reorderElements } = useSeedLayout();
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
@@ -75,7 +75,7 @@ export default function DoctorsPage() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-2xl font-semibold" {...getElementAttributes('doctors-heading', 0)}>{getText('doctors-heading', 'Doctors')}</h1>
+      <h1 className="text-2xl font-semibold">Doctors</h1>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {orderedDoctors.map((d, i) => (
           <DynamicElement key={d.id} elementType="doctor-card" as="div" index={i} className="flex">
@@ -101,17 +101,15 @@ export default function DoctorsPage() {
                     specialty: d.specialty,
                     rating: d.rating
                   })}
-                  {...getElementAttributes('view-profile-button', i)}
                 >
-                  {getText('view-profile-button', 'View Profile')}
+                  View Profile
                 </Button>
               </Link>
               <Button 
                 onClick={() => handleBookNow(d)}
                 className="bg-green-600 hover:bg-green-700"
-                {...getElementAttributes('book-now-button', i)}
               >
-                {getText('book-now-button', 'Book Now')}
+                Book Now
               </Button>
             </CardFooter>
             </Card>

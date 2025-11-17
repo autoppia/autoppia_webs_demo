@@ -1,5 +1,5 @@
 "use client";
-import { useRestaurants } from '@/contexts/RestaurantContext';
+import { getRestaurants } from '@/utils/dynamicDataProvider';
 import RestaurantCard from './RestaurantCard';
 import { Input } from "@/components/ui/input";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
@@ -16,7 +16,7 @@ export default function RestaurantsListPage() {
   const rating = useSearchStore(s => s.rating);
   const setRating = useSearchStore(s => s.setRating);
 
-  const { restaurants } = useRestaurants();
+  const restaurants = getRestaurants() || [];
   const cuisineOptions = Array.from(new Set(restaurants.map(r => r.cuisine)));
   const ratingOptions = [4, 4.5, 5];
 

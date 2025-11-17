@@ -150,4 +150,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Dynamic HTML toggle wired from docker-compose/env
 DYNAMIC_HTML_ENABLED = os.environ.get("ENABLE_DYNAMIC_HTML", "false").lower() == "true"
-DYNAMIC_HTML_STRUCTURE = os.environ.get("DYNAMIC_HTML_STRUCTURE", "false").lower() == "true" or os.environ.get("ENABLE_DYNAMIC_HTML_STRUCTURE", "false").lower() == "true"

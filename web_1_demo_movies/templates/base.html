@@ -360,26 +360,26 @@
         <div class="container">
             <div class="row" data-dynamic-group="footer-columns">
                 <div class="col-md-4">
-                    <h5>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.brand.title }}{% else %}CineStore{% endif %}</h5>
-                    <p>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.brand.description }}{% else %}Your favorite online movie store with the best selection and quality.{% endif %}</p>
+                    <h5>CineStore</h5>
+                    <p>Your favorite online movie store with the best selection and quality.</p>
                 </div>
                 <div class="col-md-4">
-                    <h5>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.linksTitle }}{% else %}Quick Links{% endif %}</h5>
+                    <h5>Quick Links</h5>
                     <ul class="list-unstyled" data-dynamic-group="footer-links">
-                        <li><a href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="text-light" {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}aria-label="{{ STRUCTURE_DATA.footer.homeLink.ariaLabel }}"{% endif %}>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.homeLink.text }}{% else %}Home{% endif %}</a></li>
-                        <li><a href="{% url 'movieapp:add_movie' %}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="text-light" {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}aria-label="{{ STRUCTURE_DATA.footer.addMovieLink.ariaLabel }}"{% endif %}>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.addMovieLink.text }}{% else %}Add Movie{% endif %}</a></li>
-                        <li><a href="{% url 'movieapp:genre_list' %}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="text-light" {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}aria-label="{{ STRUCTURE_DATA.footer.categoriesLink.ariaLabel }}"{% endif %}>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.categoriesLink.text }}{% else %}Categories{% endif %}</a></li>
-                        <li><a href="{% url 'movieapp:about' %}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="text-light" {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}aria-label="{{ STRUCTURE_DATA.footer.aboutLink.ariaLabel }}"{% endif %}>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.aboutLink.text }}{% else %}About Us{% endif %}</a></li>
-                        <li><a href="{% url 'movieapp:contact' %}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="text-light" {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}aria-label="{{ STRUCTURE_DATA.footer.contactLink.ariaLabel }}"{% endif %}>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.contactLink.text }}{% else %}Contact{% endif %}</a></li>
+                        <li><a href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Home</a></li>
+                        <li><a href="{% url 'movieapp:add_movie' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Add Movie</a></li>
+                        <li><a href="{% url 'movieapp:genre_list' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Categories</a></li>
+                        <li><a href="{% url 'movieapp:about' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">About Us</a></li>
+                        <li><a href="{% url 'movieapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Contact</a></li>
                         {% if user.is_authenticated %}
-                        <li><a href="{% url 'movieapp:profile' %}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="text-light" {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}aria-label="{{ STRUCTURE_DATA.footer.profileLink.ariaLabel }}"{% endif %}>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.profileLink.text }}{% else %}My Profile{% endif %}</a></li>
+                        <li><a href="{% url 'movieapp:profile' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">My Profile</a></li>
                         {% else %}
-                        <li><a href="{% url 'movieapp:login' %}{% if DYNAMIC_HTML_ENABLED or DYNAMIC_HTML_STRUCTURE %}?{% endif %}{% if DYNAMIC_HTML_ENABLED %}seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_ENABLED and DYNAMIC_HTML_STRUCTURE %}&{% endif %}{% if DYNAMIC_HTML_STRUCTURE %}seed-structure={{ INITIAL_SEED_STRUCTURE }}{% endif %}" class="text-light" {% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}aria-label="{{ STRUCTURE_DATA.footer.signInLink.ariaLabel }}"{% endif %}>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.signInLink.text }}{% else %}Sign In{% endif %}</a></li>
+                        <li><a href="{% url 'movieapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Sign In</a></li>
                         {% endif %}
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h5>{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.followTitle }}{% else %}Follow Us{% endif %}</h5>
+                    <h5>Follow Us</h5>
                     <div class="social-icons" data-dynamic-group="footer-social">
                         <a href="#" class="text-light mr-3"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="text-light mr-3"><i class="fab fa-twitter"></i></a>
@@ -390,7 +390,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-12 text-center">
-                    <p class="mb-0">{% if DYNAMIC_HTML_STRUCTURE and STRUCTURE_DATA %}{{ STRUCTURE_DATA.footer.copyright }}{% else %}&copy; 2025 Autoppia AIcinema. All rights reserved.{% endif %}</p>
+                    <p class="mb-0">&copy; 2025 Autoppia AIcinema. All rights reserved.</p>
                 </div>
             </div>
         </div>

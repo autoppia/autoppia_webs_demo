@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 {% block body %}
-{% with contact=STRUCTURE_DATA.contactPage %}
 <div class="container mt-5 mb-5" data-dynamic-group="contact">
     <div class="row mb-5">
         <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 mb-4">{% if contact %}{{ contact.heroTitle }}{% else %}Contact Us{% endif %}</h1>
-            <p class="lead">{% if contact %}{{ contact.heroSubtitle }}{% else %}We'd love to hear from you!{% endif %}</p>
+            <h1 class="display-4 mb-4">Contact Us</h1>
+            <p class="lead">We'd love to hear from you!</p>
             <hr class="my-4">
             <p class="mb-4">Have questions, feedback, or suggestions? Fill out the form below and our team will get back to you as soon as possible. We value your input and are committed to making CineStore the best platform for movie enthusiasts.</p>
         </div>
@@ -15,72 +14,8 @@
         <div class="col-md-6">
             <div class="card border-0 shadow mb-4">
                 <div class="card-body p-4">
-                    {% if contact %}
-                        {% with formSection=contact.formSection %}
-                    <h2 class="h3 mb-4"><i class="fas fa-envelope mr-2 text-primary"></i>{% if formSection and formSection.title %}{{ formSection.title }}{% else %}Send us a message{% endif %}</h2>
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-                                {{ message }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <form method="POST">
-                        {% csrf_token %}
-                        {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
-                        {% if DYNAMIC_HTML_STRUCTURE %}<input type="hidden" name="seed-structure" value="{{ INITIAL_SEED_STRUCTURE }}">{% endif %}
-                        {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
-                        {% if DYNAMIC_HTML_STRUCTURE %}<input type="hidden" name="seed-structure" value="{{ INITIAL_SEED_STRUCTURE }}">{% endif %}
-                        <div class="form-group">
-                            <label for="{{ form.name.id_for_label }}">
-                                <i class="fas fa-user mr-1"></i> {% if formSection and formSection.nameLabel %}{{ formSection.nameLabel }}{% else %}Your Name{% endif %}
-                            </label>
-                            {{ form.name }}
-                            {% if form.name.errors %}
-                                <div class="text-danger small">{{ form.name.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.email.id_for_label }}">
-                                <i class="fas fa-envelope mr-1"></i> {% if formSection and formSection.emailLabel %}{{ formSection.emailLabel }}{% else %}Email Address{% endif %}
-                            </label>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="text-danger small">{{ form.email.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.subject.id_for_label }}">
-                                <i class="fas fa-tag mr-1"></i> {% if formSection and formSection.subjectLabel %}{{ formSection.subjectLabel }}{% else %}Subject{% endif %}
-                            </label>
-                            {{ form.subject }}
-                            {% if form.subject.errors %}
-                                <div class="text-danger small">{{ form.subject.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.message.id_for_label }}">
-                                <i class="fas fa-comment mr-1"></i> {% if formSection and formSection.messageLabel %}{{ formSection.messageLabel }}{% else %}Message{% endif %}
-                            </label>
-                            {{ form.message }}
-                            {% if form.message.errors %}
-                                <div class="text-danger small">{{ form.message.errors }}</div>
-                            {% endif %}
-                        </div>
-                        {% with btn=formSection.submitButton %}
-                        <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-primary btn-block" {% if btn and btn.id %}id="{{ btn.id }}"{% endif %}{% if btn and btn.ariaLabel %} aria-label="{{ btn.ariaLabel }}"{% endif %}>
-                                <i class="fas fa-paper-plane mr-2"></i>{% if btn and btn.text %}{{ btn.text }}{% else %}Send Message{% endif %}
-                            </button>
-                        </div>
-                        {% endwith %}
-                    </form>
-                        {% endwith %}
-                    {% else %}
                     <h2 class="h3 mb-4"><i class="fas fa-envelope mr-2 text-primary"></i>Send us a message</h2>
+                    
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
@@ -91,8 +26,10 @@
                             </div>
                         {% endfor %}
                     {% endif %}
+                    
                     <form method="POST">
                         {% csrf_token %}
+                        
                         <div class="form-group">
                             <label for="{{ form.name.id_for_label }}">
                                 <i class="fas fa-user mr-1"></i> Your Name
@@ -102,6 +39,7 @@
                                 <div class="text-danger small">{{ form.name.errors }}</div>
                             {% endif %}
                         </div>
+                        
                         <div class="form-group">
                             <label for="{{ form.email.id_for_label }}">
                                 <i class="fas fa-envelope mr-1"></i> Email Address
@@ -111,6 +49,7 @@
                                 <div class="text-danger small">{{ form.email.errors }}</div>
                             {% endif %}
                         </div>
+                        
                         <div class="form-group">
                             <label for="{{ form.subject.id_for_label }}">
                                 <i class="fas fa-tag mr-1"></i> Subject
@@ -120,6 +59,7 @@
                                 <div class="text-danger small">{{ form.subject.errors }}</div>
                             {% endif %}
                         </div>
+                        
                         <div class="form-group">
                             <label for="{{ form.message.id_for_label }}">
                                 <i class="fas fa-comment mr-1"></i> Message
@@ -129,13 +69,13 @@
                                 <div class="text-danger small">{{ form.message.errors }}</div>
                             {% endif %}
                         </div>
+                        
                         <div class="form-group mt-4">
                             <button type="submit" class="btn btn-primary btn-block">
                                 <i class="fas fa-paper-plane mr-2"></i>Send Message
                             </button>
                         </div>
                     </form>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -143,64 +83,8 @@
         <div class="col-md-6">
             <div class="card border-0 shadow mb-4">
                 <div class="card-body p-4">
-                    {% if contact %}
-                        {% with info=contact.infoSection %}
-                    <h2 class="h3 mb-4"><i class="fas fa-map-marker-alt mr-2 text-primary"></i>{% if info and info.title %}{{ info.title }}{% else %}Find Us{% endif %}</h2>
-                    <div class="contact-info-item">
-                        <div class="icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-1">{% if info and info.locationHeading %}{{ info.locationHeading }}{% else %}Our Location{% endif %}</h5>
-                            <p class="mb-0">
-                                {% if info and info.locationLines %}
-                                    {% for line in info.locationLines %}
-                                        {{ line }}{% if not forloop.last %}<br>{% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    123 Movie Street, Cinema District<br>Los Angeles, CA 90001
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="contact-info-item">
-                        <div class="icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-1">{% if info and info.phoneHeading %}{{ info.phoneHeading }}{% else %}Phone Number{% endif %}</h5>
-                            <p class="mb-0">{% if info and info.phoneText %}{{ info.phoneText }}{% else %}(555) 123-4567{% endif %}</p>
-                        </div>
-                    </div>
-                    <div class="contact-info-item">
-                        <div class="icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-1">{% if info and info.emailHeading %}{{ info.emailHeading }}{% else %}Email Address{% endif %}</h5>
-                            <p class="mb-0">{% if info and info.emailText %}{{ info.emailText }}{% else %}info@cinestore.com{% endif %}</p>
-                        </div>
-                    </div>
-                    <div class="contact-info-item">
-                        <div class="icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-1">{% if info and info.hoursHeading %}{{ info.hoursHeading }}{% else %}Business Hours{% endif %}</h5>
-                            <p class="mb-0">
-                                {% if info and info.hoursLines %}
-                                    {% for line in info.hoursLines %}
-                                        {{ line }}{% if not forloop.last %}<br>{% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    Monday - Friday: 9AM - 5PM<br>Saturday - Sunday: Closed
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                        {% endwith %}
-                    {% else %}
                     <h2 class="h3 mb-4"><i class="fas fa-map-marker-alt mr-2 text-primary"></i>Find Us</h2>
+                    
                     <div class="contact-info-item">
                         <div class="icon">
                             <i class="fas fa-map-marker-alt"></i>
@@ -210,6 +94,7 @@
                             <p class="mb-0">123 Movie Street, Cinema District<br>Los Angeles, CA 90001</p>
                         </div>
                     </div>
+                    
                     <div class="contact-info-item">
                         <div class="icon">
                             <i class="fas fa-phone"></i>
@@ -219,6 +104,7 @@
                             <p class="mb-0">(555) 123-4567</p>
                         </div>
                     </div>
+                    
                     <div class="contact-info-item">
                         <div class="icon">
                             <i class="fas fa-envelope"></i>
@@ -228,6 +114,7 @@
                             <p class="mb-0">info@cinestore.com</p>
                         </div>
                     </div>
+                    
                     <div class="contact-info-item">
                         <div class="icon">
                             <i class="fas fa-clock"></i>
@@ -237,82 +124,13 @@
                             <p class="mb-0">Monday - Friday: 9AM - 5PM<br>Saturday - Sunday: Closed</p>
                         </div>
                     </div>
-                    {% endif %}
                 </div>
             </div>
+            
             <div class="card border-0 shadow">
                 <div class="card-body p-4">
-                    {% if contact %}
-                        {% with faq=contact.faqSection %}
-                    <h2 class="h3 mb-4"><i class="fas fa-question-circle mr-2 text-primary"></i>{% if faq and faq.title %}{{ faq.title }}{% else %}FAQs{% endif %}</h2>
-                    {% if faq and faq.items %}
-                    <div class="accordion" id="faqAccordion">
-                        {% for item in faq.items %}
-                        <div class="card border-0 mb-3">
-                            <div class="card-header bg-light" id="faqHeader{{ forloop.counter }}">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link text-dark collapsed" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
-                                        {{ item.question }}
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="faqHeader{{ forloop.counter }}" data-parent="#faqAccordion">
-                                <div class="card-body">
-                                    {{ item.answer }}
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <div class="accordion" id="faqAccordion">
-                        <div class="card border-0 mb-3">
-                            <div class="card-header bg-light" id="faqOne">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link text-dark collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                        How do I add a new movie?
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseOne" class="collapse" aria-labelledby="faqOne" data-parent="#faqAccordion">
-                                <div class="card-body">
-                                    You can add a new movie by clicking on the "Add Movie" button in the navigation menu or on the homepage. Fill out the form with the movie details and submit it.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card border-0 mb-3">
-                            <div class="card-header bg-light" id="faqTwo">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link text-dark collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Do I need an account to add comments?
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseTwo" class="collapse" aria-labelledby="faqTwo" data-parent="#faqAccordion">
-                                <div class="card-body">
-                                    No, you don't need an account to add comments to movies. However, creating an account allows you to keep track of your activities and personalize your experience.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card border-0">
-                            <div class="card-header bg-light" id="faqThree">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link text-dark collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        How can I contribute to CineStore?
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="collapseThree" class="collapse" aria-labelledby="faqThree" data-parent="#faqAccordion">
-                                <div class="card-body">
-                                    You can contribute by adding new movies, writing thoughtful comments, and sharing CineStore with fellow movie enthusiasts. We also welcome feedback for improving our platform.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                        {% endwith %}
-                    {% else %}
                     <h2 class="h3 mb-4"><i class="fas fa-question-circle mr-2 text-primary"></i>FAQs</h2>
+                    
                     <div class="accordion" id="faqAccordion">
                         <div class="card border-0 mb-3">
                             <div class="card-header bg-light" id="faqOne">
@@ -328,6 +146,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="card border-0 mb-3">
                             <div class="card-header bg-light" id="faqTwo">
                                 <h5 class="mb-0">
@@ -342,6 +161,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="card border-0">
                             <div class="card-header bg-light" id="faqThree">
                                 <h5 class="mb-0">
@@ -357,11 +177,9 @@
                             </div>
                         </div>
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% endwith %}
 {% endblock %}

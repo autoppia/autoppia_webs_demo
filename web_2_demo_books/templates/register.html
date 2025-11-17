@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-{% load custom_filters %}
 {% block body %}
 <div class="container mt-5" data-dynamic-group="register-container">
     <div class="row justify-content-center" data-dynamic-group="register-row">
         <div class="col-md-7 col-lg-6" data-dynamic-group="register-column">
             <div class="card shadow border-0" data-dynamic-group="register-card">
                 <div class="card-header bg-success text-white text-center py-3" data-dynamic-group="register-header">
-                    <h3 class="mb-0"><i class="fas fa-user-plus mr-2"></i>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'register.submit.text' }}{% else %}Create an Account{% endif %}</h3>
+                    <h3 class="mb-0"><i class="fas fa-user-plus mr-2"></i>Create an Account</h3>
                 </div>
 
                 <div class="card-body p-4" data-dynamic-group="register-body">
@@ -15,89 +14,53 @@
                         {% if DYNAMIC_HTML_ENABLED %}
                         <input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
                         {% endif %}
-                        {% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}
-                        <input type="hidden" name="seed-structure" value="{{ SEED_STRUCTURE }}">
-                        {% endif %}
 
                         <div class="form-group" data-dynamic-group="register-form-fields">
                             <div class="form-group" data-dynamic-group="username-field">
-                                <label for="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.username.id' }}{% else %}username{% endif %}">
-                                    <i class="fas fa-user mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_label:'register.username.label' }}{% else %}Username{% endif %}
+                                <label for="username">
+                                    <i class="fas fa-user mr-1"></i> Username
                                 </label>
-                                <input type="text" 
-                                       name="username" 
-                                       id="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.username.id' }}{% else %}username{% endif %}" 
-                                       class="form-control" 
-                                       placeholder="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_placeholder:'register.username.placeholder' }}{% else %}Choose a username{% endif %}" 
-                                       {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'register.username.aria-label' }}"{% endif %}
-                                       required autofocus>
+                                <input type="text" name="username" id="username" class="form-control" placeholder="Choose a username" required autofocus>
                                 <small class="form-text text-muted">
                                     Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.
                                 </small>
                             </div>
 
                             <div class="form-group" data-dynamic-group="email-field">
-                                <label for="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.email.id' }}{% else %}email{% endif %}">
-                                    <i class="fas fa-envelope mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_label:'register.email.label' }}{% else %}Email{% endif %}
+                                <label for="email">
+                                    <i class="fas fa-envelope mr-1"></i> Email
                                 </label>
-                                <input type="email" 
-                                       name="email" 
-                                       id="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.email.id' }}{% else %}email{% endif %}" 
-                                       class="form-control" 
-                                       placeholder="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_placeholder:'register.email.placeholder' }}{% else %}Enter your email{% endif %}" 
-                                       {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'register.email.aria-label' }}"{% endif %}
-                                       required>
+                                <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
                             </div>
 
                             <div class="form-group" data-dynamic-group="password1-field">
-                                <label for="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.password1.id' }}{% else %}password1{% endif %}">
-                                    <i class="fas fa-lock mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_label:'register.password1.label' }}{% else %}Password{% endif %}
+                                <label for="password1">
+                                    <i class="fas fa-lock mr-1"></i> Password
                                 </label>
-                                <input type="password" 
-                                       name="password1" 
-                                       id="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.password1.id' }}{% else %}password1{% endif %}" 
-                                       class="form-control" 
-                                       placeholder="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_placeholder:'register.password1.placeholder' }}{% else %}Create a password{% endif %}" 
-                                       {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'register.password1.aria-label' }}"{% endif %}
-                                       required>
+                                <input type="password" name="password1" id="password1" class="form-control" placeholder="Create a password" required>
                                 <small class="form-text text-muted">
                                     Your password must contain at least 8 characters.
                                 </small>
                             </div>
 
                             <div class="form-group" data-dynamic-group="password2-field">
-                                <label for="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.password2.id' }}{% else %}password2{% endif %}">
-                                    <i class="fas fa-lock mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_label:'register.password2.label' }}{% else %}Confirm Password{% endif %}
+                                <label for="password2">
+                                    <i class="fas fa-lock mr-1"></i> Confirm Password
                                 </label>
-                                <input type="password" 
-                                       name="password2" 
-                                       id="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.password2.id' }}{% else %}password2{% endif %}" 
-                                       class="form-control" 
-                                       placeholder="{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_placeholder:'register.password2.placeholder' }}{% else %}Confirm your password{% endif %}" 
-                                       {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'register.password2.aria-label' }}"{% endif %}
-                                       required>
+                                <input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm your password" required>
                             </div>
                         </div>
 
                         <div class="form-group mt-4" data-dynamic-group="register-button">
-                            <button type="submit" 
-                                    class="btn btn-success btn-block"
-                                    {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                                    id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.submit.id' }}"
-                                    aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'register.submit.aria-label' }}"
-                                    {% endif %}>
-                                <i class="fas fa-user-plus mr-1"></i> {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'register.submit.text' }}{% else %}Create Account{% endif %}
+                            <button type="submit" class="btn btn-success btn-block">
+                                <i class="fas fa-user-plus mr-1"></i> Create Account
                             </button>
                         </div>
                     </form>
                 </div>
 
                 <div class="card-footer bg-light text-center py-3" data-dynamic-group="register-footer">
-                    <p class="mb-0">Already have an account? <a href="{% url 'booksapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}{% if DYNAMIC_HTML_STRUCTURE_ENABLED and SEED_STRUCTURE %}{% if DYNAMIC_HTML_ENABLED %}&{% else %}?{% endif %}seed-structure={{ SEED_STRUCTURE }}{% endif %}"
-                           {% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}
-                           id="{{ STRUCTURE_VARIANT_DATA|get_structure_id:'register.link.id' }}"
-                           aria-label="{{ STRUCTURE_VARIANT_DATA|get_structure_aria_label:'register.link.aria-label' }}"
-                           {% endif %}>{% if DYNAMIC_HTML_STRUCTURE_ENABLED and STRUCTURE_VARIANT_DATA %}{{ STRUCTURE_VARIANT_DATA|get_structure_text:'register.link.text' }}{% else %}Sign In{% endif %}</a></p>
+                    <p class="mb-0">Already have an account? <a href="{% url 'booksapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Sign In</a></p>
                 </div>
             </div>
         </div>

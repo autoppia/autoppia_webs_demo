@@ -11,7 +11,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import Cookies from "js-cookie";
 import {EVENT_TYPES, logEvent} from "@/library/events";
 import { DEMO_MATTERS } from "@/library/dataset";
-import { useMatters } from "@/contexts/MatterContext";
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
   { name: "Documents", icon: <FileText className="w-5 h-5 mr-1" /> },
@@ -95,7 +94,6 @@ export default function MatterDetailPage() {
   const [summaryOpen, setSummaryOpen] = useState(true);
   const [customMatters, setCustomMatters] = useState<Matter[]>([]);
   const [currentMatter, setCurrentMatter] = useState<Matter | null>(null);
-  const { matters: contextMatters } = useMatters();
   
   const layout = useDetailLayoutVariant();
   const params = useParams();
@@ -109,9 +107,7 @@ export default function MatterDetailPage() {
   useEffect(() => {
     if (!matterId) return;
 
-    // Use context matters if available, otherwise fallback to DEMO_MATTERS
-    const baseMatters = (contextMatters && contextMatters.length > 0 ? contextMatters : DEMO_MATTERS);
-    const allMatters = [...customMatters, ...baseMatters];
+    const allMatters = [...customMatters, ...DEMO_MATTERS];
     const matter = allMatters.find((m) => m.id === matterId);
     if (matter) {
       setCurrentMatter(matter);
@@ -120,7 +116,7 @@ export default function MatterDetailPage() {
       console.warn(`Matter with ID ${matterId} not found.`);
       setCurrentMatter(null);
     }
-  }, [matterId, customMatters, contextMatters]);
+  }, [matterId, customMatters]);
 
   // If the matter is not found, show error
   if (!currentMatter) {

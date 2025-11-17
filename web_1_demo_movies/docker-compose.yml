@@ -18,7 +18,6 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - ENABLE_DYNAMIC_HTML=${ENABLE_DYNAMIC_HTML:-true}
-      - ENABLE_DYNAMIC_HTML_STRUCTURE=${ENABLE_DYNAMIC_HTML_STRUCTURE:-false}
       - DATA_GENERATION=${DATA_GENERATION:-false}
       - API_URL=http://app:8080
     depends_on:

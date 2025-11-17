@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   dynamicStructureProvider,
@@ -22,21 +22,6 @@ const DynamicStructureContext = createContext<
   DynamicStructureContextType | undefined
 >(undefined);
 
-function parseSeedStructureParam(value: string | null): number | null {
-  if (value === null) {
-    return null;
-  }
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function sanitizeSeedStructure(value: number | null | undefined): number {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    return 1;
-  }
-  return value;
-}
-
 export function DynamicStructureProvider({
   children,
 }: {
@@ -48,71 +33,43 @@ export function DynamicStructureProvider({
   
   // Get seed-structure from URL or localStorage
   const getPersistedSeedStructure = (): number => {
-    if (typeof window === "undefined") return 1;
-    const stored = localStorage.getItem("autolodge-seed-structure");
-    const parsed = parseSeedStructureParam(stored);
-    return sanitizeSeedStructure(parsed);
+    if (typeof window === 'undefined') return 1;
+    const stored = localStorage.getItem('autolodge-seed-structure');
+    return stored ? parseInt(stored, 10) : 1;
   };
 
   const urlSeedStructure = searchParams.get("seed-structure");
-  const parsedUrlSeed = parseSeedStructureParam(urlSeedStructure);
   const persistedSeedStructure = getPersistedSeedStructure();
-
-  // Use URL parameter if present and valid, otherwise use persisted value
-  const rawSeedStructure = parsedUrlSeed ?? persistedSeedStructure;
-
-  const seedStructure = useMemo(
-    () => dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure),
-    [rawSeedStructure],
+  
+  // Use URL parameter if present, otherwise use persisted value
+  const rawSeedStructure = urlSeedStructure 
+    ? Number(urlSeedStructure) 
+    : persistedSeedStructure;
+    
+  const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(
+    rawSeedStructure
   );
   const isEnabled = dynamicStructureProvider.isDynamicStructureModeEnabled();
 
   // Persist seed-structure to localStorage when it changes
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!isEnabled) {
-      localStorage.removeItem("autolodge-seed-structure");
-      return;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('autolodge-seed-structure', seedStructure.toString());
     }
-    localStorage.setItem("autolodge-seed-structure", seedStructure.toString());
-  }, [seedStructure, isEnabled]);
+  }, [seedStructure]);
 
-  // Update URL with seed-structure if it's missing or invalid
+  // Update URL with seed-structure if it's not present
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const url = new URL(window.location.href);
-
-    if (!isEnabled) {
-      if (url.searchParams.has("seed-structure")) {
-        url.searchParams.delete("seed-structure");
-        const nextSearch = url.searchParams.toString();
-        router.replace(
-          url.pathname + (nextSearch ? `?${nextSearch}` : "") + url.hash,
-          { scroll: false },
-        );
-      }
-      return;
+    if (urlSeedStructure === null && typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('seed-structure', seedStructure.toString());
+      router.replace(url.pathname + url.search, { scroll: false });
     }
-
-    const currentParam = url.searchParams.get("seed-structure");
-    const parsedParam = parseSeedStructureParam(currentParam);
-    if (
-      parsedParam === null ||
-      parsedParam !== seedStructure ||
-      currentParam !== seedStructure.toString()
-    ) {
-      url.searchParams.set("seed-structure", seedStructure.toString());
-      router.replace(url.pathname + url.search + url.hash, { scroll: false });
-    }
-  }, [seedStructure, router, pathname, isEnabled]);
+  }, [urlSeedStructure, seedStructure, router, pathname]);
 
   useEffect(() => {
-    if (!isEnabled) {
-      dynamicStructureProvider.setVariation(1);
-      return;
-    }
     dynamicStructureProvider.setVariation(seedStructure);
-  }, [seedStructure, isEnabled]);
+  }, [seedStructure]);
 
   const [currentVariation, setCurrentVariation] = useState<StructureVariation>(
     dynamicStructureProvider.getCurrentVariation()
@@ -136,15 +93,11 @@ export function DynamicStructureProvider({
   };
 
   const setSeedStructure = (value: number): void => {
-    if (!isEnabled) return;
-    const normalized = dynamicStructureProvider.getEffectiveSeedStructure(
-      sanitizeSeedStructure(value),
-    );
-    if (typeof window !== "undefined") {
-      localStorage.setItem("autolodge-seed-structure", normalized.toString());
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('autolodge-seed-structure', value.toString());
       const url = new URL(window.location.href);
-      url.searchParams.set("seed-structure", normalized.toString());
-      router.push(url.pathname + url.search + url.hash);
+      url.searchParams.set('seed-structure', value.toString());
+      router.push(url.pathname + url.search);
     }
   };
 

@@ -9,7 +9,7 @@ import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { withSeed } from "@/utils/seedRouting";
 
 export default function Navbar() {
-  const { reorderElements, getText, getElementAttributes } = useSeedLayout();
+  const { reorderElements } = useSeedLayout();
   const links = [
     { href: "/appointments", title: "Appointments", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
     { href: "/doctors", title: "Doctors", event: EVENT_TYPES.BROWSE_DOCTORS_CLICKED },
@@ -63,9 +63,8 @@ export default function Navbar() {
         <Button 
           size="sm"
           onClick={() => logEvent(EVENT_TYPES.BOOK_NOW_CLICKED, { source: "navbar_cta_button" })}
-          {...getElementAttributes('nav-book-now-button', 0)}
         >
-          {getText('nav-book-now-button', 'Book now')}
+          Book now
         </Button>
       </Link>
     </DynamicElement>

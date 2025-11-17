@@ -1,10 +1,8 @@
-"use client";
-import { useRestaurants } from "@/contexts/RestaurantContext";
+import { getRestaurants } from "@/utils/dynamicDataProvider";
 import RestaurantCard from "./RestaurantCard";
 
 export default function FeaturedRestaurantsGrid() {
-  const { getFeaturedRestaurants } = useRestaurants();
-  const restaurants = getFeaturedRestaurants();
+  const restaurants = getRestaurants() || [];
   return (
     <section className="my-14">
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
