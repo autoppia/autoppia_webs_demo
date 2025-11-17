@@ -327,6 +327,9 @@ deploy_webs_server() {
   [ "$FAST_MODE" = false ] && cache_flag="--no-cache"
 
   (
+    # Calculate absolute path for webs_data (works on any server)
+    WEBS_DATA_ABS_PATH="${WEBS_DATA_PATH:-$(cd ~ && pwd)/webs_data}"
+    
     export \
       WEB_PORT="$WEBS_PORT" \
       POSTGRES_PORT="$WEBS_PG_PORT" \
@@ -334,7 +337,8 @@ deploy_webs_server() {
       NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE="$ENABLE_DYNAMIC_V2_AI_GENERATE" \
       HOST_UID=$(id -u) \
-      HOST_GID=$(id -g)
+      HOST_GID=$(id -g) \
+      WEBS_DATA_PATH="$WEBS_DATA_ABS_PATH"
 
     docker compose -p "$name" build $cache_flag
     docker compose -p "$name" up -d
@@ -365,7 +369,7 @@ deploy_webs_server() {
   echo "📦 Checking for initial data pools..."
   mkdir -p ~/webs_data
   
-  for project in web_4_autodining web_5_autocrm web_6_automail; do
+  for project in web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery; do
     if [ ! -f ~/webs_data/$project/main.json ]; then
       echo "  → Initializing $project master pool (100 records)..."
       mkdir -p ~/webs_data/$project/data
@@ -381,6 +385,28 @@ deploy_webs_server() {
   done
   
   echo "✅ Master pools ready"
+  
+  # Copy data to container if webs_server is running
+  if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
+    echo "📦 Copying data pools to webs_server container..."
+    for project in web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery; do
+      if [ -f ~/webs_data/$project/main.json ]; then
+        echo "  → Copying $project to container..."
+        docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
+        docker cp ~/webs_data/$project/main.json webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
+        if [ -d ~/webs_data/$project/data ]; then
+          for data_file in ~/webs_data/$project/data/*.json; do
+            if [ -f "$data_file" ]; then
+              docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
+            fi
+          done
+        fi
+        docker exec -u root webs_server-app-1 chown -R appuser:appuser /app/data/$project 2>/dev/null || true
+        echo "  ✅ $project copied to container"
+      fi
+    done
+    echo "✅ Data pools copied to container"
+  fi
 
   popd >/dev/null
   echo "✅ $name running on HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"

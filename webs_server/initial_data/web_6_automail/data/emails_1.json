@@ -237,5 +237,5380 @@
     "labels": [],
     "category": "promotions",
     "threadId": "thread8"
+  },
+  {
+    "id": "email9",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/80.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nBob Johnson",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-07-25T12:36:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Personal",
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email10",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/88.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nAlice Smith",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-11-14T09:51:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Important",
+      "Marketing"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email11",
+    "from": {
+      "name": "Tina Martin",
+      "email": "tina.martin@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/men/92.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q1",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nTina Martin",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-11-26T12:48:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email12",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/49.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nSam Jackson",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-04-12T11:24:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Marketing"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email13",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/98.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nBob Johnson",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-07-20T12:41:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Support",
+      "Updates"
+    ],
+    "category": "Social",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email14",
+    "from": {
+      "name": "Olivia Anderson",
+      "email": "olivia.anderson@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nOlivia Anderson",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-01-19T16:53:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email15",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/97.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q4",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nVictor Chen",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-02-02T11:02:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Marketing"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email16",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/10.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q3",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nJack Martinez",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-08-25T16:46:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Work",
+      "Personal"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email17",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/34.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q3",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nJack Martinez",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-02-16T17:26:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing"
+    ],
+    "category": "Social",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email18",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/79.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Summary",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-04-03T13:07:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email19",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/45.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Review",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nAlice Smith",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-10-18T17:42:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Important",
+      "Support"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email20",
+    "from": {
+      "name": "Henry Adams",
+      "email": "henry.adams@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/20.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nHenry Adams",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-12-21T11:50:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Finance"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email21",
+    "from": {
+      "name": "Henry Adams",
+      "email": "henry.adams@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/53.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nHenry Adams",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-04-07T14:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Social",
+      "Marketing"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email22",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/70.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 24",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-02-28T13:18:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Support"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email23",
+    "from": {
+      "name": "Emma Davis",
+      "email": "emma.davis@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/78.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #4144",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nEmma Davis",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-02-01T09:10:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Finance",
+      "Social"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email24",
+    "from": {
+      "name": "Leo Hernandez",
+      "email": "leo.hernandez@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/22.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 33",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nLeo Hernandez",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-01-17T11:50:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Support"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email25",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/89.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q2 Summary",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nJack Martinez",
+    "snippet": "Attached is the summary...",
+    "timestamp": "2025-06-15T13:04:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Work",
+      "Support"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email26",
+    "from": {
+      "name": "Karen Rodriguez",
+      "email": "karen.rodriguez@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/59.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #9652",
+    "body": "Dear Team,\n\nAttached is the update.\n\nBest regards,\nKaren Rodriguez",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-04-02T10:42:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email27",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/79.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 3",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nCarol White",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-09-15T17:20:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email28",
+    "from": {
+      "name": "Peter Thomas",
+      "email": "peter.thomas@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/81.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 49",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nPeter Thomas",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-12-18T11:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Finance"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email29",
+    "from": {
+      "name": "Nathan Gonzalez",
+      "email": "nathan.gonzalez@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/56.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q1",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nNathan Gonzalez",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-02-16T14:43:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Finance",
+      "Social"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email30",
+    "from": {
+      "name": "Olivia Anderson",
+      "email": "olivia.anderson@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/14.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q3",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nOlivia Anderson",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-06-25T16:17:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Support"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email31",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/20.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 8",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nRachel Moore",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-03-15T13:35:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Finance",
+      "Support"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email32",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/68.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #9228",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-06-12T13:12:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email33",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/75.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nRachel Moore",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-09-23T12:38:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Finance",
+      "Important"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email34",
+    "from": {
+      "name": "Karen Rodriguez",
+      "email": "karen.rodriguez@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/53.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nKaren Rodriguez",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-06-23T11:21:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email35",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/39.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nZoe Williams",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-03-03T09:06:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Support"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email36",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/49.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nVictor Chen",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-01-10T16:37:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Work",
+      "Finance"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email37",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #6331",
+    "body": "Dear Team,\n\nFind attached the update.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-05-08T08:48:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Finance",
+      "Support",
+      "Social"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email38",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/62.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 52",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-10-02T12:53:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Support",
+      "Personal"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email39",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/57.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q1 Analysis",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nRachel Moore",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-04-13T17:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Finance",
+      "Social"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email40",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/87.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q4",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nRachel Moore",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-09-15T13:57:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Support"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email41",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/44.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-10-14T09:44:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Support"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email42",
+    "from": {
+      "name": "Olivia Anderson",
+      "email": "olivia.anderson@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nOlivia Anderson",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-08-27T09:32:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Finance",
+      "Important",
+      "Marketing"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email43",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/80.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nHere is the document.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-09-26T08:57:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal",
+      "Important"
+    ],
+    "category": "Finance",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email44",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/73.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nJack Martinez",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-02-06T12:24:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Social"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email45",
+    "from": {
+      "name": "Nathan Gonzalez",
+      "email": "nathan.gonzalez@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/31.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q1",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nNathan Gonzalez",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-01-28T16:36:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Work"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email46",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/27.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q2 Results",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nZoe Williams",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-07-08T14:13:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Marketing",
+      "Finance",
+      "Support"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email47",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/64.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #3656",
+    "body": "Dear Team,\n\nHere is the document.\n\nBest regards,\nGrace Lee",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-09-08T08:19:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email48",
+    "from": {
+      "name": "Peter Thomas",
+      "email": "peter.thomas@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/73.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 17",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nPeter Thomas",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-03-08T08:49:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Finance"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email49",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/55.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nSam Jackson",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-08-03T14:01:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email50",
+    "from": {
+      "name": "Leo Hernandez",
+      "email": "leo.hernandez@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/88.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nLeo Hernandez",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-07-17T15:26:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Finance",
+      "Social"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email51",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/83.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nAttached is the update.\n\nBest regards,\nZoe Williams",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-04-23T11:03:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email52",
+    "from": {
+      "name": "Quinn Taylor",
+      "email": "quinn.taylor@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/25.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nQuinn Taylor",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-04-23T12:42:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Important",
+      "Marketing"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email53",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nPlease review the report.\n\nBest regards,\nGrace Lee",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-05-15T13:09:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Updates"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email54",
+    "from": {
+      "name": "Tina Martin",
+      "email": "tina.martin@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/96.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nTina Martin",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-08-05T10:09:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Updates",
+      "Personal"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email55",
+    "from": {
+      "name": "Isabel Garcia",
+      "email": "isabel.garcia@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/84.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nIsabel Garcia",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-02-24T08:25:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email56",
+    "from": {
+      "name": "Tina Martin",
+      "email": "tina.martin@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Results",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nTina Martin",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-04-28T16:30:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Updates",
+      "Important"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email57",
+    "from": {
+      "name": "Tina Martin",
+      "email": "tina.martin@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/21.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nTina Martin",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-01-01T11:25:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Work",
+      "Support"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email58",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/21.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 49",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nCarol White",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-08-02T09:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Social",
+      "Marketing"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email59",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/26.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #3181",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nAlice Smith",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-06-20T12:46:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Personal",
+      "Social"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email60",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/68.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nXavier Patel",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-09-25T15:46:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Support",
+      "Social",
+      "Updates"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email61",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/12.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q1",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-05-15T08:55:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email62",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/79.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q3",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nSam Jackson",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-06-19T10:40:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Personal"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email63",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/46.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #6089",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nRachel Moore",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-03-11T16:58:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal",
+      "Marketing"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email64",
+    "from": {
+      "name": "Quinn Taylor",
+      "email": "quinn.taylor@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/39.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nQuinn Taylor",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-08-18T15:56:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Important"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email65",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/91.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 35",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nGrace Lee",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-11-24T16:03:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Personal",
+      "Important"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email66",
+    "from": {
+      "name": "Nathan Gonzalez",
+      "email": "nathan.gonzalez@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/5.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #1719",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nNathan Gonzalez",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-08-16T13:44:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Personal"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email67",
+    "from": {
+      "name": "Quinn Taylor",
+      "email": "quinn.taylor@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nQuinn Taylor",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-09-24T09:21:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Personal",
+      "Social"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email68",
+    "from": {
+      "name": "Wendy Kim",
+      "email": "wendy.kim@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/98.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the document.\n\nBest regards,\nWendy Kim",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-06-12T16:58:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Marketing"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email69",
+    "from": {
+      "name": "Wendy Kim",
+      "email": "wendy.kim@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/men/45.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q4",
+    "body": "Dear Team,\n\nAttached is the update.\n\nBest regards,\nWendy Kim",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-04-18T13:34:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Marketing",
+      "Social"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email70",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/17.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nJack Martinez",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-12-27T08:02:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Finance",
+      "Work"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email71",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/21.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nGrace Lee",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-11-18T08:51:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email72",
+    "from": {
+      "name": "Nathan Gonzalez",
+      "email": "nathan.gonzalez@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/33.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the document.\n\nBest regards,\nNathan Gonzalez",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-04-05T09:19:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email73",
+    "from": {
+      "name": "Tina Martin",
+      "email": "tina.martin@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/40.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 7",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nTina Martin",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-05-21T11:34:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Important",
+      "Work",
+      "Personal"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email74",
+    "from": {
+      "name": "Emma Davis",
+      "email": "emma.davis@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/35.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nEmma Davis",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-12-22T11:05:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email75",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/69.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #6469",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nVictor Chen",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-07-08T11:38:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Finance",
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email76",
+    "from": {
+      "name": "Isabel Garcia",
+      "email": "isabel.garcia@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/95.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 7",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nIsabel Garcia",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-11-16T13:33:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email77",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/89.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nAlice Smith",
+    "snippet": "Attached is the summary...",
+    "timestamp": "2025-11-17T13:50:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Finance"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email78",
+    "from": {
+      "name": "Yuki Tanaka",
+      "email": "yuki.tanaka@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/18.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nYuki Tanaka",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-09-01T12:23:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Work",
+      "Personal"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email79",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/8.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nHere is the document.\n\nBest regards,\nVictor Chen",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-09-22T14:21:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Work",
+      "Finance"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email80",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/men/98.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 19",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nDavid Brown",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-11-25T10:18:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Personal",
+      "Marketing"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email81",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 9",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nBob Johnson",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-05-18T14:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Important"
+    ],
+    "category": "Social",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email82",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #4696",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nZoe Williams",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-03-21T11:18:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Support",
+      "Marketing"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email83",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nGrace Lee",
+    "snippet": "Attached is the summary...",
+    "timestamp": "2025-11-06T13:59:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email84",
+    "from": {
+      "name": "Quinn Taylor",
+      "email": "quinn.taylor@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nQuinn Taylor",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-09-09T08:23:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Social"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email85",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/15.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q4",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nRachel Moore",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-04-26T11:53:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal",
+      "Work",
+      "Important"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email86",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/97.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nXavier Patel",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-08-16T16:42:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Work",
+      "Finance"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email87",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/86.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nVictor Chen",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-03-23T13:57:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Updates"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email88",
+    "from": {
+      "name": "Peter Thomas",
+      "email": "peter.thomas@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/95.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #9368",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nPeter Thomas",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-12-23T09:37:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email89",
+    "from": {
+      "name": "Peter Thomas",
+      "email": "peter.thomas@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/80.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q4",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nPeter Thomas",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-09-10T10:30:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email90",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/47.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 36",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-10-17T14:50:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Important"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email91",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/39.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Summary",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nJack Martinez",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-11-04T15:53:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Personal"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email92",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/72.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 47",
+    "body": "Dear Team,\n\nAttached is the summary.\n\nBest regards,\nSam Jackson",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-02-20T08:12:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email93",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q1",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nBob Johnson",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-01-23T17:47:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Finance",
+      "Work"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email94",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/86.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 42",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-12-14T14:06:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email95",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/39.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 15",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nDavid Brown",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-06-02T16:48:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Finance",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email96",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/98.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q3",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nXavier Patel",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-08-07T15:20:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email97",
+    "from": {
+      "name": "Olivia Anderson",
+      "email": "olivia.anderson@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/31.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nOlivia Anderson",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-01-06T09:22:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Social"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email98",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/men/15.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nPlease review the report.\n\nBest regards,\nSam Jackson",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-07-17T08:04:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Social"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email99",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/31.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #9746",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nAlice Smith",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-10-01T16:02:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Finance",
+      "Marketing"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email100",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/97.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #2443",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nXavier Patel",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-03-11T15:09:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Support"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email101",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/15.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nBob Johnson",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-09-22T09:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email102",
+    "from": {
+      "name": "Wendy Kim",
+      "email": "wendy.kim@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/60.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 48",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nWendy Kim",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-12-25T14:05:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email103",
+    "from": {
+      "name": "Wendy Kim",
+      "email": "wendy.kim@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/72.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 23",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nWendy Kim",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-10-24T16:10:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Social",
+      "Important"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email104",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/17.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q2 Results",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nCarol White",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-03-17T15:32:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Social",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email105",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/54.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q3",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nDavid Brown",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-08-21T11:08:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Work"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email106",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/20.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 44",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nGrace Lee",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-05-03T17:53:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Marketing"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email107",
+    "from": {
+      "name": "Quinn Taylor",
+      "email": "quinn.taylor@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/76.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nAttached is the summary.\n\nBest regards,\nQuinn Taylor",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-06-10T16:45:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Support",
+      "Marketing"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email108",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/41.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Summary",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nBob Johnson",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-12-10T10:31:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Social",
+      "Updates"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email109",
+    "from": {
+      "name": "Nathan Gonzalez",
+      "email": "nathan.gonzalez@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/15.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Summary",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nNathan Gonzalez",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-01-04T16:29:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Personal",
+      "Updates"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email110",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/86.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #5075",
+    "body": "Dear Team,\n\nAttached is the update.\n\nBest regards,\nZoe Williams",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-02-12T12:26:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Important",
+      "Social"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email111",
+    "from": {
+      "name": "Nathan Gonzalez",
+      "email": "nathan.gonzalez@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/28.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 6",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nNathan Gonzalez",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-05-22T09:03:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Updates"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email112",
+    "from": {
+      "name": "Quinn Taylor",
+      "email": "quinn.taylor@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/95.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nQuinn Taylor",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-07-16T13:09:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Social",
+      "Finance",
+      "Updates"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email113",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/65.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nFind attached the update.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-04-23T11:23:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Marketing",
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email114",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/70.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Review",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nDavid Brown",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-06-23T17:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Personal",
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email115",
+    "from": {
+      "name": "Yuki Tanaka",
+      "email": "yuki.tanaka@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/43.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nYuki Tanaka",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-05-12T08:07:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Personal",
+      "Marketing"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email116",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/6.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nVictor Chen",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-06-08T17:38:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Updates"
+    ],
+    "category": "Social",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email117",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/86.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nAttached is the update.\n\nBest regards,\nZoe Williams",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-04-01T12:37:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Important"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email118",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/30.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q4",
+    "body": "Dear Team,\n\nPlease review the report.\n\nBest regards,\nAlice Smith",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-08-12T13:02:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Personal"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email119",
+    "from": {
+      "name": "Henry Adams",
+      "email": "henry.adams@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/14.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nHenry Adams",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-03-01T15:34:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Social"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email120",
+    "from": {
+      "name": "Emma Davis",
+      "email": "emma.davis@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/37.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nEmma Davis",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-02-26T12:56:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Marketing"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email121",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/70.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nAttached is the document.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-10-20T16:29:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email122",
+    "from": {
+      "name": "Isabel Garcia",
+      "email": "isabel.garcia@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/88.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Analysis",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nIsabel Garcia",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-10-08T10:53:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Work"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email123",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/42.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q1 Analysis",
+    "body": "Dear Team,\n\nFind attached the update.\n\nBest regards,\nDavid Brown",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-10-10T08:01:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Work",
+      "Updates"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email124",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/men/68.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #4285",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nXavier Patel",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-04-03T08:32:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Work",
+      "Important"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email125",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/43.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #6201",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nSam Jackson",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-10-10T13:32:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Work",
+      "Important"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email126",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/99.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q2",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nCarol White",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-11-27T11:09:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Work",
+      "Updates"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email127",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/21.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q1 Summary",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nGrace Lee",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-09-27T15:18:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Work",
+      "Support"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email128",
+    "from": {
+      "name": "Olivia Anderson",
+      "email": "olivia.anderson@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/43.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nOlivia Anderson",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-04-27T12:52:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email129",
+    "from": {
+      "name": "Wendy Kim",
+      "email": "wendy.kim@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/27.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 4",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nWendy Kim",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-01-20T14:28:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Support",
+      "Marketing"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email130",
+    "from": {
+      "name": "Emma Davis",
+      "email": "emma.davis@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/46.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q4",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nEmma Davis",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-08-15T12:22:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email131",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/63.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nSam Jackson",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-11-06T13:54:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Important",
+      "Marketing",
+      "Updates"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email132",
+    "from": {
+      "name": "Leo Hernandez",
+      "email": "leo.hernandez@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/46.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Analysis",
+    "body": "Dear Team,\n\nAttached is the summary.\n\nBest regards,\nLeo Hernandez",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-04-24T15:51:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Support",
+      "Marketing"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email133",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/74.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nXavier Patel",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-10-14T08:48:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Important"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email134",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/7.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 20",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nRachel Moore",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-12-15T14:23:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Important",
+      "Support"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email135",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q2",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nDavid Brown",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-03-19T09:16:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Important",
+      "Social"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email136",
+    "from": {
+      "name": "Olivia Anderson",
+      "email": "olivia.anderson@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/83.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nOlivia Anderson",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-12-07T10:25:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Personal",
+      "Updates"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email137",
+    "from": {
+      "name": "Isabel Garcia",
+      "email": "isabel.garcia@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/86.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q3",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nIsabel Garcia",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-10-06T10:08:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Updates",
+      "Personal"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email138",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/31.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #7408",
+    "body": "Dear Team,\n\nAttached is the summary.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-06-07T14:22:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email139",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-09-20T15:41:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Social"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email140",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/31.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 25",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nAlice Smith",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-04-15T08:27:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email141",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/5.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 25",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nSam Jackson",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-09-19T15:42:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Important"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email142",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/83.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q1",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-08-06T08:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email143",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/men/57.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Analysis",
+    "body": "Dear Team,\n\nFind attached the update.\n\nBest regards,\nJack Martinez",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-12-06T16:35:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Personal",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email144",
+    "from": {
+      "name": "Isabel Garcia",
+      "email": "isabel.garcia@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #6254",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nIsabel Garcia",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-08-19T10:57:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email145",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/61.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 39",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nZoe Williams",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-04-23T13:01:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Marketing"
+    ],
+    "category": "Social",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email146",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/7.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nDavid Brown",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-08-23T17:04:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Marketing",
+      "Social"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email147",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/54.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 6",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nCarol White",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-02-01T17:59:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email148",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/98.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Follow-up",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nVictor Chen",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-07-05T17:56:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Support",
+      "Work"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email149",
+    "from": {
+      "name": "Yuki Tanaka",
+      "email": "yuki.tanaka@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/58.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 41",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nYuki Tanaka",
+    "snippet": "Please review the update...",
+    "timestamp": "2025-01-03T17:52:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email150",
+    "from": {
+      "name": "Henry Adams",
+      "email": "henry.adams@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/13.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q2",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nHenry Adams",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-08-01T15:25:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Updates",
+      "Support",
+      "Marketing"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email151",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/78.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the report.\n\nBest regards,\nBob Johnson",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-04-14T11:38:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Updates"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email152",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/85.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #7887",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nBob Johnson",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-09-26T11:40:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Marketing"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email153",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/women/20.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-11-07T16:05:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email154",
+    "from": {
+      "name": "Nathan Gonzalez",
+      "email": "nathan.gonzalez@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/82.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 3",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nNathan Gonzalez",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-04-28T17:39:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Important"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email155",
+    "from": {
+      "name": "Karen Rodriguez",
+      "email": "karen.rodriguez@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/62.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q4",
+    "body": "Dear Team,\n\nAttached is the summary.\n\nBest regards,\nKaren Rodriguez",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-06-16T14:37:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Marketing",
+      "Work"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email156",
+    "from": {
+      "name": "Karen Rodriguez",
+      "email": "karen.rodriguez@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/59.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q3",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nKaren Rodriguez",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-07-02T09:43:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email157",
+    "from": {
+      "name": "Tina Martin",
+      "email": "tina.martin@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/78.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nTina Martin",
+    "snippet": "Attached is the report...",
+    "timestamp": "2025-09-05T13:26:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email158",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/63.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q1",
+    "body": "Dear Team,\n\nPlease review the report.\n\nBest regards,\nRachel Moore",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-07-19T12:49:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email159",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/39.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 51",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nDavid Brown",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-09-15T13:12:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Updates",
+      "Support"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email160",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/66.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #7135",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nXavier Patel",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-12-08T11:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Support"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email161",
+    "from": {
+      "name": "Tina Martin",
+      "email": "tina.martin@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/6.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nTina Martin",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-12-22T12:02:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Support",
+      "Marketing",
+      "Personal"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email162",
+    "from": {
+      "name": "Henry Adams",
+      "email": "henry.adams@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/10.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q1",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nHenry Adams",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-09-16T13:11:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Marketing",
+      "Important"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email163",
+    "from": {
+      "name": "Wendy Kim",
+      "email": "wendy.kim@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/58.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q4",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nWendy Kim",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-10-01T17:54:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Personal",
+      "Updates",
+      "Social"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email164",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/90.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #8790",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nRachel Moore",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-12-06T09:21:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Finance",
+      "Support"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email165",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/79.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Analysis",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nCarol White",
+    "snippet": "Here is the update...",
+    "timestamp": "2025-07-21T10:57:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email166",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/50.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the document.\n\nBest regards,\nRachel Moore",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-04-11T12:09:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email167",
+    "from": {
+      "name": "David Brown",
+      "email": "david.brown@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/68.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q1 Summary",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nDavid Brown",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-12-22T10:06:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email168",
+    "from": {
+      "name": "Henry Adams",
+      "email": "henry.adams@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/94.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 43",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nHenry Adams",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-12-13T16:16:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal",
+      "Finance",
+      "Important"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email169",
+    "from": {
+      "name": "Leo Hernandez",
+      "email": "leo.hernandez@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/74.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #4217",
+    "body": "Dear Team,\n\nPlease review the report.\n\nBest regards,\nLeo Hernandez",
+    "snippet": "Find attached the report...",
+    "timestamp": "2025-03-14T13:56:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Finance"
+    ],
+    "category": "Finance",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email170",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/58.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nVictor Chen",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-08-26T11:05:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Social",
+      "Important"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email171",
+    "from": {
+      "name": "Bob Johnson",
+      "email": "bob.johnson@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/81.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q3",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nBob Johnson",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-11-27T15:07:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Updates"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email172",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/35.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 39",
+    "body": "Dear Team,\n\nAttached is the report.\n\nBest regards,\nZoe Williams",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-02-09T13:57:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email173",
+    "from": {
+      "name": "Zoe Williams",
+      "email": "zoe.williams@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/14.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nZoe Williams",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-08-13T14:58:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Marketing"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email174",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/men/54.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Results",
+    "body": "Dear Team,\n\nHere is the analysis.\n\nBest regards,\nCarol White",
+    "snippet": "Please review the summary...",
+    "timestamp": "2025-08-23T12:19:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal",
+      "Work",
+      "Finance"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email175",
+    "from": {
+      "name": "Yuki Tanaka",
+      "email": "yuki.tanaka@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/69.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #9371",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nYuki Tanaka",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-12-19T09:08:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Important"
+    ],
+    "category": "Finance",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email176",
+    "from": {
+      "name": "Rachel Moore",
+      "email": "rachel.moore@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/women/69.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q4",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nRachel Moore",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-01-21T09:30:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Updates"
+    ],
+    "category": "Finance",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email177",
+    "from": {
+      "name": "Peter Thomas",
+      "email": "peter.thomas@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/89.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Analysis",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nPeter Thomas",
+    "snippet": "Attached is the summary...",
+    "timestamp": "2025-04-15T08:08:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Work",
+      "Marketing",
+      "Finance"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email178",
+    "from": {
+      "name": "Grace Lee",
+      "email": "grace.lee@tech.com",
+      "avatar": "https://randomuser.me/api/portraits/men/4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 24",
+    "body": "Dear Team,\n\nAttached is the update.\n\nBest regards,\nGrace Lee",
+    "snippet": "Find attached the update...",
+    "timestamp": "2025-12-24T17:14:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Social"
+    ],
+    "category": "Finance",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email179",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/75.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Summary",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nCarol White",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-05-12T09:04:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Support",
+      "Social"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email180",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 19",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nVictor Chen",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-06-24T10:42:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Marketing",
+      "Important"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email181",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@services.com",
+      "avatar": "https://randomuser.me/api/portraits/women/51.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Summary",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nSam Jackson",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-07-17T17:09:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": true,
+    "labels": [
+      "Support"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email182",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/22.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nPlease review the analysis.\n\nBest regards,\nVictor Chen",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-11-16T14:12:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email183",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/28.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Important - Action Required",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nAlice Smith",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-06-19T09:57:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Finance"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email184",
+    "from": {
+      "name": "Leo Hernandez",
+      "email": "leo.hernandez@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/50.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q1 Summary",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nLeo Hernandez",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-05-07T13:50:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Important",
+      "Work"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email185",
+    "from": {
+      "name": "Victor Chen",
+      "email": "victor.chen@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/76.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q3 Analysis",
+    "body": "Dear Team,\n\nAttached is the summary.\n\nBest regards,\nVictor Chen",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-09-16T11:17:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email186",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/19.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-01-20T13:06:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Finance",
+      "Marketing"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email187",
+    "from": {
+      "name": "Emma Davis",
+      "email": "emma.davis@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q1",
+    "body": "Dear Team,\n\nPlease review the summary.\n\nBest regards,\nEmma Davis",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-04-09T15:56:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Important",
+      "Marketing"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email188",
+    "from": {
+      "name": "Jack Martinez",
+      "email": "jack.martinez@group.com",
+      "avatar": "https://randomuser.me/api/portraits/women/73.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Q4 Analysis",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nJack Martinez",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-06-28T09:08:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social",
+      "Support"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email189",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@company.com",
+      "avatar": "https://randomuser.me/api/portraits/men/58.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nFind attached the report.\n\nBest regards,\nXavier Patel",
+    "snippet": "Here is the report...",
+    "timestamp": "2025-09-13T14:31:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Updates"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email190",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@company.com",
+      "avatar": "https://randomuser.me/api/portraits/women/62.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Summary 6",
+    "body": "Dear Team,\n\nFind attached the summary.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Find attached the summary...",
+    "timestamp": "2025-07-04T12:09:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing",
+      "Work",
+      "Important"
+    ],
+    "category": "Marketing",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email191",
+    "from": {
+      "name": "Xavier Patel",
+      "email": "xavier.patel@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/54.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #1125",
+    "body": "Dear Team,\n\nPlease review the document.\n\nBest regards,\nXavier Patel",
+    "snippet": "Please review the report...",
+    "timestamp": "2025-03-10T08:32:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Important"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email192",
+    "from": {
+      "name": "Frank Wilson",
+      "email": "frank.wilson@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/65.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nHere is the summary.\n\nBest regards,\nFrank Wilson",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-06-20T17:05:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Finance",
+      "Work",
+      "Personal"
+    ],
+    "category": "Support",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email193",
+    "from": {
+      "name": "Emma Davis",
+      "email": "emma.davis@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/women/61.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Discussion Follow-up",
+    "body": "Dear Team,\n\nFind attached the document.\n\nBest regards,\nEmma Davis",
+    "snippet": "Attached is the summary...",
+    "timestamp": "2025-10-20T09:14:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Updates"
+    ],
+    "category": "Social",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email194",
+    "from": {
+      "name": "Alice Smith",
+      "email": "alice.smith@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/women/3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Report 30",
+    "body": "Dear Team,\n\nPlease review the update.\n\nBest regards,\nAlice Smith",
+    "snippet": "Please review the document...",
+    "timestamp": "2025-10-23T16:16:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Social"
+    ],
+    "category": "Work",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email195",
+    "from": {
+      "name": "Carol White",
+      "email": "carol.white@solutions.com",
+      "avatar": "https://randomuser.me/api/portraits/women/1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Urgent - Action Required",
+    "body": "Dear Team,\n\nHere is the update.\n\nBest regards,\nCarol White",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-08-06T16:04:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Marketing",
+      "Support"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email196",
+    "from": {
+      "name": "Quinn Taylor",
+      "email": "quinn.taylor@services.com",
+      "avatar": "https://randomuser.me/api/portraits/men/97.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Summary #8429",
+    "body": "Dear Team,\n\nAttached is the summary.\n\nBest regards,\nQuinn Taylor",
+    "snippet": "Here is the document...",
+    "timestamp": "2025-09-10T10:07:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isImportant": false,
+    "labels": [
+      "Updates",
+      "Finance"
+    ],
+    "category": "Finance",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email197",
+    "from": {
+      "name": "Peter Thomas",
+      "email": "peter.thomas@industries.com",
+      "avatar": "https://randomuser.me/api/portraits/men/72.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q4",
+    "body": "Dear Team,\n\nFind attached the analysis.\n\nBest regards,\nPeter Thomas",
+    "snippet": "Attached is the update...",
+    "timestamp": "2025-07-24T08:35:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing"
+    ],
+    "category": "Personal",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email198",
+    "from": {
+      "name": "Sam Jackson",
+      "email": "sam.jackson@group.com",
+      "avatar": "https://randomuser.me/api/portraits/men/47.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Meeting Notes #2420",
+    "body": "Dear Team,\n\nHere is the document.\n\nBest regards,\nSam Jackson",
+    "snippet": "Here is the summary...",
+    "timestamp": "2025-12-27T13:47:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Marketing",
+      "Personal"
+    ],
+    "category": "Marketing",
+    "hasAttachments": false,
+    "attachments": []
+  },
+  {
+    "id": "email199",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@consulting.com",
+      "avatar": "https://randomuser.me/api/portraits/men/20.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Review - Q3",
+    "body": "Dear Team,\n\nPlease review the report.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Find attached the document...",
+    "timestamp": "2025-08-19T10:33:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isImportant": true,
+    "labels": [
+      "Personal"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
+  },
+  {
+    "id": "email200",
+    "from": {
+      "name": "Maria Lopez",
+      "email": "maria.lopez@corp.com",
+      "avatar": "https://randomuser.me/api/portraits/men/56.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Update - Q4",
+    "body": "Dear Team,\n\nAttached is the analysis.\n\nBest regards,\nMaria Lopez",
+    "snippet": "Attached is the document...",
+    "timestamp": "2025-05-06T08:49:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isImportant": false,
+    "labels": [
+      "Marketing"
+    ],
+    "category": "Work",
+    "hasAttachments": true,
+    "attachments": []
   }
 ]

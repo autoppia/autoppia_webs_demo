@@ -15,9 +15,12 @@ Cada proyecto de demostración necesita un **pool de datos maestro** del cual se
 
 | Proyecto | Entidad | Registros actuales | Objetivo |
 |----------|---------|-------------------|----------|
-| `web_4_autodining` | Restaurants | ✅ 100 | 🎯 2000 |
-| `web_5_autocrm` | Clients | ✅ 100 | 🎯 2000 |
-| `web_6_automail` | Emails | ✅ 100 | 🎯 2000 |
+| `web_4_autodining` | Restaurants | ✅ 200 | 🎯 2000 |
+| `web_5_autocrm` | Clients | ✅ 200 | 🎯 2000 |
+| `web_6_automail` | Emails | ✅ 200 | 🎯 2000 |
+| `web_7_autodelivery` | Restaurants | ✅ 200 | 🎯 2000 |
+
+**✅ ESTADO:** Con 200 registros, diferentes seeds ya mostrarán contenido diferente. Para demos más robustas, el objetivo sigue siendo 2000 registros (pool 10-20x más grande que el limit solicitado).
 
 ## 🎯 TODO: Ampliar a 2000 registros
 

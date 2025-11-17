@@ -32,7 +32,8 @@ services:
     networks:
       - apps_net
     volumes:
-      - ~/webs_data:/app/data
+      # Use WEBS_DATA_PATH env var (set by setup.sh, works on any server)
+      - ${WEBS_DATA_PATH}:/app/data
 
   db:
     image: postgres:15-alpine

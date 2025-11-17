@@ -394,5 +394,1409 @@
     "avatar": "",
     "status": "Active",
     "last": "1w ago"
+  },
+  {
+    "id": "CL-956",
+    "name": "Patricia Rodriguez",
+    "email": "patricia.rodriguez@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-955",
+    "name": "Williams Partners",
+    "email": "legal@williamspartners.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-954",
+    "name": "Miller Partners",
+    "email": "legal@millerpartners.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-953",
+    "name": "Patricia Martinez",
+    "email": "patricia.martinez@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-952",
+    "name": "Mary Anderson",
+    "email": "mary.anderson@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-951",
+    "name": "Michael Wilson",
+    "email": "michael.wilson@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-950",
+    "name": "Patricia Anderson",
+    "email": "patricia.anderson@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-949",
+    "name": "Patricia Garcia",
+    "email": "patricia.garcia@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-948",
+    "name": "William Taylor",
+    "email": "william.taylor@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-947",
+    "name": "Thomas Services",
+    "email": "legal@thomasservices.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-946",
+    "name": "Wilson Enterprises",
+    "email": "legal@wilsonenterprises.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-945",
+    "name": "Anderson Labs",
+    "email": "legal@andersonlabs.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-944",
+    "name": "William Garcia",
+    "email": "william.garcia@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-943",
+    "name": "Lopez Labs",
+    "email": "legal@lopezlabs.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-942",
+    "name": "Sarah Wilson",
+    "email": "sarah.wilson@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-941",
+    "name": "Patricia Smith",
+    "email": "patricia.smith@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-940",
+    "name": "Jackson Systems",
+    "email": "legal@jacksonsystems.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-939",
+    "name": "Johnson International",
+    "email": "legal@johnsoninternational.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-938",
+    "name": "Lopez Solutions",
+    "email": "legal@lopezsolutions.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-937",
+    "name": "Sarah Thomas",
+    "email": "sarah.thomas@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-936",
+    "name": "Johnson Dynamics",
+    "email": "legal@johnsondynamics.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-935",
+    "name": "Garcia Partners",
+    "email": "legal@garciapartners.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-934",
+    "name": "Gonzalez Dynamics",
+    "email": "legal@gonzalezdynamics.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-933",
+    "name": "David Wilson",
+    "email": "david.wilson@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-932",
+    "name": "Wilson Services",
+    "email": "legal@wilsonservices.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-931",
+    "name": "Martin Enterprises",
+    "email": "legal@martinenterprises.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-930",
+    "name": "Elizabeth Smith",
+    "email": "elizabeth.smith@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-929",
+    "name": "Jessica Hernandez",
+    "email": "jessica.hernandez@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-928",
+    "name": "Davis Consulting",
+    "email": "legal@davisconsulting.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-927",
+    "name": "Rodriguez International",
+    "email": "legal@rodriguezinternational.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-926",
+    "name": "Jackson Enterprises",
+    "email": "legal@jacksonenterprises.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-925",
+    "name": "Martinez Services",
+    "email": "legal@martinezservices.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-924",
+    "name": "Moore International",
+    "email": "legal@mooreinternational.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-923",
+    "name": "Anderson International",
+    "email": "legal@andersoninternational.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-922",
+    "name": "Brown Services",
+    "email": "legal@brownservices.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-921",
+    "name": "Moore Consulting",
+    "email": "legal@mooreconsulting.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-920",
+    "name": "Barbara Hernandez",
+    "email": "barbara.hernandez@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-919",
+    "name": "Thomas Brown",
+    "email": "thomas.brown@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-918",
+    "name": "Thomas Solutions",
+    "email": "legal@thomassolutions.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-917",
+    "name": "Brown Enterprises",
+    "email": "legal@brownenterprises.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-916",
+    "name": "James Davis",
+    "email": "james.davis@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-915",
+    "name": "Linda Johnson",
+    "email": "linda.johnson@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-914",
+    "name": "Gonzalez International",
+    "email": "legal@gonzalezinternational.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-913",
+    "name": "Taylor Systems",
+    "email": "legal@taylorsystems.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-912",
+    "name": "Martin International",
+    "email": "legal@martininternational.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-911",
+    "name": "Smith Services",
+    "email": "legal@smithservices.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-910",
+    "name": "Robert Brown",
+    "email": "robert.brown@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-909",
+    "name": "Jessica Thomas",
+    "email": "jessica.thomas@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-908",
+    "name": "Linda Martinez",
+    "email": "linda.martinez@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-907",
+    "name": "Wilson Associates",
+    "email": "legal@wilsonassociates.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-906",
+    "name": "Michael Rodriguez",
+    "email": "michael.rodriguez@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-905",
+    "name": "David Moore",
+    "email": "david.moore@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-904",
+    "name": "Hernandez Enterprises",
+    "email": "legal@hernandezenterprises.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-903",
+    "name": "Jackson Associates",
+    "email": "legal@jacksonassociates.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-902",
+    "name": "Thomas Associates",
+    "email": "legal@thomasassociates.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-901",
+    "name": "Thomas Martinez",
+    "email": "thomas.martinez@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-900",
+    "name": "Johnson Associates",
+    "email": "legal@johnsonassociates.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-899",
+    "name": "William Jackson",
+    "email": "william.jackson@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-898",
+    "name": "Joseph Smith",
+    "email": "joseph.smith@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-897",
+    "name": "Joseph Brown",
+    "email": "joseph.brown@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-896",
+    "name": "Hernandez Consulting",
+    "email": "legal@hernandezconsulting.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-895",
+    "name": "Michael Lopez",
+    "email": "michael.lopez@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-894",
+    "name": "Karen Jones",
+    "email": "karen.jones@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-893",
+    "name": "Elizabeth Martinez",
+    "email": "elizabeth.martinez@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-892",
+    "name": "Anderson Dynamics",
+    "email": "legal@andersondynamics.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-891",
+    "name": "Rodriguez Group",
+    "email": "legal@rodriguezgroup.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-890",
+    "name": "Moore Industries",
+    "email": "legal@mooreindustries.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-889",
+    "name": "Susan Anderson",
+    "email": "susan.anderson@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-888",
+    "name": "Thomas Rodriguez",
+    "email": "thomas.rodriguez@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-887",
+    "name": "Thomas Davis",
+    "email": "thomas.davis@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-886",
+    "name": "Thomas Johnson",
+    "email": "thomas.johnson@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-885",
+    "name": "Brown Associates",
+    "email": "legal@brownassociates.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-884",
+    "name": "Susan Martinez",
+    "email": "susan.martinez@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-883",
+    "name": "Davis Labs",
+    "email": "legal@davislabs.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-882",
+    "name": "Lopez Group",
+    "email": "legal@lopezgroup.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-881",
+    "name": "Anderson Systems",
+    "email": "legal@andersonsystems.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-880",
+    "name": "Robert Jackson",
+    "email": "robert.jackson@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-879",
+    "name": "Garcia Dynamics",
+    "email": "legal@garciadynamics.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-878",
+    "name": "Linda Jackson",
+    "email": "linda.jackson@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-877",
+    "name": "Taylor Group",
+    "email": "legal@taylorgroup.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-876",
+    "name": "Moore Services",
+    "email": "legal@mooreservices.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-875",
+    "name": "Moore Systems",
+    "email": "legal@mooresystems.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-874",
+    "name": "Joseph Jackson",
+    "email": "joseph.jackson@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-873",
+    "name": "Thomas Anderson",
+    "email": "thomas.anderson@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-872",
+    "name": "Thomas Martinez",
+    "email": "thomas.martinez@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-871",
+    "name": "Robert Davis",
+    "email": "robert.davis@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-870",
+    "name": "John Jackson",
+    "email": "john.jackson@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-869",
+    "name": "Moore Partners",
+    "email": "legal@moorepartners.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-868",
+    "name": "James Thomas",
+    "email": "james.thomas@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-867",
+    "name": "David Hernandez",
+    "email": "david.hernandez@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-866",
+    "name": "Jennifer Williams",
+    "email": "jennifer.williams@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-865",
+    "name": "Joseph Smith",
+    "email": "joseph.smith@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-864",
+    "name": "Robert Wilson",
+    "email": "robert.wilson@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-863",
+    "name": "Jones Associates",
+    "email": "legal@jonesassociates.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-862",
+    "name": "William Miller",
+    "email": "william.miller@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-861",
+    "name": "Martinez International",
+    "email": "legal@martinezinternational.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-860",
+    "name": "James Martinez",
+    "email": "james.martinez@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-859",
+    "name": "Mary Miller",
+    "email": "mary.miller@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-858",
+    "name": "Jessica Thomas",
+    "email": "jessica.thomas@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-857",
+    "name": "Moore Solutions",
+    "email": "legal@mooresolutions.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-856",
+    "name": "Jackson Associates",
+    "email": "legal@jacksonassociates.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-855",
+    "name": "Sarah Taylor",
+    "email": "sarah.taylor@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-854",
+    "name": "Brown Systems",
+    "email": "legal@brownsystems.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-853",
+    "name": "Elizabeth Miller",
+    "email": "elizabeth.miller@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-852",
+    "name": "Taylor Solutions",
+    "email": "legal@taylorsolutions.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-851",
+    "name": "Garcia Dynamics",
+    "email": "legal@garciadynamics.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-850",
+    "name": "Miller Group",
+    "email": "legal@millergroup.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-849",
+    "name": "Smith Services",
+    "email": "legal@smithservices.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-848",
+    "name": "Taylor International",
+    "email": "legal@taylorinternational.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-847",
+    "name": "Rodriguez Enterprises",
+    "email": "legal@rodriguezenterprises.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-846",
+    "name": "Susan Smith",
+    "email": "susan.smith@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-845",
+    "name": "Smith Enterprises",
+    "email": "legal@smithenterprises.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-844",
+    "name": "Martinez Services",
+    "email": "legal@martinezservices.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-843",
+    "name": "Anderson Global",
+    "email": "legal@andersonglobal.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-842",
+    "name": "Charles Anderson",
+    "email": "charles.anderson@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-841",
+    "name": "David Miller",
+    "email": "david.miller@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-840",
+    "name": "Lopez Associates",
+    "email": "legal@lopezassociates.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-839",
+    "name": "Jessica Wilson",
+    "email": "jessica.wilson@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-838",
+    "name": "Richard Moore",
+    "email": "richard.moore@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-837",
+    "name": "Hernandez Tech Corp",
+    "email": "legal@hernandeztechcorp.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-836",
+    "name": "Thomas Solutions",
+    "email": "legal@thomassolutions.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-835",
+    "name": "Robert Jackson",
+    "email": "robert.jackson@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-834",
+    "name": "Martin Solutions",
+    "email": "legal@martinsolutions.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-833",
+    "name": "Susan Martinez",
+    "email": "susan.martinez@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-832",
+    "name": "Jones Industries",
+    "email": "legal@jonesindustries.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-831",
+    "name": "Barbara Martinez",
+    "email": "barbara.martinez@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-830",
+    "name": "James Wilson",
+    "email": "james.wilson@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-829",
+    "name": "Robert Rodriguez",
+    "email": "robert.rodriguez@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-828",
+    "name": "Sarah Davis",
+    "email": "sarah.davis@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Archived",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-827",
+    "name": "Davis Biotech",
+    "email": "legal@davisbiotech.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-826",
+    "name": "Thomas Consulting",
+    "email": "legal@thomasconsulting.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-825",
+    "name": "Linda Johnson",
+    "email": "linda.johnson@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-824",
+    "name": "Karen Moore",
+    "email": "karen.moore@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-823",
+    "name": "Thomas Garcia",
+    "email": "thomas.garcia@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-822",
+    "name": "Linda Moore",
+    "email": "linda.moore@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-821",
+    "name": "Mary Gonzalez",
+    "email": "mary.gonzalez@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-820",
+    "name": "Elizabeth Jones",
+    "email": "elizabeth.jones@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-819",
+    "name": "Michael Miller",
+    "email": "michael.miller@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-818",
+    "name": "Thomas Consulting",
+    "email": "legal@thomasconsulting.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "1m ago"
+  },
+  {
+    "id": "CL-817",
+    "name": "Susan Rodriguez",
+    "email": "susan.rodriguez@email.com",
+    "matters": 5,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-816",
+    "name": "David Garcia",
+    "email": "david.garcia@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-815",
+    "name": "Joseph Williams",
+    "email": "joseph.williams@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-814",
+    "name": "Patricia Jones",
+    "email": "patricia.jones@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-813",
+    "name": "Gonzalez Consulting",
+    "email": "legal@gonzalezconsulting.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-812",
+    "name": "Sarah Brown",
+    "email": "sarah.brown@email.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-811",
+    "name": "Brown Group",
+    "email": "legal@browngroup.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-810",
+    "name": "William Gonzalez",
+    "email": "william.gonzalez@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "Archived",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-809",
+    "name": "David Davis",
+    "email": "david.davis@email.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-808",
+    "name": "Sarah Smith",
+    "email": "sarah.smith@email.com",
+    "matters": 3,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-807",
+    "name": "Hernandez Partners",
+    "email": "legal@hernandezpartners.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-806",
+    "name": "Mary Anderson",
+    "email": "mary.anderson@email.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-805",
+    "name": "Miller Enterprises",
+    "email": "legal@millerenterprises.com",
+    "matters": 1,
+    "avatar": "",
+    "status": "Archived",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-804",
+    "name": "Gonzalez Solutions",
+    "email": "legal@gonzalezsolutions.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-803",
+    "name": "Taylor Biotech",
+    "email": "legal@taylorbiotech.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-802",
+    "name": "Smith International",
+    "email": "legal@smithinternational.com",
+    "matters": 2,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-801",
+    "name": "Taylor Biotech",
+    "email": "legal@taylorbiotech.com",
+    "matters": 4,
+    "avatar": "",
+    "status": "On Hold",
+    "last": "3w ago"
   }
 ]

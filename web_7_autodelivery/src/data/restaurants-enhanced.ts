@@ -131,54 +131,50 @@ async function generateRestaurantsForCategories(
 /**
  * Main initialization function for restaurants
  */
-export async function initializeRestaurants(): Promise<Restaurant[]> {
-  if (!isDataGenerationAvailable()) {
-    console.log("🔍 Data generation not available, using original restaurants");
-    return originalRestaurants;
-  }
-
-  // Check cache first
-  const cached = readCachedRestaurants();
-  if (cached && cached.length > 0) {
-    console.log("🔍 Using cached restaurants:", cached.length, "items");
-    return cached;
-  }
-
+export async function initializeRestaurants(v2SeedValue?: number | null): Promise<Restaurant[]> {
+  let dbModeEnabled = false;
   try {
-    const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
-    const restaurantsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_RESTAURANTS_PER_CATEGORY;
-    
-    const allGeneratedRestaurants = await generateRestaurantsForCategories(
-      categories,
-      restaurantsPerCategory,
-      DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS
-    );
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
 
-    if (!Array.isArray(allGeneratedRestaurants) || allGeneratedRestaurants.length === 0) {
-      console.log("No restaurants were generated for any category, returning existing restaurants.");
-      return originalRestaurants;
-    }
+  let effectiveSeed: number | null;
 
-    try {
-      // Normalize images and cache results
-      const normalizedRestaurants = normalizeRestaurantImages(allGeneratedRestaurants);
-      
-      if (!Array.isArray(normalizedRestaurants) || normalizedRestaurants.length === 0) {
-        console.warn("Normalization failed, using original restaurants");
-        return originalRestaurants;
-      }
-      
-      writeCachedRestaurants(normalizedRestaurants);
-      console.log(`✅ Successfully generated and cached ${normalizedRestaurants.length} restaurants`);
-      return normalizedRestaurants;
-    } catch (error) {
-      console.error("Error during restaurant normalization:", error);
-      return originalRestaurants;
-    }
-  } catch (error) {
-    console.error("❌ Failed to generate restaurants:", error);
-    return originalRestaurants;
+  if (dbModeEnabled) {
+    effectiveSeed = v2SeedValue ?? null;
+  } else {
+    effectiveSeed = 1; // If v2 is NOT enabled, automatically use seed=1
   }
+
+  if (effectiveSeed !== null && effectiveSeed !== undefined) {
+    try {
+      const { fetchSeededSelection } = await import("@/shared/seeded-loader");
+      const fromDb = await fetchSeededSelection<Restaurant>({
+        projectKey: "web_7_autodelivery",
+        entityType: "restaurants",
+        seedValue: effectiveSeed,
+        limit: 100,
+        method: "distribute",
+        filterKey: "cuisine",
+      });
+
+      console.log(`[autodelivery] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+
+      if (fromDb && fromDb.length > 0) {
+        const normalized = normalizeRestaurantImages(fromDb);
+        return normalized;
+      } else {
+        console.warn(`[autodelivery] No data returned from DB with seed=${effectiveSeed}`);
+      }
+    } catch (err) {
+      console.error(`[autodelivery] Failed to load from DB with seed=${effectiveSeed}:`, err);
+      throw err;
+    }
+  } else {
+    if (dbModeEnabled) {
+      throw new Error("[autodelivery] v2 is enabled but no valid seed provided");
+    }
+  }
+  throw new Error("[autodelivery] Failed to load restaurants from database");
 }
 
 /**

@@ -90,29 +90,17 @@ export class DynamicDataProvider {
   private async initializeRestaurants(): Promise<Restaurant[]> {
     try {
       const runtimeSeed = this.getRuntimeV2Seed();
-      // Try DB mode first if enabled
-      const dbRestaurants = await loadRestaurantsFromDb(runtimeSeed ?? undefined);
-      if (dbRestaurants.length > 0) {
-        console.log("🔍 DB restaurants loaded:", dbRestaurants.length, "items");
-        writeCachedRestaurants(dbRestaurants);
-        return dbRestaurants;
-      }
-
-      // If DB mode is enabled but no data found, use static data as fallback
-      if (this.dataGenerationEnabled) {
-        // Fallback to existing behavior for data generation mode
-        const initializedRestaurants = await initializeRestaurants();
-        if (initializedRestaurants.length > 0) {
-          writeCachedRestaurants(initializedRestaurants);
-        }
+      // Use the simplified initializeRestaurants with seed
+      const initializedRestaurants = await initializeRestaurants(runtimeSeed ?? undefined);
+      if (initializedRestaurants.length > 0) {
+        writeCachedRestaurants(initializedRestaurants);
         return initializedRestaurants;
-      } else {
-        // For DB mode, use static data as fallback if no DB data found
-        return restaurants;
       }
+      // If no data found, return empty array (should not happen with new logic)
+      return [];
     } catch (error) {
       console.error("Failed to initialize restaurants:", error);
-      return restaurants;
+      throw error; // Throw error instead of falling back
     }
   }
 
