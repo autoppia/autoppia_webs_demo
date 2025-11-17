@@ -9,6 +9,7 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useSeed } from "@/context/SeedContext";
 import { withSeed } from "@/utils/seedRouting";
 
 
@@ -23,12 +24,14 @@ function getInitials(name: string) {
 
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
+  const { v2Seed } = useSeed();
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: 'web_5_autocrm',
     entityType: 'clients',
     generateCount: 60,
     version: 'v1',
     fallback: () => staticClients,
+    seedValue: v2Seed ?? undefined,
   });
   const clients = (data && data.length ? data : staticClients).map((c: any, i: number) => ({
     id: c.id ?? `CL-${1000 + i}`,

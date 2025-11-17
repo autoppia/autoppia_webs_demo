@@ -42,7 +42,8 @@ export default function RootLayout({
         className="font-sans bg-neutral text-[#1A1A1A] min-h-screen"
         suppressHydrationWarning
       >
-        <ClientProviders>
+        <SeedProvider>
+          <ClientProviders>
           <nav
             className={`w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30 ${layoutClasses.header}`}
             style={{
@@ -81,7 +82,8 @@ export default function RootLayout({
               {children}
             </main>
           </div>
-        </ClientProviders>
+          </ClientProviders>
+        </SeedProvider>
       </body>
     </html>
   );
