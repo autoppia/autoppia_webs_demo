@@ -13,7 +13,7 @@ import {
 } from "date-fns";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
@@ -56,7 +56,7 @@ function getFallbackHotel(): Hotel {
 }
 
 function PropertyDetailContent() {
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const router = useSeedRouter();
   const params = useParams<{ id: string }>();
 

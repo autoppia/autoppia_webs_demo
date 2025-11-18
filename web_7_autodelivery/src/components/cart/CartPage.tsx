@@ -76,7 +76,7 @@ import {
 } from "@/components/ui/dialog";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, clearCart, getTotal } =
@@ -86,7 +86,7 @@ export default function CartPage() {
   const hydrated = useHasHydrated();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const layout = useSeedLayout();
-  const { getText, getPlaceholder, getId, getAria, seedStructure } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const predefinedAddresses = [
     "710 Portofino Ln, Foster City, CA 94004",
     "450 Townsend St, San Francisco, CA 94107",

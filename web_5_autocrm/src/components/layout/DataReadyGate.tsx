@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { whenReady } from "@/utils/dynamicDataProvider";
+import { whenReady } from "@/dynamic/v2-data";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
@@ -90,4 +90,3 @@ export function DataReadyGate({ children }: { children: React.ReactNode }) {
   // Data is ready, show content
   return <>{children}</>;
 }
-

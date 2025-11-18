@@ -22,7 +22,7 @@ import {
 } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export type AddToCartModalProps = {
   open: boolean;
@@ -49,7 +49,7 @@ export function AddToCartModal({
   const [preferences, setPreferences] = React.useState("");
   const [qty, setQty] = React.useState(1);
   const layout = useSeedLayout();
-  const { getText, getPlaceholder, getId, getAria, seedStructure } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   React.useEffect(() => {
     setSize(item.sizes?.[0]);

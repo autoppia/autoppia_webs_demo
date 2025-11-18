@@ -9,7 +9,7 @@ import { Loader2, Trash } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 
 function Stars({ rating }: { rating: number }) {
@@ -47,7 +47,7 @@ function ReviewsSection({
   restaurant: Restaurant;
 }) {
   const layout = useLayout();
-  const { getText, getId, getAria, seedStructure } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const [localReviews, setLocalReviews] = useState(reviews);
   const handleDelete = (idx: number) => {
     const deleted = localReviews[idx];
@@ -138,7 +138,7 @@ export default function RestaurantDetailPage({
   restaurantId: string;
 }) {
   const layout = useLayout();
-  const { getText, getId, getAria, seedStructure } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useSeedRouter();
   const { restaurants, isLoading } = useRestaurants();

@@ -1,11 +1,11 @@
 "use client";
 
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedStructureNavigation } from "@/hooks/useSeedStructureNavigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function SeedTestPage() {
-  const { seedStructure, setSeedStructure, currentVariation } = useDynamicStructure();
+  const { v3Seed } = useV3Attributes();
   const { navigateWithSeedStructure } = useSeedStructureNavigation();
 
   return (

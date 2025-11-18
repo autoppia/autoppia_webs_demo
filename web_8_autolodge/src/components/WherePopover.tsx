@@ -5,7 +5,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 // Example static data
 const RECENT_SEARCHES = [
@@ -57,7 +57,7 @@ export function WherePopover({
 }) {
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState(searchTerm);
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   // sync with parent
   React.useEffect(() => setInput(searchTerm), [searchTerm]);

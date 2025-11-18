@@ -1,4 +1,3 @@
-// src/library/useSeedLayout.ts
 import { useMemo, useCallback } from 'react';
 import { 
   getLayoutVariant, 
@@ -8,8 +7,8 @@ import {
   generateElementId,
   generateCSSVariables,
   generateLayoutClasses
-} from './layoutVariants';
-import { getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+} from '@/dynamic/v1-layouts';
+import { getLayoutConfig, isDynamicModeEnabled } from '@/dynamic/v2-data';
 import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 export function useSeedLayout() {

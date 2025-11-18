@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 const DEFAULTS = [
   { key: "adults", labelKey: "adults_label", subKey: "adults_sub", min: 0, max: 10 },
@@ -22,7 +22,7 @@ export function GuestSelectorPopover({
   children: React.ReactNode,
 }) {
   const [open, setOpen] = React.useState(false);
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
 
   const changeCount = (key: keyof GuestCounts, delta: number) => {
     setCounts({ ...counts, [key]: Math.max(0, counts[key] + delta) });

@@ -1,4 +1,4 @@
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { 
   initializeClients, 

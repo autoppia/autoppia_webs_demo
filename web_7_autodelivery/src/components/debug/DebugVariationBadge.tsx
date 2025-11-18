@@ -1,10 +1,10 @@
 "use client";
 
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import React from "react";
 
 export default function DebugVariationBadge() {
-  const { currentVariation, isEnabled, seedStructure } = useDynamicStructure();
+  const { v3Seed } = useV3Attributes();
   if (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE !== "true") {
     return null;
   }
