@@ -69,40 +69,71 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
     resolveSeedsSync(DEFAULT_SEED)
   );
   const [isInitialized, setIsInitialized] = useState(false);
+  const [urlSeedProcessed, setUrlSeedProcessed] = useState(false);
 
-  // Initialize seed from localStorage
+  // PRIORITY: URL > localStorage
+  // First, check if there's a seed in URL
+  const urlSeedRaw = searchParams.get("seed");
+  const urlSeed = urlSeedRaw ? clampBaseSeed(Number.parseInt(urlSeedRaw, 10)) : null;
+
+  // Initialize seed: URL has priority over localStorage
   useEffect(() => {
     if (isInitialized) return;
-    try {
-      const savedSeed = localStorage.getItem("autodining_seed_base");
-      if (savedSeed) {
-        const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
-        setSeedState(parsedSeed);
+    
+    if (urlSeed !== null && !isNaN(urlSeed)) {
+      // URL seed has priority - use it immediately
+      setSeedState(urlSeed);
+      setUrlSeedProcessed(true);
+      console.log(`[SeedContext] Using seed from URL: ${urlSeed}`);
+    } else {
+      // No seed in URL, try localStorage
+      try {
+        const savedSeed = localStorage.getItem("autodining_seed_base");
+        if (savedSeed) {
+          const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
+          setSeedState(parsedSeed);
+          console.log(`[SeedContext] Using seed from localStorage: ${parsedSeed}`);
+        }
+      } catch (error) {
+        console.error("Error loading seed from localStorage:", error);
       }
-    } catch (error) {
-      console.error("Error loading seed:", error);
     }
     setIsInitialized(true);
-  }, [isInitialized]);
+  }, [isInitialized, urlSeed]);
 
-  // Handle seed from URL
+  // Handle seed from URL changes (when URL changes after initial load)
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
+      console.log(`[SeedContext] Seed changed in URL: ${urlSeed}`);
       setSeedState(urlSeed);
+      setUrlSeedProcessed(true);
+    } else if (urlSeedProcessed) {
+      // URL seed was removed, but we already processed it
+      // Don't fallback to localStorage if user explicitly removed seed from URL
+      console.log(`[SeedContext] Seed removed from URL, using default: ${DEFAULT_SEED}`);
+      setSeedState(DEFAULT_SEED);
     }
-  }, []);
+  }, [urlSeedProcessed]);
 
   // Update derived seeds + persist base seed
   // Re-run when seed OR enable_dynamic changes
   useEffect(() => {
-    // Use sync version for immediate update, then fetch from API
-    setResolvedSeeds(resolveSeedsSync(seed));
+    let cancelled = false;
+    
+    // Use sync version for immediate update
+    const syncResolved = resolveSeedsSync(seed);
+    setResolvedSeeds(syncResolved);
     
     // Fetch from centralized service (async, updates when ready)
     resolveSeeds(seed).then((resolved) => {
-      setResolvedSeeds(resolved);
+      // Only update if this effect hasn't been cancelled (seed hasn't changed)
+      if (!cancelled) {
+        setResolvedSeeds(resolved);
+      }
     }).catch((error) => {
-      console.warn("[SeedContext] Failed to resolve seeds from API, using local:", error);
+      if (!cancelled) {
+        console.warn("[SeedContext] Failed to resolve seeds from API, using local:", error);
+      }
     });
     
     try {
@@ -110,6 +141,11 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("Error saving seed to localStorage:", error);
     }
+    
+    // Cleanup: cancel if seed changes before async completes
+    return () => {
+      cancelled = true;
+    };
   }, [seed, searchParams]); // Re-run when searchParams change (to catch enable_dynamic)
 
   const setSeed = useCallback((newSeed: number) => {

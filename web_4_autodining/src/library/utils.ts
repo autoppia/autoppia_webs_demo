@@ -1171,10 +1171,13 @@ export function getLayoutIndexFromSeed(seed: number): number {
 // Hook for using seed-based variations with event support
 export function useSeedVariation(
   type: keyof SeedVariations,
-  eventType?: string
+  eventType?: string,
+  seedOverride?: number
 ) {
   const { resolvedSeeds } = useSeed();
-  const seed = resolvedSeeds.v1 ?? resolvedSeeds.base;
+  
+  // If seedOverride is provided, use it; otherwise use v1 from resolvedSeeds
+  const seed = seedOverride ?? (resolvedSeeds.v1 ?? resolvedSeeds.base);
 
   return {
     className: SeedVariationManager.getClassName(type, seed, eventType),

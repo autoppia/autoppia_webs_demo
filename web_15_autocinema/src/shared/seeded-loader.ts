@@ -21,7 +21,7 @@ export function isDbLoadModeEnabled(): boolean {
 }
 
 export function getSeedValueFromEnv(defaultSeed: number = 1): number {
-  // Always return default seed (v2-seed comes from URL parameter, not env vars)
+  // Dataset seed is derived at runtime; env fallback only matters for SSR.
   return defaultSeed;
 }
 
@@ -67,5 +67,4 @@ export async function fetchPoolInfo(projectKey: string, entityType: string): Pro
     return null;
   }
 }
-
 

@@ -8,6 +8,11 @@ export const EVENT_TYPES = {
   ADD_TO_WATCHLIST: "ADD_TO_WATCHLIST",
   SHARE_MOVIE: "SHARE_MOVIE",
   POST_COMMENT: "POST_COMMENT",
+  LOGIN_SUCCESS: "login.success",
+  LOGIN_FAILURE: "login.failure",
+  LOGOUT: "logout",
+  EDIT_MOVIE: "edit.event",
+  DELETE_MOVIE: "delete.event",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];

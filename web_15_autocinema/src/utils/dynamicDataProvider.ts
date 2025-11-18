@@ -1,13 +1,12 @@
 import type { Movie } from "@/data/movies";
 import { initializeMovies } from "@/data/movies";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
 
 export interface MovieSearchFilters {
   genre?: string;
   year?: number;
 }
-
-const V2_STORAGE_KEY = "autocinema_v2_seed";
 
 const clampSeed = (value: number): number => {
   if (!Number.isFinite(value)) return 1;
@@ -15,13 +14,7 @@ const clampSeed = (value: number): number => {
   return value;
 };
 
-const parseSeedValue = (value: string | null): number | null => {
-  if (!value) return null;
-  const parsed = Number.parseInt(value, 10);
-  if (Number.isNaN(parsed)) return null;
-  if (parsed < 1 || parsed > 300) return null;
-  return parsed;
-};
+const BASE_SEED_STORAGE_KEY = "autocinema_seed_base";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -47,30 +40,33 @@ export class DynamicDataProvider {
     return DynamicDataProvider.instance;
   }
 
-  private getV2SeedFromUrl(): number | null {
+  private getBaseSeed(): number {
     if (typeof window === "undefined") {
-      return null;
+      return clampBaseSeed(1);
     }
     try {
       const params = new URLSearchParams(window.location.search);
-      const fromUrl = parseSeedValue(params.get("v2-seed"));
-      if (fromUrl !== null) {
-        window.localStorage.setItem(V2_STORAGE_KEY, fromUrl.toString());
-        return fromUrl;
+      const raw = params.get("seed");
+      if (raw) {
+        const parsed = clampBaseSeed(Number.parseInt(raw, 10));
+        window.localStorage.setItem(BASE_SEED_STORAGE_KEY, parsed.toString());
+        return parsed;
       }
-      const stored = parseSeedValue(window.localStorage.getItem(V2_STORAGE_KEY));
-      if (stored !== null) {
-        return stored;
+      const stored = window.localStorage.getItem(BASE_SEED_STORAGE_KEY);
+      if (stored) {
+        return clampBaseSeed(Number.parseInt(stored, 10));
       }
     } catch (error) {
-      console.warn("[autocinema] Failed to resolve v2-seed", error);
+      console.warn("[autocinema] Failed to resolve base seed from URL/localStorage", error);
     }
-    return null;
+    return clampBaseSeed(1);
   }
 
   private async loadMovies(): Promise<void> {
     try {
-      const v2Seed = this.getV2SeedFromUrl();
+      const baseSeed = this.getBaseSeed();
+      const resolved = resolveSeedsSync(baseSeed);
+      const v2Seed = resolved.v2 ?? resolved.base;
       this.movies = await initializeMovies(v2Seed);
     } catch (error) {
       console.error("[autocinema] Failed to initialize movies", error);
@@ -160,13 +156,6 @@ export class DynamicDataProvider {
     return this.isEnabled;
   }
 
-  public getEffectiveSeed(providedSeed: number = 1): number {
-    if (!this.isEnabled) {
-      return 1;
-    }
-    return clampSeed(providedSeed);
-  }
-
   public getLayoutConfig(seed?: number) {
     return getEffectiveLayoutConfig(seed);
   }
@@ -183,5 +172,4 @@ export const getMoviesByGenre = (genre: string) => dynamicDataProvider.getMovies
 export const getAvailableGenres = () => dynamicDataProvider.getAvailableGenres();
 export const getAvailableYears = () => dynamicDataProvider.getAvailableYears();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getEffectiveSeed = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed ?? 1);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);

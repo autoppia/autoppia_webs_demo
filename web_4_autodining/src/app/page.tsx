@@ -158,16 +158,16 @@ function RestaurantCard({
   );
 }
 
-function CardScroller({ children, title }: { children: React.ReactNode; title: string }) {
+function CardScroller({ children, title, layoutSeed }: { children: React.ReactNode; title: string; layoutSeed: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const tickingRef = useRef(false);
   const rafIdRef = useRef<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const { getText } = useDynamicStructure();
+  const { seed } = useSeed(); // Get seed from context for data-testid
 
-  const { seed } = useSeed();
-  const cardContainerVariation = useSeedVariation("cardContainer");
+  const cardContainerVariation = useSeedVariation("cardContainer", undefined, layoutSeed);
   const childCount = React.Children.count(children);
 
   const checkScroll = () => {
@@ -224,7 +224,7 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
         <button
           onClick={() => scroll("left")}
           className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
-          data-testid={`scroll-left-${seed}`}
+          data-testid={`scroll-left-${seed ?? 1}`}
           aria-label={getText("scroll_left")}
         >
           <ChevronLeft className="w-5 h-5" />
@@ -234,7 +234,7 @@ function CardScroller({ children, title }: { children: React.ReactNode; title: s
         <button
           onClick={() => scroll("right")}
           className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
-          data-testid={`scroll-right-${seed}`}
+          data-testid={`scroll-right-${seed ?? 1}`}
           aria-label={getText("scroll_right")}
         >
           <ChevronRight className="w-5 h-5" />
@@ -279,16 +279,38 @@ function HomePageContent() {
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const layoutSeed = resolvedSeeds.v1 ?? seed;
+  
+  // Calculate layout variation (1-10) from v1 seed
+  const layoutVariation = useMemo(() => {
+    if (layoutSeed < 1 || layoutSeed > 300) return 1;
+    return ((layoutSeed - 1) % 10) + 1;
+  }, [layoutSeed]);
+  
+  // Log v1 info when it changes (only once per unique v1 seed)
+  const lastV1SeedRef = useRef<number | null>(null);
+  useEffect(() => {
+    const currentV1Seed = resolvedSeeds.v1 ?? resolvedSeeds.base;
+    // Only log if v1 seed actually changed
+    if (lastV1SeedRef.current !== currentV1Seed) {
+      if (resolvedSeeds.v1 !== null) {
+        console.log(`[autodining] V1 Layout - Seed: ${resolvedSeeds.v1}, Variation: #${layoutVariation} (of 10)`);
+      } else if (resolvedSeeds.base) {
+        console.log(`[autodining] V1 Layout - Using base seed: ${resolvedSeeds.base}, Variation: #${layoutVariation} (of 10)`);
+      }
+      lastV1SeedRef.current = currentV1Seed;
+    }
+  }, [resolvedSeeds.v1, resolvedSeeds.base, layoutVariation]);
+  
   const { marginTop, wrapButton } = useMemo(
     () => getLayoutVariant(layoutSeed),
     [layoutSeed]
   );
 
-  // Use seed-based variations with event support
-  const searchBarVariation = useSeedVariation("searchBar");
-  const searchButtonVariation = useSeedVariation("searchButton");
-  const pageLayoutVariation = useSeedVariation("pageLayout");
-  const sectionLayoutVariation = useSeedVariation("sectionLayout");
+  // Use seed-based variations with event support (pass v1 seed)
+  const searchBarVariation = useSeedVariation("searchBar", undefined, layoutSeed);
+  const searchButtonVariation = useSeedVariation("searchButton", undefined, layoutSeed);
+  const pageLayoutVariation = useSeedVariation("pageLayout", undefined, layoutSeed);
+  const sectionLayoutVariation = useSeedVariation("sectionLayout", undefined, layoutSeed);
   
 
 
@@ -355,37 +377,76 @@ function HomePageContent() {
     "2:30 PM",
   ];
 
+  // Track the last v2Seed we used to avoid duplicate loads
+  const lastV2SeedRef = useRef<number | null>(null);
+  const lastBaseSeedRef = useRef<number | null>(null);
+  
+  // Reset lastV2SeedRef when base seed changes (user changed seed in URL)
   useEffect(() => {
+    if (lastBaseSeedRef.current !== null && lastBaseSeedRef.current !== seed) {
+      console.log(`[autodining] Base seed changed from ${lastBaseSeedRef.current} to ${seed}, resetting cache`);
+      lastV2SeedRef.current = null; // Force reload with new seed
+    }
+    lastBaseSeedRef.current = seed;
+  }, [seed]);
+  
+  useEffect(() => {
+    // Only load if v2Seed is valid and different from last load
+    const currentV2Seed = v2Seed ?? resolvedSeeds.base;
+    if (currentV2Seed === null || currentV2Seed === undefined) {
+      return; // Wait for valid seed
+    }
+    
+    // Skip if we already loaded with this seed
+    if (lastV2SeedRef.current === currentV2Seed) {
+      return;
+    }
+    
+    let cancelled = false;
+    
     const loadRestaurants = async () => {
-      console.log("[autodining] Loading restaurants with v2Seed:", v2Seed);
+      console.log(`[autodining] V2 Data - Seed: ${currentV2Seed} (from base seed: ${seed})`);
+      lastV2SeedRef.current = currentV2Seed; // Mark as loading
       setIsLoading(true);
       const genEnabled = isDataGenerationEnabled();
       if (genEnabled) setIsGenerating(true);
       try {
         // Pass v2Seed to initializeRestaurants when v2 is enabled
-        await initializeRestaurants(v2Seed ?? undefined); // waits for DB/gen
-        const fresh = getRestaurants().map((r) => ({
-          id: r.id,
-          name: r.name,
-          image: r.image,
-          cuisine: r.cuisine ?? "International",
-          area: r.area ?? "Downtown",
-          reviews: r.reviews ?? 0,
-          stars: r.stars ?? 4,
-          price: r.price ?? "$$",
-          bookings: r.bookings ?? 0,
-          times: ["1:00 PM"],
-        }));
-        const mapped = fresh.length > 0 ? fresh : defaultRestaurants;
-        setList(mapped);
-        setIsReady(mapped.length > 0);
+        await initializeRestaurants(currentV2Seed); // waits for DB/gen
+        
+        // Only update state if this effect hasn't been cancelled
+        if (!cancelled) {
+          const fresh = getRestaurants().map((r) => ({
+            id: r.id,
+            name: r.name,
+            image: r.image,
+            cuisine: r.cuisine ?? "International",
+            area: r.area ?? "Downtown",
+            reviews: r.reviews ?? 0,
+            stars: r.stars ?? 4,
+            price: r.price ?? "$$",
+            bookings: r.bookings ?? 0,
+            times: ["1:00 PM"],
+          }));
+          const mapped = fresh.length > 0 ? fresh : defaultRestaurants;
+          setList(mapped);
+          setIsReady(mapped.length > 0);
+        }
       } finally {
-        setIsLoading(false);
-        setIsGenerating(false);
+        if (!cancelled) {
+          setIsLoading(false);
+          setIsGenerating(false);
+        }
       }
     };
+    
     loadRestaurants();
-  }, [v2Seed]);
+    
+    // Cleanup: cancel if seed changes before async completes
+    return () => {
+      cancelled = true;
+    };
+  }, [v2Seed, resolvedSeeds.base, resolvedSeeds.v2, seed]);
 
   const iconRestaurants = useMemo(() => list.slice(15, 30), [list]);
   const awardRestaurants = useMemo(() => list.slice(30, 50), [list]);
@@ -536,7 +597,7 @@ function HomePageContent() {
             onChange={handleSearchChange}
           />
           {wrapButton ? (
-            <div data-testid={`wrapper-${seed}`}>
+            <div data-testid={`wrapper-${seed ?? 1}`}>
               <button
                 id={getId("search_button")}
                 className={searchButtonVariation.className}
@@ -560,14 +621,14 @@ function HomePageContent() {
 
         {/* Main Content - Cards, Sections, etc. */}
         {isLoading || !isReady || list.length === 0 ? null : wrapButton ? (
-          <div data-testid={`section-wrapper-${seed}`}>
+          <div data-testid={`section-wrapper-${seed ?? 1}`}>
             <section
               id={getId("section_lunch")}
               className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
               data-testid={sectionLayoutVariation.dataTestId}
             >
               <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
-              <CardScroller title={getText("section_lunch")}>
+              <CardScroller title={getText("section_lunch")} layoutSeed={layoutSeed}>
                 {filtered.map((r) => (
                   <RestaurantCard
                     key={r.id + "-lunch"}
@@ -575,6 +636,7 @@ function HomePageContent() {
                     date={date}
                     people={people}
                     time={time}
+                    layoutSeed={layoutSeed}
                   />
                 ))}
               </CardScroller>
@@ -587,7 +649,7 @@ function HomePageContent() {
             data-testid={sectionLayoutVariation.dataTestId}
           >
             <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
-            <CardScroller title={getText("section_lunch")}>
+            <CardScroller title={getText("section_lunch")} layoutSeed={layoutSeed}>
               {filtered.map((r) => (
                 <RestaurantCard
                   key={r.id + "-lunch"}
@@ -595,6 +657,7 @@ function HomePageContent() {
                   date={date}
                   people={people}
                   time={time}
+                  layoutSeed={layoutSeed}
                 />
               ))}
             </CardScroller>
@@ -603,7 +666,7 @@ function HomePageContent() {
 
         {/* Introducing OpenDinning Icons Section */}
         {wrapButton ? (
-          <div data-testid={`icon-section-wrapper-${seed}`}>
+          <div data-testid={`icon-section-wrapper-${seed ?? 1}`}>
             <section
               id={getId("section_icons")}
               className={`${sectionLayoutVariation.className} ${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
@@ -622,7 +685,7 @@ function HomePageContent() {
                   {getText("explore_icons")}
                 </button>
               </div>
-              <CardScroller title={getText("section_icons")}>
+              <CardScroller title={getText("section_icons")} layoutSeed={layoutSeed}>
                 {iconRestaurants.map((r) => (
                   <RestaurantCard
                     key={r.id + "-icon"}
@@ -630,6 +693,7 @@ function HomePageContent() {
                     date={date}
                     people={people}
                     time={time}
+                    layoutSeed={layoutSeed}
                   />
                 ))}
               </CardScroller>
@@ -654,7 +718,7 @@ function HomePageContent() {
                 {getText("explore_icons")}
               </button>
             </div>
-            <CardScroller title={getText("section_icons")}>
+            <CardScroller title={getText("section_icons")} layoutSeed={layoutSeed}>
               {iconRestaurants.map((r) => (
                 <RestaurantCard
                   key={r.id + "-icon"}
@@ -662,6 +726,7 @@ function HomePageContent() {
                   date={date}
                   people={people}
                   time={time}
+                  layoutSeed={layoutSeed}
                 />
               ))}
             </CardScroller>
@@ -670,10 +735,10 @@ function HomePageContent() {
 
         {/* Award Winners Section */}
         {wrapButton ? (
-          <div data-testid={`award-section-wrapper-${seed}`}>
+          <div data-testid={`award-section-wrapper-${seed ?? 1}`}>
             <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
               <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
-              <CardScroller title={getText("section_awards")}>
+              <CardScroller title={getText("section_awards")} layoutSeed={layoutSeed}>
                 {awardRestaurants.map((r) => (
                   <RestaurantCard
                     key={r.id + "-award"}
@@ -681,6 +746,7 @@ function HomePageContent() {
                     date={date}
                     people={people}
                     time={time}
+                    layoutSeed={layoutSeed}
                   />
                 ))}
               </CardScroller>
@@ -689,7 +755,7 @@ function HomePageContent() {
         ) : (
           <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
             <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
-            <CardScroller title={getText("section_awards")}>
+            <CardScroller title={getText("section_awards")} layoutSeed={layoutSeed}>
               {awardRestaurants.map((r) => (
                 <RestaurantCard
                   key={r.id + "-award"}
@@ -697,6 +763,7 @@ function HomePageContent() {
                   date={date}
                   people={people}
                   time={time}
+                  layoutSeed={layoutSeed}
                 />
               ))}
             </CardScroller>

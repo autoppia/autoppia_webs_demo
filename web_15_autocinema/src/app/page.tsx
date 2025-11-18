@@ -23,8 +23,9 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 export default function HomePage() {
   const searchParams = useSearchParams();
   const router = useSeedRouter();
-  const { seed } = useSeed();
-  const layoutConfig = getLayoutConfig(seed);
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
+  const layoutConfig = getLayoutConfig(layoutSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
 
   const initialSearch = searchParams.get("search") ?? "";
@@ -65,7 +66,6 @@ export default function HomePage() {
   const updateQueryString = (next: { search?: string; genre?: string; year?: string }) => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("seed");
-    params.delete("v2-seed");
 
     if (next.search !== undefined) {
       if (next.search) params.set("search", next.search);

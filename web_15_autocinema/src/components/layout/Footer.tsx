@@ -18,8 +18,9 @@ const ABOUT_LINKS = [
 ];
 
 export function Footer() {
-  const { seed } = useSeed();
-  const config = getLayoutConfig(seed);
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
+  const config = getLayoutConfig(layoutSeed);
   const classes = getLayoutClasses(config);
 
   return (
@@ -66,7 +67,7 @@ export function Footer() {
       </div>
       <div className="border-t border-white/5 bg-neutral-950/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
-          <p>Seed #{seed} controls the layout you see.</p>
+          <p>Base seed #{seed} → layout variant #{layoutSeed}.</p>
           <p>&copy; {new Date().getFullYear()} Autoppia Experiments</p>
         </div>
       </div>

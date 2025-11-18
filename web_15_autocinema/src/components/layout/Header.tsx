@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
+import { useAuth } from "@/context/AuthContext";
 
 const NAV_LINKS = [
   { label: "Home", href: "/", preserveSeed: true },
@@ -16,8 +17,10 @@ const NAV_LINKS = [
 ];
 
 export function Header() {
-  const { seed, setSeed, v2Seed } = useSeed();
-  const layoutConfig = getLayoutConfig(seed);
+  const { seed, setSeed, resolvedSeeds } = useSeed();
+  const { currentUser, logout } = useAuth();
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
+  const layoutConfig = getLayoutConfig(layoutSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
 
   const layoutLabel = useMemo(() => {
@@ -41,11 +44,6 @@ export function Header() {
               <p className="text-xs uppercase text-white/50">AI Film Library</p>
             </div>
           </SeedLink>
-          {v2Seed ? (
-            <span className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/70">
-              v2-seed: {v2Seed}
-            </span>
-          ) : null}
         </div>
 
         <nav className="flex flex-wrap items-center gap-4 text-sm text-white/70">
@@ -59,6 +57,24 @@ export function Header() {
               {link.label}
             </SeedLink>
           ))}
+          {currentUser ? (
+            <>
+              <SeedLink href="/profile" className="font-semibold text-secondary">
+                {currentUser.username}
+              </SeedLink>
+              <button
+                type="button"
+                onClick={logout}
+                className="text-xs uppercase tracking-wide text-white/60 hover:text-white"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <SeedLink href="/login" className="text-secondary">
+              Login
+            </SeedLink>
+          )}
         </nav>
 
         <div className="flex items-center gap-3">

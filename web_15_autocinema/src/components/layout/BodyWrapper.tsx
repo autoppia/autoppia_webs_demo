@@ -5,8 +5,9 @@ import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/utils/dynamicDataProvider";
 
 export function BodyWrapper({ children }: { children: React.ReactNode }) {
-  const { seed } = useSeed();
-  const layoutConfig = getLayoutConfig(seed);
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
+  const layoutConfig = getLayoutConfig(layoutSeed);
 
   useEffect(() => {
     // Remove any existing navbar classes

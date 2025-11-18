@@ -45,7 +45,7 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
-  throw new Error("[autocinema] v2 mode enabled but no valid v2-seed was provided");
+  throw new Error("[autocinema] v2 mode enabled but no derived seed was provided");
 };
 
 const coerceNumber = (value: unknown, fallback: number = 0): number => {
@@ -127,7 +127,7 @@ const normalizeMovie = (movie: DatasetMovie): Movie => {
 
 let moviesCache: Movie[] = [];
 
-export async function initializeMovies(v2SeedValue?: number | null, limit: number = 120): Promise<Movie[]> {
+export async function initializeMovies(v2SeedValue?: number | null, limit: number = 300): Promise<Movie[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 

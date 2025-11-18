@@ -63,9 +63,9 @@ export default function RestaurantPage() {
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const layoutSeed = resolvedSeeds.v1 ?? seed;
 
-  // Use seed-based variations
-  const bookButtonVariation = useSeedVariation("bookButton");
-  const imageContainerVariation = useSeedVariation("imageContainer");
+  // Use seed-based variations (pass v1 seed)
+  const bookButtonVariation = useSeedVariation("bookButton", undefined, layoutSeed);
+  const imageContainerVariation = useSeedVariation("imageContainer", undefined, layoutSeed);
   
   // Create layout based on seed
   const layout = useMemo(() => {

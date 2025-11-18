@@ -77,9 +77,9 @@ export default function Page() {
     };
   }, [layoutSeed]);
 
-  // Use seed-based variations
-  const formVariation = useSeedVariation("form");
-  const bookButtonVariation = useSeedVariation("bookButton");
+  // Use seed-based variations (pass v1 seed)
+  const formVariation = useSeedVariation("form", undefined, layoutSeed);
+  const bookButtonVariation = useSeedVariation("bookButton", undefined, layoutSeed);
 
   const restaurantInfo = {
     restaurantId,

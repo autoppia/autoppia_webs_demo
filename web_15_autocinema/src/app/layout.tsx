@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SeedProvider } from "@/context/SeedContext";
+import { AuthProvider } from "@/context/AuthContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
@@ -25,19 +26,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} bg-neutral-950 text-white`} suppressHydrationWarning>
-        <SeedProvider>
-          <Suspense fallback={<div className="h-16 w-full bg-neutral-900" />}>
-            <Header />
-          </Suspense>
-          <Suspense fallback={<div className="min-h-screen bg-neutral-950" />}>
-            <DataReadyGate>
-              <BodyWrapper>
-                {children}
-              </BodyWrapper>
-            </DataReadyGate>
-          </Suspense>
-          <Footer />
-        </SeedProvider>
+        <AuthProvider>
+          <SeedProvider>
+            <Suspense fallback={<div className="h-16 w-full bg-neutral-900" />}>
+              <Header />
+            </Suspense>
+            <Suspense fallback={<div className="min-h-screen bg-neutral-950" />}>
+              <DataReadyGate>
+                <BodyWrapper>
+                  {children}
+                </BodyWrapper>
+              </DataReadyGate>
+            </Suspense>
+            <Footer />
+          </SeedProvider>
+        </AuthProvider>
       </body>
     </html>
   );
