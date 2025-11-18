@@ -6,7 +6,7 @@
  */
 
 import { useMemo, useCallback } from 'react';
-import { useSeed } from '@/context/SeedContext';
+import { useSeed } from '@/seed-system';
 import { generateElementId } from '../utils/id-generator';
 import { getTextForElement } from '../utils/text-selector';
 import { getClassForElement } from '../utils/class-selector';
