@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   title: "Autolodge – Book Hotels, Cabins & Retreats",
   description:
     "Autolodge is your trusted platform for booking hotels, cabins, and unique stays worldwide. Find your perfect getaway with flexible dates, real guest reviews, and seamless booking.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

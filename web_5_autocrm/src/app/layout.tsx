@@ -23,6 +23,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AutoCRM | Smart Client & Case Management Software",
   description: "AutoCRM helps you streamline client communication, manage cases, track tasks, and grow your business with powerful, intuitive CRM tools.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

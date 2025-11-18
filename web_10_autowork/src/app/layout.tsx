@@ -45,6 +45,7 @@ const topIcons = [
 export const metadata: Metadata = {
   title: "Autowork - Hire Freelancers",
   description: "Hire skilled freelancers on Autowork for web development, design, marketing, and more.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

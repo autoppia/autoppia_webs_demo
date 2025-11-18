@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "AutoCalendar – Your Smart Scheduling Assistant",
   description:
     "AutoCalendar is a powerful and intuitive calendar app inspired by Google Calendar. Plan, schedule, and manage events with ease and automation.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

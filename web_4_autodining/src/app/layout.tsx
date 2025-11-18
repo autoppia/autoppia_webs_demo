@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AutoDining | Easy Restaurant Reservations & Dining Bookings",
   description: "Book your favorite restaurants effortlessly with AutoDining. Discover top dining spots, reserve tables instantly, and enjoy a seamless restaurant booking experience.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

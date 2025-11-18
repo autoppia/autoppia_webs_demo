@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "AutoMail - Modern Email Client",
   description: "A modern, intuitive email client with advanced features.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

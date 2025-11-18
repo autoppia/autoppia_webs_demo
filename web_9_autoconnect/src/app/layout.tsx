@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "AutoConnect – A LinkedIn-like Professional Network",
   description:
     "Connect, share updates, and explore jobs on AutoConnect, a modern LinkedIn clone.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "Autozon - Online Shopping for Electronics, Apparel, and More",
   description:
     "Shop online for the best deals on electronics, clothing, books, and much more at Autozon.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

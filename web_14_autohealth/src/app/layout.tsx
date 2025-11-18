@@ -19,6 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AutoHealth",
   description: "Demo healthcare portal — static UI with dummy data",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({

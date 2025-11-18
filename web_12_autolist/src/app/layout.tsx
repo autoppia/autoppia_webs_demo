@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "AutoList – Smart To‑Do App",
   description:
     "AutoDo is a smart, minimal to-do app that helps you organize, automate, and complete tasks effortlessly. Stay productive with intelligent task tracking and reminders.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
