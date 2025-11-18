@@ -58,8 +58,9 @@ export function DynamicStructureProvider({ children }: { children: ReactNode }) 
   // Update variation when seed changes
   useEffect(() => {
     if (isEnabled && seedStructure !== null) {
-      // Map seed (1-300) to variation (1-10) using modulo
-      const variationIndex = ((seedStructure - 1) % 10) + 1;
+      // Map seed (1-300) to variation (1-10) using COMMON formula
+      // COMMON FORMULA across all webs
+      const variationIndex = ((seedStructure % 30) + 1) % 10 || 10;
       setCurrentVariation(variationIndex);
     } else {
       setCurrentVariation(1); // Default variation

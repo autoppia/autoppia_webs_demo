@@ -281,9 +281,10 @@ function HomePageContent() {
   const layoutSeed = resolvedSeeds.v1 ?? seed;
   
   // Calculate layout variation (1-10) from v1 seed
+  // COMMON FORMULA across all webs
   const layoutVariation = useMemo(() => {
     if (layoutSeed < 1 || layoutSeed > 300) return 1;
-    return ((layoutSeed - 1) % 10) + 1;
+    return ((layoutSeed % 30) + 1) % 10 || 10;
   }, [layoutSeed]);
   
   // Log v1 info when it changes (only once per unique v1 seed)

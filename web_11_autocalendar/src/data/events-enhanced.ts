@@ -1,4 +1,7 @@
-import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import {
+  fetchSeededSelection,
+  isDbLoadModeEnabled,
+} from "@/shared/seeded-loader";
 import { EVENTS_DATASET, CalendarEvent } from "@/library/dataset";
 
 const PROJECT_KEY = "web_11_autocalendar";
@@ -13,13 +16,20 @@ const clampSeed = (value?: number | null, fallback: number = 1): number =>
 const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
   const value = (window as any).__autocalendarV2Seed;
-  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+  if (
+    typeof value === "number" &&
+    Number.isFinite(value) &&
+    value >= 1 &&
+    value <= 300
+  ) {
     return value;
   }
   return null;
 };
 
-export async function initializeEvents(v2Seed?: number | null): Promise<CalendarEvent[]> {
+export async function initializeEvents(
+  v2Seed?: number | null
+): Promise<CalendarEvent[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   let effectiveSeed = 1;
 
@@ -28,8 +38,9 @@ export async function initializeEvents(v2Seed?: number | null): Promise<Calendar
       effectiveSeed = 1;
     } else {
       // Wait a bit for SeedContext to sync v2Seed to window
-      await new Promise(resolve => setTimeout(resolve, 100));
-      const resolvedSeed = typeof v2Seed === "number" ? clampSeed(v2Seed, 1) : getRuntimeV2Seed();
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      const resolvedSeed =
+        typeof v2Seed === "number" ? clampSeed(v2Seed, 1) : getRuntimeV2Seed();
       // Default to 1 if no v2-seed provided
       effectiveSeed = resolvedSeed ?? 1;
     }
@@ -52,4 +63,3 @@ export async function initializeEvents(v2Seed?: number | null): Promise<Calendar
 
   return EVENTS_DATASET as CalendarEvent[];
 }
-

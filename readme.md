@@ -33,8 +33,8 @@ The demo webs are **containerized applications**, each with its own Docker confi
 
 ```
 demo-webs/
-├── web_1_demo_movies/
-├── web_2_demo_books/
+├── web_1_autocinema/
+├── web_2_autobooks/
 ├── web_3_autozone/
 ├── web_4_autodining/
 ├── web_5_autocrm/
@@ -69,8 +69,8 @@ The demo webs run on **consecutive ports**, starting from values you specify via
 
 | Demo | Web Port | DB Port | Notes |
 |------------------|----------| ------- | ---------------------------------- |
-| **Movies** | 8000 | 5434 | Django + PostgreSQL |
-| **Books** | 8001 | 5435 | Django + PostgreSQL |
+| **Movies (Autocinema)** | 8000 | — | Next.js + webs_server dataset |
+| **Books (Autobooks)** | 8001 | — | Next.js + webs_server dataset |
 | **AutoZone** | 8002 | — | Next.js, no database required |
 | **AutoDining** | 8003 | — | Next.js, no database required |
 | **AutoCRM** | 8004 | — | Next.js, no database required |
@@ -127,14 +127,18 @@ chmod +x ./scripts/setup.sh
 #### **🎬 Deploy Movies Demo**
 
 ```bash
-./scripts/setup.sh --demo=movies --web_port=8000 --postgres_port=5435
+./scripts/setup.sh --demo=movies --web_port=8000
 ```
+
+This starts `web_1_autocinema` (Next.js) and automatically brings up `webs_server` so the `/datasets/load` endpoint is available.
 
 #### **📚 Deploy Books Demo**
 
 ```bash
-./scripts/setup.sh --demo=books --web_port=8001 --postgres_port=5436
+./scripts/setup.sh --demo=books --web_port=8001
 ```
+
+The command launches `web_2_autobooks` and the shared `webs_server` instance, mirroring the original Django data experience without the local Postgres container.
 
 #### **📦 Deploy AutoZone Demo**
 

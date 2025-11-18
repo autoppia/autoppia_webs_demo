@@ -189,14 +189,9 @@ echo "🔣 Configuration:"
 echo "    Ports:"
 if [ "$WEB_DEMO" = "all" ]; then
   echo "      Base web port         →  $WEB_PORT"
-  echo "      Base DB port          →  $POSTGRES_PORT"
 else
   echo "      $WEB_DEMO HTTP         →  $WEB_PORT"
-  if [ "$WEB_DEMO" = "movies" ] || [ "$WEB_DEMO" = "books" ]; then
-    echo "      $WEB_DEMO DB           →  $POSTGRES_PORT"
-  else
-    echo "      $WEB_DEMO DB           →  N/A (uses webs_server)"
-  fi
+  echo "      $WEB_DEMO DB           →  N/A (uses webs_server)"
 fi
 echo "      webs_server HTTP    →  $WEBS_PORT"
 echo "      webs_server DB      →  $WEBS_PG_PORT"
@@ -424,17 +419,13 @@ setup_docker
 # ============================================================================
 
 case "$WEB_DEMO" in
-  movies)
-    if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = true ]; then
-      deploy_webs_server
-    fi
-    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
+  movies|autocinema)
+    deploy_webs_server
+    deploy_project "web_1_autocinema" "$WEB_PORT" "" "${WEB_DEMO}_${WEB_PORT}"
     ;;
-  books)
-    if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = true ]; then
-      deploy_webs_server
-    fi
-    deploy_project "web_2_demo_books" "$WEB_PORT" "$POSTGRES_PORT" "books_${WEB_PORT}"
+  books|autobooks)
+    deploy_webs_server
+    deploy_project "web_2_autobooks" "$WEB_PORT" "" "${WEB_DEMO}_${WEB_PORT}"
     ;;
   autozone)
     deploy_webs_server
@@ -484,37 +475,25 @@ case "$WEB_DEMO" in
     deploy_webs_server
     deploy_project "web_14_autohealth" "$WEB_PORT" "" "autohealth_${WEB_PORT}"
     ;;
-  autocinema)
-    deploy_webs_server
-    deploy_project "web_15_autocinema" "$WEB_PORT" "" "autocinema_${WEB_PORT}"
-    ;;
-  autobooks)
-    deploy_webs_server
-    deploy_project "web_16_autobooks" "$WEB_PORT" "" "autobooks_${WEB_PORT}"
-    ;;
   all)
     deploy_webs_server
-    # Movies and Books (with DB)
-    # deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
-    # deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
-    # All other webs (without DB, need webs_server)
-    # deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    # deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    # deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    # deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    # deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    # deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    # deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    # deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    # deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    # deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    # deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
-    #deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
-    deploy_project "web_15_autocinema" "$((WEB_PORT + 14))" "" "autocinema_$((WEB_PORT + 14))"
-    deploy_project "web_16_autobooks" "$((WEB_PORT + 15))" "" "autobooks_$((WEB_PORT + 15))"
+    deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)
-    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autocinema, or all."
+    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
     exit 1
     ;;
 esac

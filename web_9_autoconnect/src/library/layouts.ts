@@ -47,8 +47,9 @@ export function getSeedLayout(seed?: number): LayoutConfig {
     return getLayoutByIndex(specialLayouts[seed]);
   }
 
-  // Map seed (1-300) to layout index (1-20) using modulo
-  const layoutIndex = ((seed % 30) + 1) % 20 || 20;
+  // Map seed (1-300) to layout index (1-10) using modulo
+  // COMMON FORMULA across all webs
+  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
 
   return getLayoutByIndex(layoutIndex);
 }
