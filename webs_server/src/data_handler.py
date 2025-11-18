@@ -7,7 +7,6 @@ import os
 import json
 import fcntl
 from datetime import datetime
-from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 try:
@@ -42,9 +41,7 @@ def _ensure_dir(path: str) -> None:
         raise IOError(f"OS error while creating directory: {path}: {e}") from e
 
 
-def save_data_file(
-    web_name: str, filename: str, data: List[Dict[str, Any]], entity_type: str
-) -> str:
+def save_data_file(web_name: str, filename: str, data: List[Dict[str, Any]], entity_type: str) -> str:
     """
     Save data to a single file under {BASE_PATH}/{web_name}/data/{filename}.
     Also updates main.json to reference this file under the entity_type key.
@@ -108,9 +105,7 @@ def save_data_file(
     return file_path
 
 
-def load_all_data(
-    web_name: str, entity_type: Optional[str] = None
-) -> List[Dict[str, Any]]:
+def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
     """
     Load and return all JSON objects referenced in main.json for a given web_name.
     If entity_type is provided, only load files listed under that entity key.
@@ -159,9 +154,7 @@ def load_all_data(
     return all_data
 
 
-def append_or_rollover_entity_data(
-    web_name: str, entity_type: str, data: List[Dict[str, Any]]
-) -> str:
+def append_or_rollover_entity_data(web_name: str, entity_type: str, data: List[Dict[str, Any]]) -> str:
     """
     Append data to the latest file for this entity, or create a new file if:
     - No files exist yet
@@ -224,9 +217,7 @@ def append_or_rollover_entity_data(
         return target_file
 
 
-def append_to_entity_data(
-    web_name: str, entity_type: str, data: List[Dict[str, Any]]
-) -> str:
+def append_to_entity_data(web_name: str, entity_type: str, data: List[Dict[str, Any]]) -> str:
     """
     Append data to the FIRST file for this entity (e.g., {entity_type}_1.json).
     If the file doesn't exist, creates it.
@@ -293,7 +284,5 @@ def append_to_entity_data(
     with open(main_path, "w", encoding="utf-8") as f:
         json.dump(main, f, indent=2, ensure_ascii=False)
 
-    print(
-        f"✅ Appended {len(data)} records to {file_path} (total: {len(combined_data)})"
-    )
+    print(f"✅ Appended {len(data)} records to {file_path} (total: {len(combined_data)})")
     return file_path
