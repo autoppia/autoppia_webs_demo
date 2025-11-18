@@ -12,8 +12,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
 import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
 import { withSeed } from "@/utils/seedRouting";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { useSeed } from "@/context/SeedContext";
+import { useSeedRouter, useSeed } from "@/seed-system";
 
 
 // Static date to avoid hydration mismatch

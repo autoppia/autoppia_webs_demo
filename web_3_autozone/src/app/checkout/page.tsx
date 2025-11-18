@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useDynamicStructure as useV3Attributes } from "@/dynamic/v3-attributes";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { ToastContainer, toast } from "react-toastify";
 

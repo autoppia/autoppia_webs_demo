@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeedRouter } from "@/seed-system";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
+import { withSeed } from "@/seed-system/navigation/routing-utils";
 
 interface CategoryItem {
   image: string;

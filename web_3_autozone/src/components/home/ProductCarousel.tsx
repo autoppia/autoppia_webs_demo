@@ -9,7 +9,7 @@ import type { Product } from "@/context/CartContext";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
+import { withSeed } from "@/seed-system/navigation/routing-utils";
 
 interface ProductCarouselProps {
   title: string;

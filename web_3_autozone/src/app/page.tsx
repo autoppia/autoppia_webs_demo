@@ -5,7 +5,7 @@ import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { Suspense } from "react";
-import { useSeed } from "@/context/SeedContext";
+import { useSeed } from "@/seed-system";
 import { 
   getProductsByCategory, 
   getStaticCategories, 

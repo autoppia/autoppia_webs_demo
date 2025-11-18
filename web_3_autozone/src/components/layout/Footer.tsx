@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { useSeed } from "@/seed-system";
+import { getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 
