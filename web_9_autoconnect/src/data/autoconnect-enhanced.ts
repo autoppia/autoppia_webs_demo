@@ -12,6 +12,18 @@ type LoadOptions = {
   filterValues?: string[];
 };
 
+/**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autoconnectV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
 function resolveSeed(entityType: string, v2SeedValue?: number | null): number {
   let dbModeEnabled = false;
   try {
@@ -21,12 +33,20 @@ function resolveSeed(entityType: string, v2SeedValue?: number | null): number {
   }
 
   if (dbModeEnabled) {
+    // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
     if (typeof v2SeedValue === "number" && v2SeedValue >= 1 && v2SeedValue <= 300) {
       return v2SeedValue;
     }
-    throw new Error(`[autoconnect] v2 enabled but no valid v2-seed provided for ${entityType}`);
+    // Try to get from window
+    const fromWindow = getRuntimeV2Seed();
+    if (fromWindow !== null) {
+      return fromWindow;
+    }
+    // Default to 1 if no v2-seed provided
+    return 1;
   }
 
+  // If v2 is NOT enabled, automatically use seed=1
   return 1;
 }
 
@@ -35,6 +55,11 @@ async function loadEntity<T>(
   options: LoadOptions,
   v2SeedValue?: number | null
 ): Promise<T[]> {
+  // Wait a bit for SeedContext to sync v2Seed to window if needed
+  if (typeof window !== "undefined") {
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  
   const seed = resolveSeed(entityType, v2SeedValue);
   const payload = await fetchSeededSelection<T>({
     projectKey: PROJECT_KEY,

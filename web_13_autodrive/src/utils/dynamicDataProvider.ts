@@ -53,22 +53,16 @@ export class DynamicDataProvider {
     return parsed;
   }
 
-  private getV2SeedFromUrl(): number | null {
+  /**
+   * Get v2 seed from window (synchronized by SeedContext)
+   */
+  private getRuntimeV2Seed(): number | null {
     if (typeof window === "undefined") {
       return null;
     }
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const fromUrl = this.parseSeed(params.get("v2-seed"));
-      if (fromUrl !== null) {
-        return fromUrl;
-      }
-      const stored = this.parseSeed(localStorage.getItem("autodrive_v2_seed"));
-      if (stored !== null) {
-        return stored;
-      }
-    } catch (error) {
-      console.warn("[web13][provider] Failed to read v2-seed from URL/localStorage:", error);
+    const value = (window as any).__autodriveV2Seed;
+    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+      return value;
     }
     return null;
   }
@@ -76,8 +70,10 @@ export class DynamicDataProvider {
   private async initialize(): Promise<void> {
     try {
       console.log('[web13][provider] initialize() start');
-      const v2Seed = this.getV2SeedFromUrl();
-      this.trips = await initializeTrips(30, v2Seed);
+      // Wait a bit for SeedContext to sync v2Seed to window
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const v2Seed = this.getRuntimeV2Seed();
+      this.trips = await initializeTrips(30, v2Seed ?? undefined);
       console.log('[web13][provider] initialize() loaded trips', {
         count: this.trips.length,
         seed: v2Seed ?? "default",

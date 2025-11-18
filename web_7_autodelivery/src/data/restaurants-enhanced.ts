@@ -129,8 +129,17 @@ async function generateRestaurantsForCategories(
 }
 
 /**
- * Main initialization function for restaurants
+ * Get v2 seed from window (synchronized by SeedContext)
  */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autodeliveryV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
 export async function initializeRestaurants(v2SeedValue?: number | null): Promise<Restaurant[]> {
   let dbModeEnabled = false;
   try {
@@ -140,7 +149,11 @@ export async function initializeRestaurants(v2SeedValue?: number | null): Promis
   let effectiveSeed: number;
 
   if (dbModeEnabled) {
-    effectiveSeed = v2SeedValue ?? 1; // Default to 1 if no v2-seed provided
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined") {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
     effectiveSeed = 1; // If v2 is NOT enabled, automatically use seed=1
   }

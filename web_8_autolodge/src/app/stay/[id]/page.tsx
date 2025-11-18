@@ -1,7 +1,8 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
 import {
@@ -56,7 +57,7 @@ function getFallbackHotel(): Hotel {
 
 function PropertyDetailContent() {
   const { getText, getId } = useDynamicStructure();
-  const router = useRouter();
+  const router = useSeedRouter();
   const params = useParams<{ id: string }>();
 
   const prop = useMemo<Hotel>(() => {

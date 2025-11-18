@@ -1,12 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   dynamicStructureProvider,
   type StructureVariation,
 } from "@/utils/dynamicStructureProvider";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { useSeed } from "@/context/SeedContext";
 
 interface DynamicStructureContextType {
   getText: (key: string, fallback?: string) => string;
@@ -25,16 +25,6 @@ const DynamicStructureContext = createContext<
   DynamicStructureContextType | undefined
 >(undefined);
 
-const getV2SeedFromUrl = (): number | null => {
-  if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const raw = params.get("v2-seed");
-  if (!raw) return null;
-  const parsed = Number.parseInt(raw, 10);
-  if (!Number.isFinite(parsed) || parsed < 1 || parsed > 300) return null;
-  return parsed;
-};
-
 export function DynamicStructureProvider({
   children,
 }: {
@@ -44,14 +34,9 @@ export function DynamicStructureProvider({
   const router = useRouter();
   const pathname = usePathname();
   
-  const [v2Seed, setV2Seed] = useState<number | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      return isDbLoadModeEnabled() ? getV2SeedFromUrl() : null;
-    } catch {
-      return null;
-    }
-  });
+  // Use SeedContext for unified seed management
+  const { seed: baseSeed, resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   
   // Get seed-structure from URL or localStorage
   const getPersistedSeedStructure = (): number => {
@@ -121,55 +106,12 @@ export function DynamicStructureProvider({
     }
   };
 
-  // Helper to preserve v2-seed when navigating
-  const getNavigationUrl = (path: string): string => {
-    if (!path || path.startsWith("http")) {
-      return path;
-    }
-    const [base, queryString] = path.split("?");
-    const params = new URLSearchParams(queryString || "");
-
-    // Preserve v2-seed if present
-    if (v2Seed !== null && !params.has("v2-seed")) {
-      params.set("v2-seed", v2Seed.toString());
-    }
-
-    const query = params.toString();
-    return query ? `${base}?${query}` : base;
-  };
-
-  // Update window.__autolodgeV2Seed when v2Seed changes and dispatch event
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const dbModeEnabled = isDbLoadModeEnabled();
-      if (!dbModeEnabled) {
-        (window as any).__autolodgeV2Seed = null;
-        return;
-      }
-      (window as any).__autolodgeV2Seed = v2Seed ?? null;
-      
-      // Dispatch event so DynamicDataProvider can refresh data
-      window.dispatchEvent(new CustomEvent("autolodge:v2SeedChange", { 
-        detail: { seed: v2Seed ?? null } 
-      }));
-      
-      console.log("[DynamicStructureProvider] v2-seed", v2Seed);
-    } catch (error) {
-      console.error("[DynamicStructureProvider] Error setting v2Seed:", error);
-    }
-  }, [v2Seed]);
-
-  // Update v2Seed when URL changes
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const dbModeEnabled = isDbLoadModeEnabled();
-      if (dbModeEnabled) {
-        setV2Seed(getV2SeedFromUrl());
-      }
-    } catch {}
-  }, [searchParams]);
+  // Helper to preserve seed when navigating
+  // Note: This is kept for backward compatibility, but SeedLink/useSeedRouter use SeedContext directly
+  const getNavigationUrl = useCallback((path: string): string => {
+    // Delegate to SeedContext's getNavigationUrl for consistency
+    return seedGetNavigationUrl(path);
+  }, [seedGetNavigationUrl]);
 
   return (
     <DynamicStructureContext.Provider

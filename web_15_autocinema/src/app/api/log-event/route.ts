@@ -1,6 +1,6 @@
 // src/app/api/log-event/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.API_URL || "http://app:8080";
 

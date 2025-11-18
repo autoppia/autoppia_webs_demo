@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
 import { SeedLink } from "@/components/ui/SeedLink";
+import { SeedProvider } from "@/context/SeedContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,7 +63,8 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="antialiased bg-[#f5f6fa]">
-        <div className="min-h-screen flex">
+        <SeedProvider>
+          <div className="min-h-screen flex">
           {/* Sidebar */}
           <aside className="hidden md:flex flex-col bg-white text-[#253037] py-4 px-4 gap-6 shadow-lg">
             <div className="bg-[#17A2B8] px-5 py-1 rounded flex items-center h-9 text-white">
@@ -117,6 +119,7 @@ export default function RootLayout({
             </main>
           </div>
         </div>
+        </SeedProvider>
       </body>
     </html>
   );

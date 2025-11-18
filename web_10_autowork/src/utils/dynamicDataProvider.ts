@@ -23,16 +23,15 @@ export class DynamicDataProvider {
   }
 
   /**
-   * Get v2 seed directly from URL
+   * Get v2 seed from window (synchronized by SeedContext)
    */
-  private getV2SeedFromUrl(): number | null {
+  private getRuntimeV2Seed(): number | null {
     if (typeof window === "undefined") return null;
-    const params = new URLSearchParams(window.location.search);
-    const raw = params.get("v2-seed");
-    if (!raw) return null;
-    const parsed = Number.parseInt(raw, 10);
-    if (!Number.isFinite(parsed) || parsed < 1 || parsed > 300) return null;
-    return parsed;
+    const value = (window as any).__autoworkV2Seed;
+    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+      return value;
+    }
+    return null;
   }
 
   public isDynamicModeEnabled(): boolean {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSeed } from "@/library/useSeed";
+import { useSeed } from "@/context/SeedContext";
 import { useSeedStructure } from "@/library/useSeedStructure";
 import type { ComponentProps } from "react";
 

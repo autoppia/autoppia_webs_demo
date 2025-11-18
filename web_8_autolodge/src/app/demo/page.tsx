@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedLayout } from "@/library/utils";
 import { Suspense } from "react";
 
@@ -25,7 +25,7 @@ function DemoPageContent() {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           {seeds.map((seedValue) => (
-            <Link
+            <SeedLink
               key={seedValue}
               href={`/?seed=${seedValue}`}
               className={`p-4 rounded-lg border-2 transition-all hover:scale-105 ${
@@ -49,7 +49,7 @@ function DemoPageContent() {
                   {seedValue === 10 && "Indigo Theme"}
                 </div>
               </div>
-            </Link>
+            </SeedLink>
           ))}
         </div>
 

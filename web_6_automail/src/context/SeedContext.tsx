@@ -17,6 +17,15 @@ import {
   type ResolvedSeeds,
 } from "@/shared/seed-resolver";
 
+declare global {
+  interface Window {
+    __automailV2Seed?: number | null;
+  }
+  interface WindowEventMap {
+    "automail:v2SeedChange": CustomEvent<{ seed: number | null }>;
+  }
+}
+
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
@@ -147,6 +156,15 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       cancelled = true;
     };
   }, [seed, searchParams]); // Re-run when searchParams change (to catch enable_dynamic)
+
+  // Sync v2Seed to window for backward compatibility with data loaders
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+    (window as any).__automailV2Seed = v2Seed ?? null;
+    window.dispatchEvent(new CustomEvent("automail:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
+    console.log("[SeedContext:web6] v2-seed synced to window:", v2Seed);
+  }, [resolvedSeeds.v2, resolvedSeeds.base]);
 
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));

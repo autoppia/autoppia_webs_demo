@@ -4,6 +4,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses } from "@/library/layouts";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 const companies = [
   {
@@ -83,13 +84,13 @@ export default function RightSidebar() {
           );
         })}
       </ul>
-      <a
+      <SeedLink
         href="/recommendations"
         onClick={handleViewAll}
         className="block text-sm text-blue-700 font-medium mt-2 hover:underline"
       >
         View all recommendations &rarr;
-      </a>
+      </SeedLink>
     </aside>
   );
 }

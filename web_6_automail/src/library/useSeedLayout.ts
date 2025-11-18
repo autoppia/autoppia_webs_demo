@@ -1,36 +1,43 @@
 // src/library/useSeedLayout.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { getLayoutVariant } from './layoutVariants';
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
-import { getLayoutClasses } from '@/utils/seedLayout';
+import { getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 export function useSeedLayout() {
-  const [seed, setSeed] = useState(1);
-  const [layout, setLayout] = useState(getLayoutVariant(1));
-  const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
-
-  useEffect(() => {
-    // Check if dynamic HTML is enabled
-    const dynamicEnabled = isDynamicModeEnabled();
-    setIsDynamicEnabled(dynamicEnabled);
-    
-    // Get seed from URL parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    const seedParam = searchParams.get('seed');
-    const rawSeed = seedParam ? parseInt(seedParam) : 1;
-    
-    // Get effective seed (validates range and respects dynamic HTML setting)
-    const effectiveSeed = getEffectiveSeed(rawSeed);
-    setSeed(effectiveSeed);
-    
-    // Update layout only if dynamic HTML is enabled
-    if (dynamicEnabled) {
-      setLayout(getLayoutVariant(effectiveSeed));
-    } else {
-      // Use default layout when dynamic HTML is disabled
-      setLayout(getLayoutVariant(1));
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds } = useSeedContext();
+  
+  // Use resolved v1 seed for layout
+  const layoutSeed = useMemo(() => {
+    return resolvedSeeds.v1 ?? resolvedSeeds.base;
+  }, [resolvedSeeds.v1, resolvedSeeds.base]);
+  
+  // Use resolved v3 seed for dynamic (HTML/text), or v1 if v3 not enabled
+  const dynamicSeed = useMemo(() => {
+    return resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  }, [resolvedSeeds.v3, resolvedSeeds.v1, resolvedSeeds.base]);
+  
+  const v2Seed = useMemo(() => {
+    return resolvedSeeds.v2 ?? null;
+  }, [resolvedSeeds.v2]);
+  
+  // Check if dynamic mode is enabled
+  const isDynamicEnabled = isDynamicModeEnabled();
+  
+  const seed = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return 1;
     }
-  }, []);
+    return layoutSeed;
+  }, [isDynamicEnabled, layoutSeed]);
+  
+  const layout = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return getLayoutVariant(1);
+    }
+    return getLayoutVariant(seed);
+  }, [isDynamicEnabled, seed]);
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
@@ -137,6 +144,7 @@ export function useSeedLayout() {
     seed,
     layout,
     isDynamicEnabled,
+    v2Seed,
     getElementAttributes,
     getElementXPath,
     reorderElements,

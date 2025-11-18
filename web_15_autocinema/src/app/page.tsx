@@ -19,6 +19,7 @@ import { getLayoutClasses } from "@/utils/seedLayout";
 import { useSeed } from "@/context/SeedContext";
 import type { Movie } from "@/data/movies";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { ContactSection } from "@/components/contact/ContactSection";
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -41,15 +42,6 @@ function HomeContent() {
     setSelectedGenre(initialGenre);
     setSelectedYear(initialYear);
   }, [initialSearch, initialGenre, initialYear]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    const webAgentId = params.get("X-WebAgent-Id");
-    const userId = params.get("user");
-    localStorage.setItem("web_agent_id", webAgentId ?? "null");
-    localStorage.setItem("user", userId ?? "null");
-  }, []);
 
   const featuredMovies = useMemo(() => getFeaturedMovies(4), []);
   const genres = useMemo(() => getAvailableGenres(), []);
@@ -151,6 +143,7 @@ function HomeContent() {
         description="High-tension ideas sourced from the dataset variant you picked"
         movies={thrillerFocus}
       />
+      <ContactSection />
     </main>
   );
 }

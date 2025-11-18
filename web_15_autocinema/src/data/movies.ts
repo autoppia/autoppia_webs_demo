@@ -35,7 +35,7 @@ type DatasetMovie = {
 
 const DEFAULT_POSTER = "/media/gallery/default_movie.png";
 
-const clampSeed = (value: number, fallback: number = 1): number =>
+const clampSeed = (value: number, fallback = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
 const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number => {
@@ -48,7 +48,7 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   throw new Error("[autocinema] v2 mode enabled but no derived seed was provided");
 };
 
-const coerceNumber = (value: unknown, fallback: number = 0): number => {
+const coerceNumber = (value: unknown, fallback = 0): number => {
   if (typeof value === "number") return Number.isFinite(value) ? value : fallback;
   if (typeof value === "string") {
     const parsed = Number.parseFloat(value);
@@ -127,7 +127,7 @@ const normalizeMovie = (movie: DatasetMovie): Movie => {
 
 let moviesCache: Movie[] = [];
 
-export async function initializeMovies(v2SeedValue?: number | null, limit: number = 300): Promise<Movie[]> {
+export async function initializeMovies(v2SeedValue?: number | null, limit = 300): Promise<Movie[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 

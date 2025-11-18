@@ -1,8 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { useSearchParams } from "next/navigation";
 import structureVariations from "@/data/structureVariations.json";
+import { useSeed } from "@/context/SeedContext";
 
 // Types for structure variations
 interface StructureVariation {
@@ -36,125 +36,71 @@ const DynamicStructureContext = createContext<DynamicStructureContextType>({
 
 // Provider component
 export function DynamicStructureProvider({ children }: { children: ReactNode }) {
-  const searchParams = useSearchParams();
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds } = useSeed();
+  const rawSeedStructure = resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  const seedStructure = rawSeedStructure;
+  
   const [currentVariation, setCurrentVariation] = useState<number>(1);
-  const [seedStructure, setSeedStructure] = useState<number | null>(null);
-  const [variationData, setVariationData] = useState<StructureVariation | null>(null);
-  const [isEnabled, setIsEnabled] = useState<boolean>(true);
+  const [isEnabled] = useState<boolean>(isDynamicStructureEnabled());
+  const [variations, setVariations] = useState<Record<string, StructureVariation>>({});
 
+  // Load variations from JSON
   useEffect(() => {
-    // Check if dynamic structure is enabled
-    const enabled = isDynamicStructureEnabled();
-    setIsEnabled(enabled);
-
-    // If disabled, always use variation 1
-    if (!enabled) {
-      console.log("Dynamic HTML Structure is DISABLED - using default variation");
-      setCurrentVariation(1);
-      setSeedStructure(null);
-      setVariationData((structureVariations as Record<string, StructureVariation>).variation1);
-      return;
+    try {
+      const vars = structureVariations as unknown as Record<number, StructureVariation>;
+      setVariations(vars);
+    } catch (error) {
+      console.error("Failed to load structure variations:", error);
     }
+  }, []);
 
-    // Read seed-structure from URL
-    const seedParam = searchParams?.get("seed-structure");
-    
-    if (seedParam) {
-      const parsedSeed = parseInt(seedParam, 10);
-      
-      // Validate seed is in range 1-300
-      if (!isNaN(parsedSeed) && parsedSeed >= 1 && parsedSeed <= 300) {
-        setSeedStructure(parsedSeed);
-        
-        // Map seed to variation (1-10) using modulo formula
-        const mappedVariation = ((parsedSeed - 1) % 10) + 1;
-        setCurrentVariation(mappedVariation);
-        
-        // Load variation data
-        const variations = structureVariations as Record<string, StructureVariation>;
-        const variationKey = `variation${mappedVariation}`;
-        
-        if (variations[variationKey]) {
-          setVariationData(variations[variationKey]);
-        } else {
-          console.warn(`Variation ${mappedVariation} not found in structureVariations.json`);
-          setVariationData(variations.variation1); // Fallback to variation 1
-        }
-      } else {
-        console.warn(`Invalid seed-structure value: ${seedParam}. Must be between 1-300.`);
-        // Use default variation 1
-        setCurrentVariation(1);
-        setSeedStructure(null);
-        setVariationData((structureVariations as Record<string, StructureVariation>).variation1);
-      }
+  // Update variation when seed changes
+  useEffect(() => {
+    if (isEnabled && seedStructure !== null) {
+      // Map seed (1-300) to variation (1-10) using modulo
+      const variationIndex = ((seedStructure - 1) % 10) + 1;
+      setCurrentVariation(variationIndex);
     } else {
-      // No seed parameter - use default variation 1
-      setCurrentVariation(1);
-      setSeedStructure(null);
-      setVariationData((structureVariations as Record<string, StructureVariation>).variation1);
+      setCurrentVariation(1); // Default variation
     }
-  }, [searchParams]);
+  }, [seedStructure, isEnabled]);
 
-  // Function to get text content by key
+  // Helper functions
   const getText = (key: string): string => {
-    if (!variationData || !variationData.texts) {
-      console.warn(`Variation data not loaded. Returning key: ${key}`);
-      return key;
-    }
-    
-    const text = variationData.texts[key];
-    
-    if (!text) {
-      console.warn(`Text key "${key}" not found in variation ${currentVariation}`);
+    if (!isEnabled || currentVariation === 1 || !variations[currentVariation]) {
       return key; // Return key as fallback
     }
-    
-    return text;
+    return variations[currentVariation]?.texts?.[key] || key;
   };
 
-  // Function to get element ID by key
   const getId = (key: string): string => {
-    if (!variationData || !variationData.ids) {
-      console.warn(`Variation data not loaded. Returning key: ${key}`);
-      return key;
-    }
-    
-    const id = variationData.ids[key];
-    
-    if (!id) {
-      console.warn(`ID key "${key}" not found in variation ${currentVariation}`);
+    if (!isEnabled || currentVariation === 1 || !variations[currentVariation]) {
       return key; // Return key as fallback
     }
-    
-    return id;
-  };
-
-  const value = {
-    getText,
-    getId,
-    currentVariation,
-    seedStructure,
-    isEnabled,
+    return variations[currentVariation]?.ids?.[key] || key;
   };
 
   return (
-    <DynamicStructureContext.Provider value={value}>
+    <DynamicStructureContext.Provider
+      value={{
+        getText,
+        getId,
+        currentVariation,
+        seedStructure,
+        isEnabled,
+      }}
+    >
       {children}
     </DynamicStructureContext.Provider>
   );
 }
 
-// Hook to use the dynamic structure context
+// Custom hook to use the context
 export function useDynamicStructure() {
   const context = useContext(DynamicStructureContext);
-  
   if (!context) {
-    throw new Error("useDynamicStructure must be used within DynamicStructureProvider");
+    throw new Error("useDynamicStructure must be used within a DynamicStructureProvider");
   }
-  
   return context;
 }
-
-// Export context for testing purposes
-export { DynamicStructureContext };
-

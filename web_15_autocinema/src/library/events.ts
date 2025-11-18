@@ -13,6 +13,7 @@ export const EVENT_TYPES = {
   LOGOUT: "logout",
   EDIT_MOVIE: "edit.event",
   DELETE_MOVIE: "delete.event",
+  CONTACT_MESSAGE: "contact.message",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
@@ -24,6 +25,10 @@ export function logEvent(eventType: EventType, data: any = {}, extra_headers: Re
   if (user === "null") {
     user = null;
   }
+  const webAgentId = localStorage.getItem("web_agent_id");
+  const validatorId = localStorage.getItem("validator_id");
+  const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
+  const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
 
   const payload = {
     event_name: eventType,
@@ -31,14 +36,18 @@ export function logEvent(eventType: EventType, data: any = {}, extra_headers: Re
     user_id: user,
   };
 
-  console.log("🎬 Logging Event:", { ...payload, headers: extra_headers });
+  const headers = {
+    "Content-Type": "application/json",
+    "X-WebAgent-Id": resolvedWebAgentId,
+    "X-Validator-Id": resolvedValidatorId,
+    ...extra_headers,
+  };
+
+  console.log("🎬 Logging Event:", { ...payload, headers });
 
   fetch("/api/log-event", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...extra_headers,
-    },
+    headers,
     body: JSON.stringify(payload),
   });
 }

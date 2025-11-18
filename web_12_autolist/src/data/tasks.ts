@@ -12,14 +12,16 @@ export interface RemoteTask {
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
-const resolveSeed = (v2SeedValue: number | null | undefined, dbMode: boolean): number => {
-  if (!dbMode) {
-    return 1;
+/**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autolistV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
   }
-  if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
-    return clampSeed(v2SeedValue);
-  }
-  throw new Error("[autolist] v2 is enabled but no valid v2-seed was provided");
+  return null;
 };
 
 export async function loadTasks(
@@ -27,7 +29,19 @@ export async function loadTasks(
   limit: number = 80
 ): Promise<RemoteTask[]> {
   const dbMode = isDbLoadModeEnabled();
-  const effectiveSeed = resolveSeed(v2Seed, dbMode);
+  let effectiveSeed = 1;
+  
+  if (dbMode) {
+    if (typeof window === "undefined") {
+      effectiveSeed = 1;
+    } else {
+      // Wait a bit for SeedContext to sync v2Seed to window
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const resolvedSeed = typeof v2Seed === "number" ? clampSeed(v2Seed, 1) : getRuntimeV2Seed();
+      // Default to 1 if no v2-seed provided
+      effectiveSeed = resolvedSeed ?? 1;
+    }
+  }
 
   try {
     const tasks = await fetchSeededSelection<RemoteTask>({

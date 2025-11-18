@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { label: "Library", href: "#library", preserveSeed: false },
   { label: "Genres", href: "#genres", preserveSeed: false },
   { label: "About", href: "#about", preserveSeed: false },
+  { label: "Contact", href: "#contact", preserveSeed: false },
 ];
 
 export function Header() {

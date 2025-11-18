@@ -1,197 +1,200 @@
 "use client";
 
 import type React from "react";
-import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  Suspense,
+} from "react";
 import { useSearchParams } from "next/navigation";
-import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
+import {
+  resolveSeeds,
+  resolveSeedsSync,
+  clampBaseSeed,
+  type ResolvedSeeds,
+} from "@/shared/seed-resolver";
+
+declare global {
+  interface Window {
+    __autozoneV2Seed?: number | null;
+  }
+  interface WindowEventMap {
+    "autozone:v2SeedChange": CustomEvent<{ seed: number | null }>;
+  }
+}
 
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  v2Seed: number | null;
+  resolvedSeeds: ResolvedSeeds;
+  v2Seed: number | null; // Para compatibilidad backward
 }
 
 const SeedContext = createContext<SeedContextType>({
   seed: 1,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
+  resolvedSeeds: resolveSeedsSync(1),
   v2Seed: null,
 });
 
-const clampSeed = (value: number): number => {
-  if (!Number.isFinite(value)) return 1;
-  if (value < 1 || value > 300) return 1;
-  return value;
-};
-
-const parseSeedValue = (value: string | null): number | null => {
-  if (!value) return null;
-  const parsed = Number.parseInt(value, 10);
-  return Number.isNaN(parsed) ? null : parsed;
-};
-
-const isV2DbModeEnabled =
-  (
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE ||
-    process.env.ENABLE_DYNAMIC_V2_DB_MODE ||
-    ""
-  )
-    .toString()
-    .toLowerCase() === "true";
-
-const V2_STORAGE_KEY = "autozone_v2_seed";
+const DEFAULT_SEED = 1;
 
 // Internal component that handles URL params
 function SeedInitializer({
   onSeedFromUrl,
-  onV2SeedFromUrl,
 }: {
   onSeedFromUrl: (seed: number | null) => void;
-  onV2SeedFromUrl: (seed: number | null) => void;
 }) {
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
     const urlSeed = searchParams.get("seed");
     if (urlSeed) {
-      const parsedSeed = parseSeedValue(urlSeed);
-      const effectiveSeed = getEffectiveSeed(clampSeed(parsedSeed ?? 1));
-      onSeedFromUrl(effectiveSeed);
+      const parsedSeed = Number.parseInt(urlSeed, 10);
+      onSeedFromUrl(Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed));
     } else {
       onSeedFromUrl(null);
     }
-
-    if (isV2DbModeEnabled) {
-      let resolvedV2: number | null = null;
-      const rawV2 = parseSeedValue(searchParams.get("v2-seed"));
-      if (rawV2 !== null) {
-        resolvedV2 = clampSeed(rawV2);
-      } else if (typeof window !== "undefined") {
-        try {
-          const stored = parseSeedValue(localStorage.getItem(V2_STORAGE_KEY));
-          if (stored !== null) {
-            resolvedV2 = clampSeed(stored);
-            const url = new URL(window.location.href);
-            url.searchParams.set("v2-seed", resolvedV2.toString());
-            window.history.replaceState(null, "", url.toString());
-          }
-        } catch {
-          resolvedV2 = null;
-        }
-      }
-
-      onV2SeedFromUrl(resolvedV2);
-
-      try {
-        if (resolvedV2 !== null) {
-          localStorage.setItem(V2_STORAGE_KEY, resolvedV2.toString());
-        } else {
-          localStorage.removeItem(V2_STORAGE_KEY);
-        }
-      } catch {
-        // ignore storage issues
-      }
+    
+    const enableDynamic = searchParams.get("enable_dynamic");
+    if (enableDynamic) {
+      console.log("[SeedContext:web3] enable_dynamic from URL (user override):", enableDynamic);
     } else {
-      onV2SeedFromUrl(null);
-      if (typeof window !== "undefined") {
-        const url = new URL(window.location.href);
-        if (url.searchParams.has("v2-seed")) {
-          url.searchParams.delete("v2-seed");
-          window.history.replaceState(null, "", url.toString());
-        }
-      }
+      console.log("[SeedContext:web3] No enable_dynamic in URL, using env vars as default");
     }
-  }, [searchParams, onSeedFromUrl, onV2SeedFromUrl]);
+  }, [searchParams, onSeedFromUrl]);
 
   return null;
 }
 
 export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
-  const [seed, setSeedState] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const [seed, setSeedState] = useState<number>(() => DEFAULT_SEED);
+  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
+    resolveSeedsSync(DEFAULT_SEED)
+  );
   const [isInitialized, setIsInitialized] = useState(false);
-  const [v2Seed, setV2Seed] = useState<number | null>(null);
+  const [urlSeedProcessed, setUrlSeedProcessed] = useState(false);
 
-  // Initialize seed from localStorage on mount
+  // PRIORITY: URL > localStorage
+  const urlSeedRaw = searchParams.get("seed");
+  const urlSeed = urlSeedRaw ? clampBaseSeed(Number.parseInt(urlSeedRaw, 10)) : null;
+
+  // Initialize seed: URL has priority over localStorage
   useEffect(() => {
     if (isInitialized) return;
-
-    try {
-      const savedSeed = localStorage.getItem("autozoneSeed");
-      if (savedSeed) {
-        const parsedSeed = Number.parseInt(savedSeed, 10);
-        const effectiveSeed = getEffectiveSeed(parsedSeed);
-        setSeedState(effectiveSeed);
+    
+    if (urlSeed !== null && !isNaN(urlSeed)) {
+      setSeedState(urlSeed);
+      setUrlSeedProcessed(true);
+      console.log(`[SeedContext:web3] Using seed from URL: ${urlSeed}`);
+    } else {
+      try {
+        const savedSeed = localStorage.getItem("autozone_seed_base");
+        if (savedSeed) {
+          const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
+          setSeedState(parsedSeed);
+          console.log(`[SeedContext:web3] Using seed from localStorage: ${parsedSeed}`);
+        }
+      } catch (error) {
+        console.error("Error loading seed from localStorage:", error);
       }
-    } catch (error) {
-      console.error("Error loading seed:", error);
     }
     setIsInitialized(true);
-  }, [isInitialized]);
+  }, [isInitialized, urlSeed]);
 
-  // Handle seed from URL
+  // Handle seed from URL changes
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
+      console.log(`[SeedContext:web3] Seed changed in URL: ${urlSeed}`);
       setSeedState(urlSeed);
-      try {
-        localStorage.setItem("autozoneSeed", urlSeed.toString());
-      } catch (error) {
-        console.error("Error saving seed to localStorage:", error);
-      }
+      setUrlSeedProcessed(true);
+    } else if (urlSeedProcessed) {
+      console.log(`[SeedContext:web3] Seed removed from URL, using default: ${DEFAULT_SEED}`);
+      setSeedState(DEFAULT_SEED);
     }
-  }, []);
+  }, [urlSeedProcessed]);
 
-  const handleV2SeedFromUrl = useCallback((seedValue: number | null) => {
-    setV2Seed(seedValue);
-  }, []);
-
-  // Update localStorage when seed changes
+  // Update derived seeds + persist base seed
   useEffect(() => {
-    if (!isInitialized) return;
+    let cancelled = false;
+    
+    // Use sync version for immediate update
+    const syncResolved = resolveSeedsSync(seed);
+    setResolvedSeeds(syncResolved);
+    
+    // Fetch from centralized service (async, updates when ready)
+    resolveSeeds(seed).then((resolved) => {
+      if (!cancelled) {
+        setResolvedSeeds(resolved);
+      }
+    }).catch((error) => {
+      if (!cancelled) {
+        console.warn("[SeedContext:web3] Failed to resolve seeds from API, using local:", error);
+      }
+    });
+    
     try {
-      localStorage.setItem("autozoneSeed", seed.toString());
+      localStorage.setItem("autozone_seed_base", seed.toString());
     } catch (error) {
       console.error("Error saving seed to localStorage:", error);
     }
-  }, [seed, isInitialized]);
+    
+    return () => {
+      cancelled = true;
+    };
+  }, [seed, searchParams]);
 
-  // Function to set seed and persist it
+  // Sync v2Seed to window for backward compatibility
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+    (window as any).__autozoneV2Seed = v2Seed ?? null;
+    window.dispatchEvent(new CustomEvent("autozone:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
+    console.log("[SeedContext:web3] v2-seed synced to window:", v2Seed);
+  }, [resolvedSeeds.v2, resolvedSeeds.base]);
+
   const setSeed = useCallback((newSeed: number) => {
-    const effectiveSeed = getEffectiveSeed(newSeed);
-    setSeedState(effectiveSeed);
+    setSeedState(clampBaseSeed(newSeed));
   }, []);
 
-  // Helper function to generate navigation URLs with seed parameter
+  // Helper function to generate navigation URLs with seed and enable_dynamic parameters
   const getNavigationUrl = useCallback((path: string): string => {
-    // If path already has query params
-    if (path.includes('?')) {
-      // Check if seed already exists in the URL
-      if (path.includes('seed=')) {
-        if (isV2DbModeEnabled && v2Seed !== null && !path.includes("v2-seed=")) {
-          return `${path}&v2-seed=${v2Seed}`;
-        }
-        return path;
-      }
-      const withSeed = `${path}&seed=${seed}`;
-      if (isV2DbModeEnabled && v2Seed !== null) {
-        return `${withSeed}&v2-seed=${v2Seed}`;
-      }
-      return withSeed;
+    if (!path) return path;
+    if (path.startsWith("http")) return path;
+    
+    const currentParams = typeof window !== "undefined" 
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams();
+    
+    const [base, queryString] = path.split("?");
+    const params = new URLSearchParams(queryString || "");
+    
+    // Always preserve seed
+    params.set("seed", seed.toString());
+    
+    // ONLY preserve enable_dynamic if user explicitly set it in URL
+    const enableDynamic = currentParams.get("enable_dynamic");
+    if (enableDynamic) {
+      params.set("enable_dynamic", enableDynamic);
     }
-    // Add seed as first query param
-    if (isV2DbModeEnabled && v2Seed !== null) {
-      return `${path}?seed=${seed}&v2-seed=${v2Seed}`;
-    }
-    return `${path}?seed=${seed}`;
-  }, [seed, v2Seed]);
+    
+    const query = params.toString();
+    return query ? `${base}?${query}` : base;
+  }, [seed]);
+
+  // v2Seed for backward compatibility
+  const v2Seed = resolvedSeeds.v2 ?? null;
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, v2Seed }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds, v2Seed }}>
       <Suspense fallback={null}>
-        <SeedInitializer
-          onSeedFromUrl={handleSeedFromUrl}
-          onV2SeedFromUrl={handleV2SeedFromUrl}
-        />
+        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       </Suspense>
       {children}
     </SeedContext.Provider>

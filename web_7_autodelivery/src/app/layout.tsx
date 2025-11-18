@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import { LayoutProvider } from "@/contexts/LayoutProvider";
 import { DynamicStructureProvider } from "@/contexts/DynamicStructureContext";
 import { RestaurantProvider } from "@/contexts/RestaurantContext";
+import { SeedProvider } from "@/context/SeedContext";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { Suspense } from "react";
 // import DebugVariationBadge from "@/components/debug/DebugVariationBadge";
@@ -36,22 +37,24 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50`}
     >
       <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
-        <LayoutProvider>
-          <RestaurantProvider>
-            <Suspense fallback={<div className="min-h-screen" />}>
-              <DynamicStructureProvider>
-                <DataReadyGate>
-                  <Navbar />
-                  {/* Debug badge removed */}
-                  {/* Optionally add persistent cart ui/button here */}
-                  <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
-                    {children}
-                  </div>
-                </DataReadyGate>
-              </DynamicStructureProvider>
-            </Suspense>
-          </RestaurantProvider>
-        </LayoutProvider>
+        <SeedProvider>
+          <LayoutProvider>
+            <RestaurantProvider>
+              <Suspense fallback={<div className="min-h-screen" />}>
+                <DynamicStructureProvider>
+                  <DataReadyGate>
+                    <Navbar />
+                    {/* Debug badge removed */}
+                    {/* Optionally add persistent cart ui/button here */}
+                    <div className="relative pt-4 pb-12 min-h-[calc(100vh-4rem)]">
+                      {children}
+                    </div>
+                  </DataReadyGate>
+                </DynamicStructureProvider>
+              </Suspense>
+            </RestaurantProvider>
+          </LayoutProvider>
+        </SeedProvider>
       </body>
     </html>
   );

@@ -4,26 +4,14 @@ import { Trip } from "@/library/dataset";
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
-const readV2SeedFromClient = (): number | null => {
+/**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
-  const params = new URLSearchParams(window.location.search);
-  const raw = params.get("v2-seed");
-  if (raw) {
-    const parsed = Number.parseInt(raw, 10);
-    if (!Number.isNaN(parsed)) {
-      return clampSeed(parsed);
-    }
-  }
-  try {
-    const stored = localStorage.getItem("autodrive_v2_seed");
-    if (stored) {
-      const parsedStored = Number.parseInt(stored, 10);
-      if (!Number.isNaN(parsedStored)) {
-        return clampSeed(parsedStored);
-      }
-    }
-  } catch {
-    // ignore storage issues
+  const value = (window as any).__autodriveV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
   }
   return null;
 };
@@ -39,12 +27,14 @@ const resolveSeed = (
     return clampSeed(v2SeedValue);
   }
   if (typeof window !== "undefined") {
-    const fromClient = readV2SeedFromClient();
+    // Wait a bit for SeedContext to sync v2Seed to window
+    const fromClient = getRuntimeV2Seed();
     if (typeof fromClient === "number") {
       return fromClient;
     }
   }
-  throw new Error("[autodrive] v2 is enabled but no valid v2-seed was provided");
+  // Default to 1 if no v2-seed provided
+  return 1;
 };
 
 /**

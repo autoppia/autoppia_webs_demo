@@ -4,6 +4,18 @@ import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loade
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
+/**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autozoneV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
 const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): number => {
   if (!dbModeEnabled) {
     return 1;
@@ -11,7 +23,14 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
     return clampSeed(v2SeedValue);
   }
-  throw new Error("[autozone] v2 is enabled but no valid v2-seed was provided");
+  if (typeof window !== "undefined") {
+    const fromClient = getRuntimeV2Seed();
+    if (typeof fromClient === "number") {
+      return fromClient;
+    }
+  }
+  // Default to 1 if no v2-seed provided
+  return 1;
 };
 
 const normalizeImageUrl = (image?: string, category?: string): string => {
@@ -54,6 +73,12 @@ export async function initializeProducts(
   limit: number = 100
 ): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
+  
+  // Wait a bit for SeedContext to sync v2Seed to window if needed
+  if (typeof window !== "undefined" && dbModeEnabled) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
   const products = await fetchSeededSelection<Product>({

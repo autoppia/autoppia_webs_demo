@@ -1,8 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import DynamicStructureProvider, { StructureVariation } from '@/utils/dynamicStructureProvider';
+import { useSeed } from '@/context/SeedContext';
 
 interface DynamicStructureContextType {
   getText: (key: string, fallback?: string) => string;
@@ -27,11 +27,14 @@ interface DynamicStructureProviderProps {
 }
 
 export default function DynamicStructureProviderComponent({ children }: DynamicStructureProviderProps) {
-  const searchParams = useSearchParams();
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds } = useSeed();
+  const rawSeedStructure = resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  const seedStructure = rawSeedStructure;
+  
   const [provider] = useState(() => DynamicStructureProvider.getInstance());
   const [variations, setVariations] = useState<StructureVariation[]>([]);
   const [currentVariation, setCurrentVariation] = useState<StructureVariation | null>(null);
-  const [seedStructure, setSeedStructure] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     // Load variations from JSON file
@@ -39,48 +42,46 @@ export default function DynamicStructureProviderComponent({ children }: DynamicS
       try {
         const response = await fetch('/data/structureVariations.json');
         const data = await response.json();
-        setVariations(data);
-        provider.setVariations(data);
-        // Initialize current variation if seed-structure already present
-        const ss = searchParams.get('seed-structure');
-        if (ss) {
-          const n = parseInt(ss, 10);
-          if (!Number.isNaN(n)) {
-            provider.setCurrentVariation(n);
-            setCurrentVariation(provider.getCurrentVariation());
-            setSeedStructure(n);
-          }
-        } else {
-          setCurrentVariation(provider.getCurrentVariation());
-        }
+        setVariations(data.variations || []);
       } catch (error) {
         console.error('Failed to load structure variations:', error);
+        setVariations([]);
       }
     };
-
+    
     loadVariations();
-  }, [provider, searchParams]);
+  }, []);
 
   useEffect(() => {
-    const ss = searchParams.get('seed-structure');
-    if (ss && variations.length > 0) {
-      const n = parseInt(ss, 10);
-      if (!Number.isNaN(n)) {
-        provider.setCurrentVariation(n);
-        setCurrentVariation(provider.getCurrentVariation());
-        setSeedStructure(n);
-      }
+    if (seedStructure) {
+      provider.setSeedStructure(seedStructure);
+      const variation = provider.getCurrentVariation();
+      setCurrentVariation(variation);
     }
-  }, [searchParams, provider, variations]);
+  }, [seedStructure, provider, variations]);
 
-  const getText = (key: string, fallback: string = '') => provider.getText(key, fallback);
+  const getText = (key: string, fallback?: string): string => {
+    return provider.getText(key, fallback);
+  };
 
-  const getId = (key: string, fallback: string = '') => provider.getId(key, fallback);
+  const getId = (key: string, fallback?: string): string => {
+    return provider.getId(key, fallback);
+  };
 
-  const getClass = (key: string, fallback: string = '') => provider.getClass(key, fallback);
+  const getClass = (key: string, fallback?: string): string => {
+    return provider.getClass(key, fallback);
+  };
 
   return (
-    <DynamicStructureContext.Provider value={{ getText, getId, getClass, currentVariation, seedStructure }}>
+    <DynamicStructureContext.Provider
+      value={{
+        getText,
+        getId,
+        getClass,
+        currentVariation,
+        seedStructure,
+      }}
+    >
       {children}
     </DynamicStructureContext.Provider>
   );

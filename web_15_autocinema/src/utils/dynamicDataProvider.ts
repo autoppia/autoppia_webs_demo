@@ -19,8 +19,8 @@ const BASE_SEED_STORAGE_KEY = "autocinema_seed_base";
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private movies: Movie[] = [];
-  private isEnabled: boolean = false;
-  private ready: boolean = false;
+  private isEnabled = false;
+  private ready = false;
   private readyPromise: Promise<void>;
 
   private constructor() {
@@ -92,11 +92,11 @@ export class DynamicDataProvider {
     return this.movies.find((movie) => movie.id === id);
   }
 
-  public getFeaturedMovies(count: number = 6): Movie[] {
+  public getFeaturedMovies(count = 6): Movie[] {
     return this.movies.slice(0, count);
   }
 
-  public findRelatedMovies(movieId: string, limit: number = 4): Movie[] {
+  public findRelatedMovies(movieId: string, limit = 4): Movie[] {
     const current = this.getMovieById(movieId);
     const pool = this.movies.filter((movie) => movie.id !== movieId);
 

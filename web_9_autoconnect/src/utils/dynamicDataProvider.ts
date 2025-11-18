@@ -168,30 +168,23 @@ export class DynamicDataProvider {
   }
 
   /**
-   * Initialize the data provider
+   * Get v2 seed from window (synchronized by SeedContext)
    */
-  private getV2SeedFromUrl(): number | null {
+  private getRuntimeV2Seed(): number | null {
     if (typeof window === "undefined") return null;
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get("v2-seed");
-      if (!raw) return null;
-      const parsed = Number.parseInt(raw, 10);
-      if (Number.isNaN(parsed) || parsed < 1 || parsed > 300) {
-        console.warn(`[autoconnect] Ignoring invalid v2-seed parameter: ${raw}`);
-        return null;
-      }
-      return parsed;
-    } catch (err) {
-      console.warn("[autoconnect] Failed to parse v2-seed from URL:", err);
-      return null;
+    const value = (window as any).__autoconnectV2Seed;
+    if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+      return value;
     }
+    return null;
   }
 
   async initialize(): Promise<void> {
     try {
       console.log('🚀 Initializing Autoconnect data provider...');
-      const v2Seed = this.getV2SeedFromUrl();
+      // Wait a bit for SeedContext to sync v2Seed to window
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const v2Seed = this.getRuntimeV2Seed();
       
       // Load all data types in parallel
       const [users, posts, jobs, recommendations] = await Promise.all([
@@ -351,10 +344,53 @@ export class DynamicDataProvider {
       jobs: this.jobs.length
     };
   }
+
+  /**
+   * Refresh data when v2-seed changes
+   */
+  async refreshDataForSeed(seedOverride?: number | null): Promise<void> {
+    try {
+      const v2Seed = typeof seedOverride === "number" ? seedOverride : this.getRuntimeV2Seed();
+      console.log('[DynamicDataProvider] Refreshing data for v2-seed:', v2Seed ?? 1);
+      
+      // Load all data types in parallel
+      const [users, posts, jobs, recommendations] = await Promise.all([
+        initializeUsers(v2Seed ?? undefined),
+        initializePosts(v2Seed ?? undefined),
+        initializeJobs(v2Seed ?? undefined),
+        initializeRecommendations(v2Seed ?? undefined)
+      ]);
+      
+      const merged = this.mergeUsersFromSources(users, posts);
+
+      this.users = merged.users;
+      this.posts = merged.posts;
+      this.jobs = jobs;
+      this.recommendations = recommendations;
+      
+      console.log('✅ Data refreshed:', {
+        users: this.users.length,
+        posts: this.posts.length,
+        jobs: this.jobs.length,
+        recommendations: this.recommendations.length
+      });
+    } catch (error) {
+      console.error('[DynamicDataProvider] Failed to refresh data:', error);
+    }
+  }
 }
 
 // Export singleton instance
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
+
+// Listen for v2-seed changes
+if (typeof window !== "undefined") {
+  window.addEventListener("autoconnect:v2SeedChange", (event: any) => {
+    const newSeed = event.detail?.seed ?? null;
+    console.log('[DynamicDataProvider] v2-seed changed to:', newSeed);
+    dynamicDataProvider.refreshDataForSeed(newSeed);
+  });
+}
 
 // Helper functions for easy access
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();

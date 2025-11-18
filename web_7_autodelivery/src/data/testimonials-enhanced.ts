@@ -89,12 +89,29 @@ export async function initializeTestimonials(): Promise<Testimonial[]> {
 }
 
 /**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autodeliveryV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
+/**
  * Load testimonials from database with seeded selection
  */
 export async function loadTestimonialsFromDb(seedOverride?: number | null): Promise<Testimonial[]> {
   if (!isDbLoadModeEnabled()) {
     console.log("🔍 DB mode not enabled for testimonials, returning empty array");
     return [];
+  }
+  
+  // Wait a bit for SeedContext to sync v2Seed to window if needed
+  if (typeof window !== "undefined") {
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
 
   try {

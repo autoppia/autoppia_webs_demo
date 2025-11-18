@@ -9,7 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies, autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
+#   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
 #                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
@@ -40,7 +40,7 @@ Options:
   --postgres_port=PORT          Set base postgres port (default: 5434)
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-  --demo=NAME                   One of: movies, autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
+  --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
                                             v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
@@ -174,14 +174,9 @@ for port_var in WEB_PORT POSTGRES_PORT WEBS_PORT WEBS_PG_PORT; do
   fi
 done
 
-# Normalize demo name (aliases)
-case "$WEB_DEMO" in
-  autobooks) WEB_DEMO="books" ;;
-esac
-
 # Validate demo name
 if ! is_valid_demo "$WEB_DEMO"; then
-  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
+  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
   exit 1
 fi
 
@@ -493,6 +488,10 @@ case "$WEB_DEMO" in
     deploy_webs_server
     deploy_project "web_15_autocinema" "$WEB_PORT" "" "autocinema_${WEB_PORT}"
     ;;
+  autobooks)
+    deploy_webs_server
+    deploy_project "web_16_autobooks" "$WEB_PORT" "" "autobooks_${WEB_PORT}"
+    ;;
   all)
     deploy_webs_server
     # Movies and Books (with DB)
@@ -510,11 +509,12 @@ case "$WEB_DEMO" in
     # deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
     # deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
     # deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
-    # deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
+    #deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     deploy_project "web_15_autocinema" "$((WEB_PORT + 14))" "" "autocinema_$((WEB_PORT + 14))"
+    deploy_project "web_16_autobooks" "$((WEB_PORT + 15))" "" "autobooks_$((WEB_PORT + 15))"
     ;;
   *)
-    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autocinema, or all."
+    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, autocinema, or all."
     exit 1
     ;;
 esac
