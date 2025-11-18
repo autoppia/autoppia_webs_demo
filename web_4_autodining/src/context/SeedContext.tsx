@@ -1,191 +1,154 @@
 "use client";
 
 import type React from "react";
-import { createContext, useContext, useState, useEffect, useCallback, Suspense } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  Suspense,
+} from "react";
 import { useSearchParams } from "next/navigation";
-import { getSeedFromUrl } from "@/components/library/utils";
+import {
+  resolveSeeds,
+  resolveSeedsSync,
+  clampBaseSeed,
+  type ResolvedSeeds,
+} from "@/shared/seed-resolver";
 
 interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
-  v2Seed: number | null;
+  resolvedSeeds: ResolvedSeeds;
 }
 
 const SeedContext = createContext<SeedContextType>({
   seed: 1,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
-  v2Seed: null,
+  resolvedSeeds: resolveSeedsSync(1),
 });
 
+const DEFAULT_SEED = 1;
+
 // Internal component that handles URL params
-function SeedInitializer({ 
-  onSeedFromUrl, 
-  onV2SeedFromUrl 
-}: { 
+function SeedInitializer({
+  onSeedFromUrl,
+}: {
   onSeedFromUrl: (seed: number | null) => void;
-  onV2SeedFromUrl: (v2Seed: number | null) => void;
 }) {
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
-    // Check if v1 (dynamic HTML) is enabled
-    const isV1Enabled = (): boolean => {
-      if (typeof window === "undefined") return false;
-      const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 || process.env.ENABLE_DYNAMIC_V1 || "").toString().toLowerCase();
-      return raw === "true";
-    };
-
-    // Check if v2 (DB mode) is enabled
-    const isV2Enabled = (): boolean => {
-      if (typeof window === "undefined") return false;
-      const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
-      const enabled = raw === "true";
-      console.log("[SeedContext] isV2Enabled check:", {
-        NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE,
-        ENABLE_DYNAMIC_V2_DB_MODE: process.env.ENABLE_DYNAMIC_V2_DB_MODE,
-        raw,
-        enabled
-      });
-      return enabled;
-    };
-
-    // Only process seed parameter if v1 is enabled
-    if (isV1Enabled()) {
-      const urlSeed = searchParams.get("seed");
-      if (urlSeed) {
-        const parsedSeed = Number.parseInt(urlSeed, 10);
-        // Validate seed is between 1-300
-        const effectiveSeed = (parsedSeed >= 1 && parsedSeed <= 300) ? parsedSeed : 1;
-        onSeedFromUrl(effectiveSeed);
-      } else {
-        onSeedFromUrl(null);
-      }
+    const urlSeed = searchParams.get("seed");
+    if (urlSeed) {
+      const parsedSeed = Number.parseInt(urlSeed, 10);
+      onSeedFromUrl(Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed));
     } else {
-      // If v1 is not enabled, ignore seed parameter
       onSeedFromUrl(null);
     }
-
-    // Only process v2-seed parameter if v2 is enabled
-    const v2Enabled = isV2Enabled();
-    const urlV2Seed = searchParams.get("v2-seed");
-    console.log("[SeedContext] v2-seed processing:", { v2Enabled, urlV2Seed });
     
-    if (v2Enabled) {
-      if (urlV2Seed) {
-        const parsedV2Seed = Number.parseInt(urlV2Seed, 10);
-        // Validate v2-seed is between 1-300
-        const effectiveV2Seed = (parsedV2Seed >= 1 && parsedV2Seed <= 300) ? parsedV2Seed : null;
-        console.log("[SeedContext] Parsed v2-seed:", { parsedV2Seed, effectiveV2Seed });
-        onV2SeedFromUrl(effectiveV2Seed);
-      } else {
-        onV2SeedFromUrl(null);
-      }
+    // Log enable_dynamic if present (user explicitly set it)
+    const enableDynamic = searchParams.get("enable_dynamic");
+    if (enableDynamic) {
+      console.log("[SeedContext] enable_dynamic from URL (user override):", enableDynamic);
     } else {
-      // If v2 is not enabled, ignore v2-seed parameter
-      console.log("[SeedContext] v2 not enabled, ignoring v2-seed");
-      onV2SeedFromUrl(null);
+      console.log("[SeedContext] No enable_dynamic in URL, using env vars as default");
     }
-  }, [searchParams, onSeedFromUrl, onV2SeedFromUrl]);
+  }, [searchParams, onSeedFromUrl]);
 
   return null;
 }
 
 export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
-  const [seed, setSeedState] = useState<number>(1);
-  const [v2Seed, setV2SeedState] = useState<number | null>(null);
+  const searchParams = useSearchParams();
+  const [seed, setSeedState] = useState<number>(() => DEFAULT_SEED);
+  const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
+    resolveSeedsSync(DEFAULT_SEED)
+  );
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Check if v1 (dynamic HTML) is enabled
-  const isV1Enabled = useCallback((): boolean => {
-    if (typeof window === "undefined") return false;
-    const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 || process.env.ENABLE_DYNAMIC_V1 || "").toString().toLowerCase();
-    return raw === "true";
-  }, []);
-
-  // Initialize seed from localStorage on mount (only if v1 is enabled)
+  // Initialize seed from localStorage
   useEffect(() => {
     if (isInitialized) return;
-    if (!isV1Enabled()) {
-      // If v1 is not enabled, don't load seed from localStorage
-      setIsInitialized(true);
-      return;
-    }
-
     try {
-      const savedSeed = localStorage.getItem("autodining_seed");
+      const savedSeed = localStorage.getItem("autodining_seed_base");
       if (savedSeed) {
-        const parsedSeed = Number.parseInt(savedSeed, 10);
-        const effectiveSeed = (parsedSeed >= 1 && parsedSeed <= 300) ? parsedSeed : 1;
-        setSeedState(effectiveSeed);
+        const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
+        setSeedState(parsedSeed);
       }
     } catch (error) {
       console.error("Error loading seed:", error);
     }
     setIsInitialized(true);
-  }, [isInitialized, isV1Enabled]);
+  }, [isInitialized]);
 
-  // Handle seed from URL (only if v1 is enabled)
+  // Handle seed from URL
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
-    if (!isV1Enabled()) {
-      // If v1 is not enabled, ignore seed
-      return;
-    }
     if (urlSeed !== null) {
       setSeedState(urlSeed);
-      try {
-        localStorage.setItem("autodining_seed", urlSeed.toString());
-      } catch (error) {
-        console.error("Error saving seed to localStorage:", error);
-      }
     }
-  }, [isV1Enabled]);
-
-  // Handle v2-seed from URL (don't persist to localStorage, only use from URL)
-  const handleV2SeedFromUrl = useCallback((urlV2Seed: number | null) => {
-    setV2SeedState(urlV2Seed);
   }, []);
 
-  // Update localStorage when seed changes (only if v1 is enabled)
+  // Update derived seeds + persist base seed
+  // Re-run when seed OR enable_dynamic changes
   useEffect(() => {
-    if (!isInitialized) return;
-    if (!isV1Enabled()) return; // Don't persist seed when v1 is not enabled
+    // Use sync version for immediate update, then fetch from API
+    setResolvedSeeds(resolveSeedsSync(seed));
+    
+    // Fetch from centralized service (async, updates when ready)
+    resolveSeeds(seed).then((resolved) => {
+      setResolvedSeeds(resolved);
+    }).catch((error) => {
+      console.warn("[SeedContext] Failed to resolve seeds from API, using local:", error);
+    });
+    
     try {
-      localStorage.setItem("autodining_seed", seed.toString());
+      localStorage.setItem("autodining_seed_base", seed.toString());
     } catch (error) {
       console.error("Error saving seed to localStorage:", error);
     }
-  }, [seed, isInitialized, isV1Enabled]);
+  }, [seed, searchParams]); // Re-run when searchParams change (to catch enable_dynamic)
 
-  // Function to set seed and persist it (only if v1 is enabled)
   const setSeed = useCallback((newSeed: number) => {
-    if (!isV1Enabled()) {
-      // If v1 is not enabled, don't allow setting seed
-      return;
-    }
-    const effectiveSeed = (newSeed >= 1 && newSeed <= 300) ? newSeed : 1;
-    setSeedState(effectiveSeed);
-  }, [isV1Enabled]);
+    setSeedState(clampBaseSeed(newSeed));
+  }, []);
 
-  // Helper function to generate navigation URLs with seed parameter
+  // Helper function to generate navigation URLs with seed and enable_dynamic parameters
   const getNavigationUrl = useCallback((path: string): string => {
+    if (!path) return path;
+    if (path.startsWith("http")) return path;
+    
+    const currentParams = typeof window !== "undefined" 
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams();
+    
     // If path already has query params
-    if (path.includes('?')) {
-      // Check if seed already exists in the URL
-      if (path.includes('seed=')) {
-        return path;
-      }
-      return `${path}&seed=${seed}`;
+    const [base, queryString] = path.split("?");
+    const params = new URLSearchParams(queryString || "");
+    
+    // Always preserve seed
+    params.set("seed", seed.toString());
+    
+    // ONLY preserve enable_dynamic if user explicitly set it in URL
+    // If not in URL, don't add it (will use env vars as default)
+    const enableDynamic = currentParams.get("enable_dynamic");
+    if (enableDynamic) {
+      // User explicitly set it, preserve it
+      params.set("enable_dynamic", enableDynamic);
     }
-    // Add seed as first query param
-    return `${path}?seed=${seed}`;
+    // If not present, don't add it - will use env vars
+    
+    const query = params.toString();
+    return query ? `${base}?${query}` : base;
   }, [seed]);
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, v2Seed }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
       <Suspense fallback={null}>
-        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} onV2SeedFromUrl={handleV2SeedFromUrl} />
+        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       </Suspense>
       {children}
     </SeedContext.Provider>

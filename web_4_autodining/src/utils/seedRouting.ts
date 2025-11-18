@@ -8,27 +8,25 @@
  * @param searchParams - Current search params from useSearchParams()
  * @returns URL with seed-structure preserved if present
  */
-export function withSeed(path: string, searchParams: URLSearchParams | null = null): string {
-  if (!searchParams) {
-    // If no searchParams provided, try to get from window (client-side only)
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const seedStructure = params.get('seed-structure');
-      if (seedStructure) {
-        const separator = path.includes('?') ? '&' : '?';
-        return `${path}${separator}seed-structure=${seedStructure}`;
-      }
-    }
+export function withSeed(
+  path: string,
+  searchParams: URLSearchParams | null = null
+): string {
+  const seedParam =
+    searchParams?.get("seed") ||
+    (typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("seed")
+      : null);
+
+  if (!seedParam) {
     return path;
   }
 
-  const seedStructure = searchParams.get('seed-structure');
-  if (seedStructure) {
-    const separator = path.includes('?') ? '&' : '?';
-    return `${path}${separator}seed-structure=${seedStructure}`;
-  }
-  
-  return path;
+  const [base, queryString] = path.split("?");
+  const params = new URLSearchParams(queryString || "");
+  params.set("seed", seedParam);
+  const query = params.toString();
+  return query ? `${base}?${query}` : base;
 }
 
 /**
@@ -50,18 +48,13 @@ export function withSeedAndParams(
     params.set(key, value);
   });
   
-  // Preserve seed-structure if present
-  if (searchParams) {
-    const seedStructure = searchParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
-    }
-  } else if (typeof window !== 'undefined') {
-    const currentParams = new URLSearchParams(window.location.search);
-    const seedStructure = currentParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
-    }
+  const currentSeed =
+    searchParams?.get("seed") ||
+    (typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("seed")
+      : null);
+  if (currentSeed) {
+    params.set("seed", currentSeed);
   }
   
   const queryString = params.toString();

@@ -1,6 +1,7 @@
+import type React from "react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { useState, useEffect } from "react";
+import { useSeed } from "@/context/SeedContext";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -1167,47 +1168,14 @@ export function getLayoutIndexFromSeed(seed: number): number {
 }
 
 // Helper function to get seed from URL
-export function getSeedFromUrl(): number {
-  if (typeof window === 'undefined') return 1;
-  
-  // If dynamic HTML is disabled, always return seed 1 (static mode)
-  if (!isDynamicModeEnabled()) {
-    return 1;
-  }
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const seedParam = urlParams.get('seed');
-  const seed = parseInt(seedParam || '1', 10);
-  
-  // Ensure seed is between 1-300
-  return Math.max(1, Math.min(300, seed));
-}
-
-// Helper function to get seed from URL with fallback
-export function getSeedFromUrlWithFallback(fallback: number = 1): number {
-  if (typeof window === 'undefined') return fallback;
-  
-  // If dynamic HTML is disabled, always return seed 1 (static mode)
-  if (!isDynamicModeEnabled()) {
-    return 1;
-  }
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const seedParam = urlParams.get('seed');
-  const seed = parseInt(seedParam || fallback.toString(), 10);
-  
-  // Ensure seed is between 1-300
-  return Math.max(1, Math.min(300, seed));
-}
-
 // Hook for using seed-based variations with event support
-export function useSeedVariation(type: keyof SeedVariations, eventType?: string) {
-  const [seed, setSeed] = useState(1);
-  
-  useEffect(() => {
-    setSeed(getSeedFromUrl());
-  }, []);
-  
+export function useSeedVariation(
+  type: keyof SeedVariations,
+  eventType?: string
+) {
+  const { resolvedSeeds } = useSeed();
+  const seed = resolvedSeeds.v1 ?? resolvedSeeds.base;
+
   return {
     className: SeedVariationManager.getClassName(type, seed, eventType),
     style: SeedVariationManager.getStyle(type, seed, eventType),

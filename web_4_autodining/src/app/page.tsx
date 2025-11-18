@@ -276,10 +276,12 @@ function HomePageContent() {
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
 
-  const { seed, v2Seed } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
   const { marginTop, wrapButton } = useMemo(
-    () => getLayoutVariant(seed),
-    [seed]
+    () => getLayoutVariant(layoutSeed),
+    [layoutSeed]
   );
 
   // Use seed-based variations with event support
