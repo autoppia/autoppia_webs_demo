@@ -1,4 +1,9 @@
-import { getApiBaseUrl } from "./data-generator";
+function getApiBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+  }
+  return process.env.API_URL || "http://app:8080";
+}
 
 export interface SeededLoadOptions {
   projectKey: string;

@@ -1,4 +1,9 @@
-import { getApiBaseUrl } from "./data-generator";
+function getApiBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+  }
+  return process.env.API_URL || "http://app:8080";
+}
 
 export interface SeededLoadOptions {
   projectKey: string;
@@ -20,7 +25,7 @@ export function getSeedValueFromEnv(defaultSeed: number = 1): number {
   return defaultSeed;
 }
 
-export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
+export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? getSeedValueFromEnv(1);
   const limit = options.limit ?? 50;
