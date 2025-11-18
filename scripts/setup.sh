@@ -346,6 +346,10 @@ deploy_webs_server() {
       HOST_GID=$(id -g) \
       WEBS_DATA_PATH="$WEBS_DATA_ABS_PATH"
 
+    # Ensure host data directory exists and is owned by the invoking user
+    mkdir -p "$WEBS_DATA_PATH"
+    chown -R "$(id -u)":"$(id -g)" "$WEBS_DATA_ABS_PATH" 2>/dev/null || true
+
     docker compose -p "$name" build $cache_flag
     docker compose -p "$name" up -d
   )
@@ -373,20 +377,20 @@ deploy_webs_server() {
 
   # Initialize master data pools if they don't exist
   echo "📦 Checking for initial data pools..."
-  mkdir -p ~/webs_data
+  mkdir -p "${WEBS_DATA_PATH:-$HOME/webs_data}"
   
   for project in web_1_demo_movies web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
-    if [ ! -f ~/webs_data/$project/main.json ]; then
+    if [ ! -f "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/main.json" ]; then
       echo "  → Initializing $project master pool (100 records)..."
-      mkdir -p ~/webs_data/$project/data
+      mkdir -p "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/data"
       if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
-        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* ~/webs_data/$project/
+        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/"
         echo "  ✅ $project master pool initialized"
       else
         echo "  ⚠️  No initial data found for $project (will need to generate)"
       fi
     else
-      echo "  ✓ $project master pool already exists ($(cat ~/webs_data/$project/main.json | grep -o '"./data/[^"]*"' | wc -l) files)"
+      echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
     fi
   done
   
