@@ -8,7 +8,7 @@
         </div>
         <div class="card-body">
           <form method="POST" enctype="multipart/form-data" class="movie-form" data-dynamic-group="add-form">
-            {% csrf_token %}
+            {% csrf_token %}{% include "partials/seed_fields.html" %}
 
             {% if form.errors %}
             <div class="alert alert-danger">
@@ -193,7 +193,7 @@
 
             <div class="form-group text-center mt-4">
               <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save mr-2"></i>Save Movie</button>
-              <a href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary btn-lg ml-2"><i class="fas fa-times mr-2"></i>Cancel</a>
+              <a href="{% url 'movieapp:index' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-secondary btn-lg ml-2"><i class="fas fa-times mr-2"></i>Cancel</a>
             </div>
           </form>
         </div>

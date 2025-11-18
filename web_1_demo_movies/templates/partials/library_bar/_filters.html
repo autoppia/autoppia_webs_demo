@@ -1,5 +1,5 @@
 <form method="GET" action="{% url 'movieapp:index' %}" class="float-md-right">
-  {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
+  {% include "partials/seed_fields.html" %}
   {% if search_query %}<input type="hidden" name="search" value="{{ search_query }}">{% endif %}
   <div class="form-row" data-dynamic-group="library-filters-row">
     <div class="col-md-5 mb-2 mb-md-0">
@@ -23,4 +23,3 @@
     </div>
   </div>
 </form>
-

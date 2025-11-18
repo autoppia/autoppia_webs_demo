@@ -19,6 +19,7 @@ services:
       - DB_PORT=5432
       - ENABLE_DYNAMIC_V1=${ENABLE_DYNAMIC_V1:-true}
       - ENABLE_DYNAMIC_V2_AI_GENERATE=${ENABLE_DYNAMIC_V2_AI_GENERATE:-false}
+      - ENABLE_DYNAMIC_V2_DB_MODE=${ENABLE_DYNAMIC_V2_DB_MODE:-false}
       - API_URL=http://app:8080
     depends_on:
       db:

@@ -149,3 +149,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Dynamic HTML toggle wired from docker-compose/env
 DYNAMIC_HTML_ENABLED = os.environ.get("ENABLE_DYNAMIC_V1", "false").lower() == "true"
+
+# V2 DB Load Mode (load data from webs_server API using v2-seed)
+ENABLE_DYNAMIC_V2_DB_MODE = os.environ.get("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() == "true"
+DYNAMIC_V2_DB_MODE_ENABLED = ENABLE_DYNAMIC_V2_DB_MODE  # Alias for compatibility
+DYNAMIC_V2_PROJECT_KEY = os.environ.get("DYNAMIC_V2_PROJECT_KEY", "web_1_demo_movies")
+DYNAMIC_V2_ENTITY_TYPE = os.environ.get("DYNAMIC_V2_ENTITY_TYPE", "movies")
+
+# API URL for webs_server
+API_URL = os.environ.get("API_URL", "http://app:8080")
+DYNAMIC_V2_API_URL = os.environ.get("DYNAMIC_V2_API_URL") or os.environ.get("API_URL", "http://localhost:8080")
+DYNAMIC_V2_CATEGORY_KEY = os.environ.get("DYNAMIC_V2_CATEGORY_KEY", "category")
+DYNAMIC_V2_SELECTION_METHOD = os.environ.get("DYNAMIC_V2_SELECTION_METHOD", "distribute")

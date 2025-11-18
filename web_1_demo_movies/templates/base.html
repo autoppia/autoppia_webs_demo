@@ -367,15 +367,15 @@
                 <div class="col-md-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled" data-dynamic-group="footer-links">
-                        <li><a href="{% url 'movieapp:index' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Home</a></li>
-                        <li><a href="{% url 'movieapp:add_movie' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Add Movie</a></li>
-                        <li><a href="{% url 'movieapp:genre_list' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Categories</a></li>
-                        <li><a href="{% url 'movieapp:about' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">About Us</a></li>
-                        <li><a href="{% url 'movieapp:contact' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Contact</a></li>
+                        <li><a href="{% url 'movieapp:index' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="text-light">Home</a></li>
+                        <li><a href="{% url 'movieapp:add_movie' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="text-light">Add Movie</a></li>
+                        <li><a href="{% url 'movieapp:genre_list' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="text-light">Categories</a></li>
+                        <li><a href="{% url 'movieapp:about' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="text-light">About Us</a></li>
+                        <li><a href="{% url 'movieapp:contact' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="text-light">Contact</a></li>
                         {% if user.is_authenticated %}
-                        <li><a href="{% url 'movieapp:profile' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">My Profile</a></li>
+                        <li><a href="{% url 'movieapp:profile' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="text-light">My Profile</a></li>
                         {% else %}
-                        <li><a href="{% url 'movieapp:login' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="text-light">Sign In</a></li>
+                        <li><a href="{% url 'movieapp:login' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="text-light">Sign In</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -404,6 +404,8 @@
     <script>
         window.__DYNAMIC_HTML_ENABLED__ = {{ DYNAMIC_HTML_ENABLED|yesno:"true,false" }};
         window.__INITIAL_SEED__ = {{ INITIAL_SEED }};
+        window.__DYNAMIC_V2_DB_MODE_ENABLED__ = {{ DYNAMIC_V2_DB_MODE_ENABLED|yesno:"true,false" }};
+        window.__V2_SEED__ = {{ V2_SEED|default:"null" }};
     </script>
     <script src="{% static 'js/dynamic_layout.js' %}"></script>
 </body>

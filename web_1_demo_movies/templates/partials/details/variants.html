@@ -38,8 +38,8 @@
           <p class="card-text">{{movie.desc}}</p>
           <div class="mt-4" data-dynamic-group="detail-actions">
             {% if movie.trailer_url %}<a href="{{ movie.trailer_url }}" target="_blank" class="btn btn-primary mr-2"><i class="fas fa-play-circle mr-1"></i> Watch Trailer</a>{% endif %}
-            <a href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-warning mr-2"><i class="fas fa-edit mr-1"></i> Edit</a>
-            <a href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-danger"><i class="fas fa-trash-alt mr-1"></i> Delete</a>
+            <a href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-warning mr-2"><i class="fas fa-edit mr-1"></i> Edit</a>
+            <a href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-danger"><i class="fas fa-trash-alt mr-1"></i> Delete</a>
           </div>
         </div>
       </div>
@@ -58,8 +58,8 @@
         <p>{{ movie.desc }}</p>
         <div class="mt-2">
           {% if movie.trailer_url %}<a href="{{ movie.trailer_url }}" target="_blank" class="btn btn-primary btn-sm mr-2">Trailer</a>{% endif %}
-          <a href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-warning btn-sm mr-2">Edit</a>
-          <a href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-danger btn-sm">Delete</a>
+          <a href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-warning btn-sm mr-2">Edit</a>
+          <a href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-danger btn-sm">Delete</a>
         </div>
       </div>
       <div class="col-md-4 order-md-1 text-center p-3">
@@ -78,8 +78,8 @@
       <p class="mb-0">{{ movie.desc }}</p>
       <div class="mt-3">
         {% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-        <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-        <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a>
+        <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+        <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a>
       </div>
     </div>
   </div>
@@ -101,8 +101,8 @@
     </div>
     <div class="px-3 pb-3">
       {% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-      <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-      <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a>
+      <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+      <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a>
     </div>
   </div>
 
@@ -123,8 +123,8 @@
         <div class="text-muted"><strong>Duration:</strong> {% if movie.duration %}{{ movie.duration }} min{% else %}Not specified{% endif %}</div>
         <div class="mt-2">
           {% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a>
+          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a>
         </div>
       </div>
     </div>
@@ -148,8 +148,8 @@
         </div>
         <div class="mt-2">
           {% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a>
+          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a>
         </div>
       </div>
     </div>
@@ -166,8 +166,8 @@
         <div class="text-muted mb-2"><strong>Director:</strong> {{ movie.director|default:"Not specified" }}</div>
         <div class="text-muted mb-2"><strong>Duration:</strong> {% if movie.duration %}{{ movie.duration }} min{% else %}Not specified{% endif %}</div>
         <div>{% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a></div>
+          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a></div>
       </div>
       <div class="col-md-4 p-3 text-center">
         {% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid img-thumbnail" style="max-height:300px; object-fit:contain;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid img-thumbnail" style="max-height:300px; object-fit:contain;">{% endif %}
@@ -192,8 +192,8 @@
         </div>
         <p class="mt-2">{{ movie.desc }}</p>
         <div>{% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a></div>
+          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a></div>
       </div>
     </div>
   </div>
@@ -215,8 +215,8 @@
         <div class="row mb-2"><div class="col-6 text-muted"><strong>Director:</strong> {{ movie.director|default:"Not specified" }}</div><div class="col-6 text-muted"><strong>Duration:</strong> {% if movie.duration %}{{ movie.duration }} min{% else %}Not specified{% endif %}</div></div>
         <p>{{ movie.desc }}</p>
         <div class="text-right">{% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a></div>
+          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a></div>
       </div>
     </div>
   </div>
@@ -231,8 +231,8 @@
         <div class="mb-2 text-muted"><strong>Year:</strong> {{ movie.year }} &nbsp; <strong>Director:</strong> {{ movie.director|default:"Not specified" }}</div>
         <div class="mb-2 text-muted"><strong>Duration:</strong> {% if movie.duration %}{{ movie.duration }} min{% else %}Not specified{% endif %} &nbsp; <strong>Rating:</strong> {{ movie.rating|default:0|floatformat:"1" }}/5</div>
         <div class="mt-1">{% if movie.trailer_url %}<a class="btn btn-primary btn-sm mr-2" target="_blank" href="{{ movie.trailer_url }}">Trailer</a>{% endif %}
-          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Edit</a>
-          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Delete</a></div>
+          <a class="btn btn-warning btn-sm mr-2" href="{% url 'movieapp:update' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'movieapp:delete' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Delete</a></div>
       </div>
       <div class="col-md-6 text-center p-3">
         {% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid rounded" style="max-height:340px; object-fit:contain;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:340px; object-fit:contain;">{% endif %}
@@ -245,7 +245,7 @@
   <div class="card mt-4 shadow">
     <div class="card-header bg-light"><h4 class="mb-0"><i class="fas fa-comments mr-2"></i>Comments ({{ comments.count }})</h4></div>
     <div class="card-body" data-dynamic-group="detail-comments">
-      <form id="comment-form" method="POST" action="{% url 'movieapp:add_comment' movie.id %}">{% csrf_token %}
+      <form id="comment-form" method="POST" action="{% url 'movieapp:add_comment' movie.id %}">{% csrf_token %}{% include "partials/seed_fields.html" %}
         <div class="form-group"><input type="text" name="name" class="form-control mb-2" placeholder="Your name" required><textarea name="content" class="form-control" rows="3" placeholder="Write a comment..." required></textarea></div>
         <button type="submit" class="btn btn-primary">Submit comment</button>
       </form>

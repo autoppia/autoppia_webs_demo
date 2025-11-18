@@ -10,10 +10,10 @@
           <div class="mb-4">{% if movie.img %}<img src="{{ movie.img.url }}" alt="{{ movie.name }}" class="img-fluid rounded" style="max-height:200px;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:200px;">{% endif %}</div>
           <h5 class="text-danger mb-3">"{{ movie.name }}" ({{ movie.year }})</h5>
           <p class="alert alert-warning"><i class="fas fa-exclamation-circle mr-2"></i>This action cannot be undone.</p>
-          <form method="POST">{% csrf_token %}
+          <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
             <div class="d-flex justify-content-center mt-4">
               <button type="submit" class="btn btn-danger btn-lg mr-2"><i class="fas fa-trash mr-2"></i>Delete</button>
-              <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary btn-lg"><i class="fas fa-times mr-2"></i>Cancel</a>
+              <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-secondary btn-lg"><i class="fas fa-times mr-2"></i>Cancel</a>
             </div>
           </form>
         </div>
@@ -31,9 +31,9 @@
           <h5 class="text-danger">Are you sure?</h5>
           <p class="mb-1"><strong>Title:</strong> {{ movie.name }}</p>
           <p class="mb-3"><strong>Year:</strong> {{ movie.year }}</p>
-          <form method="POST">{% csrf_token %}
+          <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
             <button class="btn btn-danger mr-2">Delete</button>
-            <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+            <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
           </form>
         </div>
       </div>
@@ -46,9 +46,9 @@
     <div class="mb-3">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid rounded" style="max-height:220px;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:220px;">{% endif %}</div>
     <h4 class="mb-2">Delete "{{ movie.name }}"?</h4>
     <p class="text-muted">This cannot be undone.</p>
-    <form method="POST">{% csrf_token %}
+    <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
       <button class="btn btn-danger mr-2">Confirm</button>
-      <a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+      <a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
     </form>
   </div></div></div>
 
@@ -57,9 +57,9 @@
     <div class="col-md-6"><div class="card shadow border-danger"><div class="card-header bg-danger text-white">Confirm Deletion</div><div class="card-body">
       <p class="mb-2">You are about to delete:</p>
       <h5 class="text-danger mb-3">{{ movie.name }} ({{ movie.year }})</h5>
-      <form method="POST">{% csrf_token %}
+      <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
         <button class="btn btn-danger mr-2">Delete</button>
-        <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+        <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
       </form>
     </div></div></div>
   </div>
@@ -69,8 +69,8 @@
     <h5 class="text-danger"><i class="fas fa-exclamation-circle mr-2"></i>Warning</h5>
     <div class="text-center mb-3">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid rounded" style="max-height:200px;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:200px;">{% endif %}</div>
     <p>Deleting "{{ movie.name }}" will remove all related data.</p>
-    <form method="POST">{% csrf_token %}
-      <div class="d-flex"><button class="btn btn-danger mr-2">Delete</button><a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a></div>
+    <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
+      <div class="d-flex"><button class="btn btn-danger mr-2">Delete</button><a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a></div>
     </form>
   </div></div></div>
 
@@ -78,9 +78,9 @@
   <div class="row"><div class="col-md-12"><div class="card shadow border-0"><div class="card-header bg-danger text-white">Delete Movie</div><div class="card-body">
     <div class="row align-items-center"><div class="col-md-3 text-center">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid rounded" style="max-height:180px;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:180px;">{% endif %}</div>
       <div class="col-md-9"><h5 class="mb-1">{{ movie.name }}</h5><div class="text-muted mb-3">{{ movie.year }}</div>
-        <form method="POST">{% csrf_token %}
+        <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
           <button class="btn btn-danger mr-2 btn-sm">Delete</button>
-          <a class="btn btn-secondary btn-sm" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+          <a class="btn btn-secondary btn-sm" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
         </form>
       </div></div>
   </div></div></div>
@@ -90,18 +90,18 @@
     <h4 class="text-danger">Confirm Deletion</h4>
     <div class="text-center mb-3">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid rounded" style="max-height:220px;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:220px;">{% endif %}</div>
     <p class="mb-3">Delete <strong>{{ movie.name }}</strong>?</p>
-    <form method="POST">{% csrf_token %}
+    <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
       <button class="btn btn-danger mr-2">Yes, Delete</button>
-      <a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+      <a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
     </form>
   </div></div></div>
 
   {% elif v == 8 %}
   <div class="row align-items-center"><div class="col-md-7"><div class="card shadow border-0"><div class="card-body">
     <h5 class="mb-2">You're deleting:</h5><h3 class="text-danger">{{ movie.name }}</h3><div class="text-muted mb-3">{{ movie.year }}</div>
-    <form method="POST">{% csrf_token %}
+    <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
       <button class="btn btn-danger mr-2">Delete</button>
-      <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+      <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
     </form>
   </div></div>
   <div class="col-md-5 text-center">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid rounded" style="max-height:220px;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:220px;">{% endif %}</div></div>
@@ -110,9 +110,9 @@
   <div class="row justify-content-center"><div class="col-md-6"><div class="card shadow border-0"><div class="card-header bg-danger text-white">Delete</div><div class="card-body">
     <div class="text-center mb-3">{% if movie.img %}<img src="{{ movie.img.url }}" class="img-fluid rounded" style="max-height:200px;">{% else %}<img src="{% static 'images/placeholder.jpg' %}" class="img-fluid rounded" style="max-height:200px;">{% endif %}</div>
     <p>Are you sure you want to delete <strong>{{ movie.name }}</strong>?</p>
-    <form method="POST">{% csrf_token %}
+    <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
       <button class="btn btn-danger mr-2">Delete</button>
-      <a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+      <a class="btn btn-outline-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
     </form>
   </div></div></div></div>
 
@@ -127,9 +127,9 @@
             <div class="col-md-8">
               <p class="mb-1">Delete:</p>
               <h5 class="text-danger mb-3">{{ movie.name }} ({{ movie.year }})</h5>
-              <form method="POST">{% csrf_token %}
+              <form method="POST">{% csrf_token %}{% include "partials/seed_fields.html" %}
                 <button class="btn btn-danger mr-2">Delete</button>
-                <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}">Cancel</a>
+                <a class="btn btn-secondary" href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}">Cancel</a>
               </form>
             </div>
           </div>

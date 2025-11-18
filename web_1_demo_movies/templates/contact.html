@@ -28,7 +28,7 @@
                     {% endif %}
                     
                     <form method="POST">
-                        {% csrf_token %}
+                        {% csrf_token %}{% include "partials/seed_fields.html" %}
                         
                         <div class="form-group">
                             <label for="{{ form.name.id_for_label }}">

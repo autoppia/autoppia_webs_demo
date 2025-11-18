@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -6,30 +8,249 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+from django.conf import settings
 
 from events.models import Event
 from .forms import MovieForm, ContactForm
-from .utils import stable_shuffle, redirect_with_seed
+from .utils import stable_shuffle, redirect_with_seed, normalize_v2_seed
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
+from movieapp.context import dynamic_context
+from movieapp.services.v2_dataset_loader import ensure_movies_for_seed
+from .seeded_loader import is_db_load_mode_enabled, load_movies_from_api
+from .seeded_selector import seeded_distribution, seeded_select
+
+logger = logging.getLogger(__name__)
+
+
+class ImgProxy:
+    """Proxy for img field to support .url attribute."""
+    def __init__(self, img_path):
+        self.path = img_path or ""
+    
+    @property
+    def url(self):
+        return self.path
+    
+    def __str__(self):
+        return self.path
+    
+    def __bool__(self):
+        return bool(self.path)
+
+
+class MovieProxy:
+    """Proxy object to make API movie dictionaries work like Movie model instances."""
+    def __init__(self, data: dict):
+        self._data = data
+        # Map common fields - web_1 uses 'title' instead of 'name'
+        self.id = data.get("id", data.get("movie_id", 0))
+        self.name = data.get("title", data.get("name", ""))
+        self.desc = data.get("description", data.get("desc", ""))
+        self.year = data.get("year", 0)
+        
+        # Wrap img in ImgProxy to support .url attribute
+        img_path = data.get("image_path", data.get("img", ""))
+        self.img = ImgProxy(img_path)
+        
+        self.director = data.get("director", "")
+        self.cast = ", ".join(data.get("cast", [])) if isinstance(data.get("cast"), list) else data.get("cast", "")
+        self.duration = data.get("duration", 0)
+        self.trailer_url = data.get("trailer_url", "")
+        self.rating = data.get("rating", 0.0)
+        self.genres = GenreProxyList(data.get("genres", []))
+        self.created_at = data.get("created_at", None)
+        self.updated_at = data.get("updated_at", None)
+    
+    def get_genre_list(self):
+        return ", ".join(self.genres.names)
+    
+    def __getattr__(self, name):
+        # Fallback to data dict
+        return self._data.get(name, None)
+
+
+class GenreProxyList:
+    """Proxy for genres list from API."""
+    def __init__(self, genres_data):
+        if isinstance(genres_data, list):
+            if not genres_data:
+                self.names = []
+            elif isinstance(genres_data[0], str):
+                self.names = genres_data
+            else:
+                self.names = [g.get("name", "") if isinstance(g, dict) else str(g) for g in genres_data]
+        else:
+            self.names = []
+    
+    def all(self):
+        return [GenreProxy(name) for name in self.names]
+    
+    def __iter__(self):
+        """Make it iterable for template loops."""
+        return iter(self.all())
+    
+    def __len__(self):
+        """Support len() calls."""
+        return len(self.names)
+
+
+class GenreProxy:
+    """Proxy for individual genre."""
+    def __init__(self, name):
+        self.name = name
+        self.id = hash(name) % 1000  # Simple hash-based ID
+
+
+def get_movies_queryset_for_request(request, dynamic_ctx):
+    """
+    Get movies for the request. Can load from API, from DB master pool, or from DB depending on configuration.
+    Returns: (movies_list, v2_seed_used, is_from_api)
+    """
+    v2_enabled = bool(dynamic_ctx.get("ENABLE_DYNAMIC_V2_DB_MODE"))
+    v2_seed = dynamic_ctx.get("V2_SEED")
+    
+    if v2_enabled and v2_seed:
+        # NEW APPROACH: Load from master pool in DB and filter deterministically
+        master_movies = Movie.objects.filter(v2_master=True)
+        master_count = master_movies.count()
+        
+        if master_count > 0:
+            # Ensure we have enough movies in pool (minimum 256 for proper distribution)
+            if master_count < 256:
+                logger.warning(
+                    f"Master pool has only {master_count} movies (minimum 256 recommended). "
+                    f"Some seeds may have limited variety."
+                )
+            
+            # Convert QuerySet to list for seeded selection
+            master_list = list(master_movies)
+            
+            # Use seeded_distribution to select deterministically (same as webs_server)
+            # Select up to 50 movies, but ensure we don't exceed pool size
+            select_count = min(50, master_count)
+            selected_movies = seeded_distribution(
+                data_pool=master_list,
+                seed=v2_seed,
+                category_key='genres',  # Distribute by genres
+                total_count=select_count
+            )
+            
+            return selected_movies, v2_seed, False  # False = from DB, not API
+        
+        # Fallback: Try API if no master pool exists
+        try:
+            if is_db_load_mode_enabled():
+                api_movies_data = load_movies_from_api(seed_value=v2_seed, limit=200)
+                if api_movies_data:
+                    # Convert to MovieProxy objects
+                    movies_list = [MovieProxy(movie_data) for movie_data in api_movies_data]
+                    return movies_list, v2_seed, True
+        except Exception as exc:
+            logger.warning("Could not load from API (seed=%s): %s. Trying DB fallback.", v2_seed, exc)
+        
+        # Fallback to old DB approach
+        try:
+            ensure_movies_for_seed(v2_seed)
+            return Movie.objects.filter(v2_seed=v2_seed), v2_seed, False
+        except Exception as exc:
+            logger.error("Failed to load v2 dataset (seed=%s): %s", v2_seed, exc)
+            messages.error(request, "Unable to load dynamic dataset. Showing the default catalog instead.")
+    
+    return Movie.objects.filter(v2_seed__isnull=True, v2_master=False), None, False
 
 
 def index(request, variant=None):
     """
     Vista principal que muestra la lista de películas con opciones de búsqueda y filtrado.
     """
-    # Obtener todos los géneros para el dropdown de filtro
-    all_genres = Genre.objects.all().order_by("name")
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
 
-    # Obtener años disponibles para el filtro
-    available_years = Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
+    movies_source, active_v2_seed, is_from_api = get_movies_queryset_for_request(request, dynamic_ctx)
+    
+    # Check if movies_source is a list (from API or DB master pool)
+    if isinstance(movies_source, list):
+        # Movies from API (MovieProxy) or DB master pool (Movie instances)
+        movies_list = movies_source
+        
+        # Get genres - handle both MovieProxy and Movie instances
+        all_genres_set = set()
+        for movie in movies_list:
+            if hasattr(movie, 'genres'):
+                if hasattr(movie.genres, 'names'):  # MovieProxy
+                    all_genres_set.update(movie.genres.names)
+                elif hasattr(movie.genres, 'all'):  # Movie instance with ManyToMany
+                    for genre in movie.genres.all():
+                        all_genres_set.add(genre.name)
+        
+        all_genres = [GenreProxy(name) for name in sorted(all_genres_set)]
+        
+        # Get available years
+        available_years = sorted(set(movie.year for movie in movies_list if movie.year), reverse=True)
+        
+        # Apply filters
+        search_query = request.GET.get("search", "")
+        genre_filter = request.GET.get("genre", "")
+        year_filter = request.GET.get("year", "")
+        
+        # Filter movies
+        filtered_movies = movies_list
+        if search_query:
+            search_lower = search_query.lower()
+            filtered_movies = [
+                m for m in filtered_movies
+                if search_lower in m.name.lower() or search_lower in m.desc.lower() or search_lower in m.director.lower()
+            ]
+        
+        if genre_filter:
+            try:
+                genre_id = int(genre_filter)
+                selected_genre = next((g for g in all_genres if g.id == genre_id), None)
+                if selected_genre:
+                    # Handle both MovieProxy and Movie instances
+                    filtered_movies = [
+                        m for m in filtered_movies
+                        if (hasattr(m.genres, 'names') and selected_genre.name in m.genres.names) or
+                           (hasattr(m.genres, 'all') and any(g.name == selected_genre.name for g in m.genres.all()))
+                    ]
+            except ValueError:
+                pass
+        
+        if year_filter:
+            try:
+                year_value = int(year_filter)
+                filtered_movies = [m for m in filtered_movies if m.year == year_value]
+            except ValueError:
+                pass
+        
+        # Apply seed-based shuffle (v1 seed for layout)
+        movie_list = stable_shuffle(filtered_movies, seed, salt="movies")
+        genre_list = stable_shuffle(all_genres, seed, salt="genres")
+        
+        context = {
+            "movie_list": movie_list,
+            "search_query": search_query,
+            "genres": genre_list,
+            "available_years": available_years,
+            "selected_genre": genre_filter,
+            "selected_year": year_filter,
+        }
+        return render(request, "index.html", context)
+    
+    # Movies from DB (original behavior)
+    base_movies_qs = movies_source
+    available_years = base_movies_qs.values_list("year", flat=True).distinct().order_by("-year")
+    movies = base_movies_qs.prefetch_related("genres")
 
-    # Obtener parámetros de búsqueda y filtro
+    if active_v2_seed:
+        all_genres = Genre.objects.filter(movies__v2_seed=active_v2_seed).distinct().order_by("name")
+    else:
+        all_genres = Genre.objects.all().order_by("name")
+
     search_query = request.GET.get("search", "")
     genre_filter = request.GET.get("genre", "")
     year_filter = request.GET.get("year", "")
-
-    # Comenzar con todas las películas (prefetch genres to avoid N+1 in templates)
-    movies = Movie.objects.all().prefetch_related("genres")
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
@@ -85,12 +306,6 @@ def index(request, variant=None):
         filter_event.save()
 
     # Server-side dynamic order and variant based on seed / explicit variant
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
-    dynamic_ctx = dynamic_context(request)
-    seed = dynamic_ctx.get("INITIAL_SEED", 1)
-    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
     movie_list = stable_shuffle(movies, seed, salt="movies")
     genre_list = stable_shuffle(all_genres, seed, salt="genres")
     years_list = stable_shuffle(available_years, seed, salt="years")
@@ -123,7 +338,13 @@ def detail(request, movie_id, variant=None):
     Vista de detalle de película: muestra información, películas relacionadas y comentarios.
     Además, registra el evento de visualización de detalle.
     """
-    movie = get_object_or_404(Movie, id=movie_id)
+    dynamic_ctx = dynamic_context(request)
+    seed = dynamic_ctx.get("INITIAL_SEED", 1)
+    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+
+    base_movies_qs, _ = get_movies_queryset_for_request(request, dynamic_ctx)
+    movie_queryset = base_movies_qs.prefetch_related("genres")
+    movie = get_object_or_404(movie_queryset, id=movie_id)
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
     validator_id = request.headers.get("X-Validator-Id", "0")
 
@@ -136,29 +357,32 @@ def detail(request, movie_id, variant=None):
     )
     detail_event.save()
 
-    # Películas relacionadas
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
-    dynamic_ctx = dynamic_context(request)
-    seed = dynamic_ctx.get("INITIAL_SEED", 1)
-    variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
     related_movies = []
     if movie.genres.exists():
-        related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct().prefetch_related("genres")[:4]
+        related_movies = (
+            base_movies_qs.filter(genres__in=movie.genres.all())
+            .exclude(id=movie.id)
+            .distinct()
+            .prefetch_related("genres")[:4]
+        )
 
     if len(related_movies) < 4:
-        more_movies = Movie.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]]).prefetch_related("genres")[: 4 - len(related_movies)]
+        more_movies = (
+            base_movies_qs.filter(year=movie.year)
+            .exclude(id__in=[m.id for m in list(related_movies) + [movie]])
+            .prefetch_related("genres")[: 4 - len(related_movies)]
+        )
         related_movies = list(related_movies) + list(more_movies)
 
     if len(related_movies) < 4:
         remaining_needed = 4 - len(related_movies)
-        # Avoid DB-level random ordering which is slow; pick a capped candidate pool and deterministically shuffle it
         excluded_ids = [m.id for m in list(related_movies) + [movie]]
-        candidate_ids = list(Movie.objects.exclude(id__in=excluded_ids).order_by("id").values_list("id", flat=True)[:100])
+        candidate_ids = list(
+            base_movies_qs.exclude(id__in=excluded_ids).order_by("id").values_list("id", flat=True)[:100]
+        )
         shuffled_ids = stable_shuffle(candidate_ids, seed, salt="related-fallback")
         extra_ids = shuffled_ids[:remaining_needed]
-        extra_movies_qs = Movie.objects.filter(id__in=extra_ids).prefetch_related("genres")
+        extra_movies_qs = base_movies_qs.filter(id__in=extra_ids).prefetch_related("genres")
         id_to_movie = {m.id: m for m in extra_movies_qs}
         related_movies = list(related_movies) + [id_to_movie[i] for i in extra_ids if i in id_to_movie]
 
@@ -213,9 +437,6 @@ def add_movie(request, variant=None):
     else:
         form = MovieForm()
 
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
@@ -232,6 +453,9 @@ def update_movie(request, id, variant=None):
     Registra el evento de EDIT_FILM si se detectan cambios, pero NO guarda los cambios en la BD.
     """
     movie = get_object_or_404(Movie, id=id)
+    if movie.v2_seed is not None:
+        messages.error(request, "Editing V2 generated movies is not supported.")
+        return redirect_with_seed(request, "movieapp:detail", movie_id=id)
     original_values = {
         "name": movie.name,
         "desc": movie.desc,
@@ -312,9 +536,6 @@ def update_movie(request, id, variant=None):
     else:
         form = MovieForm(instance=movie)
 
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
@@ -335,6 +556,9 @@ def delete_movie(request, id, variant=None):
     Vista para eliminar una película y registrar el evento de DELETE_FILM.
     """
     movie = get_object_or_404(Movie, id=id)
+    if movie.v2_seed is not None:
+        messages.error(request, "Deleting V2 generated movies is not supported.")
+        return redirect_with_seed(request, "movieapp:detail", movie_id=id)
 
     if request.method == "POST":
         delete_film_event = Event.create_delete_film_event(
@@ -347,9 +571,6 @@ def delete_movie(request, id, variant=None):
         # movie.delete()
         messages.success(request, "Movie deleted successfully.")
         return redirect_with_seed(request, "movieapp:index")
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
@@ -365,7 +586,9 @@ def add_comment(request, movie_id):
     Vista para agregar un comentario a una película.
     Registra el evento de añadir comentario y, si la solicitud es AJAX, devuelve una respuesta JSON.
     """
-    movie = get_object_or_404(Movie, id=movie_id)
+    dynamic_ctx = dynamic_context(request)
+    base_movies_qs, _ = get_movies_queryset_for_request(request, dynamic_ctx)
+    movie = get_object_or_404(base_movies_qs, id=movie_id)
 
     if request.method == "POST":
         name = request.POST.get("name", "")
@@ -411,13 +634,18 @@ def genre_list(request, variant=None):
     """
     Vista que muestra la lista de géneros.
     """
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
-    genres = Genre.objects.all()
+
+    _, active_v2_seed = get_movies_queryset_for_request(request, dynamic_ctx)
+    if active_v2_seed:
+        genres = Genre.objects.filter(movies__v2_seed=active_v2_seed).distinct()
+    else:
+        genres = Genre.objects.filter(movies__v2_seed__isnull=True).distinct()
+        if not genres.exists():
+            genres = Genre.objects.all()
+
     genres_list = stable_shuffle(genres, seed, salt="genres-page")
     return render(
         request,
@@ -430,14 +658,12 @@ def genre_detail(request, genre_id, variant=None):
     """
     Vista que muestra los detalles de un género y las películas asociadas.
     """
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
+    base_movies_qs, _ = get_movies_queryset_for_request(request, dynamic_ctx)
     genre = get_object_or_404(Genre, id=genre_id)
-    movies = Movie.objects.filter(genres=genre).prefetch_related("genres")
+    movies = base_movies_qs.filter(genres=genre).prefetch_related("genres")
     movies_list = stable_shuffle(movies, seed, salt="genre-detail")
     context = {
         "genre": genre,
@@ -482,9 +708,6 @@ def contact(request, variant=None):
             return redirect_with_seed(request, "movieapp:contact")
     else:
         form = ContactForm()
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
@@ -542,9 +765,6 @@ def login_view(request, variant=None):
                 return redirect_with_seed(request, "movieapp:index", seed=seed)
         else:
             messages.error(request, "Invalid username or password.")
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
@@ -610,9 +830,6 @@ def register_view(request, variant=None):
             # login_event.save()
             messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect_with_seed(request, "movieapp:index")
-
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
 
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
@@ -707,9 +924,6 @@ def profile_view(request, variant=None):
         "genres": all_genres,
         "selected_genres": [g.id for g in profile.favorite_genres.all()],
     }
-    # Use dynamic_context to get seed (from URL or session) instead of reading directly
-    from movieapp.context import dynamic_context
-
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)

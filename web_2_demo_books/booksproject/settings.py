@@ -150,3 +150,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Dynamic HTML toggle wired from docker-compose/env
 DYNAMIC_HTML_ENABLED = os.environ.get("ENABLE_DYNAMIC_V1", "false").lower() == "true"
+
+# V2 DB Load Mode (load data from webs_server API using v2-seed)
+ENABLE_DYNAMIC_V2_DB_MODE = os.environ.get("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() == "true"
+
+# API URL for webs_server
+API_URL = os.environ.get("API_URL", "http://app:8080")

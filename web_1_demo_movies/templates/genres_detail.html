@@ -27,7 +27,7 @@
                     <p class="card-text movie-desc">{{ movie.desc|truncatechars:100 }}</p>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
-                    <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-block">View Details</a>
+                    <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-primary btn-block">View Details</a>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
     
     <div class="row mt-4">
         <div class="col-12">
-            <a href="{% url 'movieapp:genre_list' %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-secondary">
+            <a href="{% url 'movieapp:genre_list' %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i>Back to genre list
             </a>
         </div>

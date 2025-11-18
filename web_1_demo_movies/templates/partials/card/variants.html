@@ -23,7 +23,7 @@
         <p class="card-text movie-desc">{{ movie.desc|truncatechars:80 }}</p>
       </div>
       <div class="card-footer bg-transparent border-top-0 pt-0">
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-block">Details</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-primary btn-block">Details</a>
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@
             </div>
             {% if movie.director %}<p class="card-subtitle text-muted mb-2 small"><i class="fas fa-user"></i> {{ movie.director }}</p>{% endif %}
             <p class="card-text small mb-2">{{ movie.desc|truncatechars:60 }}</p>
-            <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-sm btn-outline-primary">Details</a>
+            <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-sm btn-outline-primary">Details</a>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
         <p class="card-text movie-desc">{{ movie.desc|truncatechars:70 }}</p>
       </div>
       <div class="card-footer bg-transparent border-0 pt-0">
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-outline-primary btn-block">Details</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-outline-primary btn-block">Details</a>
       </div>
     </div>
   </div>
@@ -96,7 +96,7 @@
         {% endif %}
       </div>
       <div class="card-footer bg-transparent border-0 pt-2">
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-sm">Read more</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-primary btn-sm">Read more</a>
       </div>
     </div>
   </div>
@@ -121,7 +121,7 @@
         <p class="card-text movie-desc">{{ movie.desc|truncatechars:65 }}</p>
       </div>
       <div class="card-footer bg-transparent border-0 pt-0">
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-outline-secondary btn-sm btn-block">Details</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-outline-secondary btn-sm btn-block">Details</a>
       </div>
     </div>
   </div>
@@ -144,7 +144,7 @@
             <p class="card-text small flex-grow-1">{{ movie.desc|truncatechars:100 }}</p>
             <div>
               <span class="badge badge-info mr-2">{{ movie.year }}</span>
-              <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-sm">Open</a>
+              <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-primary btn-sm">Open</a>
             </div>
           </div>
         </div>
@@ -168,7 +168,7 @@
           <span class="small font-weight-bold">{{ movie.name|truncatechars:16 }}</span>
           <span class="badge badge-light">{{ movie.year }}</span>
         </div>
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-sm btn-outline-primary mt-2">Details</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-sm btn-outline-primary mt-2">Details</a>
       </div>
     </div>
   </div>
@@ -194,7 +194,7 @@
           {% endfor %}
         </div>
         {% endif %}
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-sm">More</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-primary btn-sm">More</a>
       </div>
     </div>
   </div>
@@ -218,7 +218,7 @@
         <p class="card-text movie-desc">{{ movie.desc|truncatechars:55 }}</p>
       </div>
       <div class="card-footer bg-transparent border-0 pt-0">
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-outline-primary btn-sm btn-block">Details</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-outline-primary btn-sm btn-block">Details</a>
       </div>
     </div>
   </div>
@@ -243,7 +243,7 @@
         <p class="card-text movie-desc">{{ movie.desc|truncatechars:70 }}</p>
       </div>
       <div class="card-footer bg-transparent border-0 pt-0">
-        <a href="{% url 'movieapp:detail' movie.id %}{% if DYNAMIC_HTML_ENABLED %}?seed={{ INITIAL_SEED }}{% endif %}" class="btn btn-primary btn-sm btn-block">View</a>
+        <a href="{% url 'movieapp:detail' movie.id %}{{ SEED_QUERYSTRING_PREFIXED }}" class="btn btn-primary btn-sm btn-block">View</a>
       </div>
     </div>
   </div>

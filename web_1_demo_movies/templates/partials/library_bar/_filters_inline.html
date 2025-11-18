@@ -1,5 +1,5 @@
 <form method="GET" action="{% url 'movieapp:index' %}">
-  {% if DYNAMIC_HTML_ENABLED %}<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">{% endif %}
+  {% include "partials/seed_fields.html" %}
   <div class="form-row align-items-center">
     <div class="col-md-4 mb-2">
       <select name="genre" class="form-control" id="genreFilterInline">
@@ -25,4 +25,3 @@
     </div>
   </div>
 </form>
-

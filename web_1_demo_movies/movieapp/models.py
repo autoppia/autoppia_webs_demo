@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -25,11 +26,21 @@ class Movie(models.Model):
     trailer_url = models.URLField(blank=True, null=True)
     rating = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)], help_text="Rating between 0 and 5")
     genres = models.ManyToManyField(Genre, blank=True, related_name="movies")
+    v2_seed = models.IntegerField(blank=True, null=True, db_index=True, help_text="Seed value when record comes from V2 datasets")
+    v2_dataset_id = models.CharField(max_length=120, blank=True, null=True, help_text="Dataset identifier for V2 generated entries")
+    v2_master = models.BooleanField(default=False, db_index=True, help_text="True if this is a master pool movie (loaded from JSON)")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["v2_seed", "v2_dataset_id"],
+                name="movie_unique_v2_dataset_entry",
+                condition=Q(v2_seed__isnull=False, v2_dataset_id__isnull=False),
+            )
+        ]
 
     def __str__(self):
         return self.name

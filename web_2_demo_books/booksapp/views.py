@@ -12,13 +12,170 @@ from django.views.decorators.http import require_http_methods
 from events.models import Event
 from .forms import BookForm, ContactForm
 from .models import Book, Genre, Comment, UserProfile, ContactMessage, Cart
-from .utils import normalize_seed, stable_shuffle, compute_variant, redirect_with_seed
+from .utils import normalize_seed, normalize_v2_seed, stable_shuffle, compute_variant, redirect_with_seed
+from .seeded_loader import is_db_load_mode_enabled, load_books_from_api
+from django.conf import settings
+
+
+class ImgProxy:
+    """Proxy for img field to support .url attribute."""
+    def __init__(self, img_path):
+        self.path = img_path or ""
+    
+    @property
+    def url(self):
+        return self.path
+    
+    def __str__(self):
+        return self.path
+    
+    def __bool__(self):
+        return bool(self.path)
+
+
+class BookProxy:
+    """Proxy object to make API book dictionaries work like Book model instances."""
+    def __init__(self, data: dict):
+        self._data = data
+        # Map common fields
+        self.id = data.get("id", data.get("book_id", 0))
+        self.name = data.get("name", "")
+        self.desc = data.get("desc", data.get("description", ""))
+        self.year = data.get("year", 0)
+        
+        # Wrap img in ImgProxy to support .url attribute
+        img_path = data.get("img", "")
+        self.img = ImgProxy(img_path)
+        
+        self.director = data.get("director", data.get("author", ""))
+        self.duration = data.get("duration", 0)
+        self.trailer_url = data.get("trailer_url", "")
+        self.rating = data.get("rating", 0.0)
+        self.price = data.get("price", 0.0)
+        self.genres = GenreProxyList(data.get("genres", []))
+        self.created_at = data.get("created_at", None)
+        self.updated_at = data.get("updated_at", None)
+    
+    def get_genre_list(self):
+        return ", ".join(self.genres.names)
+    
+    def __getattr__(self, name):
+        # Fallback to data dict
+        return self._data.get(name, None)
+
+
+class GenreProxyList:
+    """Proxy for genres list from API."""
+    def __init__(self, genres_data):
+        if isinstance(genres_data, list):
+            if not genres_data:
+                self.names = []
+            elif isinstance(genres_data[0], str):
+                self.names = genres_data
+            else:
+                self.names = [g.get("name", "") if isinstance(g, dict) else str(g) for g in genres_data]
+        else:
+            self.names = []
+    
+    def all(self):
+        return [GenreProxy(name) for name in self.names]
+    
+    def __iter__(self):
+        """Make it iterable for template loops."""
+        return iter(self.all())
+    
+    def __len__(self):
+        """Support len() calls."""
+        return len(self.names)
+
+
+class GenreProxy:
+    """Proxy for individual genre."""
+    def __init__(self, name):
+        self.name = name
+        self.id = hash(name) % 1000  # Simple hash-based ID
 
 
 def index(request):
     """
     Vista principal que muestra la lista de libros con opciones de búsqueda y filtrado.
     """
+    # Check if v2 DB mode is enabled
+    v2_enabled = is_db_load_mode_enabled()
+    v2_seed = None
+    
+    if v2_enabled:
+        # Get v2-seed from URL
+        v2_seed_raw = request.GET.get("v2-seed")
+        v2_seed = normalize_v2_seed(v2_seed_raw) if v2_seed_raw else 1
+        
+        # Load books from API
+        api_books_data = load_books_from_api(seed_value=v2_seed, limit=200)
+        if api_books_data:
+            # Convert to BookProxy objects
+            books_list = [BookProxy(book_data) for book_data in api_books_data]
+            
+            # Get genres from API data or database
+            all_genres_set = set()
+            for book in books_list:
+                all_genres_set.update(book.genres.names)
+            all_genres = [GenreProxy(name) for name in sorted(all_genres_set)]
+            
+            # Get available years from API data
+            available_years = sorted(set(book.year for book in books_list if book.year), reverse=True)
+            
+            # Apply filters
+            search_query = request.GET.get("search", "")
+            genre_filter = request.GET.get("genre", "")
+            year_filter = request.GET.get("year", "")
+            
+            # Filter books
+            filtered_books = books_list
+            if search_query:
+                search_lower = search_query.lower()
+                filtered_books = [
+                    b for b in filtered_books
+                    if search_lower in b.name.lower() or search_lower in b.desc.lower() or search_lower in b.director.lower()
+                ]
+            
+            if genre_filter:
+                try:
+                    genre_id = int(genre_filter)
+                    # Find genre by ID (hash-based)
+                    selected_genre = next((g for g in all_genres if g.id == genre_id), None)
+                    if selected_genre:
+                        filtered_books = [b for b in filtered_books if selected_genre.name in b.genres.names]
+                except ValueError:
+                    pass
+            
+            if year_filter:
+                try:
+                    year_value = int(year_filter)
+                    filtered_books = [b for b in filtered_books if b.year == year_value]
+                except ValueError:
+                    pass
+            
+            # Apply seed-based shuffle (v1 seed for layout)
+            seed = normalize_seed(request.GET.get("seed"))
+            if not getattr(settings, "DYNAMIC_HTML_ENABLED", False):
+                seed = 1
+            variant_val = compute_variant(seed)
+            book_list = stable_shuffle(filtered_books, seed, salt="books")
+            genre_list = stable_shuffle(all_genres, seed, salt="genres")
+            
+            context = {
+                "book_list": book_list,
+                "search_query": search_query,
+                "genres": genre_list,
+                "available_years": available_years,
+                "selected_genre": genre_filter,
+                "selected_year": year_filter,
+                "LAYOUT_VARIANT": variant_val,
+                "INITIAL_SEED": seed,
+            }
+            return render(request, "index.html", context)
+    
+    # Fallback to database (original behavior)
     # Obtener todos los géneros para el dropdown de filtro
     all_genres = Genre.objects.all().order_by("name")
 

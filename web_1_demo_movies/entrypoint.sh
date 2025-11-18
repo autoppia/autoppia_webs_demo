@@ -29,6 +29,22 @@ python manage.py seed_users
 # Step 4
 python manage.py seed_movies
 
+# Step 4.5 - Load master movies from JSON (if v2 DB mode is enabled)
+if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = "true" ]; then
+    echo "V2 DB mode enabled. Loading master movies from JSON..."
+    # Try to find movies_1.json in container or copy from host
+    JSON_PATH="/app/data/web_1_demo_movies/data/movies_1.json"
+    if [ ! -f "$JSON_PATH" ]; then
+        # Try alternative path
+        JSON_PATH="/app/../webs_server/initial_data/web_1_demo_movies/data/movies_1.json"
+    fi
+    if [ -f "$JSON_PATH" ]; then
+        python manage.py load_master_movies --json-path "$JSON_PATH" --clear
+    else
+        echo "Warning: movies_1.json not found at $JSON_PATH. Master pool will be empty."
+    fi
+fi
+
 # Step 5 - Data Generation (if enabled)
 if [ "$ENABLE_DYNAMIC_V2_AI_GENERATE" = "true" ]; then
     echo "Data generation is enabled. Waiting for API server..."

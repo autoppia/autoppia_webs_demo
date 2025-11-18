@@ -1,0 +1,6 @@
+{% if DYNAMIC_HTML_ENABLED %}
+<input type="hidden" name="seed" value="{{ INITIAL_SEED }}">
+{% endif %}
+{% if DYNAMIC_V2_DB_MODE_ENABLED and V2_SEED %}
+<input type="hidden" name="v2-seed" value="{{ V2_SEED }}">
+{% endif %}

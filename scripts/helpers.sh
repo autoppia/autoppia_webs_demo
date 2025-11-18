@@ -31,7 +31,7 @@ is_integer() {
 # Check if demo name is valid
 is_valid_demo() {
   case "$1" in
-    movies|books|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth|all)
+    movies|autocinema|books|autobooks|autozone|autodining|autocrm|automail|autodelivery|autolodge|autoconnect|autowork|autocalendar|autolist|autodrive|autohealth|all)
       return 0
       ;;
     *)

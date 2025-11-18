@@ -9,7 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
+#   --demo=NAME                   Deploy specific demo: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
 #                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
@@ -40,7 +40,7 @@ Options:
   --postgres_port=PORT          Set base postgres port (default: 5434)
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-  --demo=NAME                   One of: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, all (default: all)
+  --demo=NAME                   One of: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
                                             v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
@@ -174,9 +174,15 @@ for port_var in WEB_PORT POSTGRES_PORT WEBS_PORT WEBS_PG_PORT; do
   fi
 done
 
+# Normalize demo name (aliases)
+case "$WEB_DEMO" in
+  autocinema) WEB_DEMO="movies" ;;
+  autobooks) WEB_DEMO="books" ;;
+esac
+
 # Validate demo name
 if ! is_valid_demo "$WEB_DEMO"; then
-  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
+  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
   exit 1
 fi
 
@@ -369,7 +375,7 @@ deploy_webs_server() {
   echo "📦 Checking for initial data pools..."
   mkdir -p ~/webs_data
   
-  for project in web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
+  for project in web_1_demo_movies web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
     if [ ! -f ~/webs_data/$project/main.json ]; then
       echo "  → Initializing $project master pool (100 records)..."
       mkdir -p ~/webs_data/$project/data
@@ -389,7 +395,7 @@ deploy_webs_server() {
   # Copy data to container if webs_server is running
   if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
     echo "📦 Copying data pools to webs_server container..."
-    for project in web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
+    for project in web_1_demo_movies web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
       if [ -f ~/webs_data/$project/main.json ]; then
         echo "  → Copying $project to container..."
         docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
@@ -425,9 +431,15 @@ setup_docker
 
 case "$WEB_DEMO" in
   movies)
+    if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = true ]; then
+      deploy_webs_server
+    fi
     deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
     ;;
   books)
+    if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = true ]; then
+      deploy_webs_server
+    fi
     deploy_project "web_2_demo_books" "$WEB_PORT" "$POSTGRES_PORT" "books_${WEB_PORT}"
     ;;
   autozone)
@@ -498,7 +510,7 @@ case "$WEB_DEMO" in
     deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)
-    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, books, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
+    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
     exit 1
     ;;
 esac
