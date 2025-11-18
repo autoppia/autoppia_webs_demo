@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
-import { 
-  getLayoutVariant, 
-  generateElementAttributes, 
+import {
+  getLayoutVariant,
+  generateElementAttributes,
   getXPathSelector,
   getElementOrder,
   generateElementId,
@@ -10,6 +10,7 @@ import {
 } from '@/dynamic/v1-layouts';
 import { getLayoutConfig, isDynamicModeEnabled } from '@/dynamic/v2-data';
 import { useSeed as useSeedContext } from '@/context/SeedContext';
+import { useV3Attributes } from './useV3Attributes';
 
 export function useSeedLayout() {
   // Use SeedContext for unified seed management
@@ -28,6 +29,16 @@ export function useSeedLayout() {
   const v2Seed = useMemo(() => {
     return resolvedSeeds.v2 ?? null;
   }, [resolvedSeeds.v2]);
+
+  const {
+    v3Seed,
+    isActive: isV3Active,
+    getElementAttributes: getV3ElementAttributes,
+    getXPath: getV3XPath,
+    getId: getV3Id,
+    getText,
+    getClass
+  } = useV3Attributes();
   
   // Check if dynamic mode is enabled
   const isDynamicEnabled = isDynamicModeEnabled();
@@ -55,19 +66,25 @@ export function useSeedLayout() {
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
+    if (isV3Active) {
+      return getV3ElementAttributes(elementType, index);
+    }
     if (!isDynamicEnabled) {
       return { id: `${elementType}-${index}`, 'data-element-type': elementType };
     }
     return generateElementAttributes(elementType, seed, index);
-  }, [seed, isDynamicEnabled]);
+  }, [seed, isDynamicEnabled, isV3Active, getV3ElementAttributes]);
 
   // Function to get XPath selector for an element
   const getElementXPath = useCallback((elementType: string) => {
+    if (isV3Active) {
+      return getV3XPath(elementType);
+    }
     if (!isDynamicEnabled) {
       return `//${elementType}[@id='${elementType}-0']`;
     }
     return getXPathSelector(elementType, seed);
-  }, [seed, isDynamicEnabled]);
+  }, [seed, isDynamicEnabled, isV3Active, getV3XPath]);
 
   // Function to reorder elements
   const reorderElements = useCallback(<T extends { id?: string; name?: string }>(elements: T[]) => {
@@ -79,11 +96,14 @@ export function useSeedLayout() {
 
   // Function to generate element ID
   const generateId = useCallback((context: string, index: number = 0) => {
+    if (isV3Active) {
+      return getV3Id(context, index);
+    }
     if (!isDynamicEnabled) {
       return `${context}-${index}`;
     }
     return generateElementId(seed, context, index);
-  }, [seed, isDynamicEnabled]);
+  }, [seed, isDynamicEnabled, isV3Active, getV3Id]);
 
   // Function to get layout classes for specific element types
   const getLayoutClasses = useCallback((elementType: 'container' | 'item' | 'button' | 'checkbox') => {
@@ -120,11 +140,12 @@ export function useSeedLayout() {
 
   // Function to generate a unique class name based on seed
   const generateSeedClass = useCallback((baseClass: string) => {
-    if (!isDynamicEnabled) {
+    if (!isDynamicEnabled && !isV3Active) {
       return baseClass;
     }
-    return `${baseClass}-seed-${seed}`;
-  }, [seed, isDynamicEnabled]);
+    const activeSeed = isV3Active ? v3Seed : seed;
+    return `${baseClass}-seed-${activeSeed}`;
+  }, [seed, isDynamicEnabled, isV3Active, v3Seed]);
 
   // Function to create a dynamic style object
   const createDynamicStyles = useCallback((baseStyles: React.CSSProperties = {}) => {
@@ -148,6 +169,7 @@ export function useSeedLayout() {
     cssVariables,
     isDynamicEnabled,
     v2Seed,
+    v3Seed,
     getElementAttributes,
     getElementXPath,
     reorderElements,
@@ -156,6 +178,8 @@ export function useSeedLayout() {
     applyCSSVariables,
     getLayoutInfo,
     generateSeedClass,
-    createDynamicStyles
+    createDynamicStyles,
+    getText,
+    getClass
   };
 }

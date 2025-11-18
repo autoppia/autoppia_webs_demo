@@ -1,14 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import structureVariations from "@/data/structureVariations.json";
-import { useSeed } from "@/context/SeedContext";
-
-// Types for structure variations
-interface StructureVariation {
-  texts: Record<string, string>;
-  ids: Record<string, string>;
-}
+import React, { createContext, useContext, useMemo, useCallback, ReactNode } from "react";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 interface DynamicStructureContextType {
   getText: (key: string) => string;
@@ -36,51 +29,27 @@ const DynamicStructureContext = createContext<DynamicStructureContextType>({
 
 // Provider component
 export function DynamicStructureProvider({ children }: { children: ReactNode }) {
-  // Use SeedContext for unified seed management
-  const { resolvedSeeds } = useSeed();
-  const rawSeedStructure = resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
-  const seedStructure = rawSeedStructure;
-  
-  const [currentVariation, setCurrentVariation] = useState<number>(1);
-  const [isEnabled] = useState<boolean>(isDynamicStructureEnabled());
-  const [variations, setVariations] = useState<Record<string, StructureVariation>>({});
+  const { getText: resolveText, getId: resolveId, v3Seed, isActive } = useV3Attributes();
+  const isEnabled = isDynamicStructureEnabled() && isActive;
 
-  // Load variations from JSON
-  useEffect(() => {
-    try {
-      const vars = structureVariations as unknown as Record<number, StructureVariation>;
-      setVariations(vars);
-    } catch (error) {
-      console.error("Failed to load structure variations:", error);
-    }
-  }, []);
+  const currentVariation = useMemo(() => {
+    if (!v3Seed) return 1;
+    return ((v3Seed % 30) + 1) % 10 || 10;
+  }, [v3Seed]);
 
-  // Update variation when seed changes
-  useEffect(() => {
-    if (isEnabled && seedStructure !== null) {
-      // Map seed (1-300) to variation (1-10) using COMMON formula
-      // COMMON FORMULA across all webs
-      const variationIndex = ((seedStructure % 30) + 1) % 10 || 10;
-      setCurrentVariation(variationIndex);
-    } else {
-      setCurrentVariation(1); // Default variation
-    }
-  }, [seedStructure, isEnabled]);
+  const getText = useCallback(
+    (key: string): string => {
+      return resolveText(key, key);
+    },
+    [resolveText]
+  );
 
-  // Helper functions
-  const getText = (key: string): string => {
-    if (!isEnabled || currentVariation === 1 || !variations[currentVariation]) {
-      return key; // Return key as fallback
-    }
-    return variations[currentVariation]?.texts?.[key] || key;
-  };
-
-  const getId = (key: string): string => {
-    if (!isEnabled || currentVariation === 1 || !variations[currentVariation]) {
-      return key; // Return key as fallback
-    }
-    return variations[currentVariation]?.ids?.[key] || key;
-  };
+  const getId = useCallback(
+    (key: string): string => {
+      return resolveId(key, key);
+    },
+    [resolveId]
+  );
 
   return (
     <DynamicStructureContext.Provider
@@ -88,7 +57,7 @@ export function DynamicStructureProvider({ children }: { children: ReactNode }) 
         getText,
         getId,
         currentVariation,
-        seedStructure,
+        seedStructure: v3Seed ?? null,
         isEnabled,
       }}
     >

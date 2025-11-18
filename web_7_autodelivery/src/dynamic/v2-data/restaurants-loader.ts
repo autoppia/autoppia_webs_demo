@@ -1,0 +1,328 @@
+/**
+ * Enhanced Restaurants Data with AI Generation Support
+ * 
+ * This file provides both static and dynamic restaurant data generation
+ * for the Food Delivery application.
+ */
+
+import type { Restaurant } from "@/data/restaurants";
+import { readJson, writeJson } from "@/shared/storage";
+import { 
+  generateRestaurantsWithFallback, 
+  replaceAllRestaurants, 
+  addGeneratedRestaurants,
+  isDataGenerationAvailable 
+} from "@/utils/restaurantDataGenerator";
+import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import { restaurants as originalRestaurants } from "@/data/restaurants";
+
+// Configuration for data generation
+const DATA_GENERATION_CONFIG = {
+  DEFAULT_DELAY_BETWEEN_CALLS: 1000,
+  DEFAULT_RESTAURANTS_PER_CATEGORY: 8,
+  MAX_RETRY_ATTEMPTS: 2,
+  AVAILABLE_CATEGORIES: ["Italian", "Japanese", "Indian", "Mexican", "American"]
+};
+
+// Helper function to normalize restaurant images
+function normalizeRestaurantImages(restaurants: Restaurant[]): Restaurant[] {
+  if (!Array.isArray(restaurants)) {
+    console.warn('normalizeRestaurantImages: restaurants is not an array:', restaurants);
+    return [];
+  }
+  
+  return restaurants.map((restaurant) => {
+    if (!restaurant || typeof restaurant !== 'object') {
+      console.warn('normalizeRestaurantImages: invalid restaurant object:', restaurant);
+      return restaurant;
+    }
+
+    let image = restaurant.image;
+    
+    // Ensure restaurant image is valid
+    if (!image || (!image.startsWith("/images/") && !image.includes("unsplash.com"))) {
+      // Default fallback image based on cuisine
+      const cuisineFallback: Record<string, string> = {
+        Italian: "/images/pizza-palace.jpg",
+        Japanese: "/images/sushi-world.jpg",
+        Indian: "/images/curry-house.jpg",
+        Mexican: "/images/taco-fiesta.jpg",
+        American: "/images/burger-joint.jpg",
+      };
+      image = cuisineFallback[restaurant.cuisine] || "/images/pizza-palace.jpg";
+    }
+
+    // Safely handle menu items
+    const normalizedMenu = Array.isArray(restaurant.menu) 
+      ? restaurant.menu.map((item) => {
+          if (!item || typeof item !== 'object') {
+            console.warn('normalizeRestaurantImages: invalid menu item:', item);
+            return item;
+          }
+          return {
+            ...item,
+            // Ensure menu item images are valid
+            image: item.image && (item.image.startsWith("/images/") || item.image.includes("unsplash.com"))
+              ? item.image
+              : `/images/${item.name?.toLowerCase().replace(/ /g, "-") || 'menu-item'}.jpg`,
+          };
+        })
+      : [];
+
+    return {
+      ...restaurant,
+      image,
+      menu: normalizedMenu,
+    };
+  });
+}
+
+/**
+ * Generate restaurants for multiple categories with bounded concurrency
+ */
+async function generateRestaurantsForCategories(
+  categories: string[],
+  restaurantsPerCategory: number = DATA_GENERATION_CONFIG.DEFAULT_RESTAURANTS_PER_CATEGORY,
+  delayBetweenCalls: number = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS
+): Promise<Restaurant[]> {
+  const allGeneratedRestaurants: Restaurant[] = [];
+  const maxConcurrent = 3; // Limit concurrent API calls
+  
+  console.log(`🚀 Starting async restaurant data generation for each cuisine...`);
+  console.log(`📡 Using API: ${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8090'}`);
+  console.log(`📊 Will generate ${restaurantsPerCategory} restaurants per cuisine`);
+  console.log(`🏷️ Cuisines: ${categories.join(', ')}`);
+
+  // Process categories in batches to avoid overwhelming the server
+  for (let i = 0; i < categories.length; i += maxConcurrent) {
+    const batch = categories.slice(i, i + maxConcurrent);
+    
+    const batchPromises = batch.map(async (category) => {
+      console.log(`Generating ${restaurantsPerCategory} restaurants for ${category}...`);
+      
+      try {
+        const result = await generateRestaurantsWithFallback(
+          originalRestaurants,
+          restaurantsPerCategory,
+          [category]
+        );
+        
+        console.log(`✅ Generated ${result.length} restaurants for ${category}`);
+        return result;
+      } catch (error) {
+        console.error(`❌ Failed to generate restaurants for ${category}:`, error);
+        return [];
+      }
+    });
+
+    const batchResults = await Promise.all(batchPromises);
+    const validResults = batchResults.filter(result => Array.isArray(result));
+    allGeneratedRestaurants.push(...validResults.flat());
+
+    // Add delay between batches to be respectful to the API
+    if (i + maxConcurrent < categories.length) {
+      await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
+    }
+  }
+
+  return allGeneratedRestaurants;
+}
+
+/**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autodeliveryV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
+export async function initializeRestaurants(v2SeedValue?: number | null): Promise<Restaurant[]> {
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+
+  let effectiveSeed: number;
+
+  if (dbModeEnabled) {
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined") {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
+  } else {
+    effectiveSeed = 1; // If v2 is NOT enabled, automatically use seed=1
+  }
+
+  try {
+    const { fetchSeededSelection } = await import("@/shared/seeded-loader");
+    const fromDb = await fetchSeededSelection<Restaurant>({
+      projectKey: "web_7_autodelivery",
+      entityType: "restaurants",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "cuisine",
+    });
+
+    console.log(`[autodelivery] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+
+    if (fromDb && fromDb.length > 0) {
+      const normalized = normalizeRestaurantImages(fromDb);
+      return normalized;
+    } else {
+      console.warn(`[autodelivery] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[autodelivery] No data found for seed=${effectiveSeed}`);
+    }
+  } catch (err) {
+    console.error(`[autodelivery] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    throw err;
+  }
+}
+
+/**
+ * Load restaurants from database with seeded selection
+ */
+export async function loadRestaurantsFromDb(seedOverride?: number | null): Promise<Restaurant[]> {
+  if (!isDbLoadModeEnabled()) {
+    console.log("🔍 DB mode not enabled, returning empty array");
+    return [];
+  }
+
+  try {
+    const fallbackSeed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" && Number.isFinite(seedOverride) ? seedOverride : fallbackSeed;
+    const limit = 100;
+    console.log("🔍 Attempting to load restaurants from DB with seed:", seed, "limit:", limit);
+    
+    // Prefer distributed selection to avoid category dominance
+    const distributed = await fetchSeededSelection<Restaurant>({
+      projectKey: "web_7_autodelivery",
+      entityType: "restaurants",
+      seedValue: seed,
+      limit,
+      method: "distribute",
+      filterKey: "cuisine",
+    });
+    
+    console.log("🔍 Distributed selection result:", distributed?.length || 0, "items");
+    
+    const selected = Array.isArray(distributed) && distributed.length > 0
+      ? distributed
+      : await fetchSeededSelection<Restaurant>({
+          projectKey: "web_7_autodelivery",
+          entityType: "restaurants",
+          seedValue: seed,
+          limit,
+          method: "select",
+        });
+    
+    console.log("🔍 Final selected restaurants:", selected?.length || 0, "items");
+
+    if (selected && selected.length > 0) {
+      // Ensure we have at least some items for all primary cuisines by supplementing with originals if needed
+      const cuisines = ["Italian", "Japanese", "Indian", "Mexican", "American"];
+      const byCuisine: Record<string, Restaurant[]> = {};
+      
+      // Group selected restaurants by cuisine
+      selected.forEach(restaurant => {
+        if (!byCuisine[restaurant.cuisine]) {
+          byCuisine[restaurant.cuisine] = [];
+        }
+        byCuisine[restaurant.cuisine].push(restaurant);
+      });
+      
+      // Supplement missing cuisines with original restaurants
+      const supplemented: Restaurant[] = [...selected];
+      cuisines.forEach(cuisine => {
+        if (!byCuisine[cuisine] || byCuisine[cuisine].length === 0) {
+          const originalForCuisine = originalRestaurants.filter(r => r.cuisine === cuisine);
+          supplemented.push(...originalForCuisine.slice(0, 2)); // Add up to 2 original restaurants per missing cuisine
+        }
+      });
+      
+      // Remove duplicates by ID
+      const uniqueRestaurants = supplemented.filter((restaurant, index, self) => 
+        index === self.findIndex(r => r.id === restaurant.id)
+      );
+      
+      const normalizedRestaurants = normalizeRestaurantImages(uniqueRestaurants);
+      console.log("🔍 DB restaurants loaded:", normalizedRestaurants.length, "items");
+      return normalizedRestaurants;
+    }
+    
+    console.log("🔍 No restaurants found in DB, falling back to original restaurants");
+    return originalRestaurants;
+  } catch (error) {
+    console.error("❌ Failed to load restaurants from DB:", error);
+    return originalRestaurants;
+  }
+}
+
+// Cache management
+const CACHE_KEY = 'fooddelivery_generated_restaurants_v1';
+
+export function readCachedRestaurants(): Restaurant[] | null {
+  return readJson<Restaurant[]>(CACHE_KEY);
+}
+
+export function writeCachedRestaurants(restaurants: Restaurant[]): void {
+  writeJson(CACHE_KEY, restaurants);
+}
+
+export function clearCachedRestaurants(): void {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(CACHE_KEY);
+  }
+}
+
+// Helper functions for restaurant data access
+export function getRestaurantsByCuisine(cuisine: string, restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.cuisine === cuisine);
+}
+
+export function getRestaurantById(id: string, restaurants: Restaurant[] = originalRestaurants): Restaurant | undefined {
+  return restaurants.find(restaurant => restaurant.id === id);
+}
+
+export function getFeaturedRestaurants(restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.featured);
+}
+
+export function getTopRatedRestaurants(restaurants: Restaurant[] = originalRestaurants, minRating: number = 4.5): Restaurant[] {
+  return restaurants.filter(restaurant => restaurant.rating >= minRating);
+}
+
+export function searchRestaurants(query: string, restaurants: Restaurant[] = originalRestaurants): Restaurant[] {
+  const lowercaseQuery = query.toLowerCase();
+  return restaurants.filter(restaurant => 
+    restaurant.name.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.description.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.cuisine.toLowerCase().includes(lowercaseQuery) ||
+    restaurant.menu.some(item => 
+      item.name.toLowerCase().includes(lowercaseQuery) ||
+      item.description.toLowerCase().includes(lowercaseQuery)
+    )
+  );
+}
+
+export function getRestaurantStats(restaurants: Restaurant[] = originalRestaurants) {
+  const cuisines = [...new Set(restaurants.map(r => r.cuisine))];
+  const totalMenuItems = restaurants.reduce((sum, r) => sum + r.menu.length, 0);
+  const totalReviews = restaurants.reduce((sum, r) => sum + r.reviews.length, 0);
+  const averageRating = restaurants.reduce((sum, r) => sum + r.rating, 0) / restaurants.length;
+  
+  return {
+    totalRestaurants: restaurants.length,
+    totalCuisines: cuisines.length,
+    cuisines,
+    totalMenuItems,
+    totalReviews,
+    averageRating: Math.round(averageRating * 10) / 10,
+    featuredCount: restaurants.filter(r => r.featured).length
+  };
+}
