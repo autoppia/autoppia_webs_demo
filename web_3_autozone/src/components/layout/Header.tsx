@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeed } from "@/context/SeedContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
@@ -29,7 +29,7 @@ export function Header() {
   const searchParams = useSearchParams();
   const { state } = useCart();
   const cartItemCount = isMounted ? state.totalItems : 0;
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);

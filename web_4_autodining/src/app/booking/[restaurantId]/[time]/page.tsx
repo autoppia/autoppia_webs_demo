@@ -9,7 +9,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
 import { countries, initializeRestaurants, getRestaurants } from "@/library/dataset";
 import { useSeedVariation } from "@/library/utils";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { useSeed } from "@/context/SeedContext";
@@ -56,7 +56,7 @@ export default function Page() {
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [email, setEmail] = useState("user_name@gmail.com");
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   const [data, setData] = useState<RestaurantView | null>(null);
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { useDynamicStructure as useV3Attributes } from "@/dynamic/v3-attributes";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -15,7 +15,7 @@ const getTopMarginClass = () => {
 export default function CheckoutPage() {
   const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   const shipping = parseFloat((Math.random() * 5 + 2).toFixed(2));
   const tax = parseFloat((totalAmount * 0.08).toFixed(2));

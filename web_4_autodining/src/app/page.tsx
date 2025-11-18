@@ -26,7 +26,7 @@ import {
 } from "@/library/dataset";
 import { useSearchParams } from "next/navigation";
 import { useSeedVariation } from "@/library/utils";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 
@@ -92,7 +92,7 @@ function RestaurantCard({
   const searchParams = useSearchParams();
   const seedParam = searchParams?.get("seed");
   const seed = Number(seedParam) || 1;
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
@@ -164,7 +164,7 @@ function CardScroller({ children, title, layoutSeed }: { children: React.ReactNo
   const rafIdRef = useRef<number | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
   const { seed } = useSeed(); // Get seed from context for data-testid
 
   const cardContainerVariation = useSeedVariation("cardContainer", undefined, layoutSeed);
@@ -273,7 +273,7 @@ function HomePageContent() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
 
   const { seed, resolvedSeeds } = useSeed();

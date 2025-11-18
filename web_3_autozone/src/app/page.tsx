@@ -15,12 +15,12 @@ import {
   getEffectiveSeed
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 
 function HomeContent() {
   
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
   const seed = getEffectiveSeed(rawSeed);

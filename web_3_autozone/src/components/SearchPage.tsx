@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useCart } from "@/context/CartContext";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
@@ -21,7 +21,7 @@ export default function SearchPage() {
   const router = useSeedRouter();
   const query = searchParams.get("q")?.toLowerCase() || "1";
   const { addToCart } = useCart();
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
 
   const results = searchProducts(query);

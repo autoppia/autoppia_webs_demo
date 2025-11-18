@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import Link from "next/link";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
@@ -28,7 +28,7 @@ export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
 
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
   const router = useSeedRouter();
 

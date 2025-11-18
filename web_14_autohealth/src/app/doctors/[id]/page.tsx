@@ -6,6 +6,7 @@ import type { Doctor } from "@/data/doctors";
 import { initializeDoctors } from "@/data/doctors-enhanced";
 import { DoctorProfileClient } from "./doctor-profile-client";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function DoctorProfile() {
   const params = useParams();
@@ -13,6 +14,7 @@ export default function DoctorProfile() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notFoundError, setNotFoundError] = useState(false);
+  const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
   useEffect(() => {
     let mounted = true;
@@ -42,7 +44,7 @@ export default function DoctorProfile() {
   }, [id]);
 
   if (isLoading) {
-    if (isDataGenerationAvailable()) {
+    if (useAiGeneration) {
       return (
         <div className="container py-20 flex items-center justify-center">
           <div className="flex items-center gap-3 text-muted-foreground">
@@ -54,7 +56,7 @@ export default function DoctorProfile() {
     }
     return (
       <div className="container py-20 flex items-center justify-center">
-        <div className="text-muted-foreground">Loading...</div>
+        <div className="text-muted-foreground">Loading doctor profile…</div>
       </div>
     );
   }

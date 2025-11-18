@@ -10,6 +10,7 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeedLayout } from "@/library/useSeedLayout";
 import { DynamicElement } from "@/components/DynamicElement";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
+import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function AppointmentsPage() {
   const { reorderElements } = useSeedLayout();
@@ -17,6 +18,7 @@ export default function AppointmentsPage() {
   const [appointmentList, setAppointmentList] = useState<Appointment[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const useAiGeneration = isDataGenerationAvailable() && !isDbLoadModeEnabled();
 
   const handleBookAppointment = (appointment: Appointment) => {
     // Log the initial booking attempt
@@ -44,7 +46,7 @@ export default function AppointmentsPage() {
     return () => { mounted = false; };
   }, []);
 
-  if (isDataGenerationAvailable() && isLoading) {
+  if (useAiGeneration && isLoading) {
     return (
       <div className="container py-20 flex items-center justify-center">
         <div className="flex items-center gap-3 text-muted-foreground">
@@ -54,14 +56,18 @@ export default function AppointmentsPage() {
       </div>
     );
   }
+  if (isLoading) {
+    return (
+      <div className="container py-20 flex items-center justify-center">
+        <div className="text-muted-foreground">Loading appointments…</div>
+      </div>
+    );
+  }
   return (
     <div className="container py-10">
       <h1 className="text-2xl font-semibold">Available Appointments</h1>
       <div className="mt-6">
         {(() => {
-          const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-          const hasSeed = !!sp?.get('seed');
-
           // Column definitions (keys drive order of headers/cells)
           const columns = [
             { key: 'doctor', header: 'Doctor' },
@@ -70,10 +76,8 @@ export default function AppointmentsPage() {
             { key: 'time', header: 'Time' },
             { key: 'action', header: 'Action', align: 'right' as const },
           ];
-          const orderedColumns = hasSeed ? reorderElements(columns) : columns;
-
-          // Row ordering
-          const rows = hasSeed ? reorderElements(appointmentList) : appointmentList;
+          const orderedColumns = reorderElements(columns);
+          const rows = reorderElements(appointmentList);
 
           return (
         <Table>
