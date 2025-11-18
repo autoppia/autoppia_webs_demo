@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
 import { DynamicStructureProvider } from "@/contexts/DynamicStructureContext";
+import { SeedProvider } from "@/context/SeedContext";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 
@@ -32,13 +33,15 @@ export default function RootLayout({
       <head />
       <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
         <ThemeProvider>
-          <LayoutProvider>
-            <EmailProvider>
-              <DynamicStructureProvider>
-                {children}
-              </DynamicStructureProvider>
-            </EmailProvider>
-          </LayoutProvider>
+          <SeedProvider>
+            <LayoutProvider>
+              <EmailProvider>
+                <DynamicStructureProvider>
+                  {children}
+                </DynamicStructureProvider>
+              </EmailProvider>
+            </LayoutProvider>
+          </SeedProvider>
         </ThemeProvider>
       </body>
     </html>

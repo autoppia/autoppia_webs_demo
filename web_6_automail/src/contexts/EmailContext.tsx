@@ -8,6 +8,7 @@ import {
   useCallback,
   useMemo,
   useEffect,
+  useRef,
 } from "react";
 import type {
   Email,
@@ -24,7 +25,7 @@ import {
 } from "@/library/dataset";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useLayout } from "@/contexts/LayoutContext";
+import { useSeed } from "@/context/SeedContext";
 
 interface EmailState {
   emails: Email[];
@@ -349,7 +350,8 @@ const tokenize = (str: string) => {
 
 export function EmailProvider({children}: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(emailReducer, initialState);
-    const { v2Seed } = useLayout();
+    const { resolvedSeeds } = useSeed();
+    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
 
     useEffect(() => {
         let isMounted = true;
@@ -374,8 +376,14 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
         };
     }, []);
 
+    // Track last v2Seed to avoid duplicate refreshes
+    const lastV2SeedRef = useRef<number | null>(null);
     useEffect(() => {
-        dynamicDataProvider.refreshEmailsForSeed(v2Seed ?? null);
+        // Only refresh if v2Seed actually changed
+        if (lastV2SeedRef.current !== v2Seed) {
+            lastV2SeedRef.current = v2Seed;
+            dynamicDataProvider.refreshEmailsForSeed(v2Seed ?? null);
+        }
     }, [v2Seed]);
 
     // Email actions
