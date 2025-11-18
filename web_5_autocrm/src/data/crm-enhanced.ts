@@ -26,21 +26,9 @@ const CACHE_KEYS = {
   logs: "autocrm_generated_logs_v1",
 };
 
-// Track runtime v2 seed propagated from SeedContext (client-side)
-let runtimeV2Seed: number | null = null;
-
-if (typeof window !== "undefined") {
-  runtimeV2Seed = (window as any).__autocrmV2Seed ?? null;
-  window.addEventListener("autocrm:v2SeedChange", (event: Event) => {
-    const detail = (event as CustomEvent<{ seed: number | null }>).detail;
-    runtimeV2Seed = typeof detail?.seed === "number" ? detail.seed : null;
-  });
-}
-
+// Note: v2Seed is now passed directly to initializeClients, initializeMatters, etc.
+// This function is kept for backward compatibility but should use the seed parameter
 function getActiveSeed(defaultSeed: number = 1): number {
-  if (typeof runtimeV2Seed === "number" && runtimeV2Seed >= 1 && runtimeV2Seed <= 300) {
-    return runtimeV2Seed;
-  }
   return getSeedValueFromEnv(defaultSeed);
 }
 

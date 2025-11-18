@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState, Suspense } from "react";
-import Link from "next/link";
+import { SeedLink } from "@/components/ui/SeedLink";
 import {
   Briefcase,
   Plus,
@@ -69,14 +69,15 @@ function statusPill(status: string) {
 function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
-  const { v2Seed } = useSeed();
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: "web_5_autocrm",
     entityType: "matters",
-    seedValue: v2Seed ?? undefined,
+    seedValue: v2Seed,
   });
   console.log("[MattersPage] API response", {
-    seed: v2Seed ?? null,
+    seed: v2Seed,
     count: data?.length ?? 0,
     isLoading,
     error,
@@ -85,7 +86,7 @@ function MattersListPageContent() {
   const normalizedDemo = useMemo(() => DEMO_MATTERS.map((m, idx) => normalizeMatter(m, idx)), []);
   const normalizedApi = useMemo(() => (data || []).map((m, idx) => normalizeMatter(m, idx)), [data]);
   const resolvedMatters = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
-  const storageKey = useMemo(() => `${STORAGE_KEY}_${v2Seed ?? 0}`, [v2Seed]);
+  const storageKey = useMemo(() => `${STORAGE_KEY}_${v2Seed}`, [v2Seed]);
   const [matters, setMatters] = useState<Matter[]>(resolvedMatters);
   const [seedSnapshot, setSeedSnapshot] = useState<number | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -98,7 +99,7 @@ function MattersListPageContent() {
 
   useEffect(() => {
     if (isLoading) return;
-    const currentSeed = v2Seed ?? 0;
+    const currentSeed = v2Seed;
     if (seedSnapshot === currentSeed) return;
     let next = resolvedMatters;
     if (typeof window !== "undefined") {
@@ -124,7 +125,7 @@ function MattersListPageContent() {
     }
     const baseIds = new Set(resolvedMatters.map((m) => m.id));
     const custom = newList.filter((m) => !baseIds.has(m.id));
-    Cookies.set(`custom_matters_${v2Seed ?? 0}`, JSON.stringify(custom), {
+    Cookies.set(`custom_matters_${v2Seed}`, JSON.stringify(custom), {
       expires: 7,
       path: "/",
     });
@@ -213,8 +214,8 @@ function MattersListPageContent() {
                 />
               </div>
 
-              <Link
-                href={withSeed(`/matters/${matter.id}`, searchParams)}
+              <SeedLink
+                href={`/matters/${matter.id}`}
                 onClick={() => logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, matter)}
                 className="block p-6 pl-16"
               >

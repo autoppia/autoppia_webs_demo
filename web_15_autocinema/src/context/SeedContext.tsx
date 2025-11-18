@@ -40,6 +40,14 @@ function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | nul
 }
 
 export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Suspense fallback={children}>
+      <SeedProviderInner>{children}</SeedProviderInner>
+    </Suspense>
+  );
+};
+
+function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
   const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
@@ -131,13 +139,11 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
-      <Suspense fallback={null}>
-        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
-      </Suspense>
+      <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>
   );
-};
+}
 
 // Custom hook to use seed context
 export const useSeed = () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { HeroSection } from "@/components/movies/HeroSection";
 import { FilterBar } from "@/components/movies/FilterBar";
@@ -20,7 +20,7 @@ import { useSeed } from "@/context/SeedContext";
 import type { Movie } from "@/data/movies";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 
-export default function HomePage() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const router = useSeedRouter();
   const { seed, resolvedSeeds } = useSeed();
@@ -152,5 +152,13 @@ export default function HomePage() {
         movies={thrillerFocus}
       />
     </main>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral-950 text-white flex items-center justify-center">Loading…</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }

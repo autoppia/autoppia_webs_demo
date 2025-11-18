@@ -1,7 +1,6 @@
 "use client";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { withSeed } from "@/utils/seedRouting";
 import { SeedLink } from "@/components/ui/SeedLink";
 
 const NAV_ITEMS = [
@@ -68,7 +67,7 @@ export default function Sidebar() {
             <SeedLink
               key={labelKey}
               id={linkId}
-              href={withSeed(href, searchParams)}
+              href={href}
               className={`text-base font-medium rounded-2xl px-4 py-2 transition-all ${
                 isActive
                   ? "text-accent-forest bg-accent-forest/10 font-bold"
