@@ -17,4 +17,3 @@ __all__ = [
     "load_example_data",
     "infer_typescript_interface",
 ]
-

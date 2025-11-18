@@ -1,3 +1,5 @@
 {
-  "hotels": ["./data/hotels_1.json"]
+    "hotels": [
+        "./data/hotels_1.json"
+    ]
 }

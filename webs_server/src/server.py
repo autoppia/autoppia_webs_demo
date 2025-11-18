@@ -1,7 +1,5 @@
 import asyncio
 import os
-import json
-from pathlib import Path
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import List, Dict, Any, Optional
@@ -11,7 +9,7 @@ import asyncpg
 import uvicorn
 from asyncpg.exceptions import PostgresError
 import orjson
-from fastapi import FastAPI, HTTPException, Query, status, Body
+from fastapi import FastAPI, HTTPException, Query, status
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
@@ -27,8 +25,6 @@ except ImportError:
     HAS_FASTJSONSCHEMA = False
 
 from master_dataset_handler import (
-    save_master_pool,
-    select_from_pool,
     get_pool_info,
     list_available_pools,
 )
@@ -49,9 +45,7 @@ from generators.smart_generator import (
 )
 
 # --- Configuration ---
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://user:password@localhost:5433/database"
-)
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
 DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "10"))
 DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "50"))
 GZIP_MIN_SIZE = int(os.getenv("GZIP_MIN_SIZE", "1000"))
@@ -137,38 +131,18 @@ class ResetResponse(BaseModel):
 
 # --- Data Generation Models (generic) ---
 class DataGenerationRequest(BaseModel):
-    interface_definition: str = Field(
-        ..., description="TypeScript interface definition"
-    )
+    interface_definition: str = Field(..., description="TypeScript interface definition")
     examples: List[Dict[str, Any]] = Field(..., description="Few-shot JSON examples")
     count: int = Field(..., ge=1, le=200, description="How many objects to generate")
-    categories: Optional[List[str]] = Field(
-        None, description="Optional categories/themes"
-    )
-    additional_requirements: Optional[str] = Field(
-        None, description="Free-form guidance"
-    )
-    json_schema: Optional[Dict[str, Any]] = Field(
-        None, description="Optional JSON Schema to validate the result shape"
-    )
-    naming_rules: Optional[Dict[str, Any]] = Field(
-        None, description="Optional rules e.g. id or image path patterns"
-    )
-    project_key: Optional[str] = Field(
-        None, description="Project key for saving data to specific project directory"
-    )
-    entity_type: Optional[str] = Field(
-        None, description="Entity type (e.g., 'products', 'movies', 'tasks')"
-    )
-    save_to_file: bool = Field(
-        default=False, description="Whether to save generated data to JSON file"
-    )
-    save_to_db: bool = Field(
-        default=False, description="Whether to save generated data to database"
-    )
-    seed_value: Optional[int] = Field(
-        None, description="Seed value for reproducible generation"
-    )
+    categories: Optional[List[str]] = Field(None, description="Optional categories/themes")
+    additional_requirements: Optional[str] = Field(None, description="Free-form guidance")
+    json_schema: Optional[Dict[str, Any]] = Field(None, description="Optional JSON Schema to validate the result shape")
+    naming_rules: Optional[Dict[str, Any]] = Field(None, description="Optional rules e.g. id or image path patterns")
+    project_key: Optional[str] = Field(None, description="Project key for saving data to specific project directory")
+    entity_type: Optional[str] = Field(None, description="Entity type (e.g., 'products', 'movies', 'tasks')")
+    save_to_file: bool = Field(default=False, description="Whether to save generated data to JSON file")
+    save_to_db: bool = Field(default=False, description="Whether to save generated data to database")
+    seed_value: Optional[int] = Field(None, description="Seed value for reproducible generation")
 
 
 class DataGenerationResponse(BaseModel):
@@ -176,9 +150,7 @@ class DataGenerationResponse(BaseModel):
     generated_data: List[Dict[str, Any]]
     count: int
     generation_time: float
-    saved_path: Optional[str] = Field(
-        None, description="Path where data was saved (if save_to_file=True)"
-    )
+    saved_path: Optional[str] = Field(None, description="Path where data was saved (if save_to_file=True)")
 
 
 # --- Database Initialization ---
@@ -188,9 +160,7 @@ async def init_db_pool():
     max_retries = 5
     retry_delay = 5  # seconds
 
-    logger.info(
-        f"Initializing database connection pool to: {DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else 'localhost'}"
-    )
+    logger.info(f"Initializing database connection pool to: {DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else 'localhost'}")
 
     while retry_count < max_retries:
         try:
@@ -210,31 +180,21 @@ async def init_db_pool():
             async with app.state.pool.acquire() as conn:
                 await conn.fetchval("SELECT 1")
 
-            logger.success(
-                f"Database connection pool established (min: {DB_POOL_MIN}, max: {DB_POOL_MAX})"
-            )
+            logger.success(f"Database connection pool established (min: {DB_POOL_MIN}, max: {DB_POOL_MAX})")
             return
         except asyncpg.PostgresError as e:
             retry_count += 1
-            logger.warning(
-                f"Database pool creation failed (attempt {retry_count}/{max_retries}): {str(e)}"
-            )
+            logger.warning(f"Database pool creation failed (attempt {retry_count}/{max_retries}): {str(e)}")
             if retry_count >= max_retries:
                 logger.error("Failed to create database pool after multiple attempts.")
                 raise RuntimeError(f"Database pool creation failed: {str(e)}")
             await asyncio.sleep(retry_delay)
         except Exception as e:
             retry_count += 1
-            logger.error(
-                f"An unexpected error occurred during database pool creation (attempt {retry_count}/{max_retries}): {e}"
-            )
+            logger.error(f"An unexpected error occurred during database pool creation (attempt {retry_count}/{max_retries}): {e}")
             if retry_count >= max_retries:
-                logger.error(
-                    "Failed to create database pool after multiple attempts due to unexpected error."
-                )
-                raise RuntimeError(
-                    f"Database pool creation failed due to unexpected error: {str(e)}"
-                )
+                logger.error("Failed to create database pool after multiple attempts due to unexpected error.")
+                raise RuntimeError(f"Database pool creation failed due to unexpected error: {str(e)}")
             await asyncio.sleep(retry_delay)
 
 
@@ -421,9 +381,7 @@ async def get_events_endpoint(
         )
 
     try:
-        rows: List[asyncpg.Record] = await app.state.pool.fetch(
-            SELECT_EVENTS_SQL, trimmed_url, web_agent_id, validator_id
-        )
+        rows: List[asyncpg.Record] = await app.state.pool.fetch(SELECT_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
 
         processed_rows = []
         for row in rows:
@@ -433,24 +391,18 @@ async def get_events_endpoint(
                 try:
                     row_dict["data"] = orjson.loads(raw_data)
                 except orjson.JSONDecodeError as e:
-                    logger.error(
-                        f"Failed to parse JSON data for event ID {row_dict.get('id', 'unknown')}: {e}"
-                    )
+                    logger.error(f"Failed to parse JSON data for event ID {row_dict.get('id', 'unknown')}: {e}")
                     row_dict["data"] = {}
             elif raw_data is None:
                 row_dict["data"] = {}
 
             processed_rows.append(row_dict)
 
-        logger.info(
-            f"Retrieved {len(processed_rows)} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}"
-        )
+        logger.info(f"Retrieved {len(processed_rows)} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
         return processed_rows
 
     except PostgresError as e:
-        logger.error(
-            f"Database query failed for get_events: {e} (SQLState: {e.sqlstate})"
-        )
+        logger.error(f"Database query failed for get_events: {e} (SQLState: {e.sqlstate})")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Database operation failed during event retrieval: {e.pgcode}.",
@@ -471,17 +423,13 @@ async def get_events_endpoint(
     summary="Delete all events for a web URL",
 )
 async def reset_events_endpoint(
-    web_url: str = Query(
-        ..., description="The web URL for which all events should be deleted."
-    ),
+    web_url: str = Query(..., description="The web URL for which all events should be deleted."),
     web_agent_id: str = Query(
         default="UNKNOWN_AGENT",
         max_length=255,
         description="The specific web agent ID.",
     ),
-    validator_id: str = Query(
-        ..., description="The validator ID associated with the events."
-    ),
+    validator_id: str = Query(..., description="The validator ID associated with the events."),
 ):
     """
     Deletes all events for a given web_url, web_agent_id, and validator_id using a prepared statement.
@@ -503,13 +451,9 @@ async def reset_events_endpoint(
         )
 
     try:
-        deleted_count: Optional[int] = await app.state.pool.fetchval(
-            DELETE_EVENTS_SQL, trimmed_url, web_agent_id, validator_id
-        )
+        deleted_count: Optional[int] = await app.state.pool.fetchval(DELETE_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
         actual_deleted_count = deleted_count if deleted_count is not None else 0
-        logger.info(
-            f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}"
-        )
+        logger.info(f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
         return ResetResponse(
             message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'",
             web_url=web_url,
@@ -517,9 +461,7 @@ async def reset_events_endpoint(
             validator_id=validator_id,
         )
     except PostgresError as e:
-        logger.error(
-            f"Database deletion failed for reset_events: {e} (SQLState: {e.sqlstate})."
-        )
+        logger.error(f"Database deletion failed for reset_events: {e} (SQLState: {e.sqlstate}).")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Database operation failed during event reset: {e.pgcode}.",
@@ -544,12 +486,8 @@ async def generate_with_openai(request: DataGenerationRequest) -> List[Dict[str,
 
     client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
-    examples_json = orjson.dumps(request.examples, option=orjson.OPT_INDENT_2).decode(
-        "utf-8"
-    )
-    naming_rules = orjson.dumps(
-        request.naming_rules or {}, option=orjson.OPT_INDENT_2
-    ).decode("utf-8")
+    examples_json = orjson.dumps(request.examples, option=orjson.OPT_INDENT_2).decode("utf-8")
+    naming_rules = orjson.dumps(request.naming_rules or {}, option=orjson.OPT_INDENT_2).decode("utf-8")
 
     prompt = f"""
 You generate strictly valid JSON arrays for synthetic datasets.
@@ -613,9 +551,7 @@ Output strictly a JSON array only.
         # Optional JSON Schema validation if provided
         if request.json_schema:
             if not HAS_FASTJSONSCHEMA:
-                logger.warning(
-                    "JSON Schema validation requested but fastjsonschema not available"
-                )
+                logger.warning("JSON Schema validation requested but fastjsonschema not available")
                 raise HTTPException(
                     status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                     detail="JSON Schema validation not available - fastjsonschema not installed",
@@ -645,9 +581,7 @@ Output strictly a JSON array only.
 
 
 # --- Helper Function to Save Data to File Storage (/app/data) ---
-def save_generated_data_file_storage(
-    data: List[Dict[str, Any]], project_key: str, entity_type: str
-) -> str:
+def save_generated_data_file_storage(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
     """
     Save generated data to file storage using the new persistent volume structure:
     /app/data/<project_key>/data/<entity_type>_<timestamp>.json
@@ -676,9 +610,7 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     if request.project_key and request.entity_type:
         try:
             # Use new file-storage saver under /app/data (persistent volume)
-            saved_path = save_generated_data_file_storage(
-                data, request.project_key, request.entity_type
-            )
+            saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
             # Don't fail the request if saving fails
@@ -697,19 +629,13 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
 class SmartGenerationRequest(BaseModel):
     project_key: str = Field(..., description="Project key (e.g., 'web_5_autocrm')")
     entity_type: str = Field(..., description="Entity type (e.g., 'logs', 'clients')")
-    count: int = Field(
-        default=200, ge=1, le=500, description="How many objects to generate"
-    )
+    count: int = Field(default=200, ge=1, le=500, description="How many objects to generate")
     mode: str = Field(
         default="append",
         description="Generation mode: 'append' (add to existing) or 'replace' (create new)",
     )
-    additional_requirements: Optional[str] = Field(
-        None, description="Optional additional requirements"
-    )
-    seed_value: Optional[int] = Field(
-        None, description="Seed value for reproducible generation"
-    )
+    additional_requirements: Optional[str] = Field(None, description="Optional additional requirements")
+    seed_value: Optional[int] = Field(None, description="Seed value for reproducible generation")
 
 
 # --- Smart Data Generation Endpoint ---
@@ -740,9 +666,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 
     try:
         # Build prompt from existing examples
-        interface_definition, examples = build_generation_prompt_from_examples(
-            request.project_key, request.entity_type, count=request.count
-        )
+        interface_definition, examples = build_generation_prompt_from_examples(request.project_key, request.entity_type, count=request.count)
 
         # Get metadata for this project/entity
         metadata = get_project_entity_metadata(request.project_key, request.entity_type)
@@ -753,8 +677,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
             examples=examples,
             count=request.count,
             categories=metadata.get("categories"),
-            additional_requirements=request.additional_requirements
-            or metadata.get("requirements"),
+            additional_requirements=request.additional_requirements or metadata.get("requirements"),
             project_key=request.project_key,
             entity_type=request.entity_type,
             seed_value=request.seed_value,
@@ -764,9 +687,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
         data = await generate_with_openai(gen_request)
         elapsed = (datetime.now() - start).total_seconds()
 
-        logger.info(
-            f"[Smart Generation] Generated {len(data)} items for {request.project_key}/{request.entity_type} in {elapsed:.2f}s"
-        )
+        logger.info(f"[Smart Generation] Generated {len(data)} items for {request.project_key}/{request.entity_type} in {elapsed:.2f}s")
 
         # Save to file storage based on mode
         saved_path = None
@@ -775,17 +696,11 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
         try:
             if mode == "append":
                 # Append to existing {entity_type}_1.json
-                saved_path = append_to_entity_data(
-                    request.project_key, request.entity_type, data
-                )
-                logger.info(
-                    f"[Smart Generation] Appended {len(data)} items to {saved_path}"
-                )
+                saved_path = append_to_entity_data(request.project_key, request.entity_type, data)
+                logger.info(f"[Smart Generation] Appended {len(data)} items to {saved_path}")
             else:
                 # Replace mode: create new file with timestamp
-                saved_path = save_generated_data_file_storage(
-                    data, request.project_key, request.entity_type
-                )
+                saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
                 logger.info(f"[Smart Generation] Created new file {saved_path}")
         except Exception as e:
             logger.error(f"Failed to save data to file storage: {e}")
@@ -818,9 +733,7 @@ class DatasetLoadRequest(BaseModel):
     project_key: str = Field(..., description="Project key")
     entity_type: str = Field(..., description="Entity type")
     seed_value: int = Field(..., description="Seed value to load")
-    limit: int = Field(
-        default=50, ge=1, le=500, description="Maximum number of items to return"
-    )
+    limit: int = Field(default=50, ge=1, le=500, description="Maximum number of items to return")
 
 
 class DatasetLoadResponse(BaseModel):
@@ -845,12 +758,8 @@ async def load_dataset_endpoint(
         default="select",
         description="Selection method: select, shuffle, filter, distribute",
     ),
-    filter_key: Optional[str] = Query(
-        None, description="Key to filter on (for filter method)"
-    ),
-    filter_values: Optional[str] = Query(
-        None, description="Comma-separated values to filter (for filter method)"
-    ),
+    filter_key: Optional[str] = Query(None, description="Key to filter on (for filter method)"),
+    filter_values: Optional[str] = Query(None, description="Comma-separated values to filter (for filter method)"),
 ):
     """
     Select data from master pool using seed for reproducible selection.
@@ -874,9 +783,7 @@ async def load_dataset_endpoint(
         selected: List[Dict[str, Any]]
 
         # Parse filters
-        filter_list = (
-            [v.strip() for v in filter_values.split(",")] if filter_values else None
-        )
+        filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
 
         if method_normalized == "shuffle":
             selected = seeded_shuffle(file_data_pool, seed_value, limit=limit)
@@ -891,14 +798,10 @@ async def load_dataset_endpoint(
         elif method_normalized == "distribute":
             # Use filter_key as category_key for distribution if provided, else default 'category'
             category_key = filter_key or "category"
-            selected = seeded_distribution(
-                file_data_pool, seed_value, category_key=category_key, total_count=limit
-            )
+            selected = seeded_distribution(file_data_pool, seed_value, category_key=category_key, total_count=limit)
         else:
             # Default 'select' method
-            selected = seeded_select(
-                file_data_pool, seed=seed_value, count=limit, allow_duplicates=False
-            )
+            selected = seeded_select(file_data_pool, seed=seed_value, count=limit, allow_duplicates=False)
 
         metadata = {
             "source": "file_storage",
@@ -930,9 +833,7 @@ async def load_dataset_endpoint(
 
 # --- List Pools Endpoint ---
 @app.get("/datasets/pools", summary="List available master pools")
-async def list_pools_endpoint(
-    project_key: Optional[str] = Query(None, description="Optional project key filter")
-):
+async def list_pools_endpoint(project_key: Optional[str] = Query(None, description="Optional project key filter")):
     """
     List all available master data pools.
     Each pool can be queried with any seed value for reproducible selection.
@@ -1037,9 +938,7 @@ async def health_check_endpoint():
             logger.error(f"Health check DB query failed with PostgresError: {e}")
         except Exception as e:
             db_pool_operational = False
-            debug_message = (
-                f"Database connection pool exists but failed health check query: {e}"
-            )
+            debug_message = f"Database connection pool exists but failed health check query: {e}"
             logger.error(f"Health check DB query failed: {e}")
 
     # Determine overall health status

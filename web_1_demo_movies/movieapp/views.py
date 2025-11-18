@@ -4,13 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
 from events.models import Event
 from .forms import MovieForm, ContactForm
-from .utils import normalize_seed, stable_shuffle, compute_variant, redirect_with_seed
+from .utils import stable_shuffle, redirect_with_seed
 from .models import Movie, Genre, Comment, UserProfile, ContactMessage
 
 
@@ -22,9 +21,7 @@ def index(request, variant=None):
     all_genres = Genre.objects.all().order_by("name")
 
     # Obtener años disponibles para el filtro
-    available_years = (
-        Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
-    )
+    available_years = Movie.objects.values_list("year", flat=True).distinct().order_by("-year")
 
     # Obtener parámetros de búsqueda y filtro
     search_query = request.GET.get("search", "")
@@ -36,12 +33,7 @@ def index(request, variant=None):
 
     # Aplicar filtro de búsqueda si se proporciona
     if search_query:
-        movies = movies.filter(
-            Q(name__icontains=search_query)
-            | Q(desc__icontains=search_query)
-            | Q(director__icontains=search_query)
-            | Q(cast__icontains=search_query)
-        ).distinct()
+        movies = movies.filter(Q(name__icontains=search_query) | Q(desc__icontains=search_query) | Q(director__icontains=search_query) | Q(cast__icontains=search_query)).distinct()
 
         from events.models import Event
 
@@ -153,39 +145,22 @@ def detail(request, movie_id, variant=None):
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
     related_movies = []
     if movie.genres.exists():
-        related_movies = (
-            Movie.objects.filter(genres__in=movie.genres.all())
-            .exclude(id=movie.id)
-            .distinct()
-            .prefetch_related("genres")[:4]
-        )
+        related_movies = Movie.objects.filter(genres__in=movie.genres.all()).exclude(id=movie.id).distinct().prefetch_related("genres")[:4]
 
     if len(related_movies) < 4:
-        more_movies = (
-            Movie.objects.filter(year=movie.year)
-            .exclude(id__in=[m.id for m in list(related_movies) + [movie]])
-            .prefetch_related("genres")[: 4 - len(related_movies)]
-        )
+        more_movies = Movie.objects.filter(year=movie.year).exclude(id__in=[m.id for m in list(related_movies) + [movie]]).prefetch_related("genres")[: 4 - len(related_movies)]
         related_movies = list(related_movies) + list(more_movies)
 
     if len(related_movies) < 4:
         remaining_needed = 4 - len(related_movies)
         # Avoid DB-level random ordering which is slow; pick a capped candidate pool and deterministically shuffle it
         excluded_ids = [m.id for m in list(related_movies) + [movie]]
-        candidate_ids = list(
-            Movie.objects.exclude(id__in=excluded_ids)
-            .order_by("id")
-            .values_list("id", flat=True)[:100]
-        )
+        candidate_ids = list(Movie.objects.exclude(id__in=excluded_ids).order_by("id").values_list("id", flat=True)[:100])
         shuffled_ids = stable_shuffle(candidate_ids, seed, salt="related-fallback")
         extra_ids = shuffled_ids[:remaining_needed]
-        extra_movies_qs = Movie.objects.filter(id__in=extra_ids).prefetch_related(
-            "genres"
-        )
+        extra_movies_qs = Movie.objects.filter(id__in=extra_ids).prefetch_related("genres")
         id_to_movie = {m.id: m for m in extra_movies_qs}
-        related_movies = list(related_movies) + [
-            id_to_movie[i] for i in extra_ids if i in id_to_movie
-        ]
+        related_movies = list(related_movies) + [id_to_movie[i] for i in extra_ids if i in id_to_movie]
 
     # Server-side shuffle related movies by seed for deterministic order
     related_movies = stable_shuffle(related_movies, seed, salt="related")
@@ -218,16 +193,8 @@ def add_movie(request, variant=None):
                 "cast": form.cleaned_data.get("cast"),
                 "duration": form.cleaned_data.get("duration"),
                 "trailer_url": form.cleaned_data.get("trailer_url"),
-                "rating": (
-                    float(form.cleaned_data.get("rating"))
-                    if form.cleaned_data.get("rating")
-                    else 0
-                ),
-                "genres": (
-                    [form.cleaned_data.get("genres")]
-                    if isinstance(form.cleaned_data.get("genres"), Genre)
-                    else [genre for genre in form.cleaned_data.get("genres", [])]
-                ),
+                "rating": (float(form.cleaned_data.get("rating")) if form.cleaned_data.get("rating") else 0),
+                "genres": ([form.cleaned_data.get("genres")] if isinstance(form.cleaned_data.get("genres"), Genre) else [genre for genre in form.cleaned_data.get("genres", [])]),
             }
 
             # Crear el evento de añadir película
@@ -239,9 +206,7 @@ def add_movie(request, variant=None):
             )
             add_film_event.save()
 
-            messages.success(
-                request, "Evento de añadir película registrado exitosamente."
-            )
+            messages.success(request, "Evento de añadir película registrado exitosamente.")
             return redirect_with_seed(request, "movieapp:index")
         else:
             messages.error(request, "Por favor, corrige los errores en el formulario.")
@@ -310,11 +275,7 @@ def update_movie(request, id, variant=None):
                 changed_fields.append("trailer_url")
                 new_values["trailer_url"] = form.cleaned_data.get("trailer_url")
 
-            current_rating = (
-                float(form.cleaned_data.get("rating"))
-                if form.cleaned_data.get("rating")
-                else None
-            )
+            current_rating = float(form.cleaned_data.get("rating")) if form.cleaned_data.get("rating") else None
             if current_rating != original_values["rating"]:
                 changed_fields.append("rating")
                 new_values["rating"] = current_rating
@@ -432,14 +393,8 @@ def add_comment(request, movie_id):
                         "comment": {
                             "name": comment.name,
                             "content": comment.content,
-                            "created_at": comment.created_at.strftime(
-                                "%b %d, %Y, %I:%M %p"
-                            ),
-                            "time_ago": (
-                                f"{(timezone.now() - comment.created_at).days} days ago"
-                                if (timezone.now() - comment.created_at).days > 0
-                                else "Today"
-                            ),
+                            "created_at": comment.created_at.strftime("%b %d, %Y, %I:%M %p"),
+                            "time_ago": (f"{(timezone.now() - comment.created_at).days} days ago" if (timezone.now() - comment.created_at).days > 0 else "Today"),
                             "avatar": comment.avatar.url if comment.avatar else None,
                         },
                     }
@@ -509,9 +464,7 @@ def contact(request, variant=None):
             message = form.cleaned_data["message"]
 
             # Crear el mensaje de contacto
-            contact_message = ContactMessage.objects.create(
-                name=name, email=email, subject=subject, message=message
-            )
+            contact_message = ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
 
             # Crear evento de CONTACT
             contact_event = Event.create_contact_event(
@@ -595,9 +548,7 @@ def login_view(request, variant=None):
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
-    return render(
-        request, "login.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed}
-    )
+    return render(request, "login.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
 def logout_view(request, variant=None):
@@ -607,9 +558,7 @@ def logout_view(request, variant=None):
     """
     web_agent_id = request.headers.get("X-WebAgent-Id", "0")
     validator_id = request.headers.get("X-Validator-Id", "0")
-    logout_event = Event.create_logout_event(
-        request.user, web_agent_id, validator_id=validator_id
-    )
+    logout_event = Event.create_logout_event(request.user, web_agent_id, validator_id=validator_id)
     logout(request)
     logout_event.save()
     messages.success(request, "You have been logged out successfully.")
@@ -648,9 +597,7 @@ def register_view(request, variant=None):
             error = True
 
         if not error:
-            user = User.objects.create_user(
-                username=username, email=email, password=password1
-            )
+            user = User.objects.create_user(username=username, email=email, password=password1)
             web_agent_id = request.headers.get("X-WebAgent-Id", "0")
             register_event = Event.create_registration_event(
                 user,
@@ -661,9 +608,7 @@ def register_view(request, variant=None):
             # login(request, user)
             # login_event = Event.create_login_event(user, web_agent_id)
             # login_event.save()
-            messages.success(
-                request, f"Account created successfully. Welcome, {username}!"
-            )
+            messages.success(request, f"Account created successfully. Welcome, {username}!")
             return redirect_with_seed(request, "movieapp:index")
 
     # Use dynamic_context to get seed (from URL or session) instead of reading directly
@@ -672,9 +617,7 @@ def register_view(request, variant=None):
     dynamic_ctx = dynamic_context(request)
     seed = dynamic_ctx.get("INITIAL_SEED", 1)
     variant_val = dynamic_ctx.get("LAYOUT_VARIANT", 1)
-    return render(
-        request, "register.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed}
-    )
+    return render(request, "register.html", {"LAYOUT_VARIANT": variant_val, "INITIAL_SEED": seed})
 
 
 @login_required

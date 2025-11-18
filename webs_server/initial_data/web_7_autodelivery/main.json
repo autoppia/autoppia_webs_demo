@@ -1,6 +1,5 @@
 {
-  "restaurants": [
-    "./data/restaurants_1.json"
-  ]
+    "restaurants": [
+        "./data/restaurants_1.json"
+    ]
 }
-
