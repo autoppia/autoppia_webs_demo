@@ -114,6 +114,15 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
     };
   }, [seed]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? null;
+    (window as any).__autobooksV2Seed = v2Seed;
+    window.dispatchEvent(
+      new CustomEvent("autobooks:v2SeedChange", { detail: { seed: v2Seed } })
+    );
+  }, [resolvedSeeds.v2, resolvedSeeds.base]);
+
   const setSeed = useCallback((newSeed: number) => {
     setSeedState(clampBaseSeed(newSeed));
   }, []);

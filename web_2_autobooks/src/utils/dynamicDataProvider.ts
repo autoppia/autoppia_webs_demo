@@ -1,7 +1,7 @@
 import type { Book } from "@/data/books";
 import { initializeBooks } from "@/data/books";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export interface BookSearchFilters {
   genre?: string;
@@ -58,10 +58,8 @@ export class DynamicDataProvider {
 
   private async loadBooks(): Promise<void> {
     try {
-      const baseSeed = this.getBaseSeed();
-      const resolved = resolveSeedsSync(baseSeed);
-      const v2Seed = resolved.v2 ?? resolved.base;
-      this.books = await initializeBooks(v2Seed);
+      this.getBaseSeed();
+      this.books = await initializeBooks();
     } catch (error) {
       console.error("[autobooks] Failed to initialize books", error);
       throw error;

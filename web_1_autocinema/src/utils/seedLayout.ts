@@ -24,7 +24,7 @@ export function getSeedLayout(seed?: number): SeedLayoutConfig {
   if (!seed || seed < 1) {
     return getDefaultLayout();
   }
-  const layoutIndex = ((seed - 1) % 10) + 1;
+  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
   return getLayoutByIndex(layoutIndex);
 }
 

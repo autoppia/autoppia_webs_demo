@@ -1,18 +1,12 @@
 import type { Movie } from "@/data/movies";
 import { initializeMovies } from "@/data/movies";
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
-import { resolveSeedsSync, clampBaseSeed } from "@/shared/seed-resolver";
+import { clampBaseSeed } from "@/shared/seed-resolver";
 
 export interface MovieSearchFilters {
   genre?: string;
   year?: number;
 }
-
-const clampSeed = (value: number): number => {
-  if (!Number.isFinite(value)) return 1;
-  if (value < 1 || value > 300) return 1;
-  return value;
-};
 
 const BASE_SEED_STORAGE_KEY = "autocinema_seed_base";
 
@@ -64,10 +58,8 @@ export class DynamicDataProvider {
 
   private async loadMovies(): Promise<void> {
     try {
-      const baseSeed = this.getBaseSeed();
-      const resolved = resolveSeedsSync(baseSeed);
-      const v2Seed = resolved.v2 ?? resolved.base;
-      this.movies = await initializeMovies(v2Seed);
+      this.getBaseSeed();
+      this.movies = await initializeMovies();
     } catch (error) {
       console.error("[autocinema] Failed to initialize movies", error);
       throw error;
