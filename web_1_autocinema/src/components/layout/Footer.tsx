@@ -25,7 +25,7 @@ export function Footer() {
 
   return (
     <footer className={`border-t border-white/10 bg-neutral-950/90 text-white/70 ${classes.footer}`}>
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 md:flex-row md:justify-between">
+      <div className="mx-auto flex w-full flex-col gap-8 px-6 py-12 md:flex-row md:justify-between">
         <div className="max-w-md">
           <p className="text-sm uppercase tracking-[0.3em] text-secondary">Autocinema</p>
           <h3 className="mt-3 text-2xl font-semibold text-white">Generative stories for adventurous moviegoers.</h3>
@@ -66,7 +66,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/5 bg-neutral-950/70">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex w-full flex-col gap-3 px-6 py-4 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
           <p>Base seed #{seed} → layout variant #{layoutSeed}.</p>
           <p>&copy; {new Date().getFullYear()} Autoppia Experiments</p>
         </div>

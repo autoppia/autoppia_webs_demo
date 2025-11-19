@@ -23,6 +23,21 @@ const SeedContext = createContext<SeedContextType>({
 
 const STORAGE_KEY = "autocinema_seed_base";
 
+const LAYOUT_MIRRORS: Record<number, number> = {
+  3: 6,
+};
+
+const applyLayoutOverrides = (baseSeed: number, seeds: ResolvedSeeds): ResolvedSeeds => {
+  const mirrorSeed = LAYOUT_MIRRORS[baseSeed];
+  if (!mirrorSeed) return seeds;
+  const mirroredSeeds = resolveSeedsSync(mirrorSeed);
+  const mirroredLayoutSeed = mirroredSeeds.v1 ?? mirrorSeed;
+  if (seeds.v1 === mirroredLayoutSeed) {
+    return seeds;
+  }
+  return { ...seeds, v1: mirroredLayoutSeed };
+};
+
 function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | null) => void }) {
   const searchParams = useSearchParams();
 
@@ -82,7 +97,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
-    const syncResolved = resolveSeedsSync(seed);
+    const syncResolved = applyLayoutOverrides(seed, resolveSeedsSync(seed));
     setResolvedSeeds(syncResolved);
     console.log(
       "[autocinema][seeds]",
@@ -94,7 +109,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
     resolveSeeds(seed)
       .then((resolved) => {
         if (!cancelled) {
-          setResolvedSeeds(resolved);
+          setResolvedSeeds(applyLayoutOverrides(seed, resolved));
           console.log(
             "[autocinema][seeds:update]",
             `base=${resolved.base}`,

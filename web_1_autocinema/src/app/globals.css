@@ -86,7 +86,7 @@
   }
   
   body.navbar-floating {
-    @apply pt-20; /* Standard header height to account for floating navbar space */
+    @apply pt-32; /* Extra spacing so floating header card never overlaps content */
   }
   
   body.navbar-top {
@@ -139,8 +139,21 @@
   }
   
   .navbar-floating {
-    @apply absolute top-4 right-4 bg-white shadow-xl rounded-lg p-3 border border-gray-200 z-50 max-w-sm;
+    @apply relative w-full max-w-xl rounded-3xl border border-white/15 bg-neutral-900/90 p-5 text-white shadow-2xl backdrop-blur-lg md:w-[30rem];
   }
+
+  .navbar-floating-left {
+    @apply md:ml-4 md:mr-auto;
+  }
+
+  .navbar-floating-right {
+    @apply md:ml-auto md:mr-4;
+  }
+
+  .hero-align-right {
+    @apply lg:ml-auto lg:mr-0;
+  }
+
   
   /* Content Layout Variations */
   .content-reverse {
@@ -174,6 +187,10 @@
   
   .cards-masonry {
     @apply columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6;
+  }
+
+  .cards-masonry > * {
+    @apply break-inside-avoid-column w-full mb-6;
   }
   
   .cards-grid {

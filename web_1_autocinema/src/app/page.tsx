@@ -28,6 +28,7 @@ function HomeContent() {
   const layoutSeed = resolvedSeeds.v1 ?? seed;
   const layoutConfig = getLayoutConfig(layoutSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+  const isSeedThree = seed === 3;
 
   const initialSearch = searchParams.get("search") ?? "";
   const initialGenre = searchParams.get("genre") ?? "";
@@ -112,12 +113,13 @@ function HomeContent() {
   const thrillerFocus = useMemo(() => getMoviesByGenre("Thriller").slice(0, 5), []);
 
   return (
-    <main className={`mx-auto max-w-6xl space-y-8 px-4 py-8 ${layoutClasses.spacing}`}>
+    <main className={`w-full space-y-8 px-6 py-8 ${layoutClasses.spacing}`}>
       <HeroSection
         featuredMovies={featuredMovies}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onSearchSubmit={handleSearchSubmit}
+        className={isSeedThree ? "hero-align-right" : undefined}
       />
 
       <FilterBar

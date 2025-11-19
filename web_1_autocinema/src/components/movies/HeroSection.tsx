@@ -6,15 +6,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, TrendingUp } from "lucide-react";
 import { useMemo } from "react";
+import { cn } from "@/library/utils";
 
 interface HeroSectionProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
   onSearchSubmit: () => void;
   featuredMovies: Movie[];
+  className?: string;
 }
 
-export function HeroSection({ searchQuery, onSearchChange, onSearchSubmit, featuredMovies }: HeroSectionProps) {
+export function HeroSection({
+  searchQuery,
+  onSearchChange,
+  onSearchSubmit,
+  featuredMovies,
+  className,
+}: HeroSectionProps) {
   const stats = useMemo(() => {
     const totalDuration = featuredMovies.reduce((acc, movie) => acc + movie.duration, 0);
     return {
@@ -27,7 +35,12 @@ export function HeroSection({ searchQuery, onSearchChange, onSearchSubmit, featu
   }, [featuredMovies]);
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#141926] via-[#0F172A] to-[#05070d] p-8 text-white shadow-2xl">
+    <section
+      className={cn(
+        "relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#141926] via-[#0F172A] to-[#05070d] p-8 text-white shadow-2xl",
+        className
+      )}
+    >
       <div className="relative flex flex-col gap-8 lg:flex-row">
         <div className="lg:w-1/2">
           <div className="flex items-center gap-2 text-sm text-white/70">

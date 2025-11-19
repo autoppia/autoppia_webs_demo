@@ -23,6 +23,11 @@ export function Header() {
   const layoutSeed = resolvedSeeds.v1 ?? seed;
   const layoutConfig = getLayoutConfig(layoutSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
+  const isSeedThree = seed === 3;
+  const floatingAlignmentClass =
+    layoutClasses.header.includes("navbar-floating") ?
+      (isSeedThree ? "navbar-floating-left" : "navbar-floating-right") :
+      "";
 
   const layoutLabel = useMemo(() => {
     if (!layoutConfig) return "Default";
@@ -36,7 +41,9 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur">
-      <div className={`mx-auto flex max-w-6xl flex-col gap-2 px-4 py-4 md:flex-row md:items-center md:justify-between ${layoutClasses.header}`}>
+      <div
+        className={`mx-auto flex w-full flex-col gap-2 px-6 py-4 md:flex-row md:items-center md:justify-between ${layoutClasses.header} ${floatingAlignmentClass}`}
+      >
         <div className="flex items-center gap-3">
           <SeedLink href="/" className="flex items-center gap-2">
             <Film className="h-6 w-6 text-secondary" />
