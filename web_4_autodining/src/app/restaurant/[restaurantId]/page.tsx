@@ -16,14 +16,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import Image from "next/image";
-import Link from "next/link";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedVariation } from "@/library/utils";
+import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { withSeedAndParams } from "@/utils/seedRouting";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { buildBookingHref } from "@/utils/bookingPaths";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
@@ -499,11 +499,8 @@ export default function RestaurantPage() {
                       className="flex gap-1"
                       style={{ justifyContent: layout.justify }}
                     >
-                      <Link
-                        href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, {
-                          date: formattedDate,
-                          people: String(people ?? ""),
-                        })}
+                      <SeedLink
+                        href={buildBookingHref(id, time, { date: formattedDate, people })}
                         onClick={() =>
                           logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                             restaurantId: id,
@@ -527,7 +524,7 @@ export default function RestaurantPage() {
                         >
                           <span>Book Restaurant</span>
                         </Button>
-                      </Link>
+                      </SeedLink>
                     </div>
                   </div>
                 ) : (
@@ -538,11 +535,8 @@ export default function RestaurantPage() {
                       marginTop: layout.marginTop,
                     }}
                   >
-                    <Link
-                      href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, {
-                        date: formattedDate,
-                        people: String(people ?? ""),
-                      })}
+                    <SeedLink
+                      href={buildBookingHref(id, time, { date: formattedDate, people })}
                       onClick={() =>
                         logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                           restaurantId: id,
@@ -567,7 +561,7 @@ export default function RestaurantPage() {
                       >
                         <span>{getText("book_now")}</span>
                       </Button>
-                    </Link>
+                    </SeedLink>
                   </div>
                 )
               ) : (

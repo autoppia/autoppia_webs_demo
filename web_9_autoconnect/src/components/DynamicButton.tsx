@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState, type ButtonHTMLAttributes } from 'react';
-import { useSeedLayout } from '@/library/useSeedLayout';
+import { useSeed } from '@/context/SeedContext';
+import { getSeedLayout } from '@/dynamic/v1-layouts';
 
 interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   eventType: string;
@@ -18,51 +19,33 @@ export function DynamicButton({
   ...props
 }: DynamicButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const {
-    getElementAttributes,
-    getLayoutClasses,
-    generateId,
-    generateSeedClass,
-    applyCSSVariables,
-    createDynamicStyles
-  } = useSeedLayout();
+  const { seed } = useSeed();
+  const layout = getSeedLayout(seed);
 
   const [attributes, setAttributes] = useState<Record<string, string>>({});
-  const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
 
   useEffect(() => {
-    // Generate dynamic attributes and styles based on seed
-    const elementAttrs = getElementAttributes(eventType, index);
-    const buttonClasses = getLayoutClasses('button');
-    const elementId = generateId(eventType, index);
-    const seedClass = generateSeedClass('dynamic-button');
-    
-    setAttributes({
-      ...elementAttrs,
-      id: elementId,
-      className: `${buttonClasses} ${seedClass} ${className}`.trim()
-    });
-    
-    setDynamicStyles(createDynamicStyles());
-  }, [eventType, index, className, getElementAttributes, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
+    // Generate attributes based on seed
+    const attrs = {
+      'data-seed': seed?.toString() || '1',
+      'data-event': eventType,
+      'data-index': index.toString(),
+    };
+    setAttributes(attrs);
 
-  useEffect(() => {
-    // Apply CSS variables to the button element
     if (buttonRef.current) {
-      applyCSSVariables(buttonRef.current);
+      buttonRef.current.style.setProperty('--seed', seed?.toString() || '1');
     }
-  }, [dynamicStyles, applyCSSVariables]);
+  }, [seed, eventType, index]);
 
   return (
     <button
       ref={buttonRef}
+      className={`${className} dynamic-button`}
       {...attributes}
       {...props}
-      className={attributes.className}
-      style={dynamicStyles}
     >
       {children}
     </button>
   );
 }
-

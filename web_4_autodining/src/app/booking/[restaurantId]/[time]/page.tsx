@@ -9,10 +9,9 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
 import { countries } from "@/library/dataset";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
-import { useSeedVariation } from "@/library/utils";
+import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { useSeed } from "@/context/SeedContext";
 
 type RestaurantView = {
@@ -177,7 +176,7 @@ export default function Page() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <SeedLink href={withSeed("/", searchParams)}>
+            <SeedLink href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
@@ -198,13 +197,13 @@ export default function Page() {
           <div className="flex items-center gap-4">
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href={withSeed("/help", searchParams)}
+              href="/help"
             >
               {getText("get_help")}
             </SeedLink>
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href={withSeed("/faqs", searchParams)}
+              href="/faqs"
             >
               {getText("faqs")}
             </SeedLink>

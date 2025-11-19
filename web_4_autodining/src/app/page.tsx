@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useRef, useEffect, useMemo, Suspense } from "react";
-import Link from "next/link";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -19,13 +18,14 @@ import {
 } from "lucide-react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { RestaurantsData } from "@/library/dataset";
 import { getRestaurants, initializeRestaurants } from "@/dynamic/v2-data";
 import type { RestaurantData } from "@/dynamic/v2-data";
 import { useSearchParams } from "next/navigation";
-import { useSeedVariation } from "@/library/utils";
+import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { buildBookingHref } from "@/utils/bookingPaths";
 
 type UiRestaurant = {
   id: string;
@@ -131,24 +131,24 @@ function RestaurantCard({
           <span className="text-xs text-gray-500">{r.bookings} {getText("booked_today")}</span>
         </div>
         <div className={`mt-3 flex ${layout.wrap ? 'flex-wrap' : 'flex-nowrap'} ${layout.justify} gap-2`}>
-          <Link
+          <SeedLink
             id={getId("view_details_button")}
-            href={withSeed(`/restaurant/${r.id}`, searchParams)}
+            href={`/restaurant/${r.id}`}
             className="text-sm text-blue-600 hover:text-blue-800"
             onClick={() => logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })}
           >
             {getText("view_details")}
-          </Link>
-          <Link
+          </SeedLink>
+          <SeedLink
             id={getId("book_button")}
-            href={withSeedAndParams(`/booking/${r.id}/${time}`, { people: String(people), date: formattedDate }, searchParams)}
+            href={buildBookingHref(r.id, time, { people, date: formattedDate })}
             className={`${bookButtonVariation.className} text-sm`}
             data-testid={bookButtonVariation.dataTestId}
             style={{ position: bookButtonVariation.position as any }}
             onClick={() => logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })}
           >
             {getText("book_now")}
-          </Link>
+          </SeedLink>
         </div>
       </div>
     </div>
@@ -465,7 +465,7 @@ function HomePageContent() {
       <nav className="w-full border-b bg-white sticky top-0 z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
           <div className="flex items-center gap-3">
-            <SeedLink href={withSeed("/", searchParams)}>
+            <SeedLink href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
                 <span className="font-bold text-white text-lg">{getText("app_title")}</span>
               </div>
@@ -475,19 +475,19 @@ function HomePageContent() {
           <div className="flex items-center gap-4">
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href={withSeed("/help", searchParams)}
+              href="/help"
             >
               {getText("get_help")}
             </SeedLink>
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href={withSeed("/about", searchParams)}
+              href="/about"
             >
               {getText("about")}
             </SeedLink>
             <SeedLink
               className="text-sm text-gray-600 hover:text-[#46a758]"
-              href={withSeed("/contact", searchParams)}
+              href="/contact"
             >
               {getText("contact")}
             </SeedLink>
