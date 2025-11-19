@@ -10,7 +10,7 @@ from pathlib import Path
 
 def expand_movies():
     """Expandir movies_1.json de 200 a 300."""
-    movies_path = Path("webs_server/initial_data/web_1_demo_movies/data/movies_1.json")
+    movies_path = Path("webs_server/initial_data/web_1_autocinema/data/movies_1.json")
     
     with open(movies_path, 'r', encoding='utf-8') as f:
         movies = json.load(f)
