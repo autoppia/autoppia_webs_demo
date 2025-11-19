@@ -4,6 +4,8 @@
  * Loads different data subsets based on v2 seed.
  */
 
+import { dynamicDataProvider } from "./data-provider";
+
 export {
   dynamicDataProvider,
   initializeRestaurants,

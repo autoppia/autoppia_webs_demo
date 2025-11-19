@@ -134,7 +134,7 @@ function getLayoutId(seed: number): number {
   return layoutIndex;
 }
 // Generate layout configuration based on seed
-export function getSeedLayout(seed: number): SeedLayout {
+export function getSeedLayout(seed: number = 6): SeedLayout {
   const effectiveSeed = getEffectiveSeed(seed);
   const layoutId = getLayoutId(effectiveSeed);
   // Normalize to 1-10 for position arrays
@@ -277,11 +277,11 @@ export function generateUrlWithSeed(baseUrl: string, seed: number): string {
 
 // Helper function to get effective layout config (alias for getSeedLayout)
 export function getEffectiveLayoutConfig(seed?: number): SeedLayout {
-  return getSeedLayout(seed);
+  return getSeedLayout(seed ?? 6);
 }
 
 // Helper function to generate layout classes from seed
 export function getLayoutClasses(seed?: number): string {
-  const layout = getSeedLayout(seed);
+  const layout = getSeedLayout(seed ?? 6);
   return `${layout.searchBar.containerClass} ${layout.navbar.containerClass}`;
 }

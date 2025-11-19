@@ -49,7 +49,8 @@ export function AddToCartModal({
   const [preferences, setPreferences] = React.useState("");
   const [qty, setQty] = React.useState(1);
   const layout = useSeedLayout();
-  const { getText, getId } = useV3Attributes();
+  const seedStructure = layout.seed;
+  const { getText, getPlaceholder, getId, getAria } = useV3Attributes();
 
   React.useEffect(() => {
     setSize(item.sizes?.[0]);

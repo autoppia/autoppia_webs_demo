@@ -86,7 +86,8 @@ export default function CartPage() {
   const hydrated = useHasHydrated();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const layout = useSeedLayout();
-  const { getText, getId } = useV3Attributes();
+  const seedStructure = layout.seed;
+  const { getText, getPlaceholder, getId, getAria } = useV3Attributes();
   const predefinedAddresses = [
     "710 Portofino Ln, Foster City, CA 94004",
     "450 Townsend St, San Francisco, CA 94107",

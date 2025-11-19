@@ -47,7 +47,8 @@ function ReviewsSection({
   restaurant: Restaurant;
 }) {
   const layout = useLayout();
-  const { getText, getId } = useV3Attributes();
+  const seedStructure = layout.seed;
+  const { getText, getId, getAria } = useV3Attributes();
   const [localReviews, setLocalReviews] = useState(reviews);
   const handleDelete = (idx: number) => {
     const deleted = localReviews[idx];
@@ -138,7 +139,8 @@ export default function RestaurantDetailPage({
   restaurantId: string;
 }) {
   const layout = useLayout();
-  const { getText, getId } = useV3Attributes();
+  const seedStructure = layout.seed;
+  const { getText, getId, getAria } = useV3Attributes();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useSeedRouter();
   const { restaurants, isLoading } = useRestaurants();

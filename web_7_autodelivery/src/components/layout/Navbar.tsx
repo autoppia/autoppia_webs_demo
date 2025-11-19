@@ -12,7 +12,7 @@ export default function Navbar() {
   const search = useSearchStore((s) => s.search);
   const setSearch = useSearchStore((s) => s.setSearch);
   const layout = useSeedLayout();
-  const { getText, getId } = useV3Attributes();
+  const { getText, getPlaceholder, getId, getAria } = useV3Attributes();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
