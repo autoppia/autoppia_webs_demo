@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { MovieDetailHero } from "@/components/movies/MovieDetailHero";
 import { MovieMeta } from "@/components/movies/MovieMeta";
@@ -63,6 +63,17 @@ export default function BookDetailPage() {
   const relatedBooks = useMemo(() => getRelatedBooks(book.id, 4), [book.id]);
   const canManageBook = Boolean(currentUser?.allowedBooks?.includes(book.id));
 
+  // Log detail view with backend-expected schema
+  useEffect(() => {
+    logEvent(EVENT_TYPES.BOOK_DETAIL, {
+      name: book.title,
+      year: book.year,
+      genres: book.genres,
+      rating: book.rating,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [book.id]);
+
   const handleWatchTrailer = () => {
     logEvent(EVENT_TYPES.OPEN_PREVIEW, { book_id: book.id, title: book.title });
     if (book.trailerUrl) {
@@ -71,21 +82,61 @@ export default function BookDetailPage() {
   };
 
   const handleDelete = () => {
-    logEvent(EVENT_TYPES.DELETE_BOOK, { book_id: book.id, username: currentUser?.username });
+    logEvent(EVENT_TYPES.DELETE_BOOK, {
+      name: book.title,
+      author: book.director,
+      year: book.year,
+      genres: book.genres,
+      rating: book.rating,
+      pages: book.duration,
+    });
     setMessage("Delete event recorded. No data was removed.");
   };
 
   const handleEditSubmit = (data: MovieEditorData) => {
+    const newValues = {
+      name: data.title,
+      author: data.director,
+      year: Number.parseInt(data.year, 10),
+      rating: Number.parseFloat(data.rating),
+      pages: Number.parseInt(data.duration, 10),
+      genres: data.genres.split(",").map((g) => g.trim()).filter(Boolean),
+    };
+    const previousValues = {
+      name: book.title,
+      author: book.director,
+      year: book.year,
+      rating: book.rating,
+      pages: book.duration,
+      genres: book.genres,
+    };
+    const changedFields = (Object.keys(newValues) as Array<keyof typeof newValues>).filter(
+      (key) => {
+        const a = newValues[key];
+        const b = previousValues[key as keyof typeof previousValues];
+        if (Array.isArray(a) && Array.isArray(b)) {
+          if (a.length !== b.length) return true;
+          return a.join(",") !== b.join(",");
+        }
+        return a !== b;
+      }
+    );
+
     logEvent(EVENT_TYPES.EDIT_BOOK, {
-      book_id: book.id,
-      username: currentUser?.username,
-      changes: data,
+      ...newValues,
+      previous_values: previousValues,
+      changed_fields: changedFields,
     });
     setMessage("Edit event recorded for auditing purposes.");
   };
 
   const handleWatchlist = () => {
-    logEvent(EVENT_TYPES.SAVE_BOOKMARK, { book_id: book.id });
+    logEvent(EVENT_TYPES.SHOPPING_CART, {
+      name: book.title,
+      year: book.year,
+      genres: book.genres,
+      rating: book.rating,
+    });
   };
 
   const handleShare = () => {
@@ -105,7 +156,11 @@ export default function BookDetailPage() {
       createdAt: new Date().toLocaleString(),
     };
     setComments((prev) => [entry, ...prev]);
-    logEvent(EVENT_TYPES.POST_REVIEW, { book_id: book.id, author });
+    logEvent(EVENT_TYPES.ADD_COMMENT_BOOK, {
+      name: author,
+      content: message,
+      book: { name: book.title },
+    });
   };
 
   return (

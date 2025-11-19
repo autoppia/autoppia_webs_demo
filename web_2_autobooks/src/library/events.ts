@@ -1,19 +1,34 @@
 // src/lib/logger.ts
 
 export const EVENT_TYPES = {
+  // Backend-validated events (must match backend parse names)
   SEARCH_BOOK: "SEARCH_BOOK",
-  FILTER_BOOKS: "FILTER_BOOKS",
-  VIEW_BOOK_DETAIL: "VIEW_BOOK_DETAIL",
+  FILTER_BOOK: "FILTER_BOOK",
+  BOOK_DETAIL: "BOOK_DETAIL",
+  SHOPPING_CART: "SHOPPING_CART",
+  PURCHASE_BOOK: "PURCHASE_BOOK",
+  ADD_COMMENT_BOOK: "ADD_COMMENT_BOOK",
+  LOGIN_BOOK: "LOGIN_BOOK",
+  LOGOUT_BOOK: "LOGOUT_BOOK",
+  REGISTRATION_BOOK: "REGISTRATION_BOOK",
+  EDIT_BOOK: "EDIT_BOOK",
+  DELETE_BOOK: "DELETE_BOOK",
+  CONTACT_BOOK: "CONTACT_BOOK",
+  EDIT_USER_BOOK: "EDIT_USER_BOOK",
+  ADD_BOOK: "ADD_BOOK",
+
+  // Optional UI-only events (not used by backend validators)
   OPEN_PREVIEW: "OPEN_PREVIEW",
-  SAVE_BOOKMARK: "SAVE_BOOKMARK",
   SHARE_BOOK: "SHARE_BOOK",
-  POST_REVIEW: "POST_REVIEW",
-  LOGIN_SUCCESS: "login.success",
-  LOGIN_FAILURE: "login.failure",
-  LOGOUT: "logout",
-  EDIT_BOOK: "edit.event",
-  DELETE_BOOK: "delete.event",
-  CONTACT_MESSAGE: "contact.message",
+  // POST_REVIEW: "POST_REVIEW",
+  // LOGIN_SUCCESS: "login.success",
+  // LOGIN_FAILURE: "login.failure",
+  // LOGOUT: "logout",
+  // SIGNUP_SUCCESS: "signup.success",
+  // SIGNUP_FAILURE: "signup.failure",
+  // EDIT_BOOK: "edit.event",
+  // DELETE_BOOK: "delete.event",
+  // CONTACT_MESSAGE: "contact.message",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
@@ -36,7 +51,11 @@ export function logEvent(
 
   const payload = {
     event_name: eventType,
-    data,
+    data: {
+      ...data,
+      timestamp: new Date().toISOString(),
+      url: window.location.href,
+    },
     user_id: user,
   };
 

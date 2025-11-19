@@ -148,7 +148,7 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
   const movies = await fetchSeededSelection<DatasetMovie>({
-    projectKey: "web_1_demo_movies",
+    projectKey: "web_1_autocinema",
     entityType: "movies",
     seedValue: effectiveSeed,
     limit,

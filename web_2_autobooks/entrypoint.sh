@@ -3,8 +3,8 @@ set -e
 
 # --- Configuration Variables ---
 NODE_VERSION="v20"
-APP_NAME="Autozon"
-APP_PORT="8002"
+APP_NAME="Autobooks"
+APP_PORT="8001"
 APP_HOST="0.0.0.0"
 NVM_INSTALL_SCRIPT="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
 

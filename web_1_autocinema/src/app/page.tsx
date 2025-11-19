@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { HeroSection } from "@/components/movies/HeroSection";
 import { FilterBar } from "@/components/movies/FilterBar";
@@ -17,7 +17,6 @@ import {
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useSeed } from "@/context/SeedContext";
-import type { Movie } from "@/data/movies";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ContactSection } from "@/components/contact/ContactSection";
 
@@ -77,24 +76,36 @@ function HomeContent() {
     router.push(query ? `/?${query}` : "/");
   };
 
+  const normalizeYearValue = (value: string | undefined) => {
+    if (!value) return null;
+    const parsed = Number.parseInt(value, 10);
+    return Number.isNaN(parsed) ? null : parsed;
+  };
+
   const handleSearchSubmit = () => {
-    logEvent(EVENT_TYPES.SEARCH_MOVIE, {
+    logEvent(EVENT_TYPES.SEARCH_FILM, {
       query: searchQuery,
-      genre: selectedGenre || null,
-      year: selectedYear || null,
+      genre: selectedGenre ? { name: selectedGenre } : undefined,
+      year: normalizeYearValue(selectedYear),
     });
     updateQueryString({ search: searchQuery });
   };
 
   const handleGenreChange = (value: string) => {
     setSelectedGenre(value);
-    logEvent(EVENT_TYPES.FILTER_MOVIES, { filter: "genre", value });
+    logEvent(EVENT_TYPES.FILTER_FILM, {
+      genre: value ? { name: value } : undefined,
+      year: normalizeYearValue(selectedYear),
+    });
     updateQueryString({ genre: value });
   };
 
   const handleYearChange = (value: string) => {
     setSelectedYear(value);
-    logEvent(EVENT_TYPES.FILTER_MOVIES, { filter: "year", value });
+    logEvent(EVENT_TYPES.FILTER_FILM, {
+      genre: selectedGenre ? { name: selectedGenre } : undefined,
+      year: normalizeYearValue(value),
+    });
     updateQueryString({ year: value });
   };
 
@@ -105,8 +116,8 @@ function HomeContent() {
     updateQueryString({ search: "", genre: "", year: "" });
   };
 
-  const handleSelectMovie = (movie: Movie) => {
-    logEvent(EVENT_TYPES.VIEW_MOVIE_DETAIL, { movie_id: movie.id, title: movie.title });
+  const handleSelectMovie = () => {
+    // reserved for future instrumentation
   };
 
   const dramaFocus = useMemo(() => getMoviesByGenre("Drama").slice(0, 5), []);

@@ -6,6 +6,7 @@ Autocinema is a Next.js demo that recreates the experience of `web_1_demo_movies
 - Cinematic home hero with search, genre/year filters, and dataset-powered movie cards.
 - Detail view with metadata, trailer/watchlist/share actions and simulated community comments.
 - Related-movie suggestions plus spotlight rows inspired by the original Django templates.
+- Self-serve login/registration so validators can create a local curator account instantly.
 - All assets resolved locally via `public/media/gallery` to match the dataset image paths.
 
 ## Running the demo

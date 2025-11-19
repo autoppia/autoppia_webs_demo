@@ -356,11 +356,27 @@ export function isDynamicEnabled(): boolean {
 }
 
 // Helper function to get effective layout config
+const STANDARD_LAYOUT = getDefaultLayout();
+
+function applyStandardLayout(config: SeedLayoutConfig): SeedLayoutConfig {
+  return {
+    ...config,
+    headerOrder: STANDARD_LAYOUT.headerOrder,
+    searchPosition: STANDARD_LAYOUT.searchPosition,
+    navbarStyle: STANDARD_LAYOUT.navbarStyle,
+    contentGrid: STANDARD_LAYOUT.contentGrid,
+    cardLayout: STANDARD_LAYOUT.cardLayout,
+    buttonStyle: STANDARD_LAYOUT.buttonStyle,
+    footerStyle: STANDARD_LAYOUT.footerStyle,
+    spacing: STANDARD_LAYOUT.spacing,
+    borderRadius: STANDARD_LAYOUT.borderRadius,
+    colorScheme: STANDARD_LAYOUT.colorScheme,
+  };
+}
+
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled()) {
-    return getDefaultLayout();
-  }
-  return getSeedLayout(seed);
+  const baseConfig = isDynamicEnabled() ? getSeedLayout(seed) : getDefaultLayout();
+  return applyStandardLayout(baseConfig);
 }
 
 // Helper function to generate CSS classes based on layout config

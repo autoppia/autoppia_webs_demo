@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { findUser, type UserRecord } from "@/data/users";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { readJson, writeJson } from "@/shared/storage";
 
 interface AuthUser {
   username: string;
@@ -13,8 +14,14 @@ interface AuthContextValue {
   currentUser: AuthUser | null;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
-  registerAndLogin: (username: string, password: string) => Promise<void>;
+  register: (input: RegisterInput) => Promise<void>;
   logout: () => void;
+}
+
+interface RegisterInput {
+  username: string;
+  password: string;
+  allowedMovies?: string[];
 }
 
 const STORAGE_KEY = "autocinemaUser";
@@ -47,8 +54,17 @@ const matchCustomUser = (users: CustomUserRecord[], username: string) => {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+const normalizeUsername = (value: string) => value.trim();
+
+const getStoredCustomUsers = (): UserRecord[] => readJson<UserRecord[]>(CUSTOM_USERS_KEY, []) ?? [];
+
+const persistCustomUsers = (users: UserRecord[]) => {
+  writeJson(CUSTOM_USERS_KEY, users);
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [customUsers, setCustomUsers] = useState<UserRecord[]>([]);
 
   useEffect(() => {
     try {
@@ -60,7 +76,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       // ignore corrupted storage
     }
+    setCustomUsers(getStoredCustomUsers());
   }, []);
+
+  const resolveUserRecord = useCallback(
+    (username: string): UserRecord | undefined => {
+      const normalized = normalizeUsername(username);
+      if (!normalized) return undefined;
+      const existing = findUser(normalized);
+      if (existing) return existing;
+      const lower = normalized.toLowerCase();
+      const localMatch = customUsers.find((user) => user.username.toLowerCase() === lower);
+      if (localMatch) {
+        return localMatch;
+      }
+      if (typeof window !== "undefined") {
+        const storedMatch = getStoredCustomUsers().find((user) => user.username.toLowerCase() === lower);
+        if (storedMatch && !localMatch) {
+          setCustomUsers((prev) => {
+            if (prev.some((user) => user.username.toLowerCase() === lower)) {
+              return prev;
+            }
+            return [...prev, storedMatch];
+          });
+          return storedMatch;
+        }
+      }
+      return undefined;
+    },
+    [customUsers]
+  );
 
   const persistUser = useCallback((authUser: AuthUser, source: "login" | "register") => {
     setCurrentUser(authUser);
@@ -97,59 +142,74 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [persistUser]
   );
 
-  const registerAndLogin = useCallback(
-    async (username: string, password: string) => {
-      const safeUsername = username.trim();
+  const resolveOrCreateAllowedMovies = (username: string, requested?: string[]): string[] => {
+    if (requested && requested.length > 0) {
+      return requested;
+    }
+    const hash = username.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    const movieIndex = (hash % 120) + 1;
+    const movieId = `movie-v2-${movieIndex.toString().padStart(3, "0")}`;
+    return [movieId];
+  };
+
+  const register = useCallback(
+    async ({ username, password, allowedMovies }: RegisterInput) => {
+      const safeUsername = normalizeUsername(username);
       const safePassword = password.trim();
-      if (!safeUsername || !safePassword) {
-        throw new Error("Username and password are required");
+      if (!safeUsername) {
+        throw new Error("Username is required");
+      }
+      if (!safePassword) {
+        throw new Error("Password is required");
       }
 
-      const existing = findUser(safeUsername);
-      if (existing && existing.password === safePassword) {
+      const existingRecord = resolveUserRecord(safeUsername);
+      if (existingRecord) {
+        if (existingRecord.password !== safePassword) {
+          throw new Error("Username already registered with different credentials.");
+        }
         const authUser: AuthUser = {
-          username: existing.username,
-          allowedMovies: existing.allowedMovies,
+          username: existingRecord.username,
+          allowedMovies: existingRecord.allowedMovies,
         };
         persistUser(authUser, "login");
         return;
       }
 
       const customUsers = loadCustomUsers();
-      const custom = matchCustomUser(customUsers, safeUsername);
-      if (custom) {
-        if (custom.password !== safePassword) {
-          throw new Error("Username already registered with different credentials.");
-        }
-        const authUser: AuthUser = {
-          username: custom.username,
-          allowedMovies: custom.allowedMovies,
-        };
-        persistUser(authUser, "login");
-        return;
-      }
-
-      const hash = safeUsername.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
-      const movieIndex = (hash % 120) + 1;
-      const movieId = `movie-v2-${movieIndex.toString().padStart(3, "0")}`;
-
-      const authUser: AuthUser = {
-        username: safeUsername,
-        allowedMovies: [movieId],
-      };
-
       const nextCustomUsers: CustomUserRecord[] = [
         ...customUsers,
         {
-          username: authUser.username,
-          allowedMovies: authUser.allowedMovies,
+          username: safeUsername,
+          allowedMovies: resolveOrCreateAllowedMovies(safeUsername, allowedMovies),
           password: safePassword,
         },
       ];
+
       saveCustomUsers(nextCustomUsers);
+      persistCustomUsers(nextCustomUsers);
+      setCustomUsers((prev) => {
+        const hasUser = prev.some((user) => user.username.toLowerCase() === safeUsername.toLowerCase());
+        if (hasUser) {
+          return prev;
+        }
+        return [
+          ...prev,
+          {
+            username: safeUsername,
+            password: safePassword,
+            allowedMovies: nextCustomUsers[nextCustomUsers.length - 1].allowedMovies,
+          },
+        ];
+      });
+
+      const authUser: AuthUser = {
+        username: safeUsername,
+        allowedMovies: nextCustomUsers[nextCustomUsers.length - 1].allowedMovies,
+      };
       persistUser(authUser, "register");
     },
-    [persistUser]
+    [persistUser, resolveUserRecord, setCustomUsers]
   );
 
   const logout = useCallback(() => {
@@ -165,10 +225,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       currentUser,
       isAuthenticated: Boolean(currentUser),
       login,
-      registerAndLogin,
+      register,
       logout,
     }),
-    [currentUser, login, logout, registerAndLogin]
+    [currentUser, login, logout, register]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

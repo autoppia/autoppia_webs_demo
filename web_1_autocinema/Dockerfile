@@ -52,8 +52,8 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 ENV NODE_ENV=production
-ENV PORT=8002
-EXPOSE 8002
+ENV PORT=8000
+EXPOSE 8000
 
 # Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
 # so they don't need to be set here. They're already in the JavaScript code.
