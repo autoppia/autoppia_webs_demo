@@ -1,7 +1,6 @@
 "use client";
 
 import { SeedLink } from "@/components/ui/SeedLink";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import UserSearchBar from "./UserSearchBar";
 import { logEvent, EVENT_TYPES } from "@/library/events";
