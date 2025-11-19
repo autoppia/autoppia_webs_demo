@@ -5,7 +5,7 @@ import { BookOpen } from "lucide-react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { applyLayoutOverrides, getLayoutClasses } from "@/utils/seedLayout";
 import { useAuth } from "@/context/AuthContext";
 
 const NAV_LINKS = [
@@ -20,7 +20,8 @@ export function Header() {
   const { seed, resolvedSeeds } = useSeed();
   const { currentUser, logout } = useAuth();
   const layoutSeed = resolvedSeeds.v1 ?? seed;
-  const layoutConfig = getLayoutConfig(layoutSeed);
+  const baseSeed = resolvedSeeds.base ?? seed;
+  const layoutConfig = applyLayoutOverrides(getLayoutConfig(layoutSeed), baseSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
 
   const layoutLabel = useMemo(() => {

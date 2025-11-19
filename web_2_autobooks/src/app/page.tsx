@@ -15,7 +15,7 @@ import {
   getBooksByGenre,
   searchBooks,
 } from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { applyLayoutOverrides, getLayoutClasses } from "@/utils/seedLayout";
 import { useSeed } from "@/context/SeedContext";
 import type { Book } from "@/data/books";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
@@ -27,7 +27,8 @@ function HomeContent() {
   const router = useSeedRouter();
   const { seed, resolvedSeeds } = useSeed();
   const layoutSeed = resolvedSeeds.v1 ?? seed;
-  const layoutConfig = getLayoutConfig(layoutSeed);
+  const baseSeed = resolvedSeeds.base ?? seed;
+  const layoutConfig = applyLayoutOverrides(getLayoutConfig(layoutSeed), baseSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
 
   const initialSearch = searchParams.get("search") ?? "";
