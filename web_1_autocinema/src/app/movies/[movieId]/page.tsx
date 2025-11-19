@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { MovieDetailHero } from "@/components/movies/MovieDetailHero";
 import { MovieMeta } from "@/components/movies/MovieMeta";
@@ -13,6 +13,7 @@ import type { Movie } from "@/data/movies";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
+import { collectFilmChangeMetadata, editorDataToFilmPayload, movieToFilmPayload } from "@/utils/eventPayloads";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
@@ -63,6 +64,14 @@ export default function MovieDetailPage() {
   const relatedMovies = useMemo(() => getRelatedMovies(movie.id, 4), [movie.id]);
   const canManageMovie = Boolean(currentUser?.allowedMovies.includes(movie.id));
 
+  useEffect(() => {
+    if (!movie) return;
+    const payload = movieToFilmPayload(movie);
+    logEvent(EVENT_TYPES.FILM_DETAIL, {
+      ...payload,
+    });
+  }, [movie]);
+
   const handleWatchTrailer = () => {
     logEvent(EVENT_TYPES.WATCH_TRAILER, { movie_id: movie.id, title: movie.title });
     if (movie.trailerUrl) {
@@ -71,15 +80,19 @@ export default function MovieDetailPage() {
   };
 
   const handleDelete = () => {
-    logEvent(EVENT_TYPES.DELETE_MOVIE, { movie_id: movie.id, username: currentUser?.username });
+    const payload = movieToFilmPayload(movie);
+    logEvent(EVENT_TYPES.DELETE_FILM, payload);
     setMessage("Delete event recorded. No data was removed.");
   };
 
   const handleEditSubmit = (data: MovieEditorData) => {
-    logEvent(EVENT_TYPES.EDIT_MOVIE, {
-      movie_id: movie.id,
-      username: currentUser?.username,
-      changes: data,
+    const original = movieToFilmPayload(movie);
+    const updated = editorDataToFilmPayload(original.id, data);
+    const { changed_fields, previous_values } = collectFilmChangeMetadata(original, updated);
+    logEvent(EVENT_TYPES.EDIT_FILM, {
+      ...updated,
+      previous_values,
+      changed_fields,
     });
     setMessage("Edit event recorded for auditing purposes.");
   };
@@ -105,7 +118,15 @@ export default function MovieDetailPage() {
       createdAt: new Date().toLocaleString(),
     };
     setComments((prev) => [entry, ...prev]);
-    logEvent(EVENT_TYPES.POST_COMMENT, { movie_id: movie.id, author });
+    const payload = movieToFilmPayload(movie);
+    logEvent(EVENT_TYPES.ADD_COMMENT, {
+      name: author,
+      content: message,
+      movie: {
+        id: payload.id,
+        name: movie.title,
+      },
+    });
   };
 
   return (

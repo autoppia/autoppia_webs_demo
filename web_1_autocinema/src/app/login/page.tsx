@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -13,6 +14,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [registrationUsername, setRegistrationUsername] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

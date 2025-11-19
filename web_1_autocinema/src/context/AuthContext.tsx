@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
     setCurrentUser(authUser);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
-    logEvent(EVENT_TYPES.LOGIN_SUCCESS, { username: authUser.username });
+    logEvent(EVENT_TYPES.LOGIN, { username: authUser.username });
   }, []);
 
   const logout = useCallback(() => {
