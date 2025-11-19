@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -66,6 +67,13 @@ export default function LoginPage() {
           {isSubmitting ? "Verifying…" : "Sign in"}
         </Button>
       </form>
+      <p className="text-sm text-white/60">
+        Need an account?{" "}
+        <SeedLink href="/register" className="font-semibold text-secondary">
+          Create one
+        </SeedLink>
+        .
+      </p>
       <p className="text-sm text-white/60">
         Each miner can only manage their assigned film. Once signed in, visit your profile to review or simulate edits.
       </p>

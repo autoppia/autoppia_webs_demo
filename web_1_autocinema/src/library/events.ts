@@ -11,6 +11,8 @@ export const EVENT_TYPES = {
   LOGIN_SUCCESS: "login.success",
   LOGIN_FAILURE: "login.failure",
   LOGOUT: "logout",
+  REGISTER_SUCCESS: "register.success",
+  REGISTER_FAILURE: "register.failure",
   EDIT_MOVIE: "edit.event",
   DELETE_MOVIE: "delete.event",
   CONTACT_MESSAGE: "contact.message",

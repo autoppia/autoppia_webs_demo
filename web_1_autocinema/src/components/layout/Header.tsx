@@ -72,9 +72,17 @@ export function Header() {
               </button>
             </>
           ) : (
-            <SeedLink href="/login" className="text-secondary">
-              Login
-            </SeedLink>
+            <>
+              <SeedLink href="/login" className="text-secondary">
+                Login
+              </SeedLink>
+              <SeedLink
+                href="/register"
+                className="rounded-full border border-secondary px-4 py-1 text-xs font-semibold uppercase tracking-wider text-secondary"
+              >
+                Register
+              </SeedLink>
+            </>
           )}
         </nav>
 
