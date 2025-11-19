@@ -1,8 +1,8 @@
 import Avatar from "@/components/Avatar";
 import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses } from "@/library/layouts";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 const currentUser = dynamicDataProvider.getUsers()[2] || dynamicDataProvider.getUsers()[0];
 

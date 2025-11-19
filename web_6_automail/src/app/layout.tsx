@@ -6,8 +6,8 @@ import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
 // DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { getEffectiveSeed, getLayoutConfig } from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 
 const inter = Inter({ subsets: ["latin"] });
 

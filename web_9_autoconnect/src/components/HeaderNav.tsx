@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import UserSearchBar from "./UserSearchBar";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses, getShuffledItems } from "@/dynamic/v1-layouts";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 export default function HeaderNav() {
   const pathname = usePathname();

@@ -6,8 +6,8 @@ import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { getLayoutClasses, getShuffledItems } from "@/dynamic/v1-layouts";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
 function ProfileContent({ username }: { username: string }) {

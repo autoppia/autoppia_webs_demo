@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback } from 'react';
 import { getEffectiveLayoutConfig, type LayoutConfig } from './layouts';
-import { isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { isDynamicModeEnabled } from '@/dynamic/v2-data';
 import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 export function useSeedLayout() {

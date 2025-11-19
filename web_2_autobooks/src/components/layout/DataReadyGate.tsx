@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 export function DataReadyGate({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(dynamicDataProvider.isReady());

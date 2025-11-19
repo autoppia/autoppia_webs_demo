@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
 function JobDetailContent({ jobId }: { jobId: string }) {

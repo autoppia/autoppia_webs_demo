@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { EVENTS_DATASET } from "@/library/dataset";
 import { initializeEvents } from "@/data/events-enhanced";
-import { getEffectiveLayoutConfig, getSeedFromUrl, SeedLayoutConfig } from "@/utils/seedLayout";
+import { getEffectiveLayoutConfig, getSeedFromUrl, SeedLayoutConfig } from "@/dynamic/v1-layouts";
 import { LayoutProvider, useLayout } from "@/contexts/LayoutContext";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import {

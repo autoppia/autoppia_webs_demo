@@ -5,21 +5,19 @@ import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { Suspense } from "react";
-import { useSeed } from "@/seed-system";
+import { useSeed } from "@/context/SeedContext";
 import {
   getProductsByCategory,
   getStaticCategories,
   getStaticHomeEssentials,
   getStaticRefreshSpace,
   getLayoutConfig,
-  getEffectiveSeed
+  getEffectiveSeed,
 } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
-
 function HomeContent() {
-  
   const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
@@ -40,7 +38,12 @@ function HomeContent() {
   const FitnessProducts = getProductsByCategory("Fitness");
 
   const isLoadingProducts =
-    kitchenProducts.length + techProducts.length + HomeProducts.length + ElectronicProducts.length + FitnessProducts.length === 0;
+    kitchenProducts.length +
+      techProducts.length +
+      HomeProducts.length +
+      ElectronicProducts.length +
+      FitnessProducts.length ===
+    0;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -60,11 +63,17 @@ function HomeContent() {
       {/* Hero Slider */}
       <HeroSlider />
       {/* Main Content Grid */}
-      <div className={`px-4 py-4 -mt-20 relative z-10 ${layoutClasses.content}`}>
+      <div
+        className={`px-4 py-4 -mt-20 relative z-10 ${layoutClasses.content}`}
+      >
         {isLoadingProducts && (
-          <div className="omnizon-container text-center text-zinc-500 mb-4">Loading products...</div>
+          <div className="omnizon-container text-center text-zinc-500 mb-4">
+            Loading products...
+          </div>
         )}
-        <div className={`omnizon-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${layoutClasses.cards}`}>
+        <div
+          className={`omnizon-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${layoutClasses.cards}`}
+        >
           {/* Kitchen Categories */}
           <CategoryCard
             title={getText("home_title")}
@@ -169,7 +178,13 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
       <HomeContent />
     </Suspense>
   );

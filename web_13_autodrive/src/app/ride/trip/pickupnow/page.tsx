@@ -6,7 +6,7 @@ import RideNavbar from "../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import { DatePickerInput } from "../../../../components/DatePicker";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed } from "@/dynamic/v2-data";
 
 function getTimeSlotsForDate(dateStr: string) {
   const results = [];

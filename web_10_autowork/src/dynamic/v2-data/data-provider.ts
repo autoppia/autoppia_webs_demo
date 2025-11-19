@@ -1,4 +1,4 @@
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 // Check if dynamic HTML is enabled via environment variable

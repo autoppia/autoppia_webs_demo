@@ -1,0 +1,93 @@
+{
+  "1": {
+    "search_placeholder": "Search books",
+    "read": "Read",
+    "add_to_library": "Add to Library",
+    "my_library": "My Library",
+    "featured": "Featured",
+    "trending": "Trending",
+    "top_rated": "Top Rated"
+  },
+  "2": {
+    "search_placeholder": "Find books",
+    "read": "Open",
+    "add_to_library": "Save",
+    "my_library": "Bookshelf",
+    "featured": "Popular",
+    "trending": "Hot Now",
+    "top_rated": "Best Rated"
+  },
+  "3": {
+    "search_placeholder": "Look for titles",
+    "read": "View",
+    "add_to_library": "Add",
+    "my_library": "Saved",
+    "featured": "Highlighted",
+    "trending": "Popular Now",
+    "top_rated": "Highest Rated"
+  },
+  "4": {
+    "search_placeholder": "Discover books",
+    "read": "Start",
+    "add_to_library": "Keep",
+    "my_library": "Collection",
+    "featured": "Spotlight",
+    "trending": "Trending Now",
+    "top_rated": "Top Picks"
+  },
+  "5": {
+    "search_placeholder": "Type book name",
+    "read": "Begin",
+    "add_to_library": "Store",
+    "my_library": "Shelf",
+    "featured": "Featured Books",
+    "trending": "Hot Titles",
+    "top_rated": "Premium"
+  },
+  "6": {
+    "search_placeholder": "Search catalog",
+    "read": "Launch",
+    "add_to_library": "Bookmark",
+    "my_library": "Bookmarks",
+    "featured": "Curated",
+    "trending": "Popular Books",
+    "top_rated": "Elite"
+  },
+  "7": {
+    "search_placeholder": "Find titles",
+    "read": "Open Book",
+    "add_to_library": "Mark",
+    "my_library": "Marked",
+    "featured": "Recommended",
+    "trending": "Hot Books",
+    "top_rated": "Best Books"
+  },
+  "8": {
+    "search_placeholder": "Query books",
+    "read": "Browse",
+    "add_to_library": "Pin",
+    "my_library": "Pinned",
+    "featured": "Must Read",
+    "trending": "What's Hot",
+    "top_rated": "Top Quality"
+  },
+  "9": {
+    "search_placeholder": "Lookup titles",
+    "read": "Continue",
+    "add_to_library": "Flag",
+    "my_library": "Flagged",
+    "featured": "Editor's Choice",
+    "trending": "Viral Now",
+    "top_rated": "Best Choice"
+  },
+  "10": {
+    "search_placeholder": "Search library",
+    "read": "Resume",
+    "add_to_library": "Remember",
+    "my_library": "Remembered",
+    "featured": "Staff Picks",
+    "trending": "Buzz Worthy",
+    "top_rated": "Top Tier"
+  }
+}
+

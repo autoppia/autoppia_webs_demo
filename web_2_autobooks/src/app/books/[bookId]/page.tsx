@@ -7,7 +7,7 @@ import { MovieMeta } from "@/components/movies/MovieMeta";
 import { RelatedBooks } from "@/components/movies/RelatedBooks";
 import { CommentsPanel, type CommentEntry } from "@/components/movies/CommentsPanel";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { getBookById, getRelatedBooks } from "@/utils/dynamicDataProvider";
+import { getBookById, getRelatedBooks } from "@/dynamic/v2-data";
 import { SeedLink } from "@/components/ui/SeedLink";
 import type { Book } from "@/data/books";
 import { useAuth } from "@/context/AuthContext";

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses } from "@/library/layouts";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { SeedLink } from "@/components/ui/SeedLink";
 
 const companies = [

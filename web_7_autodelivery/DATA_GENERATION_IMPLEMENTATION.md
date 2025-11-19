@@ -229,7 +229,7 @@ export function DataReadyGate({ children }: DataReadyGateProps) {
 **Changes**:
 ```typescript
 // Uses DynamicDataProvider
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 // In RestaurantProvider
 useEffect(() => {

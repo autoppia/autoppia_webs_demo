@@ -6,7 +6,7 @@ import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import type { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
 

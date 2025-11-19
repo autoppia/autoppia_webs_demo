@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { getSeedLayout, SeedLayout, isDynamicEnabled } from "@/lib/seed-layout";
+import { getSeedLayout, SeedLayout, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { useSeed } from "@/context/SeedContext";
 
 declare global {

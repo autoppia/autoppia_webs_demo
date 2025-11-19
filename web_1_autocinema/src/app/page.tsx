@@ -14,8 +14,8 @@ import {
   getLayoutConfig,
   getMoviesByGenre,
   searchMovies,
-} from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+} from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useSeed } from "@/context/SeedContext";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ContactSection } from "@/components/contact/ContactSection";

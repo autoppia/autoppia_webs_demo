@@ -12,7 +12,7 @@ import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/seed-system/navigation/routing-utils";
+import { withSeed } from "@/utils/seedRouting";
 
 interface CartItem {
   id: string;

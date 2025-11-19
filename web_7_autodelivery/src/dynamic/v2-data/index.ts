@@ -4,7 +4,4 @@
  * Loads different data subsets based on v2 seed.
  */
 
-export { dynamicDataProvider } from './data-provider';
-export { initializeRestaurants, loadTestimonialsFromDb } from './restaurants-loader';
-export { getTestimonials } from './testimonials-loader';
-
+export * from "./data-provider";

@@ -1,0 +1,75 @@
+{
+  "search-input": [
+    "search-input",
+    "query-box",
+    "filter-input",
+    "book-search",
+    "find-book",
+    "search-field",
+    "lookup-input",
+    "book-finder",
+    "type-to-search",
+    "search-box"
+  ],
+  "book-card": [
+    "book-card",
+    "book-tile",
+    "book-block",
+    "book-box",
+    "book-panel",
+    "title-card",
+    "title-tile",
+    "book-item",
+    "title-item",
+    "book-container"
+  ],
+  "read-button": [
+    "read-btn",
+    "read-now",
+    "start-reading",
+    "read-book",
+    "read-action",
+    "book-read",
+    "open-book",
+    "begin-reading",
+    "read-title",
+    "start-book"
+  ],
+  "add-to-library": [
+    "add-library-btn",
+    "save-book",
+    "add-shelf",
+    "save-btn",
+    "library-add",
+    "shelf-add",
+    "save-title",
+    "add-to-shelf",
+    "book-save",
+    "title-save"
+  ],
+  "rating-stars": [
+    "rating-stars",
+    "star-rating",
+    "review-stars",
+    "rating-display",
+    "stars",
+    "rating-indicator",
+    "review-rating",
+    "star-display",
+    "rating-visual",
+    "stars-rating"
+  ],
+  "filter-genre": [
+    "filter-genre",
+    "genre-filter",
+    "genre-select",
+    "filter-category",
+    "genre-dropdown",
+    "category-filter",
+    "genre-menu",
+    "category-select",
+    "genre-picker",
+    "category-dropdown"
+  ]
+}
+

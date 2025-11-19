@@ -18,7 +18,7 @@ import { useSeed } from "@/context/SeedContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { useSearchParams } from "next/navigation";
 export function Header() {

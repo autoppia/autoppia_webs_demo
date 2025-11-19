@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { applyLayoutOverrides } from "@/utils/seedLayout";
+import { getLayoutConfig } from "@/dynamic/v2-data";
+import { applyLayoutOverrides } from "@/dynamic/v1-layouts";
 
 export function BodyWrapper({ children }: { children: React.ReactNode }) {
   const { seed, resolvedSeeds } = useSeed();

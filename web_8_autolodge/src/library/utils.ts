@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from "@/dynamic/v2-data";
 import { useSeed } from "@/context/SeedContext";
 
 export function cn(...inputs: ClassValue[]) {

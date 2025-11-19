@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 interface DataReadyGateProps {
   children: React.ReactNode;

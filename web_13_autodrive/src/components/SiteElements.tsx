@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { getSeedLayout } from "@/library/layouts";
+import { getSeedLayout } from "@/dynamic/v1-layouts";
 import { ReactNode } from "react";
 
 interface SiteElementsProps {

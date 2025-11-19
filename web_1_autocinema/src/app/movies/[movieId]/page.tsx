@@ -7,7 +7,7 @@ import { MovieMeta } from "@/components/movies/MovieMeta";
 import { RelatedMovies } from "@/components/movies/RelatedMovies";
 import { CommentsPanel, type CommentEntry } from "@/components/movies/CommentsPanel";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { getMovieById, getRelatedMovies } from "@/utils/dynamicDataProvider";
+import { getMovieById, getRelatedMovies } from "@/dynamic/v2-data";
 import { SeedLink } from "@/components/ui/SeedLink";
 import type { Movie } from "@/data/movies";
 import { useAuth } from "@/context/AuthContext";

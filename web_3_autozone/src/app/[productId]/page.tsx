@@ -10,9 +10,10 @@ import { type Product, useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
-import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed, getProductById } from "@/dynamic/v2-data";
 import { withSeed } from "@/utils/seedRouting";
-import { useSeedRouter, useSeed } from "@/seed-system";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeed } from "@/context/SeedContext";
 
 
 // Static date to avoid hydration mismatch

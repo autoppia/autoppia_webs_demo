@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { LayoutVariant, getLayoutVariant } from '@/library/layoutVariants';
-import { getEffectiveSeed } from '@/utils/dynamicDataProvider';
+import { getEffectiveSeed } from '@/dynamic/v2-data';
 import { useSeed } from '@/context/SeedContext';
 
 declare global {

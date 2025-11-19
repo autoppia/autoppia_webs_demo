@@ -1,6 +1,5 @@
-import { getSeedLayout } from "@/library/layouts";
-import { initializeTrips } from "@/data/trips-enhanced";
-import type { Trip } from "@/library/dataset";
+import { getSeedLayout } from "@/dynamic/v1-layouts";
+import { initializeTrips, type Trip } from "@/data/trips-enhanced";
 
 // Check if dynamic HTML is enabled via environment variable (seed-based structure flag)
 const isDynamicHtmlEnabled = (): boolean => {

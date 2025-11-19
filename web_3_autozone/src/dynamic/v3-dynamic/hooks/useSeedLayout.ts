@@ -9,7 +9,7 @@ import {
   generateLayoutClasses,
 } from "@/dynamic/v1-layouts";
 import { isDynamicModeEnabled } from "@/dynamic/v2-data";
-import { useSeed as useSeedContext } from "@/seed-system";
+import { useSeed as useSeedContext } from "@/context/SeedContext";
 import { useV3Attributes } from "./useV3Attributes";
 
 export function useSeedLayout() {

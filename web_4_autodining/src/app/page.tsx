@@ -19,13 +19,10 @@ import {
 } from "lucide-react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import {
-  RestaurantsData,
-  getRestaurants,
-  initializeRestaurants,
-} from "@/library/dataset";
+import { RestaurantsData } from "@/library/dataset";
+import { getRestaurants, initializeRestaurants } from "@/dynamic/v2-data";
 import { useSearchParams } from "next/navigation";
-import { useSeedVariation } from "@/library/utils";
+import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { isDataGenerationEnabled } from "@/shared/data-generator";

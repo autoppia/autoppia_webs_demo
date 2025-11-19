@@ -1,5 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { Trip } from "@/library/dataset";
+import { Trip } from "@/data/trips-enhanced";
 
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;

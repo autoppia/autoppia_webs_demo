@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import type { Recommendation } from "@/library/dataset";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";

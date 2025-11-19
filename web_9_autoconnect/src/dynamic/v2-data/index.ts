@@ -4,6 +4,4 @@
  * Loads different data subsets based on v2 seed.
  */
 
-export { dynamicDataProvider } from './data-provider';
-export { loadEntity, isDbLoadModeEnabled } from './users-loader';
-
+export * from "./data-provider";

@@ -14,8 +14,8 @@ import {
   getLayoutConfig,
   getBooksByGenre,
   searchBooks,
-} from "@/utils/dynamicDataProvider";
-import { applyLayoutOverrides, getLayoutClasses } from "@/utils/seedLayout";
+} from "@/dynamic/v2-data";
+import { applyLayoutOverrides, getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useSeed } from "@/context/SeedContext";
 import type { Book } from "@/data/books";
 import { useSeedRouter } from "@/hooks/useSeedRouter";

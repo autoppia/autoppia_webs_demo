@@ -1,7 +1,7 @@
 // src/library/useSeedLayout.ts
 import { useMemo, useCallback } from 'react';
 import { getSeedLayout, isDynamicEnabled } from './layouts';
-import { getLayoutConfig } from '@/utils/dynamicDataProvider';
+import { getLayoutConfig } from '@/dynamic/v2-data';
 import { getTextForElement, type ElementKey } from '@/library/textVariants';
 import { useSeed as useSeedContext } from '@/context/SeedContext';
 

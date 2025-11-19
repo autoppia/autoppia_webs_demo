@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getBooks } from "@/utils/dynamicDataProvider";
+import { getBooks } from "@/dynamic/v2-data";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { EVENT_TYPES, logEvent } from "@/library/events";

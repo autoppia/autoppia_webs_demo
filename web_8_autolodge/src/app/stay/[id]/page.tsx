@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
 

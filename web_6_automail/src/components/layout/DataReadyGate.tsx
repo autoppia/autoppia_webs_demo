@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
