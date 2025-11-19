@@ -41,18 +41,29 @@ export default function RegisterPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
+    const normalizedUsername = username.trim();
+    const failurePayload = {
+      username: normalizedUsername || username,
+    };
+
+    if (!normalizedUsername) {
+      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason: "missing_username" });
+      setError("Username is required");
+      return;
+    }
     if (password !== confirmPassword) {
+      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason: "password_mismatch" });
       setError("Passwords do not match");
       return;
     }
     if (password.trim().length < MIN_PASSWORD_LENGTH) {
+      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason: "password_too_short" });
       setError(`Password must be at least ${MIN_PASSWORD_LENGTH} characters`);
       return;
     }
     setIsSubmitting(true);
     try {
       const movieId = assignedMovie || preferredDefaultMovie;
-      const normalizedUsername = username.trim();
       await register({
         username: normalizedUsername,
         password,
@@ -65,6 +76,8 @@ export default function RegisterPage() {
       router.push("/profile");
     } catch (err) {
       setError((err as Error).message ?? "Unable to register");
+      const reason = (err as Error).message || "unknown_error";
+      logEvent(EVENT_TYPES.REGISTER_FAILURE, { ...failurePayload, reason });
     } finally {
       setIsSubmitting(false);
     }

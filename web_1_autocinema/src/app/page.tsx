@@ -17,7 +17,6 @@ import {
 } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { useSeed } from "@/context/SeedContext";
-import type { Movie } from "@/data/movies";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ContactSection } from "@/components/contact/ContactSection";
 

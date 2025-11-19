@@ -67,13 +67,13 @@ export default function MovieDetailPage() {
   useEffect(() => {
     if (!movie) return;
     const payload = movieToFilmPayload(movie);
-    logEvent(EVENT_TYPES.FILM_DETAIL, {
-      ...payload,
-    });
+    logEvent(EVENT_TYPES.FILM_DETAIL, payload);
   }, [movie]);
 
   const handleWatchTrailer = () => {
-    logEvent(EVENT_TYPES.WATCH_TRAILER, { movie_id: movie.id, title: movie.title });
+    if (!movie) return;
+    const payload = movieToFilmPayload(movie);
+    logEvent(EVENT_TYPES.WATCH_TRAILER, payload);
     if (movie.trailerUrl) {
       window.open(movie.trailerUrl, "_blank", "noopener,noreferrer");
     }
@@ -98,11 +98,15 @@ export default function MovieDetailPage() {
   };
 
   const handleWatchlist = () => {
-    logEvent(EVENT_TYPES.ADD_TO_WATCHLIST, { movie_id: movie.id });
+    if (!movie) return;
+    const payload = movieToFilmPayload(movie);
+    logEvent(EVENT_TYPES.ADD_TO_WATCHLIST, payload);
   };
 
   const handleShare = () => {
-    logEvent(EVENT_TYPES.SHARE_MOVIE, { movie_id: movie.id });
+    if (!movie) return;
+    const payload = movieToFilmPayload(movie);
+    logEvent(EVENT_TYPES.SHARE_MOVIE, payload);
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href).catch(() => {});
     }
