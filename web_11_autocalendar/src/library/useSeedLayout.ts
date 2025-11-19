@@ -1,8 +1,9 @@
 // src/library/useSeedLayout.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { getSeedLayout } from '@/utils/seedLayout';
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
 import { getTextForElement, type ElementKey } from '@/library/textVariants';
+import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 // Semantic ID mappings (10 per type; selected by seed mapped to 1-10)
 const SEMANTIC_ID_MAP: Record<string, string[]> = {
@@ -116,50 +117,30 @@ function generateElementId(seed: number, elementType: string, index: number): st
 }
 
 export function useSeedLayout() {
-  const [seed, setSeed] = useState(1);
-  const [layout, setLayout] = useState(getSeedLayout(1));
-  const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
-
-  useEffect(() => {
-    // Check if dynamic HTML is enabled
-    const dynamicEnabled = isDynamicModeEnabled();
-    setIsDynamicEnabled(dynamicEnabled);
-    
-    // Get seed from URL parameters (prefer seed-structure)
-    const searchParams = new URLSearchParams(window.location.search);
-    const seedStructureParam = searchParams.get('seed-structure');
-    const seedParam = seedStructureParam ?? searchParams.get('seed');
-    let rawSeed = seedParam ? parseInt(seedParam) : 1;
-    if (!seedParam) {
-      try {
-        const storedStructure = localStorage.getItem('autocalendarSeedStructure');
-        const stored = storedStructure ?? localStorage.getItem('autocalendarSeed');
-        if (stored) rawSeed = parseInt(stored);
-      } catch {}
-      if (!Number.isFinite(rawSeed)) {
-        const envDefault = parseInt(process.env.NEXT_PUBLIC_DEFAULT_SEED_STRUCTURE as string);
-        if (Number.isFinite(envDefault)) rawSeed = envDefault as unknown as number;
-      }
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds } = useSeedContext();
+  
+  // Use resolved v1 seed for layout (or v3 if enabled, otherwise v1)
+  const layoutSeed = useMemo(() => {
+    return resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  }, [resolvedSeeds.v3, resolvedSeeds.v1, resolvedSeeds.base]);
+  
+  // Check if dynamic mode is enabled
+  const isDynamicEnabled = isDynamicModeEnabled();
+  
+  const seed = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return 1;
     }
-    
-    // Get effective seed (validates range and respects dynamic HTML setting)
-    const effectiveSeed = getEffectiveSeed(rawSeed);
-    setSeed(effectiveSeed);
-    
-    // Save for compatibility
-    try {
-      localStorage.setItem('autocalendarSeedStructure', effectiveSeed.toString());
-      localStorage.setItem('autocalendarSeed', effectiveSeed.toString());
-    } catch {}
-    
-    // Update layout only if dynamic HTML is enabled
-    if (dynamicEnabled) {
-      setLayout(getSeedLayout(effectiveSeed));
-    } else {
-      // Use default layout when dynamic HTML is disabled
-      setLayout(getSeedLayout(1));
+    return layoutSeed;
+  }, [isDynamicEnabled, layoutSeed]);
+  
+  const layout = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return getSeedLayout(1);
     }
-  }, []);
+    return getSeedLayout(seed);
+  }, [isDynamicEnabled, seed]);
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {

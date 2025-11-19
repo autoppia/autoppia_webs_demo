@@ -39,7 +39,7 @@ export class DynamicStructureProvider {
 
   // Get effective seed-structure value - returns 1 (default) when dynamic HTML structure is disabled
   // Maps seed-structure from 1-300 to variations 1-10 using formula
-  // Formula: Maps 300 seeds to 10 variations using modulo pattern
+  // Formula: COMMON across all webs - ((seed % 30) + 1) % 10 || 10
   public getEffectiveSeedStructure(providedSeed: number = 1): number {
     if (!this.isEnabled) {
       return 1;
@@ -50,9 +50,9 @@ export class DynamicStructureProvider {
       return 1;
     }
     
-    // Map 1-300 to 1-10 using modulo
-    // This distributes the 300 seeds evenly across 10 variations
-    const mappedSeed = ((providedSeed - 1) % 10) + 1;
+    // Map 1-300 to 1-10 using COMMON formula
+    // This distributes the 300 seeds more evenly across 10 variations
+    const mappedSeed = ((providedSeed % 30) + 1) % 10 || 10;
     
     return mappedSeed;
   }

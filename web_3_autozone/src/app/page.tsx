@@ -5,22 +5,22 @@ import { CategoryCard } from "@/components/home/CategoryCard";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { Suspense } from "react";
-import { useSeed } from "@/context/SeedContext";
-import { 
-  getProductsByCategory, 
-  getStaticCategories, 
-  getStaticHomeEssentials, 
+import { useSeed } from "@/seed-system";
+import {
+  getProductsByCategory,
+  getStaticCategories,
+  getStaticHomeEssentials,
   getStaticRefreshSpace,
   getLayoutConfig,
   getEffectiveSeed
-} from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+} from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 
 function HomeContent() {
   
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
   const rawSeed = Number(searchParams.get("seed") ?? "1");
   const seed = getEffectiveSeed(rawSeed);

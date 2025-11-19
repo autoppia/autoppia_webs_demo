@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 
@@ -86,9 +86,6 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
     return () => { mounted = false; };
   }, [activeTab, doctor.id, doctor.name, doctor.specialty]);
 
-  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-  const hasSeed = !!sp?.get('seed');
-
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "education", label: "Education & Certifications" },
@@ -96,7 +93,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
     { id: "reviews", label: "Reviews" },
     { id: "procedures", label: "Procedures" }
   ];
-  const orderedTabs = hasSeed ? reorderElements(tabs) : tabs;
+  const orderedTabs = reorderElements(tabs);
 
   return (
     <div className="container py-10">
@@ -108,7 +105,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               { key: 'avatar' },
               { key: 'details' },
             ];
-            const orderedHeader = hasSeed ? reorderElements(headerParts) : headerParts;
+            const orderedHeader = reorderElements(headerParts);
             return orderedHeader.map((p, i) => (
               <DynamicElement key={p.key} elementType={`profile-header-${p.key}`} as="div" index={i} className={p.key === 'avatar' ? 'flex-shrink-0' : 'flex-1'}>
                 {p.key === 'avatar' && (
@@ -157,7 +154,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
                 { key: 'email', icon: <Mail className="h-4 w-4 text-muted-foreground" />, label: 'Email', value: doctor.email || 'N/A' },
                 { key: 'fee', icon: <span className="text-lg">💰</span>, label: 'Consultation Fee', value: doctor.consultationFee != null ? `$${doctor.consultationFee}` : 'N/A' },
               ];
-              const orderedInfo = hasSeed ? reorderElements(info) : info;
+              const orderedInfo = reorderElements(info);
               return orderedInfo.map((it, i) => (
                 <DynamicElement key={it.key} elementType="contact-item" as="div" index={i} className="flex items-center gap-3">
                   {it.icon}
@@ -416,7 +413,7 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
               <Button variant="outline" onClick={handleViewReviews} className="flex-1">View All Reviews</Button>
             ) },
           ];
-          const orderedActions = hasSeed ? reorderElements(actions) : actions;
+          const orderedActions = reorderElements(actions);
           return orderedActions.map((a, i) => (
             <DynamicElement key={a.key} elementType="profile-action" as="div" index={i}>
               {a.node}

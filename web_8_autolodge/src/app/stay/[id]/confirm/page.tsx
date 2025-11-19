@@ -1,12 +1,13 @@
 "use client";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { addDays, format, isWithinInterval, parseISO } from "date-fns";
 import type { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedStructureNavigation } from "../../../../hooks/useSeedStructureNavigation";
 
 function parseLocalDate(dateString: string | undefined) {
@@ -35,9 +36,9 @@ function toStartOfDay(date: Date): Date {
 
 
 function ConfirmPageContent() {
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const { navigateWithSeedStructure } = useSeedStructureNavigation();
-  const router = useRouter();
+  const router = useSeedRouter();
   const params = useParams<{ id: string }>();
   const search = useSearchParams();
   const prop = useMemo(() => {

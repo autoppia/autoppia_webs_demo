@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter as useNextRouter } from "next/navigation";
-import { useSeed } from "@/library/useSeed";
+import { useSeed } from "@/context/SeedContext";
 import { useCallback } from "react";
 import type { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 

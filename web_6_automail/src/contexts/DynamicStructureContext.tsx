@@ -1,18 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import {
-  dynamicStructureProvider,
-  type StructureVariation,
-} from "@/utils/dynamicStructureProvider";
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useCallback,
+  Suspense,
+} from "react";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 interface DynamicStructureContextType {
   getText: (key: string, fallback?: string) => string;
   getId: (key: string, fallback?: string) => string;
   getAriaLabel: (key: string, fallback?: string) => string;
-  currentVariation: StructureVariation;
-  seedStructure: number;
+  currentVariation: number;
+  seedStructure: number | null;
   isEnabled: boolean;
 }
 
@@ -25,37 +27,34 @@ function DynamicStructureProviderInner({
 }: {
   children: React.ReactNode;
 }) {
-  const searchParams = useSearchParams();
-  const rawSeedStructure = Number(searchParams.get("seed-structure") ?? "1");
-  const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure);
-  const isEnabled = dynamicStructureProvider.isDynamicStructureModeEnabled();
+  const {
+    getText: resolveText,
+    getId: resolveId,
+    getAriaLabel: resolveAria,
+    v3Seed,
+    isActive,
+  } = useV3Attributes();
 
-  // Set variation based on seed-structure from URL
-  useEffect(() => {
-    dynamicStructureProvider.setVariation(seedStructure);
+  const seedStructure = v3Seed ?? null;
+  const currentVariation = useMemo(() => {
+    if (!seedStructure) return 1;
+    return ((seedStructure % 30) + 1) % 10 || 10;
   }, [seedStructure]);
 
-  const [currentVariation, setCurrentVariation] = useState<StructureVariation>(
-    dynamicStructureProvider.getCurrentVariation()
+  const getText = useCallback(
+    (key: string, fallback?: string) => resolveText(key, fallback ?? key),
+    [resolveText]
   );
 
-  // Update current variation when seed-structure changes
-  useEffect(() => {
-    const variation = dynamicStructureProvider.getCurrentVariation();
-    setCurrentVariation(variation);
-  }, [seedStructure]);
+  const getId = useCallback(
+    (key: string, fallback?: string) => resolveId(key, fallback ?? key),
+    [resolveId]
+  );
 
-  const getText = (key: string, fallback?: string): string => {
-    return dynamicStructureProvider.getText(key, fallback);
-  };
-
-  const getId = (key: string, fallback?: string): string => {
-    return dynamicStructureProvider.getId(key, fallback);
-  };
-
-  const getAriaLabel = (key: string, fallback?: string): string => {
-    return dynamicStructureProvider.getAriaLabel(key, fallback);
-  };
+  const getAriaLabel = useCallback(
+    (key: string, fallback?: string) => resolveAria(key, fallback ?? ""),
+    [resolveAria]
+  );
 
   return (
     <DynamicStructureContext.Provider
@@ -65,7 +64,7 @@ function DynamicStructureProviderInner({
         getAriaLabel,
         currentVariation,
         seedStructure,
-        isEnabled,
+        isEnabled: isActive,
       }}
     >
       {children}

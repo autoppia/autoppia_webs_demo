@@ -1,8 +1,9 @@
 // src/library/useSeedLayout.ts
-import { useState, useEffect, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { getSeedLayout, isDynamicEnabled } from './layouts';
 import { getLayoutConfig } from '@/utils/dynamicDataProvider';
 import { getTextForElement, type ElementKey } from '@/library/textVariants';
+import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 // Semantic ID mappings (10 per type; selected by seed mapped to 1-10)
 const SEMANTIC_ID_MAP: Record<string, string[]> = {
@@ -127,127 +128,43 @@ function generateElementId(seed: number, elementType: string, index: number): st
   return bases[(variant - 1) % bases.length];
 }
 
-const parseSeedValue = (value?: string | null): number => {
-  if (!value) return NaN;
-  const parsed = Number.parseInt(value, 10);
-  return Number.isFinite(parsed) ? parsed : NaN;
-};
-
-const clampSeed = (value: number): number => (value >= 1 && value <= 300 ? value : 1);
-const V2_STORAGE_KEY = 'autodrive_v2_seed';
-const isV2DbModeEnabled = (
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE ||
-  process.env.ENABLE_DYNAMIC_V2_DB_MODE ||
-  ''
-)
-  .toString()
-  .toLowerCase() === 'true';
-
 export function useSeedLayout() {
-  const [structureSeed, setStructureSeed] = useState(1);
-  const [dynamicSeed, setDynamicSeed] = useState(1);
-  const [structureSeedActive, setStructureSeedActive] = useState(false);
-  const [dynamicSeedActive, setDynamicSeedActive] = useState(false);
-  const [layout, setLayout] = useState(getSeedLayout(1));
-  const [isDynamicEnabledState, setIsDynamicEnabledState] = useState(false);
-  const [v2Seed, setV2Seed] = useState<number | null>(null);
-
-  useEffect(() => {
-    // Check if dynamic HTML is enabled
-    const dynamicEnabled = isDynamicEnabled();
-    setIsDynamicEnabledState(dynamicEnabled);
-    
-    if (typeof window === 'undefined') {
-      return;
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeedContext();
+  
+  // Use resolved v1 seed for structure (layout)
+  const structureSeed = useMemo(() => {
+    return resolvedSeeds.v1 ?? resolvedSeeds.base;
+  }, [resolvedSeeds.v1, resolvedSeeds.base]);
+  
+  // Use resolved v3 seed for dynamic (HTML/text), or v1 if v3 not enabled
+  const dynamicSeed = useMemo(() => {
+    return resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  }, [resolvedSeeds.v3, resolvedSeeds.v1, resolvedSeeds.base]);
+  
+  const v2Seed = useMemo(() => {
+    return resolvedSeeds.v2 ?? null;
+  }, [resolvedSeeds.v2]);
+  
+  // Check if dynamic mode is enabled
+  const isDynamicEnabledState = isDynamicEnabled();
+  
+  // Determine if structure and dynamic are active based on resolved seeds
+  const structureSeedActive = useMemo(() => {
+    return isDynamicEnabledState && resolvedSeeds.v1 !== null;
+  }, [isDynamicEnabledState, resolvedSeeds.v1]);
+  
+  const dynamicSeedActive = useMemo(() => {
+    return isDynamicEnabledState && (resolvedSeeds.v3 !== null || resolvedSeeds.v1 !== null);
+  }, [isDynamicEnabledState, resolvedSeeds.v3, resolvedSeeds.v1]);
+  
+  // Calculate layout based on structure seed
+  const layout = useMemo(() => {
+    if (isDynamicEnabledState && structureSeedActive) {
+      return getLayoutConfig(structureSeed);
     }
-
-    const url = new URL(window.location.href);
-    let urlChanged = false;
-
-    const rawStructureSeed = parseSeedValue(url.searchParams.get('seed'));
-    const structureActive = dynamicEnabled && Number.isFinite(rawStructureSeed);
-    const resolvedStructureSeed = structureActive ? clampSeed(rawStructureSeed as number) : 1;
-
-    const rawDynamicSeed = parseSeedValue(url.searchParams.get('seed-structure'));
-    const dynamicActive = dynamicEnabled && Number.isFinite(rawDynamicSeed);
-    const resolvedDynamicSeed = dynamicActive ? clampSeed(rawDynamicSeed as number) : 1;
-
-    if (structureActive) {
-      const structureString = resolvedStructureSeed.toString();
-      if (url.searchParams.get('seed') !== structureString) {
-        url.searchParams.set('seed', structureString);
-        urlChanged = true;
-      }
-    }
-
-    if (dynamicActive) {
-      const dynamicString = resolvedDynamicSeed.toString();
-      if (url.searchParams.get('seed-structure') !== dynamicString) {
-        url.searchParams.set('seed-structure', dynamicString);
-        urlChanged = true;
-      }
-    }
-
-    let resolvedV2Seed: number | null = null;
-    if (isV2DbModeEnabled) {
-      const rawV2 = parseSeedValue(url.searchParams.get('v2-seed'));
-      if (Number.isFinite(rawV2)) {
-        resolvedV2Seed = clampSeed(rawV2 as number);
-      } else {
-        try {
-          const stored = localStorage.getItem(V2_STORAGE_KEY);
-          if (stored) {
-            const parsedStored = parseSeedValue(stored);
-            if (Number.isFinite(parsedStored)) {
-              resolvedV2Seed = clampSeed(parsedStored as number);
-            }
-          }
-        } catch {
-          resolvedV2Seed = null;
-        }
-      }
-      if (resolvedV2Seed !== null) {
-        const v2String = resolvedV2Seed.toString();
-        if (url.searchParams.get('v2-seed') !== v2String) {
-          url.searchParams.set('v2-seed', v2String);
-          urlChanged = true;
-        }
-        try {
-          localStorage.setItem(V2_STORAGE_KEY, v2String);
-        } catch {
-          // ignore storage errors
-        }
-      } else if (url.searchParams.has('v2-seed')) {
-        url.searchParams.delete('v2-seed');
-        urlChanged = true;
-        try {
-          localStorage.removeItem(V2_STORAGE_KEY);
-        } catch {}
-      }
-    } else if (url.searchParams.has('v2-seed')) {
-      url.searchParams.delete('v2-seed');
-      urlChanged = true;
-      try {
-        localStorage.removeItem(V2_STORAGE_KEY);
-      } catch {}
-    }
-
-    setStructureSeed(resolvedStructureSeed);
-    setDynamicSeed(resolvedDynamicSeed);
-    setV2Seed(isV2DbModeEnabled ? resolvedV2Seed : null);
-    setStructureSeedActive(structureActive);
-    setDynamicSeedActive(dynamicActive);
-
-    if (dynamicEnabled && structureActive) {
-      setLayout(getLayoutConfig(resolvedStructureSeed));
-    } else {
-      setLayout(getLayoutConfig(1));
-    }
-
-    if (urlChanged) {
-      window.history.replaceState(null, '', url.toString());
-    }
-  }, []);
+    return getLayoutConfig(1);
+  }, [isDynamicEnabledState, structureSeedActive, structureSeed]);
 
   const isDynamicStructureActive = isDynamicEnabledState && structureSeedActive;
   const isDynamicHtmlActive = isDynamicEnabledState && dynamicSeedActive;
@@ -367,33 +284,10 @@ export function useSeedLayout() {
   }, [dynamicSeed, isDynamicHtmlActive]);
 
   // Helper function to generate navigation URLs with seed parameter
+  // Delegates to SeedContext which handles unified seed preservation
   const getNavigationUrl = useCallback((path: string): string => {
-    const [pathWithoutHash, hashFragment] = path.split('#', 2);
-    const [basePath, queryString] = pathWithoutHash.split('?', 2);
-    const params = new URLSearchParams(queryString || '');
-
-    if (isDynamicStructureActive) {
-      params.set('seed', structureSeed.toString());
-    } else {
-      params.delete('seed');
-    }
-
-    if (isDynamicHtmlActive) {
-      params.set('seed-structure', dynamicSeed.toString());
-    } else {
-      params.delete('seed-structure');
-    }
-
-    if (isV2DbModeEnabled && v2Seed !== null) {
-      params.set('v2-seed', v2Seed.toString());
-    } else {
-      params.delete('v2-seed');
-    }
-
-    const query = params.toString();
-    const rebuilt = `${basePath}${query ? `?${query}` : ''}`;
-    return hashFragment ? `${rebuilt}#${hashFragment}` : rebuilt;
-  }, [structureSeed, dynamicSeed, v2Seed, isDynamicStructureActive, isDynamicHtmlActive]);
+    return seedGetNavigationUrl(path);
+  }, [seedGetNavigationUrl]);
 
   return {
     seed: dynamicSeed,

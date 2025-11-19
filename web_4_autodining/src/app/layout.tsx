@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
-import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
+// DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
 import { Suspense } from "react";
 
@@ -35,9 +35,7 @@ export default function RootLayout({
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
             <SeedProvider>
-              <DynamicStructureProvider>
-                {children}
-              </DynamicStructureProvider>
+              {children}
             </SeedProvider>
           </Suspense>
         </ClientBody>

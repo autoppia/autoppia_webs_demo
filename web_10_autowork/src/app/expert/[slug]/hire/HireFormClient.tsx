@@ -4,7 +4,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 
 interface Expert {
   slug: string;

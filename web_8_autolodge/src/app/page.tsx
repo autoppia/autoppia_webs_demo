@@ -9,7 +9,7 @@ import { GuestSelectorPopover } from "@/components/GuestSelectorPopover";
 import { PropertyCard } from "@/components/PropertyCard";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
 
@@ -50,7 +50,7 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function HomeContent() {
-  const { getText, getId, getClass, seedStructure } = useDynamicStructure();
+  const { getText, getId, getClass } = useV3Attributes();
   const searchParams = useSearchParams();
 
   const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeed as useSeedContext } from "@/context/SeedContext";
 
 const BASE_PROJECT_KEY = "web_10_autowork";
 
@@ -40,7 +40,8 @@ export function useAutoworkData<T = any>(projectKey: string, count: number = 12)
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [nonce, setNonce] = useState(0);
-  const { v2Seed } = useSeedLayout();
+  const { resolvedSeeds } = useSeedContext();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const entityType = useMemo(() => resolveEntityType(projectKey), [projectKey]);
   const selectionMethod = entityType === "skills" ? "select" : "shuffle";
 

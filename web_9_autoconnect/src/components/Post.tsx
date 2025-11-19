@@ -5,7 +5,7 @@ import { useState } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import Image from "next/image";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function Post({
   post,
@@ -17,7 +17,7 @@ export default function Post({
   onAddComment: (postId: string, text: string) => void;
 }) {
   const [comment, setComment] = useState("");
-  const { getText, getClass } = useDynamicStructure();
+  const { getText, getClass } = useV3Attributes();
   function timeAgo(dateString: string) {
     const seconds = Math.floor(
       (Date.now() - new Date(dateString).getTime()) / 1000

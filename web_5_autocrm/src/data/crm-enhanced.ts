@@ -26,21 +26,9 @@ const CACHE_KEYS = {
   logs: "autocrm_generated_logs_v1",
 };
 
-// Track runtime v2 seed propagated from SeedContext (client-side)
-let runtimeV2Seed: number | null = null;
-
-if (typeof window !== "undefined") {
-  runtimeV2Seed = (window as any).__autocrmV2Seed ?? null;
-  window.addEventListener("autocrm:v2SeedChange", (event: Event) => {
-    const detail = (event as CustomEvent<{ seed: number | null }>).detail;
-    runtimeV2Seed = typeof detail?.seed === "number" ? detail.seed : null;
-  });
-}
-
+// Note: v2Seed is now passed directly to initializeClients, initializeMatters, etc.
+// This function is kept for backward compatibility but should use the seed parameter
 function getActiveSeed(defaultSeed: number = 1): number {
-  if (typeof runtimeV2Seed === "number" && runtimeV2Seed >= 1 && runtimeV2Seed <= 300) {
-    return runtimeV2Seed;
-  }
   return getSeedValueFromEnv(defaultSeed);
 }
 
@@ -139,6 +127,18 @@ function normalizeMatter(matter: any, index: number): any {
 }
 
 /**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autocrmV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
+/**
  * Initialize clients with data generation if enabled
  */
 export async function initializeClients(v2SeedValue?: number | null): Promise<any[]> {
@@ -152,8 +152,12 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
   let effectiveSeed: number;
   
   if (dbModeEnabled) {
-    // If v2 is enabled, use the v2-seed provided OR default to 1
-    effectiveSeed = v2SeedValue ?? 1;
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined") {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
+    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
     // If v2 is NOT enabled, automatically use seed=1
     effectiveSeed = 1;

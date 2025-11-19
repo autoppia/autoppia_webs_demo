@@ -43,6 +43,7 @@ from generators.smart_generator import (
     build_generation_prompt_from_examples,
     get_project_entity_metadata,
 )
+from seed_resolver import resolve_seeds
 
 # --- Configuration ---
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
@@ -226,27 +227,15 @@ app = FastAPI(
 )
 
 # Add CORS middleware to allow requests from Next.js local development
+LOCALHOST_PORTS = [f"http://localhost:{port}" for port in range(8000, 8021)]
+INTERNAL_PORTS = [
+    "http://app:8002",
+    "http://app:8003",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://app:8002",
-        "http://app:8003",
-        "http://localhost:8000",
-        "http://localhost:8001",
-        "http://localhost:8002",
-        "http://localhost:8003",
-        "http://localhost:8004",
-        "http://localhost:8005",
-        "http://localhost:8006",
-        "http://localhost:8007",
-        "http://localhost:8008",
-        "http://localhost:8009",
-        "http://localhost:8010",
-        "http://localhost:8011",
-        "http://localhost:8012",
-        "http://localhost:8013",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=INTERNAL_PORTS + LOCALHOST_PORTS + ["http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
@@ -273,6 +262,7 @@ async def root():
             "generate_dataset": "/datasets/generate",
             "generate_smart": "/datasets/generate-smart",
             "load_dataset": "/datasets/load",
+            "resolve_seeds": "/seeds/resolve",
         },
         "status": "operational",
     }
@@ -953,6 +943,112 @@ async def health_check_endpoint():
         python_version=f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
         debug_message=debug_message,
     )
+
+
+# --- Seed Resolution Models ---
+class SeedResolveRequest(BaseModel):
+    seed: int = Field(..., ge=1, le=999, description="Base seed value (1-999)")
+    v1_enabled: bool = Field(default=False, description="Enable v1 (layout/content variations)")
+    v2_enabled: bool = Field(default=False, description="Enable v2 (DB data selection)")
+    v3_enabled: bool = Field(default=False, description="Enable v3 (structure variations)")
+    v1_config: Optional[Dict[str, int]] = Field(
+        default=None,
+        description="Optional v1 config: {max, multiplier, offset}",
+    )
+    v2_config: Optional[Dict[str, int]] = Field(
+        default=None,
+        description="Optional v2 config: {max, multiplier, offset}",
+    )
+    v3_config: Optional[Dict[str, int]] = Field(
+        default=None,
+        description="Optional v3 config: {max, multiplier, offset}",
+    )
+
+
+class SeedResolveResponse(BaseModel):
+    base: int
+    v1: Optional[int] = None
+    v2: Optional[int] = None
+    v3: Optional[int] = None
+
+
+# --- Seed Resolution Endpoint ---
+@app.post(
+    "/seeds/resolve",
+    response_model=SeedResolveResponse,
+    summary="Resolve base seed into v1/v2/v3 seeds",
+)
+async def resolve_seeds_endpoint(request: SeedResolveRequest):
+    """
+    Resolves a base seed into deterministic v1, v2, v3 seeds.
+    
+    This service centralizes seed resolution logic so all webs use the same formulas.
+    Each version (v1, v2, v3) can be enabled/disabled independently.
+    
+    Example:
+        POST /seeds/resolve
+        {
+            "seed": 42,
+            "v1_enabled": true,
+            "v2_enabled": true,
+            "v3_enabled": false
+        }
+        
+        Returns:
+        {
+            "base": 42,
+            "v1": 173,
+            "v2": 247,
+            "v3": null
+        }
+    """
+    try:
+        result = resolve_seeds(
+            base_seed=request.seed,
+            v1_enabled=request.v1_enabled,
+            v2_enabled=request.v2_enabled,
+            v3_enabled=request.v3_enabled,
+            v1_config=request.v1_config,
+            v2_config=request.v2_config,
+            v3_config=request.v3_config,
+        )
+        return SeedResolveResponse(**result)
+    except Exception as e:
+        logger.error(f"Seed resolution failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Seed resolution failed: {str(e)}",
+        )
+
+
+@app.get(
+    "/seeds/resolve",
+    response_model=SeedResolveResponse,
+    summary="Resolve base seed into v1/v2/v3 seeds (GET version)",
+)
+async def resolve_seeds_get(
+    seed: int = Query(..., ge=1, le=999, description="Base seed value (1-999)"),
+    v1_enabled: bool = Query(default=False, description="Enable v1"),
+    v2_enabled: bool = Query(default=False, description="Enable v2"),
+    v3_enabled: bool = Query(default=False, description="Enable v3"),
+):
+    """
+    GET version of seed resolution (for easier browser testing).
+    """
+    try:
+        result = resolve_seeds(
+            base_seed=seed,
+            v1_enabled=v1_enabled,
+            v2_enabled=v2_enabled,
+            v3_enabled=v3_enabled,
+        )
+        return SeedResolveResponse(**result)
+    except Exception as e:
+        logger.error(f"Seed resolution failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Seed resolution failed: {str(e)}",
+        )
 
 
 if __name__ == "__main__":

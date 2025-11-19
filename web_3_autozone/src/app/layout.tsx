@@ -1,7 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
-import { DynamicStructureProvider } from "@/context/DynamicStructureContext";
+// DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -29,22 +29,20 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <SeedProvider>
           <CartProvider>
-            <DynamicStructureProvider>
-              {/* <NotificationBanner /> */}
-              <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
-                <Header />
-              </Suspense>
-              <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
-                <DataReadyGate>
-                  <BodyWrapper>
-                    {children}
-                  </BodyWrapper>
-                </DataReadyGate>
-              </Suspense>
-              <Suspense fallback={<div className="h-32 bg-white"></div>}>
-                <Footer />
-              </Suspense>
-            </DynamicStructureProvider>
+            {/* <NotificationBanner /> */}
+            <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
+              <Header />
+            </Suspense>
+            <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
+              <DataReadyGate>
+                <BodyWrapper>
+                  {children}
+                </BodyWrapper>
+              </DataReadyGate>
+            </Suspense>
+            <Suspense fallback={<div className="h-32 bg-white"></div>}>
+              <Footer />
+            </Suspense>
           </CartProvider>
         </SeedProvider>
       </body>

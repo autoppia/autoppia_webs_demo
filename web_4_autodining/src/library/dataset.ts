@@ -665,7 +665,7 @@ export function getRestaurants(): RestaurantGenerated[] {
     }));
 }
 
-export async function initializeRestaurants(v2SeedValue?: number | null): Promise<RestaurantGenerated[]> {
+export async function initializeRestaurants(seedValue?: number | null): Promise<RestaurantGenerated[]> {
   // Check if v2 (DB mode) is enabled
   let dbModeEnabled = false;
   try {
@@ -676,13 +676,7 @@ export async function initializeRestaurants(v2SeedValue?: number | null): Promis
   // Determine the seed to use
   let effectiveSeed: number;
   
-  if (dbModeEnabled) {
-    // If v2 is enabled, use the v2-seed provided OR default to 1
-    effectiveSeed = v2SeedValue ?? 1;
-  } else {
-    // If v2 is NOT enabled, automatically use seed=1
-    effectiveSeed = 1;
-  }
+  effectiveSeed = dbModeEnabled ? seedValue ?? 1 : 1;
 
   // Load from DB with the determined seed
   try {

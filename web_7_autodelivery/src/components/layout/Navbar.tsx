@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input";
 import { useSearchStore } from "@/store/search-store";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function Navbar() {
   const search = useSearchStore((s) => s.search);
   const setSearch = useSearchStore((s) => s.setSearch);
   const layout = useSeedLayout();
-  const { getText, getPlaceholder, getId, getAria } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

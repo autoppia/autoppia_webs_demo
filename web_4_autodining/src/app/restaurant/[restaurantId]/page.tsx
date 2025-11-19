@@ -20,7 +20,7 @@ import Link from "next/link";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeedVariation } from "@/library/utils";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { withSeedAndParams } from "@/utils/seedRouting";
 import { initializeRestaurants, getRestaurants } from "@/library/dataset";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
@@ -57,23 +57,25 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
-  const { seed, v2Seed } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
 
-  // Use seed-based variations
-  const bookButtonVariation = useSeedVariation("bookButton");
-  const imageContainerVariation = useSeedVariation("imageContainer");
+  // Use seed-based variations (pass v1 seed)
+  const bookButtonVariation = useSeedVariation("bookButton", undefined, layoutSeed);
+  const imageContainerVariation = useSeedVariation("imageContainer", undefined, layoutSeed);
   
   // Create layout based on seed
   const layout = useMemo(() => {
-    const wrap = seed % 2 === 0;
-    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][seed % 5];
-    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][seed % 5];
-    const justify = ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5];
-    const marginTop = [0, 16, 32, 48, 64][seed % 5];
+    const wrap = layoutSeed % 2 === 0;
+    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][layoutSeed % 5];
+    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][layoutSeed % 5];
+    const justify = ["flex-start", "center", "flex-end", "space-between", "space-around"][layoutSeed % 5];
+    const marginTop = [0, 16, 32, 48, 64][layoutSeed % 5];
     return { wrap, justifyClass, marginTopClass, justify, marginTop };
-  }, [seed]);
+  }, [layoutSeed]);
 
   useEffect(() => {
     // Ensure data is initialized and loaded from DB or generator as configured
@@ -491,7 +493,7 @@ export default function RestaurantPage() {
                   <div
                     className="mt-2"
                     style={{ marginTop: layout.marginTop }}
-                    data-testid={`book-btn-wrapper-${seed}`}
+                    data-testid={`book-btn-wrapper-${layoutSeed}`}
                   >
                     <div
                       className="flex gap-1"

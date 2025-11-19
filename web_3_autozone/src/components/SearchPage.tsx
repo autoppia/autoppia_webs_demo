@@ -3,13 +3,13 @@
 import { useSearchParams } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useCart } from "@/context/CartContext";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useState } from "react";
 import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
-import { searchProducts } from "@/utils/dynamicDataProvider";
-import { withSeed } from "@/utils/seedRouting";
+import { searchProducts } from "@/dynamic/v2-data";
+import { withSeed } from "@/seed-system/navigation/routing-utils";
 
 const getTopMarginClass = () => {
   const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
@@ -21,7 +21,7 @@ export default function SearchPage() {
   const router = useSeedRouter();
   const query = searchParams.get("q")?.toLowerCase() || "1";
   const { addToCart } = useCart();
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
 
   const results = searchProducts(query);

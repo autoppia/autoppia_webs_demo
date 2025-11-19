@@ -6,15 +6,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLayout } from '@/contexts/LayoutProvider';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
+import { useSeed } from '@/context/SeedContext';
 
 function DemoPageContent() {
   const router = useSeedRouter();
   const searchParams = useSearchParams();
   const currentSeed = parseInt(searchParams.get('seed') || '1', 10);
   const layout = useLayout();
+  const { setSeed } = useSeed();
 
   const handleSeedChange = (seed: number) => {
-    router.push(`/demo?seed=${seed}`);
+    setSeed(seed);
+    router.push('/demo');
   };
 
   return (

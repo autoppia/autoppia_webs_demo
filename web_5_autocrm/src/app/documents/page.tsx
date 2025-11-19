@@ -28,14 +28,15 @@ const LoadingNotice = ({ message }: { message: string }) => (
 
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
-  const { v2Seed } = useSeed();
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: "web_5_autocrm",
     entityType: "files",
-    seedValue: v2Seed ?? undefined,
+    seedValue: v2Seed,
   });
   console.log("[DocumentsPage] API response", {
-    seed: v2Seed ?? null,
+    seed: v2Seed,
     count: data?.length ?? 0,
     isLoading,
     error,

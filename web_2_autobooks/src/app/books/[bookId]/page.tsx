@@ -1,0 +1,143 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { useParams } from "next/navigation";
+import { MovieDetailHero } from "@/components/movies/MovieDetailHero";
+import { MovieMeta } from "@/components/movies/MovieMeta";
+import { RelatedBooks } from "@/components/movies/RelatedBooks";
+import { CommentsPanel, type CommentEntry } from "@/components/movies/CommentsPanel";
+import { logEvent, EVENT_TYPES } from "@/library/events";
+import { getBookById, getRelatedBooks } from "@/utils/dynamicDataProvider";
+import { SeedLink } from "@/components/ui/SeedLink";
+import type { Book } from "@/data/books";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
+
+const AVATARS = [
+  "/media/gallery/people/person1.jpg",
+  "/media/gallery/people/person2.png",
+  "/media/gallery/people/person3.jpg",
+  "/media/gallery/people/person4.jpg",
+];
+
+function createMockComments(book: Book): CommentEntry[] {
+  const snippets = [
+    `${book.title} bends genres in the best way possible.`,
+    `Loved how ${book.director} lets the narrative shift mid-chapter.`,
+    `If you enjoy ${book.genres[0] || "experimental"} books, this is a wild ride.`,
+  ];
+  return snippets.map((snippet, index) => ({
+    id: `${book.id}-${index}`,
+    author: index % 2 === 0 ? "Alicia" : "Jordan",
+    message: snippet,
+    mood: ["Inspired", "Curious", "Skeptical"][index % 3],
+    avatar: AVATARS[index % AVATARS.length],
+    createdAt: `Shelf note #${index + 1}`,
+  }));
+}
+
+export default function BookDetailPage() {
+  const params = useParams<{ bookId: string }>();
+  const bookId = decodeURIComponent(params.bookId);
+  const book = getBookById(bookId);
+  const { currentUser } = useAuth();
+
+  const [comments, setComments] = useState(() => (book ? createMockComments(book) : []));
+  const [message, setMessage] = useState<string | null>(null);
+
+  if (!book) {
+    return (
+      <main className="mx-auto max-w-4xl px-4 py-16 text-white">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+          <h1 className="text-3xl font-semibold">Book not found</h1>
+          <p className="mt-3 text-white/70">Try selecting a different seed or explore the full catalog.</p>
+          <SeedLink href="/" className="mt-6 inline-flex rounded-full border border-white/10 px-6 py-3 text-sm uppercase tracking-wide text-secondary">
+            Back to home
+          </SeedLink>
+        </div>
+      </main>
+    );
+  }
+
+  const relatedBooks = useMemo(() => getRelatedBooks(book.id, 4), [book.id]);
+  const canManageBook = Boolean(currentUser?.allowedBooks?.includes(book.id));
+
+  const handleWatchTrailer = () => {
+    logEvent(EVENT_TYPES.OPEN_PREVIEW, { book_id: book.id, title: book.title });
+    if (book.trailerUrl) {
+      window.open(book.trailerUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const handleDelete = () => {
+    logEvent(EVENT_TYPES.DELETE_BOOK, { book_id: book.id, username: currentUser?.username });
+    setMessage("Delete event recorded. No data was removed.");
+  };
+
+  const handleEditSubmit = (data: MovieEditorData) => {
+    logEvent(EVENT_TYPES.EDIT_BOOK, {
+      book_id: book.id,
+      username: currentUser?.username,
+      changes: data,
+    });
+    setMessage("Edit event recorded for auditing purposes.");
+  };
+
+  const handleWatchlist = () => {
+    logEvent(EVENT_TYPES.SAVE_BOOKMARK, { book_id: book.id });
+  };
+
+  const handleShare = () => {
+    logEvent(EVENT_TYPES.SHARE_BOOK, { book_id: book.id });
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href).catch(() => {});
+    }
+  };
+
+  const handleCommentSubmit = ({ author, message }: { author: string; message: string }) => {
+    const entry: CommentEntry = {
+      id: `${book.id}-comment-${Date.now()}`,
+      author,
+      message,
+      mood: "Reader note",
+      avatar: AVATARS[(comments.length + 1) % AVATARS.length],
+      createdAt: new Date().toLocaleString(),
+    };
+    setComments((prev) => [entry, ...prev]);
+    logEvent(EVENT_TYPES.POST_REVIEW, { book_id: book.id, author });
+  };
+
+  return (
+    <main className="mx-auto max-w-5xl space-y-8 px-4 py-10 text-white">
+      {message && <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">{message}</p>}
+      <MovieDetailHero
+        movie={book}
+        onWatchTrailer={handleWatchTrailer}
+        onWatchlist={handleWatchlist}
+        onShare={handleShare}
+      />
+      <MovieMeta movie={book} />
+      {canManageBook && (
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white">
+          <h2 className="text-xl font-semibold">Validator actions</h2>
+          <p className="text-sm text-white/60">
+            Use these controls to simulate edits or deletions. They simply emit events, mirroring the Django workflow.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button
+              variant="ghost"
+              className="rounded-full border border-white/10 bg-white/10 text-red-300 hover:bg-red-400/20"
+              onClick={handleDelete}
+            >
+              Delete book
+            </Button>
+          </div>
+          <MovieEditor movie={book} onSubmit={handleEditSubmit} submitLabel="Record edit event" />
+        </section>
+      )}
+      <RelatedBooks books={relatedBooks} />
+      <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
+    </main>
+  );
+}

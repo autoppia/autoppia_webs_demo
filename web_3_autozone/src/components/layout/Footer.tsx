@@ -1,16 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { useSeed } from "@/seed-system";
+import { getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/utils/seedLayout";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export function Footer() {
   const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

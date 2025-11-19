@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import RideNavbar from "../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "../../../components/DynamicLayout";

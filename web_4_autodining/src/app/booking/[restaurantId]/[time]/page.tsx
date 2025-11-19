@@ -9,7 +9,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
 import { countries, initializeRestaurants, getRestaurants } from "@/library/dataset";
 import { useSeedVariation } from "@/library/utils";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { useSeed } from "@/context/SeedContext";
@@ -29,7 +29,9 @@ type RestaurantView = {
 export default function Page() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const { v2Seed } = useSeed();
+  const { seed: baseSeed, resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const layoutSeed = resolvedSeeds.v1 ?? baseSeed;
 
   const restaurantId = params.restaurantId as string;
   const reservationTimeParam = decodeURIComponent(params.time as string);
@@ -54,19 +56,17 @@ export default function Page() {
   const [showToast, setShowToast] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [email, setEmail] = useState("user_name@gmail.com");
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   const [data, setData] = useState<RestaurantView | null>(null);
 
-  const seed = Number(searchParams?.get("seed") ?? "1");
-
   // Create layout based on seed
   const layout = useMemo(() => {
-    const wrap = seed % 2 === 0;
-    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][seed % 5];
-    const gapClass = ["gap-2", "gap-3", "gap-4", "gap-5", "gap-6"][seed % 5];
-    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][seed % 5];
-    const marginBottomClass = ["mb-0", "mb-4", "mb-8", "mb-12", "mb-16"][seed % 5];
+    const wrap = layoutSeed % 2 === 0;
+    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][layoutSeed % 5];
+    const gapClass = ["gap-2", "gap-3", "gap-4", "gap-5", "gap-6"][layoutSeed % 5];
+    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][layoutSeed % 5];
+    const marginBottomClass = ["mb-0", "mb-4", "mb-8", "mb-12", "mb-16"][layoutSeed % 5];
 
     return {
       wrap,
@@ -75,11 +75,11 @@ export default function Page() {
       marginTopClass,
       marginBottomClass,
     };
-  }, [seed]);
+  }, [layoutSeed]);
 
-  // Use seed-based variations
-  const formVariation = useSeedVariation("form");
-  const bookButtonVariation = useSeedVariation("bookButton");
+  // Use seed-based variations (pass v1 seed)
+  const formVariation = useSeedVariation("form", undefined, layoutSeed);
+  const bookButtonVariation = useSeedVariation("bookButton", undefined, layoutSeed);
 
   const restaurantInfo = {
     restaurantId,
@@ -241,7 +241,7 @@ export default function Page() {
         <h3 className="font-semibold text-lg mb-2 mt-4">{getText("diner_details")}</h3>
         <div className={formVariation.className} data-testid={formVariation.dataTestId}>
         {layout.wrap ? (
-          <div className="w-full" data-testid={`input-wrapper-${seed}`}>
+          <div className="w-full" data-testid={`input-wrapper-${layoutSeed}`}>
             <div
               className={`flex ${layout.wrap ? "flex-wrap" : ""} ${layout.justifyClass} ${layout.gapClass} ${layout.marginBottomClass}`}
             >
@@ -355,7 +355,7 @@ export default function Page() {
         )}
 
         {layout.wrap ? (
-          <div className="w-full" data-testid={`occasion-wrapper-${seed}`}>
+          <div className="w-full" data-testid={`occasion-wrapper-${layoutSeed}`}>
             <div
               className={`flex ${layout.wrap ? "flex-wrap" : ""} ${layout.justifyClass} ${layout.gapClass} ${layout.marginBottomClass}`}
             >
@@ -422,7 +422,7 @@ export default function Page() {
         {layout.wrap ? (
           <div
             className="w-full"
-            data-testid={`complete-reservation-wrapper-${seed}`}
+            data-testid={`complete-reservation-wrapper-${layoutSeed}`}
           >
             <Button
               onClick={handleReservation}

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import {
   dynamicStructureProvider,
   type StructureVariation,
 } from "@/utils/dynamicStructureProvider";
+import { useSeed } from "@/context/SeedContext";
 
 interface DynamicStructureContextType {
   getText: (key: string, fallback?: string) => string;
@@ -24,9 +24,11 @@ export function DynamicStructureProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const searchParams = useSearchParams();
-  const rawSeedStructure = Number(searchParams?.get("seed-structure") ?? "1");
-  const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure);
+  const { resolvedSeeds } = useSeed();
+  const rawSeedStructure =
+    resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  const seedStructure =
+    dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure);
   const isEnabled = dynamicStructureProvider.isDynamicStructureModeEnabled();
 
   // Set variation based on seed-structure from URL

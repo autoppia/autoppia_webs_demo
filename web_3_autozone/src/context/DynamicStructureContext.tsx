@@ -1,11 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, Suspense, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   dynamicStructureProvider,
   type StructureVariation,
 } from "@/utils/dynamicStructureProvider";
+import { useSeed } from "@/context/SeedContext";
 
 interface DynamicStructureContextType {
   getText: (key: string, fallback?: string) => string;
@@ -19,37 +19,18 @@ const DynamicStructureContext = createContext<
   DynamicStructureContextType | undefined
 >(undefined);
 
-// Internal component that handles URL params
-function DynamicStructureInitializer({
-  onSeedStructureFromUrl,
-}: {
-  onSeedStructureFromUrl: (seedStructure: number) => void;
-}) {
-  const searchParams = useSearchParams();
-  const rawSeedStructure = Number(searchParams.get("seed-structure") ?? "1");
-  const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure);
-
-  useEffect(() => {
-    onSeedStructureFromUrl(seedStructure);
-  }, [seedStructure, onSeedStructureFromUrl]);
-
-  return null;
-}
-
 export function DynamicStructureProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [seedStructure, setSeedStructure] = useState<number>(1);
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds } = useSeed();
+  const rawSeedStructure = resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
+  const seedStructure = dynamicStructureProvider.getEffectiveSeedStructure(rawSeedStructure);
   const isEnabled = dynamicStructureProvider.isDynamicStructureModeEnabled();
 
-  // Handle seed structure from URL
-  const handleSeedStructureFromUrl = useCallback((urlSeedStructure: number) => {
-    setSeedStructure(urlSeedStructure);
-  }, []);
-
-  // Set variation based on seed-structure from URL
+  // Set variation based on seed-structure from resolved seeds
   useEffect(() => {
     dynamicStructureProvider.setVariation(seedStructure);
   }, [seedStructure]);
@@ -82,9 +63,6 @@ export function DynamicStructureProvider({
         isEnabled,
       }}
     >
-      <Suspense fallback={null}>
-        <DynamicStructureInitializer onSeedStructureFromUrl={handleSeedStructureFromUrl} />
-      </Suspense>
       {children}
     </DynamicStructureContext.Provider>
   );
@@ -99,4 +77,3 @@ export function useDynamicStructure() {
   }
   return context;
 }
-

@@ -1,7 +1,7 @@
 "use client";
 
 import { getSeedLayout, getLayoutClasses, LayoutConfig } from "@/library/layouts";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { ReactNode, Suspense } from "react";
 
 interface DynamicLayoutProps {

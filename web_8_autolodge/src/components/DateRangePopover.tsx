@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { addMonths, addDays, isAfter } from "date-fns";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export function DateRangePopover({
   placeholder = "Add dates",
@@ -22,7 +22,7 @@ export function DateRangePopover({
 }) {
   const [open, setOpen] = React.useState(false);
   const [hoveredDate, setHoveredDate] = React.useState<Date | null>(null);
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   // Handles click on a calendar cell to set range
   const handleSelect = (date: Date) => {

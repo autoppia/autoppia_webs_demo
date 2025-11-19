@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   
   const sliderImages = [
     {

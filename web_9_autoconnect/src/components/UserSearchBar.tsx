@@ -1,20 +1,20 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function UserSearchBar() {
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
-  const { getText, getClass } = useDynamicStructure();
+  const { getText, getClass } = useV3Attributes();
   const matches =
     q.length === 0
       ? []
       : dynamicDataProvider.searchUsers(q);
-  const router = useRouter();
+  const router = useSeedRouter();
   return (
     <div className="relative flex-1 max-w-lg">
       <input
@@ -30,11 +30,7 @@ export default function UserSearchBar() {
           if (val.trim().length >= 2) {
             logEvent(EVENT_TYPES.SEARCH_USERS, {
               query: val.trim(),
-              resultCount: mockUsers.filter(
-                (u) =>
-                  u.name.toLowerCase().includes(val.toLowerCase()) ||
-                  u.title.toLowerCase().includes(val.toLowerCase())
-              ).length,
+              resultCount: matches.length,
             });
           }
         }}

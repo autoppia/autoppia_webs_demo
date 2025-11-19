@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSeed } from "@/context/SeedContext";
+import { useSeed } from "@/seed-system";
 import type { ComponentProps } from "react";
 
 interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {

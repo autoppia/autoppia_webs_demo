@@ -1,6 +1,6 @@
 // src/components/DynamicElement.tsx
 import { useState, useEffect, useRef, ReactNode } from 'react';
-import { useSeedLayout } from '@/library/useSeedLayout';
+import { useSeedLayout } from '@/dynamic/v3-dynamic';
 
 interface DynamicElementProps {
   children: ReactNode;

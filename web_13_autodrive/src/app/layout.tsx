@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
+import { SeedProvider } from "@/context/SeedContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +40,9 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="antialiased bg-[#f5fbfc] min-h-screen">
-        <ClientBody>{children}</ClientBody>
+        <SeedProvider>
+          <ClientBody>{children}</ClientBody>
+        </SeedProvider>
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import type { Job } from "@/library/dataset";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function JobCard({
   job,
@@ -14,7 +14,7 @@ export default function JobCard({
   onApply?: (id: string) => void;
 }) {
   const [applied, setApplied] = useState<"none" | "pending" | "done">("none");
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
 
   const handleApply = (e: React.MouseEvent) => {
     e.preventDefault();

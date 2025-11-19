@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import Link from "next/link";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
@@ -12,7 +12,7 @@ import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
+import { withSeed } from "@/seed-system/navigation/routing-utils";
 
 interface CartItem {
   id: string;
@@ -28,7 +28,7 @@ export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
 
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
   const router = useSeedRouter();
 

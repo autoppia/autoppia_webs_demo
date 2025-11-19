@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function Footer() {
   const { reorderElements } = useSeedLayout();
-
-  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-  const hasSeed = !!sp?.get('seed');
 
   const linkGroups = [
     {
@@ -29,14 +26,14 @@ export default function Footer() {
     },
   ];
 
-  const orderedGroups = hasSeed ? reorderElements(linkGroups) : linkGroups;
+  const orderedGroups = reorderElements(linkGroups);
 
   const sections = [
     { key: 'brand' },
     { key: 'links' },
     { key: 'copyright' },
   ];
-  const orderedSections = hasSeed ? reorderElements(sections) : sections;
+  const orderedSections = reorderElements(sections);
 
   return (
     <footer className="border-t">
@@ -60,9 +57,9 @@ export default function Footer() {
                       <ul className="space-y-1 text-sm text-muted-foreground">
                         {g.items.map((it, ii) => (
                           <li key={ii}>
-                            <Link href={it.href} className="hover:text-foreground">
+                            <SeedLink href={it.href} className="hover:text-foreground">
                               {it.label}
-                            </Link>
+                            </SeedLink>
                           </li>
                         ))}
                       </ul>

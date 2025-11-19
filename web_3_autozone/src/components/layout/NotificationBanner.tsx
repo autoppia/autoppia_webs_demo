@@ -2,12 +2,12 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 
 export function NotificationBanner() {
   const [isVisible, setIsVisible] = useState(true);
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
 
   if (!isVisible) return null;
 

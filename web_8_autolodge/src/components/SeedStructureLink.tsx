@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { ReactNode } from "react";
 
 interface SeedStructureLinkProps {
@@ -21,19 +21,19 @@ export default function SeedStructureLink({
   id,
   style
 }: SeedStructureLinkProps) {
-  const { seedStructure } = useDynamicStructure();
+  const { v3Seed } = useV3Attributes();
 
   const getHrefWithSeedStructure = (href: string): string => {
     if (typeof window === 'undefined') return href;
     
     try {
       const url = new URL(href, window.location.origin);
-      url.searchParams.set('seed-structure', seedStructure.toString());
+      url.searchParams.set('seed-structure', v3Seed.toString());
       return url.pathname + url.search;
     } catch {
       // If href is not a valid URL, just append the parameter
       const separator = href.includes('?') ? '&' : '?';
-      return `${href}${separator}seed-structure=${seedStructure}`;
+      return `${href}${separator}seed-structure=${v3Seed}`;
     }
   };
 

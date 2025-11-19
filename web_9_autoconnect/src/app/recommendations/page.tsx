@@ -4,12 +4,12 @@ import { logEvent, EVENT_TYPES } from "@/library/events";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { DataReadyGate } from "@/components/DataReadyGate";
 import type { Recommendation } from "@/library/dataset";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 function RecommendationsContent() {
   const [following, setFollowing] = useState<Record<string, boolean>>({});
   const recommendations = dynamicDataProvider.getRecommendations();
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
 
   useEffect(() => {
     logEvent(EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS, {

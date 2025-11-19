@@ -9,7 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-#   --demo=NAME                   Deploy specific demo: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, or all (default: all)
+#   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
 #                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
@@ -40,7 +40,7 @@ Options:
   --postgres_port=PORT          Set base postgres port (default: 5434)
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
-  --demo=NAME                   One of: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, all (default: all)
+  --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
                                             v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
@@ -91,7 +91,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
-ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"
@@ -174,15 +174,9 @@ for port_var in WEB_PORT POSTGRES_PORT WEBS_PORT WEBS_PG_PORT; do
   fi
 done
 
-# Normalize demo name (aliases)
-case "$WEB_DEMO" in
-  autocinema) WEB_DEMO="movies" ;;
-  autobooks) WEB_DEMO="books" ;;
-esac
-
 # Validate demo name
 if ! is_valid_demo "$WEB_DEMO"; then
-  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
+  echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
   exit 1
 fi
 
@@ -195,14 +189,9 @@ echo "🔣 Configuration:"
 echo "    Ports:"
 if [ "$WEB_DEMO" = "all" ]; then
   echo "      Base web port         →  $WEB_PORT"
-  echo "      Base DB port          →  $POSTGRES_PORT"
 else
   echo "      $WEB_DEMO HTTP         →  $WEB_PORT"
-  if [ "$WEB_DEMO" = "movies" ] || [ "$WEB_DEMO" = "books" ]; then
-    echo "      $WEB_DEMO DB           →  $POSTGRES_PORT"
-  else
-    echo "      $WEB_DEMO DB           →  N/A (uses webs_server)"
-  fi
+  echo "      $WEB_DEMO DB           →  N/A (uses webs_server)"
 fi
 echo "      webs_server HTTP    →  $WEBS_PORT"
 echo "      webs_server DB      →  $WEBS_PG_PORT"
@@ -434,17 +423,13 @@ setup_docker
 # ============================================================================
 
 case "$WEB_DEMO" in
-  movies)
-    if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = true ]; then
-      deploy_webs_server
-    fi
-    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
+  movies|autocinema)
+    deploy_webs_server
+    deploy_project "web_1_autocinema" "$WEB_PORT" "" "${WEB_DEMO}_${WEB_PORT}"
     ;;
-  books)
-    if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = true ]; then
-      deploy_webs_server
-    fi
-    deploy_project "web_2_demo_books" "$WEB_PORT" "$POSTGRES_PORT" "books_${WEB_PORT}"
+  books|autobooks)
+    deploy_webs_server
+    deploy_project "web_2_autobooks" "$WEB_PORT" "" "${WEB_DEMO}_${WEB_PORT}"
     ;;
   autozone)
     deploy_webs_server
@@ -496,10 +481,8 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_webs_server
-    # Movies and Books (with DB)
-    deploy_project "web_1_demo_movies" "$WEB_PORT" "$POSTGRES_PORT" "movies_${WEB_PORT}"
-    deploy_project "web_2_demo_books" "$((WEB_PORT + 1))" "$((POSTGRES_PORT + 1))" "books_$((WEB_PORT + 1))"
-    # All other webs (without DB, need webs_server)
+    deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
     deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
     deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
     deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
@@ -514,7 +497,7 @@ case "$WEB_DEMO" in
     deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)
-    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies/autocinema, books/autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
+    echo "❌ Invalid demo: $WEB_DEMO. Use one of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all."
     exit 1
     ;;
 esac

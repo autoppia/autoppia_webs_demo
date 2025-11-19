@@ -3,8 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { LayoutProvider } from "@/contexts/LayoutProvider";
-import { DynamicStructureProvider } from "@/contexts/DynamicStructureContext";
+// DynamicStructureProvider removed - now using v3-dynamic
 import { RestaurantProvider } from "@/contexts/RestaurantContext";
+import { SeedProvider } from "@/context/SeedContext";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { Suspense } from "react";
 // import DebugVariationBadge from "@/components/debug/DebugVariationBadge";
@@ -36,10 +37,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} bg-zinc-50`}
     >
       <body className="min-h-screen font-sans bg-zinc-50" suppressHydrationWarning>
-        <LayoutProvider>
-          <RestaurantProvider>
-            <Suspense fallback={<div className="min-h-screen" />}>
-              <DynamicStructureProvider>
+        <SeedProvider>
+          <LayoutProvider>
+            <RestaurantProvider>
+              <Suspense fallback={<div className="min-h-screen" />}>
                 <DataReadyGate>
                   <Navbar />
                   {/* Debug badge removed */}
@@ -48,10 +49,10 @@ export default function RootLayout({
                     {children}
                   </div>
                 </DataReadyGate>
-              </DynamicStructureProvider>
-            </Suspense>
-          </RestaurantProvider>
-        </LayoutProvider>
+              </Suspense>
+            </RestaurantProvider>
+          </LayoutProvider>
+        </SeedProvider>
       </body>
     </html>
   );

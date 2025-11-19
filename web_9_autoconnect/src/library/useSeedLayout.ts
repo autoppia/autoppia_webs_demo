@@ -1,36 +1,34 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { getEffectiveLayoutConfig, type LayoutConfig } from './layouts';
-import { getEffectiveSeed, isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { isDynamicModeEnabled } from '@/utils/dynamicDataProvider';
+import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 export function useSeedLayout() {
-  const [seed, setSeed] = useState(1);
-  const [layout, setLayout] = useState<LayoutConfig>(getEffectiveLayoutConfig(1));
-  const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
-
-  useEffect(() => {
-    // Check if dynamic HTML is enabled
-    const dynamicEnabled = isDynamicModeEnabled();
-    setIsDynamicEnabled(dynamicEnabled);
-    
-    // Get seed from URL parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    const seedParam = searchParams.get('seed');
-    const rawSeed = seedParam ? parseInt(seedParam) : 1;
-    
-    // Get effective seed (validates range and respects dynamic HTML setting)
-    const effectiveSeed = getEffectiveSeed(rawSeed);
-    setSeed(effectiveSeed);
-    
-    // Update layout only if dynamic HTML is enabled
-    if (dynamicEnabled) {
-      setLayout(getEffectiveLayoutConfig(effectiveSeed));
-    } else {
-      // Use default layout when dynamic HTML is disabled
-      setLayout(getEffectiveLayoutConfig(1));
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds } = useSeedContext();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base;
+  
+  // Check if dynamic mode is enabled
+  const isDynamicEnabled = isDynamicModeEnabled();
+  
+  const seed = useMemo(() => {
+    if (!isDynamicEnabled) {
+      // When disabled, return default seed (1)
+      return 1;
     }
-  }, []);
+    
+    // When enabled, use resolved v1 seed (or base as fallback)
+    return layoutSeed;
+  }, [isDynamicEnabled, layoutSeed]);
+  
+  const layout = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return getEffectiveLayoutConfig(1);
+    }
+    return getEffectiveLayoutConfig(seed);
+  }, [isDynamicEnabled, seed]);
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {

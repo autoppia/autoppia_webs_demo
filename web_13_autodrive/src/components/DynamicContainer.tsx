@@ -1,7 +1,7 @@
 // src/components/DynamicContainer.tsx
 
 import { useState, useEffect, useRef } from "react";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 
 interface DynamicContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;

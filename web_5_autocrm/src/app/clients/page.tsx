@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { clients as staticClients } from "@/library/dataset";
@@ -31,7 +32,8 @@ const LoadingNotice = ({ message }: { message: string }) => (
 
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
-  const { v2Seed } = useSeed();
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   console.log("[ClientsPage] current v2Seed", v2Seed);
 
   const { data, isLoading, error } = useProjectData<any>({
@@ -71,7 +73,7 @@ function ClientsDirectoryContent() {
 
   const handleClientClick = (client: (typeof clients)[number]) => {
     logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, client);
-    router.push(withSeed(`/clients/${client.id}`, searchParams));
+    seedRouter.push(`/clients/${client.id}`);
   };
 
   return (
