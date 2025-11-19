@@ -17,8 +17,10 @@ export class DynamicDataProvider {
   private readyPromise: Promise<void>;
   private restaurants: Restaurant[] = [];
   private testimonials: Testimonial[] = [];
-  private restaurantSubscribers: Array<(restaurants: Restaurant[]) => void> = [];
-  private testimonialSubscribers: Array<(testimonials: Testimonial[]) => void> = [];
+  private restaurantSubscribers: Array<(restaurants: Restaurant[]) => void> =
+    [];
+  private testimonialSubscribers: Array<(testimonials: Testimonial[]) => void> =
+    [];
 
   private constructor() {
     // Check if V2 dynamic is enabled - simplified check
@@ -81,19 +83,27 @@ export class DynamicDataProvider {
     return this.readyPromise;
   }
 
-  public subscribeRestaurants(callback: (data: Restaurant[]) => void): () => void {
+  public subscribeRestaurants(
+    callback: (data: Restaurant[]) => void
+  ): () => void {
     this.restaurantSubscribers.push(callback);
     callback(this.restaurants);
     return () => {
-      this.restaurantSubscribers = this.restaurantSubscribers.filter((cb) => cb !== callback);
+      this.restaurantSubscribers = this.restaurantSubscribers.filter(
+        (cb) => cb !== callback
+      );
     };
   }
 
-  public subscribeTestimonials(callback: (data: Testimonial[]) => void): () => void {
+  public subscribeTestimonials(
+    callback: (data: Testimonial[]) => void
+  ): () => void {
     this.testimonialSubscribers.push(callback);
     callback(this.testimonials);
     return () => {
-      this.testimonialSubscribers = this.testimonialSubscribers.filter((cb) => cb !== callback);
+      this.testimonialSubscribers = this.testimonialSubscribers.filter(
+        (cb) => cb !== callback
+      );
     };
   }
 
