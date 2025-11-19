@@ -10,8 +10,6 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { DASHBOARD_HOTELS } from "@/library/dataset";
-import type { Hotel } from "@/types/hotel";
 
 type GuestsCount = {
   adults: number;
@@ -97,18 +95,18 @@ function HomeContent() {
   // Listen for data refresh events from DynamicDataProvider
   useEffect(() => {
     const loadHotels = async () => {
-      // Wait for provider to be ready
-      await dynamicDataProvider.whenReady();
-      
-      const providerHotels = dynamicDataProvider.getHotels();
-      if (providerHotels.length > 0) {
+      try {
+        // Wait for provider to be ready
+        await dynamicDataProvider.whenReady();
+        
+        const providerHotels = dynamicDataProvider.getHotels();
         setHotels(providerHotels.map(normalizeHotelDates));
         console.log('[HomeContent] Hotels loaded:', providerHotels.length);
-      } else {
-        console.warn('[HomeContent] No hotels from provider, using fallback');
-        setHotels(DASHBOARD_HOTELS as Hotel[]);
+      } catch (error) {
+        console.error('[HomeContent] Error loading hotels:', error);
+      } finally {
+        setIsLoadingHotels(false);
       }
-      setIsLoadingHotels(false);
     };
 
     const handleDataRefresh = () => {

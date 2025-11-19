@@ -67,6 +67,11 @@ export function getSeedLayout(seed?: number): SeedLayoutConfig {
   return getLayoutByIndex(layoutIndex);
 }
 
+export function getLayoutClasses(seed?: number): string {
+  const config = getSeedLayout(seed);
+  return `layout-${config.id} ${config.name.toLowerCase().replace(/\s+/g, '-')}`;
+}
+
 function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
   switch (layoutIndex) {
     case 1:

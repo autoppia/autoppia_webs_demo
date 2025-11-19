@@ -19,8 +19,8 @@ import {
 } from "lucide-react";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { RestaurantsData } from "@/library/dataset";
 import { getRestaurants, initializeRestaurants } from "@/dynamic/v2-data";
+import type { RestaurantData } from "@/dynamic/v2-data";
 import { useSearchParams } from "next/navigation";
 import { useSeedVariation } from "@/library/utils";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";

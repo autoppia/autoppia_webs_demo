@@ -1,7 +1,7 @@
 "use client";
-import { Suspense } from "react";
-import { useSeedLayout } from "@/library/utils";
 import React from "react";
+import { useSeed } from "@/context/SeedContext";
+import { getSeedLayout } from "@/dynamic/v1-layouts";
 
 interface DynamicWrapperProps {
   children: React.ReactNode;
@@ -17,7 +17,8 @@ function DynamicWrapperContent({
   className = '', 
   ...props 
 }: DynamicWrapperProps) {
-  const { seed, layout } = useSeedLayout();
+  const { seed } = useSeed();
+  const layout = getSeedLayout(seed);
   
   // Handle undefined seed case
   const seedValue = seed || 'default';
@@ -28,20 +29,18 @@ function DynamicWrapperContent({
     'data-layout-version': `v${seedValue}`,
     'data-element-order': layout.eventElements.order.join('-'),
   };
-
+  
   return (
-    <Component {...seedAttributes} className={`seed-${seedValue} layout-${layout.propertyDetail.layout} ${className}`} {...props}>
+    <Component
+      className={className}
+      {...seedAttributes}
+      {...props}
+    >
       {children}
     </Component>
   );
 }
 
-export function DynamicWrapper({ children, fallback = <div>Loading...</div>, ...props }: DynamicWrapperProps) {
-  return (
-    <Suspense fallback={fallback}>
-      <DynamicWrapperContent {...props}>
-        {children}
-      </DynamicWrapperContent>
-    </Suspense>
-  );
-} 
+export default function DynamicWrapper(props: DynamicWrapperProps) {
+  return <DynamicWrapperContent {...props} />;
+}
