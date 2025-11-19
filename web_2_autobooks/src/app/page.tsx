@@ -80,21 +80,19 @@ function HomeContent() {
   const handleSearchSubmit = () => {
     logEvent(EVENT_TYPES.SEARCH_BOOK, {
       query: searchQuery,
-      genre: selectedGenre || null,
-      year: selectedYear || null,
     });
     updateQueryString({ search: searchQuery });
   };
 
   const handleGenreChange = (value: string) => {
     setSelectedGenre(value);
-    logEvent(EVENT_TYPES.FILTER_BOOKS, { filter: "genre", value });
+    logEvent(EVENT_TYPES.FILTER_BOOK, { genre: value ? { name: value } : null });
     updateQueryString({ genre: value });
   };
 
   const handleYearChange = (value: string) => {
     setSelectedYear(value);
-    logEvent(EVENT_TYPES.FILTER_BOOKS, { filter: "year", value });
+    logEvent(EVENT_TYPES.FILTER_BOOK, { year: value ? Number.parseInt(value, 10) : null });
     updateQueryString({ year: value });
   };
 
@@ -106,7 +104,12 @@ function HomeContent() {
   };
 
   const handleSelectBook = (book: Book) => {
-    logEvent(EVENT_TYPES.VIEW_BOOK_DETAIL, { book_id: book.id, title: book.title });
+    logEvent(EVENT_TYPES.BOOK_DETAIL, {
+      name: book.title,
+      year: book.year,
+      genres: book.genres,
+      rating: book.rating,
+    });
   };
 
   const fictionFocus = useMemo(() => getBooksByGenre("Drama").slice(0, 5), []);

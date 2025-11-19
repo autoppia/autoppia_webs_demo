@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = useCallback(async (username: string, password: string) => {
     const record = findUser(username);
     if (!record || record.password !== password) {
-      logEvent(EVENT_TYPES.LOGIN_FAILURE, { username });
+      // logEvent(EVENT_TYPES.LOGIN_FAILURE, { username });
       throw new Error("Invalid credentials");
     }
     const authUser: AuthUser = {
@@ -54,24 +54,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
     setCurrentUser(authUser);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
-    logEvent(EVENT_TYPES.LOGIN_SUCCESS, { username: authUser.username });
+    logEvent(EVENT_TYPES.LOGIN_BOOK, { username: authUser.username });
   }, []);
 
   const signup = useCallback(async (username: string, password: string, confirmPassword: string) => {
     if (!username.trim()) {
-      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "empty_username" });
+      // logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "empty_username" });
       throw new Error("Username is required");
     }
     if (!password || password.length < 3) {
-      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "weak_password" });
+      // logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "weak_password" });
       throw new Error("Password must be at least 3 characters");
     }
     if (password !== confirmPassword) {
-      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "password_mismatch" });
+      // logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "password_mismatch" });
       throw new Error("Passwords do not match");
     }
     if (findUser(username)) {
-      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "username_exists" });
+      // logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "username_exists" });
       throw new Error("Username already exists");
     }
 
@@ -83,16 +83,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       };
       setCurrentUser(authUser);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
-      logEvent(EVENT_TYPES.SIGNUP_SUCCESS, { username: authUser.username });
+      logEvent(EVENT_TYPES.REGISTRATION_BOOK, { username: authUser.username });
     } catch (err) {
-      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: (err as Error).message });
+      // logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: (err as Error).message });
       throw err;
     }
   }, []);
 
   const logout = useCallback(() => {
     if (currentUser) {
-      logEvent(EVENT_TYPES.LOGOUT, { username: currentUser.username });
+      logEvent(EVENT_TYPES.LOGOUT_BOOK, { username: currentUser.username });
     }
     setCurrentUser(null);
     localStorage.removeItem(STORAGE_KEY);

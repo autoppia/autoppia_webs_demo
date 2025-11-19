@@ -8,13 +8,14 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 export function ContactSection() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sent">("idle");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!name.trim() || !email.trim() || !message.trim()) return;
-    logEvent(EVENT_TYPES.CONTACT_MESSAGE, { name, email, message });
+    if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) return;
+    logEvent(EVENT_TYPES.CONTACT_BOOK, { name, email, subject, message });
     setStatus("sent");
     setMessage("");
   };
@@ -61,6 +62,15 @@ export function ContactSection() {
               onChange={(event) => setEmail(event.target.value)}
               className="mt-1 bg-black/40 text-white"
               placeholder="you@example.com"
+            />
+          </label>
+          <label className="block text-xs uppercase tracking-wide text-white/50">
+            Subject
+            <Input
+              value={subject}
+              onChange={(event) => setSubject(event.target.value)}
+              className="mt-1 bg-black/40 text-white"
+              placeholder="Subject"
             />
           </label>
           <label className="block text-xs uppercase tracking-wide text-white/50">
