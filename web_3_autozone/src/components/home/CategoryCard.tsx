@@ -6,8 +6,6 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
 
 interface CategoryItem {
   image: string;
@@ -52,7 +50,6 @@ export function CategoryCard({
 }: CategoryCardProps) {
 
   const { getId } = useV3Attributes();
-  const searchParams = useSearchParams();
   const router = useSeedRouter();
 
   const gridCols = {
@@ -106,7 +103,7 @@ export function CategoryCard({
                       brand: item.brand || "Generic",
                       category: item.category || title || "Uncategorized",
                     });
-                    router.push(withSeed(item.link, searchParams));
+                    router.push(item.link);
                   }
                 }}
                 className="space-y-2 hover:opacity-90 transition-opacity block no-underline text-inherit cursor-pointer group"

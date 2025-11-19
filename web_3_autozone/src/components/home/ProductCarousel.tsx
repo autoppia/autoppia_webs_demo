@@ -8,8 +8,6 @@ import { Card } from "@/components/ui/card";
 import type { Product } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
 
 interface ProductCarouselProps {
   title: string;
@@ -36,8 +34,6 @@ export function ProductCarousel({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { getText, getId } = useV3Attributes();
-  const searchParams = useSearchParams();
-
   const router = useSeedRouter();
 
   // const [showLeftButton, setShowLeftButton] = useState(false);
@@ -115,7 +111,7 @@ export function ProductCarousel({
                   rating: product.rating ?? 12,
                   brand: product.brand || "generic",
                 });
-                router.push(withSeed(`/${product.id}`, searchParams));
+                router.push(`/${product.id}`);
               }}
               className="flex-none w-[160px] md:w-[200px] group block no-underline text-inherit cursor-pointer relative"
             >

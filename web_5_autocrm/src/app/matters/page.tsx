@@ -17,8 +17,6 @@ import { DEMO_MATTERS } from "@/library/dataset";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 
@@ -68,7 +66,6 @@ function statusPill(status: string) {
 
 function MattersListPageContent() {
   const { getText, getId } = useDynamicStructure();
-  const searchParams = useSearchParams();
   const { resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const { data, isLoading, error } = useProjectData<any>({

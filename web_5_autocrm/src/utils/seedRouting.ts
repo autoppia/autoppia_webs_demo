@@ -1,11 +1,14 @@
 /**
  * Utility functions for preserving seed and enable_dynamic query parameters in navigation
- * 
+ *
  * Note: This is a simplified version that only preserves the unified ?seed=X parameter.
  * The SeedLink component uses getNavigationUrl from SeedContext which handles enable_dynamic.
  */
 
-function getUrlParam(searchParams: URLSearchParams | null, key: string): string | null {
+function getUrlParam(
+  searchParams: URLSearchParams | null,
+  key: string
+): string | null {
   if (searchParams) {
     return searchParams.get(key);
   }
@@ -21,16 +24,19 @@ function getUrlParam(searchParams: URLSearchParams | null, key: string): string 
  * @param searchParams - Current search params from useSearchParams()
  * @returns URL with seed preserved if present
  */
-export function withSeed(path: string, searchParams: URLSearchParams | null = null): string {
+export function withSeed(
+  path: string,
+  searchParams: URLSearchParams | null = null
+): string {
   const seed = getUrlParam(searchParams, "seed");
   const enableDynamic = getUrlParam(searchParams, "enable_dynamic");
-  
+
   if (!seed && !enableDynamic) return path;
-  
+
   const params = new URLSearchParams();
   if (seed) params.set("seed", seed);
   if (enableDynamic) params.set("enable_dynamic", enableDynamic);
-  
+
   const queryString = params.toString();
   const separator = path.includes("?") ? "&" : "?";
   return queryString ? `${path}${separator}${queryString}` : path;
@@ -65,4 +71,3 @@ export function withSeedAndParams(
   const queryString = params.toString();
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
-

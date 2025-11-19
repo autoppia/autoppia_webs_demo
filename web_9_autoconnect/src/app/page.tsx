@@ -118,7 +118,7 @@ function HomeContent() {
     });
   }
 
-  const shuffledPosts = getShuffledItems(posts, layout.feedOrder ?? layoutSeed);
+  const shuffledPosts = getShuffledItems(posts, layoutSeed);
   const sidebarClasses = getLayoutClasses(layout, 'sidebarPosition');
   const postBoxClasses = getLayoutClasses(layout, 'postBoxPosition');
   const searchClasses = getLayoutClasses(layout, 'searchPosition');

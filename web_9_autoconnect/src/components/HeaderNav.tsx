@@ -52,10 +52,7 @@ export default function HeaderNav() {
     }
   ];
 
-  const shuffledNavItems = getShuffledItems(
-    navItems,
-    layout.navOrder ?? layoutSeed
-  );
+  const shuffledNavItems = getShuffledItems(navItems, layoutSeed);
 
   const searchClasses = getLayoutClasses(layout, "searchPosition");
 

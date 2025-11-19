@@ -396,6 +396,22 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   return LAYOUTS[mappedSeed];
 }
 
+export function getLayoutClasses(config: LayoutConfig): {
+  container: string;
+  header: string;
+  sidebar: string;
+  content: string;
+  footer: string;
+} {
+  return {
+    container: config.container.className,
+    header: config.elements.header.className,
+    sidebar: config.elements.sidebar.className,
+    content: config.elements.content.className,
+    footer: config.elements.footer.className,
+  };
+}
+
 /**
  * Get all available layout configurations
  * @returns Array of all layout configurations

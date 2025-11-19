@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -11,7 +10,6 @@ import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useSeed } from "@/context/SeedContext";
-import { withSeed } from "@/utils/seedRouting";
 
 
 
@@ -55,8 +53,7 @@ function ClientsDirectoryContent() {
     status: c.status ?? 'Active',
     last: c.last ?? 'Today',
   }));
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const seedRouter = useSeedRouter();
   const { getText, getId } = useDynamicStructure();
 
   useEffect(() => {

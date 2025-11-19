@@ -2,6 +2,7 @@ export {
   getSeedLayout,
   getAllLayouts,
   getLayoutByName,
+  getLayoutClasses,
   isDynamicEnabled,
 } from "./layouts";
 export type { LayoutConfig } from "./layouts";

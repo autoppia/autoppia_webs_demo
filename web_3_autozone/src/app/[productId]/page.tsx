@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Star, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
@@ -11,7 +11,6 @@ import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
 import { getEffectiveSeed, getProductById } from "@/dynamic/v2-data";
-import { withSeed } from "@/utils/seedRouting";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
 
@@ -22,7 +21,6 @@ const DELIVERY_ADDRESS = "Daly City 94016";
 
 function ProductContent() {
   const router = useSeedRouter();
-  const searchParams = useSearchParams();
   const { productId } = useParams();
   const [product, setProduct] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
@@ -102,7 +100,7 @@ function ProductContent() {
       className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
       onClick={() => {
         handleAddToCart();
-        router.push(withSeed("/cart", searchParams));
+        router.push("/cart");
       }}
     >
       {getText("add_to_cart")}
@@ -126,7 +124,7 @@ function ProductContent() {
           brand: product.brand,
           rating: product.rating,
         });
-        router.push(withSeed("/checkout", searchParams));
+        router.push("/checkout");
       }}
     >
       {getText("buy_now")}
@@ -211,7 +209,7 @@ function ProductContent() {
           <p className="mt-4">
             The product you are looking for does not exist or has been removed.
           </p>
-          <Button className="mt-4" onClick={() => router.push(withSeed("/", searchParams))}>
+          <Button className="mt-4" onClick={() => router.push("/")}>
             {getText("return_to_home")}
           </Button>
         </div>

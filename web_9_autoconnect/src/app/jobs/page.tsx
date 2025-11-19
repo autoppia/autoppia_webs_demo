@@ -172,10 +172,7 @@ function JobsContent() {
     (value) => value !== "" && value !== false
   );
 
-  const shuffledJobs = getShuffledItems(
-    filteredJobs,
-    layout.feedOrder ?? layoutSeed
-  );
+  const shuffledJobs = getShuffledItems(filteredJobs, layoutSeed);
   const jobCardsClasses = getLayoutClasses(layout, "jobCardsLayout");
   const filtersClasses = getLayoutClasses(layout, "filtersPosition");
 

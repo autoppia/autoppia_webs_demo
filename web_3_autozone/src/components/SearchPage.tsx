@@ -9,7 +9,6 @@ import type { Product } from "@/context/CartContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Button } from "@/components/ui/button";
 import { searchProducts } from "@/dynamic/v2-data";
-import { withSeed } from "@/utils/seedRouting";
 
 const getTopMarginClass = () => {
   const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
@@ -75,7 +74,7 @@ export default function SearchPage() {
                 brand: product.brand || "Generic",
                 category: product.category || "Uncategorized",
               });
-              router.push(withSeed(`/${product.id}`, searchParams));
+              router.push(`/${product.id}`);
             }}
             className={`${getTopMarginClass()} block no-underline text-inherit cursor-pointer group`}
           >

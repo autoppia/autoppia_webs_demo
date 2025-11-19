@@ -4,15 +4,12 @@ import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import Link from "next/link";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
 
 interface CartItem {
   id: string;
@@ -29,7 +26,6 @@ export function CartPageContent() {
   const { items, totalItems, totalAmount } = state;
 
   const { getText, getId } = useV3Attributes();
-  const searchParams = useSearchParams();
   const router = useSeedRouter();
 
   const handleRemoveItem = (id: string) => {
@@ -149,7 +145,7 @@ export function CartPageContent() {
                             }}
                             onClick={(e) => {
                               e.preventDefault();
-                              router.push(withSeed(`/${item.id}`, searchParams));
+                              router.push(`/${item.id}`);
                             }}
                             className="text-base font-medium hover:text-blue-600 no-underline cursor-pointer"
                           >

@@ -49,7 +49,7 @@ function ProfileContent({ username }: { username: string }) {
     return <div className="text-center text-red-600 mt-8">{getText("profile_not_found", "User not found.")}</div>;
 
   const posts = mockPosts.filter((p) => p.user.username === user.username);
-  const shuffledPosts = getShuffledItems(posts, layout.feedOrder ?? layoutSeed);
+  const shuffledPosts = getShuffledItems(posts, layoutSeed);
   const profileClasses = getLayoutClasses(layout, "profileLayout");
 
   const handleConnect = () => {
