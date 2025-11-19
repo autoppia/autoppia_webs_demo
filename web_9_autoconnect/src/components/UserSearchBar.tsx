@@ -4,12 +4,12 @@ import Image from "next/image";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function UserSearchBar() {
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
-  const { getText, getClass } = useDynamicStructure();
+  const { getText, getClass } = useV3Attributes();
   const matches =
     q.length === 0
       ? []

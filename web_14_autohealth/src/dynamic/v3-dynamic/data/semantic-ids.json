@@ -1,0 +1,74 @@
+{
+  "nav-link": [
+    "care-nav-link",
+    "clinic-nav-link",
+    "triage-nav-link",
+    "patient-nav-link",
+    "doctor-nav-link",
+    "record-nav-link",
+    "pharmacy-nav-link",
+    "schedule-nav-link",
+    "insight-nav-link",
+    "portal-nav-link"
+  ],
+  "hero-cta": [
+    "schedule-care-action",
+    "book-consult-action",
+    "plan-visit-action",
+    "start-triage-action",
+    "notify-clinic-action",
+    "open-intake-action",
+    "launch-care-action",
+    "queue-patient-action",
+    "escalate-care-action",
+    "ping-doctor-action"
+  ],
+  "search-input": [
+    "care-search-field",
+    "patient-search-field",
+    "doctor-search-field",
+    "records-search-field",
+    "appointments-search-field",
+    "triage-search-field",
+    "pharmacy-search-field",
+    "support-search-field",
+    "navigator-search-field",
+    "insight-search-field"
+  ],
+  "card": [
+    "care-card",
+    "doctor-card",
+    "patient-card",
+    "schedule-card",
+    "record-card",
+    "insight-card",
+    "triage-card",
+    "activity-card",
+    "med-card",
+    "alert-card"
+  ],
+  "status-pill": [
+    "status-pill",
+    "state-pill",
+    "health-pill",
+    "triage-pill",
+    "queue-pill",
+    "signal-pill",
+    "phase-pill",
+    "step-pill",
+    "progress-pill",
+    "monitor-pill"
+  ],
+  "section": [
+    "section-clinical",
+    "section-support",
+    "section-monitoring",
+    "section-activity",
+    "section-intake",
+    "section-overview",
+    "section-dashboard",
+    "section-summary",
+    "section-snapshot",
+    "section-network"
+  ]
+}

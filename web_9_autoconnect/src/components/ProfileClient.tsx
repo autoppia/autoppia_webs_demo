@@ -4,7 +4,7 @@ import { type User, type Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
@@ -19,7 +19,7 @@ function ProfileContent({ username }: { username: string }) {
 
   const user = users.find((u) => u.username === username);
   const currentUser = users[2] || users[0];
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
   const isSelf = user?.username === currentUser.username;
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"

@@ -1,0 +1,102 @@
+{
+  "1": {
+    "hero_title": "Comprehensive Health Management",
+    "hero_cta": "Schedule appointment",
+    "nav_doctors": "Doctors",
+    "nav_appointments": "Appointments",
+    "nav_records": "Records",
+    "nav_prescriptions": "Prescriptions",
+    "cta_message": "Start a consultation",
+    "footer_cta": "Message care team"
+  },
+  "2": {
+    "hero_title": "Coordinated care for every patient",
+    "hero_cta": "Book a visit",
+    "nav_doctors": "Care Team",
+    "nav_appointments": "Visits",
+    "nav_records": "Medical Files",
+    "nav_prescriptions": "Medications",
+    "cta_message": "Chat with a clinician",
+    "footer_cta": "Contact support"
+  },
+  "3": {
+    "hero_title": "Your digital hospital workspace",
+    "hero_cta": "Arrange appointment",
+    "nav_doctors": "Providers",
+    "nav_appointments": "Schedules",
+    "nav_records": "Charts",
+    "nav_prescriptions": "Rx Center",
+    "cta_message": "Launch telehealth",
+    "footer_cta": "Request follow-up"
+  },
+  "4": {
+    "hero_title": "One hub for patients and staff",
+    "hero_cta": "Plan a visit",
+    "nav_doctors": "Specialists",
+    "nav_appointments": "Calendar",
+    "nav_records": "Files",
+    "nav_prescriptions": "Pharmacy",
+    "cta_message": "Open triage flow",
+    "footer_cta": "Reach care desk"
+  },
+  "5": {
+    "hero_title": "Modern care coordination",
+    "hero_cta": "Schedule now",
+    "nav_doctors": "Teams",
+    "nav_appointments": "Sessions",
+    "nav_records": "History",
+    "nav_prescriptions": "Orders",
+    "cta_message": "Escalate to nurse",
+    "footer_cta": "Ask for assistance"
+  },
+  "6": {
+    "hero_title": "Smart hospital operations",
+    "hero_cta": "Book consultation",
+    "nav_doctors": "Staff",
+    "nav_appointments": "Agenda",
+    "nav_records": "Documents",
+    "nav_prescriptions": "Medication",
+    "cta_message": "Open intake form",
+    "footer_cta": "Connect with admin"
+  },
+  "7": {
+    "hero_title": "Hyper-personalized care journeys",
+    "hero_cta": "Plan consult",
+    "nav_doctors": "Clinicians",
+    "nav_appointments": "Timeline",
+    "nav_records": "Reports",
+    "nav_prescriptions": "Treatments",
+    "cta_message": "Notify doctor",
+    "footer_cta": "Request callback"
+  },
+  "8": {
+    "hero_title": "Unified view of patient data",
+    "hero_cta": "Create appointment",
+    "nav_doctors": "Physicians",
+    "nav_appointments": "Planner",
+    "nav_records": "Portfolio",
+    "nav_prescriptions": "Dose Center",
+    "cta_message": "Start escalation",
+    "footer_cta": "Flag an issue"
+  },
+  "9": {
+    "hero_title": "AI-assisted hospital workflows",
+    "hero_cta": "Begin scheduling",
+    "nav_doctors": "Providers Hub",
+    "nav_appointments": "Queue",
+    "nav_records": "Vault",
+    "nav_prescriptions": "Scripts",
+    "cta_message": "Trigger workflow",
+    "footer_cta": "Ping dispatcher"
+  },
+  "10": {
+    "hero_title": "End-to-end clinical operations",
+    "hero_cta": "Book patient slot",
+    "nav_doctors": "Care Pods",
+    "nav_appointments": "Runway",
+    "nav_records": "Ledger",
+    "nav_prescriptions": "Medication Hub",
+    "cta_message": "Send care alert",
+    "footer_cta": "Open support ticket"
+  }
+}

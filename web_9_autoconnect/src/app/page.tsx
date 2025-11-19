@@ -12,13 +12,13 @@ import UserSearchBar from "@/components/UserSearchBar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
 function HomeContent() {
   const { seed, layout } = useSeed();
-  const { getText, getClass } = useDynamicStructure();
+  const { getText, getClass } = useV3Attributes();
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();

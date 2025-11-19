@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { ContactDoctorModal } from "@/components/contact-doctor-modal";
 import { DoctorReviewsModal } from "@/components/doctor-reviews-modal";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
 import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 

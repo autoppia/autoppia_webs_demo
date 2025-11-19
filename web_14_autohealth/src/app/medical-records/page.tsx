@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { initializeMedicalRecords } from "@/data/medical-records-enhanced";
 import type { MedicalRecord } from "@/data/medical-records";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";

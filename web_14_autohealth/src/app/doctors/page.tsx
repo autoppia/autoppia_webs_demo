@@ -11,7 +11,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { AppointmentBookingModal } from "@/components/appointment-booking-modal";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
 import { SeedLink } from "@/components/ui/SeedLink";
 

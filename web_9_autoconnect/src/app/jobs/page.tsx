@@ -5,7 +5,7 @@ import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/library/useSeed";
 import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
@@ -19,7 +19,7 @@ interface Filters {
 
 function JobsContent() {
   const { layout } = useSeed();
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
   const [filters, setFilters] = useState<Filters>({
     search: "",
     experience: "",

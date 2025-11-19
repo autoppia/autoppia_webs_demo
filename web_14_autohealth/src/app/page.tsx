@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
 import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { initializeDoctors } from "@/data/doctors-enhanced";
