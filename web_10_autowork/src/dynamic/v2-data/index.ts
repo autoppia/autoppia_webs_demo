@@ -6,3 +6,9 @@
 
 export { dynamicDataProvider, getLayoutConfig, isDynamicModeEnabled, getEffectiveSeed } from './data-provider';
 
+// Export whenReady function
+export const whenReady = () => {
+  const { dynamicDataProvider } = require('./data-provider');
+  return dynamicDataProvider.whenReady();
+};
+

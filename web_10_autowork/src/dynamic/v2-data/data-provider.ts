@@ -203,3 +203,7 @@ export function isDynamicModeEnabled(): boolean {
 export function getLayoutConfig(seed?: number) {
   return dynamicDataProvider.getLayoutConfig(seed);
 }
+
+export function getEffectiveSeed(seed?: number) {
+  return dynamicDataProvider.getEffectiveSeed(seed ?? 36);
+}

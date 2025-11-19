@@ -3,6 +3,7 @@ export {
   getAllLayouts,
   getLayoutByName,
   getLayoutClasses,
+  getEffectiveLayoutConfig,
   isDynamicEnabled,
 } from "./layouts";
 export type { LayoutConfig } from "./layouts";

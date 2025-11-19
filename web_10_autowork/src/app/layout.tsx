@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
@@ -63,63 +64,65 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="antialiased bg-[#f5f6fa]">
-        <SeedProvider>
-          <div className="min-h-screen flex">
-          {/* Sidebar */}
-          <aside className="hidden md:flex flex-col bg-white text-[#253037] py-4 px-4 gap-6 shadow-lg">
-            <div className="bg-[#17A2B8] px-5 py-1 rounded flex items-center h-9 text-white">
-              <span className="font-semibold text-lg tracking-wide">
-                AutoWork
-              </span>
+        <Suspense fallback={<div className="min-h-screen bg-[#f5f6fa]" />}>
+          <SeedProvider>
+            <div className="min-h-screen flex">
+              {/* Sidebar */}
+              <aside className="hidden md:flex flex-col bg-white text-[#253037] py-4 px-4 gap-6 shadow-lg">
+                <div className="bg-[#17A2B8] px-5 py-1 rounded flex items-center h-9 text-white">
+                  <span className="font-semibold text-lg tracking-wide">
+                    AutoWork
+                  </span>
+                </div>
+                <nav className="flex flex-col gap-3 ">
+                  {sidebarLinks.map((link) => (
+                    <SeedLink
+                      key={link.label}
+                      href="/"
+                      className="flex items-center gap-4 px-3 py-2 rounded-lg transition bg-transparent hover:bg-[#e6f9fb] text-base hover:text-[#08b4ce]"
+                    >
+                      <img src={link.icon} alt="" className="w-5 h-8" />{" "}
+                      {link.label}
+                    </SeedLink>
+                  ))}
+                </nav>
+              </aside>
+              {/* Main area incl. topbar */}
+              <div className="flex-1 flex flex-col min-h-screen bg-[#fafafa]">
+                <header className="h-16 flex items-center px-6 border-b border-gray-200 bg-white justify-between">
+                  <div className="md:hidden flex items-center">
+                    <img
+                      src="https://ext.same-assets.com/1836270417/3369074439.png"
+                      alt="Topwork Logo"
+                      className="w-7 h-7 rounded mr-2"
+                    />
+                    <span className="font-semibold text-lg text-[#253037]">
+                      Topwork
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-6 ml-auto">
+                    {topIcons.map((icon, i) => (
+                      <img
+                        key={icon}
+                        src={icon}
+                        alt=""
+                        className="w-7 h-7 opacity-70"
+                      />
+                    ))}
+                    <img
+                      src="https://ext.same-assets.com/1836270417/1435009301.png"
+                      alt="User avatar"
+                      className="w-8 h-8 rounded-full object-cover border border-[#08b4ce]"
+                    />
+                  </div>
+                </header>
+                <main className="flex-1">
+                  <ClientBody>{children}</ClientBody>
+                </main>
+              </div>
             </div>
-            <nav className="flex flex-col gap-3 ">
-              {sidebarLinks.map((link) => (
-                <SeedLink
-                  key={link.label}
-                  href="/"
-                  className="flex items-center gap-4 px-3 py-2 rounded-lg transition bg-transparent hover:bg-[#e6f9fb] text-base hover:text-[#08b4ce]"
-                >
-                  <img src={link.icon} alt="" className="w-5 h-8" />{" "}
-                  {link.label}
-                </SeedLink>
-              ))}
-            </nav>
-          </aside>
-          {/* Main area incl. topbar */}
-          <div className="flex-1 flex flex-col min-h-screen bg-[#fafafa]">
-            <header className="h-16 flex items-center px-6 border-b border-gray-200 bg-white justify-between">
-              <div className="md:hidden flex items-center">
-                <img
-                  src="https://ext.same-assets.com/1836270417/3369074439.png"
-                  alt="Topwork Logo"
-                  className="w-7 h-7 rounded mr-2"
-                />
-                <span className="font-semibold text-lg text-[#253037]">
-                  Topwork
-                </span>
-              </div>
-              <div className="flex items-center gap-6 ml-auto">
-                {topIcons.map((icon, i) => (
-                  <img
-                    key={icon}
-                    src={icon}
-                    alt=""
-                    className="w-7 h-7 opacity-70"
-                  />
-                ))}
-                <img
-                  src="https://ext.same-assets.com/1836270417/1435009301.png"
-                  alt="User avatar"
-                  className="w-8 h-8 rounded-full object-cover border border-[#08b4ce]"
-                />
-              </div>
-            </header>
-            <main className="flex-1">
-              <ClientBody>{children}</ClientBody>
-            </main>
-          </div>
-        </div>
-        </SeedProvider>
+          </SeedProvider>
+        </Suspense>
       </body>
     </html>
   );

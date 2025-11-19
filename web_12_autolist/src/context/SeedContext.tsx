@@ -72,7 +72,6 @@ function SeedInitializer({
 }
 
 export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
-  const searchParams = useSearchParams();
   const [seed, setSeedState] = useState<number>(() => DEFAULT_SEED);
   const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
     resolveSeedsSync(DEFAULT_SEED)
@@ -80,22 +79,12 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [urlSeedProcessed, setUrlSeedProcessed] = useState(false);
 
-  // PRIORITY: URL > localStorage
-  // First, check if there's a seed in URL
-  const urlSeedRaw = searchParams.get("seed");
-  const urlSeed = urlSeedRaw ? clampBaseSeed(Number.parseInt(urlSeedRaw, 10)) : null;
-
-  // Initialize seed: URL has priority over localStorage
+  // Initialize seed from localStorage on mount (client-side only)
   useEffect(() => {
     if (isInitialized) return;
     
-    if (urlSeed !== null && !isNaN(urlSeed)) {
-      // URL seed has priority - use it immediately
-      setSeedState(urlSeed);
-      setUrlSeedProcessed(true);
-      console.log(`[SeedContext:web12] Using seed from URL: ${urlSeed}`);
-    } else {
-      // No seed in URL, try localStorage
+    // Try localStorage only on client-side
+    if (typeof window !== "undefined") {
       try {
         const savedSeed = localStorage.getItem("autolist_seed_base");
         if (savedSeed) {
@@ -108,7 +97,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
     setIsInitialized(true);
-  }, [isInitialized, urlSeed]);
+  }, [isInitialized]);
 
   // Handle seed from URL changes (when URL changes after initial load)
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
@@ -145,17 +134,19 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
     
-    try {
-      localStorage.setItem("autolist_seed_base", seed.toString());
-    } catch (error) {
-      console.error("Error saving seed to localStorage:", error);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("autolist_seed_base", seed.toString());
+      } catch (error) {
+        console.error("Error saving seed to localStorage:", error);
+      }
     }
     
     // Cleanup: cancel if seed changes before async completes
     return () => {
       cancelled = true;
     };
-  }, [seed, searchParams]); // Re-run when searchParams change (to catch enable_dynamic)
+  }, [seed]);
 
   // Sync v2Seed to window for backward compatibility with dynamicDataProvider
   useEffect(() => {

@@ -11,3 +11,6 @@ export {
   isDynamicModeEnabled,
   getLayoutConfig,
 } from "./data-provider";
+
+// Export whenReady function
+export const whenReady = () => dynamicDataProvider.whenReady();

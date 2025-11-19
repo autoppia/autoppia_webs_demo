@@ -429,3 +429,13 @@ export function getLayoutByName(name: string): LayoutConfig | null {
   const layout = Object.values(LAYOUTS).find(l => l.name === name);
   return layout || null;
 }
+
+/**
+ * Get effective layout configuration based on seed
+ * Alias for getSeedLayout for compatibility
+ * @param seed - Optional seed value
+ * @returns Layout configuration object
+ */
+export function getEffectiveLayoutConfig(seed?: number): LayoutConfig {
+  return getSeedLayout(seed);
+}

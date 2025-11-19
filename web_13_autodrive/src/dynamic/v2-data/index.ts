@@ -20,3 +20,6 @@ export {
   getStaticLocations,
 } from "./data-provider";
 export { initializeTrips } from "./trips-loader";
+
+// Export whenReady as alias for compatibility
+export const whenReady = whenDataReady;

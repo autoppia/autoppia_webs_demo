@@ -5,8 +5,9 @@
  */
 
 import { initializeRestaurants } from "@/data/restaurants-enhanced";
-import { getTestimonials } from "@/data/testimonials-enhanced";
+import { getRandomTestimonials } from "@/data/testimonials-enhanced";
 import { getEffectiveSeed } from "@/shared/seed-resolver";
+import { getEffectiveLayoutConfig } from "@/dynamic/v1-layouts";
 
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
@@ -52,7 +53,7 @@ export class DynamicDataProvider {
   }
 
   public getTestimonials() {
-    return getTestimonials();
+    return getRandomTestimonials(5);
   }
 
   public isReady(): boolean {
@@ -67,11 +68,11 @@ export class DynamicDataProvider {
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Re-export for compatibility
-export { initializeRestaurants, getTestimonials };
+export { initializeRestaurants };
+export const getTestimonials = () => dynamicDataProvider.getTestimonials();
 
 // Export helper functions
 export const isDynamicModeEnabled = () => dynamicDataProvider.isReady();
 export const getLayoutConfig = (seed?: number) => {
-  const { getEffectiveLayoutConfig } = require("@/dynamic/v1-layouts");
   return getEffectiveLayoutConfig(seed);
 };

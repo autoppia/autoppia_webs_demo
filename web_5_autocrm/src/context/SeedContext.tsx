@@ -88,15 +88,17 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (isInitialized) return;
     
-    try {
-      const savedSeed = localStorage.getItem("autocrm_seed_base");
-      if (savedSeed) {
-        const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
-        setSeedState(parsedSeed);
-        console.log(`[SeedContext:web5] Using seed from localStorage: ${parsedSeed}`);
+    if (typeof window !== "undefined") {
+      try {
+        const savedSeed = localStorage.getItem("autocrm_seed_base");
+        if (savedSeed) {
+          const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
+          setSeedState(parsedSeed);
+          console.log(`[SeedContext:web5] Using seed from localStorage: ${parsedSeed}`);
+        }
+      } catch (e) {
+        console.error("[SeedContext:web5] Error loading seed from localStorage", e);
       }
-    } catch (e) {
-      console.error("[SeedContext:web5] Error loading seed from localStorage", e);
     }
     
     setIsInitialized(true);
@@ -121,7 +123,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Save seed to localStorage whenever it changes
   useEffect(() => {
-    if (isInitialized && urlSeedProcessed) {
+    if (isInitialized && urlSeedProcessed && typeof window !== "undefined") {
       try {
         localStorage.setItem("autocrm_seed_base", seed.toString());
       } catch (e) {
@@ -167,9 +169,18 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getNavigationUrl = useCallback(
     (path: string) => {
-      const url = new URL(path, window.location.origin);
-      url.searchParams.set("seed", seed.toString());
-      return `${url.pathname}${url.search}`;
+      const [rawPath, rawQuery = ""] = path.split("?");
+      const params = new URLSearchParams(rawQuery);
+      params.set("seed", seed.toString());
+
+      if (typeof window !== "undefined") {
+        const url = new URL(path, window.location.origin);
+        url.searchParams.set("seed", seed.toString());
+        return `${url.pathname}${url.search}`;
+      }
+
+      const queryString = params.toString();
+      return queryString ? `${rawPath}?${queryString}` : rawPath;
     },
     [seed]
   );

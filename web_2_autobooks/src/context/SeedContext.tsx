@@ -57,14 +57,16 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isInitialized) return;
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = clampBaseSeed(Number.parseInt(saved, 10));
-        setSeedState(parsed);
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = clampBaseSeed(Number.parseInt(saved, 10));
+          setSeedState(parsed);
+        }
+      } catch (error) {
+        console.error("Error loading seed:", error);
       }
-    } catch (error) {
-      console.error("Error loading seed:", error);
     }
     setIsInitialized(true);
   }, [isInitialized]);
@@ -72,10 +74,12 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
       setSeedState(urlSeed);
-      try {
-        localStorage.setItem(STORAGE_KEY, urlSeed.toString());
-      } catch (error) {
-        console.error("Error saving seed to localStorage:", error);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(STORAGE_KEY, urlSeed.toString());
+        } catch (error) {
+          console.error("Error saving seed to localStorage:", error);
+        }
       }
     }
   }, []);

@@ -21,9 +21,12 @@ const isDynamicHtmlEnabled = (): boolean => {
 class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled = false;
+  private ready: boolean = true;
+  private readyPromise: Promise<void>;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    this.readyPromise = Promise.resolve();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -35,6 +38,14 @@ class DynamicDataProvider {
 
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
   }
 
   public getEffectiveSeed(providedSeed: number = 1): number {

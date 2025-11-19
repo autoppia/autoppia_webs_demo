@@ -12,3 +12,6 @@ export {
   getLayoutConfig,
 } from "./data-provider";
 export type { MovieSearchFilters } from "./data-provider";
+
+// Export whenReady function
+export const whenReady = () => dynamicDataProvider.whenReady();

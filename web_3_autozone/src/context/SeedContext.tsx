@@ -90,15 +90,17 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (isInitialized) return;
     
-    try {
-      const savedSeed = localStorage.getItem("autozone_seed_base");
-      if (savedSeed) {
-        const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
-        setSeedState(parsedSeed);
-        console.log(`[SeedContext:web3] Using seed from localStorage: ${parsedSeed}`);
+    if (typeof window !== "undefined") {
+      try {
+        const savedSeed = localStorage.getItem("autozone_seed_base");
+        if (savedSeed) {
+          const parsedSeed = clampBaseSeed(Number.parseInt(savedSeed, 10));
+          setSeedState(parsedSeed);
+          console.log(`[SeedContext:web3] Using seed from localStorage: ${parsedSeed}`);
+        }
+      } catch (error) {
+        console.error("Error loading seed from localStorage:", error);
       }
-    } catch (error) {
-      console.error("Error loading seed from localStorage:", error);
     }
     setIsInitialized(true);
   }, [isInitialized]);
@@ -138,10 +140,12 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
     
-    try {
-      localStorage.setItem("autozone_seed_base", seed.toString());
-    } catch (error) {
-      console.error("Error saving seed to localStorage:", error);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("autozone_seed_base", seed.toString());
+      } catch (error) {
+        console.error("Error saving seed to localStorage:", error);
+      }
     }
     
     return () => {

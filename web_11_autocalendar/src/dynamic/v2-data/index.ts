@@ -15,3 +15,9 @@ export {
 } from "./data-provider";
 export { initializeEvents } from './events-loader';
 
+// Export whenReady function
+export const whenReady = () => {
+  const { dynamicDataProvider } = require("./data-provider");
+  return dynamicDataProvider.whenReady();
+};
+
