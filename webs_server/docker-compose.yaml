@@ -1,6 +1,6 @@
 services:
   app:
-    user: "${HOST_UID}:${HOST_GID}"
+    user: "0:0"
     build: .
     ports:
       - "127.0.0.1:${WEB_PORT}:8080"
