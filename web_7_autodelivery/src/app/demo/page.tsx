@@ -3,7 +3,6 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLayout } from '@/contexts/LayoutProvider';
 import { useSeedRouter } from '@/hooks/useSeedRouter';
 import { useSeed } from '@/context/SeedContext';
@@ -53,71 +52,71 @@ function DemoPageContent() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Search Bar Layout</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="px-5 py-4 border-b border-zinc-100 font-semibold text-lg">
+            Search Bar Layout
+          </div>
+          <div className="px-5 py-4 text-sm space-y-2">
             <p><strong>Position:</strong> {layout.searchBar.position}</p>
             <p><strong>Container Class:</strong> <code>{layout.searchBar.containerClass}</code></p>
             <p><strong>Input Class:</strong> <code>{layout.searchBar.inputClass}</code></p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Navbar Layout</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="px-5 py-4 border-b border-zinc-100 font-semibold text-lg">
+            Navbar Layout
+          </div>
+          <div className="px-5 py-4 text-sm space-y-2">
             <p><strong>Logo Position:</strong> {layout.navigation.logoPosition}</p>
             <p><strong>Cart Position:</strong> {layout.navigation.cartPosition}</p>
             <p><strong>Menu Position:</strong> {layout.navigation.menuPosition}</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Restaurant Cards</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="px-5 py-4 border-b border-zinc-100 font-semibold text-lg">
+            Restaurant Cards
+          </div>
+          <div className="px-5 py-4 text-sm space-y-2">
             <p><strong>Grid Class:</strong> <code>{layout.grid.containerClass}</code></p>
             <p><strong>Card Class:</strong> <code>{layout.restaurantCard.containerClass}</code></p>
             <p><strong>Title Class:</strong> <code>{layout.restaurantCard.titleClass}</code></p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Hero Section</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="px-5 py-4 border-b border-zinc-100 font-semibold text-lg">
+            Hero Section
+          </div>
+          <div className="px-5 py-4 text-sm space-y-2">
             <p><strong>Button Position:</strong> {layout.hero.buttonPosition}</p>
             <p><strong>Container Class:</strong> <code>{layout.hero.containerClass}</code></p>
             <p><strong>Button Class:</strong> <code>{layout.hero.buttonClass}</code></p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Cart Components</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="px-5 py-4 border-b border-zinc-100 font-semibold text-lg">
+            Cart Components
+          </div>
+          <div className="px-5 py-4 text-sm space-y-2">
             <p><strong>Icon Class:</strong> <code>{layout.cart.iconClass}</code></p>
             <p><strong>Badge Class:</strong> <code>{layout.cart.badgeClass}</code></p>
             <p><strong>Page Class:</strong> <code>{layout.cart.pageContainerClass}</code></p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Modal Layout</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
+          <div className="px-5 py-4 border-b border-zinc-100 font-semibold text-lg">
+            Modal Layout
+          </div>
+          <div className="px-5 py-4 text-sm space-y-2">
             <p><strong>Container Class:</strong> <code>{layout.modal.containerClass}</code></p>
             <p><strong>Content Class:</strong> <code>{layout.modal.contentClass}</code></p>
             <p><strong>Header Class:</strong> <code>{layout.modal.headerClass}</code></p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       <div className="mt-8">
