@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   Briefcase,
   FileText,
@@ -7,7 +7,7 @@ import {
   Clock,
   ChevronDown,
 } from "lucide-react";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, Suspense } from "react";
 import Cookies from "js-cookie";
 import {EVENT_TYPES, logEvent} from "@/library/events";
 import { DEMO_MATTERS } from "@/library/dataset";
@@ -30,13 +30,11 @@ type Matter = {
 
 function useDetailLayoutVariant() {
   // Get the seed value from URL, default to 1 if not present
-  const [seed, setSeed] = useState(1);
-  
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const seedParam = searchParams.get('seed');
-    setSeed(seedParam ? parseInt(seedParam) : 1);
-  }, []);
+  const searchParams = useSearchParams();
+  const seedParam = searchParams?.get('seed');
+  const seed = useMemo(() => {
+    return seedParam ? parseInt(seedParam) : 1;
+  }, [seedParam]);
 
   // Define different layout variants for detail page
   const variants = {
@@ -89,7 +87,7 @@ function useDetailLayoutVariant() {
   return getVariant(seed);
 }
 
-export default function MatterDetailPage() {
+function MatterDetailPageContent() {
   const [tab, setTab] = useState("Overview");
   const [summaryOpen, setSummaryOpen] = useState(true);
   const [customMatters, setCustomMatters] = useState<Matter[]>([]);
@@ -290,5 +288,13 @@ export default function MatterDetailPage() {
         </div>
       </main>
     </section>
+  );
+}
+
+export default function MatterDetailPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral flex items-center justify-center">Loading...</div>}>
+      <MatterDetailPageContent />
+    </Suspense>
   );
 }

@@ -106,7 +106,7 @@ export default function DocumentsPage() {
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
-          {getText("documents_title")}
+          {getText("documents_title", "Documents")}
           <span className="ml-2 text-base font-medium text-zinc-400 align-middle">
             (Demo)
           </span>
@@ -114,7 +114,7 @@ export default function DocumentsPage() {
       </DynamicElement>
 
       {isLoading && (
-        <LoadingNotice message={getText("loading_message") ?? "Loading documents..."} />
+        <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading documents..."} />
       )}
 
       <DynamicElement
@@ -126,11 +126,11 @@ export default function DocumentsPage() {
         onClick={() => fileInput.current && fileInput.current.click()}
         style={{ minHeight: 140 }}
         id={getId("upload_area")}
-        aria-label={getText("upload_documents")}
+        aria-label={getText("upload_documents", "Upload Documents")}
       >
         <UploadCloud className="w-9 h-9 text-accent-forest/60 mb-2" />
         <span id={getId("upload_instructions")} className="font-semibold text-accent-forest">
-          {getText("upload_instructions")}
+          {getText("upload_instructions", "Upload Instructions")}
         </span>
         <input id={getId("file_input")} data-testid="file-input" type="file" multiple ref={fileInput} onChange={onUpload} className="hidden" />
       </DynamicElement>
@@ -140,7 +140,7 @@ export default function DocumentsPage() {
           <div className="col-span-full text-red-600">Failed to load documents: {apiError}</div>
         )}
         {isLoading && files.length === 0 && (
-          <div className="col-span-full text-zinc-500">{getText("loading_message") ?? "Loading documents..."}</div>
+          <div className="col-span-full text-zinc-500">{getText("loading_message", "Loading...") ?? "Loading documents..."}</div>
         )}
         {files.map((file, index) => (
           <DynamicItem key={file.id} index={index} className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition">
@@ -169,8 +169,8 @@ export default function DocumentsPage() {
               onClick={() => deleteFile(file.id)} 
               className="absolute right-5 top-5 text-zinc-400 rounded-full hover:bg-zinc-100 p-2 opacity-70 group-hover:opacity-100 transition" 
               id={`${getId("delete_document_button")}-${file.id}`}
-              title={getText("delete_button")} 
-              aria-label={`${getText("delete_button")} ${file.name}`}
+              title={getText("delete_button", "Delete Button")} 
+              aria-label={`${getText("delete_button", "Delete Button")} ${file.name}`}
             >
               <Trash2 className="w-5 h-5" />
             </DynamicButton>

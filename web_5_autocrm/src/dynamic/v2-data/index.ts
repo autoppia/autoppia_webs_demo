@@ -3,4 +3,5 @@ export {
   getEffectiveSeed,
   getLayoutConfig,
   isDynamicModeEnabled,
+  whenReady,
 } from "./data-provider";

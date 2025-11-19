@@ -90,11 +90,11 @@ export default function CalendarPage() {
   return (
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
-        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">{getText("calendar_title")}</h1>
+        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">{getText("calendar_title", "Calendar")}</h1>
       </DynamicElement>
 
       {isLoading && (
-        <LoadingNotice message={getText("loading_message") ?? "Loading calendar..."} />
+        <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading calendar..."} />
       )}
 
       <DynamicElement elementType="section" index={1} className="flex items-center gap-2 mb-6">
@@ -103,7 +103,7 @@ export default function CalendarPage() {
           index={0}
           className="p-2 rounded-full hover:bg-accent-forest/20"
           id={getId("previous_month_button")}
-          aria-label={getText("previous_month")}
+          aria-label={getText("previous_month", "Previous Month")}
           onClick={() =>
             setCurMonth((m: number) =>
               m === 0 ? (setCurYear((y: number) => y - 1), 11) : m - 1
@@ -120,7 +120,7 @@ export default function CalendarPage() {
           index={1}
           className="p-2 rounded-full hover:bg-accent-forest/20"
           id={getId("next_month_button")}
-          aria-label={getText("next_month")}
+          aria-label={getText("next_month", "Next Month")}
           onClick={() =>
             setCurMonth((m) =>
               m === 11 ? (setCurYear((y) => y + 1), 0) : m + 1

@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { User, Mail, CheckCircle, FileText, Briefcase, Calendar, ChevronRight, Phone } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { clients as ALL_CLIENTS } from '@/library/dataset';
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 
 function getInitials(name: string) {
   return name

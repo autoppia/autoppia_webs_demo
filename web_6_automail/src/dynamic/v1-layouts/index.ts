@@ -9,3 +9,4 @@ export {
   generateCSSVariables,
   generateLayoutClasses,
 } from "./layout-variants";
+export type { LayoutVariant } from "./layout-variants";

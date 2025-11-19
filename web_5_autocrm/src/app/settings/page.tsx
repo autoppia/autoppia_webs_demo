@@ -26,16 +26,16 @@ export default function SettingsPage() {
   return (
     <DynamicContainer index={0} className="max-w-2xl mx-auto flex flex-col gap-10">
       <DynamicElement elementType="header" index={0}>
-        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">{getText("settings_title")}</h1>
+        <h1 className="text-3xl font-extrabold mb-10 tracking-tight">{getText("settings_title", "Settings")}</h1>
       </DynamicElement>
       
       <DynamicItem index={0} className="bg-white rounded-2xl shadow-card border border-zinc-100 p-7 flex flex-col gap-7">
         <DynamicElement elementType="section" index={1}>
-          <h2 className="font-semibold text-lg mb-4">{getText("user_profile")}</h2>
+          <h2 className="font-semibold text-lg mb-4">{getText("user_profile", "User Profile")}</h2>
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-zinc-700 flex items-center gap-2">
-                <User className="w-4 h-4 inline" /> {getText("full_name")}
+                <User className="w-4 h-4 inline" /> {getText("full_name", "Full Name")}
               </label>
               <input
                 id={getId("user_name_input")}
@@ -44,19 +44,19 @@ export default function SettingsPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onBlur={saveName}
-                aria-label={getText("full_name")}
+                aria-label={getText("full_name", "Full Name")}
               />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium text-zinc-700 flex items-center gap-2">
-                <Mail className="w-4 h-4 inline" /> {getText("client_email")}
+                <Mail className="w-4 h-4 inline" /> {getText("client_email", "Client Email")}
               </label>
               <input
                 id={getId("user_email_input")}
                 className="rounded-xl border px-4 py-3 font-medium bg-zinc-50"
                 value="j.doe@firmly.com"
                 disabled
-                aria-label={getText("client_email")}
+                aria-label={getText("client_email", "Client Email")}
               />
             </div>
             <div className="flex items-center gap-3">
@@ -66,9 +66,9 @@ export default function SettingsPage() {
                 onClick={saveName}
                 className="ml-auto rounded-2xl text-accent-forest border border-accent-forest px-4 py-2 font-medium hover:bg-accent-forest/10 transition"
                 id={getId("save_name_button")}
-                aria-label={getText("save_profile")}
+                aria-label={getText("save_profile", "Save Profile")}
               >
-                {getText("save_profile")}
+                {getText("save_profile", "Save Profile")}
               </DynamicButton>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default function SettingsPage() {
       </DynamicItem>
       
       <DynamicElement elementType="section" index={2} className="text-xs text-zinc-400 text-center pt-6">
-        {getText("settings_note")}
+        {getText("settings_note", "Settings Note")}
       </DynamicElement>
     </DynamicContainer>
   );

@@ -1,10 +1,7 @@
 "use client";
 
 import React, { createContext, useState, useEffect, useCallback, ReactNode, useMemo } from 'react';
-import { LayoutVariant } from '@/library/layoutVariants';
-import { getLayoutVariant } from '@/library/layoutVariants';
-import { getSeedLayout } from '@/dynamic/v1-layouts';
-import { isDynamicEnabled } from '@/dynamic/v1-layouts';
+import { getSeedLayout, getLayoutVariant, isDynamicEnabled, type LayoutVariant } from '@/dynamic/v1-layouts';
 import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 interface LayoutContextType {

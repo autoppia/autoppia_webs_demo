@@ -348,6 +348,153 @@ export function getLayoutVariant(seed: number): LayoutVariant {
   return LAYOUT_VARIANTS[variantIndex];
 }
 
+const EVENT_TO_ELEMENT: Record<string, keyof LayoutVariant["xpaths"]> = {
+  VIEW_EMAIL: "emailItem",
+  EMAIL_LIST: "emailItem",
+  EMAIL_LIST_ITEM: "emailItem",
+  EMAIL_CONTENT: "emailItem",
+  EMAIL_SENDER: "emailItem",
+  EMAIL_TIMESTAMP: "emailItem",
+  EMAIL_LIST_HEADER: "searchInput",
+  CLEAR_SELECTION: "checkbox",
+  BULK_ACTIONS: "checkbox",
+  DELETE_EMAIL: "deleteButton",
+  MARK_AS_SPAM: "deleteButton",
+  MARK_EMAIL_AS_IMPORTANT: "starButton",
+  STAR_AN_EMAIL: "starButton",
+  MARK_AS_UNREAD: "checkbox",
+  ADD_LABEL: "labelSelector",
+  CREATE_LABEL: "labelSelector",
+  THEME_CHANGED: "themeToggle",
+  SEARCH_EMAIL: "searchInput",
+  SEND_EMAIL: "sendButton",
+  EMAIL_SAVE_AS_DRAFT: "saveDraftButton",
+};
+
+const COMPOSE_POSITION_CLASSES: Record<LayoutVariant["layout"]["composeButton"], string> = {
+  "top-right": "flex justify-end gap-2",
+  "bottom-right": "fixed bottom-6 right-6 flex flex-col gap-3",
+  center: "flex justify-center gap-2",
+  floating: "fixed bottom-6 right-6 shadow-lg rounded-full",
+  sidebar: "flex flex-col gap-2",
+  "top-left": "flex justify-start gap-2",
+};
+
+const EMAIL_DENSITY_CLASSES: Record<LayoutVariant["layout"]["emailList"], string> = {
+  left: "space-y-3",
+  right: "space-y-4",
+  center: "grid grid-cols-1 gap-4",
+  top: "grid grid-cols-2 gap-4",
+  bottom: "grid grid-cols-2 gap-6",
+};
+
+const COLOR_PALETTE = [
+  "hsl(12, 88%, 60%)",
+  "hsl(200, 85%, 55%)",
+  "hsl(270, 75%, 60%)",
+  "hsl(146, 75%, 45%)",
+  "hsl(48, 95%, 55%)",
+  "hsl(330, 80%, 60%)",
+  "hsl(210, 50%, 45%)",
+  "hsl(120, 55%, 45%)",
+  "hsl(32, 90%, 55%)",
+  "hsl(260, 60%, 55%)",
+];
+
+const SHADOW_VALUES = ["0", "1", "2", "3", "4", "5"];
+const RADIUS_VALUES = ["0.25rem", "0.5rem", "0.75rem", "1rem", "1.25rem", "9999px"];
+
+function getSeededValue(seed: number, key: string): number {
+  const input = `${seed}-${key}`;
+  let hash = 0;
+  for (let i = 0; i < input.length; i += 1) {
+    hash = (hash << 5) - hash + input.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+export function generateElementAttributes(
+  elementType: string,
+  seed: number,
+  index: number = 0
+): Record<string, string> {
+  const variant = getLayoutVariant(seed);
+  const normalizedType = elementType.toLowerCase();
+  return {
+    id: generateElementId(seed, normalizedType, index),
+    "data-seed": `${seed}`,
+    "data-variant": `${variant.id}`,
+    "data-element": normalizedType,
+    "data-index": `${index}`,
+    "data-layout": variant.layout.emailList,
+    "data-testid": `${normalizedType}-${variant.id}`,
+  };
+}
+
+export function getXPathSelector(elementType: string, seed: number): string {
+  const variant = getLayoutVariant(seed);
+  const normalizedType = elementType.toUpperCase();
+  const xpathKey = EVENT_TO_ELEMENT[normalizedType] ?? "emailItem";
+  const xpath = variant.xpaths[xpathKey as keyof LayoutVariant["xpaths"]];
+  if (xpath) {
+    return xpath;
+  }
+  const htmlTag = normalizedType.includes("BUTTON") ? "button" : "div";
+  return `//${htmlTag}[@data-element='${normalizedType.toLowerCase()}']`;
+}
+
+export function getElementOrder<T extends { id?: string; name?: string }>(
+  seed: number,
+  elements: T[]
+): T[] {
+  const orderStrategy = getSeededValue(seed, "order") % 3;
+  if (orderStrategy === 1) {
+    return [...elements].reverse();
+  }
+  if (orderStrategy === 2) {
+    return [...elements].sort((a, b) => {
+      const aHash = getSeededValue(seed, a.id || a.name || "a");
+      const bHash = getSeededValue(seed, b.id || b.name || "b");
+      return aHash - bHash;
+    });
+  }
+  return elements;
+}
+
+export function generateElementId(seed: number, context: string, index: number = 0): string {
+  const hashed = getSeededValue(seed, `${context}-${index}`);
+  return `${context}-${index}-${hashed % 1000}`;
+}
+
+export function generateCSSVariables(seed: number): Record<string, string> {
+  return {
+    "--automail-accent": COLOR_PALETTE[getSeededValue(seed, "accent") % COLOR_PALETTE.length],
+    "--automail-highlight": COLOR_PALETTE[getSeededValue(seed, "highlight") % COLOR_PALETTE.length],
+    "--automail-shadow": SHADOW_VALUES[getSeededValue(seed, "shadow") % SHADOW_VALUES.length],
+    "--automail-radius": RADIUS_VALUES[getSeededValue(seed, "radius") % RADIUS_VALUES.length],
+  };
+}
+
+export function generateLayoutClasses(
+  seed: number,
+  elementType: "container" | "item" | "button" | "checkbox"
+): string {
+  const variant = getLayoutVariant(seed);
+  switch (elementType) {
+    case "container":
+      return variant.styles.container;
+    case "item":
+      return EMAIL_DENSITY_CLASSES[variant.layout.emailList] || variant.styles.emailList;
+    case "button":
+      return COMPOSE_POSITION_CLASSES[variant.layout.composeButton] || "flex gap-2";
+    case "checkbox":
+      return `seed-checkbox seed-${variant.layout.emailList}`;
+    default:
+      return "";
+  }
+}
+
 export function getSeedFromUrl(): number {
   if (typeof window === 'undefined') return 1;
   

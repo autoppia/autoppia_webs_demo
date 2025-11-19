@@ -169,20 +169,20 @@ function MattersListPageContent() {
       <DynamicContainer className="flex flex-col gap-6">
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">{getText("matters_title")}</h1>
+          <h1 className="text-3xl font-bold">{getText("matters_title", "Matters")}</h1>
           <DynamicButton
             eventType="ADD_NEW_MATTER"
             onClick={() => setOpenNew(true)}
             className="bg-accent-forest text-white hover:bg-accent-forest/90"
             id={getId("add_matter_button")}
-            aria-label={getText("add_new_matter")}
+            aria-label={getText("add_new_matter", "Add New Matter")}
           >
-            <Plus className="w-4 h-4 mr-2" /> {getText("add_new_matter")}
+            <Plus className="w-4 h-4 mr-2" /> {getText("add_new_matter", "Add New Matter")}
           </DynamicButton>
         </div>
 
         {isLoading && (
-          <LoadingNotice message={getText("loading_message") ?? "Loading matters..."} />
+          <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading matters..."} />
         )}
 
         {/* Matter List */}
@@ -192,7 +192,7 @@ function MattersListPageContent() {
           )}
           {isLoading && matters.length === 0 && (
             <div className="text-zinc-500">
-              {getText("loading_message") ?? "Loading matters..."}
+              {getText("loading_message", "Loading...") ?? "Loading matters..."}
             </div>
           )}
           {matters.map((matter) => (
@@ -229,7 +229,7 @@ function MattersListPageContent() {
                     <span className="text-sm text-zinc-500">{matter.updated}</span>
                   </div>
                 </div>
-              </Link>
+              </SeedLink>
             </DynamicItem>
           ))}
         </div>
@@ -242,9 +242,9 @@ function MattersListPageContent() {
               onClick={archiveSelected}
               variant="outline"
               id={getId("archive_button")}
-              aria-label={getText("archive_selected")}
+              aria-label={getText("archive_selected", "Archive Selected")}
             >
-              <Archive className="w-4 h-4 mr-2" /> {getText("archive_selected")}
+              <Archive className="w-4 h-4 mr-2" /> {getText("archive_selected", "Archive Selected")}
             </DynamicButton>
             <DynamicButton
               eventType="DELETE_MATTER"
@@ -252,9 +252,9 @@ function MattersListPageContent() {
               variant="outline"
               className="text-red-600 hover:bg-red-50"
               id={getId("delete_button")}
-              aria-label={getText("delete_selected")}
+              aria-label={getText("delete_selected", "Delete Selected")}
             >
-              <Trash2 className="w-4 h-4 mr-2" /> {getText("delete_selected")}
+              <Trash2 className="w-4 h-4 mr-2" /> {getText("delete_selected", "Delete Selected")}
             </DynamicButton>
           </div>
         )}
@@ -265,13 +265,13 @@ function MattersListPageContent() {
             <DynamicContainer className="bg-white rounded-2xl p-8 max-w-md w-full">
               <form onSubmit={addMatter} className="space-y-6">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-2xl font-bold">{getText("add_new_matter")}</h2>
+                  <h2 className="text-2xl font-bold">{getText("add_new_matter", "Add New Matter")}</h2>
                   <button
                     type="button"
                     onClick={() => setOpenNew(false)}
                     className="text-zinc-400 hover:text-zinc-600"
                     id={getId("close_modal_button")}
-                    aria-label={getText("cancel_button")}
+                    aria-label={getText("cancel_button", "Cancel")}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -280,7 +280,7 @@ function MattersListPageContent() {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      {getText("matter_name")}
+                      {getText("matter_name", "Matter Name")}
                     </label>
                     <input
                       id={getId("matter_name_input")}
@@ -289,14 +289,14 @@ function MattersListPageContent() {
                       onChange={(e) =>
                         setNewMatter((m) => ({ ...m, name: e.target.value }))
                       }
-                      placeholder={getText("matter_name")}
+                      placeholder={getText("matter_name", "Matter Name")}
                       required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      {getText("client_name")}
+                      {getText("client_name", "Client Name")}
                     </label>
                     <input
                       id={getId("client_name_input")}
@@ -305,14 +305,14 @@ function MattersListPageContent() {
                       onChange={(e) =>
                         setNewMatter((m) => ({ ...m, client: e.target.value }))
                       }
-                      placeholder={getText("client_name")}
+                      placeholder={getText("client_name", "Client Name")}
                       required
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      {getText("matter_status")}
+                      {getText("matter_status", "Matter Status")}
                     </label>
                     <select
                       id={getId("matter_status_select")}
@@ -322,9 +322,9 @@ function MattersListPageContent() {
                         setNewMatter((m) => ({ ...m, status: e.target.value }))
                       }
                     >
-                      <option value="Active">{getText("active_status")}</option>
-                      <option value="On Hold">{getText("pending_status")}</option>
-                      <option value="Archived">{getText("inactive_status")}</option>
+                      <option value="Active">{getText("active_status", "Active")}</option>
+                      <option value="On Hold">{getText("pending_status", "Pending")}</option>
+                      <option value="Archived">{getText("inactive_status", "Inactive")}</option>
                     </select>
                   </div>
                 </div>
@@ -334,9 +334,9 @@ function MattersListPageContent() {
                   type="submit"
                   className="w-full bg-accent-forest text-white hover:bg-accent-forest/90"
                   id={getId("submit_matter_button")}
-                  aria-label={getText("add_new_matter")}
+                  aria-label={getText("add_new_matter", "Add New Matter")}
                 >
-                  {getText("add_new_matter")}
+                  {getText("add_new_matter", "Add New Matter")}
                 </DynamicButton>
               </form>
             </DynamicContainer>

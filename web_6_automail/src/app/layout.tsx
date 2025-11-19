@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -33,13 +34,15 @@ export default function RootLayout({
       <head />
       <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
         <ThemeProvider>
-          <SeedProvider>
-            <LayoutProvider>
-              <EmailProvider>
-                {children}
-              </EmailProvider>
-            </LayoutProvider>
-          </SeedProvider>
+          <Suspense fallback={<div className="min-h-screen bg-background" />}>
+            <SeedProvider>
+              <LayoutProvider>
+                <EmailProvider>
+                  {children}
+                </EmailProvider>
+              </LayoutProvider>
+            </SeedProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>

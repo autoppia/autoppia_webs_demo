@@ -77,7 +77,7 @@ function ClientsDirectoryContent() {
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
-          {getText("clients_title")}
+          {getText("clients_title", "Clients")}
         </h1>
       </DynamicElement>
       
@@ -89,7 +89,7 @@ function ClientsDirectoryContent() {
           <input
             id={getId("search_input")}
             className="w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium"
-            placeholder={getText("search_placeholder")}
+            placeholder={getText("search_placeholder", "Search Placeholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search clients"
@@ -100,13 +100,13 @@ function ClientsDirectoryContent() {
           index={0}
           className="flex-shrink-0 flex items-center gap-2 px-5 h-12 ml-0 md:ml-4 font-medium rounded-2xl bg-white border border-zinc-200 text-zinc-700 shadow-sm hover:bg-zinc-50 transition"
           id={getId("filter_button")}
-          aria-label={getText("filter_by")}
+          aria-label={getText("filter_by", "Filter By")}
         >
-          <Filter className="w-4 h-4" /> {getText("filter_by")}
+          <Filter className="w-4 h-4" /> {getText("filter_by", "Filter By")}
         </DynamicButton>
       </DynamicElement>
       {isLoading && (
-        <LoadingNotice message={getText("loading_message") ?? "Loading clients..."} />
+        <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading clients..."} />
       )}
       <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
         {error && (
@@ -116,10 +116,10 @@ function ClientsDirectoryContent() {
           className="hidden md:grid grid-cols-7 px-10 pt-6 pb-2 text-zinc-500 text-xs uppercase tracking-wide select-none"
           style={{ letterSpacing: "0.08em" }}
         >
-          <span className="col-span-3">{getText("client_name")}</span>
-          <span className="">{getText("matters_title")}</span>
-          <span className="">{getText("matter_status")}</span>
-          <span className="">{getText("modified_date")}</span>
+          <span className="col-span-3">{getText("client_name", "Client Name")}</span>
+          <span className="">{getText("matters_title", "Matters")}</span>
+          <span className="">{getText("matter_status", "Matter Status")}</span>
+          <span className="">{getText("modified_date", "Modified Date")}</span>
           <span className=""></span>
         </div>
         <div className="flex flex-col divide-y divide-zinc-100">

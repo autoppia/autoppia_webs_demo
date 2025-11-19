@@ -116,10 +116,10 @@ export default function BillingPage() {
   return (
     <section>
       <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
-        {getText("billing_title")}
+        {getText("billing_title", "Billing")}
       </h1>
       {isLoading && (
-        <LoadingNotice message={getText("loading_message") ?? "Loading logs..."} />
+        <LoadingNotice message={getText("loading_message", "Loading logs...")} />
       )}
       <div className="flex gap-4 mb-8">
         <button
@@ -130,9 +130,9 @@ export default function BillingPage() {
               : "text-zinc-700 hover:bg-zinc-100"
           }`}
           id={getId("logs_tab_button")}
-          aria-label={getText("time_entries")}
+          aria-label={getText("time_entries", "Time Entries")}
         >
-          {getText("time_entries")}
+          {getText("time_entries", "Time Entries")}
         </button>
       </div>
       {tab === "Logs" && (
@@ -140,7 +140,7 @@ export default function BillingPage() {
           <div className="bg-white rounded-2xl shadow-card p-7 flex flex-col gap-6 border border-zinc-100 w-full max-w-sm">
             <div className="flex items-center gap-3 mb-2">
               <Timer className="w-7 h-7 text-accent-forest" />
-              <span className="font-bold text-xl">{getText("timer")}</span>
+              <span className="font-bold text-xl">{getText("timer", "Timer")}</span>
             </div>
             <div className="text-5xl font-bold tracking-tight text-[#1A1A1A] mb-2 select-none">
               {`${Math.floor(timerSec / 3600)
@@ -160,17 +160,17 @@ export default function BillingPage() {
                     : "bg-accent-forest hover:bg-accent-forest/90 text-white"
                 }`}
                 onClick={timerActive ? stopTimer : startTimer}
-                aria-label={timerActive ? getText("stop_timer") : getText("start_timer")}
+                aria-label={timerActive ? getText("stop_timer", "Stop Timer") : getText("start_timer", "Start Timer")}
               >
                 {timerActive ? (
                   <>
                     <PauseCircle className="w-6 h-6" />
-                    {getText("stop_timer")}
+                    {getText("stop_timer", "Stop Timer")}
                   </>
                 ) : (
                   <>
                     <PlayCircle className="w-6 h-6" />
-                    {getText("start_timer")}
+                    {getText("start_timer", "Start Timer")}
                   </>
                 )}
               </button>
@@ -183,11 +183,11 @@ export default function BillingPage() {
             >
               <div className="flex items-center gap-3 mb-1">
                 <Plus className="w-6 h-6 text-accent-forest" />
-                <span className="font-bold text-lg">{getText("add_time_entry")}</span>
+                <span className="font-bold text-lg">{getText("add_time_entry", "Add Time Entry")}</span>
               </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor={getId("manual_matter_input")} className="text-sm font-medium text-zinc-700">
-                  {getText("matter_name")}
+                  {getText("matter_name", "Matter Name")}
                 </label>
                 <input
                   id={getId("manual_matter_input")}
@@ -196,13 +196,13 @@ export default function BillingPage() {
                   onChange={(e) =>
                     setManual((m) => ({ ...m, matter: e.target.value }))
                   }
-                  placeholder={getText("matter_name")}
+                  placeholder={getText("matter_name", "Matter Name")}
                   required
                 />
               </div>
               <div className="flex flex-col gap-2">
                 <label htmlFor={getId("manual_description_input")} className="text-sm font-medium text-zinc-700">
-                  {getText("task_description")}
+                  {getText("task_description", "Task Description")}
                 </label>
                 <input
                   id={getId("manual_description_input")}
@@ -211,12 +211,12 @@ export default function BillingPage() {
                   onChange={(e) =>
                     setManual((m) => ({ ...m, description: e.target.value }))
                   }
-                  placeholder={getText("task_description")}
+                  placeholder={getText("task_description", "Task Description")}
                   required
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor={getId("manual_hours_input")} className="text-sm font-medium text-zinc-700">{getText("hours_logged")}</label>
+                <label htmlFor={getId("manual_hours_input")} className="text-sm font-medium text-zinc-700">{getText("hours_logged", "Hours Logged")}</label>
                 <input
                   id={getId("manual_hours_input")}
                   type="number"
@@ -235,16 +235,16 @@ export default function BillingPage() {
                 id={getId("add_entry_button")}
                 type="submit"
                 className="rounded-2xl px-5 py-3 bg-accent-forest text-white font-semibold hover:bg-accent-forest/90 transition text-lg"
-                aria-label={getText("add_time_entry")}
+                aria-label={getText("add_time_entry", "Add Time Entry")}
               >
-                {getText("add_time_entry")}
+                {getText("add_time_entry", "Add Time Entry")}
               </button>
             </form>
         </div>
       )}
       {tab === "Logs" && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-5">{getText("recent_activity")}</h2>
+          <h2 className="text-lg font-semibold mb-5">{getText("recent_activity", "Recent Activity")}</h2>
           <div className="flex flex-col gap-4">
             {apiError && (
               <div className="text-red-600 px-4 py-2">Failed to load logs: {apiError}</div>
@@ -255,7 +255,7 @@ export default function BillingPage() {
                 data-testid="no-logs-message"
                 className="text-zinc-400 px-4 py-8 text-center"
               >
-                {getText("no_logs_yet")}
+                {getText("no_logs_yet", "No logs yet")}
               </div>
             )}
             {logs.map((l) => (
@@ -310,9 +310,9 @@ export default function BillingPage() {
                 <button
                   id={`${getId("delete_log_button")}-${l.id}`}
                   className="absolute right-3 top-3 text-zinc-300 hover:text-red-500 rounded-full"
-                  title={getText("delete_button")}
+                  title={getText("delete_button", "Delete")}
                   onClick={() => deleteLog(l.id)}
-                  aria-label={`${getText("delete_button")} ${l.matter}`}
+                  aria-label={`${getText("delete_button", "Delete")} ${l.matter}`}
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>

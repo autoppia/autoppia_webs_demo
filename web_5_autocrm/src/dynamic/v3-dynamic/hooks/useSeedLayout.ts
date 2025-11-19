@@ -4,10 +4,10 @@ import {
   generateElementAttributes,
   getXPathSelector,
   getElementOrder,
-  generateElementId,
   generateCSSVariables,
   generateLayoutClasses
 } from '@/dynamic/v1-layouts';
+import { generateElementId } from '../utils/id-generator';
 import { getLayoutConfig, isDynamicModeEnabled } from '@/dynamic/v2-data';
 import { useSeed as useSeedContext } from '@/context/SeedContext';
 import { useV3Attributes } from './useV3Attributes';

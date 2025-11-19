@@ -328,7 +328,9 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
     }
   } catch (err) {
     console.error(`[automail] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    throw err;
+    const fallback = normalizeEmailTimestamps([...originalEmails]);
+    dynamicEmails = fallback;
+    return fallback;
   }
 }
 
@@ -467,4 +469,3 @@ export function searchEmails(query: string): Email[] {
 
 // Export the dynamic emails array for direct access
 export { dynamicEmails as emails };
-
