@@ -6,12 +6,20 @@ import { Hotel } from "@/types/hotel";
  * Manages hotel data loading with caching and fallback support
  */
 class DynamicDataProvider {
+  private static instance: DynamicDataProvider;
   private hotels: Hotel[] = [];
   private ready = false;
   private readyPromise: Promise<void>;
 
-  constructor() {
+  private constructor() {
     this.readyPromise = this.initialize();
+  }
+
+  public static getInstance(): DynamicDataProvider {
+    if (!DynamicDataProvider.instance) {
+      DynamicDataProvider.instance = new DynamicDataProvider();
+    }
+    return DynamicDataProvider.instance;
   }
 
   /**
@@ -136,7 +144,7 @@ class DynamicDataProvider {
 }
 
 // Export singleton instance
-export const dynamicDataProvider = new DynamicDataProvider();
+export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Listen for v2-seed changes
 if (typeof window !== "undefined") {

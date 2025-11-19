@@ -3,7 +3,13 @@ import { initializeTrips, type Trip } from "@/data/trips-enhanced";
 
 // Check if dynamic HTML is enabled via environment variable (seed-based structure flag)
 const isDynamicHtmlEnabled = (): boolean => {
-  return process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE === 'true';
+  const raw = (
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
+    process.env.ENABLE_DYNAMIC_V1 ??
+    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
+    ''
+  ).toString().toLowerCase();
+  return raw === 'true' || raw === '1' || raw === 'yes' || raw === 'on';
 };
 
 // Dynamic data provider that returns either seed data or empty arrays based on config

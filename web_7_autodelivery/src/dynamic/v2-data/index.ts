@@ -4,4 +4,10 @@
  * Loads different data subsets based on v2 seed.
  */
 
-export * from "./data-provider";
+export {
+  dynamicDataProvider,
+  initializeRestaurants,
+  getTestimonials,
+  isDynamicModeEnabled,
+  getLayoutConfig,
+} from "./data-provider";

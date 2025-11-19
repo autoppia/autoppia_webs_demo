@@ -9,7 +9,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
 import { countries } from "@/library/dataset";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
+import { useSeedVariation } from "@/library/utils";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";

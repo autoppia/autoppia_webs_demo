@@ -19,7 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
+import { useSeedVariation } from "@/library/utils";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { withSeedAndParams } from "@/utils/seedRouting";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";

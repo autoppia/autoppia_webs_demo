@@ -11,13 +11,17 @@ export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled = false;
   private ready = false;
+  private readyPromise: Promise<void>;
 
   private constructor() {
     this.isEnabled = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2 === 'true';
     if (typeof window === "undefined") {
       this.ready = true;
+      this.readyPromise = Promise.resolve();
       return;
     }
+    this.readyPromise = Promise.resolve();
+    this.ready = true;
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -48,9 +52,20 @@ export class DynamicDataProvider {
   public isReady(): boolean {
     return this.ready;
   }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
+  }
 }
 
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Re-export for compatibility
 export { loadEntity };
+
+// Export helper functions
+export const isDynamicModeEnabled = () => dynamicDataProvider.isReady();
+export const getLayoutConfig = (seed?: number) => {
+  const { getEffectiveLayoutConfig } = require('@/dynamic/v1-layouts');
+  return getEffectiveLayoutConfig(seed);
+};

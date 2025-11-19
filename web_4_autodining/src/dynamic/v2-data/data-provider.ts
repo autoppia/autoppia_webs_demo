@@ -60,8 +60,12 @@ export class DynamicDataProvider {
     }
   }
 
-  public async waitForReady(): Promise<void> {
+  public async whenReady(): Promise<void> {
     return this.readyPromise;
+  }
+
+  public isReady(): boolean {
+    return this.ready;
   }
 
   public getRestaurants(): RestaurantData[] {
@@ -85,10 +89,35 @@ export class DynamicDataProvider {
     await initializeRestaurants(v2Seed);
     this.restaurants = getRestaurants();
   }
+
+  public isDynamicModeEnabled(): boolean {
+    return this.isEnabled;
+  }
+
+  public getEffectiveSeed(providedSeed: number = 1): number {
+    if (!this.isEnabled) {
+      return 1;
+    }
+    if (providedSeed < 1 || providedSeed > 300) {
+      return 1;
+    }
+    return providedSeed;
+  }
+
+  public getLayoutConfig(seed?: number) {
+    // Import from v1-layouts if needed
+    const { getEffectiveLayoutConfig } = require('@/dynamic/v1-layouts');
+    return getEffectiveLayoutConfig(seed);
+  }
 }
 
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 // Re-export for compatibility
 export { initializeRestaurants, getRestaurants };
+
+// Export helper functions
+export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
+export const getEffectiveSeedValue = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
+export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
 

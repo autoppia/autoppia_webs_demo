@@ -274,3 +274,14 @@ export function generateUrlWithSeed(baseUrl: string, seed: number): string {
   url.searchParams.set('seed', seed.toString());
   return url.toString();
 }
+
+// Helper function to get effective layout config (alias for getSeedLayout)
+export function getEffectiveLayoutConfig(seed?: number): SeedLayout {
+  return getSeedLayout(seed);
+}
+
+// Helper function to generate layout classes from seed
+export function getLayoutClasses(seed?: number): string {
+  const layout = getSeedLayout(seed);
+  return `${layout.searchBar.containerClass} ${layout.navbar.containerClass}`;
+}
