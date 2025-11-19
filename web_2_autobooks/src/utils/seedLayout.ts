@@ -363,6 +363,32 @@ export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
   return getSeedLayout(seed);
 }
 
+export function applyLayoutOverrides(
+  config: SeedLayoutConfig,
+  baseSeed?: number
+): SeedLayoutConfig {
+  const shouldApplyOverride =
+    typeof baseSeed === "number" && Number.isFinite(baseSeed) && baseSeed % 10 === 3;
+
+  if (shouldApplyOverride) {
+    return {
+      ...config,
+      headerOrder: ['nav', 'logo', 'search'],
+      searchPosition: 'full-width',
+      navbarStyle: 'side',
+      contentGrid: 'centered',
+      cardLayout: 'row',
+      buttonStyle: 'rounded',
+      footerStyle: 'centered',
+      spacing: 'loose',
+      borderRadius: 'large',
+      colorScheme: 'accent',
+    };
+  }
+
+  return config;
+}
+
 // Helper function to generate CSS classes based on layout config
 export function getLayoutClasses(config: SeedLayoutConfig): {
   header: string;

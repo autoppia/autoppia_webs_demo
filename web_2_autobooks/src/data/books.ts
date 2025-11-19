@@ -164,7 +164,7 @@ export async function initializeBooks(v2SeedValue?: number | null, limit = 300):
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
   const books = await fetchSeededSelection<DatasetBook>({
-    projectKey: "web_2_demo_books",
+    projectKey: "web_2_autobooks",
     entityType: "books",
     seedValue: effectiveSeed,
     limit,

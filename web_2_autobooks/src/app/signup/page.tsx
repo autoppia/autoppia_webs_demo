@@ -7,11 +7,12 @@ import { Input } from "@/components/ui/input";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { SeedLink } from "@/components/ui/SeedLink";
 
-export default function LoginPage() {
-  const { login } = useAuth();
+export default function SignupPage() {
+  const { signup } = useAuth();
   const router = useSeedRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -20,12 +21,13 @@ export default function LoginPage() {
     setError(null);
     setIsSubmitting(true);
     try {
-      await login(username.trim(), password.trim());
+      await signup(username.trim(), password.trim(), confirmPassword.trim());
       setUsername("");
       setPassword("");
+      setConfirmPassword("");
       router.push("/profile");
     } catch (err) {
-      setError((err as Error).message || "Unable to log in");
+      setError((err as Error).message || "Unable to create account");
     } finally {
       setIsSubmitting(false);
     }
@@ -35,9 +37,9 @@ export default function LoginPage() {
     <main className="mx-auto flex max-w-md flex-col gap-6 px-4 py-12 text-white">
       <div>
         <p className="text-sm uppercase tracking-[0.3em] text-white/60">Autobooks</p>
-        <h1 className="mt-2 text-3xl font-semibold">Sign in to start</h1>
+        <h1 className="mt-2 text-3xl font-semibold">Create an account</h1>
         <p className="text-white/70">
-          Enter the credential provided in your task instructions. The UI will simply record the authentication events.
+          Sign up to get started. You'll be assigned a book to manage once you create your account.
         </p>
       </div>
       <form className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6" onSubmit={handleSubmit}>
@@ -47,8 +49,9 @@ export default function LoginPage() {
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             className="mt-1 bg-black/40 text-white"
-            placeholder="username"
+            placeholder="Choose a username"
             autoComplete="username"
+            required
           />
         </label>
         <label className="block text-xs uppercase tracking-wide text-white/60">
@@ -58,24 +61,37 @@ export default function LoginPage() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             className="mt-1 bg-black/40 text-white"
-            placeholder="password"
-            autoComplete="current-password"
+            placeholder="Create a password"
+            autoComplete="new-password"
+            required
+            minLength={3}
+          />
+        </label>
+        <label className="block text-xs uppercase tracking-wide text-white/60">
+          Confirm Password
+          <Input
+            type="password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            className="mt-1 bg-black/40 text-white"
+            placeholder="Confirm your password"
+            autoComplete="new-password"
+            required
+            minLength={3}
           />
         </label>
         {error && <p className="text-sm text-red-400">{error}</p>}
         <Button type="submit" className="w-full bg-secondary text-black hover:bg-secondary/80" disabled={isSubmitting}>
-          {isSubmitting ? "Verifying…" : "Sign in"}
+          {isSubmitting ? "Creating account…" : "Sign up"}
         </Button>
       </form>
       <p className="text-center text-sm text-white/60">
-        Don't have an account?{" "}
-        <SeedLink href="/signup" className="text-secondary hover:underline">
-          Sign up
+        Already have an account?{" "}
+        <SeedLink href="/login" className="text-secondary hover:underline">
+          Sign in
         </SeedLink>
-      </p>
-      <p className="text-sm text-white/60">
-        Each user can only manage their assigned book. Once signed in, visit your profile to review or simulate edits.
       </p>
     </main>
   );
 }
+

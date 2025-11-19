@@ -3,7 +3,7 @@
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { applyLayoutOverrides, getLayoutClasses } from "@/utils/seedLayout";
 
 const QUICK_LINKS = [
   { label: "Catalog", href: "#library" },
@@ -20,7 +20,8 @@ const ABOUT_LINKS = [
 export function Footer() {
   const { seed, resolvedSeeds } = useSeed();
   const layoutSeed = resolvedSeeds.v1 ?? seed;
-  const config = getLayoutConfig(layoutSeed);
+  const baseSeed = resolvedSeeds.base ?? seed;
+  const config = applyLayoutOverrides(getLayoutConfig(layoutSeed), baseSeed);
   const classes = getLayoutClasses(config);
 
   return (
