@@ -71,7 +71,7 @@ export function useSeedLayout() {
       if (!isDynamicEnabled) {
         return { id: `${elementType}-${index}`, "data-element-type": elementType };
       }
-      return generateElementAttributes(dynamicSeed, elementType, index);
+      return generateElementAttributes(elementType, dynamicSeed, index);
     },
     [dynamicSeed, isDynamicEnabled, isV3Active, getV3Attributes]
   );

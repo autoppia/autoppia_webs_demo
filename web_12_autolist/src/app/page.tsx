@@ -18,7 +18,7 @@ import { useState, useRef, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { loadTasks, RemoteTask } from "@/data/tasks";
 
 // Import debug utilities in development

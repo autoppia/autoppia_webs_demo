@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import RideNavbar from "../../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import { DatePickerInput } from "../../../../components/DatePicker";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { getEffectiveSeed } from "@/utils/dynamicDataProvider";
 
 function getTimeSlotsForDate(dateStr: string) {

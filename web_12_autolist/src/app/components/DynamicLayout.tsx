@@ -1,9 +1,8 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { getSeedLayout, LayoutConfig } from "@/library/layouts";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import type { LayoutConfig } from "@/dynamic/v1-layouts";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import Navbar from "./Navbar";
 import Sidebar from "../Sidebar";
 
