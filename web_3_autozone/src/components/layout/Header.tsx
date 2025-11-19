@@ -17,7 +17,7 @@ import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeed } from "@/context/SeedContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/utils/seedLayout";
 import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
 import { useSearchParams } from "next/navigation";

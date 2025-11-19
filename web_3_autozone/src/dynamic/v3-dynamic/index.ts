@@ -5,8 +5,9 @@
  * All changes are seed-based and deterministic.
  */
 
-// Main hook
+// Main hooks
 export { useV3Attributes } from './hooks/useV3Attributes';
+export { useSeedLayout } from './hooks/useSeedLayout';
 
 // Utilities
 export { generateElementId, getAvailableElementTypes, hasSemanticVariants } from './utils/id-generator';
@@ -21,4 +22,3 @@ export type V3Attributes = {
   'data-variant': string;
   'data-xpath': string;
 };
-

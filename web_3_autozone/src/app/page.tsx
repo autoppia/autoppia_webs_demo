@@ -6,15 +6,15 @@ import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { Suspense } from "react";
 import { useSeed } from "@/seed-system";
-import { 
-  getProductsByCategory, 
-  getStaticCategories, 
-  getStaticHomeEssentials, 
+import {
+  getProductsByCategory,
+  getStaticCategories,
+  getStaticHomeEssentials,
   getStaticRefreshSpace,
   getLayoutConfig,
   getEffectiveSeed
-} from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+} from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 
