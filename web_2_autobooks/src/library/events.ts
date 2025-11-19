@@ -5,7 +5,6 @@ export const EVENT_TYPES = {
   SEARCH_BOOK: "SEARCH_BOOK",
   FILTER_BOOK: "FILTER_BOOK",
   BOOK_DETAIL: "BOOK_DETAIL",
-  SHOPPING_CART: "SHOPPING_CART",
   PURCHASE_BOOK: "PURCHASE_BOOK",
   ADD_COMMENT_BOOK: "ADD_COMMENT_BOOK",
   LOGIN_BOOK: "LOGIN_BOOK",
@@ -20,6 +19,7 @@ export const EVENT_TYPES = {
   // Optional UI-only events (not used by backend validators)
   OPEN_PREVIEW: "OPEN_PREVIEW",
   SHARE_BOOK: "SHARE_BOOK",
+  ADD_TO_READING_LIST: "ADD_TO_READING_LIST",
   // POST_REVIEW: "POST_REVIEW",
   // LOGIN_SUCCESS: "login.success",
   // LOGIN_FAILURE: "login.failure",
