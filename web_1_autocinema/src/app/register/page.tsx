@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { getMovies } from "@/utils/dynamicDataProvider";
 import { SeedLink } from "@/components/ui/SeedLink";
+import { logEvent, EVENT_TYPES } from "@/library/events";
 
 const MIN_PASSWORD_LENGTH = 6;
 const FALLBACK_MOVIE_ID = "movie-v2-001";
@@ -51,10 +52,15 @@ export default function RegisterPage() {
     setIsSubmitting(true);
     try {
       const movieId = assignedMovie || preferredDefaultMovie;
+      const normalizedUsername = username.trim();
       await register({
-        username,
+        username: normalizedUsername,
         password,
         allowedMovies: movieId ? [movieId] : undefined,
+      });
+      logEvent(EVENT_TYPES.REGISTRATION, {
+        username: normalizedUsername,
+        assigned_movie: movieId ?? undefined,
       });
       router.push("/profile");
     } catch (err) {
