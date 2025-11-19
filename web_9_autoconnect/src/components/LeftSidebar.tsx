@@ -1,14 +1,19 @@
 import Avatar from "@/components/Avatar";
 import UserSearchBar from "./UserSearchBar";
-import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
+import { useSeed } from "@/context/SeedContext";
+import {
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+} from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 const currentUser = dynamicDataProvider.getUsers()[2] || dynamicDataProvider.getUsers()[0];
 
 export default function LeftSidebar() {
-  const { layout } = useSeed();
-  const searchClasses = getLayoutClasses(layout, 'searchPosition');
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layout = getEffectiveLayoutConfig(layoutSeed);
+  const searchClasses = getLayoutClasses(layout, "searchPosition");
 
   return (
     <aside className="bg-white rounded-lg shadow p-5 mb-5 sticky top-20">

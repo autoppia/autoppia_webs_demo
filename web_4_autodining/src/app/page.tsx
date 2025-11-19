@@ -100,7 +100,13 @@ function RestaurantCard({
   // Create layout based on seed
   const layout = {
     wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
-    justify: ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5],
+    justify: [
+      "flex-start",
+      "center",
+      "flex-end",
+      "space-between",
+      "space-around",
+    ][seed % 5],
   };
 
   return (
@@ -128,14 +134,22 @@ function RestaurantCard({
         <p className="text-gray-500 text-xs mb-3">{r.area}</p>
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">{r.price}</span>
-          <span className="text-xs text-gray-500">{r.bookings} {getText("booked_today")}</span>
+          <span className="text-xs text-gray-500">
+            {r.bookings} {getText("booked_today")}
+          </span>
         </div>
-        <div className={`mt-3 flex ${layout.wrap ? 'flex-wrap' : 'flex-nowrap'} ${layout.justify} gap-2`}>
+        <div
+          className={`mt-3 flex ${layout.wrap ? "flex-wrap" : "flex-nowrap"} ${
+            layout.justify
+          } gap-2`}
+        >
           <SeedLink
             id={getId("view_details_button")}
             href={`/restaurant/${r.id}`}
             className="text-sm text-blue-600 hover:text-blue-800"
-            onClick={() => logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })}
+            onClick={() =>
+              logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })
+            }
           >
             {getText("view_details")}
           </SeedLink>
@@ -145,7 +159,9 @@ function RestaurantCard({
             className={`${bookButtonVariation.className} text-sm`}
             data-testid={bookButtonVariation.dataTestId}
             style={{ position: bookButtonVariation.position as any }}
-            onClick={() => logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })}
+            onClick={() =>
+              logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })
+            }
           >
             {getText("book_now")}
           </SeedLink>
@@ -155,7 +171,15 @@ function RestaurantCard({
   );
 }
 
-function CardScroller({ children, title, layoutSeed }: { children: React.ReactNode; title: string; layoutSeed: number }) {
+function CardScroller({
+  children,
+  title,
+  layoutSeed,
+}: {
+  children: React.ReactNode;
+  title: string;
+  layoutSeed: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const tickingRef = useRef(false);
   const rafIdRef = useRef<number | null>(null);
@@ -164,7 +188,11 @@ function CardScroller({ children, title, layoutSeed }: { children: React.ReactNo
   const { getText } = useV3Attributes();
   const { seed } = useSeed(); // Get seed from context for data-testid
 
-  const cardContainerVariation = useSeedVariation("cardContainer", undefined, layoutSeed);
+  const cardContainerVariation = useSeedVariation(
+    "cardContainer",
+    undefined,
+    layoutSeed
+  );
   const childCount = React.Children.count(children);
 
   const checkScroll = () => {
@@ -187,7 +215,7 @@ function CardScroller({ children, title, layoutSeed }: { children: React.ReactNo
   useEffect(() => {
     checkScroll();
     let ro: ResizeObserver | null = null;
-    if (ref.current && typeof ResizeObserver !== 'undefined') {
+    if (ref.current && typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(() => scheduleCheck());
       ro.observe(ref.current);
     }
@@ -203,9 +231,11 @@ function CardScroller({ children, title, layoutSeed }: { children: React.ReactNo
   const scroll = (direction: "left" | "right") => {
     if (ref.current) {
       const scrollAmount = 300;
-      const newScrollLeft = ref.current.scrollLeft + (direction === "left" ? -scrollAmount : scrollAmount);
+      const newScrollLeft =
+        ref.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
       ref.current.scrollTo({ left: newScrollLeft, behavior: "smooth" });
-      
+
       // Log scroll event
       logEvent(EVENT_TYPES.SCROLL_VIEW, { direction, title });
     }
@@ -218,14 +248,14 @@ function CardScroller({ children, title, layoutSeed }: { children: React.ReactNo
   return (
     <div className="relative">
       {/*{canScrollLeft && (*/}
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
-          data-testid={`scroll-left-${seed ?? 1}`}
-          aria-label={getText("scroll_left")}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
+      <button
+        onClick={() => scroll("left")}
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+        data-testid={`scroll-left-${seed ?? 1}`}
+        aria-label={getText("scroll_left")}
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
       {/*)}*/}
       {canScrollRight && (
         <button
@@ -276,14 +306,14 @@ function HomePageContent() {
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const layoutSeed = resolvedSeeds.v1 ?? seed;
-  
+
   // Calculate layout variation (1-10) from v1 seed
   // COMMON FORMULA across all webs
   const layoutVariation = useMemo(() => {
     if (layoutSeed < 1 || layoutSeed > 300) return 1;
     return ((layoutSeed % 30) + 1) % 10 || 10;
   }, [layoutSeed]);
-  
+
   // Log v1 info when it changes (only once per unique v1 seed)
   const lastV1SeedRef = useRef<number | null>(null);
   useEffect(() => {
@@ -291,26 +321,44 @@ function HomePageContent() {
     // Only log if v1 seed actually changed
     if (lastV1SeedRef.current !== currentV1Seed) {
       if (resolvedSeeds.v1 !== null) {
-        console.log(`[autodining] V1 Layout - Seed: ${resolvedSeeds.v1}, Variation: #${layoutVariation} (of 10)`);
+        console.log(
+          `[autodining] V1 Layout - Seed: ${resolvedSeeds.v1}, Variation: #${layoutVariation} (of 10)`
+        );
       } else if (resolvedSeeds.base) {
-        console.log(`[autodining] V1 Layout - Using base seed: ${resolvedSeeds.base}, Variation: #${layoutVariation} (of 10)`);
+        console.log(
+          `[autodining] V1 Layout - Using base seed: ${resolvedSeeds.base}, Variation: #${layoutVariation} (of 10)`
+        );
       }
       lastV1SeedRef.current = currentV1Seed;
     }
   }, [resolvedSeeds.v1, resolvedSeeds.base, layoutVariation]);
-  
+
   const { marginTop, wrapButton } = useMemo(
     () => getLayoutVariant(layoutSeed),
     [layoutSeed]
   );
 
   // Use seed-based variations with event support (pass v1 seed)
-  const searchBarVariation = useSeedVariation("searchBar", undefined, layoutSeed);
-  const searchButtonVariation = useSeedVariation("searchButton", undefined, layoutSeed);
-  const pageLayoutVariation = useSeedVariation("pageLayout", undefined, layoutSeed);
-  const sectionLayoutVariation = useSeedVariation("sectionLayout", undefined, layoutSeed);
-  
-
+  const searchBarVariation = useSeedVariation(
+    "searchBar",
+    undefined,
+    layoutSeed
+  );
+  const searchButtonVariation = useSeedVariation(
+    "searchButton",
+    undefined,
+    layoutSeed
+  );
+  const pageLayoutVariation = useSeedVariation(
+    "pageLayout",
+    undefined,
+    layoutSeed
+  );
+  const sectionLayoutVariation = useSeedVariation(
+    "sectionLayout",
+    undefined,
+    layoutSeed
+  );
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -378,32 +426,36 @@ function HomePageContent() {
   // Track the last v2Seed we used to avoid duplicate loads
   const lastV2SeedRef = useRef<number | null>(null);
   const lastBaseSeedRef = useRef<number | null>(null);
-  
+
   // Reset lastV2SeedRef when base seed changes (user changed seed in URL)
   useEffect(() => {
     if (lastBaseSeedRef.current !== null && lastBaseSeedRef.current !== seed) {
-      console.log(`[autodining] Base seed changed from ${lastBaseSeedRef.current} to ${seed}, resetting cache`);
+      console.log(
+        `[autodining] Base seed changed from ${lastBaseSeedRef.current} to ${seed}, resetting cache`
+      );
       lastV2SeedRef.current = null; // Force reload with new seed
     }
     lastBaseSeedRef.current = seed;
   }, [seed]);
-  
+
   useEffect(() => {
     // Only load if v2Seed is valid and different from last load
     const currentV2Seed = v2Seed ?? resolvedSeeds.base;
     if (currentV2Seed === null || currentV2Seed === undefined) {
       return; // Wait for valid seed
     }
-    
+
     // Skip if we already loaded with this seed
     if (lastV2SeedRef.current === currentV2Seed) {
       return;
     }
-    
+
     let cancelled = false;
-    
+
     const loadRestaurants = async () => {
-      console.log(`[autodining] V2 Data - Seed: ${currentV2Seed} (from base seed: ${seed})`);
+      console.log(
+        `[autodining] V2 Data - Seed: ${currentV2Seed} (from base seed: ${seed})`
+      );
       lastV2SeedRef.current = currentV2Seed; // Mark as loading
       setIsLoading(true);
       const genEnabled = isDataGenerationEnabled();
@@ -411,7 +463,7 @@ function HomePageContent() {
       try {
         // Pass v2Seed to initializeRestaurants when v2 is enabled
         await initializeRestaurants(currentV2Seed); // waits for DB/gen
-        
+
         // Only update state if this effect hasn't been cancelled
         if (!cancelled) {
           const fresh = getRestaurants().map((r) => ({
@@ -437,9 +489,9 @@ function HomePageContent() {
         }
       }
     };
-    
+
     loadRestaurants();
-    
+
     // Cleanup: cancel if seed changes before async completes
     return () => {
       cancelled = true;
@@ -454,7 +506,10 @@ function HomePageContent() {
       {isGenerating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-[#46a758] animate-spin" aria-hidden="true" />
+            <div
+              className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-[#46a758] animate-spin"
+              aria-hidden="true"
+            />
             <div className="text-gray-700 text-base font-medium text-center">
               Data is being generated by AI this may take some time
             </div>
@@ -467,7 +522,9 @@ function HomePageContent() {
           <div className="flex items-center gap-3">
             <SeedLink href="/">
               <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">{getText("app_title")}</span>
+                <span className="font-bold text-white text-lg">
+                  {getText("app_title")}
+                </span>
               </div>
             </SeedLink>
           </div>
@@ -496,9 +553,12 @@ function HomePageContent() {
       </nav>
 
       {/* Hero Section */}
-      <section className={pageLayoutVariation.className} data-testid={pageLayoutVariation.dataTestId}>
+      <section
+        className={pageLayoutVariation.className}
+        data-testid={pageLayoutVariation.dataTestId}
+      >
         <h1 className="text-4xl font-bold mb-6">{getText("hero_title")}</h1>
-        
+
         {/* Search and Filters */}
         <section className="flex flex-wrap gap-4 items-end">
           <Popover open={dateOpen} onOpenChange={setDateOpen}>
@@ -507,10 +567,16 @@ function HomePageContent() {
                 id={getId("date_picker")}
                 variant="outline"
                 className="w-[200px] justify-start text-left font-normal"
-                onClick={() => logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: 'open' })}
+                onClick={() =>
+                  logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: "open" })
+                }
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>{getText("date_picker")}</span>}
+                {date ? (
+                  format(date, "PPP")
+                ) : (
+                  <span>{getText("date_picker")}</span>
+                )}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -529,7 +595,9 @@ function HomePageContent() {
                 id={getId("time_picker")}
                 variant="outline"
                 className="w-[150px] justify-start text-left font-normal"
-                onClick={() => logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: 'open' })}
+                onClick={() =>
+                  logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: "open" })
+                }
               >
                 <ClockIcon className="mr-2 h-4 w-4" />
                 {time}
@@ -560,7 +628,11 @@ function HomePageContent() {
                 id={getId("people_picker")}
                 variant="outline"
                 className="w-[150px] justify-start text-left font-normal"
-                onClick={() => logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, { action: 'open' })}
+                onClick={() =>
+                  logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, {
+                    action: "open",
+                  })
+                }
               >
                 <UserIcon className="mr-2 h-4 w-4" />
                 {people} {people === 1 ? getText("person") : getText("people")}
@@ -625,8 +697,13 @@ function HomePageContent() {
               className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
               data-testid={sectionLayoutVariation.dataTestId}
             >
-              <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
-              <CardScroller title={getText("section_lunch")} layoutSeed={layoutSeed}>
+              <h2 className="text-2xl font-bold mb-4">
+                {getText("section_lunch")}
+              </h2>
+              <CardScroller
+                title={getText("section_lunch")}
+                layoutSeed={layoutSeed}
+              >
                 {filtered.map((r) => (
                   <RestaurantCard
                     key={r.id + "-lunch"}
@@ -646,8 +723,13 @@ function HomePageContent() {
             className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
             data-testid={sectionLayoutVariation.dataTestId}
           >
-            <h2 className="text-2xl font-bold mb-4">{getText("section_lunch")}</h2>
-            <CardScroller title={getText("section_lunch")} layoutSeed={layoutSeed}>
+            <h2 className="text-2xl font-bold mb-4">
+              {getText("section_lunch")}
+            </h2>
+            <CardScroller
+              title={getText("section_lunch")}
+              layoutSeed={layoutSeed}
+            >
               {filtered.map((r) => (
                 <RestaurantCard
                   key={r.id + "-lunch"}
@@ -683,7 +765,10 @@ function HomePageContent() {
                   {getText("explore_icons")}
                 </button>
               </div>
-              <CardScroller title={getText("section_icons")} layoutSeed={layoutSeed}>
+              <CardScroller
+                title={getText("section_icons")}
+                layoutSeed={layoutSeed}
+              >
                 {iconRestaurants.map((r) => (
                   <RestaurantCard
                     key={r.id + "-icon"}
@@ -716,7 +801,10 @@ function HomePageContent() {
                 {getText("explore_icons")}
               </button>
             </div>
-            <CardScroller title={getText("section_icons")} layoutSeed={layoutSeed}>
+            <CardScroller
+              title={getText("section_icons")}
+              layoutSeed={layoutSeed}
+            >
               {iconRestaurants.map((r) => (
                 <RestaurantCard
                   key={r.id + "-icon"}
@@ -734,9 +822,18 @@ function HomePageContent() {
         {/* Award Winners Section */}
         {wrapButton ? (
           <div data-testid={`award-section-wrapper-${seed ?? 1}`}>
-            <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
-              <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
-              <CardScroller title={getText("section_awards")} layoutSeed={layoutSeed}>
+            <section
+              id={getId("section_awards")}
+              className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
+              data-testid={sectionLayoutVariation.dataTestId}
+            >
+              <h2 className="text-2xl font-bold mb-4">
+                {getText("section_awards")}
+              </h2>
+              <CardScroller
+                title={getText("section_awards")}
+                layoutSeed={layoutSeed}
+              >
                 {awardRestaurants.map((r) => (
                   <RestaurantCard
                     key={r.id + "-award"}
@@ -751,9 +848,18 @@ function HomePageContent() {
             </section>
           </div>
         ) : (
-          <section id={getId("section_awards")} className={`${sectionLayoutVariation.className} ${marginTop} px-4`} data-testid={sectionLayoutVariation.dataTestId}>
-            <h2 className="text-2xl font-bold mb-4">{getText("section_awards")}</h2>
-            <CardScroller title={getText("section_awards")} layoutSeed={layoutSeed}>
+          <section
+            id={getId("section_awards")}
+            className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
+            data-testid={sectionLayoutVariation.dataTestId}
+          >
+            <h2 className="text-2xl font-bold mb-4">
+              {getText("section_awards")}
+            </h2>
+            <CardScroller
+              title={getText("section_awards")}
+              layoutSeed={layoutSeed}
+            >
               {awardRestaurants.map((r) => (
                 <RestaurantCard
                   key={r.id + "-award"}

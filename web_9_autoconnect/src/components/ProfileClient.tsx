@@ -5,13 +5,19 @@ import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses, getShuffledItems } from "@/dynamic/v1-layouts";
+import { useSeed } from "@/context/SeedContext";
+import {
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+  getShuffledItems,
+} from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
 function ProfileContent({ username }: { username: string }) {
-  const { layout } = useSeed();
+  const { resolvedSeeds, seed } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layout = getEffectiveLayoutConfig(layoutSeed);
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
@@ -43,8 +49,8 @@ function ProfileContent({ username }: { username: string }) {
     return <div className="text-center text-red-600 mt-8">{getText("profile_not_found", "User not found.")}</div>;
 
   const posts = mockPosts.filter((p) => p.user.username === user.username);
-  const shuffledPosts = getShuffledItems(posts, layout.feedOrder);
-  const profileClasses = getLayoutClasses(layout, 'profileLayout');
+  const shuffledPosts = getShuffledItems(posts, layout.feedOrder ?? layoutSeed);
+  const profileClasses = getLayoutClasses(layout, "profileLayout");
 
   const handleConnect = () => {
     logEvent(EVENT_TYPES.CONNECT_WITH_USER, {
