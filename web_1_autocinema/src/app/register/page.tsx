@@ -115,28 +115,6 @@ export default function RegisterPage() {
           />
         </label>
 
-        <label className="block text-xs uppercase tracking-wide text-white/60">
-          Assigned movie
-          <select
-            value={assignedMovie || preferredDefaultMovie}
-            onChange={(event) => setAssignedMovie(event.target.value)}
-            className="mt-1 w-full rounded-xl border border-white/20 bg-black/40 px-3 py-2 text-sm text-white focus:border-secondary focus:outline-none"
-          >
-            {movieOptions.map((movie) => (
-              <option key={movie.id} value={movie.id} className="bg-neutral-900 text-white">
-                {movie.title}
-              </option>
-            ))}
-            {movieOptions.length === 0 && (
-              <option value={FALLBACK_MOVIE_ID} className="bg-neutral-900 text-white">
-                Default assignment
-              </option>
-            )}
-          </select>
-          <span className="mt-1 block text-[11px] uppercase tracking-wide text-white/40">
-            We limit new users to one film so profile actions stay scoped.
-          </span>
-        </label>
 
         {error && <p className="text-sm text-red-400">{error}</p>}
 
