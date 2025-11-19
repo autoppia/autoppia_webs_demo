@@ -19,7 +19,7 @@ import { EVENTS_DATASET } from "@/library/dataset";
 import { initializeEvents } from "@/data/events-enhanced";
 import { getEffectiveLayoutConfig, getSeedFromUrl, SeedLayoutConfig } from "@/utils/seedLayout";
 import { LayoutProvider, useLayout } from "@/contexts/LayoutContext";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import {
   addDays,
   startOfWeek,
