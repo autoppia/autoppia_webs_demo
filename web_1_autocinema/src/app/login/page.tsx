@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function LoginPage() {
@@ -14,8 +15,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [registrationUsername, setRegistrationUsername] = useState("");
-  const [registrationSuccess, setRegistrationSuccess] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -69,6 +68,13 @@ export default function LoginPage() {
           {isSubmitting ? "Verifying…" : "Sign in"}
         </Button>
       </form>
+      <p className="text-sm text-white/60">
+        Need an account?{" "}
+        <SeedLink href="/register" className="font-semibold text-secondary">
+          Create one
+        </SeedLink>
+        .
+      </p>
       <p className="text-sm text-white/60">
         Each miner can only manage their assigned film. Once signed in, visit your profile to review or simulate edits.
       </p>
