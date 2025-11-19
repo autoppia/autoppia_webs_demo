@@ -4,7 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
-import { DynamicStructureProvider } from "@/contexts/DynamicStructureContext";
+// DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
 import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
 import { getLayoutClasses } from "@/utils/seedLayout";
@@ -36,9 +36,7 @@ export default function RootLayout({
           <SeedProvider>
             <LayoutProvider>
               <EmailProvider>
-                <DynamicStructureProvider>
-                  {children}
-                </DynamicStructureProvider>
+                {children}
               </EmailProvider>
             </LayoutProvider>
           </SeedProvider>
