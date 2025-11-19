@@ -16,7 +16,7 @@ services:
     #   - .:/app
     #   - /app/node_modules
     ports:
-      - "127.0.0.1:${WEB_PORT}:8002"
+      - "127.0.0.1:${WEB_PORT}:8001"
     restart: always
     environment:
       - API_URL=${API_URL:-http://app:8080}
