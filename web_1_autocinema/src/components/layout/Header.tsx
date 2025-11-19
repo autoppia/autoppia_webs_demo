@@ -72,9 +72,14 @@ export function Header() {
               </button>
             </>
           ) : (
-            <SeedLink href="/login" className="text-secondary">
-              Login
-            </SeedLink>
+            <>
+              <SeedLink href="/register" className="font-semibold text-secondary">
+                Register
+              </SeedLink>
+              <SeedLink href="/login" className="text-white/80 hover:text-white">
+                Login
+              </SeedLink>
+            </>
           )}
         </nav>
 

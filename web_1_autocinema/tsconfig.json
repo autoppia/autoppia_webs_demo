@@ -22,6 +22,11 @@
         "name": "next"
       }
     ],
+    "types": [
+      "react",
+      "react-dom",
+      "node"
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": [
