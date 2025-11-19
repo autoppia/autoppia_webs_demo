@@ -14,10 +14,11 @@
 4. [URL Parameters](#url-parameters)
 5. [Version Control (v1, v2, v3)](#version-control-v1-v2-v3)
 6. [File Structure](#file-structure)
-7. [Code Examples](#code-examples)
-8. [Testing](#testing)
-9. [Guarantees](#guarantees)
-10. [Troubleshooting](#troubleshooting)
+7. [Code Organization](#code-organization)
+8. [Code Examples](#code-examples)
+9. [Testing](#testing)
+10. [Guarantees](#guarantees)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -410,6 +411,162 @@ const layout = getSeedLayout(layoutIndex);
 
 ---
 
+## Code Organization
+
+### Physical Structure
+
+All webs (3-13) follow the **same physical structure** for dynamic functionality. Everything dynamic is organized under `src/dynamic/`:
+
+```
+web_X/src/
+  ├── dynamic/                    ← ALL dynamic functionality
+  │   ├── v1-layouts/             ← V1: Layout variations (common)
+  │   │   ├── layouts.ts          → 10 layout definitions
+  │   │   ├── layout-variants.ts  → Layout variants
+  │   │   └── index.ts            → Exports
+  │   │
+  │   ├── v2-data/                ← V2: Data loading (specific)
+  │   │   ├── data-provider.ts    → Main provider
+  │   │   ├── [entity]-loader.ts  → Entity-specific loaders
+  │   │   └── index.ts            → Exports
+  │   │
+  │   ├── v3-dynamic/             ← V3: Anti-scraping (specific)
+  │   │   ├── data/
+  │   │   │   ├── semantic-ids.json      → 15-21 types × 10 variants
+  │   │   │   ├── class-variants.json    → 11 types × 10 variants
+  │   │   │   ├── text-variants.json     → 13-90+ keys × 10 variants
+  │   │   │   └── textVariants.json      → (optional, advanced webs)
+  │   │   ├── hooks/
+  │   │   │   ├── useV3Attributes.ts     → Main V3 hook
+  │   │   │   └── useSeedLayout.ts       → (optional, advanced webs)
+  │   │   ├── utils/
+  │   │   │   ├── id-generator.ts        → Generate semantic IDs
+  │   │   │   ├── text-selector.ts       → Select text variants
+  │   │   │   ├── class-selector.ts      → Select class variants
+  │   │   │   └── textVariants.ts        → (optional, advanced webs)
+  │   │   └── index.ts                   → Exports
+  │   │
+  │   └── index.ts                ← Central export (v1+v2+v3)
+  │
+  ├── seed-system/                ← Seed infrastructure
+  │   ├── context/
+  │   │   └── SeedContext.tsx     → Seed management
+  │   ├── resolver/
+  │   │   └── seed-resolver.ts    → Seed resolution logic
+  │   ├── navigation/
+  │   │   ├── SeedLink.tsx        → Link with seed preservation
+  │   │   ├── useSeedRouter.ts    → Router with seed
+  │   │   └── routing-utils.ts    → Routing helpers
+  │   └── index.ts                → Exports
+  │
+  ├── app/                        ← Pages (non-dynamic)
+  ├── components/                 ← Business components (non-dynamic)
+  ├── context/                    ← Other contexts
+  └── ...
+```
+
+### Why This Structure?
+
+**Clear Separation:**
+- **Core web code** (app/, components/) vs **Dynamic code** (dynamic/)
+- **V1** (layouts) vs **V2** (data) vs **V3** (anti-scraping)
+- Easy to find: "Where's the V3 anti-scraping?" → `dynamic/v3-dynamic/`
+
+**Reusable:**
+- V1 layouts are common → can be shared
+- V2 and V3 are web-specific → kept separate
+- Same structure across all 11 webs → easy to understand
+
+**Maintainable:**
+- Add new variants? → Edit JSON files in `v3-dynamic/data/`
+- Change V3 logic? → Edit hooks/utils in `v3-dynamic/`
+- Everything in one place
+
+### Import Patterns
+
+All imports use the `@/dynamic/*` path:
+
+```typescript
+// Simple webs (3, 4, 7, 8, 9) - Direct V3 attributes
+import { useV3Attributes } from '@/dynamic/v3-dynamic';
+
+const MyComponent = () => {
+  const { getText, getId, getClass, getElementAttributes } = useV3Attributes();
+  
+  return (
+    <button
+      {...getElementAttributes('book-button', 0)}
+      className={getClass('button-primary', 'btn-primary')}
+    >
+      {getText('book_now', 'Book Now')}
+    </button>
+  );
+};
+```
+
+```typescript
+// Advanced webs (10, 11, 12, 13) - Layout + V3
+import { useSeedLayout } from '@/dynamic/v3-dynamic';
+
+const MyComponent = () => {
+  const { layout, getText, getId, getElementAttributes } = useSeedLayout();
+  
+  // layout object contains V1 configuration
+  const buttonPosition = layout.buttonPositions?.submit || 'right';
+  
+  return (
+    <button
+      {...getElementAttributes('submit-button', 0)}
+      className={buttonPosition === 'left' ? 'ml-0' : 'ml-auto'}
+    >
+      {getText('submit', 'Submit')}
+    </button>
+  );
+};
+```
+
+### V3 Anti-Scraping System Details
+
+The `v3-dynamic/` folder contains a **robust anti-scraping system** that:
+
+1. **Semantic IDs** - Not predictable patterns
+   - ❌ Bad: `button-1`, `button-2`, `button-seed-23`
+   - ✅ Good: `book-btn`, `reserve-btn`, `submit-booking` (changes with seed)
+
+2. **Dynamic Classes** - CSS selectors break
+   - Changes: `btn-primary` → `button-main` → `action-button` (based on seed)
+   - 10 variants per class type
+
+3. **Text Variations** - Text-based selectors break
+   - Changes: "Add to Cart" → "Add to Basket" → "Include in Cart" (based on seed)
+   - 10 variants per text key
+
+4. **Data Attributes** - XPath changes
+   - Adds: `data-seed`, `data-variant`, `data-xpath`
+   - Makes scrapers fragile
+
+**Example semantic-ids.json:**
+```json
+{
+  "search-input": [
+    "search-input",
+    "query-box",
+    "filter-input",
+    "product-search",
+    "item-search",
+    "search-field",
+    "lookup-input",
+    "find-input",
+    "type-to-search",
+    "search-box"
+  ]
+}
+```
+
+Each element type has **10 semantic variations**, selected deterministically by the v3 seed.
+
+---
+
 ## Code Examples
 
 ### Example 1: Basic Usage
@@ -447,7 +604,7 @@ const layout = getSeedLayout(layoutIndex);
 ### Example 3: Using SeedLink in Components
 
 ```typescript
-import { SeedLink } from "@/components/ui/SeedLink";
+import { SeedLink } from "@/seed-system";
 
 function MyComponent() {
   return (
@@ -467,7 +624,7 @@ function MyComponent() {
 ### Example 4: Programmatic Navigation
 
 ```typescript
-import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeedRouter } from "@/seed-system";
 
 function MyComponent() {
   const router = useSeedRouter();
@@ -487,7 +644,7 @@ function MyComponent() {
 ### Example 5: Using Resolved Seeds in Components
 
 ```typescript
-import { useSeed } from "@/context/SeedContext";
+import { useSeed } from "@/seed-system";
 
 function MyComponent() {
   const { seed, resolvedSeeds } = useSeed();
