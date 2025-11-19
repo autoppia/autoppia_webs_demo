@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { findUser, type UserRecord } from "@/data/users";
+import { findUser, createUser, type UserRecord } from "@/data/users";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface AuthUser {
@@ -13,6 +13,7 @@ interface AuthContextValue {
   currentUser: AuthUser | null;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
+  signup: (username: string, password: string, confirmPassword: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -56,6 +57,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     logEvent(EVENT_TYPES.LOGIN_SUCCESS, { username: authUser.username });
   }, []);
 
+  const signup = useCallback(async (username: string, password: string, confirmPassword: string) => {
+    if (!username.trim()) {
+      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "empty_username" });
+      throw new Error("Username is required");
+    }
+    if (!password || password.length < 3) {
+      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "weak_password" });
+      throw new Error("Password must be at least 3 characters");
+    }
+    if (password !== confirmPassword) {
+      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "password_mismatch" });
+      throw new Error("Passwords do not match");
+    }
+    if (findUser(username)) {
+      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: "username_exists" });
+      throw new Error("Username already exists");
+    }
+
+    try {
+      const newUser = createUser(username, password);
+      const authUser: AuthUser = {
+        username: newUser.username,
+        allowedBooks: newUser.allowedBooks,
+      };
+      setCurrentUser(authUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(authUser));
+      logEvent(EVENT_TYPES.SIGNUP_SUCCESS, { username: authUser.username });
+    } catch (err) {
+      logEvent(EVENT_TYPES.SIGNUP_FAILURE, { username, reason: (err as Error).message });
+      throw err;
+    }
+  }, []);
+
   const logout = useCallback(() => {
     if (currentUser) {
       logEvent(EVENT_TYPES.LOGOUT, { username: currentUser.username });
@@ -69,9 +103,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       currentUser,
       isAuthenticated: Boolean(currentUser),
       login,
+      signup,
       logout,
     }),
-    [currentUser, login, logout]
+    [currentUser, login, signup, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
