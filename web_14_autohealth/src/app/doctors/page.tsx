@@ -14,7 +14,6 @@ import { AppointmentBookingModal } from "@/components/appointment-booking-modal"
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 function Stars({ value }: { value: number }) {
   const stars = Array.from({ length: 5 }).map((_, i) => {

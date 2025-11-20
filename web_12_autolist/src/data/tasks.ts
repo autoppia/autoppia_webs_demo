@@ -1,5 +1,9 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
+type AutolistWindow = Window & {
+  __autolistV2Seed?: number | null;
+};
+
 export interface RemoteTask {
   id?: string;
   name?: string;
@@ -17,7 +21,7 @@ const clampSeed = (value: number, fallback: number = 1): number =>
  */
 const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autolistV2Seed;
+  const value = (window as AutolistWindow).__autolistV2Seed;
   if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
     return value;
   }
