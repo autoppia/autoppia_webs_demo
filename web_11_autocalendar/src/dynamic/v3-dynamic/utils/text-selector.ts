@@ -4,7 +4,7 @@
  * Selects text variants based on seed
  */
 
-import textVariantsJson from '../data/text-variants.json';
+import textVariantsJson from '../data/textVariants.json';
 
 type TextKey = string;
 type TextVariantMap = Record<TextKey, string>;
@@ -58,4 +58,3 @@ export function getAvailableTextKeys(): TextKey[] {
   const firstVariant = VARIANTS[1] || {};
   return Object.keys(firstVariant);
 }
-

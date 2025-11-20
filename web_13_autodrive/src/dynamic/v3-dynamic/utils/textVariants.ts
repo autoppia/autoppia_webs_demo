@@ -41,7 +41,7 @@ type ElementKey =
   | "trips-rebook";
 
 type TextVariantMap = Record<ElementKey, string>;
-import jsonVariants from '../data/textVariants.json';
+import jsonVariants from '../data/text-variants.json';
 
 const VARIANTS: Record<number, TextVariantMap> = Object.fromEntries(
   Object.entries(jsonVariants as Record<string, TextVariantMap>).map(([k, v]) => [parseInt(k, 10), v])
@@ -59,5 +59,4 @@ export function getTextForElement(seed: number, key: ElementKey, fallback: strin
 }
 
 export type { ElementKey };
-
 
