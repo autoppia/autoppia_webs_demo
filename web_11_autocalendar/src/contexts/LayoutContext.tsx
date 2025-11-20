@@ -25,8 +25,14 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
   }, [resolvedSeeds.v1, resolvedSeeds.base]);
   
   const v2Seed = useMemo(() => {
-    return resolvedSeeds.v2 ?? null;
-  }, [resolvedSeeds.v2]);
+    if (resolvedSeeds.v2 !== null && resolvedSeeds.v2 !== undefined) {
+      return resolvedSeeds.v2;
+    }
+    if (resolvedSeeds.base !== null && resolvedSeeds.base !== undefined) {
+      return resolvedSeeds.base;
+    }
+    return baseSeed ?? null;
+  }, [resolvedSeeds.v2, resolvedSeeds.base, baseSeed]);
   
   const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(1));
   const [isDynamicHTMLEnabled, setIsDynamicHTMLEnabled] = useState(false);

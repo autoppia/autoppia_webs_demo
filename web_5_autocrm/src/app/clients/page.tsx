@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -28,6 +28,8 @@ const LoadingNotice = ({ message }: { message: string }) => (
   </div>
 );
 
+const STORAGE_KEY_PREFIX = "clients";
+
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
   const { resolvedSeeds } = useSeed();
@@ -44,17 +46,38 @@ function ClientsDirectoryContent() {
   });
   console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
 
-  const clients = (data && data.length ? data : staticClients).map((c: any, i: number) => ({
-    id: c.id ?? `CL-${1000 + i}`,
-    name: c.name ?? c.title ?? `Client ${i+1}`,
-    email: c.email ?? `client${i+1}@example.com`,
-    matters: typeof c.matters === 'number' ? c.matters : (Math.floor(Math.random()*5)+1),
-    avatar: c.avatar ?? "",
-    status: c.status ?? 'Active',
-    last: c.last ?? 'Today',
-  }));
+  const clients = useMemo(
+    () =>
+      (data && data.length ? data : staticClients).map((c: any, i: number) => ({
+        id: c.id ?? `CL-${1000 + i}`,
+        name: c.name ?? c.title ?? `Client ${i + 1}`,
+        email: c.email ?? `client${i + 1}@example.com`,
+        matters:
+          typeof c.matters === "number"
+            ? c.matters
+            : Math.floor(Math.random() * 5) + 1,
+        avatar: c.avatar ?? "",
+        status: c.status ?? "Active",
+        last: c.last ?? "Today",
+      })),
+    [data]
+  );
   const seedRouter = useSeedRouter();
   const { getText, getId } = useDynamicStructure();
+  const storageKey = useMemo(
+    () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
+    [v2Seed]
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (clients.length === 0) return;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(clients));
+    } catch (error) {
+      console.warn("[ClientsPage] Failed to cache clients", error);
+    }
+  }, [clients, storageKey]);
 
   useEffect(() => {
     if (query.trim()) {

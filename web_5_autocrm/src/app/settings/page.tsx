@@ -64,7 +64,7 @@ export default function SettingsPage() {
                 eventType="CHANGE_USER_NAME"
                 index={0}
                 onClick={saveName}
-                className="ml-auto rounded-2xl text-accent-forest border border-accent-forest px-4 py-2 font-medium hover:bg-accent-forest/10 transition"
+                className="ml-auto rounded-2xl text-accent-forest bg-accent-forest/10 border border-accent-forest px-4 py-2 font-medium hover:bg-accent-forest/20 transition"
                 id={getId("save_name_button")}
                 aria-label={getText("save_profile", "Save Profile")}
               >
