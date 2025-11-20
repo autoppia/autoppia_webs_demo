@@ -8,6 +8,7 @@ import {
   type Job,
   type Recommendation,
 } from "@/data/autoconnect-enhanced";
+import { getEffectiveLayoutConfig } from "@/dynamic/v1-layouts";
 
 const isV2Enabled = (): boolean => {
   return (
@@ -142,8 +143,4 @@ export class DynamicDataProvider {
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
 
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicEnabled();
-export const getLayoutConfig = (seed?: number) => {
-  const { getEffectiveLayoutConfig } = require("@/dynamic/v1-layouts");
-  const { getEffectiveLayoutConfig } = require("@/dynamic/v1-layouts");
-  return getEffectiveLayoutConfig(seed);
-};
+export const getLayoutConfig = (seed?: number) => getEffectiveLayoutConfig(seed);
