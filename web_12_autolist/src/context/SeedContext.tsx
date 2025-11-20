@@ -152,7 +152,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-    (window as any).__autolistV2Seed = v2Seed ?? null;
+    window.__autolistV2Seed = v2Seed ?? null;
     window.dispatchEvent(new CustomEvent("autolist:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
     console.log("[SeedContext:web12] v2-seed synced to window:", v2Seed);
   }, [resolvedSeeds.v2, resolvedSeeds.base]);
@@ -208,4 +208,3 @@ export const useSeed = () => {
   }
   return context;
 };
-
