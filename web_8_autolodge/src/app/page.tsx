@@ -10,6 +10,8 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useSeedLayout } from "@/library/utils";
+import type { Hotel } from "@/types/hotel";
 
 type GuestsCount = {
   adults: number;
@@ -195,7 +197,7 @@ function HomeContent() {
         `${guestCount} ${guestCount === 1 ? getText("guest", "guest") : getText("guests", "guests")}`
       );
     } else {
-      return getText("add_guests");
+      return getText("add_guests", "Add guests");
     }
 
     if (guests.infants > 0) {
@@ -219,6 +221,14 @@ function HomeContent() {
     return parts.join(", ");
   }, [guests, getText]);
 
+  const { seed: layoutSeed, layout } = useSeedLayout("stay");
+  const SearchWrapperTag = (layout?.searchBar?.wrapper ?? "section") as keyof JSX.IntrinsicElements;
+  const EventWrapperTag = (layout?.eventElements?.wrapper ?? "div") as keyof JSX.IntrinsicElements;
+  const searchWrapperClass =
+    layout?.searchBar?.className ?? "w-full flex justify-center";
+  const eventWrapperClass = layout?.eventElements?.className ?? "";
+  const defaultOrder = ["search", "dates", "guests", "reserve"];
+
   const handleSearch = () => {
     setCommittedSearch(searchTerm);
     logEvent(EVENT_TYPES.SEARCH_HOTEL, {
@@ -233,161 +243,193 @@ function HomeContent() {
         infants: guests.infants,
         pets: guests.pets,
       },
-      seedStructure,
+      seedStructure: layoutSeed,
     });
   };
 
+  const searchButtonVariant = getClass("button-primary", "");
+
+  const searchFieldNode = (
+    <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
+      <div
+        id={getId("search_field")}
+        className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+      >
+        <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+          {getText("where_label", "Where")}
+        </span>
+        <span className="text-sm text-neutral-700">
+          {searchTerm || getText("where_placeholder", "Search destinations")}
+        </span>
+        {searchTerm && (
+          <button
+            className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+            type="button"
+            style={{ lineHeight: 1, background: "none" }}
+            tabIndex={0}
+            aria-label={getText("clear_search", "Clear search")}
+            onClick={(event) => {
+              event.stopPropagation();
+              setSearchTerm("");
+              setCommittedSearch("");
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
+    </WherePopover>
+  );
+
+  const checkInNode = (
+    <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
+      <div
+        id={getId("check_in_field")}
+        className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+      >
+        <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+          {getText("check_in", "Check in")}
+        </span>
+        <span className="text-sm text-neutral-700">
+          {dateRange.from
+            ? format(dateRange.from, "MMM d")
+            : getText("add_dates", "Add dates")}
+        </span>
+        {dateRange.from && (
+          <button
+            className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+            type="button"
+            style={{ lineHeight: 1, background: "none" }}
+            tabIndex={0}
+            aria-label={getText("clear_dates", "Clear dates")}
+            onClick={(event) => {
+              event.stopPropagation();
+              setDateRange({ from: null, to: null });
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
+    </DateRangePopover>
+  );
+
+  const checkOutNode = (
+    <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
+      <div
+        id={getId("check_out_field")}
+        className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
+      >
+        <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+          {getText("check_out", "Check out")}
+        </span>
+        <span className="text-sm text-neutral-700">
+          {dateRange.to
+            ? format(dateRange.to, "MMM d")
+            : getText("add_dates", "Add dates")}
+        </span>
+        {dateRange.to && (
+          <button
+            className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+            type="button"
+            style={{ lineHeight: 1, background: "none" }}
+            tabIndex={0}
+            aria-label={getText("clear_dates", "Clear dates")}
+            onClick={(event) => {
+              event.stopPropagation();
+              setDateRange({ from: null, to: null });
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
+    </DateRangePopover>
+  );
+
+  const guestsNode = (
+    <GuestSelectorPopover counts={guests} setCounts={setGuests}>
+      <div
+        id={getId("guests_field")}
+        className="flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative min-w-[180px]"
+      >
+        <span className="text-xs font-semibold text-neutral-500 pb-0.5">
+          {getText("who", "Who")}
+        </span>
+        <span className="text-sm text-neutral-700">{summaryGuests}</span>
+        {(guests.adults > 0 ||
+          guests.children > 0 ||
+          guests.infants > 0 ||
+          guests.pets > 0) && (
+          <button
+            className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
+            type="button"
+            style={{ lineHeight: 1, background: "none" }}
+            tabIndex={0}
+            aria-label={getText("clear_guests", "Clear guests")}
+            onClick={(event) => {
+              event.stopPropagation();
+              setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
+    </GuestSelectorPopover>
+  );
+
+  const reserveNode = (
+    <button
+      id={getId("search_button")}
+      className={`${searchButtonVariant} ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all`}
+      onClick={handleSearch}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="mr-1"
+      >
+        <circle cx="11" cy="11" r="8" />
+        <path d="M21 21l-3.5-3.5" />
+      </svg>
+      {getText("search_button", "Search")}
+    </button>
+  );
+
+  const eventComponents: Record<string, JSX.Element> = {
+    search: searchFieldNode,
+    dates: (
+      <div className="flex flex-1 gap-2 min-w-[260px]">{checkInNode}{checkOutNode}</div>
+    ),
+    guests: guestsNode,
+    reserve: reserveNode,
+  };
+
+  const orderedComponents =
+    (layout?.eventElements?.order ?? defaultOrder)
+      .map((key) => eventComponents[key])
+      .filter(Boolean);
+
+  const renderedEventComponents =
+    orderedComponents.length > 0
+      ? orderedComponents
+      : defaultOrder.map((key) => eventComponents[key]).filter(Boolean);
+
   return (
     <div className="flex flex-col w-full items-center mt-4 pb-12">
-      <section className="w-full flex justify-center">
-        <div className="rounded-[32px] shadow-md bg-white flex flex-row items-center px-2 py-1 min-w-[900px] max-w-3xl border">
-          <WherePopover searchTerm={searchTerm} setSearchTerm={setSearchTerm}>
-            <div
-              id={getId("search_field")}
-              className="flex-[2] flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                {getText("where_label")}
-              </span>
-              <span className="text-sm text-neutral-700">
-                {searchTerm || getText("where_placeholder")}
-              </span>
-              {searchTerm && (
-                <button
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
-                  type="button"
-                  style={{ lineHeight: 1, background: "none" }}
-                  tabIndex={0}
-                  aria-label={getText("clear_search")}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setSearchTerm("");
-                    setCommittedSearch("");
-                  }}
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          </WherePopover>
-
-          <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
-            <div
-              id={getId("check_in_field")}
-              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                {getText("check_in")}
-              </span>
-              <span className="text-sm text-neutral-700">
-                {dateRange.from
-                  ? format(dateRange.from, "MMM d")
-                  : getText("add_dates")}
-              </span>
-              {dateRange.from && (
-                <button
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
-                  type="button"
-                  style={{ lineHeight: 1, background: "none" }}
-                  tabIndex={0}
-                  aria-label={getText("clear_dates")}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setDateRange({ from: null, to: null });
-                  }}
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          </DateRangePopover>
-
-          <DateRangePopover selectedRange={dateRange} setSelectedRange={setDateRange}>
-            <div
-              id={getId("check_out_field")}
-              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                {getText("check_out")}
-              </span>
-              <span className="text-sm text-neutral-700">
-                {dateRange.to
-                  ? format(dateRange.to, "MMM d")
-                  : getText("add_dates")}
-              </span>
-              {dateRange.to && (
-                <button
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
-                  type="button"
-                  style={{ lineHeight: 1, background: "none" }}
-                  tabIndex={0}
-                  aria-label={getText("clear_dates")}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setDateRange({ from: null, to: null });
-                  }}
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          </DateRangePopover>
-
-          <GuestSelectorPopover counts={guests} setCounts={setGuests}>
-            <div
-              id={getId("guests_field")}
-              className="flex-1 flex flex-col px-3 py-2 rounded-[24px] cursor-pointer hover:bg-neutral-100 transition-all relative"
-            >
-              <span className="text-xs font-semibold text-neutral-500 pb-0.5">
-                {getText("who")}
-              </span>
-              <span className="text-sm text-neutral-700">{summaryGuests}</span>
-              {(guests.adults > 0 ||
-                guests.children > 0 ||
-                guests.infants > 0 ||
-                guests.pets > 0) && (
-                <button
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-lg p-0 bg-transparent border-none outline-none"
-                  type="button"
-                  style={{ lineHeight: 1, background: "none" }}
-                  tabIndex={0}
-                  aria-label={getText("clear_guests")}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    setGuests({ adults: 0, children: 0, infants: 0, pets: 0 });
-                  }}
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          </GuestSelectorPopover>
-
-          <button
-            id={getId("search_button")}
-            className={getClass(
-              "search_button",
-              "ml-3 px-4 py-2 rounded-full bg-[#616882] text-white font-semibold text-lg flex items-center shadow-md border border-neutral-200 hover:bg-[#9ba6ce] focus:outline-none transition-all"
-            )}
-            onClick={handleSearch}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="mr-1"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-3.5-3.5" />
-            </svg>
-            {getText("search_button")}
-          </button>
-        </div>
-      </section>
+      <SearchWrapperTag className={`w-full flex justify-center ${searchWrapperClass}`}>
+        <EventWrapperTag
+          className={`rounded-[32px] shadow-md bg-white border flex flex-wrap gap-3 items-center px-2 py-1 min-w-[900px] max-w-3xl ${eventWrapperClass} !flex-row !items-center`}
+        >
+          {renderedEventComponents}
+        </EventWrapperTag>
+      </SearchWrapperTag>
 
       <section className="w-full flex flex-col items-center mt-8">
         {paginatedResults.length === 0 ? (
@@ -395,7 +437,7 @@ function HomeContent() {
             id={getId("no_results")}
             className="text-neutral-400 font-semibold text-lg mt-12"
           >
-            {getText("no_results")}
+            {getText("no_results", "No results")}
           </div>
         ) : (
           <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
