@@ -2,11 +2,11 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSeed } from "@/context/SeedContext";
-import { getSeedLayout } from "@/dynamic/v1-layouts";
+import { getSeedLayout as getPageSeedLayout } from "@/library/utils";
 
 function DemoPageContent() {
   const { seed } = useSeed();
-  const layout = getSeedLayout(seed);
+  const layout = getPageSeedLayout(seed);
 
   const seeds = Array.from({ length: 10 }, (_, i) => i + 1);
 
