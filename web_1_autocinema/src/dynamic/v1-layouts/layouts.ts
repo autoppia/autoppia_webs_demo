@@ -375,8 +375,10 @@ function applyStandardLayout(config: SeedLayoutConfig): SeedLayoutConfig {
 }
 
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  const baseConfig = isDynamicEnabled() ? getSeedLayout(seed) : getDefaultLayout();
-  return applyStandardLayout(baseConfig);
+  if (!isDynamicEnabled()) {
+    return getDefaultLayout();
+  }
+  return getSeedLayout(seed);
 }
 
 // Helper function to generate CSS classes based on layout config
