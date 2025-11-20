@@ -86,11 +86,17 @@ export function CategoryCard({
                 title={item.link ? `View ${item.title} - ${item.link}` : item.title}
                 onMouseEnter={() => {
                   if (item.link && item.link !== "#") {
-                    window.history.replaceState(null, '', `#${item.link.replace('/', '')}`);
+                    const basePath = `${window.location.pathname}${window.location.search}`;
+                    window.history.replaceState(
+                      null,
+                      '',
+                      `${basePath}#${item.link.replace('/', '')}`
+                    );
                   }
                 }}
                 onMouseLeave={() => {
-                  window.history.replaceState(null, '', window.location.pathname);
+                  const basePath = `${window.location.pathname}${window.location.search}`;
+                  window.history.replaceState(null, '', basePath);
                 }}
                 onClick={(e) => {
                   if (item.link && item.link !== "#") {
