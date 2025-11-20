@@ -23,13 +23,25 @@ export class DynamicDataProvider {
     [];
 
   private constructor() {
-    // Check if V2 dynamic is enabled - simplified check
-    this.isEnabled = false; // Default to false, will be enabled by environment
+    this.isEnabled = this.resolveV2Enabled();
     if (typeof window === "undefined") {
       this.ready = true;
       this.readyPromise = Promise.resolve();
       return;
     }
+
+    if (!this.isEnabled) {
+      this.ready = true;
+      this.readyPromise = Promise.resolve();
+      return;
+    }
+
+    this.handleSeedEvent = this.handleSeedEvent.bind(this);
+    window.addEventListener(
+      "autodelivery:v2SeedChange",
+      this.handleSeedEvent as EventListener
+    );
+
     this.readyPromise = this.loadData();
   }
 
@@ -47,8 +59,7 @@ export class DynamicDataProvider {
     }
 
     try {
-      // Use provided seed or default to 1
-      const v2Seed = seed ?? 1;
+      const v2Seed = await this.getEffectiveV2Seed(seed);
       this.restaurants = await initializeRestaurants(v2Seed);
       this.testimonials = getRandomTestimonials(5);
       this.notifyRestaurants();
@@ -113,6 +124,89 @@ export class DynamicDataProvider {
 
   private notifyTestimonials() {
     this.testimonialSubscribers.forEach((cb) => cb(this.testimonials));
+  }
+
+  private handleSeedEvent(event: Event) {
+    if (!this.isEnabled) return;
+    const custom = event as CustomEvent<{ seed: number | null }>;
+    const nextSeed = custom.detail?.seed ?? undefined;
+    this.reload(nextSeed).catch((error) => {
+      console.error("[DynamicDataProvider] Failed to reload on seed change:", error);
+    });
+  }
+
+  private resolveV2Enabled(): boolean {
+    if (typeof process === "undefined") return false;
+    const publicFlag = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE === "true";
+    const serverFlag = process.env.ENABLE_DYNAMIC_V2_DB_MODE === "true";
+    return publicFlag || serverFlag;
+  }
+
+  private getRuntimeV2Seed(): number | null {
+    if (typeof window === "undefined") return null;
+    const extendedWindow = window as Window & {
+      __autodeliveryV2Seed?: number | null;
+    };
+    const value = extendedWindow.__autodeliveryV2Seed;
+    if (
+      typeof value === "number" &&
+      Number.isFinite(value) &&
+      value >= 1 &&
+      value <= 300
+    ) {
+      return value;
+    }
+    return null;
+  }
+
+  private waitForV2Seed(timeoutMs = 300): Promise<number> {
+    if (typeof window === "undefined") {
+      return Promise.resolve(1);
+    }
+
+    const runtimeSeed = this.getRuntimeV2Seed();
+    if (runtimeSeed !== null) {
+      return Promise.resolve(runtimeSeed);
+    }
+
+    return new Promise((resolve) => {
+      const timeout = window.setTimeout(() => {
+        cleanup();
+        resolve(1);
+      }, timeoutMs);
+
+      const handler = (event: Event) => {
+        const custom = event as CustomEvent<{ seed: number | null }>;
+        cleanup();
+        resolve(custom.detail?.seed ?? 1);
+      };
+
+      const cleanup = () => {
+        window.removeEventListener(
+          "autodelivery:v2SeedChange",
+          handler as EventListener
+        );
+        window.clearTimeout(timeout);
+      };
+
+      window.addEventListener(
+        "autodelivery:v2SeedChange",
+        handler as EventListener,
+        { once: true }
+      );
+    });
+  }
+
+  private async getEffectiveV2Seed(
+    seedOverride?: number
+  ): Promise<number> {
+    if (typeof seedOverride === "number" && Number.isFinite(seedOverride)) {
+      return seedOverride;
+    }
+    if (typeof window === "undefined") {
+      return 1;
+    }
+    return await this.waitForV2Seed();
   }
 
   public getRestaurantById(id: string): Restaurant | undefined {
