@@ -221,3 +221,4 @@ export const getStaticCalendarEvents = () =>
   dynamicDataProvider.getStaticCalendarEvents();
 export const getStaticProjects = () => dynamicDataProvider.getStaticProjects();
 export const getStaticTeams = () => dynamicDataProvider.getStaticTeams();
+export const whenReady = () => dynamicDataProvider.whenReady();
