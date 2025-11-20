@@ -3,10 +3,14 @@ import { useState, useMemo } from "react";
 import { type Job } from "@/library/dataset";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
+import { useSeed } from "@/context/SeedContext";
+import {
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+  getShuffledItems,
+} from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
 interface Filters {
@@ -18,7 +22,9 @@ interface Filters {
 }
 
 function JobsContent() {
-  const { layout } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layout = getEffectiveLayoutConfig(layoutSeed);
   const { getText } = useV3Attributes();
   const [filters, setFilters] = useState<Filters>({
     search: "",
@@ -166,9 +172,9 @@ function JobsContent() {
     (value) => value !== "" && value !== false
   );
 
-  const shuffledJobs = getShuffledItems(filteredJobs, layout.feedOrder);
-  const jobCardsClasses = getLayoutClasses(layout, 'jobCardsLayout');
-  const filtersClasses = getLayoutClasses(layout, 'filtersPosition');
+  const shuffledJobs = getShuffledItems(filteredJobs, layoutSeed);
+  const jobCardsClasses = getLayoutClasses(layout, "jobCardsLayout");
+  const filtersClasses = getLayoutClasses(layout, "filtersPosition");
 
   return (
     <section>

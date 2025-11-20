@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSeed } from "@/seed-system";
+import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/dynamic/v2-data";
 
 export function BodyWrapper({ children }: { children: React.ReactNode }) {

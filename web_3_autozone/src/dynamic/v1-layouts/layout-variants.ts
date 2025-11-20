@@ -1,5 +1,5 @@
 import { type ComponentPropsWithoutRef } from "react"
-import { seededRandom, seededRandomItem } from "@/lib/utils"
+import { seededRandom, seededRandomItem } from "@/library/utils"
 
 export interface LayoutVariantAttributes {
   className?: string
@@ -63,9 +63,10 @@ export function generateAttributes(eventType?: string, seed?: string): LayoutVar
   const variant = seededRandomItem(variants, seed + eventType)
   const styles = generateDynamicStyles(seed + eventType)
   
+  const dataVariant = variant["data-variant"] || variant["data-layout"] || "default"
   return {
     ...variant,
     style: styles,
-    "data-testid": \`\${eventType.toLowerCase()}-\${variant["data-variant"] || variant["data-layout"]}\`,
+    ["data-testid"]: `${eventType.toLowerCase()}-${dataVariant}`,
   }
 }

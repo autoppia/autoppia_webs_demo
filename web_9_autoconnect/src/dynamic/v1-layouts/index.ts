@@ -4,8 +4,12 @@
  * Changes HTML structure and layout based on v1 seed.
  */
 
-export { getSeedLayout } from './layouts';
-export type { LayoutConfig } from './layouts';
-export { getLayoutVariant } from './layout-variants';
-export type { LayoutVariant } from './layout-variants';
-
+export {
+  getSeedLayout,
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+  getShuffledItems,
+  shuffleArray,
+  isDynamicEnabled,
+} from "./layouts";
+export type { SeedLayoutConfig, LayoutVariant } from "./layouts";

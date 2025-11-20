@@ -1,17 +1,22 @@
 "use client";
 
 import { SeedLink } from "@/components/ui/SeedLink";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import UserSearchBar from "./UserSearchBar";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { useSeed } from "@/context/SeedContext";
+import {
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+  getShuffledItems,
+} from "@/dynamic/v1-layouts";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 export default function HeaderNav() {
   const pathname = usePathname();
-  const { layout } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layout = getEffectiveLayoutConfig(layoutSeed);
 
   const linkClass = (href: string) =>
     `px-3 py-2 text-sm font-medium rounded ${
@@ -47,9 +52,9 @@ export default function HeaderNav() {
     }
   ];
 
-  const shuffledNavItems = getShuffledItems(navItems, layout.navOrder);
+  const shuffledNavItems = getShuffledItems(navItems, layoutSeed);
 
-  const searchClasses = getLayoutClasses(layout, 'searchPosition');
+  const searchClasses = getLayoutClasses(layout, "searchPosition");
 
   const getHeaderClasses = () => {
     const baseClasses = "flex items-center border-b bg-white px-4 shadow-sm";

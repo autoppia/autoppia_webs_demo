@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
 
@@ -56,7 +56,7 @@ function getFallbackHotel(): Hotel {
 }
 
 function PropertyDetailContent() {
-  const { getText, getId } = useV3Attributes();
+  const { getText, getId, getClass } = useV3Attributes();
   const router = useSeedRouter();
   const params = useParams<{ id: string }>();
 
@@ -517,7 +517,7 @@ function PropertyDetailContent() {
         {hasValidSelection ? (
           <button
             id={getId("reserve_button")}
-            className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
+            className={`${getClass("button-primary", "")} rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none`}
             onClick={handleReserve}
           >
             {getText("reserve", "Reserve")}

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import RideNavbar from "../../../../components/RideNavbar";
-import { rides } from "@/library/dataset";
+import { rides } from "@/data/trips-enhanced";
 
 function formatDateTime(date: string, time: string) {
   if (!date || !time) return "";

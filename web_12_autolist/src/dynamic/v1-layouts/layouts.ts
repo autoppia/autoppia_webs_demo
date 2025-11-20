@@ -396,6 +396,22 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   return LAYOUTS[mappedSeed];
 }
 
+export function getLayoutClasses(config: LayoutConfig): {
+  container: string;
+  header: string;
+  sidebar: string;
+  content: string;
+  footer: string;
+} {
+  return {
+    container: config.container.className,
+    header: config.elements.header.className,
+    sidebar: config.elements.sidebar.className,
+    content: config.elements.content.className,
+    footer: config.elements.footer.className,
+  };
+}
+
 /**
  * Get all available layout configurations
  * @returns Array of all layout configurations
@@ -412,4 +428,14 @@ export function getAllLayouts(): LayoutConfig[] {
 export function getLayoutByName(name: string): LayoutConfig | null {
   const layout = Object.values(LAYOUTS).find(l => l.name === name);
   return layout || null;
+}
+
+/**
+ * Get effective layout configuration based on seed
+ * Alias for getSeedLayout for compatibility
+ * @param seed - Optional seed value
+ * @returns Layout configuration object
+ */
+export function getEffectiveLayoutConfig(seed?: number): LayoutConfig {
+  return getSeedLayout(seed);
 }

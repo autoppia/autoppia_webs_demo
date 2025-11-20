@@ -5,6 +5,18 @@
  */
 
 export { initializeProducts } from './products-loader';
-export { dynamicDataProvider } from './data-provider';
+export { 
+  dynamicDataProvider,
+  getProductsByCategory,
+  getStaticCategories,
+  getStaticHomeEssentials,
+  getStaticRefreshSpace,
+  getLayoutConfig,
+  getEffectiveSeed,
+  searchProducts
+} from './data-provider';
 export type { Product } from '@/context/CartContext';
+
+// Export whenReady function
+export const whenReady = () => dynamicDataProvider.whenReady();
 

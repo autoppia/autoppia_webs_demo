@@ -1,4 +1,4 @@
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 
 // Check if dynamic HTML is enabled via environment variable
 const isDynamicHtmlEnabled = (): boolean => {
@@ -9,9 +9,12 @@ const isDynamicHtmlEnabled = (): boolean => {
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private isEnabled: boolean = false;
+  private ready: boolean = true;
+  private readyPromise: Promise<void>;
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    this.readyPromise = Promise.resolve();
   }
 
   public static getInstance(): DynamicDataProvider {
@@ -23,6 +26,14 @@ export class DynamicDataProvider {
 
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
+  }
+
+  public isReady(): boolean {
+    return this.ready;
+  }
+
+  public whenReady(): Promise<void> {
+    return this.readyPromise;
   }
 
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled

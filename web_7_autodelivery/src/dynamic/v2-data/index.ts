@@ -4,7 +4,15 @@
  * Loads different data subsets based on v2 seed.
  */
 
-export { dynamicDataProvider } from './data-provider';
-export { initializeRestaurants, loadTestimonialsFromDb } from './restaurants-loader';
-export { getTestimonials } from './testimonials-loader';
+import { dynamicDataProvider } from "./data-provider";
 
+export {
+  dynamicDataProvider,
+  initializeRestaurants,
+  getTestimonials,
+  isDynamicModeEnabled,
+  getLayoutConfig,
+} from "./data-provider";
+
+// Export whenReady function
+export const whenReady = () => dynamicDataProvider.whenReady();

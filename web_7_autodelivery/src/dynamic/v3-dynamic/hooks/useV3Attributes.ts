@@ -6,7 +6,7 @@
  */
 
 import { useMemo, useCallback } from 'react';
-import { useSeed } from '@/seed-system';
+import { useSeed } from '@/context/SeedContext';
 import { generateElementId } from '../utils/id-generator';
 import { getTextForElement } from '../utils/text-selector';
 import { getClassForElement } from '../utils/class-selector';
@@ -64,6 +64,22 @@ export function useV3Attributes() {
     },
     [v3Seed, isActive]
   );
+
+  const getPlaceholder = useCallback(
+    (key: string, fallback: string = ""): string => {
+      if (!isActive) return fallback;
+      return getTextForElement(v3Seed, key, fallback);
+    },
+    [v3Seed, isActive]
+  );
+
+  const getAria = useCallback(
+    (key: string, fallback: string): string => {
+      if (!isActive) return fallback;
+      return getTextForElement(v3Seed, key, fallback);
+    },
+    [v3Seed, isActive]
+  );
   
   /**
    * Get CSS class variant for a class type
@@ -80,11 +96,16 @@ export function useV3Attributes() {
    * Generate a unique ID for an element
    */
   const getId = useCallback(
-    (elementType: string, index: number = 0): string => {
+    (elementType: string, indexOrFallback?: number | string): string => {
       if (!isActive) {
-        return index > 0 ? `${elementType}-${index}` : elementType;
+        if (typeof indexOrFallback === "string") {
+          return indexOrFallback;
+        }
+        const idx = typeof indexOrFallback === "number" ? indexOrFallback : 0;
+        return idx > 0 ? `${elementType}-${idx}` : elementType;
       }
-      return generateElementId(v3Seed, elementType, index);
+      const idx = typeof indexOrFallback === "number" ? indexOrFallback : 0;
+      return generateElementId(v3Seed, elementType, idx);
     },
     [v3Seed, isActive]
   );
@@ -108,6 +129,8 @@ export function useV3Attributes() {
     isActive,
     getElementAttributes,
     getText,
+    getPlaceholder,
+    getAria,
     getClass,
     getId,
     getXPath,
@@ -115,4 +138,3 @@ export function useV3Attributes() {
 }
 
 export type { };
-

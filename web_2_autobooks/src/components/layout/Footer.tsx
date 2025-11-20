@@ -2,8 +2,8 @@
 
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { applyLayoutOverrides, getLayoutClasses } from "@/utils/seedLayout";
+import { getLayoutConfig } from "@/dynamic/v2-data";
+import { applyLayoutOverrides, getLayoutClasses } from "@/dynamic/v1-layouts";
 
 const QUICK_LINKS = [
   { label: "Catalog", href: "#library" },

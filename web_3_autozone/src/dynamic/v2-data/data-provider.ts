@@ -1,5 +1,5 @@
 import type { Product } from "@/context/CartContext";
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { initializeProducts } from "@/data/products-enhanced";
 
 // Check if dynamic HTML is enabled via environment variable

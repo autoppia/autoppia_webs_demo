@@ -1,9 +1,9 @@
-// src/library/useSeedLayout.ts
+// src/dynamic/v3-dynamic/hooks/useSeedLayout.ts
 import { useMemo, useCallback } from 'react';
-import { getSeedLayout, isDynamicEnabled } from './layouts';
-import { getLayoutConfig } from '@/utils/dynamicDataProvider';
+import { getSeedLayout, isDynamicEnabled } from '../../v1-layouts/layouts';
+import { getLayoutConfig } from '../../v2-data/data-provider';
 import { getTextForElement, type ElementKey } from '../utils/textVariants';
-import { useSeed as useSeedContext } from '@/seed-system';
+import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 // Semantic ID mappings (10 per type; selected by seed mapped to 1-10)
 const SEMANTIC_ID_MAP: Record<string, string[]> = {

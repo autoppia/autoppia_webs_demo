@@ -7,12 +7,13 @@ import { MovieMeta } from "@/components/movies/MovieMeta";
 import { RelatedBooks } from "@/components/movies/RelatedBooks";
 import { CommentsPanel, type CommentEntry } from "@/components/movies/CommentsPanel";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { getBookById, getRelatedBooks } from "@/utils/dynamicDataProvider";
+import { getBookById, getRelatedBooks } from "@/dynamic/v2-data";
 import { SeedLink } from "@/components/ui/SeedLink";
 import type { Book } from "@/data/books";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
+import { buildBookDetailPayload } from "@/utils/bookEventPayload";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
@@ -65,17 +66,13 @@ export default function BookDetailPage() {
 
   // Log detail view with backend-expected schema
   useEffect(() => {
-    logEvent(EVENT_TYPES.BOOK_DETAIL, {
-      name: book.title,
-      year: book.year,
-      genres: book.genres,
-      rating: book.rating,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [book.id]);
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.BOOK_DETAIL, payload);
+  }, [book]);
 
   const handleWatchTrailer = () => {
-    logEvent(EVENT_TYPES.OPEN_PREVIEW, { book_id: book.id, title: book.title });
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.OPEN_PREVIEW, payload);
     if (book.trailerUrl) {
       window.open(book.trailerUrl, "_blank", "noopener,noreferrer");
     }
@@ -131,16 +128,13 @@ export default function BookDetailPage() {
   };
 
   const handleWatchlist = () => {
-    logEvent(EVENT_TYPES.SHOPPING_CART, {
-      name: book.title,
-      year: book.year,
-      genres: book.genres,
-      rating: book.rating,
-    });
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.ADD_TO_READING_LIST, payload);
   };
 
   const handleShare = () => {
-    logEvent(EVENT_TYPES.SHARE_BOOK, { book_id: book.id });
+    const payload = buildBookDetailPayload(book);
+    logEvent(EVENT_TYPES.SHARE_BOOK, payload);
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href).catch(() => {});
     }

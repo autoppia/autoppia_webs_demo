@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from 'react';
-import { getSeedLayout, SeedLayout, getEffectiveSeed, generateElementAttributes, isDynamicEnabled } from '@/lib/seed-layout';
+import { getSeedLayout, SeedLayout, getEffectiveSeed, generateElementAttributes, isDynamicEnabled } from '@/dynamic/v1-layouts';
 
 export function useSeedLayout() {
   const [layout, setLayout] = useState<SeedLayout>(getSeedLayout(6));

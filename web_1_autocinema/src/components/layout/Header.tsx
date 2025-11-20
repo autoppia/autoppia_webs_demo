@@ -5,8 +5,8 @@ import { Film, Shuffle } from "lucide-react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Button } from "@/components/ui/button";
 import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { getLayoutConfig } from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useAuth } from "@/context/AuthContext";
 
 const NAV_LINKS = [

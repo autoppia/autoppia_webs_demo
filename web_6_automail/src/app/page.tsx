@@ -6,8 +6,8 @@ import { DynamicLayout } from "@/components/DynamicLayout";
 import { 
   getEffectiveSeed, 
   getLayoutConfig
-} from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+} from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { getEffectiveTextStructure } from "@/utils/textStructureProvider";
 import { useSeed } from "@/context/SeedContext";
 

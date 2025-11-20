@@ -6,4 +6,5 @@ export {
   getStaticCalendarEvents,
   getStaticProjects,
   getStaticTeams,
+  whenReady,
 } from "./data-provider";

@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import UserSearchBar from "./UserSearchBar";
-import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses } from "@/library/layouts";
 import { SeedLink } from "@/components/ui/SeedLink";
 
 const companies = [
@@ -25,8 +23,6 @@ const companies = [
 ];
 
 export default function RightSidebar() {
-  const { layout } = useSeed();
-  const searchClasses = getLayoutClasses(layout, 'searchPosition');
   const [followed, setFollowed] = useState<{ [name: string]: boolean }>({});
 
   const handleFollow = (name: string) => {

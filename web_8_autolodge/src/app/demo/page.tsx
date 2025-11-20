@@ -1,10 +1,28 @@
 "use client";
-import { SeedLink } from "@/components/ui/SeedLink";
-import { useSeedLayout } from "@/library/utils";
-import { Suspense } from "react";
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSeed } from "@/context/SeedContext";
+import { getSeedLayout as getPageSeedLayout } from "@/library/utils";
 
 function DemoPageContent() {
-  const { seed, layout } = useSeedLayout();
+  const { seed } = useSeed();
+<<<<<<< HEAD
+  const layout = getPageSeedLayout(seed);
+=======
+  const layout = getSeedLayout(seed ?? 1);
+  const searchBar = layout?.searchBar ?? {
+    position: "top",
+    wrapper: "div",
+  };
+  const propertyDetail = layout?.propertyDetail ?? {
+    layout: "vertical",
+    wrapper: "div",
+  };
+  const eventElements = layout?.eventElements ?? {
+    order: [],
+    wrapper: "div",
+  };
+>>>>>>> 31e453b2a7fff6f13b2d82852e125958cc9babd2
 
   const seeds = Array.from({ length: 10 }, (_, i) => i + 1);
 
@@ -25,7 +43,7 @@ function DemoPageContent() {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           {seeds.map((seedValue) => (
-            <SeedLink
+            <a
               key={seedValue}
               href={`/?seed=${seedValue}`}
               className={`p-4 rounded-lg border-2 transition-all hover:scale-105 ${
@@ -37,75 +55,67 @@ function DemoPageContent() {
               <div className="text-center">
                 <div className="text-2xl font-bold mb-1">Seed {seedValue}</div>
                 <div className="text-xs text-gray-500">
-                  {seedValue === 1 && "Center Layout"}
-                  {seedValue === 2 && "Right Layout"}
-                  {seedValue === 3 && "Top Layout"}
-                  {seedValue === 4 && "Bottom Layout"}
-                  {seedValue === 5 && "Left Layout"}
-                  {seedValue === 6 && "Purple Theme"}
-                  {seedValue === 7 && "Compact Layout"}
-                  {seedValue === 8 && "Green Theme"}
-                  {seedValue === 9 && "Orange Theme"}
-                  {seedValue === 10 && "Indigo Theme"}
+                  {seedValue === seed ? "Current" : "Click to change"}
                 </div>
               </div>
-            </SeedLink>
+            </a>
           ))}
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold mb-4">Current Layout Configuration</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-semibold mb-2">Search Bar</h3>
-              <div className="bg-gray-100 p-3 rounded text-sm font-mono">
-                Position: {layout.searchBar.position}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Property Detail</h3>
-              <div className="bg-gray-100 p-3 rounded text-sm font-mono">
-                Layout: {layout.propertyDetail.layout}
-              </div>
-            </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Current Layout Details</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Search Bar</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">Position: {searchBar.position}</p>
+                <p className="text-sm text-gray-600">Wrapper: {searchBar.wrapper}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Property Detail</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">Layout: {propertyDetail.layout}</p>
+                <p className="text-sm text-gray-600">Wrapper: {propertyDetail.wrapper}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Event Elements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  Order: {eventElements.order.length ? eventElements.order.join(", ") : "N/A"}
+                </p>
+                <p className="text-sm text-gray-600">Wrapper: {eventElements.wrapper}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Layout Info</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">Seed: {seed}</p>
+                <p className="text-sm text-gray-600">Type: Dynamic</p>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">How It Works</h2>
-          <div className="space-y-4 text-gray-700">
-            <div>
-              <h3 className="font-semibold text-lg mb-2">🎯 Anti-Scraping Features</h3>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Dynamic CSS class names based on seed value</li>
-                <li>Variable DOM structure with different wrapper elements</li>
-                <li>Random spacing and positioning variations</li>
-                <li>Different HTML element types (div, section, article, etc.)</li>
-                <li>Dynamic data attributes and ARIA labels</li>
-                <li>Nested element structures that change per seed</li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold text-lg mb-2">🔧 Technical Implementation</h3>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>URL parameter extraction: <code className="bg-gray-100 px-1 rounded">?seed=1-10</code></li>
-                <li>Layout configuration system with 10 unique variations</li>
-                <li>Dynamic wrapper components with unpredictable DOM structure</li>
-                <li>Event tracking preserved across all layout variations</li>
-                <li>Responsive design maintained in all configurations</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-lg mb-2">🚀 Testing</h3>
-              <p className="ml-4">
-                Click on different seed values above to see how the layout changes. 
-                Each seed creates a completely different DOM structure while maintaining 
-                the same functionality and user experience.
-              </p>
-            </div>
-          </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-blue-900 mb-2">How it works</h3>
+          <p className="text-sm text-blue-800">
+            Each seed value creates a completely different DOM structure and element ordering.
+            This makes it harder for web scrapers to extract content, as the structure changes
+            based on the seed parameter in the URL.
+          </p>
         </div>
       </div>
     </div>
@@ -114,13 +124,6 @@ function DemoPageContent() {
 
 export default function DemoPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 py-8 flex items-center justify-center">
-      <div className="text-center">
-        <div className="text-2xl font-bold text-gray-900 mb-2">Loading...</div>
-        <div className="text-gray-600">Preparing dynamic layout demo</div>
-      </div>
-    </div>}>
-      <DemoPageContent />
-    </Suspense>
+    <DemoPageContent />
   );
-} 
+}

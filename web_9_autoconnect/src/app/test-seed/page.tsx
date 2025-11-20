@@ -1,9 +1,12 @@
 "use client";
 
-import { useSeed } from "@/library/useSeed";
+import { useSeed } from "@/context/SeedContext";
+import { getEffectiveLayoutConfig } from "@/dynamic/v1-layouts";
 
 export default function TestSeedPage() {
-  const { seed, layout } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layout = getEffectiveLayoutConfig(layoutSeed);
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -13,7 +16,7 @@ export default function TestSeedPage() {
         <h2 className="text-xl font-semibold mb-4">Current Seed Configuration</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <strong>Seed Value:</strong> {seed || 'Default (no seed)'}
+            <strong>Seed Value:</strong> {layoutSeed || "Default (no seed)"}
           </div>
           <div>
             <strong>Main Layout:</strong> {layout.mainLayout}

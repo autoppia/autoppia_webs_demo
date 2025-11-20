@@ -220,7 +220,7 @@ export function DataReadyGate({ children }: DataReadyGateProps) {
 import { emails } from "@/library/dataset";
 
 // After: Use DynamicDataProvider
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 
 // In EmailProvider
 useEffect(() => {

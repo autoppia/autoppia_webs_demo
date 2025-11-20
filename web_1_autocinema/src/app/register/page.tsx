@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { getMovies } from "@/utils/dynamicDataProvider";
+import { getMovies } from "@/dynamic/v2-data";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 
 const MIN_PASSWORD_LENGTH = 6;

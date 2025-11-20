@@ -93,7 +93,8 @@ export async function initializeTestimonials(): Promise<Testimonial[]> {
  */
 const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autodeliveryV2Seed;
+  const extendedWindow = window as Window & { __autodeliveryV2Seed?: number | null };
+  const value = extendedWindow.__autodeliveryV2Seed;
   if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
     return value;
   }

@@ -60,7 +60,7 @@ export default function Sidebar() {
               ? pathname === href
               : pathname === href || pathname.startsWith(href + "/");
           
-          const label = getText(labelKey);
+          const label = getText(labelKey, labelKey.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase()));
           const linkId = getId(idKey);
 
           return (

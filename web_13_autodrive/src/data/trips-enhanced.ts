@@ -1,5 +1,114 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { Trip } from "@/library/dataset";
+
+// Trip type for extensibility
+export interface Trip {
+  id: string;
+  status: "upcoming" | "completed" | "cancelled";
+  ride: RideType;
+  pickup: string;
+  dropoff: string;
+  date: string;
+  time: string;
+  price: number;
+  payment: string;
+  driver: DriverType;
+}
+
+// Driver type for extensibility
+export interface DriverType {
+  name: string;
+  car: string;
+  plate: string;
+  phone: string;
+  photo: string;
+}
+
+// Ride type for extensibility
+export interface RideType {
+  name: string;
+  icon: string;
+  image: string;
+  price: number;
+}
+
+export const rides: RideType[] = [
+  {
+    name: "AutoDriverX",
+    image: "/car1.jpg",
+    icon: "https://ext.same-assets.com/407674263/3757967630.png",
+    price: 26.6,
+  },
+  {
+    name: "Comfort",
+    image: "/car2.jpg",
+    icon: "https://ext.same-assets.com/407674263/2600779409.svg",
+    price: 31.5,
+  },
+  {
+    name: "AutoDriverXL",
+    image: "/car3.jpg",
+    icon: "https://ext.same-assets.com/407674263/2882408466.svg",
+    price: 27.37,
+  },
+];
+
+export const simulatedTrips: Trip[] = [
+  {
+    id: "1",
+    status: "upcoming",
+    ride: rides[1],
+    pickup: "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+    dropoff:
+      "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+    date: "2025-07-18",
+    time: "13:00",
+    price: 31.5,
+    payment: "card",
+    driver: {
+      name: "Carlos Mendez",
+      car: "Toyota Camry 2022",
+      plate: "ABC-123",
+      phone: "+1-555-0101",
+      photo: "https://randomuser.me/api/portraits/men/1.jpg",
+    },
+  },
+  {
+    id: "2",
+    status: "completed",
+    ride: rides[0],
+    pickup: "SFO Airport - San Francisco International Airport, CA 94128, USA",
+    dropoff: "Union Square - Union Square, San Francisco, CA 94108, USA",
+    date: "2025-07-17",
+    time: "14:30",
+    price: 26.6,
+    payment: "cash",
+    driver: {
+      name: "Sarah Johnson",
+      car: "Honda Accord 2021",
+      plate: "XYZ-789",
+      phone: "+1-555-0102",
+      photo: "https://randomuser.me/api/portraits/women/2.jpg",
+    },
+  },
+  {
+    id: "3",
+    status: "cancelled",
+    ride: rides[2],
+    pickup: "Fisherman's Wharf - Pier 39, San Francisco, CA 94133, USA",
+    dropoff: "Coit Tower - 1 Telegraph Hill Blvd, San Francisco, CA 94133, USA",
+    date: "2025-07-16",
+    time: "16:20",
+    price: 27.37,
+    payment: "card",
+    driver: {
+      name: "Ahmed Hassan",
+      car: "BMW 5 Series 2023",
+      plate: "DEF-456",
+      phone: "+1-555-0103",
+      photo: "https://randomuser.me/api/portraits/men/3.jpg",
+    },
+  },
+];
 
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;

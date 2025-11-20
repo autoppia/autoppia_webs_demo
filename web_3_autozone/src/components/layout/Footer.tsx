@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useSeed } from "@/seed-system";
+import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export function Footer() {

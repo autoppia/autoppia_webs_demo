@@ -4,6 +4,15 @@
  * Loads different data subsets based on v2 seed.
  */
 
-export { dynamicDataProvider } from './data-provider';
-export { initializeRestaurants, getRestaurants, countries } from './restaurants-loader';
+export {
+  dynamicDataProvider,
+  initializeRestaurants,
+  getRestaurants,
+  isDynamicModeEnabled,
+  getEffectiveSeedValue,
+  getLayoutConfig,
+} from "./data-provider";
+export type { RestaurantData } from "./data-provider";
 
+// Export whenReady function
+export const whenReady = () => dynamicDataProvider.whenReady();

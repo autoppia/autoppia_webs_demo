@@ -1,5 +1,5 @@
 import type { Email, EmailFolder } from "@/types/email";
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "./seedLayout";
+import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { emails, initializeEmails, loadEmailsFromDb, writeCachedEmails, readCachedEmails } from "@/data/emails-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { isDataGenerationEnabled } from "@/shared/data-generator";

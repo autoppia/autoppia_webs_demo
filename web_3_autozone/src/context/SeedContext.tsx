@@ -44,11 +44,13 @@ const SeedContext = createContext<SeedContextType>({
 
 const DEFAULT_SEED = 1;
 
-// Internal component that handles URL params
+// Internal component that handles URL params - wrapped in Suspense
 function SeedInitializer({
   onSeedFromUrl,
+  onSeedChange,
 }: {
   onSeedFromUrl: (seed: number | null) => void;
+  onSeedChange: (seed: number) => void;
 }) {
   const searchParams = useSearchParams();
 
@@ -56,7 +58,11 @@ function SeedInitializer({
     const urlSeed = searchParams.get("seed");
     if (urlSeed) {
       const parsedSeed = Number.parseInt(urlSeed, 10);
-      onSeedFromUrl(Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed));
+      const clampedSeed = Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed);
+      onSeedFromUrl(clampedSeed);
+      if (clampedSeed !== null) {
+        onSeedChange(clampedSeed);
+      }
     } else {
       onSeedFromUrl(null);
     }
@@ -67,13 +73,12 @@ function SeedInitializer({
     } else {
       console.log("[SeedContext:web3] No enable_dynamic in URL, using env vars as default");
     }
-  }, [searchParams, onSeedFromUrl]);
+  }, [searchParams, onSeedFromUrl, onSeedChange]);
 
   return null;
 }
 
 export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
-  const searchParams = useSearchParams();
   const [seed, setSeedState] = useState<number>(() => DEFAULT_SEED);
   const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
     resolveSeedsSync(DEFAULT_SEED)
@@ -81,19 +86,11 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [urlSeedProcessed, setUrlSeedProcessed] = useState(false);
 
-  // PRIORITY: URL > localStorage
-  const urlSeedRaw = searchParams.get("seed");
-  const urlSeed = urlSeedRaw ? clampBaseSeed(Number.parseInt(urlSeedRaw, 10)) : null;
-
-  // Initialize seed: URL has priority over localStorage
+  // Initialize seed from localStorage (fallback if no URL seed)
   useEffect(() => {
     if (isInitialized) return;
     
-    if (urlSeed !== null && !isNaN(urlSeed)) {
-      setSeedState(urlSeed);
-      setUrlSeedProcessed(true);
-      console.log(`[SeedContext:web3] Using seed from URL: ${urlSeed}`);
-    } else {
+    if (typeof window !== "undefined") {
       try {
         const savedSeed = localStorage.getItem("autozone_seed_base");
         if (savedSeed) {
@@ -106,19 +103,23 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
     setIsInitialized(true);
-  }, [isInitialized, urlSeed]);
+  }, [isInitialized]);
 
   // Handle seed from URL changes
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
-      console.log(`[SeedContext:web3] Seed changed in URL: ${urlSeed}`);
-      setSeedState(urlSeed);
       setUrlSeedProcessed(true);
     } else if (urlSeedProcessed) {
       console.log(`[SeedContext:web3] Seed removed from URL, using default: ${DEFAULT_SEED}`);
       setSeedState(DEFAULT_SEED);
     }
   }, [urlSeedProcessed]);
+
+  // Handle seed change from URL
+  const handleSeedChange = useCallback((newSeed: number) => {
+    console.log(`[SeedContext:web3] Seed changed in URL: ${newSeed}`);
+    setSeedState(newSeed);
+  }, []);
 
   // Update derived seeds + persist base seed
   useEffect(() => {
@@ -139,16 +140,18 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
     
-    try {
-      localStorage.setItem("autozone_seed_base", seed.toString());
-    } catch (error) {
-      console.error("Error saving seed to localStorage:", error);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("autozone_seed_base", seed.toString());
+      } catch (error) {
+        console.error("Error saving seed to localStorage:", error);
+      }
     }
     
     return () => {
       cancelled = true;
     };
-  }, [seed, searchParams]);
+  }, [seed]);
 
   // Sync v2Seed to window for backward compatibility
   useEffect(() => {
@@ -194,7 +197,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds, v2Seed }}>
       <Suspense fallback={null}>
-        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
+        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} onSeedChange={handleSeedChange} />
       </Suspense>
       {children}
     </SeedContext.Provider>

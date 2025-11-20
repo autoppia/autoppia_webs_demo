@@ -18,15 +18,18 @@ import { useSeed } from "@/context/SeedContext";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/utils/seedLayout";
-import { withSeed, withSeedAndParams } from "@/utils/seedRouting";
-import { useSearchParams } from "next/navigation";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const router = useSeedRouter();
-  const searchParams = useSearchParams();
+  const buildSearchUrl = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return "/search";
+    const params = new URLSearchParams({ q: trimmed });
+    return `/search?${params.toString()}`;
+  };
   const { state } = useCart();
   const cartItemCount = isMounted ? state.totalItems : 0;
   const { getText, getId } = useV3Attributes();
@@ -93,9 +96,7 @@ export function Header() {
                           logEvent(EVENT_TYPES.SEARCH_PRODUCT, {
                             query: searchQuery,
                           });
-                          router.push(
-                            withSeedAndParams("/search", { q: searchQuery }, searchParams)
-                          );
+                          router.push(buildSearchUrl(searchQuery));
                         }
                       }}
                       placeholder={getText("search_placeholder")}
@@ -109,9 +110,7 @@ export function Header() {
                         logEvent(EVENT_TYPES.SEARCH_PRODUCT, {
                           query: searchQuery,
                         });
-                        router.push(
-                          withSeedAndParams("/search", { q: searchQuery }, searchParams)
-                        );
+                        router.push(buildSearchUrl(searchQuery));
                       }}
                     >
                       <Search className="h-3 w-3 text-amazon-lightBlue" />
@@ -143,9 +142,7 @@ export function Header() {
                           logEvent(EVENT_TYPES.SEARCH_PRODUCT, {
                             query: searchQuery,
                           });
-                          router.push(
-                            withSeedAndParams("/search", { q: searchQuery }, searchParams)
-                          );
+                          router.push(buildSearchUrl(searchQuery));
                         }
                       }}
                       placeholder={getText("search_placeholder")}
@@ -159,9 +156,7 @@ export function Header() {
                         logEvent(EVENT_TYPES.SEARCH_PRODUCT, {
                           query: searchQuery,
                         });
-                        router.push(
-                          withSeedAndParams("/search", { q: searchQuery }, searchParams)
-                        );
+                        router.push(buildSearchUrl(searchQuery));
                       }}
                     >
                       <Search className="h-5 w-5 text-amazon-lightBlue " />

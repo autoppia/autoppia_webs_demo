@@ -4,6 +4,14 @@
  * Loads different data subsets based on v2 seed.
  */
 
-export { dynamicDataProvider } from './data-provider';
-export { loadEntity, isDbLoadModeEnabled } from './users-loader';
+export {
+  dynamicDataProvider,
+  isDynamicModeEnabled,
+  getLayoutConfig,
+} from "./data-provider";
 
+// Export whenReady function
+export const whenReady = () => {
+  const { dynamicDataProvider } = require("./data-provider");
+  return dynamicDataProvider.whenReady();
+};

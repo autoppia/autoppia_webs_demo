@@ -5,7 +5,6 @@ export {
   generateElementAttributes,
   getXPathSelector,
   getElementOrder,
-  generateElementId,
   generateCSSVariables,
   generateLayoutClasses,
 } from "./layout-variants";

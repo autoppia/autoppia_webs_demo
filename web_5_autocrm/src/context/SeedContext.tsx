@@ -42,11 +42,13 @@ const SeedContext = createContext<SeedContextType>({
 
 const DEFAULT_SEED = 1;
 
-// Internal component that handles URL params
+// Internal component that handles URL params - wrapped in Suspense
 function SeedInitializer({
   onSeedFromUrl,
+  onSeedChange,
 }: {
   onSeedFromUrl: (seed: number | null) => void;
+  onSeedChange: (seed: number) => void;
 }) {
   const searchParams = useSearchParams();
 
@@ -54,25 +56,27 @@ function SeedInitializer({
     const urlSeed = searchParams.get("seed");
     if (urlSeed) {
       const parsedSeed = Number.parseInt(urlSeed, 10);
-      onSeedFromUrl(Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed));
+      const clampedSeed = Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed);
+      onSeedFromUrl(clampedSeed);
+      if (clampedSeed !== null) {
+        onSeedChange(clampedSeed);
+      }
     } else {
       onSeedFromUrl(null);
     }
     
-    // Log enable_dynamic if present (user explicitly set it)
     const enableDynamic = searchParams.get("enable_dynamic");
     if (enableDynamic) {
       console.log("[SeedContext:web5] enable_dynamic from URL (user override):", enableDynamic);
     } else {
       console.log("[SeedContext:web5] No enable_dynamic in URL, using env vars as default");
     }
-  }, [searchParams, onSeedFromUrl]);
+  }, [searchParams, onSeedFromUrl, onSeedChange]);
 
   return null;
 }
 
 export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
-  const searchParams = useSearchParams();
   const [seed, setSeedState] = useState<number>(() => DEFAULT_SEED);
   const [resolvedSeeds, setResolvedSeeds] = useState<ResolvedSeeds>(() =>
     resolveSeedsSync(DEFAULT_SEED)
@@ -80,22 +84,11 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [urlSeedProcessed, setUrlSeedProcessed] = useState(false);
 
-  // PRIORITY: URL > localStorage
-  // First, check if there's a seed in URL
-  const urlSeedRaw = searchParams.get("seed");
-  const urlSeed = urlSeedRaw ? clampBaseSeed(Number.parseInt(urlSeedRaw, 10)) : null;
-
-  // Initialize seed: URL has priority over localStorage
+  // Initialize seed from localStorage (fallback if no URL seed)
   useEffect(() => {
     if (isInitialized) return;
     
-    if (urlSeed !== null && !isNaN(urlSeed)) {
-      // URL seed has priority - use it immediately
-      setSeedState(urlSeed);
-      setUrlSeedProcessed(true);
-      console.log(`[SeedContext:web5] Using seed from URL: ${urlSeed}`);
-    } else {
-      // No seed in URL, try localStorage
+    if (typeof window !== "undefined") {
       try {
         const savedSeed = localStorage.getItem("autocrm_seed_base");
         if (savedSeed) {
@@ -103,113 +96,112 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
           setSeedState(parsedSeed);
           console.log(`[SeedContext:web5] Using seed from localStorage: ${parsedSeed}`);
         }
-      } catch (error) {
-        console.error("Error loading seed from localStorage:", error);
+      } catch (e) {
+        console.error("[SeedContext:web5] Error loading seed from localStorage", e);
       }
     }
+    
     setIsInitialized(true);
-  }, [isInitialized, urlSeed]);
+  }, [isInitialized]);
 
-  // Handle seed from URL changes (when URL changes after initial load)
-  const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
-    if (urlSeed !== null) {
-      console.log(`[SeedContext:web5] Seed changed in URL: ${urlSeed}`);
-      setSeedState(urlSeed);
+  // Handler for URL seed changes
+  const handleSeedFromUrl = useCallback(
+    (urlSeed: number | null) => {
+      if (urlSeed !== null && urlSeed !== seed) {
+        setSeedState(urlSeed);
+        console.log(`[SeedContext:web5] Updated seed from URL: ${urlSeed}`);
+      }
       setUrlSeedProcessed(true);
-    } else if (urlSeedProcessed) {
-      // URL seed was removed, but we already processed it
-      // Don't fallback to localStorage if user explicitly removed seed from URL
-      console.log(`[SeedContext:web5] Seed removed from URL, using default: ${DEFAULT_SEED}`);
-      setSeedState(DEFAULT_SEED);
-    }
-  }, [urlSeedProcessed]);
+    },
+    [seed]
+  );
 
-  // Update derived seeds + persist base seed
-  // Re-run when seed OR enable_dynamic changes
-  useEffect(() => {
-    let cancelled = false;
-    
-    // Use sync version for immediate update
-    const syncResolved = resolveSeedsSync(seed);
-    setResolvedSeeds(syncResolved);
-    
-    // Fetch from centralized service (async, updates when ready)
-    resolveSeeds(seed).then((resolved) => {
-      // Only update if this effect hasn't been cancelled (seed hasn't changed)
-      if (!cancelled) {
-        setResolvedSeeds(resolved);
-      }
-    }).catch((error) => {
-      if (!cancelled) {
-        console.warn("[SeedContext:web5] Failed to resolve seeds from API, using local:", error);
-      }
-    });
-    
-    try {
-      localStorage.setItem("autocrm_seed_base", seed.toString());
-    } catch (error) {
-      console.error("Error saving seed to localStorage:", error);
-    }
-    
-    // Cleanup: cancel if seed changes before async completes
-    return () => {
-      cancelled = true;
-    };
-  }, [seed, searchParams]); // Re-run when searchParams change (to catch enable_dynamic)
-
-  // Sync v2Seed to window for backward compatibility with dynamicDataProvider
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-    (window as any).__autocrmV2Seed = v2Seed ?? null;
-    window.dispatchEvent(new CustomEvent("autocrm:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
-    console.log("[SeedContext:web5] v2-seed synced to window:", v2Seed);
-  }, [resolvedSeeds.v2, resolvedSeeds.base]);
-
-  const setSeed = useCallback((newSeed: number) => {
-    setSeedState(clampBaseSeed(newSeed));
+  // Handler for seed changes (from SeedInitializer)
+  const handleSeedChange = useCallback((newSeed: number) => {
+    setSeedState(newSeed);
   }, []);
 
-  // Helper function to generate navigation URLs with seed and enable_dynamic parameters
-  const getNavigationUrl = useCallback((path: string): string => {
-    if (!path) return path;
-    if (path.startsWith("http")) return path;
-    
-    const currentParams = typeof window !== "undefined" 
-      ? new URLSearchParams(window.location.search)
-      : new URLSearchParams();
-    
-    // If path already has query params
-    const [base, queryString] = path.split("?");
-    const params = new URLSearchParams(queryString || "");
-    
-    // Always preserve seed
-    params.set("seed", seed.toString());
-    
-    // ONLY preserve enable_dynamic if user explicitly set it in URL
-    // If not in URL, don't add it (will use env vars as default)
-    const enableDynamic = currentParams.get("enable_dynamic");
-    if (enableDynamic) {
-      // User explicitly set it, preserve it
-      params.set("enable_dynamic", enableDynamic);
+  // Save seed to localStorage whenever it changes
+  useEffect(() => {
+    if (isInitialized && urlSeedProcessed && typeof window !== "undefined") {
+      try {
+        localStorage.setItem("autocrm_seed_base", seed.toString());
+      } catch (e) {
+        console.error("[SeedContext:web5] Error saving seed to localStorage", e);
+      }
     }
-    // If not present, don't add it - will use env vars
-    
-    const query = params.toString();
-    return query ? `${base}?${query}` : base;
+  }, [seed, isInitialized, urlSeedProcessed]);
+
+  // Update resolved seeds when seed changes
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const updateResolvedSeeds = async () => {
+      const resolved = await resolveSeeds(seed);
+      setResolvedSeeds(resolved);
+
+      // Set global v2 seed for DynamicDataProvider
+      if (typeof window !== "undefined" && resolved.v2 !== null) {
+        window.__autocrmV2Seed = resolved.v2;
+
+        // Dispatch custom event for v2 seed changes
+        window.dispatchEvent(
+          new CustomEvent("autocrm:v2SeedChange", {
+            detail: { seed: resolved.v2 },
+          })
+        );
+      }
+    };
+
+    updateResolvedSeeds();
   }, [seed]);
 
+  const setSeed = useCallback(
+    (newSeed: number) => {
+      const clamped = clampBaseSeed(newSeed);
+      if (clamped === seed) return;
+
+      setSeedState(clamped);
+      console.log(`[SeedContext:web5] Manual seed change to ${clamped}`);
+    },
+    [seed]
+  );
+
+  const getNavigationUrl = useCallback(
+    (path: string) => {
+      const [rawPath, rawQuery = ""] = path.split("?");
+      const params = new URLSearchParams(rawQuery);
+      params.set("seed", seed.toString());
+
+      if (typeof window !== "undefined") {
+        const url = new URL(path, window.location.origin);
+        url.searchParams.set("seed", seed.toString());
+        return `${url.pathname}${url.search}`;
+      }
+
+      const queryString = params.toString();
+      return queryString ? `${rawPath}?${queryString}` : rawPath;
+    },
+    [seed]
+  );
+
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, resolvedSeeds }}>
+    <SeedContext.Provider
+      value={{
+        seed,
+        setSeed,
+        getNavigationUrl,
+        resolvedSeeds,
+      }}
+    >
       <Suspense fallback={null}>
-        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
+        <SeedInitializer onSeedFromUrl={handleSeedFromUrl} onSeedChange={handleSeedChange} />
       </Suspense>
       {children}
     </SeedContext.Provider>
   );
 };
 
-// Custom hook to use seed context
 export const useSeed = () => {
   const context = useContext(SeedContext);
   if (!context) {

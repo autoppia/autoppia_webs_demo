@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -6,8 +7,8 @@ import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
 // DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { getEffectiveSeed, getLayoutConfig } from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,13 +34,15 @@ export default function RootLayout({
       <head />
       <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
         <ThemeProvider>
-          <SeedProvider>
-            <LayoutProvider>
-              <EmailProvider>
-                {children}
-              </EmailProvider>
-            </LayoutProvider>
-          </SeedProvider>
+          <Suspense fallback={<div className="min-h-screen bg-background" />}>
+            <SeedProvider>
+              <LayoutProvider>
+                <EmailProvider>
+                  {children}
+                </EmailProvider>
+              </LayoutProvider>
+            </SeedProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>

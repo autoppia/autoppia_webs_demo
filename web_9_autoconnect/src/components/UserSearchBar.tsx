@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function UserSearchBar() {

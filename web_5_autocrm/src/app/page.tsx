@@ -88,7 +88,7 @@ function DashboardContent() {
 
   return (
     <section className={`${layoutClasses.spacing}`}>
-      <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">{getText("dashboard_title")}</h1>
+      <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">{getText("dashboard_title", "Dashboard")}</h1>
       <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
         {/* Card 1: Matters */}
         <SeedLink
@@ -98,11 +98,11 @@ function DashboardContent() {
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("matters_title")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{getText("matters_title", "Matters")}</span>
             <Briefcase className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.matters}</span>
-          <span className="text-sm text-zinc-400">{getText("total_matters")}</span>
+          <span className="text-sm text-zinc-400">{getText("total_matters", "Total Matters")}</span>
         </SeedLink>
 
         {/* Card 2: Clients */}
@@ -113,11 +113,11 @@ function DashboardContent() {
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("clients_title")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{getText("clients_title", "Clients")}</span>
             <Users className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.clients}</span>
-          <span className="text-sm text-zinc-400">{getText("total_clients")}</span>
+          <span className="text-sm text-zinc-400">{getText("total_clients", "Total Clients")}</span>
         </SeedLink>
 
         {/* Card 3: Calendar */}
@@ -128,11 +128,11 @@ function DashboardContent() {
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("upcoming_events")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{getText("upcoming_events", "Upcoming Events")}</span>
             <Calendar className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.events}</span>
-          <span className="text-sm text-zinc-400">{getText("event_date")}</span>
+          <span className="text-sm text-zinc-400">{getText("event_date", "Event Date")}</span>
         </SeedLink>
 
         {/* Card 4: Documents */}
@@ -143,11 +143,11 @@ function DashboardContent() {
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("documents_title")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{getText("documents_title", "Documents")}</span>
             <FileText className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.files}</span>
-          <span className="text-sm text-zinc-400">{getText("document_name")}</span>
+          <span className="text-sm text-zinc-400">{getText("document_name", "Document Name")}</span>
         </SeedLink>
 
         {/* Card 5: Time Tracking */}
@@ -158,11 +158,11 @@ function DashboardContent() {
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("billing_title")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{getText("billing_title", "Billing Title")}</span>
             <Clock className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-4xl font-bold tracking-tight text-[#1A1A1A] select-none">{counters.logs}</span>
-          <span className="text-sm text-zinc-400">{getText("hours_logged")}</span>
+          <span className="text-sm text-zinc-400">{getText("hours_logged", "Hours Logged")}</span>
         </SeedLink>
 
         {/* Card 6: Settings */}
@@ -173,11 +173,11 @@ function DashboardContent() {
           className="rounded-2xl bg-white shadow-card p-8 flex flex-col gap-4 min-h-[180px] group transition shadow-md hover:shadow-lg border border-zinc-100 hover:border-zinc-200"
         >
           <div className="flex justify-between items-center">
-            <span className="font-semibold text-zinc-600 text-lg">{getText("settings_title")}</span>
+            <span className="font-semibold text-zinc-600 text-lg">{getText("settings_title", "Settings")}</span>
             <Settings2 className="w-7 h-7 text-accent-forest group-hover:scale-110 transition" />
           </div>
           <span className="text-4xl md:text-5xl font-bold tracking-tight text-[#1A1A1A] select-none">--</span>
-          <span className="text-sm text-zinc-400">{getText("notes")}</span>
+          <span className="text-sm text-zinc-400">{getText("notes", "Notes")}</span>
         </SeedLink>
       </div>
     </section>
