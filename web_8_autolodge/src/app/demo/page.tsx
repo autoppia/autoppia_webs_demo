@@ -2,10 +2,13 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSeed } from "@/context/SeedContext";
-import { getSeedLayout } from "@/dynamic/v1-layouts";
+import { getSeedLayout as getPageSeedLayout } from "@/library/utils";
 
 function DemoPageContent() {
   const { seed } = useSeed();
+<<<<<<< HEAD
+  const layout = getPageSeedLayout(seed);
+=======
   const layout = getSeedLayout(seed ?? 1);
   const searchBar = layout?.searchBar ?? {
     position: "top",
@@ -19,6 +22,7 @@ function DemoPageContent() {
     order: [],
     wrapper: "div",
   };
+>>>>>>> 31e453b2a7fff6f13b2d82852e125958cc9babd2
 
   const seeds = Array.from({ length: 10 }, (_, i) => i + 1);
 
