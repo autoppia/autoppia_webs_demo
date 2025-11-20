@@ -138,10 +138,12 @@ export function CartPageContent() {
                             href={`#${item.id}`}
                             title={`View ${item.title} - Product ID: ${item.id}`}
                             onMouseEnter={() => {
-                              window.history.replaceState(null, '', `#${item.id}`);
+                              const basePath = `${window.location.pathname}${window.location.search}`;
+                              window.history.replaceState(null, '', `${basePath}#${item.id}`);
                             }}
                             onMouseLeave={() => {
-                              window.history.replaceState(null, '', window.location.pathname);
+                              const basePath = `${window.location.pathname}${window.location.search}`;
+                              window.history.replaceState(null, '', basePath);
                             }}
                             onClick={(e) => {
                               e.preventDefault();

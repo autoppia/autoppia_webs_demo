@@ -59,10 +59,12 @@ export default function SearchPage() {
             href={`#${product.id}`}
             title={`View ${product.title} - Product ID: ${product.id}`}
             onMouseEnter={() => {
-              window.history.replaceState(null, '', `#${product.id}`);
+              const basePath = `${window.location.pathname}${window.location.search}`;
+              window.history.replaceState(null, '', `${basePath}#${product.id}`);
             }}
             onMouseLeave={() => {
-              window.history.replaceState(null, '', window.location.pathname);
+              const basePath = `${window.location.pathname}${window.location.search}`;
+              window.history.replaceState(null, '', basePath);
             }}
             onClick={(e) => {
               e.preventDefault();
