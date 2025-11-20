@@ -28,7 +28,7 @@ export default function CheckoutPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-[#fafbfc] w-full pb-16">
+      <div className="min-h-screen bg-[#fafbfc] w-full pb-16 text-[#0F1111]">
         <div className="w-full bg-gradient-to-b from-[#f3f3f3] to-[#ffffff] border-b flex flex-col items-center pt-2 pb-3">
           <div className="flex items-center gap-6">
             <h1 className="font-semibold">Autozon</h1>
@@ -124,7 +124,7 @@ export default function CheckoutPage() {
             <div className="bg-white border border-[#d5d9d9] shadow-sm rounded-md p-5 pt-6 min-h-[350px] flex flex-col">
               <Button
                 id={getId("checkout_button")}
-                className="bg-amazon-yellow hover:bg-amazon-darkYellow text-white font-semibold w-full mb-2 py-2 rounded"
+                className="bg-amazon-yellow hover:bg-amazon-darkYellow text-[#0F1111] font-semibold w-full mb-2 py-2 rounded"
                 onClick={() => {
                   logEvent(EVENT_TYPES.ORDER_COMPLETED, {
                     items: items.map((item) => ({
@@ -143,7 +143,7 @@ export default function CheckoutPage() {
                   clearCart();
                 }}
               >
-                {getText("place_order")}
+                {getText("place_order", "Proceed")}
               </Button>
               <div className="text-xs text-[#565959] text-center mt-2">
                 {getText("by_placing_order")}{" "}

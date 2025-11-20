@@ -144,5 +144,6 @@ export const dynamicDataProvider = DynamicDataProvider.getInstance();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicEnabled();
 export const getLayoutConfig = (seed?: number) => {
   const { getEffectiveLayoutConfig } = require("@/dynamic/v1-layouts");
+  const { getEffectiveLayoutConfig } = require("@/dynamic/v1-layouts");
   return getEffectiveLayoutConfig(seed);
 };
