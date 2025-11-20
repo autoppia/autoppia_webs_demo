@@ -94,12 +94,14 @@ export function ProductCarousel({
               href={`#${product.id}`}
               title={`View ${product.title} - Product ID: ${product.id}`}
               onMouseEnter={() => {
-                // Update URL in address bar on hover
-                window.history.replaceState(null, '', `#${product.id}`);
+                // Update URL in address bar on hover while keeping seed params
+                const basePath = `${window.location.pathname}${window.location.search}`;
+                window.history.replaceState(null, '', `${basePath}#${product.id}`);
               }}
               onMouseLeave={() => {
-                // Clear hash on mouse leave
-                window.history.replaceState(null, '', window.location.pathname);
+                // Clear hash but preserve seed params
+                const basePath = `${window.location.pathname}${window.location.search}`;
+                window.history.replaceState(null, '', basePath);
               }}
               onClick={(e) => {
                 e.preventDefault();

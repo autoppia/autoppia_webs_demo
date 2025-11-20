@@ -9,8 +9,10 @@ import {
 } from "lucide-react";
 import React, { useState, useMemo, useEffect, Suspense } from "react";
 import Cookies from "js-cookie";
-import {EVENT_TYPES, logEvent} from "@/library/events";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_MATTERS } from "@/library/dataset";
+import { useSeed } from "@/context/SeedContext";
+import { useProjectData } from "@/shared/universal-loader";
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
   { name: "Documents", icon: <FileText className="w-5 h-5 mr-1" /> },
@@ -24,9 +26,18 @@ type Matter = {
   status: string;
   client: string;
   updated: string;
-  // opened: string;
-  // description: string;
 };
+
+const STORAGE_KEY_PREFIX = "matters";
+const CUSTOM_COOKIE_PREFIX = "custom_matters";
+
+const normalizeMatter = (matter: any, index: number): Matter => ({
+  id: matter?.id ?? matter?.matterId ?? `MAT-${1000 + index}`,
+  name: matter?.name ?? matter?.title ?? matter?.matter ?? `Matter ${index + 1}`,
+  client: matter?.client ?? matter?.clientName ?? "—",
+  status: matter?.status ?? "Active",
+  updated: matter?.updated ?? matter?.updated_at ?? matter?.lastUpdated ?? "Today",
+});
 
 function useDetailLayoutVariant() {
   // Get the seed value from URL, default to 1 if not present
@@ -90,37 +101,112 @@ function useDetailLayoutVariant() {
 function MatterDetailPageContent() {
   const [tab, setTab] = useState("Overview");
   const [summaryOpen, setSummaryOpen] = useState(true);
-  const [customMatters, setCustomMatters] = useState<Matter[]>([]);
   const [currentMatter, setCurrentMatter] = useState<Matter | null>(null);
-  
+  const [isResolving, setIsResolving] = useState(true);
+
   const layout = useDetailLayoutVariant();
   const params = useParams();
   const matterId = params?.id as string;
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const storageKey = useMemo(
+    () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
+    [v2Seed]
+  );
+  const cookieKey = useMemo(
+    () => `${CUSTOM_COOKIE_PREFIX}_${v2Seed ?? "default"}`,
+    [v2Seed]
+  );
 
-  useEffect(() => {
-    const cookie = Cookies.get("custom_matters");
-    if (cookie) setCustomMatters(JSON.parse(cookie));
-  }, []);
+  const { data } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "matters",
+    seedValue: v2Seed ?? undefined,
+  });
+
+  const baseMatters = useMemo(() => {
+    const normalizedDemo = DEMO_MATTERS.map((m, idx) => normalizeMatter(m, idx));
+    const normalizedApi = (data || []).map((m: any, idx: number) =>
+      normalizeMatter(m, idx)
+    );
+    return normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  }, [data]);
 
   useEffect(() => {
     if (!matterId) return;
+    if (baseMatters.length === 0) return;
 
-    const allMatters = [...customMatters, ...DEMO_MATTERS];
-    const matter = allMatters.find((m) => m.id === matterId);
-    if (matter) {
-      setCurrentMatter(matter);
-      logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, matter);
+    setIsResolving(true);
+
+    let resolvedList: Matter[] = baseMatters;
+
+    if (typeof window !== "undefined") {
+      const saved = window.localStorage.getItem(storageKey);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            resolvedList = parsed;
+          }
+        } catch (error) {
+          console.warn("[MatterDetail] Failed to parse cached matters", error);
+        }
+      } else {
+        window.localStorage.setItem(storageKey, JSON.stringify(baseMatters));
+      }
+
+      if (resolvedList === baseMatters) {
+        const cookie = Cookies.get(cookieKey);
+        if (cookie) {
+          try {
+            const parsed = JSON.parse(cookie);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              const existingIds = new Set(resolvedList.map((m) => m.id));
+              const merged = [...resolvedList];
+              for (const entry of parsed) {
+                if (!existingIds.has(entry.id)) {
+                  merged.unshift(entry);
+                }
+              }
+              resolvedList = merged;
+            }
+          } catch (error) {
+            console.warn("[MatterDetail] Failed to parse custom matters cookie", error);
+          }
+        }
+      }
+    }
+
+    const match =
+      resolvedList.find((m) => m.id === matterId) ??
+      baseMatters.find((m) => m.id === matterId) ??
+      null;
+
+    if (match) {
+      setCurrentMatter(match);
+      logEvent(EVENT_TYPES.VIEW_MATTER_DETAILS, match);
     } else {
       console.warn(`Matter with ID ${matterId} not found.`);
       setCurrentMatter(null);
     }
-  }, [matterId, customMatters]);
+    setIsResolving(false);
+  }, [matterId, baseMatters, storageKey, cookieKey]);
 
   // If the matter is not found, show error
+  if (isResolving) {
+    return (
+      <section className="flex justify-center items-center h-screen">
+        <p className="text-zinc-500">Loading matter details...</p>
+      </section>
+    );
+  }
+
   if (!currentMatter) {
     return (
       <section className="flex justify-center items-center h-screen">
-        <p className="text-zinc-500">Matter not found</p>
+        <p className="text-zinc-500">
+          Matter {matterId ? `(${matterId}) ` : ""}not found
+        </p>
       </section>
     );
   }

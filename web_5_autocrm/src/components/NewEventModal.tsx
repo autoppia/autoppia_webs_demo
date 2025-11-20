@@ -61,7 +61,7 @@ export function NewEventModal({
       date,
       label,
       time,
-      color,
+      color: mappedColor,
     };
     logEvent(EVENT_TYPES.NEW_CALENDAR_EVENT_ADDED, eventToTrigger);
     onSave(newEvent);
