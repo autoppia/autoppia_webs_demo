@@ -129,6 +129,71 @@ interface RawEvent {
   meetingLink?: string;
 }
 
+const EVENTS_STORAGE_PREFIX = "gocal_events_seed_";
+const LEGACY_EVENTS_STORAGE_KEY = "gocal_events";
+
+const clampV2Seed = (value?: number | null): number => {
+  if (
+    typeof value === "number" &&
+    Number.isFinite(value) &&
+    value >= 1 &&
+    value <= 300
+  ) {
+    return value;
+  }
+  return 1;
+};
+
+const getEventsStorageKey = (seed?: number | null) =>
+  `${EVENTS_STORAGE_PREFIX}${clampV2Seed(seed)}`;
+
+const normalizeStoredEvents = (rawEvents: RawEvent[]): Event[] => {
+  return rawEvents
+    .map((ev) => {
+      const start = ev.start ?? 9;
+      const end = ev.end ?? 10;
+      const startTime: [number, number] =
+        Array.isArray(ev.startTime) && ev.startTime.length === 2
+          ? [
+              Math.floor(ev.startTime[0]),
+              ev.startTime[1] === 30 ? 30 : 0,
+            ]
+          : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
+      const endTime: [number, number] =
+        Array.isArray(ev.endTime) && ev.endTime.length === 2
+          ? [
+              Math.floor(ev.endTime[0]),
+              ev.endTime[1] === 30 ? 30 : 0,
+            ]
+          : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
+      return {
+        id: ev.id ?? Math.random().toString(36).slice(2),
+        date: ev.date ?? new Date().toISOString().split("T")[0],
+        start,
+        end,
+        label: ev.label ?? "",
+        calendar: ev.calendar ?? "Work",
+        color: ev.color ?? calendarColors.Work,
+        startTime,
+        endTime,
+        description: ev.description ?? "",
+        location: ev.location ?? "",
+        allDay: ev.allDay ?? false,
+        recurrence: ev.recurrence ?? "none",
+        recurrenceEndDate: ev.recurrenceEndDate ?? null,
+        attendees: Array.isArray(ev.attendees) ? ev.attendees : [],
+        reminders: Array.isArray(ev.reminders) ? ev.reminders : [],
+        busy: ev.busy ?? true,
+        visibility: ev.visibility ?? "default",
+        meetingLink: ev.meetingLink ?? "",
+      } as Event;
+    })
+    .filter(
+      (ev) =>
+        Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
+    );
+};
+
 interface Calendar {
   name: string;
   enabled: boolean;
@@ -143,78 +208,87 @@ function usePersistedEvents(v2Seed?: number | null) {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    try {
-      const stored = window.localStorage.getItem("gocal_events");
-      if (stored) {
-        const evs = JSON.parse(stored) as RawEvent[];
-        const validEvents = evs
-          .map((ev) => {
-            const start = ev.start ?? 9;
-            const end = ev.end ?? 10;
-            const startTime: [number, number] =
-              Array.isArray(ev.startTime) && ev.startTime.length === 2
-                ? [Math.floor(ev.startTime[0]), ev.startTime[1] === 30 ? 30 : 0]
-                : [Math.floor(start), start % 1 === 0.5 ? 30 : 0];
-            const endTime: [number, number] =
-              Array.isArray(ev.endTime) && ev.endTime.length === 2
-                ? [Math.floor(ev.endTime[0]), ev.endTime[1] === 30 ? 30 : 0]
-                : [Math.floor(end), end % 1 === 0.5 ? 30 : 0];
-            return {
-              id: ev.id ?? Math.random().toString(36).slice(2),
-              date: ev.date ?? new Date().toISOString().split("T")[0],
-              start,
-              end,
-              label: ev.label ?? "",
-              calendar: ev.calendar ?? "Work",
-              color: ev.color ?? calendarColors.Work,
-              startTime,
-              endTime,
-              description: ev.description ?? "",
-              location: ev.location ?? "",
-              allDay: ev.allDay ?? false,
-              recurrence: ev.recurrence ?? "none",
-              recurrenceEndDate: ev.recurrenceEndDate ?? null,
-              attendees: Array.isArray(ev.attendees) ? ev.attendees : [],
-              reminders: Array.isArray(ev.reminders) ? ev.reminders : [],
-              busy: ev.busy ?? true,
-              visibility: ev.visibility ?? "default",
-              meetingLink: ev.meetingLink ?? "",
-            } as Event;
-          })
-          .filter(
-            (ev) =>
-              Number.isInteger(ev.startTime[0]) && Number.isInteger(ev.endTime[0])
-          );
-        setState(validEvents.length > 0 ? validEvents : EVENTS_DATASET as Event[]);
-      }
-      // If nothing in local storage, try enhanced initializer (DB or generation)
-      (async () => {
-        setIsGenerating(true);
+    let cancelled = false;
+    const storageKey = getEventsStorageKey(v2Seed);
+
+    const tryLoadFromStorage = (): boolean => {
+      const candidateKeys = [storageKey, LEGACY_EVENTS_STORAGE_KEY];
+      for (const key of candidateKeys) {
+        const stored = window.localStorage.getItem(key);
+        if (!stored) continue;
         try {
-          const initialized = await initializeEvents(v2Seed ?? undefined);
-          if (Array.isArray(initialized) && initialized.length > 0) {
-            setState(initialized as Event[]);
-            window.localStorage.setItem("gocal_events", JSON.stringify(initialized));
+          const validEvents = normalizeStoredEvents(JSON.parse(stored) as RawEvent[]);
+          if (validEvents.length === 0) {
+            window.localStorage.removeItem(key);
+            continue;
           }
-        } catch (err) {
-          console.error("[AutoCalendar] usePersistedEvents() init failure", err);
-          setGenError(err instanceof Error ? err.message : "Generation failed");
-        } finally {
+          if (!cancelled) {
+            setState(validEvents);
+            if (key === LEGACY_EVENTS_STORAGE_KEY && key !== storageKey) {
+              window.localStorage.setItem(storageKey, JSON.stringify(validEvents));
+              window.localStorage.removeItem(LEGACY_EVENTS_STORAGE_KEY);
+            }
+          }
+          return true;
+        } catch (error) {
+          console.error("[AutoCalendar] Failed to parse stored events:", error);
+          window.localStorage.removeItem(key);
+        }
+      }
+      return false;
+    };
+
+    const loadEvents = async () => {
+      setIsGenerating(true);
+      setGenError(null);
+
+      if (tryLoadFromStorage()) {
+        if (!cancelled) {
           setIsGenerating(false);
         }
-      })();
-    } catch (error) {
-      console.error("Error parsing localStorage events:", error);
-      window.localStorage.removeItem("gocal_events");
-      setState(EVENTS_DATASET as Event[]);
-    }
-  }, []);
+        return;
+      }
+
+      // No stored events for this seed – fall back to static dataset while fetching
+      if (!cancelled) {
+        setState(EVENTS_DATASET as Event[]);
+      }
+
+      try {
+        const initialized = await initializeEvents(v2Seed ?? undefined);
+        if (!cancelled && Array.isArray(initialized) && initialized.length > 0) {
+          setState(initialized as Event[]);
+          window.localStorage.setItem(storageKey, JSON.stringify(initialized));
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error("[AutoCalendar] usePersistedEvents() init failure", err);
+          setGenError(err instanceof Error ? err.message : "Generation failed");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsGenerating(false);
+        }
+      }
+    };
+
+    loadEvents();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [v2Seed]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("gocal_events", JSON.stringify(state));
+    if (typeof window === "undefined") return;
+    try {
+      const storageKey = getEventsStorageKey(v2Seed);
+      window.localStorage.setItem(storageKey, JSON.stringify(state));
+      window.localStorage.removeItem(LEGACY_EVENTS_STORAGE_KEY);
+    } catch (error) {
+      console.error("[AutoCalendar] Failed to persist events:", error);
     }
-  }, [state]);
+  }, [state, v2Seed]);
 
   return [state, setState, isGenerating, genError] as const;
 }

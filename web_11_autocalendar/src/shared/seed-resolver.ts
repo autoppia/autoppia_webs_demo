@@ -15,7 +15,9 @@ const boolFromEnv = (value?: string | undefined | null): boolean => {
 /**
  * Parse enable_dynamic parameter from URL (e.g., "v1", "v2", "v1,v2", "v1,v2,v3")
  */
-function parseEnableDynamicFromUrl(): { v1: boolean; v2: boolean; v3: boolean } | null {
+function parseEnableDynamicFromUrl():
+  | { v1: boolean; v2: boolean; v3: boolean }
+  | null {
   if (typeof window === "undefined") return null;
   
   const params = new URLSearchParams(window.location.search);
