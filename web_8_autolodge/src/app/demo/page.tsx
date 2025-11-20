@@ -6,7 +6,23 @@ import { getSeedLayout as getPageSeedLayout } from "@/library/utils";
 
 function DemoPageContent() {
   const { seed } = useSeed();
+<<<<<<< HEAD
   const layout = getPageSeedLayout(seed);
+=======
+  const layout = getSeedLayout(seed ?? 1);
+  const searchBar = layout?.searchBar ?? {
+    position: "top",
+    wrapper: "div",
+  };
+  const propertyDetail = layout?.propertyDetail ?? {
+    layout: "vertical",
+    wrapper: "div",
+  };
+  const eventElements = layout?.eventElements ?? {
+    order: [],
+    wrapper: "div",
+  };
+>>>>>>> 31e453b2a7fff6f13b2d82852e125958cc9babd2
 
   const seeds = Array.from({ length: 10 }, (_, i) => i + 1);
 
@@ -54,8 +70,8 @@ function DemoPageContent() {
                 <CardTitle>Search Bar</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600">Position: {layout.searchBar.position}</p>
-                <p className="text-sm text-gray-600">Wrapper: {layout.searchBar.wrapper}</p>
+                <p className="text-sm text-gray-600">Position: {searchBar.position}</p>
+                <p className="text-sm text-gray-600">Wrapper: {searchBar.wrapper}</p>
               </CardContent>
             </Card>
 
@@ -64,8 +80,8 @@ function DemoPageContent() {
                 <CardTitle>Property Detail</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600">Layout: {layout.propertyDetail.layout}</p>
-                <p className="text-sm text-gray-600">Wrapper: {layout.propertyDetail.wrapper}</p>
+                <p className="text-sm text-gray-600">Layout: {propertyDetail.layout}</p>
+                <p className="text-sm text-gray-600">Wrapper: {propertyDetail.wrapper}</p>
               </CardContent>
             </Card>
 
@@ -74,8 +90,10 @@ function DemoPageContent() {
                 <CardTitle>Event Elements</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600">Order: {layout.eventElements.order.join(", ")}</p>
-                <p className="text-sm text-gray-600">Wrapper: {layout.eventElements.wrapper}</p>
+                <p className="text-sm text-gray-600">
+                  Order: {eventElements.order.length ? eventElements.order.join(", ") : "N/A"}
+                </p>
+                <p className="text-sm text-gray-600">Wrapper: {eventElements.wrapper}</p>
               </CardContent>
             </Card>
 
