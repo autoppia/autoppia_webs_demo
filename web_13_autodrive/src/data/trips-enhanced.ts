@@ -125,26 +125,110 @@ const getRuntimeV2Seed = (): number | null => {
   return null;
 };
 
-const resolveSeed = (
-  dbEnabled: boolean,
-  v2SeedValue?: number | null
-): number => {
-  if (!dbEnabled) {
-    return 1;
-  }
+const resolveSeed = (v2SeedValue?: number | null): number => {
   if (typeof v2SeedValue === "number" && Number.isFinite(v2SeedValue)) {
     return clampSeed(v2SeedValue);
   }
   if (typeof window !== "undefined") {
-    // Wait a bit for SeedContext to sync v2Seed to window
     const fromClient = getRuntimeV2Seed();
     if (typeof fromClient === "number") {
       return fromClient;
     }
   }
-  // Default to 1 if no v2-seed provided
   return 1;
 };
+
+const STATUSES: Trip["status"][] = ["upcoming", "completed", "cancelled"];
+
+const DRIVER_POOL: DriverType[] = [
+  {
+    name: "Carlos Mendez",
+    car: "Toyota Camry 2022",
+    plate: "ABC-123",
+    phone: "+1-555-0101",
+    photo: "https://randomuser.me/api/portraits/men/44.jpg",
+  },
+  {
+    name: "Sarah Johnson",
+    car: "Honda Accord 2021",
+    plate: "XYZ-789",
+    phone: "+1-555-0102",
+    photo: "https://randomuser.me/api/portraits/women/65.jpg",
+  },
+  {
+    name: "Ahmed Hassan",
+    car: "BMW 5 Series 2023",
+    plate: "DEF-456",
+    phone: "+1-555-0103",
+    photo: "https://randomuser.me/api/portraits/men/12.jpg",
+  },
+  {
+    name: "Maria Garcia",
+    car: "Mercedes E-Class 2022",
+    plate: "GHI-789",
+    phone: "+1-555-0104",
+    photo: "https://randomuser.me/api/portraits/women/32.jpg",
+  },
+];
+
+const ADDRESS_POOL: string[] = [
+  "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+  "100 Van Ness Ave, San Francisco, CA 94102, USA",
+  "Pier 39, San Francisco, CA 94133, USA",
+  "SFO Airport - San Francisco International Airport, CA 94128, USA",
+  "Union Square - San Francisco, CA 94108, USA",
+  "Golden Gate Park - San Francisco, CA 94122, USA",
+  "Chase Center - 1 Warriors Way, San Francisco, CA 94158, USA",
+  "Oracle Park - 24 Willie Mays Plaza, San Francisco, CA 94107, USA",
+  "Coit Tower - 1 Telegraph Hill Blvd, San Francisco, CA 94133, USA",
+  "Ferry Building - 1 Ferry Building, San Francisco, CA 94105, USA",
+  "Palace of Fine Arts - 3601 Lyon St, San Francisco, CA 94123, USA",
+  "Salesforce Tower - 415 Mission St, San Francisco, CA 94105, USA",
+  "Mission Dolores Park - Dolores St, San Francisco, CA 94114, USA",
+  "Twin Peaks - 501 Twin Peaks Blvd, San Francisco, CA 94114, USA",
+  "Exploratorium - Pier 15, San Francisco, CA 94111, USA",
+];
+
+const PAYMENT_METHODS = ["card", "cash", "business", "wallet"];
+
+const seededRandom = (seed: number) => {
+  let value = seed;
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296;
+    return value / 4294967296;
+  };
+};
+
+const pick = <T,>(rng: () => number, collection: T[]): T =>
+  collection[Math.floor(rng() * collection.length)];
+
+function generateDeterministicTrips(seed: number, limit: number): Trip[] {
+  const rng = seededRandom(seed || 1);
+  return Array.from({ length: limit }).map((_, index) => {
+    const pickup = pick(rng, ADDRESS_POOL);
+    let dropoff = pick(rng, ADDRESS_POOL);
+    if (dropoff === pickup) {
+      dropoff = pick(rng, ADDRESS_POOL);
+    }
+    const driver = pick(rng, DRIVER_POOL);
+    const ride = pick(rng, rides);
+    const status = pick(rng, STATUSES);
+    const date = new Date(Date.now() + rng() * 1000 * 60 * 60 * 24 * 30);
+    const isoDate = date.toISOString();
+    return {
+      id: `seed-${seed}-${index}`,
+      status,
+      ride,
+      pickup,
+      dropoff,
+      date: isoDate.split("T")[0],
+      time: isoDate.split("T")[1]?.slice(0, 5) ?? "10:00",
+      price: Number((ride.price * (0.8 + rng() * 0.4)).toFixed(2)),
+      payment: pick(rng, PAYMENT_METHODS),
+      driver,
+    };
+  });
+}
 
 /**
  * Initialize trips data for Web13 with deterministic pools.
@@ -156,7 +240,11 @@ export async function initializeTrips(
   seedOverride?: number | null
 ): Promise<Trip[]> {
   const dbEnabled = isDbLoadModeEnabled();
-  const effectiveSeed = resolveSeed(dbEnabled, seedOverride);
+  const effectiveSeed = resolveSeed(seedOverride);
+
+  if (!dbEnabled) {
+    return generateDeterministicTrips(effectiveSeed, limit);
+  }
 
   try {
     const trips = await fetchSeededSelection<Trip>({
@@ -179,6 +267,6 @@ export async function initializeTrips(
     );
   } catch (error) {
     console.error("[autodrive] Failed to load trips from dataset", error);
-    throw error;
+    return generateDeterministicTrips(effectiveSeed, limit);
   }
 }
