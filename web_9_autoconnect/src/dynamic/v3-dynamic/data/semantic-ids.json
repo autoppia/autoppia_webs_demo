@@ -1,4 +1,64 @@
 {
+  "logo_link": [
+    "linkedin-logo",
+    "brand-anchor",
+    "nav-brand-link",
+    "autoconnect-logo",
+    "home-logo-link",
+    "network-logo",
+    "brandmark-link",
+    "identity-link",
+    "site-logo-link",
+    "primary-logo-link"
+  ],
+  "nav_home_link": [
+    "home-nav-link",
+    "feed-link",
+    "dashboard-link",
+    "home-menu-item",
+    "feed-navigation",
+    "home-route-link",
+    "timeline-link",
+    "home-pill",
+    "feed-button",
+    "home-entry"
+  ],
+  "nav_jobs_link": [
+    "jobs-nav-link",
+    "jobs-menu-item",
+    "jobs-route-link",
+    "jobs-navigation",
+    "jobs-pill",
+    "opportunities-link",
+    "jobs-button",
+    "hiring-link",
+    "career-link",
+    "jobs-entry"
+  ],
+  "nav_recommendations_link": [
+    "recs-nav-link",
+    "recommendations-link",
+    "discover-link",
+    "suggestions-link",
+    "network-recs",
+    "inspiration-link",
+    "ideas-link",
+    "recs-pill",
+    "discover-pill",
+    "recommendations-entry"
+  ],
+  "nav_profile_link": [
+    "profile-nav-link",
+    "profile-menu-item",
+    "profile-route-link",
+    "me-link",
+    "profile-pill",
+    "profile-button",
+    "me-navigation",
+    "account-link",
+    "identity-link-nav",
+    "profile-entry"
+  ],
   "search-input": [
     "search-input",
     "query-box",
@@ -10,6 +70,42 @@
     "user-finder",
     "type-to-search",
     "search-box"
+  ],
+  "search_field": [
+    "user-search-field",
+    "talent-search",
+    "network-search",
+    "peer-search",
+    "profile-search",
+    "connection-search",
+    "member-search",
+    "people-search",
+    "lookup-field",
+    "search-members"
+  ],
+  "search_results_panel": [
+    "search-results-panel",
+    "lookup-results",
+    "people-results",
+    "search-suggestions",
+    "lookup-dropdown",
+    "search-overlay-panel",
+    "results-dropdown",
+    "search-result-box",
+    "people-dropdown",
+    "profile-results-panel"
+  ],
+  "search_result_item": [
+    "search-result-item",
+    "lookup-result",
+    "people-result",
+    "search-row",
+    "profile-result",
+    "user-result-entry",
+    "suggestion-item",
+    "result-list-item",
+    "user-suggestion",
+    "profile-suggestion"
   ],
   "search-button": [
     "search-btn",
@@ -190,6 +286,54 @@
     "tab-strip",
     "tabs-container",
     "tab-group"
+  ],
+  "post_card": [
+    "post-card",
+    "story-card",
+    "feed-item",
+    "update-card",
+    "timeline-panel",
+    "post-panel",
+    "feed-panel",
+    "network-card",
+    "post-container",
+    "feed-card"
+  ],
+  "post_like_button": [
+    "like-button",
+    "appreciate-btn",
+    "clap-btn",
+    "support-btn",
+    "insightful-btn",
+    "cheer-btn",
+    "endorse-btn",
+    "applaud-btn",
+    "react-btn",
+    "praise-btn"
+  ],
+  "comment_input": [
+    "comment-input",
+    "reply-input",
+    "discussion-input",
+    "comment-field",
+    "comment-textbox",
+    "comment-control",
+    "comment-editor",
+    "reply-field",
+    "comment-entry",
+    "response-input"
+  ],
+  "comment_button": [
+    "comment-button",
+    "reply-button",
+    "respond-button",
+    "send-comment",
+    "post-comment-btn",
+    "share-comment-btn",
+    "add-comment-btn",
+    "comment-action",
+    "reply-action",
+    "comment-submit"
   ]
 }
 

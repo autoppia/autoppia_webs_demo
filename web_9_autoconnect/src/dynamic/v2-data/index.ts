@@ -6,7 +6,6 @@
 
 export {
   dynamicDataProvider,
-  loadEntity,
   isDynamicModeEnabled,
   getLayoutConfig,
 } from "./data-provider";
