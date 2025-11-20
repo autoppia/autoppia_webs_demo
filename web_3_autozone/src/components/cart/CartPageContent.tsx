@@ -75,7 +75,7 @@ export function CartPageContent() {
   };
 
   return (
-    <div className="bg-[#edeff0] min-h-screen py-10 mt-16">
+    <div className="bg-[#edeff0] min-h-screen py-10 mt-16 text-[#0F1111]">
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-6">
         {/* Cart Section */}
         <div className="flex-1">
@@ -223,7 +223,7 @@ export function CartPageContent() {
         </div>
         {/* Order Summary Side Box */}
         <div className={`w-full md:w-80 ${getTopMarginClass()}`}>
-          <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200 flex flex-col gap-4">
+          <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200 flex flex-col gap-4 text-[#0F1111]">
             <div className="text-md md:text-lg text-gray-700">
               {getText("subtotal")} (<span>{totalItems}</span> {getText("items")}):
               <span className="font-bold ml-1">${totalAmount.toFixed(2)}</span>
@@ -244,10 +244,10 @@ export function CartPageContent() {
                 <SeedLink href="/checkout">
                   <Button
                     id={getId("checkout_button")}
-                    className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
+                    className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-[#0F1111] rounded-md ${getTopMarginClass()}`}
                     onClick={handleProceedToCheckout}
                   >
-                    {getText("proceed_to_checkout")}
+                    {getText("proceed_to_checkout", "Checkout")}
                   </Button>
                 </SeedLink>
               </>
@@ -255,11 +255,11 @@ export function CartPageContent() {
             {items.length === 0 && (
               <Button
                 id={getId("checkout_button")}
-                className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
+                className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-[#0F1111] rounded-md ${getTopMarginClass()}`}
                 disabled
                 onClick={handleProceedToCheckout}
               >
-                {getText("proceed_to_checkout")}
+                {getText("proceed_to_checkout", "Checkout")}
               </Button>
             )}
           </div>
