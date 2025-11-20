@@ -7,6 +7,7 @@
 export { initializeProducts } from './products-loader';
 export { 
   dynamicDataProvider,
+  getProductById,
   getProductsByCategory,
   getStaticCategories,
   getStaticHomeEssentials,
