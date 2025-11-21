@@ -22,7 +22,9 @@ export interface SeedLayoutConfig {
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
   if (!seed || seed < 1) {
-    return getDefaultLayout();
+    // When no seed is provided, return layout index 1 (Classic Amazon-style layout)
+    // This is the layout that is "at seed=1" meaning layout index 1
+    return getLayoutByIndex(1);
   }
   const layoutIndex = ((seed % 30) + 1) % 10 || 10;
   return getLayoutByIndex(layoutIndex);
@@ -336,18 +338,9 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
 }
 
 function getDefaultLayout(): SeedLayoutConfig {
-  return {
-    headerOrder: ['logo', 'search', 'nav'],
-    searchPosition: 'center',
-    navbarStyle: 'top',
-    contentGrid: 'default',
-    cardLayout: 'grid',
-    buttonStyle: 'default',
-    footerStyle: 'default',
-    spacing: 'normal',
-    borderRadius: 'medium',
-    colorScheme: 'default',
-  };
+  // Return layout 1 (Classic Amazon-style layout) as the default
+  // This is the layout that is "at seed=1" meaning layout index 1
+  return getLayoutByIndex(1);
 }
 
 // Helper function to check if dynamic HTML is enabled
@@ -358,7 +351,9 @@ export function isDynamicEnabled(): boolean {
 // Helper function to get effective layout config
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
   if (!isDynamicEnabled()) {
-    return getDefaultLayout();
+    // When dynamic is disabled, return layout index 1 (Classic Amazon-style layout)
+    // This is the layout that is "at seed=1" meaning layout index 1
+    return getLayoutByIndex(1);
   }
   return getSeedLayout(seed);
 }
