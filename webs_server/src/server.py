@@ -660,14 +660,14 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
 
         # Get metadata for this project/entity
         metadata = get_project_entity_metadata(request.project_key, request.entity_type)
-
+        additional_requirements = request.additional_requirements or "\n\nContinue the data generation count from/after the examples provided."
         # Build the full generation request
         gen_request = DataGenerationRequest(
             interface_definition=interface_definition,
             examples=examples,
             count=request.count,
             categories=metadata.get("categories"),
-            additional_requirements=request.additional_requirements or metadata.get("requirements"),
+            additional_requirements=str(additional_requirements) + '\n' + str(metadata.get("requirements")),
             project_key=request.project_key,
             entity_type=request.entity_type,
             seed_value=request.seed_value,
