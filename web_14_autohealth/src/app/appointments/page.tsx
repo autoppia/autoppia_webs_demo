@@ -13,7 +13,7 @@ import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function AppointmentsPage() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getId, getClass, getText } = useSeedLayout();
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [appointmentList, setAppointmentList] = useState<Appointment[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -101,10 +101,11 @@ export default function AppointmentsPage() {
                   if (c.key === 'action') return (
                     <TableCell key={c.key} className="text-right">
                       <Button 
+                        id={getId("book-appointment-button", ri)}
+                        className={`bg-blue-600 hover:bg-blue-700 ${getClass("button-primary", "")}`}
                         onClick={() => handleBookAppointment(a)}
-                        className="bg-blue-600 hover:bg-blue-700"
                       >
-                        Book Appointment
+                        {getText("book_appointment", "Book Appointment")}
                       </Button>
                     </TableCell>
                   );

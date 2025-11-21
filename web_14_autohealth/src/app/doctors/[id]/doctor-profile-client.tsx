@@ -26,7 +26,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getId, getClass, getText } = useSeedLayout();
   const [activeTab, setActiveTab] = useState("overview");
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isReviewsModalOpen, setIsReviewsModalOpen] = useState(false);
@@ -175,9 +175,10 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
           {orderedTabs.map((tab, i) => (
             <DynamicElement key={tab.id} elementType="profile-tab" as="span" index={i}>
             <Button
+              id={getId("profile-tab", i)}
+              className={`rounded-b-none ${getClass("button-secondary", "")}`}
               variant={activeTab === tab.id ? "default" : "ghost"}
               onClick={() => setActiveTab(tab.id)}
-              className="rounded-b-none"
             >
               {tab.label}
             </Button>
@@ -404,13 +405,33 @@ export function DoctorProfileClient({ doctor }: { doctor: Doctor }) {
         {(() => {
           const actions = [
             { key: 'book', node: (
-              <Button onClick={handleBookAppointment} className="flex-1 bg-blue-600 hover:bg-blue-700">Book Appointment</Button>
+              <Button 
+                id={getId("book-appointment-button", 0)}
+                className={`flex-1 bg-blue-600 hover:bg-blue-700 ${getClass("button-primary", "")}`}
+                onClick={handleBookAppointment}
+              >
+                {getText("book_appointment", "Book Appointment")}
+              </Button>
             ) },
             { key: 'contact', node: (
-              <Button variant="outline" onClick={handleContactDoctor} className="flex-1">Contact Doctor</Button>
+              <Button 
+                id={getId("contact-doctor-button", 0)}
+                className={`flex-1 ${getClass("button-secondary", "")}`}
+                variant="outline" 
+                onClick={handleContactDoctor}
+              >
+                {getText("contact_doctor", "Contact Doctor")}
+              </Button>
             ) },
             { key: 'reviews', node: (
-              <Button variant="outline" onClick={handleViewReviews} className="flex-1">View All Reviews</Button>
+              <Button 
+                id={getId("view-reviews-button", 0)}
+                className={`flex-1 ${getClass("button-secondary", "")}`}
+                variant="outline" 
+                onClick={handleViewReviews}
+              >
+                {getText("view_reviews", "View All Reviews")}
+              </Button>
             ) },
           ];
           const orderedActions = reorderElements(actions);

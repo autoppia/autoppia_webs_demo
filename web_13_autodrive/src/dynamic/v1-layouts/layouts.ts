@@ -17,8 +17,19 @@ export interface LayoutConfig {
  * Check if dynamic HTML is enabled
  * @returns boolean indicating if dynamic HTML is enabled
  */
+const truthy = (value?: string | null) =>
+  typeof value === "string" &&
+  ["true", "1", "yes", "on"].includes(value.toLowerCase());
+
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE === 'true';
+  return (
+    truthy(process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE) ||
+    truthy(process.env.DYNAMIC_HTML_STRUCTURE) ||
+    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) ||
+    truthy(process.env.ENABLE_DYNAMIC_V1) ||
+    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) ||
+    truthy(process.env.ENABLE_DYNAMIC_V3)
+  );
 }
 
 export function getSeedLayout(seed?: number): LayoutConfig {

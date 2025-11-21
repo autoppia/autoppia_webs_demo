@@ -7,7 +7,7 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function Navbar() {
-  const { reorderElements, layoutConfig } = useSeedLayout();
+  const { reorderElements, layoutConfig, getId, getClass, getText } = useSeedLayout();
   const links = [
     { href: "/appointments", title: "Appointments", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
     { href: "/doctors", title: "Doctors", event: EVENT_TYPES.BROWSE_DOCTORS_CLICKED },
@@ -21,8 +21,9 @@ export default function Navbar() {
   const Logo = (
     <DynamicElement elementType="nav-logo" as="span" index={0}>
       <SeedLink 
+        id={getId("nav-logo", 0)}
         href="/" 
-        className="font-semibold text-emerald-700"
+        className={`font-semibold text-emerald-700 ${getClass("nav-link", "")}`}
         onClick={() => logEvent(EVENT_TYPES.BROWSE_HOME_CLICKED, { source: "navbar_logo" })}
       >
         AutoHealth
@@ -35,8 +36,9 @@ export default function Navbar() {
       {ordered.map((n, i) => (
         <DynamicElement key={n.href} elementType="nav-link" as="span" index={i}>
           <SeedLink
+            id={getId("nav-link", i)}
             href={n.href}
-            className="text-sm text-muted-foreground hover:text-foreground"
+            className={`text-sm text-muted-foreground hover:text-foreground ${getClass("nav-link", "")}`}
             onClick={() => logEvent(n.event, { source: "navbar_link" })}
           >
             {n.title}
@@ -50,10 +52,12 @@ export default function Navbar() {
     <DynamicElement elementType="nav-cta" as="span" index={0}>
       <SeedLink href="/appointments">
         <Button 
+          id={getId("nav-cta", 0)}
+          className={getClass("button-primary", "")}
           size="sm"
           onClick={() => logEvent(EVENT_TYPES.BOOK_NOW_CLICKED, { source: "navbar_cta_button" })}
         >
-          Book now
+          {getText("book_now", "Book now")}
         </Button>
       </SeedLink>
     </DynamicElement>

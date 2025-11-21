@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { getSeedLayout } from "@/dynamic/v1-layouts";
+import { useMemo } from "react";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { ReactNode } from "react";
 
 interface SiteElementsProps {
@@ -16,55 +16,51 @@ interface SiteElementsProps {
 }
 
 export default function SiteElements({ children }: SiteElementsProps) {
-  const searchParams = useSearchParams();
-  const seedParam = searchParams.get('seed');
-  const seed = seedParam ? parseInt(seedParam, 10) : undefined;
-  
-  const layout = getSeedLayout(seed);
+  const { layout } = useSeedLayout();
 
-  // Render elements in the order specified by the layout
-  const renderElements = () => {
-    const elements: ReactNode[] = [];
-    
-    layout.structure.main.sections.forEach((section) => {
-      switch (section) {
-        case 'hero':
-          elements.push(
-            <div key="hero" className="hero-section">
-              {children.hero}
-            </div>
-          );
-          break;
-        case 'booking':
-          elements.push(
-            <div key="booking" className="booking-section">
-              {children.booking}
-            </div>
-          );
-          break;
-        case 'map':
-          elements.push(
-            <div key="map" className="map-section">
-              {children.map}
-            </div>
-          );
-          break;
-        case 'rides':
-          elements.push(
-            <div key="rides" className="rides-section">
-              {children.rides}
-            </div>
-          );
-          break;
-      }
-    });
-    
-    return elements;
-  };
+  const sections = useMemo(
+    () => layout?.structure?.main?.sections ?? ["hero", "booking", "map", "rides"],
+    [layout?.structure?.main?.sections]
+  );
 
   return (
     <>
-      {renderElements()}
+      {sections.map((section) => {
+        switch (section) {
+          case "hero":
+            return (
+              <div key="hero" className="hero-section">
+                {children.hero}
+              </div>
+            );
+          case "booking":
+            return (
+              <div key="booking" className="booking-section">
+                {children.booking}
+              </div>
+            );
+          case "map":
+            return (
+              <div key="map" className="map-section">
+                {children.map}
+              </div>
+            );
+          case "rides":
+            return (
+              <div key="rides" className="rides-section">
+                {children.rides}
+              </div>
+            );
+          case "footer":
+            return children.footer ? (
+              <div key="footer" className="footer-section">
+                {children.footer}
+              </div>
+            ) : null;
+          default:
+            return null;
+        }
+      })}
     </>
   );
 }

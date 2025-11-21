@@ -16,7 +16,7 @@ import { initializeDoctorReviews } from "@/data/reviews-enhanced";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function Home() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getId, getClass, getText } = useSeedLayout();
   const [isLoading, setIsLoading] = useState(true);
   const nav = [
     { href: "/appointments", title: "Appointments", desc: "Find a slot and book online", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
@@ -88,7 +88,7 @@ export default function Home() {
           <DynamicElement key={part.key} elementType={`hero-${part.key}`} as="div" index={i}>
             {part.key === 'title' && (
               <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-                Book your doctor online
+                {getText("hero_title", "Book your doctor online")}
               </h1>
             )}
             {part.key === 'desc' && (
@@ -100,10 +100,12 @@ export default function Home() {
               <div className="mt-6 flex justify-center">
                 <SeedLink href="/appointments">
                   <Button 
+                    id={getId("hero-cta", 0)}
+                    className={getClass("button-primary", "")}
                     size="lg"
                     onClick={() => logEvent(EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED, { source: "homepage_cta_button" })}
                   >
-                    Browse Appointments
+                    {getText("browse_appointments", "Browse Appointments")}
                   </Button>
                 </SeedLink>
               </div>

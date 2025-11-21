@@ -15,7 +15,7 @@ import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function MedicalRecordsPage() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getId, getClass, getText } = useSeedLayout();
   const [files, setFiles] = useState<File[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedRecord, setSelectedRecord] = useState<MedicalRecord | null>(null);
@@ -116,6 +116,8 @@ export default function MedicalRecordsPage() {
         {orderedCategories.map((category, i) => (
           <DynamicElement key={category} elementType="records-filter" as="span" index={i}>
           <Button
+            id={getId("category-filter-button", i)}
+            className={getClass("button-secondary", "")}
             variant={selectedCategory === category ? "default" : "outline"}
             size="sm"
             onClick={() => {
@@ -123,7 +125,7 @@ export default function MedicalRecordsPage() {
               logEvent(EVENT_TYPES.FILTER_BY_SPECIALTY, { category });
             }}
           >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
+            {getText(`filter_${category}`, category.charAt(0).toUpperCase() + category.slice(1))}
           </Button>
           </DynamicElement>
         ))}
@@ -133,8 +135,14 @@ export default function MedicalRecordsPage() {
       <div className="mt-8 max-w-xl space-y-2">
         <Label htmlFor="records">Upload additional files (PDF or images)</Label>
         <div className="flex gap-2">
-          <Input id="records" type="file" accept="application/pdf,image/*" multiple ref={fileRef} />
-          <Button onClick={() => addFiles(fileRef.current?.files ?? null)}>Upload Record</Button>
+          <Input id={getId("records-upload-input", 0)} type="file" accept="application/pdf,image/*" multiple ref={fileRef} />
+          <Button 
+            id={getId("upload-record-button", 0)}
+            className={getClass("button-primary", "")}
+            onClick={() => addFiles(fileRef.current?.files ?? null)}
+          >
+            {getText("upload_record", "Upload Record")}
+          </Button>
         </div>
         <p className="text-sm text-muted-foreground">Files are not stored. They only appear in the list below for this session.</p>
       </div>
@@ -163,11 +171,12 @@ export default function MedicalRecordsPage() {
                 {record.description}
               </p>
               <Button
+                id={getId("view-record-button", i)}
+                className={`w-full ${getClass("button-secondary", "")}`}
                 size="sm"
                 onClick={() => handleViewRecord(record)}
-                className="w-full"
               >
-                View Details
+                {getText("view_record", "View Details")}
               </Button>
             </CardContent>
             </Card>
@@ -187,6 +196,8 @@ export default function MedicalRecordsPage() {
                   <div className="truncate text-sm text-muted-foreground">{f.type || "unknown"} • {(f.size / 1024).toFixed(1)} KB</div>
                 </div>
                 <Button
+                  id={getId("view-record-button", idx)}
+                  className={getClass("button-secondary", "")}
                   variant="outline"
                   onClick={() => {
                     logEvent(EVENT_TYPES.VIEW_HEALTH_METRICS, { 
@@ -197,7 +208,7 @@ export default function MedicalRecordsPage() {
                     });
                   }}
                 >
-                  View Record
+                  {getText("view_record", "View Record")}
                 </Button>
               </li>
             ))}
@@ -214,8 +225,13 @@ export default function MedicalRecordsPage() {
                 <span className="text-2xl">{getTypeIcon(selectedRecord.type)}</span>
                 <h2 className="text-xl font-semibold">{selectedRecord.title}</h2>
               </div>
-              <Button variant="outline" onClick={() => setSelectedRecord(null)}>
-                Close
+              <Button 
+                id={getId("close-modal-button", 0)}
+                className={getClass("button-secondary", "")}
+                variant="outline" 
+                onClick={() => setSelectedRecord(null)}
+              >
+                {getText("close", "Close")}
               </Button>
             </div>
             

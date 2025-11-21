@@ -11,12 +11,19 @@ import {
   getShuffledItems,
 } from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function HeaderNav() {
   const pathname = usePathname();
   const { seed, resolvedSeeds } = useSeed();
   const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
+  const { getId, getClass } = useV3Attributes();
+
+  const applyVariant = (type: string, base: string) => {
+    const variant = getClass(type, "");
+    return variant ? `${variant} ${base}` : base;
+  };
 
   const linkClass = (href: string) =>
     `px-3 py-2 text-sm font-medium rounded ${
@@ -30,25 +37,29 @@ export default function HeaderNav() {
       href: "/",
       label: "Home",
       eventType: EVENT_TYPES.HOME_NAVBAR,
-      eventData: { label: "Home" }
+      eventData: { label: "Home" },
+      idKey: "nav_home_link",
     },
     {
       href: "/jobs",
       label: "Jobs", 
       eventType: EVENT_TYPES.JOBS_NAVBAR,
-      eventData: { label: "Jobs" }
+      eventData: { label: "Jobs" },
+      idKey: "nav_jobs_link",
     },
     {
       href: "/recommendations",
       label: "Recommendations",
       eventType: EVENT_TYPES.VIEW_ALL_RECOMMENDATIONS,
-      eventData: { label: "Recommendations", source: "navbar" }
+      eventData: { label: "Recommendations", source: "navbar" },
+      idKey: "nav_recommendations_link",
     },
     {
       href: `/profile/${(dynamicDataProvider.getUsers()[0]?.username) || "alexsmith"}`,
       label: "Profile",
       eventType: EVENT_TYPES.PROFILE_NAVBAR,
-      eventData: { label: "Profile", username: dynamicDataProvider.getUsers()[0]?.username || "alexsmith" }
+      eventData: { label: "Profile", username: dynamicDataProvider.getUsers()[0]?.username || "alexsmith" },
+      idKey: "nav_profile_link",
     }
   ];
 
@@ -97,8 +108,12 @@ export default function HeaderNav() {
     <header className={getHeaderClasses()}>
       <div className={getHeaderContentClasses()}>
         <div className="text-white bg-blue-600 px-2 py-2">
-          <SeedLink href="/" className="flex items-center gap-2">
-            <span className={`font-bold text-xl tracking-tight text-white`}>
+          <SeedLink
+            href="/"
+            id={getId("logo_link")}
+            className={applyVariant("nav-link", "flex items-center gap-2")}
+          >
+            <span className="font-bold text-xl tracking-tight text-white">
               AutoConnect
             </span>
           </SeedLink>
@@ -112,7 +127,8 @@ export default function HeaderNav() {
             <SeedLink
               key={item.href}
               href={item.href}
-              className={linkClass(item.href)}
+              id={getId(item.idKey)}
+              className={applyVariant("nav-link", linkClass(item.href))}
               onClick={() => logEvent(item.eventType, item.eventData)}
             >
               {item.label}

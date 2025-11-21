@@ -11,8 +11,17 @@ import { generateElementId } from "../utils/id-generator";
 import { getTextForElement } from "../utils/text-selector";
 import { getClassForElement } from "../utils/class-selector";
 
+const truthy = (value?: string | null) =>
+  typeof value === "string" &&
+  ["true", "1", "yes", "on"].includes(value.toLowerCase());
+
 const isDynamicEnabled = (): boolean => {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 === "true";
+  return (
+    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) ||
+    truthy(process.env.ENABLE_DYNAMIC_V3) ||
+    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) ||
+    truthy(process.env.ENABLE_DYNAMIC_V1)
+  );
 };
 
 export function useV3Attributes() {

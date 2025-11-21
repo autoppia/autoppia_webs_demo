@@ -26,7 +26,7 @@ function Stars({ value }: { value: number }) {
 }
 
 export default function DoctorsPage() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getId, getClass, getText } = useSeedLayout();
   const [doctorList, setDoctorList] = useState<Doctor[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
@@ -100,6 +100,8 @@ export default function DoctorsPage() {
             <CardFooter className="mt-auto flex gap-2">
               <SeedLink href={`/doctors/${d.id}`}>
                 <Button 
+                  id={getId("view-profile-button", i)}
+                  className={getClass("button-secondary", "")}
                   variant="outline"
                   onClick={() => logEvent(EVENT_TYPES.VIEW_DOCTOR_PROFILE, {
                     doctorId: d.id,
@@ -108,14 +110,15 @@ export default function DoctorsPage() {
                     rating: d.rating
                   })}
                 >
-                  View Profile
+                  {getText("view_profile", "View Profile")}
                 </Button>
               </SeedLink>
               <Button 
+                id={getId("book-now-button", i)}
+                className={`bg-green-600 hover:bg-green-700 ${getClass("button-primary", "")}`}
                 onClick={() => handleBookNow(d)}
-                className="bg-green-600 hover:bg-green-700"
               >
-                Book Now
+                {getText("book_now", "Book Now")}
               </Button>
             </CardFooter>
             </Card>
