@@ -1,12 +1,45 @@
 import { UserOutlined, DownOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import CreateTeamModal from "./CreateTeamModal";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
+
+type NavItem = {
+  id: string;
+  label: string;
+  onClick?: () => void;
+};
 
 export default function Navbar({ className }: { className?: string }) {
   const [profilePopoverOpen, setProfilePopoverOpen] = useState(false);
   const [createTeamModalOpen, setCreateTeamModalOpen] = useState(false);
+  const { reorderElements, getElementAttributes, getElementXPath } =
+    useSeedLayout();
+
+  const baseNavItems: NavItem[] = useMemo(
+    () => [
+      { id: "upcoming", label: "Upcoming" },
+      { id: "drafts", label: "Drafts" },
+      { id: "more", label: "More" },
+      {
+        id: "add-team",
+        label: "Add Team",
+        onClick: () => {
+          logEvent(EVENT_TYPES.ADD_TEAM_CLICKED, {
+            timestamp: Date.now(),
+          });
+          setCreateTeamModalOpen(true);
+        },
+      },
+    ],
+    []
+  );
+
+  const shuffledNavItems = reorderElements(baseNavItems);
+  const splitIndex = Math.ceil(shuffledNavItems.length / 2);
+  const leftNavItems = shuffledNavItems.slice(0, splitIndex);
+  const rightNavItems = shuffledNavItems.slice(splitIndex);
 
   const profilePanel = (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 min-w-[200px] py-2 px-0 mt-2">
@@ -41,35 +74,49 @@ export default function Navbar({ className }: { className?: string }) {
     <nav className={className || "fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-10"}>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center">
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <button
-                className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
-              >
-                Upcoming
-              </button>
-              <button
-                className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
-              >
-                Drafts
-              </button>
-              <button
-                className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
-              >
-                More
-              </button>
-              <button
-                className="border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b]"
-                onClick={() => {
-                  logEvent(EVENT_TYPES.ADD_TEAM_CLICKED, {
-                    timestamp: Date.now()
-                  });
-                  setCreateTeamModalOpen(true);
-                }}
-              >
-                Add Team
-              </button>
+          <div className="flex items-center gap-6">
+            <div className="hidden sm:flex sm:space-x-4">
+              {leftNavItems.map((item, index) => {
+                const attributes = getElementAttributes(
+                  "nav_left_button",
+                  index
+                );
+                const xpath = getElementXPath("nav_left_button");
+                return (
+                  <button
+                    key={item.id}
+                    {...attributes}
+                    data-xpath={xpath}
+                    className={`border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b] ${attributes?.className ?? ""}`}
+                    onClick={item.onClick}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
             </div>
+            {rightNavItems.length > 0 && (
+              <div className="hidden sm:flex sm:space-x-4">
+                {rightNavItems.map((item, index) => {
+                  const attributes = getElementAttributes(
+                    "nav_right_button",
+                    index
+                  );
+                  const xpath = getElementXPath("nav_right_button");
+                  return (
+                    <button
+                      key={item.id}
+                      {...attributes}
+                      data-xpath={xpath}
+                      className={`border-b-2 border-transparent px-1 pt-1 pb-4 text-md font-medium text-gray-600 hover:text-gray-900 hover:border-[#d1453b] ${attributes?.className ?? ""}`}
+                      onClick={item.onClick}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
           <div className="flex items-center">
             <Popover

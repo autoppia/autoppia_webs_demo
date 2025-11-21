@@ -355,11 +355,34 @@ const LAYOUTS: Record<number, LayoutConfig> = {
   }
 };
 
+const TRUE_VALUES = new Set(['true', '1', 'yes', 'on']);
+const FALSE_VALUES = new Set(['false', '0', 'no', 'off']);
+
+function parseEnableDynamicFromUrl(): boolean | null {
+  if (typeof window === 'undefined') return null;
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get('enable_dynamic');
+  if (!raw) return null;
+  const parts = raw
+    .toLowerCase()
+    .split(',')
+    .map((part) => part.trim());
+  if (parts.length === 0) return null;
+  if (parts.includes('v1')) return true;
+  if (parts.some((part) => FALSE_VALUES.has(part))) return false;
+  return false;
+}
+
 /**
  * Check if dynamic HTML is enabled
  * @returns boolean indicating if dynamic HTML is enabled
  */
 export function isDynamicEnabled(): boolean {
+  const fromUrl = parseEnableDynamicFromUrl();
+  if (fromUrl !== null) {
+    return fromUrl;
+  }
+
   const rawFlag =
     process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE ??
     process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
@@ -368,8 +391,14 @@ export function isDynamicEnabled(): boolean {
     process.env.ENABLE_DYNAMIC_V1 ??
     '';
 
+  if (!rawFlag) {
+    return true;
+  }
+
   const normalized = rawFlag.toString().trim().toLowerCase();
-  return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';
+  if (TRUE_VALUES.has(normalized)) return true;
+  if (FALSE_VALUES.has(normalized)) return false;
+  return true;
 }
 
 /**
@@ -393,7 +422,74 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   if (seed === 3) return LAYOUTS[1];
   const mappedSeed = ((seed % 30) + 1) % 10 || 10;
   
-  return LAYOUTS[mappedSeed];
+  const baseLayout = LAYOUTS[mappedSeed];
+  
+  // Dynamically adjust sidebar placement based on seed
+  // Alternate between left and right: even seeds = right, odd seeds = left
+  // This gives a 50/50 distribution
+  const shouldPlaceSidebarRight = (seed % 2) === 0;
+  
+  // Don't modify floating sidebars
+  const currentPlacement = baseLayout.elements.sidebar.placement;
+  if (currentPlacement === 'floating' || currentPlacement === 'top' || currentPlacement === 'bottom') {
+    return baseLayout;
+  }
+  
+  // Only modify if the placement should change from the base layout
+  const needsChange = (shouldPlaceSidebarRight && currentPlacement !== 'right') ||
+                     (!shouldPlaceSidebarRight && currentPlacement !== 'left');
+  
+  if (!needsChange) {
+    return baseLayout;
+  }
+  
+  // Helper function to swap left/right positioning in className
+  const swapSidebarPosition = (className: string, toRight: boolean): string => {
+    if (toRight) {
+      return className
+        .replace(/\bleft-0\b/g, 'right-0')
+        .replace(/\bleft-16\b/g, 'right-16')
+        .replace(/\bborder-r\b/g, 'border-l');
+    } else {
+      return className
+        .replace(/\bright-0\b/g, 'left-0')
+        .replace(/\bright-16\b/g, 'left-16')
+        .replace(/\bborder-l\b/g, 'border-r');
+    }
+  };
+  
+  // Helper function to swap content margins
+  const swapContentMargin = (className: string, sidebarRight: boolean): string => {
+    if (sidebarRight) {
+      return className
+        .replace(/\bml-\[280px\]/g, 'mr-[280px]')
+        .replace(/\bml-\[296px\]/g, 'mr-[296px]');
+    } else {
+      return className
+        .replace(/\bmr-\[280px\]/g, 'ml-[280px]')
+        .replace(/\bmr-\[296px\]/g, 'ml-[296px]');
+    }
+  };
+  
+  // Create a modified layout with adjusted sidebar placement
+  const modifiedLayout: LayoutConfig = {
+    ...baseLayout,
+    elements: {
+      ...baseLayout.elements,
+      sidebar: {
+        ...baseLayout.elements.sidebar,
+        placement: shouldPlaceSidebarRight ? 'right' : 'left',
+        className: swapSidebarPosition(baseLayout.elements.sidebar.className, shouldPlaceSidebarRight),
+      },
+      // Also adjust content margin based on sidebar placement
+      content: {
+        ...baseLayout.elements.content,
+        className: swapContentMargin(baseLayout.elements.content.className, shouldPlaceSidebarRight),
+      },
+    },
+  };
+  
+  return modifiedLayout;
 }
 
 export function getLayoutClasses(config: LayoutConfig): {

@@ -9,8 +9,8 @@ import {
   generateElementId,
   generateCSSVariables,
   generateLayoutClasses,
+  isDynamicEnabled as isStructureDynamicEnabled,
 } from "@/dynamic/v1-layouts";
-import { isDynamicModeEnabled } from "@/dynamic/v2-data";
 import { useSeed as useSeedContext } from "@/context/SeedContext";
 import { useV3Attributes } from "./useV3Attributes";
 
@@ -30,7 +30,9 @@ export function useSeedLayout() {
     return resolvedSeeds.v2 ?? null;
   }, [resolvedSeeds.v2]);
 
-  const isDynamicEnabled = isDynamicModeEnabled();
+  // Check if v1 is enabled - use structureDynamicEnabled check OR if v1 seed is resolved
+  const isV1Enabled = resolvedSeeds.v1 !== null;
+  const isDynamicEnabled = isStructureDynamicEnabled() || isV1Enabled;
 
   const layout = useMemo(() => {
     if (!isDynamicEnabled) {
@@ -71,9 +73,10 @@ export function useSeedLayout() {
       if (!isDynamicEnabled) {
         return { id: `${elementType}-${index}`, "data-element-type": elementType };
       }
-      return generateElementAttributes(elementType, dynamicSeed, index);
+      // Use structureSeed (v1) for element attributes when v1 is enabled
+      return generateElementAttributes(elementType, structureSeed, index);
     },
-    [dynamicSeed, isDynamicEnabled, isV3Active, getV3Attributes]
+    [structureSeed, isDynamicEnabled, isV3Active, getV3Attributes]
   );
 
   const getElementXPath = useCallback(
@@ -84,9 +87,10 @@ export function useSeedLayout() {
       if (!isDynamicEnabled) {
         return `//${elementType}[@id='${elementType}-0']`;
       }
-      return getXPathSelector(elementType, dynamicSeed);
+      // Use structureSeed (v1) for xpath when v1 is enabled
+      return getXPathSelector(elementType, structureSeed);
     },
-    [dynamicSeed, isDynamicEnabled, isV3Active, getV3XPath]
+    [structureSeed, isDynamicEnabled, isV3Active, getV3XPath]
   );
 
   const reorderElements = useCallback(
@@ -94,18 +98,10 @@ export function useSeedLayout() {
       if (!isDynamicEnabled || elements.length === 0) {
         return elements;
       }
-      const rotations =
-        dynamicSeed > 1 ? ((dynamicSeed - 1) % elements.length) : 0;
-      if (rotations === 0) {
-        return elements;
-      }
-      const reordered = [...elements];
-      for (let i = 0; i < rotations; i++) {
-        reordered.push(reordered.shift()!);
-      }
-      return reordered;
+      // Use getElementOrder from v1-layouts for proper seed-based shuffling
+      return getElementOrder(structureSeed, elements);
     },
-    [dynamicSeed, isDynamicEnabled]
+    [structureSeed, isDynamicEnabled]
   );
 
   const generateId = useCallback(
@@ -116,9 +112,10 @@ export function useSeedLayout() {
       if (!isDynamicEnabled) {
         return `${context}-${index}`;
       }
-      return generateElementId(dynamicSeed, context, index);
+      // Use structureSeed (v1) for element IDs when v1 is enabled
+      return generateElementId(structureSeed, context, index);
     },
-    [dynamicSeed, isDynamicEnabled, isV3Active, getV3Id]
+    [structureSeed, isDynamicEnabled, isV3Active, getV3Id]
   );
 
   const getLayoutClasses = useCallback(
