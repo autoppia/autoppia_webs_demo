@@ -15998,5 +15998,445 @@
     "priority": 2,
     "status": "completed",
     "createdAt": "2025-11-11"
+  },
+  {
+    "id": "2001",
+    "name": "Prepare presentation slides 15",
+    "description": "Create slides for the upcoming quarterly review",
+    "priority": 2,
+    "status": "in_progress",
+    "createdAt": "2024-09-15"
+  },
+  {
+    "id": "2002",
+    "name": "Conduct user testing 8",
+    "description": "Gather feedback from users on the latest features",
+    "priority": 3,
+    "status": "upcoming",
+    "createdAt": "2024-09-20"
+  },
+  {
+    "id": "2003",
+    "name": "Update project roadmap 42",
+    "description": "Revise the project timeline based on recent developments",
+    "priority": 1,
+    "status": "completed",
+    "createdAt": "2024-08-30"
+  },
+  {
+    "id": "2004",
+    "name": "Plan team building activity 5",
+    "description": "Organize a team outing for the end of the month",
+    "priority": 4,
+    "status": "in_progress",
+    "createdAt": "2024-09-10"
+  },
+  {
+    "id": "2005",
+    "name": "Finalize budget report 12",
+    "description": "Complete the financial report for the last quarter",
+    "priority": 3,
+    "status": "completed",
+    "createdAt": "2024-09-12"
+  },
+  {
+    "id": "2006",
+    "name": "Design new marketing materials",
+    "description": "Create brochures and flyers for the upcoming campaign",
+    "priority": 2,
+    "status": "in_progress",
+    "createdAt": "2024-09-15"
+  },
+  {
+    "id": "2007",
+    "name": "Conduct user research",
+    "description": "Gather feedback from users about the new features",
+    "priority": 3,
+    "status": "upcoming",
+    "createdAt": "2024-09-16"
+  },
+  {
+    "id": "2008",
+    "name": "Update website content",
+    "description": "Revise the homepage and product descriptions",
+    "priority": 1,
+    "status": "completed",
+    "createdAt": "2024-09-17"
+  },
+  {
+    "id": "2009",
+    "name": "Prepare presentation for stakeholders",
+    "description": "Create slides for the quarterly business review",
+    "priority": 4,
+    "status": "in_progress",
+    "createdAt": "2024-09-18"
+  },
+  {
+    "id": "2010",
+    "name": "Review team performance metrics",
+    "description": "Analyze the KPIs from the last quarter",
+    "priority": 2,
+    "status": "completed",
+    "createdAt": "2024-09-19"
+  },
+  {
+    "id": "2011",
+    "name": "Set up new project management tool",
+    "description": "Implement and configure the new software",
+    "priority": 1,
+    "status": "upcoming",
+    "createdAt": "2024-09-20"
+  },
+  {
+    "id": "2012",
+    "name": "Draft press release for product launch",
+    "description": "Write and finalize the announcement for the media",
+    "priority": 3,
+    "status": "in_progress",
+    "createdAt": "2024-09-21"
+  },
+  {
+    "id": "2013",
+    "name": "Organize training session for new hires",
+    "description": "Plan and execute onboarding for new employees",
+    "priority": 4,
+    "status": "completed",
+    "createdAt": "2024-09-22"
+  },
+  {
+    "id": "2014",
+    "name": "Evaluate vendor proposals",
+    "description": "Review submissions and select a vendor",
+    "priority": 2,
+    "status": "upcoming",
+    "createdAt": "2024-09-23"
+  },
+  {
+    "id": "2015",
+    "name": "Create social media strategy",
+    "description": "Develop a plan for content and engagement",
+    "priority": 1,
+    "status": "in_progress",
+    "createdAt": "2024-09-24"
+  },
+  {
+    "id": "2016",
+    "name": "Update employee handbook",
+    "description": "Revise policies and procedures for clarity",
+    "priority": 3,
+    "status": "completed",
+    "createdAt": "2024-09-25"
+  },
+  {
+    "id": "2017",
+    "name": "Plan annual company retreat",
+    "description": "Organize logistics for the team-building event",
+    "priority": 4,
+    "status": "in_progress",
+    "createdAt": "2024-09-26"
+  },
+  {
+    "id": "2018",
+    "name": "Conduct market analysis",
+    "description": "Research and analyze competitors and trends",
+    "priority": 2,
+    "status": "upcoming",
+    "createdAt": "2024-09-27"
+  },
+  {
+    "id": "2019",
+    "name": "Finalize product specifications",
+    "description": "Complete detailed requirements for the new product",
+    "priority": 1,
+    "status": "completed",
+    "createdAt": "2024-09-28"
+  },
+  {
+    "id": "2020",
+    "name": "Implement feedback from last client meeting",
+    "description": "Make necessary adjustments based on client input",
+    "priority": 3,
+    "status": "in_progress",
+    "createdAt": "2024-09-29"
+  },
+  {
+    "id": "2021",
+    "name": "Schedule one-on-one meetings with team",
+    "description": "Arrange time to discuss individual performance",
+    "priority": 4,
+    "status": "upcoming",
+    "createdAt": "2024-09-30"
+  },
+  {
+    "id": "2022",
+    "name": "Create budget for next quarter",
+    "description": "Prepare financial allocations for upcoming projects",
+    "priority": 2,
+    "status": "completed",
+    "createdAt": "2024-10-01"
+  },
+  {
+    "id": "2023",
+    "name": "Review and update risk management plan",
+    "description": "Assess risks and revise mitigation strategies",
+    "priority": 1,
+    "status": "in_progress",
+    "createdAt": "2024-10-02"
+  },
+  {
+    "id": "2024",
+    "name": "Launch customer satisfaction survey",
+    "description": "Distribute and collect feedback from customers",
+    "priority": 3,
+    "status": "upcoming",
+    "createdAt": "2024-10-03"
+  },
+  {
+    "id": "2025",
+    "name": "Conduct training on new software",
+    "description": "Educate staff on the functionalities of the new tool",
+    "priority": 2,
+    "status": "completed",
+    "createdAt": "2024-10-04"
+  },
+  {
+    "id": "2026",
+    "name": "Prepare for upcoming audit",
+    "description": "Gather necessary documents and records",
+    "priority": 4,
+    "status": "in_progress",
+    "createdAt": "2024-10-05"
+  },
+  {
+    "id": "2027",
+    "name": "Analyze sales data from last month",
+    "description": "Review sales figures to identify trends",
+    "priority": 1,
+    "status": "upcoming",
+    "createdAt": "2024-10-06"
+  },
+  {
+    "id": "2028",
+    "name": "Create a content calendar for blogs",
+    "description": "Plan topics and publish dates for the next quarter",
+    "priority": 3,
+    "status": "completed",
+    "createdAt": "2024-10-07"
+  },
+  {
+    "id": "2029",
+    "name": "Host a webinar for potential clients",
+    "description": "Organize an online event to showcase our services",
+    "priority": 4,
+    "status": "in_progress",
+    "createdAt": "2024-10-08"
+  },
+  {
+    "id": "2030",
+    "name": "Update project timelines",
+    "description": "Revise deadlines based on team capacity",
+    "priority": 2,
+    "status": "upcoming",
+    "createdAt": "2024-10-09"
+  },
+  {
+    "id": "2031",
+    "name": "Create a FAQ for the new product",
+    "description": "Develop a document to address common customer questions",
+    "priority": 1,
+    "status": "completed",
+    "createdAt": "2024-10-10"
+  },
+  {
+    "id": "2032",
+    "name": "Review team feedback on recent changes",
+    "description": "Gather input from team members about recent updates",
+    "priority": 3,
+    "status": "in_progress",
+    "createdAt": "2024-10-11"
+  },
+  {
+    "id": "2033",
+    "name": "Plan marketing campaign for next quarter",
+    "description": "Outline strategies and budgets for upcoming promotions",
+    "priority": 4,
+    "status": "upcoming",
+    "createdAt": "2024-10-12"
+  },
+  {
+    "id": "2034",
+    "name": "Finalize new hire onboarding process",
+    "description": "Refine the steps for integrating new employees",
+    "priority": 2,
+    "status": "completed",
+    "createdAt": "2024-10-13"
+  },
+  {
+    "id": "2035",
+    "name": "Update training materials",
+    "description": "Revise and enhance the existing training documents",
+    "priority": 1,
+    "status": "in_progress",
+    "createdAt": "2024-10-14"
+  },
+  {
+    "id": "2036",
+    "name": "Conduct team-building exercises",
+    "description": "Facilitate activities to strengthen team cohesion",
+    "priority": 3,
+    "status": "upcoming",
+    "createdAt": "2024-10-15"
+  },
+  {
+    "id": "2037",
+    "name": "Evaluate employee satisfaction survey results",
+    "description": "Analyze feedback and identify areas for improvement",
+    "priority": 4,
+    "status": "completed",
+    "createdAt": "2024-10-16"
+  },
+  {
+    "id": "2038",
+    "name": "Optimize website SEO",
+    "description": "Implement changes to improve search engine visibility",
+    "priority": 2,
+    "status": "in_progress",
+    "createdAt": "2024-10-17"
+  },
+  {
+    "id": "2039",
+    "name": "Prepare for product demo",
+    "description": "Set up and rehearse the presentation for the demo",
+    "priority": 1,
+    "status": "upcoming",
+    "createdAt": "2024-10-18"
+  },
+  {
+    "id": "2040",
+    "name": "Conduct performance reviews",
+    "description": "Evaluate employee performance and provide feedback",
+    "priority": 3,
+    "status": "completed",
+    "createdAt": "2024-10-19"
+  },
+  {
+    "id": "2041",
+    "name": "Launch new feature",
+    "description": "Deploy the latest updates to the application",
+    "priority": 4,
+    "status": "in_progress",
+    "createdAt": "2024-10-20"
+  },
+  {
+    "id": "2042",
+    "name": "Prepare for client meeting",
+    "description": "Gather materials and agenda for the discussion",
+    "priority": 2,
+    "status": "upcoming",
+    "createdAt": "2024-10-21"
+  },
+  {
+    "id": "2043",
+    "name": "Conduct usability testing",
+    "description": "Test the product with users to identify issues",
+    "priority": 1,
+    "status": "completed",
+    "createdAt": "2024-10-22"
+  },
+  {
+    "id": "2044",
+    "name": "Update marketing analytics dashboard",
+    "description": "Revise metrics and visualizations for clarity",
+    "priority": 3,
+    "status": "in_progress",
+    "createdAt": "2024-10-23"
+  },
+  {
+    "id": "2045",
+    "name": "Plan community outreach program",
+    "description": "Develop initiatives to engage with the local community",
+    "priority": 4,
+    "status": "upcoming",
+    "createdAt": "2024-10-24"
+  },
+  {
+    "id": "2046",
+    "name": "Create a project closure report",
+    "description": "Document the outcomes and lessons learned from the project",
+    "priority": 2,
+    "status": "completed",
+    "createdAt": "2024-10-25"
+  },
+  {
+    "id": "2047",
+    "name": "Conduct coding review",
+    "description": "Evaluate the code for quality and adherence to standards",
+    "priority": 1,
+    "status": "in_progress",
+    "createdAt": "2024-10-26"
+  },
+  {
+    "id": "2048",
+    "name": "Update client contracts",
+    "description": "Revise terms and conditions for clarity",
+    "priority": 3,
+    "status": "upcoming",
+    "createdAt": "2024-10-27"
+  },
+  {
+    "id": "2049",
+    "name": "Create a risk assessment report",
+    "description": "Identify potential risks and mitigation strategies",
+    "priority": 4,
+    "status": "completed",
+    "createdAt": "2024-10-28"
+  },
+  {
+    "id": "2050",
+    "name": "Plan a product launch event",
+    "description": "Organize logistics for the upcoming product release",
+    "priority": 2,
+    "status": "in_progress",
+    "createdAt": "2024-10-29"
+  },
+  {
+    "id": "2051",
+    "name": "Review customer feedback",
+    "description": "Analyze comments and suggestions from users",
+    "priority": 1,
+    "status": "upcoming",
+    "createdAt": "2024-10-30"
+  },
+  {
+    "id": "2052",
+    "name": "Conduct a market segmentation analysis",
+    "description": "Identify target audiences for marketing efforts",
+    "priority": 3,
+    "status": "completed",
+    "createdAt": "2024-10-31"
+  },
+  {
+    "id": "2053",
+    "name": "Refine pricing strategy",
+    "description": "Adjust pricing based on market research and competition",
+    "priority": 4,
+    "status": "in_progress",
+    "createdAt": "2024-11-01"
+  },
+  {
+    "id": "2054",
+    "name": "Create a sales forecast report",
+    "description": "Predict sales for the upcoming quarter",
+    "priority": 2,
+    "status": "upcoming",
+    "createdAt": "2024-11-02"
+  },
+  {
+    "id": "2055",
+    "name": "Organize a charity event",
+    "description": "Plan and execute a fundraising initiative",
+    "priority": 1,
+    "status": "completed",
+    "createdAt": "2024-11-03"
   }
 ]

@@ -45998,5 +45998,120 @@
       "phone": "+1 711-946-4569",
       "photo": "https://randomuser.me/api/portraits/men/78.jpg"
     }
+  },
+  {
+    "id": "2001",
+    "status": "completed",
+    "ride": {
+      "name": "Standard",
+      "image": "/car2.jpg",
+      "icon": "https://ext.same-assets.com/407674263/1234567890.png",
+      "price": 15.5
+    },
+    "pickup": "123 Market St, San Francisco, CA 94103",
+    "dropoff": "456 Mission St, San Francisco, CA 94105",
+    "date": "2023-10-15",
+    "time": "14:00",
+    "price": 15.5,
+    "payment": "MasterCard ••••3456",
+    "driver": {
+      "name": "John Doe",
+      "car": "Toyota Camry (Blue)",
+      "plate": "ABC 123",
+      "phone": "+1 415-555-0199",
+      "photo": "https://randomuser.me/api/portraits/men/10.jpg"
+    }
+  },
+  {
+    "id": "2002",
+    "status": "upcoming",
+    "ride": {
+      "name": "Luxury",
+      "image": "/car3.jpg",
+      "icon": "https://ext.same-assets.com/407674263/0987654321.png",
+      "price": 50.0
+    },
+    "pickup": "789 Howard St, San Francisco, CA 94103",
+    "dropoff": "321 Pine St, San Francisco, CA 94104",
+    "date": "2024-05-20",
+    "time": "18:30",
+    "price": 50.0,
+    "payment": "Visa ••••6789",
+    "driver": {
+      "name": "Jane Smith",
+      "car": "Mercedes-Benz C-Class (Silver)",
+      "plate": "XYZ 789",
+      "phone": "+1 415-555-0123",
+      "photo": "https://randomuser.me/api/portraits/women/20.jpg"
+    }
+  },
+  {
+    "id": "2003",
+    "status": "cancelled",
+    "ride": {
+      "name": "Standard",
+      "image": "/car4.jpg",
+      "icon": "https://ext.same-assets.com/407674263/1122334455.png",
+      "price": 20.0
+    },
+    "pickup": "101 California St, San Francisco, CA 94111",
+    "dropoff": "202 Sansome St, San Francisco, CA 94104",
+    "date": "2023-11-10",
+    "time": "09:00",
+    "price": 20.0,
+    "payment": "Discover ••••9876",
+    "driver": {
+      "name": "Emily Johnson",
+      "car": "Ford Fusion (Red)",
+      "plate": "LMN 456",
+      "phone": "+1 415-555-0134",
+      "photo": "https://randomuser.me/api/portraits/women/15.jpg"
+    }
+  },
+  {
+    "id": "2004",
+    "status": "completed",
+    "ride": {
+      "name": "Economy",
+      "image": "/car1.jpg",
+      "icon": "https://ext.same-assets.com/407674263/2233445566.png",
+      "price": 12.0
+    },
+    "pickup": "555 Geary St, San Francisco, CA 94102",
+    "dropoff": "888 Mission St, San Francisco, CA 94103",
+    "date": "2023-09-30",
+    "time": "16:45",
+    "price": 12.0,
+    "payment": "Visa ••••1234",
+    "driver": {
+      "name": "Michael Brown",
+      "car": "Nissan Altima (Black)",
+      "plate": "PQR 789",
+      "phone": "+1 415-555-0178",
+      "photo": "https://randomuser.me/api/portraits/men/25.jpg"
+    }
+  },
+  {
+    "id": "2005",
+    "status": "upcoming",
+    "ride": {
+      "name": "Premier",
+      "image": "/car5.jpg",
+      "icon": "https://ext.same-assets.com/407674263/3344556677.png",
+      "price": 45.0
+    },
+    "pickup": "2000 Van Ness Ave, San Francisco, CA 94109",
+    "dropoff": "3000 Fillmore St, San Francisco, CA 94123",
+    "date": "2024-02-15",
+    "time": "07:30",
+    "price": 45.0,
+    "payment": "MasterCard ••••4567",
+    "driver": {
+      "name": "Sarah Davis",
+      "car": "BMW 3 Series (White)",
+      "plate": "STU 123",
+      "phone": "+1 415-555-0198",
+      "photo": "https://randomuser.me/api/portraits/women/35.jpg"
+    }
   }
 ]

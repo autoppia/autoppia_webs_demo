@@ -58386,5 +58386,2049 @@
     "companySize": "500-1000 employees",
     "industry": "Retail",
     "remote": false
+  },
+  {
+    "id": "j2001",
+    "title": "Data Scientist",
+    "company": "Google",
+    "location": "Mountain View, CA",
+    "logo": "https://logo.clearbit.com/google.com",
+    "salary": "$120,000 - $180,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Data Scientist to analyze complex data sets and derive actionable insights. You will work closely with cross-functional teams to drive data-driven decision-making.",
+    "requirements": [
+      "3+ years of experience in data science or related field",
+      "Proficiency in Python and SQL",
+      "Strong analytical and problem-solving skills",
+      "Experience with machine learning techniques"
+    ],
+    "benefits": [
+      "Health and wellness programs",
+      "Generous parental leave",
+      "Flexible working hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-11-12",
+    "applicationCount": 150,
+    "companySize": "10000+ employees",
+    "industry": "Technology",
+    "remote": true
+  },
+  {
+    "id": "j2002",
+    "title": "Product Manager",
+    "company": "Amazon",
+    "location": "Seattle, WA",
+    "logo": "https://logo.clearbit.com/amazon.com",
+    "salary": "$130,000 - $200,000",
+    "type": "Contract",
+    "experience": "5+ years",
+    "description": "We are looking for a Product Manager to lead product strategy and execution. You will collaborate with engineering, design, and marketing teams to deliver exceptional products.",
+    "requirements": [
+      "5+ years of product management experience",
+      "Strong understanding of Agile methodologies",
+      "Excellent communication and leadership skills",
+      "Experience in e-commerce or retail preferred"
+    ],
+    "benefits": [
+      "Stock options",
+      "Health insurance",
+      "Paid time off",
+      "Employee discounts"
+    ],
+    "postedDate": "2025-11-15",
+    "applicationCount": 200,
+    "companySize": "10000+ employees",
+    "industry": "E-commerce",
+    "remote": false
+  },
+  {
+    "id": "j2003",
+    "title": "UX Designer",
+    "company": "Adobe",
+    "location": "San Jose, CA",
+    "logo": "https://logo.clearbit.com/adobe.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "2+ years",
+    "description": "We are looking for a UX Designer to create intuitive and engaging user experiences. You will work closely with product and engineering teams to design user-centered solutions.",
+    "requirements": [
+      "2+ years of experience in UX design",
+      "Proficiency in design tools such as Figma or Sketch",
+      "Strong portfolio showcasing design projects",
+      "Ability to conduct user research and testing"
+    ],
+    "benefits": [
+      "Flexible work schedule",
+      "Health and wellness programs",
+      "Comprehensive health insurance",
+      "Retirement savings plan"
+    ],
+    "postedDate": "2025-11-18",
+    "applicationCount": 75,
+    "companySize": "10000+ employees",
+    "industry": "Software",
+    "remote": true
+  },
+  {
+    "id": "j2004",
+    "title": "Sales Executive",
+    "company": "Salesforce",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/salesforce.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are searching for a Sales Executive to drive sales and build relationships with clients. You will be responsible for achieving sales targets and expanding our customer base.",
+    "requirements": [
+      "3+ years of sales experience in SaaS or technology",
+      "Strong negotiation and communication skills",
+      "Ability to work independently and as part of a team",
+      "Proven track record of meeting sales targets"
+    ],
+    "benefits": [
+      "Competitive salary and commission structure",
+      "Health insurance",
+      "Generous vacation policy",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-11-20",
+    "applicationCount": 120,
+    "companySize": "10000+ employees",
+    "industry": "Technology",
+    "remote": false
+  },
+  {
+    "id": "j2005",
+    "title": "Network Engineer",
+    "company": "Cisco",
+    "location": "San Jose, CA",
+    "logo": "https://logo.clearbit.com/cisco.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Contract",
+    "experience": "4+ years",
+    "description": "We are looking for a Network Engineer to design and implement network solutions. You will work with a team of engineers to ensure the reliability and performance of our network infrastructure.",
+    "requirements": [
+      "4+ years of experience in network engineering",
+      "In-depth knowledge of networking protocols and technologies",
+      "CCNA or equivalent certification preferred",
+      "Strong troubleshooting skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible working hours",
+      "Paid time off"
+    ],
+    "postedDate": "2025-11-22",
+    "applicationCount": 95,
+    "companySize": "10000+ employees",
+    "industry": "Networking",
+    "remote": false
+  },
+  {
+    "id": "j2006",
+    "title": "Data Scientist",
+    "company": "Google",
+    "location": "Mountain View, CA",
+    "logo": "https://logo.clearbit.com/google.com",
+    "salary": "$120,000 - $180,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are looking for a Data Scientist to analyze large datasets and provide actionable insights. You will collaborate with cross-functional teams to improve data-driven decision-making.",
+    "requirements": [
+      "3+ years of experience in data science or analytics",
+      "Proficiency in Python and SQL",
+      "Experience with machine learning frameworks",
+      "Strong analytical and problem-solving skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Stock options",
+      "Generous paid time off",
+      "Flexible work environment"
+    ],
+    "postedDate": "2025-11-25",
+    "applicationCount": 150,
+    "companySize": "10000+ employees",
+    "industry": "Technology",
+    "remote": true
+  },
+  {
+    "id": "j2007",
+    "title": "Project Manager",
+    "company": "Microsoft",
+    "location": "Redmond, WA",
+    "logo": "https://logo.clearbit.com/microsoft.com",
+    "salary": "$95,000 - $140,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are seeking a Project Manager to oversee various projects and ensure timely delivery. You will work with stakeholders to define project scope and objectives.",
+    "requirements": [
+      "5+ years of project management experience",
+      "PMP certification preferred",
+      "Excellent communication and leadership skills",
+      "Ability to manage multiple projects simultaneously"
+    ],
+    "benefits": [
+      "Comprehensive health benefits",
+      "Retirement savings plan",
+      "Professional development opportunities",
+      "Work-life balance initiatives"
+    ],
+    "postedDate": "2025-11-26",
+    "applicationCount": 80,
+    "companySize": "10000+ employees",
+    "industry": "Software",
+    "remote": false
+  },
+  {
+    "id": "j2008",
+    "title": "Software Engineer",
+    "company": "Amazon",
+    "location": "Seattle, WA",
+    "logo": "https://logo.clearbit.com/amazon.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Full-time",
+    "experience": "2+ years",
+    "description": "Join our team as a Software Engineer to develop scalable applications. You will work with a talented team to deliver high-quality software solutions.",
+    "requirements": [
+      "2+ years of experience in software development",
+      "Proficiency in Java or C++",
+      "Experience with cloud technologies",
+      "Strong problem-solving skills"
+    ],
+    "benefits": [
+      "Health and wellness programs",
+      "401(k) matching",
+      "Flexible work hours",
+      "Employee discounts"
+    ],
+    "postedDate": "2025-11-27",
+    "applicationCount": 200,
+    "companySize": "10000+ employees",
+    "industry": "E-commerce",
+    "remote": true
+  },
+  {
+    "id": "j2009",
+    "title": "Graphic Designer",
+    "company": "Adobe",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/adobe.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are looking for a Graphic Designer to create visually appealing designs. You will collaborate with marketing teams to produce creative assets.",
+    "requirements": [
+      "3+ years of graphic design experience",
+      "Proficiency in Adobe Creative Suite",
+      "Strong portfolio of design work",
+      "Ability to work under tight deadlines"
+    ],
+    "benefits": [
+      "Flexible working hours",
+      "Health insurance",
+      "Creative work environment",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-11-28",
+    "applicationCount": 60,
+    "companySize": "10000+ employees",
+    "industry": "Design",
+    "remote": false
+  },
+  {
+    "id": "j2010",
+    "title": "Marketing Specialist",
+    "company": "HubSpot",
+    "location": "Cambridge, MA",
+    "logo": "https://logo.clearbit.com/hubspot.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Full-time",
+    "experience": "2+ years",
+    "description": "We are seeking a Marketing Specialist to develop and execute marketing campaigns. You will analyze market trends and customer feedback to optimize marketing strategies.",
+    "requirements": [
+      "2+ years of experience in marketing",
+      "Strong understanding of digital marketing strategies",
+      "Excellent communication skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible work schedule",
+      "Generous vacation policy",
+      "Team-building activities"
+    ],
+    "postedDate": "2025-11-29",
+    "applicationCount": 90,
+    "companySize": "5000+ employees",
+    "industry": "Marketing",
+    "remote": true
+  },
+  {
+    "id": "j2011",
+    "title": "Cybersecurity Analyst",
+    "company": "Palo Alto Networks",
+    "location": "Santa Clara, CA",
+    "logo": "https://logo.clearbit.com/paloaltonetworks.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Contract",
+    "experience": "4+ years",
+    "description": "We are looking for a Cybersecurity Analyst to protect our systems from cyber threats. You will monitor security incidents and respond to breaches.",
+    "requirements": [
+      "4+ years of experience in cybersecurity",
+      "Knowledge of security frameworks and tools",
+      "Strong analytical skills",
+      "Ability to work under pressure"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Work-from-home options",
+      "Continuous learning opportunities"
+    ],
+    "postedDate": "2025-11-30",
+    "applicationCount": 70,
+    "companySize": "5000+ employees",
+    "industry": "Cybersecurity",
+    "remote": false
+  },
+  {
+    "id": "j2012",
+    "title": "Business Analyst",
+    "company": "IBM",
+    "location": "Armonk, NY",
+    "logo": "https://logo.clearbit.com/ibm.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Business Analyst to analyze business processes and provide insights. You will work with stakeholders to identify improvement opportunities.",
+    "requirements": [
+      "3+ years of experience in business analysis",
+      "Strong analytical and problem-solving skills",
+      "Experience with data visualization tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible work hours",
+      "Professional development programs",
+      "Employee wellness initiatives"
+    ],
+    "postedDate": "2025-12-01",
+    "applicationCount": 85,
+    "companySize": "10000+ employees",
+    "industry": "Consulting",
+    "remote": true
+  },
+  {
+    "id": "j2013",
+    "title": "Cloud Engineer",
+    "company": "Oracle",
+    "location": "Austin, TX",
+    "logo": "https://logo.clearbit.com/oracle.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are looking for a Cloud Engineer to design and implement cloud solutions. You will work with development teams to ensure seamless integration.",
+    "requirements": [
+      "4+ years of experience in cloud engineering",
+      "Proficiency in AWS or Azure",
+      "Strong understanding of cloud architecture",
+      "Excellent troubleshooting skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work environment",
+      "Generous paid time off"
+    ],
+    "postedDate": "2025-12-02",
+    "applicationCount": 95,
+    "companySize": "10000+ employees",
+    "industry": "Cloud Computing",
+    "remote": true
+  },
+  {
+    "id": "j2014",
+    "title": "Content Writer",
+    "company": "Contently",
+    "location": "New York, NY",
+    "logo": "https://logo.clearbit.com/contently.com",
+    "salary": "$60,000 - $90,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are seeking a Content Writer to create engaging content for various platforms. You will collaborate with marketing teams to develop content strategies.",
+    "requirements": [
+      "2+ years of experience in content writing",
+      "Strong writing and editing skills",
+      "Ability to work independently",
+      "Familiarity with SEO best practices"
+    ],
+    "benefits": [
+      "Flexible work hours",
+      "Health insurance",
+      "Creative work environment",
+      "Remote work options"
+    ],
+    "postedDate": "2025-12-03",
+    "applicationCount": 50,
+    "companySize": "200+ employees",
+    "industry": "Media",
+    "remote": false
+  },
+  {
+    "id": "j2015",
+    "title": "Frontend Developer",
+    "company": "Spotify",
+    "location": "Stockholm, Sweden",
+    "logo": "https://logo.clearbit.com/spotify.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "Join our team as a Frontend Developer to create user-friendly web applications. You will work closely with designers and backend developers.",
+    "requirements": [
+      "3+ years of experience in frontend development",
+      "Proficiency in HTML, CSS, and JavaScript",
+      "Experience with React or Angular",
+      "Strong problem-solving skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Employee discounts"
+    ],
+    "postedDate": "2025-12-04",
+    "applicationCount": 110,
+    "companySize": "5000+ employees",
+    "industry": "Music Streaming",
+    "remote": true
+  },
+  {
+    "id": "j2016",
+    "title": "Quality Assurance Engineer",
+    "company": "Slack",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/slack.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are looking for a Quality Assurance Engineer to ensure the quality of our software products. You will develop test plans and conduct testing.",
+    "requirements": [
+      "3+ years of experience in quality assurance",
+      "Familiarity with automated testing tools",
+      "Strong analytical skills",
+      "Attention to detail"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2025-12-05",
+    "applicationCount": 65,
+    "companySize": "5000+ employees",
+    "industry": "Technology",
+    "remote": false
+  },
+  {
+    "id": "j2017",
+    "title": "System Administrator",
+    "company": "Dell",
+    "location": "Round Rock, TX",
+    "logo": "https://logo.clearbit.com/dell.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are seeking a System Administrator to manage and support our IT infrastructure. You will ensure system availability and performance.",
+    "requirements": [
+      "4+ years of experience in system administration",
+      "Strong knowledge of Windows and Linux environments",
+      "Experience with virtualization technologies",
+      "Excellent troubleshooting skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Generous paid time off"
+    ],
+    "postedDate": "2025-12-06",
+    "applicationCount": 40,
+    "companySize": "10000+ employees",
+    "industry": "IT Services",
+    "remote": true
+  },
+  {
+    "id": "j2018",
+    "title": "Database Administrator",
+    "company": "MySQL",
+    "location": "Austin, TX",
+    "logo": "https://logo.clearbit.com/mysql.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are looking for a Database Administrator to manage and optimize our database systems. You will ensure data integrity and availability.",
+    "requirements": [
+      "5+ years of experience in database administration",
+      "Strong knowledge of SQL and database design",
+      "Experience with database management systems",
+      "Excellent analytical skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible working hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-07",
+    "applicationCount": 75,
+    "companySize": "2000+ employees",
+    "industry": "Database Management",
+    "remote": false
+  },
+  {
+    "id": "j2019",
+    "title": "Mobile Developer",
+    "company": "Uber",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/uber.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Mobile Developer to create innovative mobile applications. You will work closely with product teams to deliver high-quality mobile experiences.",
+    "requirements": [
+      "3+ years of experience in mobile development",
+      "Proficiency in Swift or Kotlin",
+      "Experience with mobile app frameworks",
+      "Strong problem-solving skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Employee discounts"
+    ],
+    "postedDate": "2025-12-08",
+    "applicationCount": 120,
+    "companySize": "10000+ employees",
+    "industry": "Transportation",
+    "remote": true
+  },
+  {
+    "id": "j2020",
+    "title": "SEO Specialist",
+    "company": "Moz",
+    "location": "Seattle, WA",
+    "logo": "https://logo.clearbit.com/moz.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are looking for an SEO Specialist to optimize our website for search engines. You will analyze website performance and implement SEO strategies.",
+    "requirements": [
+      "2+ years of experience in SEO",
+      "Strong analytical skills",
+      "Familiarity with SEO tools and analytics",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Flexible working hours",
+      "Health insurance",
+      "Work-from-home options",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-09",
+    "applicationCount": 55,
+    "companySize": "300+ employees",
+    "industry": "Marketing",
+    "remote": false
+  },
+  {
+    "id": "j2021",
+    "title": "DevOps Engineer",
+    "company": "Atlassian",
+    "location": "Sydney, Australia",
+    "logo": "https://logo.clearbit.com/atlassian.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "Join our team as a DevOps Engineer to streamline our development processes. You will work closely with development and operations teams.",
+    "requirements": [
+      "4+ years of experience in DevOps",
+      "Proficiency in CI/CD tools",
+      "Experience with cloud platforms",
+      "Strong problem-solving skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Team-building activities"
+    ],
+    "postedDate": "2025-12-10",
+    "applicationCount": 80,
+    "companySize": "5000+ employees",
+    "industry": "Software",
+    "remote": true
+  },
+  {
+    "id": "j2022",
+    "title": "HR Manager",
+    "company": "LinkedIn",
+    "location": "Sunnyvale, CA",
+    "logo": "https://logo.clearbit.com/linkedin.com",
+    "salary": "$95,000 - $140,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are seeking an HR Manager to oversee human resources functions. You will manage recruitment, employee relations, and performance management.",
+    "requirements": [
+      "5+ years of experience in HR management",
+      "Strong knowledge of employment laws",
+      "Excellent communication and interpersonal skills",
+      "Ability to handle sensitive information"
+    ],
+    "benefits": [
+      "Comprehensive health benefits",
+      "Retirement savings plan",
+      "Professional development opportunities",
+      "Work-life balance initiatives"
+    ],
+    "postedDate": "2025-12-11",
+    "applicationCount": 65,
+    "companySize": "10000+ employees",
+    "industry": "Human Resources",
+    "remote": false
+  },
+  {
+    "id": "j2023",
+    "title": "Technical Writer",
+    "company": "Cisco",
+    "location": "San Jose, CA",
+    "logo": "https://logo.clearbit.com/cisco.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are looking for a Technical Writer to create documentation for our products. You will work with engineering teams to gather information.",
+    "requirements": [
+      "3+ years of experience in technical writing",
+      "Strong writing and editing skills",
+      "Ability to understand complex technical concepts",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Flexible working hours",
+      "Health insurance",
+      "Creative work environment",
+      "Remote work options"
+    ],
+    "postedDate": "2025-12-12",
+    "applicationCount": 50,
+    "companySize": "10000+ employees",
+    "industry": "Technology",
+    "remote": false
+  },
+  {
+    "id": "j2024",
+    "title": "Product Manager",
+    "company": "Facebook",
+    "location": "Menlo Park, CA",
+    "logo": "https://logo.clearbit.com/facebook.com",
+    "salary": "$120,000 - $180,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are seeking a Product Manager to lead product development initiatives. You will work closely with cross-functional teams to define product vision and roadmap.",
+    "requirements": [
+      "5+ years of experience in product management",
+      "Strong analytical and leadership skills",
+      "Experience with Agile methodologies",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Generous paid time off",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-13",
+    "applicationCount": 75,
+    "companySize": "10000+ employees",
+    "industry": "Social Media",
+    "remote": true
+  },
+  {
+    "id": "j2025",
+    "title": "Network Architect",
+    "company": "Juniper Networks",
+    "location": "Sunnyvale, CA",
+    "logo": "https://logo.clearbit.com/juniper.net",
+    "salary": "$130,000 - $180,000",
+    "type": "Contract",
+    "experience": "6+ years",
+    "description": "We are looking for a Network Architect to design and implement network solutions. You will work with engineering teams to ensure optimal network performance.",
+    "requirements": [
+      "6+ years of experience in network architecture",
+      "In-depth knowledge of networking protocols",
+      "Strong analytical and problem-solving skills",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible working hours",
+      "Paid time off"
+    ],
+    "postedDate": "2025-12-14",
+    "applicationCount": 40,
+    "companySize": "2000+ employees",
+    "industry": "Networking",
+    "remote": false
+  },
+  {
+    "id": "j2026",
+    "title": "Data Analyst",
+    "company": "Tableau",
+    "location": "Seattle, WA",
+    "logo": "https://logo.clearbit.com/tableau.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Data Analyst to interpret data and provide insights. You will collaborate with business teams to support data-driven decisions.",
+    "requirements": [
+      "3+ years of experience in data analysis",
+      "Proficiency in SQL and data visualization tools",
+      "Strong analytical skills",
+      "Ability to communicate findings effectively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-15",
+    "applicationCount": 90,
+    "companySize": "5000+ employees",
+    "industry": "Business Intelligence",
+    "remote": true
+  },
+  {
+    "id": "j2027",
+    "title": "Sales Manager",
+    "company": "Salesforce",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/salesforce.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are looking for a Sales Manager to lead our sales team. You will develop sales strategies and drive revenue growth.",
+    "requirements": [
+      "5+ years of experience in sales management",
+      "Strong leadership and motivational skills",
+      "Ability to analyze sales metrics",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Generous vacation policy",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-16",
+    "applicationCount": 85,
+    "companySize": "10000+ employees",
+    "industry": "Sales",
+    "remote": false
+  },
+  {
+    "id": "j2028",
+    "title": "UI Developer",
+    "company": "Zendesk",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/zendesk.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are seeking a UI Developer to create user-friendly interfaces. You will collaborate with designers to implement visual elements.",
+    "requirements": [
+      "3+ years of experience in UI development",
+      "Proficiency in HTML, CSS, and JavaScript",
+      "Experience with frontend frameworks",
+      "Strong attention to detail"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2025-12-17",
+    "applicationCount": 70,
+    "companySize": "3000+ employees",
+    "industry": "Customer Service",
+    "remote": false
+  },
+  {
+    "id": "j2029",
+    "title": "Business Development Representative",
+    "company": "HubSpot",
+    "location": "Cambridge, MA",
+    "logo": "https://logo.clearbit.com/hubspot.com",
+    "salary": "$60,000 - $90,000",
+    "type": "Full-time",
+    "experience": "1+ years",
+    "description": "We are looking for a Business Development Representative to generate new business opportunities. You will work closely with the sales team.",
+    "requirements": [
+      "1+ years of experience in sales or business development",
+      "Strong communication and interpersonal skills",
+      "Ability to work in a fast-paced environment",
+      "Willingness to learn"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Team-building activities"
+    ],
+    "postedDate": "2025-12-18",
+    "applicationCount": 100,
+    "companySize": "5000+ employees",
+    "industry": "Sales",
+    "remote": true
+  },
+  {
+    "id": "j2030",
+    "title": "Operations Manager",
+    "company": "Airbnb",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/airbnb.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are seeking an Operations Manager to oversee daily operations. You will ensure efficiency and effectiveness in our processes.",
+    "requirements": [
+      "4+ years of experience in operations management",
+      "Strong leadership skills",
+      "Ability to analyze operational metrics",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Generous paid time off"
+    ],
+    "postedDate": "2025-12-19",
+    "applicationCount": 55,
+    "companySize": "10000+ employees",
+    "industry": "Hospitality",
+    "remote": false
+  },
+  {
+    "id": "j2031",
+    "title": "Research Scientist",
+    "company": "Genentech",
+    "location": "South San Francisco, CA",
+    "logo": "https://logo.clearbit.com/genentech.com",
+    "salary": "$120,000 - $180,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are looking for a Research Scientist to conduct scientific research and experiments. You will collaborate with cross-functional teams to advance our projects.",
+    "requirements": [
+      "5+ years of experience in scientific research",
+      "Strong analytical and problem-solving skills",
+      "Experience with laboratory techniques",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-20",
+    "applicationCount": 45,
+    "companySize": "10000+ employees",
+    "industry": "Biotechnology",
+    "remote": true
+  },
+  {
+    "id": "j2032",
+    "title": "Supply Chain Analyst",
+    "company": "Nike",
+    "location": "Beaverton, OR",
+    "logo": "https://logo.clearbit.com/nike.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Supply Chain Analyst to optimize our supply chain processes. You will analyze data and provide recommendations for improvement.",
+    "requirements": [
+      "3+ years of experience in supply chain management",
+      "Strong analytical skills",
+      "Proficiency in Excel and data analysis tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Generous paid time off"
+    ],
+    "postedDate": "2025-12-21",
+    "applicationCount": 60,
+    "companySize": "10000+ employees",
+    "industry": "Retail",
+    "remote": false
+  },
+  {
+    "id": "j2033",
+    "title": "Sales Engineer",
+    "company": "Salesforce",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/salesforce.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are looking for a Sales Engineer to provide technical support to the sales team. You will assist in product demonstrations and customer presentations.",
+    "requirements": [
+      "4+ years of experience in sales engineering",
+      "Strong technical background",
+      "Excellent communication skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Generous vacation policy",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-22",
+    "applicationCount": 70,
+    "companySize": "10000+ employees",
+    "industry": "Sales",
+    "remote": false
+  },
+  {
+    "id": "j2034",
+    "title": "Compliance Officer",
+    "company": "Wells Fargo",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/wellsfargo.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Contract",
+    "experience": "5+ years",
+    "description": "We are seeking a Compliance Officer to ensure regulatory compliance across the organization. You will develop and implement compliance programs.",
+    "requirements": [
+      "5+ years of experience in compliance",
+      "Strong knowledge of regulations and laws",
+      "Excellent analytical skills",
+      "Ability to communicate effectively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-23",
+    "applicationCount": 45,
+    "companySize": "10000+ employees",
+    "industry": "Finance",
+    "remote": false
+  },
+  {
+    "id": "j2035",
+    "title": "Web Developer",
+    "company": "Shopify",
+    "location": "Ottawa, Canada",
+    "logo": "https://logo.clearbit.com/shopify.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Web Developer to create and maintain our e-commerce platform. You will work closely with designers and product teams.",
+    "requirements": [
+      "3+ years of experience in web development",
+      "Proficiency in HTML, CSS, and JavaScript",
+      "Experience with e-commerce platforms",
+      "Strong problem-solving skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-24",
+    "applicationCount": 80,
+    "companySize": "5000+ employees",
+    "industry": "E-commerce",
+    "remote": true
+  },
+  {
+    "id": "j2036",
+    "title": "Account Executive",
+    "company": "Zendesk",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/zendesk.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are looking for an Account Executive to manage client relationships and drive sales. You will work closely with the sales team to achieve targets.",
+    "requirements": [
+      "3+ years of experience in account management",
+      "Strong communication and negotiation skills",
+      "Ability to work independently",
+      "Proven track record of meeting sales targets"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Generous vacation policy"
+    ],
+    "postedDate": "2025-12-25",
+    "applicationCount": 90,
+    "companySize": "3000+ employees",
+    "industry": "Customer Service",
+    "remote": false
+  },
+  {
+    "id": "j2037",
+    "title": "Network Security Engineer",
+    "company": "Fortinet",
+    "location": "Sunnyvale, CA",
+    "logo": "https://logo.clearbit.com/fortinet.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Contract",
+    "experience": "5+ years",
+    "description": "We are looking for a Network Security Engineer to protect our network infrastructure. You will monitor and respond to security incidents.",
+    "requirements": [
+      "5+ years of experience in network security",
+      "Strong knowledge of security protocols",
+      "Excellent analytical and problem-solving skills",
+      "Ability to work under pressure"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible working hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-26",
+    "applicationCount": 50,
+    "companySize": "5000+ employees",
+    "industry": "Cybersecurity",
+    "remote": false
+  },
+  {
+    "id": "j2038",
+    "title": "Product Designer",
+    "company": "Square",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/square.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Product Designer to create user-friendly products. You will collaborate with cross-functional teams to define product requirements.",
+    "requirements": [
+      "3+ years of experience in product design",
+      "Strong portfolio showcasing design projects",
+      "Proficiency in design tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Creative work environment"
+    ],
+    "postedDate": "2025-12-27",
+    "applicationCount": 65,
+    "companySize": "2000+ employees",
+    "industry": "Design",
+    "remote": true
+  },
+  {
+    "id": "j2039",
+    "title": "Operations Analyst",
+    "company": "Tesla",
+    "location": "Palo Alto, CA",
+    "logo": "https://logo.clearbit.com/tesla.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are looking for an Operations Analyst to analyze operational processes and recommend improvements. You will work closely with teams to streamline operations.",
+    "requirements": [
+      "3+ years of experience in operations analysis",
+      "Strong analytical skills",
+      "Proficiency in data analysis tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-28",
+    "applicationCount": 55,
+    "companySize": "10000+ employees",
+    "industry": "Automotive",
+    "remote": false
+  },
+  {
+    "id": "j2040",
+    "title": "Financial Analyst",
+    "company": "Goldman Sachs",
+    "location": "New York, NY",
+    "logo": "https://logo.clearbit.com/goldmansachs.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Financial Analyst to analyze financial data and provide insights. You will work closely with finance teams to support decision-making.",
+    "requirements": [
+      "3+ years of experience in financial analysis",
+      "Strong analytical and problem-solving skills",
+      "Proficiency in Excel and financial modeling",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-29",
+    "applicationCount": 70,
+    "companySize": "10000+ employees",
+    "industry": "Finance",
+    "remote": true
+  },
+  {
+    "id": "j2041",
+    "title": "Cloud Consultant",
+    "company": "Accenture",
+    "location": "Chicago, IL",
+    "logo": "https://logo.clearbit.com/accenture.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Contract",
+    "experience": "4+ years",
+    "description": "We are looking for a Cloud Consultant to advise clients on cloud solutions. You will develop cloud strategies and implementation plans.",
+    "requirements": [
+      "4+ years of experience in cloud consulting",
+      "Strong knowledge of cloud platforms",
+      "Excellent communication and presentation skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-30",
+    "applicationCount": 60,
+    "companySize": "5000+ employees",
+    "industry": "Consulting",
+    "remote": false
+  },
+  {
+    "id": "j2042",
+    "title": "Risk Analyst",
+    "company": "JPMorgan Chase",
+    "location": "New York, NY",
+    "logo": "https://logo.clearbit.com/jpmorganchase.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are looking for a Risk Analyst to assess and manage risks. You will work closely with risk management teams to develop risk mitigation strategies.",
+    "requirements": [
+      "3+ years of experience in risk analysis",
+      "Strong analytical skills",
+      "Proficiency in risk management tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2025-12-31",
+    "applicationCount": 50,
+    "companySize": "10000+ employees",
+    "industry": "Finance",
+    "remote": true
+  },
+  {
+    "id": "j2043",
+    "title": "Graphic Artist",
+    "company": "Adobe",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/adobe.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are looking for a Graphic Artist to create visual content for marketing campaigns. You will collaborate with marketing teams to produce creative assets.",
+    "requirements": [
+      "2+ years of experience in graphic design",
+      "Strong portfolio of design work",
+      "Proficiency in Adobe Creative Suite",
+      "Ability to work under tight deadlines"
+    ],
+    "benefits": [
+      "Flexible working hours",
+      "Health insurance",
+      "Creative work environment",
+      "Remote work options"
+    ],
+    "postedDate": "2026-01-01",
+    "applicationCount": 40,
+    "companySize": "10000+ employees",
+    "industry": "Design",
+    "remote": false
+  },
+  {
+    "id": "j2044",
+    "title": "Business Intelligence Analyst",
+    "company": "SAP",
+    "location": "Walldorf, Germany",
+    "logo": "https://logo.clearbit.com/sap.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Business Intelligence Analyst to analyze data and provide insights. You will work closely with business teams to support data-driven decisions.",
+    "requirements": [
+      "3+ years of experience in business intelligence",
+      "Strong analytical and problem-solving skills",
+      "Proficiency in SQL and data visualization tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-02",
+    "applicationCount": 75,
+    "companySize": "10000+ employees",
+    "industry": "Business Intelligence",
+    "remote": true
+  },
+  {
+    "id": "j2045",
+    "title": "Technical Support Specialist",
+    "company": "Zendesk",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/zendesk.com",
+    "salary": "$60,000 - $90,000",
+    "type": "Contract",
+    "experience": "1+ years",
+    "description": "We are looking for a Technical Support Specialist to assist customers with technical issues. You will provide troubleshooting support and solutions.",
+    "requirements": [
+      "1+ years of experience in technical support",
+      "Strong communication and problem-solving skills",
+      "Ability to work independently",
+      "Familiarity with help desk software"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-03",
+    "applicationCount": 50,
+    "companySize": "3000+ employees",
+    "industry": "Customer Service",
+    "remote": false
+  },
+  {
+    "id": "j2046",
+    "title": "Event Coordinator",
+    "company": "Eventbrite",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/eventbrite.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Full-time",
+    "experience": "2+ years",
+    "description": "We are seeking an Event Coordinator to plan and execute events. You will work closely with clients to ensure successful event delivery.",
+    "requirements": [
+      "2+ years of experience in event planning",
+      "Strong organizational skills",
+      "Excellent communication skills",
+      "Ability to work under pressure"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-04",
+    "applicationCount": 45,
+    "companySize": "2000+ employees",
+    "industry": "Event Management",
+    "remote": true
+  },
+  {
+    "id": "j2047",
+    "title": "IT Support Specialist",
+    "company": "IBM",
+    "location": "Armonk, NY",
+    "logo": "https://logo.clearbit.com/ibm.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are looking for an IT Support Specialist to provide technical support to users. You will troubleshoot hardware and software issues.",
+    "requirements": [
+      "2+ years of experience in IT support",
+      "Strong troubleshooting skills",
+      "Ability to work independently",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-05",
+    "applicationCount": 55,
+    "companySize": "10000+ employees",
+    "industry": "IT Services",
+    "remote": false
+  },
+  {
+    "id": "j2048",
+    "title": "Digital Marketing Manager",
+    "company": "HubSpot",
+    "location": "Cambridge, MA",
+    "logo": "https://logo.clearbit.com/hubspot.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are seeking a Digital Marketing Manager to develop and implement online marketing strategies. You will analyze performance metrics and optimize campaigns.",
+    "requirements": [
+      "4+ years of experience in digital marketing",
+      "Strong analytical skills",
+      "Proficiency in digital marketing tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-06",
+    "applicationCount": 65,
+    "companySize": "5000+ employees",
+    "industry": "Marketing",
+    "remote": true
+  },
+  {
+    "id": "j2049",
+    "title": "Video Producer",
+    "company": "Vimeo",
+    "location": "New York, NY",
+    "logo": "https://logo.clearbit.com/vimeo.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are looking for a Video Producer to create engaging video content. You will collaborate with creative teams to produce high-quality videos.",
+    "requirements": [
+      "3+ years of experience in video production",
+      "Strong portfolio of video work",
+      "Proficiency in video editing software",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-07",
+    "applicationCount": 50,
+    "companySize": "2000+ employees",
+    "industry": "Media",
+    "remote": false
+  },
+  {
+    "id": "j2050",
+    "title": "Social Media Manager",
+    "company": "Twitter",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/twitter.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Social Media Manager to develop and execute social media strategies. You will engage with our audience and analyze performance metrics.",
+    "requirements": [
+      "3+ years of experience in social media management",
+      "Strong communication and writing skills",
+      "Ability to analyze social media metrics",
+      "Experience with social media tools"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-08",
+    "applicationCount": 60,
+    "companySize": "5000+ employees",
+    "industry": "Social Media",
+    "remote": true
+  },
+  {
+    "id": "j2051",
+    "title": "Email Marketing Specialist",
+    "company": "Mailchimp",
+    "location": "Atlanta, GA",
+    "logo": "https://logo.clearbit.com/mailchimp.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are seeking an Email Marketing Specialist to create and manage email campaigns. You will analyze performance metrics and optimize email strategies.",
+    "requirements": [
+      "2+ years of experience in email marketing",
+      "Strong analytical skills",
+      "Proficiency in email marketing tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-09",
+    "applicationCount": 40,
+    "companySize": "3000+ employees",
+    "industry": "Marketing",
+    "remote": false
+  },
+  {
+    "id": "j2052",
+    "title": "Field Sales Representative",
+    "company": "Salesforce",
+    "location": "Los Angeles, CA",
+    "logo": "https://logo.clearbit.com/salesforce.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Full-time",
+    "experience": "1+ years",
+    "description": "We are seeking a Field Sales Representative to generate new business opportunities. You will meet with clients and promote our products.",
+    "requirements": [
+      "1+ years of experience in sales",
+      "Strong communication and interpersonal skills",
+      "Ability to work independently",
+      "Willingness to travel"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-10",
+    "applicationCount": 55,
+    "companySize": "5000+ employees",
+    "industry": "Sales",
+    "remote": true
+  },
+  {
+    "id": "j2053",
+    "title": "Research Analyst",
+    "company": "Bloomberg",
+    "location": "New York, NY",
+    "logo": "https://logo.clearbit.com/bloomberg.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are looking for a Research Analyst to conduct market research and analyze data. You will provide insights to support decision-making.",
+    "requirements": [
+      "3+ years of experience in research analysis",
+      "Strong analytical and problem-solving skills",
+      "Proficiency in data analysis tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-11",
+    "applicationCount": 50,
+    "companySize": "10000+ employees",
+    "industry": "Finance",
+    "remote": false
+  },
+  {
+    "id": "j2054",
+    "title": "Customer Success Manager",
+    "company": "Zendesk",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/zendesk.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking a Customer Success Manager to ensure client satisfaction and retention. You will work closely with clients to address their needs.",
+    "requirements": [
+      "3+ years of experience in customer success",
+      "Strong communication and relationship-building skills",
+      "Ability to analyze customer feedback",
+      "Excellent problem-solving skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-12",
+    "applicationCount": 60,
+    "companySize": "3000+ employees",
+    "industry": "Customer Service",
+    "remote": true
+  },
+  {
+    "id": "j2055",
+    "title": "Security Consultant",
+    "company": "CrowdStrike",
+    "location": "Sunnyvale, CA",
+    "logo": "https://logo.clearbit.com/crowdstrike.com",
+    "salary": "$120,000 - $180,000",
+    "type": "Contract",
+    "experience": "5+ years",
+    "description": "We are looking for a Security Consultant to advise clients on security best practices. You will conduct security assessments and provide recommendations.",
+    "requirements": [
+      "5+ years of experience in security consulting",
+      "Strong knowledge of security frameworks",
+      "Excellent communication and presentation skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible working hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-13",
+    "applicationCount": 45,
+    "companySize": "5000+ employees",
+    "industry": "Cybersecurity",
+    "remote": false
+  },
+  {
+    "id": "j2056",
+    "title": "Content Strategist",
+    "company": "HubSpot",
+    "location": "Cambridge, MA",
+    "logo": "https://logo.clearbit.com/hubspot.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are seeking a Content Strategist to develop content strategies that align with business goals. You will work closely with marketing teams.",
+    "requirements": [
+      "4+ years of experience in content strategy",
+      "Strong analytical skills",
+      "Excellent writing and communication skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-14",
+    "applicationCount": 55,
+    "companySize": "5000+ employees",
+    "industry": "Marketing",
+    "remote": true
+  },
+  {
+    "id": "j2057",
+    "title": "Product Marketing Manager",
+    "company": "Apple",
+    "location": "Cupertino, CA",
+    "logo": "https://logo.clearbit.com/apple.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are looking for a Product Marketing Manager to develop marketing strategies for our products. You will collaborate with cross-functional teams to drive product success.",
+    "requirements": [
+      "5+ years of experience in product marketing",
+      "Strong analytical and strategic thinking skills",
+      "Excellent communication skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Generous paid time off",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-15",
+    "applicationCount": 60,
+    "companySize": "10000+ employees",
+    "industry": "Technology",
+    "remote": false
+  },
+  {
+    "id": "j2058",
+    "title": "Field Operations Manager",
+    "company": "DoorDash",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/doordash.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are seeking a Field Operations Manager to oversee field operations. You will ensure efficiency and effectiveness in our processes.",
+    "requirements": [
+      "4+ years of experience in operations management",
+      "Strong leadership skills",
+      "Ability to analyze operational metrics",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Generous paid time off"
+    ],
+    "postedDate": "2026-01-16",
+    "applicationCount": 50,
+    "companySize": "10000+ employees",
+    "industry": "Food Delivery",
+    "remote": false
+  },
+  {
+    "id": "j2059",
+    "title": "Compliance Analyst",
+    "company": "Goldman Sachs",
+    "location": "New York, NY",
+    "logo": "https://logo.clearbit.com/goldmansachs.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are looking for a Compliance Analyst to ensure regulatory compliance across the organization. You will assist in developing compliance programs.",
+    "requirements": [
+      "3+ years of experience in compliance analysis",
+      "Strong knowledge of regulations and laws",
+      "Excellent analytical skills",
+      "Ability to communicate effectively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-17",
+    "applicationCount": 45,
+    "companySize": "10000+ employees",
+    "industry": "Finance",
+    "remote": false
+  },
+  {
+    "id": "j2060",
+    "title": "Digital Designer",
+    "company": "Figma",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/figma.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Contract",
+    "experience": "3+ years",
+    "description": "We are seeking a Digital Designer to create engaging digital experiences. You will work closely with product teams to deliver high-quality designs.",
+    "requirements": [
+      "3+ years of experience in digital design",
+      "Strong portfolio of design work",
+      "Proficiency in design tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-18",
+    "applicationCount": 50,
+    "companySize": "2000+ employees",
+    "industry": "Design",
+    "remote": false
+  },
+  {
+    "id": "j2061",
+    "title": "Customer Support Specialist",
+    "company": "Zendesk",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/zendesk.com",
+    "salary": "$60,000 - $90,000",
+    "type": "Contract",
+    "experience": "1+ years",
+    "description": "We are seeking a Customer Support Specialist to assist customers with inquiries. You will provide support through various channels.",
+    "requirements": [
+      "1+ years of experience in customer support",
+      "Strong communication skills",
+      "Ability to work independently",
+      "Familiarity with help desk software"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-19",
+    "applicationCount": 45,
+    "companySize": "3000+ employees",
+    "industry": "Customer Service",
+    "remote": false
+  },
+  {
+    "id": "j2062",
+    "title": "Data Engineer",
+    "company": "Snowflake",
+    "location": "Bozeman, MT",
+    "logo": "https://logo.clearbit.com/snowflake.com",
+    "salary": "$110,000 - $160,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are looking for a Data Engineer to design and maintain data pipelines. You will work with data scientists and analysts to ensure data availability.",
+    "requirements": [
+      "4+ years of experience in data engineering",
+      "Proficiency in SQL and Python",
+      "Experience with data warehousing solutions",
+      "Strong analytical skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-20",
+    "applicationCount": 70,
+    "companySize": "5000+ employees",
+    "industry": "Data Management",
+    "remote": true
+  },
+  {
+    "id": "j2063",
+    "title": "E-commerce Specialist",
+    "company": "Shopify",
+    "location": "Ottawa, Canada",
+    "logo": "https://logo.clearbit.com/shopify.com",
+    "salary": "$80,000 - $120,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking an E-commerce Specialist to optimize our online store. You will analyze performance metrics and implement strategies for improvement.",
+    "requirements": [
+      "3+ years of experience in e-commerce",
+      "Strong analytical skills",
+      "Proficiency in e-commerce platforms",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-21",
+    "applicationCount": 55,
+    "companySize": "5000+ employees",
+    "industry": "E-commerce",
+    "remote": false
+  },
+  {
+    "id": "j2064",
+    "title": "Business Operations Manager",
+    "company": "Slack",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/slack.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are seeking a Business Operations Manager to streamline our operations. You will work closely with cross-functional teams to improve efficiency.",
+    "requirements": [
+      "5+ years of experience in operations management",
+      "Strong analytical skills",
+      "Excellent communication skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-22",
+    "applicationCount": 60,
+    "companySize": "5000+ employees",
+    "industry": "Software",
+    "remote": true
+  },
+  {
+    "id": "j2065",
+    "title": "Creative Director",
+    "company": "Wieden+Kennedy",
+    "location": "Portland, OR",
+    "logo": "https://logo.clearbit.com/wk.com",
+    "salary": "$120,000 - $180,000",
+    "type": "Full-time",
+    "experience": "6+ years",
+    "description": "We are looking for a Creative Director to lead our creative team. You will oversee the development of innovative advertising campaigns.",
+    "requirements": [
+      "6+ years of experience in creative direction",
+      "Strong portfolio of creative work",
+      "Excellent leadership skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-23",
+    "applicationCount": 50,
+    "companySize": "2000+ employees",
+    "industry": "Advertising",
+    "remote": false
+  },
+  {
+    "id": "j2066",
+    "title": "Legal Assistant",
+    "company": "DLA Piper",
+    "location": "New York, NY",
+    "logo": "https://logo.clearbit.com/dlapiper.com",
+    "salary": "$60,000 - $90,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are seeking a Legal Assistant to support our legal team. You will assist in document preparation and case management.",
+    "requirements": [
+      "2+ years of experience as a legal assistant",
+      "Strong organizational skills",
+      "Excellent communication skills",
+      "Ability to work independently"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-24",
+    "applicationCount": 40,
+    "companySize": "3000+ employees",
+    "industry": "Legal",
+    "remote": false
+  },
+  {
+    "id": "j2067",
+    "title": "Data Privacy Officer",
+    "company": "Facebook",
+    "location": "Menlo Park, CA",
+    "logo": "https://logo.clearbit.com/facebook.com",
+    "salary": "$100,000 - $150,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are seeking a Data Privacy Officer to oversee data protection strategies. You will ensure compliance with data privacy regulations.",
+    "requirements": [
+      "5+ years of experience in data privacy",
+      "Strong knowledge of data protection laws",
+      "Excellent communication skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-25",
+    "applicationCount": 50,
+    "companySize": "10000+ employees",
+    "industry": "Social Media",
+    "remote": false
+  },
+  {
+    "id": "j2068",
+    "title": "User Experience Researcher",
+    "company": "Airbnb",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/airbnb.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We are looking for a User Experience Researcher to conduct research and gather insights. You will work closely with design teams to improve user experiences.",
+    "requirements": [
+      "4+ years of experience in user experience research",
+      "Strong analytical skills",
+      "Experience with research methodologies",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-26",
+    "applicationCount": 45,
+    "companySize": "10000+ employees",
+    "industry": "Technology",
+    "remote": true
+  },
+  {
+    "id": "j2069",
+    "title": "Account Manager",
+    "company": "Salesforce",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/salesforce.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are seeking an Account Manager to manage client relationships and drive sales. You will work closely with the sales team to achieve targets.",
+    "requirements": [
+      "3+ years of experience in account management",
+      "Strong communication and negotiation skills",
+      "Ability to work independently",
+      "Proven track record of meeting sales targets"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Generous vacation policy"
+    ],
+    "postedDate": "2026-01-27",
+    "applicationCount": 60,
+    "companySize": "10000+ employees",
+    "industry": "Sales",
+    "remote": false
+  },
+  {
+    "id": "j2070",
+    "title": "Software Tester",
+    "company": "Microsoft",
+    "location": "Redmond, WA",
+    "logo": "https://logo.clearbit.com/microsoft.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are looking for a Software Tester to ensure the quality of our software products. You will develop test plans and conduct testing.",
+    "requirements": [
+      "2+ years of experience in software testing",
+      "Familiarity with automated testing tools",
+      "Strong analytical skills",
+      "Attention to detail"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-28",
+    "applicationCount": 50,
+    "companySize": "10000+ employees",
+    "industry": "Software",
+    "remote": false
+  },
+  {
+    "id": "j2071",
+    "title": "Cloud Architect",
+    "company": "Amazon Web Services",
+    "location": "Seattle, WA",
+    "logo": "https://logo.clearbit.com/aws.amazon.com",
+    "salary": "$130,000 - $180,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We are seeking a Cloud Architect to design and implement cloud solutions. You will work with development teams to ensure optimal cloud performance.",
+    "requirements": [
+      "5+ years of experience in cloud architecture",
+      "Strong knowledge of cloud platforms",
+      "Excellent communication skills",
+      "Ability to work collaboratively"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-29",
+    "applicationCount": 45,
+    "companySize": "10000+ employees",
+    "industry": "Cloud Computing",
+    "remote": false
+  },
+  {
+    "id": "j2072",
+    "title": "Marketing Coordinator",
+    "company": "Salesforce",
+    "location": "San Francisco, CA",
+    "logo": "https://logo.clearbit.com/salesforce.com",
+    "salary": "$70,000 - $100,000",
+    "type": "Contract",
+    "experience": "2+ years",
+    "description": "We are looking for a Marketing Coordinator to assist in the execution of marketing campaigns. You will support the marketing team in various initiatives.",
+    "requirements": [
+      "2+ years of experience in marketing coordination",
+      "Strong organizational skills",
+      "Excellent communication skills",
+      "Ability to work independently"
+    ],
+    "benefits": [
+      "Health insurance",
+      "Flexible working hours",
+      "Professional development opportunities",
+      "Team-building activities"
+    ],
+    "postedDate": "2026-01-30",
+    "applicationCount": 50,
+    "companySize": "10000+ employees",
+    "industry": "Marketing",
+    "remote": false
+  },
+  {
+    "id": "j2073",
+    "title": "Business Analyst",
+    "company": "Accenture",
+    "location": "Chicago, IL",
+    "logo": "https://logo.clearbit.com/accenture.com",
+    "salary": "$90,000 - $130,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We are looking for a Business Analyst to analyze business processes and provide insights. You will work with stakeholders to identify improvement opportunities.",
+    "requirements": [
+      "3+ years of experience in business analysis",
+      "Strong analytical and problem-solving skills",
+      "Experience with data visualization tools",
+      "Excellent communication skills"
+    ],
+    "benefits": [
+      "Health insurance",
+      "401(k) matching",
+      "Flexible work hours",
+      "Professional development opportunities"
+    ],
+    "postedDate": "2026-01-31",
+    "applicationCount": 55,
+    "companySize": "5000+ employees",
+    "industry": "Consulting",
+    "remote": true
   }
 ]

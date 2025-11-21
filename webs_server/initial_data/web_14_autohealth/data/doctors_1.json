@@ -139372,5 +139372,350 @@
       "Rheumatology Consultation",
       "Rheumatology Follow-up"
     ]
+  },
+  {
+    "id": "d2001",
+    "name": "Dr. Emily Carter 123",
+    "specialty": "Pediatrics",
+    "rating": 4.9,
+    "bio": "Pediatric specialist with 10+ years of experience in child healthcare and development.",
+    "experience": 10,
+    "education": [
+      "MD - Stanford University",
+      "Residency - Children's Hospital"
+    ],
+    "certifications": [
+      "Board Certified in Pediatrics",
+      "Pediatric Specialist"
+    ],
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "hospitalAffiliations": [
+      "Children's Health Center",
+      "Pediatric Care Hospital"
+    ],
+    "officeLocation": "123 Kid's Lane, Medical District",
+    "phone": "(555) 123-4567",
+    "email": ".emily.carter.123@autohealth.com",
+    "consultationFee": 200,
+    "insuranceAccepted": [
+      "Blue Cross",
+      "Aetna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Pediatrics",
+      "Adolescent Medicine"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Emily is amazing with kids!",
+        "patientName": "Linda T.",
+        "date": "2025-01-15"
+      },
+      {
+        "rating": 4,
+        "comment": "Great experience overall.",
+        "patientName": "Mark P.",
+        "date": "2025-03-22"
+      }
+    ],
+    "awards": [
+      "Pediatric Excellence Award 2021"
+    ],
+    "publications": [
+      "Child Health Advances - 2022"
+    ],
+    "procedures": [
+      "Pediatric Consultation",
+      "Developmental Assessment"
+    ]
+  },
+  {
+    "id": "d2002",
+    "name": "Dr. Michael Brown 456",
+    "specialty": "Cardiology",
+    "rating": 4.7,
+    "bio": "Cardiology expert with 15+ years of experience in heart health and disease prevention.",
+    "experience": 15,
+    "education": [
+      "MD - Harvard Medical School",
+      "Residency - Cardiology Institute"
+    ],
+    "certifications": [
+      "Board Certified in Cardiology",
+      "Cardiology Specialist"
+    ],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "hospitalAffiliations": [
+      "Heart Health Hospital",
+      "City Cardiology Center"
+    ],
+    "officeLocation": "456 Heartbeat Ave, Medical District",
+    "phone": "(555) 987-6543",
+    "email": ".michael.brown.456@autohealth.com",
+    "consultationFee": 450,
+    "insuranceAccepted": [
+      "Medicare",
+      "Cigna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Cardiology",
+      "Interventional Cardiology"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Michael is very thorough and caring.",
+        "patientName": "Sarah L.",
+        "date": "2025-06-10"
+      },
+      {
+        "rating": 4,
+        "comment": "Great cardiologist, highly recommend.",
+        "patientName": "James W.",
+        "date": "2025-02-28"
+      }
+    ],
+    "awards": [
+      "Cardiology Excellence Award 2020"
+    ],
+    "publications": [
+      "Heart Health Journal - 2023"
+    ],
+    "procedures": [
+      "Cardiology Consultation",
+      "Echocardiogram"
+    ]
+  },
+  {
+    "id": "d2003",
+    "name": "Dr. Olivia Smith 789",
+    "specialty": "Dermatology",
+    "rating": 4.6,
+    "bio": "Dermatology specialist with 8+ years of experience in skin health and aesthetics.",
+    "experience": 8,
+    "education": [
+      "MD - University of California",
+      "Residency - Dermatology Clinic"
+    ],
+    "certifications": [
+      "Board Certified in Dermatology",
+      "Dermatology Specialist"
+    ],
+    "languages": [
+      "English",
+      "Korean"
+    ],
+    "hospitalAffiliations": [
+      "Skin Health Center",
+      "Cosmetic Dermatology Clinic"
+    ],
+    "officeLocation": "789 Skin St, Medical District",
+    "phone": "(555) 321-9876",
+    "email": ".olivia.smith.789@autohealth.com",
+    "consultationFee": 300,
+    "insuranceAccepted": [
+      "Aetna",
+      "United Healthcare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Dermatology",
+      "Cosmetic Dermatology"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Olivia is the best dermatologist I've seen.",
+        "patientName": "Emma J.",
+        "date": "2025-07-05"
+      },
+      {
+        "rating": 4,
+        "comment": "Very professional and knowledgeable.",
+        "patientName": "Chris T.",
+        "date": "2025-05-18"
+      }
+    ],
+    "awards": [
+      "Dermatology Excellence Award 2019"
+    ],
+    "publications": [
+      "Skin Health Review - 2021"
+    ],
+    "procedures": [
+      "Dermatology Consultation",
+      "Skin Biopsy"
+    ]
+  },
+  {
+    "id": "d2004",
+    "name": "Dr. William Johnson 234",
+    "specialty": "Orthopedics",
+    "rating": 4.8,
+    "bio": "Orthopedic surgeon with 12+ years of experience in sports medicine and joint health.",
+    "experience": 12,
+    "education": [
+      "MD - University of Michigan",
+      "Residency - Orthopedic Surgery Center"
+    ],
+    "certifications": [
+      "Board Certified in Orthopedics",
+      "Orthopedic Specialist"
+    ],
+    "languages": [
+      "English",
+      "Italian"
+    ],
+    "hospitalAffiliations": [
+      "City Orthopedic Hospital",
+      "Sports Medicine Institute"
+    ],
+    "officeLocation": "234 Bone Blvd, Medical District",
+    "phone": "(555) 654-3210",
+    "email": ".william.johnson.234@autohealth.com",
+    "consultationFee": 400,
+    "insuranceAccepted": [
+      "Blue Shield",
+      "Medicare"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Orthopedics",
+      "Sports Medicine"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. William is a fantastic surgeon.",
+        "patientName": "Anna K.",
+        "date": "2025-09-12"
+      },
+      {
+        "rating": 4,
+        "comment": "Very satisfied with the treatment.",
+        "patientName": "Tom H.",
+        "date": "2025-11-01"
+      }
+    ],
+    "awards": [
+      "Orthopedic Excellence Award 2022"
+    ],
+    "publications": [
+      "Journal of Orthopedics - 2023"
+    ],
+    "procedures": [
+      "Orthopedic Consultation",
+      "Joint Replacement Surgery"
+    ]
+  },
+  {
+    "id": "d2005",
+    "name": "Dr. Ava Wilson 567",
+    "specialty": "Endocrinology",
+    "rating": 4.5,
+    "bio": "Endocrinology specialist with 9+ years of experience in hormone health and diabetes management.",
+    "experience": 9,
+    "education": [
+      "MD - Duke University",
+      "Residency - Endocrinology Clinic"
+    ],
+    "certifications": [
+      "Board Certified in Endocrinology",
+      "Endocrinology Specialist"
+    ],
+    "languages": [
+      "English",
+      "French"
+    ],
+    "hospitalAffiliations": [
+      "Diabetes Care Center",
+      "Endocrine Health Hospital"
+    ],
+    "officeLocation": "567 Hormone Rd, Medical District",
+    "phone": "(555) 456-7890",
+    "email": ".ava.wilson.567@autohealth.com",
+    "consultationFee": 275,
+    "insuranceAccepted": [
+      "Cigna",
+      "Aetna"
+    ],
+    "availability": {
+      "monday": "8:00 AM - 5:00 PM",
+      "tuesday": "8:00 AM - 5:00 PM",
+      "wednesday": "8:00 AM - 5:00 PM",
+      "thursday": "8:00 AM - 5:00 PM",
+      "friday": "8:00 AM - 3:00 PM",
+      "saturday": "Closed",
+      "sunday": "Closed"
+    },
+    "specialties": [
+      "Endocrinology",
+      "Diabetes Management"
+    ],
+    "patientReviews": [
+      {
+        "rating": 5,
+        "comment": "Dr. Ava is very knowledgeable and caring.",
+        "patientName": "Sophie R.",
+        "date": "2025-10-11"
+      },
+      {
+        "rating": 4,
+        "comment": "Great experience with my treatment.",
+        "patientName": "Liam B.",
+        "date": "2025-08-30"
+      }
+    ],
+    "awards": [
+      "Endocrinology Excellence Award 2021"
+    ],
+    "publications": [
+      "Endocrine Journal - 2023"
+    ],
+    "procedures": [
+      "Endocrinology Consultation",
+      "Thyroid Function Test"
+    ]
   }
 ]

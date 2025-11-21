@@ -62712,5 +62712,157 @@
     "labels": [],
     "category": "social",
     "threadId": "thread2000"
+  },
+  {
+    "id": "email2001",
+    "from": {
+      "name": "Emily Johnson",
+      "email": "emily.johnson@workplace.com",
+      "avatar": "https://example.com/avatars/emilyjohnson.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Meeting Reminder",
+    "body": "Hello Team,\n\nJust a reminder about our meeting scheduled for tomorrow at 10 AM. Please be prepared to discuss your progress.\n\nBest,\nEmily",
+    "snippet": "Hello Team, Just a reminder about our meeting scheduled for tomorrow at 10 AM. Please be prepared...",
+    "timestamp": "2024-11-26T09:00:00.000Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "inbox",
+    "threadId": "thread2001",
+    "attachments": []
+  },
+  {
+    "id": "email2002",
+    "from": {
+      "name": "Michael Smith",
+      "email": "michael.smith@business.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Invoice for Services Rendered",
+    "body": "Dear Client,\n\nAttached is the invoice for the services provided last month. Please review and let me know if you have any questions.\n\nThank you,\nMichael",
+    "snippet": "Dear Client, Attached is the invoice for the services provided last month. Please review and let me...",
+    "timestamp": "2024-11-25T14:30:00.000Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [],
+    "category": "sent",
+    "threadId": "thread2002",
+    "attachments": [
+      {
+        "id": "attach2002001",
+        "name": "invoice.pdf",
+        "size": 204800,
+        "type": "application/pdf",
+        "url": "https://example.com/invoice.pdf"
+      }
+    ]
+  },
+  {
+    "id": "email2003",
+    "from": {
+      "name": "Sarah Lee",
+      "email": "sarah.lee@company.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Feedback Request",
+    "body": "Hi,\n\nI would appreciate your feedback on the recent project presentation. Your insights are valuable to me.\n\nThanks,\nSarah",
+    "snippet": "Hi, I would appreciate your feedback on the recent project presentation. Your insights are valuable...",
+    "timestamp": "2024-11-24T11:15:00.000Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [],
+    "category": "inbox",
+    "threadId": "thread2003"
+  },
+  {
+    "id": "email2004",
+    "from": {
+      "name": "John Doe",
+      "email": "john.doe@gmail.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekend Plans",
+    "body": "Hey,\n\nAre we still on for the hike this weekend? Let me know what time works for you.\n\nCheers,\nJohn",
+    "snippet": "Hey, Are we still on for the hike this weekend? Let me know what time works for you...",
+    "timestamp": "2024-11-23T16:45:00.000Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [],
+    "category": "inbox",
+    "threadId": "thread2004"
+  },
+  {
+    "id": "email2005",
+    "from": {
+      "name": "Alice Brown",
+      "email": "alice.brown@service.com"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Draft of the Proposal",
+    "body": "Hi,\n\nI have attached the draft of the proposal we discussed. Please review it and let me know your thoughts.\n\nBest,\nAlice",
+    "snippet": "Hi, I have attached the draft of the proposal we discussed. Please review it and let me know your...",
+    "timestamp": "2024-11-22T10:00:00.000Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": true,
+    "isImportant": true,
+    "labels": [],
+    "category": "draft",
+    "threadId": "thread2005",
+    "attachments": [
+      {
+        "id": "attach2005001",
+        "name": "proposal_draft.docx",
+        "size": 512000,
+        "type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "url": "https://example.com/proposal_draft.docx"
+      }
+    ]
   }
 ]

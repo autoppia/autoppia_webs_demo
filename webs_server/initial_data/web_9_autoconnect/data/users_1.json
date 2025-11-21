@@ -52198,5 +52198,1175 @@
         "description": "Working on product manager projects. Building innovative solutions and collaborating with cross-functional teams to deliver high-quality products."
       }
     ]
+  },
+  {
+    "username": "sophia.johnson22",
+    "name": "Sophia Johnson",
+    "avatar": "https://randomuser.me/api/portraits/women/54.jpg",
+    "bio": "Creative Graphic Designer with a flair for innovation.",
+    "title": "Graphic Designer",
+    "about": "Hello, I'm Sophia! I specialize in graphic design and creating visual experiences. I love working with colors and shapes to deliver impactful designs. Always looking for new challenges to tackle!\n\nExperienced professional with a passion for creativity and continuous learning. I've worked on various projects that push the boundaries of design.",
+    "experience": [
+      {
+        "title": "Junior Graphic Designer",
+        "company": "Figma",
+        "logo": "https://logo.clearbit.com/figma.com",
+        "duration": "Jan 2020 - Dec 2021 • 1 yr",
+        "location": "San Francisco, CA",
+        "description": "Assisted in the design of user interfaces and marketing materials. Collaborated with cross-functional teams to create engaging visuals."
+      },
+      {
+        "title": "Senior Graphic Designer",
+        "company": "Canva",
+        "logo": "https://logo.clearbit.com/canva.com",
+        "duration": "Jan 2022 - Present • 1 yr 10 mos",
+        "location": "Sydney, Australia",
+        "description": "Lead design projects for various clients, focusing on brand identity and visual storytelling."
+      }
+    ]
+  },
+  {
+    "username": "michael.brown33",
+    "name": "Michael Brown",
+    "avatar": "https://randomuser.me/api/portraits/men/75.jpg",
+    "bio": "Product Manager with a passion for delivering user-centric solutions.",
+    "title": "Product Manager",
+    "about": "Hello, I'm Michael! I specialize in product management and enhancing user experiences. I love working with teams to bring innovative products to life. Always looking for new challenges to tackle!\n\nExperienced professional with a focus on agile methodologies and cross-functional collaboration.",
+    "experience": [
+      {
+        "title": "Associate Product Manager",
+        "company": "Airbnb",
+        "logo": "https://logo.clearbit.com/airbnb.com",
+        "duration": "Mar 2019 - Aug 2021 • 2 yrs 5 mos",
+        "location": "Los Angeles, CA",
+        "description": "Worked on product development and user feedback analysis to enhance platform features."
+      },
+      {
+        "title": "Product Manager",
+        "company": "Slack",
+        "logo": "https://logo.clearbit.com/slack.com",
+        "duration": "Sep 2021 - Present • 2 yrs 2 mos",
+        "location": "San Francisco, CA",
+        "description": "Lead product initiatives and coordinate with engineering and design teams to improve user engagement."
+      }
+    ]
+  },
+  {
+    "username": "olivia.wilson44",
+    "name": "Olivia Wilson",
+    "avatar": "https://randomuser.me/api/portraits/women/25.jpg",
+    "bio": "Marketing Specialist with expertise in digital strategies.",
+    "title": "Marketing Specialist",
+    "about": "Hello, I'm Olivia! I specialize in digital marketing and brand development. I love crafting strategies that resonate with audiences. Always looking for new challenges to tackle!\n\nExperienced professional with a knack for data analysis and creative problem-solving.",
+    "experience": [
+      {
+        "title": "Marketing Coordinator",
+        "company": "HubSpot",
+        "logo": "https://logo.clearbit.com/hubspot.com",
+        "duration": "Jan 2018 - Dec 2020 • 2 yrs",
+        "location": "Cambridge, MA",
+        "description": "Coordinated marketing campaigns and analyzed performance metrics to optimize outreach."
+      },
+      {
+        "title": "Digital Marketing Specialist",
+        "company": "Mailchimp",
+        "logo": "https://logo.clearbit.com/mailchimp.com",
+        "duration": "Jan 2021 - Present • 2 yrs 10 mos",
+        "location": "Atlanta, GA",
+        "description": "Developed and executed digital marketing strategies to increase brand awareness and customer engagement."
+      }
+    ]
+  },
+  {
+    "username": "david.jones55",
+    "name": "David Jones",
+    "avatar": "https://randomuser.me/api/portraits/men/30.jpg",
+    "bio": "Software Engineer with a passion for developing scalable applications.",
+    "title": "Software Engineer",
+    "about": "Hello, I'm David! I specialize in software engineering and building robust applications. I love tackling complex problems with elegant solutions. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in full-stack development and cloud technologies.",
+    "experience": [
+      {
+        "title": "Software Engineer Intern",
+        "company": "IBM",
+        "logo": "https://logo.clearbit.com/ibm.com",
+        "duration": "Jun 2017 - Aug 2018 • 1 yr 2 mos",
+        "location": "New York, NY",
+        "description": "Assisted in developing enterprise applications and collaborating with senior engineers."
+      },
+      {
+        "title": "Software Engineer",
+        "company": "Amazon",
+        "logo": "https://logo.clearbit.com/amazon.com",
+        "duration": "Sep 2018 - Present • 5 yrs 1 mos",
+        "location": "Seattle, WA",
+        "description": "Developing scalable cloud solutions and optimizing application performance."
+      }
+    ]
+  },
+  {
+    "username": "isabella.martinez66",
+    "name": "Isabella Martinez",
+    "avatar": "https://randomuser.me/api/portraits/women/12.jpg",
+    "bio": "UI/UX Designer focused on creating user-friendly interfaces.",
+    "title": "UI/UX Designer",
+    "about": "Hello, I'm Isabella! I specialize in UI/UX design and enhancing user interactions. I love creating intuitive experiences that delight users. Always looking for new challenges to tackle!\n\nExperienced professional with a strong portfolio in user-centered design and usability testing.",
+    "experience": [
+      {
+        "title": "UX Researcher",
+        "company": "Dropbox",
+        "logo": "https://logo.clearbit.com/dropbox.com",
+        "duration": "Jan 2019 - Jun 2020 • 1 yr 5 mos",
+        "location": "San Francisco, CA",
+        "description": "Conducted user research and usability testing to inform design decisions."
+      },
+      {
+        "title": "UI/UX Designer",
+        "company": "Adobe",
+        "logo": "https://logo.clearbit.com/adobe.com",
+        "duration": "Jul 2020 - Present • 3 yrs 4 mos",
+        "location": "San Jose, CA",
+        "description": "Designing user interfaces and collaborating with product teams to enhance user experience."
+      }
+    ]
+  },
+  {
+    "username": "michael.brown21",
+    "name": "Michael Brown",
+    "avatar": "https://randomuser.me/api/portraits/men/45.jpg",
+    "bio": "Product Manager with a focus on driving product vision and strategy.",
+    "title": "Product Manager",
+    "about": "Hello, I'm Michael! I specialize in product management and strategic planning. I enjoy bridging the gap between technology and business to deliver impactful products. Always looking for new challenges to tackle!\n\nExperienced professional with a background in agile methodologies and cross-functional team leadership.",
+    "experience": [
+      {
+        "title": "Associate Product Manager",
+        "company": "Slack",
+        "logo": "https://logo.clearbit.com/slack.com",
+        "duration": "Mar 2016 - Dec 2018 • 2 yrs 9 mos",
+        "location": "San Francisco, CA",
+        "description": "Supported product development and collaborated with engineering teams to deliver features."
+      },
+      {
+        "title": "Product Manager",
+        "company": "Zoom",
+        "logo": "https://logo.clearbit.com/zoom.us",
+        "duration": "Jan 2019 - Present • 4 yrs 10 mos",
+        "location": "San Jose, CA",
+        "description": "Leading product initiatives and driving user engagement strategies."
+      }
+    ]
+  },
+  {
+    "username": "sophia.johnson88",
+    "name": "Sophia Johnson",
+    "avatar": "https://randomuser.me/api/portraits/women/34.jpg",
+    "bio": "Graphic Designer with a passion for visual storytelling.",
+    "title": "Graphic Designer",
+    "about": "Hello, I'm Sophia! I specialize in graphic design and branding. I love creating visual identities that communicate messages effectively. Always looking for new challenges to tackle!\n\nExperienced professional with a strong portfolio in digital and print design.",
+    "experience": [
+      {
+        "title": "Junior Graphic Designer",
+        "company": "Canva",
+        "logo": "https://logo.clearbit.com/canva.com",
+        "duration": "Jun 2017 - Aug 2019 • 2 yrs 2 mos",
+        "location": "Sydney, Australia",
+        "description": "Assisted in designing marketing materials and user interface elements."
+      },
+      {
+        "title": "Graphic Designer",
+        "company": "Figma",
+        "logo": "https://logo.clearbit.com/figma.com",
+        "duration": "Sep 2019 - Present • 4 yrs 1 mos",
+        "location": "San Francisco, CA",
+        "description": "Creating visual content for product marketing and user engagement."
+      }
+    ]
+  },
+  {
+    "username": "james.smith42",
+    "name": "James Smith",
+    "avatar": "https://randomuser.me/api/portraits/men/22.jpg",
+    "bio": "Data Scientist skilled in machine learning and statistical analysis.",
+    "title": "Data Scientist",
+    "about": "Hello, I'm James! I specialize in data science and analytics. I enjoy uncovering insights from data to drive business decisions. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in predictive modeling and data visualization.",
+    "experience": [
+      {
+        "title": "Data Analyst",
+        "company": "Spotify",
+        "logo": "https://logo.clearbit.com/spotify.com",
+        "duration": "Jan 2018 - Dec 2019 • 2 yrs",
+        "location": "New York, NY",
+        "description": "Analyzed user data to improve product features and user experience."
+      },
+      {
+        "title": "Data Scientist",
+        "company": "Netflix",
+        "logo": "https://logo.clearbit.com/netflix.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Los Gatos, CA",
+        "description": "Developing machine learning models to enhance content recommendations."
+      }
+    ]
+  },
+  {
+    "username": "ava.wilson33",
+    "name": "Ava Wilson",
+    "avatar": "https://randomuser.me/api/portraits/women/19.jpg",
+    "bio": "Frontend Developer with a focus on responsive web applications.",
+    "title": "Frontend Developer",
+    "about": "Hello, I'm Ava! I specialize in frontend development and creating engaging user interfaces. I love building responsive and accessible web applications. Always looking for new challenges to tackle!\n\nExperienced professional with a strong foundation in HTML, CSS, and JavaScript.",
+    "experience": [
+      {
+        "title": "Web Developer Intern",
+        "company": "Shopify",
+        "logo": "https://logo.clearbit.com/shopify.com",
+        "duration": "Jun 2019 - Aug 2020 • 1 yr 2 mos",
+        "location": "Ottawa, Canada",
+        "description": "Assisted in developing e-commerce websites and improving user experience."
+      },
+      {
+        "title": "Frontend Developer",
+        "company": "Airbnb",
+        "logo": "https://logo.clearbit.com/airbnb.com",
+        "duration": "Sep 2020 - Present • 3 yrs 1 mos",
+        "location": "San Francisco, CA",
+        "description": "Building user interfaces and optimizing application performance."
+      }
+    ]
+  },
+  {
+    "username": "benjamin.miller77",
+    "name": "Benjamin Miller",
+    "avatar": "https://randomuser.me/api/portraits/men/11.jpg",
+    "bio": "Backend Developer with expertise in cloud computing.",
+    "title": "Backend Developer",
+    "about": "Hello, I'm Benjamin! I specialize in backend development and cloud services. I love designing scalable systems that handle large volumes of data. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in server-side programming and database management.",
+    "experience": [
+      {
+        "title": "Software Engineer Intern",
+        "company": "Microsoft",
+        "logo": "https://logo.clearbit.com/microsoft.com",
+        "duration": "Jan 2020 - Dec 2020 • 1 yr",
+        "location": "Redmond, WA",
+        "description": "Assisted in developing cloud-based applications and services."
+      },
+      {
+        "title": "Backend Developer",
+        "company": "Google",
+        "logo": "https://logo.clearbit.com/google.com",
+        "duration": "Jan 2021 - Present • 2 yrs 10 mos",
+        "location": "Mountain View, CA",
+        "description": "Developing backend services and optimizing cloud infrastructure."
+      }
+    ]
+  },
+  {
+    "username": "charlotte.davis99",
+    "name": "Charlotte Davis",
+    "avatar": "https://randomuser.me/api/portraits/women/39.jpg",
+    "bio": "Marketing Manager with a focus on brand strategy.",
+    "title": "Marketing Manager",
+    "about": "Hello, I'm Charlotte! I specialize in marketing strategy and brand development. I enjoy crafting campaigns that resonate with target audiences. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in digital marketing and analytics.",
+    "experience": [
+      {
+        "title": "Marketing Specialist",
+        "company": "Hootsuite",
+        "logo": "https://logo.clearbit.com/hootsuite.com",
+        "duration": "Feb 2018 - Jul 2020 • 2 yrs 5 mos",
+        "location": "Vancouver, Canada",
+        "description": "Developed and executed social media marketing strategies."
+      },
+      {
+        "title": "Marketing Manager",
+        "company": "Twitter",
+        "logo": "https://logo.clearbit.com/twitter.com",
+        "duration": "Aug 2020 - Present • 3 yrs 2 mos",
+        "location": "San Francisco, CA",
+        "description": "Leading marketing initiatives and managing brand partnerships."
+      }
+    ]
+  },
+  {
+    "username": "elijah.harris88",
+    "name": "Elijah Harris",
+    "avatar": "https://randomuser.me/api/portraits/men/50.jpg",
+    "bio": "DevOps Engineer focused on continuous integration and deployment.",
+    "title": "DevOps Engineer",
+    "about": "Hello, I'm Elijah! I specialize in DevOps practices and automation. I love streamlining processes to enhance software delivery. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in cloud infrastructure and CI/CD pipelines.",
+    "experience": [
+      {
+        "title": "DevOps Intern",
+        "company": "Oracle",
+        "logo": "https://logo.clearbit.com/oracle.com",
+        "duration": "Jan 2019 - May 2019 • 4 mos",
+        "location": "Redwood City, CA",
+        "description": "Assisted in implementing CI/CD pipelines and monitoring systems."
+      },
+      {
+        "title": "DevOps Engineer",
+        "company": "Facebook",
+        "logo": "https://logo.clearbit.com/facebook.com",
+        "duration": "Jun 2019 - Present • 4 yrs 5 mos",
+        "location": "Menlo Park, CA",
+        "description": "Optimizing deployment processes and managing cloud infrastructure."
+      }
+    ]
+  },
+  {
+    "username": "madison.thompson44",
+    "name": "Madison Thompson",
+    "avatar": "https://randomuser.me/api/portraits/women/28.jpg",
+    "bio": "Product Designer with a focus on user-centered design.",
+    "title": "Product Designer",
+    "about": "Hello, I'm Madison! I specialize in product design and user experience. I love creating products that are both functional and delightful. Always looking for new challenges to tackle!\n\nExperienced professional with a strong portfolio in design thinking and prototyping.",
+    "experience": [
+      {
+        "title": "Product Design Intern",
+        "company": "LinkedIn",
+        "logo": "https://logo.clearbit.com/linkedin.com",
+        "duration": "Jan 2020 - May 2020 • 4 mos",
+        "location": "Sunnyvale, CA",
+        "description": "Assisted in developing user interfaces and conducting user testing."
+      },
+      {
+        "title": "Product Designer",
+        "company": "Salesforce",
+        "logo": "https://logo.clearbit.com/salesforce.com",
+        "duration": "Jun 2020 - Present • 3 yrs 4 mos",
+        "location": "San Francisco, CA",
+        "description": "Designing user interfaces and collaborating with product teams."
+      }
+    ]
+  },
+  {
+    "username": "aiden.jackson55",
+    "name": "Aiden Jackson",
+    "avatar": "https://randomuser.me/api/portraits/men/27.jpg",
+    "bio": "Full Stack Developer with expertise in modern web technologies.",
+    "title": "Full Stack Developer",
+    "about": "Hello, I'm Aiden! I specialize in full stack development and building web applications. I enjoy creating seamless experiences for users. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in JavaScript frameworks and RESTful APIs.",
+    "experience": [
+      {
+        "title": "Software Developer Intern",
+        "company": "GitHub",
+        "logo": "https://logo.clearbit.com/github.com",
+        "duration": "Jun 2018 - Aug 2019 • 1 yr 2 mos",
+        "location": "San Francisco, CA",
+        "description": "Assisted in developing features for the GitHub platform."
+      },
+      {
+        "title": "Full Stack Developer",
+        "company": "Netflix",
+        "logo": "https://logo.clearbit.com/netflix.com",
+        "duration": "Sep 2019 - Present • 4 yrs 1 mos",
+        "location": "Los Gatos, CA",
+        "description": "Building and maintaining web applications and services."
+      }
+    ]
+  },
+  {
+    "username": "ella.martinez66",
+    "name": "Ella Martinez",
+    "avatar": "https://randomuser.me/api/portraits/women/5.jpg",
+    "bio": "SEO Specialist with expertise in digital marketing strategies.",
+    "title": "SEO Specialist",
+    "about": "Hello, I'm Ella! I specialize in search engine optimization and content marketing. I love improving website visibility and driving organic traffic. Always looking for new challenges to tackle!\n\nExperienced professional with a solid background in keyword research and analytics.",
+    "experience": [
+      {
+        "title": "SEO Intern",
+        "company": "Moz",
+        "logo": "https://logo.clearbit.com/moz.com",
+        "duration": "Jan 2018 - Dec 2018 • 1 yr",
+        "location": "Seattle, WA",
+        "description": "Assisted in optimizing client websites for search engines."
+      },
+      {
+        "title": "SEO Specialist",
+        "company": "HubSpot",
+        "logo": "https://logo.clearbit.com/hubspot.com",
+        "duration": "Jan 2019 - Present • 4 yrs 10 mos",
+        "location": "Cambridge, MA",
+        "description": "Developing and executing SEO strategies to improve search rankings."
+      }
+    ]
+  },
+  {
+    "username": "noah.lee99",
+    "name": "Noah Lee",
+    "avatar": "https://randomuser.me/api/portraits/men/18.jpg",
+    "bio": "Mobile Developer focused on creating innovative applications.",
+    "title": "Mobile Developer",
+    "about": "Hello, I'm Noah! I specialize in mobile app development and user experience. I enjoy building applications that enhance daily life. Always looking for new challenges to tackle!\n\nExperienced professional with a strong foundation in iOS and Android development.",
+    "experience": [
+      {
+        "title": "Mobile Developer Intern",
+        "company": "Snapchat",
+        "logo": "https://logo.clearbit.com/snapchat.com",
+        "duration": "Jun 2019 - Aug 2020 • 1 yr 2 mos",
+        "location": "Los Angeles, CA",
+        "description": "Assisted in developing new features for the Snapchat app."
+      },
+      {
+        "title": "Mobile Developer",
+        "company": "Uber",
+        "logo": "https://logo.clearbit.com/uber.com",
+        "duration": "Sep 2020 - Present • 3 yrs 1 mos",
+        "location": "San Francisco, CA",
+        "description": "Building and maintaining mobile applications for ride-sharing services."
+      }
+    ]
+  },
+  {
+    "username": "chloe.wilson77",
+    "name": "Chloe Wilson",
+    "avatar": "https://randomuser.me/api/portraits/women/32.jpg",
+    "bio": "Content Strategist with a focus on engaging storytelling.",
+    "title": "Content Strategist",
+    "about": "Hello, I'm Chloe! I specialize in content strategy and digital marketing. I love crafting compelling narratives that engage audiences. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in content creation and analytics.",
+    "experience": [
+      {
+        "title": "Content Writer",
+        "company": "Medium",
+        "logo": "https://logo.clearbit.com/medium.com",
+        "duration": "Jan 2019 - Dec 2020 • 2 yrs",
+        "location": "San Francisco, CA",
+        "description": "Created engaging articles and blog posts for various publications."
+      },
+      {
+        "title": "Content Strategist",
+        "company": "BuzzFeed",
+        "logo": "https://logo.clearbit.com/buzzfeed.com",
+        "duration": "Jan 2021 - Present • 2 yrs 10 mos",
+        "location": "New York, NY",
+        "description": "Developing content strategies to drive user engagement and growth."
+      }
+    ]
+  },
+  {
+    "username": "lucas.martinez33",
+    "name": "Lucas Martinez",
+    "avatar": "https://randomuser.me/api/portraits/men/15.jpg",
+    "bio": "Systems Analyst with expertise in IT solutions.",
+    "title": "Systems Analyst",
+    "about": "Hello, I'm Lucas! I specialize in systems analysis and IT consulting. I enjoy solving complex problems with technology. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in systems integration and project management.",
+    "experience": [
+      {
+        "title": "IT Intern",
+        "company": "Dell",
+        "logo": "https://logo.clearbit.com/dell.com",
+        "duration": "Jan 2019 - May 2019 • 4 mos",
+        "location": "Round Rock, TX",
+        "description": "Assisted in analyzing system requirements and optimizing processes."
+      },
+      {
+        "title": "Systems Analyst",
+        "company": "IBM",
+        "logo": "https://logo.clearbit.com/ibm.com",
+        "duration": "Jun 2019 - Present • 4 yrs 5 mos",
+        "location": "Austin, TX",
+        "description": "Analyzing business needs and providing IT solutions to improve efficiency."
+      }
+    ]
+  },
+  {
+    "username": "olivia.jones44",
+    "name": "Olivia Jones",
+    "avatar": "https://randomuser.me/api/portraits/women/8.jpg",
+    "bio": "Web Designer focused on creating stunning websites.",
+    "title": "Web Designer",
+    "about": "Hello, I'm Olivia! I specialize in web design and user experience. I love creating visually appealing websites that are easy to navigate. Always looking for new challenges to tackle!\n\nExperienced professional with a strong portfolio in responsive web design.",
+    "experience": [
+      {
+        "title": "Web Design Intern",
+        "company": "Wix",
+        "logo": "https://logo.clearbit.com/wix.com",
+        "duration": "Jan 2018 - Dec 2018 • 1 yr",
+        "location": "Tel Aviv, Israel",
+        "description": "Assisted in designing templates and improving user interfaces."
+      },
+      {
+        "title": "Web Designer",
+        "company": "Squarespace",
+        "logo": "https://logo.clearbit.com/squarespace.com",
+        "duration": "Jan 2019 - Present • 4 yrs 10 mos",
+        "location": "New York, NY",
+        "description": "Creating and maintaining user-friendly website designs."
+      }
+    ]
+  },
+  {
+    "username": "liam.scott22",
+    "name": "Liam Scott",
+    "avatar": "https://randomuser.me/api/portraits/men/8.jpg",
+    "bio": "Technical Writer with expertise in documentation and user guides.",
+    "title": "Technical Writer",
+    "about": "Hello, I'm Liam! I specialize in technical writing and documentation. I enjoy making complex information accessible to users. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in creating user manuals and online help documentation.",
+    "experience": [
+      {
+        "title": "Technical Writer Intern",
+        "company": "Adobe",
+        "logo": "https://logo.clearbit.com/adobe.com",
+        "duration": "Jan 2019 - Jul 2019 • 6 mos",
+        "location": "San Jose, CA",
+        "description": "Assisted in writing user documentation for software products."
+      },
+      {
+        "title": "Technical Writer",
+        "company": "Atlassian",
+        "logo": "https://logo.clearbit.com/atlassian.com",
+        "duration": "Aug 2019 - Present • 4 yrs 2 mos",
+        "location": "San Francisco, CA",
+        "description": "Creating and maintaining technical documentation for development teams."
+      }
+    ]
+  },
+  {
+    "username": "mason.hall99",
+    "name": "Mason Hall",
+    "avatar": "https://randomuser.me/api/portraits/men/13.jpg",
+    "bio": "Cloud Engineer with expertise in cloud architecture.",
+    "title": "Cloud Engineer",
+    "about": "Hello, I'm Mason! I specialize in cloud engineering and architecture. I love designing scalable cloud solutions. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in AWS and Azure.",
+    "experience": [
+      {
+        "title": "Cloud Engineer Intern",
+        "company": "Salesforce",
+        "logo": "https://logo.clearbit.com/salesforce.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "San Francisco, CA",
+        "description": "Assisted in developing cloud-based applications and services."
+      },
+      {
+        "title": "Cloud Engineer",
+        "company": "IBM",
+        "logo": "https://logo.clearbit.com/ibm.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Austin, TX",
+        "description": "Designing and implementing cloud solutions for enterprise clients."
+      }
+    ]
+  },
+  {
+    "username": "ava.white77",
+    "name": "Ava White",
+    "avatar": "https://randomuser.me/api/portraits/women/7.jpg",
+    "bio": "Social Media Manager with a focus on brand engagement.",
+    "title": "Social Media Manager",
+    "about": "Hello, I'm Ava! I specialize in social media marketing and brand management. I love building online communities and engaging audiences. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in content creation and analytics.",
+    "experience": [
+      {
+        "title": "Social Media Intern",
+        "company": "Buffer",
+        "logo": "https://logo.clearbit.com/buffer.com",
+        "duration": "Jan 2018 - Dec 2018 • 1 yr",
+        "location": "San Francisco, CA",
+        "description": "Assisted in managing social media accounts and creating content."
+      },
+      {
+        "title": "Social Media Manager",
+        "company": "Instagram",
+        "logo": "https://logo.clearbit.com/instagram.com",
+        "duration": "Jan 2019 - Present • 4 yrs 10 mos",
+        "location": "Menlo Park, CA",
+        "description": "Developing social media strategies and engaging with users."
+      }
+    ]
+  },
+  {
+    "username": "eli.brown44",
+    "name": "Eli Brown",
+    "avatar": "https://randomuser.me/api/portraits/men/6.jpg",
+    "bio": "Game Developer with expertise in interactive design.",
+    "title": "Game Developer",
+    "about": "Hello, I'm Eli! I specialize in game development and interactive design. I love creating immersive experiences for players. Always looking for new challenges to tackle!\n\nExperienced professional with a strong portfolio in game design and programming.",
+    "experience": [
+      {
+        "title": "Game Developer Intern",
+        "company": "Epic Games",
+        "logo": "https://logo.clearbit.com/epicgames.com",
+        "duration": "Jun 2019 - Aug 2020 • 1 yr 2 mos",
+        "location": "Cary, NC",
+        "description": "Assisted in developing game features and mechanics."
+      },
+      {
+        "title": "Game Developer",
+        "company": "Riot Games",
+        "logo": "https://logo.clearbit.com/riotgames.com",
+        "duration": "Sep 2020 - Present • 3 yrs 1 mos",
+        "location": "Los Angeles, CA",
+        "description": "Creating engaging gameplay experiences and optimizing game performance."
+      }
+    ]
+  },
+  {
+    "username": "sofia.james55",
+    "name": "Sofia James",
+    "avatar": "https://randomuser.me/api/portraits/women/4.jpg",
+    "bio": "E-commerce Specialist skilled in online sales strategies.",
+    "title": "E-commerce Specialist",
+    "about": "Hello, I'm Sofia! I specialize in e-commerce and online marketing. I love driving sales through innovative strategies. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in digital marketing and analytics.",
+    "experience": [
+      {
+        "title": "E-commerce Intern",
+        "company": "Etsy",
+        "logo": "https://logo.clearbit.com/etsy.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Brooklyn, NY",
+        "description": "Assisted in managing online store and optimizing product listings."
+      },
+      {
+        "title": "E-commerce Specialist",
+        "company": "Shopify",
+        "logo": "https://logo.clearbit.com/shopify.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Ottawa, Canada",
+        "description": "Developing strategies to increase online sales and improve customer experience."
+      }
+    ]
+  },
+  {
+    "username": "jackson.miller88",
+    "name": "Jackson Miller",
+    "avatar": "https://randomuser.me/api/portraits/men/12.jpg",
+    "bio": "Network Engineer with expertise in network security.",
+    "title": "Network Engineer",
+    "about": "Hello, I'm Jackson! I specialize in network engineering and security. I love building secure and reliable networks. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in network protocols and infrastructure.",
+    "experience": [
+      {
+        "title": "Network Engineer Intern",
+        "company": "Cisco",
+        "logo": "https://logo.clearbit.com/cisco.com",
+        "duration": "Jan 2019 - May 2019 • 4 mos",
+        "location": "San Jose, CA",
+        "description": "Assisted in configuring network devices and troubleshooting issues."
+      },
+      {
+        "title": "Network Engineer",
+        "company": "Juniper Networks",
+        "logo": "https://logo.clearbit.com/juniper.net",
+        "duration": "Jun 2019 - Present • 4 yrs 5 mos",
+        "location": "Sunnyvale, CA",
+        "description": "Designing and implementing network solutions for enterprise clients."
+      }
+    ]
+  },
+  {
+    "username": "grace.thomas22",
+    "name": "Grace Thomas",
+    "avatar": "https://randomuser.me/api/portraits/women/20.jpg",
+    "bio": "Research Scientist focused on innovative solutions.",
+    "title": "Research Scientist",
+    "about": "Hello, I'm Grace! I specialize in research and development. I enjoy solving complex scientific problems. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in experimental design and data analysis.",
+    "experience": [
+      {
+        "title": "Research Intern",
+        "company": "NASA",
+        "logo": "https://logo.clearbit.com/nasa.gov",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Huntsville, AL",
+        "description": "Assisted in conducting experiments and analyzing data."
+      },
+      {
+        "title": "Research Scientist",
+        "company": "Google X",
+        "logo": "https://logo.clearbit.com/x.company",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Mountain View, CA",
+        "description": "Developing innovative technologies and conducting scientific research."
+      }
+    ]
+  },
+  {
+    "username": "oliver.james99",
+    "name": "Oliver James",
+    "avatar": "https://randomuser.me/api/portraits/men/31.jpg",
+    "bio": "Blockchain Developer with expertise in decentralized applications.",
+    "title": "Blockchain Developer",
+    "about": "Hello, I'm Oliver! I specialize in blockchain technology and smart contracts. I love creating decentralized applications that empower users. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in cryptography and distributed systems.",
+    "experience": [
+      {
+        "title": "Blockchain Intern",
+        "company": "Ethereum",
+        "logo": "https://logo.clearbit.com/ethereum.org",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Zug, Switzerland",
+        "description": "Assisted in developing smart contracts and blockchain applications."
+      },
+      {
+        "title": "Blockchain Developer",
+        "company": "ChainSafe",
+        "logo": "https://logo.clearbit.com/chainsafe.io",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Toronto, Canada",
+        "description": "Developing decentralized applications and blockchain solutions."
+      }
+    ]
+  },
+  {
+    "username": "sophia.miller66",
+    "name": "Sophia Miller",
+    "avatar": "https://randomuser.me/api/portraits/women/3.jpg",
+    "bio": "Artificial Intelligence Engineer with expertise in machine learning.",
+    "title": "AI Engineer",
+    "about": "Hello, I'm Sophia! I specialize in artificial intelligence and machine learning. I love creating intelligent systems that learn from data. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in neural networks and data analytics.",
+    "experience": [
+      {
+        "title": "AI Intern",
+        "company": "NVIDIA",
+        "logo": "https://logo.clearbit.com/nvidia.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Santa Clara, CA",
+        "description": "Assisted in developing machine learning models and algorithms."
+      },
+      {
+        "title": "AI Engineer",
+        "company": "OpenAI",
+        "logo": "https://logo.clearbit.com/openai.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "San Francisco, CA",
+        "description": "Developing AI models and conducting research in artificial intelligence."
+      }
+    ]
+  },
+  {
+    "username": "jack.smith44",
+    "name": "Jack Smith",
+    "avatar": "https://randomuser.me/api/portraits/men/10.jpg",
+    "bio": "Cybersecurity Analyst focused on protecting information systems.",
+    "title": "Cybersecurity Analyst",
+    "about": "Hello, I'm Jack! I specialize in cybersecurity and information security. I enjoy protecting systems from cyber threats. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in threat analysis and incident response.",
+    "experience": [
+      {
+        "title": "Cybersecurity Intern",
+        "company": "Palo Alto Networks",
+        "logo": "https://logo.clearbit.com/paloaltonetworks.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Santa Clara, CA",
+        "description": "Assisted in monitoring security events and analyzing vulnerabilities."
+      },
+      {
+        "title": "Cybersecurity Analyst",
+        "company": "CrowdStrike",
+        "logo": "https://logo.clearbit.com/crowdstrike.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Sunnyvale, CA",
+        "description": "Conducting security assessments and responding to incidents."
+      }
+    ]
+  },
+  {
+    "username": "michael.johnson99",
+    "name": "Michael Johnson",
+    "avatar": "https://randomuser.me/api/portraits/men/25.jpg",
+    "bio": "Cloud Consultant specializing in cloud solutions.",
+    "title": "Cloud Consultant",
+    "about": "Hello, I'm Michael! I specialize in cloud consulting and strategy. I love helping organizations transition to cloud-based solutions. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in cloud architecture and migration.",
+    "experience": [
+      {
+        "title": "Cloud Consultant Intern",
+        "company": "Accenture",
+        "logo": "https://logo.clearbit.com/accenture.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Chicago, IL",
+        "description": "Assisted in developing cloud strategies for clients."
+      },
+      {
+        "title": "Cloud Consultant",
+        "company": "Deloitte",
+        "logo": "https://logo.clearbit.com/deloitte.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "New York, NY",
+        "description": "Advising clients on cloud solutions and implementation."
+      }
+    ]
+  },
+  {
+    "username": "madeline.brown22",
+    "name": "Madeline Brown",
+    "avatar": "https://randomuser.me/api/portraits/women/21.jpg",
+    "bio": "Product Marketing Manager with expertise in go-to-market strategies.",
+    "title": "Product Marketing Manager",
+    "about": "Hello, I'm Madeline! I specialize in product marketing and strategy. I love launching products that meet customer needs. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in market research and competitive analysis.",
+    "experience": [
+      {
+        "title": "Product Marketing Intern",
+        "company": "Facebook",
+        "logo": "https://logo.clearbit.com/facebook.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Menlo Park, CA",
+        "description": "Assisted in developing marketing strategies for new product launches."
+      },
+      {
+        "title": "Product Marketing Manager",
+        "company": "Adobe",
+        "logo": "https://logo.clearbit.com/adobe.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "San Jose, CA",
+        "description": "Leading product marketing initiatives and managing cross-functional teams."
+      }
+    ]
+  },
+  {
+    "username": "elena.wilson99",
+    "name": "Elena Wilson",
+    "avatar": "https://randomuser.me/api/portraits/women/30.jpg",
+    "bio": "Web Developer with a focus on responsive design.",
+    "title": "Web Developer",
+    "about": "Hello, I'm Elena! I specialize in web development and responsive design. I love building websites that provide great user experiences. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in front-end technologies.",
+    "experience": [
+      {
+        "title": "Web Developer Intern",
+        "company": "Mozilla",
+        "logo": "https://logo.clearbit.com/mozilla.org",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Mountain View, CA",
+        "description": "Assisted in developing web applications and improving user interfaces."
+      },
+      {
+        "title": "Web Developer",
+        "company": "GitHub",
+        "logo": "https://logo.clearbit.com/github.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "San Francisco, CA",
+        "description": "Building responsive web applications and collaborating with design teams."
+      }
+    ]
+  },
+  {
+    "username": "harper.jones77",
+    "name": "Harper Jones",
+    "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+    "bio": "Data Analyst skilled in data visualization and reporting.",
+    "title": "Data Analyst",
+    "about": "Hello, I'm Harper! I specialize in data analysis and visualization. I enjoy transforming data into actionable insights. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in SQL and data visualization tools.",
+    "experience": [
+      {
+        "title": "Data Analyst Intern",
+        "company": "Tableau",
+        "logo": "https://logo.clearbit.com/tableau.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Seattle, WA",
+        "description": "Assisted in creating visual reports and dashboards for clients."
+      },
+      {
+        "title": "Data Analyst",
+        "company": "Salesforce",
+        "logo": "https://logo.clearbit.com/salesforce.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "San Francisco, CA",
+        "description": "Analyzing data and providing insights to improve business strategies."
+      }
+    ]
+  },
+  {
+    "username": "jackson.lee99",
+    "name": "Jackson Lee",
+    "avatar": "https://randomuser.me/api/portraits/men/14.jpg",
+    "bio": "Software Developer with expertise in mobile applications.",
+    "title": "Software Developer",
+    "about": "Hello, I'm Jackson! I specialize in software development and mobile applications. I love creating apps that enhance user experience. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in iOS and Android development.",
+    "experience": [
+      {
+        "title": "Software Developer Intern",
+        "company": "Spotify",
+        "logo": "https://logo.clearbit.com/spotify.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "New York, NY",
+        "description": "Assisted in developing mobile applications and features."
+      },
+      {
+        "title": "Software Developer",
+        "company": "Apple",
+        "logo": "https://logo.clearbit.com/apple.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Cupertino, CA",
+        "description": "Building and maintaining mobile applications for iOS platform."
+      }
+    ]
+  },
+  {
+    "username": "ella.harris88",
+    "name": "Ella Harris",
+    "avatar": "https://randomuser.me/api/portraits/women/2.jpg",
+    "bio": "Product Owner focused on delivering customer value.",
+    "title": "Product Owner",
+    "about": "Hello, I'm Ella! I specialize in product ownership and agile methodologies. I love ensuring that products meet customer needs. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in stakeholder management and product development.",
+    "experience": [
+      {
+        "title": "Product Owner Intern",
+        "company": "Salesforce",
+        "logo": "https://logo.clearbit.com/salesforce.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "San Francisco, CA",
+        "description": "Assisted in managing product backlogs and prioritizing features."
+      },
+      {
+        "title": "Product Owner",
+        "company": "SAP",
+        "logo": "https://logo.clearbit.com/sap.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Walldorf, Germany",
+        "description": "Leading product development and ensuring alignment with customer needs."
+      }
+    ]
+  },
+  {
+    "username": "noah.scott99",
+    "name": "Noah Scott",
+    "avatar": "https://randomuser.me/api/portraits/men/16.jpg",
+    "bio": "Systems Administrator with expertise in IT infrastructure.",
+    "title": "Systems Administrator",
+    "about": "Hello, I'm Noah! I specialize in systems administration and IT support. I enjoy managing and optimizing IT infrastructure. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in network management and server administration.",
+    "experience": [
+      {
+        "title": "Systems Administrator Intern",
+        "company": "Dell",
+        "logo": "https://logo.clearbit.com/dell.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Round Rock, TX",
+        "description": "Assisted in managing IT infrastructure and providing technical support."
+      },
+      {
+        "title": "Systems Administrator",
+        "company": "HP",
+        "logo": "https://logo.clearbit.com/hp.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Palo Alto, CA",
+        "description": "Managing and optimizing IT systems and infrastructure."
+      }
+    ]
+  },
+  {
+    "username": "mila.jones33",
+    "name": "Mila Jones",
+    "avatar": "https://randomuser.me/api/portraits/women/9.jpg",
+    "bio": "Digital Marketing Specialist with a focus on online campaigns.",
+    "title": "Digital Marketing Specialist",
+    "about": "Hello, I'm Mila! I specialize in digital marketing and online advertising. I love creating campaigns that drive engagement and conversions. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in social media and content marketing.",
+    "experience": [
+      {
+        "title": "Digital Marketing Intern",
+        "company": "Hootsuite",
+        "logo": "https://logo.clearbit.com/hootsuite.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Vancouver, Canada",
+        "description": "Assisted in developing and executing digital marketing campaigns."
+      },
+      {
+        "title": "Digital Marketing Specialist",
+        "company": "LinkedIn",
+        "logo": "https://logo.clearbit.com/linkedin.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Sunnyvale, CA",
+        "description": "Creating and managing online marketing strategies to drive user engagement."
+      }
+    ]
+  },
+  {
+    "username": "ella.martinez88",
+    "name": "Ella Martinez",
+    "avatar": "https://randomuser.me/api/portraits/women/31.jpg",
+    "bio": "Operations Manager with expertise in process optimization.",
+    "title": "Operations Manager",
+    "about": "Hello, I'm Ella! I specialize in operations management and process improvement. I love streamlining business processes for efficiency. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in project management and team leadership.",
+    "experience": [
+      {
+        "title": "Operations Intern",
+        "company": "Amazon",
+        "logo": "https://logo.clearbit.com/amazon.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Seattle, WA",
+        "description": "Assisted in managing operations and improving workflows."
+      },
+      {
+        "title": "Operations Manager",
+        "company": "Walmart",
+        "logo": "https://logo.clearbit.com/walmart.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Bentonville, AR",
+        "description": "Leading operations and optimizing supply chain processes."
+      }
+    ]
+  },
+  {
+    "username": "aiden.brown99",
+    "name": "Aiden Brown",
+    "avatar": "https://randomuser.me/api/portraits/men/9.jpg",
+    "bio": "Quality Assurance Engineer with expertise in testing methodologies.",
+    "title": "Quality Assurance Engineer",
+    "about": "Hello, I'm Aiden! I specialize in quality assurance and software testing. I love ensuring products meet high standards. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in automated testing and test case development.",
+    "experience": [
+      {
+        "title": "QA Intern",
+        "company": "Adobe",
+        "logo": "https://logo.clearbit.com/adobe.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "San Jose, CA",
+        "description": "Assisted in testing software products and reporting bugs."
+      },
+      {
+        "title": "Quality Assurance Engineer",
+        "company": "Microsoft",
+        "logo": "https://logo.clearbit.com/microsoft.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Redmond, WA",
+        "description": "Conducting quality assurance testing and ensuring software reliability."
+      }
+    ]
+  },
+  {
+    "username": "harper.johnson99",
+    "name": "Harper Johnson",
+    "avatar": "https://randomuser.me/api/portraits/women/17.jpg",
+    "bio": "Creative Director with a focus on brand identity.",
+    "title": "Creative Director",
+    "about": "Hello, I'm Harper! I specialize in creative direction and visual branding. I love crafting compelling brand stories. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in graphic design and marketing.",
+    "experience": [
+      {
+        "title": "Creative Intern",
+        "company": "Nike",
+        "logo": "https://logo.clearbit.com/nike.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Beaverton, OR",
+        "description": "Assisted in developing creative concepts for marketing campaigns."
+      },
+      {
+        "title": "Creative Director",
+        "company": "Adidas",
+        "logo": "https://logo.clearbit.com/adidas.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Portland, OR",
+        "description": "Leading creative projects and managing design teams."
+      }
+    ]
+  },
+  {
+    "username": "charlie.martin88",
+    "name": "Charlie Martin",
+    "avatar": "https://randomuser.me/api/portraits/men/7.jpg",
+    "bio": "Research Analyst with expertise in market research.",
+    "title": "Research Analyst",
+    "about": "Hello, I'm Charlie! I specialize in research analysis and data interpretation. I love uncovering insights from data. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in quantitative and qualitative research.",
+    "experience": [
+      {
+        "title": "Research Intern",
+        "company": "Gartner",
+        "logo": "https://logo.clearbit.com/gartner.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Stamford, CT",
+        "description": "Assisted in conducting market research and analyzing trends."
+      },
+      {
+        "title": "Research Analyst",
+        "company": "Forrester",
+        "logo": "https://logo.clearbit.com/forrester.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Cambridge, MA",
+        "description": "Conducting research and providing insights to clients."
+      }
+    ]
+  },
+  {
+    "username": "lily.brown99",
+    "name": "Lily Brown",
+    "avatar": "https://randomuser.me/api/portraits/women/10.jpg",
+    "bio": "Business Analyst with expertise in data-driven decision making.",
+    "title": "Business Analyst",
+    "about": "Hello, I'm Lily! I specialize in business analysis and data interpretation. I love helping organizations make informed decisions. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in data analysis and project management.",
+    "experience": [
+      {
+        "title": "Business Analyst Intern",
+        "company": "Accenture",
+        "logo": "https://logo.clearbit.com/accenture.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "Chicago, IL",
+        "description": "Assisted in analyzing business processes and providing recommendations."
+      },
+      {
+        "title": "Business Analyst",
+        "company": "McKinsey & Company",
+        "logo": "https://logo.clearbit.com/mckinsey.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "New York, NY",
+        "description": "Conducting business analysis and supporting strategic initiatives."
+      }
+    ]
+  },
+  {
+    "username": "madison.james99",
+    "name": "Madison James",
+    "avatar": "https://randomuser.me/api/portraits/women/23.jpg",
+    "bio": "Security Consultant with expertise in risk assessment.",
+    "title": "Security Consultant",
+    "about": "Hello, I'm Madison! I specialize in security consulting and risk management. I love helping organizations protect their assets. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in security assessments and compliance.",
+    "experience": [
+      {
+        "title": "Security Consultant Intern",
+        "company": "KPMG",
+        "logo": "https://logo.clearbit.com/kpmg.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "New York, NY",
+        "description": "Assisted in conducting security assessments and audits."
+      },
+      {
+        "title": "Security Consultant",
+        "company": "Deloitte",
+        "logo": "https://logo.clearbit.com/deloitte.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "New York, NY",
+        "description": "Providing security consulting services and risk management strategies."
+      }
+    ]
+  },
+  {
+    "username": "oliver.thompson99",
+    "name": "Oliver Thompson",
+    "avatar": "https://randomuser.me/api/portraits/men/29.jpg",
+    "bio": "Artificial Intelligence Researcher focused on innovative solutions.",
+    "title": "AI Researcher",
+    "about": "Hello, I'm Oliver! I specialize in AI research and development. I love creating new algorithms and models. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in machine learning and data science.",
+    "experience": [
+      {
+        "title": "AI Research Intern",
+        "company": "DeepMind",
+        "logo": "https://logo.clearbit.com/deepmind.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "London, UK",
+        "description": "Assisted in developing AI models and conducting research."
+      },
+      {
+        "title": "AI Researcher",
+        "company": "Facebook AI Research",
+        "logo": "https://logo.clearbit.com/facebook.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Menlo Park, CA",
+        "description": "Conducting research in artificial intelligence and developing innovative solutions."
+      }
+    ]
+  },
+  {
+    "username": "sophia.hall88",
+    "name": "Sophia Hall",
+    "avatar": "https://randomuser.me/api/portraits/women/11.jpg",
+    "bio": "Marketing Analyst with expertise in data-driven strategies.",
+    "title": "Marketing Analyst",
+    "about": "Hello, I'm Sophia! I specialize in marketing analysis and strategy development. I love using data to drive marketing decisions. Always looking for new challenges to tackle!\n\nExperienced professional with a strong background in market research and analytics.",
+    "experience": [
+      {
+        "title": "Marketing Analyst Intern",
+        "company": "Nielsen",
+        "logo": "https://logo.clearbit.com/nielsen.com",
+        "duration": "Jan 2019 - Dec 2019 • 1 yr",
+        "location": "New York, NY",
+        "description": "Assisted in conducting market research and analyzing consumer data."
+      },
+      {
+        "title": "Marketing Analyst",
+        "company": "Procter & Gamble",
+        "logo": "https://logo.clearbit.com/pg.com",
+        "duration": "Jan 2020 - Present • 3 yrs 10 mos",
+        "location": "Cincinnati, OH",
+        "description": "Conducting marketing analysis and providing insights for strategic planning."
+      }
+    ]
   }
 ]

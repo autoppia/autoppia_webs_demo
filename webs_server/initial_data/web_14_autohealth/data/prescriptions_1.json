@@ -48391,5 +48391,1369 @@
     "prescriptionNumber": "RX-2023-664709",
     "cost": 44.27,
     "insuranceCoverage": true
+  },
+  {
+    "id": "p2001",
+    "medicineName": "Lisinopril",
+    "genericName": "Lisinopril",
+    "dosage": "10 mg once daily",
+    "doctorName": "Dr. Emily Carter 345",
+    "startDate": "2023-05-15",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take at the same time each day",
+    "sideEffects": [
+      "Cough",
+      "Dizziness"
+    ],
+    "warnings": [
+      "Avoid potassium supplements"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-001234",
+    "cost": 15.75,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2002",
+    "medicineName": "Atorvastatin",
+    "genericName": "Atorvastatin",
+    "dosage": "20 mg once daily",
+    "doctorName": "Dr. Sarah Lee 789",
+    "startDate": "2023-06-20",
+    "status": "completed",
+    "category": "cholesterol",
+    "instructions": "Take in the evening",
+    "sideEffects": [
+      "Muscle pain",
+      "Nausea"
+    ],
+    "warnings": [
+      "Avoid grapefruit juice"
+    ],
+    "refillsRemaining": 0,
+    "totalRefills": 2,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-002345",
+    "cost": 30.5,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2003",
+    "medicineName": "Sertraline",
+    "genericName": "Sertraline",
+    "dosage": "50 mg once daily",
+    "doctorName": "Dr. John Smith 456",
+    "startDate": "2023-07-10",
+    "status": "refill_needed",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Insomnia",
+      "Dry mouth"
+    ],
+    "warnings": [
+      "May increase suicidal thoughts"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 3,
+    "pharmacy": "Rite Aid",
+    "prescriptionNumber": "RX-2024-003456",
+    "cost": 25.4,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2004",
+    "medicineName": "Amoxicillin",
+    "genericName": "Amoxicillin",
+    "dosage": "500 mg three times daily",
+    "doctorName": "Dr. Anna Brown 123",
+    "startDate": "2023-08-05",
+    "status": "active",
+    "category": "antibiotic",
+    "instructions": "Complete the full course",
+    "sideEffects": [
+      "Diarrhea",
+      "Rash"
+    ],
+    "warnings": [
+      "Allergic reactions possible"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 2,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-004567",
+    "cost": 18.9,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2005",
+    "medicineName": "Metoprolol",
+    "genericName": "Metoprolol",
+    "dosage": "25 mg twice daily",
+    "doctorName": "Dr. Michael Green 987",
+    "startDate": "2023-09-12",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Do not stop abruptly",
+    "sideEffects": [
+      "Fatigue",
+      "Bradycardia"
+    ],
+    "warnings": [
+      "Monitor heart rate"
+    ],
+    "refillsRemaining": 4,
+    "totalRefills": 6,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-005678",
+    "cost": 12.34,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2006",
+    "medicineName": "Lisinopril",
+    "genericName": "Lisinopril",
+    "dosage": "10 mg once daily",
+    "doctorName": "Dr. Sarah Johnson 654",
+    "startDate": "2023-07-15",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take at the same time each day",
+    "sideEffects": [
+      "Cough",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-006789",
+    "cost": 15.75,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2007",
+    "medicineName": "Atorvastatin",
+    "genericName": "Atorvastatin",
+    "dosage": "20 mg once daily",
+    "doctorName": "Dr. Emily Davis 321",
+    "startDate": "2023-08-20",
+    "status": "active",
+    "category": "cholesterol",
+    "instructions": "Take in the evening",
+    "sideEffects": [
+      "Muscle pain",
+      "Nausea"
+    ],
+    "warnings": [
+      "Monitor liver function"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 4,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-007890",
+    "cost": 22.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2008",
+    "medicineName": "Metformin",
+    "genericName": "Metformin",
+    "dosage": "500 mg twice daily",
+    "doctorName": "Dr. Robert Wilson 112",
+    "startDate": "2023-09-01",
+    "status": "active",
+    "category": "diabetes",
+    "instructions": "Take with meals",
+    "sideEffects": [
+      "Stomach upset",
+      "Diarrhea"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 6,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-008901",
+    "cost": 10.99,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2009",
+    "medicineName": "Ibuprofen",
+    "genericName": "Ibuprofen",
+    "dosage": "200 mg every 6 hours as needed",
+    "doctorName": "Dr. Lisa Taylor 456",
+    "startDate": "2023-07-20",
+    "status": "active",
+    "category": "pain relief",
+    "instructions": "Do not exceed 1200 mg per day",
+    "sideEffects": [
+      "Stomach pain",
+      "Nausea"
+    ],
+    "warnings": [
+      "May cause gastrointestinal bleeding"
+    ],
+    "refillsRemaining": 5,
+    "totalRefills": 5,
+    "pharmacy": "Rite Aid",
+    "prescriptionNumber": "RX-2024-009012",
+    "cost": 8.25,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2010",
+    "medicineName": "Levothyroxine",
+    "genericName": "Levothyroxine",
+    "dosage": "75 mcg once daily",
+    "doctorName": "Dr. James Anderson 789",
+    "startDate": "2023-08-10",
+    "status": "active",
+    "category": "hormonal",
+    "instructions": "Take on an empty stomach",
+    "sideEffects": [
+      "Weight loss",
+      "Increased appetite"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 3,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-010123",
+    "cost": 18.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2011",
+    "medicineName": "Furosemide",
+    "genericName": "Furosemide",
+    "dosage": "40 mg once daily",
+    "doctorName": "Dr. Nancy Green 654",
+    "startDate": "2023-09-05",
+    "status": "active",
+    "category": "diuretic",
+    "instructions": "Monitor potassium levels",
+    "sideEffects": [
+      "Dehydration",
+      "Electrolyte imbalance"
+    ],
+    "warnings": [
+      "May cause dizziness"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 4,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-011234",
+    "cost": 14.99,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2012",
+    "medicineName": "Citalopram",
+    "genericName": "Citalopram",
+    "dosage": "20 mg once daily",
+    "doctorName": "Dr. Karen Clark 321",
+    "startDate": "2023-08-25",
+    "status": "refill_needed",
+    "category": "mental health",
+    "instructions": "Take with or without food",
+    "sideEffects": [
+      "Nausea",
+      "Dry mouth"
+    ],
+    "warnings": [
+      "May increase risk of bleeding"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 3,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-012345",
+    "cost": 23.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2013",
+    "medicineName": "Gabapentin",
+    "genericName": "Gabapentin",
+    "dosage": "300 mg three times daily",
+    "doctorName": "Dr. Steven Lewis 987",
+    "startDate": "2023-09-15",
+    "status": "active",
+    "category": "neuropathic pain",
+    "instructions": "Take at evenly spaced intervals",
+    "sideEffects": [
+      "Drowsiness",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 6,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-013456",
+    "cost": 29.99,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2014",
+    "medicineName": "Amlodipine",
+    "genericName": "Amlodipine",
+    "dosage": "5 mg once daily",
+    "doctorName": "Dr. Patricia Hall 654",
+    "startDate": "2023-09-20",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take with or without food",
+    "sideEffects": [
+      "Swelling",
+      "Fatigue"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-014567",
+    "cost": 12.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2015",
+    "medicineName": "Sertraline",
+    "genericName": "Sertraline",
+    "dosage": "100 mg once daily",
+    "doctorName": "Dr. Brian Young 123",
+    "startDate": "2023-09-25",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take in the morning",
+    "sideEffects": [
+      "Insomnia",
+      "Dry mouth"
+    ],
+    "warnings": [
+      "May cause drowsiness"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 4,
+    "pharmacy": "Rite Aid",
+    "prescriptionNumber": "RX-2024-015678",
+    "cost": 26.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2016",
+    "medicineName": "Clopidogrel",
+    "genericName": "Clopidogrel",
+    "dosage": "75 mg once daily",
+    "doctorName": "Dr. Jennifer Lee 456",
+    "startDate": "2023-08-30",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take with food to avoid stomach upset",
+    "sideEffects": [
+      "Bleeding",
+      "Stomach pain"
+    ],
+    "warnings": [
+      "Risk of bleeding"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-016789",
+    "cost": 19.75,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2017",
+    "medicineName": "Hydrochlorothiazide",
+    "genericName": "Hydrochlorothiazide",
+    "dosage": "25 mg once daily",
+    "doctorName": "Dr. Thomas Harris 321",
+    "startDate": "2023-09-10",
+    "status": "active",
+    "category": "diuretic",
+    "instructions": "Take in the morning",
+    "sideEffects": [
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 4,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-017890",
+    "cost": 11.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2018",
+    "medicineName": "Simvastatin",
+    "genericName": "Simvastatin",
+    "dosage": "40 mg once daily",
+    "doctorName": "Dr. Angela Martinez 654",
+    "startDate": "2023-09-16",
+    "status": "active",
+    "category": "cholesterol",
+    "instructions": "Take in the evening",
+    "sideEffects": [
+      "Muscle pain",
+      "Constipation"
+    ],
+    "warnings": [
+      "May interact with certain medications"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-018901",
+    "cost": 20.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2019",
+    "medicineName": "Ranitidine",
+    "genericName": "Ranitidine",
+    "dosage": "150 mg twice daily",
+    "doctorName": "Dr. Christopher Scott 987",
+    "startDate": "2023-09-18",
+    "status": "active",
+    "category": "gastrointestinal",
+    "instructions": "Take before meals",
+    "sideEffects": [
+      "Headache",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 6,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-019012",
+    "cost": 15.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2020",
+    "medicineName": "Montelukast",
+    "genericName": "Montelukast",
+    "dosage": "10 mg once daily",
+    "doctorName": "Dr. Elizabeth White 123",
+    "startDate": "2023-08-12",
+    "status": "active",
+    "category": "respiratory",
+    "instructions": "Take in the evening",
+    "sideEffects": [
+      "Headache",
+      "Nausea"
+    ],
+    "warnings": [
+      "May cause mood changes"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-020123",
+    "cost": 17.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2021",
+    "medicineName": "Zoloft",
+    "genericName": "Sertraline",
+    "dosage": "50 mg once daily",
+    "doctorName": "Dr. Amanda King 456",
+    "startDate": "2023-09-22",
+    "status": "refill_needed",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Nausea",
+      "Dry mouth"
+    ],
+    "warnings": [
+      "Increased risk of bleeding"
+    ],
+    "refillsRemaining": 1,
+    "totalRefills": 3,
+    "pharmacy": "Rite Aid",
+    "prescriptionNumber": "RX-2024-021234",
+    "cost": 24.99,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2022",
+    "medicineName": "Tamsulosin",
+    "genericName": "Tamsulosin",
+    "dosage": "0.4 mg once daily",
+    "doctorName": "Dr. Robert Allen 321",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "urology",
+    "instructions": "Take after the same meal each day",
+    "sideEffects": [
+      "Dizziness",
+      "Headache"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-022345",
+    "cost": 11.75,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2023",
+    "medicineName": "Venlafaxine",
+    "genericName": "Venlafaxine",
+    "dosage": "75 mg once daily",
+    "doctorName": "Dr. Jennifer Wright 654",
+    "startDate": "2023-09-28",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Nausea",
+      "Drowsiness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-023456",
+    "cost": 21.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2024",
+    "medicineName": "Duloxetine",
+    "genericName": "Duloxetine",
+    "dosage": "60 mg once daily",
+    "doctorName": "Dr. Charles Evans 987",
+    "startDate": "2023-09-17",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Dry mouth",
+      "Fatigue"
+    ],
+    "warnings": [],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-024567",
+    "cost": 19.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2025",
+    "medicineName": "Tramadol",
+    "genericName": "Tramadol",
+    "dosage": "50 mg every 6 hours as needed",
+    "doctorName": "Dr. Laura Roberts 321",
+    "startDate": "2023-09-20",
+    "status": "active",
+    "category": "pain relief",
+    "instructions": "Do not exceed 400 mg per day",
+    "sideEffects": [
+      "Dizziness",
+      "Nausea"
+    ],
+    "warnings": [
+      "Risk of dependence"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-025678",
+    "cost": 18.25,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2026",
+    "medicineName": "Bupropion",
+    "genericName": "Bupropion",
+    "dosage": "150 mg once daily",
+    "doctorName": "Dr. Kevin Turner 654",
+    "startDate": "2023-09-29",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take in the morning",
+    "sideEffects": [
+      "Insomnia",
+      "Dry mouth"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 6,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-026789",
+    "cost": 20.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2027",
+    "medicineName": "Atenolol",
+    "genericName": "Atenolol",
+    "dosage": "50 mg once daily",
+    "doctorName": "Dr. Ashley Phillips 123",
+    "startDate": "2023-09-25",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take at the same time each day",
+    "sideEffects": [
+      "Fatigue",
+      "Cold hands"
+    ],
+    "warnings": [
+      "Do not stop abruptly"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-027890",
+    "cost": 14.99,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2028",
+    "medicineName": "Sildenafil",
+    "genericName": "Sildenafil",
+    "dosage": "50 mg as needed",
+    "doctorName": "Dr. Brian Clark 456",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "erectile dysfunction",
+    "instructions": "Take 30 minutes before sexual activity",
+    "sideEffects": [
+      "Headache",
+      "Flushing"
+    ],
+    "warnings": [],
+    "refillsRemaining": 5,
+    "totalRefills": 5,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-028901",
+    "cost": 29.99,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2029",
+    "medicineName": "Loratadine",
+    "genericName": "Loratadine",
+    "dosage": "10 mg once daily",
+    "doctorName": "Dr. Sarah Martinez 321",
+    "startDate": "2023-09-22",
+    "status": "active",
+    "category": "allergy",
+    "instructions": "Take with water",
+    "sideEffects": [
+      "Headache",
+      "Fatigue"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 4,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-029012",
+    "cost": 10.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2030",
+    "medicineName": "Esomeprazole",
+    "genericName": "Esomeprazole",
+    "dosage": "20 mg once daily",
+    "doctorName": "Dr. Anthony Harris 654",
+    "startDate": "2023-09-15",
+    "status": "active",
+    "category": "gastrointestinal",
+    "instructions": "Take before meals",
+    "sideEffects": [
+      "Nausea",
+      "Headache"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-030123",
+    "cost": 16.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2031",
+    "medicineName": "Risperidone",
+    "genericName": "Risperidone",
+    "dosage": "2 mg once daily",
+    "doctorName": "Dr. Jessica Lee 987",
+    "startDate": "2023-09-20",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Drowsiness",
+      "Weight gain"
+    ],
+    "warnings": [
+      "Monitor for movement disorders"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-031234",
+    "cost": 22.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2032",
+    "medicineName": "Trazodone",
+    "genericName": "Trazodone",
+    "dosage": "100 mg at bedtime",
+    "doctorName": "Dr. Mark Robinson 123",
+    "startDate": "2023-09-29",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Drowsiness",
+      "Dry mouth"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 4,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-032345",
+    "cost": 18.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2033",
+    "medicineName": "Oxycodone",
+    "genericName": "Oxycodone",
+    "dosage": "10 mg every 12 hours as needed",
+    "doctorName": "Dr. Elizabeth King 654",
+    "startDate": "2023-09-10",
+    "status": "active",
+    "category": "pain relief",
+    "instructions": "Risk of addiction",
+    "sideEffects": [
+      "Dizziness",
+      "Constipation"
+    ],
+    "warnings": [
+      "May cause respiratory depression"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-033456",
+    "cost": 27.5,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2034",
+    "medicineName": "Fluticasone",
+    "genericName": "Fluticasone",
+    "dosage": "200 mcg once daily",
+    "doctorName": "Dr. George Allen 321",
+    "startDate": "2023-09-18",
+    "status": "active",
+    "category": "respiratory",
+    "instructions": "Use as directed",
+    "sideEffects": [
+      "Throat irritation",
+      "Nosebleeds"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 4,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-034567",
+    "cost": 15.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2035",
+    "medicineName": "Mirtazapine",
+    "genericName": "Mirtazapine",
+    "dosage": "15 mg at bedtime",
+    "doctorName": "Dr. Daniel Martinez 654",
+    "startDate": "2023-09-21",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take before sleep",
+    "sideEffects": [
+      "Drowsiness",
+      "Weight gain"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-035678",
+    "cost": 20.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2036",
+    "medicineName": "Ciprofloxacin",
+    "genericName": "Ciprofloxacin",
+    "dosage": "500 mg twice daily",
+    "doctorName": "Dr. Emily Johnson 123",
+    "startDate": "2023-09-14",
+    "status": "active",
+    "category": "antibiotic",
+    "instructions": "Finish the entire course",
+    "sideEffects": [
+      "Nausea",
+      "Diarrhea"
+    ],
+    "warnings": [
+      "Tendon rupture possible"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-036789",
+    "cost": 17.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2037",
+    "medicineName": "Azithromycin",
+    "genericName": "Azithromycin",
+    "dosage": "250 mg once daily",
+    "doctorName": "Dr. Jason Lee 456",
+    "startDate": "2023-09-19",
+    "status": "active",
+    "category": "antibiotic",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Nausea",
+      "Diarrhea"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-037890",
+    "cost": 16.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2038",
+    "medicineName": "Candesartan",
+    "genericName": "Candesartan",
+    "dosage": "16 mg once daily",
+    "doctorName": "Dr. Angela White 321",
+    "startDate": "2023-09-25",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take at the same time each day",
+    "sideEffects": [
+      "Dizziness",
+      "Fatigue"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-038901",
+    "cost": 18.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2039",
+    "medicineName": "Dexamethasone",
+    "genericName": "Dexamethasone",
+    "dosage": "4 mg once daily",
+    "doctorName": "Dr. Brian Young 654",
+    "startDate": "2023-09-28",
+    "status": "active",
+    "category": "anti-inflammatory",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Increased appetite",
+      "Mood changes"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-039012",
+    "cost": 12.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2040",
+    "medicineName": "Lansoprazole",
+    "genericName": "Lansoprazole",
+    "dosage": "30 mg once daily",
+    "doctorName": "Dr. Lisa Smith 123",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "gastrointestinal",
+    "instructions": "Take before meals",
+    "sideEffects": [
+      "Nausea",
+      "Diarrhea"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-040123",
+    "cost": 14.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2041",
+    "medicineName": "Duloxetine",
+    "genericName": "Duloxetine",
+    "dosage": "30 mg once daily",
+    "doctorName": "Dr. Richard Johnson 654",
+    "startDate": "2023-09-15",
+    "status": "refill_needed",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 1,
+    "totalRefills": 3,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-041234",
+    "cost": 22.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2042",
+    "medicineName": "Fluoxetine",
+    "genericName": "Fluoxetine",
+    "dosage": "20 mg once daily",
+    "doctorName": "Dr. Nancy Taylor 321",
+    "startDate": "2023-09-22",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take in the morning",
+    "sideEffects": [
+      "Insomnia",
+      "Nausea"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-042345",
+    "cost": 19.99,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2043",
+    "medicineName": "Buspirone",
+    "genericName": "Buspirone",
+    "dosage": "10 mg twice daily",
+    "doctorName": "Dr. Steven White 987",
+    "startDate": "2023-09-18",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Dizziness",
+      "Nausea"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-043456",
+    "cost": 15.25,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2044",
+    "medicineName": "Levofloxacin",
+    "genericName": "Levofloxacin",
+    "dosage": "500 mg once daily",
+    "doctorName": "Dr. Jennifer Brown 123",
+    "startDate": "2023-09-27",
+    "status": "active",
+    "category": "antibiotic",
+    "instructions": "Finish the entire course",
+    "sideEffects": [
+      "Nausea",
+      "Diarrhea"
+    ],
+    "warnings": [
+      "Tendon rupture possible"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-044567",
+    "cost": 20.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2045",
+    "medicineName": "Citalopram",
+    "genericName": "Citalopram",
+    "dosage": "40 mg once daily",
+    "doctorName": "Dr. Matthew Wilson 654",
+    "startDate": "2023-09-20",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Nausea",
+      "Dry mouth"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-045678",
+    "cost": 23.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2046",
+    "medicineName": "Baclofen",
+    "genericName": "Baclofen",
+    "dosage": "10 mg three times daily",
+    "doctorName": "Dr. Angela Martinez 321",
+    "startDate": "2023-09-25",
+    "status": "active",
+    "category": "muscle relaxant",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Drowsiness",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 5,
+    "totalRefills": 5,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-046789",
+    "cost": 18.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2047",
+    "medicineName": "Nitroglycerin",
+    "genericName": "Nitroglycerin",
+    "dosage": "0.4 mg as needed",
+    "doctorName": "Dr. Samuel Johnson 654",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take at the first sign of chest pain",
+    "sideEffects": [
+      "Headache",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 6,
+    "pharmacy": "Walmart Pharmacy",
+    "prescriptionNumber": "RX-2024-047890",
+    "cost": 13.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2048",
+    "medicineName": "Ropinirole",
+    "genericName": "Ropinirole",
+    "dosage": "1 mg three times daily",
+    "doctorName": "Dr. Kenneth Brown 123",
+    "startDate": "2023-09-28",
+    "status": "active",
+    "category": "neurology",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-048901",
+    "cost": 25.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2049",
+    "medicineName": "Doxazosin",
+    "genericName": "Doxazosin",
+    "dosage": "1 mg once daily",
+    "doctorName": "Dr. Laura Harris 654",
+    "startDate": "2023-09-26",
+    "status": "active",
+    "category": "urology",
+    "instructions": "Take at bedtime",
+    "sideEffects": [
+      "Dizziness",
+      "Fatigue"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-049012",
+    "cost": 11.25,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2050",
+    "medicineName": "Pramipexole",
+    "genericName": "Pramipexole",
+    "dosage": "0.5 mg once daily",
+    "doctorName": "Dr. Steven Taylor 321",
+    "startDate": "2023-09-27",
+    "status": "active",
+    "category": "neurology",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Nausea",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-050123",
+    "cost": 24.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2051",
+    "medicineName": "Carvedilol",
+    "genericName": "Carvedilol",
+    "dosage": "6.25 mg twice daily",
+    "doctorName": "Dr. John White 456",
+    "startDate": "2023-09-29",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Dizziness",
+      "Fatigue"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-051234",
+    "cost": 17.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2052",
+    "medicineName": "Quetiapine",
+    "genericName": "Quetiapine",
+    "dosage": "100 mg at bedtime",
+    "doctorName": "Dr. Patricia King 321",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "mental health",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Drowsiness",
+      "Dry mouth"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-052345",
+    "cost": 21.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2053",
+    "medicineName": "Topiramate",
+    "genericName": "Topiramate",
+    "dosage": "50 mg once daily",
+    "doctorName": "Dr. Michael Johnson 654",
+    "startDate": "2023-09-28",
+    "status": "active",
+    "category": "neurology",
+    "instructions": "Take with or without food",
+    "sideEffects": [
+      "Dizziness",
+      "Fatigue"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Target Pharmacy",
+    "prescriptionNumber": "RX-2024-053456",
+    "cost": 15.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2054",
+    "medicineName": "Amiodarone",
+    "genericName": "Amiodarone",
+    "dosage": "200 mg once daily",
+    "doctorName": "Dr. James Brown 123",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "cardiovascular",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Fatigue",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 5,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-054321",
+    "cost": 30.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2055",
+    "medicineName": "Gabapentin",
+    "genericName": "Gabapentin",
+    "dosage": "600 mg three times daily",
+    "doctorName": "Dr. Karen Smith 654",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "neuropathic pain",
+    "instructions": "Take at evenly spaced intervals",
+    "sideEffects": [
+      "Drowsiness",
+      "Dizziness"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 6,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-055432",
+    "cost": 27.5,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2056",
+    "medicineName": "Dexamethasone",
+    "genericName": "Dexamethasone",
+    "dosage": "2 mg once daily",
+    "doctorName": "Dr. Lisa White 123",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "anti-inflammatory",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Increased appetite",
+      "Mood changes"
+    ],
+    "warnings": [],
+    "refillsRemaining": 3,
+    "totalRefills": 4,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-056789",
+    "cost": 12.5,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2057",
+    "medicineName": "Fentanyl",
+    "genericName": "Fentanyl",
+    "dosage": "25 mcg/hour transdermal patch",
+    "doctorName": "Dr. Janet Wilson 654",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "pain relief",
+    "instructions": "Apply patch to a hairless area",
+    "sideEffects": [
+      "Drowsiness",
+      "Nausea"
+    ],
+    "warnings": [
+      "Risk of overdose"
+    ],
+    "refillsRemaining": 2,
+    "totalRefills": 3,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-057890",
+    "cost": 35.0,
+    "insuranceCoverage": false
+  },
+  {
+    "id": "p2058",
+    "medicineName": "Rivaroxaban",
+    "genericName": "Rivaroxaban",
+    "dosage": "20 mg once daily",
+    "doctorName": "Dr. Timothy Brown 321",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "anticoagulant",
+    "instructions": "Take with food",
+    "sideEffects": [
+      "Bleeding",
+      "Nausea"
+    ],
+    "warnings": [
+      "Increased risk of bleeding"
+    ],
+    "refillsRemaining": 3,
+    "totalRefills": 5,
+    "pharmacy": "Kroger Pharmacy",
+    "prescriptionNumber": "RX-2024-058901",
+    "cost": 28.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2059",
+    "medicineName": "Insulin Glargine",
+    "genericName": "Insulin Glargine",
+    "dosage": "10 units once daily",
+    "doctorName": "Dr. Michelle Johnson 654",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "diabetes",
+    "instructions": "Inject subcutaneously",
+    "sideEffects": [
+      "Hypoglycemia",
+      "Weight gain"
+    ],
+    "warnings": [],
+    "refillsRemaining": 4,
+    "totalRefills": 4,
+    "pharmacy": "CVS Pharmacy",
+    "prescriptionNumber": "RX-2024-059012",
+    "cost": 45.0,
+    "insuranceCoverage": true
+  },
+  {
+    "id": "p2060",
+    "medicineName": "Tadalafil",
+    "genericName": "Tadalafil",
+    "dosage": "10 mg as needed",
+    "doctorName": "Dr. Robert Green 321",
+    "startDate": "2023-09-30",
+    "status": "active",
+    "category": "erectile dysfunction",
+    "instructions": "Take 30 minutes before sexual activity",
+    "sideEffects": [
+      "Headache",
+      "Flushing"
+    ],
+    "warnings": [],
+    "refillsRemaining": 5,
+    "totalRefills": 5,
+    "pharmacy": "Walgreens",
+    "prescriptionNumber": "RX-2024-060123",
+    "cost": 29.99,
+    "insuranceCoverage": false
   }
 ]
