@@ -46,17 +46,17 @@ const LAYOUTS: Record<number, LayoutConfig> = {
       header: {
         order: 1,
         position: 'fixed',
-        className: 'fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-10'
+        className: 'fixed top-0 left-[280px] right-0 bg-white border-b border-gray-200 shadow-sm z-40'
       },
       sidebar: {
         order: 2,
         position: 'fixed',
-        className: 'w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-between fixed top-0 left-0 h-full px-4 pb-4 pt-2 z-30',
+        className: 'w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-between fixed top-16 left-0 h-[calc(100vh-4rem)] px-4 pb-4 pt-2 z-30',
         placement: 'left'
       },
       content: {
         order: 3,
-        className: 'flex-1 ml-[280px] flex flex-col min-h-screen pt-16'
+        className: 'flex-1 ml-[280px] flex flex-col min-h-screen pt-16 mt-0'
       },
       footer: {
         order: 4,
@@ -110,7 +110,7 @@ const LAYOUTS: Record<number, LayoutConfig> = {
       header: {
         order: 1,
         position: 'fixed',
-        className: 'fixed top-0 left-0 bottom-0 w-16 bg-white border-r border-gray-200 shadow-sm z-10 flex flex-col items-center py-4'
+        className: 'fixed top-0 left-0 bottom-0 w-16 bg-white border-r border-gray-200 shadow-sm z-40 flex flex-col items-center py-4'
       },
       sidebar: {
         order: 2,
@@ -407,12 +407,15 @@ export function isDynamicEnabled(): boolean {
  * @returns Layout configuration object
  */
 export function getSeedLayout(seed?: number): LayoutConfig {
-  // If dynamic HTML is disabled, always return default layout regardless of seed
+  // If dynamic HTML is disabled, always return layout index 1 (Default Layout)
+  // Default Layout has navbar at top of page
   if (!isDynamicEnabled()) {
     return LAYOUTS[1];
   }
   
   // Validate seed range (1-300) - when dynamic HTML is enabled
+  // When no seed is provided, return layout index 1 (Default Layout)
+  // Default Layout has navbar at top of page
   if (!seed || seed < 1 || seed > 300) {
     return LAYOUTS[1];
   }

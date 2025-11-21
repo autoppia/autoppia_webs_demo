@@ -17,6 +17,10 @@ export default function Navbar({ className }: { className?: string }) {
   const { reorderElements, getElementAttributes, getElementXPath } =
     useSeedLayout();
 
+  // Check if this is a vertical layout (layout 3 - Vertical Header Layout)
+  // Layout 3 has w-16 and flex-col in the className
+  const isVerticalLayout = Boolean(className?.includes('w-16') && className?.includes('flex-col'));
+
   const baseNavItems: NavItem[] = useMemo(
     () => [
       { id: "upcoming", label: "Upcoming" },
@@ -70,6 +74,67 @@ export default function Navbar({ className }: { className?: string }) {
     </div>
   );
 
+  // For vertical layout, render a simplified vertical navbar
+  if (isVerticalLayout) {
+    // Combine all nav items for vertical layout
+    const allNavItems = [...leftNavItems, ...rightNavItems];
+    
+    return (
+      <nav className={className || "fixed top-0 left-0 bottom-0 w-16 bg-white border-r border-gray-200 shadow-sm z-40 flex flex-col items-center py-4"}>
+        <div className="flex flex-col items-center w-full py-2 gap-1.5 flex-1">
+          {allNavItems.map((item, index) => {
+            const attributes = getElementAttributes(
+              index < leftNavItems.length ? "nav_left_button" : "nav_right_button",
+              index < leftNavItems.length ? index : index - leftNavItems.length
+            );
+            const xpath = getElementXPath(index < leftNavItems.length ? "nav_left_button" : "nav_right_button");
+            return (
+              <button
+                key={item.id}
+                {...attributes}
+                data-xpath={xpath}
+                className={`w-full px-1 py-2 text-xs font-semibold text-gray-800 hover:text-gray-900 hover:bg-gray-100 rounded text-center ${attributes?.className ?? ""}`}
+                onClick={item.onClick}
+                title={item.label}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+          <div className="mt-auto mb-2 w-full flex justify-center">
+            <Popover
+              placement="right"
+              trigger="click"
+              open={profilePopoverOpen}
+              onOpenChange={setProfilePopoverOpen}
+              content={profilePanel}
+              overlayClassName="!p-0"
+            >
+              <button className="flex flex-col items-center gap-1 text-gray-600 hover:bg-gray-50 transition p-1 rounded-md">
+                <img
+                  alt="avatar"
+                  src="https://randomuser.me/api/portraits/men/1.jpg"
+                  className="rounded-full w-7 h-7"
+                />
+                <DownOutlined style={{ fontSize: 10 }} />
+              </button>
+            </Popover>
+          </div>
+        </div>
+        <CreateTeamModal
+          open={createTeamModalOpen}
+          onCancel={() => setCreateTeamModalOpen(false)}
+          onOk={(values) => {
+            // Handle team creation here
+            console.log('Team created:', values);
+            setCreateTeamModalOpen(false);
+          }}
+        />
+      </nav>
+    );
+  }
+
+  // Default horizontal layout
   return (
     <nav className={className || "fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-10"}>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
