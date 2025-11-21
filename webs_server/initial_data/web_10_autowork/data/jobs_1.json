@@ -17998,5 +17998,419 @@
     "time": "36:00 hrs ($2664)",
     "timestr": "Time logged this week:",
     "active": false
+  },
+  {
+    "title": "Create e-commerce website",
+    "status": "Open",
+    "start": "Oct 1",
+    "activity": "last active 5 days ago on Initial design phase",
+    "time": "20:00 hrs ($800)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Implement user authentication",
+    "status": "Assigned",
+    "start": "Oct 5",
+    "activity": "last active 1 day ago on Database setup",
+    "time": "15:00 hrs ($600)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Optimize website performance",
+    "status": "In progress",
+    "start": "Oct 10",
+    "activity": "last active today on Performance testing",
+    "time": "10:00 hrs ($400)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Conduct user testing",
+    "status": "Completed",
+    "start": "Sep 15",
+    "activity": "last active 2 weeks ago on Feedback collection",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Develop mobile app features",
+    "status": "In progress",
+    "start": "Oct 12",
+    "activity": "last active yesterday on Feature implementation",
+    "time": "12:00 hrs ($480)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Design user interface",
+    "status": "Open",
+    "start": "Oct 05",
+    "activity": "last active 3 days ago on Wireframe creation",
+    "time": "8:00 hrs ($320)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Backend API development",
+    "status": "Assigned",
+    "start": "Oct 02",
+    "activity": "last active today on API integration",
+    "time": "15:00 hrs ($600)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "SEO optimization",
+    "status": "In progress",
+    "start": "Sep 25",
+    "activity": "last active yesterday on Keyword analysis",
+    "time": "10:00 hrs ($400)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Content writing for blog",
+    "status": "Completed",
+    "start": "Sep 20",
+    "activity": "last active 1 week ago on Final edits",
+    "time": "6:00 hrs ($240)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Setup database schema",
+    "status": "Open",
+    "start": "Oct 08",
+    "activity": "last active 2 days ago on Schema design",
+    "time": "4:00 hrs ($160)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Create marketing strategy",
+    "status": "Assigned",
+    "start": "Oct 03",
+    "activity": "last active today on Market analysis",
+    "time": "9:00 hrs ($360)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Implement user authentication",
+    "status": "In progress",
+    "start": "Oct 07",
+    "activity": "last active today on Security checks",
+    "time": "7:00 hrs ($280)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Conduct competitor analysis",
+    "status": "Completed",
+    "start": "Sep 18",
+    "activity": "last active 1 week ago on Report generation",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Develop API documentation",
+    "status": "Open",
+    "start": "Oct 01",
+    "activity": "last active 4 days ago on Drafting",
+    "time": "3:00 hrs ($120)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Create social media content",
+    "status": "Assigned",
+    "start": "Oct 04",
+    "activity": "last active yesterday on Content planning",
+    "time": "8:00 hrs ($320)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Fix bugs in application",
+    "status": "In progress",
+    "start": "Sep 30",
+    "activity": "last active today on Bug fixing",
+    "time": "10:00 hrs ($400)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Review project requirements",
+    "status": "Completed",
+    "start": "Sep 17",
+    "activity": "last active 2 weeks ago on Requirement gathering",
+    "time": "4:00 hrs ($160)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Conduct usability testing",
+    "status": "Open",
+    "start": "Oct 09",
+    "activity": "last active today on Test planning",
+    "time": "6:00 hrs ($240)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Create wireframes for app",
+    "status": "Assigned",
+    "start": "Oct 06",
+    "activity": "last active yesterday on Wireframe reviews",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Launch email campaign",
+    "status": "In progress",
+    "start": "Sep 29",
+    "activity": "last active today on Email drafting",
+    "time": "7:00 hrs ($280)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Prepare project presentation",
+    "status": "Completed",
+    "start": "Sep 16",
+    "activity": "last active 1 week ago on Slide creation",
+    "time": "3:00 hrs ($120)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Integrate payment gateway",
+    "status": "Open",
+    "start": "Oct 11",
+    "activity": "last active today on Gateway setup",
+    "time": "9:00 hrs ($360)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Analyze user feedback",
+    "status": "Assigned",
+    "start": "Oct 05",
+    "activity": "last active 2 days ago on Data analysis",
+    "time": "8:00 hrs ($320)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Update website content",
+    "status": "In progress",
+    "start": "Oct 03",
+    "activity": "last active today on Content updates",
+    "time": "6:00 hrs ($240)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Finalize project scope",
+    "status": "Completed",
+    "start": "Sep 19",
+    "activity": "last active 2 weeks ago on Scope definition",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Conduct performance testing",
+    "status": "Open",
+    "start": "Oct 12",
+    "activity": "last active today on Test execution",
+    "time": "10:00 hrs ($400)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Create user onboarding guide",
+    "status": "Assigned",
+    "start": "Oct 06",
+    "activity": "last active yesterday on Guide drafting",
+    "time": "7:00 hrs ($280)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Monitor server performance",
+    "status": "In progress",
+    "start": "Sep 28",
+    "activity": "last active today on Performance monitoring",
+    "time": "8:00 hrs ($320)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Conduct team meeting",
+    "status": "Completed",
+    "start": "Sep 15",
+    "activity": "last active 1 week ago on Meeting notes",
+    "time": "2:00 hrs ($80)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Revise project timeline",
+    "status": "Open",
+    "start": "Oct 10",
+    "activity": "last active today on Timeline adjustments",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Implement analytics tracking",
+    "status": "Assigned",
+    "start": "Oct 04",
+    "activity": "last active yesterday on Tracking setup",
+    "time": "6:00 hrs ($240)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Refactor codebase",
+    "status": "In progress",
+    "start": "Sep 26",
+    "activity": "last active today on Code reviews",
+    "time": "12:00 hrs ($480)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Prepare budget report",
+    "status": "Completed",
+    "start": "Sep 14",
+    "activity": "last active 2 weeks ago on Budget analysis",
+    "time": "4:00 hrs ($160)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Update project documentation",
+    "status": "Open",
+    "start": "Oct 13",
+    "activity": "last active today on Document revisions",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Conduct stakeholder interviews",
+    "status": "Assigned",
+    "start": "Oct 05",
+    "activity": "last active 2 days ago on Interview scheduling",
+    "time": "8:00 hrs ($320)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Design marketing materials",
+    "status": "In progress",
+    "start": "Sep 29",
+    "activity": "last active today on Design revisions",
+    "time": "9:00 hrs ($360)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Evaluate project risks",
+    "status": "Completed",
+    "start": "Sep 17",
+    "activity": "last active 1 week ago on Risk assessment",
+    "time": "3:00 hrs ($120)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Create testing plan",
+    "status": "Open",
+    "start": "Oct 14",
+    "activity": "last active today on Test planning",
+    "time": "6:00 hrs ($240)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Develop training materials",
+    "status": "Assigned",
+    "start": "Oct 06",
+    "activity": "last active yesterday on Material creation",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Launch website redesign",
+    "status": "In progress",
+    "start": "Sep 30",
+    "activity": "last active today on Design implementation",
+    "time": "10:00 hrs ($400)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Compile project feedback",
+    "status": "Completed",
+    "start": "Sep 15",
+    "activity": "last active 1 week ago on Feedback analysis",
+    "time": "4:00 hrs ($160)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Conduct risk assessment",
+    "status": "Open",
+    "start": "Oct 15",
+    "activity": "last active today on Risk evaluation",
+    "time": "5:00 hrs ($200)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Prepare project timeline",
+    "status": "Assigned",
+    "start": "Oct 07",
+    "activity": "last active yesterday on Timeline updates",
+    "time": "7:00 hrs ($280)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Test application features",
+    "status": "In progress",
+    "start": "Oct 02",
+    "activity": "last active today on Feature testing",
+    "time": "8:00 hrs ($320)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Update project roadmap",
+    "status": "Completed",
+    "start": "Sep 18",
+    "activity": "last active 2 weeks ago on Roadmap creation",
+    "time": "3:00 hrs ($120)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Conduct team training",
+    "status": "Open",
+    "start": "Oct 16",
+    "activity": "last active today on Training sessions",
+    "time": "6:00 hrs ($240)",
+    "timestr": "Time logged this week:",
+    "active": true
   }
 ]

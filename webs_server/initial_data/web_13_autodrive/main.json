@@ -1,11 +1,11 @@
 {
-    "places": [
-        "./data/places_1.json"
-    ],
-    "rides": [
-        "./data/rides_1.json"
-    ],
-    "trips": [
-        "./data/trips_1.json"
-    ]
+  "places": [
+    "./data/places_1.json"
+  ],
+  "rides": [
+    "./data/rides_1.json"
+  ],
+  "trips": [
+    "./data/trips_1.json"
+  ]
 }

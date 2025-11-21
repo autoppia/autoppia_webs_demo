@@ -63845,5 +63845,2725 @@
     "busy": true,
     "visibility": "public",
     "meetingLink": ""
+  },
+  {
+    "id": "2001",
+    "date": "2025-09-15",
+    "start": 10,
+    "end": 11,
+    "label": "Team Standup",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Daily team check-in to discuss progress.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-15",
+    "attendees": [
+      "team.lead@example.com",
+      "developer@example.com",
+      "designer@example.com"
+    ],
+    "reminders": [
+      10
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2002",
+    "date": "2025-10-10",
+    "start": 18,
+    "end": 20,
+    "label": "Dinner with Friends",
+    "calendar": "Social",
+    "color": "#3F51B5",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Catch up with old friends over dinner.",
+    "location": "Italian Bistro",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2003",
+    "date": "2025-11-05",
+    "start": 14,
+    "end": 15,
+    "label": "Project Presentation",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Presenting the final project to stakeholders.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "stakeholder1@example.com",
+      "stakeholder2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2004",
+    "date": "2025-12-01",
+    "start": 9,
+    "end": 17,
+    "label": "Workshop",
+    "calendar": "Professional Development",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Full day workshop on leadership skills.",
+    "location": "Training Room B",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "employee1@example.com",
+      "employee2@example.com",
+      "employee3@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2005",
+    "date": "2025-12-25",
+    "start": 0,
+    "end": 23.5,
+    "label": "Christmas Day",
+    "calendar": "Holidays",
+    "color": "#F44336",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      30
+    ],
+    "description": "Celebrating Christmas with family.",
+    "location": "Home",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [],
+    "reminders": [],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2006",
+    "date": "2025-12-15",
+    "start": 10,
+    "end": 11,
+    "label": "Team Standup",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Daily team standup meeting.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-12-30",
+    "attendees": [
+      "teamlead@example.com",
+      "developer1@example.com",
+      "developer2@example.com"
+    ],
+    "reminders": [
+      10
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2007",
+    "date": "2025-12-18",
+    "start": 13,
+    "end": 14,
+    "label": "Client Meeting",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Meeting with the client to discuss project updates.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2008",
+    "date": "2025-12-20",
+    "start": 18,
+    "end": 21,
+    "label": "Holiday Party",
+    "calendar": "Social",
+    "color": "#FF5722",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Annual holiday party with the team.",
+    "location": "Company Rooftop",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "employee1@example.com",
+      "employee2@example.com",
+      "employee3@example.com",
+      "employee4@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2009",
+    "date": "2025-12-31",
+    "start": 20,
+    "end": 23.5,
+    "label": "New Year's Eve Celebration",
+    "calendar": "Holidays",
+    "color": "#9C27B0",
+    "startTime": [
+      20,
+      0
+    ],
+    "endTime": [
+      23,
+      30
+    ],
+    "description": "Celebrating New Year's Eve with friends.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2010",
+    "date": "2026-01-05",
+    "start": 9,
+    "end": 17,
+    "label": "Kickoff Meeting",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Kickoff meeting for the new project.",
+    "location": "Conference Room A",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2011",
+    "date": "2026-01-10",
+    "start": 14,
+    "end": 15,
+    "label": "Weekly Review",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Weekly project review with the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2026-03-01",
+    "attendees": [
+      "developer1@example.com",
+      "developer2@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2012",
+    "date": "2026-01-15",
+    "start": 11,
+    "end": 12,
+    "label": "Lunch & Learn",
+    "calendar": "Professional Development",
+    "color": "#FF9800",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Lunch and learn session on new technologies.",
+    "location": "Cafeteria",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "employee1@example.com",
+      "employee2@example.com",
+      "employee3@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2013",
+    "date": "2026-01-20",
+    "start": 9,
+    "end": 10,
+    "label": "One-on-One",
+    "calendar": "Work",
+    "color": "#E91E63",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "One-on-one meeting with my manager.",
+    "location": "Manager's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "employee1@example.com"
+    ],
+    "reminders": [
+      5
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2014",
+    "date": "2026-01-25",
+    "start": 15,
+    "end": 16,
+    "label": "Project Update",
+    "calendar": "Work",
+    "color": "#8BC34A",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Update meeting for the ongoing project.",
+    "location": "Conference Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "projectmanager@example.com",
+      "developer1@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2015",
+    "date": "2026-02-01",
+    "start": 10,
+    "end": 11,
+    "label": "Retrospective Meeting",
+    "calendar": "Work",
+    "color": "#FFEB3B",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Retrospective meeting to discuss past sprint.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2016",
+    "date": "2026-02-10",
+    "start": 12,
+    "end": 13,
+    "label": "Strategy Session",
+    "calendar": "Work",
+    "color": "#673AB7",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Session to discuss future strategies.",
+    "location": "Board Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "executive@example.com",
+      "manager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2017",
+    "date": "2026-02-15",
+    "start": 14,
+    "end": 15,
+    "label": "Team Building Activity",
+    "calendar": "Social",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Fun team building activities.",
+    "location": "Local Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2018",
+    "date": "2026-02-20",
+    "start": 16,
+    "end": 17,
+    "label": "Feedback Session",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      16,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Session to gather feedback from the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2019",
+    "date": "2026-02-25",
+    "start": 9,
+    "end": 10,
+    "label": "Client Check-In",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Check-in meeting with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2020",
+    "date": "2026-03-01",
+    "start": 14,
+    "end": 15,
+    "label": "Quarterly Review",
+    "calendar": "Work",
+    "color": "#8BC34A",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Review of quarterly performance.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "executive@example.com",
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2021",
+    "date": "2026-03-05",
+    "start": 10,
+    "end": 11,
+    "label": "Project Planning",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Planning meeting for the upcoming project.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "developer1@example.com",
+      "developer2@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2022",
+    "date": "2026-03-10",
+    "start": 12,
+    "end": 13,
+    "label": "Networking Event",
+    "calendar": "Professional Development",
+    "color": "#673AB7",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Networking event with industry professionals.",
+    "location": "Downtown Convention Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2023",
+    "date": "2026-03-15",
+    "start": 14,
+    "end": 15,
+    "label": "Team Outing",
+    "calendar": "Social",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Team outing to promote bonding.",
+    "location": "Amusement Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2024",
+    "date": "2026-03-20",
+    "start": 9,
+    "end": 10,
+    "label": "Budget Review",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Review of departmental budget.",
+    "location": "Finance Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "finance@example.com",
+      "manager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2025",
+    "date": "2026-03-25",
+    "start": 11,
+    "end": 12,
+    "label": "Learning Session",
+    "calendar": "Professional Development",
+    "color": "#FFC107",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Session on personal development topics.",
+    "location": "Training Room A",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "employee1@example.com",
+      "employee2@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2026",
+    "date": "2026-03-30",
+    "start": 15,
+    "end": 16,
+    "label": "Performance Review",
+    "calendar": "Work",
+    "color": "#E91E63",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Performance review meeting with supervisor.",
+    "location": "Supervisor's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "employee1@example.com",
+      "supervisor@example.com"
+    ],
+    "reminders": [
+      10
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2027",
+    "date": "2026-04-05",
+    "start": 9,
+    "end": 10,
+    "label": "Health and Safety Meeting",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Meeting to discuss health and safety protocols.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "hr@example.com",
+      "manager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2028",
+    "date": "2026-04-10",
+    "start": 14,
+    "end": 15,
+    "label": "Innovation Workshop",
+    "calendar": "Professional Development",
+    "color": "#673AB7",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Workshop focusing on innovation in the workplace.",
+    "location": "Training Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "employee1@example.com",
+      "employee2@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2029",
+    "date": "2026-04-15",
+    "start": 11,
+    "end": 12,
+    "label": "Team Feedback",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Gathering feedback from team members.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2030",
+    "date": "2026-04-20",
+    "start": 9,
+    "end": 10,
+    "label": "Budget Planning",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Planning meeting for the upcoming budget.",
+    "location": "Finance Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "finance@example.com",
+      "manager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2031",
+    "date": "2026-04-25",
+    "start": 14,
+    "end": 15,
+    "label": "Project Closure",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Closure meeting for the completed project.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "projectmanager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2032",
+    "date": "2026-04-30",
+    "start": 12,
+    "end": 13,
+    "label": "Employee Training",
+    "calendar": "Professional Development",
+    "color": "#FFC107",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Training session for new employees.",
+    "location": "Training Room A",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "newhire@example.com",
+      "hr@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2033",
+    "date": "2026-05-05",
+    "start": 9,
+    "end": 10,
+    "label": "Team Goals Meeting",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Setting goals for the upcoming quarter.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2034",
+    "date": "2026-05-10",
+    "start": 10,
+    "end": 11,
+    "label": "Project Review",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Reviewing the current project status.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "projectmanager@example.com",
+      "developer1@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2035",
+    "date": "2026-05-15",
+    "start": 12,
+    "end": 13,
+    "label": "Skill Development Workshop",
+    "calendar": "Professional Development",
+    "color": "#FF9800",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Workshop focused on skill development.",
+    "location": "Training Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "employee1@example.com",
+      "employee2@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2036",
+    "date": "2026-05-20",
+    "start": 14,
+    "end": 15,
+    "label": "Client Feedback Session",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Feedback session with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2037",
+    "date": "2026-05-25",
+    "start": 11,
+    "end": 12,
+    "label": "Team Retrospective",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Retrospective meeting to discuss team performance.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2038",
+    "date": "2026-05-30",
+    "start": 9,
+    "end": 10,
+    "label": "Health Check Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Meeting to check on team health and morale.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "hr@example.com",
+      "manager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2039",
+    "date": "2026-06-05",
+    "start": 10,
+    "end": 11,
+    "label": "Product Launch Meeting",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Meeting to discuss the upcoming product launch.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "marketing@example.com",
+      "sales@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2040",
+    "date": "2026-06-10",
+    "start": 14,
+    "end": 15,
+    "label": "Sales Strategy Meeting",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Meeting to develop sales strategies.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "sales@example.com",
+      "manager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2041",
+    "date": "2026-06-15",
+    "start": 12,
+    "end": 13,
+    "label": "Team Celebration",
+    "calendar": "Social",
+    "color": "#FF5722",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Celebrating team achievements.",
+    "location": "Rooftop Garden",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2042",
+    "date": "2026-06-20",
+    "start": 9,
+    "end": 10,
+    "label": "Monthly Planning Meeting",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Planning meeting for the upcoming month.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2043",
+    "date": "2026-06-25",
+    "start": 14,
+    "end": 15,
+    "label": "Client Presentation",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Presentation to the client regarding project status.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2044",
+    "date": "2026-06-30",
+    "start": 10,
+    "end": 11,
+    "label": "Team Sync",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Sync meeting with the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2045",
+    "date": "2026-07-05",
+    "start": 12,
+    "end": 13,
+    "label": "Mid-Year Review",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Reviewing progress at the mid-year point.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2046",
+    "date": "2026-07-10",
+    "start": 10,
+    "end": 11,
+    "label": "Project Retrospective",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Retrospective meeting for the completed project.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2047",
+    "date": "2026-07-15",
+    "start": 14,
+    "end": 15,
+    "label": "Team Lunch",
+    "calendar": "Social",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Team lunch to celebrate achievements.",
+    "location": "Local Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2048",
+    "date": "2026-07-20",
+    "start": 9,
+    "end": 10,
+    "label": "Quarterly Planning",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Planning meeting for the upcoming quarter.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2049",
+    "date": "2026-07-25",
+    "start": 12,
+    "end": 13,
+    "label": "Feedback Gathering",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Gathering feedback from the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2050",
+    "date": "2026-07-30",
+    "start": 14,
+    "end": 15,
+    "label": "Team Strategy Meeting",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Discussing strategies for the next phase.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2051",
+    "date": "2026-08-05",
+    "start": 10,
+    "end": 11,
+    "label": "Team Check-In",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Check-in meeting with the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2052",
+    "date": "2026-08-10",
+    "start": 14,
+    "end": 15,
+    "label": "Project Kickoff",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Kickoff meeting for the new project.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2053",
+    "date": "2026-08-15",
+    "start": 9,
+    "end": 10,
+    "label": "Weekly Sync",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Weekly sync meeting with the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2026-09-01",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2054",
+    "date": "2026-08-20",
+    "start": 12,
+    "end": 13,
+    "label": "Team Lunch",
+    "calendar": "Social",
+    "color": "#FF9800",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Lunch with the team to discuss upcoming projects.",
+    "location": "Local Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2055",
+    "date": "2026-08-25",
+    "start": 14,
+    "end": 15,
+    "label": "Project Review Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Reviewing project milestones and next steps.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "projectmanager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2056",
+    "date": "2026-08-30",
+    "start": 9,
+    "end": 10,
+    "label": "Monthly Review",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Review of monthly performance and goals.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2057",
+    "date": "2026-09-05",
+    "start": 14,
+    "end": 15,
+    "label": "Client Follow-Up",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Follow-up meeting with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2058",
+    "date": "2026-09-10",
+    "start": 12,
+    "end": 13,
+    "label": "Team Strategy Session",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Strategy session for upcoming projects.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2059",
+    "date": "2026-09-15",
+    "start": 10,
+    "end": 11,
+    "label": "Team Workshop",
+    "calendar": "Professional Development",
+    "color": "#FF5722",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Workshop on team collaboration.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2060",
+    "date": "2026-09-20",
+    "start": 14,
+    "end": 15,
+    "label": "Closing Meeting",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Closing meeting for the project.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "projectmanager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2061",
+    "date": "2026-09-25",
+    "start": 12,
+    "end": 13,
+    "label": "Team Celebration",
+    "calendar": "Social",
+    "color": "#FF5722",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Celebration for project completion.",
+    "location": "Local Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2062",
+    "date": "2026-10-01",
+    "start": 9,
+    "end": 10,
+    "label": "Monthly Review",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Review of monthly performance.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2063",
+    "date": "2026-10-05",
+    "start": 10,
+    "end": 11,
+    "label": "Client Follow-Up Meeting",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Follow-up meeting with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2064",
+    "date": "2026-10-10",
+    "start": 12,
+    "end": 13,
+    "label": "Team Strategy Meeting",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Strategy meeting for upcoming projects.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2065",
+    "date": "2026-10-15",
+    "start": 14,
+    "end": 15,
+    "label": "Client Presentation",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Presentation to the client on project status.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2066",
+    "date": "2026-10-20",
+    "start": 9,
+    "end": 10,
+    "label": "Weekly Team Sync",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Weekly sync meeting with the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2026-11-01",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2067",
+    "date": "2026-10-25",
+    "start": 14,
+    "end": 15,
+    "label": "Project Review Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Reviewing project milestones and next steps.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "projectmanager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2068",
+    "date": "2026-10-30",
+    "start": 12,
+    "end": 13,
+    "label": "Monthly Team Review",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Monthly review of team performance.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2069",
+    "date": "2026-11-05",
+    "start": 10,
+    "end": 11,
+    "label": "Client Strategy Session",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Strategy session with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2070",
+    "date": "2026-11-10",
+    "start": 12,
+    "end": 13,
+    "label": "Team Building Activity",
+    "calendar": "Social",
+    "color": "#FF5722",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Team building activity to enhance collaboration.",
+    "location": "Local Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2071",
+    "date": "2026-11-15",
+    "start": 14,
+    "end": 15,
+    "label": "Quarterly Planning Meeting",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Planning meeting for the upcoming quarter.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2072",
+    "date": "2026-11-20",
+    "start": 9,
+    "end": 10,
+    "label": "Monthly Team Sync",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Monthly sync meeting with the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2073",
+    "date": "2026-11-25",
+    "start": 11,
+    "end": 12,
+    "label": "End of Year Review",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Reviewing team performance at the end of the year.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2074",
+    "date": "2026-12-01",
+    "start": 14,
+    "end": 15,
+    "label": "Final Project Review",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Final review meeting for the project.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "projectmanager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2075",
+    "date": "2026-12-05",
+    "start": 10,
+    "end": 11,
+    "label": "Client Feedback Review",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Reviewing client feedback on the project.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2076",
+    "date": "2026-12-10",
+    "start": 12,
+    "end": 13,
+    "label": "End of Year Celebration",
+    "calendar": "Social",
+    "color": "#FF9800",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Celebration for the end of the year.",
+    "location": "Rooftop Garden",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2077",
+    "date": "2026-12-15",
+    "start": 14,
+    "end": 15,
+    "label": "Year-End Review Meeting",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Meeting to review the year's performance.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2078",
+    "date": "2026-12-20",
+    "start": 9,
+    "end": 10,
+    "label": "Final Team Sync",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Final sync meeting with the team for the year.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2079",
+    "date": "2026-12-25",
+    "start": 0,
+    "end": 23.5,
+    "label": "Christmas Day",
+    "calendar": "Holidays",
+    "color": "#F44336",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      30
+    ],
+    "description": "Celebrating Christmas with family.",
+    "location": "Home",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [],
+    "reminders": [],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2080",
+    "date": "2027-01-01",
+    "start": 0,
+    "end": 23.5,
+    "label": "New Year's Day",
+    "calendar": "Holidays",
+    "color": "#F44336",
+    "startTime": [
+      0,
+      0
+    ],
+    "endTime": [
+      23,
+      30
+    ],
+    "description": "Celebrating New Year's Day with family.",
+    "location": "Home",
+    "allDay": true,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [],
+    "reminders": [],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "2081",
+    "date": "2027-01-05",
+    "start": 9,
+    "end": 10,
+    "label": "Team Kickoff Meeting",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Kickoff meeting for the new project.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2082",
+    "date": "2027-01-10",
+    "start": 14,
+    "end": 15,
+    "label": "Client Kickoff Meeting",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Kickoff meeting with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2083",
+    "date": "2027-01-15",
+    "start": 12,
+    "end": 13,
+    "label": "Team Strategy Meeting",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Strategy meeting for the upcoming projects.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2084",
+    "date": "2027-01-20",
+    "start": 14,
+    "end": 15,
+    "label": "Monthly Planning Meeting",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Planning meeting for the upcoming month.",
+    "location": "Main Conference Room",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2085",
+    "date": "2027-01-25",
+    "start": 9,
+    "end": 10,
+    "label": "Weekly Team Sync",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Weekly sync meeting with the team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2027-02-01",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2086",
+    "date": "2027-01-30",
+    "start": 12,
+    "end": 13,
+    "label": "Client Review Meeting",
+    "calendar": "Work",
+    "color": "#3F51B5",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Review meeting with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2087",
+    "date": "2027-02-05",
+    "start": 10,
+    "end": 11,
+    "label": "Team Retrospective",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Retrospective meeting to discuss team performance.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2088",
+    "date": "2027-02-10",
+    "start": 12,
+    "end": 13,
+    "label": "Monthly Review Meeting",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Monthly review of team performance.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2089",
+    "date": "2027-02-15",
+    "start": 14,
+    "end": 15,
+    "label": "Client Follow-Up Meeting",
+    "calendar": "Work",
+    "color": "#FFC107",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Follow-up meeting with the client.",
+    "location": "Client's Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "client@example.com",
+      "projectmanager@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "2090",
+    "date": "2027-02-20",
+    "start": 10,
+    "end": 11,
+    "label": "Team Strategy Meeting",
+    "calendar": "Work",
+    "color": "#009688",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Strategy meeting for the upcoming projects.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/987654321"
+  },
+  {
+    "id": "2091",
+    "date": "2027-02-25",
+    "start": 12,
+    "end": 13,
+    "label": "End of Month Review",
+    "calendar": "Work",
+    "color": "#4CAF50",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Review of team performance at the end of the month.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "",
+    "attendees": [
+      "manager@example.com",
+      "team@example.com"
+    ],
+    "reminders": [],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://zoom.us/j/123456789"
   }
 ]

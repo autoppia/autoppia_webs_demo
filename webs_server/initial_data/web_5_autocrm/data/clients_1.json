@@ -17998,5 +17998,923 @@
     "avatar": "",
     "status": "Active",
     "last": "2w ago"
+  },
+  {
+    "id": "CL-2098",
+    "name": "Emily Johnson",
+    "email": "emilyjohnson@businessmail.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/emilyjohnson.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2099",
+    "name": "David Smith",
+    "email": "davidsmith@company.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/davidsmith.png",
+    "status": "Inactive",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-2100",
+    "name": "Sophia Brown",
+    "email": "sophiabrown@workmail.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/sophiabrown.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2101",
+    "name": "Michael Davis",
+    "email": "michaeldavis@firm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/michaeldavis.png",
+    "status": "Active",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2102",
+    "name": "Olivia Wilson",
+    "email": "oliviawilson@corporate.com",
+    "matters": 7,
+    "avatar": "https://example.com/avatars/oliviawilson.png",
+    "status": "Inactive",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-2103",
+    "name": "Emma Johnson",
+    "email": "emmajohnson@legalfirm.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/emmajohnson.png",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-2104",
+    "name": "James Smith",
+    "email": "jamessmith@lawoffice.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/jamessmith.png",
+    "status": "Pending",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2105",
+    "name": "Ava Brown",
+    "email": "avabrown@attorney.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/avabrown.png",
+    "status": "Inactive",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-2106",
+    "name": "Liam Garcia",
+    "email": "liamgarcia@lawgroup.com",
+    "matters": 8,
+    "avatar": "https://example.com/avatars/liamgarcia.png",
+    "status": "Active",
+    "last": "2h ago"
+  },
+  {
+    "id": "CL-2107",
+    "name": "Isabella Martinez",
+    "email": "isabellamartinez@legalservices.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/isabellamartinez.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2108",
+    "name": "Noah Rodriguez",
+    "email": "noahrodriguez@lawfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/noahrodriguez.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2109",
+    "name": "Sophia Lee",
+    "email": "sophialee@attorney.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/sophialee.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2110",
+    "name": "William Walker",
+    "email": "williamwalker@legalfirm.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/williamwalker.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2111",
+    "name": "Mia Hall",
+    "email": "miahall@lawgroup.com",
+    "matters": 7,
+    "avatar": "https://example.com/avatars/miahall.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2112",
+    "name": "Benjamin Young",
+    "email": "benjaminyoung@lawoffice.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/benjaminyoung.png",
+    "status": "Active",
+    "last": "1h ago"
+  },
+  {
+    "id": "CL-2113",
+    "name": "Charlotte King",
+    "email": "charlotteking@corporatelaw.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/charlotteking.png",
+    "status": "Pending",
+    "last": "6h ago"
+  },
+  {
+    "id": "CL-2114",
+    "name": "Elijah Wright",
+    "email": "elijahwright@lawfirm.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/elijahwright.png",
+    "status": "Inactive",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-2115",
+    "name": "Amelia Scott",
+    "email": "ameliascott@legalservices.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/ameliascott.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2116",
+    "name": "James Hernandez",
+    "email": "jameshernandez@lawgroup.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/jameshernandez.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2117",
+    "name": "Evelyn Lopez",
+    "email": "evelynlopez@attorney.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/evelynlopez.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2118",
+    "name": "Lucas Gonzalez",
+    "email": "lucasgonzalez@legalfirm.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/lucasgonzalez.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2119",
+    "name": "Harper Perez",
+    "email": "harperperez@lawoffice.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/harperperez.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2120",
+    "name": "Alexander Sanchez",
+    "email": "alexandersanchez@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/alexandersanchez.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2121",
+    "name": "Scarlett Rivera",
+    "email": "scarlettrivera@legalservices.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/scarlettrivera.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2122",
+    "name": "Jackson Cooper",
+    "email": "jacksoncooper@lawgroup.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/jacksoncooper.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2123",
+    "name": "Grace Reed",
+    "email": "gracereed@attorney.com",
+    "matters": 7,
+    "avatar": "https://example.com/avatars/gracereed.png",
+    "status": "Inactive",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-2124",
+    "name": "Henry Cook",
+    "email": "henrycook@legalfirm.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/henrycook.png",
+    "status": "Active",
+    "last": "1h ago"
+  },
+  {
+    "id": "CL-2125",
+    "name": "Chloe Morgan",
+    "email": "chloemorgan@lawoffice.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/chloemorgan.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2126",
+    "name": "Michael Bell",
+    "email": "michaelbell@lawgroup.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/michaelbell.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2127",
+    "name": "Avery Torres",
+    "email": "averytorres@legalservices.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/averytorres.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2128",
+    "name": "Isaac Nguyen",
+    "email": "isaacnguyen@attorney.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/isaacnguyen.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2129",
+    "name": "Sofia Ramirez",
+    "email": "sofiaramirez@legalfirm.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/sofiaramirez.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2130",
+    "name": "Elena Martinez",
+    "email": "elenamartinez@lawoffice.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/elenamartinez.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2131",
+    "name": "Daniel Harris",
+    "email": "danielharris@lawgroup.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/danielharris.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2132",
+    "name": "Victoria Clark",
+    "email": "victoriaclark@attorney.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/victoriaclark.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2133",
+    "name": "Matthew Lewis",
+    "email": "matthewlewis@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/matthewlewis.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2134",
+    "name": "Lily Lee",
+    "email": "lilylee@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/lilylee.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2135",
+    "name": "David Walker",
+    "email": "davidwalker@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/davidwalker.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2136",
+    "name": "Ella Young",
+    "email": "ellayoung@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/ellayoung.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2137",
+    "name": "James Martinez",
+    "email": "jamesmartinez@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/jamesmartinez.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2138",
+    "name": "Ariana Anderson",
+    "email": "arianaanderson@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/arianaanderson.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2139",
+    "name": "Logan Thomas",
+    "email": "loganthomas@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/loganthomas.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2140",
+    "name": "Mason White",
+    "email": "masonwhite@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/masonwhite.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2141",
+    "name": "Zoe Harris",
+    "email": "zoeharris@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/zoeharris.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2142",
+    "name": "Jacob Lee",
+    "email": "jacoblee@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/jacoblee.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2143",
+    "name": "Mila Wilson",
+    "email": "milawilson@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/milawilson.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2144",
+    "name": "Aiden Martinez",
+    "email": "aidenmartinez@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/aidenmartinez.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2145",
+    "name": "Natalie Clark",
+    "email": "natalieclark@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/natalieclark.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2146",
+    "name": "Ryan Hall",
+    "email": "ryanhall@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/ryanhall.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2147",
+    "name": "Luna Sanchez",
+    "email": "lunasanchez@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/lunasanchez.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2148",
+    "name": "Isaiah Johnson",
+    "email": "isaiahjohnson@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/isaiahjohnson.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2149",
+    "name": "Samantha Brown",
+    "email": "samanthabrown@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/samanthabrown.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2150",
+    "name": "Nathaniel Garcia",
+    "email": "nathanielgarcia@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/nathanielgarcia.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2151",
+    "name": "Madison Taylor",
+    "email": "madisontaylor@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/madisontaylor.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2152",
+    "name": "Ethan Lee",
+    "email": "ethanlee@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/ethanlee.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2153",
+    "name": "Cameron Johnson",
+    "email": "cameronjohnson@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/cameronjohnson.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2154",
+    "name": "Aaliyah Smith",
+    "email": "aaliyahsmith@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/aaliyahsmith.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2155",
+    "name": "Josiah Brown",
+    "email": "josiahbrown@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/josiahbrown.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2156",
+    "name": "Kayla Martinez",
+    "email": "kaylamartinez@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/kaylamartinez.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2157",
+    "name": "Sebastian Wilson",
+    "email": "sebastianwilson@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/sebastianwilson.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2158",
+    "name": "Maya Taylor",
+    "email": "mayataylor@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/mayataylor.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2159",
+    "name": "Oliver Davis",
+    "email": "oliverdavis@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/oliverdavis.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2160",
+    "name": "Layla Johnson",
+    "email": "laylajohnson@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/laylajohnson.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2161",
+    "name": "Jason Brown",
+    "email": "jasonbrown@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/jasonbrown.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2162",
+    "name": "Chase Miller",
+    "email": "chasemiller@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/chasemiller.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2163",
+    "name": "Nora Davis",
+    "email": "noradavis@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/noradavis.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2164",
+    "name": "Wyatt Harris",
+    "email": "wyattharris@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/wyattharris.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2165",
+    "name": "Aiden Lee",
+    "email": "aidenlee@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/aidenlee.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2166",
+    "name": "Mackenzie Wilson",
+    "email": "mackenziewilson@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/mackenziewilson.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2167",
+    "name": "Landon Brown",
+    "email": "landonbrown@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/landonbrown.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2168",
+    "name": "Bella Johnson",
+    "email": "bellajohnson@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/bellajohnson.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2169",
+    "name": "Ella Martinez",
+    "email": "ellamartinez@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/ellamartinez.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2170",
+    "name": "Samuel Davis",
+    "email": "samuel.davis@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/samueldavis.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2171",
+    "name": "Sophie Lee",
+    "email": "sophielee@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/sophielee.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2172",
+    "name": "Liam Smith",
+    "email": "liamsmith@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/liamsmith.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2173",
+    "name": "Charlotte Johnson",
+    "email": "charlottejohnson@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/charlottejohnson.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2174",
+    "name": "Oliver Brown",
+    "email": "oliverbrown@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/oliverbrown.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2175",
+    "name": "Harper Davis",
+    "email": "harperdavis@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/harperdavis.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2176",
+    "name": "Ethan Johnson",
+    "email": "ethanjohnson@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/ethanjohnson.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2177",
+    "name": "Mia Lee",
+    "email": "mialee@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/mialee.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2178",
+    "name": "Jacob Wilson",
+    "email": "jacobwilson@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/jacobwilson.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2179",
+    "name": "Ava Johnson",
+    "email": "avajohnson@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/avajohnson.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2180",
+    "name": "Lily Brown",
+    "email": "lilybrown@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/lilybrown.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2181",
+    "name": "Noah Johnson",
+    "email": "noahjohnson@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/noahjohnson.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2182",
+    "name": "Emma Wilson",
+    "email": "emmawilson@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/emmawilson.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2183",
+    "name": "Liam Taylor",
+    "email": "liamtaylor@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/liamtaylor.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2184",
+    "name": "Grace Clark",
+    "email": "graceclark@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/graceclark.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2185",
+    "name": "Ella Smith",
+    "email": "ellasmith@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/ellasmith.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2186",
+    "name": "Isaac Brown",
+    "email": "isaacbrown@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/isaacbrown.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2187",
+    "name": "Madison Lee",
+    "email": "madisonlee@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/madisonlee.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2188",
+    "name": "Oliver White",
+    "email": "oliverwhite@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/oliverwhite.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2189",
+    "name": "Sophia Garcia",
+    "email": "sophiagarcia@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/sophiagarcia.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2190",
+    "name": "Liam Anderson",
+    "email": "liamanderson@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/liamanderson.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2191",
+    "name": "Charlotte Smith",
+    "email": "charlottesmith@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/charlottesmith.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2192",
+    "name": "Noah Brown",
+    "email": "noahbrown@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/noahbrown.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2193",
+    "name": "Alyssa Johnson",
+    "email": "alyssajohnson@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/alyssajohnson.png",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-2194",
+    "name": "Sebastian Lee",
+    "email": "sebastianlee@lawoffice.com",
+    "matters": 1,
+    "avatar": "https://example.com/avatars/sebastianlee.png",
+    "status": "Pending",
+    "last": "5h ago"
+  },
+  {
+    "id": "CL-2195",
+    "name": "Mia White",
+    "email": "miawhite@lawgroup.com",
+    "matters": 6,
+    "avatar": "https://example.com/avatars/miawhite.png",
+    "status": "Inactive",
+    "last": "3w ago"
+  },
+  {
+    "id": "CL-2196",
+    "name": "Ethan Wilson",
+    "email": "ethanwilson@legalservices.com",
+    "matters": 3,
+    "avatar": "https://example.com/avatars/ethanwilson.png",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-2197",
+    "name": "Lily Johnson",
+    "email": "lilyjohnson@attorney.com",
+    "matters": 2,
+    "avatar": "https://example.com/avatars/lilyjohnson.png",
+    "status": "Pending",
+    "last": "4h ago"
+  },
+  {
+    "id": "CL-2198",
+    "name": "Daniel Brown",
+    "email": "danielbrown@lawfirm.com",
+    "matters": 5,
+    "avatar": "https://example.com/avatars/danielbrown.png",
+    "status": "Inactive",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-2199",
+    "name": "Grace Taylor",
+    "email": "gracetaylor@legalfirm.com",
+    "matters": 4,
+    "avatar": "https://example.com/avatars/gracetaylor.png",
+    "status": "Active",
+    "last": "2d ago"
   }
 ]

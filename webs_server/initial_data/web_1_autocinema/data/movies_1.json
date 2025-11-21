@@ -6598,5 +6598,2977 @@
       "Fantasy"
     ],
     "category": "Animation"
+  },
+  {
+    "id": "movie-exp-101",
+    "title": "Whispers of the Past",
+    "description": "A historical drama that delves into the lives of two lovers separated by war and time.",
+    "year": 2022,
+    "duration": 130,
+    "rating": 4.2,
+    "director": "Elena Torres",
+    "cast": [
+      "Liam Johnson",
+      "Sophia Chen",
+      "Marcus Lee"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd1234",
+    "image_path": "gallery/whispers-of-the-past.jpg",
+    "genres": [
+      "Drama",
+      "History",
+      "Romance"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-102",
+    "title": "Galactic Odyssey",
+    "description": "An epic space adventure where a crew of misfits embarks on a quest to save their planet.",
+    "year": 2025,
+    "duration": 145,
+    "rating": 4.5,
+    "director": "Raj Patel",
+    "cast": [
+      "Zara Khan",
+      "Ethan Carter",
+      "Maya Lopez"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh5678",
+    "image_path": "gallery/galactic-odyssey.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Adventure",
+      "Action"
+    ],
+    "category": "Sci-Fi"
+  },
+  {
+    "id": "movie-exp-103",
+    "title": "Echoes in the Dark",
+    "description": "A psychological thriller that explores the mind of a detective haunted by his past cases.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 3.9,
+    "director": "Ava Martinez",
+    "cast": [
+      "Noah Brown",
+      "Isabella Garcia",
+      "Liam Smith"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl9012",
+    "image_path": "gallery/echoes-in-the-dark.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery",
+      "Drama"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-104",
+    "title": "The Last Melody",
+    "description": "A heartwarming story of a retired musician who finds new purpose in teaching music to underprivileged children.",
+    "year": 2021,
+    "duration": 115,
+    "rating": 4.1,
+    "director": "Oliver Scott",
+    "cast": [
+      "Ella White",
+      "James Wilson",
+      "Mia Thompson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop3456",
+    "image_path": "gallery/the-last-melody.jpg",
+    "genres": [
+      "Drama",
+      "Music",
+      "Family"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-105",
+    "title": "Chasing Shadows",
+    "description": "An action-packed film about a group of vigilantes taking on a corrupt city.",
+    "year": 2024,
+    "duration": 140,
+    "rating": 4.3,
+    "director": "Sofia Kim",
+    "cast": [
+      "Jack Davis",
+      "Emily Johnson",
+      "Lucas Martin"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst7890",
+    "image_path": "gallery/chasing-shadows.jpg",
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-106",
+    "title": "Whispers of the Past",
+    "description": "A young woman discovers her family's hidden history through a series of letters from World War II.",
+    "year": 2022,
+    "duration": 110,
+    "rating": 4.5,
+    "director": "Liam Carter",
+    "cast": [
+      "Sophie Turner",
+      "Daniel Radcliffe",
+      "Emily Blunt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd1234",
+    "image_path": "gallery/whispers-of-the-past.jpg",
+    "genres": [
+      "Drama",
+      "History",
+      "Romance"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-107",
+    "title": "Galactic Odyssey",
+    "description": "A thrilling space adventure where a crew must save their planet from an impending alien invasion.",
+    "year": 2023,
+    "duration": 135,
+    "rating": 4.7,
+    "director": "Zara Lee",
+    "cast": [
+      "Chris Pratt",
+      "Zendaya",
+      "John Boyega"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh5678",
+    "image_path": "gallery/galactic-odyssey.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Adventure",
+      "Action"
+    ],
+    "category": "Sci-Fi"
+  },
+  {
+    "id": "movie-exp-108",
+    "title": "The Silent Echo",
+    "description": "A gripping horror film about a group of friends who venture into an abandoned asylum, only to find they are not alone.",
+    "year": 2021,
+    "duration": 95,
+    "rating": 3.8,
+    "director": "Mia Torres",
+    "cast": [
+      "Finn Wolfhard",
+      "Millie Bobby Brown",
+      "Noah Schnapp"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl9012",
+    "image_path": "gallery/the-silent-echo.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-109",
+    "title": "Journey to the Unknown",
+    "description": "A fantasy adventure where a young hero must navigate through a mystical land to save their kingdom.",
+    "year": 2024,
+    "duration": 145,
+    "rating": 4.2,
+    "director": "David Yates",
+    "cast": [
+      "Emma Watson",
+      "Tom Holland",
+      "Idris Elba"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop3456",
+    "image_path": "gallery/journey-to-the-unknown.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-110",
+    "title": "Love in the Time of War",
+    "description": "A poignant love story set against the backdrop of a devastating war, exploring the sacrifices made for love.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.6,
+    "director": "Isabella Chen",
+    "cast": [
+      "Ryan Gosling",
+      "Rachel McAdams",
+      "Michael B. Jordan"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst7890",
+    "image_path": "gallery/love-in-the-time-of-war.jpg",
+    "genres": [
+      "Romance",
+      "Drama",
+      "War"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-111",
+    "title": "The Great Heist",
+    "description": "An exhilarating caper film about a team of thieves who plan the ultimate bank robbery.",
+    "year": 2022,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "Oliver Stone",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Scarlett Johansson",
+      "Ben Affleck"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx1234",
+    "image_path": "gallery/the-great-heist.jpg",
+    "genres": [
+      "Crime",
+      "Thriller",
+      "Action"
+    ],
+    "category": "Crime"
+  },
+  {
+    "id": "movie-exp-112",
+    "title": "Dancing with Shadows",
+    "description": "A biographical drama about a famous dancer who struggles with personal demons while achieving greatness.",
+    "year": 2021,
+    "duration": 115,
+    "rating": 4.3,
+    "director": "Sophia Loren",
+    "cast": [
+      "Natalie Portman",
+      "Javier Bardem",
+      "Emma Stone"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=yzaq5678",
+    "image_path": "gallery/dancing-with-shadows.jpg",
+    "genres": [
+      "Drama",
+      "Biography",
+      "Music"
+    ],
+    "category": "Biography"
+  },
+  {
+    "id": "movie-exp-113",
+    "title": "Under the Sea",
+    "description": "An animated adventure about a young mermaid who dreams of becoming human and exploring the world above water.",
+    "year": 2023,
+    "duration": 90,
+    "rating": 4.8,
+    "director": "Jennifer Lee",
+    "cast": [
+      "Ariana Grande",
+      "Josh Gad",
+      "Awkwafina"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=bcd12345",
+    "image_path": "gallery/under-the-sea.jpg",
+    "genres": [
+      "Animation",
+      "Family",
+      "Fantasy"
+    ],
+    "category": "Animation"
+  },
+  {
+    "id": "movie-exp-114",
+    "title": "The Last Stand",
+    "description": "A gripping war film following a soldier's journey through the horrors of battle and the quest for survival.",
+    "year": 2024,
+    "duration": 140,
+    "rating": 4.1,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Tom Hardy",
+      "Chris Hemsworth",
+      "Margot Robbie"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh9012",
+    "image_path": "gallery/the-last-stand.jpg",
+    "genres": [
+      "War",
+      "Action",
+      "Drama"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-115",
+    "title": "Secrets of the Forest",
+    "description": "A family discovers a hidden world in the forest where magical creatures live and adventure awaits.",
+    "year": 2022,
+    "duration": 100,
+    "rating": 4.4,
+    "director": "Peter Jackson",
+    "cast": [
+      "Daisy Ridley",
+      "John Boyega",
+      "Benicio del Toro"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl3456",
+    "image_path": "gallery/secrets-of-the-forest.jpg",
+    "genres": [
+      "Adventure",
+      "Fantasy",
+      "Family"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-116",
+    "title": "The Edge of Tomorrow",
+    "description": "A sci-fi thriller where a soldier relives the same day over and over, fighting against an alien invasion.",
+    "year": 2021,
+    "duration": 113,
+    "rating": 4.0,
+    "director": "Doug Liman",
+    "cast": [
+      "Tom Cruise",
+      "Emily Blunt",
+      "Bill Paxton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop6789",
+    "image_path": "gallery/the-edge-of-tomorrow.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Thriller"
+    ],
+    "category": "Sci-Fi"
+  },
+  {
+    "id": "movie-exp-117",
+    "title": "Beyond the Horizon",
+    "description": "A romantic drama about two star-crossed lovers separated by circumstances but destined to find each other.",
+    "year": 2023,
+    "duration": 125,
+    "rating": 4.5,
+    "director": "Greta Gerwig",
+    "cast": [
+      "Timothée Chalamet",
+      "Florence Pugh",
+      "Harry Styles"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst1234",
+    "image_path": "gallery/beyond-the-horizon.jpg",
+    "genres": [
+      "Romance",
+      "Drama"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-118",
+    "title": "The Forgotten Ones",
+    "description": "A drama that follows a group of friends who reunite after years apart, confronting their past and rekindling old flames.",
+    "year": 2022,
+    "duration": 118,
+    "rating": 4.2,
+    "director": "Ava DuVernay",
+    "cast": [
+      "Jessica Chastain",
+      "Michael B. Jordan",
+      "Viola Davis"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx6789",
+    "image_path": "gallery/the-forgotten-ones.jpg",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-119",
+    "title": "The Timekeeper",
+    "description": "A science fiction tale about a man who can manipulate time and the consequences that come with it.",
+    "year": 2024,
+    "duration": 130,
+    "rating": 4.6,
+    "director": "Denis Villeneuve",
+    "cast": [
+      "Jake Gyllenhaal",
+      "Rebecca Ferguson",
+      "Oscar Isaac"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd6789",
+    "image_path": "gallery/the-timekeeper.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Drama",
+      "Thriller"
+    ],
+    "category": "Sci-Fi"
+  },
+  {
+    "id": "movie-exp-120",
+    "title": "The Art of Deception",
+    "description": "A psychological thriller about an artist who becomes embroiled in a web of lies and deceit.",
+    "year": 2023,
+    "duration": 125,
+    "rating": 4.3,
+    "director": "David Fincher",
+    "cast": [
+      "Natalie Dormer",
+      "James McAvoy",
+      "Tilda Swinton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh6789",
+    "image_path": "gallery/the-art-of-deception.jpg",
+    "genres": [
+      "Thriller",
+      "Drama",
+      "Mystery"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-121",
+    "title": "The Last Voyage",
+    "description": "An epic tale of survival at sea as a group of sailors faces a deadly storm and their own fears.",
+    "year": 2022,
+    "duration": 140,
+    "rating": 4.4,
+    "director": "Ron Howard",
+    "cast": [
+      "Chris Pine",
+      "Emily Blunt",
+      "Javier Bardem"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl6789",
+    "image_path": "gallery/the-last-voyage.jpg",
+    "genres": [
+      "Adventure",
+      "Drama"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-122",
+    "title": "The Last Resort",
+    "description": "A comedy about a group of friends who take a vacation to a tropical island, only to find themselves in hilarious situations.",
+    "year": 2023,
+    "duration": 108,
+    "rating": 4.0,
+    "director": "Judd Apatow",
+    "cast": [
+      "Adam Sandler",
+      "Jennifer Aniston",
+      "Kevin Hart"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop6789",
+    "image_path": "gallery/the-last-resort.jpg",
+    "genres": [
+      "Comedy",
+      "Adventure"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-exp-123",
+    "title": "The Unseen",
+    "description": "A horror film that follows a family who moves into a new house only to discover it is haunted by dark forces.",
+    "year": 2021,
+    "duration": 102,
+    "rating": 3.7,
+    "director": "James Wan",
+    "cast": [
+      "Vera Farmiga",
+      "Patrick Wilson",
+      "Mckenna Grace"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst5678",
+    "image_path": "gallery/the-unseen.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-124",
+    "title": "The Heist of the Century",
+    "description": "A fast-paced action film about a team of thieves who plan an elaborate heist on a high-security museum.",
+    "year": 2024,
+    "duration": 130,
+    "rating": 4.5,
+    "director": "Guy Ritchie",
+    "cast": [
+      "Jason Statham",
+      "Charlize Theron",
+      "Mark Strong"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd9012",
+    "image_path": "gallery/the-heist-of-the-century.jpg",
+    "genres": [
+      "Action",
+      "Crime",
+      "Thriller"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-125",
+    "title": "The Forgotten City",
+    "description": "A mystery unfolds in an ancient city where a group of archaeologists discovers secrets that could change history.",
+    "year": 2023,
+    "duration": 115,
+    "rating": 4.2,
+    "director": "Catherine Hardwicke",
+    "cast": [
+      "Henry Cavill",
+      "Jessica Chastain",
+      "Daniel Craig"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh1234",
+    "image_path": "gallery/the-forgotten-city.jpg",
+    "genres": [
+      "Adventure",
+      "Mystery",
+      "History"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-126",
+    "title": "The New Frontier",
+    "description": "A sci-fi drama about humanity's first contact with an alien civilization and the challenges that follow.",
+    "year": 2022,
+    "duration": 140,
+    "rating": 4.6,
+    "director": "Ridley Scott",
+    "cast": [
+      "Matthew McConaughey",
+      "Jessica Chastain",
+      "Michael Fassbender"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl9012",
+    "image_path": "gallery/the-new-frontier.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Drama"
+    ],
+    "category": "Sci-Fi"
+  },
+  {
+    "id": "movie-exp-127",
+    "title": "The Last Dance",
+    "description": "A documentary exploring the life of a legendary basketball player and his impact on the sport.",
+    "year": 2023,
+    "duration": 90,
+    "rating": 4.9,
+    "director": "Spike Lee",
+    "cast": [
+      "Michael Jordan",
+      "Kobe Bryant",
+      "LeBron James"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop1234",
+    "image_path": "gallery/the-last-dance.jpg",
+    "genres": [
+      "Documentary",
+      "Sports"
+    ],
+    "category": "Documentary"
+  },
+  {
+    "id": "movie-exp-128",
+    "title": "The Sound of Silence",
+    "description": "A musical drama about a young musician who struggles to find his voice in a world of noise.",
+    "year": 2024,
+    "duration": 120,
+    "rating": 4.3,
+    "director": "Damien Chazelle",
+    "cast": [
+      "Timothée Chalamet",
+      "Emma Stone",
+      "John Legend"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst9012",
+    "image_path": "gallery/the-sound-of-silence.jpg",
+    "genres": [
+      "Drama",
+      "Music"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-129",
+    "title": "The Great Escape",
+    "description": "A historical drama about a group of prisoners who plan an elaborate escape from a high-security camp during WWII.",
+    "year": 2023,
+    "duration": 135,
+    "rating": 4.4,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Benedict Cumberbatch",
+      "Tom Hardy",
+      "Cillian Murphy"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd5678",
+    "image_path": "gallery/the-great-escape.jpg",
+    "genres": [
+      "Drama",
+      "History",
+      "War"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-130",
+    "title": "The Journey Home",
+    "description": "An emotional tale of a soldier returning home from war and the challenges he faces in reintegrating into society.",
+    "year": 2022,
+    "duration": 110,
+    "rating": 4.1,
+    "director": "Ang Lee",
+    "cast": [
+      "Jake Gyllenhaal",
+      "Amy Adams",
+      "Forest Whitaker"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh2345",
+    "image_path": "gallery/the-journey-home.jpg",
+    "genres": [
+      "Drama",
+      "War"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-131",
+    "title": "The Secret Garden",
+    "description": "A magical story about a young girl who discovers a hidden garden that changes her life forever.",
+    "year": 2021,
+    "duration": 100,
+    "rating": 4.5,
+    "director": "Marc Munden",
+    "cast": [
+      "Dixie Egerickx",
+      "Colin Firth",
+      "Julie Walters"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl2345",
+    "image_path": "gallery/the-secret-garden.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-132",
+    "title": "The Invisible Man",
+    "description": "A modern adaptation of the classic horror story about a scientist who discovers a way to become invisible.",
+    "year": 2022,
+    "duration": 125,
+    "rating": 4.2,
+    "director": "Leigh Whannell",
+    "cast": [
+      "Elisabeth Moss",
+      "Oliver Jackson-Cohen",
+      "Aldis Hodge"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop2345",
+    "image_path": "gallery/the-invisible-man.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-133",
+    "title": "The Edge of Tomorrow",
+    "description": "A gripping sci-fi thriller where a soldier relives the same day over and over while fighting against an alien invasion.",
+    "year": 2023,
+    "duration": 140,
+    "rating": 4.6,
+    "director": "Doug Liman",
+    "cast": [
+      "Tom Cruise",
+      "Emily Blunt",
+      "Bill Paxton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst4567",
+    "image_path": "gallery/the-edge-of-tomorrow.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Thriller"
+    ],
+    "category": "Sci-Fi"
+  },
+  {
+    "id": "movie-exp-134",
+    "title": "The Road Less Traveled",
+    "description": "A heartwarming story about a young woman who embarks on a journey of self-discovery and adventure.",
+    "year": 2023,
+    "duration": 115,
+    "rating": 4.3,
+    "director": "Sofia Coppola",
+    "cast": [
+      "Maya Hawke",
+      "Timothée Chalamet",
+      "John David Washington"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd2345",
+    "image_path": "gallery/the-road-less-traveled.jpg",
+    "genres": [
+      "Drama",
+      "Adventure"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-135",
+    "title": "A World Apart",
+    "description": "A powerful drama about two families from different backgrounds who come together during a time of crisis.",
+    "year": 2022,
+    "duration": 130,
+    "rating": 4.5,
+    "director": "Barry Jenkins",
+    "cast": [
+      "Mahershala Ali",
+      "Janelle Monáe",
+      "Matthew McConaughey"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh2345",
+    "image_path": "gallery/a-world-apart.jpg",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-136",
+    "title": "The Great Adventure",
+    "description": "A family-friendly adventure film about a group of kids who embark on a quest to find a hidden treasure.",
+    "year": 2023,
+    "duration": 105,
+    "rating": 4.4,
+    "director": "Chris Columbus",
+    "cast": [
+      "Jack Black",
+      "Maddie Ziegler",
+      "Finn Wolfhard"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl4567",
+    "image_path": "gallery/the-great-adventure.jpg",
+    "genres": [
+      "Adventure",
+      "Family",
+      "Comedy"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-137",
+    "title": "The Final Countdown",
+    "description": "A thrilling action film about a military team sent back in time to prevent a catastrophic event.",
+    "year": 2024,
+    "duration": 145,
+    "rating": 4.5,
+    "director": "Michael Bay",
+    "cast": [
+      "Dwayne Johnson",
+      "Gal Gadot",
+      "Chris Evans"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop4567",
+    "image_path": "gallery/the-final-countdown.jpg",
+    "genres": [
+      "Action",
+      "Sci-Fi"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-138",
+    "title": "The Unexpected Journey",
+    "description": "A heartwarming tale of friendship and adventure as a group of unlikely heroes come together to save their town.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.3,
+    "director": "Marc Webb",
+    "cast": [
+      "Zach Galifianakis",
+      "Katherine Langford",
+      "Awkwafina"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst6789",
+    "image_path": "gallery/the-unexpected-journey.jpg",
+    "genres": [
+      "Adventure",
+      "Comedy",
+      "Family"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-139",
+    "title": "The Last Guardian",
+    "description": "A fantasy film about a young hero who must protect a mystical creature from dark forces.",
+    "year": 2024,
+    "duration": 130,
+    "rating": 4.6,
+    "director": "Peter Jackson",
+    "cast": [
+      "Tom Holland",
+      "Daisy Ridley",
+      "Ben Barnes"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd7890",
+    "image_path": "gallery/the-last-guardian.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-140",
+    "title": "The Heart of the Ocean",
+    "description": "A romantic drama set on a cruise ship, where two strangers find love amidst the chaos of life.",
+    "year": 2023,
+    "duration": 115,
+    "rating": 4.4,
+    "director": "Richard Curtis",
+    "cast": [
+      "Lily James",
+      "Sam Claflin",
+      "Hugh Grant"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh7890",
+    "image_path": "gallery/the-heart-of-the-ocean.jpg",
+    "genres": [
+      "Romance",
+      "Drama"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-141",
+    "title": "The Time Traveler's Dilemma",
+    "description": "A sci-fi drama exploring the moral implications of time travel and its effects on relationships.",
+    "year": 2024,
+    "duration": 135,
+    "rating": 4.5,
+    "director": "Shane Carruth",
+    "cast": [
+      "Joseph Gordon-Levitt",
+      "Rachel McAdams",
+      "John Goodman"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl7890",
+    "image_path": "gallery/the-time-travelers-dilemma.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Drama"
+    ],
+    "category": "Sci-Fi"
+  },
+  {
+    "id": "movie-exp-142",
+    "title": "The Last Embrace",
+    "description": "A romantic thriller about a couple whose love is tested by secrets from their past.",
+    "year": 2022,
+    "duration": 120,
+    "rating": 4.2,
+    "director": "Alfonso Cuarón",
+    "cast": [
+      "Jessica Chastain",
+      "Oscar Isaac",
+      "Ben Mendelsohn"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop7890",
+    "image_path": "gallery/the-last-embrace.jpg",
+    "genres": [
+      "Romance",
+      "Thriller"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-143",
+    "title": "The Forgotten Hero",
+    "description": "An inspiring biopic about a war hero whose bravery went unrecognized for decades.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.3,
+    "director": "Ang Lee",
+    "cast": [
+      "Gary Oldman",
+      "Emily Blunt",
+      "Tom Hanks"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst7890",
+    "image_path": "gallery/the-forgotten-hero.jpg",
+    "genres": [
+      "Biography",
+      "Drama",
+      "War"
+    ],
+    "category": "Biography"
+  },
+  {
+    "id": "movie-exp-144",
+    "title": "The Last Wish",
+    "description": "A fantasy adventure about a young girl who discovers a magical wish-granting stone.",
+    "year": 2024,
+    "duration": 125,
+    "rating": 4.4,
+    "director": "Katherine Hardwicke",
+    "cast": [
+      "Millie Bobby Brown",
+      "Ben Barnes",
+      "Josh Gad"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd8901",
+    "image_path": "gallery/the-last-wish.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-145",
+    "title": "The Lost Treasure",
+    "description": "A thrilling adventure about a group of explorers searching for a legendary treasure hidden deep in the jungle.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Chris Pratt",
+      "Zoe Saldana",
+      "Dwayne Johnson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh8901",
+    "image_path": "gallery/the-lost-treasure.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-146",
+    "title": "The Last Train",
+    "description": "A suspenseful thriller about a group of strangers trapped on a train during a storm, where secrets unravel.",
+    "year": 2022,
+    "duration": 115,
+    "rating": 4.2,
+    "director": "David Fincher",
+    "cast": [
+      "John Boyega",
+      "Jessica Chastain",
+      "Chris Hemsworth"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop8901",
+    "image_path": "gallery/the-last-train.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-147",
+    "title": "The Final Battle",
+    "description": "An epic war film that chronicles a pivotal battle in history and the heroes who fought in it.",
+    "year": 2023,
+    "duration": 145,
+    "rating": 4.6,
+    "director": "Ridley Scott",
+    "cast": [
+      "Christian Bale",
+      "Tom Hardy",
+      "Michael Fassbender"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd5678",
+    "image_path": "gallery/the-final-battle.jpg",
+    "genres": [
+      "War",
+      "Action",
+      "Drama"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-148",
+    "title": "The Silent Night",
+    "description": "A heartwarming Christmas film about a family coming together to celebrate the holiday spirit.",
+    "year": 2022,
+    "duration": 100,
+    "rating": 4.3,
+    "director": "Frank Capra",
+    "cast": [
+      "Mila Kunis",
+      "Justin Timberlake",
+      "Kristen Bell"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh5678",
+    "image_path": "gallery/the-silent-night.jpg",
+    "genres": [
+      "Family",
+      "Comedy"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-149",
+    "title": "The Road Home",
+    "description": "A touching drama about a man who embarks on a journey to reconnect with his estranged family.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "Peter Weir",
+    "cast": [
+      "Hugh Jackman",
+      "Nicole Kidman",
+      "Sam Neill"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl5678",
+    "image_path": "gallery/the-road-home.jpg",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-150",
+    "title": "The Secret of the Lost City",
+    "description": "An adventure film about a group of explorers searching for a mythical city hidden in the jungle.",
+    "year": 2024,
+    "duration": 135,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Tom Holland",
+      "Zoe Saldana",
+      "Chris Pratt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop1234",
+    "image_path": "gallery/the-secret-of-the-lost-city.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-151",
+    "title": "The Last Wish",
+    "description": "A fantasy adventure about a young girl who discovers a magical wish-granting stone.",
+    "year": 2023,
+    "duration": 125,
+    "rating": 4.4,
+    "director": "Katherine Hardwicke",
+    "cast": [
+      "Millie Bobby Brown",
+      "Ben Barnes",
+      "Josh Gad"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd8901",
+    "image_path": "gallery/the-last-wish.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-152",
+    "title": "The Lost Treasure",
+    "description": "A thrilling adventure about a group of explorers searching for a legendary treasure hidden deep in the jungle.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Chris Pratt",
+      "Zoe Saldana",
+      "Dwayne Johnson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh8901",
+    "image_path": "gallery/the-lost-treasure.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-153",
+    "title": "The Last Train",
+    "description": "A suspenseful thriller about a group of strangers trapped on a train during a storm, where secrets unravel.",
+    "year": 2022,
+    "duration": 115,
+    "rating": 4.2,
+    "director": "David Fincher",
+    "cast": [
+      "John Boyega",
+      "Jessica Chastain",
+      "Chris Hemsworth"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop8901",
+    "image_path": "gallery/the-last-train.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-154",
+    "title": "The Final Battle",
+    "description": "An epic war film that chronicles a pivotal battle in history and the heroes who fought in it.",
+    "year": 2023,
+    "duration": 145,
+    "rating": 4.6,
+    "director": "Ridley Scott",
+    "cast": [
+      "Christian Bale",
+      "Tom Hardy",
+      "Michael Fassbender"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd5678",
+    "image_path": "gallery/the-final-battle.jpg",
+    "genres": [
+      "War",
+      "Action",
+      "Drama"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-155",
+    "title": "The Silent Night",
+    "description": "A heartwarming Christmas film about a family coming together to celebrate the holiday spirit.",
+    "year": 2022,
+    "duration": 100,
+    "rating": 4.3,
+    "director": "Frank Capra",
+    "cast": [
+      "Mila Kunis",
+      "Justin Timberlake",
+      "Kristen Bell"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh5678",
+    "image_path": "gallery/the-silent-night.jpg",
+    "genres": [
+      "Family",
+      "Comedy"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-156",
+    "title": "The Road Home",
+    "description": "A touching drama about a man who embarks on a journey to reconnect with his estranged family.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "Peter Weir",
+    "cast": [
+      "Hugh Jackman",
+      "Nicole Kidman",
+      "Sam Neill"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl5678",
+    "image_path": "gallery/the-road-home.jpg",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-157",
+    "title": "The Secret of the Lost City",
+    "description": "An adventure film about a group of explorers searching for a mythical city hidden in the jungle.",
+    "year": 2024,
+    "duration": 135,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Tom Holland",
+      "Zoe Saldana",
+      "Chris Pratt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop1234",
+    "image_path": "gallery/the-secret-of-the-lost-city.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-158",
+    "title": "The Last Wish",
+    "description": "A fantasy adventure about a young girl who discovers a magical wish-granting stone.",
+    "year": 2023,
+    "duration": 125,
+    "rating": 4.4,
+    "director": "Katherine Hardwicke",
+    "cast": [
+      "Millie Bobby Brown",
+      "Ben Barnes",
+      "Josh Gad"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd8901",
+    "image_path": "gallery/the-last-wish.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-159",
+    "title": "The Lost Treasure",
+    "description": "A thrilling adventure about a group of explorers searching for a legendary treasure hidden deep in the jungle.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Chris Pratt",
+      "Zoe Saldana",
+      "Dwayne Johnson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh8901",
+    "image_path": "gallery/the-lost-treasure.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-160",
+    "title": "The Last Train",
+    "description": "A suspenseful thriller about a group of strangers trapped on a train during a storm, where secrets unravel.",
+    "year": 2022,
+    "duration": 115,
+    "rating": 4.2,
+    "director": "David Fincher",
+    "cast": [
+      "John Boyega",
+      "Jessica Chastain",
+      "Chris Hemsworth"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop8901",
+    "image_path": "gallery/the-last-train.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-161",
+    "title": "The Final Battle",
+    "description": "An epic war film that chronicles a pivotal battle in history and the heroes who fought in it.",
+    "year": 2023,
+    "duration": 145,
+    "rating": 4.6,
+    "director": "Ridley Scott",
+    "cast": [
+      "Christian Bale",
+      "Tom Hardy",
+      "Michael Fassbender"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd5678",
+    "image_path": "gallery/the-final-battle.jpg",
+    "genres": [
+      "War",
+      "Action",
+      "Drama"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-162",
+    "title": "The Silent Night",
+    "description": "A heartwarming Christmas film about a family coming together to celebrate the holiday spirit.",
+    "year": 2022,
+    "duration": 100,
+    "rating": 4.3,
+    "director": "Frank Capra",
+    "cast": [
+      "Mila Kunis",
+      "Justin Timberlake",
+      "Kristen Bell"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh5678",
+    "image_path": "gallery/the-silent-night.jpg",
+    "genres": [
+      "Family",
+      "Comedy"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-163",
+    "title": "The Road Home",
+    "description": "A touching drama about a man who embarks on a journey to reconnect with his estranged family.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "Peter Weir",
+    "cast": [
+      "Hugh Jackman",
+      "Nicole Kidman",
+      "Sam Neill"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl5678",
+    "image_path": "gallery/the-road-home.jpg",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-164",
+    "title": "The Secret of the Lost City",
+    "description": "An adventure film about a group of explorers searching for a mythical city hidden in the jungle.",
+    "year": 2024,
+    "duration": 135,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Tom Holland",
+      "Zoe Saldana",
+      "Chris Pratt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop1234",
+    "image_path": "gallery/the-secret-of-the-lost-city.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-165",
+    "title": "The Last Wish",
+    "description": "A fantasy adventure about a young girl who discovers a magical wish-granting stone.",
+    "year": 2023,
+    "duration": 125,
+    "rating": 4.4,
+    "director": "Katherine Hardwicke",
+    "cast": [
+      "Millie Bobby Brown",
+      "Ben Barnes",
+      "Josh Gad"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd8901",
+    "image_path": "gallery/the-last-wish.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-166",
+    "title": "The Lost Treasure",
+    "description": "A thrilling adventure about a group of explorers searching for a legendary treasure hidden deep in the jungle.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Chris Pratt",
+      "Zoe Saldana",
+      "Dwayne Johnson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh8901",
+    "image_path": "gallery/the-lost-treasure.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-167",
+    "title": "The Last Train",
+    "description": "A suspenseful thriller about a group of strangers trapped on a train during a storm, where secrets unravel.",
+    "year": 2022,
+    "duration": 115,
+    "rating": 4.2,
+    "director": "David Fincher",
+    "cast": [
+      "John Boyega",
+      "Jessica Chastain",
+      "Chris Hemsworth"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop8901",
+    "image_path": "gallery/the-last-train.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-168",
+    "title": "The Final Battle",
+    "description": "An epic war film that chronicles a pivotal battle in history and the heroes who fought in it.",
+    "year": 2023,
+    "duration": 145,
+    "rating": 4.6,
+    "director": "Ridley Scott",
+    "cast": [
+      "Christian Bale",
+      "Tom Hardy",
+      "Michael Fassbender"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd5678",
+    "image_path": "gallery/the-final-battle.jpg",
+    "genres": [
+      "War",
+      "Action",
+      "Drama"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-169",
+    "title": "The Silent Night",
+    "description": "A heartwarming Christmas film about a family coming together to celebrate the holiday spirit.",
+    "year": 2022,
+    "duration": 100,
+    "rating": 4.3,
+    "director": "Frank Capra",
+    "cast": [
+      "Mila Kunis",
+      "Justin Timberlake",
+      "Kristen Bell"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh5678",
+    "image_path": "gallery/the-silent-night.jpg",
+    "genres": [
+      "Family",
+      "Comedy"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-170",
+    "title": "The Road Home",
+    "description": "A touching drama about a man who embarks on a journey to reconnect with his estranged family.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "Peter Weir",
+    "cast": [
+      "Hugh Jackman",
+      "Nicole Kidman",
+      "Sam Neill"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl5678",
+    "image_path": "gallery/the-road-home.jpg",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-171",
+    "title": "The Secret of the Lost City",
+    "description": "An adventure film about a group of explorers searching for a mythical city hidden in the jungle.",
+    "year": 2024,
+    "duration": 135,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Tom Holland",
+      "Zoe Saldana",
+      "Chris Pratt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop1234",
+    "image_path": "gallery/the-secret-of-the-lost-city.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-172",
+    "title": "The Last Wish",
+    "description": "A fantasy adventure about a young girl who discovers a magical wish-granting stone.",
+    "year": 2023,
+    "duration": 125,
+    "rating": 4.4,
+    "director": "Katherine Hardwicke",
+    "cast": [
+      "Millie Bobby Brown",
+      "Ben Barnes",
+      "Josh Gad"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd8901",
+    "image_path": "gallery/the-last-wish.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-173",
+    "title": "The Lost Treasure",
+    "description": "A thrilling adventure about a group of explorers searching for a legendary treasure hidden deep in the jungle.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Chris Pratt",
+      "Zoe Saldana",
+      "Dwayne Johnson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh8901",
+    "image_path": "gallery/the-lost-treasure.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-174",
+    "title": "The Last Train",
+    "description": "A suspenseful thriller about a group of strangers trapped on a train during a storm, where secrets unravel.",
+    "year": 2022,
+    "duration": 115,
+    "rating": 4.2,
+    "director": "David Fincher",
+    "cast": [
+      "John Boyega",
+      "Jessica Chastain",
+      "Chris Hemsworth"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop8901",
+    "image_path": "gallery/the-last-train.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-175",
+    "title": "The Final Battle",
+    "description": "An epic war film that chronicles a pivotal battle in history and the heroes who fought in it.",
+    "year": 2023,
+    "duration": 145,
+    "rating": 4.6,
+    "director": "Ridley Scott",
+    "cast": [
+      "Christian Bale",
+      "Tom Hardy",
+      "Michael Fassbender"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd5678",
+    "image_path": "gallery/the-final-battle.jpg",
+    "genres": [
+      "War",
+      "Action",
+      "Drama"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-176",
+    "title": "The Silent Night",
+    "description": "A heartwarming Christmas film about a family coming together to celebrate the holiday spirit.",
+    "year": 2022,
+    "duration": 100,
+    "rating": 4.3,
+    "director": "Frank Capra",
+    "cast": [
+      "Mila Kunis",
+      "Justin Timberlake",
+      "Kristen Bell"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh5678",
+    "image_path": "gallery/the-silent-night.jpg",
+    "genres": [
+      "Family",
+      "Comedy"
+    ],
+    "category": "Family"
+  },
+  {
+    "id": "movie-exp-177",
+    "title": "The Road Home",
+    "description": "A touching drama about a man who embarks on a journey to reconnect with his estranged family.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "Peter Weir",
+    "cast": [
+      "Hugh Jackman",
+      "Nicole Kidman",
+      "Sam Neill"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl5678",
+    "image_path": "gallery/the-road-home.jpg",
+    "genres": [
+      "Drama",
+      "Family"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-178",
+    "title": "The Secret of the Lost City",
+    "description": "An adventure film about a group of explorers searching for a mythical city hidden in the jungle.",
+    "year": 2024,
+    "duration": 135,
+    "rating": 4.5,
+    "director": "James Cameron",
+    "cast": [
+      "Tom Holland",
+      "Zoe Saldana",
+      "Chris Pratt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop1234",
+    "image_path": "gallery/the-secret-of-the-lost-city.jpg",
+    "genres": [
+      "Adventure",
+      "Action"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-179",
+    "title": "Whispers in the Wind",
+    "description": "A captivating story of love and loss set against the backdrop of a small coastal town.",
+    "year": 2021,
+    "duration": 95,
+    "rating": 4.0,
+    "director": "Sofia Coppola",
+    "cast": [
+      "Emma Stone",
+      "Ryan Gosling",
+      "Bill Nighy"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd1234",
+    "image_path": "gallery/whispers-in-the-wind.jpg",
+    "genres": [
+      "Romance",
+      "Drama"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-180",
+    "title": "Galactic Odyssey",
+    "description": "An epic space adventure where a crew of astronauts must save humanity from an impending cosmic threat.",
+    "year": 2025,
+    "duration": 150,
+    "rating": 4.8,
+    "director": "Ridley Scott",
+    "cast": [
+      "Chris Hemsworth",
+      "Tessa Thompson",
+      "Idris Elba"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh1234",
+    "image_path": "gallery/galactic-odyssey.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Action"
+    ],
+    "category": "Science Fiction"
+  },
+  {
+    "id": "movie-exp-181",
+    "title": "The Last Guardian",
+    "description": "A thrilling tale of a young hero who must protect a mystical creature from dark forces.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.6,
+    "director": "Hayao Miyazaki",
+    "cast": [
+      "Daisuke Namikawa",
+      "Akiyo Yoshida",
+      "Miyu Irino"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl1234",
+    "image_path": "gallery/the-last-guardian.jpg",
+    "genres": [
+      "Animation",
+      "Fantasy"
+    ],
+    "category": "Animation"
+  },
+  {
+    "id": "movie-exp-182",
+    "title": "Under the Stars",
+    "description": "A poignant story of friendship and dreams set in the vibrant streets of Paris.",
+    "year": 2022,
+    "duration": 110,
+    "rating": 4.2,
+    "director": "Marc Forster",
+    "cast": [
+      "Timothée Chalamet",
+      "Florence Pugh",
+      "Ben Mendelsohn"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop1234",
+    "image_path": "gallery/under-the-stars.jpg",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-183",
+    "title": "The Unseen",
+    "description": "A psychological thriller that delves into the mind of a detective as he uncovers a series of mysterious disappearances.",
+    "year": 2024,
+    "duration": 100,
+    "rating": 4.1,
+    "director": "David Fincher",
+    "cast": [
+      "Benedict Cumberbatch",
+      "Jessica Chastain",
+      "John Boyega"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst1234",
+    "image_path": "gallery/the-unseen.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-184",
+    "title": "Echoes of Time",
+    "description": "A time-travel adventure where a scientist must fix the past to save the future.",
+    "year": 2025,
+    "duration": 140,
+    "rating": 4.7,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Matthew McConaughey",
+      "Emily Blunt",
+      "David Oyelowo"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx1234",
+    "image_path": "gallery/echoes-of-time.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Adventure"
+    ],
+    "category": "Science Fiction"
+  },
+  {
+    "id": "movie-exp-185",
+    "title": "The Forgotten",
+    "description": "A gripping tale of survival and resilience in a post-apocalyptic world.",
+    "year": 2023,
+    "duration": 130,
+    "rating": 4.4,
+    "director": "Darren Aronofsky",
+    "cast": [
+      "Joaquin Phoenix",
+      "Natalie Portman",
+      "Oscar Isaac"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=yzab1234",
+    "image_path": "gallery/the-forgotten.jpg",
+    "genres": [
+      "Drama",
+      "Thriller"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-186",
+    "title": "The Hidden Path",
+    "description": "An inspiring journey of a young woman who discovers her true self while hiking through the wilderness.",
+    "year": 2022,
+    "duration": 115,
+    "rating": 4.3,
+    "director": "Gus Van Sant",
+    "cast": [
+      "Shailene Woodley",
+      "Ansel Elgort",
+      "Laura Dern"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd5678",
+    "image_path": "gallery/the-hidden-path.jpg",
+    "genres": [
+      "Adventure",
+      "Drama"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-187",
+    "title": "Rebel Hearts",
+    "description": "A historical drama about a group of activists fighting for social justice in the 1960s.",
+    "year": 2023,
+    "duration": 125,
+    "rating": 4.5,
+    "director": "Steve McQueen",
+    "cast": [
+      "Daniel Kaluuya",
+      "Jodie Comer",
+      "Ben Whishaw"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=cdef1234",
+    "image_path": "gallery/rebel-hearts.jpg",
+    "genres": [
+      "Drama",
+      "Biography"
+    ],
+    "category": "Biography"
+  },
+  {
+    "id": "movie-exp-188",
+    "title": "The Great Escape",
+    "description": "A gripping war drama about a group of soldiers trying to escape from a POW camp during World War II.",
+    "year": 2023,
+    "duration": 145,
+    "rating": 4.9,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Tom Hardy",
+      "Michael Fassbender",
+      "Emily Blunt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ghij1234",
+    "image_path": "gallery/the-great-escape.jpg",
+    "genres": [
+      "War",
+      "Drama"
+    ],
+    "category": "War"
+  },
+  {
+    "id": "movie-exp-189",
+    "title": "Chasing Shadows",
+    "description": "A mystery thriller that follows a detective as he unravels a web of deceit in a small town.",
+    "year": 2024,
+    "duration": 130,
+    "rating": 4.3,
+    "director": "David Fincher",
+    "cast": [
+      "Ben Affleck",
+      "Rosamund Pike",
+      "John Hawkes"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl5678",
+    "image_path": "gallery/chasing-shadows.jpg",
+    "genres": [
+      "Thriller",
+      "Mystery"
+    ],
+    "category": "Mystery"
+  },
+  {
+    "id": "movie-exp-190",
+    "title": "The Color of Dreams",
+    "description": "An animated feature that explores the imaginative world of dreams through the eyes of a child.",
+    "year": 2022,
+    "duration": 100,
+    "rating": 4.6,
+    "director": "Hayao Miyazaki",
+    "cast": [
+      "Aoi Miyazaki",
+      "Takuya Kimura",
+      "Ryo Kase"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop5678",
+    "image_path": "gallery/the-color-of-dreams.jpg",
+    "genres": [
+      "Animation",
+      "Fantasy"
+    ],
+    "category": "Animation"
+  },
+  {
+    "id": "movie-exp-191",
+    "title": "The Edge of Tomorrow",
+    "description": "A soldier finds himself in a time loop during an alien invasion and must relive the same day to save humanity.",
+    "year": 2025,
+    "duration": 138,
+    "rating": 4.7,
+    "director": "Doug Liman",
+    "cast": [
+      "Tom Cruise",
+      "Emily Blunt",
+      "Bill Paxton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst5678",
+    "image_path": "gallery/the-edge-of-tomorrow.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Action"
+    ],
+    "category": "Science Fiction"
+  },
+  {
+    "id": "movie-exp-192",
+    "title": "Beyond the Horizon",
+    "description": "A romantic drama about two lovers separated by distance and time, fighting to be together.",
+    "year": 2023,
+    "duration": 112,
+    "rating": 4.4,
+    "director": "Richard Linklater",
+    "cast": [
+      "Zoe Kazan",
+      "Jake Gyllenhaal",
+      "Mandy Moore"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx5678",
+    "image_path": "gallery/beyond-the-horizon.jpg",
+    "genres": [
+      "Romance",
+      "Drama"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-193",
+    "title": "The Last Voyage",
+    "description": "A suspenseful thriller about a ship's crew encountering a mysterious force at sea.",
+    "year": 2024,
+    "duration": 125,
+    "rating": 4.5,
+    "director": "M. Night Shyamalan",
+    "cast": [
+      "Mark Wahlberg",
+      "Zoe Saldana",
+      "Javier Bardem"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd6789",
+    "image_path": "gallery/the-last-voyage.jpg",
+    "genres": [
+      "Thriller",
+      "Horror"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-194",
+    "title": "The Art of War",
+    "description": "A historical drama depicting the life of a renowned general and his strategies in battle.",
+    "year": 2023,
+    "duration": 140,
+    "rating": 4.8,
+    "director": "Ang Lee",
+    "cast": [
+      "Donnie Yen",
+      "Jet Li",
+      "Maggie Cheung"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=cdef6789",
+    "image_path": "gallery/the-art-of-war.jpg",
+    "genres": [
+      "Action",
+      "Drama"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-195",
+    "title": "Dreamcatcher",
+    "description": "A supernatural thriller about a group of friends who encounter a malevolent spirit in the woods.",
+    "year": 2022,
+    "duration": 115,
+    "rating": 4.2,
+    "director": "John Carpenter",
+    "cast": [
+      "Katherine Langford",
+      "Finn Wolfhard",
+      "Dacre Montgomery"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh6789",
+    "image_path": "gallery/dreamcatcher.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-196",
+    "title": "The Chosen One",
+    "description": "An action-packed film about a young hero destined to save the world from an ancient evil.",
+    "year": 2025,
+    "duration": 130,
+    "rating": 4.6,
+    "director": "Zack Snyder",
+    "cast": [
+      "Henry Cavill",
+      "Gal Gadot",
+      "Jason Momoa"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ghij6789",
+    "image_path": "gallery/the-chosen-one.jpg",
+    "genres": [
+      "Action",
+      "Fantasy"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-197",
+    "title": "The Last Samurai",
+    "description": "An epic tale of honor and redemption set in feudal Japan.",
+    "year": 2023,
+    "duration": 145,
+    "rating": 4.7,
+    "director": "Edward Zwick",
+    "cast": [
+      "Tom Cruise",
+      "Ken Watanabe",
+      "Koyuki"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl6789",
+    "image_path": "gallery/the-last-samurai.jpg",
+    "genres": [
+      "Action",
+      "Drama"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-198",
+    "title": "The Garden of Words",
+    "description": "A beautiful romantic drama about two people who meet in a garden and share their dreams.",
+    "year": 2022,
+    "duration": 90,
+    "rating": 4.5,
+    "director": "Makoto Shinkai",
+    "cast": [
+      "Miyu Irino",
+      "Kana Hanazawa",
+      "Tsubasa Honda"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop6789",
+    "image_path": "gallery/the-garden-of-words.jpg",
+    "genres": [
+      "Animation",
+      "Romance"
+    ],
+    "category": "Animation"
+  },
+  {
+    "id": "movie-exp-199",
+    "title": "The Time Traveler's Wife",
+    "description": "A romantic drama about a man with a genetic disorder that causes him to time travel unpredictably.",
+    "year": 2023,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "Robert Schwentke",
+    "cast": [
+      "Rachel McAdams",
+      "Eric Bana",
+      "Ron Livingston"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst6789",
+    "image_path": "gallery/the-time-travelers-wife.jpg",
+    "genres": [
+      "Romance",
+      "Drama"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-200",
+    "title": "The Maze Runner",
+    "description": "A thrilling dystopian adventure where a group of teens must navigate a deadly maze to survive.",
+    "year": 2024,
+    "duration": 140,
+    "rating": 4.3,
+    "director": "Wes Ball",
+    "cast": [
+      "Dylan O'Brien",
+      "Kaya Scodelario",
+      "Will Poulter"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx6789",
+    "image_path": "gallery/the-maze-runner.jpg",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "category": "Adventure"
+  },
+  {
+    "id": "movie-exp-201",
+    "title": "The Pursuit of Happyness",
+    "description": "An inspirational true story of a father struggling to create a better life for his son.",
+    "year": 2022,
+    "duration": 117,
+    "rating": 4.8,
+    "director": "Gabriele Muccino",
+    "cast": [
+      "Will Smith",
+      "Jaden Smith",
+      "Thandie Newton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd7890",
+    "image_path": "gallery/the-pursuit-of-happyness.jpg",
+    "genres": [
+      "Drama",
+      "Biography"
+    ],
+    "category": "Biography"
+  },
+  {
+    "id": "movie-exp-202",
+    "title": "The Shape of Water",
+    "description": "A unique love story between a mute woman and a mysterious aquatic creature.",
+    "year": 2023,
+    "duration": 123,
+    "rating": 4.6,
+    "director": "Guillermo del Toro",
+    "cast": [
+      "Sally Hawkins",
+      "Michael Shannon",
+      "Richard Jenkins"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh7890",
+    "image_path": "gallery/the-shape-of-water.jpg",
+    "genres": [
+      "Fantasy",
+      "Romance"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-203",
+    "title": "The Imitation Game",
+    "description": "The story of Alan Turing, a mathematician and logician who played a pivotal role in breaking the Enigma code.",
+    "year": 2024,
+    "duration": 113,
+    "rating": 4.5,
+    "director": "Morten Tyldum",
+    "cast": [
+      "Benedict Cumberbatch",
+      "Keira Knightley",
+      "Matthew Goode"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl7890",
+    "image_path": "gallery/the-imitation-game.jpg",
+    "genres": [
+      "Biography",
+      "Drama"
+    ],
+    "category": "Biography"
+  },
+  {
+    "id": "movie-exp-204",
+    "title": "The King's Speech",
+    "description": "The inspiring true story of King George VI and his struggle to overcome a speech impediment.",
+    "year": 2023,
+    "duration": 118,
+    "rating": 4.7,
+    "director": "Tom Hooper",
+    "cast": [
+      "Colin Firth",
+      "Geoffrey Rush",
+      "Helena Bonham Carter"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop7890",
+    "image_path": "gallery/the-kings-speech.jpg",
+    "genres": [
+      "Biography",
+      "Drama"
+    ],
+    "category": "Biography"
+  },
+  {
+    "id": "movie-exp-205",
+    "title": "The Social Network",
+    "description": "A dramatic portrayal of the founding of Facebook and the legal battles that followed.",
+    "year": 2022,
+    "duration": 120,
+    "rating": 4.4,
+    "director": "David Fincher",
+    "cast": [
+      "Jesse Eisenberg",
+      "Andrew Garfield",
+      "Justin Timberlake"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst7890",
+    "image_path": "gallery/the-social-network.jpg",
+    "genres": [
+      "Biography",
+      "Drama"
+    ],
+    "category": "Biography"
+  },
+  {
+    "id": "movie-exp-206",
+    "title": "The Revenant",
+    "description": "A frontiersman on a quest for survival and revenge after being left for dead.",
+    "year": 2023,
+    "duration": 156,
+    "rating": 4.5,
+    "director": "Alejandro González Iñárritu",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Tom Hardy",
+      "Will Poulter"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx7890",
+    "image_path": "gallery/the-revenant.jpg",
+    "genres": [
+      "Action",
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-207",
+    "title": "A Star is Born",
+    "description": "A musician helps a young singer find fame as age and alcoholism send his own career into a downward spiral.",
+    "year": 2024,
+    "duration": 135,
+    "rating": 4.6,
+    "director": "Bradley Cooper",
+    "cast": [
+      "Lady Gaga",
+      "Bradley Cooper",
+      "Sam Elliott"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd8901",
+    "image_path": "gallery/a-star-is-born.jpg",
+    "genres": [
+      "Drama",
+      "Music"
+    ],
+    "category": "Music"
+  },
+  {
+    "id": "movie-exp-208",
+    "title": "The Great Gatsby",
+    "description": "A wealthy man’s obsession with a beautiful woman leads to tragedy in this adaptation of F. Scott Fitzgerald’s novel.",
+    "year": 2023,
+    "duration": 143,
+    "rating": 4.4,
+    "director": "Baz Luhrmann",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Carey Mulligan",
+      "Joel Edgerton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh8901",
+    "image_path": "gallery/the-great-gatsby.jpg",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-209",
+    "title": "Inception",
+    "description": "A skilled thief is given a chance at redemption if he can successfully perform inception.",
+    "year": 2022,
+    "duration": 148,
+    "rating": 4.8,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Joseph Gordon-Levitt",
+      "Elliot Page"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl8901",
+    "image_path": "gallery/inception.jpg",
+    "genres": [
+      "Action",
+      "Sci-Fi"
+    ],
+    "category": "Science Fiction"
+  },
+  {
+    "id": "movie-exp-210",
+    "title": "The Matrix Resurrections",
+    "description": "The fourth installment in the Matrix franchise that explores the nature of reality and choice.",
+    "year": 2021,
+    "duration": 148,
+    "rating": 4.2,
+    "director": "Lana Wachowski",
+    "cast": [
+      "Keanu Reeves",
+      "Carrie-Anne Moss",
+      "Yahya Abdul-Mateen II"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop8901",
+    "image_path": "gallery/the-matrix-resurrections.jpg",
+    "genres": [
+      "Action",
+      "Sci-Fi"
+    ],
+    "category": "Science Fiction"
+  },
+  {
+    "id": "movie-exp-211",
+    "title": "The Lion King",
+    "description": "The classic animated story of a young lion prince fleeing his kingdom only to learn the true meaning of responsibility.",
+    "year": 2022,
+    "duration": 118,
+    "rating": 4.5,
+    "director": "Jon Favreau",
+    "cast": [
+      "Donald Glover",
+      "Beyoncé",
+      "James Earl Jones"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst8901",
+    "image_path": "gallery/the-lion-king.jpg",
+    "genres": [
+      "Animation",
+      "Adventure"
+    ],
+    "category": "Animation"
+  },
+  {
+    "id": "movie-exp-212",
+    "title": "The Fault in Our Stars",
+    "description": "A touching story about two teenagers who fall in love while battling cancer.",
+    "year": 2023,
+    "duration": 126,
+    "rating": 4.4,
+    "director": "Josh Boone",
+    "cast": [
+      "Shailene Woodley",
+      "Ansel Elgort",
+      "Nat Wolff"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx8901",
+    "image_path": "gallery/the-fault-in-our-stars.jpg",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "category": "Romance"
+  },
+  {
+    "id": "movie-exp-213",
+    "title": "The Pursuit of Love",
+    "description": "A romantic comedy that follows the lives and loves of two sisters in post-war England.",
+    "year": 2024,
+    "duration": 120,
+    "rating": 4.3,
+    "director": "Emily Mortimer",
+    "cast": [
+      "Lily James",
+      "Dominic West",
+      "Emily Beecham"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd9012",
+    "image_path": "gallery/the-pursuit-of-love.jpg",
+    "genres": [
+      "Romance",
+      "Comedy"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-exp-214",
+    "title": "The Invisible Man",
+    "description": "A modern adaptation of the classic horror story about a man who becomes invisible and terrorizes those around him.",
+    "year": 2022,
+    "duration": 124,
+    "rating": 4.5,
+    "director": "Leigh Whannell",
+    "cast": [
+      "Elisabeth Moss",
+      "Oliver Jackson-Cohen",
+      "Harriet Dyer"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh9012",
+    "image_path": "gallery/the-invisible-man.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-215",
+    "title": "The Green Knight",
+    "description": "A fantasy retelling of the Arthurian legend of Sir Gawain and the Green Knight.",
+    "year": 2021,
+    "duration": 130,
+    "rating": 4.2,
+    "director": "David Lowery",
+    "cast": [
+      "Dev Patel",
+      "Alicia Vikander",
+      "Joel Edgerton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ghij9012",
+    "image_path": "gallery/the-green-knight.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-216",
+    "title": "Dune",
+    "description": "A science fiction epic about the son of a noble family who becomes embroiled in a war for control of a vital spice.",
+    "year": 2021,
+    "duration": 155,
+    "rating": 4.6,
+    "director": "Denis Villeneuve",
+    "cast": [
+      "Timothée Chalamet",
+      "Rebecca Ferguson",
+      "Oscar Isaac"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl9012",
+    "image_path": "gallery/dune.jpg",
+    "genres": [
+      "Sci-Fi",
+      "Adventure"
+    ],
+    "category": "Science Fiction"
+  },
+  {
+    "id": "movie-exp-217",
+    "title": "The Trial of the Chicago 7",
+    "description": "The story of the Chicago Seven, a group of anti-Vietnam War protesters charged with conspiracy.",
+    "year": 2022,
+    "duration": 130,
+    "rating": 4.4,
+    "director": "Aaron Sorkin",
+    "cast": [
+      "Eddie Redmayne",
+      "Sacha Baron Cohen",
+      "Mark Rylance"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop9012",
+    "image_path": "gallery/the-trial-of-the-chicago-7.jpg",
+    "genres": [
+      "Drama",
+      "History"
+    ],
+    "category": "History"
+  },
+  {
+    "id": "movie-exp-218",
+    "title": "No Time to Die",
+    "description": "James Bond returns to action to face a new villain armed with dangerous technology.",
+    "year": 2021,
+    "duration": 163,
+    "rating": 4.5,
+    "director": "Cary Joji Fukunaga",
+    "cast": [
+      "Daniel Craig",
+      "Rami Malek",
+      "Léa Seydoux"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst9012",
+    "image_path": "gallery/no-time-to-die.jpg",
+    "genres": [
+      "Action",
+      "Thriller"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-219",
+    "title": "The French Dispatch",
+    "description": "A love letter to journalists, this film tells several stories from the final issue of an American magazine published in a fictional French city.",
+    "year": 2021,
+    "duration": 108,
+    "rating": 4.3,
+    "director": "Wes Anderson",
+    "cast": [
+      "Benicio del Toro",
+      "Adrien Brody",
+      "Tilda Swinton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx9012",
+    "image_path": "gallery/the-french-dispatch.jpg",
+    "genres": [
+      "Comedy",
+      "Drama"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-exp-220",
+    "title": "West Side Story",
+    "description": "A modern retelling of the classic musical about love and rivalry between two gangs.",
+    "year": 2021,
+    "duration": 156,
+    "rating": 4.6,
+    "director": "Steven Spielberg",
+    "cast": [
+      "Ansel Elgort",
+      "Rachel Zegler",
+      "Ariana DeBose"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd0123",
+    "image_path": "gallery/west-side-story.jpg",
+    "genres": [
+      "Musical",
+      "Romance"
+    ],
+    "category": "Musical"
+  },
+  {
+    "id": "movie-exp-221",
+    "title": "Spider-Man: No Way Home",
+    "description": "Spider-Man faces new challenges and foes as he navigates his dual life as a superhero and a teenager.",
+    "year": 2021,
+    "duration": 148,
+    "rating": 4.7,
+    "director": "Jon Watts",
+    "cast": [
+      "Tom Holland",
+      "Zendaya",
+      "Benedict Cumberbatch"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh0123",
+    "image_path": "gallery/spider-man-no-way-home.jpg",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-222",
+    "title": "Eternals",
+    "description": "A group of immortal beings must come together to protect humanity from their ancient enemies.",
+    "year": 2021,
+    "duration": 157,
+    "rating": 4.3,
+    "director": "Chloé Zhao",
+    "cast": [
+      "Gemma Chan",
+      "Richard Madden",
+      "Angelina Jolie"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl0123",
+    "image_path": "gallery/eternals.jpg",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-223",
+    "title": "Shang-Chi and the Legend of the Ten Rings",
+    "description": "A martial arts master confronts his past and battles the mysterious Ten Rings organization.",
+    "year": 2021,
+    "duration": 132,
+    "rating": 4.5,
+    "director": "Destin Daniel Cretton",
+    "cast": [
+      "Simu Liu",
+      "Awkwafina",
+      "Tony Leung Chiu-wai"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop0123",
+    "image_path": "gallery/shang-chi.jpg",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-224",
+    "title": "Black Widow",
+    "description": "Natasha Romanoff confronts her past as she becomes embroiled in a conspiracy.",
+    "year": 2021,
+    "duration": 134,
+    "rating": 4.4,
+    "director": "Cate Shortland",
+    "cast": [
+      "Scarlett Johansson",
+      "Florence Pugh",
+      "David Harbour"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst0123",
+    "image_path": "gallery/black-widow.jpg",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-225",
+    "title": "The Suicide Squad",
+    "description": "A group of anti-heroes is recruited for a dangerous mission to save the world.",
+    "year": 2021,
+    "duration": 132,
+    "rating": 4.3,
+    "director": "James Gunn",
+    "cast": [
+      "Margot Robbie",
+      "Idris Elba",
+      "John Cena"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx0123",
+    "image_path": "gallery/the-suicide-squad.jpg",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-226",
+    "title": "Ghostbusters: Afterlife",
+    "description": "A new generation of ghostbusters must save their town from supernatural threats.",
+    "year": 2021,
+    "duration": 124,
+    "rating": 4.5,
+    "director": "Jason Reitman",
+    "cast": [
+      "Finn Wolfhard",
+      "Mckenna Grace",
+      "Carrie Coon"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ghij0123",
+    "image_path": "gallery/ghostbusters-afterlife.jpg",
+    "genres": [
+      "Comedy",
+      "Fantasy"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-exp-227",
+    "title": "The Matrix 4",
+    "description": "Neo and Trinity return to face new threats in a world where reality is not what it seems.",
+    "year": 2021,
+    "duration": 148,
+    "rating": 4.2,
+    "director": "Lana Wachowski",
+    "cast": [
+      "Keanu Reeves",
+      "Carrie-Anne Moss",
+      "Yahya Abdul-Mateen II"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl0123",
+    "image_path": "gallery/the-matrix-4.jpg",
+    "genres": [
+      "Action",
+      "Sci-Fi"
+    ],
+    "category": "Science Fiction"
+  },
+  {
+    "id": "movie-exp-228",
+    "title": "The Conjuring: The Devil Made Me Do It",
+    "description": "The Warrens investigate a murder case linked to demonic possession.",
+    "year": 2021,
+    "duration": 112,
+    "rating": 4.4,
+    "director": "Michael Chaves",
+    "cast": [
+      "Patrick Wilson",
+      "Vera Farmiga",
+      "Ruairi O'Connor"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop0123",
+    "image_path": "gallery/the-conjuring-the-devil-made-me-do-it.jpg",
+    "genres": [
+      "Horror",
+      "Mystery"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-229",
+    "title": "The Night House",
+    "description": "A widow discovers her husband's disturbing secrets after his death.",
+    "year": 2021,
+    "duration": 108,
+    "rating": 4.3,
+    "director": "David Bruckner",
+    "cast": [
+      "Rebecca Hall",
+      "Sarah Goldberg",
+      "Vondie Curtis-Hall"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst0123",
+    "image_path": "gallery/the-night-house.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-230",
+    "title": "Candyman",
+    "description": "A spiritual sequel to the horror classic that explores urban legends and their impact.",
+    "year": 2021,
+    "duration": 91,
+    "rating": 4.5,
+    "director": "Nia DaCosta",
+    "cast": [
+      "Yahya Abdul-Mateen II",
+      "Teyonah Parris",
+      "Nathan Stewart-Jarrett"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=uvwx0123",
+    "image_path": "gallery/candyman.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-231",
+    "title": "A Quiet Place Part II",
+    "description": "The Abbott family faces new threats in a post-apocalyptic world where silence is survival.",
+    "year": 2021,
+    "duration": 97,
+    "rating": 4.6,
+    "director": "John Krasinski",
+    "cast": [
+      "Emily Blunt",
+      "Millicent Simmonds",
+      "Cillian Murphy"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ghij0123",
+    "image_path": "gallery/a-quiet-place-part-ii.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-232",
+    "title": "The Last Duel",
+    "description": "A gripping historical drama about the last legal duel in France, exploring themes of honor and betrayal.",
+    "year": 2021,
+    "duration": 152,
+    "rating": 4.3,
+    "director": "Ridley Scott",
+    "cast": [
+      "Matt Damon",
+      "Adam Driver",
+      "Jodie Comer"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl0123",
+    "image_path": "gallery/the-last-duel.jpg",
+    "genres": [
+      "Drama",
+      "History"
+    ],
+    "category": "History"
+  },
+  {
+    "id": "movie-exp-233",
+    "title": "The Green Knight",
+    "description": "A fantasy retelling of the Arthurian legend of Sir Gawain and the Green Knight.",
+    "year": 2021,
+    "duration": 130,
+    "rating": 4.2,
+    "director": "David Lowery",
+    "cast": [
+      "Dev Patel",
+      "Alicia Vikander",
+      "Joel Edgerton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop0123",
+    "image_path": "gallery/the-green-knight.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-234",
+    "title": "The Father",
+    "description": "A poignant drama about a man dealing with dementia and his daughter's struggle to care for him.",
+    "year": 2022,
+    "duration": 97,
+    "rating": 4.7,
+    "director": "Florian Zeller",
+    "cast": [
+      "Anthony Hopkins",
+      "Olivia Colman",
+      "Mark Gatiss"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst0123",
+    "image_path": "gallery/the-father.jpg",
+    "genres": [
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-235",
+    "title": "Nomadland",
+    "description": "A woman embarks on a journey through the American West, living as a modern-day nomad.",
+    "year": 2021,
+    "duration": 108,
+    "rating": 4.5,
+    "director": "Chloé Zhao",
+    "cast": [
+      "Frances McDormand",
+      "David Strathairn",
+      "Linda May"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=abcd0123",
+    "image_path": "gallery/nomadland.jpg",
+    "genres": [
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-exp-236",
+    "title": "The Tragedy of Macbeth",
+    "description": "A bold adaptation of Shakespeare's classic tragedy, exploring ambition and guilt.",
+    "year": 2021,
+    "duration": 105,
+    "rating": 4.6,
+    "director": "Joel Coen",
+    "cast": [
+      "Denzel Washington",
+      "Frances McDormand",
+      "Bertie Carvel"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=efgh0123",
+    "image_path": "gallery/the-tragedy-of-macbeth.jpg",
+    "genres": [
+      "Drama",
+      "Thriller"
+    ],
+    "category": "Thriller"
+  },
+  {
+    "id": "movie-exp-237",
+    "title": "The Night House",
+    "description": "A widow discovers her husband's disturbing secrets after his death.",
+    "year": 2021,
+    "duration": 108,
+    "rating": 4.3,
+    "director": "David Bruckner",
+    "cast": [
+      "Rebecca Hall",
+      "Sarah Goldberg",
+      "Vondie Curtis-Hall"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ghij0123",
+    "image_path": "gallery/the-night-house.jpg",
+    "genres": [
+      "Horror",
+      "Thriller"
+    ],
+    "category": "Horror"
+  },
+  {
+    "id": "movie-exp-238",
+    "title": "The Green Knight",
+    "description": "A fantasy retelling of the Arthurian legend of Sir Gawain and the Green Knight.",
+    "year": 2021,
+    "duration": 130,
+    "rating": 4.2,
+    "director": "David Lowery",
+    "cast": [
+      "Dev Patel",
+      "Alicia Vikander",
+      "Joel Edgerton"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ijkl0123",
+    "image_path": "gallery/the-green-knight.jpg",
+    "genres": [
+      "Fantasy",
+      "Adventure"
+    ],
+    "category": "Fantasy"
+  },
+  {
+    "id": "movie-exp-239",
+    "title": "The King's Man",
+    "description": "A prequel to the Kingsman series that explores the origins of the secret service.",
+    "year": 2021,
+    "duration": 131,
+    "rating": 4.4,
+    "director": "Matthew Vaughn",
+    "cast": [
+      "Ralph Fiennes",
+      "Gemma Arterton",
+      "Rhys Ifans"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=mnop0123",
+    "image_path": "gallery/the-kings-man.jpg",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-exp-240",
+    "title": "The Matrix Resurrections",
+    "description": "The fourth installment in the Matrix franchise that explores the nature of reality and choice.",
+    "year": 2021,
+    "duration": 148,
+    "rating": 4.2,
+    "director": "Lana Wachowski",
+    "cast": [
+      "Keanu Reeves",
+      "Carrie-Anne Moss",
+      "Yahya Abdul-Mateen II"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qrst0123",
+    "image_path": "gallery/the-matrix-resurrections.jpg",
+    "genres": [
+      "Action",
+      "Sci-Fi"
+    ],
+    "category": "Science Fiction"
   }
 ]

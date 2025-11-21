@@ -17998,5 +17998,608 @@
     "category": "office",
     "latitude": 37.827271,
     "longitude": -122.436092
+  },
+  {
+    "id": "pl1991",
+    "label": "Golden Gate Park - 501 Stanyan St, San Francisco, CA 94117",
+    "main": "Golden Gate Park",
+    "sub": "501 Stanyan St, San Francisco, CA 94117",
+    "category": "park",
+    "latitude": 37.76942,
+    "longitude": -122.486213
+  },
+  {
+    "id": "pl1992",
+    "label": "California Academy of Sciences - 55 Music Concourse Dr, San Francisco, CA 94118",
+    "main": "California Academy of Sciences",
+    "sub": "55 Music Concourse Dr, San Francisco, CA 94118",
+    "category": "museum",
+    "latitude": 37.769868,
+    "longitude": -122.466122
+  },
+  {
+    "id": "pl1993",
+    "label": "Ferry Building Marketplace - 1 Ferry Bldg, San Francisco, CA 94111",
+    "main": "Ferry Building Marketplace",
+    "sub": "1 Ferry Bldg, San Francisco, CA 94111",
+    "category": "market",
+    "latitude": 37.795491,
+    "longitude": -122.393171
+  },
+  {
+    "id": "pl1994",
+    "label": "Alcatraz Island - San Francisco, CA 94133",
+    "main": "Alcatraz Island",
+    "sub": "San Francisco, CA 94133",
+    "category": "historical site",
+    "latitude": 37.826977,
+    "longitude": -122.422956
+  },
+  {
+    "id": "pl1995",
+    "label": "Chinatown - Grant Ave & California St, San Francisco, CA 94108",
+    "main": "Chinatown",
+    "sub": "Grant Ave & California St, San Francisco, CA 94108",
+    "category": "cultural",
+    "latitude": 37.794138,
+    "longitude": -122.40712
+  },
+  {
+    "id": "pl1996",
+    "label": "Golden Gate Park - San Francisco, CA 94121",
+    "main": "Golden Gate Park",
+    "sub": "San Francisco, CA 94121",
+    "category": "park",
+    "latitude": 37.769421,
+    "longitude": -122.486214
+  },
+  {
+    "id": "pl1997",
+    "label": "Lombard Street - Lombard St, San Francisco, CA 94133",
+    "main": "Lombard Street",
+    "sub": "Lombard St, San Francisco, CA 94133",
+    "category": "landmark",
+    "latitude": 37.802139,
+    "longitude": -122.418202
+  },
+  {
+    "id": "pl1998",
+    "label": "Coit Tower - 1 Telegraph Hill Blvd, San Francisco, CA 94133",
+    "main": "Coit Tower",
+    "sub": "1 Telegraph Hill Blvd, San Francisco, CA 94133",
+    "category": "viewpoint",
+    "latitude": 37.802374,
+    "longitude": -122.405818
+  },
+  {
+    "id": "pl1999",
+    "label": "The Painted Ladies - Alamo Square, San Francisco, CA 94117",
+    "main": "The Painted Ladies",
+    "sub": "Alamo Square, San Francisco, CA 94117",
+    "category": "historic site",
+    "latitude": 37.776264,
+    "longitude": -122.432789
+  },
+  {
+    "id": "pl2000",
+    "label": "Exploratorium - Pier 15, San Francisco, CA 94111",
+    "main": "Exploratorium",
+    "sub": "Pier 15, San Francisco, CA 94111",
+    "category": "museum",
+    "latitude": 37.796982,
+    "longitude": -122.398162
+  },
+  {
+    "id": "pl2001",
+    "label": "San Francisco Museum of Modern Art - 151 3rd St, San Francisco, CA 94103",
+    "main": "SFMOMA",
+    "sub": "151 3rd St, San Francisco, CA 94103",
+    "category": "museum",
+    "latitude": 37.7857,
+    "longitude": -122.4011
+  },
+  {
+    "id": "pl2002",
+    "label": "Mission Dolores Park - 19th St & Dolores St, San Francisco, CA 94114",
+    "main": "Mission Dolores Park",
+    "sub": "19th St & Dolores St, San Francisco, CA 94114",
+    "category": "park",
+    "latitude": 37.7596,
+    "longitude": -122.4269
+  },
+  {
+    "id": "pl2003",
+    "label": "Chase Center - 1 Warriors Way, San Francisco, CA 94158",
+    "main": "Chase Center",
+    "sub": "1 Warriors Way, San Francisco, CA 94158",
+    "category": "arena",
+    "latitude": 37.7681,
+    "longitude": -122.3875
+  },
+  {
+    "id": "pl2004",
+    "label": "Oracle Park - 24 Willie Mays Plaza, San Francisco, CA 94107",
+    "main": "Oracle Park",
+    "sub": "24 Willie Mays Plaza, San Francisco, CA 94107",
+    "category": "stadium",
+    "latitude": 37.7786,
+    "longitude": -122.3893
+  },
+  {
+    "id": "pl2005",
+    "label": "Fisherman's Wharf - San Francisco, CA 94133",
+    "main": "Fisherman's Wharf",
+    "sub": "San Francisco, CA 94133",
+    "category": "tourist attraction",
+    "latitude": 37.808,
+    "longitude": -122.4177
+  },
+  {
+    "id": "pl2006",
+    "label": "Pier 39 - Beach St & The Embarcadero, San Francisco, CA 94133",
+    "main": "Pier 39",
+    "sub": "Beach St & The Embarcadero, San Francisco, CA 94133",
+    "category": "shopping",
+    "latitude": 37.8087,
+    "longitude": -122.4098
+  },
+  {
+    "id": "pl2007",
+    "label": "AT&T Park - 24 Willie Mays Plaza, San Francisco, CA 94107",
+    "main": "AT&T Park",
+    "sub": "24 Willie Mays Plaza, San Francisco, CA 94107",
+    "category": "stadium",
+    "latitude": 37.7786,
+    "longitude": -122.3893
+  },
+  {
+    "id": "pl2008",
+    "label": "The Castro Theatre - 429 Castro St, San Francisco, CA 94114",
+    "main": "The Castro Theatre",
+    "sub": "429 Castro St, San Francisco, CA 94114",
+    "category": "theater",
+    "latitude": 37.7619,
+    "longitude": -122.4324
+  },
+  {
+    "id": "pl2009",
+    "label": "California Academy of Sciences - 55 Music Concourse Dr, San Francisco, CA 94118",
+    "main": "California Academy of Sciences",
+    "sub": "55 Music Concourse Dr, San Francisco, CA 94118",
+    "category": "museum",
+    "latitude": 37.7699,
+    "longitude": -122.4661
+  },
+  {
+    "id": "pl2010",
+    "label": "Palace of Fine Arts - 3301 Lyon St, San Francisco, CA 94123",
+    "main": "Palace of Fine Arts",
+    "sub": "3301 Lyon St, San Francisco, CA 94123",
+    "category": "landmark",
+    "latitude": 37.8014,
+    "longitude": -122.4482
+  },
+  {
+    "id": "pl2011",
+    "label": "Muir Woods National Monument - Mill Valley, CA 94941",
+    "main": "Muir Woods",
+    "sub": "Mill Valley, CA 94941",
+    "category": "national park",
+    "latitude": 37.8951,
+    "longitude": -122.5822
+  },
+  {
+    "id": "pl2012",
+    "label": "Angel Island State Park - Tiburon, CA 94920",
+    "main": "Angel Island",
+    "sub": "Tiburon, CA 94920",
+    "category": "state park",
+    "latitude": 37.8651,
+    "longitude": -122.4376
+  },
+  {
+    "id": "pl2013",
+    "label": "Lands End - San Francisco, CA 94121",
+    "main": "Lands End",
+    "sub": "San Francisco, CA 94121",
+    "category": "park",
+    "latitude": 37.7848,
+    "longitude": -122.5
+  },
+  {
+    "id": "pl2014",
+    "label": "Sausalito - Sausalito, CA 94965",
+    "main": "Sausalito",
+    "sub": "Sausalito, CA 94965",
+    "category": "town",
+    "latitude": 37.8591,
+    "longitude": -122.4858
+  },
+  {
+    "id": "pl2015",
+    "label": "Twin Peaks - San Francisco, CA 94114",
+    "main": "Twin Peaks",
+    "sub": "San Francisco, CA 94114",
+    "category": "viewpoint",
+    "latitude": 37.7439,
+    "longitude": -122.4477
+  },
+  {
+    "id": "pl2016",
+    "label": "The Ferry Building - 1 Ferry Building, San Francisco, CA 94111",
+    "main": "The Ferry Building",
+    "sub": "1 Ferry Building, San Francisco, CA 94111",
+    "category": "market",
+    "latitude": 37.7955,
+    "longitude": -122.3932
+  },
+  {
+    "id": "pl2017",
+    "label": "The Exploratorium - Pier 15, San Francisco, CA 94111",
+    "main": "The Exploratorium",
+    "sub": "Pier 15, San Francisco, CA 94111",
+    "category": "museum",
+    "latitude": 37.7969,
+    "longitude": -122.3982
+  },
+  {
+    "id": "pl2018",
+    "label": "Ghirardelli Square - 900 North Point St, San Francisco, CA 94109",
+    "main": "Ghirardelli Square",
+    "sub": "900 North Point St, San Francisco, CA 94109",
+    "category": "shopping",
+    "latitude": 37.8052,
+    "longitude": -122.423
+  },
+  {
+    "id": "pl2019",
+    "label": "The Mission District - San Francisco, CA 94110",
+    "main": "The Mission District",
+    "sub": "San Francisco, CA 94110",
+    "category": "neighborhood",
+    "latitude": 37.7599,
+    "longitude": -122.4184
+  },
+  {
+    "id": "pl2020",
+    "label": "Napa Valley - Napa, CA 94558",
+    "main": "Napa Valley",
+    "sub": "Napa, CA 94558",
+    "category": "wine region",
+    "latitude": 38.2975,
+    "longitude": -122.2869
+  },
+  {
+    "id": "pl2021",
+    "label": "Sonoma Valley - Sonoma, CA 95476",
+    "main": "Sonoma Valley",
+    "sub": "Sonoma, CA 95476",
+    "category": "wine region",
+    "latitude": 38.2923,
+    "longitude": -122.4587
+  },
+  {
+    "id": "pl2022",
+    "label": "Berkeley Botanical Garden - 200 Centennial Dr, Berkeley, CA 94720",
+    "main": "Berkeley Botanical Garden",
+    "sub": "200 Centennial Dr, Berkeley, CA 94720",
+    "category": "garden",
+    "latitude": 37.8755,
+    "longitude": -122.2537
+  },
+  {
+    "id": "pl2023",
+    "label": "Mount Tamalpais State Park - Mill Valley, CA 94941",
+    "main": "Mount Tamalpais",
+    "sub": "Mill Valley, CA 94941",
+    "category": "state park",
+    "latitude": 37.8862,
+    "longitude": -122.5111
+  },
+  {
+    "id": "pl2024",
+    "label": "Crissy Field - San Francisco, CA 94129",
+    "main": "Crissy Field",
+    "sub": "San Francisco, CA 94129",
+    "category": "park",
+    "latitude": 37.8053,
+    "longitude": -122.4665
+  },
+  {
+    "id": "pl2025",
+    "label": "Dolores Park - 19th St & Dolores St, San Francisco, CA 94114",
+    "main": "Dolores Park",
+    "sub": "19th St & Dolores St, San Francisco, CA 94114",
+    "category": "park",
+    "latitude": 37.7596,
+    "longitude": -122.4269
+  },
+  {
+    "id": "pl2026",
+    "label": "The Presidio - San Francisco, CA 94129",
+    "main": "The Presidio",
+    "sub": "San Francisco, CA 94129",
+    "category": "park",
+    "latitude": 37.7989,
+    "longitude": -122.4662
+  },
+  {
+    "id": "pl2027",
+    "label": "Alamo Square - San Francisco, CA 94117",
+    "main": "Alamo Square",
+    "sub": "San Francisco, CA 94117",
+    "category": "park",
+    "latitude": 37.7763,
+    "longitude": -122.4334
+  },
+  {
+    "id": "pl2028",
+    "label": "Fort Point National Historic Site - 201 Fort Point Rd, San Francisco, CA 94129",
+    "main": "Fort Point",
+    "sub": "201 Fort Point Rd, San Francisco, CA 94129",
+    "category": "historical site",
+    "latitude": 37.8053,
+    "longitude": -122.475
+  },
+  {
+    "id": "pl2029",
+    "label": "San Francisco Zoo - Sloat Blvd & Great Hwy, San Francisco, CA 94132",
+    "main": "San Francisco Zoo",
+    "sub": "Sloat Blvd & Great Hwy, San Francisco, CA 94132",
+    "category": "zoo",
+    "latitude": 37.7333,
+    "longitude": -122.5024
+  },
+  {
+    "id": "pl2030",
+    "label": "Cable Car Museum - 1201 Mason St, San Francisco, CA 94108",
+    "main": "Cable Car Museum",
+    "sub": "1201 Mason St, San Francisco, CA 94108",
+    "category": "museum",
+    "latitude": 37.7941,
+    "longitude": -122.413
+  },
+  {
+    "id": "pl2031",
+    "label": "Baker Beach - San Francisco, CA 94129",
+    "main": "Baker Beach",
+    "sub": "San Francisco, CA 94129",
+    "category": "beach",
+    "latitude": 37.7934,
+    "longitude": -122.4862
+  },
+  {
+    "id": "pl2032",
+    "label": "Ocean Beach - San Francisco, CA 94121",
+    "main": "Ocean Beach",
+    "sub": "San Francisco, CA 94121",
+    "category": "beach",
+    "latitude": 37.7599,
+    "longitude": -122.5119
+  },
+  {
+    "id": "pl2033",
+    "label": "The Bay Bridge - San Francisco, CA 94105",
+    "main": "The Bay Bridge",
+    "sub": "San Francisco, CA 94105",
+    "category": "bridge",
+    "latitude": 37.7955,
+    "longitude": -122.4014
+  },
+  {
+    "id": "pl2034",
+    "label": "Treasure Island - Treasure Island, CA 94130",
+    "main": "Treasure Island",
+    "sub": "Treasure Island, CA 94130",
+    "category": "island",
+    "latitude": 37.8267,
+    "longitude": -122.3662
+  },
+  {
+    "id": "pl2035",
+    "label": "Yerba Buena Gardens - 750 Howard St, San Francisco, CA 94103",
+    "main": "Yerba Buena Gardens",
+    "sub": "750 Howard St, San Francisco, CA 94103",
+    "category": "park",
+    "latitude": 37.7844,
+    "longitude": -122.4015
+  },
+  {
+    "id": "pl2036",
+    "label": "The Walt Disney Family Museum - 104 Montgomery St, San Francisco, CA 94129",
+    "main": "Walt Disney Family Museum",
+    "sub": "104 Montgomery St, San Francisco, CA 94129",
+    "category": "museum",
+    "latitude": 37.7986,
+    "longitude": -122.4667
+  },
+  {
+    "id": "pl2037",
+    "label": "The Asian Art Museum - 200 Larkin St, San Francisco, CA 94102",
+    "main": "Asian Art Museum",
+    "sub": "200 Larkin St, San Francisco, CA 94102",
+    "category": "museum",
+    "latitude": 37.7791,
+    "longitude": -122.4193
+  },
+  {
+    "id": "pl2038",
+    "label": "The Contemporary Jewish Museum - 736 Mission St, San Francisco, CA 94103",
+    "main": "Contemporary Jewish Museum",
+    "sub": "736 Mission St, San Francisco, CA 94103",
+    "category": "museum",
+    "latitude": 37.7846,
+    "longitude": -122.4012
+  },
+  {
+    "id": "pl2039",
+    "label": "The San Francisco Symphony - 201 Van Ness Ave, San Francisco, CA 94102",
+    "main": "San Francisco Symphony",
+    "sub": "201 Van Ness Ave, San Francisco, CA 94102",
+    "category": "music venue",
+    "latitude": 37.7793,
+    "longitude": -122.4239
+  },
+  {
+    "id": "pl2040",
+    "label": "The Fillmore - 1805 Geary Blvd, San Francisco, CA 94115",
+    "main": "The Fillmore",
+    "sub": "1805 Geary Blvd, San Francisco, CA 94115",
+    "category": "music venue",
+    "latitude": 37.7844,
+    "longitude": -122.434
+  },
+  {
+    "id": "pl2041",
+    "label": "The War Memorial Opera House - 301 Van Ness Ave, San Francisco, CA 94102",
+    "main": "War Memorial Opera House",
+    "sub": "301 Van Ness Ave, San Francisco, CA 94102",
+    "category": "theater",
+    "latitude": 37.7798,
+    "longitude": -122.4225
+  },
+  {
+    "id": "pl2042",
+    "label": "The Exploratorium - Pier 15, San Francisco, CA 94111",
+    "main": "Exploratorium",
+    "sub": "Pier 15, San Francisco, CA 94111",
+    "category": "museum",
+    "latitude": 37.7969,
+    "longitude": -122.3982
+  },
+  {
+    "id": "pl2043",
+    "label": "The Palace of the Legion of Honor - 100 34th Ave, San Francisco, CA 94121",
+    "main": "Palace of the Legion of Honor",
+    "sub": "100 34th Ave, San Francisco, CA 94121",
+    "category": "museum",
+    "latitude": 37.7858,
+    "longitude": -122.5
+  },
+  {
+    "id": "pl2044",
+    "label": "The San Francisco Botanical Garden - 1199 9th Ave, San Francisco, CA 94122",
+    "main": "San Francisco Botanical Garden",
+    "sub": "1199 9th Ave, San Francisco, CA 94122",
+    "category": "garden",
+    "latitude": 37.7642,
+    "longitude": -122.4661
+  },
+  {
+    "id": "pl2045",
+    "label": "The San Francisco Maritime National Historical Park - 499 Jefferson St, San Francisco, CA 94109",
+    "main": "San Francisco Maritime",
+    "sub": "499 Jefferson St, San Francisco, CA 94109",
+    "category": "historical site",
+    "latitude": 37.8072,
+    "longitude": -122.4235
+  },
+  {
+    "id": "pl2046",
+    "label": "The San Francisco Museum of Craft and Design - 2569 3rd St, San Francisco, CA 94107",
+    "main": "Museum of Craft and Design",
+    "sub": "2569 3rd St, San Francisco, CA 94107",
+    "category": "museum",
+    "latitude": 37.7749,
+    "longitude": -122.3895
+  },
+  {
+    "id": "pl2047",
+    "label": "The San Francisco Art Institute - 800 Chestnut St, San Francisco, CA 94133",
+    "main": "San Francisco Art Institute",
+    "sub": "800 Chestnut St, San Francisco, CA 94133",
+    "category": "art school",
+    "latitude": 37.8026,
+    "longitude": -122.4233
+  },
+  {
+    "id": "pl2048",
+    "label": "The Contemporary Jewish Museum - 736 Mission St, San Francisco, CA 94103",
+    "main": "Contemporary Jewish Museum",
+    "sub": "736 Mission St, San Francisco, CA 94103",
+    "category": "museum",
+    "latitude": 37.7846,
+    "longitude": -122.4012
+  },
+  {
+    "id": "pl2049",
+    "label": "The San Francisco Opera - 301 Van Ness Ave, San Francisco, CA 94102",
+    "main": "San Francisco Opera",
+    "sub": "301 Van Ness Ave, San Francisco, CA 94102",
+    "category": "theater",
+    "latitude": 37.7798,
+    "longitude": -122.4225
+  },
+  {
+    "id": "pl2050",
+    "label": "The San Francisco Symphony - 201 Van Ness Ave, San Francisco, CA 94102",
+    "main": "San Francisco Symphony",
+    "sub": "201 Van Ness Ave, San Francisco, CA 94102",
+    "category": "music venue",
+    "latitude": 37.7793,
+    "longitude": -122.4239
+  },
+  {
+    "id": "pl2051",
+    "label": "The San Francisco Ballet - 455 Franklin St, San Francisco, CA 94102",
+    "main": "San Francisco Ballet",
+    "sub": "455 Franklin St, San Francisco, CA 94102",
+    "category": "theater",
+    "latitude": 37.7749,
+    "longitude": -122.4213
+  },
+  {
+    "id": "pl2052",
+    "label": "The San Francisco Playhouse - 450 Post St, San Francisco, CA 94102",
+    "main": "San Francisco Playhouse",
+    "sub": "450 Post St, San Francisco, CA 94102",
+    "category": "theater",
+    "latitude": 37.7892,
+    "longitude": -122.4095
+  },
+  {
+    "id": "pl2053",
+    "label": "The American Conservatory Theater - 415 Geary St, San Francisco, CA 94102",
+    "main": "American Conservatory Theater",
+    "sub": "415 Geary St, San Francisco, CA 94102",
+    "category": "theater",
+    "latitude": 37.7864,
+    "longitude": -122.4112
+  },
+  {
+    "id": "pl2054",
+    "label": "The San Francisco Museum of Modern Art - 151 3rd St, San Francisco, CA 94103",
+    "main": "SFMOMA",
+    "sub": "151 3rd St, San Francisco, CA 94103",
+    "category": "museum",
+    "latitude": 37.7857,
+    "longitude": -122.4011
+  },
+  {
+    "id": "pl2055",
+    "label": "The San Francisco Museum of Craft and Design - 2569 3rd St, San Francisco, CA 94107",
+    "main": "Museum of Craft and Design",
+    "sub": "2569 3rd St, San Francisco, CA 94107",
+    "category": "museum",
+    "latitude": 37.7749,
+    "longitude": -122.3895
+  },
+  {
+    "id": "pl2056",
+    "label": "The San Francisco Art Institute - 800 Chestnut St, San Francisco, CA 94133",
+    "main": "San Francisco Art Institute",
+    "sub": "800 Chestnut St, San Francisco, CA 94133",
+    "category": "art school",
+    "latitude": 37.8026,
+    "longitude": -122.4233
+  },
+  {
+    "id": "pl2057",
+    "label": "The San Francisco Museum of Craft and Design - 2569 3rd St, San Francisco, CA 94107",
+    "main": "Museum of Craft and Design",
+    "sub": "2569 3rd St, San Francisco, CA 94107",
+    "category": "museum",
+    "latitude": 37.7749,
+    "longitude": -122.3895
   }
 ]

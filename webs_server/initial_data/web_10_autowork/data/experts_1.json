@@ -63796,5 +63796,1381 @@
       "time": "12 hours",
       "dates": "Nov 3, 2024 - Apr 25, 2024"
     }
+  },
+  {
+    "slug": "lisa-k-123",
+    "name": "Lisa K.",
+    "country": "Germany",
+    "role": "Product Manager",
+    "avatar": "https://randomuser.me/api/portraits/women/12.jpg",
+    "rate": "$120.00/hr",
+    "rating": 4.8,
+    "jobs": 65,
+    "consultation": "$200 per hour",
+    "desc": "Product Manager with expertise in agile methodologies",
+    "stats": {
+      "earnings": "$60k+",
+      "jobs": 10,
+      "hours": 500
+    },
+    "about": "Experienced Product Manager with a strong background in leading cross-functional teams.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "German: Native",
+      "English: Fluent"
+    ],
+    "lastReview": {
+      "title": "Outstanding leadership",
+      "stars": 5,
+      "text": "\"Lisa led our project to success with exceptional skills and dedication.\"",
+      "price": "$4,000",
+      "rate": "$120/hr",
+      "time": "33 hours",
+      "dates": "Jan 10, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "mike-t-456",
+    "name": "Mike T.",
+    "country": "USA",
+    "role": "Data Analyst",
+    "avatar": "https://randomuser.me/api/portraits/men/34.jpg",
+    "rate": "$75.00/hr",
+    "rating": 4.6,
+    "jobs": 50,
+    "consultation": "$100 per hour",
+    "desc": "Data Analyst specializing in business intelligence",
+    "stats": {
+      "earnings": "$30k+",
+      "jobs": 8,
+      "hours": 400
+    },
+    "about": "Data Analyst with a passion for turning data into actionable insights.",
+    "hoursPerWeek": "10-15 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Conversational"
+    ],
+    "lastReview": {
+      "title": "Highly skilled and reliable",
+      "stars": 5,
+      "text": "\"Mike provided valuable insights that helped us make informed decisions.\"",
+      "price": "$2,500",
+      "rate": "$75/hr",
+      "time": "20 hours",
+      "dates": "Mar 1, 2024 - Mar 20, 2024"
+    }
+  },
+  {
+    "slug": "sara-l-789",
+    "name": "Sara L.",
+    "country": "Canada",
+    "role": "UX Designer",
+    "avatar": "https://randomuser.me/api/portraits/women/22.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.9,
+    "jobs": 75,
+    "consultation": "$130 per hour",
+    "desc": "UX Designer focused on user-centered design",
+    "stats": {
+      "earnings": "$50k+",
+      "jobs": 12,
+      "hours": 450
+    },
+    "about": "Creative UX Designer with a knack for enhancing user experiences.",
+    "hoursPerWeek": "15-25 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "French: Conversational"
+    ],
+    "lastReview": {
+      "title": "Exceptional design skills",
+      "stars": 5,
+      "text": "\"Sara's designs significantly improved our product's usability.\"",
+      "price": "$3,000",
+      "rate": "$85/hr",
+      "time": "25 hours",
+      "dates": "Feb 15, 2024 - Mar 5, 2024"
+    }
+  },
+  {
+    "slug": "john-d-321",
+    "name": "John D.",
+    "country": "UK",
+    "role": "Software Engineer",
+    "avatar": "https://randomuser.me/api/portraits/men/15.jpg",
+    "rate": "$95.00/hr",
+    "rating": 4.7,
+    "jobs": 90,
+    "consultation": "$150 per hour",
+    "desc": "Software Engineer with a focus on backend development",
+    "stats": {
+      "earnings": "$70k+",
+      "jobs": 15,
+      "hours": 600
+    },
+    "about": "Dedicated Software Engineer with extensive experience in building scalable applications.",
+    "hoursPerWeek": "30-40 hrs/week",
+    "languages": [
+      "English: Native",
+      "German: Conversational"
+    ],
+    "lastReview": {
+      "title": "Top-notch coding skills",
+      "stars": 5,
+      "text": "\"John delivered high-quality code and met all project deadlines.\"",
+      "price": "$5,500",
+      "rate": "$95/hr",
+      "time": "40 hours",
+      "dates": "Jan 5, 2024 - Feb 5, 2024"
+    }
+  },
+  {
+    "slug": "emily-s-654",
+    "name": "Emily S.",
+    "country": "Australia",
+    "role": "Marketing Specialist",
+    "avatar": "https://randomuser.me/api/portraits/women/33.jpg",
+    "rate": "$70.00/hr",
+    "rating": 4.5,
+    "jobs": 40,
+    "consultation": "$110 per hour",
+    "desc": "Marketing Specialist with expertise in digital marketing strategies",
+    "stats": {
+      "earnings": "$25k+",
+      "jobs": 6,
+      "hours": 300
+    },
+    "about": "Results-driven Marketing Specialist with a focus on increasing brand awareness.",
+    "hoursPerWeek": "10-20 hrs/week",
+    "languages": [
+      "English: Native",
+      "Chinese: Conversational"
+    ],
+    "lastReview": {
+      "title": "Great marketing strategies",
+      "stars": 5,
+      "text": "\"Emily's strategies helped us boost our online presence significantly.\"",
+      "price": "$2,000",
+      "rate": "$70/hr",
+      "time": "28 hours",
+      "dates": "Feb 10, 2024 - Mar 1, 2024"
+    }
+  },
+  {
+    "slug": "michael-b-123",
+    "name": "Michael B.",
+    "country": "USA",
+    "role": "Product Manager",
+    "avatar": "https://randomuser.me/api/portraits/men/12.jpg",
+    "rate": "$120.00/hr",
+    "rating": 4.8,
+    "jobs": 65,
+    "consultation": "$160 per hour",
+    "desc": "Product Manager with a focus on agile methodologies and user feedback.",
+    "stats": {
+      "earnings": "$80k+",
+      "jobs": 20,
+      "hours": 500
+    },
+    "about": "Experienced Product Manager adept at guiding teams to deliver high-quality products.",
+    "hoursPerWeek": "25-35 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Conversational"
+    ],
+    "lastReview": {
+      "title": "Outstanding product insights",
+      "stars": 5,
+      "text": "\"Michael's insights were pivotal in our product development process.\"",
+      "price": "$4,500",
+      "rate": "$120/hr",
+      "time": "30 hours",
+      "dates": "Mar 1, 2024 - Mar 15, 2024"
+    }
+  },
+  {
+    "slug": "lucy-t-456",
+    "name": "Lucy T.",
+    "country": "Canada",
+    "role": "Data Analyst",
+    "avatar": "https://randomuser.me/api/portraits/women/18.jpg",
+    "rate": "$90.00/hr",
+    "rating": 4.6,
+    "jobs": 50,
+    "consultation": "$140 per hour",
+    "desc": "Data Analyst specializing in data visualization and business intelligence.",
+    "stats": {
+      "earnings": "$60k+",
+      "jobs": 10,
+      "hours": 400
+    },
+    "about": "Detail-oriented Data Analyst with a passion for turning data into actionable insights.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "Mandarin: Basic"
+    ],
+    "lastReview": {
+      "title": "Exceptional data insights",
+      "stars": 5,
+      "text": "\"Lucy's analysis helped us make informed decisions quickly.\"",
+      "price": "$3,200",
+      "rate": "$90/hr",
+      "time": "35 hours",
+      "dates": "Feb 20, 2024 - Mar 10, 2024"
+    }
+  },
+  {
+    "slug": "oliver-w-789",
+    "name": "Oliver W.",
+    "country": "UK",
+    "role": "Software Engineer",
+    "avatar": "https://randomuser.me/api/portraits/men/25.jpg",
+    "rate": "$100.00/hr",
+    "rating": 4.7,
+    "jobs": 80,
+    "consultation": "$150 per hour",
+    "desc": "Full Stack Software Engineer with expertise in modern web technologies.",
+    "stats": {
+      "earnings": "$75k+",
+      "jobs": 18,
+      "hours": 550
+    },
+    "about": "Skilled Software Engineer with a strong background in both frontend and backend development.",
+    "hoursPerWeek": "30-40 hrs/week",
+    "languages": [
+      "English: Native",
+      "French: Conversational"
+    ],
+    "lastReview": {
+      "title": "Highly skilled engineer",
+      "stars": 5,
+      "text": "\"Oliver delivered exceptional code quality and met tight deadlines.\"",
+      "price": "$6,000",
+      "rate": "$100/hr",
+      "time": "50 hours",
+      "dates": "Jan 15, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "sophia-k-321",
+    "name": "Sophia K.",
+    "country": "Australia",
+    "role": "UX Designer",
+    "avatar": "https://randomuser.me/api/portraits/women/30.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.9,
+    "jobs": 55,
+    "consultation": "$130 per hour",
+    "desc": "UX Designer with a passion for creating intuitive user experiences.",
+    "stats": {
+      "earnings": "$45k+",
+      "jobs": 12,
+      "hours": 400
+    },
+    "about": "Creative UX Designer dedicated to enhancing user satisfaction through design.",
+    "hoursPerWeek": "15-25 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "Italian: Basic"
+    ],
+    "lastReview": {
+      "title": "Incredible design work",
+      "stars": 5,
+      "text": "\"Sophia's designs transformed our app's user experience completely.\"",
+      "price": "$3,500",
+      "rate": "$85/hr",
+      "time": "40 hours",
+      "dates": "Feb 5, 2024 - Feb 25, 2024"
+    }
+  },
+  {
+    "slug": "liam-j-654",
+    "name": "Liam J.",
+    "country": "Germany",
+    "role": "Marketing Consultant",
+    "avatar": "https://randomuser.me/api/portraits/men/20.jpg",
+    "rate": "$95.00/hr",
+    "rating": 4.8,
+    "jobs": 70,
+    "consultation": "$145 per hour",
+    "desc": "Marketing Consultant skilled in SEO and content marketing strategies.",
+    "stats": {
+      "earnings": "$55k+",
+      "jobs": 14,
+      "hours": 450
+    },
+    "about": "Results-oriented Marketing Consultant with a proven track record in driving traffic.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Native"
+    ],
+    "lastReview": {
+      "title": "Effective marketing strategies",
+      "stars": 5,
+      "text": "\"Liam's strategies significantly increased our website traffic and conversions.\"",
+      "price": "$4,000",
+      "rate": "$95/hr",
+      "time": "45 hours",
+      "dates": "Jan 10, 2024 - Feb 5, 2024"
+    }
+  },
+  {
+    "slug": "ava-n-456",
+    "name": "Ava N.",
+    "country": "Canada",
+    "role": "Data Analyst",
+    "avatar": "https://randomuser.me/api/portraits/women/15.jpg",
+    "rate": "$90.00/hr",
+    "rating": 4.6,
+    "jobs": 40,
+    "consultation": "$140 per hour",
+    "desc": "Data Analyst with expertise in data visualization and statistical analysis.",
+    "stats": {
+      "earnings": "$50k+",
+      "jobs": 10,
+      "hours": 350
+    },
+    "about": "Detail-oriented Data Analyst focused on delivering actionable insights.",
+    "hoursPerWeek": "25-35 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Conversational"
+    ],
+    "lastReview": {
+      "title": "Invaluable insights",
+      "stars": 5,
+      "text": "\"Ava provided insights that transformed our data strategy!\"",
+      "price": "$3,200",
+      "rate": "$90/hr",
+      "time": "30 hours",
+      "dates": "Feb 1, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "noah-t-789",
+    "name": "Noah T.",
+    "country": "UK",
+    "role": "Product Manager",
+    "avatar": "https://randomuser.me/api/portraits/men/35.jpg",
+    "rate": "$110.00/hr",
+    "rating": 4.8,
+    "jobs": 60,
+    "consultation": "$160 per hour",
+    "desc": "Product Manager with a focus on agile methodologies and user-centric design.",
+    "stats": {
+      "earnings": "$70k+",
+      "jobs": 20,
+      "hours": 600
+    },
+    "about": "Experienced Product Manager skilled in driving product vision and strategy.",
+    "hoursPerWeek": "40-50 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Basic"
+    ],
+    "lastReview": {
+      "title": "Exceptional product guidance",
+      "stars": 5,
+      "text": "\"Noah's leadership was key in our product success!\"",
+      "price": "$5,500",
+      "rate": "$110/hr",
+      "time": "50 hours",
+      "dates": "Jan 5, 2024 - Feb 5, 2024"
+    }
+  },
+  {
+    "slug": "emma-s-234",
+    "name": "Emma S.",
+    "country": "Australia",
+    "role": "Graphic Designer",
+    "avatar": "https://randomuser.me/api/portraits/women/45.jpg",
+    "rate": "$75.00/hr",
+    "rating": 4.7,
+    "jobs": 50,
+    "consultation": "$120 per hour",
+    "desc": "Graphic Designer specializing in branding and visual storytelling.",
+    "stats": {
+      "earnings": "$40k+",
+      "jobs": 15,
+      "hours": 400
+    },
+    "about": "Creative Graphic Designer dedicated to crafting unique brand identities.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native",
+      "French: Basic"
+    ],
+    "lastReview": {
+      "title": "Outstanding design work",
+      "stars": 5,
+      "text": "\"Emma's designs perfectly captured our brand essence!\"",
+      "price": "$2,800",
+      "rate": "$75/hr",
+      "time": "37 hours",
+      "dates": "Feb 10, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "liam-b-123",
+    "name": "Liam B.",
+    "country": "Germany",
+    "role": "Software Engineer",
+    "avatar": "https://randomuser.me/api/portraits/men/12.jpg",
+    "rate": "$95.00/hr",
+    "rating": 4.9,
+    "jobs": 80,
+    "consultation": "$150 per hour",
+    "desc": "Software Engineer with a strong background in backend development.",
+    "stats": {
+      "earnings": "$80k+",
+      "jobs": 25,
+      "hours": 700
+    },
+    "about": "Passionate Software Engineer focused on building scalable applications.",
+    "hoursPerWeek": "35-45 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Native"
+    ],
+    "lastReview": {
+      "title": "Exceptional coding skills",
+      "stars": 5,
+      "text": "\"Liam delivered high-quality code and exceeded expectations!\"",
+      "price": "$4,500",
+      "rate": "$95/hr",
+      "time": "60 hours",
+      "dates": "Jan 15, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "mason-c-678",
+    "name": "Mason C.",
+    "country": "USA",
+    "role": "Marketing Specialist",
+    "avatar": "https://randomuser.me/api/portraits/men/40.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.5,
+    "jobs": 30,
+    "consultation": "$135 per hour",
+    "desc": "Marketing Specialist with expertise in digital marketing and analytics.",
+    "stats": {
+      "earnings": "$30k+",
+      "jobs": 8,
+      "hours": 250
+    },
+    "about": "Results-driven Marketing Specialist focused on optimizing campaigns.",
+    "hoursPerWeek": "15-25 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Conversational"
+    ],
+    "lastReview": {
+      "title": "Effective marketing strategies",
+      "stars": 4,
+      "text": "\"Mason's strategies helped improve our online presence!\"",
+      "price": "$2,200",
+      "rate": "$85/hr",
+      "time": "26 hours",
+      "dates": "Feb 1, 2024 - Feb 10, 2024"
+    }
+  },
+  {
+    "slug": "sophia-d-234",
+    "name": "Sophia D.",
+    "country": "UK",
+    "role": "UX Designer",
+    "avatar": "https://randomuser.me/api/portraits/women/50.jpg",
+    "rate": "$80.00/hr",
+    "rating": 4.6,
+    "jobs": 45,
+    "consultation": "$125 per hour",
+    "desc": "UX Designer with expertise in user research and interface design.",
+    "stats": {
+      "earnings": "$35k+",
+      "jobs": 10,
+      "hours": 300
+    },
+    "about": "Dedicated UX Designer focused on enhancing user experience.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "Italian: Basic"
+    ],
+    "lastReview": {
+      "title": "Great design insights",
+      "stars": 5,
+      "text": "\"Sophia's user research led to significant improvements in our app!\"",
+      "price": "$3,000",
+      "rate": "$80/hr",
+      "time": "40 hours",
+      "dates": "Feb 5, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "ethan-g-321",
+    "name": "Ethan G.",
+    "country": "Canada",
+    "role": "Data Scientist",
+    "avatar": "https://randomuser.me/api/portraits/men/55.jpg",
+    "rate": "$120.00/hr",
+    "rating": 4.9,
+    "jobs": 50,
+    "consultation": "$160 per hour",
+    "desc": "Data Scientist specializing in machine learning and predictive analytics.",
+    "stats": {
+      "earnings": "$90k+",
+      "jobs": 15,
+      "hours": 500
+    },
+    "about": "Innovative Data Scientist dedicated to solving complex problems.",
+    "hoursPerWeek": "30-40 hrs/week",
+    "languages": [
+      "English: Native",
+      "French: Conversational"
+    ],
+    "lastReview": {
+      "title": "Outstanding analytical skills",
+      "stars": 5,
+      "text": "\"Ethan's models provided incredible insights into our data!\"",
+      "price": "$4,800",
+      "rate": "$120/hr",
+      "time": "60 hours",
+      "dates": "Jan 20, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "isabella-h-987",
+    "name": "Isabella H.",
+    "country": "Australia",
+    "role": "Product Designer",
+    "avatar": "https://randomuser.me/api/portraits/women/60.jpg",
+    "rate": "$95.00/hr",
+    "rating": 4.7,
+    "jobs": 35,
+    "consultation": "$150 per hour",
+    "desc": "Product Designer focused on creating user-friendly products.",
+    "stats": {
+      "earnings": "$55k+",
+      "jobs": 12,
+      "hours": 400
+    },
+    "about": "Creative Product Designer dedicated to enhancing user satisfaction.",
+    "hoursPerWeek": "25-35 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Basic"
+    ],
+    "lastReview": {
+      "title": "Incredible design solutions",
+      "stars": 5,
+      "text": "\"Isabella's designs significantly improved our product usability!\"",
+      "price": "$3,500",
+      "rate": "$95/hr",
+      "time": "45 hours",
+      "dates": "Feb 10, 2024 - Feb 25, 2024"
+    }
+  },
+  {
+    "slug": "james-k-654",
+    "name": "James K.",
+    "country": "Germany",
+    "role": "Software Developer",
+    "avatar": "https://randomuser.me/api/portraits/men/70.jpg",
+    "rate": "$100.00/hr",
+    "rating": 4.8,
+    "jobs": 65,
+    "consultation": "$155 per hour",
+    "desc": "Software Developer with expertise in frontend technologies.",
+    "stats": {
+      "earnings": "$75k+",
+      "jobs": 20,
+      "hours": 600
+    },
+    "about": "Skilled Software Developer focused on building interactive web applications.",
+    "hoursPerWeek": "35-45 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "Spanish: Basic"
+    ],
+    "lastReview": {
+      "title": "Exceptional frontend skills",
+      "stars": 5,
+      "text": "\"James created a stunning interface for our web app!\"",
+      "price": "$5,000",
+      "rate": "$100/hr",
+      "time": "50 hours",
+      "dates": "Jan 15, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "olivia-m-432",
+    "name": "Olivia M.",
+    "country": "USA",
+    "role": "Marketing Consultant",
+    "avatar": "https://randomuser.me/api/portraits/women/75.jpg",
+    "rate": "$90.00/hr",
+    "rating": 4.6,
+    "jobs": 40,
+    "consultation": "$140 per hour",
+    "desc": "Marketing Consultant specializing in social media strategies.",
+    "stats": {
+      "earnings": "$50k+",
+      "jobs": 10,
+      "hours": 300
+    },
+    "about": "Creative Marketing Consultant focused on enhancing brand visibility.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native",
+      "French: Basic"
+    ],
+    "lastReview": {
+      "title": "Great marketing strategies",
+      "stars": 5,
+      "text": "\"Olivia's strategies boosted our social media engagement!\"",
+      "price": "$3,200",
+      "rate": "$90/hr",
+      "time": "30 hours",
+      "dates": "Feb 1, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "benjamin-l-321",
+    "name": "Benjamin L.",
+    "country": "Canada",
+    "role": "Data Engineer",
+    "avatar": "https://randomuser.me/api/portraits/men/80.jpg",
+    "rate": "$115.00/hr",
+    "rating": 4.7,
+    "jobs": 55,
+    "consultation": "$150 per hour",
+    "desc": "Data Engineer with expertise in ETL processes and data warehousing.",
+    "stats": {
+      "earnings": "$60k+",
+      "jobs": 15,
+      "hours": 450
+    },
+    "about": "Skilled Data Engineer dedicated to optimizing data workflows.",
+    "hoursPerWeek": "30-40 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Basic"
+    ],
+    "lastReview": {
+      "title": "Excellent data solutions",
+      "stars": 5,
+      "text": "\"Benjamin's work streamlined our data processing significantly!\"",
+      "price": "$4,000",
+      "rate": "$115/hr",
+      "time": "40 hours",
+      "dates": "Jan 10, 2024 - Feb 10, 2024"
+    }
+  },
+  {
+    "slug": "charlotte-p-678",
+    "name": "Charlotte P.",
+    "country": "Australia",
+    "role": "Product Owner",
+    "avatar": "https://randomuser.me/api/portraits/women/85.jpg",
+    "rate": "$125.00/hr",
+    "rating": 4.9,
+    "jobs": 30,
+    "consultation": "$170 per hour",
+    "desc": "Product Owner focused on maximizing product value.",
+    "stats": {
+      "earnings": "$80k+",
+      "jobs": 20,
+      "hours": 400
+    },
+    "about": "Results-oriented Product Owner skilled in stakeholder engagement.",
+    "hoursPerWeek": "25-35 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Conversational"
+    ],
+    "lastReview": {
+      "title": "Invaluable product insights",
+      "stars": 5,
+      "text": "\"Charlotte's insights were crucial for our product launch!\"",
+      "price": "$5,500",
+      "rate": "$125/hr",
+      "time": "50 hours",
+      "dates": "Jan 15, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "jackson-r-234",
+    "name": "Jackson R.",
+    "country": "USA",
+    "role": "Web Developer",
+    "avatar": "https://randomuser.me/api/portraits/men/90.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.5,
+    "jobs": 65,
+    "consultation": "$130 per hour",
+    "desc": "Web Developer specializing in responsive design and user experience.",
+    "stats": {
+      "earnings": "$45k+",
+      "jobs": 18,
+      "hours": 500
+    },
+    "about": "Creative Web Developer focused on delivering high-quality web solutions.",
+    "hoursPerWeek": "30-40 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "French: Basic"
+    ],
+    "lastReview": {
+      "title": "Fantastic web solutions",
+      "stars": 5,
+      "text": "\"Jackson's work significantly improved our website's performance!\"",
+      "price": "$3,000",
+      "rate": "$85/hr",
+      "time": "35 hours",
+      "dates": "Feb 5, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "madison-q-456",
+    "name": "Madison Q.",
+    "country": "Germany",
+    "role": "SEO Specialist",
+    "avatar": "https://randomuser.me/api/portraits/women/95.jpg",
+    "rate": "$90.00/hr",
+    "rating": 4.8,
+    "jobs": 50,
+    "consultation": "$140 per hour",
+    "desc": "SEO Specialist with a focus on improving search engine rankings.",
+    "stats": {
+      "earnings": "$55k+",
+      "jobs": 12,
+      "hours": 400
+    },
+    "about": "Results-driven SEO Specialist dedicated to enhancing online visibility.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Native"
+    ],
+    "lastReview": {
+      "title": "Significant traffic growth",
+      "stars": 5,
+      "text": "\"Madison's strategies led to a remarkable increase in our traffic!\"",
+      "price": "$3,800",
+      "rate": "$90/hr",
+      "time": "40 hours",
+      "dates": "Jan 20, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "henry-s-789",
+    "name": "Henry S.",
+    "country": "USA",
+    "role": "Content Writer",
+    "avatar": "https://randomuser.me/api/portraits/men/100.jpg",
+    "rate": "$70.00/hr",
+    "rating": 4.6,
+    "jobs": 40,
+    "consultation": "$110 per hour",
+    "desc": "Content Writer specializing in engaging and SEO-friendly content.",
+    "stats": {
+      "earnings": "$30k+",
+      "jobs": 15,
+      "hours": 300
+    },
+    "about": "Creative Content Writer focused on delivering high-quality articles.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Basic"
+    ],
+    "lastReview": {
+      "title": "Outstanding writing skills",
+      "stars": 5,
+      "text": "\"Henry's content significantly improved our blog's engagement!\"",
+      "price": "$2,500",
+      "rate": "$70/hr",
+      "time": "35 hours",
+      "dates": "Feb 1, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "grace-t-456",
+    "name": "Grace T.",
+    "country": "Canada",
+    "role": "Digital Marketing Manager",
+    "avatar": "https://randomuser.me/api/portraits/women/105.jpg",
+    "rate": "$95.00/hr",
+    "rating": 4.7,
+    "jobs": 30,
+    "consultation": "$150 per hour",
+    "desc": "Digital Marketing Manager with expertise in PPC and social media marketing.",
+    "stats": {
+      "earnings": "$60k+",
+      "jobs": 10,
+      "hours": 300
+    },
+    "about": "Results-oriented Digital Marketing Manager focused on driving online campaigns.",
+    "hoursPerWeek": "25-35 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "French: Basic"
+    ],
+    "lastReview": {
+      "title": "Effective digital strategies",
+      "stars": 5,
+      "text": "\"Grace's strategies significantly improved our online presence!\"",
+      "price": "$3,700",
+      "rate": "$95/hr",
+      "time": "40 hours",
+      "dates": "Jan 15, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "daniel-u-678",
+    "name": "Daniel U.",
+    "country": "Australia",
+    "role": "Software Architect",
+    "avatar": "https://randomuser.me/api/portraits/men/110.jpg",
+    "rate": "$130.00/hr",
+    "rating": 4.9,
+    "jobs": 20,
+    "consultation": "$180 per hour",
+    "desc": "Software Architect with expertise in system design and cloud solutions.",
+    "stats": {
+      "earnings": "$100k+",
+      "jobs": 5,
+      "hours": 250
+    },
+    "about": "Innovative Software Architect focused on designing scalable systems.",
+    "hoursPerWeek": "30-40 hrs/week",
+    "languages": [
+      "English: Native",
+      "Chinese: Basic"
+    ],
+    "lastReview": {
+      "title": "Exceptional architecture skills",
+      "stars": 5,
+      "text": "\"Daniel's architecture significantly improved our system performance!\"",
+      "price": "$6,000",
+      "rate": "$130/hr",
+      "time": "50 hours",
+      "dates": "Feb 5, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "madeline-v-234",
+    "name": "Madeline V.",
+    "country": "Germany",
+    "role": "Business Analyst",
+    "avatar": "https://randomuser.me/api/portraits/women/115.jpg",
+    "rate": "$100.00/hr",
+    "rating": 4.8,
+    "jobs": 25,
+    "consultation": "$150 per hour",
+    "desc": "Business Analyst with expertise in process optimization and data analysis.",
+    "stats": {
+      "earnings": "$70k+",
+      "jobs": 10,
+      "hours": 300
+    },
+    "about": "Detail-oriented Business Analyst focused on improving business processes.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Native"
+    ],
+    "lastReview": {
+      "title": "Invaluable business insights",
+      "stars": 5,
+      "text": "\"Madeline's analysis led to significant efficiency improvements!\"",
+      "price": "$4,200",
+      "rate": "$100/hr",
+      "time": "40 hours",
+      "dates": "Jan 10, 2024 - Feb 10, 2024"
+    }
+  },
+  {
+    "slug": "oliver-j-789",
+    "name": "Oliver J.",
+    "country": "Canada",
+    "role": "Content Strategist",
+    "avatar": "https://randomuser.me/api/portraits/men/120.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.6,
+    "jobs": 30,
+    "consultation": "$130 per hour",
+    "desc": "Content Strategist focused on developing content strategies that drive engagement.",
+    "stats": {
+      "earnings": "$40k+",
+      "jobs": 10,
+      "hours": 250
+    },
+    "about": "Creative Content Strategist dedicated to enhancing brand storytelling.",
+    "hoursPerWeek": "15-25 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Basic"
+    ],
+    "lastReview": {
+      "title": "Fantastic content direction",
+      "stars": 5,
+      "text": "\"Oliver's strategies significantly improved our engagement metrics!\"",
+      "price": "$2,800",
+      "rate": "$85/hr",
+      "time": "30 hours",
+      "dates": "Feb 5, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "sophia-w-456",
+    "name": "Sophia W.",
+    "country": "Australia",
+    "role": "Marketing Analyst",
+    "avatar": "https://randomuser.me/api/portraits/women/125.jpg",
+    "rate": "$95.00/hr",
+    "rating": 4.7,
+    "jobs": 20,
+    "consultation": "$140 per hour",
+    "desc": "Marketing Analyst specializing in market research and data analysis.",
+    "stats": {
+      "earnings": "$50k+",
+      "jobs": 8,
+      "hours": 200
+    },
+    "about": "Dedicated Marketing Analyst focused on delivering actionable insights.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "French: Basic"
+    ],
+    "lastReview": {
+      "title": "Great market insights",
+      "stars": 5,
+      "text": "\"Sophia's research provided valuable insights for our strategy!\"",
+      "price": "$3,000",
+      "rate": "$95/hr",
+      "time": "30 hours",
+      "dates": "Feb 1, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "elijah-z-321",
+    "name": "Elijah Z.",
+    "country": "Germany",
+    "role": "Graphic Designer",
+    "avatar": "https://randomuser.me/api/portraits/men/130.jpg",
+    "rate": "$80.00/hr",
+    "rating": 4.8,
+    "jobs": 25,
+    "consultation": "$125 per hour",
+    "desc": "Graphic Designer with expertise in digital illustrations and branding.",
+    "stats": {
+      "earnings": "$45k+",
+      "jobs": 12,
+      "hours": 300
+    },
+    "about": "Creative Graphic Designer focused on delivering unique visual solutions.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "Italian: Basic"
+    ],
+    "lastReview": {
+      "title": "Exceptional design work",
+      "stars": 5,
+      "text": "\"Elijah's illustrations brought our brand to life!\"",
+      "price": "$3,200",
+      "rate": "$80/hr",
+      "time": "40 hours",
+      "dates": "Jan 20, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "amelia-b-678",
+    "name": "Amelia B.",
+    "country": "Canada",
+    "role": "Software Tester",
+    "avatar": "https://randomuser.me/api/portraits/women/135.jpg",
+    "rate": "$75.00/hr",
+    "rating": 4.7,
+    "jobs": 30,
+    "consultation": "$120 per hour",
+    "desc": "Software Tester with expertise in automation and manual testing.",
+    "stats": {
+      "earnings": "$35k+",
+      "jobs": 10,
+      "hours": 200
+    },
+    "about": "Detail-oriented Software Tester focused on ensuring quality.",
+    "hoursPerWeek": "15-25 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Basic"
+    ],
+    "lastReview": {
+      "title": "Thorough testing process",
+      "stars": 5,
+      "text": "\"Amelia's testing ensured our software was bug-free!\"",
+      "price": "$2,500",
+      "rate": "$75/hr",
+      "time": "30 hours",
+      "dates": "Feb 5, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "chloe-n-234",
+    "name": "Chloe N.",
+    "country": "Australia",
+    "role": "Business Consultant",
+    "avatar": "https://randomuser.me/api/portraits/women/140.jpg",
+    "rate": "$90.00/hr",
+    "rating": 4.6,
+    "jobs": 20,
+    "consultation": "$135 per hour",
+    "desc": "Business Consultant specializing in process improvement and strategy.",
+    "stats": {
+      "earnings": "$50k+",
+      "jobs": 8,
+      "hours": 200
+    },
+    "about": "Experienced Business Consultant focused on driving operational success.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Basic"
+    ],
+    "lastReview": {
+      "title": "Invaluable business insights",
+      "stars": 5,
+      "text": "\"Chloe's recommendations improved our efficiency!\"",
+      "price": "$3,000",
+      "rate": "$90/hr",
+      "time": "30 hours",
+      "dates": "Jan 15, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "jack-a-567",
+    "name": "Jack A.",
+    "country": "Germany",
+    "role": "Data Analyst",
+    "avatar": "https://randomuser.me/api/portraits/men/145.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.5,
+    "jobs": 25,
+    "consultation": "$130 per hour",
+    "desc": "Data Analyst with expertise in data mining and business intelligence.",
+    "stats": {
+      "earnings": "$40k+",
+      "jobs": 10,
+      "hours": 250
+    },
+    "about": "Detail-oriented Data Analyst focused on delivering insightful analysis.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Native"
+    ],
+    "lastReview": {
+      "title": "Great analytical skills",
+      "stars": 5,
+      "text": "\"Jack's analysis helped us make informed decisions!\"",
+      "price": "$3,000",
+      "rate": "$85/hr",
+      "time": "30 hours",
+      "dates": "Jan 20, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "zoe-l-890",
+    "name": "Zoe L.",
+    "country": "Canada",
+    "role": "Product Manager",
+    "avatar": "https://randomuser.me/api/portraits/women/150.jpg",
+    "rate": "$110.00/hr",
+    "rating": 4.8,
+    "jobs": 30,
+    "consultation": "$160 per hour",
+    "desc": "Product Manager with a focus on agile project management.",
+    "stats": {
+      "earnings": "$75k+",
+      "jobs": 12,
+      "hours": 300
+    },
+    "about": "Experienced Product Manager dedicated to delivering high-quality products.",
+    "hoursPerWeek": "30-40 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Conversational"
+    ],
+    "lastReview": {
+      "title": "Exceptional product leadership",
+      "stars": 5,
+      "text": "\"Zoe's leadership was crucial for our project success!\"",
+      "price": "$4,500",
+      "rate": "$110/hr",
+      "time": "50 hours",
+      "dates": "Jan 10, 2024 - Feb 10, 2024"
+    }
+  },
+  {
+    "slug": "michael-d-234",
+    "name": "Michael D.",
+    "country": "USA",
+    "role": "Software Engineer",
+    "avatar": "https://randomuser.me/api/portraits/men/155.jpg",
+    "rate": "$100.00/hr",
+    "rating": 4.9,
+    "jobs": 45,
+    "consultation": "$155 per hour",
+    "desc": "Software Engineer with expertise in cloud computing and DevOps.",
+    "stats": {
+      "earnings": "$85k+",
+      "jobs": 20,
+      "hours": 600
+    },
+    "about": "Innovative Software Engineer focused on delivering scalable solutions.",
+    "hoursPerWeek": "35-45 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "Spanish: Basic"
+    ],
+    "lastReview": {
+      "title": "Exceptional cloud solutions",
+      "stars": 5,
+      "text": "\"Michael's solutions significantly improved our infrastructure!\"",
+      "price": "$5,200",
+      "rate": "$100/hr",
+      "time": "60 hours",
+      "dates": "Feb 1, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "hannah-e-789",
+    "name": "Hannah E.",
+    "country": "Canada",
+    "role": "Content Writer",
+    "avatar": "https://randomuser.me/api/portraits/women/160.jpg",
+    "rate": "$70.00/hr",
+    "rating": 4.5,
+    "jobs": 30,
+    "consultation": "$110 per hour",
+    "desc": "Content Writer specializing in blog and article writing.",
+    "stats": {
+      "earnings": "$30k+",
+      "jobs": 12,
+      "hours": 300
+    },
+    "about": "Creative Content Writer focused on delivering engaging content.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native",
+      "French: Basic"
+    ],
+    "lastReview": {
+      "title": "Great writing skills",
+      "stars": 5,
+      "text": "\"Hannah's articles significantly increased our readership!\"",
+      "price": "$2,700",
+      "rate": "$70/hr",
+      "time": "35 hours",
+      "dates": "Jan 20, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "nathan-f-234",
+    "name": "Nathan F.",
+    "country": "USA",
+    "role": "Data Scientist",
+    "avatar": "https://randomuser.me/api/portraits/men/165.jpg",
+    "rate": "$120.00/hr",
+    "rating": 4.9,
+    "jobs": 20,
+    "consultation": "$180 per hour",
+    "desc": "Data Scientist specializing in AI and machine learning.",
+    "stats": {
+      "earnings": "$95k+",
+      "jobs": 5,
+      "hours": 150
+    },
+    "about": "Innovative Data Scientist dedicated to leveraging data for insights.",
+    "hoursPerWeek": "15-25 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "Mandarin: Basic"
+    ],
+    "lastReview": {
+      "title": "Outstanding AI models",
+      "stars": 5,
+      "text": "\"Nathan's models provided incredible insights for our business!\"",
+      "price": "$6,500",
+      "rate": "$120/hr",
+      "time": "50 hours",
+      "dates": "Feb 5, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "scarlett-g-678",
+    "name": "Scarlett G.",
+    "country": "Canada",
+    "role": "UX Designer",
+    "avatar": "https://randomuser.me/api/portraits/women/170.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.6,
+    "jobs": 25,
+    "consultation": "$130 per hour",
+    "desc": "UX Designer focused on creating intuitive user interfaces.",
+    "stats": {
+      "earnings": "$45k+",
+      "jobs": 10,
+      "hours": 200
+    },
+    "about": "Dedicated UX Designer focused on enhancing user satisfaction.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Basic"
+    ],
+    "lastReview": {
+      "title": "Great user experience",
+      "stars": 5,
+      "text": "\"Scarlett's designs greatly improved user interaction with our app!\"",
+      "price": "$3,000",
+      "rate": "$85/hr",
+      "time": "30 hours",
+      "dates": "Feb 1, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "joseph-h-456",
+    "name": "Joseph H.",
+    "country": "Germany",
+    "role": "Software Engineer",
+    "avatar": "https://randomuser.me/api/portraits/men/175.jpg",
+    "rate": "$100.00/hr",
+    "rating": 4.9,
+    "jobs": 50,
+    "consultation": "$150 per hour",
+    "desc": "Software Engineer with expertise in full-stack development.",
+    "stats": {
+      "earnings": "$80k+",
+      "jobs": 20,
+      "hours": 500
+    },
+    "about": "Innovative Software Engineer focused on delivering robust solutions.",
+    "hoursPerWeek": "35-45 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Native"
+    ],
+    "lastReview": {
+      "title": "Exceptional full-stack skills",
+      "stars": 5,
+      "text": "\"Joseph's contributions were invaluable to our project!\"",
+      "price": "$5,000",
+      "rate": "$100/hr",
+      "time": "50 hours",
+      "dates": "Jan 15, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "ava-j-789",
+    "name": "Ava J.",
+    "country": "Australia",
+    "role": "Digital Marketing Specialist",
+    "avatar": "https://randomuser.me/api/portraits/women/180.jpg",
+    "rate": "$90.00/hr",
+    "rating": 4.7,
+    "jobs": 30,
+    "consultation": "$140 per hour",
+    "desc": "Digital Marketing Specialist with expertise in content marketing.",
+    "stats": {
+      "earnings": "$50k+",
+      "jobs": 10,
+      "hours": 300
+    },
+    "about": "Creative Digital Marketing Specialist dedicated to enhancing online presence.",
+    "hoursPerWeek": "25-35 hrs/week",
+    "languages": [
+      "English: Native",
+      "French: Basic"
+    ],
+    "lastReview": {
+      "title": "Effective digital strategies",
+      "stars": 5,
+      "text": "\"Ava's strategies significantly boosted our online engagement!\"",
+      "price": "$3,200",
+      "rate": "$90/hr",
+      "time": "30 hours",
+      "dates": "Feb 5, 2024 - Feb 15, 2024"
+    }
+  },
+  {
+    "slug": "lucas-k-456",
+    "name": "Lucas K.",
+    "country": "Canada",
+    "role": "Data Analyst",
+    "avatar": "https://randomuser.me/api/portraits/men/185.jpg",
+    "rate": "$85.00/hr",
+    "rating": 4.5,
+    "jobs": 25,
+    "consultation": "$130 per hour",
+    "desc": "Data Analyst with expertise in data visualization and reporting.",
+    "stats": {
+      "earnings": "$40k+",
+      "jobs": 10,
+      "hours": 250
+    },
+    "about": "Detail-oriented Data Analyst focused on delivering clear insights.",
+    "hoursPerWeek": "20-30 hrs/week",
+    "languages": [
+      "English: Fluent",
+      "German: Basic"
+    ],
+    "lastReview": {
+      "title": "Great reporting skills",
+      "stars": 5,
+      "text": "\"Lucas's reports helped us make informed decisions!\"",
+      "price": "$3,000",
+      "rate": "$85/hr",
+      "time": "30 hours",
+      "dates": "Jan 20, 2024 - Feb 20, 2024"
+    }
+  },
+  {
+    "slug": "madison-m-789",
+    "name": "Madison M.",
+    "country": "Australia",
+    "role": "Product Designer",
+    "avatar": "https://randomuser.me/api/portraits/women/190.jpg",
+    "rate": "$95.00/hr",
+    "rating": 4.8,
+    "jobs": 20,
+    "consultation": "$150 per hour",
+    "desc": "Product Designer focused on user-centered design principles.",
+    "stats": {
+      "earnings": "$60k+",
+      "jobs": 10,
+      "hours": 300
+    },
+    "about": "Creative Product Designer dedicated to enhancing user experience.",
+    "hoursPerWeek": "25-35 hrs/week",
+    "languages": [
+      "English: Native",
+      "Spanish: Basic"
+    ],
+    "lastReview": {
+      "title": "Outstanding design work",
+      "stars": 5,
+      "text": "\"Madison's designs significantly improved our product usability!\"",
+      "price": "$3,500",
+      "rate": "$95/hr",
+      "time": "40 hours",
+      "dates": "Feb 5, 2024 - Feb 20, 2024"
+    }
   }
 ]

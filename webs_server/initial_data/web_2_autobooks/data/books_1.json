@@ -4711,5 +4711,90 @@
       "Literary Fiction"
     ],
     "title": "Book (Edition 44)"
+  },
+  {
+    "id": "book-exp-045",
+    "name": "Educated",
+    "desc": "A memoir by Tara Westover, detailing her journey from a survivalist family to earning a PhD from Cambridge University.",
+    "year": 2018,
+    "img": "/media/gallery/9780399590504.jpg",
+    "director": "Tara Westover",
+    "duration": 336,
+    "trailer_url": "https://www.bookstores.com/books/educated/9780399590504",
+    "rating": 4.7,
+    "price": 16.99,
+    "genres": [
+      "Memoir",
+      "Nonfiction"
+    ],
+    "title": "Book (Edition 45)"
+  },
+  {
+    "id": "book-exp-046",
+    "name": "The Vanishing Half",
+    "desc": "A multi-generational tale of twin sisters whose lives diverge when one decides to pass as white.",
+    "year": 2020,
+    "img": "/media/gallery/9780525536291.jpg",
+    "director": "Brit Bennett",
+    "duration": 352,
+    "trailer_url": "https://www.bookstores.com/books/vanishing-half/9780525536291",
+    "rating": 4.5,
+    "price": 17.99,
+    "genres": [
+      "Fiction",
+      "Literary Fiction"
+    ],
+    "title": "Book (Edition 46)"
+  },
+  {
+    "id": "book-exp-047",
+    "name": "The Midnight Library",
+    "desc": "A woman finds herself in a library between life and death, where she can explore alternate versions of her life.",
+    "year": 2020,
+    "img": "/media/gallery/9780525624301.jpg",
+    "director": "Matt Haig",
+    "duration": 304,
+    "trailer_url": "https://www.bookstores.com/books/midnight-library/9780525624301",
+    "rating": 4.4,
+    "price": 14.99,
+    "genres": [
+      "Fantasy",
+      "Fiction"
+    ],
+    "title": "Book (Edition 47)"
+  },
+  {
+    "id": "book-exp-048",
+    "name": "Crying in H Mart",
+    "desc": "A memoir about love, loss, and the Korean-American experience, centered around food and family.",
+    "year": 2021,
+    "img": "/media/gallery/9780593139318.jpg",
+    "director": "Michelle Zauner",
+    "duration": 256,
+    "trailer_url": "https://www.bookstores.com/books/crying-in-h-mart/9780593139318",
+    "rating": 4.6,
+    "price": 15.99,
+    "genres": [
+      "Memoir",
+      "Nonfiction"
+    ],
+    "title": "Book (Edition 48)"
+  },
+  {
+    "id": "book-exp-049",
+    "name": "Where the Crawdads Sing",
+    "desc": "A coming-of-age story set in the marshes of North Carolina, blending mystery and romance.",
+    "year": 2018,
+    "img": "/media/gallery/9780735219090.jpg",
+    "director": "Delia Owens",
+    "duration": 368,
+    "trailer_url": "https://www.bookstores.com/books/where-the-crawdads-sing/9780735219090",
+    "rating": 4.8,
+    "price": 18.99,
+    "genres": [
+      "Fiction",
+      "Mystery"
+    ],
+    "title": "Book (Edition 49)"
   }
 ]
