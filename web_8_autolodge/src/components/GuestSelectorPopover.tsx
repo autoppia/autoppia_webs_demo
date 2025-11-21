@@ -33,29 +33,45 @@ export function GuestSelectorPopover({
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent sideOffset={12} align="end" className="min-w-[370px] p-0 pt-2 bg-white rounded-3xl border shadow-xl">
         <div className="p-6 w-full flex flex-col gap-1">
-          {DEFAULTS.map((row) => (
-            <div className="flex items-center justify-between py-3" key={row.key}>
-              <div className="flex flex-col">
-                <span className="font-semibold text-[17px]">{getText(row.labelKey)}</span>
-                <span className="text-sm text-neutral-400">{getText(row.subKey)}</span>
+          {DEFAULTS.map((row) => {
+            const labelFallbacks: Record<string, string> = {
+              adults_label: "Adults",
+              children_label: "Children",
+              infants_label: "Infants",
+              pets_label: "Pets",
+            };
+            const subFallbacks: Record<string, string> = {
+              adults_sub: "Ages 13 or above",
+              children_sub: "Ages 2 – 12",
+              infants_sub: "Under 2",
+              pets_sub: "Bringing a service animal?",
+            };
+            const labelText = getText(row.labelKey, labelFallbacks[row.labelKey] || row.key);
+            const subText = getText(row.subKey, subFallbacks[row.subKey] || "");
+            return (
+              <div className="flex items-center justify-between py-3" key={row.key}>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-[17px]">{labelText}</span>
+                  <span className="text-sm text-neutral-400">{subText}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    className="w-8 h-8 flex items-center justify-center rounded-full border text-xl bg-white disabled:opacity-40"
+                    onClick={() => changeCount(row.key as keyof GuestCounts, -1)}
+                    disabled={counts[row.key as keyof GuestCounts] <= row.min}
+                    aria-label={`${getText("decrease", "Decrease")} ${labelText}`}
+                  >–</button>
+                  <span className="min-w-[16px] text-neutral-700 tabular-nums text-lg text-center">{counts[row.key as keyof GuestCounts]}</span>
+                  <button
+                    className="w-8 h-8 flex items-center justify-center rounded-full border text-xl bg-white disabled:opacity-40"
+                    onClick={() => changeCount(row.key as keyof GuestCounts, 1)}
+                    disabled={counts[row.key as keyof GuestCounts] >= row.max}
+                    aria-label={`${getText("increase", "Increase")} ${labelText}`}
+                  >+</button>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  className="w-8 h-8 flex items-center justify-center rounded-full border text-xl bg-white disabled:opacity-40"
-                  onClick={() => changeCount(row.key as keyof GuestCounts, -1)}
-                  disabled={counts[row.key as keyof GuestCounts] <= row.min}
-                  aria-label={`${getText("decrease")} ${getText(row.labelKey)}`}
-                >–</button>
-                <span className="min-w-[16px] text-neutral-700 tabular-nums text-lg text-center">{counts[row.key as keyof GuestCounts]}</span>
-                <button
-                  className="w-8 h-8 flex items-center justify-center rounded-full border text-xl bg-white disabled:opacity-40"
-                  onClick={() => changeCount(row.key as keyof GuestCounts, 1)}
-                  disabled={counts[row.key as keyof GuestCounts] >= row.max}
-                  aria-label={`${getText("increase")} ${getText(row.labelKey)}`}
-                >+</button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </PopoverContent>
     </Popover>
