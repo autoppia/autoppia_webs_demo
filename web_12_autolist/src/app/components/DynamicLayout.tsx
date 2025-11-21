@@ -98,12 +98,18 @@ function DynamicLayoutContent({ children, sidebarProps }: DynamicLayoutProps) {
           order: isDynamicEnabled ? index : config.order,
         };
 
-        // Apply specific positioning for sidebar based on layout config
+        // Apply specific positioning for sidebar based on layout config and placement
+        // The className from layout config already handles most positioning, but we ensure
+        // the inline style doesn't conflict and respects the placement
         if (key === 'sidebar' && 'placement' in config) {
           const sidebarConfig = config as SidebarConfig;
-          if (sidebarConfig.placement === 'floating') {
-            elementStyle.position = 'absolute';
-          }
+          
+          // Ensure position is set correctly from config
+          elementStyle.position = getElementPosition(config);
+          
+          // The className from layout config handles all positioning
+          // We just ensure the position property matches the config
+          // No need to override width/height as className handles it
         }
 
         return (

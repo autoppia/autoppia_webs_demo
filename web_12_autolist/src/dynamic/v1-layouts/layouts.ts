@@ -425,66 +425,154 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   const baseLayout = LAYOUTS[mappedSeed];
   
   // Dynamically adjust sidebar placement based on seed
-  // Alternate between left and right: even seeds = right, odd seeds = left
-  // This gives a 50/50 distribution
-  const shouldPlaceSidebarRight = (seed % 2) === 0;
+  // Use seed to determine placement: left, right, top, bottom, or floating
+  // This creates more variety in sidebar positioning
+  const placementOptions: Array<'left' | 'right' | 'top' | 'bottom' | 'floating'> = ['left', 'right', 'top', 'bottom', 'floating'];
+  const placementIndex = seed % placementOptions.length;
+  const targetPlacement = placementOptions[placementIndex];
   
-  // Don't modify floating sidebars
   const currentPlacement = baseLayout.elements.sidebar.placement;
-  if (currentPlacement === 'floating' || currentPlacement === 'top' || currentPlacement === 'bottom') {
+  
+  // If placement is already what we want, return base layout
+  if (currentPlacement === targetPlacement) {
     return baseLayout;
   }
   
-  // Only modify if the placement should change from the base layout
-  const needsChange = (shouldPlaceSidebarRight && currentPlacement !== 'right') ||
-                     (!shouldPlaceSidebarRight && currentPlacement !== 'left');
-  
-  if (!needsChange) {
-    return baseLayout;
-  }
-  
-  // Helper function to swap left/right positioning in className
-  const swapSidebarPosition = (className: string, toRight: boolean): string => {
-    if (toRight) {
-      return className
-        .replace(/\bleft-0\b/g, 'right-0')
-        .replace(/\bleft-16\b/g, 'right-16')
-        .replace(/\bborder-r\b/g, 'border-l');
-    } else {
-      return className
-        .replace(/\bright-0\b/g, 'left-0')
-        .replace(/\bright-16\b/g, 'left-16')
-        .replace(/\bborder-l\b/g, 'border-r');
+  // Helper function to generate sidebar className based on placement
+  const getSidebarClassName = (placement: 'left' | 'right' | 'top' | 'bottom' | 'floating'): string => {
+    const baseStyles = 'bg-[#f8f6f2] flex flex-col justify-between px-4 pb-4 pt-2 z-30';
+    
+    switch (placement) {
+      case 'left':
+        return `w-[280px] ${baseStyles} min-h-screen border-r border-gray-200 fixed top-0 left-0 h-full`;
+      case 'right':
+        return `w-[280px] ${baseStyles} min-h-screen border-l border-gray-200 fixed top-0 right-0 h-full`;
+      case 'top':
+        return `w-full ${baseStyles} border-b border-gray-200 fixed top-0 left-0 right-0 h-auto max-h-[300px]`;
+      case 'bottom':
+        return `w-full ${baseStyles} border-t border-gray-200 fixed bottom-0 left-0 right-0 h-auto max-h-[300px]`;
+      case 'floating':
+        return `w-[280px] ${baseStyles} border border-gray-200 rounded-lg shadow-lg absolute top-4 right-4 max-h-[calc(100vh-2rem)]`;
+      default:
+        return baseLayout.elements.sidebar.className;
     }
   };
   
-  // Helper function to swap content margins
-  const swapContentMargin = (className: string, sidebarRight: boolean): string => {
-    if (sidebarRight) {
-      return className
-        .replace(/\bml-\[280px\]/g, 'mr-[280px]')
-        .replace(/\bml-\[296px\]/g, 'mr-[296px]');
-    } else {
-      return className
-        .replace(/\bmr-\[280px\]/g, 'ml-[280px]')
-        .replace(/\bmr-\[296px\]/g, 'ml-[296px]');
+  // Helper function to adjust content margins based on sidebar placement
+  const getContentClassName = (placement: 'left' | 'right' | 'top' | 'bottom' | 'floating', currentContentClass: string): string => {
+    // Remove existing margin and padding classes that depend on sidebar position
+    let adjusted = currentContentClass
+      .replace(/\bml-\[280px\]/g, '')
+      .replace(/\bmr-\[280px\]/g, '')
+      .replace(/\bml-\[296px\]/g, '')
+      .replace(/\bmr-\[296px\]/g, '')
+      .replace(/\bpt-\[300px\]/g, '')
+      .replace(/\bpb-\[300px\]/g, '')
+      .replace(/\s+/g, ' ') // Normalize multiple spaces
+      .trim();
+    
+    // Add appropriate margins/padding based on sidebar placement
+    switch (placement) {
+      case 'left':
+        adjusted = (adjusted + ' ml-[280px]').trim();
+        break;
+      case 'right':
+        adjusted = (adjusted + ' mr-[280px]').trim();
+        break;
+      case 'top':
+        adjusted = (adjusted + ' pt-[300px]').trim();
+        break;
+      case 'bottom':
+        adjusted = (adjusted + ' pb-[300px]').trim();
+        break;
+      case 'floating':
+        // Floating sidebar doesn't need content margin
+        break;
+    }
+    
+    // Add top padding for header if not already present and sidebar is not on top
+    if (!adjusted.includes('pt-') && placement !== 'top') {
+      adjusted = (adjusted + ' pt-16').trim();
+    }
+    
+    return adjusted.replace(/\s+/g, ' ').trim();
+  };
+  
+  // Determine sidebar position and order based on placement
+  const getSidebarPosition = (placement: 'left' | 'right' | 'top' | 'bottom' | 'floating'): 'static' | 'fixed' | 'sticky' | 'absolute' => {
+    switch (placement) {
+      case 'floating':
+        return 'absolute';
+      case 'left':
+      case 'right':
+      case 'top':
+      case 'bottom':
+        return 'fixed';
+      default:
+        return baseLayout.elements.sidebar.position;
     }
   };
+  
+  // Adjust element orders based on sidebar placement
+  // When sidebar is top, it should be first; when bottom, it should be last
+  // This affects the visual order when elements are shuffled
+  const getElementOrders = (placement: 'left' | 'right' | 'top' | 'bottom' | 'floating') => {
+    const baseOrders = {
+      header: baseLayout.elements.header.order,
+      sidebar: baseLayout.elements.sidebar.order,
+      content: baseLayout.elements.content.order,
+      footer: baseLayout.elements.footer.order,
+    };
+    
+    switch (placement) {
+      case 'top':
+        // Sidebar on top should appear first in DOM order for proper stacking
+        return {
+          header: Math.max(1, baseOrders.header - 1), // Move header down
+          sidebar: 0, // Sidebar first when on top
+          content: baseOrders.content,
+          footer: baseOrders.footer,
+        };
+      case 'bottom':
+        // Sidebar on bottom should appear last in DOM order
+        return {
+          header: baseOrders.header,
+          sidebar: 100, // Sidebar last when on bottom
+          content: baseOrders.content,
+          footer: Math.min(99, baseOrders.footer), // Move footer up
+        };
+      default:
+        // For left/right/floating, keep original orders but may be shuffled by reorderElements
+        return baseOrders;
+    }
+  };
+  
+  const elementOrders = getElementOrders(targetPlacement);
   
   // Create a modified layout with adjusted sidebar placement
   const modifiedLayout: LayoutConfig = {
     ...baseLayout,
     elements: {
       ...baseLayout.elements,
+      header: {
+        ...baseLayout.elements.header,
+        order: elementOrders.header,
+      },
       sidebar: {
         ...baseLayout.elements.sidebar,
-        placement: shouldPlaceSidebarRight ? 'right' : 'left',
-        className: swapSidebarPosition(baseLayout.elements.sidebar.className, shouldPlaceSidebarRight),
+        placement: targetPlacement,
+        position: getSidebarPosition(targetPlacement),
+        className: getSidebarClassName(targetPlacement),
+        order: elementOrders.sidebar,
       },
-      // Also adjust content margin based on sidebar placement
       content: {
         ...baseLayout.elements.content,
-        className: swapContentMargin(baseLayout.elements.content.className, shouldPlaceSidebarRight),
+        className: getContentClassName(targetPlacement, baseLayout.elements.content.className),
+        order: elementOrders.content,
+      },
+      footer: {
+        ...baseLayout.elements.footer,
+        order: elementOrders.footer,
       },
     },
   };
