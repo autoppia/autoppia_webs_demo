@@ -34,7 +34,13 @@ interface DynamicLayoutProps {
 
 // Component that uses useSearchParams - needs to be wrapped in Suspense
 function DynamicLayoutContent({ children, sidebarProps }: DynamicLayoutProps) {
-  const { layout, isDynamicEnabled } = useSeedLayout();
+  const {
+    layout,
+    isDynamicEnabled,
+    getElementAttributes,
+    getElementXPath,
+    reorderElements,
+  } = useSeedLayout();
   
   // Create container styles based on layout config
   const containerStyle: React.CSSProperties = {
@@ -45,39 +51,73 @@ function DynamicLayoutContent({ children, sidebarProps }: DynamicLayoutProps) {
   };
 
   // Render elements in the correct order based on layout config
-  const elements = [
-    { key: 'header', component: <Navbar className={layout.elements.header.className} />, config: layout.elements.header },
-    { key: 'sidebar', component: <Sidebar {...sidebarProps} className={layout.elements.sidebar.className} />, config: layout.elements.sidebar },
-    { key: 'content', component: children, config: layout.elements.content },
-    { key: 'footer', component: <Footer />, config: layout.elements.footer },
+  const baseElements = [
+    {
+      key: "header",
+      id: "header",
+      component: <Navbar className={layout.elements.header.className} />,
+      config: layout.elements.header,
+    },
+    {
+      key: "sidebar",
+      id: "sidebar",
+      component: <Sidebar {...sidebarProps} className={layout.elements.sidebar.className} />,
+      config: layout.elements.sidebar,
+    },
+    {
+      key: "content",
+      id: "content",
+      component: children,
+      config: layout.elements.content,
+    },
+    {
+      key: "footer",
+      id: "footer",
+      component: <Footer />,
+      config: layout.elements.footer,
+    },
   ];
 
-  // Sort elements by order
-  const sortedElements = elements.sort((a, b) => a.config.order - b.config.order);
+  // Shuffle elements based on seed when v1 is enabled
+  const shuffledElements = isDynamicEnabled 
+    ? reorderElements(baseElements)
+    : baseElements;
 
   return (
     <div 
       className={layout.container.className}
       style={containerStyle}
     >
-      {sortedElements.map(({ key, component, config }) => {
+      {shuffledElements.map(({ key, component, config }, index) => {
+        const elementAttributes = getElementAttributes(key, index);
+        const elementXPath = getElementXPath(key);
         const elementStyle: React.CSSProperties = {
           position: getElementPosition(config),
-          order: config.order,
+          // When v1 is enabled and elements are shuffled, use the shuffled index for order
+          // This changes the DOM order, which affects XPath and visual rendering
+          order: isDynamicEnabled ? index : config.order,
         };
 
-        // Apply specific positioning for sidebar
+        // Apply specific positioning for sidebar based on layout config and placement
+        // The className from layout config already handles most positioning, but we ensure
+        // the inline style doesn't conflict and respects the placement
         if (key === 'sidebar' && 'placement' in config) {
           const sidebarConfig = config as SidebarConfig;
-          if (sidebarConfig.placement === 'floating') {
-            elementStyle.position = 'absolute';
-          }
+          
+          // Ensure position is set correctly from config
+          elementStyle.position = getElementPosition(config);
+          
+          // The className from layout config handles all positioning
+          // We just ensure the position property matches the config
+          // No need to override width/height as className handles it
         }
 
         return (
           <div 
             key={key}
-            className={config.className}
+            {...elementAttributes}
+            data-xpath={elementXPath}
+            className={`${config.className} ${elementAttributes?.className ?? ""}`.trim()}
             style={elementStyle}
           >
             {component}

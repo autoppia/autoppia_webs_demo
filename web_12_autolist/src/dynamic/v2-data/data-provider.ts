@@ -1,21 +1,7 @@
-import { getSeedLayout } from "@/dynamic/v1-layouts";
+import { getSeedLayout, isDynamicEnabled } from "@/dynamic/v1-layouts";
 
 const isDynamicHtmlEnabled = (): boolean => {
-  const rawFlag =
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE ??
-    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
-    process.env.ENABLE_DYNAMIC_V1_STRUCTURE ??
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
-    process.env.ENABLE_DYNAMIC_V1 ??
-    "";
-
-  const normalized = rawFlag.toString().trim().toLowerCase();
-  return (
-    normalized === "true" ||
-    normalized === "1" ||
-    normalized === "yes" ||
-    normalized === "on"
-  );
+  return isDynamicEnabled();
 };
 
 class DynamicDataProvider {
