@@ -44,7 +44,7 @@ def load_example_data(project_key: str, entity_type: str, max_examples: int = 3)
         raise ValueError(f"No examples found in {data_file}")
 
     # Return up to max_examples
-    return data[:max_examples]
+    return data[-max_examples:]
 
 
 def infer_typescript_interface(examples: List[Dict[str, Any]], entity_type: str) -> str:
