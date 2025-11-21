@@ -7,8 +7,7 @@ export default function Header() {
   const pathname = usePathname();
   const { getText, getId } = useV3Attributes();
   const navItems = [
-    { name: getText("nav_stays"), href: "/", id: getId("nav_stays_link") },
-    { name: getText("nav_experiences"), href: "#", id: getId("nav_experiences_link") },
+    { name: getText("nav_stays", "Stays"), href: "/", id: getId("nav_stays_link") },
   ];
   return (
     <header className="w-full flex flex-col items-center border-b bg-white sticky top-0 z-20">
