@@ -7,7 +7,26 @@
     "nav_records": "Records",
     "nav_prescriptions": "Prescriptions",
     "cta_message": "Start a consultation",
-    "footer_cta": "Message care team"
+    "footer_cta": "Message care team",
+    "book_appointment": "Book Appointment",
+    "view_profile": "View Profile",
+    "book_now": "Book Now",
+    "browse_appointments": "Browse Appointments",
+    "view_prescription": "View Prescription",
+    "upload_record": "Upload Record",
+    "view_record": "View Record",
+    "contact_doctor": "Contact Doctor",
+    "view_reviews": "View All Reviews",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "booking": "Booking...",
+    "confirm_appointment": "Confirm Appointment",
+    "filter_all": "All",
+    "filter_diagnostic": "Diagnostic",
+    "filter_preventive": "Preventive",
+    "filter_treatment": "Treatment",
+    "filter_monitoring": "Monitoring"
   },
   "2": {
     "hero_title": "Coordinated care for every patient",
@@ -17,7 +36,18 @@
     "nav_records": "Medical Files",
     "nav_prescriptions": "Medications",
     "cta_message": "Chat with a clinician",
-    "footer_cta": "Contact support"
+    "footer_cta": "Contact support",
+    "book_appointment": "Schedule Visit",
+    "view_profile": "See Details",
+    "book_now": "Reserve Now",
+    "browse_appointments": "View Visits",
+    "upload_record": "Add Record",
+    "view_record": "See Details",
+    "filter_all": "Everything",
+    "filter_diagnostic": "Tests",
+    "filter_preventive": "Prevention",
+    "filter_treatment": "Therapy",
+    "filter_monitoring": "Tracking"
   },
   "3": {
     "hero_title": "Your digital hospital workspace",
@@ -27,7 +57,18 @@
     "nav_records": "Charts",
     "nav_prescriptions": "Rx Center",
     "cta_message": "Launch telehealth",
-    "footer_cta": "Request follow-up"
+    "footer_cta": "Request follow-up",
+    "book_appointment": "Arrange Session",
+    "view_profile": "Open Profile",
+    "book_now": "Plan Now",
+    "browse_appointments": "Check Schedules",
+    "upload_record": "Submit Record",
+    "view_record": "Open Record",
+    "filter_all": "Complete",
+    "filter_diagnostic": "Analysis",
+    "filter_preventive": "Wellness",
+    "filter_treatment": "Care",
+    "filter_monitoring": "Oversight"
   },
   "4": {
     "hero_title": "One hub for patients and staff",
@@ -37,7 +78,18 @@
     "nav_records": "Files",
     "nav_prescriptions": "Pharmacy",
     "cta_message": "Open triage flow",
-    "footer_cta": "Reach care desk"
+    "footer_cta": "Reach care desk",
+    "book_appointment": "Reserve Slot",
+    "view_profile": "Check Info",
+    "book_now": "Secure Now",
+    "browse_appointments": "View Calendar",
+    "upload_record": "Attach Record",
+    "view_record": "Check Record",
+    "filter_all": "Total",
+    "filter_diagnostic": "Exams",
+    "filter_preventive": "Screening",
+    "filter_treatment": "Intervention",
+    "filter_monitoring": "Surveillance"
   },
   "5": {
     "hero_title": "Modern care coordination",
@@ -47,7 +99,18 @@
     "nav_records": "History",
     "nav_prescriptions": "Orders",
     "cta_message": "Escalate to nurse",
-    "footer_cta": "Ask for assistance"
+    "footer_cta": "Ask for assistance",
+    "book_appointment": "Confirm Booking",
+    "view_profile": "Explore Profile",
+    "book_now": "Arrange Now",
+    "browse_appointments": "View Sessions",
+    "upload_record": "Post Record",
+    "view_record": "Review Record",
+    "filter_all": "Full",
+    "filter_diagnostic": "Assessment",
+    "filter_preventive": "Protection",
+    "filter_treatment": "Management",
+    "filter_monitoring": "Observation"
   },
   "6": {
     "hero_title": "Smart hospital operations",
@@ -57,7 +120,18 @@
     "nav_records": "Documents",
     "nav_prescriptions": "Medication",
     "cta_message": "Open intake form",
-    "footer_cta": "Connect with admin"
+    "footer_cta": "Connect with admin",
+    "book_appointment": "Secure Appointment",
+    "view_profile": "Review Details",
+    "book_now": "Plan Now",
+    "browse_appointments": "Check Agenda",
+    "upload_record": "Send Record",
+    "view_record": "Access Record",
+    "filter_all": "Entire",
+    "filter_diagnostic": "Evaluation",
+    "filter_preventive": "Maintenance",
+    "filter_treatment": "Procedure",
+    "filter_monitoring": "Review"
   },
   "7": {
     "hero_title": "Hyper-personalized care journeys",
@@ -67,7 +141,18 @@
     "nav_records": "Reports",
     "nav_prescriptions": "Treatments",
     "cta_message": "Notify doctor",
-    "footer_cta": "Request callback"
+    "footer_cta": "Request callback",
+    "book_appointment": "Request Visit",
+    "view_profile": "Access Profile",
+    "book_now": "Set Now",
+    "browse_appointments": "View Timeline",
+    "upload_record": "Share Record",
+    "view_record": "Show Record",
+    "filter_all": "Whole",
+    "filter_diagnostic": "Testing",
+    "filter_preventive": "Health",
+    "filter_treatment": "Therapy",
+    "filter_monitoring": "Tracking"
   },
   "8": {
     "hero_title": "Unified view of patient data",
@@ -77,7 +162,18 @@
     "nav_records": "Portfolio",
     "nav_prescriptions": "Dose Center",
     "cta_message": "Start escalation",
-    "footer_cta": "Flag an issue"
+    "footer_cta": "Flag an issue",
+    "book_appointment": "Set Meeting",
+    "view_profile": "Show Profile",
+    "book_now": "Create Now",
+    "browse_appointments": "View Planner",
+    "upload_record": "Provide Record",
+    "view_record": "Display Record",
+    "filter_all": "Complete Set",
+    "filter_diagnostic": "Lab Work",
+    "filter_preventive": "Wellness",
+    "filter_treatment": "Care Plan",
+    "filter_monitoring": "Follow-up"
   },
   "9": {
     "hero_title": "AI-assisted hospital workflows",
@@ -87,7 +183,18 @@
     "nav_records": "Vault",
     "nav_prescriptions": "Scripts",
     "cta_message": "Trigger workflow",
-    "footer_cta": "Ping dispatcher"
+    "footer_cta": "Ping dispatcher",
+    "book_appointment": "Create Booking",
+    "view_profile": "Display Info",
+    "book_now": "Begin Now",
+    "browse_appointments": "View Queue",
+    "upload_record": "Include Record",
+    "view_record": "Browse Record",
+    "filter_all": "All Items",
+    "filter_diagnostic": "Diagnosis",
+    "filter_preventive": "Prevention",
+    "filter_treatment": "Intervention",
+    "filter_monitoring": "Monitoring"
   },
   "10": {
     "hero_title": "End-to-end clinical operations",
@@ -97,6 +204,17 @@
     "nav_records": "Ledger",
     "nav_prescriptions": "Medication Hub",
     "cta_message": "Send care alert",
-    "footer_cta": "Open support ticket"
+    "footer_cta": "Open support ticket",
+    "book_appointment": "Book Slot",
+    "view_profile": "Browse Profile",
+    "book_now": "Book Immediately",
+    "browse_appointments": "View Runway",
+    "upload_record": "Insert Record",
+    "view_record": "Explore Record",
+    "filter_all": "Full Range",
+    "filter_diagnostic": "Examination",
+    "filter_preventive": "Screening",
+    "filter_treatment": "Therapy",
+    "filter_monitoring": "Surveillance"
   }
 }

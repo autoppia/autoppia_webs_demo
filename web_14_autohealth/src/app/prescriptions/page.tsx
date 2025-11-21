@@ -13,7 +13,7 @@ import { isDataGenerationAvailable } from "@/utils/healthDataGenerator";
 import { isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
 export default function PrescriptionsPage() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, getId, getClass, getText } = useSeedLayout();
   const [selectedPrescription, setSelectedPrescription] = useState<Prescription | null>(null);
   const [prescriptionList, setPrescriptionList] = useState<Prescription[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -98,6 +98,8 @@ export default function PrescriptionsPage() {
         {orderedStatuses.map((status, i) => (
           <DynamicElement key={status} elementType="status-filter" as="span" index={i}>
           <Button
+            id={getId("status-filter-button", i)}
+            className={getClass("button-secondary", "")}
             variant={selectedStatus === status ? "default" : "outline"}
             size="sm"
             onClick={() => {
@@ -160,7 +162,14 @@ export default function PrescriptionsPage() {
                   );
                   if (c.key === 'action') return (
                     <TableCell key={c.key} className="text-right">
-                      <Button onClick={() => handleViewPrescription(p)} size="sm">View Prescription</Button>
+                      <Button 
+                        id={getId("view-prescription-button", ri)}
+                        className={getClass("button-secondary", "")}
+                        onClick={() => handleViewPrescription(p)} 
+                        size="sm"
+                      >
+                        {getText("view_prescription", "View Prescription")}
+                      </Button>
                     </TableCell>
                   );
                   return null;
@@ -187,8 +196,13 @@ export default function PrescriptionsPage() {
                   )}
                 </div>
               </div>
-              <Button variant="outline" onClick={() => setSelectedPrescription(null)}>
-                Close
+              <Button 
+                id={getId("close-modal-button", 0)}
+                className={getClass("button-secondary", "")}
+                variant="outline" 
+                onClick={() => setSelectedPrescription(null)}
+              >
+                {getText("close", "Close")}
               </Button>
             </div>
             

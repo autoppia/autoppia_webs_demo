@@ -182,6 +182,9 @@ export function useSeedLayout() {
     [cssVariables, isDynamicEnabled]
   );
 
+  // Alias generateId as getId for consistency
+  const getId = generateId;
+
   return {
     seed,
     layout: layoutVariant,
@@ -195,6 +198,7 @@ export function useSeedLayout() {
     getElementXPath,
     reorderElements,
     generateId,
+    getId,
     getLayoutClasses: getLayoutClassTokens,
     applyCSSVariables,
     getLayoutInfo,

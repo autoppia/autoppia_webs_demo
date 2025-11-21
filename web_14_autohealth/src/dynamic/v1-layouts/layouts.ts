@@ -12,12 +12,19 @@ const DEFAULT_LAYOUT: SeedLayoutConfig = {
   spacing: "normal",
 };
 
+const truthy = (value?: string | null) =>
+  typeof value === "string" &&
+  ["true", "1", "yes", "on"].includes(value.toLowerCase());
+
 const isDynamicFlagEnabled = (): boolean => {
-  const flag =
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE ??
-    "";
-  return flag === "true" || flag === "1";
+  return (
+    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) ||
+    truthy(process.env.ENABLE_DYNAMIC_V1) ||
+    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) ||
+    truthy(process.env.ENABLE_DYNAMIC_V3) ||
+    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE) ||
+    truthy(process.env.DYNAMIC_HTML_STRUCTURE)
+  );
 };
 
 export function isDynamicEnabled(): boolean {
