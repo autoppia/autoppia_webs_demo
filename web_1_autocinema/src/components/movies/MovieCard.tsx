@@ -11,7 +11,7 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
     <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-xl backdrop-blur">
       <div
         className="aspect-[2/3] w-full rounded-2xl bg-cover bg-center"
-        style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5)), url(${movie.poster})` }}
+        style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5)), url(${movie.poster}), url('/media/gallery/default_movie.png')` }}
         aria-label={`${movie.title} poster`}
       />
 

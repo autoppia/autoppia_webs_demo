@@ -85993,5 +85993,200 @@
         "desc": "Large table and mountain views for productivity."
       }
     ]
+  },
+  {
+    "id": 2001,
+    "image": "/images/hotel3.jpeg",
+    "title": "Lakefront Retreat 101",
+    "location": "Lake Tahoe, USA",
+    "rating": 4.9,
+    "reviews": 320,
+    "guests": 8,
+    "maxGuests": 8,
+    "bedrooms": 4,
+    "beds": 5,
+    "baths": 3,
+    "datesFrom": "2025-05-01",
+    "datesTo": "2025-05-15",
+    "price": 450,
+    "host": {
+      "name": "Jessica",
+      "since": 4,
+      "avatar": "https://randomuser.me/api/portraits/women/22.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🔥",
+        "title": "Fireplace",
+        "desc": "Cozy up by the fireplace after a day of adventure."
+      },
+      {
+        "icon": "🏖️",
+        "title": "Beach access",
+        "desc": "Private access to the lake for swimming and relaxation."
+      },
+      {
+        "icon": "🍽️",
+        "title": "Outdoor dining",
+        "desc": "Enjoy meals on the terrace with stunning views."
+      },
+      {
+        "icon": "🚴",
+        "title": "Biking trails",
+        "desc": "Explore nearby trails with complimentary bikes."
+      }
+    ]
+  },
+  {
+    "id": 2002,
+    "image": "/images/hotel4.jpeg",
+    "title": "Tropical Paradise 205",
+    "location": "Goa, India",
+    "rating": 4.7,
+    "reviews": 150,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 2,
+    "baths": 2,
+    "datesFrom": "2025-06-10",
+    "datesTo": "2025-06-20",
+    "price": 120,
+    "host": {
+      "name": "Rahul",
+      "since": 3,
+      "avatar": "https://randomuser.me/api/portraits/men/30.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🌊",
+        "title": "Ocean views",
+        "desc": "Breathtaking views of the ocean from your balcony."
+      },
+      {
+        "icon": "🍹",
+        "title": "Bar service",
+        "desc": "Enjoy cocktails by the poolside bar."
+      },
+      {
+        "icon": "🏊",
+        "title": "Infinity pool",
+        "desc": "Relax in the infinity pool overlooking the beach."
+      }
+    ]
+  },
+  {
+    "id": 2003,
+    "image": "/images/hotel6.jpeg",
+    "title": "Alpine Lodge 308",
+    "location": "Zermatt, Switzerland",
+    "rating": 4.6,
+    "reviews": 200,
+    "guests": 5,
+    "maxGuests": 5,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-01-15",
+    "datesTo": "2025-01-30",
+    "price": 350,
+    "host": {
+      "name": "Martin",
+      "since": 7,
+      "avatar": "https://randomuser.me/api/portraits/men/31.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🛷",
+        "title": "Ski access",
+        "desc": "Direct access to ski slopes from the lodge."
+      },
+      {
+        "icon": "🧖",
+        "title": "Spa services",
+        "desc": "Relax with a range of spa treatments available."
+      },
+      {
+        "icon": "🍽️",
+        "title": "Gourmet dining",
+        "desc": "On-site restaurant with local cuisine."
+      }
+    ]
+  },
+  {
+    "id": 2004,
+    "image": "/images/hotel7.jpeg",
+    "title": "Serenity Villa 412",
+    "location": "Bali, Indonesia",
+    "rating": 4.8,
+    "reviews": 340,
+    "guests": 6,
+    "maxGuests": 6,
+    "bedrooms": 3,
+    "beds": 3,
+    "baths": 3,
+    "datesFrom": "2025-03-01",
+    "datesTo": "2025-03-15",
+    "price": 250,
+    "host": {
+      "name": "Siti",
+      "since": 5,
+      "avatar": "https://randomuser.me/api/portraits/women/10.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "🌺",
+        "title": "Garden view",
+        "desc": "Enjoy the lush garden views from your room."
+      },
+      {
+        "icon": "🧘",
+        "title": "Yoga space",
+        "desc": "Dedicated area for yoga and meditation."
+      },
+      {
+        "icon": "🍽️",
+        "title": "In-house chef",
+        "desc": "Gourmet meals prepared by a private chef."
+      }
+    ]
+  },
+  {
+    "id": 2005,
+    "image": "/images/hotel8.jpeg",
+    "title": "City Haven 519",
+    "location": "Tokyo, Japan",
+    "rating": 4.5,
+    "reviews": 280,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 2,
+    "baths": 1,
+    "datesFrom": "2025-07-01",
+    "datesTo": "2025-07-10",
+    "price": 180,
+    "host": {
+      "name": "Kenji",
+      "since": 6,
+      "avatar": "https://randomuser.me/api/portraits/men/40.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "📶",
+        "title": "Free WiFi",
+        "desc": "Stay connected with complimentary WiFi."
+      },
+      {
+        "icon": "🚉",
+        "title": "Public transport access",
+        "desc": "Convenient access to subway and bus lines."
+      },
+      {
+        "icon": "🍣",
+        "title": "Local cuisine",
+        "desc": "Experience authentic Japanese dining nearby."
+      }
+    ]
   }
 ]

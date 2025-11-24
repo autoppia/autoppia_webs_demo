@@ -14,7 +14,7 @@ export function MovieDetailHero({ movie, onWatchTrailer, onWatchlist, onShare }:
     <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#0b1120] via-[#05070d] to-[#04060c] p-6 text-white shadow-2xl lg:flex lg:items-center lg:gap-8">
       <div
         className="mx-auto aspect-[2/3] w-64 rounded-3xl border border-white/10 bg-cover bg-center shadow-2xl"
-        style={{ backgroundImage: `linear-gradient(180deg, rgba(12,17,32,0.2), rgba(4,6,12,0.8)), url(${movie.poster})` }}
+        style={{ backgroundImage: `linear-gradient(180deg, rgba(12,17,32,0.2), rgba(4,6,12,0.8)), url(${movie.poster}), url('/media/gallery/default_movie.png')` }}
       />
       <div className="mt-6 flex-1 space-y-4 lg:mt-0">
         <div className="flex flex-wrap items-center gap-3 text-sm uppercase tracking-widest text-white/60">

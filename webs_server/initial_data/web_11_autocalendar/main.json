@@ -1,5 +1,8 @@
 {
-    "events": [
-        "./data/events_1.json"
-    ]
+  "events": [
+    "./data/events_1.json"
+  ],
+  "calendar_events": [
+    "./data/calendar_events_1.json"
+  ]
 }

@@ -1,11 +1,11 @@
 {
-    "experts": [
-        "./data/experts_1.json"
-    ],
-    "hires": [
-        "./data/hires_1.json"
-    ],
-    "jobs": [
-        "./data/jobs_1.json"
-    ]
+  "experts": [
+    "./data/experts_1.json"
+  ],
+  "hires": [
+    "./data/hires_1.json"
+  ],
+  "jobs": [
+    "./data/jobs_1.json"
+  ]
 }

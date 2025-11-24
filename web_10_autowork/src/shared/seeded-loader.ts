@@ -48,7 +48,20 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
     throw new Error(`Seeded selection request failed: ${resp.status}`);
   }
   const json = await resp.json();
-  return (json?.data ?? []) as T[];
+  
+  // Check if API returned an error in the response body (common pattern: {detail: "error message"})
+  if (json?.detail && typeof json.detail === 'string' && !json?.data) {
+    throw new Error(`API error: ${json.detail}`);
+  }
+  
+  // Check if data is missing or empty
+  if (!json?.data || !Array.isArray(json.data)) {
+    const errorMsg = json?.detail || `No data returned from API for ${options.entityType}`;
+    throw new Error(errorMsg);
+  }
+  
+  // Return data even if empty array - let caller decide if empty is acceptable
+  return json.data as T[];
 }
 
 

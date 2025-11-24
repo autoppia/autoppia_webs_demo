@@ -17998,5 +17998,905 @@
     "hours": 2,
     "description": "Negotiation call",
     "status": "Billable"
+  },
+  {
+    "id": 2001,
+    "matter": "Contract Review",
+    "client": "Sophia Martinez",
+    "date": "2025-12-05",
+    "hours": 4.5,
+    "description": "Reviewed contract terms and conditions",
+    "status": "Billable"
+  },
+  {
+    "id": 2002,
+    "matter": "Mergers and Acquisitions",
+    "client": "David Johnson",
+    "date": "2025-11-30",
+    "hours": 6.0,
+    "description": "Due diligence review",
+    "status": "Billed"
+  },
+  {
+    "id": 2003,
+    "matter": "Intellectual Property",
+    "client": "Emma Wilson",
+    "date": "2025-12-01",
+    "hours": 2.5,
+    "description": "Trademark application preparation",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2004,
+    "matter": "Litigation Support",
+    "client": "Liam Brown",
+    "date": "2025-12-03",
+    "hours": 3.0,
+    "description": "Gathered evidence for case",
+    "status": "Billable"
+  },
+  {
+    "id": 2005,
+    "matter": "Family Law",
+    "client": "Olivia Smith",
+    "date": "2025-11-29",
+    "hours": 1.0,
+    "description": "Consultation regarding custody",
+    "status": "Billed"
+  },
+  {
+    "id": 2006,
+    "matter": "Corporate Law",
+    "client": "Sophia Johnson",
+    "date": "2025-12-05",
+    "hours": 4.0,
+    "description": "Drafting shareholder agreements",
+    "status": "Billable"
+  },
+  {
+    "id": 2007,
+    "matter": "Real Estate",
+    "client": "James Williams",
+    "date": "2025-12-06",
+    "hours": 2.0,
+    "description": "Reviewed lease agreements",
+    "status": "Billed"
+  },
+  {
+    "id": 2008,
+    "matter": "Criminal Defense",
+    "client": "Isabella Garcia",
+    "date": "2025-12-07",
+    "hours": 3.5,
+    "description": "Prepared defense strategy",
+    "status": "Billable"
+  },
+  {
+    "id": 2009,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2025-12-08",
+    "hours": 1.5,
+    "description": "Mediation session with clients",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2010,
+    "matter": "Intellectual Property",
+    "client": "Noah Rodriguez",
+    "date": "2025-12-09",
+    "hours": 5.0,
+    "description": "Filed patent application",
+    "status": "Billed"
+  },
+  {
+    "id": 2011,
+    "matter": "Litigation Support",
+    "client": "Liam Brown",
+    "date": "2025-12-10",
+    "hours": 2.5,
+    "description": "Reviewed discovery documents",
+    "status": "Billable"
+  },
+  {
+    "id": 2012,
+    "matter": "Trusts and Estates",
+    "client": "Emma Wilson",
+    "date": "2025-12-11",
+    "hours": 3.0,
+    "description": "Drafted will for client",
+    "status": "Billed"
+  },
+  {
+    "id": 2013,
+    "matter": "Corporate Law",
+    "client": "Olivia Smith",
+    "date": "2025-12-12",
+    "hours": 4.5,
+    "description": "Negotiated merger terms",
+    "status": "Billable"
+  },
+  {
+    "id": 2014,
+    "matter": "Real Estate",
+    "client": "Sophia Johnson",
+    "date": "2025-12-13",
+    "hours": 2.0,
+    "description": "Conducted property inspection",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2015,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2025-12-14",
+    "hours": 6.0,
+    "description": "Prepared for trial",
+    "status": "Billable"
+  },
+  {
+    "id": 2016,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2025-12-15",
+    "hours": 3.0,
+    "description": "Filed custody motion",
+    "status": "Billed"
+  },
+  {
+    "id": 2017,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2025-12-16",
+    "hours": 2.5,
+    "description": "Conducted trademark search",
+    "status": "Billable"
+  },
+  {
+    "id": 2018,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2025-12-17",
+    "hours": 4.0,
+    "description": "Assisted in trial preparation",
+    "status": "Billed"
+  },
+  {
+    "id": 2019,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2025-12-18",
+    "hours": 3.5,
+    "description": "Reviewed compliance documents",
+    "status": "Billable"
+  },
+  {
+    "id": 2020,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2025-12-19",
+    "hours": 1.0,
+    "description": "Consultation on estate planning",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2021,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2025-12-20",
+    "hours": 5.0,
+    "description": "Negotiated purchase agreement",
+    "status": "Billed"
+  },
+  {
+    "id": 2022,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2025-12-21",
+    "hours": 2.0,
+    "description": "Client consultation",
+    "status": "Billable"
+  },
+  {
+    "id": 2023,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2025-12-22",
+    "hours": 4.0,
+    "description": "Drafted divorce settlement",
+    "status": "Billed"
+  },
+  {
+    "id": 2024,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2025-12-23",
+    "hours": 3.0,
+    "description": "Consultation on copyright issues",
+    "status": "Billable"
+  },
+  {
+    "id": 2025,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2025-12-24",
+    "hours": 2.5,
+    "description": "Prepared evidence binder",
+    "status": "Billed"
+  },
+  {
+    "id": 2026,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2025-12-25",
+    "hours": 4.0,
+    "description": "Reviewed merger documents",
+    "status": "Billable"
+  },
+  {
+    "id": 2027,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2025-12-26",
+    "hours": 3.0,
+    "description": "Drafted trust documents",
+    "status": "Billed"
+  },
+  {
+    "id": 2028,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2025-12-27",
+    "hours": 2.0,
+    "description": "Reviewed zoning laws",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2029,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2025-12-28",
+    "hours": 5.0,
+    "description": "Filed motions for discovery",
+    "status": "Billable"
+  },
+  {
+    "id": 2030,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2025-12-29",
+    "hours": 1.5,
+    "description": "Consultation regarding child support",
+    "status": "Billed"
+  },
+  {
+    "id": 2031,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2025-12-30",
+    "hours": 3.5,
+    "description": "Trademark application review",
+    "status": "Billable"
+  },
+  {
+    "id": 2032,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2025-12-31",
+    "hours": 4.0,
+    "description": "Assisted in witness preparation",
+    "status": "Billed"
+  },
+  {
+    "id": 2033,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-01-01",
+    "hours": 2.0,
+    "description": "Reviewed corporate bylaws",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2034,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-01-02",
+    "hours": 3.0,
+    "description": "Consultation on estate tax",
+    "status": "Billed"
+  },
+  {
+    "id": 2035,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-01-03",
+    "hours": 4.5,
+    "description": "Negotiated lease terms",
+    "status": "Billable"
+  },
+  {
+    "id": 2036,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-01-04",
+    "hours": 2.5,
+    "description": "Client meeting for case review",
+    "status": "Billed"
+  },
+  {
+    "id": 2037,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-01-05",
+    "hours": 3.0,
+    "description": "Drafted prenuptial agreement",
+    "status": "Billable"
+  },
+  {
+    "id": 2038,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-01-06",
+    "hours": 5.0,
+    "description": "Filed trademark opposition",
+    "status": "Billed"
+  },
+  {
+    "id": 2039,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-01-07",
+    "hours": 2.0,
+    "description": "Conducted legal research",
+    "status": "Billable"
+  },
+  {
+    "id": 2040,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-01-08",
+    "hours": 4.0,
+    "description": "Reviewed financing documents",
+    "status": "Billed"
+  },
+  {
+    "id": 2041,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-01-09",
+    "hours": 3.5,
+    "description": "Consultation on probate process",
+    "status": "Billable"
+  },
+  {
+    "id": 2042,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-01-10",
+    "hours": 2.5,
+    "description": "Reviewed property title",
+    "status": "Billed"
+  },
+  {
+    "id": 2043,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-01-11",
+    "hours": 6.0,
+    "description": "Trial preparation meeting",
+    "status": "Billable"
+  },
+  {
+    "id": 2044,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-01-12",
+    "hours": 1.0,
+    "description": "Consultation on adoption process",
+    "status": "Billed"
+  },
+  {
+    "id": 2045,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-01-13",
+    "hours": 3.0,
+    "description": "Conducted copyright registration",
+    "status": "Billable"
+  },
+  {
+    "id": 2046,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-01-14",
+    "hours": 4.0,
+    "description": "Assisted in deposition preparation",
+    "status": "Billed"
+  },
+  {
+    "id": 2047,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-01-15",
+    "hours": 2.0,
+    "description": "Reviewed business contracts",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2048,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-01-16",
+    "hours": 3.0,
+    "description": "Drafted living trust",
+    "status": "Billed"
+  },
+  {
+    "id": 2049,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-01-17",
+    "hours": 4.5,
+    "description": "Negotiated sale agreement",
+    "status": "Billable"
+  },
+  {
+    "id": 2050,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-01-18",
+    "hours": 2.0,
+    "description": "Client follow-up meeting",
+    "status": "Billed"
+  },
+  {
+    "id": 2051,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-01-19",
+    "hours": 3.5,
+    "description": "Drafted child custody agreement",
+    "status": "Billable"
+  },
+  {
+    "id": 2052,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-01-20",
+    "hours": 5.0,
+    "description": "Filed patent infringement case",
+    "status": "Billed"
+  },
+  {
+    "id": 2053,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-01-21",
+    "hours": 2.5,
+    "description": "Prepared trial exhibits",
+    "status": "Billable"
+  },
+  {
+    "id": 2054,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-01-22",
+    "hours": 4.0,
+    "description": "Negotiated partnership agreement",
+    "status": "Billed"
+  },
+  {
+    "id": 2055,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-01-23",
+    "hours": 3.0,
+    "description": "Consultation on inheritance issues",
+    "status": "Billable"
+  },
+  {
+    "id": 2056,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-01-24",
+    "hours": 2.0,
+    "description": "Reviewed real estate contracts",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2057,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-01-25",
+    "hours": 6.0,
+    "description": "Trial strategy meeting",
+    "status": "Billable"
+  },
+  {
+    "id": 2058,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-01-26",
+    "hours": 1.5,
+    "description": "Consultation on divorce options",
+    "status": "Billed"
+  },
+  {
+    "id": 2059,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-01-27",
+    "hours": 3.5,
+    "description": "Conducted trademark analysis",
+    "status": "Billable"
+  },
+  {
+    "id": 2060,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-01-28",
+    "hours": 4.0,
+    "description": "Assisted in case filing",
+    "status": "Billed"
+  },
+  {
+    "id": 2061,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-01-29",
+    "hours": 2.0,
+    "description": "Reviewed compliance reports",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2062,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-01-30",
+    "hours": 3.0,
+    "description": "Drafted estate planning documents",
+    "status": "Billed"
+  },
+  {
+    "id": 2063,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-01-31",
+    "hours": 4.5,
+    "description": "Negotiated lease renewal",
+    "status": "Billable"
+  },
+  {
+    "id": 2064,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-02-01",
+    "hours": 2.5,
+    "description": "Client consultation",
+    "status": "Billed"
+  },
+  {
+    "id": 2065,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-02-02",
+    "hours": 3.0,
+    "description": "Drafted child support modification",
+    "status": "Billable"
+  },
+  {
+    "id": 2066,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-02-03",
+    "hours": 5.0,
+    "description": "Filed trademark renewal",
+    "status": "Billed"
+  },
+  {
+    "id": 2067,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-02-04",
+    "hours": 2.0,
+    "description": "Reviewed deposition transcripts",
+    "status": "Billable"
+  },
+  {
+    "id": 2068,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-02-05",
+    "hours": 4.0,
+    "description": "Negotiated employment contract",
+    "status": "Billed"
+  },
+  {
+    "id": 2069,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-02-06",
+    "hours": 3.5,
+    "description": "Consultation on trust administration",
+    "status": "Billable"
+  },
+  {
+    "id": 2070,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-02-07",
+    "hours": 2.5,
+    "description": "Reviewed property appraisal",
+    "status": "Billed"
+  },
+  {
+    "id": 2071,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-02-08",
+    "hours": 3.0,
+    "description": "Trial review meeting",
+    "status": "Billable"
+  },
+  {
+    "id": 2072,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-02-09",
+    "hours": 1.0,
+    "description": "Consultation on custody issues",
+    "status": "Billed"
+  },
+  {
+    "id": 2073,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-02-10",
+    "hours": 3.0,
+    "description": "Conducted patent search",
+    "status": "Billable"
+  },
+  {
+    "id": 2074,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-02-11",
+    "hours": 4.0,
+    "description": "Assisted in trial prep",
+    "status": "Billed"
+  },
+  {
+    "id": 2075,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-02-12",
+    "hours": 2.0,
+    "description": "Reviewed merger agreement",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2076,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-02-13",
+    "hours": 3.0,
+    "description": "Drafted estate documents",
+    "status": "Billed"
+  },
+  {
+    "id": 2077,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-02-14",
+    "hours": 4.5,
+    "description": "Negotiated closing documents",
+    "status": "Billable"
+  },
+  {
+    "id": 2078,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-02-15",
+    "hours": 2.5,
+    "description": "Client case review",
+    "status": "Billed"
+  },
+  {
+    "id": 2079,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-02-16",
+    "hours": 3.5,
+    "description": "Drafted custody agreement",
+    "status": "Billable"
+  },
+  {
+    "id": 2080,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-02-17",
+    "hours": 5.0,
+    "description": "Filed copyright infringement case",
+    "status": "Billed"
+  },
+  {
+    "id": 2081,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-02-18",
+    "hours": 2.0,
+    "description": "Conducted legal analysis",
+    "status": "Billable"
+  },
+  {
+    "id": 2082,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-02-19",
+    "hours": 4.0,
+    "description": "Reviewed corporate filings",
+    "status": "Billed"
+  },
+  {
+    "id": 2083,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-02-20",
+    "hours": 3.0,
+    "description": "Consultation on estate distribution",
+    "status": "Billable"
+  },
+  {
+    "id": 2084,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-02-21",
+    "hours": 2.5,
+    "description": "Reviewed lease agreement",
+    "status": "Billed"
+  },
+  {
+    "id": 2085,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-02-22",
+    "hours": 3.0,
+    "description": "Trial preparation meeting",
+    "status": "Billable"
+  },
+  {
+    "id": 2086,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-02-23",
+    "hours": 1.5,
+    "description": "Consultation on divorce settlement",
+    "status": "Billed"
+  },
+  {
+    "id": 2087,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-02-24",
+    "hours": 3.5,
+    "description": "Conducted trademark registration",
+    "status": "Billable"
+  },
+  {
+    "id": 2088,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-02-25",
+    "hours": 4.0,
+    "description": "Assisted in trial strategy",
+    "status": "Billed"
+  },
+  {
+    "id": 2089,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-02-26",
+    "hours": 2.0,
+    "description": "Reviewed shareholder agreement",
+    "status": "Non-billable"
+  },
+  {
+    "id": 2090,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-02-27",
+    "hours": 3.0,
+    "description": "Drafted will",
+    "status": "Billed"
+  },
+  {
+    "id": 2091,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-02-28",
+    "hours": 4.5,
+    "description": "Negotiated property sale",
+    "status": "Billable"
+  },
+  {
+    "id": 2092,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-03-01",
+    "hours": 2.5,
+    "description": "Client follow-up meeting",
+    "status": "Billed"
+  },
+  {
+    "id": 2093,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-03-02",
+    "hours": 3.0,
+    "description": "Drafted marital settlement agreement",
+    "status": "Billable"
+  },
+  {
+    "id": 2094,
+    "matter": "Intellectual Property",
+    "client": "Isabella Garcia",
+    "date": "2026-03-03",
+    "hours": 5.0,
+    "description": "Filed copyright registration",
+    "status": "Billed"
+  },
+  {
+    "id": 2095,
+    "matter": "Litigation Support",
+    "client": "James Williams",
+    "date": "2026-03-04",
+    "hours": 2.0,
+    "description": "Conducted case analysis",
+    "status": "Billable"
+  },
+  {
+    "id": 2096,
+    "matter": "Corporate Law",
+    "client": "Emma Wilson",
+    "date": "2026-03-05",
+    "hours": 4.0,
+    "description": "Reviewed corporate governance",
+    "status": "Billed"
+  },
+  {
+    "id": 2097,
+    "matter": "Trusts and Estates",
+    "client": "Olivia Smith",
+    "date": "2026-03-06",
+    "hours": 3.5,
+    "description": "Consultation on trust issues",
+    "status": "Billable"
+  },
+  {
+    "id": 2098,
+    "matter": "Real Estate",
+    "client": "Noah Rodriguez",
+    "date": "2026-03-07",
+    "hours": 2.5,
+    "description": "Reviewed mortgage documents",
+    "status": "Billed"
+  },
+  {
+    "id": 2099,
+    "matter": "Criminal Defense",
+    "client": "Liam Brown",
+    "date": "2026-03-08",
+    "hours": 3.0,
+    "description": "Client preparation for trial",
+    "status": "Billable"
+  },
+  {
+    "id": 2100,
+    "matter": "Family Law",
+    "client": "Mia Martinez",
+    "date": "2026-03-09",
+    "hours": 1.0,
+    "description": "Consultation on parenting plan",
+    "status": "Billed"
   }
 ]

@@ -1,5 +1,7 @@
 {
   "1": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Search hotels",
     "book_now": "Book Now",
     "view_details": "View Details",
@@ -16,6 +18,8 @@
     "reserve": "Reserve"
   },
   "2": {
+    "nav_stays": "Find stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Find accommodations",
     "book_now": "Reserve Now",
     "view_details": "See Details",
@@ -32,6 +36,8 @@
     "reserve": "Book"
   },
   "3": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Trips",
     "search_placeholder": "Look for hotels",
     "book_now": "Make Reservation",
     "view_details": "Hotel Info",
@@ -48,6 +54,8 @@
     "reserve": "Confirm"
   },
   "4": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Discover stays",
     "book_now": "Quick Booking",
     "view_details": "More Info",
@@ -64,6 +72,8 @@
     "reserve": "Secure"
   },
   "5": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Type hotel name",
     "book_now": "Instant Booking",
     "view_details": "Full Details",
@@ -80,6 +90,8 @@
     "reserve": "Lock In"
   },
   "6": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Find your stay",
     "book_now": "Reserve Spot",
     "view_details": "About Hotel",
@@ -96,6 +108,8 @@
     "reserve": "Schedule"
   },
   "7": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Search lodging",
     "book_now": "Submit Booking",
     "view_details": "Property Info",
@@ -112,6 +126,8 @@
     "reserve": "Finalize"
   },
   "8": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Hotel lookup",
     "book_now": "Place Booking",
     "view_details": "See Property",
@@ -128,6 +144,8 @@
     "reserve": "Commit"
   },
   "9": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Query accommodations",
     "book_now": "Get Reservation",
     "view_details": "Property Details",
@@ -144,6 +162,8 @@
     "reserve": "Approve"
   },
   "10": {
+    "nav_stays": "Stays",
+    "nav_experiences": "Experiences",
     "search_placeholder": "Find properties",
     "book_now": "Arrange Stay",
     "view_details": "Specifications",

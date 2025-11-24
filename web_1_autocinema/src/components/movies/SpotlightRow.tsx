@@ -23,7 +23,7 @@ export function SpotlightRow({ title, description, movies }: SpotlightRowProps) 
           <div key={movie.id} className="min-w-[220px] rounded-2xl border border-white/10 bg-white/5 p-4 text-white">
             <div
               className="aspect-video rounded-xl bg-cover bg-center"
-              style={{ backgroundImage: `linear-gradient(180deg, rgba(5,7,13,0.2), rgba(5,7,13,0.7)), url(${movie.poster})` }}
+              style={{ backgroundImage: `linear-gradient(180deg, rgba(5,7,13,0.2), rgba(5,7,13,0.7)), url(${movie.poster}), url('/media/gallery/default_movie.png')` }}
             />
             <p className="mt-3 text-sm uppercase text-white/50">{movie.genres[0] || "Genre"}</p>
             <h4 className="text-lg font-semibold leading-tight">{movie.title}</h4>

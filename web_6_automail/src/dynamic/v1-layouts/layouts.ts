@@ -32,9 +32,10 @@ export interface SeedLayoutConfig {
 }
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  // If no seed provided or dynamic HTML is disabled, return default
+  // If no seed provided or dynamic HTML is disabled, return layout index 1
+  // This is the layout that is "at seed=1" meaning layout index 1
   if (!seed || seed < 1 || seed > 300) {
-    return getDefaultLayout();
+    return getLayoutByIndex(1);
   }
 
   // Special case: Seeds 160-170 should use the same layout as seed 80 (Layout 3)
@@ -523,25 +524,9 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
 }
 
 function getDefaultLayout(): SeedLayoutConfig {
-  return {
-    headerOrder: ['logo', 'search', 'nav'],
-    searchPosition: 'center',
-    navbarStyle: 'top',
-    contentGrid: 'default',
-    cardLayout: 'grid',
-    buttonStyle: 'default',
-    footerStyle: 'default',
-    spacing: 'normal',
-    borderRadius: 'medium',
-    colorScheme: 'default',
-    emailLayout: 'list',
-    sidebarPosition: 'left',
-    emailDensity: 'comfortable',
-    threadView: 'single',
-    emailPreview: 'sidebar',
-    attachmentDisplay: 'list',
-    labelDisplay: 'badges',
-  };
+  // Return layout 1 (Classic Email-style layout) as the default
+  // This is the layout that is "at seed=1" meaning layout index 1
+  return getLayoutByIndex(1);
 }
 
 // Helper function to check if dynamic HTML is enabled
@@ -552,7 +537,9 @@ export function isDynamicEnabled(): boolean {
 // Helper function to get effective layout config
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
   if (!isDynamicEnabled()) {
-    return getDefaultLayout();
+    // When dynamic is disabled, return layout index 1 (Classic Email-style layout)
+    // This is the layout that is "at seed=1" meaning layout index 1
+    return getLayoutByIndex(1);
   }
   return getSeedLayout(seed);
 }

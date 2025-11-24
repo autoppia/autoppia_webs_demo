@@ -37998,5 +37998,1430 @@
       "Climate control",
       "Phone chargers"
     ]
+  },
+  {
+    "id": "r1998",
+    "name": "LuxurySedan 900",
+    "image": "/car8.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2600779409.svg",
+    "price": 75.0,
+    "oldPrice": 85.0,
+    "seats": 4,
+    "eta": "5 min away",
+    "desc": "Premium ride with leather seats",
+    "recommended": true,
+    "waitTime": "< 10 min",
+    "perMile": 2.0,
+    "perMinute": 0.8,
+    "features": [
+      "Leather interior",
+      "Wi-Fi"
+    ]
+  },
+  {
+    "id": "r1999",
+    "name": "EcoRide 101",
+    "image": "/car2.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2882408466.svg",
+    "price": 32.5,
+    "oldPrice": 37.0,
+    "seats": 4,
+    "eta": "3 min away",
+    "desc": "Affordable and eco-friendly",
+    "recommended": true,
+    "waitTime": "< 5 min",
+    "perMile": 1.2,
+    "perMinute": 0.5,
+    "features": [
+      "Hybrid engine",
+      "Recyclable materials"
+    ]
+  },
+  {
+    "id": "r2000",
+    "name": "CompactCar 202",
+    "image": "/car3.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2600779409.svg",
+    "price": 25.75,
+    "oldPrice": 30.0,
+    "seats": 4,
+    "eta": "7 min away",
+    "desc": "Perfect for city driving",
+    "recommended": false,
+    "waitTime": "< 8 min",
+    "perMile": 1.0,
+    "perMinute": 0.4,
+    "features": [
+      "Compact size",
+      "Bluetooth"
+    ]
+  },
+  {
+    "id": "r2001",
+    "name": "VanGo 150",
+    "image": "/car5.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2600779409.svg",
+    "price": 60.0,
+    "oldPrice": 70.0,
+    "seats": 8,
+    "eta": "10 min away",
+    "desc": "Ideal for large groups",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 1.75,
+    "perMinute": 0.9,
+    "features": [
+      "Extra luggage space",
+      "Child seats available"
+    ]
+  },
+  {
+    "id": "r2002",
+    "name": "SportyRide 300",
+    "image": "/car4.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2882408466.svg",
+    "price": 90.0,
+    "oldPrice": 100.0,
+    "seats": 2,
+    "eta": "6 min away",
+    "desc": "Fast and stylish for a thrilling ride",
+    "recommended": false,
+    "waitTime": "< 7 min",
+    "perMile": 3.0,
+    "perMinute": 1.2,
+    "features": [
+      "Sporty design",
+      "Premium sound system"
+    ]
+  },
+  {
+    "id": "r2003",
+    "name": "EcoRide 150",
+    "image": "/car6.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1234567890.svg",
+    "price": 22.5,
+    "oldPrice": 27.5,
+    "seats": 4,
+    "eta": "5 min away",
+    "desc": "Environmentally friendly and economical",
+    "recommended": true,
+    "waitTime": "< 6 min",
+    "perMile": 0.9,
+    "perMinute": 0.3,
+    "features": [
+      "Hybrid engine",
+      "Low emissions"
+    ]
+  },
+  {
+    "id": "r2004",
+    "name": "LuxuryLimo 500",
+    "image": "/car7.jpg",
+    "icon": "https://ext.same-assets.com/407674263/0987654321.svg",
+    "price": 150.0,
+    "oldPrice": 180.0,
+    "seats": 6,
+    "eta": "15 min away",
+    "desc": "Travel in style and comfort",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 4.0,
+    "perMinute": 1.5,
+    "features": [
+      "Leather seats",
+      "Champagne service"
+    ]
+  },
+  {
+    "id": "r2005",
+    "name": "FamilySUV 400",
+    "image": "/car8.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1122334455.svg",
+    "price": 80.0,
+    "oldPrice": 95.0,
+    "seats": 7,
+    "eta": "8 min away",
+    "desc": "Spacious and perfect for family trips",
+    "recommended": true,
+    "waitTime": "< 10 min",
+    "perMile": 2.5,
+    "perMinute": 0.8,
+    "features": [
+      "All-wheel drive",
+      "Entertainment system"
+    ]
+  },
+  {
+    "id": "r2006",
+    "name": "CityBike 100",
+    "image": "/bike1.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2233445566.svg",
+    "price": 15.0,
+    "oldPrice": 20.0,
+    "seats": 1,
+    "eta": "3 min away",
+    "desc": "Quick and easy transport around the city",
+    "recommended": false,
+    "waitTime": "< 4 min",
+    "perMile": 0.5,
+    "perMinute": 0.2,
+    "features": [
+      "Lightweight",
+      "Eco-friendly"
+    ]
+  },
+  {
+    "id": "r2007",
+    "name": "SportyCoupe 350",
+    "image": "/car9.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3344556677.svg",
+    "price": 85.0,
+    "oldPrice": 100.0,
+    "seats": 2,
+    "eta": "4 min away",
+    "desc": "For those who love speed and style",
+    "recommended": false,
+    "waitTime": "< 5 min",
+    "perMile": 3.2,
+    "perMinute": 1.1,
+    "features": [
+      "Turbocharged engine",
+      "Sport suspension"
+    ]
+  },
+  {
+    "id": "r2008",
+    "name": "Minivan 200",
+    "image": "/car10.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4455667788.svg",
+    "price": 50.0,
+    "oldPrice": 60.0,
+    "seats": 8,
+    "eta": "12 min away",
+    "desc": "Perfect for family outings",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 1.5,
+    "perMinute": 0.7,
+    "features": [
+      "Sliding doors",
+      "Child-friendly"
+    ]
+  },
+  {
+    "id": "r2009",
+    "name": "Convertible 600",
+    "image": "/car11.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5566778899.svg",
+    "price": 120.0,
+    "oldPrice": 140.0,
+    "seats": 2,
+    "eta": "9 min away",
+    "desc": "Enjoy the open air while driving",
+    "recommended": false,
+    "waitTime": "< 10 min",
+    "perMile": 3.5,
+    "perMinute": 1.4,
+    "features": [
+      "Retractable roof",
+      "Leather interior"
+    ]
+  },
+  {
+    "id": "r2010",
+    "name": "ElectricCar 300",
+    "image": "/car12.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6677889900.svg",
+    "price": 40.0,
+    "oldPrice": 50.0,
+    "seats": 4,
+    "eta": "6 min away",
+    "desc": "Quiet and efficient with zero emissions",
+    "recommended": true,
+    "waitTime": "< 7 min",
+    "perMile": 1.2,
+    "perMinute": 0.5,
+    "features": [
+      "Fast charging",
+      "Smart technology"
+    ]
+  },
+  {
+    "id": "r2011",
+    "name": "LuxurySUV 450",
+    "image": "/car13.jpg",
+    "icon": "https://ext.same-assets.com/407674263/7788990011.svg",
+    "price": 110.0,
+    "oldPrice": 130.0,
+    "seats": 5,
+    "eta": "14 min away",
+    "desc": "Luxury and comfort combined",
+    "recommended": true,
+    "waitTime": "< 18 min",
+    "perMile": 3.8,
+    "perMinute": 1.6,
+    "features": [
+      "Panoramic sunroof",
+      "Heated seats"
+    ]
+  },
+  {
+    "id": "r2012",
+    "name": "CompactSUV 250",
+    "image": "/car14.jpg",
+    "icon": "https://ext.same-assets.com/407674263/8899001122.svg",
+    "price": 55.0,
+    "oldPrice": 65.0,
+    "seats": 5,
+    "eta": "7 min away",
+    "desc": "Versatile and easy to park",
+    "recommended": true,
+    "waitTime": "< 8 min",
+    "perMile": 2.0,
+    "perMinute": 0.6,
+    "features": [
+      "Good fuel economy",
+      "Compact size"
+    ]
+  },
+  {
+    "id": "r2013",
+    "name": "CargoVan 350",
+    "image": "/car15.jpg",
+    "icon": "https://ext.same-assets.com/407674263/9900112233.svg",
+    "price": 70.0,
+    "oldPrice": 85.0,
+    "seats": 2,
+    "eta": "11 min away",
+    "desc": "Ideal for transporting goods",
+    "recommended": false,
+    "waitTime": "< 13 min",
+    "perMile": 1.8,
+    "perMinute": 0.7,
+    "features": [
+      "Large cargo space",
+      "Easy loading"
+    ]
+  },
+  {
+    "id": "r2014",
+    "name": "RuggedTruck 500",
+    "image": "/car16.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1011121314.svg",
+    "price": 90.0,
+    "oldPrice": 100.0,
+    "seats": 3,
+    "eta": "13 min away",
+    "desc": "Built for tough terrains",
+    "recommended": false,
+    "waitTime": "< 15 min",
+    "perMile": 2.2,
+    "perMinute": 0.9,
+    "features": [
+      "4x4 drive",
+      "Heavy-duty"
+    ]
+  },
+  {
+    "id": "r2015",
+    "name": "LuxurySedan 400",
+    "image": "/car17.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1213141516.svg",
+    "price": 95.0,
+    "oldPrice": 110.0,
+    "seats": 5,
+    "eta": "10 min away",
+    "desc": "Elegance and performance at its best",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 3.0,
+    "perMinute": 1.2,
+    "features": [
+      "Premium sound system",
+      "Advanced safety features"
+    ]
+  },
+  {
+    "id": "r2016",
+    "name": "CityScooter 90",
+    "image": "/scooter1.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1314151617.svg",
+    "price": 10.0,
+    "oldPrice": 15.0,
+    "seats": 1,
+    "eta": "2 min away",
+    "desc": "A fun way to get around town",
+    "recommended": false,
+    "waitTime": "< 3 min",
+    "perMile": 0.3,
+    "perMinute": 0.1,
+    "features": [
+      "Compact design",
+      "Easy to ride"
+    ]
+  },
+  {
+    "id": "r2017",
+    "name": "AdventureBike 200",
+    "image": "/bike2.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1415161718.svg",
+    "price": 20.0,
+    "oldPrice": 25.0,
+    "seats": 1,
+    "eta": "4 min away",
+    "desc": "Perfect for outdoor adventures",
+    "recommended": true,
+    "waitTime": "< 5 min",
+    "perMile": 0.6,
+    "perMinute": 0.25,
+    "features": [
+      "Durable",
+      "Off-road capabilities"
+    ]
+  },
+  {
+    "id": "r2018",
+    "name": "RetroCar 250",
+    "image": "/car18.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1516171819.svg",
+    "price": 75.0,
+    "oldPrice": 90.0,
+    "seats": 4,
+    "eta": "8 min away",
+    "desc": "Classic design with modern features",
+    "recommended": false,
+    "waitTime": "< 10 min",
+    "perMile": 2.8,
+    "perMinute": 1.0,
+    "features": [
+      "Vintage style",
+      "Modern technology"
+    ]
+  },
+  {
+    "id": "r2019",
+    "name": "CityCruiser 300",
+    "image": "/car19.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1617181920.svg",
+    "price": 50.0,
+    "oldPrice": 60.0,
+    "seats": 4,
+    "eta": "6 min away",
+    "desc": "Smooth ride for urban commuting",
+    "recommended": true,
+    "waitTime": "< 7 min",
+    "perMile": 1.5,
+    "perMinute": 0.5,
+    "features": [
+      "Comfortable seating",
+      "Fuel-efficient"
+    ]
+  },
+  {
+    "id": "r2020",
+    "name": "FamilyVan 350",
+    "image": "/car20.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1718192021.svg",
+    "price": 65.0,
+    "oldPrice": 80.0,
+    "seats": 7,
+    "eta": "9 min away",
+    "desc": "Spacious for family trips",
+    "recommended": true,
+    "waitTime": "< 10 min",
+    "perMile": 1.6,
+    "perMinute": 0.7,
+    "features": [
+      "Ample storage",
+      "Child safety locks"
+    ]
+  },
+  {
+    "id": "r2021",
+    "name": "Speedster 450",
+    "image": "/car21.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1819202122.svg",
+    "price": 130.0,
+    "oldPrice": 150.0,
+    "seats": 2,
+    "eta": "5 min away",
+    "desc": "For those who crave speed",
+    "recommended": false,
+    "waitTime": "< 6 min",
+    "perMile": 4.5,
+    "perMinute": 1.8,
+    "features": [
+      "High performance",
+      "Aerodynamic design"
+    ]
+  },
+  {
+    "id": "r2022",
+    "name": "CityCar 180",
+    "image": "/car22.jpg",
+    "icon": "https://ext.same-assets.com/407674263/1920212223.svg",
+    "price": 30.0,
+    "oldPrice": 35.0,
+    "seats": 4,
+    "eta": "3 min away",
+    "desc": "Perfect for navigating city streets",
+    "recommended": true,
+    "waitTime": "< 4 min",
+    "perMile": 1.0,
+    "perMinute": 0.4,
+    "features": [
+      "Compact and efficient",
+      "Easy parking"
+    ]
+  },
+  {
+    "id": "r2023",
+    "name": "UtilityTruck 600",
+    "image": "/car23.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2021222324.svg",
+    "price": 140.0,
+    "oldPrice": 160.0,
+    "seats": 2,
+    "eta": "20 min away",
+    "desc": "For heavy-duty jobs",
+    "recommended": false,
+    "waitTime": "< 25 min",
+    "perMile": 3.0,
+    "perMinute": 1.2,
+    "features": [
+      "Large towing capacity",
+      "Rugged design"
+    ]
+  },
+  {
+    "id": "r2024",
+    "name": "FamilySUV 300",
+    "image": "/car24.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2122232425.svg",
+    "price": 85.0,
+    "oldPrice": 100.0,
+    "seats": 7,
+    "eta": "12 min away",
+    "desc": "Great for family vacations",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 2.7,
+    "perMinute": 0.8,
+    "features": [
+      "Spacious interior",
+      "Safety features"
+    ]
+  },
+  {
+    "id": "r2025",
+    "name": "LuxuryCoupe 500",
+    "image": "/car25.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2223242526.svg",
+    "price": 150.0,
+    "oldPrice": 170.0,
+    "seats": 2,
+    "eta": "8 min away",
+    "desc": "Elegance meets performance",
+    "recommended": true,
+    "waitTime": "< 10 min",
+    "perMile": 4.2,
+    "perMinute": 1.6,
+    "features": [
+      "Luxury interior",
+      "High-end sound system"
+    ]
+  },
+  {
+    "id": "r2026",
+    "name": "CompactCar 2022",
+    "image": "/car26.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2324252627.svg",
+    "price": 28.0,
+    "oldPrice": 32.0,
+    "seats": 4,
+    "eta": "7 min away",
+    "desc": "Compact and efficient for city driving",
+    "recommended": false,
+    "waitTime": "< 8 min",
+    "perMile": 1.1,
+    "perMinute": 0.5,
+    "features": [
+      "Bluetooth connectivity",
+      "Compact design"
+    ]
+  },
+  {
+    "id": "r2027",
+    "name": "AdventureVan 400",
+    "image": "/car27.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2425262728.svg",
+    "price": 95.0,
+    "oldPrice": 110.0,
+    "seats": 8,
+    "eta": "15 min away",
+    "desc": "Perfect for road trips",
+    "recommended": true,
+    "waitTime": "< 18 min",
+    "perMile": 2.9,
+    "perMinute": 1.0,
+    "features": [
+      "Ample storage space",
+      "Comfortable seating"
+    ]
+  },
+  {
+    "id": "r2028",
+    "name": "CityCruiser 250",
+    "image": "/car28.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2526272829.svg",
+    "price": 55.0,
+    "oldPrice": 65.0,
+    "seats": 5,
+    "eta": "6 min away",
+    "desc": "Smooth and efficient city transport",
+    "recommended": true,
+    "waitTime": "< 7 min",
+    "perMile": 1.4,
+    "perMinute": 0.5,
+    "features": [
+      "Comfortable ride",
+      "Fuel-efficient"
+    ]
+  },
+  {
+    "id": "r2029",
+    "name": "SportyHatch 350",
+    "image": "/car29.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2627282930.svg",
+    "price": 85.0,
+    "oldPrice": 100.0,
+    "seats": 5,
+    "eta": "9 min away",
+    "desc": "Fun and agile for city driving",
+    "recommended": false,
+    "waitTime": "< 10 min",
+    "perMile": 2.6,
+    "perMinute": 1.1,
+    "features": [
+      "Sporty design",
+      "High performance"
+    ]
+  },
+  {
+    "id": "r2030",
+    "name": "LuxuryPickup 700",
+    "image": "/car30.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2728293031.svg",
+    "price": 160.0,
+    "oldPrice": 180.0,
+    "seats": 2,
+    "eta": "12 min away",
+    "desc": "Luxury meets utility",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 4.8,
+    "perMinute": 2.0,
+    "features": [
+      "Leather seats",
+      "Advanced technology"
+    ]
+  },
+  {
+    "id": "r2031",
+    "name": "CompactVan 300",
+    "image": "/car31.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2829303132.svg",
+    "price": 70.0,
+    "oldPrice": 85.0,
+    "seats": 5,
+    "eta": "11 min away",
+    "desc": "Ideal for small groups",
+    "recommended": false,
+    "waitTime": "< 13 min",
+    "perMile": 1.7,
+    "perMinute": 0.6,
+    "features": [
+      "Flexible seating",
+      "Compact design"
+    ]
+  },
+  {
+    "id": "r2032",
+    "name": "EconomyCar 150",
+    "image": "/car32.jpg",
+    "icon": "https://ext.same-assets.com/407674263/2930313233.svg",
+    "price": 20.0,
+    "oldPrice": 25.0,
+    "seats": 4,
+    "eta": "5 min away",
+    "desc": "Affordable and reliable",
+    "recommended": true,
+    "waitTime": "< 6 min",
+    "perMile": 0.8,
+    "perMinute": 0.3,
+    "features": [
+      "Great fuel economy",
+      "Compact size"
+    ]
+  },
+  {
+    "id": "r2033",
+    "name": "SportySedan 400",
+    "image": "/car33.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3031323334.svg",
+    "price": 90.0,
+    "oldPrice": 105.0,
+    "seats": 5,
+    "eta": "8 min away",
+    "desc": "Stylish and fast for city driving",
+    "recommended": false,
+    "waitTime": "< 10 min",
+    "perMile": 2.9,
+    "perMinute": 1.2,
+    "features": [
+      "Sporty design",
+      "High-tech features"
+    ]
+  },
+  {
+    "id": "r2034",
+    "name": "ModernTruck 550",
+    "image": "/car34.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3132333435.svg",
+    "price": 110.0,
+    "oldPrice": 130.0,
+    "seats": 2,
+    "eta": "14 min away",
+    "desc": "Efficient and reliable for heavy loads",
+    "recommended": false,
+    "waitTime": "< 16 min",
+    "perMile": 3.5,
+    "perMinute": 1.4,
+    "features": [
+      "Strong build",
+      "Large cargo capacity"
+    ]
+  },
+  {
+    "id": "r2035",
+    "name": "CityTaxi 200",
+    "image": "/car35.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3233343536.svg",
+    "price": 40.0,
+    "oldPrice": 50.0,
+    "seats": 4,
+    "eta": "6 min away",
+    "desc": "Reliable transport for city trips",
+    "recommended": true,
+    "waitTime": "< 7 min",
+    "perMile": 1.2,
+    "perMinute": 0.5,
+    "features": [
+      "Comfortable seating",
+      "GPS navigation"
+    ]
+  },
+  {
+    "id": "r2036",
+    "name": "UrbanBike 180",
+    "image": "/bike3.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3334353637.svg",
+    "price": 25.0,
+    "oldPrice": 30.0,
+    "seats": 1,
+    "eta": "4 min away",
+    "desc": "Quick and easy transport for city dwellers",
+    "recommended": true,
+    "waitTime": "< 5 min",
+    "perMile": 0.7,
+    "perMinute": 0.25,
+    "features": [
+      "Lightweight",
+      "Easy to maneuver"
+    ]
+  },
+  {
+    "id": "r2037",
+    "name": "RetroVan 400",
+    "image": "/car36.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3435363738.svg",
+    "price": 80.0,
+    "oldPrice": 95.0,
+    "seats": 8,
+    "eta": "15 min away",
+    "desc": "Classic style with modern comfort",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 2.3,
+    "perMinute": 0.9,
+    "features": [
+      "Vintage design",
+      "Ample space"
+    ]
+  },
+  {
+    "id": "r2038",
+    "name": "SportyBike 250",
+    "image": "/bike4.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3536373839.svg",
+    "price": 30.0,
+    "oldPrice": 35.0,
+    "seats": 1,
+    "eta": "3 min away",
+    "desc": "Fast and agile for city rides",
+    "recommended": false,
+    "waitTime": "< 4 min",
+    "perMile": 0.9,
+    "perMinute": 0.35,
+    "features": [
+      "Sporty design",
+      "Lightweight"
+    ]
+  },
+  {
+    "id": "r2039",
+    "name": "FamilyCar 300",
+    "image": "/car37.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3637383940.svg",
+    "price": 70.0,
+    "oldPrice": 85.0,
+    "seats": 5,
+    "eta": "10 min away",
+    "desc": "Spacious and comfortable for families",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 1.9,
+    "perMinute": 0.75,
+    "features": [
+      "Ample legroom",
+      "Safety features"
+    ]
+  },
+  {
+    "id": "r2040",
+    "name": "AdventureCar 400",
+    "image": "/car38.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3738394041.svg",
+    "price": 95.0,
+    "oldPrice": 110.0,
+    "seats": 5,
+    "eta": "11 min away",
+    "desc": "Perfect for outdoor adventures",
+    "recommended": true,
+    "waitTime": "< 13 min",
+    "perMile": 2.8,
+    "perMinute": 1.0,
+    "features": [
+      "Rugged tires",
+      "Off-road capabilities"
+    ]
+  },
+  {
+    "id": "r2041",
+    "name": "LuxuryHatch 500",
+    "image": "/car39.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3839404142.svg",
+    "price": 120.0,
+    "oldPrice": 140.0,
+    "seats": 5,
+    "eta": "14 min away",
+    "desc": "Luxury and style combined",
+    "recommended": true,
+    "waitTime": "< 16 min",
+    "perMile": 3.6,
+    "perMinute": 1.5,
+    "features": [
+      "High-end interior",
+      "Advanced technology"
+    ]
+  },
+  {
+    "id": "r2042",
+    "name": "UrbanSUV 400",
+    "image": "/car40.jpg",
+    "icon": "https://ext.same-assets.com/407674263/3940414243.svg",
+    "price": 85.0,
+    "oldPrice": 100.0,
+    "seats": 5,
+    "eta": "10 min away",
+    "desc": "Stylish and functional for city life",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 2.5,
+    "perMinute": 0.9,
+    "features": [
+      "Compact size",
+      "Good fuel economy"
+    ]
+  },
+  {
+    "id": "r2043",
+    "name": "FamilyPickup 600",
+    "image": "/car41.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4041424344.svg",
+    "price": 140.0,
+    "oldPrice": 160.0,
+    "seats": 2,
+    "eta": "12 min away",
+    "desc": "Utility meets comfort",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 3.9,
+    "perMinute": 1.6,
+    "features": [
+      "Spacious bed",
+      "Comfortable seating"
+    ]
+  },
+  {
+    "id": "r2044",
+    "name": "CompactPickup 300",
+    "image": "/car42.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4142434445.svg",
+    "price": 75.0,
+    "oldPrice": 90.0,
+    "seats": 2,
+    "eta": "10 min away",
+    "desc": "Compact and efficient for city use",
+    "recommended": false,
+    "waitTime": "< 12 min",
+    "perMile": 2.0,
+    "perMinute": 0.7,
+    "features": [
+      "Easy to maneuver",
+      "Compact design"
+    ]
+  },
+  {
+    "id": "r2045",
+    "name": "SportySUV 500",
+    "image": "/car43.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4243444546.svg",
+    "price": 110.0,
+    "oldPrice": 130.0,
+    "seats": 5,
+    "eta": "15 min away",
+    "desc": "Sporty and stylish for city driving",
+    "recommended": true,
+    "waitTime": "< 18 min",
+    "perMile": 3.1,
+    "perMinute": 1.2,
+    "features": [
+      "Sporty design",
+      "High performance"
+    ]
+  },
+  {
+    "id": "r2046",
+    "name": "LuxuryVan 700",
+    "image": "/car44.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4344454647.svg",
+    "price": 180.0,
+    "oldPrice": 200.0,
+    "seats": 8,
+    "eta": "20 min away",
+    "desc": "Ultimate comfort for large groups",
+    "recommended": true,
+    "waitTime": "< 25 min",
+    "perMile": 4.0,
+    "perMinute": 1.8,
+    "features": [
+      "Spacious interior",
+      "Advanced technology"
+    ]
+  },
+  {
+    "id": "r2047",
+    "name": "UtilityVan 400",
+    "image": "/car45.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4445464748.svg",
+    "price": 90.0,
+    "oldPrice": 110.0,
+    "seats": 2,
+    "eta": "15 min away",
+    "desc": "Designed for heavy-duty tasks",
+    "recommended": false,
+    "waitTime": "< 20 min",
+    "perMile": 2.4,
+    "perMinute": 1.0,
+    "features": [
+      "Large cargo space",
+      "Durable build"
+    ]
+  },
+  {
+    "id": "r2048",
+    "name": "UrbanCoupe 350",
+    "image": "/car46.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4546474849.svg",
+    "price": 85.0,
+    "oldPrice": 100.0,
+    "seats": 4,
+    "eta": "7 min away",
+    "desc": "Stylish and agile for city commutes",
+    "recommended": true,
+    "waitTime": "< 8 min",
+    "perMile": 2.1,
+    "perMinute": 0.8,
+    "features": [
+      "Compact and stylish",
+      "Good fuel economy"
+    ]
+  },
+  {
+    "id": "r2049",
+    "name": "AdventureSUV 600",
+    "image": "/car47.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4647484950.svg",
+    "price": 150.0,
+    "oldPrice": 170.0,
+    "seats": 5,
+    "eta": "16 min away",
+    "desc": "Built for off-road adventures",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 4.4,
+    "perMinute": 1.9,
+    "features": [
+      "All-terrain capabilities",
+      "Spacious interior"
+    ]
+  },
+  {
+    "id": "r2050",
+    "name": "LuxurySedan 600",
+    "image": "/car48.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4748495051.svg",
+    "price": 130.0,
+    "oldPrice": 150.0,
+    "seats": 5,
+    "eta": "12 min away",
+    "desc": "Luxury and comfort for business trips",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 3.7,
+    "perMinute": 1.6,
+    "features": [
+      "High-end sound system",
+      "Leather seats"
+    ]
+  },
+  {
+    "id": "r2051",
+    "name": "EcoFriendlyCar 250",
+    "image": "/car49.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4849505152.svg",
+    "price": 35.0,
+    "oldPrice": 40.0,
+    "seats": 4,
+    "eta": "5 min away",
+    "desc": "Eco-friendly and budget-friendly",
+    "recommended": true,
+    "waitTime": "< 6 min",
+    "perMile": 1.0,
+    "perMinute": 0.4,
+    "features": [
+      "Low emissions",
+      "Compact size"
+    ]
+  },
+  {
+    "id": "r2052",
+    "name": "CityCruiser 400",
+    "image": "/car50.jpg",
+    "icon": "https://ext.same-assets.com/407674263/4950515253.svg",
+    "price": 70.0,
+    "oldPrice": 85.0,
+    "seats": 5,
+    "eta": "10 min away",
+    "desc": "Smooth ride for urban commuting",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 1.9,
+    "perMinute": 0.75,
+    "features": [
+      "Comfortable seating",
+      "Fuel-efficient"
+    ]
+  },
+  {
+    "id": "r2053",
+    "name": "AdventureHatch 300",
+    "image": "/car51.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5051525354.svg",
+    "price": 80.0,
+    "oldPrice": 90.0,
+    "seats": 5,
+    "eta": "7 min away",
+    "desc": "Perfect for outdoor adventures",
+    "recommended": true,
+    "waitTime": "< 8 min",
+    "perMile": 2.5,
+    "perMinute": 1.0,
+    "features": [
+      "Rugged design",
+      "Spacious interior"
+    ]
+  },
+  {
+    "id": "r2054",
+    "name": "FamilySUV 500",
+    "image": "/car52.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5152535455.svg",
+    "price": 100.0,
+    "oldPrice": 120.0,
+    "seats": 7,
+    "eta": "12 min away",
+    "desc": "Spacious and versatile for families",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 3.2,
+    "perMinute": 1.1,
+    "features": [
+      "Ample storage",
+      "Child safety locks"
+    ]
+  },
+  {
+    "id": "r2055",
+    "name": "LuxurySUV 600",
+    "image": "/car53.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5253545556.svg",
+    "price": 140.0,
+    "oldPrice": 160.0,
+    "seats": 5,
+    "eta": "15 min away",
+    "desc": "Luxury and comfort for long journeys",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 4.0,
+    "perMinute": 1.5,
+    "features": [
+      "High-end technology",
+      "Spacious interior"
+    ]
+  },
+  {
+    "id": "r2056",
+    "name": "SportyHatchback 400",
+    "image": "/car54.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5354555657.svg",
+    "price": 90.0,
+    "oldPrice": 110.0,
+    "seats": 5,
+    "eta": "8 min away",
+    "desc": "Agile and fun for city driving",
+    "recommended": false,
+    "waitTime": "< 10 min",
+    "perMile": 2.8,
+    "perMinute": 1.1,
+    "features": [
+      "Sporty design",
+      "High performance"
+    ]
+  },
+  {
+    "id": "r2057",
+    "name": "EcoVan 300",
+    "image": "/car55.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5456575858.svg",
+    "price": 70.0,
+    "oldPrice": 85.0,
+    "seats": 8,
+    "eta": "15 min away",
+    "desc": "Eco-friendly and spacious for families",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 2.0,
+    "perMinute": 0.8,
+    "features": [
+      "Low emissions",
+      "Spacious interior"
+    ]
+  },
+  {
+    "id": "r2058",
+    "name": "AdventureTruck 500",
+    "image": "/car56.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5658596061.svg",
+    "price": 100.0,
+    "oldPrice": 120.0,
+    "seats": 2,
+    "eta": "10 min away",
+    "desc": "Built for tough terrains",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 3.0,
+    "perMinute": 1.2,
+    "features": [
+      "Heavy-duty build",
+      "Off-road capabilities"
+    ]
+  },
+  {
+    "id": "r2059",
+    "name": "LuxuryPickup 800",
+    "image": "/car57.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5759606162.svg",
+    "price": 200.0,
+    "oldPrice": 220.0,
+    "seats": 2,
+    "eta": "15 min away",
+    "desc": "Ultimate luxury for work and play",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 5.0,
+    "perMinute": 2.5,
+    "features": [
+      "High-end finishes",
+      "Spacious bed"
+    ]
+  },
+  {
+    "id": "r2060",
+    "name": "FamilyHatch 350",
+    "image": "/car58.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5861626263.svg",
+    "price": 80.0,
+    "oldPrice": 95.0,
+    "seats": 5,
+    "eta": "10 min away",
+    "desc": "Perfect for family outings",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 2.4,
+    "perMinute": 1.0,
+    "features": [
+      "Ample legroom",
+      "Safety features"
+    ]
+  },
+  {
+    "id": "r2061",
+    "name": "LuxurySedan 700",
+    "image": "/car59.jpg",
+    "icon": "https://ext.same-assets.com/407674263/5962636364.svg",
+    "price": 160.0,
+    "oldPrice": 180.0,
+    "seats": 5,
+    "eta": "15 min away",
+    "desc": "Luxury travel for business executives",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 4.5,
+    "perMinute": 1.8,
+    "features": [
+      "High-end technology",
+      "Comfortable seating"
+    ]
+  },
+  {
+    "id": "r2062",
+    "name": "SportyCoupe 600",
+    "image": "/car60.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6063646465.svg",
+    "price": 140.0,
+    "oldPrice": 160.0,
+    "seats": 2,
+    "eta": "6 min away",
+    "desc": "Stylish and fast for city driving",
+    "recommended": false,
+    "waitTime": "< 7 min",
+    "perMile": 4.0,
+    "perMinute": 1.5,
+    "features": [
+      "Aerodynamic design",
+      "High performance"
+    ]
+  },
+  {
+    "id": "r2063",
+    "name": "EcoFriendlySUV 400",
+    "image": "/car61.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6164656766.svg",
+    "price": 90.0,
+    "oldPrice": 110.0,
+    "seats": 5,
+    "eta": "12 min away",
+    "desc": "Eco-friendly and spacious for families",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 3.5,
+    "perMinute": 1.3,
+    "features": [
+      "Low emissions",
+      "Spacious interior"
+    ]
+  },
+  {
+    "id": "r2064",
+    "name": "LuxuryHatchback 500",
+    "image": "/car62.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6265667877.svg",
+    "price": 120.0,
+    "oldPrice": 140.0,
+    "seats": 5,
+    "eta": "10 min away",
+    "desc": "Luxury and performance combined",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 3.8,
+    "perMinute": 1.6,
+    "features": [
+      "High-end technology",
+      "Comfortable seating"
+    ]
+  },
+  {
+    "id": "r2065",
+    "name": "UrbanVan 400",
+    "image": "/car63.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6367788998.svg",
+    "price": 90.0,
+    "oldPrice": 110.0,
+    "seats": 8,
+    "eta": "15 min away",
+    "desc": "Spacious and comfortable for families",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 2.6,
+    "perMinute": 1.0,
+    "features": [
+      "Ample storage",
+      "Child safety locks"
+    ]
+  },
+  {
+    "id": "r2066",
+    "name": "AdventureSedan 400",
+    "image": "/car64.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6468799099.svg",
+    "price": 100.0,
+    "oldPrice": 120.0,
+    "seats": 5,
+    "eta": "10 min away",
+    "desc": "Perfect for family adventures",
+    "recommended": true,
+    "waitTime": "< 12 min",
+    "perMile": 3.0,
+    "perMinute": 1.1,
+    "features": [
+      "Rugged design",
+      "Comfortable seating"
+    ]
+  },
+  {
+    "id": "r2067",
+    "name": "LuxuryTruck 600",
+    "image": "/car65.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6567890100.svg",
+    "price": 150.0,
+    "oldPrice": 170.0,
+    "seats": 2,
+    "eta": "15 min away",
+    "desc": "Luxury and utility combined",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 4.2,
+    "perMinute": 1.8,
+    "features": [
+      "High-end finishes",
+      "Spacious bed"
+    ]
+  },
+  {
+    "id": "r2068",
+    "name": "FamilySUV 600",
+    "image": "/car66.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6678902101.svg",
+    "price": 110.0,
+    "oldPrice": 130.0,
+    "seats": 7,
+    "eta": "12 min away",
+    "desc": "Spacious and versatile for families",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 3.3,
+    "perMinute": 1.2,
+    "features": [
+      "Ample storage",
+      "Child safety locks"
+    ]
+  },
+  {
+    "id": "r2069",
+    "name": "SportyCoupe 700",
+    "image": "/car67.jpg",
+    "icon": "https://ext.same-assets.com/407674263/6789012102.svg",
+    "price": 150.0,
+    "oldPrice": 170.0,
+    "seats": 2,
+    "eta": "5 min away",
+    "desc": "Fast and stylish for city driving",
+    "recommended": false,
+    "waitTime": "< 6 min",
+    "perMile": 4.6,
+    "perMinute": 1.9,
+    "features": [
+      "Aerodynamic design",
+      "High performance"
+    ]
+  },
+  {
+    "id": "r2070",
+    "name": "EcoHatch 250",
+    "image": "/car68.jpg",
+    "icon": "https://ext.same-assets.com/407674263/7890123103.svg",
+    "price": 40.0,
+    "oldPrice": 50.0,
+    "seats": 4,
+    "eta": "4 min away",
+    "desc": "Eco-friendly and budget-friendly",
+    "recommended": true,
+    "waitTime": "< 5 min",
+    "perMile": 1.0,
+    "perMinute": 0.4,
+    "features": [
+      "Low emissions",
+      "Compact size"
+    ]
+  },
+  {
+    "id": "r2071",
+    "name": "AdventureSUV 700",
+    "image": "/car69.jpg",
+    "icon": "https://ext.same-assets.com/407674263/8901234104.svg",
+    "price": 160.0,
+    "oldPrice": 180.0,
+    "seats": 5,
+    "eta": "16 min away",
+    "desc": "Built for off-road adventures",
+    "recommended": true,
+    "waitTime": "< 20 min",
+    "perMile": 4.7,
+    "perMinute": 2.0,
+    "features": [
+      "All-terrain capabilities",
+      "Spacious interior"
+    ]
+  },
+  {
+    "id": "r2072",
+    "name": "LuxuryHatch 600",
+    "image": "/car70.jpg",
+    "icon": "https://ext.same-assets.com/407674263/9012345105.svg",
+    "price": 140.0,
+    "oldPrice": 160.0,
+    "seats": 5,
+    "eta": "12 min away",
+    "desc": "Luxury and performance combined",
+    "recommended": true,
+    "waitTime": "< 15 min",
+    "perMile": 3.9,
+    "perMinute": 1.5,
+    "features": [
+      "High-end technology",
+      "Comfortable seating"
+    ]
   }
 ]
