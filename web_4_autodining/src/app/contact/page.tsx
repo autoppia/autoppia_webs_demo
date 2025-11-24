@@ -4,10 +4,11 @@ import { useSeed } from "@/context/SeedContext";
 import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import Navbar from "@/components/Navbar";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function ContactPage() {
   const { seed, resolvedSeeds } = useSeed();
@@ -54,6 +55,11 @@ export default function ContactPage() {
       setFormData({ name: "", email: "", subject: "", message: "" });
       setSubmitted(false);
     }, 3000);
+
+    logEvent(EVENT_TYPES.CONTACT_FORM_SUBMIT, {
+      ...formData,
+      layoutSeed,
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -90,6 +96,13 @@ export default function ContactPage() {
     },
   ];
 
+  useEffect(() => {
+    logEvent(EVENT_TYPES.CONTACT_PAGE_VIEW, {
+      layoutSeed,
+      fromSeedParam: hasSeedParam,
+    });
+  }, [layoutSeed, hasSeedParam]);
+
   return (
     <main>
       <Navbar />
@@ -120,6 +133,12 @@ export default function ContactPage() {
                       key={index}
                       href={info.link}
                       className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758]"
+                      onClick={() =>
+                        logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, {
+                          type: info.title,
+                          layoutSeed,
+                        })
+                      }
                     >
                       <div className="text-[#46a758] mb-4">{info.icon}</div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">{info.title}</h3>

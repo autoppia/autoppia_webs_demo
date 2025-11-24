@@ -5,8 +5,9 @@ import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import Navbar from "@/components/Navbar";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Utensils, Heart, Users, Award, TrendingUp } from "lucide-react";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 export default function AboutPage() {
   const { seed, resolvedSeeds } = useSeed();
@@ -66,6 +67,13 @@ export default function AboutPage() {
     },
   ];
 
+  useEffect(() => {
+    logEvent(EVENT_TYPES.ABOUT_PAGE_VIEW, {
+      layoutSeed,
+      fromSeedParam: hasSeedParam,
+    });
+  }, [layoutSeed, hasSeedParam]);
+
   return (
     <main>
       <Navbar />
@@ -117,6 +125,12 @@ export default function AboutPage() {
                       <div
                         key={index}
                         className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300"
+                        onClick={() =>
+                          logEvent(EVENT_TYPES.ABOUT_FEATURE_CLICK, {
+                            feature: feature.title,
+                            layoutSeed,
+                          })
+                        }
                       >
                         <div className="text-[#46a758] mb-4">{feature.icon}</div>
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>

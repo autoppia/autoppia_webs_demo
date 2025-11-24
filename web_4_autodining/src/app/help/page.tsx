@@ -4,9 +4,10 @@ import { useSeed } from "@/context/SeedContext";
 import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import Navbar from "@/components/Navbar";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, ChevronUp, Search, BookOpen, HelpCircle, MessageCircle, Calendar } from "lucide-react";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 interface FAQItem {
   question: string;
@@ -126,8 +127,14 @@ export default function HelpPage() {
     return matchesSearch && matchesCategory;
   });
 
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
+  const toggleFAQ = (index: number, faq: FAQItem) => {
+    const nextIndex = openIndex === index ? null : index;
+    setOpenIndex(nextIndex);
+    logEvent(EVENT_TYPES.HELP_FAQ_TOGGLED, {
+      question: faq.question,
+      category: faq.category,
+      opened: nextIndex === index,
+    });
   };
 
   const helpSections = [
@@ -156,6 +163,13 @@ export default function HelpPage() {
       link: "#",
     },
   ];
+
+  useEffect(() => {
+    logEvent(EVENT_TYPES.HELP_PAGE_VIEW, {
+      layoutSeed,
+      fromSeedParam: hasSeedParam,
+    });
+  }, [layoutSeed, hasSeedParam]);
 
   return (
     <main>
@@ -226,7 +240,13 @@ export default function HelpPage() {
                   {categories.map((category) => (
                     <button
                       key={category}
-                      onClick={() => setSelectedCategory(category)}
+                      onClick={() => {
+                        setSelectedCategory(category);
+                        logEvent(EVENT_TYPES.HELP_CATEGORY_SELECTED, {
+                          category,
+                          layoutSeed,
+                        });
+                      }}
                       className={`px-6 py-2 rounded-full font-medium transition-colors ${
                         selectedCategory === category
                           ? "bg-[#46a758] text-white"
@@ -254,7 +274,7 @@ export default function HelpPage() {
                       className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
                     >
                       <button
-                        onClick={() => toggleFAQ(index)}
+                        onClick={() => toggleFAQ(index, faq)}
                         className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
                       >
                         <div className="flex-1">

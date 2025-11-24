@@ -58,6 +58,16 @@ export default function RestaurantPage() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const { getText, getId } = useV3Attributes();
+  
+  // Define labels with fallbacks
+  const personLabel = getText("person") || "Guest";
+  const peopleLabel = getText("people") || "Guests";
+  const pickLabel = getText("pick") || "Pick";
+  const selectDateLabel = getText("date_picker") || "Select date";
+  const selectTimeLabel = getText("select_time") || "Select time";
+  const viewFullMenuLabel = getText("view_full_menu") || "View Full Menu";
+  const collapseMenuLabel = getText("collapse_menu") || "Collapse Menu";
+  const bookNowLabel = getText("book_now") || "Book Now";
 
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
@@ -345,7 +355,7 @@ export default function RestaurantPage() {
                       className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
                       onClick={handleToggleMenu}
                     >
-                      {showFullMenu ? getText("collapse_menu") : getText("view_full_menu")}
+                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
                     </Button>
                   </div>
                 ) : (
@@ -354,7 +364,7 @@ export default function RestaurantPage() {
                       className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
                       onClick={handleToggleMenu}
                     >
-                      {showFullMenu ? getText("collapse_menu") : getText("view_full_menu")}
+                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
                     </Button>
                   </div>
                 )}
@@ -401,8 +411,7 @@ export default function RestaurantPage() {
                   className="flex items-center gap-2 min-w-[100px] justify-start"
                 >
                   <UserIcon className="h-5 w-5 text-gray-700" />
-                  {people ? people : getText("pick")}{" "}
-                  {people === 1 ? getText("person_cap") : getText("people_cap")}{" "}
+                  {people ? `${people} ${people === 1 ? personLabel : peopleLabel}` : `${pickLabel} ${peopleLabel}`}
                   <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                 </Button>
               </PopoverTrigger>
@@ -417,7 +426,7 @@ export default function RestaurantPage() {
                       setPeopleOpen(false);
                     }}
                   >
-                    {n} {n === 1 ? getText("person") : getText("people")}
+                    {n} {n === 1 ? personLabel : peopleLabel}
                   </Button>
                 ))}
               </PopoverContent>
@@ -432,7 +441,7 @@ export default function RestaurantPage() {
                     className="flex items-center gap-2 min-w-[120px] justify-start"
                   >
                     <CalendarIcon className="h-5 w-5 text-gray-700" />
-                    {date ? format(date, "MMM d") : getText("date_picker")}
+                    {date ? format(date, "MMM d") : selectDateLabel}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -455,7 +464,7 @@ export default function RestaurantPage() {
                     className="flex items-center gap-2 min-w-[120px] justify-start"
                   >
                     <ClockIcon className="h-5 w-5 text-gray-700" />
-                    {time ? time : getText("select_time")}
+                    {time ? time : selectTimeLabel}
                     <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                   </Button>
                 </PopoverTrigger>
@@ -476,7 +485,7 @@ export default function RestaurantPage() {
                 </PopoverContent>
               </Popover>
             </div>
-            {/* Time slots */}
+            {/* Booking button - only show when date, time, and people are selected */}
             <div className="mt-3">
               {time === "3:00 PM" ? (
                 <div className="flex gap-1 mt-2">
@@ -485,10 +494,10 @@ export default function RestaurantPage() {
                     className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
                   >
                     <span>{time}</span>
-                    <span className="ml-2">{getText("notify_me")}</span>
+                    <span className="ml-2">{getText("notify_me") || "Notify Me"}</span>
                   </Button>
                 </div>
-              ) : time ? (
+              ) : time && date && people ? (
                 layout.wrap ? (
                   <div
                     className="mt-2"
@@ -518,11 +527,11 @@ export default function RestaurantPage() {
                         }
                       >
                         <Button
-                          className={`${bookButtonVariation.className} font-semibold text-sm`}
+                          id={getId("book_button")}
+                          className={`${bookButtonVariation.className || "bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-2 rounded-lg"} font-semibold text-sm`}
                           data-testid={bookButtonVariation.dataTestId}
-                          asChild
                         >
-                          <span>Book Restaurant</span>
+                          {bookNowLabel}
                         </Button>
                       </SeedLink>
                     </div>
@@ -555,11 +564,10 @@ export default function RestaurantPage() {
                     >
                       <Button
                         id={getId("book_button")}
-                        className={`${bookButtonVariation.className} font-semibold text-sm`}
+                        className={`${bookButtonVariation.className || "bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-2 rounded-lg"} font-semibold text-sm`}
                         data-testid={bookButtonVariation.dataTestId}
-                        asChild
                       >
-                        <span>{getText("book_now")}</span>
+                        {bookNowLabel}
                       </Button>
                     </SeedLink>
                   </div>

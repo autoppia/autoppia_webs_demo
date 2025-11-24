@@ -43,7 +43,7 @@ type UiRestaurant = {
 
 // Default restaurants array from jsonData (fallback when dynamic data unavailable)
 const defaultRestaurants = RestaurantsData.map((item, index) => ({
-  id: `restaurant-${item.id}`,
+  id: `restaurant-${item.id ?? index + 1}`,
   name: item.namepool,
   image: `/images/restaurant${(index % 19) + 1}.jpg`,
   stars: item.staticStars,
@@ -91,6 +91,8 @@ function RestaurantCard({
   const seedParam = searchParams?.get("seed");
   const seed = Number(seedParam) || 1;
   const { getText, getId } = useV3Attributes();
+  const personLabel = getText("person") || "Guest";
+  const peopleLabel = getText("people") || "Guests";
 
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
@@ -110,6 +112,9 @@ function RestaurantCard({
     ][seed % 5],
   };
 
+  const viewDetailsLabel = getText("view_details") || "View details";
+  const bookNowLabel = getText("book_now") || "Book now";
+
   return (
     <div
       className={`w-[255px] flex-shrink-0 rounded-xl border shadow-sm bg-white overflow-hidden`}
@@ -125,7 +130,11 @@ function RestaurantCard({
       </div>
       <div className="p-4">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="font-semibold text-lg">{r.name}</h3>
+          <SeedLink href={`/restaurant/${encodeURIComponent(r.id)}`}>
+            <h3 className="font-semibold text-lg hover:text-[#46a758] transition-colors">
+              {r.name}
+            </h3>
+          </SeedLink>
           <div className="flex items-center">
             <StarRating count={r.stars} />
             <span className="text-sm text-gray-600">({r.reviews})</span>
@@ -146,13 +155,13 @@ function RestaurantCard({
         >
           <SeedLink
             id={getId("view_details_button")}
-            href={`/restaurant/${r.id}`}
+            href={`/restaurant/${encodeURIComponent(r.id)}`}
             className="text-sm text-blue-600 hover:text-blue-800"
             onClick={() =>
               logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })
             }
           >
-            {getText("view_details")}
+            {viewDetailsLabel}
           </SeedLink>
           <SeedLink
             id={getId("book_button")}
@@ -163,8 +172,8 @@ function RestaurantCard({
             onClick={() =>
               logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })
             }
-          >
-            {getText("book_now")}
+            >
+              {bookNowLabel}
           </SeedLink>
         </div>
       </div>
@@ -303,6 +312,8 @@ function HomePageContent() {
   const [peopleOpen, setPeopleOpen] = useState(false);
   const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
+  const personLabel = getText("person") || "Guest";
+  const peopleLabel = getText("people") || "Guests";
 
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
@@ -615,7 +626,7 @@ function HomePageContent() {
                 }
               >
                 <UserIcon className="mr-2 h-4 w-4" />
-                {people} {people === 1 ? getText("person") : getText("people")}
+                {people} {people === 1 ? personLabel : peopleLabel}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -630,7 +641,7 @@ function HomePageContent() {
                       setPeopleOpen(false);
                     }}
                   >
-                    {n} {n === 1 ? getText("person") : getText("people")}
+                    {n} {n === 1 ? personLabel : peopleLabel}
                   </Button>
                 ))}
               </div>
