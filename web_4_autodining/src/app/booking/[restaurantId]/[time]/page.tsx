@@ -13,6 +13,7 @@ import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
+import Navbar from "@/components/Navbar";
 
 type RestaurantView = {
   id: string;
@@ -173,43 +174,11 @@ export default function Page() {
 
   return (
     <main suppressHydrationWarning>
-      <nav className="w-full border-b bg-white sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
-          <div className="flex items-center gap-3">
-            <SeedLink href="/">
-              <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">{getText("app_title")}</span>
-              </div>
-            </SeedLink>
-          </div>
-          <div className="flex-1 flex items-center justify-center">
-            <input
-              id={getId("search_input")}
-              type="text"
-              placeholder={getText("search_placeholder")}
-              className="rounded p-2 min-w-[250px] border border-gray-300"
-              disabled
-            />
-            <button id={getId("search_button")} className="ml-2 px-4 py-2 rounded bg-[#46a758] text-white">
-              {getText("search_button")}
-            </button>
-          </div>
-          <div className="flex items-center gap-4">
-            <SeedLink
-              className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/help"
-            >
-              {getText("get_help")}
-            </SeedLink>
-            <SeedLink
-              className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/faqs"
-            >
-              {getText("faqs")}
-            </SeedLink>
-          </div>
-        </div>
-      </nav>
+      <Navbar 
+        showSearch={true}
+        searchInputId={getId("search_input")}
+        searchButtonId={getId("search_button")}
+      />
 
       <div className="max-w-2xl mx-auto px-4 pb-10 pt-4">
         <h2 className="font-bold text-lg mt-8 mb-4">{getText("you_almost_done")}</h2>

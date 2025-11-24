@@ -26,6 +26,7 @@ import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { buildBookingHref } from "@/utils/bookingPaths";
+import Navbar from "@/components/Navbar";
 
 type UiRestaurant = {
   id: string;
@@ -305,7 +306,8 @@ function HomePageContent() {
 
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  const layoutSeed = resolvedSeeds.v1 ?? seed;
+  const seedParam = searchParams?.get("seed");
+  const layoutSeed = seedParam ? (resolvedSeeds.v1 ?? seed) : 2;
 
   // Calculate layout variation (1-10) from v1 seed
   // COMMON FORMULA across all webs
@@ -317,21 +319,23 @@ function HomePageContent() {
   // Log v1 info when it changes (only once per unique v1 seed)
   const lastV1SeedRef = useRef<number | null>(null);
   useEffect(() => {
-    const currentV1Seed = resolvedSeeds.v1 ?? resolvedSeeds.base;
+    const currentV1Seed = seedParam ? resolvedSeeds.v1 ?? resolvedSeeds.base : layoutSeed;
     // Only log if v1 seed actually changed
     if (lastV1SeedRef.current !== currentV1Seed) {
       if (resolvedSeeds.v1 !== null) {
         console.log(
-          `[autodining] V1 Layout - Seed: ${resolvedSeeds.v1}, Variation: #${layoutVariation} (of 10)`
+          `[autodining] V1 Layout - Seed: ${seedParam ? resolvedSeeds.v1 : layoutSeed}, Variation: #${layoutVariation} (of 10)`
         );
       } else if (resolvedSeeds.base) {
         console.log(
-          `[autodining] V1 Layout - Using base seed: ${resolvedSeeds.base}, Variation: #${layoutVariation} (of 10)`
+          `[autodining] V1 Layout - Using base seed: ${
+            seedParam ? resolvedSeeds.base : layoutSeed
+          }, Variation: #${layoutVariation} (of 10)`
         );
       }
       lastV1SeedRef.current = currentV1Seed;
     }
-  }, [resolvedSeeds.v1, resolvedSeeds.base, layoutVariation]);
+  }, [resolvedSeeds.v1, resolvedSeeds.base, layoutVariation, layoutSeed, seedParam]);
 
   const { marginTop, wrapButton } = useMemo(
     () => getLayoutVariant(layoutSeed),
@@ -359,6 +363,15 @@ function HomePageContent() {
     undefined,
     layoutSeed
   );
+
+  const searchButtonLabel = getText("search_button") || "Search";
+  const searchButtonClassName = seedParam
+    ? searchButtonVariation.className
+    : "ml-3 px-6 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] transition-colors shadow-sm";
+  const searchButtonStyle =
+    seedParam && searchButtonVariation.position
+      ? { position: searchButtonVariation.position as any }
+      : undefined;
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -517,40 +530,7 @@ function HomePageContent() {
         </div>
       )}
       {/* Navigation/Header */}
-      <nav className="w-full border-b bg-white sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
-          <div className="flex items-center gap-3">
-            <SeedLink href="/">
-              <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-                <span className="font-bold text-white text-lg">
-                  {getText("app_title")}
-                </span>
-              </div>
-            </SeedLink>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <SeedLink
-              className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/help"
-            >
-              {getText("get_help")}
-            </SeedLink>
-            <SeedLink
-              className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/about"
-            >
-              {getText("about")}
-            </SeedLink>
-            <SeedLink
-              className="text-sm text-gray-600 hover:text-[#46a758]"
-              href="/contact"
-            >
-              {getText("contact")}
-            </SeedLink>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section
@@ -670,21 +650,21 @@ function HomePageContent() {
             <div data-testid={`wrapper-${seed ?? 1}`}>
               <button
                 id={getId("search_button")}
-                className={searchButtonVariation.className}
+                className={searchButtonClassName}
                 data-testid={searchButtonVariation.dataTestId}
-                style={{ position: searchButtonVariation.position as any }}
+                style={searchButtonStyle}
               >
-                {getText("search_button")}
+                {searchButtonLabel}
               </button>
             </div>
           ) : (
             <button
               id={getId("search_button")}
-              className={searchButtonVariation.className}
+              className={searchButtonClassName}
               data-testid={searchButtonVariation.dataTestId}
-              style={{ position: searchButtonVariation.position as any }}
+              style={searchButtonStyle}
             >
-              {getText("search_button")}
+              {searchButtonLabel}
             </button>
           )}
         </section>
@@ -882,15 +862,7 @@ function HomePageContent() {
 function HomePageLoading() {
   return (
     <main>
-      <nav className="w-full border-b bg-white sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto flex items-center justify-between h-20 px-4 gap-2">
-          <div className="flex items-center gap-3">
-            <div className="bg-[#46a758] px-3 py-1 rounded flex items-center h-9">
-              <span className="font-bold text-white text-lg">AutoDining</span>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="animate-pulse">
           <div className="h-10 bg-gray-200 rounded mb-6"></div>
