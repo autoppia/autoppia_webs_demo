@@ -100,7 +100,7 @@ const LAYOUTS: Record<number, LayoutConfig> = {
 
   3: {
     name: "Vertical Header Layout",
-    description: "Header left vertically, content full width, footer bottom",
+    description: "Header left vertically, sidebar next, content full width",
     container: {
       type: 'flex',
       direction: 'row',
@@ -120,7 +120,7 @@ const LAYOUTS: Record<number, LayoutConfig> = {
       },
       content: {
         order: 3,
-        className: 'flex-1 ml-[296px] flex flex-col min-h-screen'
+        className: 'flex-1 ml-[296px] flex flex-col min-h-screen pt-4'
       },
       footer: {
         order: 4,
@@ -167,24 +167,24 @@ const LAYOUTS: Record<number, LayoutConfig> = {
     description: "Content first, then header, then sidebar",
     container: {
       type: 'flex',
-      direction: 'column',
+      direction: 'row',
       className: 'flex min-h-screen bg-white'
     },
     elements: {
       header: {
-        order: 2,
-        position: 'static',
-        className: 'bg-white border-b border-gray-200 shadow-sm'
+        order: 1,
+        position: 'fixed',
+        className: 'fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-40'
       },
       sidebar: {
-        order: 3,
-        position: 'static',
-        className: 'w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-between px-4 pb-4 pt-2',
+        order: 2,
+        position: 'fixed',
+        className: 'w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-between fixed top-16 left-0 h-[calc(100vh-4rem)] px-4 pb-4 pt-2 z-30',
         placement: 'left'
       },
       content: {
-        order: 1,
-        className: 'flex-1 flex flex-col min-h-screen'
+        order: 3,
+        className: 'flex-1 ml-[280px] flex flex-col min-h-screen pt-16'
       },
       footer: {
         order: 4,
@@ -205,17 +205,17 @@ const LAYOUTS: Record<number, LayoutConfig> = {
       header: {
         order: 1,
         position: 'sticky',
-        className: 'sticky top-0 bg-white border-b border-gray-200 shadow-sm z-10'
+        className: 'sticky top-0 bg-white border-b border-gray-200 shadow-sm z-50'
       },
       sidebar: {
         order: 2,
         position: 'absolute',
-        className: 'absolute top-4 right-4 w-[280px] bg-[#f8f6f2] border border-gray-200 rounded-lg shadow-lg flex flex-col justify-between px-4 pb-4 pt-2 z-30 max-h-[calc(100vh-2rem)]',
+        className: 'absolute top-20 right-4 w-[280px] bg-[#f8f6f2] border border-gray-200 rounded-lg shadow-lg flex flex-col justify-between px-4 pb-4 pt-2 z-40 max-h-[calc(100vh-6rem)] overflow-y-auto',
         placement: 'floating'
       },
       content: {
         order: 3,
-        className: 'flex-1 flex flex-col min-h-screen pr-[300px]'
+        className: 'flex-1 flex flex-col min-h-screen pr-[300px] pt-4'
       },
       footer: {
         order: 4,
@@ -227,27 +227,27 @@ const LAYOUTS: Record<number, LayoutConfig> = {
 
   7: {
     name: "Split Screen Layout",
-    description: "Split screen: left = tasks, right = teams",
+    description: "Split screen: left = sidebar, right = content",
     container: {
       type: 'grid',
-      gridTemplate: '1fr 1fr',
-      className: 'grid grid-cols-2 min-h-screen bg-white'
+      gridTemplate: 'auto 1fr auto / 280px 1fr',
+      className: 'grid min-h-screen bg-white'
     },
     elements: {
       header: {
         order: 1,
-        position: 'fixed',
-        className: 'fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-10 col-span-2'
+        position: 'static',
+        className: 'bg-white border-b border-gray-200 shadow-sm z-10 col-span-2'
       },
       sidebar: {
         order: 2,
         position: 'static',
-        className: 'w-full bg-[#f8f6f2] border-r border-gray-200 flex flex-col justify-between px-4 pb-4 pt-2',
+        className: 'w-full bg-[#f8f6f2] border-r border-gray-200 flex flex-col justify-between px-4 pb-4 pt-2 min-h-[calc(100vh-4rem)]',
         placement: 'left'
       },
       content: {
         order: 3,
-        className: 'flex-1 flex flex-col min-h-screen pt-16'
+        className: 'flex-1 flex flex-col min-h-screen pt-4'
       },
       footer: {
         order: 4,
@@ -323,7 +323,7 @@ const LAYOUTS: Record<number, LayoutConfig> = {
 
   10: {
     name: "Masonry Grid Layout",
-    description: "Masonry/grid-style placement of header, sidebar, content, footer",
+    description: "Grid-style placement of header, sidebar, content, footer",
     container: {
       type: 'grid',
       gridTemplate: 'auto 1fr auto / 280px 1fr',
@@ -334,17 +334,17 @@ const LAYOUTS: Record<number, LayoutConfig> = {
       header: {
         order: 1,
         position: 'static',
-        className: 'bg-white border-b border-gray-200 shadow-sm col-span-2'
+        className: 'bg-white border-b border-gray-200 shadow-sm z-10 col-span-2'
       },
       sidebar: {
         order: 2,
         position: 'static',
-        className: 'w-full bg-[#f8f6f2] border-r border-gray-200 flex flex-col justify-between px-4 pb-4 pt-2',
+        className: 'w-full bg-[#f8f6f2] border-r border-gray-200 flex flex-col justify-between px-4 pb-4 pt-2 min-h-[calc(100vh-4rem)]',
         placement: 'left'
       },
       content: {
         order: 3,
-        className: 'flex-1 flex flex-col min-h-screen'
+        className: 'flex-1 flex flex-col min-h-screen pt-4'
       },
       footer: {
         order: 4,
@@ -427,7 +427,16 @@ export function getSeedLayout(seed?: number): LayoutConfig {
   
   const baseLayout = LAYOUTS[mappedSeed];
   
-  // Dynamically adjust sidebar placement based on seed
+  // Layouts that should NOT have their sidebar placement changed
+  // These layouts have specific positioning requirements that would break if changed
+  const layoutsWithFixedPlacement = [3, 6, 7, 10]; // Vertical Header, Floating Sidebar, Split Screen, Masonry Grid
+  
+  // If this layout has fixed placement, return it as-is
+  if (layoutsWithFixedPlacement.includes(mappedSeed)) {
+    return baseLayout;
+  }
+  
+  // Dynamically adjust sidebar placement based on seed for layouts that can handle it
   // Use seed to determine placement: left, right, top, bottom, or floating
   // This creates more variety in sidebar positioning
   const placementOptions: Array<'left' | 'right' | 'top' | 'bottom' | 'floating'> = ['left', 'right', 'top', 'bottom', 'floating'];
@@ -471,30 +480,50 @@ export function getSeedLayout(seed?: number): LayoutConfig {
       .replace(/\bmr-\[296px\]/g, '')
       .replace(/\bpt-\[300px\]/g, '')
       .replace(/\bpb-\[300px\]/g, '')
+      .replace(/\bpr-\[300px\]/g, '')
+      .replace(/\bpt-16/g, '')
+      .replace(/\bpt-4/g, '')
       .replace(/\s+/g, ' ') // Normalize multiple spaces
       .trim();
     
     // Add appropriate margins/padding based on sidebar placement
     switch (placement) {
       case 'left':
-        adjusted = (adjusted + ' ml-[280px]').trim();
+        // Only add left margin if not already present
+        if (!adjusted.includes('ml-')) {
+          adjusted = (adjusted + ' ml-[280px]').trim();
+        }
         break;
       case 'right':
-        adjusted = (adjusted + ' mr-[280px]').trim();
+        // Only add right margin if not already present
+        if (!adjusted.includes('mr-')) {
+          adjusted = (adjusted + ' mr-[280px]').trim();
+        }
         break;
       case 'top':
-        adjusted = (adjusted + ' pt-[300px]').trim();
+        // Only add top padding if not already present
+        if (!adjusted.includes('pt-')) {
+          adjusted = (adjusted + ' pt-[300px]').trim();
+        }
         break;
       case 'bottom':
-        adjusted = (adjusted + ' pb-[300px]').trim();
+        // Only add bottom padding if not already present
+        if (!adjusted.includes('pb-')) {
+          adjusted = (adjusted + ' pb-[300px]').trim();
+        }
         break;
       case 'floating':
-        // Floating sidebar doesn't need content margin
+        // Floating sidebar needs right padding to prevent content overlap
+        if (!adjusted.includes('pr-')) {
+          adjusted = (adjusted + ' pr-[300px]').trim();
+        }
         break;
     }
     
     // Add top padding for header if not already present and sidebar is not on top
+    // Only if there's no existing padding-top
     if (!adjusted.includes('pt-') && placement !== 'top') {
+      // Check if header is fixed/sticky - if so, add padding
       adjusted = (adjusted + ' pt-16').trim();
     }
     
