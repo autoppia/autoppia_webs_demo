@@ -25,13 +25,13 @@ interface SeedContextType {
 }
 
 const SeedContext = createContext<SeedContextType>({
-  seed: 1,
+  seed: 8,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
-  resolvedSeeds: resolveSeedsSync(1),
+  resolvedSeeds: resolveSeedsSync(8),
 });
 
-const DEFAULT_SEED = 1;
+const DEFAULT_SEED = 8;
 
 // Internal component that handles URL params
 function SeedInitializer({
