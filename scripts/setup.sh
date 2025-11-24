@@ -13,7 +13,7 @@
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
 #                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
 #   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
-#   --webs_data_path=PATH         Host dir to bind at /app/data (default: $HOME/webs_data)
+#   --webs_data_path=PATH         Host dir to bind at /app/data (default: $DEMOS_DIR/webs_server/initial_data)
 #   -y, --yes                     Force Docker cleanup (remove all containers/images/volumes) before deploy
 #   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
 #   -h, --help                    Show this help and exit
@@ -45,7 +45,7 @@ Options:
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
                                             v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
   --enable_db_mode=BOOL         Enable DB-backed mode (for v2: load pre-generated data from DB)
-  --webs_data_path=PATH         Host dir to bind at /app/data (default: \$HOME/webs_data)
+  --webs_data_path=PATH         Host dir to bind at /app/data (default: \$DEMOS_DIR/webs_server/initial_data)
   --fast=BOOL                   Skip cleanup and use cached builds (true/false, default: false)
   -h, --help                    Show this help and exit
 
@@ -207,7 +207,7 @@ echo "      V3 (HTML structure)  →  $ENABLE_DYNAMIC_V3"
 echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Fast mode              →  $FAST_MODE"
-echo "    Host data path         →  ${WEBS_DATA_PATH:-<default: \$HOME/webs_data>}"
+echo "    Host data path         →  ${WEBS_DATA_PATH:-<default: \$DEMOS_DIR/webs_server/initial_data>}"
 echo ""
 
 # ============================================================================
@@ -327,7 +327,7 @@ deploy_webs_server() {
 
   (
     # Calculate absolute path for webs_data (works on any server)
-    WEBS_DATA_ABS_PATH="${WEBS_DATA_PATH:-$(cd ~ && pwd)/webs_data}"
+    WEBS_DATA_ABS_PATH="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}"
     
     export \
       WEB_PORT="$WEBS_PORT" \
@@ -370,20 +370,20 @@ deploy_webs_server() {
 
   # Initialize master data pools if they don't exist
   echo "📦 Checking for initial data pools..."
-  mkdir -p "${WEBS_DATA_PATH:-$HOME/webs_data}"
+  mkdir -p "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}"
   
   for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
-    if [ ! -f "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/main.json" ]; then
+    if [ ! -f "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" ]; then
       echo "  → Initializing $project master pool (100 records)..."
-      mkdir -p "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/data"
+      mkdir -p "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data"
       if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
-        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/"
+        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/"
         echo "  ✅ $project master pool initialized"
       else
         echo "  ⚠️  No initial data found for $project (will need to generate)"
       fi
     else
-      echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+      echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
     fi
   done
   
@@ -393,12 +393,12 @@ deploy_webs_server() {
   if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
     echo "📦 Copying data pools to webs_server container..."
     for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
-      if [ -f "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/main.json" ]; then
+      if [ -f "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" ]; then
         echo "  → Copying $project to container..."
         docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
-        docker cp "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/main.json" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
-        if [ -d "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/data" ]; then
-          for data_file in "${WEBS_DATA_PATH:-$HOME/webs_data}/$project/data"/*.json; do
+        docker cp "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
+        if [ -d "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data" ]; then
+          for data_file in "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data"/*.json; do
             if [ -f "$data_file" ]; then
               docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
             fi
@@ -486,18 +486,18 @@ case "$WEB_DEMO" in
   all)
     deploy_webs_server
     deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-#    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-#    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-#    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-#    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-#    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-#    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-#    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-#    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-#    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-#    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-#    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-#    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
 #    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)

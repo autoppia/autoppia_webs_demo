@@ -17,7 +17,7 @@ export function RelatedMovies({ movies, title = "Related films" }: RelatedMovies
           <div key={movie.id} className="flex gap-4 rounded-2xl border border-white/10 bg-black/40 p-4">
             <div
               className="h-24 w-24 flex-shrink-0 rounded-2xl bg-cover bg-center"
-              style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(${movie.poster})` }}
+              style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(${movie.poster}), url('/media/gallery/default_movie.png')` }}
             />
             <div>
               <p className="text-xs uppercase text-white/50">{movie.genres[0] || "Genre"}</p>
