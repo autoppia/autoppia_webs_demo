@@ -76,6 +76,7 @@ export function ProductCarousel({
       <div className="relative">
         {/*{showLeftButton && (*/}
         <button
+          type="button"
           onClick={() => scroll("left")}
           className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
           aria-label={getText("scroll_left")}
@@ -143,6 +144,7 @@ export function ProductCarousel({
 
         {/*{showRightButton && (*/}
         <button
+          type="button"
           onClick={() => scroll("right")}
           className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
           aria-label={getText("scroll_right")}

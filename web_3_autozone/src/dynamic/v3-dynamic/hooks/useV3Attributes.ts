@@ -58,9 +58,13 @@ export function useV3Attributes() {
    * Get text variant for a key
    */
   const getText = useCallback(
-    (key: string, fallback: string): string => {
-      if (!isActive) return fallback;
-      return getTextForElement(v3Seed, key, fallback);
+    (key: string, fallback?: string): string => {
+      const defaultFallback =
+        typeof fallback === 'string' && fallback.length > 0
+          ? fallback
+          : key.replace(/_/g, ' ');
+      if (!isActive) return defaultFallback;
+      return getTextForElement(v3Seed, key, defaultFallback);
     },
     [v3Seed, isActive]
   );

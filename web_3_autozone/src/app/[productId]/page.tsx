@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Star, Check } from "lucide-react";
+import { Star, Share2, Heart, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
 
@@ -13,6 +13,10 @@ import { Suspense } from "react";
 import { getEffectiveSeed, getProductById } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
+import {
+  isInWishlist,
+  toggleWishlistItem,
+} from "@/library/wishlist";
 
 
 // Static date to avoid hydration mismatch
@@ -28,6 +32,11 @@ function ProductContent() {
   const { getText, getId } = useV3Attributes();
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [wishlistAdded, setWishlistAdded] = useState(false);
+  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "shared">(
+    "idle"
+  );
+  const [isExploreOpen, setIsExploreOpen] = useState(false);
 
   const { seed } = useSeed();
   const order = seed % 3;
@@ -57,6 +66,77 @@ function ProductContent() {
       });
     }
   }, [product]);
+
+  useEffect(() => {
+    if (product?.id) {
+      setWishlistAdded(isInWishlist(product.id));
+    }
+  }, [product?.id]);
+
+  const handleShareProduct = async () => {
+    if (!product) return;
+    const shareUrl =
+      typeof window !== "undefined" ? window.location.href : product.id;
+
+    logEvent(EVENT_TYPES.SHARE_PRODUCT, {
+      productId: product.id,
+      title: product.title,
+      price: product.price,
+      category: product.category,
+      brand: product.brand,
+    });
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: product.title,
+          text: product.description ?? product.title,
+          url: shareUrl,
+        });
+        setShareStatus("shared");
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareStatus("copied");
+      }
+    } catch (error) {
+      console.warn("Share cancelled", error);
+    } finally {
+      setTimeout(() => setShareStatus("idle"), 2500);
+    }
+  };
+
+  const handleWishlistToggle = () => {
+    if (!product) return;
+    const { added } = toggleWishlistItem({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      brand: product.brand,
+    });
+    setWishlistAdded(added);
+    logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+      productId: product.id,
+      title: product.title,
+      price: product.price,
+      category: product.category,
+      brand: product.brand,
+      action: added ? "added" : "removed",
+    });
+  };
+
+  const handleExploreToggle = () => {
+    if (!product) return;
+    const next = !isExploreOpen;
+    setIsExploreOpen(next);
+    logEvent(EVENT_TYPES.VIEW_MORE_DETAILS, {
+      productId: product.id,
+      title: product.title,
+      section: "explore_further",
+      expanded: next,
+    });
+  };
 
   const quantityInput = (
     <>
@@ -259,6 +339,35 @@ function ProductContent() {
             {getText("visit_store")} {product.brand} {getText("store")}
           </div>
 
+          <div className="flex flex-wrap gap-3 mb-4">
+            <button
+              type="button"
+              onClick={handleShareProduct}
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:border-slate-400"
+            >
+              <Share2 className="h-4 w-4" />
+              <span>
+                {shareStatus === "shared"
+                  ? getText("share_success") || "Shared"
+                  : shareStatus === "copied"
+                  ? getText("link_copied") || "Link copied"
+                  : "Share product"}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={handleWishlistToggle}
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:border-slate-400"
+            >
+              <Heart
+                className={`h-4 w-4 ${
+                  wishlistAdded ? "text-red-500 fill-red-100" : ""
+                }`}
+              />
+              <span>{wishlistAdded ? "In wishlist" : "Add to wishlist"}</span>
+            </button>
+          </div>
+
           <div className="mb-4">{renderStars(rating)}</div>
 
           <div className="border-t border-b border-gray-200 py-2 mb-4">
@@ -370,13 +479,15 @@ function ProductContent() {
             <dl className="text-xs text-gray-700 mb-2 mt-2 leading-5 border-t border-b py-3 border-[#D5D9D9]">
               <div className="flex items-center py-0.5">
                 <dt className="w-20 font-normal">{getText("ships_from")}</dt>
-                <dd className="flex-1 pl-1 font-normal">Autozon.com</dd>
+                <dd className="flex-1 pl-1 font-normal">
+                  Autozon Fulfillment
+                </dd>
               </div>
               <div className="flex items-center py-0.5">
                 <dt className="w-20 font-normal">{getText("sold_by")}</dt>
                 <dd className="flex-1 pl-1">
                   <span className="text-[#007185] hover:underline cursor-pointer">
-                    Autozon.com
+                    {product.brand || "Verified Partner"}
                   </span>
                 </dd>
               </div>
@@ -397,8 +508,39 @@ function ProductContent() {
                 </dd>
               </div>
             </dl>
-            <div className="mb-2 text-xs text-[#007185] cursor-pointer flex items-center gap-1">
-              <span>&#9660;</span> {getText("see_more")}
+            <div className="mb-2">
+              <button
+                type="button"
+                onClick={handleExploreToggle}
+                aria-expanded={isExploreOpen}
+                className="text-xs text-[#007185] flex items-center gap-1"
+              >
+                {isExploreOpen ? (
+                  <ChevronUp className="h-3 w-3" />
+                ) : (
+                  <ChevronDown className="h-3 w-3" />
+                )}
+                {getText("see_more") || "Explore further"}
+              </button>
+              {isExploreOpen && (
+                <ul className="mt-2 space-y-1 rounded-lg bg-slate-50 p-3 text-xs text-slate-600">
+                  <li className="flex gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#007185] mt-1.5" />
+                    {getText("white_glove_option") ||
+                      "White-glove install scheduling available during checkout."}
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#007185] mt-1.5" />
+                    {getText("carbon_offset") ||
+                      "Eligible for carbon-neutral delivery credits."}
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#007185] mt-1.5" />
+                    {getText("bundle_service") ||
+                      "Bundle with counter accessories for automatic discounts."}
+                  </li>
+                </ul>
+              )}
             </div>
             <div className="flex items-center text-sm mb-2 mt-1">
               <input
@@ -431,7 +573,10 @@ function ProductContent() {
                 </span>
               </div>
               <div className="text-xs mt-1">
-                {getText("ships_from")} <span className="text-[#007185]">Autozon.com</span>
+                {getText("ships_from")}{" "}
+                <span className="text-[#007185]">
+                  {product.brand || "Verified Partner"}
+                </span>
               </div>
             </div>
             {addedToCart && (
