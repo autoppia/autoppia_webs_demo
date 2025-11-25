@@ -1,13 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import type { Product } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { BlurCard } from "@/components/ui/BlurCard";
+import { cn } from "@/library/utils";
 
 interface ProductCarouselProps {
   title: string;
@@ -15,16 +17,7 @@ interface ProductCarouselProps {
   seed: number;
 }
 
-const getCardShiftClasses = (seed: number = 1) => {
-  const marginLeftRightOptions = ["ml-0", "ml-2", "ml-4", "mr-2", "mr-4"];
-  const marginTopOptions = ["mt-2", "mt-32", "mt-4", "mt-16", "mt-32"];
-  const index = seed % marginLeftRightOptions.length;
-
-  return {
-    horizontal: marginLeftRightOptions[index],
-    vertical: marginTopOptions[index],
-  };
-};
+const PROGRESS_SEGMENTS = 4;
 
 export function ProductCarousel({
   title,
@@ -32,18 +25,13 @@ export function ProductCarousel({
   seed = 1,
 }: ProductCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-
   const { getText, getId } = useV3Attributes();
   const router = useSeedRouter();
-
-  // const [showLeftButton, setShowLeftButton] = useState(false);
-  // const [showRightButton, setShowRightButton] = useState(true);
-
-  const { horizontal, vertical } = getCardShiftClasses(seed);
+  const { addToCart } = useCart();
+  const [progressStep, setProgressStep] = useState(0);
 
   const scroll = (direction: "left" | "right") => {
     if (!containerRef.current) return;
-
     const container = containerRef.current;
     const scrollAmount = container.clientWidth * 0.8;
 
@@ -52,107 +40,183 @@ export function ProductCarousel({
       behavior: "smooth",
     });
 
-    // ✅ Log the event
     logEvent(EVENT_TYPES.SCROLL_CAROUSEL, {
       direction: direction.toUpperCase(),
       title,
     });
-
-    // Update button visibility after scrolling
-    // setTimeout(() => {
-    //   if (!containerRef.current) return;
-    //
-    //   setShowLeftButton(container.scrollLeft > 0);
-    //   setShowRightButton(
-    //     container.scrollLeft < container.scrollWidth - container.clientWidth - 10
-    //   );
-    // }, 300);
   };
 
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+
+    const handleScroll = () => {
+      const maxScroll = node.scrollWidth - node.clientWidth || 1;
+      const ratio = node.scrollLeft / maxScroll;
+      setProgressStep(
+        Math.min(
+          PROGRESS_SEGMENTS - 1,
+          Math.round(ratio * (PROGRESS_SEGMENTS - 1))
+        )
+      );
+    };
+
+    node.addEventListener("scroll", handleScroll, { passive: true });
+    return () => node.removeEventListener("scroll", handleScroll);
+  }, [products.length]);
+
+  const handleViewProduct = (product: Product) => {
+    logEvent(EVENT_TYPES.VIEW_DETAIL, {
+      section: product.description,
+      title: product.title,
+      price: product.price,
+      category: product.category,
+      rating: product.rating ?? 0,
+      brand: product.brand || "generic",
+    });
+    router.push(`/${product.id}`);
+  };
+
+  const handleQuickAdd = (product: Product) => {
+    if (!addToCart) return handleViewProduct(product);
+    addToCart(product);
+    logEvent(EVENT_TYPES.ADD_TO_CART, {
+      productId: product.id,
+      title: product.title,
+      price: product.price,
+      category: product.category,
+      brand: product.brand,
+      source: "carousel",
+    });
+  };
+
+  const exploreHref = `/search?q=${encodeURIComponent(title)}`;
+
   return (
-    <Card id={getId("product_carousel")} className={`category-card relative ${horizontal} ${vertical}`}>
-      <h2 className="category-title px-4 pt-4">{title}</h2>
+    <BlurCard
+      id={getId("product_carousel")}
+      className="relative flex flex-col overflow-hidden"
+      data-seed={seed}
+    >
+      <div className="flex flex-col gap-2 px-5 pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400">
+            Featured collection
+          </p>
+          <h2 className="text-2xl font-semibold text-slate-900">{title}</h2>
+        </div>
+        <div className="hidden items-center gap-2 sm:flex">
+          <button
+            type="button"
+            onClick={() => scroll("left")}
+            className="rounded-full border border-slate-200 bg-white/80 p-2 text-slate-700 shadow-sm"
+            aria-label={getText("scroll_left")}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            onClick={() => scroll("right")}
+            className="rounded-full border border-slate-200 bg-white/80 p-2 text-slate-700 shadow-sm"
+            aria-label={getText("scroll_right")}
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </div>
 
       <div className="relative">
-        {/*{showLeftButton && (*/}
-        <button
-          type="button"
-          onClick={() => scroll("left")}
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-          aria-label={getText("scroll_left")}
-        >
-          <ChevronLeft size={24} />
-        </button>
-        {/*// )}*/}
         <div
           ref={containerRef}
-          className="flex overflow-x-auto py-4 px-4 scrollbar-hide scroll-smooth gap-4"
+          className="mt-4 flex gap-4 overflow-x-auto px-5 pb-6 pt-2 scroll-smooth snap-x snap-mandatory scrollbar-hide"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {products.map((product) => (
-            <a
+            <div
               key={product.id}
-              href={`#${product.id}`}
-              title={`View ${product.title} - Product ID: ${product.id}`}
-              onMouseEnter={() => {
-                // Update URL in address bar on hover while keeping seed params
-                const basePath = `${window.location.pathname}${window.location.search}`;
-                window.history.replaceState(null, '', `${basePath}#${product.id}`);
-              }}
-              onMouseLeave={() => {
-                // Clear hash but preserve seed params
-                const basePath = `${window.location.pathname}${window.location.search}`;
-                window.history.replaceState(null, '', basePath);
-              }}
-              onClick={(e) => {
-                e.preventDefault();
-                logEvent(EVENT_TYPES.VIEW_DETAIL, {
-                  section: product.description,
-                  title: product.title,
-                  price: product.price,
-                  category: product.category,
-                  rating: product.rating ?? 12,
-                  brand: product.brand || "generic",
-                });
-                router.push(`/${product.id}`);
-              }}
-              className="flex-none w-[160px] md:w-[200px] group block no-underline text-inherit cursor-pointer relative"
+              className="flex-none snap-start"
+              style={{ width: "220px" }}
             >
-              <div className="relative w-full bg-gray-100" style={{ height: 150 }}>
-                <Image
-                  src={product.image}
-                  alt={product.title || "Product image"}
-                  fill
-                  className="object-contain"
-                />
-                {/* URL Display on Hover */}
-                <div className="absolute bottom-2 left-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
-                  /{product.id}
+              <BlurCard
+                interactive
+                className="flex h-full flex-col gap-3 rounded-3xl border-white/50 bg-white/85 p-4"
+              >
+                <div
+                  className="relative h-40 w-full cursor-pointer overflow-hidden rounded-2xl bg-slate-50"
+                  onClick={() => handleViewProduct(product)}
+                >
+                  <Image
+                    src={product.image}
+                    alt={product.title || "Product image"}
+                    fill
+                    className="object-contain transition-transform duration-300 hover:scale-105"
+                  />
+                  {product.price && (
+                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow">
+                      {product.price}
+                    </span>
+                  )}
                 </div>
-              </div>
-              {product.title && (
-                <div className="mt-2 text-sm truncate group-hover:text-blue-600">
-                  {product.title}
+                <div className="flex-1 space-y-1">
+                  <p className="line-clamp-2 text-sm font-semibold text-slate-900">
+                    {product.title}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {product.brand || product.category}
+                  </p>
                 </div>
-              )}
-              {product.price && (
-                <div className="text-sm font-bold">{product.price}</div>
-              )}
-            </a>
+                <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
+                  <button
+                    type="button"
+                    onClick={() => handleViewProduct(product)}
+                    className="text-slate-500 underline decoration-dotted underline-offset-4"
+                  >
+                    Details
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickAdd(product)}
+                    className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1 text-white"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Quick add
+                  </button>
+                </div>
+              </BlurCard>
+            </div>
           ))}
         </div>
 
-        {/*{showRightButton && (*/}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white/90 to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white/90 to-transparent" />
+      </div>
+
+      <div className="flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
+          {Array.from({ length: PROGRESS_SEGMENTS }).map((_, index) => (
+            <span
+              key={`${title}-progress-${index}`}
+              className={cn(
+                "h-1.5 w-10 rounded-full transition",
+                index === progressStep ? "bg-slate-900" : "bg-slate-200"
+              )}
+            />
+          ))}
+        </div>
         <button
           type="button"
-          onClick={() => scroll("right")}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 z-10"
-          aria-label={getText("scroll_right")}
+          onClick={() => {
+            logEvent(EVENT_TYPES.HEADER_NAV_LINK, {
+              label: `explore_${title}`,
+              destination: exploreHref,
+            });
+            router.push(exploreHref);
+          }}
+          className="text-sm font-semibold text-slate-700 underline-offset-4 hover:underline"
         >
-          <ChevronRight size={24} />
+          View more in {title}
         </button>
-        {/*)}*/}
       </div>
-    </Card>
+    </BlurCard>
   );
 }

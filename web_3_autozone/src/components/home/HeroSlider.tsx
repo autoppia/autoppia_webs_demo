@@ -5,10 +5,12 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
+const AUTO_DELAY = 5000;
+
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { getText, getId } = useV3Attributes();
-  
+
   const sliderImages = [
     {
       id: 1,
@@ -17,7 +19,7 @@ export function HeroSlider() {
     },
     {
       id: 2,
-      url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
+      url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1600&q=80",
       altKey: "slider_alt_2",
     },
     {
@@ -27,43 +29,44 @@ export function HeroSlider() {
     },
     {
       id: 4,
-      url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1200&q=80",
+      url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1600&q=80",
       altKey: "slider_alt_4",
     },
     {
       id: 5,
-      url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80",
+      url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80",
       altKey: "slider_alt_5",
     },
   ];
+  const slideCount = sliderImages.length;
 
   const nextSlide = () => {
-    setCurrentSlide((prev) =>
-      prev === sliderImages.length - 1 ? 0 : prev + 1
-    );
+    setCurrentSlide((prev) => (prev === slideCount - 1 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) =>
-      prev === 0 ? sliderImages.length - 1 : prev - 1
-    );
+    setCurrentSlide((prev) => (prev === 0 ? slideCount - 1 : prev - 1));
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      nextSlide();
-    }, 2000);
-
+      setCurrentSlide((prev) =>
+        prev === slideCount - 1 ? 0 : prev + 1
+      );
+    }, AUTO_DELAY);
     return () => clearInterval(interval);
-  }, []);
+  }, [slideCount]);
 
   return (
-    <div id={getId("hero_slider")} className="relative w-full overflow-hidden">
-      <div className="relative h-[300px] md:h-[400px] w-full">
+    <div
+      id={getId("hero_slider")}
+      className="relative h-[320px] w-full overflow-hidden rounded-[32px] bg-slate-900 text-white shadow-elevated lg:h-[420px]"
+    >
+      <div className="absolute inset-0">
         {sliderImages.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-500 ${
+            className={`absolute inset-0 transition-opacity duration-700 ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -78,38 +81,41 @@ export function HeroSlider() {
         ))}
       </div>
 
-      {/* Gradient overlay at the bottom */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-[100px]"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
-        }}
-      />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
 
-      {/* Navigation arrows */}
+      <div className="absolute bottom-6 left-6 right-6 space-y-2">
+        <p className="text-xs uppercase tracking-[0.4em] text-white/70">
+          Live install network
+        </p>
+        <p className="text-2xl font-semibold leading-snug lg:text-3xl">
+          Orchestrate every drop-off, install, and compliance check in one view.
+        </p>
+      </div>
+
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 opacity-70 hover:opacity-100 z-10 shadow"
+        className="absolute left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-3 text-slate-900 shadow-lg transition hover:bg-white"
         aria-label={getText("previous_slide")}
       >
-        <ChevronLeft size={36} />
+        <ChevronLeft size={24} />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 opacity-70 hover:opacity-100 z-10 shadow"
+        className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-3 text-slate-900 shadow-lg transition hover:bg-white"
         aria-label={getText("next_slide")}
       >
-        <ChevronRight size={36} />
+        <ChevronRight size={24} />
       </button>
 
-      {/* Slide indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-        {sliderImages.map((_, index) => (
-          <div
-            key={index}
-            className={`h-2 w-2 rounded-full ${
-              index === currentSlide ? "bg-white" : "bg-gray-300"
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+        {sliderImages.map((slide, index) => (
+          <button
+            key={slide.id}
+            type="button"
+            aria-label={`Go to slide ${index + 1}`}
+            onClick={() => setCurrentSlide(index)}
+            className={`h-1.5 w-8 rounded-full transition ${
+              index === currentSlide ? "bg-white" : "bg-white/40"
             }`}
           />
         ))}

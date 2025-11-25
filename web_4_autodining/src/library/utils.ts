@@ -3,6 +3,9 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useSeed } from "@/context/SeedContext";
 
+const MAX_V1_SEED = 300;
+export const TOTAL_LAYOUT_VARIANTS = 20;
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -1159,11 +1162,13 @@ export function isDynamicModeEnabled(): boolean {
   return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
 }
 
-// Helper function to map seed to layout index (1-10)
+// Helper function to map seed to layout index (1-total variants)
 export function getLayoutIndexFromSeed(seed: number): number {
-  if (seed < 1 || seed > 300) return 1; // fallback
-  const bucket = seed % 30 || 30;  // gives 1–30
-  const layoutId = ((bucket - 1) % 10) + 1; // cycles into 1–10
+  if (!Number.isFinite(seed) || seed < 1 || seed > MAX_V1_SEED) {
+    return 1;
+  }
+  const normalizedSeed = Math.floor(seed);
+  const layoutId = ((normalizedSeed - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
   return layoutId;
 }
 

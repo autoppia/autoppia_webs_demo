@@ -1,8 +1,10 @@
 /**
  * V1 Layout Variations System for web_4_autodining
- * 
+ *
  * Changes HTML structure and layout based on v1 seed.
  */
+
+import { getLayoutIndexFromSeed } from "@/library/utils";
 
 export interface SeedLayoutConfig {
   // Layout variations
@@ -31,7 +33,7 @@ export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
   }
 
   const effectiveSeed = seed ?? 1;
-  const layoutIndex = ((effectiveSeed % 30) + 1) % 10 || 10;
+  const layoutIndex = getLayoutIndexFromSeed(effectiveSeed);
 
   const justifyClasses = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"];
   const gapClasses = ["gap-2", "gap-3", "gap-4", "gap-5", "gap-6"];
