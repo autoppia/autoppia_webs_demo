@@ -1,5 +1,7 @@
 // Dynamic Seed-Based Layout System
 // This file generates different layout configurations based on a seed value (1-300)
+const TOTAL_LAYOUT_VARIANTS = 20;
+
 export interface SeedLayout {
   seed: number;
   layoutId: number;
@@ -129,24 +131,20 @@ function getLayoutId(seed: number): number {
   if (specialLayouts[seed]) {
     return specialLayouts[seed];
   }
-  // Map to 1-10 range using modulo
-  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
-  return layoutIndex;
+  // Map to full layout range using modulo
+  return ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
 }
 // Generate layout configuration based on seed
 export function getSeedLayout(seed: number = 6): SeedLayout {
   const effectiveSeed = getEffectiveSeed(seed);
   const layoutId = getLayoutId(effectiveSeed);
-  // Normalize to 1-10 for position arrays
-  const normalizedSeed = ((layoutId - 1) % 10) + 1;
+  const layoutIndex = layoutId - 1;
+  const pickFrom = <T,>(arr: T[]): T => arr[layoutIndex % arr.length];
   // Search bar positions
   const searchPositions: Array<'left' | 'center' | 'right' | 'top' | 'bottom'> = [
     'right', 'center', 'top', 'bottom', 'left', 'right', 'center', 'top', 'bottom', 'left'
   ];
-  // Navigation positions
-  const navPositions: Array<'left' | 'center' | 'right'> = [
-    'left', 'center', 'right', 'left', 'center', 'right', 'left', 'center', 'right', 'left'
-  ];
+  const navCycle: Array<'left' | 'center' | 'right'> = ['left', 'center', 'right'];
   // Hero button positions
   const heroPositions: Array<'left' | 'center' | 'right'> = [
     'center', 'left', 'right', 'center', 'left', 'right', 'center', 'left', 'right', 'center'
@@ -165,27 +163,34 @@ export function getSeedLayout(seed: number = 6): SeedLayout {
     ['menu', 'header', 'reviews'], // Menu first
     ['reviews', 'header', 'menu'], // Reviews first
   ];
+  const searchPosition = pickFrom(searchPositions);
+  const heroPosition = pickFrom(heroPositions);
+  const detailOrder = elementOrders[layoutIndex % elementOrders.length];
+  const navBase = layoutIndex % navCycle.length;
+  const logoPosition = navCycle[navBase];
+  const cartPosition = navCycle[(navBase + 1) % navCycle.length];
+  const menuPosition = navCycle[(navBase + 2) % navCycle.length];
   return {
     seed: effectiveSeed,
     layoutId: layoutId,
     searchBar: {
-      position: searchPositions[normalizedSeed - 1],
+      position: searchPosition,
       containerClass: generateVariations('search-container', effectiveSeed),
       inputClass: generateVariations('search-input', effectiveSeed),
-      wrapperClass: normalizedSeed % 3 === 0 ? generateVariations('search-wrapper', effectiveSeed) : undefined,
+      wrapperClass: layoutId % 3 === 0 ? generateVariations('search-wrapper', effectiveSeed) : undefined,
       xpath: generateXPath('input', effectiveSeed),
     },
     navbar: {
-      logoPosition: navPositions[normalizedSeed - 1],
-      cartPosition: navPositions[(normalizedSeed + 1) % 3],
-      menuPosition: navPositions[(normalizedSeed + 2) % 3],
+      logoPosition,
+      cartPosition,
+      menuPosition,
       containerClass: generateVariations('navbar-container', effectiveSeed),
       xpath: generateXPath('nav', effectiveSeed),
     },
     navigation: {
-      logoPosition: navPositions[normalizedSeed - 1],
-      cartPosition: navPositions[(normalizedSeed + 1) % 3],
-      menuPosition: navPositions[(normalizedSeed + 2) % 3],
+      logoPosition,
+      cartPosition,
+      menuPosition,
       containerClass: generateVariations('navbar-container', effectiveSeed),
       logoClass: generateVariations('navbar-logo', effectiveSeed),
       cartClass: generateVariations('navbar-cart', effectiveSeed),
@@ -193,7 +198,7 @@ export function getSeedLayout(seed: number = 6): SeedLayout {
       xpath: generateXPath('nav', effectiveSeed),
     },
     hero: {
-      buttonPosition: heroPositions[normalizedSeed - 1],
+      buttonPosition: heroPosition,
       buttonClass: generateVariations('hero-button', effectiveSeed),
       containerClass: generateVariations('hero-container', effectiveSeed),
       xpath: generateXPath('section', effectiveSeed),
@@ -230,7 +235,7 @@ export function getSeedLayout(seed: number = 6): SeedLayout {
       xpath: generateXPath('div', effectiveSeed),
     },
     restaurantDetail: {
-      elementOrder: elementOrders[normalizedSeed - 1],
+      elementOrder: detailOrder,
       containerClass: generateVariations('restaurant-detail-container', effectiveSeed),
       headerClass: generateVariations('restaurant-detail-header', effectiveSeed),
       menuClass: generateVariations('restaurant-detail-menu', effectiveSeed),

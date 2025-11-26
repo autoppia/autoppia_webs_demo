@@ -220,8 +220,8 @@ export function getSeedLayout(seed?: number): LayoutConfig {
     }
   ];
 
-  // Apply the seed mapping formula: ((seed % 30) + 1) % 10 || 10
-  const mappedSeed = ((seed % 30) + 1) % 10 || 10;
+  const totalLayouts = layouts.length;
+  const mappedSeed = ((Math.floor(seed) - 1) % totalLayouts) + 1;
   
   return layouts[mappedSeed - 1] || layouts[0];
 }

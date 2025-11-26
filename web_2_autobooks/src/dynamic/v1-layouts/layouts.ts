@@ -20,13 +20,15 @@ export interface SeedLayoutConfig {
   colorScheme: 'default' | 'inverted' | 'monochrome' | 'accent';
 }
 
+const TOTAL_LAYOUT_VARIANTS = 20;
+
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
   if (!seed || seed < 1) {
     // When no seed is provided, return layout index 1 (Classic Amazon-style layout)
     // This is the layout that is "at seed=1" meaning layout index 1
     return getLayoutByIndex(1);
   }
-  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
+  const layoutIndex = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
   return getLayoutByIndex(layoutIndex);
 }
 

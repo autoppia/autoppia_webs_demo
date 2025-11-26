@@ -27,6 +27,8 @@ const isDynamicFlagEnabled = (): boolean => {
   );
 };
 
+const TOTAL_LAYOUT_VARIANTS = 10;
+
 export function isDynamicEnabled(): boolean {
   return isDynamicFlagEnabled();
 }
@@ -47,7 +49,7 @@ export function getSeedLayout(seed?: number): SeedLayoutConfig {
     return getLayoutByIndex(2);
   }
 
-  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
+  const layoutIndex = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
   return getLayoutByIndex(layoutIndex);
 }
 

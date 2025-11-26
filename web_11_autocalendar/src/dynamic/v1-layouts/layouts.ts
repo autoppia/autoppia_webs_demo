@@ -24,6 +24,8 @@ export interface SeedLayoutConfig {
   };
 }
 
+const TOTAL_LAYOUT_VARIANTS = 20;
+
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
   // If no seed provided or dynamic HTML is disabled, return default
   if (!seed || seed < 1 || seed > 300) {
@@ -60,9 +62,8 @@ export function getSeedLayout(seed?: number): SeedLayoutConfig {
     return getLayoutByIndex(specialLayouts[seed]);
   }
 
-  // Map seed (1-300) to layout index (1-10) using modulo for less obvious pattern
-  // Use modulo 30 to get 0-29 range, then add 1 for 1-30, then modulo 10 for 1-10 range
-  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
+  // Map seed (1-300) to layout index (1-total variants)
+  const layoutIndex = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
 
   return getLayoutByIndex(layoutIndex);
 }

@@ -197,7 +197,7 @@ export function getSeedLayout(seed?: number): SeedLayoutConfig {
     return LAYOUT_VARIATIONS[0];
   }
 
-  const layoutIndex = ((seed % 30) + 1) % LAYOUT_VARIATIONS.length || LAYOUT_VARIATIONS.length;
+  const layoutIndex = ((Math.floor(seed) - 1) % LAYOUT_VARIATIONS.length) + 1;
   return getLayoutByIndex(layoutIndex);
 }
 

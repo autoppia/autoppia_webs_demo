@@ -355,6 +355,8 @@ const LAYOUTS: Record<number, LayoutConfig> = {
   }
 };
 
+const TOTAL_LAYOUT_VARIANTS = Object.keys(LAYOUTS).length;
+
 const TRUE_VALUES = new Set(['true', '1', 'yes', 'on']);
 const FALSE_VALUES = new Set(['false', '0', 'no', 'off']);
 
@@ -420,10 +422,10 @@ export function getSeedLayout(seed?: number): LayoutConfig {
     return LAYOUTS[1];
   }
 
-  // Apply the seed mapping formula: ((seed % 30) + 1) % 10 || 10
+  // Normalize seed into available layout range
   // Special-case: seed=3 should use the Default Layout (layout 1)
   if (seed === 3) return LAYOUTS[1];
-  const mappedSeed = ((seed % 30) + 1) % 10 || 10;
+  const mappedSeed = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
   
   const baseLayout = LAYOUTS[mappedSeed];
   

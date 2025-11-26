@@ -20,13 +20,16 @@ export interface SeedLayoutConfig {
   colorScheme: 'default' | 'inverted' | 'monochrome' | 'accent';
 }
 
+const TOTAL_LAYOUT_VARIANTS = 20;
+
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
   if (!seed || seed < 1) {
     // When no seed is provided, return layout index 6 (Floating header layout)
     // This is the layout that is "at seed=6" meaning layout index 6
     return getLayoutByIndex(6);
   }
-  const layoutIndex = ((seed % 30) + 1) % 10 || 10;
+  const normalizedSeed = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
+  const layoutIndex = normalizedSeed;
   return getLayoutByIndex(layoutIndex);
 }
 
