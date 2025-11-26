@@ -207,13 +207,16 @@ function ProductContent() {
   };
 
   const quantityInput = (
-    <>
-      <label htmlFor={getId("quantity_select")} className="mt-2 mb-1 block text-[15px]">
-        {getText("quantity")}:
+    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+      <label
+        htmlFor={getId("quantity_select")}
+        className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-slate-400"
+      >
+        {getText("quantity")}
       </label>
       <select
         id={getId("quantity_select")}
-        className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
+        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 focus:border-slate-400 focus:outline-none"
         value={quantity}
         onChange={(e) => {
           const newQty = Number.parseInt(e.target.value);
@@ -223,15 +226,13 @@ function ProductContent() {
             product_name: product.title,
             previous_quantity: quantity,
             new_quantity: newQty,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
             price: product.price,
             category: product.category,
             brand: product.brand,
             rating: product.rating,
+            updated_at: new Date().toISOString(),
           });
         }}
-        style={{ maxWidth: "170px" }}
       >
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
           <option key={n} value={n}>
@@ -239,7 +240,7 @@ function ProductContent() {
           </option>
         ))}
       </select>
-    </>
+    </div>
   );
 
   const addToCartButton = (
@@ -505,40 +506,6 @@ function ProductContent() {
               <p className="text-sm text-slate-600">
                 {getText("free_delivery")} <strong>{DELIVERY_DATE}</strong> — Autozone crews available
               </p>
-              <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
-                <label
-                  htmlFor={getId("quantity_select")}
-                  className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-slate-400"
-                >
-                  {getText("quantity")}
-                </label>
-                <select
-                  id={getId("quantity_select")}
-                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 focus:border-slate-400 focus:outline-none"
-                  value={quantity}
-                  onChange={(e) => {
-                    const newQty = Number.parseInt(e.target.value);
-                    setQuantity(newQty);
-                    logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
-                      product_id: product.id,
-                      product_name: product.title,
-                      previous_quantity: quantity,
-                      new_quantity: newQty,
-                      price: product.price,
-                      category: product.category,
-                      brand: product.brand,
-                      rating: product.rating,
-                      updated_at: new Date().toISOString(),
-                    });
-                  }}
-                >
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-              </div>
               {layouts[order].map((element, index) => (
                 <div key={index}>{element}</div>
               ))}
