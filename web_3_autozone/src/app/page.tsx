@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
@@ -8,11 +7,7 @@ import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { KpiStat } from "@/components/ui/KpiStat";
 import { Suspense } from "react";
-import {
-  getProductsByCategory,
-  getLayoutConfig,
-  getEffectiveSeed,
-} from "@/dynamic/v2-data";
+import { getProductsByCategory, getLayoutConfig, getEffectiveSeed } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ArrowRight, Calendar, Package, ShieldCheck, Sparkles } from "lucide-react";
@@ -22,13 +17,15 @@ import {
   onWishlistChange,
   type WishlistItem,
 } from "@/library/wishlist";
+import { useSeed } from "@/context/SeedContext";
 
 function HomeContent() {
-  const searchParams = useSearchParams();
+  const { resolvedSeeds } = useSeed();
   const router = useSeedRouter();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
-  const seed = getEffectiveSeed(rawSeed);
-  const layoutConfig = getLayoutConfig(seed);
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? 1;
+  const v1Seed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? v2Seed;
+  const seed = getEffectiveSeed(v2Seed);
+  const layoutConfig = getLayoutConfig(v1Seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
 
   // Dynamic product groupings
@@ -110,7 +107,6 @@ function HomeContent() {
   ];
 
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[] | null>(null);
-
   const navigateWithTracking = (
     href: string,
     payload: { label: string; source: string } & Record<string, any>
@@ -163,9 +159,14 @@ function HomeContent() {
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.scrollTo({ left: 0 });
+  }, [seed]);
+
   return (
     <main
-      className={`min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 ${layoutClasses.spacing}`}
+      className={`min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 ${layoutClasses.spacing} overflow-x-hidden`}
     >
       <div className={`relative z-10 px-4 pb-16 ${layoutClasses.content}`}>
         <section className="omnizon-container grid gap-10 pb-24 pt-28 lg:grid-cols-[1.1fr,0.9fr]">

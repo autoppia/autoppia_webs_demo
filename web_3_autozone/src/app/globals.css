@@ -174,15 +174,15 @@
   }
   
   .content-wide {
-    @apply mx-0 max-w-none px-2;
+    @apply mx-auto w-full max-w-screen-2xl px-3 sm:px-4;
   }
   
   .content-narrow {
-    @apply mx-auto max-w-4xl px-4;
+    @apply mx-auto w-full max-w-4xl px-4;
   }
   
   .content-default {
-    @apply mx-auto max-w-7xl px-4;
+    @apply mx-auto w-full max-w-7xl px-4;
   }
   
   /* Card Layout Variations */
