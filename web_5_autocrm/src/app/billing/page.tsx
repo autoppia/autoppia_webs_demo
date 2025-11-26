@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { Timer, PlayCircle, PauseCircle, Plus, Trash2 } from "lucide-react";
+import { Timer, PlayCircle, PauseCircle, Plus, Trash2, Pencil } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_LOGS } from "@/library/dataset";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
@@ -51,6 +51,13 @@ export default function BillingPage() {
     description: "",
   });
   const [logs, setLogs] = useState(resolvedLogs);
+  const [editingLogId, setEditingLogId] = useState<number | null>(null);
+  const [editDraft, setEditDraft] = useState({
+    matter: "",
+    hours: 0.5,
+    description: "",
+    status: "Billable",
+  });
   useEffect(() => {
     if (isLoading) return;
     setLogs(resolvedLogs);
@@ -111,6 +118,32 @@ export default function BillingPage() {
     const log = logs.find((l) => l.id === id);
     if (log) logEvent(EVENT_TYPES.LOG_DELETE, log);
     setLogs((logs) => logs.filter((l) => l.id !== id));
+  }
+
+  function startEdit(logId: number) {
+    const log = logs.find((l) => l.id === logId);
+    if (!log) return;
+    setEditingLogId(logId);
+    setEditDraft({
+      matter: log.matter,
+      hours: log.hours,
+      description: log.description,
+      status: log.status ?? "Billable",
+    });
+  }
+
+  function saveEdit(logId: number) {
+    const before = logs.find((l) => l.id === logId);
+    const updated = before
+      ? { ...before, ...editDraft }
+      : { ...editDraft, id: logId };
+    setLogs((prev) =>
+      prev.map((l) => (l.id === logId ? { ...l, ...editDraft } : l))
+    );
+    if (before) {
+      logEvent(EVENT_TYPES.LOG_EDITED, { before, after: updated });
+    }
+    setEditingLogId(null);
   }
 
   return (
@@ -265,57 +298,150 @@ export default function BillingPage() {
                 data-testid={`log-entry-${l.id}`}
                 className="bg-white rounded-2xl shadow p-5 flex flex-col sm:flex-row items-start sm:items-center gap-2 border border-zinc-100 hover:shadow-lg transition group relative"
               >
-                <div className="flex-1 flex flex-col sm:flex-row gap-1 sm:gap-6 items-start sm:items-center">
-                  <span
-                    id={`log-hours-${l.id}`}
-                    className="text-xl font-bold text-accent-forest min-w-[38px] text-left"
-                  >
-                    {l.hours}h
-                  </span>
-                  <span
-                    id={`log-matter-${l.id}`}
-                    className="text-zinc-700 font-semibold"
-                  >
-                    {l.matter}
-                  </span>
-                  <span
-                    id={`log-client-${l.id}`}
-                    className="text-xs text-zinc-400 whitespace-nowrap"
-                  >
-                    {l.client}
-                  </span>
-                  <span
-                    id={`log-date-${l.id}`}
-                    className="text-xs text-zinc-400"
-                  >
-                    {l.date}
-                  </span>
-                  <span
-                    id={`log-status-${l.id}`}
-                    className={`inline-flex px-3 py-1 ml-3 rounded-2xl text-xs font-semibold ${
-                      l.status === "Billable"
-                        ? "bg-accent-forest/10 text-accent-forest"
-                        : "bg-zinc-200 text-zinc-500"
-                    }`}
-                  >
-                    {l.status}
-                  </span>
-                  <span
-                    id={`log-description-${l.id}`}
-                    className="text-zinc-500 ml-2"
-                  >
-                    {l.description}
-                  </span>
-                </div>
-                <button
-                  id={`${getId("delete_log_button")}-${l.id}`}
-                  className="absolute right-3 top-3 text-zinc-300 hover:text-red-500 rounded-full"
-                  title={getText("delete_button", "Delete")}
-                  onClick={() => deleteLog(l.id)}
-                  aria-label={`${getText("delete_button", "Delete")} ${l.matter}`}
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
+                {editingLogId === l.id ? (
+                  <div className="w-full flex flex-col gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="flex flex-col w-full sm:w-1/3">
+                        <label htmlFor={`edit-matter-${l.id}`} className="text-xs text-zinc-500">
+                          {getText("matter_name", "Matter Name")}
+                        </label>
+                        <input
+                          id={`edit-matter-${l.id}`}
+                          className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+                          value={editDraft.matter}
+                          onChange={(e) =>
+                            setEditDraft((prev) => ({ ...prev, matter: e.target.value }))
+                          }
+                        />
+                      </div>
+                      <div className="flex flex-col w-full sm:w-24">
+                        <label htmlFor={`edit-hours-${l.id}`} className="text-xs text-zinc-500">
+                          {getText("hours_logged", "Hours")}
+                        </label>
+                        <input
+                          id={`edit-hours-${l.id}`}
+                          type="number"
+                          step=".1"
+                          min="0.1"
+                          className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+                          value={editDraft.hours}
+                          onChange={(e) =>
+                            setEditDraft((prev) => ({ ...prev, hours: +e.target.value }))
+                          }
+                        />
+                      </div>
+                      <div className="flex flex-col w-full sm:w-40">
+                        <label htmlFor={`edit-status-${l.id}`} className="text-xs text-zinc-500">
+                          {getText("status", "Status")}
+                        </label>
+                        <select
+                          id={`edit-status-${l.id}`}
+                          className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+                          value={editDraft.status}
+                          onChange={(e) =>
+                            setEditDraft((prev) => ({ ...prev, status: e.target.value }))
+                          }
+                        >
+                          <option value="Billable">Billable</option>
+                          <option value="Billed">Billed</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <label htmlFor={`edit-description-${l.id}`} className="text-xs text-zinc-500">
+                        {getText("task_description", "Task Description")}
+                      </label>
+                      <input
+                        id={`edit-description-${l.id}`}
+                        className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+                        value={editDraft.description}
+                        onChange={(e) =>
+                          setEditDraft((prev) => ({ ...prev, description: e.target.value }))
+                        }
+                      />
+                    </div>
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        type="button"
+                        className="px-4 py-2 rounded-xl border border-zinc-200 text-sm"
+                        onClick={() => setEditingLogId(null)}
+                      >
+                        {getText("cancel_button", "Cancel")}
+                      </button>
+                      <button
+                        type="button"
+                        className="px-4 py-2 rounded-xl bg-accent-forest text-white text-sm flex items-center gap-2"
+                        onClick={() => saveEdit(l.id)}
+                      >
+                        {getText("save_changes", "Save changes")}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex-1 flex flex-col sm:flex-row gap-1 sm:gap-6 items-start sm:items-center">
+                      <span
+                        id={`log-hours-${l.id}`}
+                        className="text-xl font-bold text-accent-forest min-w-[38px] text-left"
+                      >
+                        {l.hours}h
+                      </span>
+                      <span
+                        id={`log-matter-${l.id}`}
+                        className="text-zinc-700 font-semibold"
+                      >
+                        {l.matter}
+                      </span>
+                      <span
+                        id={`log-client-${l.id}`}
+                        className="text-xs text-zinc-400 whitespace-nowrap"
+                      >
+                        {l.client}
+                      </span>
+                      <span
+                        id={`log-date-${l.id}`}
+                        className="text-xs text-zinc-400"
+                      >
+                        {l.date}
+                      </span>
+                      <span
+                        id={`log-status-${l.id}`}
+                        className={`inline-flex px-3 py-1 ml-3 rounded-2xl text-xs font-semibold ${
+                          l.status === "Billable"
+                            ? "bg-accent-forest/10 text-accent-forest"
+                            : "bg-zinc-200 text-zinc-500"
+                        }`}
+                      >
+                        {l.status}
+                      </span>
+                      <span
+                        id={`log-description-${l.id}`}
+                        className="text-zinc-500 ml-2"
+                      >
+                        {l.description}
+                      </span>
+                    </div>
+                    <div className="absolute right-3 top-3 flex items-center gap-2">
+                      <button
+                        className="text-zinc-400 hover:text-accent-forest rounded-full"
+                        title={getText("edit", "Edit")}
+                        onClick={() => startEdit(l.id)}
+                        aria-label={`${getText("edit", "Edit")} ${l.matter}`}
+                      >
+                        <Pencil className="w-5 h-5" />
+                      </button>
+                      <button
+                        id={`${getId("delete_log_button")}-${l.id}`}
+                        className="text-zinc-300 hover:text-red-500 rounded-full"
+                        title={getText("delete_button", "Delete")}
+                        onClick={() => deleteLog(l.id)}
+                        aria-label={`${getText("delete_button", "Delete")} ${l.matter}`}
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
