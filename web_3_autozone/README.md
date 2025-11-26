@@ -1,7 +1,7 @@
 
-# Autozon – Fullstack E-Commerce (Next.js)
+# Autozone – Fullstack E-Commerce (Next.js)
 
-Autozon is a fullstack e-commerce web application built using **Next.js** (App Router), styled with **TailwindCSS**, and equipped with a custom event logging system that captures frontend interactions and writes them to a database.
+Autozone is a fullstack e-commerce web application built using **Next.js** (App Router), styled with **TailwindCSS**, and equipped with a custom event logging system that captures frontend interactions and writes them to a database.
 
 This version is fully Dockerized, allowing seamless setup and deployment with minimal local dependencies.
 

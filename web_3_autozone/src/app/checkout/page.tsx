@@ -29,7 +29,7 @@ export default function CheckoutPage() {
         <div className="omnizon-container space-y-10">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
-              Autozon
+              Autozone
             </p>
             <h1 className="text-3xl font-semibold text-slate-900">
               {getText("checkout")}{" "}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 import { useCart } from "@/context/CartContext";
@@ -21,12 +21,22 @@ export function WishlistPage() {
   const [items, setItems] = useState<WishlistItem[]>([]);
   const { addToCart } = useCart();
   const router = useSeedRouter();
+  const hasLoggedView = useRef(false);
 
   useEffect(() => {
     const loadWishlist = () => setItems(getWishlistItems());
     loadWishlist();
     return onWishlistChange(loadWishlist);
   }, []);
+
+  useEffect(() => {
+    if (hasLoggedView.current) return;
+    hasLoggedView.current = true;
+    logEvent(EVENT_TYPES.VIEW_WISHLIST, {
+      source: "wishlist_page",
+      totalItems: items.length,
+    });
+  }, [items.length]);
 
   const totalValue = useMemo(
     () =>
@@ -37,11 +47,21 @@ export function WishlistPage() {
     [items]
   );
 
+  const buildProductEventData = (item: WishlistItem) => ({
+    productId: item.id,
+    title: item.title,
+    price: item.price,
+    category: item.category,
+    brand: item.brand,
+    rating: item.rating,
+  });
+
   const handleRemove = (item: WishlistItem) => {
     toggleWishlistItem(item);
-    logEvent(EVENT_TYPES.WISHLIST_VIEW, {
-      productId: item.id,
+    logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+      ...buildProductEventData(item),
       action: "removed",
+      source: "wishlist_page",
     });
   };
 
@@ -60,7 +80,10 @@ export function WishlistPage() {
   const handleClearAll = () => {
     clearWishlist();
     setItems([]);
-    logEvent(EVENT_TYPES.WISHLIST_VIEW, { action: "clear_all" });
+    logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+      action: "clear_all",
+      source: "wishlist_page",
+    });
   };
 
   return (
@@ -184,4 +207,3 @@ export function WishlistPage() {
     </section>
   );
 }
-

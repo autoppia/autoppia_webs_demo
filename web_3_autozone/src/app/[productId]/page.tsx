@@ -12,7 +12,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
-import { getEffectiveSeed, getProductById } from "@/dynamic/v2-data";
+import { getProductById } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
 import {
@@ -28,7 +28,7 @@ const DELIVERY_ADDRESS = "Daly City 94016";
 function ProductContent() {
   const router = useSeedRouter();
   const { productId } = useParams();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { getText, getId } = useV3Attributes();
@@ -48,7 +48,7 @@ function ProductContent() {
     setIsLoading(true);
 
     if (typeof productId === "string") {
-      const foundProduct: any = getProductById(productId);
+      const foundProduct = getProductById(productId);
       if (foundProduct) {
         setProduct(foundProduct);
       }
@@ -56,19 +56,27 @@ function ProductContent() {
     }
   }, [productId]);
 
+  const productEventData = useMemo(
+    () =>
+      product
+        ? {
+            productId: product.id,
+            title: product.title,
+            price: product.price,
+            category: product.category,
+            brand: product.brand,
+            rating: product.rating,
+          }
+        : null,
+    [product]
+  );
+
   // Log view event
   useEffect(() => {
-    if (product) {
-      logEvent(EVENT_TYPES.VIEW_DETAIL, {
-        productId: product.id,
-        title: product.title,
-        price: product.price,
-        category: product.category,
-        brand: product.brand,
-        rating: product.rating,
-      });
+    if (productEventData) {
+      logEvent(EVENT_TYPES.VIEW_DETAIL, { ...productEventData });
     }
-  }, [product]);
+  }, [productEventData]);
 
   useEffect(() => {
     if (product?.id) {
@@ -133,7 +141,7 @@ function ProductContent() {
     if (!product?.description) {
       return [
         "Designed for multi-location deployment teams.",
-        "Pairs with Autozon install scheduling.",
+        "Pairs with Autozone install scheduling.",
         "Eligible for carbon-neutral routing offsets.",
       ];
     }
@@ -141,16 +149,13 @@ function ProductContent() {
   }, [product?.description]);
 
   const handleShareProduct = async () => {
-    if (!product) return;
+    if (!product || !productEventData) return;
     const shareUrl =
       typeof window !== "undefined" ? window.location.href : product.id;
 
     logEvent(EVENT_TYPES.SHARE_PRODUCT, {
-      productId: product.id,
-      title: product.title,
-      price: product.price,
-      category: product.category,
-      brand: product.brand,
+      ...productEventData,
+      shareUrl,
     });
 
     try {
@@ -173,7 +178,7 @@ function ProductContent() {
   };
 
   const handleWishlistToggle = () => {
-    if (!product) return;
+    if (!product || !productEventData) return;
     const { added } = toggleWishlistItem({
       id: product.id,
       title: product.title,
@@ -181,25 +186,21 @@ function ProductContent() {
       image: product.image,
       category: product.category,
       brand: product.brand,
+      rating: product.rating,
     });
     setWishlistAdded(added);
     logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
-      productId: product.id,
-      title: product.title,
-      price: product.price,
-      category: product.category,
-      brand: product.brand,
+      ...productEventData,
       action: added ? "added" : "removed",
     });
   };
 
   const handleExploreToggle = () => {
-    if (!product) return;
+    if (!product || !productEventData) return;
     const next = !isExploreOpen;
     setIsExploreOpen(next);
-    logEvent(EVENT_TYPES.VIEW_MORE_DETAILS, {
-      productId: product.id,
-      title: product.title,
+    logEvent(EVENT_TYPES.DETAILS_TOGGLE, {
+      ...productEventData,
       section: "explore_further",
       expanded: next,
     });
@@ -502,7 +503,7 @@ function ProductContent() {
                 {product.price}
               </div>
               <p className="text-sm text-slate-600">
-                {getText("free_delivery")} <strong>{DELIVERY_DATE}</strong> — Autozon crews available
+                {getText("free_delivery")} <strong>{DELIVERY_DATE}</strong> — Autozone crews available
               </p>
               <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
                 <label
@@ -544,7 +545,7 @@ function ProductContent() {
               <dl className="grid gap-2 text-xs text-slate-500">
                 <div className="flex justify-between">
                   <dt>{getText("ships_from")}</dt>
-                  <dd className="text-slate-900">Autozon Fulfillment</dd>
+                  <dd className="text-slate-900">Autozone Fulfillment</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt>{getText("sold_by")}</dt>

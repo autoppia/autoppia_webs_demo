@@ -5,7 +5,7 @@ const EVENT_NAME = "wishlist:updated";
 
 export type WishlistItem = Pick<
   Product,
-  "id" | "title" | "price" | "image" | "category" | "brand"
+  "id" | "title" | "price" | "image" | "category" | "brand" | "rating"
 >;
 
 const isBrowser = () => typeof window !== "undefined";
@@ -62,6 +62,7 @@ export const toggleWishlistItem = (
         image: product.image,
         category: product.category,
         brand: product.brand,
+        rating: product.rating,
       },
     ];
   }
@@ -79,4 +80,3 @@ export const onWishlistChange = (handler: () => void) => {
   window.addEventListener(EVENT_NAME, handler);
   return () => window.removeEventListener(EVENT_NAME, handler);
 };
-

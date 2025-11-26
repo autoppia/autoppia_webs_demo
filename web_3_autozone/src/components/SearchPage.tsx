@@ -21,6 +21,7 @@ export default function SearchPage() {
   const router = useSeedRouter();
   const urlQuery = searchParams.get("q") ?? "";
   const query = urlQuery.toLowerCase() || "1";
+  const categoryParam = (searchParams.get("category") ?? "all").toLowerCase();
   const { addToCart } = useCart();
   const { getText, getId } = useV3Attributes();
   const [addedToCartId, setAddedToCartId] = useState<string | null>(null);
@@ -28,12 +29,17 @@ export default function SearchPage() {
     null
   );
   const [localQuery, setLocalQuery] = useState(urlQuery);
+  const [activeCategory, setActiveCategory] = useState<string>(categoryParam || "all");
   const [sortOption, setSortOption] = useState<"relevance" | "price-asc" | "price-desc" | "rating">("relevance");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   useEffect(() => {
     setLocalQuery(urlQuery);
   }, [urlQuery]);
+
+  useEffect(() => {
+    setActiveCategory(categoryParam || "all");
+  }, [categoryParam]);
 
   const quickFilters = [
     { label: "Install kits", query: "install" },
@@ -44,6 +50,23 @@ export default function SearchPage() {
   ];
 
   const baseResults = searchProducts(query);
+  const availableCategories = useMemo(() => {
+    const options = new Set<string>(["all"]);
+    baseResults.forEach((product) => {
+      if (product.category) {
+        options.add(product.category.toLowerCase());
+      }
+    });
+    return Array.from(options);
+  }, [baseResults]);
+
+  const buildSearchUrl = (value: string, category: string) => {
+    const params = new URLSearchParams();
+    const trimmed = value.trim();
+    if (trimmed) params.set("q", trimmed);
+    if (category && category !== "all") params.set("category", category);
+    return params.toString() ? `/search?${params.toString()}` : "/search";
+  };
   const filteredResults = useMemo(() => {
     if (!activeQuickFilter) return baseResults;
     return baseResults.filter((product) =>
@@ -53,8 +76,15 @@ export default function SearchPage() {
     );
   }, [baseResults, activeQuickFilter]);
 
+  const categoryFilteredResults = useMemo(() => {
+    if (!activeCategory || activeCategory === "all") return filteredResults;
+    return filteredResults.filter((product) =>
+      (product.category || "").toLowerCase().includes(activeCategory)
+    );
+  }, [filteredResults, activeCategory]);
+
   const sortedResults = useMemo(() => {
-    const cloned = [...filteredResults];
+    const cloned = [...categoryFilteredResults];
     switch (sortOption) {
       case "price-asc":
         return cloned.sort(
@@ -73,15 +103,27 @@ export default function SearchPage() {
       default:
         return cloned;
     }
-  }, [filteredResults, sortOption]);
+  }, [categoryFilteredResults, sortOption]);
 
   const resultCount = sortedResults.length;
 
   const handleSearchSubmit = (event?: React.FormEvent) => {
     event?.preventDefault();
     const trimmed = localQuery.trim();
-    if (!trimmed) return;
-    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+    if (!trimmed && activeCategory === "all") return;
+    router.push(buildSearchUrl(trimmed, activeCategory));
+  };
+
+  const handleCategoryChange = (value: string) => {
+    const next = value.toLowerCase() || "all";
+    if (next === activeCategory) return;
+    setActiveCategory(next);
+    logEvent(EVENT_TYPES.CATEGORY_FILTER, {
+      category: next,
+      query: localQuery.trim() || urlQuery,
+      source: "search_page",
+    });
+    router.push(buildSearchUrl(localQuery || urlQuery, next));
   };
 
   const handleAddToCart = (product: Product) => {
@@ -277,6 +319,31 @@ export default function SearchPage() {
           >
             Clear filters
           </button>
+        </div>
+        <div className="subtle-divider" />
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+            Category
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {availableCategories.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => handleCategoryChange(category)}
+                className={cn(
+                  "rounded-full border px-3 py-2 text-xs font-semibold",
+                  activeCategory === category
+                    ? "border-slate-900 bg-slate-900 text-white"
+                    : "border-slate-200 text-slate-700 hover:border-slate-400"
+                )}
+              >
+                {category === "all"
+                  ? "All"
+                  : category.replace(/\b\w/g, (char) => char.toUpperCase())}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="subtle-divider" />
         <div className="space-y-2 text-sm text-slate-600">

@@ -206,10 +206,6 @@ export function ProductCarousel({
         <button
           type="button"
           onClick={() => {
-            logEvent(EVENT_TYPES.HEADER_NAV_LINK, {
-              label: `explore_${title}`,
-              destination: exploreHref,
-            });
             router.push(exploreHref);
           }}
           className="text-sm font-semibold text-slate-700 underline-offset-4 hover:underline"

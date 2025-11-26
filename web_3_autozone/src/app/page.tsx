@@ -111,29 +111,29 @@ function HomeContent() {
 
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[] | null>(null);
 
-  const handleNavigate = (
+  const navigateWithTracking = (
     href: string,
-    eventType: (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES],
-    data: Record<string, any>
+    payload: { label: string; source: string } & Record<string, any>
   ) => {
-    logEvent(eventType, data);
     router.push(href);
   };
 
-
   const handleWishlistProduct = (item: WishlistItem) => {
-    handleNavigate(`/${item.id}`, EVENT_TYPES.WISHLIST_VIEW, {
+    logEvent(EVENT_TYPES.VIEW_DETAIL, {
       productId: item.id,
       title: item.title,
       price: item.price,
       destination: `/${item.id}`,
+      source: "wishlist_preview",
     });
+    router.push(`/${item.id}`);
   };
 
   const handleHeroCta = (href: string, label: string) => {
-    handleNavigate(href, EVENT_TYPES.PROJECT_CTA, {
+    navigateWithTracking(href, {
       section: "hero",
       label,
+      source: "hero_cta",
     });
   };
 
@@ -176,7 +176,7 @@ function HomeContent() {
             </h1>
             <p className="text-base text-slate-600 md:text-lg">
               Deploy kits, lock delivery windows, and clear compliance in one view.
-              Autozon orchestrates the messy middle so your crews stay focused on
+              Autozone orchestrates the messy middle so your crews stay focused on
               installs—not admin work.
             </p>
             <div className="flex flex-wrap gap-3">
@@ -259,9 +259,10 @@ function HomeContent() {
                 <button
                   type="button"
                   onClick={() =>
-                    handleNavigate(tool.href, EVENT_TYPES.SERVICE_TOOL_NAV, {
-                      tool: tool.title,
-                      destination: tool.href,
+                    navigateWithTracking(tool.href, {
+                      label: tool.title,
+                      source: "service_tools",
+                      action: tool.actionLabel,
                     })
                   }
                   className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-slate-900"
@@ -283,11 +284,13 @@ function HomeContent() {
               actions={
                 <button
                   type="button"
-                  onClick={() =>
-                    handleNavigate("/wishlist", EVENT_TYPES.WISHLIST_VIEW, {
-                      action: "view_all",
-                    })
-                  }
+                  onClick={() => {
+                    logEvent(EVENT_TYPES.VIEW_WISHLIST, {
+                      source: "home_preview",
+                      intent: "view_all",
+                    });
+                    router.push("/wishlist");
+                  }}
                   className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
                 >
                   View all saved
@@ -350,14 +353,14 @@ function HomeContent() {
           <SectionHeading
             eyebrow="Product highlights"
             title="Trusted picks by category"
-            description="High-performing bundles and replacement parts curated by the Autozon ops brain."
+            description="High-performing bundles and replacement parts curated by the Autozone ops brain."
             actions={
               <button
                 type="button"
                 onClick={() =>
-                  handleNavigate("/search", EVENT_TYPES.HEADER_NAV_LINK, {
+                  navigateWithTracking("/search", {
                     label: "browse_catalog",
-                    destination: "/search",
+                    source: "highlights_header",
                   })
                 }
                 className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"

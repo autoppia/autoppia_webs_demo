@@ -24,18 +24,18 @@ export function Footer() {
       links: [
         "Careers",
         "Blog",
-        "About Autozon",
+        "About Autozone",
         "Investor Relations",
-        "Autozon Devices",
-        "Autozon Science",
+        "Autozone Devices",
+        "Autozone Science",
       ],
     },
     {
       title: getText("make_money_with_us"),
       links: [
-        "Sell products on Autozon",
-        "Sell on Autozon Business",
-        "Sell apps on Autozon",
+        "Sell products on Autozone",
+        "Sell on Autozone Business",
+        "Sell apps on Autozone",
         "Become an Affiliate",
         "Advertise Your Products",
         "Self-Publish with Us",
@@ -44,16 +44,16 @@ export function Footer() {
     {
       title: getText("payment_products"),
       links: [
-        "Autozon Business Card",
+        "Autozone Business Card",
         "Shop with Points",
         "Reload Your Balance",
-        "Autozon Currency Converter",
+        "Autozone Currency Converter",
       ],
     },
     {
       title: getText("let_us_help_you"),
       links: [
-        "Autozon and COVID-19",
+        "Autozone and COVID-19",
         "Your Account",
         "Your Orders",
         "Shipping Rates & Policies",
@@ -89,7 +89,7 @@ export function Footer() {
               </h2>
               <p className="max-w-2xl text-base text-white/70">
                 Tightly orchestrate procurement, delivery, and service follow-ups
-                across every Autozon workflow. One dashboard tracks installs,
+                across every Autozone workflow. One dashboard tracks installs,
                 automations, and savings in real time.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -161,7 +161,7 @@ export function Footer() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-lg font-semibold text-white">
-                  Autozon
+                  Autozone
                 </span>
                 <span className="rounded-full border border-white/20 px-3 py-1 text-xs uppercase tracking-[0.4em]">
                   WEB3
@@ -188,7 +188,7 @@ export function Footer() {
               </div>
             </div>
             <p className="mt-4 text-xs text-white/60">
-              © {new Date().getFullYear()} Autozon. Unified commerce infrastructure
+              © {new Date().getFullYear()} Autozone. Unified commerce infrastructure
               for installation-ready organizations.
             </p>
           </div>

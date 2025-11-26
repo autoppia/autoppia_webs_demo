@@ -13,9 +13,9 @@ import { DataReadyGate } from "@/components/layout/DataReadyGate";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Autozon - Online Shopping for Electronics, Apparel, and More",
+  title: "Autozone - Online Shopping for Electronics, Apparel, and More",
   description:
-    "Shop online for the best deals on electronics, clothing, books, and much more at Autozon.",
+    "Shop online for the best deals on electronics, clothing, books, and much more at Autozone.",
   icons: { icon: "/favicon.ico" },
 };
 

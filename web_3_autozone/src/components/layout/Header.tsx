@@ -25,7 +25,6 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useSeedRouter();
@@ -39,14 +38,7 @@ export function Header() {
     { label: "Fitness", value: "fitness" },
   ];
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-
-  const languages = [
-    { code: "en-US", label: "English (EN)", short: "EN" },
-    { code: "es-ES", label: "Español (ES)", short: "ES" },
-    { code: "fr-FR", label: "Français (FR)", short: "FR" },
-  ];
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
-
+  
   const accountActions = [
     { label: "View orders", href: "/checkout" },
     { label: "Saved wishlist", href: "/wishlist" },
@@ -82,7 +74,6 @@ export function Header() {
   const liveRoutes = 18 + (seed % 7);
   const liveCrews = 52 + (seed % 11);
 
-  const languageRef = useRef<HTMLDivElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
   const categoryRef = useRef<HTMLDivElement>(null);
 
@@ -92,12 +83,6 @@ export function Header() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        languageRef.current &&
-        !languageRef.current.contains(event.target as Node)
-      ) {
-        setLanguageMenuOpen(false);
-      }
       if (
         accountRef.current &&
         !accountRef.current.contains(event.target as Node)
@@ -124,44 +109,36 @@ export function Header() {
 
   useEffect(() => {
     if (mobileMenuOpen) {
-      setLanguageMenuOpen(false);
       setAccountMenuOpen(false);
       setIsCategoryOpen(false);
     }
   }, [mobileMenuOpen]);
 
-  const handleLanguageSelect = (language: (typeof languages)[number]) => {
-    setSelectedLanguage(language);
-    setLanguageMenuOpen(false);
-    logEvent(EVENT_TYPES.LANGUAGE_CHANGE, {
-      language: language.code,
-    });
-  };
 
   const handleAccountAction = (action: { label: string; href: string }) => {
     setAccountMenuOpen(false);
-    logEvent(EVENT_TYPES.ACCOUNT_MENU_ACTION, {
-      action: action.label,
-      destination: action.href,
-    });
     router.push(action.href);
   };
 
   const handleHeaderNav = (
     label: string,
     href: string,
-    eventType: (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES] = EVENT_TYPES.HEADER_NAV_LINK
+    source: "primary_nav" | "secondary_nav" | "all_menu" = "primary_nav"
   ) => {
-    logEvent(eventType, { label, destination: href });
     router.push(href);
   };
 
   const handleCategorySelect = (category: (typeof categories)[number]) => {
     setSelectedCategory(category);
     setIsCategoryOpen(false);
+    const destination = buildSearchUrl(searchQuery, category.value);
     logEvent(EVENT_TYPES.CATEGORY_FILTER, {
       category: category.value,
+      destination,
+      query: searchQuery.trim() || null,
+      source: "header_dropdown",
     });
+    router.push(destination);
   };
 
   const triggerSearch = () => {
@@ -417,11 +394,7 @@ export function Header() {
                       <button
                         type="button"
                         onClick={() =>
-                          handleHeaderNav(
-                            "Returns",
-                            "/search?q=returns",
-                            EVENT_TYPES.HEADER_NAV_LINK
-                          )
+                          handleHeaderNav("Returns", "/search?q=returns", "primary_nav")
                         }
                         className="hidden text-left text-xs font-semibold text-slate-600 hover:text-slate-900 md:block"
                       >
@@ -449,11 +422,7 @@ export function Header() {
                       <button
                         type="button"
                         onClick={() =>
-                          handleHeaderNav(
-                            "Wishlist",
-                            "/wishlist",
-                            EVENT_TYPES.HEADER_NAV_LINK
-                          )
+                          handleHeaderNav("Wishlist", "/wishlist", "primary_nav")
                         }
                         className="h-11 rounded-full border border-slate-200 px-4 text-xs font-semibold text-slate-600 hover:border-slate-400"
                       >
@@ -503,10 +472,7 @@ export function Header() {
                 <button
                   id={getId("all_menu_button")}
                   onClick={() =>
-                    logEvent(EVENT_TYPES.SECONDARY_NAV_LINK, {
-                      label: "All menu",
-                      destination: "/",
-                    })
+                    handleHeaderNav("All menu", "/", "all_menu")
                   }
                   className="inline-flex items-center gap-2 rounded-full border border-white/30 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.3em]"
                 >
@@ -521,11 +487,7 @@ export function Header() {
                     key={link.label}
                     type="button"
                     onClick={() =>
-                      handleHeaderNav(
-                        link.label,
-                        link.href,
-                        EVENT_TYPES.SECONDARY_NAV_LINK
-                      )
+                      handleHeaderNav(link.label, link.href, "secondary_nav")
                     }
                     className="whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-semibold text-white/80 transition hover:bg-white/10 hover:text-white"
                   >
@@ -556,7 +518,7 @@ export function Header() {
                   Menu
                 </p>
                 <p className="text-base font-semibold text-slate-900">
-                  Navigate Autozon
+                  Navigate Autozone
                 </p>
               </div>
               <button
@@ -603,11 +565,7 @@ export function Header() {
                       type="button"
                       className="rounded-xl px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"
                       onClick={() => {
-                        handleHeaderNav(
-                          link.label,
-                          link.href,
-                          EVENT_TYPES.SECONDARY_NAV_LINK
-                        );
+                        handleHeaderNav(link.label, link.href, "secondary_nav");
                         setMobileMenuOpen(false);
                       }}
                     >
