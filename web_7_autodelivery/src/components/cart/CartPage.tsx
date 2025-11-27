@@ -77,9 +77,12 @@ import {
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { AddToCartModal } from "../food/AddToCartModal";
+import type { CartItem } from "@/store/cart-store";
+import type { MenuItem } from "@/data/restaurants";
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, clearCart, getTotal } =
+  const { items, updateQuantity, removeFromCart, clearCart, getTotal, updateCartItem } =
     useCartStore();
   const [form, setForm] = useState({ name: "", address: "", phone: "" });
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -116,6 +119,9 @@ export default function CartPage() {
     items.length > 0
       ? restaurants.find((r) => r.id === items[0].restaurantId)
       : null;
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<CartItem | null>(null);
+  const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
 
   const [expressTime, setExpressTime] = useState(
     restaurant?.deliveryTime || "20-30 min"
@@ -188,6 +194,26 @@ export default function CartPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  };
+
+  const handleEditItem = (item: CartItem) => {
+    setEditingItem(item);
+    const foundRestaurant = restaurants.find((r) => r.id === item.restaurantId);
+    const menuItem = foundRestaurant?.menu.find((m) => m.id === item.id);
+    setEditingMenuItem(
+      menuItem ?? {
+        id: item.id,
+        name: item.name,
+        description: item.description || "",
+        price: item.price,
+        image: item.image,
+        options: item.options,
+        sizes: item.sizes,
+        restaurantId: item.restaurantId,
+        restaurantName: restaurant?.name,
+      }
+    );
+    setEditModalOpen(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -773,6 +799,14 @@ export default function CartPage() {
                     </Button>
                   </div>
                   <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => handleEditItem(item)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
                     size="icon"
                     variant="destructive"
                     onClick={() => {
@@ -854,6 +888,37 @@ export default function CartPage() {
             </Button>
           </form>
         </>
+      )}
+      {editingItem && editingMenuItem && (
+        <AddToCartModal
+          open={editModalOpen}
+          onOpenChange={(open) => {
+            setEditModalOpen(open);
+            if (!open) {
+              setEditingItem(null);
+              setEditingMenuItem(null);
+            }
+          }}
+          item={editingMenuItem}
+          initialSelection={{
+            size: editingItem.selectedSize ?? undefined,
+            options: editingItem.selectedOptions ?? editingItem.options?.map((o) => o.label) ?? [],
+            preferences: editingItem.preferences ?? "",
+            quantity: editingItem.quantity,
+          }}
+          onAdd={(custom) => {
+            updateCartItem(editingItem.id, {
+              selectedSize: custom.size,
+              selectedOptions: custom.options,
+              preferences: custom.preferences ?? "",
+              quantity: custom.quantity,
+              unitPrice: custom.unitPrice,
+            });
+            setEditModalOpen(false);
+            setEditingItem(null);
+            setEditingMenuItem(null);
+          }}
+        />
       )}
     </div>
   );

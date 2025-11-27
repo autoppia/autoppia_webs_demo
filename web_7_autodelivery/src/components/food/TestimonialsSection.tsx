@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
 import { useRestaurants } from "@/contexts/RestaurantContext";
 import { Loader2 } from "lucide-react";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function TestimonialsSection() {
   const { testimonials, isLoading } = useRestaurants();
@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
             className="bg-white rounded-xl shadow p-6 flex flex-col items-center gap-4 text-center hover:shadow-md transition-shadow"
           >
             <div className="rounded-full overflow-hidden w-16 h-16 border-2 border-zinc-200">
-              <Image src={t.avatar} alt={t.name} width={64} height={64} className="object-cover" />
+              <SafeImage src={t.avatar} alt={t.name} width={64} height={64} className="object-cover" />
             </div>
             <p className="text-zinc-700 mb-2">"{t.feedback}"</p>
             <div className="font-bold text-zinc-900">{t.name}</div>

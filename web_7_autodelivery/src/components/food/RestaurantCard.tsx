@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
@@ -61,7 +61,13 @@ export default function RestaurantCard({ id, name, image, cuisine, rating, descr
     >
       <Card className={`hover:shadow-xl transition-shadow duration-200 cursor-pointer ${layout.restaurantCard.containerClass}`}>
         <div className={`relative w-full h-48 rounded-t-xl overflow-hidden ${layout.restaurantCard.imageClass}`}>
-          <Image src={image} alt={name} fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 400px"/>
+          <SafeImage
+            src={image}
+            alt={name}
+            fill
+            style={{ objectFit: 'cover' }}
+            sizes="(max-width: 768px) 100vw, 400px"
+          />
         </div>
         <CardContent className={`p-4 ${layout.restaurantCard.containerClass}`}>
           <div className="flex items-center justify-between">

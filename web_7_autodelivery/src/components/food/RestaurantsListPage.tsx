@@ -7,6 +7,9 @@ import { useSearchStore } from '@/store/search-store';
 import { useLayout } from '@/contexts/LayoutProvider';
 import { useRestaurants } from '@/contexts/RestaurantContext';
 import { Loader2 } from "lucide-react";
+import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { useEffect, useState } from "react";
+import QuickOrderModal from "./QuickOrderModal";
 
 export default function RestaurantsListPage() {
   const layout = useLayout();
@@ -16,6 +19,7 @@ export default function RestaurantsListPage() {
   const setCuisine = useSearchStore(s => s.setCuisine);
   const rating = useSearchStore(s => s.rating);
   const setRating = useSearchStore(s => s.setRating);
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false);
 
   const { restaurants, isLoading } = useRestaurants();
   const cuisineOptions = Array.from(new Set(restaurants.map((r) => r.cuisine)));
@@ -35,6 +39,17 @@ export default function RestaurantsListPage() {
 
   const isFiltered = !!search || cuisine || rating;
 
+  useEffect(() => {
+    if (!restaurants.length) return;
+    if (!search && !cuisine && !rating) return;
+    logEvent(EVENT_TYPES.RESTAURANT_FILTER, {
+      search: search.trim(),
+      cuisine: cuisine || null,
+      rating: rating ? Number(rating) : null,
+      total: filtered.length,
+    });
+  }, [search, cuisine, rating, filtered.length, restaurants.length]);
+
   if (isLoading && restaurants.length === 0) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -48,6 +63,18 @@ export default function RestaurantsListPage() {
       className={layout.generateSeedClass('restaurants-section')}
       {...layout.getElementAttributes('restaurants-section', 0)}
     >
+      <div className="flex w-full justify-end mb-4">
+        <Button
+          className="bg-green-600 hover:bg-green-700"
+          onClick={() => {
+            logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "restaurants_home" });
+            setQuickOrderOpen(true);
+          }}
+          {...layout.getElementAttributes('quick-order-button', 0)}
+        >
+          Quick Order
+        </Button>
+      </div>
       <div 
         className={`flex flex-col md:flex-row gap-4 mb-8 items-center ${layout.searchBar.containerClass}`}
         {...layout.getElementAttributes('search-filters', 0)}
@@ -134,6 +161,7 @@ export default function RestaurantsListPage() {
           </div>
         )}
       </div>
+      <QuickOrderModal open={quickOrderOpen} onOpenChange={setQuickOrderOpen} />
     </section>
   );
 }

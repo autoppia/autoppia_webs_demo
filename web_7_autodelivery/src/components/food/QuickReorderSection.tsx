@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import { useCartStore } from "@/store/cart-store";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { Clock, RotateCcw } from "lucide-react";
 import { useLayout } from "@/contexts/LayoutProvider";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 interface RecentOrder {
   id: string;
@@ -86,7 +86,7 @@ export default function QuickReorderSection() {
         {recentOrders.map((order) => (
           <Card key={order.id} className="hover:shadow-lg transition-shadow">
             <div className="relative h-24 rounded-t-lg overflow-hidden">
-              <Image
+              <SafeImage
                 src={order.image}
                 alt={order.name}
                 fill

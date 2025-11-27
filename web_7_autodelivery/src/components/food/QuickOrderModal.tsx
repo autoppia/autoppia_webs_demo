@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { Search, Clock, Star, MapPin, Zap, Loader2 } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
 import { useRestaurants } from "@/contexts/RestaurantContext";
 import { useLayout } from "@/contexts/LayoutProvider";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 interface QuickOrderModalProps {
   open: boolean;
@@ -213,7 +213,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
           {filteredRestaurants.map((restaurant) => (
             <Card key={restaurant.id} className="hover:shadow-lg transition-shadow cursor-pointer">
               <div className="relative h-32 rounded-t-lg overflow-hidden">
-                <Image
+                <SafeImage
                   src={restaurant.image}
                   alt={restaurant.name}
                   fill

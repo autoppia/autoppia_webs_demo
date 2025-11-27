@@ -4,13 +4,13 @@ import { MenuItem, MenuItemSize, type Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/contexts/RestaurantContext";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
-import Image from "next/image";
 import { Loader2, Trash } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -99,7 +99,7 @@ function ReviewsSection({
             key={i}
             className="bg-white rounded-xl shadow p-5 flex items-start gap-4 group relative"
           >
-            <Image
+            <SafeImage
               src={r.avatar}
               alt={r.author}
               width={48}
@@ -182,6 +182,7 @@ export default function RestaurantDetailPage({
     options: string[];
     preferences?: string;
     quantity: number;
+    unitPrice: number;
   };
   function handleAddToCart(custom: CartCustomItem) {
     if (modalItem && restaurant) {
@@ -194,7 +195,12 @@ export default function RestaurantDetailPage({
         options: transformedOptions,
       };
 
-      addToCart(payload, restaurant.id, custom.quantity);
+      addToCart(payload, restaurant.id, custom.quantity, {
+        selectedSize: custom.size,
+        selectedOptions: custom.options,
+        preferences: custom.preferences,
+        unitPrice: custom.unitPrice,
+      });
       setModalOpen(false);
       setModalItem(null);
     }
@@ -211,7 +217,7 @@ export default function RestaurantDetailPage({
             {...layout.getElementAttributes('restaurant-header', 0)}
           >
             <div className="relative w-full md:w-72 h-48 rounded-xl overflow-hidden shadow">
-              <Image
+              <SafeImage
                 src={restaurant.image}
                 alt={restaurant.name}
                 fill
@@ -283,7 +289,7 @@ export default function RestaurantDetailPage({
                   id={getId(`menu-item-${index}`, `menu-item-${seedStructure}-${index}`)}
                 >
                   <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
-                    <Image
+                    <SafeImage
                       src={item.image}
                       alt={getText(`menu-item-name-${index}`, item.name)}
                       fill
