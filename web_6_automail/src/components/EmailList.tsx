@@ -90,6 +90,7 @@ export function EmailList({ textStructure }: EmailListProps) {
   const handleSelectAll = () => {
     if (allSelected) {
       clearSelection();
+      logEvent(EVENT_TYPES.CLEAR_SELECTION, { source: "select_all_toggle" });
     } else {
       const visibleIds = paginatedEmails.map((email) => email.id);
       selectAllVisible(visibleIds);
@@ -113,6 +114,7 @@ export function EmailList({ textStructure }: EmailListProps) {
         to: email.to.map((r) => r.email),
         cc: email.cc?.map((r) => r.email) || [],
         bcc: email.bcc?.map((r) => r.email) || [],
+        body: email.body || "",
       });
       return;
     }
@@ -151,6 +153,7 @@ export function EmailList({ textStructure }: EmailListProps) {
     moveToArchive(emailIds);
     if (emailIds.length > 1) {
       clearSelection();
+      logEvent(EVENT_TYPES.CLEAR_SELECTION, { source: "archive_bulk" });
     }
     emailIds.forEach((id) => {
       const email = filteredEmails.find((e) => e.id === id);
@@ -351,7 +354,14 @@ export function EmailList({ textStructure }: EmailListProps) {
               </Button>
             }
           />
-          <Button variant="ghost" size="sm" onClick={clearSelection}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              clearSelection();
+              logEvent(EVENT_TYPES.CLEAR_SELECTION, { source: "action_bar" });
+            }}
+          >
             Clear Selection
           </Button>
         </div>

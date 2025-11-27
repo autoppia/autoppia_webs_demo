@@ -133,20 +133,15 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
             {getText("new_message")}
           </DialogTitle>
           <div className="flex items-center gap-1">
-            <Button id={getId("compose_minimize_button")} variant="ghost" size="icon" className="h-6 w-6">
-              <Minus className="h-3 w-3" />
-            </Button>
-            <Button id={getId("compose_maximize_button")} variant="ghost" size="icon" className="h-6 w-6">
-              <Square className="h-3 w-3" />
-            </Button>
             <Button
               id={getId("compose_close_button")}
               variant="ghost"
               size="icon"
-              className="h-6 w-6"
+              className="h-8 w-8 rounded-full text-muted-foreground hover:bg-muted border border-border/50"
               onClick={() => toggleCompose(false)}
+              aria-label="Close compose"
             >
-              <X className="h-3 w-3" />
+              <X className="h-4 w-4" />
             </Button>
           </div>
         </DialogHeader>

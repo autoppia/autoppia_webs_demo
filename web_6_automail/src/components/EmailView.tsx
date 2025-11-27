@@ -150,6 +150,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
     });
     logEvent(EVENT_TYPES.REPLY_EMAIL, {
       email_id: currentEmail.id,
+      to: [currentEmail.from.email],
       subject: currentEmail.subject,
       from: currentEmail.from.email,
       mode: "reply",
@@ -169,6 +170,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
     });
     logEvent(EVENT_TYPES.REPLY_EMAIL, {
       email_id: currentEmail.id,
+      to: [currentEmail.from.email],
       subject: currentEmail.subject,
       from: currentEmail.from.email,
       mode: "reply_all",
@@ -183,6 +185,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
     });
     logEvent(EVENT_TYPES.FORWARD_EMAIL, {
       email_id: currentEmail.id,
+      to: [currentEmail.from.email],
       subject: currentEmail.subject,
       from: currentEmail.from.email,
     });
