@@ -79,20 +79,36 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
       return;
     }
 
-    if (toInput.trim()) {
-      updateComposeData({ to: [...composeData.to, toInput.trim()] });
-    }
-    if (ccInput.trim()) {
-      updateComposeData({ cc: [...(composeData.cc || []), ccInput.trim()] });
-    }
-    if (bccInput.trim()) {
-      updateComposeData({ bcc: [...(composeData.bcc || []), bccInput.trim()] });
+    const allTo = toInput.trim()
+      ? [...composeData.to, toInput.trim()]
+      : composeData.to;
+    const allCc = ccInput.trim()
+      ? [...(composeData.cc || []), ccInput.trim()]
+      : composeData.cc || [];
+    const allBcc = bccInput.trim()
+      ? [...(composeData.bcc || []), bccInput.trim()]
+      : composeData.bcc || [];
+
+    updateComposeData({ to: allTo, cc: allCc, bcc: allBcc });
+
+    if (composeData.action === "forward" && composeData.forwardedEmailId) {
+      logEvent(EVENT_TYPES.FORWARD_EMAIL, {
+        email_id: composeData.forwardedEmailId,
+        subject: composeData.forwardedSubject || composeData.subject,
+        from: composeData.forwardedFrom,
+        to: allTo,
+        cc: allCc,
+        bcc: allBcc,
+      });
     }
 
     logEvent(EVENT_TYPES.SEND_EMAIL, {
-      to: [...composeData.to, toInput.trim()],
+      to: allTo,
+      cc: allCc,
+      bcc: allBcc,
       subject: composeData.subject || "",
       body: composeData.body || "",
+      action: composeData.action,
     });
 
     sendEmail();
@@ -133,20 +149,15 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
             {getText("new_message")}
           </DialogTitle>
           <div className="flex items-center gap-1">
-            <Button id={getId("compose_minimize_button")} variant="ghost" size="icon" className="h-6 w-6">
-              <Minus className="h-3 w-3" />
-            </Button>
-            <Button id={getId("compose_maximize_button")} variant="ghost" size="icon" className="h-6 w-6">
-              <Square className="h-3 w-3" />
-            </Button>
             <Button
               id={getId("compose_close_button")}
               variant="ghost"
               size="icon"
-              className="h-6 w-6"
+              className="h-8 w-8 rounded-full text-muted-foreground hover:bg-muted border border-border/50"
               onClick={() => toggleCompose(false)}
+              aria-label="Close compose"
             >
-              <X className="h-3 w-3" />
+              <X className="h-4 w-4" />
             </Button>
           </div>
         </DialogHeader>

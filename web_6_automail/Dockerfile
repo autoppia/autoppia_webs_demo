@@ -39,12 +39,6 @@ ENV API_URL=$API_URL
 ARG NEXT_PUBLIC_API_URL=http://localhost:8090
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-# Debug: Print the environment variables
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V1: $ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V1: $NEXT_PUBLIC_ENABLE_DYNAMIC_V1"
-RUN echo "🔍 Build-time ENABLE_DYNAMIC_V2_DB_MODE: $ENABLE_DYNAMIC_V2_DB_MODE"
-RUN echo "🔍 Build-time NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: $NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE"
-
 RUN npm run build
 
 # Stage 2: Create the lean production image
@@ -54,9 +48,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8005
 EXPOSE 8005
-
-# Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
-# so they don't need to be set here. They're already in the JavaScript code.
 
 # prod deps only (from deps stage)
 COPY --from=deps /app/node_modules ./node_modules
