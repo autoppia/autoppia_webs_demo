@@ -228,8 +228,8 @@ export function Sidebar({ textStructure }: SidebarProps) {
             Compose
           </Button>
           
-          <div className="flex items-center gap-2">
-            {navigationItems.slice(0, 4).map((item) => {
+          <div className="flex items-center gap-2 flex-wrap">
+            {navigationItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item);
               return (
