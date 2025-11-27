@@ -98,26 +98,6 @@ export function EmailList({ textStructure }: EmailListProps) {
   };
 
   const handleEmailClick = (email: Email) => {
-    if (email.isDraft) {
-      setEditingDraftId(email.id);
-      updateComposeData({
-        to: email.to.map((r) => r.email),
-        cc: email.cc?.map((r) => r.email) || [],
-      bcc: email.bcc?.map((r) => r.email) || [],
-      subject: email.subject || "",
-      body: email.body || "",
-    });
-    toggleCompose(true);
-      logEvent(EVENT_TYPES.EDIT_DRAFT_EMAIL, {
-        email_id: email.id,
-        subject: email.subject,
-        to: email.to.map((r) => r.email),
-        cc: email.cc?.map((r) => r.email) || [],
-        bcc: email.bcc?.map((r) => r.email) || [],
-        body: email.body || "",
-      });
-      return;
-    }
     setEditingDraftId(null);
     setCurrentEmail(email);
     if (!email.isRead) {
@@ -126,7 +106,8 @@ export function EmailList({ textStructure }: EmailListProps) {
     logEvent(EVENT_TYPES.VIEW_EMAIL, {
       email_id: email.id,
       subject: email.subject,
-      from: email.from.email,
+      from: email.from?.email,
+      folder: email.isDraft ? "drafts" : currentFilter.folder,
     });
   };
 

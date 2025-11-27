@@ -83,4 +83,8 @@ export interface ComposeEmailData {
   subject: string;
   body: string;
   attachments?: File[];
+  action?: "compose" | "reply" | "reply_all" | "forward" | "edit_draft";
+  forwardedEmailId?: string | null;
+  forwardedFrom?: string | null;
+  forwardedSubject?: string | null;
 }

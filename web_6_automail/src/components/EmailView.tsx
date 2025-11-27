@@ -14,6 +14,7 @@ import {
   Reply,
   ReplyAll,
   Forward,
+  Pencil,
   Archive,
   Trash2,
   MoreVertical,
@@ -42,6 +43,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
     moveToArchive,
     updateComposeData,
     toggleCompose,
+    setEditingDraftId,
   } = useEmail();
 
   // useEffect(() => {
@@ -128,13 +130,20 @@ export function EmailView({ textStructure }: EmailViewProps) {
     });
   };
 
-  const openCompose = (payload: { to: string[]; cc?: string[]; bcc?: string[]; subject: string; body: string }) => {
+  const openCompose = (
+    payload: { to: string[]; cc?: string[]; bcc?: string[]; subject: string; body: string },
+    meta?: { action?: "reply" | "reply_all" | "forward" | "compose"; forwardedEmailId?: string | null; forwardedFrom?: string | null; forwardedSubject?: string | null }
+  ) => {
     updateComposeData({
       to: payload.to,
       cc: payload.cc ?? [],
       bcc: payload.bcc ?? [],
       subject: payload.subject,
       body: payload.body,
+      action: meta?.action ?? "compose",
+      forwardedEmailId: meta?.forwardedEmailId ?? null,
+      forwardedFrom: meta?.forwardedFrom ?? null,
+      forwardedSubject: meta?.forwardedSubject ?? null,
     });
     toggleCompose(true);
   };
@@ -147,7 +156,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
       to: [currentEmail.from.email],
       subject: currentEmail.subject.startsWith("Re:") ? currentEmail.subject : `Re: ${currentEmail.subject}`,
       body: quotedBody(),
-    });
+    }, { action: "reply", forwardedEmailId: null, forwardedFrom: null, forwardedSubject: null });
     logEvent(EVENT_TYPES.REPLY_EMAIL, {
       email_id: currentEmail.id,
       to: [currentEmail.from.email],
@@ -167,7 +176,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
       to: Array.from(new Set(recipients)),
       subject: currentEmail.subject.startsWith("Re:") ? currentEmail.subject : `Re: ${currentEmail.subject}`,
       body: quotedBody(),
-    });
+    }, { action: "reply_all", forwardedEmailId: null, forwardedFrom: null, forwardedSubject: null });
     logEvent(EVENT_TYPES.REPLY_EMAIL, {
       email_id: currentEmail.id,
       to: [currentEmail.from.email],
@@ -182,12 +191,30 @@ export function EmailView({ textStructure }: EmailViewProps) {
       to: [],
       subject: currentEmail.subject.startsWith("Fwd:") ? currentEmail.subject : `Fwd: ${currentEmail.subject}`,
       body: `\n\n---------- Forwarded message ----------\nFrom: ${currentEmail.from.name} <${currentEmail.from.email}>\nSubject: ${currentEmail.subject}\n\n${currentEmail.body}`,
+    }, { action: "forward", forwardedEmailId: currentEmail.id, forwardedFrom: currentEmail.from.email, forwardedSubject: currentEmail.subject });
+  };
+
+  const handleEditDraft = () => {
+    setEditingDraftId(currentEmail.id);
+    updateComposeData({
+      to: currentEmail.to.map((r) => r.email),
+      cc: currentEmail.cc?.map((r) => r.email) || [],
+      bcc: currentEmail.bcc?.map((r) => r.email) || [],
+      subject: currentEmail.subject || "",
+      body: currentEmail.body || "",
+      action: "edit_draft",
+      forwardedEmailId: null,
+      forwardedFrom: null,
+      forwardedSubject: null,
     });
-    logEvent(EVENT_TYPES.FORWARD_EMAIL, {
+    toggleCompose(true);
+    logEvent(EVENT_TYPES.EDIT_DRAFT_EMAIL, {
       email_id: currentEmail.id,
-      to: [currentEmail.from.email],
       subject: currentEmail.subject,
-      from: currentEmail.from.email,
+      to: currentEmail.to.map((r) => r.email),
+      cc: currentEmail.cc?.map((r) => r.email) || [],
+      bcc: currentEmail.bcc?.map((r) => r.email) || [],
+      body: currentEmail.body || "",
     });
   };
 
@@ -357,15 +384,20 @@ export function EmailView({ textStructure }: EmailViewProps) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={handleReply}>
-                  <Reply className="h-4 w-4" />
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" onClick={handleReply}>
+                <Reply className="h-4 w-4" />
+              </Button>
+              {currentEmail.isDraft && (
+                <Button variant="ghost" size="icon" onClick={handleEditDraft}>
+                  <Pencil className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </div>
+              )}
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
             </div>
+          </div>
 
             {/* To Recipients */}
             {currentEmail.to.length > 0 && (
@@ -447,6 +479,16 @@ export function EmailView({ textStructure }: EmailViewProps) {
               <Reply className="h-4 w-4 mr-2" />
               {textStructure?.email_content.reply_button || "Reply"}
             </Button>
+            {currentEmail.isDraft && (
+              <Button
+                id={textStructure?.email_ids.edit_draft_btn || "edit-draft-button"}
+                variant="secondary"
+                aria-label={textStructure?.email_aria_labels.edit_draft_btn || "Edit this draft email"}
+                onClick={handleEditDraft}
+              >
+                Edit draft
+              </Button>
+            )}
             <Button 
               id={textStructure?.email_ids.reply_all_btn || "reply-all-button"} 
               variant="outline"

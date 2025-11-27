@@ -79,20 +79,36 @@ export function ComposeModal({ textStructure }: ComposeModalProps) {
       return;
     }
 
-    if (toInput.trim()) {
-      updateComposeData({ to: [...composeData.to, toInput.trim()] });
-    }
-    if (ccInput.trim()) {
-      updateComposeData({ cc: [...(composeData.cc || []), ccInput.trim()] });
-    }
-    if (bccInput.trim()) {
-      updateComposeData({ bcc: [...(composeData.bcc || []), bccInput.trim()] });
+    const allTo = toInput.trim()
+      ? [...composeData.to, toInput.trim()]
+      : composeData.to;
+    const allCc = ccInput.trim()
+      ? [...(composeData.cc || []), ccInput.trim()]
+      : composeData.cc || [];
+    const allBcc = bccInput.trim()
+      ? [...(composeData.bcc || []), bccInput.trim()]
+      : composeData.bcc || [];
+
+    updateComposeData({ to: allTo, cc: allCc, bcc: allBcc });
+
+    if (composeData.action === "forward" && composeData.forwardedEmailId) {
+      logEvent(EVENT_TYPES.FORWARD_EMAIL, {
+        email_id: composeData.forwardedEmailId,
+        subject: composeData.forwardedSubject || composeData.subject,
+        from: composeData.forwardedFrom,
+        to: allTo,
+        cc: allCc,
+        bcc: allBcc,
+      });
     }
 
     logEvent(EVENT_TYPES.SEND_EMAIL, {
-      to: [...composeData.to, toInput.trim()],
+      to: allTo,
+      cc: allCc,
+      bcc: allBcc,
       subject: composeData.subject || "",
       body: composeData.body || "",
+      action: composeData.action,
     });
 
     sendEmail();

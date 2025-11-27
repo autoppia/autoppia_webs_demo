@@ -82,6 +82,10 @@ const initialComposeData: ComposeEmailData = {
   subject: "",
   body: "",
   attachments: [],
+  action: "compose",
+  forwardedEmailId: null,
+  forwardedFrom: null,
+  forwardedSubject: null,
 };
 
 const initialState: EmailState = {
@@ -567,6 +571,7 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
     const toggleCompose = useCallback((open?: boolean) => {
         dispatch({type: "TOGGLE_COMPOSE", payload: open});
         if (open === false) {
+            dispatch({ type: "RESET_COMPOSE_DATA" });
             dispatch({ type: "SET_EDITING_DRAFT_ID", payload: null });
         }
         // if (open) {
