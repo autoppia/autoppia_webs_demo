@@ -71,37 +71,40 @@ export function Sidebar({ textStructure }: SidebarProps) {
         (email) =>
           !email.isDraft &&
           email.from.email !== "me@gmail.com" &&
-          !email.labels.some((l) => ["sent", "spam", "trash"].includes(l.id))
+          !email.labels.some((l) => ["sent", "spam", "trash", "archive"].includes(l.id))
       ).length,
       starred: emails.filter(
         (email) =>
           email.isStarred &&
-          !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+          !email.labels.some((l) => ["spam", "trash", "archive"].includes(l.id))
       ).length,
       snoozed: emails.filter(
         (email) =>
           email.isSnoozed &&
-          !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+          !email.labels.some((l) => ["spam", "trash", "archive"].includes(l.id))
       ).length,
       sent: emails.filter(
         (email) =>
           email.from.email === "me@gmail.com" &&
           !email.isDraft &&
-          !email.labels.some((l) => ["trash"].includes(l.id))
+          !email.labels.some((l) => ["trash", "archive"].includes(l.id))
       ).length,
       drafts: emails.filter(
         (email) =>
-          email.isDraft && !email.labels.some((l) => ["trash"].includes(l.id))
+          email.isDraft && !email.labels.some((l) => ["trash", "archive"].includes(l.id))
       ).length,
       important: emails.filter(
         (email) =>
           email.isImportant &&
-          !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+          !email.labels.some((l) => ["spam", "trash", "archive"].includes(l.id))
       ).length,
       spam: emails.filter((email) => email.labels.some((l) => l.id === "spam"))
         .length,
       trash: emails.filter((email) =>
         email.labels.some((l) => l.id === "trash")
+      ).length,
+      archive: emails.filter((email) =>
+        email.labels.some((l) => l.id === "archive")
       ).length,
     };
   };
@@ -133,6 +136,7 @@ export function Sidebar({ textStructure }: SidebarProps) {
     { id: "sent", label: textStructure?.sent_label || getText("sent"), icon: Send, count: counts.sent, type: "folder" },
     { id: "drafts", label: textStructure?.drafts_label || getText("drafts"), icon: FileText, count: counts.drafts, type: "folder" },
     { id: "important", label: "Important", icon: AlertTriangle, count: counts.important, type: "folder" },
+    { id: "archive", label: "Archive", icon: PenTool, count: counts.archive, type: "folder" },
     { id: "spam", label: "Spam", icon: Mail, count: counts.spam, type: "folder" },
     { id: "trash", label: textStructure?.trash_label || getText("trash"), icon: Trash2, count: counts.trash, type: "folder" },
   ];

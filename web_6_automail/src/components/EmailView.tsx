@@ -39,6 +39,9 @@ export function EmailView({ textStructure }: EmailViewProps) {
     markAsUnread,
     markAsSpam,
     moveToTrash,
+    moveToArchive,
+    updateComposeData,
+    toggleCompose,
   } = useEmail();
 
   // useEffect(() => {
@@ -115,6 +118,76 @@ export function EmailView({ textStructure }: EmailViewProps) {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
+  const handleArchive = () => {
+    moveToArchive([currentEmail.id]);
+    setCurrentEmail(null);
+    logEvent(EVENT_TYPES.ARCHIVE_EMAIL, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+    });
+  };
+
+  const openCompose = (payload: { to: string[]; cc?: string[]; bcc?: string[]; subject: string; body: string }) => {
+    updateComposeData({
+      to: payload.to,
+      cc: payload.cc ?? [],
+      bcc: payload.bcc ?? [],
+      subject: payload.subject,
+      body: payload.body,
+    });
+    toggleCompose(true);
+  };
+
+  const quotedBody = () =>
+    `\n\nOn ${currentEmail.timestamp.toLocaleString()}, ${currentEmail.from.email} wrote:\n${currentEmail.body}`;
+
+  const handleReply = () => {
+    openCompose({
+      to: [currentEmail.from.email],
+      subject: currentEmail.subject.startsWith("Re:") ? currentEmail.subject : `Re: ${currentEmail.subject}`,
+      body: quotedBody(),
+    });
+    logEvent(EVENT_TYPES.REPLY_EMAIL, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+      mode: "reply",
+    });
+  };
+
+  const handleReplyAll = () => {
+    const recipients = [
+      currentEmail.from.email,
+      ...currentEmail.to.map((r) => r.email).filter((email) => email !== "me@gmail.com"),
+      ...(currentEmail.cc?.map((r) => r.email).filter((email) => email !== "me@gmail.com") || []),
+    ];
+    openCompose({
+      to: Array.from(new Set(recipients)),
+      subject: currentEmail.subject.startsWith("Re:") ? currentEmail.subject : `Re: ${currentEmail.subject}`,
+      body: quotedBody(),
+    });
+    logEvent(EVENT_TYPES.REPLY_EMAIL, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+      mode: "reply_all",
+    });
+  };
+
+  const handleForward = () => {
+    openCompose({
+      to: [],
+      subject: currentEmail.subject.startsWith("Fwd:") ? currentEmail.subject : `Fwd: ${currentEmail.subject}`,
+      body: `\n\n---------- Forwarded message ----------\nFrom: ${currentEmail.from.name} <${currentEmail.from.email}>\nSubject: ${currentEmail.subject}\n\n${currentEmail.body}`,
+    });
+    logEvent(EVENT_TYPES.FORWARD_EMAIL, {
+      email_id: currentEmail.id,
+      subject: currentEmail.subject,
+      from: currentEmail.from.email,
+    });
+  };
+
   return (
     <div
       className="h-full flex flex-col bg-background"
@@ -134,7 +207,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
           </Button>
 
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" title="Archive">
+            <Button variant="ghost" size="icon" title="Archive" onClick={handleArchive}>
               <Archive className="h-5 w-5" />
             </Button>
 
@@ -282,7 +355,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
               </div>
 
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" onClick={handleReply}>
                   <Reply className="h-4 w-4" />
                 </Button>
                 <Button variant="ghost" size="icon">
@@ -366,6 +439,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
             <Button 
               id={textStructure?.email_ids.reply_btn || "reply-button"}
               aria-label={textStructure?.email_aria_labels.reply_btn || "Reply to this email"}
+              onClick={handleReply}
             >
               <Reply className="h-4 w-4 mr-2" />
               {textStructure?.email_content.reply_button || "Reply"}
@@ -374,6 +448,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
               id={textStructure?.email_ids.reply_all_btn || "reply-all-button"} 
               variant="outline"
               aria-label={textStructure?.email_aria_labels.reply_all_btn || "Reply to all recipients"}
+              onClick={handleReplyAll}
             >
               <ReplyAll className="h-4 w-4 mr-2" />
               {textStructure?.email_content.reply_all_button || "Reply All"}
@@ -382,6 +457,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
               id={textStructure?.email_ids.forward_btn || "forward-button"} 
               variant="outline"
               aria-label={textStructure?.email_aria_labels.forward_btn || "Forward this email"}
+              onClick={handleForward}
             >
               <Forward className="h-4 w-4 mr-2" />
               {textStructure?.email_content.forward_button || "Forward"}

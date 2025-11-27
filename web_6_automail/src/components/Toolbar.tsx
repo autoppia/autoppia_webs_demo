@@ -208,21 +208,6 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
 
         {/* Right Section - Controls */}
         <div className="flex items-center gap-2">
-          {/* Apps Grid */}
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <Grid3X3 className="h-5 w-5" />
-          </Button>
-
-          {/* Settings */}
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <Settings className="h-5 w-5" />
-          </Button>
-
-          {/* Help */}
-          <Button variant="ghost" size="icon" className="hidden sm:flex">
-            <HelpCircle className="h-5 w-5" />
-          </Button>
-
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

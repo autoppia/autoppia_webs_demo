@@ -62,6 +62,7 @@ export type EmailFolder =
   | 'snoozed'
   | 'sent'
   | 'drafts'
+  | 'archive'
   | 'spam'
   | 'trash'
   | 'important';

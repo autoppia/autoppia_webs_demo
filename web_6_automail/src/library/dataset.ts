@@ -7,6 +7,7 @@ export const systemLabels: Label[] = [
   { id: "snoozed", name: "Snoozed", color: "#ea4335", type: "system" },
   { id: "sent", name: "Sent", color: "#34a853", type: "system" },
   { id: "drafts", name: "Drafts", color: "#9aa0a6", type: "system" },
+  { id: "archive", name: "Archive", color: "#5f6368", type: "system" },
   { id: "spam", name: "Spam", color: "#ea4335", type: "system" },
   { id: "trash", name: "Trash", color: "#5f6368", type: "system" },
   { id: "important", name: "Important", color: "#fbbc04", type: "system" },
