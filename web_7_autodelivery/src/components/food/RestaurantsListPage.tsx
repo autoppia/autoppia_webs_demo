@@ -10,9 +10,11 @@ import { Loader2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useEffect, useState } from "react";
 import QuickOrderModal from "./QuickOrderModal";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function RestaurantsListPage() {
   const layout = useLayout();
+  const { getText, getId, getAria } = useV3Attributes();
   const search = useSearchStore(s => s.search);
   const setSearch = useSearchStore(s => s.setSearch);
   const cuisine = useSearchStore(s => s.cuisine);
@@ -70,9 +72,11 @@ export default function RestaurantsListPage() {
             logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "restaurants_home" });
             setQuickOrderOpen(true);
           }}
+          id={getId("quick_order_button", "quick-order-button")}
+          aria-label={getAria("quick_order_button", getText("quick_order_button", "Quick Order"))}
           {...layout.getElementAttributes('quick-order-button', 0)}
         >
-          Quick Order
+          {getText("quick_order_button", "Quick Order")}
         </Button>
       </div>
       <div 

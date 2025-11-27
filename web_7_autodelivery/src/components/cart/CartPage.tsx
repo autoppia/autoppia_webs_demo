@@ -802,7 +802,18 @@ export default function CartPage() {
                     variant="outline"
                     size="sm"
                     className="text-xs"
-                    onClick={() => handleEditItem(item)}
+                    onClick={() => {
+                        handleEditItem(item);
+                        logEvent(EVENT_TYPES.EDIT_CART_ITEM, {
+                        itemId: item.id,
+                        itemName: item.name,
+                        price: item.price,
+                        quantity: item.quantity,
+                        restaurantId: item.restaurantId,
+                        restaurantName: restaurant?.name || "Unknown Restaurant",
+                        cartTotal: getTotal(),
+                      });
+                    }}
                   >
                     Edit
                   </Button>
