@@ -6,6 +6,7 @@ import { getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export function Footer() {
   const { seed } = useSeed();
@@ -20,45 +21,26 @@ export function Footer() {
 
   const linkColumns = [
     {
-      title: getText("get_to_know_us"),
+      title: "Shop",
       links: [
-        "Careers",
-        "Blog",
-        "About Autozone",
-        "Investor Relations",
-        "Autozone Devices",
-        "Autozone Science",
+        { text: "All Products", href: "/" },
+        { text: "Search", href: "/search" },
+        { text: "Shopping Cart", href: "/cart" },
       ],
     },
     {
-      title: getText("make_money_with_us"),
+      title: "Your Account",
       links: [
-        "Sell products on Autozone",
-        "Sell on Autozone Business",
-        "Sell apps on Autozone",
-        "Become an Affiliate",
-        "Advertise Your Products",
-        "Self-Publish with Us",
+        { text: "Your Orders", href: "/cart" },
+        { text: "Checkout", href: "/checkout" },
       ],
     },
     {
-      title: getText("payment_products"),
+      title: "Customer Service",
       links: [
-        "Autozone Business Card",
-        "Shop with Points",
-        "Reload Your Balance",
-        "Autozone Currency Converter",
-      ],
-    },
-    {
-      title: getText("let_us_help_you"),
-      links: [
-        "Autozone and COVID-19",
-        "Your Account",
-        "Your Orders",
-        "Shipping Rates & Policies",
-        "Returns & Replacements",
-        "Help",
+        { text: "Help Center", href: "/" },
+        { text: "Shipping Info", href: "/" },
+        { text: "Returns", href: "/" },
       ],
     },
   ];
@@ -79,63 +61,15 @@ export function Footer() {
         </div>
 
         <div className="omnizon-container relative z-10 space-y-12 py-16">
-          <div className="grid gap-10 lg:grid-cols-[1.8fr,1fr]">
-            <div className="space-y-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/60">
-                Operating system
-              </p>
-              <h2 className="text-3xl font-semibold leading-tight">
-                Commerce autopilot for every installation team
-              </h2>
-              <p className="max-w-2xl text-base text-white/70">
-                Tightly orchestrate procurement, delivery, and service follow-ups
-                across every Autozone workflow. One dashboard tracks installs,
-                automations, and savings in real time.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() =>
-                    scrollToTop()
-                  }
-                  className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg"
-                >
-                  Schedule a walkthrough
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push("/search?q=platform")}
-                  className="rounded-full border border-white/40 px-5 py-2 text-sm font-semibold text-white/80 hover:border-white"
-                >
-                  Explore the platform
-                </button>
-              </div>
-            </div>
-            <div className="grid gap-4">
-              <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur">
-                <p className="text-sm uppercase tracking-[0.35em] text-white/50">
-                  Uptime
-                </p>
-                <p className="mt-2 text-3xl font-semibold text-white">99.98%</p>
-                <p className="text-sm text-white/70">
-                  Always-on logistics visibility for distributed teams.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur">
-                <p className="text-sm uppercase tracking-[0.35em] text-white/50">
-                  Installs powered
-                </p>
-                <p className="mt-2 text-3xl font-semibold text-white">
-                  2.4M+
-                </p>
-                <p className="text-sm text-white/70">
-                  Hands-off scheduling and coordination every quarter.
-                </p>
-              </div>
-            </div>
+          <div className="text-center space-y-4 mb-12">
+            <h2 className="text-3xl font-semibold">Autozone</h2>
+            <p className="text-white/70 max-w-2xl mx-auto">
+              Your trusted online marketplace for electronics, home goods, and
+              more.
+            </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 md:grid-cols-3 max-w-3xl mx-auto">
             {linkColumns.map((column) => (
               <div key={column.title} className="space-y-3">
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
@@ -143,12 +77,13 @@ export function Footer() {
                 </p>
                 <ul className="space-y-2 text-sm text-white/70">
                   {column.links.map((item) => (
-                    <li key={item}>
+                    <li key={item.text}>
                       <button
                         type="button"
-                        className="text-left text-white/70 hover:text-white"
+                        onClick={() => router.push(item.href)}
+                        className="text-left text-white/70 hover:text-white transition-colors"
                       >
-                        {item}
+                        {item.text}
                       </button>
                     </li>
                   ))}
@@ -188,8 +123,8 @@ export function Footer() {
               </div>
             </div>
             <p className="mt-4 text-xs text-white/60">
-              © {new Date().getFullYear()} Autozone. Unified commerce infrastructure
-              for installation-ready organizations.
+              © {new Date().getFullYear()} Autozone. Your trusted online
+              shopping destination.
             </p>
           </div>
         </div>

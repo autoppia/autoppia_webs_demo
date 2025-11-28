@@ -60,7 +60,7 @@ export function HeroSlider() {
   return (
     <div
       id={getId("hero_slider")}
-      className="relative h-[320px] w-full overflow-hidden rounded-[32px] bg-slate-900 text-white shadow-elevated lg:h-[420px]"
+      className="relative h-[400px] w-full overflow-hidden bg-gradient-to-br from-amazon-lightBlue to-amazon-blue"
     >
       <div className="absolute inset-0">
         {sliderImages.map((slide, index) => (
@@ -72,7 +72,7 @@ export function HeroSlider() {
           >
             <Image
               src={slide.url}
-              alt={getText(slide.altKey)}
+              alt={getText(slide.altKey, "Shop Autozone")}
               fill
               className="object-cover"
               priority={index === 0}
@@ -81,40 +81,31 @@ export function HeroSlider() {
         ))}
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
-
-      <div className="absolute bottom-6 left-6 right-6 space-y-2">
-        <p className="text-xs uppercase tracking-[0.4em] text-white/70">
-          Live install network
-        </p>
-        <p className="text-2xl font-semibold leading-snug lg:text-3xl">
-          Orchestrate every drop-off, install, and compliance check in one view.
-        </p>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
       <button
         onClick={prevSlide}
-        className="absolute left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-3 text-slate-900 shadow-lg transition hover:bg-white"
-        aria-label={getText("previous_slide")}
+        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-800 shadow-lg transition hover:bg-white z-10"
+        aria-label={getText("previous_slide", "Previous")}
       >
         <ChevronLeft size={24} />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-3 text-slate-900 shadow-lg transition hover:bg-white"
-        aria-label={getText("next_slide")}
+        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-800 shadow-lg transition hover:bg-white z-10"
+        aria-label={getText("next_slide", "Next")}
       >
         <ChevronRight size={24} />
       </button>
 
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 z-10">
         {sliderImages.map((slide, index) => (
           <button
             key={slide.id}
             type="button"
             aria-label={`Go to slide ${index + 1}`}
             onClick={() => setCurrentSlide(index)}
-            className={`h-1.5 w-8 rounded-full transition ${
+            className={`h-2 w-8 rounded-full transition ${
               index === currentSlide ? "bg-white" : "bg-white/40"
             }`}
           />

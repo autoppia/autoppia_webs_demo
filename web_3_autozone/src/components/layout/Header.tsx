@@ -71,8 +71,6 @@ export function Header() {
   const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
-  const liveRoutes = 18 + (seed % 7);
-  const liveCrews = 52 + (seed % 11);
 
   const accountRef = useRef<HTMLDivElement>(null);
   const categoryRef = useRef<HTMLDivElement>(null);
@@ -498,7 +496,7 @@ export function Header() {
 
               <div className="hidden items-center gap-2 text-xs uppercase tracking-[0.35em] text-white/70 md:flex">
                 <Globe className="h-4 w-4" />
-                {liveRoutes} routes · {liveCrews} crews
+                Shop Online
               </div>
             </div>
           </div>
