@@ -8,6 +8,7 @@ import {
   useCallback,
   useMemo,
   useEffect,
+  useRef,
 } from "react";
 import type {
   Email,
@@ -22,8 +23,9 @@ import {
     userLabels,
     systemLabels,
 } from "@/library/dataset";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { EVENT_TYPES, logEvent } from "@/library/events";
+import { useSeed } from "@/context/SeedContext";
 
 interface EmailState {
   emails: Email[];
@@ -36,6 +38,7 @@ interface EmailState {
   currentPage: number;
   itemsPerPage: number;
   customLabels: Label[];
+  editingDraftId: string | null;
 }
 
 type EmailAction =
@@ -43,6 +46,7 @@ type EmailAction =
   | { type: "ADD_EMAIL"; payload: Email }
   | { type: "UPDATE_EMAIL"; payload: { id: string; updates: Partial<Email> } }
   | { type: "DELETE_EMAIL"; payload: string }
+  | { type: "MOVE_TO_ARCHIVE"; payload: string[] }
   | { type: "MOVE_TO_TRASH"; payload: string[] }
   | { type: "MOVE_TO_SPAM"; payload: string[] }
   | {
@@ -68,7 +72,8 @@ type EmailAction =
   | { type: "SET_PAGE"; payload: number }
   | { type: "TOGGLE_COMPOSE"; payload?: boolean }
   | { type: "SET_COMPOSE_DATA"; payload: Partial<ComposeEmailData> }
-  | { type: "RESET_COMPOSE_DATA" };
+  | { type: "RESET_COMPOSE_DATA" }
+  | { type: "SET_EDITING_DRAFT_ID"; payload: string | null };
 
 const initialComposeData: ComposeEmailData = {
   to: [],
@@ -77,6 +82,10 @@ const initialComposeData: ComposeEmailData = {
   subject: "",
   body: "",
   attachments: [],
+  action: "compose",
+  forwardedEmailId: null,
+  forwardedFrom: null,
+  forwardedSubject: null,
 };
 
 const initialState: EmailState = {
@@ -90,6 +99,7 @@ const initialState: EmailState = {
   currentPage: 1,
   itemsPerPage: 50, // Show all emails on one page since we only have 10
   customLabels: [...userLabels], // Start with default Work and Personal labels
+  editingDraftId: null,
 };
 
 function emailReducer(state: EmailState, action: EmailAction): EmailState {
@@ -123,6 +133,32 @@ function emailReducer(state: EmailState, action: EmailAction): EmailState {
                 ),
                 currentEmail:
                     state.currentEmail?.id === action.payload ? null : state.currentEmail,
+            };
+
+        case "MOVE_TO_ARCHIVE":
+            return {
+                ...state,
+                emails: state.emails.map((email) =>
+                    action.payload.includes(email.id)
+                        ? {
+                            ...email,
+                            labels: [
+                                ...email.labels.filter((l) => l.id !== "archive"),
+                                {
+                                    id: "archive",
+                                    name: "Archive",
+                                    color: "#5f6368",
+                                    type: "system",
+                                },
+                            ],
+                        }
+                        : email
+                ),
+                selectedEmails: [],
+                currentEmail:
+                    state.currentEmail && action.payload.includes(state.currentEmail.id)
+                        ? null
+                        : state.currentEmail,
             };
 
         case "MOVE_TO_TRASH":
@@ -279,6 +315,9 @@ function emailReducer(state: EmailState, action: EmailAction): EmailState {
         case "RESET_COMPOSE_DATA":
             return {...state, composeData: initialComposeData};
 
+        case "SET_EDITING_DRAFT_ID":
+            return { ...state, editingDraftId: action.payload };
+
         default:
             return state;
     }
@@ -291,9 +330,11 @@ interface EmailContextValue extends EmailState {
   markAsUnread: (emailId: string) => void;
   markAsImportant: (emailId: string, isImportant?: boolean) => void;
   markAsSpam: (emailIds: string[]) => void;
+  moveToArchive: (emailIds: string[]) => void;
   deleteEmail: (emailId: string) => void;
   deleteEmails: (emailIds: string[]) => void;
   moveToTrash: (emailIds: string[]) => void;
+  setEditingDraftId: (draftId: string | null) => void;
 
   // Label actions
   addLabelToEmails: (emailIds: string[], label: Label) => void;
@@ -308,9 +349,9 @@ interface EmailContextValue extends EmailState {
   clearSelection: () => void;
 
   // Navigation actions
-  setCurrentEmail: (email: Email | null) => void;
-  setFilter: (filter: EmailFilter) => void;
-  setSearchQuery: (query: string) => void;
+    setCurrentEmail: (email: Email | null) => void;
+    setFilter: (filter: EmailFilter) => void;
+    setSearchQuery: (query: string) => void;
 
   // Pagination actions
   setPage: (page: number) => void;
@@ -348,17 +389,41 @@ const tokenize = (str: string) => {
 
 export function EmailProvider({children}: { children: React.ReactNode }) {
     const [state, dispatch] = useReducer(emailReducer, initialState);
+    const { resolvedSeeds } = useSeed();
+    const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
 
-    // Initialize emails on client side to avoid hydration mismatch
     useEffect(() => {
-        if (state.emails.length === 0) {
-            // Wait for data to be ready, then load from DynamicDataProvider
+        let isMounted = true;
+        const unsubscribe = dynamicDataProvider.subscribe((emails) => {
+            if (isMounted) {
+                dispatch({ type: "SET_EMAILS", payload: emails });
+            }
+        });
+
+        if (dynamicDataProvider.isReady()) {
+            dispatch({ type: "SET_EMAILS", payload: dynamicDataProvider.getEmails() });
+        } else {
             dynamicDataProvider.whenReady().then(() => {
-                const loadedEmails = dynamicDataProvider.getEmails();
-                dispatch({type: "SET_EMAILS", payload: loadedEmails});
+                if (!isMounted) return;
+                dispatch({ type: "SET_EMAILS", payload: dynamicDataProvider.getEmails() });
             });
         }
-    }, [state.emails.length]);
+
+        return () => {
+            isMounted = false;
+            unsubscribe();
+        };
+    }, []);
+
+    // Track last v2Seed to avoid duplicate refreshes
+    const lastV2SeedRef = useRef<number | null>(null);
+    useEffect(() => {
+        // Only refresh if v2Seed actually changed
+        if (lastV2SeedRef.current !== v2Seed) {
+            lastV2SeedRef.current = v2Seed;
+            dynamicDataProvider.refreshEmailsForSeed(v2Seed ?? null);
+        }
+    }, [v2Seed]);
 
     // Email actions
     const toggleStar = useCallback(
@@ -393,6 +458,14 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
 
     const markAsSpam = useCallback((emailIds: string[]) => {
         dispatch({type: "MOVE_TO_SPAM", payload: emailIds});
+    }, []);
+
+    const setEditingDraftId = useCallback((draftId: string | null) => {
+        dispatch({ type: "SET_EDITING_DRAFT_ID", payload: draftId });
+    }, []);
+
+    const moveToArchive = useCallback((emailIds: string[]) => {
+        dispatch({ type: "MOVE_TO_ARCHIVE", payload: emailIds });
     }, []);
 
     // Label actions
@@ -497,6 +570,10 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
     // Compose actions
     const toggleCompose = useCallback((open?: boolean) => {
         dispatch({type: "TOGGLE_COMPOSE", payload: open});
+        if (open === false) {
+            dispatch({ type: "RESET_COMPOSE_DATA" });
+            dispatch({ type: "SET_EDITING_DRAFT_ID", payload: null });
+        }
         // if (open) {
         //   logEvent(EVENT_TYPES.COMPOSE_EMAIL, {
         //     action: "opened_compose",
@@ -510,6 +587,9 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
 
     const sendEmail = useCallback(() => {
         // In a real app, this would send the email via API
+        if (state.editingDraftId) {
+            dispatch({ type: "DELETE_EMAIL", payload: state.editingDraftId });
+        }
         const newEmail: Email = {
             id: Math.random().toString(36).substring(2) + Date.now().toString(36),
             from: {name: "Me", email: "me@gmail.com"},
@@ -532,7 +612,8 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
         dispatch({type: "ADD_EMAIL", payload: newEmail});
         dispatch({type: "RESET_COMPOSE_DATA"});
         dispatch({type: "TOGGLE_COMPOSE", payload: false});
-    }, [state.composeData]);
+        dispatch({ type: "SET_EDITING_DRAFT_ID", payload: null });
+    }, [state.composeData, state.editingDraftId]);
 
     const saveDraft = useCallback(() => {
         if (
@@ -543,8 +624,9 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
             return; // Don't save empty drafts
         }
 
+        const draftId = state.editingDraftId ?? Math.random().toString(36).substring(2) + Date.now().toString(36);
         const draftEmail: Email = {
-            id: Math.random().toString(36).substring(2) + Date.now().toString(36),
+            id: draftId,
             from: {name: "Me", email: "me@gmail.com"},
             to: state.composeData.to.map((email) => ({name: email, email})),
             cc: state.composeData.cc?.map((email) => ({name: email, email})),
@@ -564,9 +646,14 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
                 Math.random().toString(36).substring(2) + Date.now().toString(36),
         };
 
-        dispatch({type: "ADD_EMAIL", payload: draftEmail});
+        if (state.editingDraftId) {
+            dispatch({ type: "UPDATE_EMAIL", payload: { id: state.editingDraftId, updates: draftEmail } });
+        } else {
+            dispatch({type: "ADD_EMAIL", payload: draftEmail});
+        }
         dispatch({type: "RESET_COMPOSE_DATA"});
         dispatch({type: "TOGGLE_COMPOSE", payload: false});
+        dispatch({ type: "SET_EDITING_DRAFT_ID", payload: null });
     }, [state.composeData]);
 
     // Computed values
@@ -591,7 +678,7 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
                             !email.isDraft &&
                             email.from.email !== "me@gmail.com" &&
                             !email.labels.some((l) =>
-                                ["sent", "spam", "trash"].includes(l.id)
+                                ["sent", "spam", "trash", "archive"].includes(l.id)
                             )
                     );
                     break;
@@ -599,14 +686,14 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
                     filtered = filtered.filter(
                         (email) =>
                             email.isStarred &&
-                            !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+                            !email.labels.some((l) => ["spam", "trash", "archive"].includes(l.id))
                     );
                     break;
                 case "snoozed":
                     filtered = filtered.filter(
                         (email) =>
                             email.isSnoozed &&
-                            !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+                            !email.labels.some((l) => ["spam", "trash", "archive"].includes(l.id))
                     );
                     break;
                 case "sent":
@@ -614,21 +701,26 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
                         (email) =>
                             email.from.email === "me@gmail.com" &&
                             !email.isDraft &&
-                            !email.labels.some((l) => ["trash"].includes(l.id))
+                            !email.labels.some((l) => ["trash", "archive"].includes(l.id))
                     );
                     break;
                 case "drafts":
                     filtered = filtered.filter(
                         (email) =>
                             email.isDraft &&
-                            !email.labels.some((l) => ["trash"].includes(l.id))
+                            !email.labels.some((l) => ["trash", "archive"].includes(l.id))
                     );
                     break;
                 case "important":
                     filtered = filtered.filter(
                         (email) =>
                             email.isImportant &&
-                            !email.labels.some((l) => ["spam", "trash"].includes(l.id))
+                            !email.labels.some((l) => ["spam", "trash", "archive"].includes(l.id))
+                    );
+                    break;
+                case "archive":
+                    filtered = filtered.filter((email) =>
+                        email.labels.some((l) => l.id === "archive")
                     );
                     break;
                 case "spam":
@@ -764,9 +856,11 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
     markAsUnread,
     markAsImportant,
     markAsSpam,
+    moveToArchive,
     deleteEmail,
     deleteEmails,
     moveToTrash,
+    setEditingDraftId,
     addLabelToEmails,
     removeLabelFromEmails,
     createLabel,
@@ -792,6 +886,7 @@ export function EmailProvider({children}: { children: React.ReactNode }) {
     totalPages,
     hasNextPage,
     hasPrevPage,
+    setEditingDraftId,
   };
 
   return (

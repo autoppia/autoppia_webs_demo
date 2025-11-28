@@ -1,4 +1,10 @@
-import { getApiBaseUrl } from "./data-generator";
+// Local getApiBaseUrl to avoid external dependency
+function getApiBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+  }
+  return process.env.API_URL || "http://app:8080";
+}
 
 export interface SeededLoadOptions {
   projectKey: string;
@@ -11,18 +17,16 @@ export interface SeededLoadOptions {
 }
 
 export function isDbLoadModeEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DB_MODE || process.env.ENABLE_DB_MODE || "").toString().toLowerCase();
+  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
   return raw === "true";
 }
 
 export function getSeedValueFromEnv(defaultSeed: number = 1): number {
-  const raw = (process.env.NEXT_PUBLIC_DATA_SEED_VALUE || process.env.DATA_SEED_VALUE || "").toString();
-  const parsed = Number(raw);
-  if (!Number.isFinite(parsed) || parsed <= 0) return defaultSeed;
-  return Math.floor(parsed);
+  // Always return default seed (v2-seed comes from URL parameter, not env vars)
+  return defaultSeed;
 }
 
-export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
+export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? getSeedValueFromEnv(1);
   const limit = options.limit ?? 50;

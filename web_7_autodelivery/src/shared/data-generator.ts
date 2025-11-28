@@ -161,9 +161,9 @@ CRITICAL: Follow the exact data structure:
  */
 export function isDataGenerationEnabled(): boolean {
   if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_DATA_GENERATION === 'true';
+    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE === 'true';
   }
-  return process.env.ENABLE_DATA_GENERATION === 'true';
+  return process.env.ENABLE_DYNAMIC_V2_AI_GENERATE === 'true';
 }
 
 /**

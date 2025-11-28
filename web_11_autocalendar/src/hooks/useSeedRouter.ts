@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter as useNextRouter } from "next/navigation";
-import { useLayout } from "@/contexts/LayoutContext";
+import { useSeed } from "@/context/SeedContext";
 import { useCallback } from "react";
 import type { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
@@ -10,7 +10,7 @@ import type { NavigateOptions } from "next/dist/shared/lib/app-router-context.sh
  */
 export function useSeedRouter() {
   const router = useNextRouter();
-  const { getNavigationUrl } = useLayout();
+  const { getNavigationUrl } = useSeed();
 
   const push = useCallback((href: string, options?: NavigateOptions) => {
     const urlWithSeed = getNavigationUrl(href);

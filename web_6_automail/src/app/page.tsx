@@ -6,15 +6,17 @@ import { DynamicLayout } from "@/components/DynamicLayout";
 import { 
   getEffectiveSeed, 
   getLayoutConfig
-} from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+} from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { getEffectiveTextStructure } from "@/utils/textStructureProvider";
+import { useSeed } from "@/context/SeedContext";
 
 function GmailContent() {
   const searchParams = useSearchParams();
-  const rawSeed = Number(searchParams.get("seed") ?? "1");
+  const { resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base;
   const seedStructure = Number(searchParams.get("seed-structure") ?? "1");
-  const effectiveSeed = getEffectiveSeed(rawSeed);
+  const effectiveSeed = getEffectiveSeed(layoutSeed);
   const layoutConfig = getLayoutConfig(effectiveSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
   const textStructure = getEffectiveTextStructure(seedStructure);

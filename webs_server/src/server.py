@@ -1,13 +1,12 @@
 import asyncio
 import os
-import json
-from pathlib import Path
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import List, Dict, Any, Optional
 from urllib.parse import urlparse
 
 import asyncpg
+import uvicorn
 from asyncpg.exceptions import PostgresError
 import orjson
 from fastapi import FastAPI, HTTPException, Query, status
@@ -25,7 +24,26 @@ try:
 except ImportError:
     HAS_FASTJSONSCHEMA = False
 
-from master_dataset_handler import save_master_pool, select_from_pool, get_pool_info, list_available_pools
+from master_dataset_handler import (
+    get_pool_info,
+    list_available_pools,
+)
+from data_handler import (
+    load_all_data,
+    append_or_rollover_entity_data,
+    append_to_entity_data,
+)
+from seeded_selector import (
+    seeded_select,
+    seeded_shuffle,
+    seeded_filter_and_select,
+    seeded_distribution,
+)
+from generators.smart_generator import (
+    build_generation_prompt_from_examples,
+    get_project_entity_metadata,
+)
+from seed_resolver import resolve_seeds
 
 # --- Configuration ---
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5433/database")
@@ -209,27 +227,15 @@ app = FastAPI(
 )
 
 # Add CORS middleware to allow requests from Next.js local development
+LOCALHOST_PORTS = [f"http://localhost:{port}" for port in range(8000, 8021)] + ["http://localhost:8090"]
+INTERNAL_PORTS = [
+    "http://app:8002",
+    "http://app:8003",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://app:8002",
-        "http://app:8003",
-        "http://localhost:8000",
-        "http://localhost:8001",
-        "http://localhost:8002",
-        "http://localhost:8003",
-        "http://localhost:8004",
-        "http://localhost:8005",
-        "http://localhost:8006",
-        "http://localhost:8007",
-        "http://localhost:8008",
-        "http://localhost:8009",
-        "http://localhost:8010",
-        "http://localhost:8011",
-        "http://localhost:8012",
-        "http://localhost:8013",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=INTERNAL_PORTS + LOCALHOST_PORTS + ["http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
@@ -254,13 +260,21 @@ async def root():
             "get_events": "/get_events/",
             "reset_events": "/reset_events/",
             "generate_dataset": "/datasets/generate",
+            "generate_smart": "/datasets/generate-smart",
+            "load_dataset": "/datasets/load",
+            "resolve_seeds": "/seeds/resolve",
         },
         "status": "operational",
     }
 
 
 # --- API Endpoints ---
-@app.post("/save_events/", response_model=EventSaveResponse, status_code=status.HTTP_201_CREATED, summary="Save a single event")
+@app.post(
+    "/save_events/",
+    response_model=EventSaveResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Save a single event",
+)
 async def save_event_endpoint(event: EventInput):
     """
     Saves a single event using a prepared statement obtained from the pool.
@@ -282,7 +296,13 @@ async def save_event_endpoint(event: EventInput):
                 detail="Invalid web_url provided after trimming.",
             )
 
-        result = await app.state.pool.fetchrow(INSERT_EVENT_SQL, event.web_agent_id, trimmed_url, event.validator_id, event_data_json_string)
+        result = await app.state.pool.fetchrow(
+            INSERT_EVENT_SQL,
+            event.web_agent_id,
+            trimmed_url,
+            event.validator_id,
+            event_data_json_string,
+        )
         if result:
             logger.info(f"Event saved successfully with ID: {result['id']}")
             return EventSaveResponse(
@@ -313,7 +333,11 @@ async def save_event_endpoint(event: EventInput):
         ) from e
 
 
-@app.get("/get_events/", response_model=List[EventOutput], summary="Get events for a web agent and URL")
+@app.get(
+    "/get_events/",
+    response_model=List[EventOutput],
+    summary="Get events for a web agent and URL",
+)
 async def get_events_endpoint(
     web_url: str = Query(..., description="The specific web URL to filter events for."),
     web_agent_id: str = Query(
@@ -333,12 +357,18 @@ async def get_events_endpoint(
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
         logger.error("Database pool not available for fetching events.")
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database service temporarily unavailable.")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service temporarily unavailable.",
+        )
 
     # --- Apply trimming to the query parameter before using it in the WHERE clause ---
     trimmed_url = trim_url_to_origin(web_url)
     if not trimmed_url:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid web_url provided after trimming.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid web_url provided after trimming.",
+        )
 
     try:
         rows: List[asyncpg.Record] = await app.state.pool.fetch(SELECT_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
@@ -363,18 +393,32 @@ async def get_events_endpoint(
 
     except PostgresError as e:
         logger.error(f"Database query failed for get_events: {e} (SQLState: {e.sqlstate})")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database operation failed during event retrieval: {e.pgcode}.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database operation failed during event retrieval: {e.pgcode}.",
+        ) from e
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Unexpected error during get_events: {e}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An internal server error occurred while fetching events.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An internal server error occurred while fetching events.",
+        ) from e
 
 
-@app.delete("/reset_events/", response_model=ResetResponse, summary="Delete all events for a web URL")
+@app.delete(
+    "/reset_events/",
+    response_model=ResetResponse,
+    summary="Delete all events for a web URL",
+)
 async def reset_events_endpoint(
     web_url: str = Query(..., description="The web URL for which all events should be deleted."),
-    web_agent_id: str = Query(default="UNKNOWN_AGENT", max_length=255, description="The specific web agent ID."),
+    web_agent_id: str = Query(
+        default="UNKNOWN_AGENT",
+        max_length=255,
+        description="The specific web agent ID.",
+    ),
     validator_id: str = Query(..., description="The validator ID associated with the events."),
 ):
     """
@@ -383,32 +427,52 @@ async def reset_events_endpoint(
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
         logger.error("Database pool not available for resetting events.")
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database service temporarily unavailable.")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service temporarily unavailable.",
+        )
 
     # --- Apply trimming to the query parameter before using it in the WHERE clause ---
     trimmed_url = trim_url_to_origin(web_url)
     if not trimmed_url:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid web_url provided after trimming.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid web_url provided after trimming.",
+        )
 
     try:
         deleted_count: Optional[int] = await app.state.pool.fetchval(DELETE_EVENTS_SQL, trimmed_url, web_agent_id, validator_id)
         actual_deleted_count = deleted_count if deleted_count is not None else 0
         logger.info(f"Successfully deleted {actual_deleted_count} events for trimmed URL: {trimmed_url}, Agent ID: {web_agent_id}, Validator ID: {validator_id}")
-        return ResetResponse(message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'", web_url=web_url, deleted_count=actual_deleted_count, validator_id=validator_id)
+        return ResetResponse(
+            message=f"Successfully deleted {actual_deleted_count} events for '{web_url}'",
+            web_url=web_url,
+            deleted_count=actual_deleted_count,
+            validator_id=validator_id,
+        )
     except PostgresError as e:
         logger.error(f"Database deletion failed for reset_events: {e} (SQLState: {e.sqlstate}).")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database operation failed during event reset: {e.pgcode}.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database operation failed during event reset: {e.pgcode}.",
+        ) from e
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Unexpected error during reset_events: {e}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="An internal server error occurred while resetting events.") from e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An internal server error occurred while resetting events.",
+        ) from e
 
 
 # --- Data Generation Functions (generic) ---
 async def generate_with_openai(request: DataGenerationRequest) -> List[Dict[str, Any]]:
     if not OPENAI_API_KEY:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="OpenAI API key not configured")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="OpenAI API key not configured",
+        )
 
     client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
@@ -469,13 +533,19 @@ Output strictly a JSON array only.
             # Log raw content for debugging
             logger.error(f"Failed to parse generation as JSON array: {e}")
             logger.error(f"Raw content: {content[:1000]}...")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Generated output is not valid JSON")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Generated output is not valid JSON",
+            )
 
         # Optional JSON Schema validation if provided
         if request.json_schema:
             if not HAS_FASTJSONSCHEMA:
                 logger.warning("JSON Schema validation requested but fastjsonschema not available")
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="JSON Schema validation not available - fastjsonschema not installed")
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail="JSON Schema validation not available - fastjsonschema not installed",
+                )
 
             try:
                 validate = fastjsonschema.compile(request.json_schema)
@@ -483,7 +553,10 @@ Output strictly a JSON array only.
                     validate(item)
             except Exception as e:
                 logger.error(f"Schema validation failed: {e}")
-                raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"JSON Schema validation failed: {e}")
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail=f"JSON Schema validation failed: {e}",
+                )
 
         return data
 
@@ -491,42 +564,30 @@ Output strictly a JSON array only.
         raise
     except Exception as e:
         logger.error(f"OpenAI generation failed: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Data generation failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Data generation failed: {str(e)}",
+        )
 
 
-# --- Helper Function to Save Data to JSON ---
-def save_data_to_json(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
+# --- Helper Function to Save Data to File Storage (/app/data) ---
+def save_generated_data_file_storage(data: List[Dict[str, Any]], project_key: str, entity_type: str) -> str:
     """
-    Save generated data to a JSON file in the project's generated_data directory.
-    Returns the relative path where the file was saved.
+    Save generated data to file storage using the new persistent volume structure:
+    /app/data/<project_key>/data/<entity_type>_<timestamp>.json
+    Returns the absolute path where the file was saved.
     """
-    # Get the base directory (parent of webs_server)
-    base_dir = Path(__file__).parent.parent.parent
-
-    # Create the path: <project_key>/generated_data/<entity_type>_<timestamp>.json
-    project_dir = base_dir / project_key / "generated_data"
-    project_dir.mkdir(parents=True, exist_ok=True)
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"{entity_type}_{timestamp}.json"
-    filepath = project_dir / filename
-
-    # Create data container with metadata
-    data_container = {"metadata": {"projectKey": project_key, "entityType": entity_type, "generatedAt": datetime.now().isoformat(), "count": len(data), "version": "1.0"}, "data": data}
-
-    # Save to file
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(data_container, f, indent=2, ensure_ascii=False)
-
-    # Return relative path from base directory
-    relative_path = str(filepath.relative_to(base_dir))
-    logger.info(f"Saved {len(data)} items to {relative_path}")
-
-    return relative_path
+    saved_path = append_or_rollover_entity_data(project_key, entity_type, data)
+    logger.info(f"Saved {len(data)} items to file storage: {saved_path}")
+    return saved_path
 
 
 # --- Data Generation Endpoint (generic) ---
-@app.post("/datasets/generate", response_model=DataGenerationResponse, status_code=status.HTTP_200_OK)
+@app.post(
+    "/datasets/generate",
+    response_model=DataGenerationResponse,
+    status_code=status.HTTP_200_OK,
+)
 async def generate_dataset_endpoint(request: DataGenerationRequest):
     start = datetime.now()
     data = await generate_with_openai(request)
@@ -534,24 +595,16 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
     logger.info(f"Generated {len(data)} items in {elapsed:.2f}s")
     logger.debug("=" * 60 + f"DATA: {data}" + "=" * 60)
 
-    # Save to file if requested
+    # Always save to file storage (files-only mode)
     saved_path = None
-    if request.save_to_file and request.project_key and request.entity_type:
+    if request.project_key and request.entity_type:
         try:
-            saved_path = save_data_to_json(data, request.project_key, request.entity_type)
+            # Use new file-storage saver under /app/data (persistent volume)
+            saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
         except Exception as e:
-            logger.error(f"Failed to save data to file: {e}")
+            logger.error(f"Failed to save data to file storage: {e}")
             # Don't fail the request if saving fails
-
-    # Save to master pool if requested (replaces or appends)
-    pool_id = None
-    if request.save_to_db and request.project_key and request.entity_type and hasattr(app.state, "pool"):
-        try:
-            pool_id = await save_master_pool(app.state.pool, request.project_key, request.entity_type, data)
-            logger.info(f"Saved to master pool with ID: {pool_id}")
-        except Exception as e:
-            logger.error(f"Failed to save data to master pool: {e}")
-            # Don't fail the request if saving fails
+    # Ignore DB save in files-only mode
 
     return DataGenerationResponse(
         message=f"Successfully generated {len(data)} items",
@@ -560,6 +613,109 @@ async def generate_dataset_endpoint(request: DataGenerationRequest):
         generation_time=elapsed,
         saved_path=saved_path,
     )
+
+
+# --- Smart Data Generation Models ---
+class SmartGenerationRequest(BaseModel):
+    project_key: str = Field(..., description="Project key (e.g., 'web_5_autocrm')")
+    entity_type: str = Field(..., description="Entity type (e.g., 'logs', 'clients')")
+    count: int = Field(default=200, ge=1, le=500, description="How many objects to generate")
+    mode: str = Field(
+        default="append",
+        description="Generation mode: 'append' (add to existing) or 'replace' (create new)",
+    )
+    additional_requirements: Optional[str] = Field(None, description="Optional additional requirements")
+    seed_value: Optional[int] = Field(None, description="Seed value for reproducible generation")
+
+
+# --- Smart Data Generation Endpoint ---
+@app.post(
+    "/datasets/generate-smart",
+    response_model=DataGenerationResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
+    """
+    Smart data generation endpoint that automatically infers structure from existing data.
+
+    Usage:
+        POST /datasets/generate-smart
+        {
+            "project_key": "web_5_autocrm",
+            "entity_type": "logs",
+            "count": 200
+        }
+
+    The system will:
+    1. Read existing examples from initial_data/{project_key}/data/{entity_type}_1.json
+    2. Infer the TypeScript interface from those examples
+    3. Use OpenAI to generate new data with the same structure
+    4. Save to initial_data/{project_key}/data/{entity_type}_N.json
+    """
+    start = datetime.now()
+
+    try:
+        # Build prompt from existing examples
+        interface_definition, examples = build_generation_prompt_from_examples(request.project_key, request.entity_type, count=request.count)
+
+        # Get metadata for this project/entity
+        metadata = get_project_entity_metadata(request.project_key, request.entity_type)
+        additional_requirements = request.additional_requirements or "\n\nContinue the data generation count from/after the examples provided."
+        # Build the full generation request
+        gen_request = DataGenerationRequest(
+            interface_definition=interface_definition,
+            examples=examples,
+            count=request.count,
+            categories=metadata.get("categories"),
+            additional_requirements=str(additional_requirements) + '\n' + str(metadata.get("requirements")),
+            project_key=request.project_key,
+            entity_type=request.entity_type,
+            seed_value=request.seed_value,
+        )
+
+        # Generate data using OpenAI
+        data = await generate_with_openai(gen_request)
+        elapsed = (datetime.now() - start).total_seconds()
+
+        logger.info(f"[Smart Generation] Generated {len(data)} items for {request.project_key}/{request.entity_type} in {elapsed:.2f}s")
+
+        # Save to file storage based on mode
+        saved_path = None
+        mode = request.mode.lower()
+
+        try:
+            if mode == "append":
+                # Append to existing {entity_type}_1.json
+                saved_path = append_to_entity_data(request.project_key, request.entity_type, data)
+                logger.info(f"[Smart Generation] Appended {len(data)} items to {saved_path}")
+            else:
+                # Replace mode: create new file with timestamp
+                saved_path = save_generated_data_file_storage(data, request.project_key, request.entity_type)
+                logger.info(f"[Smart Generation] Created new file {saved_path}")
+        except Exception as e:
+            logger.error(f"Failed to save data to file storage: {e}")
+            # Don't fail the request if saving fails
+
+        action_msg = "appended to" if mode == "append" else "generated for"
+        return DataGenerationResponse(
+            message=f"Successfully {action_msg} {request.project_key}/{request.entity_type}: {len(data)} items",
+            generated_data=data,
+            count=len(data),
+            generation_time=elapsed,
+            saved_path=saved_path,
+        )
+
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No example data found for {request.project_key}/{request.entity_type}. Error: {str(e)}",
+        )
+    except Exception as e:
+        logger.error(f"Smart generation failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Generation failed: {str(e)}",
+        )
 
 
 # --- Data Loading Models ---
@@ -578,13 +734,20 @@ class DatasetLoadResponse(BaseModel):
 
 
 # --- Data Loading Endpoint (Seeded Selection) ---
-@app.get("/datasets/load", response_model=DatasetLoadResponse, summary="Load dataset using seeded selection")
+@app.get(
+    "/datasets/load",
+    response_model=DatasetLoadResponse,
+    summary="Load dataset using seeded selection",
+)
 async def load_dataset_endpoint(
     project_key: str = Query(..., description="Project key"),
     entity_type: str = Query(..., description="Entity type"),
     seed_value: int = Query(..., description="Seed value for deterministic selection"),
     limit: int = Query(default=50, ge=1, le=500, description="Maximum items to return"),
-    method: str = Query(default="select", description="Selection method: select, shuffle, filter, distribute"),
+    method: str = Query(
+        default="select",
+        description="Selection method: select, shuffle, filter, distribute",
+    ),
     filter_key: Optional[str] = Query(None, description="Key to filter on (for filter method)"),
     filter_values: Optional[str] = Query(None, description="Comma-separated values to filter (for filter method)"),
 ):
@@ -595,25 +758,67 @@ async def load_dataset_endpoint(
 
     This endpoint is used when projects are deployed with --load_from_db parameter.
     """
-    if not hasattr(app.state, "pool") or app.state.pool is None:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
-
     try:
-        # Parse filter values if provided
-        filter_list = filter_values.split(",") if filter_values else None
+        # Load from file-based storage under /app/data only (files-only mode)
+        file_data_pool = load_all_data(project_key, entity_type)
 
-        result = await select_from_pool(app.state.pool, project_key, entity_type, seed_value, limit, method=method, filter_key=filter_key, filter_values=filter_list, log_usage=True)
+        if not file_data_pool:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No file-based data found for project={project_key}. Generate data first.",
+            )
 
-        if not result["data"]:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No master pool found for project={project_key}, entity={entity_type}")
+        # Apply seeded selection based on requested method
+        method_normalized = (method or "select").lower()
+        selected: List[Dict[str, Any]]
 
-        return DatasetLoadResponse(message=f"Successfully selected {len(result['data'])} items using seed={seed_value}", metadata=result["metadata"], data=result["data"], count=len(result["data"]))
+        # Parse filters
+        filter_list = [v.strip() for v in filter_values.split(",")] if filter_values else None
+
+        if method_normalized == "shuffle":
+            selected = seeded_shuffle(file_data_pool, seed_value, limit=limit)
+        elif method_normalized == "filter":
+            selected = seeded_filter_and_select(
+                file_data_pool,
+                seed_value,
+                limit,
+                filter_key=filter_key,
+                filter_values=filter_list,
+            )
+        elif method_normalized == "distribute":
+            # Use filter_key as category_key for distribution if provided, else default 'category'
+            category_key = filter_key or "category"
+            selected = seeded_distribution(file_data_pool, seed_value, category_key=category_key, total_count=limit)
+        else:
+            # Default 'select' method
+            selected = seeded_select(file_data_pool, seed=seed_value, count=limit, allow_duplicates=False)
+
+        metadata = {
+            "source": "file_storage",
+            "projectKey": project_key,
+            "entityType": entity_type,
+            "seed": seed_value,
+            "limit": limit,
+            "method": method_normalized,
+            "filterKey": filter_key,
+            "filterValues": filter_list,
+            "totalAvailable": len(file_data_pool),
+        }
+        return DatasetLoadResponse(
+            message=f"Successfully selected {len(selected)} items from file storage using seed={seed_value}",
+            metadata=metadata,
+            data=selected,
+            count=len(selected),
+        )
 
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Failed to load dataset: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to load dataset: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to load dataset: {str(e)}",
+        )
 
 
 # --- List Pools Endpoint ---
@@ -624,30 +829,49 @@ async def list_pools_endpoint(project_key: Optional[str] = Query(None, descripti
     Each pool can be queried with any seed value for reproducible selection.
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database pool not available",
+        )
 
     try:
         pools = await list_available_pools(app.state.pool, project_key)
-        return {"pools": pools, "count": len(pools), "message": "Master pools available for seeded selection"}
+        return {
+            "pools": pools,
+            "count": len(pools),
+            "message": "Master pools available for seeded selection",
+        }
     except Exception as e:
         logger.error(f"Failed to list pools: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to list pools: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to list pools: {str(e)}",
+        )
 
 
 # --- Get Pool Info Endpoint ---
 @app.get("/datasets/pool/info", summary="Get master pool information")
-async def get_pool_info_endpoint(project_key: str = Query(..., description="Project key"), entity_type: str = Query(..., description="Entity type")):
+async def get_pool_info_endpoint(
+    project_key: str = Query(..., description="Project key"),
+    entity_type: str = Query(..., description="Entity type"),
+):
     """
     Get information about a master pool without loading all data.
     """
     if not hasattr(app.state, "pool") or app.state.pool is None:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database pool not available")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database pool not available",
+        )
 
     try:
         info = await get_pool_info(app.state.pool, project_key, entity_type)
 
         if not info:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No pool found for project={project_key}, entity={entity_type}")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No pool found for project={project_key}, entity={entity_type}",
+            )
 
         return info
 
@@ -655,7 +879,10 @@ async def get_pool_info_endpoint(project_key: str = Query(..., description="Proj
         raise
     except Exception as e:
         logger.error(f"Failed to get pool info: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to get pool info: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get pool info: {str(e)}",
+        )
 
 
 # --- Health Check Models ---
@@ -667,8 +894,13 @@ class HealthResponse(BaseModel):
     python_version: str
     debug_message: Optional[str] = None
 
+
 # --- Health Check ---
-@app.get("/health", response_model=HealthResponse, summary="Perform a health check of the API")
+@app.get(
+    "/health",
+    response_model=HealthResponse,
+    summary="Perform a health check of the API",
+)
 async def health_check_endpoint():
     """
     Provides a comprehensive health check, including the status of the database pool,
@@ -712,3 +944,114 @@ async def health_check_endpoint():
         debug_message=debug_message,
     )
 
+
+# --- Seed Resolution Models ---
+class SeedResolveRequest(BaseModel):
+    seed: int = Field(..., ge=1, le=999, description="Base seed value (1-999)")
+    v1_enabled: bool = Field(default=False, description="Enable v1 (layout/content variations)")
+    v2_enabled: bool = Field(default=False, description="Enable v2 (DB data selection)")
+    v3_enabled: bool = Field(default=False, description="Enable v3 (structure variations)")
+    v1_config: Optional[Dict[str, int]] = Field(
+        default=None,
+        description="Optional v1 config: {max, multiplier, offset}",
+    )
+    v2_config: Optional[Dict[str, int]] = Field(
+        default=None,
+        description="Optional v2 config: {max, multiplier, offset}",
+    )
+    v3_config: Optional[Dict[str, int]] = Field(
+        default=None,
+        description="Optional v3 config: {max, multiplier, offset}",
+    )
+
+
+class SeedResolveResponse(BaseModel):
+    base: int
+    v1: Optional[int] = None
+    v2: Optional[int] = None
+    v3: Optional[int] = None
+
+
+# --- Seed Resolution Endpoint ---
+@app.post(
+    "/seeds/resolve",
+    response_model=SeedResolveResponse,
+    summary="Resolve base seed into v1/v2/v3 seeds",
+)
+async def resolve_seeds_endpoint(request: SeedResolveRequest):
+    """
+    Resolves a base seed into deterministic v1, v2, v3 seeds.
+    
+    This service centralizes seed resolution logic so all webs use the same formulas.
+    Each version (v1, v2, v3) can be enabled/disabled independently.
+    
+    Example:
+        POST /seeds/resolve
+        {
+            "seed": 42,
+            "v1_enabled": true,
+            "v2_enabled": true,
+            "v3_enabled": false
+        }
+        
+        Returns:
+        {
+            "base": 42,
+            "v1": 173,
+            "v2": 247,
+            "v3": null
+        }
+    """
+    try:
+        result = resolve_seeds(
+            base_seed=request.seed,
+            v1_enabled=request.v1_enabled,
+            v2_enabled=request.v2_enabled,
+            v3_enabled=request.v3_enabled,
+            v1_config=request.v1_config,
+            v2_config=request.v2_config,
+            v3_config=request.v3_config,
+        )
+        return SeedResolveResponse(**result)
+    except Exception as e:
+        logger.error(f"Seed resolution failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Seed resolution failed: {str(e)}",
+        )
+
+
+@app.get(
+    "/seeds/resolve",
+    response_model=SeedResolveResponse,
+    summary="Resolve base seed into v1/v2/v3 seeds (GET version)",
+)
+async def resolve_seeds_get(
+    seed: int = Query(..., ge=1, le=999, description="Base seed value (1-999)"),
+    v1_enabled: bool = Query(default=False, description="Enable v1"),
+    v2_enabled: bool = Query(default=False, description="Enable v2"),
+    v3_enabled: bool = Query(default=False, description="Enable v3"),
+):
+    """
+    GET version of seed resolution (for easier browser testing).
+    """
+    try:
+        result = resolve_seeds(
+            base_seed=seed,
+            v1_enabled=v1_enabled,
+            v2_enabled=v2_enabled,
+            v3_enabled=v3_enabled,
+        )
+        return SeedResolveResponse(**result)
+    except Exception as e:
+        logger.error(f"Seed resolution failed: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Seed resolution failed: {str(e)}",
+        )
+
+
+if __name__ == "__main__":
+    app_host = os.environ.get("APP_HOST", "0.0.0.0")
+    app_port = int(os.environ.get("APP_PORT", 8000))
+    uvicorn.run(app, host=app_host, port=app_port)

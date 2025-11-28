@@ -1,42 +1,53 @@
 /**
- * Utility functions for preserving seed-structure query parameter in navigation
+ * Utility functions for preserving seed and enable_dynamic query parameters in navigation
+ *
+ * Note: This is a simplified version that only preserves the unified ?seed=X parameter.
+ * The SeedLink component uses getNavigationUrl from SeedContext which handles enable_dynamic.
  */
 
-/**
- * Preserves seed-structure query parameter when building URLs
- * @param path - The path to navigate to (e.g., "/", "/matters", "/clients/123")
- * @param searchParams - Current search params from useSearchParams()
- * @returns URL with seed-structure preserved if present
- */
-export function withSeed(path: string, searchParams: URLSearchParams | null = null): string {
-  if (!searchParams) {
-    // If no searchParams provided, try to get from window (client-side only)
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const seedStructure = params.get('seed-structure');
-      if (seedStructure) {
-        const separator = path.includes('?') ? '&' : '?';
-        return `${path}${separator}seed-structure=${seedStructure}`;
-      }
-    }
-    return path;
+function getUrlParam(
+  searchParams: URLSearchParams | null,
+  key: string
+): string | null {
+  if (searchParams) {
+    return searchParams.get(key);
   }
-
-  const seedStructure = searchParams.get('seed-structure');
-  if (seedStructure) {
-    const separator = path.includes('?') ? '&' : '?';
-    return `${path}${separator}seed-structure=${seedStructure}`;
+  if (typeof window !== "undefined") {
+    return new URLSearchParams(window.location.search).get(key);
   }
-  
-  return path;
+  return null;
 }
 
 /**
- * Preserves seed-structure query parameter when building URLs with additional query params
+ * Preserves seed query parameter when building URLs
+ * @param path - The path to navigate to (e.g., "/", "/matters", "/clients/123")
+ * @param searchParams - Current search params from useSearchParams()
+ * @returns URL with seed preserved if present
+ */
+export function withSeed(
+  path: string,
+  searchParams: URLSearchParams | null = null
+): string {
+  const seed = getUrlParam(searchParams, "seed");
+  const enableDynamic = getUrlParam(searchParams, "enable_dynamic");
+
+  if (!seed && !enableDynamic) return path;
+
+  const params = new URLSearchParams();
+  if (seed) params.set("seed", seed);
+  if (enableDynamic) params.set("enable_dynamic", enableDynamic);
+
+  const queryString = params.toString();
+  const separator = path.includes("?") ? "&" : "?";
+  return queryString ? `${path}${separator}${queryString}` : path;
+}
+
+/**
+ * Preserves seed and enable_dynamic when building URLs with additional query params
  * @param basePath - The base path (e.g., "/matters")
  * @param queryParams - Additional query parameters as an object
  * @param searchParams - Current search params from useSearchParams()
- * @returns URL with seed-structure and other params preserved
+ * @returns URL with seed, enable_dynamic and other params preserved
  */
 export function withSeedAndParams(
   basePath: string,
@@ -44,27 +55,19 @@ export function withSeedAndParams(
   searchParams: URLSearchParams | null = null
 ): string {
   const params = new URLSearchParams();
-  
+
   // Add provided query params
   Object.entries(queryParams).forEach(([key, value]) => {
     params.set(key, value);
   });
-  
-  // Preserve seed-structure if present
-  if (searchParams) {
-    const seedStructure = searchParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
-    }
-  } else if (typeof window !== 'undefined') {
-    const currentParams = new URLSearchParams(window.location.search);
-    const seedStructure = currentParams.get('seed-structure');
-    if (seedStructure) {
-      params.set('seed-structure', seedStructure);
-    }
-  }
-  
+
+  // Preserve seed and enable_dynamic if present
+  const seed = getUrlParam(searchParams, "seed");
+  const enableDynamic = getUrlParam(searchParams, "enable_dynamic");
+
+  if (seed) params.set("seed", seed);
+  if (enableDynamic) params.set("enable_dynamic", enableDynamic);
+
   const queryString = params.toString();
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
-

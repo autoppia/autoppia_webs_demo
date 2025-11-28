@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useSeedLayout } from '@/library/useSeedLayout';
+import { useSeed } from '@/context/SeedContext';
+import { getSeedLayout } from '@/dynamic/v1-layouts';
 
 interface DynamicElementProps {
   children: React.ReactNode;
@@ -23,72 +24,32 @@ export function DynamicElement({
   ...props
 }: DynamicElementProps) {
   const elementRef = useRef<HTMLElement>(null);
-  const {
-    getElementAttributes,
-    getElementXPath,
-    generateId,
-    generateSeedClass,
-    applyCSSVariables,
-    createDynamicStyles,
-    reorderElements
-  } = useSeedLayout();
+  const { seed } = useSeed();
+  const layout = getSeedLayout(seed);
 
   const [attributes, setAttributes] = useState<Record<string, string>>({});
-  const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
 
   useEffect(() => {
-    // Generate dynamic attributes and styles based on seed
-    const elementAttrs = getElementAttributes(elementType, index);
-    const elementId = generateId(elementType, index);
-    const seedClass = generateSeedClass(`dynamic-${elementType}`);
-    const xpath = getElementXPath(elementType);
-    
-    setAttributes({
-      ...elementAttrs,
-      id: elementId,
-      className: `${seedClass} ${className}`.trim(),
-      'data-xpath': xpath,
+    const attrs = {
+      'data-seed': seed?.toString() || '1',
       'data-element-type': elementType,
-      'data-index': `${index}`
-    });
-    
-    setDynamicStyles(createDynamicStyles());
-  }, [elementType, index, className, getElementAttributes, generateId, generateSeedClass, getElementXPath, createDynamicStyles]);
+      'data-index': index.toString(),
+    };
+    setAttributes(attrs);
 
-  useEffect(() => {
-    // Apply CSS variables to the element
     if (elementRef.current) {
-      applyCSSVariables(elementRef.current);
+      elementRef.current.style.setProperty('--seed', seed?.toString() || '1');
     }
-  }, [dynamicStyles, applyCSSVariables]);
+  }, [seed, elementType, index]);
 
-  // Render based on component type
-  const commonProps = {
-    ...attributes,
-    ...props,
-    style: dynamicStyles,
-    children
-  };
-
-  switch (Component) {
-    case 'section':
-      return <section ref={elementRef as React.Ref<HTMLElement>} {...commonProps} />;
-    case 'article':
-      return <article ref={elementRef as React.Ref<HTMLElement>} {...commonProps} />;
-    case 'header':
-      return <header ref={elementRef as React.Ref<HTMLElement>} {...commonProps} />;
-    case 'footer':
-      return <footer ref={elementRef as React.Ref<HTMLElement>} {...commonProps} />;
-    case 'main':
-      return <main ref={elementRef as React.Ref<HTMLElement>} {...commonProps} />;
-    case 'aside':
-      return <aside ref={elementRef as React.Ref<HTMLElement>} {...commonProps} />;
-    case 'nav':
-      return <nav ref={elementRef as React.Ref<HTMLElement>} {...commonProps} />;
-    case 'a':
-      return <a ref={elementRef as React.Ref<HTMLAnchorElement>} {...commonProps} />;
-    default:
-      return <div ref={elementRef as React.Ref<HTMLDivElement>} {...commonProps} />;
-  }
+  return (
+    <Component
+      ref={elementRef as any}
+      className={`${className} dynamic-element`}
+      {...attributes}
+      {...props}
+    >
+      {children}
+    </Component>
+  );
 }
-

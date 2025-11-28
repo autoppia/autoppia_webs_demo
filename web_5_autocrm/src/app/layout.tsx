@@ -6,8 +6,8 @@ import React, { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import UserNameBadge from "@/components/UserNameBadge";
 import { SeedProvider } from "@/context/SeedContext";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { getLayoutClasses } from "@/utils/seedLayout";
+import { getEffectiveSeed, getLayoutConfig } from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import ClientProviders from "./ClientProviders";
 
 const geistSans = Geist({
@@ -23,6 +23,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AutoCRM | Smart Client & Case Management Software",
   description: "AutoCRM helps you streamline client communication, manage cases, track tasks, and grow your business with powerful, intuitive CRM tools.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
@@ -42,7 +43,8 @@ export default function RootLayout({
         className="font-sans bg-neutral text-[#1A1A1A] min-h-screen"
         suppressHydrationWarning
       >
-        <ClientProviders>
+        <SeedProvider>
+          <ClientProviders>
           <nav
             className={`w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30 ${layoutClasses.header}`}
             style={{
@@ -81,7 +83,8 @@ export default function RootLayout({
               {children}
             </main>
           </div>
-        </ClientProviders>
+          </ClientProviders>
+        </SeedProvider>
       </body>
     </html>
   );

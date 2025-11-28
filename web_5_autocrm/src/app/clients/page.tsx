@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, useMemo, Suspense } from "react";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { clients as staticClients } from "@/library/dataset";
@@ -9,7 +9,7 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { withSeed } from "@/utils/seedRouting";
+import { useSeed } from "@/context/SeedContext";
 
 
 
@@ -21,27 +21,63 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
+const LoadingNotice = ({ message }: { message: string }) => (
+  <div className="flex items-center gap-2 text-sm text-zinc-500">
+    <span className="h-2 w-2 rounded-full bg-accent-forest animate-ping" />
+    <span>{message}</span>
+  </div>
+);
+
+const STORAGE_KEY_PREFIX = "clients";
+
 function ClientsDirectoryContent() {
   const [query, setQuery] = useState("");
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  console.log("[ClientsPage] current v2Seed", v2Seed);
+
   const { data, isLoading, error } = useProjectData<any>({
     projectKey: 'web_5_autocrm',
     entityType: 'clients',
     generateCount: 60,
     version: 'v1',
     fallback: () => staticClients,
+    seedValue: v2Seed ?? undefined,
   });
-  const clients = (data && data.length ? data : staticClients).map((c: any, i: number) => ({
-    id: c.id ?? `CL-${1000 + i}`,
-    name: c.name ?? c.title ?? `Client ${i+1}`,
-    email: c.email ?? `client${i+1}@example.com`,
-    matters: typeof c.matters === 'number' ? c.matters : (Math.floor(Math.random()*5)+1),
-    avatar: c.avatar ?? "",
-    status: c.status ?? 'Active',
-    last: c.last ?? 'Today',
-  }));
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
+
+  const clients = useMemo(
+    () =>
+      (data && data.length ? data : staticClients).map((c: any, i: number) => ({
+        id: c.id ?? `CL-${1000 + i}`,
+        name: c.name ?? c.title ?? `Client ${i + 1}`,
+        email: c.email ?? `client${i + 1}@example.com`,
+        matters:
+          typeof c.matters === "number"
+            ? c.matters
+            : Math.floor(Math.random() * 5) + 1,
+        avatar: c.avatar ?? "",
+        status: c.status ?? "Active",
+        last: c.last ?? "Today",
+      })),
+    [data]
+  );
+  const seedRouter = useSeedRouter();
   const { getText, getId } = useDynamicStructure();
+  const storageKey = useMemo(
+    () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
+    [v2Seed]
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (clients.length === 0) return;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(clients));
+    } catch (error) {
+      console.warn("[ClientsPage] Failed to cache clients", error);
+    }
+  }, [clients, storageKey]);
 
   useEffect(() => {
     if (query.trim()) {
@@ -57,14 +93,14 @@ function ClientsDirectoryContent() {
 
   const handleClientClick = (client: (typeof clients)[number]) => {
     logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, client);
-    router.push(withSeed(`/clients/${client.id}`, searchParams));
+    seedRouter.push(`/clients/${client.id}`);
   };
 
   return (
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
-          {getText("clients_title")}
+          {getText("clients_title", "Clients")}
         </h1>
       </DynamicElement>
       
@@ -76,7 +112,7 @@ function ClientsDirectoryContent() {
           <input
             id={getId("search_input")}
             className="w-full h-12 pl-12 pr-4 rounded-2xl bg-neutral-bg-dark border border-zinc-200 text-md focus:outline-accent-forest focus:border-accent-forest placeholder-zinc-400 font-medium"
-            placeholder={getText("search_placeholder")}
+            placeholder={getText("search_placeholder", "Search Placeholder")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search clients"
@@ -87,11 +123,14 @@ function ClientsDirectoryContent() {
           index={0}
           className="flex-shrink-0 flex items-center gap-2 px-5 h-12 ml-0 md:ml-4 font-medium rounded-2xl bg-white border border-zinc-200 text-zinc-700 shadow-sm hover:bg-zinc-50 transition"
           id={getId("filter_button")}
-          aria-label={getText("filter_by")}
+          aria-label={getText("filter_by", "Filter By")}
         >
-          <Filter className="w-4 h-4" /> {getText("filter_by")}
+          <Filter className="w-4 h-4" /> {getText("filter_by", "Filter By")}
         </DynamicButton>
       </DynamicElement>
+      {isLoading && (
+        <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading clients..."} />
+      )}
       <DynamicElement elementType="section" index={2} className="rounded-2xl bg-white shadow-card border border-zinc-100">
         {error && (
           <div className="py-6 px-6 text-red-600">Failed to load data: {error}</div>
@@ -100,10 +139,10 @@ function ClientsDirectoryContent() {
           className="hidden md:grid grid-cols-7 px-10 pt-6 pb-2 text-zinc-500 text-xs uppercase tracking-wide select-none"
           style={{ letterSpacing: "0.08em" }}
         >
-          <span className="col-span-3">{getText("client_name")}</span>
-          <span className="">{getText("matters_title")}</span>
-          <span className="">{getText("matter_status")}</span>
-          <span className="">{getText("modified_date")}</span>
+          <span className="col-span-3">{getText("client_name", "Client Name")}</span>
+          <span className="">{getText("matters_title", "Matters")}</span>
+          <span className="">{getText("matter_status", "Matter Status")}</span>
+          <span className="">{getText("modified_date", "Modified Date")}</span>
           <span className=""></span>
         </div>
         <div className="flex flex-col divide-y divide-zinc-100">

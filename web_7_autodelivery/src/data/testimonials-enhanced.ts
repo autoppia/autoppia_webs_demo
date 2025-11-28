@@ -89,21 +89,40 @@ export async function initializeTestimonials(): Promise<Testimonial[]> {
 }
 
 /**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const extendedWindow = window as Window & { __autodeliveryV2Seed?: number | null };
+  const value = extendedWindow.__autodeliveryV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
+/**
  * Load testimonials from database with seeded selection
  */
-export async function loadTestimonialsFromDb(): Promise<Testimonial[]> {
+export async function loadTestimonialsFromDb(seedOverride?: number | null): Promise<Testimonial[]> {
   if (!isDbLoadModeEnabled()) {
     console.log("🔍 DB mode not enabled for testimonials, returning empty array");
     return [];
   }
+  
+  // Wait a bit for SeedContext to sync v2Seed to window if needed
+  if (typeof window !== "undefined") {
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
 
   try {
-    const seed = getSeedValueFromEnv(1);
+    const fallbackSeed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" && Number.isFinite(seedOverride) ? seedOverride : fallbackSeed;
     const limit = 10;
     console.log("🔍 Attempting to load testimonials from DB with seed:", seed, "limit:", limit);
     
     const selected = await fetchSeededSelection<Testimonial>({
-      projectKey: "web_7_food_delivery",
+      projectKey: "web_7_autodelivery",
       entityType: "testimonials",
       seedValue: seed,
       limit,

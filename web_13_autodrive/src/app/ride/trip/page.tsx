@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import RideNavbar from "../../../components/RideNavbar";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "../../../components/DynamicLayout";
@@ -642,41 +642,78 @@ function PlaceSelect({
   );
 }
 
-const rides = [
+const RIDE_TEMPLATES = [
   {
     name: "AutoDriverX",
     icon: "https://ext.same-assets.com/407674263/3757967630.png",
     image: "/car1.jpg",
-    eta: "1 min away · 1:39 PM",
     desc: "Affordable rides, all to yourself",
     seats: 4,
-    price: 26.6,
-    oldPrice: 28.0,
-    recommended: true,
+    basePrice: 26.6,
   },
   {
     name: "Comfort",
     icon: "https://ext.same-assets.com/407674263/2600779409.svg",
     image: "/car2.jpg",
-    eta: "2 min away · 1:40 PM",
     desc: "Newer cars with extra legroom",
     seats: 4,
-    price: 31.5,
-    oldPrice: 35.0,
-    recommended: false,
+    basePrice: 31.5,
   },
   {
     name: "AutoDriverXL",
     icon: "https://ext.same-assets.com/407674263/2882408466.svg",
     image: "/car3.jpg",
-    eta: "3 min away · 1:41 PM",
     desc: "Affordable rides for groups up to 6",
     seats: 6,
-    price: 27.37,
-    oldPrice: 32.2,
-    recommended: false,
+    basePrice: 27.37,
+  },
+  {
+    name: "Executive",
+    icon: "https://ext.same-assets.com/407674263/1505241019.svg",
+    image: "/dashboard.jpg",
+    desc: "Premium rides with professional drivers",
+    seats: 4,
+    basePrice: 45.0,
   },
 ];
+
+const seededRandom = (seed: number) => {
+  let value = seed || 1;
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296;
+    return value / 4294967296;
+  };
+};
+
+function formatEta(minutesFromNow: number): string {
+  const etaTime = new Date();
+  etaTime.setMinutes(etaTime.getMinutes() + minutesFromNow);
+  const timeString = etaTime.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  return `${minutesFromNow} min away · ${timeString}`;
+}
+
+function generateSeededRides(seed: number) {
+  const rng = seededRandom(seed);
+  const recommendedIdx = Math.floor(rng() * RIDE_TEMPLATES.length);
+
+  return RIDE_TEMPLATES.map((template, idx) => {
+    const surgeMultiplier = 0.85 + rng() * 0.4; // 0.85 - 1.25
+    const price = Number((template.basePrice * surgeMultiplier).toFixed(2));
+    const oldPrice = Number((price * (1.05 + rng() * 0.15)).toFixed(2));
+    const minutesAway = 1 + Math.floor(rng() * 5);
+
+    return {
+      ...template,
+      price,
+      oldPrice,
+      eta: formatEta(minutesAway),
+      recommended: idx === recommendedIdx,
+    };
+  });
+}
 
 function Spinner() {
   return (
@@ -712,7 +749,7 @@ function Spinner() {
 
 export default function RideTripPage() {
   const router = useSeedRouter();
-  const { getElementAttributes, getText } = useSeedLayout();
+  const { getElementAttributes, getText, v2Seed } = useSeedLayout();
   const [pickupOpen, setPickupOpen] = useState(false);
   const [dropoffOpen, setDropoffOpen] = useState(false);
   const [pickup, setPickup] = useState<string | null>(null);
@@ -724,6 +761,14 @@ export default function RideTripPage() {
   const [showRides, setShowRides] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedRideIdx, setSelectedRideIdx] = useState<number | null>(null);
+  const [rides, setRides] = useState(() =>
+    generateSeededRides(v2Seed ?? 1)
+  );
+
+  useEffect(() => {
+    setRides(generateSeededRides(v2Seed ?? 1));
+    setSelectedRideIdx(null);
+  }, [v2Seed]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

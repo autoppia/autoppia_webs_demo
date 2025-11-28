@@ -1,11 +1,11 @@
 "use client";
 
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function DemoPage() {
   const seeds = Array.from({ length: 10 }, (_, i) => i + 1);
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
 
   return (
     <div className="max-w-4xl mx-auto p-8">

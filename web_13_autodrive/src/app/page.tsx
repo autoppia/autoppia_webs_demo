@@ -1,12 +1,12 @@
 "use client";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useState } from "react";
-import { whenDataReady, isDataReady } from "@/utils/dynamicDataProvider";
+import { whenDataReady, isDataReady } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent, EventType } from "@/library/event";
 import DynamicLayout from "@/components/DynamicLayout";
 import SiteElements from "@/components/SiteElements";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 
 const SUGGESTIONS = [
   "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",

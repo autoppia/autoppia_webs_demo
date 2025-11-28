@@ -1,16 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { Search, Clock, Star, MapPin, Zap } from "lucide-react";
+import { Search, Clock, Star, MapPin, Zap, Loader2 } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
+import { useRestaurants } from "@/contexts/RestaurantContext";
+import { useLayout } from "@/contexts/LayoutProvider";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 interface QuickOrderModalProps {
   open: boolean;
@@ -22,13 +23,18 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   const [activeTab, setActiveTab] = useState<"popular" | "search" | "recent">("popular");
   const addToCart = useCartStore((s) => s.addToCart);
   const layout = useSeedLayout();
-  const restaurants = getRestaurants() || [];
+  const { getNavigationUrl } = useLayout();
+  const { restaurants, isLoading } = useRestaurants();
   
   // Get popular restaurants (those with high ratings or featured)
-  const popularRestaurants = restaurants
-    .filter(r => r.rating >= 4.5 || r.featured)
-    .sort((a, b) => b.rating - a.rating)
-    .slice(0, 6);
+  const popularRestaurants = useMemo(
+    () =>
+      restaurants
+        .filter((r) => r.rating >= 4.5 || r.featured)
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 6),
+    [restaurants]
+  );
 
   // Get recently viewed restaurants (from localStorage)
   const getRecentRestaurants = () => {
@@ -75,6 +81,16 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
 
   const filteredRestaurants = getDisplayRestaurants();
 
+  if (isLoading) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-4xl max-h-[80vh] flex items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   const handleRestaurantClick = (restaurant: typeof restaurants[0]) => {
     logEvent(EVENT_TYPES.VIEW_RESTAURANT, {
       id: restaurant.id,
@@ -85,7 +101,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
     });
     onOpenChange(false);
     // Navigate to restaurant page
-    window.location.href = `/restaurants/${restaurant.id}`;
+    window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
   };
 
   const handleQuickOrder = (restaurant: typeof restaurants[0]) => {
@@ -96,7 +112,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
     });
     onOpenChange(false);
     // Navigate to restaurant page to start ordering
-    window.location.href = `/restaurants/${restaurant.id}`;
+    window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
   };
 
   const handleQuickAddPopular = (restaurant: typeof restaurants[0]) => {
@@ -197,7 +213,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
           {filteredRestaurants.map((restaurant) => (
             <Card key={restaurant.id} className="hover:shadow-lg transition-shadow cursor-pointer">
               <div className="relative h-32 rounded-t-lg overflow-hidden">
-                <Image
+                <SafeImage
                   src={restaurant.image}
                   alt={restaurant.name}
                   fill
@@ -305,7 +321,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
               onClick={() => {
                 logEvent(EVENT_TYPES.VIEW_ALL_RESTAURANTS, { source: "quick_order_modal" });
                 onOpenChange(false);
-                window.location.href = "/restaurants";
+                window.location.href = getNavigationUrl("/restaurants");
               }}
             >
               View All Restaurants
@@ -315,7 +331,7 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
               size="sm"
               onClick={() => {
                 onOpenChange(false);
-                window.location.href = "/cart";
+                window.location.href = getNavigationUrl("/cart");
               }}
             >
               View Cart

@@ -267,77 +267,85 @@ async function generateEmailsForCategories(
 }
 
 /**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__automailV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
+/**
  * Initialize emails with data generation if enabled
  * Uses async calls for each category to avoid overwhelming the server
  */
-export async function initializeEmails(): Promise<Email[]> {
-  // Preserve existing behavior: use generation when enabled, else static data
-  if (isDataGenerationAvailable()) {
-    try {
-      // Use cached emails on client to prevent re-generation on reloads
-      const cached = readCachedEmails();
-      if (cached && cached.length > 0) {
-        dynamicEmails = normalizeEmailTimestamps(cached);
-        return dynamicEmails;
-      }
+export async function initializeEmails(v2SeedValue?: number | null): Promise<Email[]> {
+  // Check if v2 (DB mode) is enabled
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
 
-      console.log("🚀 Starting async email data generation for each category...");
-      console.log("📡 Using API:", process.env.API_URL || "http://app:8090");
-
-      // Define categories and emails per category
-      const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
-      const emailsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_EMAILS_PER_CATEGORY;
-      const delayBetweenCalls = DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS;
-
-      console.log(`📊 Will generate ${emailsPerCategory} emails per category`);
-      console.log(`🏷️  Categories: ${categories.join(", ")}`);
-
-      // Generate emails for all categories with delays
-      let allGeneratedEmails = await generateEmailsForCategories(
-        categories,
-        emailsPerCategory,
-        delayBetweenCalls,
-        originalEmails
-      );
-
-      // Normalize category field to one of the allowed categories
-      const allowed = new Set(categories);
-      allGeneratedEmails = allGeneratedEmails.map((e) => ({
-        ...e,
-        category: allowed.has(e.category || "") ? e.category : (e.category ? e.category : "primary"),
-      }));
-
-      // Normalize timestamps
-      allGeneratedEmails = normalizeEmailTimestamps(allGeneratedEmails);
-
-      dynamicEmails = allGeneratedEmails;
-      // Cache generated emails on client
-      writeCachedEmails(dynamicEmails);
-      return dynamicEmails;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate emails while generation is enabled. Keeping emails empty until ready. Error:", error);
-      // When data generation is enabled, do NOT fall back to static data; return empty
-      dynamicEmails = [];
-      return dynamicEmails;
+  // Determine the seed to use
+  let effectiveSeed: number;
+  
+  if (dbModeEnabled) {
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined") {
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
+    // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
+    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
-    console.log("ℹ️ Data generation is disabled, using original static emails");
-    dynamicEmails = originalEmails;
-    return dynamicEmails;
+    // If v2 is NOT enabled, automatically use seed=1
+    effectiveSeed = 1;
+  }
+
+  // Load from DB with the determined seed
+  try {
+    // Clear existing emails to force fresh load
+    dynamicEmails = [];
+    const fromDb = await fetchSeededSelection<Email>({
+      projectKey: "web_6_automail",
+      entityType: "emails",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "category",
+    });
+    
+    console.log(`[automail] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+    
+    if (fromDb && fromDb.length > 0) {
+      dynamicEmails = normalizeEmailTimestamps(fromDb);
+      return dynamicEmails;
+    } else {
+      console.warn(`[automail] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[automail] No data found for seed=${effectiveSeed}`);
+    }
+  } catch (err) {
+    console.error(`[automail] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    const fallback = normalizeEmailTimestamps([...originalEmails]);
+    dynamicEmails = fallback;
+    return fallback;
   }
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
-export async function loadEmailsFromDb(): Promise<Email[]> {
+export async function loadEmailsFromDb(seedOverride?: number | null): Promise<Email[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
   
   try {
-    const seed = getSeedValueFromEnv(1);
+    const fallbackSeed = getSeedValueFromEnv(1);
+    const seed = (typeof seedOverride === "number" && seedOverride > 0) ? seedOverride : fallbackSeed;
     const limit = 100;
     // Prefer distributed selection to avoid category dominance (e.g., primary only)
-    const distributed = await fetchSeededSelection<Email>({
+      const distributed = await fetchSeededSelection<Email>({
       projectKey: "web_6_automail",
       entityType: "emails",
       seedValue: seed,
@@ -461,4 +469,3 @@ export function searchEmails(query: string): Email[] {
 
 // Export the dynamic emails array for direct access
 export { dynamicEmails as emails };
-

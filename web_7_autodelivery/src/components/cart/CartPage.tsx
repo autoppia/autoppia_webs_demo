@@ -2,12 +2,71 @@
 import { useCartStore } from "@/store/cart-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHasHydrated } from "@/hooks/use-hydrated";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
+import { useRestaurants } from "@/contexts/RestaurantContext";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Calendar, Clock, Home, Phone, Gift, ChevronRight } from "lucide-react";
+import { Calendar, Clock, Home, Phone, Gift, ChevronRight, Loader2 } from "lucide-react";
 import { useRef } from "react";
+
+interface EditableTimeProps {
+  value: string;
+  onChange: (v: string) => void;
+  editing: boolean;
+  setEditing: (edit: boolean) => void;
+  className?: string;
+  id?: string;
+}
+
+function EditableTime({
+  value,
+  onChange,
+  editing,
+  setEditing,
+  className,
+  id,
+}: EditableTimeProps) {
+  const [tmp, setTmp] = useState(value);
+  useEffect(() => {
+    setTmp(value);
+  }, [value]);
+
+  if (editing) {
+    return (
+      <input
+        id={id ? `${id}-input` : undefined}
+        className={
+          "border-b outline-none w-auto font-mono py-0.5 px-1 bg-zinc-50 " +
+          (className || "")
+        }
+        value={tmp}
+        onChange={(e) => setTmp(e.target.value)}
+        onBlur={() => {
+          setEditing(false);
+          if (tmp.trim()) onChange(tmp);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            setEditing(false);
+            if (tmp.trim()) onChange(tmp);
+          }
+        }}
+        autoFocus
+      />
+    );
+  }
+
+  return (
+    <span
+      id={id}
+      className={"cursor-pointer hover:underline " + (className || "")}
+      tabIndex={0}
+      onClick={() => setEditing(true)}
+    >
+      {value}
+    </span>
+  );
+}
 
 import {
   Dialog,
@@ -17,17 +76,21 @@ import {
 } from "@/components/ui/dialog";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { AddToCartModal } from "../food/AddToCartModal";
+import type { CartItem } from "@/store/cart-store";
+import type { MenuItem } from "@/data/restaurants";
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, clearCart, getTotal } =
+  const { items, updateQuantity, removeFromCart, clearCart, getTotal, updateCartItem } =
     useCartStore();
   const [form, setForm] = useState({ name: "", address: "", phone: "" });
   const [orderSuccess, setOrderSuccess] = useState(false);
   const hydrated = useHasHydrated();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const layout = useSeedLayout();
-  const { getText, getPlaceholder, getId, getAria, seedStructure } = useDynamicStructure();
+  const seedStructure = layout.seed;
+  const { getText, getPlaceholder, getId, getAria } = useV3Attributes();
   const predefinedAddresses = [
     "710 Portofino Ln, Foster City, CA 94004",
     "450 Townsend St, San Francisco, CA 94107",
@@ -51,13 +114,15 @@ export default function CartPage() {
   const [deliveryTime, setDeliveryTime] = useState<
     "express" | "standard" | "scheduled"
   >("standard");
-  const restaurants = getRestaurants() || [];
+  const { restaurants, isLoading } = useRestaurants();
   const restaurant =
     items.length > 0
       ? restaurants.find((r) => r.id === items[0].restaurantId)
       : null;
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<CartItem | null>(null);
+  const [editingMenuItem, setEditingMenuItem] = useState<MenuItem | null>(null);
 
-  // Dynamic demo time values
   const [expressTime, setExpressTime] = useState(
     restaurant?.deliveryTime || "20-30 min"
   );
@@ -67,12 +132,19 @@ export default function CartPage() {
   const [pickupTime, setPickupTime] = useState(
     restaurant?.pickupTime || "10-20 min"
   );
-  // Editable UI state
+
   const [editing, setEditing] = useState<{
     field: "express" | "standard" | "scheduled" | "pickup" | null;
   }>({ field: null });
   const [scheduledInput, setScheduledInput] = useState("");
-  React.useEffect(() => {
+
+  useEffect(() => {
+    setExpressTime(restaurant?.deliveryTime || "20-30 min");
+    setStandardTime(restaurant?.deliveryTime || "20-30 min");
+    setPickupTime(restaurant?.pickupTime || "10-20 min");
+  }, [restaurant?.deliveryTime, restaurant?.pickupTime]);
+
+  useEffect(() => {
     if (hydrated && items.length > 0) {
       logEvent(EVENT_TYPES.OPEN_CHECKOUT_PAGE, {
         itemCount: items.reduce((acc: number, i: { quantity: number }) => acc + i.quantity, 0),
@@ -85,6 +157,14 @@ export default function CartPage() {
       });
     }
   }, [hydrated, items]);
+
+  if (isLoading && items.length > 0 && !restaurant) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      </div>
+    );
+  }
   if (!hydrated) {
     return (
       <div className="flex justify-center py-16">
@@ -112,61 +192,28 @@ export default function CartPage() {
     );
   }
 
-  // Helper for time label inline editing
-  function EditableTime({
-    value,
-    onChange,
-    editing,
-    setEditing,
-    className,
-    id,
-  }: {
-    value: string;
-    onChange: (v: string) => void;
-    editing: boolean;
-    setEditing: (edit: boolean) => void;
-    className?: string;
-    id?: string;
-  }) {
-    const [tmp, setTmp] = useState(value);
-    React.useEffect(() => {
-      setTmp(value);
-    }, [value]);
-    return editing ? (
-      <input
-        id={id ? `${id}-input` : undefined}
-        className={
-          "border-b outline-none w-auto font-mono py-0.5 px-1 bg-zinc-50 " +
-          (className || "")
-        }
-        value={tmp}
-        onChange={(e) => setTmp(e.target.value)}
-        onBlur={() => {
-          setEditing(false);
-          if (tmp.trim()) onChange(tmp);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            setEditing(false);
-            if (tmp.trim()) onChange(tmp);
-          }
-        }}
-        autoFocus
-      />
-    ) : (
-      <span
-        id={id}
-        className={"cursor-pointer hover:underline " + (className || "")}
-        tabIndex={0}
-        onClick={() => setEditing(true)}
-      >
-        {value}
-      </span>
-    );
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  };
+
+  const handleEditItem = (item: CartItem) => {
+    setEditingItem(item);
+    const foundRestaurant = restaurants.find((r) => r.id === item.restaurantId);
+    const menuItem = foundRestaurant?.menu.find((m) => m.id === item.id);
+    setEditingMenuItem(
+      menuItem ?? {
+        id: item.id,
+        name: item.name,
+        description: item.description || "",
+        price: item.price,
+        image: item.image,
+        options: item.options,
+        sizes: item.sizes,
+        restaurantId: item.restaurantId,
+        restaurantName: restaurant?.name,
+      }
+    );
+    setEditModalOpen(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -752,6 +799,25 @@ export default function CartPage() {
                     </Button>
                   </div>
                   <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                        handleEditItem(item);
+                        logEvent(EVENT_TYPES.EDIT_CART_ITEM, {
+                        itemId: item.id,
+                        itemName: item.name,
+                        price: item.price,
+                        quantity: item.quantity,
+                        restaurantId: item.restaurantId,
+                        restaurantName: restaurant?.name || "Unknown Restaurant",
+                        cartTotal: getTotal(),
+                      });
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
                     size="icon"
                     variant="destructive"
                     onClick={() => {
@@ -833,6 +899,37 @@ export default function CartPage() {
             </Button>
           </form>
         </>
+      )}
+      {editingItem && editingMenuItem && (
+        <AddToCartModal
+          open={editModalOpen}
+          onOpenChange={(open) => {
+            setEditModalOpen(open);
+            if (!open) {
+              setEditingItem(null);
+              setEditingMenuItem(null);
+            }
+          }}
+          item={editingMenuItem}
+          initialSelection={{
+            size: editingItem.selectedSize ?? undefined,
+            options: editingItem.selectedOptions ?? editingItem.options?.map((o) => o.label) ?? [],
+            preferences: editingItem.preferences ?? "",
+            quantity: editingItem.quantity,
+          }}
+          onAdd={(custom) => {
+            updateCartItem(editingItem.id, {
+              selectedSize: custom.size,
+              selectedOptions: custom.options,
+              preferences: custom.preferences ?? "",
+              quantity: custom.quantity,
+              unitPrice: custom.unitPrice,
+            });
+            setEditModalOpen(false);
+            setEditingItem(null);
+            setEditingMenuItem(null);
+          }}
+        />
       )}
     </div>
   );

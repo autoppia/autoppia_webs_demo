@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DEMO_FILES } from "@/library/dataset";
@@ -7,11 +7,50 @@ import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useProjectData } from "@/shared/universal-loader";
+import { useSeed } from "@/context/SeedContext";
+
+const normalizeFile = (file: any, index: number) => ({
+  id: file?.id ?? index,
+  name: file?.name ?? `Document ${index + 1}`,
+  size: file?.size ?? "—",
+  version: file?.version ?? "v1",
+  updated: file?.updated ?? "Today",
+  status: file?.status ?? "Draft",
+});
+
+const LoadingNotice = ({ message }: { message: string }) => (
+  <div className="flex items-center gap-2 text-sm text-zinc-500">
+    <span className="h-2 w-2 rounded-full bg-accent-forest animate-ping" />
+    <span>{message}</span>
+  </div>
+);
 
 export default function DocumentsPage() {
   const { getText, getId } = useDynamicStructure();
-  const [files, setFiles] = useState(DEMO_FILES);
-  const [error] = useState<string | null>(null);
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const { data, isLoading, error } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "files",
+    seedValue: v2Seed,
+  });
+  console.log("[DocumentsPage] API response", {
+    seed: v2Seed,
+    count: data?.length ?? 0,
+    isLoading,
+    error,
+    sample: (data || []).slice(0, 3),
+  });
+  const normalizedDemo = useMemo(() => DEMO_FILES.map((f, idx) => normalizeFile(f, idx)), []);
+  const normalizedApi = useMemo(() => (data || []).map((f, idx) => normalizeFile(f, idx)), [data]);
+  const resolvedFiles = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const [files, setFiles] = useState(resolvedFiles);
+  useEffect(() => {
+    if (isLoading) return;
+    setFiles(resolvedFiles);
+  }, [resolvedFiles, isLoading]);
+  const apiError: string | null = error ?? null;
   const fileInput = useRef<HTMLInputElement>(null);
 
   const onDrop = (ev: React.DragEvent<HTMLDivElement>) => {
@@ -67,12 +106,16 @@ export default function DocumentsPage() {
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
         <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
-          {getText("documents_title")}
+          {getText("documents_title", "Documents")}
           <span className="ml-2 text-base font-medium text-zinc-400 align-middle">
             (Demo)
           </span>
         </h1>
       </DynamicElement>
+
+      {isLoading && (
+        <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading documents..."} />
+      )}
 
       <DynamicElement
         elementType="section"
@@ -83,18 +126,21 @@ export default function DocumentsPage() {
         onClick={() => fileInput.current && fileInput.current.click()}
         style={{ minHeight: 140 }}
         id={getId("upload_area")}
-        aria-label={getText("upload_documents")}
+        aria-label={getText("upload_documents", "Upload Documents")}
       >
         <UploadCloud className="w-9 h-9 text-accent-forest/60 mb-2" />
         <span id={getId("upload_instructions")} className="font-semibold text-accent-forest">
-          {getText("upload_instructions")}
+          {getText("upload_instructions", "Upload Instructions")}
         </span>
         <input id={getId("file_input")} data-testid="file-input" type="file" multiple ref={fileInput} onChange={onUpload} className="hidden" />
       </DynamicElement>
 
       <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-        {error && (
-          <div className="col-span-full text-red-600">Failed to load documents: {error}</div>
+        {apiError && (
+          <div className="col-span-full text-red-600">Failed to load documents: {apiError}</div>
+        )}
+        {isLoading && files.length === 0 && (
+          <div className="col-span-full text-zinc-500">{getText("loading_message", "Loading...") ?? "Loading documents..."}</div>
         )}
         {files.map((file, index) => (
           <DynamicItem key={file.id} index={index} className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition">
@@ -123,8 +169,8 @@ export default function DocumentsPage() {
               onClick={() => deleteFile(file.id)} 
               className="absolute right-5 top-5 text-zinc-400 rounded-full hover:bg-zinc-100 p-2 opacity-70 group-hover:opacity-100 transition" 
               id={`${getId("delete_document_button")}-${file.id}`}
-              title={getText("delete_button")} 
-              aria-label={`${getText("delete_button")} ${file.name}`}
+              title={getText("delete_button", "Delete Button")} 
+              aria-label={`${getText("delete_button", "Delete Button")} ${file.name}`}
             >
               <Trash2 className="w-5 h-5" />
             </DynamicButton>

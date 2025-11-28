@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useSeed } from "@/library/useSeed";
-import { useSeedStructure } from "@/library/useSeedStructure";
+import { useSeed } from "@/context/SeedContext";
+import { useSeedStructure } from "@/dynamic/v1-layouts/useSeedStructure";
 import type { ComponentProps } from "react";
 
 interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
@@ -27,4 +27,3 @@ export function SeedLink({ href, preserveSeed = true, ...props }: SeedLinkProps)
 
   return <Link href={finalHref} {...props} />;
 }
-

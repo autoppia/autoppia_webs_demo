@@ -1,43 +1,33 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { DynamicElement } from "@/components/DynamicElement";
-import { getEffectiveSeed, getLayoutConfig } from "@/utils/dynamicDataProvider";
-import { withSeed } from "@/utils/seedRouting";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export default function Navbar() {
-  const { reorderElements } = useSeedLayout();
+  const { reorderElements, layoutConfig, getId, getClass, getText } = useSeedLayout();
   const links = [
     { href: "/appointments", title: "Appointments", event: EVENT_TYPES.BROWSE_APPOINTMENTS_CLICKED },
     { href: "/doctors", title: "Doctors", event: EVENT_TYPES.BROWSE_DOCTORS_CLICKED },
     { href: "/prescriptions", title: "Prescriptions", event: EVENT_TYPES.BROWSE_PRESCRIPTIONS_CLICKED },
     { href: "/medical-records", title: "Medical Records", event: EVENT_TYPES.BROWSE_MEDICAL_RECORDS_CLICKED },
   ];
-  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : undefined;
-  const hasSeed = !!sp?.get('seed');
-  const ordered = hasSeed ? reorderElements(links) : links;
+  const ordered = reorderElements(links);
 
-  // Seed-driven navbar section ordering (logo, links, cta)
-  const rawSeed = sp ? parseInt(sp.get('seed') || '1') : 1;
-  const seed = getEffectiveSeed(rawSeed);
-  const layout = getLayoutConfig(seed);
-  const headerOrder = layout.headerOrder; // e.g., ['logo','nav','search']
-  const sectionKeys = hasSeed
-    ? headerOrder.map((k: string) => (k === 'search' ? 'cta' : k))
-    : ['logo', 'nav', 'cta'];
+  const sectionKeys = layoutConfig.headerOrder.map((key) => (key === "search" ? "cta" : key));
 
   const Logo = (
     <DynamicElement elementType="nav-logo" as="span" index={0}>
-      <Link 
-        href={withSeed("/")} 
-        className="font-semibold text-emerald-700"
+      <SeedLink 
+        id={getId("nav-logo", 0)}
+        href="/" 
+        className={`font-semibold text-emerald-700 ${getClass("nav-link", "")}`}
         onClick={() => logEvent(EVENT_TYPES.BROWSE_HOME_CLICKED, { source: "navbar_logo" })}
       >
         AutoHealth
-      </Link>
+      </SeedLink>
     </DynamicElement>
   );
 
@@ -45,13 +35,14 @@ export default function Navbar() {
     <nav className="hidden gap-6 md:flex">
       {ordered.map((n, i) => (
         <DynamicElement key={n.href} elementType="nav-link" as="span" index={i}>
-          <Link
-            href={withSeed(n.href)}
-            className="text-sm text-muted-foreground hover:text-foreground"
+          <SeedLink
+            id={getId("nav-link", i)}
+            href={n.href}
+            className={`text-sm text-muted-foreground hover:text-foreground ${getClass("nav-link", "")}`}
             onClick={() => logEvent(n.event, { source: "navbar_link" })}
           >
             {n.title}
-          </Link>
+          </SeedLink>
         </DynamicElement>
       ))}
     </nav>
@@ -59,14 +50,16 @@ export default function Navbar() {
 
   const Cta = (
     <DynamicElement elementType="nav-cta" as="span" index={0}>
-      <Link href={withSeed("/appointments")}>
+      <SeedLink href="/appointments">
         <Button 
+          id={getId("nav-cta", 0)}
+          className={getClass("button-primary", "")}
           size="sm"
           onClick={() => logEvent(EVENT_TYPES.BOOK_NOW_CLICKED, { source: "navbar_cta_button" })}
         >
-          Book now
+          {getText("book_now", "Book now")}
         </Button>
-      </Link>
+      </SeedLink>
     </DynamicElement>
   );
 

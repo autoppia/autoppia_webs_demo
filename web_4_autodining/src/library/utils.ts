@@ -1,6 +1,10 @@
+import type React from "react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { useState, useEffect } from "react";
+import { useSeed } from "@/context/SeedContext";
+
+const MAX_V1_SEED = 300;
+export const TOTAL_LAYOUT_VARIANTS = 20;
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -1155,59 +1159,31 @@ export class SeedVariationManager {
 
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicModeEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
 }
 
-// Helper function to map seed to layout index (1-10)
+// Helper function to map seed to layout index (1-total variants)
 export function getLayoutIndexFromSeed(seed: number): number {
-  if (seed < 1 || seed > 300) return 1; // fallback
-  const bucket = seed % 30 || 30;  // gives 1–30
-  const layoutId = ((bucket - 1) % 10) + 1; // cycles into 1–10
+  if (!Number.isFinite(seed) || seed < 1 || seed > MAX_V1_SEED) {
+    return 1;
+  }
+  const normalizedSeed = Math.floor(seed);
+  const layoutId = ((normalizedSeed - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
   return layoutId;
 }
 
 // Helper function to get seed from URL
-export function getSeedFromUrl(): number {
-  if (typeof window === 'undefined') return 1;
-  
-  // If dynamic HTML is disabled, always return seed 1 (static mode)
-  if (!isDynamicModeEnabled()) {
-    return 1;
-  }
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const seedParam = urlParams.get('seed');
-  const seed = parseInt(seedParam || '1', 10);
-  
-  // Ensure seed is between 1-300
-  return Math.max(1, Math.min(300, seed));
-}
-
-// Helper function to get seed from URL with fallback
-export function getSeedFromUrlWithFallback(fallback: number = 1): number {
-  if (typeof window === 'undefined') return fallback;
-  
-  // If dynamic HTML is disabled, always return seed 1 (static mode)
-  if (!isDynamicModeEnabled()) {
-    return 1;
-  }
-  
-  const urlParams = new URLSearchParams(window.location.search);
-  const seedParam = urlParams.get('seed');
-  const seed = parseInt(seedParam || fallback.toString(), 10);
-  
-  // Ensure seed is between 1-300
-  return Math.max(1, Math.min(300, seed));
-}
-
 // Hook for using seed-based variations with event support
-export function useSeedVariation(type: keyof SeedVariations, eventType?: string) {
-  const [seed, setSeed] = useState(1);
+export function useSeedVariation(
+  type: keyof SeedVariations,
+  eventType?: string,
+  seedOverride?: number
+) {
+  const { resolvedSeeds } = useSeed();
   
-  useEffect(() => {
-    setSeed(getSeedFromUrl());
-  }, []);
-  
+  // If seedOverride is provided, use it; otherwise use v1 from resolvedSeeds
+  const seed = seedOverride ?? (resolvedSeeds.v1 ?? resolvedSeeds.base);
+
   return {
     className: SeedVariationManager.getClassName(type, seed, eventType),
     style: SeedVariationManager.getStyle(type, seed, eventType),

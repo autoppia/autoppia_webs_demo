@@ -157,7 +157,7 @@ export function getTextStructureName(seedStructure?: number): string {
 
 // Helper function to check if text structure is enabled
 export function isTextStructureEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML_STRUCTURE === 'true';
+  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE === 'true';
 }
 
 // Helper function to get effective text structure config

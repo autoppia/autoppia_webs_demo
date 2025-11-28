@@ -20,3 +20,6 @@ openai==1.57.2
 
 # Optional JSON Schema validation
 fastjsonschema==2.21.1
+ 
+# Optional file locking for safe concurrent writes
+filelock==3.16.1

@@ -1,33 +1,39 @@
 "use client";
-import { getRestaurants } from '@/utils/dynamicDataProvider';
 import RestaurantCard from './RestaurantCard';
 import { Input } from "@/components/ui/input";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useSearchStore } from '@/store/search-store';
 import { useLayout } from '@/contexts/LayoutProvider';
+import { useRestaurants } from '@/contexts/RestaurantContext';
+import { Loader2 } from "lucide-react";
+import { EVENT_TYPES, logEvent } from "@/components/library/events";
+import { useEffect, useState } from "react";
+import QuickOrderModal from "./QuickOrderModal";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function RestaurantsListPage() {
   const layout = useLayout();
+  const { getText, getId, getAria } = useV3Attributes();
   const search = useSearchStore(s => s.search);
   const setSearch = useSearchStore(s => s.setSearch);
   const cuisine = useSearchStore(s => s.cuisine);
   const setCuisine = useSearchStore(s => s.setCuisine);
   const rating = useSearchStore(s => s.rating);
   const setRating = useSearchStore(s => s.setRating);
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false);
 
-  const restaurants = getRestaurants() || [];
-  const cuisineOptions = Array.from(new Set(restaurants.map(r => r.cuisine)));
+  const { restaurants, isLoading } = useRestaurants();
+  const cuisineOptions = Array.from(new Set(restaurants.map((r) => r.cuisine)));
   const ratingOptions = [4, 4.5, 5];
 
-  const filtered = restaurants.filter(r => {
+  const filtered = restaurants.filter((r) => {
     const text = search.trim().toLowerCase();
     return (
       (!text ||
         r.name.toLowerCase().includes(text) ||
         r.cuisine.toLowerCase().includes(text) ||
-        (Array.isArray(r.menu) && r.menu.some(m => m.name.toLowerCase().includes(text)))
-      ) &&
+        (Array.isArray(r.menu) && r.menu.some((m) => m.name.toLowerCase().includes(text)))) &&
       (!cuisine || r.cuisine === cuisine) &&
       (!rating || r.rating >= parseFloat(rating))
     );
@@ -35,11 +41,44 @@ export default function RestaurantsListPage() {
 
   const isFiltered = !!search || cuisine || rating;
 
+  useEffect(() => {
+    if (!restaurants.length) return;
+    if (!search && !cuisine && !rating) return;
+    logEvent(EVENT_TYPES.RESTAURANT_FILTER, {
+      search: search.trim(),
+      cuisine: cuisine || null,
+      rating: rating ? Number(rating) : null,
+      total: filtered.length,
+    });
+  }, [search, cuisine, rating, filtered.length, restaurants.length]);
+
+  if (isLoading && restaurants.length === 0) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      </div>
+    );
+  }
+
   return (
     <section 
       className={layout.generateSeedClass('restaurants-section')}
       {...layout.getElementAttributes('restaurants-section', 0)}
     >
+      <div className="flex w-full justify-end mb-4">
+        <Button
+          className="bg-green-600 hover:bg-green-700"
+          onClick={() => {
+            logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "restaurants_home" });
+            setQuickOrderOpen(true);
+          }}
+          id={getId("quick_order_button", "quick-order-button")}
+          aria-label={getAria("quick_order_button", getText("quick_order_button", "Quick Order"))}
+          {...layout.getElementAttributes('quick-order-button', 0)}
+        >
+          {getText("quick_order_button", "Quick Order")}
+        </Button>
+      </div>
       <div 
         className={`flex flex-col md:flex-row gap-4 mb-8 items-center ${layout.searchBar.containerClass}`}
         {...layout.getElementAttributes('search-filters', 0)}
@@ -126,6 +165,7 @@ export default function RestaurantsListPage() {
           </div>
         )}
       </div>
+      <QuickOrderModal open={quickOrderOpen} onOpenChange={setQuickOrderOpen} />
     </section>
   );
 }

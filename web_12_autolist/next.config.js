@@ -5,13 +5,13 @@ const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_EN
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
 
 // For local development, set defaults; Docker overrides
-if (!process.env.ENABLE_DYNAMIC_HTML) {
-  process.env.ENABLE_DYNAMIC_HTML = isLocalDev ? 'true' : 'false';
+if (!process.env.ENABLE_DYNAMIC_V1) {
+  process.env.ENABLE_DYNAMIC_V1 = isLocalDev ? 'true' : 'false';
 }
 if (isLocalDev) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'true';
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML = 'false';
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'true';
+} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
 }
 // Dynamic HTML structure flag (controls seed-based structure)
 if (!process.env.DYNAMIC_HTML_STRUCTURE) {
@@ -27,8 +27,8 @@ console.log('  NODE_ENV:', process.env.NODE_ENV);
 console.log('  DOCKER_BUILD:', process.env.DOCKER_BUILD);
 console.log('  isLocalDev:', isLocalDev);
 console.log('  isDockerBuild:', isDockerBuild);
-console.log('  ENABLE_DYNAMIC_HTML:', process.env.ENABLE_DYNAMIC_HTML);
-console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_HTML:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML);
+console.log('  ENABLE_DYNAMIC_V1:', process.env.ENABLE_DYNAMIC_V1);
+console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1:', process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1);
 console.log('  DYNAMIC_HTML_STRUCTURE:', process.env.DYNAMIC_HTML_STRUCTURE);
 console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE);
 
@@ -67,10 +67,16 @@ const nextConfig = {
     ],
   },
   env: {
-    ENABLE_DYNAMIC_HTML: process.env.ENABLE_DYNAMIC_HTML,
-    NEXT_PUBLIC_ENABLE_DYNAMIC_HTML: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_HTML,
-    DYNAMIC_HTML_STRUCTURE: process.env.DYNAMIC_HTML_STRUCTURE,
-    NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE: process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE,
+    ENABLE_DYNAMIC_V1: process.env.ENABLE_DYNAMIC_V1,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V1: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1,
+    ENABLE_DYNAMIC_V2_AI_GENERATE: process.env.ENABLE_DYNAMIC_V2_AI_GENERATE,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE,
+    ENABLE_DYNAMIC_V2_DB_MODE: process.env.ENABLE_DYNAMIC_V2_DB_MODE,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE,
+    ENABLE_DYNAMIC_V3: process.env.ENABLE_DYNAMIC_V3,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V3: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3,
+    ENABLE_DYNAMIC_V4: process.env.ENABLE_DYNAMIC_V4,
+    NEXT_PUBLIC_ENABLE_DYNAMIC_V4: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4,
   },
 };
 

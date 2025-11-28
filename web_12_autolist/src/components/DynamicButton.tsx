@@ -1,7 +1,7 @@
 // src/components/DynamicButton.tsx
 
 import { useState, useEffect, ButtonHTMLAttributes, useRef } from "react";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 
 interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   eventType?: string;

@@ -1,32 +1,27 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useSeedLayout } from "@/library/utils";
-import type { ComponentProps } from "react";
+import Link from 'next/link';
+import { useSeed } from '@/context/SeedContext';
+import type { ComponentProps } from 'react';
 
 interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
   href: string;
-  preserveSeed?: boolean; // Default true, set to false to skip adding seed
+  preserveSeed?: boolean;
 }
 
 /**
- * Custom Link component that automatically preserves seed parameter in URLs
+ * A Link component that automatically preserves v2-seed parameter
  */
 export function SeedLink({ href, preserveSeed = true, ...props }: SeedLinkProps) {
-  const { seed } = useSeedLayout();
+  const { getNavigationUrl } = useSeed();
   
-  // If preserveSeed is false or href starts with http (external link) or href is just a hash, use original href
-  if (!preserveSeed || href.startsWith('http') || href.startsWith('#')) {
+  // If preserveSeed is false, just return a normal Link
+  if (!preserveSeed) {
     return <Link href={href} {...props} />;
   }
   
-  // Add seed to URL if it exists
-  const finalHref = seed ? (
-    href.includes('?') 
-      ? (href.includes('seed=') ? href : `${href}&seed=${seed}`)
-      : `${href}?seed=${seed}`
-  ) : href;
+  // Use getNavigationUrl to preserve seed
+  const hrefWithSeed = getNavigationUrl(href);
   
-  return <Link href={finalHref} {...props} />;
+  return <Link href={hrefWithSeed} {...props} />;
 }
-

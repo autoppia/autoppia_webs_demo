@@ -1,10 +1,12 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, useMemo, Suspense } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import { User, Mail, CheckCircle, FileText, Briefcase, Calendar, ChevronRight, Phone } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { clients as ALL_CLIENTS } from '@/library/dataset';
-import { withSeed } from "@/utils/seedRouting";
+import { clients as STATIC_CLIENTS } from '@/library/dataset';
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeed } from "@/context/SeedContext";
+import { useProjectData } from "@/shared/universal-loader";
 
 function getInitials(name: string) {
   return name
@@ -24,28 +26,90 @@ type Client = {
   phone?: string;
 };
 
+const STORAGE_KEY_PREFIX = "clients";
 
+const normalizeClient = (client: any, index: number): Client => ({
+  id: client?.id ?? `CL-${1000 + index}`,
+  name: client?.name ?? client?.title ?? `Client ${index + 1}`,
+  email: client?.email ?? `client${index + 1}@example.com`,
+  matters:
+    typeof client?.matters === "number"
+      ? client.matters
+      : Math.floor(Math.random() * 5) + 1,
+  avatar: client?.avatar ?? "",
+  status: client?.status ?? "Active",
+  last: client?.last ?? "Today",
+  phone: client?.phone,
+});
 
 function ClientProfilePageContent() {
   const [client, setClient] = useState<Client | null>(null);
+  const [isResolving, setIsResolving] = useState(true);
   const params = useParams();
   const clientId = params?.id as string;
-  const router = useRouter();
+  const seedRouter = useSeedRouter();
   const searchParams = useSearchParams();
+  const { resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const storageKey = useMemo(
+    () => `${STORAGE_KEY_PREFIX}_${v2Seed ?? "default"}`,
+    [v2Seed]
+  );
+
+  const { data } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "clients",
+    generateCount: 60,
+    version: "v1",
+    fallback: () => STATIC_CLIENTS,
+    seedValue: v2Seed ?? undefined,
+  });
+
+  const baseClients = useMemo(() => {
+    const normalizedApi = (data || []).map((c: any, idx: number) =>
+      normalizeClient(c, idx)
+    );
+    if (normalizedApi.length > 0) return normalizedApi;
+    return STATIC_CLIENTS.map((c, idx) => normalizeClient(c, idx));
+  }, [data]);
 
   useEffect(() => {
     if (!clientId) return;
+    if (baseClients.length === 0) return;
 
-    const foundClient = ALL_CLIENTS.find((c) => c.id === clientId);
+    setIsResolving(true);
+    let source = baseClients;
 
-    if (foundClient) {
-      setClient(foundClient);
-      logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, foundClient);
+    if (typeof window !== "undefined") {
+      const cached = window.localStorage.getItem(storageKey);
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            source = parsed;
+          }
+        } catch (error) {
+          console.warn("[ClientDetail] Failed to parse cached clients", error);
+        }
+      } else {
+        window.localStorage.setItem(storageKey, JSON.stringify(baseClients));
+      }
+    }
+
+    const found =
+      source.find((c) => c.id === clientId) ??
+      baseClients.find((c) => c.id === clientId) ??
+      null;
+
+    if (found) {
+      setClient(found);
+      logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, found);
     } else {
       console.warn(`Client with ID ${clientId} not found.`);
       setClient(null);
     }
-  }, [clientId]);
+    setIsResolving(false);
+  }, [clientId, baseClients, storageKey]);
 
   const matters = [
     { id: 'MAT-113', name: 'Estate Plan Review', status: 'Active' },
@@ -59,10 +123,20 @@ function ClientProfilePageContent() {
     { label: 'Client meeting', date: '2 weeks ago', icon: <Calendar className="w-4 h-4" /> },
   ];
 
+  if (isResolving) {
+    return (
+      <section className="flex justify-center items-center h-screen">
+        <p className="text-zinc-500">Loading client details...</p>
+      </section>
+    );
+  }
+
   if (!client) {
     return (
       <section className="flex justify-center items-center h-screen">
-        <p className="text-zinc-500">Client not found</p>
+        <p className="text-zinc-500">
+          Client {clientId ? `(${clientId}) ` : ""}not found
+        </p>
       </section>
     );
   }
@@ -195,7 +269,7 @@ function ClientProfilePageContent() {
                   key={m.id}
                   id={`related-matter-${m.id}`}
                   data-testid={`related-matter-${m.id}`}
-                  onClick={() => router.push(withSeed(`/matters/${m.id}`, searchParams))}
+                  onClick={() => seedRouter.push(`/matters/${m.id}`)}
                   className="rounded-2xl bg-white border border-zinc-100 shadow p-4 flex items-center gap-4 hover:shadow-lg transition cursor-pointer"
                 >
                   <FileText className="w-7 h-7 text-accent-forest/60"/>

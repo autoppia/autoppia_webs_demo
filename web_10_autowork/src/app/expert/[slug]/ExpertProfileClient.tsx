@@ -1,6 +1,6 @@
 "use client";
 
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import HireButton from "@/app/components/HireButton";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";

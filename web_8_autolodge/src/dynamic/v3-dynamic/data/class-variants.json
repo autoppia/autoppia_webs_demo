@@ -1,0 +1,135 @@
+{
+  "button-primary": [
+    "btn-primary",
+    "button-main",
+    "btn-action",
+    "primary-btn",
+    "action-button",
+    "main-button",
+    "cta-button",
+    "primary-action",
+    "btn-cta",
+    "action-btn-main"
+  ],
+  "button-secondary": [
+    "btn-secondary",
+    "button-alt",
+    "btn-outline",
+    "secondary-btn",
+    "outline-button",
+    "alt-button",
+    "btn-ghost",
+    "secondary-action",
+    "btn-light",
+    "action-btn-alt"
+  ],
+  "card": [
+    "card",
+    "tile",
+    "panel",
+    "box",
+    "block",
+    "container-item",
+    "item-wrapper",
+    "card-container",
+    "content-box",
+    "content-panel"
+  ],
+  "card-image": [
+    "card-img",
+    "tile-image",
+    "panel-img",
+    "box-image",
+    "item-photo",
+    "card-photo",
+    "visual-content",
+    "media-img",
+    "content-image",
+    "item-visual"
+  ],
+  "card-title": [
+    "card-title",
+    "tile-heading",
+    "panel-title",
+    "box-heading",
+    "item-title",
+    "content-heading",
+    "card-header",
+    "item-name",
+    "content-title",
+    "heading-main"
+  ],
+  "nav-link": [
+    "nav-link",
+    "menu-item",
+    "nav-item",
+    "link-nav",
+    "menu-link",
+    "navigation-link",
+    "nav-action",
+    "menu-action",
+    "link-item",
+    "nav-element"
+  ],
+  "input-text": [
+    "input-field",
+    "text-input",
+    "form-input",
+    "field-text",
+    "input-box",
+    "text-field",
+    "form-field",
+    "input-control",
+    "text-control",
+    "field-control"
+  ],
+  "grid-container": [
+    "grid",
+    "grid-layout",
+    "grid-wrapper",
+    "layout-grid",
+    "grid-container",
+    "flex-grid",
+    "grid-system",
+    "layout-container",
+    "container-grid",
+    "grid-box"
+  ],
+  "badge": [
+    "badge",
+    "tag",
+    "label",
+    "pill",
+    "chip",
+    "indicator",
+    "status-badge",
+    "tag-label",
+    "label-badge",
+    "indicator-tag"
+  ],
+  "icon": [
+    "icon",
+    "svg-icon",
+    "icon-graphic",
+    "symbol",
+    "glyph",
+    "icon-img",
+    "graphic-icon",
+    "icon-element",
+    "visual-icon",
+    "icon-symbol"
+  ],
+  "rating": [
+    "rating",
+    "stars",
+    "rating-display",
+    "star-rating",
+    "review-rating",
+    "rating-stars",
+    "star-display",
+    "rating-indicator",
+    "stars-display",
+    "review-stars"
+  ]
+}
+

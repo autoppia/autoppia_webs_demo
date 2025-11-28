@@ -18,7 +18,8 @@ import { useState, useRef, useEffect } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { loadTasks, RemoteTask } from "@/data/tasks";
 
 // Import debug utilities in development
 if (process.env.NODE_ENV === 'development') {
@@ -39,9 +40,21 @@ const priorities = [
   { key: 3, label: "Medium", color: "blue" },
   { key: 4, label: "Low", color: "gray" },
 ];
+
+const clampPriorityValue = (value: number): number =>
+  value >= 1 && value <= 4 ? value : 4;
 function getPriorityLabel(priority: number): string {
     return priorities.find((p) => p.key === priority)?.label || String(priority);
   }
+
+const normalizeRemoteTask = (task: RemoteTask, index: number): Task => ({
+  id: task.id ?? `remote-task-${index}`,
+  name: task.name?.trim() || "Untitled task",
+  description: task.description ?? "",
+  date: task.due_date ? dayjs(task.due_date) : null,
+  priority: clampPriorityValue(task.priority ?? 4),
+  completedAt: task.completed_at ?? undefined,
+});
 
 function getUpcoming(label: "today" | "tomorrow" | "weekend" | "nextweek") {
   const now = dayjs();
@@ -441,14 +454,51 @@ function AddTaskCard({
 }
 
 export default function Home() {
-  const { getElementAttributes, getText } = useSeedLayout();
+  const { getElementAttributes, getText, v2Seed } = useSeedLayout();
   const [showForm, setShowForm] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasksLoading, setTasksLoading] = useState(true);
+  const [tasksError, setTasksError] = useState<string | null>(null);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [selectedView, setSelectedView] = useState<
     "inbox" | "completed" | "today"
   >("inbox");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchTasks() {
+      setTasksLoading(true);
+      setTasksError(null);
+      try {
+        const remoteTasks = await loadTasks(v2Seed ?? undefined);
+        if (cancelled) return;
+        const normalized = remoteTasks.map((task, index) =>
+          normalizeRemoteTask(task, index)
+        );
+        const initialActive = normalized.filter((task) => !task.completedAt);
+        const initialCompleted = normalized.filter((task) => task.completedAt);
+        setTasks(initialActive);
+        setCompletedTasks(initialCompleted);
+      } catch (error) {
+        if (cancelled) return;
+        console.error("[autolist] Failed to load tasks", error);
+        setTasksError(
+          error instanceof Error ? error.message : "Failed to load tasks"
+        );
+      } finally {
+        if (!cancelled) {
+          setTasksLoading(false);
+        }
+      }
+    }
+
+    fetchTasks();
+    return () => {
+      cancelled = true;
+    };
+  }, [v2Seed]);
 
   function handleAddTask(newTask: {
     name: string;
@@ -708,7 +758,17 @@ export default function Home() {
                 onAdd={handleAddTask}
               />
             )}
-            {!showForm && tasks.length === 0 && (
+            {tasksLoading && (
+              <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl border border-dashed border-gray-200 px-6 py-4 text-sm text-gray-600">
+                Loading tasks...
+              </div>
+            )}
+            {tasksError && (
+              <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl border border-red-200 px-6 py-4 text-sm text-red-600">
+                {tasksError}
+              </div>
+            )}
+            {!showForm && !tasksLoading && tasks.length === 0 && (
               <div className="w-full max-w-md mx-auto mt-6 bg-white rounded-2xl shadow-md border border-gray-200 px-8 py-10 flex flex-col items-center">
                 <div className="mb-6">
                   <svg

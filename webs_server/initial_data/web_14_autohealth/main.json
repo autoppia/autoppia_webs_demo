@@ -1,0 +1,14 @@
+{
+  "appointments": [
+    "./data/appointments_1.json"
+  ],
+  "doctors": [
+    "./data/doctors_1.json"
+  ],
+  "medical-records": [
+    "./data/medical-records_1.json"
+  ],
+  "prescriptions": [
+    "./data/prescriptions_1.json"
+  ]
+}

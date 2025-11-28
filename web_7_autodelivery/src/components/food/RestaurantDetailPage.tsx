@@ -1,16 +1,16 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { MenuItem, MenuItemSize, type Restaurant } from "@/data/restaurants";
-import { getRestaurants } from "@/utils/dynamicDataProvider";
+import { useRestaurants } from "@/contexts/RestaurantContext";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
-import Image from "next/image";
-import { Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import { AddToCartModal } from "./AddToCartModal";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useLayout } from "@/contexts/LayoutProvider";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -47,7 +47,8 @@ function ReviewsSection({
   restaurant: Restaurant;
 }) {
   const layout = useLayout();
-  const { getText, getId, getAria, seedStructure } = useDynamicStructure();
+  const seedStructure = layout.seed;
+  const { getText, getId, getAria } = useV3Attributes();
   const [localReviews, setLocalReviews] = useState(reviews);
   const handleDelete = (idx: number) => {
     const deleted = localReviews[idx];
@@ -98,7 +99,7 @@ function ReviewsSection({
             key={i}
             className="bg-white rounded-xl shadow p-5 flex items-start gap-4 group relative"
           >
-            <Image
+            <SafeImage
               src={r.avatar}
               alt={r.author}
               width={48}
@@ -138,13 +139,20 @@ export default function RestaurantDetailPage({
   restaurantId: string;
 }) {
   const layout = useLayout();
-  const { getText, getId, getAria, seedStructure } = useDynamicStructure();
+  const seedStructure = layout.seed;
+  const { getText, getId, getAria } = useV3Attributes();
   const isAdmin = true; // <-- Set false to test regular user (admin-only delete)
   const router = useSeedRouter();
-  const restaurants = useMemo(() => getRestaurants() ?? [], []);
+  const { restaurants, isLoading } = useRestaurants();
   const restaurant = useMemo(() => {
-    return restaurants.find((r) => r.id === restaurantId)!;
+    return restaurants.find((r) => r.id === restaurantId);
   }, [restaurantId, restaurants]);
+
+  const addToCart = useCartStore((state) => state.addToCart);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalItem, setModalItem] = useState<MenuItem | null>(null);
+  const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
+
   useEffect(() => {
     if (restaurant) {
       const eventPayload = {
@@ -157,12 +165,14 @@ export default function RestaurantDetailPage({
       logEvent(EVENT_TYPES.VIEW_RESTAURANT, eventPayload);
     }
   }, [restaurant]);
-  const addToCart = useCartStore((state) => state.addToCart);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalItem, setModalItem] = useState<MenuItem | null>(null);
 
-  // Delivery/Pickup toggle state
-  const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
+  if (isLoading && !restaurant) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+      </div>
+    );
+  }
 
   if (!restaurant)
     return <div className="text-lg text-zinc-500">Restaurant not found.</div>;
@@ -172,9 +182,10 @@ export default function RestaurantDetailPage({
     options: string[];
     preferences?: string;
     quantity: number;
+    unitPrice: number;
   };
   function handleAddToCart(custom: CartCustomItem) {
-    if (modalItem) {
+    if (modalItem && restaurant) {
       const transformedOptions =
         custom.options?.map((label) => ({ label })) ?? [];
 
@@ -184,7 +195,12 @@ export default function RestaurantDetailPage({
         options: transformedOptions,
       };
 
-      addToCart(payload, restaurant.id, custom.quantity);
+      addToCart(payload, restaurant.id, custom.quantity, {
+        selectedSize: custom.size,
+        selectedOptions: custom.options,
+        preferences: custom.preferences,
+        unitPrice: custom.unitPrice,
+      });
       setModalOpen(false);
       setModalItem(null);
     }
@@ -201,7 +217,7 @@ export default function RestaurantDetailPage({
             {...layout.getElementAttributes('restaurant-header', 0)}
           >
             <div className="relative w-full md:w-72 h-48 rounded-xl overflow-hidden shadow">
-              <Image
+              <SafeImage
                 src={restaurant.image}
                 alt={restaurant.name}
                 fill
@@ -273,7 +289,7 @@ export default function RestaurantDetailPage({
                   id={getId(`menu-item-${index}`, `menu-item-${seedStructure}-${index}`)}
                 >
                   <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
-                    <Image
+                    <SafeImage
                       src={item.image}
                       alt={getText(`menu-item-name-${index}`, item.name)}
                       fill

@@ -4,14 +4,20 @@ import { type User, type Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { useSeed } from "@/context/SeedContext";
+import {
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+  getShuffledItems,
+} from "@/dynamic/v1-layouts";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
 function ProfileContent({ username }: { username: string }) {
-  const { layout } = useSeed();
+  const { resolvedSeeds, seed } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layout = getEffectiveLayoutConfig(layoutSeed);
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
@@ -19,7 +25,7 @@ function ProfileContent({ username }: { username: string }) {
 
   const user = users.find((u) => u.username === username);
   const currentUser = users[2] || users[0];
-  const { getText } = useDynamicStructure();
+  const { getText } = useV3Attributes();
   const isSelf = user?.username === currentUser.username;
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"
@@ -43,8 +49,8 @@ function ProfileContent({ username }: { username: string }) {
     return <div className="text-center text-red-600 mt-8">{getText("profile_not_found", "User not found.")}</div>;
 
   const posts = mockPosts.filter((p) => p.user.username === user.username);
-  const shuffledPosts = getShuffledItems(posts, layout.feedOrder);
-  const profileClasses = getLayoutClasses(layout, 'profileLayout');
+  const shuffledPosts = getShuffledItems(posts, layoutSeed);
+  const profileClasses = getLayoutClasses(layout, "profileLayout");
 
   const handleConnect = () => {
     logEvent(EVENT_TYPES.CONNECT_WITH_USER, {

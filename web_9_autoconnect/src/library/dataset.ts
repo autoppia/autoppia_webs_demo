@@ -275,9 +275,8 @@ export async function generateProjectData(
  */
 export function isDataGenerationEnabled(): boolean {
   const raw = (
-    process.env.NEXT_PUBLIC_DATA_GENERATION ??
-    process.env.NEXT_ENABLE_DATA_GENERATION ??
-    process.env.ENABLE_DATA_GENERATION ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE ??
+    process.env.ENABLE_DYNAMIC_V2_AI_GENERATE ??
     ''
   ).toString().toLowerCase();
   return ['true', '1', 'yes', 'on'].includes(raw);

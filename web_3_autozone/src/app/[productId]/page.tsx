@@ -2,18 +2,23 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { useParams, useSearchParams } from "next/navigation";
-import { Star, Check } from "lucide-react";
+import { useParams } from "next/navigation";
+import { Star, Share2, Heart, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type Product, useCart } from "@/context/CartContext";
+import { BlurCard } from "@/components/ui/BlurCard";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { Suspense } from "react";
-import { getEffectiveSeed, getProductById } from "@/utils/dynamicDataProvider";
-import { withSeed } from "@/utils/seedRouting";
+import { getProductById } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
+import {
+  isInWishlist,
+  toggleWishlistItem,
+} from "@/library/wishlist";
 
 
 // Static date to avoid hydration mismatch
@@ -22,14 +27,19 @@ const DELIVERY_ADDRESS = "Daly City 94016";
 
 function ProductContent() {
   const router = useSeedRouter();
-  const searchParams = useSearchParams();
   const { productId } = useParams();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
   const [addedToCart, setAddedToCart] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [wishlistAdded, setWishlistAdded] = useState(false);
+  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "shared">(
+    "idle"
+  );
+  const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [activeImage, setActiveImage] = useState(0);
 
   const { seed } = useSeed();
   const order = seed % 3;
@@ -38,7 +48,7 @@ function ProductContent() {
     setIsLoading(true);
 
     if (typeof productId === "string") {
-      const foundProduct: any = getProductById(productId);
+      const foundProduct = getProductById(productId);
       if (foundProduct) {
         setProduct(foundProduct);
       }
@@ -46,28 +56,167 @@ function ProductContent() {
     }
   }, [productId]);
 
+  const productEventData = useMemo(
+    () =>
+      product
+        ? {
+            productId: product.id,
+            title: product.title,
+            price: product.price,
+            category: product.category,
+            brand: product.brand,
+            rating: product.rating,
+          }
+        : null,
+    [product]
+  );
+
   // Log view event
   useEffect(() => {
-    if (product) {
-      logEvent(EVENT_TYPES.VIEW_DETAIL, {
-        productId: product.id,
-        title: product.title,
-        price: product.price,
-        category: product.category,
-        brand: product.brand,
-        rating: product.rating,
-      });
+    if (productEventData) {
+      logEvent(EVENT_TYPES.VIEW_DETAIL, { ...productEventData });
     }
-  }, [product]);
+  }, [productEventData]);
+
+  useEffect(() => {
+    if (product?.id) {
+      setWishlistAdded(isInWishlist(product.id));
+    }
+  }, [product?.id]);
+
+  const galleryImages = useMemo(() => {
+    if (!product?.image) return [];
+    const separator = product.image.includes("?") ? "&" : "?";
+    const variants = [
+      product.image,
+      `${product.image}${separator}angle=left`,
+      `${product.image}${separator}angle=detail`,
+      `${product.image}${separator}angle=packaging`,
+    ];
+    return Array.from(new Set(variants));
+  }, [product?.image]);
+
+  useEffect(() => {
+    setActiveImage(0);
+  }, [product?.id]);
+
+  const specEntries = useMemo(
+    () =>
+      [
+        { label: getText("brand"), value: product?.brand },
+        { label: getText("color"), value: product?.color },
+        { label: getText("size"), value: product?.size },
+        {
+          label: "Dimensions",
+          value:
+            product?.dimensions?.length ||
+            product?.dimensions?.width ||
+            product?.dimensions?.depth
+              ? `${product?.dimensions?.length ?? ""} ${product?.dimensions?.width ?? ""} ${product?.dimensions?.depth ?? ""}`.trim()
+              : undefined,
+        },
+        {
+          label: getText("category", "Category"),
+          value: product?.category,
+        },
+        {
+          label: getText("care_instructions", "Care instructions"),
+          value: product?.careInstructions,
+        },
+      ].filter((entry) => entry.value),
+    [
+      product?.brand,
+      product?.careInstructions,
+      product?.category,
+      product?.color,
+      product?.dimensions?.depth,
+      product?.dimensions?.length,
+      product?.dimensions?.width,
+      product?.size,
+      getText,
+    ]
+  );
+
+  const highlightBullets = useMemo(() => {
+    if (!product?.description) {
+      return [
+        "Designed for multi-location deployment teams.",
+        "Pairs with Autozone install scheduling.",
+        "Eligible for carbon-neutral routing offsets.",
+      ];
+    }
+    return product.description.split("\n\n").slice(0, 4);
+  }, [product?.description]);
+
+  const handleShareProduct = async () => {
+    if (!product || !productEventData) return;
+    const shareUrl =
+      typeof window !== "undefined" ? window.location.href : product.id;
+
+    logEvent(EVENT_TYPES.SHARE_PRODUCT, {
+      ...productEventData,
+      shareUrl,
+    });
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: product.title,
+          text: product.description ?? product.title,
+          url: shareUrl,
+        });
+        setShareStatus("shared");
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareStatus("copied");
+      }
+    } catch (error) {
+      console.warn("Share cancelled", error);
+    } finally {
+      setTimeout(() => setShareStatus("idle"), 2500);
+    }
+  };
+
+  const handleWishlistToggle = () => {
+    if (!product || !productEventData) return;
+    const { added } = toggleWishlistItem({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      brand: product.brand,
+      rating: product.rating,
+    });
+    setWishlistAdded(added);
+    logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+      ...productEventData,
+      action: added ? "added" : "removed",
+    });
+  };
+
+  const handleExploreToggle = () => {
+    if (!product || !productEventData) return;
+    const next = !isExploreOpen;
+    setIsExploreOpen(next);
+    logEvent(EVENT_TYPES.DETAILS_TOGGLE, {
+      ...productEventData,
+      section: "explore_further",
+      expanded: next,
+    });
+  };
 
   const quantityInput = (
-    <>
-      <label htmlFor={getId("quantity_select")} className="mt-2 mb-1 block text-[15px]">
-        {getText("quantity")}:
+    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+      <label
+        htmlFor={getId("quantity_select")}
+        className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-slate-400"
+      >
+        {getText("quantity")}
       </label>
       <select
         id={getId("quantity_select")}
-        className="border border-[#D5D9D9] rounded-[4px] px-2 py-1 text-[15px] w-full mb-3"
+        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 focus:border-slate-400 focus:outline-none"
         value={quantity}
         onChange={(e) => {
           const newQty = Number.parseInt(e.target.value);
@@ -77,15 +226,13 @@ function ProductContent() {
             product_name: product.title,
             previous_quantity: quantity,
             new_quantity: newQty,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
             price: product.price,
             category: product.category,
             brand: product.brand,
             rating: product.rating,
+            updated_at: new Date().toISOString(),
           });
         }}
-        style={{ maxWidth: "170px" }}
       >
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
           <option key={n} value={n}>
@@ -93,16 +240,16 @@ function ProductContent() {
           </option>
         ))}
       </select>
-    </>
+    </div>
   );
 
   const addToCartButton = (
     <Button
       id={getId("add_to_cart_button")}
-      className="block w-full bg-[#17A2B8] hover:bg-[#1E90FF] text-white font-semibold rounded-[20px] py-2 mt-1 mb-2 text-base border border-[#FCD200] shadow"
+      className="mt-1 w-full rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-elevated hover:bg-slate-800"
       onClick={() => {
         handleAddToCart();
-        router.push(withSeed("/cart", searchParams));
+        router.push("/cart");
       }}
     >
       {getText("add_to_cart")}
@@ -112,7 +259,7 @@ function ProductContent() {
   const buyNowButton = (
     <Button
       id={getId("buy_now_button")}
-      className="block w-full bg-[#FFA41C] hover:bg-[#f08804] text-white font-semibold rounded-[20px] text-base py-2 mb-2 border border-[#FFA41C]"
+      className="w-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-lg hover:from-indigo-600 hover:to-sky-600"
       onClick={() => {
         if (!product) return;
 
@@ -126,7 +273,7 @@ function ProductContent() {
           brand: product.brand,
           rating: product.rating,
         });
-        router.push(withSeed("/checkout", searchParams));
+        router.push("/checkout");
       }}
     >
       {getText("buy_now")}
@@ -211,7 +358,7 @@ function ProductContent() {
           <p className="mt-4">
             The product you are looking for does not exist or has been removed.
           </p>
-          <Button className="mt-4" onClick={() => router.push(withSeed("/", searchParams))}>
+          <Button className="mt-4" onClick={() => router.push("/")}>
             {getText("return_to_home")}
           </Button>
         </div>
@@ -224,245 +371,241 @@ function ProductContent() {
 
   return (
     <main
-      className="container mx-auto px-2 md:px-4 py-6 bg-white"
+      className="bg-gradient-to-b from-white via-slate-50 to-white"
       suppressHydrationWarning
     >
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Product Image */}
-        <div className="md:col-span-1">
-          <div className="relative h-80 w-full bg-gray-100 mb-4">
-            <Image
-              src={product.image}
-              alt={product.title}
-              fill
-              className="object-contain"
-              unoptimized
-            />
-          </div>
-          <div className="flex space-x-2 mt-2 overflow-x-auto">
-            <div className="border-2 border-gray-300 hover:border-gray-800 cursor-pointer w-16 h-16 relative flex-shrink-0">
-              <Image
-                src={product.image}
-                alt={product.title}
-                fill
-                className="object-contain p-1"
-                unoptimized
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Product Details */}
-        <div className="md:col-span-1">
-          <h1 className="text-xl md:text-2xl font-medium mb-2">
-            {product.title}
-          </h1>
-          <div className="text-sm text-blue-600 mb-2">
-            {getText("visit_store")} {product.brand} {getText("store")}
-          </div>
-
-          <div className="mb-4">{renderStars(rating)}</div>
-
-          <div className="border-t border-b border-gray-200 py-2 mb-4">
-            <div className="flex items-center">
-              <span className="text-xl font-bold">{formattedPrice}</span>
-            </div>
-          </div>
-
-          <div className="mb-4 text-sm">
-            {product.description && renderDescription(product.description)}
-          </div>
-
-          {/* Product Specifications */}
-          <table className="min-w-full text-sm mb-4">
-            <tbody>
-              <tr>
-                <td className="py-1 font-medium text-gray-500 pr-4">{getText("brand")}</td>
-                <td className="py-1">{product.brand}</td>
-              </tr>
-              {product.color && (
-                <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">{getText("color")}</td>
-                  <td className="py-1">{product.color}</td>
-                </tr>
-              )}
-              {product.size && (
-                <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">{getText("size")}</td>
-                  <td className="py-1">{product.size}</td>
-                </tr>
-              )}
-              {product.dimensions?.depth && (
-                <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">
-                    Item Depth
-                  </td>
-                  <td className="py-1">{product.dimensions.depth}</td>
-                </tr>
-              )}
-              {product.dimensions?.length && (
-                <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">
-                    Item dimensions L x W x H
-                  </td>
-                  <td className="py-1">{product.dimensions.length}</td>
-                </tr>
-              )}
-              {product.careInstructions && (
-                <tr>
-                  <td className="py-1 font-medium text-gray-500 pr-4">
-                    Product Care Instructions
-                  </td>
-                  <td className="py-1">{product.careInstructions}</td>
-                </tr>
-              )}
-              <tr>
-                <td className="py-1 font-medium text-gray-500 pr-4">
-                  Category
-                </td>
-                <td className="py-1">{product.category}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Buy Box Right (Sticky on desktop, full-width mobile) */}
-        <div className="md:col-span-1 w-full">
-          <aside className="border border-[#D5D9D9] bg-white rounded-lg shadow-sm p-4 md:sticky md:top-20 min-w-[275px] max-w-xs mx-auto md:mx-0 text-[15px]">
-            <div className="mb-2 flex items-center">
-              <span className="text-xs font-bold mr-2">{getText("buy_new")}:</span>
-              <span className="ml-auto">
-                <input type="radio" checked readOnly aria-label="selected" />
-              </span>
-            </div>
-            <div className="text-[28px] font-bold tracking-tight leading-snug mb-2 mt-0">
-              {product.price}
-            </div>
-            <div className="leading-snug text-sm mb-1">
-              <span className="text-[#007185] leading-tight font-medium">
-                {getText("free_delivery")} <b>{DELIVERY_DATE}</b>
-              </span>
-              <span className="block text-[13px] mt-1 mb-0">
-                on orders shipped by Autozon over $35
-              </span>
-            </div>
-            <div className="flex items-center leading-tight gap-1 mt-1 mb-2 text-sm text-[#111]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="inline-block"
-                width="17"
-                height="17"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#666"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="10" r="8" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <span>{getText("deliver_to")} {DELIVERY_ADDRESS}</span>
-            </div>
-            <div className="text-[#007600] font-semibold my-1 text-base">
-              {getText("in_stock")}
-            </div>
-            {layouts[order].map((element, index) => (
-              <div key={index}>{element}</div>
-            ))}
-
-            <dl className="text-xs text-gray-700 mb-2 mt-2 leading-5 border-t border-b py-3 border-[#D5D9D9]">
-              <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">{getText("ships_from")}</dt>
-                <dd className="flex-1 pl-1 font-normal">Autozon.com</dd>
+      <div className="omnizon-container px-2 py-8 md:px-4">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr,0.8fr]">
+          <div className="space-y-8">
+            <BlurCard className="p-6">
+              <div className="grid gap-4 lg:grid-cols-[90px,1fr]">
+                <div className="flex gap-3 overflow-x-auto lg:flex-col lg:overflow-y-auto">
+                  {galleryImages.map((src, index) => (
+                    <button
+                      key={`${src}-${index}`}
+                      type="button"
+                      onClick={() => setActiveImage(index)}
+                      className={`relative h-20 w-20 rounded-2xl border-2 p-1 transition ${
+                        index === activeImage
+                          ? "border-slate-900"
+                          : "border-transparent opacity-60 hover:opacity-100"
+                      }`}
+                    >
+                      <Image
+                        src={src}
+                        alt={`${product.title} thumbnail ${index + 1}`}
+                        fill
+                        sizes="80px"
+                        className="rounded-xl object-contain"
+                      />
+                    </button>
+                  ))}
+                </div>
+                <div className="relative aspect-square rounded-[32px] border border-white/50 bg-white">
+                  <Image
+                    src={galleryImages[activeImage] ?? product.image}
+                    alt={product.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 600px"
+                    className="object-contain p-6"
+                  />
+                </div>
               </div>
-              <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">{getText("sold_by")}</dt>
-                <dd className="flex-1 pl-1">
-                  <span className="text-[#007185] hover:underline cursor-pointer">
-                    Autozon.com
-                  </span>
-                </dd>
+            </BlurCard>
+
+            <BlurCard className="space-y-4 p-6">
+              <div className="space-y-2">
+                <p className="text-xs uppercase tracking-[0.35em] text-slate-400">
+                  {getText("visit_store")} {product.brand} {getText("store")}
+                </p>
+                <h1 className="text-3xl font-semibold text-slate-900">
+                  {product.title}
+                </h1>
               </div>
-              <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">{getText("returns_policy")}</dt>
-                <dd className="flex-1 pl-1">
-                  <span className="text-[#007185] hover:underline cursor-pointer">
-                    {getText("day_refund")}
-                  </span>
-                </dd>
-              </div>
-              <div className="flex items-center py-0.5">
-                <dt className="w-20 font-normal">{getText("payment")}</dt>
-                <dd className="flex-1 pl-1">
-                  <span className="text-[#007185] underline">
-                    {getText("secure_transaction")}
-                  </span>
-                </dd>
-              </div>
-            </dl>
-            <div className="mb-2 text-xs text-[#007185] cursor-pointer flex items-center gap-1">
-              <span>&#9660;</span> {getText("see_more")}
-            </div>
-            <div className="flex items-center text-sm mb-2 mt-1">
-              <input
-                type="checkbox"
-                className="mr-2 accent-[#017185]"
-                id="gift-receipt"
-              />
-              <label htmlFor="gift-receipt" className="text-xs">
-                {getText("add_gift_receipt")}
-              </label>
-            </div>
-            <div className="border-t border-[#D5D9D9] pt-3 mt-4">
-              <div className="flex items-center mb-2 gap-2">
-                <input type="radio" id="used-like-new" name="used-new-switch" />
-                <label
-                  htmlFor="used-like-new"
-                  className="text-[13px] text-[#111] font-semibold"
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={handleShareProduct}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
                 >
-                  {getText("save_with_used")}:
-                </label>
+                  <Share2 className="h-4 w-4" />
+                  <span>
+                    {shareStatus === "shared"
+                      ? getText("share_success") || "Shared"
+                      : shareStatus === "copied"
+                      ? getText("link_copied") || "Link copied"
+                      : "Share product"}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleWishlistToggle}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
+                >
+                  <Heart
+                    className={`h-4 w-4 ${
+                      wishlistAdded ? "text-red-500 fill-red-100" : ""
+                    }`}
+                  />
+                  <span>{wishlistAdded ? "In wishlist" : "Add to wishlist"}</span>
+                </button>
               </div>
-              <div className="mb-1 text-xl font-bold">$10.49</div>
-              <div className="mb-1 text-sm">
-                <span className="text-[#007185] font-medium">
-                  {getText("free_delivery")} <b>{DELIVERY_DATE}</b>
+              <div className="flex flex-wrap items-center gap-4">
+                {renderStars(rating)}
+                <span className="text-2xl font-semibold text-slate-900">
+                  {formattedPrice}
                 </span>
-                <br />
-                <span className="text-[13px]">
-                  on orders shipped by Autozon over $35
+                <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-emerald-700">
+                  {getText("in_stock")}
                 </span>
               </div>
-              <div className="text-xs mt-1">
-                {getText("ships_from")} <span className="text-[#007185]">Autozon.com</span>
+              <div className="space-y-3 text-sm text-slate-600">
+                {product.description && renderDescription(product.description)}
               </div>
-            </div>
-            {addedToCart && (
-              <div className="mt-3 p-2 bg-green-100 text-green-800 rounded text-center text-sm">
-                ✓ Added to cart
-              </div>
-            )}
-          </aside>
-        </div>
-      </div>
+              {specEntries.length > 0 && (
+                <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white/80 p-4 text-sm text-slate-600">
+                  {specEntries.map((entry) => (
+                    <div
+                      key={`${entry.label}-${entry.value}`}
+                      className="flex items-center justify-between gap-4"
+                    >
+                      <span className="text-slate-500">{entry.label}</span>
+                      <span className="font-semibold text-slate-900">
+                        {entry.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </BlurCard>
 
-      {/* About This Item section */}
-      {product.description && (
-        <div className="mt-8 border-t border-gray-200 pt-6">
-          <h2 className="text-xl font-bold mb-4">{getText("about_this_item")}</h2>
-          <div className="pl-5 text-sm">
-            <ul className="list-disc space-y-2">
-              {product.description.split("\n\n").map((paragraph: string, idx: number) => (
-                <li
-                  key={`bullet-${paragraph.substring(0, 10)}-${idx}`}
-                  className="mb-2"
-                >
-                  {paragraph}
-                </li>
+            <BlurCard className="space-y-3 p-6">
+              <h3 className="text-lg font-semibold text-slate-900">
+                Why ops teams pick it
+              </h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                {highlightBullets.map((point, idx) => (
+                  <li key={`${point}-${idx}`} className="flex gap-2">
+                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-slate-900" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </BlurCard>
+          </div>
+
+          <div className="space-y-6">
+            <BlurCard className="space-y-4 p-6">
+              <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-slate-400">
+                <span>{getText("buy_new")}</span>
+                <span>{getText("deliver_to")} {DELIVERY_ADDRESS}</span>
+              </div>
+              <div className="text-3xl font-semibold text-slate-900">
+                {product.price}
+              </div>
+              <p className="text-sm text-slate-600">
+                {getText("free_delivery")} <strong>{DELIVERY_DATE}</strong> — Autozone crews available
+              </p>
+              {layouts[order].map((element, index) => (
+                <div key={index}>{element}</div>
               ))}
-            </ul>
+              <dl className="grid gap-2 text-xs text-slate-500">
+                <div className="flex justify-between">
+                  <dt>{getText("ships_from")}</dt>
+                  <dd className="text-slate-900">Autozone Fulfillment</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt>{getText("sold_by")}</dt>
+                  <dd className="text-slate-900">
+                    {product.brand || "Verified Partner"}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt>{getText("returns_policy")}</dt>
+                  <dd className="text-slate-900">{getText("day_refund")}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt>{getText("payment")}</dt>
+                  <dd className="text-slate-900">
+                    {getText("secure_transaction")}
+                  </dd>
+                </div>
+              </dl>
+            </BlurCard>
+
+            <BlurCard className="space-y-4 p-5" data-variant="muted">
+              <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-slate-400">
+                <span>Delivery intelligence</span>
+                <button
+                  type="button"
+                  onClick={handleExploreToggle}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600"
+                >
+                  {isExploreOpen ? (
+                    <ChevronUp className="h-3 w-3" />
+                  ) : (
+                    <ChevronDown className="h-3 w-3" />
+                  )}
+                  {getText("see_more") || "Expand"}
+                </button>
+              </div>
+              <p className="text-sm text-slate-600">
+                {getText("deliver_to")} {DELIVERY_ADDRESS}
+              </p>
+              {isExploreOpen && (
+                <ul className="space-y-2 text-sm text-slate-600">
+                  <li>
+                    {getText("white_glove_option") ||
+                      "White-glove install scheduling available during checkout."}
+                  </li>
+                  <li>
+                    {getText("carbon_offset") ||
+                      "Eligible for carbon-neutral delivery credits."}
+                  </li>
+                  <li>
+                    {getText("bundle_service") ||
+                      "Bundle with counter accessories for automatic discounts."}
+                  </li>
+                </ul>
+              )}
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <input
+                  type="checkbox"
+                  className="rounded border-slate-300 text-slate-900 focus:ring-slate-400"
+                  id="gift-receipt"
+                />
+                <label htmlFor="gift-receipt">{getText("add_gift_receipt")}</label>
+              </div>
+              {addedToCart && (
+                <div className="rounded-full bg-emerald-100 px-4 py-2 text-center text-sm font-semibold text-emerald-700">
+                  ✓ Added to cart
+                </div>
+              )}
+            </BlurCard>
           </div>
         </div>
-      )}
+
+        {product.description && (
+          <section className="mt-16 space-y-6">
+            <SectionHeading
+              eyebrow={getText("about_this_item")}
+              title="Deployment notes"
+              description="What crews and coordinators call out when rolling this kit into the field."
+            />
+            <BlurCard className="p-6">
+              <ul className="list-disc space-y-2 pl-5 text-sm text-slate-600">
+                {product.description
+                  .split("\n\n")
+                  .map((paragraph: string, idx: number) => (
+                    <li key={`bullet-${paragraph.substring(0, 10)}-${idx}`}>
+                      {paragraph}
+                    </li>
+                  ))}
+              </ul>
+            </BlurCard>
+          </section>
+        )}
+      </div>
     </main>
   );
 }

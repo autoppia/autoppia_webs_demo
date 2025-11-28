@@ -2,7 +2,8 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from "@/utils/dynamicDataProvider";
+import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from "@/dynamic/v2-data";
+import { useSeed } from "@/context/SeedContext";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -154,69 +155,22 @@ export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'sta
 
 // Hook to get current seed and layout with dynamic HTML support
 export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
-  const searchParams = useSearchParams();
+  // Use SeedContext for unified seed management
+  const { resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base;
   
-  // Custom function to handle malformed URLs with multiple ? characters
-  const getSeedFromUrl = () => {
-    if (typeof window === 'undefined') return null;
-    
-    const url = window.location.href;
-    // Look for ?seed=X pattern anywhere in the URL (handles malformed URLs)
-    const seedMatch = url.match(/\?seed=(\d+)/);
-    return seedMatch ? seedMatch[1] : null;
-  };
-  
-  // Try to get seed from searchParams first, then fallback to custom URL parsing, then localStorage
-  const getSeedWithFallback = () => {
-    // First priority: URL parameter
-    const urlSeed = searchParams.get('seed') || getSeedFromUrl();
-    if (urlSeed) {
-      return urlSeed;
-    }
-    
-    // Second priority: localStorage
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem('autolodgeSeed');
-        if (stored) {
-          return stored;
-        }
-      } catch (e) {
-        // Ignore localStorage errors
-      }
-    }
-    
-    return null;
-  };
-  
-  const seedParam = getSeedWithFallback();
+  // Check if dynamic mode is enabled
+  const isDynamicEnabled = isDynamicModeEnabled();
   
   const seed = useMemo(() => {
-    if (!seedParam) return undefined;
-    const parsed = parseInt(seedParam, 10);
-    if (isNaN(parsed)) return undefined;
-    
-    // Check if dynamic mode is enabled
-    const isDynamicEnabled = isDynamicModeEnabled();
     if (!isDynamicEnabled) {
       // When disabled, return default seed (1)
       return 1;
     }
     
-    // When enabled, support seeds 1-300
-    const effectiveSeed = getEffectiveSeed(parsed);
-    
-    // Persist to localStorage
-    if (typeof window !== 'undefined') {
-      try {
-        localStorage.setItem('autolodgeSeed', effectiveSeed.toString());
-      } catch (e) {
-        // Ignore localStorage errors
-      }
-    }
-    
-    return effectiveSeed;
-  }, [seedParam]);
+    // When enabled, use resolved v1 seed (or base as fallback)
+    return layoutSeed;
+  }, [isDynamicEnabled, layoutSeed]);
   
   const layout = useMemo(() => getSeedLayout(seed, pageType), [seed, pageType]);
   

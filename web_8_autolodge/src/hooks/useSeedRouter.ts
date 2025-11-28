@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter as useNextRouter } from "next/navigation";
-import { useSeedLayout } from "@/library/utils";
+import { useSeed } from "@/context/SeedContext";
 import { useCallback } from "react";
 import type { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
@@ -10,31 +10,17 @@ import type { NavigateOptions } from "next/dist/shared/lib/app-router-context.sh
  */
 export function useSeedRouter() {
   const router = useNextRouter();
-  const { seed } = useSeedLayout();
+  const { getNavigationUrl } = useSeed();
 
   const push = useCallback((href: string, options?: NavigateOptions) => {
-    if (!seed) {
-      return router.push(href, options);
-    }
-    
-    const urlWithSeed = href.includes('?') 
-      ? (href.includes('seed=') ? href : `${href}&seed=${seed}`)
-      : `${href}?seed=${seed}`;
-    
+    const urlWithSeed = getNavigationUrl(href);
     return router.push(urlWithSeed, options);
-  }, [router, seed]);
+  }, [router, getNavigationUrl]);
 
   const replace = useCallback((href: string, options?: NavigateOptions) => {
-    if (!seed) {
-      return router.replace(href, options);
-    }
-    
-    const urlWithSeed = href.includes('?') 
-      ? (href.includes('seed=') ? href : `${href}&seed=${seed}`)
-      : `${href}?seed=${seed}`;
-    
+    const urlWithSeed = getNavigationUrl(href);
     return router.replace(urlWithSeed, options);
-  }, [router, seed]);
+  }, [router, getNavigationUrl]);
 
   return {
     ...router,

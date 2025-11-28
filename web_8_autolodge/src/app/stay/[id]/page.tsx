@@ -1,7 +1,8 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
 import {
@@ -12,8 +13,8 @@ import {
 } from "date-fns";
 import Image from "next/image";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
 
@@ -55,8 +56,8 @@ function getFallbackHotel(): Hotel {
 }
 
 function PropertyDetailContent() {
-  const { getText, getId } = useDynamicStructure();
-  const router = useRouter();
+  const { getText, getId, getClass } = useV3Attributes();
+  const router = useSeedRouter();
   const params = useParams<{ id: string }>();
 
   const prop = useMemo<Hotel>(() => {
@@ -516,7 +517,7 @@ function PropertyDetailContent() {
         {hasValidSelection ? (
           <button
             id={getId("reserve_button")}
-            className="rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none"
+            className={`${getClass("button-primary", "")} rounded-lg w-full py-3 text-white font-semibold text-base bg-[#616882] hover:bg-[#8692bd] transition mb-3 shadow focus:outline-none`}
             onClick={handleReserve}
           >
             {getText("reserve", "Reserve")}

@@ -4,65 +4,65 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 217 60% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 200 100% 37%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 244 75% 62%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 37 98% 56%;
-    --secondary-foreground: 240 5.9% 10%;
+    --secondary: 210 38% 96%;
+    --secondary-foreground: 222 47% 18%;
 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 216 33% 92%;
+    --muted-foreground: 222 24% 40%;
 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 177 74% 72%;
+    --accent-foreground: 210 40% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 4 86% 58%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
+    --border: 216 31% 88%;
+    --input: 216 31% 88%;
+    --ring: 244 75% 62%;
 
-    --radius: 0.3rem;
+    --radius: 1.15rem;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 200 100% 37%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 201 100% 69%;
+    --primary-foreground: 222 47% 10%;
 
-    --secondary: 37 98% 56%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 213 27% 16%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 213 27% 16%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 213 27% 16%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 350 89% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --border: 215 27% 20%;
+    --input: 215 27% 20%;
+    --ring: 201 89% 65%;
   }
 }
 
@@ -70,10 +70,32 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    @apply text-base leading-relaxed text-slate-800;
+    font-family: Inter, "SF Pro Display", "Segoe UI", system-ui, -apple-system,
+      BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    background-color: hsl(var(--background));
+    background-image: radial-gradient(
+        circle at top right,
+        rgba(99, 102, 241, 0.2),
+        transparent 35%
+      ),
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(16, 185, 129, 0.25),
+        transparent 45%
+      ),
+      linear-gradient(180deg, #f7fbff 0%, #f0f4ff 15%, #f9fafb 100%);
+    min-height: 100vh;
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgba(99, 102, 241, 0.35);
+    color: #0f172a;
   }
   
   /* Dynamic body padding based on navbar style */
@@ -96,19 +118,19 @@
 
 @layer components {
   .omnizon-container {
-    @apply max-w-[1500px] mx-auto;
+    @apply mx-auto max-w-[1360px] px-4 sm:px-6;
   }
 
   .nav-link {
-    @apply hover:underline cursor-pointer;
+    @apply cursor-pointer text-sm text-slate-500 transition-colors hover:text-slate-800;
   }
 
   .category-card {
-    @apply bg-white p-4 h-full;
+    @apply h-full rounded-3xl bg-white/90 p-4 shadow-sm backdrop-blur;
   }
 
   .category-title {
-    @apply text-xl font-bold mb-4;
+    @apply mb-4 text-xl font-semibold;
   }
 
   /* Dynamic Layout Classes */
@@ -131,7 +153,7 @@
   }
   
   .navbar-side {
-    @apply flex-col items-start h-24; /* Two-line header height */
+    @apply flex-col items-start;
   }
   
   .navbar-hidden-top {
@@ -139,7 +161,7 @@
   }
   
   .navbar-floating {
-    @apply absolute top-4 right-4 bg-white shadow-xl rounded-lg p-3 border border-gray-200 z-50 max-w-sm;
+    @apply absolute top-4 right-4 z-50 max-w-sm;
   }
   
   /* Content Layout Variations */
@@ -148,19 +170,19 @@
   }
   
   .content-centered {
-    @apply justify-center items-center min-h-screen;
+    @apply min-h-screen items-center justify-center;
   }
   
   .content-wide {
-    @apply max-w-none mx-0 px-2;
+    @apply mx-auto w-full max-w-screen-2xl px-3 sm:px-4;
   }
   
   .content-narrow {
-    @apply max-w-4xl mx-auto px-4;
+    @apply mx-auto w-full max-w-4xl px-4;
   }
   
   .content-default {
-    @apply max-w-7xl mx-auto px-4;
+    @apply mx-auto w-full max-w-7xl px-4;
   }
   
   /* Card Layout Variations */
@@ -173,11 +195,11 @@
   }
   
   .cards-masonry {
-    @apply columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6;
+    @apply columns-1 gap-6 space-y-6 md:columns-2 lg:columns-3;
   }
   
   .cards-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+    @apply grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
   }
   
   /* Button Style Variations */
@@ -190,12 +212,12 @@
   }
   
   .buttons-minimal {
-    @apply bg-transparent border-none shadow-none;
+    @apply border-none bg-transparent shadow-none;
   }
   
   /* Footer Style Variations */
   .footer-minimal {
-    @apply py-4;
+    @apply py-6;
   }
   
   .footer-expanded {
@@ -217,5 +239,78 @@
   
   .spacing-normal {
     @apply gap-4 p-4;
+  }
+
+  /* Design system helpers */
+  .glass-panel {
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: linear-gradient(
+        140deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(247, 249, 255, 0.8)
+      ),
+      rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(24px);
+    border-radius: 1.75rem;
+  }
+
+  .glass-panel[data-variant="muted"] {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+
+  .pill {
+    @apply inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.35em];
+  }
+
+  .pill-muted {
+    @apply border-transparent bg-slate-100 text-slate-500;
+  }
+
+  .pill-positive {
+    @apply border-transparent bg-emerald-100 text-emerald-600;
+  }
+
+  .section-eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.45em] text-slate-500;
+  }
+
+  .section-title {
+    @apply text-3xl font-semibold text-slate-900 sm:text-4xl;
+  }
+
+  .section-description {
+    @apply max-w-3xl text-base text-slate-500;
+  }
+
+  .kpi-grid {
+    @apply grid gap-4 sm:grid-cols-2 xl:grid-cols-4;
+  }
+
+  .kpi-card {
+    @apply rounded-2xl border border-white/60 bg-white/90 p-4 shadow-sm backdrop-blur;
+  }
+
+  .wishlist-rail {
+    @apply flex gap-4 overflow-x-auto pb-2;
+    scrollbar-width: none;
+  }
+
+  .wishlist-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .subtle-divider {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent;
+  }
+
+  .card-hover {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.12);
   }
 }

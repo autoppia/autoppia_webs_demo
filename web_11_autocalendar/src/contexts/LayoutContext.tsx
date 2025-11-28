@@ -1,120 +1,75 @@
 "use client";
 
-import React, { createContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { LayoutVariant } from '@/library/layoutVariants';
-import { getLayoutVariant } from '@/library/layoutVariants';
-import { getSeedFromUrl, getSeedLayout } from '@/utils/seedLayout';
-import { isDynamicEnabled } from '@/utils/seedLayout';
+import React, { createContext, useState, useEffect, useCallback, ReactNode, useMemo } from 'react';
+import { getSeedLayout, getLayoutVariant, isDynamicEnabled, type LayoutVariant } from '@/dynamic/v1-layouts';
+import { useSeed as useSeedContext } from '@/context/SeedContext';
 
 interface LayoutContextType {
   currentVariant: LayoutVariant;
-  seed: number;
+  seed: number; // For backward compatibility, returns layoutSeed
+  v2Seed: number | null;
   isDynamicHTMLEnabled: boolean;
-  updateLayout: (seed: number) => void;
+  updateLayout: (seed: number) => void; // Deprecated, kept for backward compatibility
   getNavigationUrl: (path: string) => string;
 }
 
 export const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export function LayoutProvider({ children }: { children: ReactNode }) {
-  // Initialize seed from localStorage or URL
-  const getInitialSeed = () => {
-    if (typeof window === 'undefined') return 1;
-    
-    // Try URL first
-    const urlSeed = getSeedFromUrl();
-    if (urlSeed && urlSeed !== 1) {
-      return urlSeed;
+  // Use SeedContext for unified seed management
+  const { seed: baseSeed, resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeedContext();
+  
+  // Use resolved v1 seed for layout
+  const layoutSeed = useMemo(() => {
+    return resolvedSeeds.v1 ?? resolvedSeeds.base;
+  }, [resolvedSeeds.v1, resolvedSeeds.base]);
+  
+  const v2Seed = useMemo(() => {
+    if (resolvedSeeds.v2 !== null && resolvedSeeds.v2 !== undefined) {
+      return resolvedSeeds.v2;
     }
-    
-    // Then try localStorage
-    try {
-      const stored = localStorage.getItem('autocalendarSeed');
-      if (stored) {
-        const parsed = parseInt(stored, 10);
-        if (!isNaN(parsed) && parsed >= 1 && parsed <= 300) {
-          return parsed;
-        }
-      }
-    } catch (e) {
-      // Ignore localStorage errors
+    if (resolvedSeeds.base !== null && resolvedSeeds.base !== undefined) {
+      return resolvedSeeds.base;
     }
-    
-    return 1;
-  };
-
+    return baseSeed ?? null;
+  }, [resolvedSeeds.v2, resolvedSeeds.base, baseSeed]);
+  
   const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(1));
-  const [seed, setSeed] = useState(getInitialSeed);
   const [isDynamicHTMLEnabled, setIsDynamicHTMLEnabled] = useState(false);
 
-  // Use the centralized seed layout logic instead of duplicating it
-
-  const updateLayout = useCallback((newSeed: number) => {
-    // Validate seed range (1-300)
-    const validSeed = (newSeed >= 1 && newSeed <= 300) ? newSeed : 1;
-    setSeed(validSeed);
-    
-    // Save to localStorage
-    try {
-      localStorage.setItem('autocalendarSeed', validSeed.toString());
-    } catch (e) {
-      // Ignore localStorage errors
-    }
-    
-    // Only update layout if dynamic HTML is enabled
-    if (isDynamicHTMLEnabled) {
-      // Use the centralized getSeedLayout function
-      const seedLayoutConfig = getSeedLayout(validSeed);
-      setCurrentVariant(getLayoutVariant(seedLayoutConfig.id));
-    }
-  }, [isDynamicHTMLEnabled]);
-
+  // Update layout when seed changes
   useEffect(() => {
-    // Check if dynamic HTML is enabled
     const dynamicEnabled = isDynamicEnabled();
     setIsDynamicHTMLEnabled(dynamicEnabled);
-    
-    // Get seed from URL or localStorage
-    const urlSeed = getSeedFromUrl();
-    const effectiveSeed = urlSeed;
-    
-    setSeed(effectiveSeed);
-    
-    // Save to localStorage
-    try {
-      localStorage.setItem('autocalendarSeed', effectiveSeed.toString());
-    } catch (e) {
-      // Ignore localStorage errors
-    }
-    
-    // Set layout based on dynamic HTML setting
-    if (dynamicEnabled) {
-      updateLayout(effectiveSeed);
+
+    if (dynamicEnabled && resolvedSeeds.v1 !== null) {
+      // Use the centralized getSeedLayout function
+      const seedLayoutConfig = getSeedLayout(layoutSeed);
+      setCurrentVariant(getLayoutVariant(seedLayoutConfig.id));
     } else {
-      // Always use default layout when dynamic HTML is disabled
       setCurrentVariant(getLayoutVariant(1));
     }
-  }, [updateLayout]);
+  }, [layoutSeed, resolvedSeeds.v1]);
+
+  const updateLayout = useCallback((newSeed: number) => {
+    // This is now handled by SeedContext.setSeed
+    // But we keep this for backward compatibility
+    // The actual seed update should be done via SeedContext
+    console.warn("[LayoutContext] updateLayout called, but seed is now managed by SeedContext. Use SeedContext.setSeed instead.");
+  }, []);
 
   // Helper function to generate navigation URLs with seed parameter
+  // Delegates to SeedContext which handles unified seed preservation
   const getNavigationUrl = useCallback((path: string): string => {
-    // If path already has query params
-    if (path.includes('?')) {
-      // Check if seed already exists in the URL
-      if (path.includes('seed=')) {
-        return path;
-      }
-      return `${path}&seed=${seed}`;
-    }
-    // Add seed as first query param
-    return `${path}?seed=${seed}`;
-  }, [seed]);
+    return seedGetNavigationUrl(path);
+  }, [seedGetNavigationUrl]);
 
   return (
     <LayoutContext.Provider
       value={{
         currentVariant,
-        seed,
+        seed: layoutSeed, // Return layoutSeed for backward compatibility
+        v2Seed,
         isDynamicHTMLEnabled,
         updateLayout,
         getNavigationUrl,

@@ -1,26 +1,34 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function UserSearchBar() {
   const [q, setQ] = useState("");
   const [focus, setFocus] = useState(false);
-  const { getText, getClass } = useDynamicStructure();
+  const { getText, getClass, getId } = useV3Attributes();
+  const withVariant = (type: string, base: string) => {
+    const variant = getClass(type, "");
+    return variant ? `${variant} ${base}` : base;
+  };
   const matches =
     q.length === 0
       ? []
       : dynamicDataProvider.searchUsers(q);
-  const router = useRouter();
+  const router = useSeedRouter();
   return (
     <div className="relative flex-1 max-w-lg">
       <input
+        id={getId("search_field")}
         type="text"
         aria-label={getText("search_aria_label", "Search users")}
-        className={getClass("search_input", "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50")}
+        className={withVariant(
+          "input-text",
+          "w-full rounded-full border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+        )}
         placeholder={getText("search_placeholder", "Search users")}
         value={q}
         onChange={(e) => {
@@ -30,11 +38,7 @@ export default function UserSearchBar() {
           if (val.trim().length >= 2) {
             logEvent(EVENT_TYPES.SEARCH_USERS, {
               query: val.trim(),
-              resultCount: mockUsers.filter(
-                (u) =>
-                  u.name.toLowerCase().includes(val.toLowerCase()) ||
-                  u.title.toLowerCase().includes(val.toLowerCase())
-              ).length,
+              resultCount: matches.length,
             });
           }
         }}
@@ -51,11 +55,18 @@ export default function UserSearchBar() {
       </span>
       {/* Results Dropdown */}
       {focus && matches.length > 0 && (
-        <div className="absolute left-0 top-12 w-full bg-white border z-30 rounded-lg shadow p-2">
-          {matches.map((u) => (
+        <div
+          id={getId("search_results_panel")}
+          className="absolute left-0 top-12 w-full bg-white border z-30 rounded-lg shadow p-2"
+        >
+          {matches.map((u, idx) => (
             <button
               key={u.username}
-              className="flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
+              id={getId("search_result_item", idx)}
+              className={withVariant(
+                "card",
+                "flex items-center gap-3 w-full px-2 py-2 hover:bg-blue-50 rounded text-left"
+              )}
               onMouseDown={() => {
                 router.push(`/profile/${u.username}`);
                 setQ("");

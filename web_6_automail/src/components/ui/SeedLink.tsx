@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useLayout } from "@/contexts/LayoutContext";
+import { useSeed } from "@/context/SeedContext";
 import type { ComponentProps } from "react";
 
 interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
@@ -13,7 +13,7 @@ interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
  * Custom Link component that automatically preserves seed parameter in URLs
  */
 export function SeedLink({ href, preserveSeed = true, ...props }: SeedLinkProps) {
-  const { getNavigationUrl } = useLayout();
+  const { getNavigationUrl } = useSeed();
   
   // If preserveSeed is false or href starts with http (external link), use original href
   const finalHref = (!preserveSeed || href.startsWith('http')) ? href : getNavigationUrl(href);

@@ -1,21 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { ToastContainer, toast } from "react-toastify";
-
-const getTopMarginClass = () => {
-  const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
-  return margins[Math.floor(Math.random() * margins.length)];
-};
+import { BlurCard } from "@/components/ui/BlurCard";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { BadgeCheck, ShieldCheck, Truck } from "lucide-react";
 
 export default function CheckoutPage() {
   const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   const shipping = parseFloat((Math.random() * 5 + 2).toFixed(2));
   const tax = parseFloat((totalAmount * 0.08).toFixed(2));
@@ -28,156 +25,193 @@ export default function CheckoutPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-[#fafbfc] w-full pb-16">
-        <div className="w-full bg-gradient-to-b from-[#f3f3f3] to-[#ffffff] border-b flex flex-col items-center pt-2 pb-3">
-          <div className="flex items-center gap-6">
-            <h1 className="font-semibold">Autozon</h1>
-          </div>
-          <div className="relative w-full">
-            <div className="text-center mx-auto text-2xl font-light mt-2 mb-1 tracking-tight">
+      <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white py-10">
+        <div className="omnizon-container space-y-10">
+          <div className="text-center">
+            <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+              Autozone
+            </p>
+            <h1 className="text-3xl font-semibold text-slate-900">
               {getText("checkout")}{" "}
-              <span className="text-[#017185] text-xl align-middle">
+              <span className="text-indigo-600">
                 ({totalItems} {getText("items")})
               </span>
-            </div>
+            </h1>
           </div>
-        </div>
 
-        <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row justify-between items-start mt-6 px-3 md:px-0">
-          <div className="flex-1 min-w-0 md:mr-8">
-            <div className="px-0">
-              <div className="flex items-start mb-2">
-                <span className="font-bold text-lg text-gray-900 mr-3">1</span>
-                <div className="flex-1 font-semibold text-base leading-7 text-black">
-                  {getText("shipping_address")}
+          <div className="grid gap-10 lg:grid-cols-[1.2fr,0.8fr]">
+            <div className="space-y-6">
+              <SectionHeading
+                eyebrow="Timeline"
+                title="Review and confirm your order"
+                description="Shipping, payment, and items are locked in once you place the order."
+              />
+              <BlurCard className="flex gap-4 p-5">
+                <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+                  1
                 </div>
-              </div>
-              <div className="ml-8 text-sm text-black">
-                John Doe
-                <br />
-                123 Main St
-                <br />
-                Cityville, ST 12345
-                <br />
-                <span className="text-[#017185] hover:underline cursor-pointer text-xs mt-1 block">
-                  {getText("add_delivery_instructions")}
-                </span>
-              </div>
-            </div>
-
-            <hr className="my-5 border-t border-[#e6e7e9]" />
-
-            <div className="px-0 mb-2">
-              <div className="flex items-start mb-2">
-                <span className="font-bold text-lg text-gray-900 mr-3">2</span>
-                <div className="flex-1 font-semibold text-base leading-7 text-black">
-                  {getText("payment_method")}
+                <div className="space-y-2 text-sm text-slate-600">
+                  <p className="text-base font-semibold text-slate-900">
+                    {getText("shipping_address")}
+                  </p>
+                  <p>
+                    John Doe · 123 Main St · Cityville, ST 12345
+                  </p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+                    Earliest arrival — {deliveryDate1}
+                  </p>
+                  <button className="text-xs font-semibold text-indigo-600 underline">
+                    {getText("add_delivery_instructions")}
+                  </button>
                 </div>
-              </div>
-              <div className="ml-8 text-sm">
-                {getText("paying_with")} MasterCard ending in 1234
-                <div className="mt-2">{getText("billing_address_same")}</div>
-              </div>
-            </div>
+              </BlurCard>
 
-            <hr className="my-5 border-t border-[#e6e7e9]" />
-
-            <div className="px-0 mb-1">
-              <div className="flex items-start mb-2">
-                <span className="font-bold text-lg text-gray-900 mr-3">3</span>
-                <div className="flex-1 font-semibold text-base leading-7 text-black">
-                  {getText("review_items")}
+              <BlurCard className="flex gap-4 p-5">
+                <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+                  2
                 </div>
-              </div>
+                <div className="space-y-2 text-sm text-slate-600">
+                  <p className="text-base font-semibold text-slate-900">
+                    {getText("payment_method")}
+                  </p>
+                  <p>{getText("paying_with")} MasterCard ending in 1234</p>
+                  <p>{getText("billing_address_same")}</p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
+                    Backup arrival — {deliveryDate2}
+                  </p>
+                </div>
+              </BlurCard>
 
-              <div className="ml-8 space-y-4">
-                {items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center border rounded-md p-4 bg-white shadow-sm"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-16 h-16 object-contain mr-4"
-                    />
-                    <div className="flex-1">
-                      <div className="font-semibold text-sm text-black">
-                        {item.title}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {getText("quantity")}: {item.quantity}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {getText("price")}: ${item.price}
+              <BlurCard className="p-5">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+                    3
+                  </div>
+                  <p className="text-base font-semibold text-slate-900">
+                    {getText("review_items")}
+                  </p>
+                </div>
+                <div className="mt-4 space-y-3">
+                  {items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-4 rounded-2xl border border-white/60 bg-white/80 p-3"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="h-14 w-14 rounded-2xl bg-white object-contain p-2"
+                      />
+                      <div className="flex-1 text-sm text-slate-600">
+                        <p className="font-semibold text-slate-900">
+                          {item.title}
+                        </p>
+                        <p>
+                          {getText("quantity")}: {item.quantity}
+                        </p>
+                        <p>
+                          {getText("price")}: {item.price}
+                        </p>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+                <p className="mt-4 text-xs uppercase tracking-[0.4em] text-slate-400">
+                  {arrivalText}
+                </p>
+              </BlurCard>
             </div>
-          </div>
 
-          <div
-            className={`w-full md:w-[320px] flex-shrink-0 ${getTopMarginClass()}`}
-          >
-            <div className="bg-white border border-[#d5d9d9] shadow-sm rounded-md p-5 pt-6 min-h-[350px] flex flex-col">
-              <Button
-                id={getId("checkout_button")}
-                className="bg-amazon-yellow hover:bg-amazon-darkYellow text-white font-semibold w-full mb-2 py-2 rounded"
-                onClick={() => {
-                  logEvent(EVENT_TYPES.ORDER_COMPLETED, {
-                    items: items.map((item) => ({
-                      id: item.id,
-                      title: item.title,
-                      quantity: item.quantity,
-                      price: `${item.price}`,
-                    })),
-                    totalItems,
-                    totalAmount: totalAmount.toFixed(2),
-                    tax: tax.toFixed(2),
-                    shipping: shipping.toFixed(2),
-                    orderTotal: orderTotal.toFixed(2),
-                  });
-                  toast.success("Order placed successfully!");
-                  clearCart();
-                }}
-              >
-                {getText("place_order")}
-              </Button>
-              <div className="text-xs text-[#565959] text-center mt-2">
-                {getText("by_placing_order")}{" "}
-                <a href="#" className="underline text-[#017185]">
-                  {getText("privacy_notice")}
-                </a>{" "}
-                and{" "}
-                <a href="#" className="underline text-[#017185]">
-                  {getText("conditions_of_use")}
-                </a>
-                .
-              </div>
-              <hr className="my-4 border-[#e6e7e9]" />
-              <div className="text-base font-semibold mb-2">{getText("order_summary")}</div>
-              <div className="flex justify-between text-sm">
-                <span>{getText("items")}:</span>
-                <span>${totalAmount.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>{getText("shipping_handling")}:</span>
-                <span>${shipping.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm mt-2">
-                <span>{getText("total_before_tax")}:</span>
-                <span>${totalAmount.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>{getText("estimated_tax")}:</span>
-                <span>${tax.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-base font-bold mt-3">
-                <span className="text-[#b12704]">{getText("order_total")}:</span>
-                <span className="text-[#b12704]">${orderTotal.toFixed(2)}</span>
-              </div>
+            <div className="space-y-6">
+              <BlurCard className="space-y-5 p-6 lg:sticky lg:top-24">
+                <div className="rounded-2xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-3 text-white">
+                  <p className="text-xs uppercase tracking-[0.4em]">
+                    Final review
+                  </p>
+                  <p>
+                    {getText("qualifies_for_delivery")}{" "}
+                    <span className="font-semibold">
+                      {getText("free_delivery")}
+                    </span>
+                  </p>
+                </div>
+                <div className="text-sm text-slate-600">
+                  <div className="flex justify-between">
+                    <span>{getText("items")}</span>
+                    <span className="font-semibold text-slate-900">
+                      ${totalAmount.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>{getText("shipping_handling")}</span>
+                    <span className="font-semibold text-slate-900">
+                      ${shipping.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>{getText("estimated_tax")}</span>
+                    <span className="font-semibold text-slate-900">
+                      ${tax.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between border-t border-white/50 pt-3">
+                  <span className="text-sm font-semibold text-slate-600">
+                    {getText("order_total")}
+                  </span>
+                  <span className="text-2xl font-semibold text-slate-900">
+                    ${orderTotal.toFixed(2)}
+                  </span>
+                </div>
+                <Button
+                  id={getId("checkout_button")}
+                  className="w-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-4 text-lg font-semibold text-white shadow-lg"
+                  onClick={() => {
+                    logEvent(EVENT_TYPES.ORDER_COMPLETED, {
+                      items: items.map((item) => ({
+                        id: item.id,
+                        title: item.title,
+                        quantity: item.quantity,
+                        price: `${item.price}`,
+                      })),
+                      totalItems,
+                      totalAmount: totalAmount.toFixed(2),
+                      tax: tax.toFixed(2),
+                      shipping: shipping.toFixed(2),
+                      orderTotal: orderTotal.toFixed(2),
+                    });
+                    toast.success("Order placed successfully!");
+                    clearCart();
+                  }}
+                >
+                  {getText("place_order", "Proceed")}
+                </Button>
+                <p className="text-center text-xs text-slate-500">
+                  {getText("by_placing_order")}{" "}
+                  <a href="#" className="underline text-indigo-600">
+                    {getText("privacy_notice")}
+                  </a>{" "}
+                  and{" "}
+                  <a href="#" className="underline text-indigo-600">
+                    {getText("conditions_of_use")}
+                  </a>
+                  .
+                </p>
+                <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4" />
+                    Buyer protection
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" />
+                    Fast routing
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <BadgeCheck className="h-4 w-4" />
+                    Compliance ready
+                  </div>
+                </div>
+              </BlurCard>
             </div>
           </div>
         </div>

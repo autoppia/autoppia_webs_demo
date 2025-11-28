@@ -61,7 +61,7 @@ export function NewEventModal({
       date,
       label,
       time,
-      color,
+      color: mappedColor,
     };
     logEvent(EVENT_TYPES.NEW_CALENDAR_EVENT_ADDED, eventToTrigger);
     onSave(newEvent);
@@ -86,7 +86,16 @@ export function NewEventModal({
           </select>
 
           <div className="flex justify-end gap-3">
-            <DynamicButton eventType="NEW_CALENDAR_EVENT_ADDED" index={0} type="button" onClick={onClose} className="text-sm text-zinc-500">Cancel</DynamicButton>
+            <DynamicButton
+              eventType="NEW_CALENDAR_EVENT_ADDED"
+              index={0}
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="text-sm text-zinc-700 border-zinc-200 bg-white hover:bg-neutral-bg-dark"
+            >
+              Cancel
+            </DynamicButton>
             <DynamicButton eventType="NEW_CALENDAR_EVENT_ADDED" index={1} type="submit" className="bg-accent-forest text-white px-4 py-2 rounded text-sm font-semibold">Save</DynamicButton>
           </div>
         </form>

@@ -16,14 +16,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import Image from "next/image";
-import Link from "next/link";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedVariation } from "@/library/utils";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { withSeedAndParams } from "@/utils/seedRouting";
-import { initializeRestaurants, getRestaurants } from "@/library/dataset";
+import { useSeedVariation } from "@/dynamic/v1-layouts";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
+import { SeedLink } from "@/components/ui/SeedLink";
+import { buildBookingHref } from "@/utils/bookingPaths";
 
 const photos = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=150&h=150",
@@ -57,23 +57,35 @@ export default function RestaurantPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
+  
+  // Define labels with fallbacks
+  const personLabel = getText("person") || "Guest";
+  const peopleLabel = getText("people") || "Guests";
+  const pickLabel = getText("pick") || "Pick";
+  const selectDateLabel = getText("date_picker") || "Select date";
+  const selectTimeLabel = getText("select_time") || "Select time";
+  const viewFullMenuLabel = getText("view_full_menu") || "View Full Menu";
+  const collapseMenuLabel = getText("collapse_menu") || "Collapse Menu";
+  const bookNowLabel = getText("book_now") || "Book Now";
 
-  const { seed } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
 
-  // Use seed-based variations
-  const bookButtonVariation = useSeedVariation("bookButton");
-  const imageContainerVariation = useSeedVariation("imageContainer");
+  // Use seed-based variations (pass v1 seed)
+  const bookButtonVariation = useSeedVariation("bookButton", undefined, layoutSeed);
+  const imageContainerVariation = useSeedVariation("imageContainer", undefined, layoutSeed);
   
   // Create layout based on seed
   const layout = useMemo(() => {
-    const wrap = seed % 2 === 0;
-    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][seed % 5];
-    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][seed % 5];
-    const justify = ["flex-start", "center", "flex-end", "space-between", "space-around"][seed % 5];
-    const marginTop = [0, 16, 32, 48, 64][seed % 5];
+    const wrap = layoutSeed % 2 === 0;
+    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][layoutSeed % 5];
+    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][layoutSeed % 5];
+    const justify = ["flex-start", "center", "flex-end", "space-between", "space-around"][layoutSeed % 5];
+    const marginTop = [0, 16, 32, 48, 64][layoutSeed % 5];
     return { wrap, justifyClass, marginTopClass, justify, marginTop };
-  }, [seed]);
+  }, [layoutSeed]);
 
   useEffect(() => {
     // Ensure data is initialized and loaded from DB or generator as configured
@@ -83,7 +95,7 @@ export default function RestaurantPage() {
       const genEnabled = isDataGenerationEnabled();
       if (genEnabled) setIsGenerating(true);
       try {
-        await initializeRestaurants();
+        await initializeRestaurants(v2Seed ?? undefined);
         if (!mounted) return;
         const list = getRestaurants();
         const found = list.find((x) => x.id === id) || list[0];
@@ -111,7 +123,7 @@ export default function RestaurantPage() {
     };
     run();
     return () => { mounted = false; };
-  }, [id]);
+  }, [id, v2Seed]);
 
   useEffect(() => {
     if (!r) return; // evita enviar si aún no hay datos
@@ -343,7 +355,7 @@ export default function RestaurantPage() {
                       className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
                       onClick={handleToggleMenu}
                     >
-                      {showFullMenu ? getText("collapse_menu") : getText("view_full_menu")}
+                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
                     </Button>
                   </div>
                 ) : (
@@ -352,7 +364,7 @@ export default function RestaurantPage() {
                       className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
                       onClick={handleToggleMenu}
                     >
-                      {showFullMenu ? getText("collapse_menu") : getText("view_full_menu")}
+                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
                     </Button>
                   </div>
                 )}
@@ -399,8 +411,7 @@ export default function RestaurantPage() {
                   className="flex items-center gap-2 min-w-[100px] justify-start"
                 >
                   <UserIcon className="h-5 w-5 text-gray-700" />
-                  {people ? people : getText("pick")}{" "}
-                  {people === 1 ? getText("person_cap") : getText("people_cap")}{" "}
+                  {people ? `${people} ${people === 1 ? personLabel : peopleLabel}` : `${pickLabel} ${peopleLabel}`}
                   <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                 </Button>
               </PopoverTrigger>
@@ -415,7 +426,7 @@ export default function RestaurantPage() {
                       setPeopleOpen(false);
                     }}
                   >
-                    {n} {n === 1 ? getText("person") : getText("people")}
+                    {n} {n === 1 ? personLabel : peopleLabel}
                   </Button>
                 ))}
               </PopoverContent>
@@ -430,7 +441,7 @@ export default function RestaurantPage() {
                     className="flex items-center gap-2 min-w-[120px] justify-start"
                   >
                     <CalendarIcon className="h-5 w-5 text-gray-700" />
-                    {date ? format(date, "MMM d") : getText("date_picker")}
+                    {date ? format(date, "MMM d") : selectDateLabel}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -453,7 +464,7 @@ export default function RestaurantPage() {
                     className="flex items-center gap-2 min-w-[120px] justify-start"
                   >
                     <ClockIcon className="h-5 w-5 text-gray-700" />
-                    {time ? time : getText("select_time")}
+                    {time ? time : selectTimeLabel}
                     <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                   </Button>
                 </PopoverTrigger>
@@ -474,7 +485,7 @@ export default function RestaurantPage() {
                 </PopoverContent>
               </Popover>
             </div>
-            {/* Time slots */}
+            {/* Booking button - only show when date, time, and people are selected */}
             <div className="mt-3">
               {time === "3:00 PM" ? (
                 <div className="flex gap-1 mt-2">
@@ -483,25 +494,22 @@ export default function RestaurantPage() {
                     className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
                   >
                     <span>{time}</span>
-                    <span className="ml-2">{getText("notify_me")}</span>
+                    <span className="ml-2">{getText("notify_me") || "Notify Me"}</span>
                   </Button>
                 </div>
-              ) : time ? (
+              ) : time && date && people ? (
                 layout.wrap ? (
                   <div
                     className="mt-2"
                     style={{ marginTop: layout.marginTop }}
-                    data-testid={`book-btn-wrapper-${seed}`}
+                    data-testid={`book-btn-wrapper-${layoutSeed}`}
                   >
                     <div
                       className="flex gap-1"
                       style={{ justifyContent: layout.justify }}
                     >
-                      <Link
-                        href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, {
-                          date: formattedDate,
-                          people: String(people ?? ""),
-                        })}
+                      <SeedLink
+                        href={buildBookingHref(id, time, { date: formattedDate, people })}
                         onClick={() =>
                           logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                             restaurantId: id,
@@ -519,13 +527,13 @@ export default function RestaurantPage() {
                         }
                       >
                         <Button
-                          className={`${bookButtonVariation.className} font-semibold text-sm`}
+                          id={getId("book_button")}
+                          className={`${bookButtonVariation.className || "bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-2 rounded-lg"} font-semibold text-sm`}
                           data-testid={bookButtonVariation.dataTestId}
-                          asChild
                         >
-                          <span>Book Restaurant</span>
+                          {bookNowLabel}
                         </Button>
-                      </Link>
+                      </SeedLink>
                     </div>
                   </div>
                 ) : (
@@ -536,11 +544,8 @@ export default function RestaurantPage() {
                       marginTop: layout.marginTop,
                     }}
                   >
-                    <Link
-                      href={withSeedAndParams(`/booking/${id}/${encodeURIComponent(time)}`, {
-                        date: formattedDate,
-                        people: String(people ?? ""),
-                      })}
+                    <SeedLink
+                      href={buildBookingHref(id, time, { date: formattedDate, people })}
                       onClick={() =>
                         logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
                           restaurantId: id,
@@ -559,13 +564,12 @@ export default function RestaurantPage() {
                     >
                       <Button
                         id={getId("book_button")}
-                        className={`${bookButtonVariation.className} font-semibold text-sm`}
+                        className={`${bookButtonVariation.className || "bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-2 rounded-lg"} font-semibold text-sm`}
                         data-testid={bookButtonVariation.dataTestId}
-                        asChild
                       >
-                        <span>{getText("book_now")}</span>
+                        {bookNowLabel}
                       </Button>
-                    </Link>
+                    </SeedLink>
                   </div>
                 )
               ) : (

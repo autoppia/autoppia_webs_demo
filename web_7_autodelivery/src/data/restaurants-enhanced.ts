@@ -129,75 +129,80 @@ async function generateRestaurantsForCategories(
 }
 
 /**
- * Main initialization function for restaurants
+ * Get v2 seed from window (synchronized by SeedContext)
  */
-export async function initializeRestaurants(): Promise<Restaurant[]> {
-  if (!isDataGenerationAvailable()) {
-    console.log("🔍 Data generation not available, using original restaurants");
-    return originalRestaurants;
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const extendedWindow = window as Window & { __autodeliveryV2Seed?: number | null };
+  const value = extendedWindow.__autodeliveryV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
   }
+  return null;
+};
 
-  // Check cache first
-  const cached = readCachedRestaurants();
-  if (cached && cached.length > 0) {
-    console.log("🔍 Using cached restaurants:", cached.length, "items");
-    return cached;
+export async function initializeRestaurants(v2SeedValue?: number | null): Promise<Restaurant[]> {
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+
+  let effectiveSeed: number;
+
+  if (dbModeEnabled) {
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined") {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
+  } else {
+    effectiveSeed = 1; // If v2 is NOT enabled, automatically use seed=1
   }
 
   try {
-    const categories = DATA_GENERATION_CONFIG.AVAILABLE_CATEGORIES;
-    const restaurantsPerCategory = DATA_GENERATION_CONFIG.DEFAULT_RESTAURANTS_PER_CATEGORY;
-    
-    const allGeneratedRestaurants = await generateRestaurantsForCategories(
-      categories,
-      restaurantsPerCategory,
-      DATA_GENERATION_CONFIG.DEFAULT_DELAY_BETWEEN_CALLS
-    );
+    const { fetchSeededSelection } = await import("@/shared/seeded-loader");
+    const fromDb = await fetchSeededSelection<Restaurant>({
+      projectKey: "web_7_autodelivery",
+      entityType: "restaurants",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "cuisine",
+    });
 
-    if (!Array.isArray(allGeneratedRestaurants) || allGeneratedRestaurants.length === 0) {
-      console.log("No restaurants were generated for any category, returning existing restaurants.");
-      return originalRestaurants;
-    }
+    console.log(`[autodelivery] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
 
-    try {
-      // Normalize images and cache results
-      const normalizedRestaurants = normalizeRestaurantImages(allGeneratedRestaurants);
-      
-      if (!Array.isArray(normalizedRestaurants) || normalizedRestaurants.length === 0) {
-        console.warn("Normalization failed, using original restaurants");
-        return originalRestaurants;
-      }
-      
-      writeCachedRestaurants(normalizedRestaurants);
-      console.log(`✅ Successfully generated and cached ${normalizedRestaurants.length} restaurants`);
-      return normalizedRestaurants;
-    } catch (error) {
-      console.error("Error during restaurant normalization:", error);
-      return originalRestaurants;
+    if (fromDb && fromDb.length > 0) {
+      const normalized = normalizeRestaurantImages(fromDb);
+      return normalized;
+    } else {
+      console.warn(`[autodelivery] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[autodelivery] No data found for seed=${effectiveSeed}`);
     }
-  } catch (error) {
-    console.error("❌ Failed to generate restaurants:", error);
-    return originalRestaurants;
+  } catch (err) {
+    console.error(`[autodelivery] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    throw err;
   }
 }
 
 /**
  * Load restaurants from database with seeded selection
  */
-export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
+export async function loadRestaurantsFromDb(seedOverride?: number | null): Promise<Restaurant[]> {
   if (!isDbLoadModeEnabled()) {
     console.log("🔍 DB mode not enabled, returning empty array");
     return [];
   }
 
   try {
-    const seed = getSeedValueFromEnv(1);
+    const fallbackSeed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" && Number.isFinite(seedOverride) ? seedOverride : fallbackSeed;
     const limit = 100;
     console.log("🔍 Attempting to load restaurants from DB with seed:", seed, "limit:", limit);
     
     // Prefer distributed selection to avoid category dominance
     const distributed = await fetchSeededSelection<Restaurant>({
-      projectKey: "web_7_food_delivery",
+      projectKey: "web_7_autodelivery",
       entityType: "restaurants",
       seedValue: seed,
       limit,
@@ -210,7 +215,7 @@ export async function loadRestaurantsFromDb(): Promise<Restaurant[]> {
     const selected = Array.isArray(distributed) && distributed.length > 0
       ? distributed
       : await fetchSeededSelection<Restaurant>({
-          projectKey: "web_7_food_delivery",
+          projectKey: "web_7_autodelivery",
           entityType: "restaurants",
           seedValue: seed,
           limit,

@@ -6,7 +6,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import { title } from "process";
 import { ToastContainer, toast } from "react-toastify";
 // import { jobs,hires, experts  } from "@/library/dataset";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { writeJson } from "@/shared/storage";
 
@@ -916,6 +916,11 @@ export default function Home() {
 				experts: expertsState.data,
 			};
 			writeJson("autowork_all", combined);
+			
+			// Also save experts separately for ExpertProfileClient
+			if (expertsState.data.length > 0) {
+				window.localStorage.setItem("autowork_experts", JSON.stringify(expertsState.data));
+			}
 		}
 	}, [isLoading, jobsState.data, hiresState.data, expertsState.data]);
 

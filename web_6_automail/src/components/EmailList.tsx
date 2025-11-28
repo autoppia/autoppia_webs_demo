@@ -48,13 +48,17 @@ export function EmailList({ textStructure }: EmailListProps) {
     markAsRead,
     markAsUnread,
     markAsSpam,
+    moveToArchive,
     moveToTrash,
+    setEditingDraftId,
     currentFilter,
     searchQuery,
     hasNextPage,
     hasPrevPage,
     nextPage,
     prevPage,
+    updateComposeData,
+    toggleCompose,
   } = useEmail();
 
   const formatTimestamp = (date: Date) => {
@@ -86,6 +90,7 @@ export function EmailList({ textStructure }: EmailListProps) {
   const handleSelectAll = () => {
     if (allSelected) {
       clearSelection();
+      logEvent(EVENT_TYPES.CLEAR_SELECTION, { source: "select_all_toggle" });
     } else {
       const visibleIds = paginatedEmails.map((email) => email.id);
       selectAllVisible(visibleIds);
@@ -93,6 +98,7 @@ export function EmailList({ textStructure }: EmailListProps) {
   };
 
   const handleEmailClick = (email: Email) => {
+    setEditingDraftId(null);
     setCurrentEmail(email);
     if (!email.isRead) {
       markAsRead(email.id);
@@ -100,7 +106,8 @@ export function EmailList({ textStructure }: EmailListProps) {
     logEvent(EVENT_TYPES.VIEW_EMAIL, {
       email_id: email.id,
       subject: email.subject,
-      from: email.from.email,
+      from: email.from?.email,
+      folder: email.isDraft ? "drafts" : currentFilter.folder,
     });
   };
 
@@ -115,13 +122,30 @@ export function EmailList({ textStructure }: EmailListProps) {
     });
   };
 
-  const handleCheckboxClick = (e: React.MouseEvent, email: Email) => {
-    e.stopPropagation();
+  const handleCheckboxClick = (email: Email) => {
     selectEmail(email.id);
   };
 
   const handleBulkDelete = () => {
     moveToTrash(selectedEmails);
+  };
+
+  const handleArchive = (emailIds: string[]) => {
+    moveToArchive(emailIds);
+    if (emailIds.length > 1) {
+      clearSelection();
+      logEvent(EVENT_TYPES.CLEAR_SELECTION, { source: "archive_bulk" });
+    }
+    emailIds.forEach((id) => {
+      const email = filteredEmails.find((e) => e.id === id);
+      if (email) {
+        logEvent(EVENT_TYPES.ARCHIVE_EMAIL, {
+          email_id: email.id,
+          subject: email.subject,
+          from: email.from.email,
+        });
+      }
+    });
   };
 
   const handleBulkMarkAsUnread = () => {
@@ -154,6 +178,8 @@ export function EmailList({ textStructure }: EmailListProps) {
         return getText("drafts");
       case "important":
         return "Important";
+      case "archive":
+        return "Archive";
       case "spam":
         return "Spam";
       case "trash":
@@ -274,7 +300,7 @@ export function EmailList({ textStructure }: EmailListProps) {
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
-          <Button id="bulk-archive-button" variant="ghost" size="sm">
+          <Button id="bulk-archive-button" variant="ghost" size="sm" onClick={() => handleArchive(selectedEmails)}>
             <Archive className="h-4 w-4 mr-2" />
             Archive
           </Button>
@@ -309,7 +335,14 @@ export function EmailList({ textStructure }: EmailListProps) {
               </Button>
             }
           />
-          <Button variant="ghost" size="sm" onClick={clearSelection}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              clearSelection();
+              logEvent(EVENT_TYPES.CLEAR_SELECTION, { source: "action_bar" });
+            }}
+          >
             Clear Selection
           </Button>
         </div>
@@ -379,9 +412,10 @@ export function EmailList({ textStructure }: EmailListProps) {
                 email={email}
                 isSelected={selectedEmails.includes(email.id)}
                 isActive={currentEmail?.id === email.id}
-                onSelect={(e) => handleCheckboxClick(e, email)}
+                onSelect={() => handleCheckboxClick(email)}
                 onClick={() => handleEmailClick(email)}
                 onStarClick={(e) => handleStarClick(e, email)}
+                onArchive={() => handleArchive([email.id])}
                 formatTimestamp={formatTimestamp}
                 highlightSearchTerm={highlightSearchTerm}
                 searchQuery={searchQuery}
@@ -398,9 +432,10 @@ interface EmailItemProps {
   email: Email;
   isSelected: boolean;
   isActive: boolean;
-  onSelect: (e: React.MouseEvent) => void;
+  onSelect: () => void;
   onClick: () => void;
   onStarClick: (e: React.MouseEvent) => void;
+  onArchive: () => void;
   formatTimestamp: (date: Date) => string;
   highlightSearchTerm: (text: string, searchTerm: string) => React.ReactNode;
   searchQuery: string;
@@ -413,6 +448,7 @@ function EmailItem({
   onSelect,
   onClick,
   onStarClick,
+  onArchive,
   formatTimestamp,
   highlightSearchTerm,
   searchQuery,
@@ -509,22 +545,29 @@ function EmailItem({
       suppressHydrationWarning
     >
       {/* Selection Checkbox */}
-      <div className={cn(
-        "flex items-center",
-        currentVariant.id === 2 && "select-box",
-        currentVariant.id === 3 && "select-icon",
-        currentVariant.id === 4 && "check-element",
-        currentVariant.id === 5 && "card-check",
-        currentVariant.id === 6 && "row-check",
-        currentVariant.id === 7 && "widget-check",
-        currentVariant.id === 8 && "mobile-check",
-        currentVariant.id === 9 && "line-check",
-        currentVariant.id === 10 && "article-check"
-      )}>
+      <div
+        className={cn(
+          "flex items-center",
+          currentVariant.id === 2 && "select-box",
+          currentVariant.id === 3 && "select-icon",
+          currentVariant.id === 4 && "check-element",
+          currentVariant.id === 5 && "card-check",
+          currentVariant.id === 6 && "row-check",
+          currentVariant.id === 7 && "widget-check",
+          currentVariant.id === 8 && "mobile-check",
+          currentVariant.id === 9 && "line-check",
+          currentVariant.id === 10 && "article-check"
+        )}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect();
+        }}
+        role="presentation"
+      >
         <Checkbox
           checked={isSelected}
-          onCheckedChange={() => onSelect({} as React.MouseEvent)}
-          onClick={onSelect}
+          onCheckedChange={() => onSelect()}
+          onClick={(e) => e.stopPropagation()}
         />
       </div>
 
@@ -552,6 +595,19 @@ function EmailItem({
             email.isStarred && "fill-yellow-400 text-yellow-400"
           )}
         />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+        onClick={(e) => {
+          e.stopPropagation();
+          onArchive();
+        }}
+        title="Archive"
+        aria-label="Archive email"
+      >
+        <Archive className="h-4 w-4" />
       </Button>
 
       {/* Email Content */}

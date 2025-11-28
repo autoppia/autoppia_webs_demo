@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
+import { SeedProvider } from "@/context/SeedContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   title: "AutoList – Smart To‑Do App",
   description:
     "AutoDo is a smart, minimal to-do app that helps you organize, automate, and complete tasks effortlessly. Stay productive with intelligent task tracking and reminders.",
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
@@ -34,7 +36,9 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning className="antialiased">
-        <ClientBody>{children}</ClientBody>
+        <SeedProvider>
+          <ClientBody>{children}</ClientBody>
+        </SeedProvider>
       </body>
     </html>
   );

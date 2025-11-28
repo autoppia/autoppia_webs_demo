@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import RideNavbar from "../../../../components/RideNavbar";
 import { logEvent, EVENT_TYPES } from "@/library/event";
-import {simulatedTrips, rides, DriverType, RideType, Trip} from "@/library/dataset";
+import {simulatedTrips, rides, DriverType, RideType, Trip} from "@/data/trips-enhanced";
 
 
 function formatDateShort(date: string, time: string) {

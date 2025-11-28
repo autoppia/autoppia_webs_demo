@@ -1,8 +1,11 @@
 services:
   app:
+    user: "0:0"
     build: .
     ports:
       - "127.0.0.1:${WEB_PORT}:8080"
+    env_file:
+      - .env
     environment:
       # ======== Core Settings ========
       LOG_LEVEL: info
@@ -23,13 +26,15 @@ services:
       # Minimum response size (in bytes) before applying GZIP compression
       GZIP_MIN_SIZE: 1000
 
-      # ======== Data Generation ========
-      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      # Additional data-gen settings come from .env via env_file
     depends_on:
       db:
         condition: service_healthy
     networks:
       - apps_net
+    volumes:
+      # Use WEBS_DATA_PATH env var (set by setup.sh, works on any server)
+      - ${WEBS_DATA_PATH}:/app/data
 
   db:
     image: postgres:15-alpine
@@ -61,6 +66,7 @@ services:
 
 volumes:
   webs_postgres_data:
+  webs_data:
 
 networks:
   apps_net:

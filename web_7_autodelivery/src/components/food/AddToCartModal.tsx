@@ -14,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Minus, Plus } from "lucide-react";
-import Image from "next/image";
 import {
   type MenuItem,
   type MenuItemSize,
@@ -22,7 +21,8 @@ import {
 } from "@/data/restaurants";
 import { EVENT_TYPES, logEvent } from "../library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 export type AddToCartModalProps = {
   open: boolean;
@@ -33,7 +33,14 @@ export type AddToCartModalProps = {
     options: string[];
     preferences?: string;
     quantity: number;
+    unitPrice: number;
   }) => void;
+  initialSelection?: {
+    size?: MenuItemSize | null;
+    options?: string[];
+    preferences?: string;
+    quantity?: number;
+  };
 };
 
 export function AddToCartModal({
@@ -41,6 +48,7 @@ export function AddToCartModal({
   onOpenChange,
   item,
   onAdd,
+  initialSelection,
 }: AddToCartModalProps) {
   const [size, setSize] = React.useState<MenuItemSize | undefined>(
     item.sizes?.[0]
@@ -49,14 +57,15 @@ export function AddToCartModal({
   const [preferences, setPreferences] = React.useState("");
   const [qty, setQty] = React.useState(1);
   const layout = useSeedLayout();
-  const { getText, getPlaceholder, getId, getAria, seedStructure } = useDynamicStructure();
+  const seedStructure = layout.seed;
+  const { getText, getPlaceholder, getId, getAria } = useV3Attributes();
 
   React.useEffect(() => {
-    setSize(item.sizes?.[0]);
-    setCheckedOptions([]);
-    setPreferences("");
-    setQty(1);
-  }, [item, open]);
+    setSize(initialSelection?.size ?? item.sizes?.[0]);
+    setCheckedOptions(initialSelection?.options ?? []);
+    setPreferences(initialSelection?.preferences ?? "");
+    setQty(initialSelection?.quantity ?? 1);
+  }, [item, open, initialSelection]);
 
   const price = React.useMemo(() => {
     let p = item.price;
@@ -84,7 +93,8 @@ export function AddToCartModal({
       restaurantId: item.restaurantId || "unknown",
       restaurantName: item.restaurantName || "Unknown Restaurant",
     });
-    onAdd({ size, options: checkedOptions, preferences, quantity: qty });
+    const unitPrice = item.price + (size?.priceMod || 0);
+    onAdd({ size, options: checkedOptions, preferences, quantity: qty, unitPrice });
     onOpenChange(false);
   }
 
@@ -132,7 +142,7 @@ export function AddToCartModal({
           </DialogHeader>
           <div className="px-6 flex gap-3 items-center mb-2">
             <div className="rounded-xl overflow-hidden w-16 h-16 relative">
-              <Image
+              <SafeImage
                 src={item.image}
                 alt={item.name}
                 fill

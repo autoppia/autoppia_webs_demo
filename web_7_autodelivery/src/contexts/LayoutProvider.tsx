@@ -1,11 +1,22 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getSeedLayout, SeedLayout, getEffectiveSeed, isDynamicEnabled } from '@/lib/seed-layout';
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { getSeedLayout, SeedLayout, isDynamicEnabled } from "@/dynamic/v1-layouts";
+import { useSeed } from "@/context/SeedContext";
+
+declare global {
+  interface Window {
+    __autodeliveryV2Seed?: number | null;
+  }
+  interface WindowEventMap {
+    "autodelivery:v2SeedChange": CustomEvent<{ seed: number | null }>;
+  }
+}
 
 interface LayoutContextType extends SeedLayout {
   seed: number;
   isDynamicMode: boolean;
+  v2Seed: number | null;
   getElementAttributes: (elementType: string, index?: number) => Record<string, string>;
   generateId: (context: string, index?: number) => string;
   generateSeedClass: (baseClass: string) => string;
@@ -15,105 +26,51 @@ interface LayoutContextType extends SeedLayout {
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
-  // Initialize seed from localStorage or URL
-  const getInitialSeed = () => {
-    if (typeof window === 'undefined') return 6;
-    
-    // Try URL first
-    const urlParams = new URLSearchParams(window.location.search);
-    const seedParam = urlParams.get('seed');
-    if (seedParam) {
-      const rawSeed = parseInt(seedParam, 10);
-      return getEffectiveSeed(rawSeed);
-    }
-    
-    // Then try localStorage
-    try {
-      const stored = localStorage.getItem('autodeliverySeed');
-      if (stored) {
-        const parsed = parseInt(stored, 10);
-        return getEffectiveSeed(parsed);
-      }
-    } catch (e) {
-      // Ignore localStorage errors
-    }
-    
-    return 6; // Default seed
-  };
-
-  const [layout, setLayout] = useState<SeedLayout>(getSeedLayout(getInitialSeed()));
-  const [seed, setSeed] = useState(getInitialSeed);
+  // Use SeedContext for unified seed management
+  const { seed: baseSeed, resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? baseSeed;
+  const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
+  
+  const [seed, setSeed] = useState(baseSeed);
+  const [layout, setLayout] = useState<SeedLayout>(() => getSeedLayout(layoutSeed));
   const [isDynamicMode, setIsDynamicMode] = useState(false);
 
   useEffect(() => {
-    // Check if dynamic HTML is enabled
     setIsDynamicMode(isDynamicEnabled());
-    
-    const updateLayout = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const seedParam = urlParams.get('seed');
-      const rawSeed = seedParam ? parseInt(seedParam, 10) : seed; // Use current seed if no URL param
-      const effectiveSeed = getEffectiveSeed(rawSeed);
-      
-      // Save to localStorage
-      try {
-        localStorage.setItem('autodeliverySeed', effectiveSeed.toString());
-      } catch (e) {
-        // Ignore localStorage errors
-      }
-      
-      setSeed(effectiveSeed);
-      setLayout(getSeedLayout(effectiveSeed));
-    };
-
-    // Set initial layout
-    updateLayout();
-
-    // Listen for URL changes
-    const handlePopState = () => updateLayout();
-    window.addEventListener('popstate', handlePopState);
-
-    // Listen for pushState/replaceState changes
-    const originalPushState = history.pushState;
-    const originalReplaceState = history.replaceState;
-
-    history.pushState = function(...args) {
-      originalPushState.apply(history, args);
-      updateLayout();
-    };
-
-    history.replaceState = function(...args) {
-      originalReplaceState.apply(history, args);
-      updateLayout();
-    };
-
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-      history.pushState = originalPushState;
-      history.replaceState = originalReplaceState;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Function to get element attributes with seed
+  // Sync with SeedContext
+  useEffect(() => {
+    setSeed(baseSeed);
+    setLayout(getSeedLayout(layoutSeed));
+  }, [baseSeed, layoutSeed]);
+
+  // Sync v2Seed to window for backward compatibility
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    window.__autodeliveryV2Seed = v2Seed ?? null;
+    window.dispatchEvent(new CustomEvent("autodelivery:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
+    console.log("[LayoutProvider] v2-seed", v2Seed);
+  }, [v2Seed]);
+
   const getElementAttributes = (elementType: string, index: number = 0): Record<string, string> => {
     if (!isDynamicMode) {
       return {
         id: `${elementType}-${index}`,
-        'data-element-type': elementType,
+        "data-element-type": elementType,
       };
     }
-    
     return {
       id: `${elementType}-${seed}-${index}`,
-      'data-seed': seed.toString(),
-      'data-variant': (seed % 10).toString(),
-      'data-element-type': elementType,
-      'data-layout-id': layout.layoutId.toString(),
+      "data-seed": seed.toString(),
+      "data-variant": (seed % 10).toString(),
+      "data-element-type": elementType,
+      "data-layout-id": layout.layoutId.toString(),
     };
   };
 
-  // Function to generate element ID with seed
   const generateId = (context: string, index: number = 0) => {
     if (!isDynamicMode) {
       return `${context}-${index}`;
@@ -121,7 +78,6 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     return `${context}-${seed}-${index}`;
   };
 
-  // Function to generate seed-based class name
   const generateSeedClass = (baseClass: string) => {
     if (!isDynamicMode) {
       return baseClass;
@@ -129,53 +85,31 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     return `${baseClass}-seed-${seed}`;
   };
 
-  // Helper function to generate navigation URLs with seed-structure parameter
-  const getNavigationUrl = (path: string): string => {
-    // Get seed-structure from current URL
-    let seedStructure: string | null = null;
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      seedStructure = urlParams.get('seed-structure');
-    }
-    
-    // If no seed-structure in URL, don't add it
-    if (!seedStructure) {
-      return path;
-    }
-    
-    // If path already has query params
-    if (path.includes('?')) {
-      // Check if seed-structure already exists in the URL
-      if (path.includes('seed-structure=')) {
-        return path;
-      }
-      return `${path}&seed-structure=${seedStructure}`;
-    }
-    // Add seed-structure as first query param
-    return `${path}?seed-structure=${seedStructure}`;
-  };
+  // Helper function to generate navigation URLs with seed parameter
+  // Note: This is kept for backward compatibility, but SeedLink/useSeedRouter use SeedContext directly
+  const getNavigationUrl = useCallback((path: string): string => {
+    // Delegate to SeedContext's getNavigationUrl for consistency
+    return seedGetNavigationUrl(path);
+  }, [seedGetNavigationUrl]);
 
   const value: LayoutContextType = {
     ...layout,
     seed,
     isDynamicMode,
+    v2Seed,
     getElementAttributes,
     generateId,
     generateSeedClass,
     getNavigationUrl,
   };
 
-  return (
-    <LayoutContext.Provider value={value}>
-      {children}
-    </LayoutContext.Provider>
-  );
+  return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;
 }
 
 export function useLayout() {
   const context = useContext(LayoutContext);
   if (context === undefined) {
-    throw new Error('useLayout must be used within a LayoutProvider');
+    throw new Error("useLayout must be used within a LayoutProvider");
   }
   return context;
 }

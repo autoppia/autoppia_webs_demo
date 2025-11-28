@@ -1,84 +1,78 @@
-import { isDataGenerationEnabled, generateProjectData, generateClientSideEvents } from "@/shared/data-generator";
-import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { EVENTS_DATASET, CalendarEvent } from "@/library/dataset";
+import { generateDeterministicEvents } from "@/data/seeded-events";
+
+const PROJECT_KEY = "web_11_autocalendar";
+const ENTITY_TYPE = "events";
+
+const clampSeed = (value?: number | null, fallback: number = 1): number =>
+  typeof value === "number" && value >= 1 && value <= 300 ? value : fallback;
 
 /**
- * Initialize events data - prefers DB, then AI generation, then static dataset
+ * Get v2 seed from window (synchronized by SeedContext)
  */
-export async function initializeEvents(): Promise<CalendarEvent[]> {
-  // If DB mode is enabled and we're in the browser, try loading from DB
-  if (isDbLoadModeEnabled() && typeof window !== "undefined") {
-    try {
-      const dbData = await fetchSeededSelection<CalendarEvent>({
-        projectKey: "web_11_autocalendar",
-        entityType: "calendar_events",
-        seedValue: 1,
-        limit: 200
-      });
-      if (dbData && dbData.length > 0) {
-        return dbData;
-      }
-    } catch {
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autocalendarV2Seed;
+  if (
+    typeof value === "number" &&
+    Number.isFinite(value) &&
+    value >= 1 &&
+    value <= 300
+  ) {
+    return value;
+  }
+  return null;
+};
+
+export async function initializeEvents(
+  v2Seed?: number | null
+): Promise<CalendarEvent[]> {
+  const dbModeEnabled = isDbLoadModeEnabled();
+  let effectiveSeed = clampSeed(v2Seed ?? 1, 1);
+
+  if (dbModeEnabled) {
+    if (typeof window === "undefined") {
+      effectiveSeed = 1;
+    } else {
+      // Wait a bit for SeedContext to sync v2Seed to window
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      const resolvedSeed =
+        typeof v2Seed === "number" ? clampSeed(v2Seed, 1) : getRuntimeV2Seed();
+      // Default to 1 if no v2-seed provided
+      effectiveSeed = resolvedSeed ?? 1;
     }
+  } else if (typeof v2Seed === "number") {
+    effectiveSeed = clampSeed(v2Seed, 1);
   }
 
-  // If server-side while DB mode is enabled, just return static dataset
-  if (isDbLoadModeEnabled() && typeof window === "undefined") {
-    return EVENTS_DATASET as CalendarEvent[];
+  const fallback = () =>
+    generateDeterministicEvents(effectiveSeed, EVENTS_DATASET.length);
+
+  if (!dbModeEnabled) {
+    return fallback();
   }
 
-  // If generation is disabled, return static dataset
-  if (!isDataGenerationEnabled()) {
-    return EVENTS_DATASET as CalendarEvent[];
-  }
-
-  // Check local cache first
-  const cacheKey = "autocal_generated_events_v1";
-  const cached = typeof window !== "undefined" ? localStorage.getItem(cacheKey) : null;
-  if (cached) {
-    try {
-      const parsed = JSON.parse(cached) as CalendarEvent[];
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
-      }
-    } catch {
-      // ignore and regenerate
-    }
-  }
-
-  // Generate via backend
   try {
-    const result = await generateProjectData("web_11_autocalendar", 120);
-    if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-      if (typeof window !== "undefined") {
-        localStorage.setItem(cacheKey, JSON.stringify(result.data));
-      }
-      return result.data as CalendarEvent[];
+    const events = await fetchSeededSelection<CalendarEvent>({
+      projectKey: PROJECT_KEY,
+      entityType: ENTITY_TYPE,
+      seedValue: effectiveSeed,
+      limit: 200,
+      method: "shuffle",
+    });
+    if (Array.isArray(events) && events.length > 0) {
+      return events;
     }
-    throw new Error(result.error || "Generation returned empty data");
-  } catch (err) {
-    // try client-side fallback
-    try {
-      const local = generateClientSideEvents(80);
-      if (Array.isArray(local) && local.length > 0) {
-        if (typeof window !== "undefined") {
-          localStorage.setItem(cacheKey, JSON.stringify(local));
-        }
-        return local as CalendarEvent[];
-      }
-    } catch (e2) {
-      // ignore
-    }
+  } catch (error) {
+    console.error(
+      "[AutoCalendar] Failed to load events from dataset (seed:",
+      effectiveSeed,
+      ")",
+      error
+    );
   }
 
-  // Fallback
-  return EVENTS_DATASET as CalendarEvent[];
+  // Deterministic per-seed fallback (changes when seed changes)
+  return fallback();
 }
-
-export function clearEventsCache(): void {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("autocal_generated_events_v1");
-  }
-}
-
-

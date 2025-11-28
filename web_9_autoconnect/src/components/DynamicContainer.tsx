@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useSeedLayout } from '@/library/useSeedLayout';
+import { useSeed } from '@/context/SeedContext';
+import { getSeedLayout } from '@/dynamic/v1-layouts';
 
 interface DynamicContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -16,108 +17,39 @@ export function DynamicContainer({
   ...rest
 }: DynamicContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const {
-    getElementAttributes,
-    getLayoutClasses,
-    generateId,
-    generateSeedClass,
-    applyCSSVariables,
-    createDynamicStyles
-  } = useSeedLayout();
+  const { seed } = useSeed();
+  const layout = getSeedLayout(seed);
 
   const [attributes, setAttributes] = useState<Record<string, string>>({});
   const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
 
   useEffect(() => {
-    const elementAttrs = getElementAttributes('container', index);
-    const containerClasses = getLayoutClasses('container');
-    const elementId = generateId('container', index);
-    const seedClass = generateSeedClass('dynamic-container');
-    
-    setAttributes({
-      ...elementAttrs,
-      id: elementId,
-      className: `${containerClasses} ${seedClass} ${className}`.trim()
-    });
-    
-    setDynamicStyles(createDynamicStyles());
-  }, [index, className, getElementAttributes, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
+    const attrs = {
+      'data-seed': seed?.toString() || '1',
+      'data-container': 'true',
+      'data-index': index.toString(),
+    };
+    setAttributes(attrs);
 
-  useEffect(() => {
+    const styles: React.CSSProperties = {
+      '--seed': seed?.toString() || '1',
+    } as React.CSSProperties;
+    setDynamicStyles(styles);
+
     if (containerRef.current) {
-      applyCSSVariables(containerRef.current);
+      containerRef.current.style.setProperty('--seed', seed?.toString() || '1');
     }
-  }, [dynamicStyles, applyCSSVariables]);
+  }, [seed, index]);
 
   return (
     <div
       ref={containerRef}
+      className={`${className} ${layout.containerClass}`}
+      style={dynamicStyles}
       {...attributes}
       {...rest}
-      className={attributes.className}
-      style={dynamicStyles}
     >
       {children}
     </div>
   );
 }
-
-interface DynamicItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
-  className?: string;
-  index?: number;
-}
-
-export function DynamicItem({
-  children,
-  className = "",
-  index = 0,
-  ...rest
-}: DynamicItemProps) {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const {
-    getElementAttributes,
-    getLayoutClasses,
-    generateId,
-    generateSeedClass,
-    applyCSSVariables,
-    createDynamicStyles
-  } = useSeedLayout();
-
-  const [attributes, setAttributes] = useState<Record<string, string>>({});
-  const [dynamicStyles, setDynamicStyles] = useState<React.CSSProperties>({});
-
-  useEffect(() => {
-    const elementAttrs = getElementAttributes('item', index);
-    const itemClasses = getLayoutClasses('item');
-    const elementId = generateId('item', index);
-    const seedClass = generateSeedClass('dynamic-item');
-    
-    setAttributes({
-      ...elementAttrs,
-      id: elementId,
-      className: `${itemClasses} ${seedClass} ${className}`.trim()
-    });
-    
-    setDynamicStyles(createDynamicStyles());
-  }, [index, className, getElementAttributes, getLayoutClasses, generateId, generateSeedClass, createDynamicStyles]);
-
-  useEffect(() => {
-    if (itemRef.current) {
-      applyCSSVariables(itemRef.current);
-    }
-  }, [dynamicStyles, applyCSSVariables]);
-
-  return (
-    <div
-      ref={itemRef}
-      {...attributes}
-      {...rest}
-      className={attributes.className}
-      style={dynamicStyles}
-    >
-      {children}
-    </div>
-  );
-}
-

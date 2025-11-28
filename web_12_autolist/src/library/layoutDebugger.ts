@@ -1,6 +1,6 @@
 // Layout debugging utilities for development and testing
 
-import { getSeedLayout, getAllLayouts } from './layouts';
+import { getSeedLayout, getAllLayouts } from "@/dynamic/v1-layouts";
 
 /**
  * Debug utility to log layout information to console

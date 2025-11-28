@@ -1,6 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
-import SeedStructureLink from "./SeedStructureLink";
+import { SeedLink } from "./ui/SeedLink";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {
@@ -75,7 +75,11 @@ export function PropertyCard({
   datesTo: string;
 }) {
   return (
-    <SeedStructureLink href={`/stay/${id}`} className="block">
+    <SeedLink
+      href={`/stay/${id}`}
+      className="group relative block overflow-hidden rounded-xl border border-neutral-200 bg-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+      aria-label={`View details for ${title}`}
+    >
       <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
@@ -135,6 +139,6 @@ export function PropertyCard({
           </div>
         </div>
       </div>
-    </SeedStructureLink>
+      </SeedLink>
   );
 }

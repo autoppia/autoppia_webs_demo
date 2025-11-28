@@ -1,0 +1,1467 @@
+[
+  {
+    "id": "r1",
+    "type": "user",
+    "title": "Sarah Chen - UX Designer",
+    "description": "Senior UX Designer at Google with 8+ years of mobile design experience.",
+    "reason": "Based on your interest in design and mobile development",
+    "relevanceScore": 0.92,
+    "category": "Design",
+    "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face&auto=format&q=80",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "company": "Google",
+      "skills": [
+        "Figma",
+        "User Research",
+        "Mobile Design"
+      ]
+    }
+  },
+  {
+    "id": "r2",
+    "type": "job",
+    "title": "Senior Product Manager",
+    "description": "Lead product strategy for a high-growth fintech startup.",
+    "reason": "Matches your product management background and fintech interest",
+    "relevanceScore": 0.88,
+    "category": "Product Management",
+    "image": "https://images.unsplash.com/photo-1551434678-e076c223a692?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "New York, NY",
+      "company": "FinTech Startup",
+      "salary": "$140,000 - $180,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r3",
+    "type": "user",
+    "title": "John Doe - Data Scientist",
+    "description": "Experienced Data Scientist specializing in machine learning and AI solutions.",
+    "reason": "Aligned with your interests in data analysis and machine learning",
+    "relevanceScore": 0.91,
+    "category": "User",
+    "image": "https://images.unsplash.com/photo-1584697964170-4b9c5c1e5c4f?w=300&h=300&fit=crop&crop=face&auto=format&q=80",
+    "metadata": {
+      "location": "Austin, TX",
+      "company": "Tech Innovations",
+      "skills": [
+        "Python",
+        "Machine Learning",
+        "Data Visualization"
+      ]
+    }
+  },
+  {
+    "id": "r4",
+    "type": "job",
+    "title": "Software Engineer",
+    "description": "Join a dynamic team to develop innovative software solutions.",
+    "reason": "Fits your software development experience and interest in tech startups",
+    "relevanceScore": 0.85,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1521747116042-5a810fda9664?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Innovatech",
+      "salary": "$100,000 - $130,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r5",
+    "type": "learning",
+    "title": "Advanced Python Programming",
+    "description": "Deepen your Python skills with this advanced course focused on real-world applications.",
+    "reason": "Recommended based on your current learning path in programming",
+    "relevanceScore": 0.87,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Online Academy",
+      "duration": "6 weeks",
+      "level": "Advanced"
+    }
+  },
+  {
+    "id": "r6",
+    "type": "event",
+    "title": "Tech Conference 2023",
+    "description": "Join industry leaders at the annual Tech Conference to discuss future trends.",
+    "reason": "Relevant to your interests in technology and networking opportunities",
+    "relevanceScore": 0.89,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Los Angeles, CA",
+      "date": "2023-11-15",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r7",
+    "type": "job",
+    "title": "Marketing Specialist",
+    "description": "Develop and execute marketing strategies for a leading e-commerce platform.",
+    "reason": "Matches your background in marketing and interest in e-commerce",
+    "relevanceScore": 0.84,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Chicago, IL",
+      "company": "E-Com Solutions",
+      "salary": "$70,000 - $90,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r8",
+    "type": "learning",
+    "title": "Data Science Bootcamp",
+    "description": "Intensive program to master data analysis, visualization, and machine learning.",
+    "reason": "Aligned with your interest in data-driven decision making",
+    "relevanceScore": 0.92,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "12 weeks",
+      "level": "Intermediate"
+    }
+  },
+  {
+    "id": "r9",
+    "type": "event",
+    "title": "AI Innovations Summit",
+    "description": "Explore the latest advancements in artificial intelligence with top experts.",
+    "reason": "Relevant to your career in tech and AI interests",
+    "relevanceScore": 0.91,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "date": "2023-12-05",
+      "duration": "3 days"
+    }
+  },
+  {
+    "id": "r10",
+    "type": "job",
+    "title": "Software Engineer",
+    "description": "Design and implement software solutions for a growing tech startup.",
+    "reason": "Matches your skills in software development and agile methodologies",
+    "relevanceScore": 0.88,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "New York, NY",
+      "company": "Tech Innovators",
+      "salary": "$90,000 - $120,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r11",
+    "type": "learning",
+    "title": "Introduction to Cybersecurity",
+    "description": "Learn the fundamentals of cybersecurity and how to protect networks and systems.",
+    "reason": "Recommended based on your interest in IT security",
+    "relevanceScore": 0.85,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Cyber Academy",
+      "duration": "8 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r12",
+    "type": "event",
+    "title": "Annual Marketing Expo",
+    "description": "Network with marketing professionals and learn about the latest trends.",
+    "reason": "Relevant to your career in marketing and networking goals",
+    "relevanceScore": 0.87,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Miami, FL",
+      "date": "2023-09-20",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r13",
+    "type": "job",
+    "title": "Graphic Designer",
+    "description": "Create visual concepts to communicate ideas that inspire, inform, or captivate consumers.",
+    "reason": "Fits your creative skills and experience in design",
+    "relevanceScore": 0.86,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Austin, TX",
+      "company": "Creative Agency",
+      "salary": "$60,000 - $80,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r14",
+    "type": "learning",
+    "title": "Web Development Bootcamp",
+    "description": "Learn front-end and back-end web development in a fast-paced environment.",
+    "reason": "Aligned with your goal to enter the tech industry",
+    "relevanceScore": 0.93,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Web Academy",
+      "duration": "10 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r15",
+    "type": "event",
+    "title": "Startup Pitch Night",
+    "description": "Watch startups pitch their ideas to investors and network with entrepreneurs.",
+    "reason": "Relevant to your interest in startups and entrepreneurship",
+    "relevanceScore": 0.9,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Seattle, WA",
+      "date": "2023-10-10",
+      "duration": "1 evening"
+    }
+  },
+  {
+    "id": "r16",
+    "type": "job",
+    "title": "Data Analyst",
+    "description": "Analyze data to help drive business decisions and improve performance.",
+    "reason": "Matches your analytical skills and experience in data management",
+    "relevanceScore": 0.89,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Boston, MA",
+      "company": "Data Solutions Inc.",
+      "salary": "$70,000 - $90,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r17",
+    "type": "learning",
+    "title": "Digital Marketing Fundamentals",
+    "description": "Understand the principles of digital marketing and how to apply them effectively.",
+    "reason": "Recommended based on your interest in marketing strategies",
+    "relevanceScore": 0.84,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Marketing Academy",
+      "duration": "4 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r18",
+    "type": "event",
+    "title": "Blockchain Technology Forum",
+    "description": "Discuss the future of blockchain technology with industry leaders.",
+    "reason": "Relevant to your interests in blockchain and innovation",
+    "relevanceScore": 0.95,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "New York, NY",
+      "date": "2023-11-25",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r19",
+    "type": "job",
+    "title": "UX/UI Designer",
+    "description": "Design user-friendly interfaces and enhance user experience for apps and websites.",
+    "reason": "Fits your design background and interest in user experience",
+    "relevanceScore": 0.88,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "San Diego, CA",
+      "company": "Design Hub",
+      "salary": "$75,000 - $95,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r20",
+    "type": "learning",
+    "title": "Machine Learning Basics",
+    "description": "Get introduced to machine learning concepts and algorithms.",
+    "reason": "Aligned with your interest in AI and data science",
+    "relevanceScore": 0.91,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "AI Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r21",
+    "type": "event",
+    "title": "Women in Tech Conference",
+    "description": "Empower women in technology through networking and mentorship.",
+    "reason": "Relevant to your interests in diversity and inclusion in tech",
+    "relevanceScore": 0.89,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Chicago, IL",
+      "date": "2023-10-30",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r22",
+    "type": "job",
+    "title": "Content Writer",
+    "description": "Create engaging content for blogs, websites, and social media.",
+    "reason": "Matches your writing skills and interest in content marketing",
+    "relevanceScore": 0.87,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Content Creators Ltd.",
+      "salary": "$50,000 - $70,000",
+      "experience": "1+ years"
+    }
+  },
+  {
+    "id": "r23",
+    "type": "learning",
+    "title": "Cloud Computing Essentials",
+    "description": "Learn the basics of cloud computing and its applications.",
+    "reason": "Recommended based on your interest in cloud technologies",
+    "relevanceScore": 0.85,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Cloud Academy",
+      "duration": "5 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r24",
+    "type": "event",
+    "title": "Tech Job Fair",
+    "description": "Meet recruiters and explore job opportunities in the tech industry.",
+    "reason": "Relevant to your job search in technology",
+    "relevanceScore": 0.9,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Los Angeles, CA",
+      "date": "2023-11-12",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r25",
+    "type": "job",
+    "title": "SEO Specialist",
+    "description": "Optimize website content to improve search engine rankings.",
+    "reason": "Fits your skills in digital marketing and SEO strategies",
+    "relevanceScore": 0.86,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Marketing Pros",
+      "salary": "$60,000 - $80,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r26",
+    "type": "learning",
+    "title": "Introduction to Graphic Design",
+    "description": "Learn the basics of graphic design and visual communication.",
+    "reason": "Recommended based on your interest in design",
+    "relevanceScore": 0.83,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Design Academy",
+      "duration": "4 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r27",
+    "type": "event",
+    "title": "Cybersecurity Awareness Month",
+    "description": "Join us for workshops and seminars on cybersecurity best practices.",
+    "reason": "Relevant to your interest in cybersecurity",
+    "relevanceScore": 0.88,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Virtual",
+      "date": "2023-10-01",
+      "duration": "1 month"
+    }
+  },
+  {
+    "id": "r28",
+    "type": "job",
+    "title": "Project Manager",
+    "description": "Oversee projects from inception to completion, ensuring timely delivery.",
+    "reason": "Matches your experience in project management",
+    "relevanceScore": 0.92,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Project Solutions",
+      "salary": "$80,000 - $100,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r29",
+    "type": "learning",
+    "title": "Social Media Marketing",
+    "description": "Learn how to effectively market on social media platforms.",
+    "reason": "Recommended based on your interest in digital marketing",
+    "relevanceScore": 0.89,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Marketing Academy",
+      "duration": "6 weeks",
+      "level": "Intermediate"
+    }
+  },
+  {
+    "id": "r30",
+    "type": "event",
+    "title": "Tech Innovations Workshop",
+    "description": "Hands-on workshop to explore the latest tech innovations.",
+    "reason": "Relevant to your interests in technology and hands-on learning",
+    "relevanceScore": 0.94,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Boston, MA",
+      "date": "2023-12-10",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r31",
+    "type": "job",
+    "title": "Business Analyst",
+    "description": "Analyze business processes and recommend solutions for improvement.",
+    "reason": "Fits your analytical skills and experience in business analysis",
+    "relevanceScore": 0.85,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Atlanta, GA",
+      "company": "Business Insights",
+      "salary": "$70,000 - $90,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r32",
+    "type": "learning",
+    "title": "Introduction to Data Visualization",
+    "description": "Learn how to present data visually using various tools and techniques.",
+    "reason": "Recommended based on your interest in data analysis",
+    "relevanceScore": 0.86,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "5 weeks",
+      "level": "Intermediate"
+    }
+  },
+  {
+    "id": "r33",
+    "type": "event",
+    "title": "Entrepreneurship Workshop",
+    "description": "Learn the essentials of starting and running a successful business.",
+    "reason": "Relevant to your interests in entrepreneurship",
+    "relevanceScore": 0.93,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Denver, CO",
+      "date": "2023-11-15",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r34",
+    "type": "job",
+    "title": "Network Administrator",
+    "description": "Manage and maintain computer networks for organizations.",
+    "reason": "Matches your technical skills and experience in IT",
+    "relevanceScore": 0.87,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Houston, TX",
+      "company": "Tech Solutions",
+      "salary": "$70,000 - $90,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r35",
+    "type": "learning",
+    "title": "Advanced SQL for Data Science",
+    "description": "Enhance your SQL skills for data analysis and management.",
+    "reason": "Recommended based on your interest in data science",
+    "relevanceScore": 0.9,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "6 weeks",
+      "level": "Advanced"
+    }
+  },
+  {
+    "id": "r36",
+    "type": "event",
+    "title": "Virtual Reality Expo",
+    "description": "Discover the latest in virtual reality technology and applications.",
+    "reason": "Relevant to your interests in VR and gaming",
+    "relevanceScore": 0.91,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Austin, TX",
+      "date": "2023-12-01",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r37",
+    "type": "job",
+    "title": "Sales Manager",
+    "description": "Lead sales teams and develop strategies to increase revenue.",
+    "reason": "Fits your leadership skills and experience in sales",
+    "relevanceScore": 0.89,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Philadelphia, PA",
+      "company": "Sales Corp",
+      "salary": "$80,000 - $100,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r38",
+    "type": "learning",
+    "title": "Ethical Hacking Fundamentals",
+    "description": "Learn the basics of ethical hacking and cybersecurity measures.",
+    "reason": "Recommended based on your interest in security",
+    "relevanceScore": 0.88,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Cyber Academy",
+      "duration": "8 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r39",
+    "type": "event",
+    "title": "Global Tech Summit",
+    "description": "Join leaders from around the world to discuss technology's future.",
+    "reason": "Relevant to your interests in global tech trends",
+    "relevanceScore": 0.94,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Toronto, Canada",
+      "date": "2023-11-20",
+      "duration": "3 days"
+    }
+  },
+  {
+    "id": "r40",
+    "type": "job",
+    "title": "Human Resources Specialist",
+    "description": "Manage recruitment and employee relations for the organization.",
+    "reason": "Matches your experience in human resources",
+    "relevanceScore": 0.85,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "HR Solutions",
+      "salary": "$60,000 - $80,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r41",
+    "type": "learning",
+    "title": "Intro to Python for Data Science",
+    "description": "Learn Python programming specifically for data science applications.",
+    "reason": "Recommended based on your interest in programming and data",
+    "relevanceScore": 0.92,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "8 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r42",
+    "type": "event",
+    "title": "Digital Marketing Summit",
+    "description": "Explore the latest trends in digital marketing with industry experts.",
+    "reason": "Relevant to your interests in marketing and digital strategies",
+    "relevanceScore": 0.93,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Las Vegas, NV",
+      "date": "2023-10-25",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r43",
+    "type": "job",
+    "title": "IT Support Specialist",
+    "description": "Provide technical support and troubleshooting for IT systems.",
+    "reason": "Fits your technical skills and experience in IT support",
+    "relevanceScore": 0.86,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Tech Support Co.",
+      "salary": "$50,000 - $70,000",
+      "experience": "1+ years"
+    }
+  },
+  {
+    "id": "r44",
+    "type": "learning",
+    "title": "Intro to JavaScript",
+    "description": "Learn the fundamentals of JavaScript programming for web development.",
+    "reason": "Recommended based on your interest in web technologies",
+    "relevanceScore": 0.91,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Web Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r45",
+    "type": "event",
+    "title": "Artificial Intelligence Workshop",
+    "description": "Hands-on workshop exploring AI applications in various industries.",
+    "reason": "Relevant to your interests in AI and practical learning",
+    "relevanceScore": 0.95,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "date": "2023-11-18",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r46",
+    "type": "job",
+    "title": "Financial Analyst",
+    "description": "Analyze financial data to support business decisions.",
+    "reason": "Matches your analytical skills and experience in finance",
+    "relevanceScore": 0.87,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "New York, NY",
+      "company": "Finance Corp",
+      "salary": "$70,000 - $90,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r47",
+    "type": "learning",
+    "title": "Advanced Excel for Data Analysis",
+    "description": "Master Excel for advanced data analysis and visualization techniques.",
+    "reason": "Recommended based on your interest in data management",
+    "relevanceScore": 0.92,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "4 weeks",
+      "level": "Advanced"
+    }
+  },
+  {
+    "id": "r48",
+    "type": "event",
+    "title": "Tech for Good Summit",
+    "description": "Explore how technology can drive social change and impact.",
+    "reason": "Relevant to your interests in social impact and technology",
+    "relevanceScore": 0.93,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Washington, DC",
+      "date": "2023-12-15",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r49",
+    "type": "job",
+    "title": "Operations Manager",
+    "description": "Oversee daily operations and improve efficiency for the organization.",
+    "reason": "Fits your management experience and skills",
+    "relevanceScore": 0.88,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Chicago, IL",
+      "company": "Operations Inc.",
+      "salary": "$80,000 - $100,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r50",
+    "type": "learning",
+    "title": "Introduction to R for Data Science",
+    "description": "Learn R programming for data analysis and visualization.",
+    "reason": "Recommended based on your interest in data science",
+    "relevanceScore": 0.91,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r51",
+    "type": "event",
+    "title": "Future of Work Conference",
+    "description": "Discuss the evolving landscape of work and technology's impact.",
+    "reason": "Relevant to your interests in workplace trends",
+    "relevanceScore": 0.92,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Las Vegas, NV",
+      "date": "2023-11-30",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r52",
+    "type": "job",
+    "title": "Quality Assurance Tester",
+    "description": "Ensure software products meet quality standards before release.",
+    "reason": "Matches your attention to detail and experience in testing",
+    "relevanceScore": 0.89,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Quality Assurance Co.",
+      "salary": "$60,000 - $80,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r53",
+    "type": "learning",
+    "title": "Introduction to DevOps",
+    "description": "Learn the principles of DevOps and how to implement them.",
+    "reason": "Recommended based on your interest in software development",
+    "relevanceScore": 0.9,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "DevOps Academy",
+      "duration": "8 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r54",
+    "type": "event",
+    "title": "Tech Careers Expo",
+    "description": "Explore various career opportunities in the tech industry.",
+    "reason": "Relevant to your job search in technology",
+    "relevanceScore": 0.86,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Miami, FL",
+      "date": "2023-10-15",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r55",
+    "type": "job",
+    "title": "Data Scientist",
+    "description": "Utilize statistical methods and machine learning to analyze complex data.",
+    "reason": "Fits your background in data analysis and statistics",
+    "relevanceScore": 0.91,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Data Insights",
+      "salary": "$100,000 - $120,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r56",
+    "type": "learning",
+    "title": "Blockchain Basics",
+    "description": "Understand the fundamentals of blockchain technology.",
+    "reason": "Recommended based on your interest in emerging technologies",
+    "relevanceScore": 0.88,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Blockchain Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r57",
+    "type": "event",
+    "title": "Data Science Symposium",
+    "description": "Join experts in data science to discuss trends and innovations.",
+    "reason": "Relevant to your interests in data science and networking",
+    "relevanceScore": 0.92,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Boston, MA",
+      "date": "2023-12-20",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r58",
+    "type": "job",
+    "title": "Technical Writer",
+    "description": "Create documentation and guides for technical products.",
+    "reason": "Matches your writing skills and interest in technology",
+    "relevanceScore": 0.86,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Tech Writers Inc.",
+      "salary": "$55,000 - $75,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r59",
+    "type": "learning",
+    "title": "Introduction to Agile Methodologies",
+    "description": "Learn the principles of Agile project management.",
+    "reason": "Recommended based on your interest in project management",
+    "relevanceScore": 0.9,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Project Management Academy",
+      "duration": "4 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r60",
+    "type": "event",
+    "title": "Data Analytics Conference",
+    "description": "Explore the latest trends in data analytics and its applications.",
+    "reason": "Relevant to your interests in data analytics",
+    "relevanceScore": 0.91,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "date": "2023-11-05",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r61",
+    "type": "job",
+    "title": "Web Developer",
+    "description": "Build and maintain websites for various clients.",
+    "reason": "Matches your skills in web development and design",
+    "relevanceScore": 0.89,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Web Solutions",
+      "salary": "$70,000 - $90,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r62",
+    "type": "learning",
+    "title": "Introduction to SQL",
+    "description": "Learn the basics of SQL for database management.",
+    "reason": "Recommended based on your interest in data management",
+    "relevanceScore": 0.85,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Database Academy",
+      "duration": "4 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r63",
+    "type": "event",
+    "title": "Tech Skills Workshop",
+    "description": "Hands-on workshop to develop essential tech skills.",
+    "reason": "Relevant to your interests in skill development",
+    "relevanceScore": 0.92,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Chicago, IL",
+      "date": "2023-12-02",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r64",
+    "type": "job",
+    "title": "Marketing Manager",
+    "description": "Develop and execute marketing strategies for the organization.",
+    "reason": "Fits your experience in marketing and leadership",
+    "relevanceScore": 0.9,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Marketing Experts",
+      "salary": "$75,000 - $95,000",
+      "experience": "4+ years"
+    }
+  },
+  {
+    "id": "r65",
+    "type": "learning",
+    "title": "Introduction to Data Science",
+    "description": "Learn the fundamentals of data science and its applications.",
+    "reason": "Recommended based on your interest in data analysis",
+    "relevanceScore": 0.94,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r66",
+    "type": "event",
+    "title": "Innovation in Tech Conference",
+    "description": "Explore the latest innovations in technology and their impact.",
+    "reason": "Relevant to your interests in tech innovation",
+    "relevanceScore": 0.95,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "New York, NY",
+      "date": "2023-11-22",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r67",
+    "type": "job",
+    "title": "Cloud Engineer",
+    "description": "Design and manage cloud infrastructure for organizations.",
+    "reason": "Matches your skills in cloud technologies and engineering",
+    "relevanceScore": 0.91,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Cloud Solutions",
+      "salary": "$90,000 - $110,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r68",
+    "type": "learning",
+    "title": "Python for Data Analysis",
+    "description": "Learn how to use Python for data analysis and visualization.",
+    "reason": "Recommended based on your interest in data science",
+    "relevanceScore": 0.92,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "6 weeks",
+      "level": "Intermediate"
+    }
+  },
+  {
+    "id": "r69",
+    "type": "event",
+    "title": "AI and Ethics Symposium",
+    "description": "Discuss the ethical implications of AI technologies.",
+    "reason": "Relevant to your interests in ethics and AI",
+    "relevanceScore": 0.94,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Washington, DC",
+      "date": "2023-12-05",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r70",
+    "type": "job",
+    "title": "Mobile App Developer",
+    "description": "Create and maintain mobile applications for iOS and Android.",
+    "reason": "Fits your skills in mobile development and app design",
+    "relevanceScore": 0.9,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "App Solutions",
+      "salary": "$80,000 - $100,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r71",
+    "type": "learning",
+    "title": "Data Mining Techniques",
+    "description": "Learn techniques for extracting useful information from large datasets.",
+    "reason": "Recommended based on your interest in data science",
+    "relevanceScore": 0.91,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "6 weeks",
+      "level": "Intermediate"
+    }
+  },
+  {
+    "id": "r72",
+    "type": "event",
+    "title": "Tech for Change Forum",
+    "description": "Explore how technology can drive social change and innovation.",
+    "reason": "Relevant to your interests in tech and social impact",
+    "relevanceScore": 0.93,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Los Angeles, CA",
+      "date": "2023-10-28",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r73",
+    "type": "job",
+    "title": "Product Manager",
+    "description": "Lead product development and strategy for the organization.",
+    "reason": "Fits your experience in product management and leadership",
+    "relevanceScore": 0.88,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Product Solutions",
+      "salary": "$90,000 - $110,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r74",
+    "type": "learning",
+    "title": "Introduction to Internet of Things (IoT)",
+    "description": "Learn about IoT devices and their applications.",
+    "reason": "Recommended based on your interest in emerging technologies",
+    "relevanceScore": 0.92,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "IoT Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r75",
+    "type": "event",
+    "title": "Tech Networking Night",
+    "description": "Network with industry professionals and explore opportunities.",
+    "reason": "Relevant to your interests in networking and technology",
+    "relevanceScore": 0.9,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "San Jose, CA",
+      "date": "2023-11-10",
+      "duration": "1 evening"
+    }
+  },
+  {
+    "id": "r76",
+    "type": "job",
+    "title": "Database Administrator",
+    "description": "Manage and maintain database systems for organizations.",
+    "reason": "Matches your skills in database management",
+    "relevanceScore": 0.89,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Database Solutions",
+      "salary": "$70,000 - $90,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r77",
+    "type": "learning",
+    "title": "Advanced Data Analysis Techniques",
+    "description": "Learn advanced techniques for data analysis and interpretation.",
+    "reason": "Recommended based on your interest in data science",
+    "relevanceScore": 0.91,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "6 weeks",
+      "level": "Advanced"
+    }
+  },
+  {
+    "id": "r78",
+    "type": "event",
+    "title": "Future of AI Conference",
+    "description": "Discuss the future trends and ethical implications of AI.",
+    "reason": "Relevant to your interests in AI and technology",
+    "relevanceScore": 0.94,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "date": "2023-12-12",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r79",
+    "type": "job",
+    "title": "Marketing Analyst",
+    "description": "Analyze marketing data to inform business strategies.",
+    "reason": "Fits your analytical skills and experience in marketing",
+    "relevanceScore": 0.87,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Marketing Insights",
+      "salary": "$60,000 - $80,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r80",
+    "type": "learning",
+    "title": "Introduction to Quantum Computing",
+    "description": "Learn the basics of quantum computing and its potential applications.",
+    "reason": "Recommended based on your interest in cutting-edge technology",
+    "relevanceScore": 0.93,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Quantum Academy",
+      "duration": "8 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r81",
+    "type": "event",
+    "title": "Tech for Good Hackathon",
+    "description": "Collaborate on projects that leverage technology for social good.",
+    "reason": "Relevant to your interests in technology and social impact",
+    "relevanceScore": 0.95,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "date": "2023-11-14",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r82",
+    "type": "job",
+    "title": "E-commerce Manager",
+    "description": "Oversee online sales strategies and manage e-commerce platforms.",
+    "reason": "Fits your experience in e-commerce and digital marketing",
+    "relevanceScore": 0.88,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "E-Com Solutions",
+      "salary": "$70,000 - $90,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r83",
+    "type": "learning",
+    "title": "Introduction to Cloud Security",
+    "description": "Learn about security measures for cloud computing environments.",
+    "reason": "Recommended based on your interest in cloud technologies",
+    "relevanceScore": 0.89,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Cloud Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r84",
+    "type": "event",
+    "title": "Tech Leadership Summit",
+    "description": "Discuss leadership strategies in technology with industry leaders.",
+    "reason": "Relevant to your interests in tech leadership",
+    "relevanceScore": 0.92,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "New York, NY",
+      "date": "2023-11-28",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r85",
+    "type": "job",
+    "title": "Research Scientist",
+    "description": "Conduct research and analysis in various scientific fields.",
+    "reason": "Fits your background in research and analysis",
+    "relevanceScore": 0.9,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Research Labs",
+      "salary": "$80,000 - $100,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r86",
+    "type": "learning",
+    "title": "Advanced Data Visualization",
+    "description": "Master advanced techniques for visualizing complex data.",
+    "reason": "Recommended based on your interest in data analysis",
+    "relevanceScore": 0.91,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Data Academy",
+      "duration": "6 weeks",
+      "level": "Advanced"
+    }
+  },
+  {
+    "id": "r87",
+    "type": "event",
+    "title": "AI and Society Forum",
+    "description": "Discuss the impact of AI on society and ethical considerations.",
+    "reason": "Relevant to your interests in AI and social issues",
+    "relevanceScore": 0.93,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Los Angeles, CA",
+      "date": "2023-12-08",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r88",
+    "type": "job",
+    "title": "Cybersecurity Analyst",
+    "description": "Monitor and protect systems from cyber threats.",
+    "reason": "Fits your skills in cybersecurity and IT",
+    "relevanceScore": 0.88,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Security Solutions",
+      "salary": "$70,000 - $90,000",
+      "experience": "2+ years"
+    }
+  },
+  {
+    "id": "r89",
+    "type": "learning",
+    "title": "Data Ethics and Privacy",
+    "description": "Understand the ethical considerations in data handling and privacy.",
+    "reason": "Recommended based on your interest in data ethics",
+    "relevanceScore": 0.9,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Ethics Academy",
+      "duration": "4 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r90",
+    "type": "event",
+    "title": "Future Tech Expo",
+    "description": "Explore the latest advancements in technology and innovation.",
+    "reason": "Relevant to your interests in future technologies",
+    "relevanceScore": 0.94,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "San Francisco, CA",
+      "date": "2023-12-15",
+      "duration": "2 days"
+    }
+  },
+  {
+    "id": "r91",
+    "type": "job",
+    "title": "Cloud Security Engineer",
+    "description": "Implement security measures for cloud environments.",
+    "reason": "Matches your skills in cloud security and engineering",
+    "relevanceScore": 0.9,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Cloud Security Co.",
+      "salary": "$90,000 - $110,000",
+      "experience": "3+ years"
+    }
+  },
+  {
+    "id": "r92",
+    "type": "learning",
+    "title": "Introduction to Data Structures",
+    "description": "Learn about data structures and their applications in programming.",
+    "reason": "Recommended based on your interest in computer science",
+    "relevanceScore": 0.89,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Computer Science Academy",
+      "duration": "6 weeks",
+      "level": "Beginner"
+    }
+  },
+  {
+    "id": "r93",
+    "type": "event",
+    "title": "Tech Innovations Showcase",
+    "description": "Showcase of innovative tech solutions and startups.",
+    "reason": "Relevant to your interests in technology and innovation",
+    "relevanceScore": 0.91,
+    "category": "Event",
+    "image": "https://images.unsplash.com/photo-1566032626-4c6f4b1a4f6b?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Austin, TX",
+      "date": "2023-12-20",
+      "duration": "1 day"
+    }
+  },
+  {
+    "id": "r94",
+    "type": "job",
+    "title": "Information Security Manager",
+    "description": "Manage information security programs and policies.",
+    "reason": "Fits your experience in information security and management",
+    "relevanceScore": 0.92,
+    "category": "Job",
+    "image": "https://images.unsplash.com/photo-1517841905240-4729888e3b1e?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "location": "Remote",
+      "company": "Security Management Inc.",
+      "salary": "$100,000 - $120,000",
+      "experience": "5+ years"
+    }
+  },
+  {
+    "id": "r95",
+    "type": "learning",
+    "title": "Advanced Cloud Computing",
+    "description": "Deep dive into advanced cloud computing concepts and practices.",
+    "reason": "Recommended based on your interest in cloud technologies",
+    "relevanceScore": 0.93,
+    "category": "Learning",
+    "image": "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
+    "metadata": {
+      "provider": "Cloud Academy",
+      "duration": "8 weeks",
+      "level": "Advanced"
+    }
+  }
+]

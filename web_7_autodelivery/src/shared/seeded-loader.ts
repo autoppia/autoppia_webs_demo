@@ -16,24 +16,17 @@ export interface SeededSelectionParams {
  */
 export function isDbLoadModeEnabled(): boolean {
   if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_ENABLE_DB_MODE === 'true';
+    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE === 'true';
   }
-  return process.env.ENABLE_DB_MODE === 'true';
+  return process.env.ENABLE_DYNAMIC_V2_DB_MODE === 'true';
 }
 
 /**
  * Get seed value from environment variables
+ * Note: v2-seed comes from URL parameter, not env vars
  */
 export function getSeedValueFromEnv(defaultValue: number = 1): number {
-  const seedValue = typeof window !== 'undefined' 
-    ? process.env.NEXT_PUBLIC_DATA_SEED_VALUE 
-    : process.env.DATA_SEED_VALUE;
-  
-  if (seedValue) {
-    const parsed = parseInt(seedValue, 10);
-    return isNaN(parsed) ? defaultValue : parsed;
-  }
-  
+  // Always return default seed (v2-seed comes from URL parameter, not env vars)
   return defaultValue;
 }
 

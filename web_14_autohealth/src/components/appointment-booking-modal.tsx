@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import type { Appointment } from "@/data/appointments";
 
 interface AppointmentBookingModalProps {
@@ -27,6 +28,7 @@ interface BookingFormData {
 }
 
 export function AppointmentBookingModal({ open, onOpenChange, appointment }: AppointmentBookingModalProps) {
+  const { getId, getClass, getText } = useSeedLayout();
   const [formData, setFormData] = React.useState<BookingFormData>({
     patientName: "",
     patientEmail: "",
@@ -291,15 +293,22 @@ export function AppointmentBookingModal({ open, onOpenChange, appointment }: App
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={handleCancel} disabled={isSubmitting}>
-            Cancel
+          <Button 
+            id={getId("cancel-booking-button", 0)}
+            className={getClass("button-secondary", "")}
+            variant="outline" 
+            onClick={handleCancel} 
+            disabled={isSubmitting}
+          >
+            {getText("cancel", "Cancel")}
           </Button>
           <Button 
+            id={getId("confirm-booking-button", 0)}
+            className={`bg-blue-600 hover:bg-blue-700 ${getClass("button-primary", "")}`}
             onClick={handleConfirmAppointment} 
             disabled={isSubmitting || !validateForm()}
-            className="bg-blue-600 hover:bg-blue-700"
           >
-            {isSubmitting ? "Booking..." : "Confirm Appointment"}
+            {isSubmitting ? getText("booking", "Booking...") : getText("confirm_appointment", "Confirm Appointment")}
           </Button>
         </DialogFooter>
       </DialogContent>

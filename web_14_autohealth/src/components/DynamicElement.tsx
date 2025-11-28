@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useSeedLayout } from '../library/useSeedLayout';
+import { useSeedLayout } from '@/dynamic/v3-dynamic';
 
 type TagName = 'div' | 'section' | 'nav' | 'header' | 'footer' | 'main' | 'aside' | 'span' | 'button' | 'a' | 'tr';
 

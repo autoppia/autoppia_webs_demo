@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import QuickOrderModal from "./QuickOrderModal";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
-import { useDynamicStructure } from "@/contexts/DynamicStructureContext";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 
 export default function HeroSection() {
   const [modalOpen, setModalOpen] = useState(false);
   const layout = useSeedLayout();
-  const { getText, getId } = useDynamicStructure();
+  const { getText, getId } = useV3Attributes();
 
   const handleOrderNowClick = () => {
     setModalOpen(true);

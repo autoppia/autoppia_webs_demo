@@ -3,16 +3,16 @@
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import Link from "next/link";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
+import { BlurCard } from "@/components/ui/BlurCard";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { Minus, Plus, X } from "lucide-react";
+import { BadgeCheck, Minus, Plus, ShieldCheck, Truck, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
-import { useSearchParams } from "next/navigation";
-import { withSeed } from "@/utils/seedRouting";
 
 interface CartItem {
   id: string;
@@ -28,18 +28,44 @@ export function CartPageContent() {
   const { state, removeFromCart, updateQuantity } = useCart();
   const { items, totalItems, totalAmount } = state;
 
-  const { getText, getId } = useDynamicStructure();
-  const searchParams = useSearchParams();
+  const { getText, getId } = useV3Attributes();
   const router = useSeedRouter();
+
+  const toSentenceCase = (value: string | undefined, fallback: string) => {
+    const base = (value || fallback).trim();
+    return base ? base.charAt(0).toUpperCase() + base.slice(1) : fallback;
+  };
+
+  const toUpperLabel = (value: string | undefined, fallback: string) => {
+    const base = value || fallback;
+    return base.toUpperCase();
+  };
+
+  const cartEyebrow = toUpperLabel(
+    getText("cart_overview"),
+    "Cart overview"
+  );
+  const cartTitle = toSentenceCase(getText("shopping_cart"), "Shopping cart");
+  const emptyCartTitle = toSentenceCase(getText("empty_cart"), "Empty cart");
+  const emptyCartMessage = toSentenceCase(
+    getText("empty_cart_message"),
+    "Empty cart message"
+  );
+  const continueShoppingLabel = toSentenceCase(
+    getText("continue_shopping"),
+    "Continue shopping"
+  );
+  const inStockLabel = toSentenceCase(getText("in_stock"), "In stock");
+  const totalLabel = toSentenceCase(getText("total"), "Total");
+  const subtotalLabel = toSentenceCase(getText("subtotal"), "Subtotal");
+  const itemsLabel = toSentenceCase(getText("items"), "items");
+  const orderTotalLabel = toSentenceCase(getText("order_total"), "Order total");
+  const promoLabel = toUpperLabel(getText("promo_code"), "Promo code");
 
   const handleRemoveItem = (id: string) => {
     removeFromCart?.(id);
   };
 
-  const getTopMarginClass = () => {
-    const margins = ["mt-0", "mt-8", "mt-16", "mt-24", "mt-32"];
-    return margins[Math.floor(Math.random() * margins.length)];
-  };
   useEffect(() => {logEvent(EVENT_TYPES.VIEW_CART, {});}, []);
 
   const handleUpdateQuantity = (item: CartItem, newQuantity: number) => {
@@ -79,194 +105,222 @@ export function CartPageContent() {
   };
 
   return (
-    <div className="bg-[#edeff0] min-h-screen py-10 mt-16">
-      <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row gap-6">
-        {/* Cart Section */}
-        <div className="flex-1">
-          <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200">
-            <h1 className="text-2xl md:text-3xl font-semibold leading-tight mb-4">
-              {getText("shopping_cart")}
-            </h1>
-            {items.length > 0 && (
-              <div className="hidden md:flex items-center border-b border-gray-200 pb-2 font-medium text-gray-700">
-                <div className="flex-1">{getText("product")}</div>
-                <div className="w-32 text-center">{getText("quantity")}</div>
-                <div className="w-32 text-right">{getText("price")}</div>
-                <div className="w-32 text-right">{getText("total")}</div>
+    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white py-12">
+      <div className="omnizon-container flex flex-col gap-10 lg:flex-row">
+        <div className="flex-1 space-y-6">
+          <SectionHeading
+            eyebrow={cartEyebrow}
+            title={cartTitle}
+            description="Review every kit before locking delivery windows."
+          />
+          {items.length === 0 ? (
+            <BlurCard className="p-10 text-center md:p-12">
+              <p className="text-lg font-semibold text-slate-700">
+                {emptyCartTitle}
+              </p>
+              <p className="mt-2 text-sm text-slate-500">
+                {emptyCartMessage}
+              </p>
+              <div className="mt-4">
+                <SeedLink href="/">
+                  <Button className="rounded-full bg-slate-900 px-6 py-3 text-white hover:bg-slate-800">
+                    {continueShoppingLabel}
+                  </Button>
+                </SeedLink>
               </div>
-            )}
-
-            {/* Cart Items or Empty */}
-            <div className="my-8">
-              {items.length === 0 ? (
-                <div className="text-center p-8 text-lg text-gray-500">
-                  <p className="mb-2">{getText("empty_cart")}</p>
-                  <p className="mb-4 text-base text-gray-400">
-                    {getText("empty_cart_message")}
-                  </p>
-                  <SeedLink href="/">
-                    <Button className="bg-amazon-yellow hover:bg-amazon-darkYellow text-black font-semibold">
-                      {getText("continue_shopping")}
-                    </Button>
-                  </SeedLink>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-6">
-                  {items.map((item: CartItem) => {
-                    const itemPrice = Number.parseFloat(
-                      item.price.replace(/[^0-9.]/g, "")
-                    );
-                    const itemTotal = itemPrice * item.quantity;
-                    return (
-                      <div
-                        key={item.id}
-                        className="flex flex-col md:flex-row items-center md:items-stretch gap-4 border-b border-gray-100 pb-6 last:border-b-0"
-                      >
-                        {/* Product Image */}
-                        <div className="w-24 h-24 flex-shrink-0 flex items-center justify-center bg-gray-50 rounded relative group">
-                          <Image
-                            src={item.image}
-                            alt={item.title}
-                            width={80}
-                            height={80}
-                            className="object-contain max-h-20 max-w-20"
-                          />
-                          {/* URL Display on Hover */}
-                          <div className="absolute bottom-1 left-1 right-1 bg-black/80 text-white text-xs px-1 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
-                            /{item.id}
-                          </div>
-                        </div>
-                        {/* Product Details */}
-                        <div className="flex-1 flex flex-col justify-between">
-                          <a
-                            href={`#${item.id}`}
-                            title={`View ${item.title} - Product ID: ${item.id}`}
-                            onMouseEnter={() => {
-                              window.history.replaceState(null, '', `#${item.id}`);
-                            }}
-                            onMouseLeave={() => {
-                              window.history.replaceState(null, '', window.location.pathname);
-                            }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              router.push(withSeed(`/${item.id}`, searchParams));
-                            }}
-                            className="text-base font-medium hover:text-blue-600 no-underline cursor-pointer"
+            </BlurCard>
+          ) : (
+            <div className="space-y-4">
+              {items.map((item: CartItem) => {
+                const itemPrice = Number.parseFloat(
+                  item.price.replace(/[^0-9.]/g, "")
+                );
+                const itemTotal = itemPrice * item.quantity;
+                return (
+                  <BlurCard key={item.id} className="p-5">
+                    <div className="flex flex-col gap-4 md:flex-row">
+                      <div className="relative h-28 w-28 flex-shrink-0 rounded-2xl border border-white/60 bg-white">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes="120px"
+                          className="object-contain p-3"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => router.push(`/${item.id}`)}
+                          className="absolute inset-0"
+                          aria-label={`View ${item.title}`}
+                        />
+                      </div>
+                      <div className="flex flex-1 flex-col gap-2">
+                        <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                          <button
+                            type="button"
+                            onClick={() => router.push(`/${item.id}`)}
+                            className="text-left text-base font-semibold text-slate-900 hover:text-indigo-600"
                           >
                             {item.title}
-                          </a>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {item.brand && `${getText("brand")}: ${item.brand}`}
-                            {item.color && `, ${getText("color")}: ${item.color}`}
-                          </div>
-                          <div className="text-green-600 text-sm mt-1">
-                            {getText("in_stock")}
-                          </div>
+                          </button>
                           <button
                             id={getId("remove_button")}
                             onClick={() => handleRemoveItem(item.id)}
-                            className="text-xs text-blue-500 hover:text-blue-700 hover:underline mt-2 flex items-center w-fit"
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-900"
                           >
-                            <X size={12} className="mr-1" /> {getText("remove")}
+                            <X size={12} />
+                            {getText("remove")}
                           </button>
                         </div>
-                        {/* Quantity */}
-                        <div className="w-full md:w-32 flex items-center justify-center md:justify-center mt-2 md:mt-0">
-                          <div className="flex items-center border border-gray-300 rounded">
+                        <p className="text-xs text-slate-500">
+                          {[item.brand, item.color]
+                            .filter(Boolean)
+                            .join(" • ")}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-3 text-sm">
+                          <span className="font-semibold text-slate-900">
+                            ${itemPrice.toFixed(2)} / unit
+                          </span>
+                          <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                            {inStockLabel}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
+                          <div className="inline-flex items-center rounded-full border border-slate-200 bg-white">
                             <button
                               onClick={() =>
                                 handleUpdateQuantity(item, item.quantity - 1)
                               }
-                              className="px-2 py-1 text-gray-600 hover:bg-gray-100"
+                              className="rounded-l-full px-3 py-1 text-slate-600 hover:bg-slate-100 disabled:opacity-40"
                               disabled={item.quantity <= 1}
                             >
                               <Minus size={14} />
                             </button>
-                            <span className="px-3 py-1">{item.quantity}</span>
+                            <span className="px-4 py-1 font-semibold text-slate-900">
+                              {item.quantity}
+                            </span>
                             <button
                               onClick={() =>
                                 handleUpdateQuantity(item, item.quantity + 1)
                               }
-                              className="px-2 py-1 text-gray-600 hover:bg-gray-100"
+                              className="rounded-r-full px-3 py-1 text-slate-600 hover:bg-slate-100 disabled:opacity-40"
                               disabled={item.quantity >= 10}
                             >
                               <Plus size={14} />
                             </button>
                           </div>
-                        </div>
-                        {/* Price */}
-                        <div className="w-full md:w-32 text-right mt-2 md:mt-0">
-                          <span className="font-medium">
-                            ${itemPrice.toFixed(2)}
-                          </span>
-                        </div>
-                        {/* Total */}
-                        <div className="w-full md:w-32 text-right mt-2 md:mt-0">
-                          <span className="font-medium">
-                            ${itemTotal.toFixed(2)}
-                          </span>
+                          <div className="text-right">
+                            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+                              {totalLabel}
+                            </p>
+                            <p className="text-lg font-semibold text-slate-900">
+                              ${itemTotal.toFixed(2)}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              )}
+                    </div>
+                  </BlurCard>
+                );
+              })}
             </div>
+          )}
+        </div>
 
-            {items.length > 0 && (
-              <div className="flex flex-col md:flex-row justify-end items-end py-4 text-lg">
-                <span className="font-medium text-right">
-                  {getText("subtotal")} ({totalItems} {getText("items")}):
+        <div className="w-full lg:w-96">
+          <BlurCard className="space-y-5 p-6 lg:sticky lg:top-24">
+            <div className="rounded-2xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-3 text-white">
+              <p className="text-xs uppercase tracking-[0.4em]">
+                Delivery savings
+              </p>
+              <p className="text-sm">
+                {getText("qualifies_for_delivery")}{" "}
+                <span className="font-semibold">{getText("free_delivery")}</span>
+              </p>
+            </div>
+            <div className="space-y-2">
+              <label
+                htmlFor="promo"
+                className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500"
+              >
+                {promoLabel}
+              </label>
+              <div className="flex gap-2">
+                <Input
+                  id="promo"
+                  placeholder="e.g. INSTALL10"
+                  disabled
+                  className="rounded-full border-slate-200 bg-white"
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="rounded-full bg-slate-900 px-4 py-2 text-white"
+                  disabled
+                >
+                  Apply
+                </Button>
+              </div>
+            </div>
+            <div className="space-y-2 text-sm text-slate-600">
+              <div className="flex justify-between">
+                <span>
+                  {subtotalLabel} ({totalItems} {itemsLabel})
                 </span>
-                <span className="ml-2 font-bold text-right">
+                <span className="font-semibold text-slate-900">
                   ${totalAmount.toFixed(2)}
                 </span>
               </div>
-            )}
-          </div>
-        </div>
-        {/* Order Summary Side Box */}
-        <div className={`w-full md:w-80 ${getTopMarginClass()}`}>
-          <div className="bg-white rounded-sm shadow-sm p-7 border border-gray-200 flex flex-col gap-4">
-            <div className="text-md md:text-lg text-gray-700">
-              {getText("subtotal")} (<span>{totalItems}</span> {getText("items")}):
-              <span className="font-bold ml-1">${totalAmount.toFixed(2)}</span>
+              <div className="flex justify-between">
+                <span>Estimated taxes</span>
+                <span className="font-semibold text-slate-900">
+                  ${(totalAmount * 0.08).toFixed(2)}
+                </span>
+              </div>
             </div>
-            {items.length > 0 && (
-              <>
-                <div className="text-green-700 text-sm mb-2">
-                  {getText("qualifies_for_delivery")}{" "}
-                  <span className="font-semibold">{getText("free_delivery")}</span>
-                </div>
-                <div className="flex items-center mb-2">
-                  <input type="checkbox" className="rounded mr-2" id="gift" />
-                  <label htmlFor="gift" className="text-sm">
-                    {getText("gift_checkbox")}
-                  </label>
-                </div>
-
-                <SeedLink href="/checkout">
-                  <Button
-                    id={getId("checkout_button")}
-                    className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
-                    onClick={handleProceedToCheckout}
-                  >
-                    {getText("proceed_to_checkout")}
-                  </Button>
-                </SeedLink>
-              </>
-            )}
-            {items.length === 0 && (
+            <div className="flex items-center justify-between border-t border-white/50 pt-3">
+              <span className="text-sm font-semibold text-slate-600">
+                {orderTotalLabel}:
+              </span>
+              <span className="text-2xl font-semibold text-slate-900">
+                ${(totalAmount * 1.08).toFixed(2)}
+              </span>
+            </div>
+            {items.length > 0 ? (
+              <SeedLink href="/checkout">
+                <Button
+                  id={getId("checkout_button")}
+                  className="w-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-4 text-lg font-semibold text-white shadow-lg"
+                  onClick={handleProceedToCheckout}
+                >
+                  {getText("proceed_to_checkout", "Checkout")}
+                </Button>
+              </SeedLink>
+            ) : (
               <Button
                 id={getId("checkout_button")}
-                className={`w-full font-semibold py-5 text-lg bg-amazon-yellow hover:bg-amazon-darkYellow text-white rounded-md ${getTopMarginClass()}`}
+                className="w-full rounded-full bg-slate-200 px-6 py-4 text-lg font-semibold text-slate-500"
                 disabled
                 onClick={handleProceedToCheckout}
               >
-                {getText("proceed_to_checkout")}
+                {getText("proceed_to_checkout", "Checkout")}
               </Button>
             )}
-          </div>
+            <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4" />
+                Buyer protection
+              </div>
+              <div className="flex items-center gap-2">
+                <Truck className="h-4 w-4" />
+                Fast routing
+              </div>
+              <div className="flex items-center gap-2">
+                <BadgeCheck className="h-4 w-4" />
+                Verified partners
+              </div>
+            </div>
+          </BlurCard>
         </div>
       </div>
     </div>

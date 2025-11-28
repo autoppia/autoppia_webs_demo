@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/utils/dynamicDataProvider";
+import { getLayoutConfig } from "@/dynamic/v2-data";
 
 export function BodyWrapper({ children }: { children: React.ReactNode }) {
   const { seed } = useSeed();

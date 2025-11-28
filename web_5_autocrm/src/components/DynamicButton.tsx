@@ -2,7 +2,7 @@
 
 import { useState, useEffect, ButtonHTMLAttributes, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { useSeedLayout } from "@/library/useSeedLayout";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { EVENT_TYPES } from "@/library/events";
 
 interface DynamicButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

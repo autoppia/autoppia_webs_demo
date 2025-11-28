@@ -146,9 +146,8 @@ export async function generateProjectData(
 
 export function isDataGenerationEnabled(): boolean {
   const val = (
-    process.env.NEXT_PUBLIC_ENABLE_DATA_GENERATION ??
-    process.env.NEXT_PUBLIC_DATA_GENERATION ??
-    process.env.ENABLE_DATA_GENERATION ??
+    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE ??
+    process.env.ENABLE_DYNAMIC_V2_AI_GENERATE ??
     ""
   )
     .toString()

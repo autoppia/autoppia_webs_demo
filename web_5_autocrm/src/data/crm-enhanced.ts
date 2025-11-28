@@ -26,6 +26,12 @@ const CACHE_KEYS = {
   logs: "autocrm_generated_logs_v1",
 };
 
+// Note: v2Seed is now passed directly to initializeClients, initializeMatters, etc.
+// This function is kept for backward compatibility but should use the seed parameter
+function getActiveSeed(defaultSeed: number = 1): number {
+  return getSeedValueFromEnv(defaultSeed);
+}
+
 // Dynamic data arrays
 let dynamicClients: any[] = isDataGenerationAvailable() ? [] : [...originalClients];
 let dynamicMatters: any[] = isDataGenerationAvailable() ? [] : [...DEMO_MATTERS];
@@ -121,57 +127,67 @@ function normalizeMatter(matter: any, index: number): any {
 }
 
 /**
+ * Get v2 seed from window (synchronized by SeedContext)
+ */
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autocrmV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
+  }
+  return null;
+};
+
+/**
  * Initialize clients with data generation if enabled
  */
-export async function initializeClients(): Promise<any[]> {
-  if (isDataGenerationAvailable()) {
-    try {
-      // Use cache only if unique mode is disabled
-      if (!isUniqueGenerationEnabled()) {
-        const cached = readCachedClients();
-        if (cached && cached.length > 0) {
-          dynamicClients = cached.map(normalizeClient);
-          return dynamicClients;
-        }
-      }
+export async function initializeClients(v2SeedValue?: number | null): Promise<any[]> {
+  // Check if v2 (DB mode) is enabled
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
 
-      console.log("🚀 Starting async data generation for clients...");
-      console.log("📡 Using API:", process.env.API_URL || "http://app:8080");
-
-      const count = DATA_GENERATION_CONFIG.DEFAULT_CLIENTS_COUNT;
-      const categories = DATA_GENERATION_CONFIG.AVAILABLE_CLIENT_CATEGORIES;
-
-      console.log(`📊 Will generate ${count} clients`);
-      console.log(`🏷️  Categories: ${categories.join(", ")}`);
-
-      const generatedClients = await generateClientsWithFallback(
-        [],
-        count,
-        categories
-      );
-
-      // Normalize status field to one of the allowed categories
-      const allowed = new Set(categories);
-      const normalized = generatedClients.map((c, i) => ({
-        ...normalizeClient(c, i),
-        status: allowed.has(c.status || "") ? c.status : "Active",
-      }));
-
-      dynamicClients = normalized;
-      // Cache only if unique mode is disabled
-      if (!isUniqueGenerationEnabled()) {
-        writeCachedClients(dynamicClients);
-      }
-      return dynamicClients;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate clients while generation is enabled. Keeping clients empty until ready. Error:", error);
-      dynamicClients = [];
-      return dynamicClients;
+  // Determine the seed to use
+  let effectiveSeed: number;
+  
+  if (dbModeEnabled) {
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined") {
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
+    // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
+    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
-    console.log("ℹ️ Data generation is disabled, using original static clients");
-    dynamicClients = originalClients;
-    return dynamicClients;
+    // If v2 is NOT enabled, automatically use seed=1
+    effectiveSeed = 1;
+  }
+
+  // Load from DB with the determined seed
+  try {
+    // Clear existing clients to force fresh load
+    dynamicClients = [];
+    const fromDb = await fetchSeededSelection<any>({
+      projectKey: "web_5_autocrm",
+      entityType: "clients",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "status",
+    });
+    
+    console.log(`[autocrm] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+    
+    if (fromDb && fromDb.length > 0) {
+      dynamicClients = fromDb.map(normalizeClient);
+      return dynamicClients;
+    } else {
+      console.warn(`[autocrm] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[autocrm] No data found for seed=${effectiveSeed}`);
+    }
+  } catch (err) {
+    console.error(`[autocrm] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    throw err;
   }
 }
 
@@ -322,13 +338,13 @@ export async function initializeLogs(): Promise<any[]> {
 }
 
 // Runtime-only DB fetch for when DB mode is enabled
-export async function loadClientsFromDb(): Promise<any[]> {
+export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
   
   try {
-    const seed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
     const limit = 100;
     const selected = await fetchSeededSelection<any>({
       projectKey: "web_5_autocrm",
@@ -375,16 +391,16 @@ export async function loadClientsFromDb(): Promise<any[]> {
   return [];
 }
 
-export async function loadMattersFromDb(): Promise<any[]> {
+export async function loadMattersFromDb(seedOverride?: number): Promise<any[]> {
   if (!isDbLoadModeEnabled()) {
     return [];
   }
   
   try {
-    const seed = getSeedValueFromEnv(1);
+    const seed = typeof seedOverride === "number" ? seedOverride : getActiveSeed(1);
     const limit = 100;
     const selected = await fetchSeededSelection<any>({
-      projectKey: "web_5_autocrm:matters",
+      projectKey: "web_5_autocrm",
       entityType: "matters",
       seedValue: seed,
       limit,

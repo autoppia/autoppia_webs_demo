@@ -10,15 +10,21 @@ import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import UserSearchBar from "@/components/UserSearchBar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeed } from "@/library/useSeed";
-import { getLayoutClasses, getShuffledItems } from "@/library/layouts";
-import { useDynamicStructure } from "@/context/DynamicStructureContext";
-import { dynamicDataProvider } from "@/utils/dynamicDataProvider";
+import { useSeed } from "@/context/SeedContext";
+import {
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+  getShuffledItems,
+} from "@/dynamic/v1-layouts";
+import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
 
 function HomeContent() {
-  const { seed, layout } = useSeed();
-  const { getText, getClass } = useDynamicStructure();
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
+  const layout = getEffectiveLayoutConfig(layoutSeed);
+  const { getText, getClass } = useV3Attributes();
 
   // Get data from dynamic provider
   const users = dynamicDataProvider.getUsers();
@@ -112,7 +118,7 @@ function HomeContent() {
     });
   }
 
-  const shuffledPosts = getShuffledItems(posts, layout.feedOrder);
+  const shuffledPosts = getShuffledItems(posts, layoutSeed);
   const sidebarClasses = getLayoutClasses(layout, 'sidebarPosition');
   const postBoxClasses = getLayoutClasses(layout, 'postBoxPosition');
   const searchClasses = getLayoutClasses(layout, 'searchPosition');

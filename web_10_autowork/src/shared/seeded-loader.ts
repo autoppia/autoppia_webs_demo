@@ -1,4 +1,9 @@
-import { getApiBaseUrl } from "./data-generator";
+function getApiBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+  }
+  return process.env.API_URL || "http://app:8080";
+}
 
 export interface SeededLoadOptions {
   projectKey: string;
@@ -11,15 +16,13 @@ export interface SeededLoadOptions {
 }
 
 export function isDbLoadModeEnabled(): boolean {
-  const raw = (process.env.NEXT_PUBLIC_ENABLE_DB_MODE || process.env.ENABLE_DB_MODE || "").toString().toLowerCase();
+  const raw = (process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE || process.env.ENABLE_DYNAMIC_V2_DB_MODE || "").toString().toLowerCase();
   return raw === "true";
 }
 
 export function getSeedValueFromEnv(defaultSeed: number = 1): number {
-  const raw = (process.env.NEXT_PUBLIC_DATA_SEED_VALUE || process.env.DATA_SEED_VALUE || "").toString();
-  const parsed = Number(raw);
-  if (!Number.isFinite(parsed) || parsed <= 0) return defaultSeed;
-  return Math.floor(parsed);
+  // Always return default seed (v2-seed comes from URL parameter, not env vars)
+  return defaultSeed;
 }
 
 export async function fetchSeededSelection<T = any>(options: SeededLoadOptions): Promise<T[]> {
@@ -45,7 +48,20 @@ export async function fetchSeededSelection<T = any>(options: SeededLoadOptions):
     throw new Error(`Seeded selection request failed: ${resp.status}`);
   }
   const json = await resp.json();
-  return (json?.data ?? []) as T[];
+  
+  // Check if API returned an error in the response body (common pattern: {detail: "error message"})
+  if (json?.detail && typeof json.detail === 'string' && !json?.data) {
+    throw new Error(`API error: ${json.detail}`);
+  }
+  
+  // Check if data is missing or empty
+  if (!json?.data || !Array.isArray(json.data)) {
+    const errorMsg = json?.detail || `No data returned from API for ${options.entityType}`;
+    throw new Error(errorMsg);
+  }
+  
+  // Return data even if empty array - let caller decide if empty is acceptable
+  return json.data as T[];
 }
 
 

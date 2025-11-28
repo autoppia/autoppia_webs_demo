@@ -1,0 +1,74 @@
+{
+  "button-primary": [
+    "btn-care-primary",
+    "btn-clinic-primary",
+    "btn-sky-primary",
+    "btn-mint-primary",
+    "btn-sage-primary",
+    "btn-teal-primary",
+    "btn-iris-primary",
+    "btn-amber-primary",
+    "btn-rose-primary",
+    "btn-indigo-primary"
+  ],
+  "button-secondary": [
+    "btn-care-secondary",
+    "btn-clinic-secondary",
+    "btn-sky-secondary",
+    "btn-mint-secondary",
+    "btn-sage-secondary",
+    "btn-teal-secondary",
+    "btn-iris-secondary",
+    "btn-amber-secondary",
+    "btn-rose-secondary",
+    "btn-indigo-secondary"
+  ],
+  "nav-link": [
+    "nav-care-link",
+    "nav-clinic-link",
+    "nav-sky-link",
+    "nav-mint-link",
+    "nav-sage-link",
+    "nav-teal-link",
+    "nav-iris-link",
+    "nav-amber-link",
+    "nav-rose-link",
+    "nav-indigo-link"
+  ],
+  "card": [
+    "card-care",
+    "card-clinic",
+    "card-sky",
+    "card-mint",
+    "card-sage",
+    "card-teal",
+    "card-iris",
+    "card-amber",
+    "card-rose",
+    "card-indigo"
+  ],
+  "badge": [
+    "badge-care",
+    "badge-clinic",
+    "badge-sky",
+    "badge-mint",
+    "badge-sage",
+    "badge-teal",
+    "badge-iris",
+    "badge-amber",
+    "badge-rose",
+    "badge-indigo"
+  ],
+  "input": [
+    "input-care",
+    "input-clinic",
+    "input-sky",
+    "input-mint",
+    "input-sage",
+    "input-teal",
+    "input-iris",
+    "input-amber",
+    "input-rose",
+    "input-indigo"
+  ]
+}

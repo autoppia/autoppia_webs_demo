@@ -1,0 +1,2946 @@
+[
+  {
+    "id": "1",
+    "date": "2025-08-15",
+    "start": 9,
+    "end": 10,
+    "label": "Team Meeting",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Weekly sync with team.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "alice@example.com",
+      "bob@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://zoom.us/j/123456789"
+  },
+  {
+    "id": "2",
+    "date": "2025-08-16",
+    "start": 14,
+    "end": 15,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#E53935",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Annual checkup.",
+    "location": "Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-16",
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "3",
+    "date": "2025-08-17",
+    "start": 11,
+    "end": 12,
+    "label": "Project Demo",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Demo for client.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": "2025-08-17",
+    "attendees": [
+      "client@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": "https://meet.google.com/abc-defg-hij"
+  },
+  {
+    "id": "4",
+    "date": "2025-08-18",
+    "start": 8,
+    "end": 9,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      8,
+      0
+    ],
+    "endTime": [
+      9,
+      0
+    ],
+    "description": "Morning yoga at the park.",
+    "location": "Central Park",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-08-25",
+    "attendees": [
+      "jane@example.com"
+    ],
+    "reminders": [
+      10
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "5",
+    "date": "2025-08-19",
+    "start": 19,
+    "end": 21,
+    "label": "Movie Night",
+    "calendar": "Friends",
+    "color": "#FBC02D",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Watching the latest blockbuster.",
+    "location": "Cinema City",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "bob@example.com",
+      "alice@example.com"
+    ],
+    "reminders": [
+      120
+    ],
+    "busy": false,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "6",
+    "date": "2025-08-20",
+    "start": 13,
+    "end": 14,
+    "label": "Lunch with Mentor",
+    "calendar": "Personal",
+    "color": "#8E24AA",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Catch up and career advice.",
+    "location": "Cafe Delight",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "mentor@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "7",
+    "date": "2025-08-21",
+    "start": 17,
+    "end": 18,
+    "label": "Parent-Teacher Meeting",
+    "calendar": "Family",
+    "color": "#D81B60",
+    "startTime": [
+      17,
+      0
+    ],
+    "endTime": [
+      18,
+      0
+    ],
+    "description": "Discuss progress at school.",
+    "location": "Greenwood School",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "teacher@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": ""
+  },
+  {
+    "id": "8",
+    "date": "2025-08-22",
+    "start": 10,
+    "end": 12,
+    "label": "Hackathon",
+    "calendar": "Work",
+    "color": "#1976D2",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Internal company hackathon.",
+    "location": "HQ - Main Hall",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "dev1@example.com",
+      "dev2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": "https://meet.google.com/hackathon-2025"
+  },
+  {
+    "id": "9",
+    "date": "2025-08-13",
+    "start": 8,
+    "end": 9,
+    "label": "Morning Run",
+    "calendar": "Wellness",
+    "color": "#43A047",
+    "startTime": [
+      8,
+      0
+    ],
+    "endTime": [
+      9,
+      0
+    ],
+    "description": "Running with friends in the park.",
+    "location": "Riverside Park",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-08-20",
+    "attendees": [
+      "friend@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "10",
+    "date": "2025-08-25",
+    "start": 16,
+    "end": 17,
+    "label": "Sprint Planning",
+    "calendar": "Work",
+    "color": "#2196F3",
+    "startTime": [
+      16,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Plan tasks for next sprint.",
+    "location": "Zoom",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-11-01",
+    "attendees": [
+      "team@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "default",
+    "meetingLink": "https://meet.google.com/sprint-plan"
+  },
+  {
+    "id": "11",
+    "date": "2025-09-01",
+    "start": 9,
+    "end": 10,
+    "label": "Team Standup",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Daily team standup meeting.",
+    "location": "Office - Conference Room A",
+    "allDay": false,
+    "recurrence": "daily",
+    "recurrenceEndDate": "2025-09-30",
+    "attendees": [
+      "teamlead@example.com",
+      "developer@example.com",
+      "designer@example.com"
+    ],
+    "reminders": [
+      10
+    ],
+    "busy": true,
+    "visibility": "public",
+    "meetingLink": "https://meet.google.com/team-standup"
+  },
+  {
+    "id": "12",
+    "date": "2025-09-05",
+    "start": 18,
+    "end": 20,
+    "label": "Family Dinner",
+    "calendar": "Family",
+    "color": "#F44336",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Monthly family dinner at home.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2025-12-05",
+    "attendees": [
+      "mom@example.com",
+      "dad@example.com",
+      "sibling@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "13",
+    "date": "2025-09-10",
+    "start": 14,
+    "end": 15,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Weekly yoga class for relaxation.",
+    "location": "Yoga Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-11-30",
+    "attendees": [
+      "yoga_friend@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "14",
+    "date": "2025-09-15",
+    "start": 20,
+    "end": 21,
+    "label": "Movie Night",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      20,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Watch a movie with friends.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "15",
+    "date": "2025-09-20",
+    "start": 11,
+    "end": 12,
+    "label": "Doctor Appointment",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Regular check-up with the doctor.",
+    "location": "Health Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "16",
+    "date": "2025-09-25",
+    "start": 9,
+    "end": 10,
+    "label": "Team Meeting",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Weekly team sync-up.",
+    "location": "Conference Room A",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      10
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/16"
+  },
+  {
+    "id": "17",
+    "date": "2025-09-30",
+    "start": 18,
+    "end": 19,
+    "label": "Dinner with Family",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Family gathering for dinner.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "18",
+    "date": "2025-10-01",
+    "start": 10,
+    "end": 11,
+    "label": "Grocery Shopping",
+    "calendar": "Personal",
+    "color": "#8BC34A",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Weekly grocery shopping.",
+    "location": "Local Supermarket",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "19",
+    "date": "2025-10-05",
+    "start": 15,
+    "end": 16,
+    "label": "Fitness Class",
+    "calendar": "Wellness",
+    "color": "#E91E63",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Group fitness class for all levels.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2025-12-31",
+    "attendees": [
+      "fitness_friend@example.com"
+    ],
+    "reminders": [
+      10
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "20",
+    "date": "2025-10-10",
+    "start": 19,
+    "end": 21,
+    "label": "Game Night",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Board games with friends.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com",
+      "friend3@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "21",
+    "date": "2025-10-15",
+    "start": 14,
+    "end": 15,
+    "label": "Project Deadline",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Deadline for project submission.",
+    "location": "N/A",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      120
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "22",
+    "date": "2025-10-20",
+    "start": 8,
+    "end": 9,
+    "label": "Morning Run",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      8,
+      0
+    ],
+    "endTime": [
+      9,
+      0
+    ],
+    "description": "Morning run in the park.",
+    "location": "City Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "23",
+    "date": "2025-10-25",
+    "start": 17,
+    "end": 18,
+    "label": "Family Movie Night",
+    "calendar": "Family",
+    "color": "#FFC107",
+    "startTime": [
+      17,
+      0
+    ],
+    "endTime": [
+      18,
+      0
+    ],
+    "description": "Watch a family-friendly movie.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "24",
+    "date": "2025-10-30",
+    "start": 16,
+    "end": 17,
+    "label": "Coffee Break",
+    "calendar": "Work",
+    "color": "#9C27B0",
+    "startTime": [
+      16,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Short break for coffee.",
+    "location": "Café",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      5
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "25",
+    "date": "2025-11-01",
+    "start": 11,
+    "end": 12,
+    "label": "Visit Grandma",
+    "calendar": "Family",
+    "color": "#8BC34A",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Spend time with grandma.",
+    "location": "Grandma's House",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "26",
+    "date": "2025-11-05",
+    "start": 13,
+    "end": 14,
+    "label": "Lunch with Colleagues",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      13,
+      0
+    ],
+    "endTime": [
+      14,
+      0
+    ],
+    "description": "Lunch meeting with the team.",
+    "location": "Nearby Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "27",
+    "date": "2025-11-10",
+    "start": 20,
+    "end": 21,
+    "label": "Cooking Class",
+    "calendar": "Wellness",
+    "color": "#E91E63",
+    "startTime": [
+      20,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Learn new recipes and cooking techniques.",
+    "location": "Culinary School",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "28",
+    "date": "2025-11-15",
+    "start": 9,
+    "end": 10,
+    "label": "Family Brunch",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Family gathering for brunch.",
+    "location": "Local Café",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "29",
+    "date": "2025-11-20",
+    "start": 19,
+    "end": 20,
+    "label": "Book Club Meeting",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Discuss the latest book.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "monthly",
+    "recurrenceEndDate": "2026-11-20",
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "30",
+    "date": "2025-11-25",
+    "start": 14,
+    "end": 15,
+    "label": "Project Kickoff",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Kickoff meeting for new project.",
+    "location": "Conference Room B",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/30"
+  },
+  {
+    "id": "31",
+    "date": "2025-12-01",
+    "start": 10,
+    "end": 11,
+    "label": "Yoga Class",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Weekly yoga class for relaxation.",
+    "location": "Yoga Studio",
+    "allDay": false,
+    "recurrence": "weekly",
+    "recurrenceEndDate": "2026-02-28",
+    "attendees": [
+      "yoga_friend@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "32",
+    "date": "2025-12-05",
+    "start": 19,
+    "end": 20,
+    "label": "Dinner with Friends",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Catch up over dinner.",
+    "location": "Italian Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "33",
+    "date": "2025-12-10",
+    "start": 15,
+    "end": 16,
+    "label": "Volunteer at Shelter",
+    "calendar": "Personal",
+    "color": "#8BC34A",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Help out at the local shelter.",
+    "location": "Community Shelter",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "34",
+    "date": "2025-12-15",
+    "start": 12,
+    "end": 13,
+    "label": "Holiday Party",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      12,
+      0
+    ],
+    "endTime": [
+      13,
+      0
+    ],
+    "description": "Annual holiday celebration.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "35",
+    "date": "2025-12-20",
+    "start": 18,
+    "end": 19,
+    "label": "Family Gathering",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Family gathering for the holidays.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "36",
+    "date": "2025-12-25",
+    "start": 10,
+    "end": 11,
+    "label": "Christmas Celebration",
+    "calendar": "Family",
+    "color": "#8BC34A",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Celebrate Christmas with family.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "37",
+    "date": "2026-01-01",
+    "start": 21,
+    "end": 22,
+    "label": "New Year's Party",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      21,
+      0
+    ],
+    "endTime": [
+      22,
+      0
+    ],
+    "description": "Celebrate the New Year with friends.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "38",
+    "date": "2026-01-05",
+    "start": 10,
+    "end": 11,
+    "label": "Fitness Assessment",
+    "calendar": "Wellness",
+    "color": "#E91E63",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Annual fitness assessment.",
+    "location": "Fitness Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "39",
+    "date": "2026-01-10",
+    "start": 14,
+    "end": 15,
+    "label": "Work Review Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Review work progress and goals.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/39"
+  },
+  {
+    "id": "40",
+    "date": "2026-01-15",
+    "start": 18,
+    "end": 19,
+    "label": "Dinner with Colleagues",
+    "calendar": "Work",
+    "color": "#FF9800",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Networking dinner with colleagues.",
+    "location": "Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "41",
+    "date": "2026-01-20",
+    "start": 9,
+    "end": 10,
+    "label": "Morning Meditation",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Start the day with meditation.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "42",
+    "date": "2026-01-25",
+    "start": 16,
+    "end": 17,
+    "label": "Family Game Night",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      16,
+      0
+    ],
+    "endTime": [
+      17,
+      0
+    ],
+    "description": "Family game night with board games.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "43",
+    "date": "2026-01-30",
+    "start": 10,
+    "end": 11,
+    "label": "Health Check-up",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Annual health check-up.",
+    "location": "Health Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "44",
+    "date": "2026-02-01",
+    "start": 14,
+    "end": 15,
+    "label": "Work Presentation",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Presentation of project findings.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/44"
+  },
+  {
+    "id": "45",
+    "date": "2026-02-05",
+    "start": 18,
+    "end": 19,
+    "label": "Family Dinner",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Family dinner to catch up.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "46",
+    "date": "2026-02-10",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Workshop",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Workshop on wellness practices.",
+    "location": "Community Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "47",
+    "date": "2026-02-15",
+    "start": 19,
+    "end": 20,
+    "label": "Friends Reunion",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Reunion dinner with old friends.",
+    "location": "Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "48",
+    "date": "2026-02-20",
+    "start": 10,
+    "end": 11,
+    "label": "Health Workshop",
+    "calendar": "Wellness",
+    "color": "#E91E63",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Workshop on health and nutrition.",
+    "location": "Community Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "49",
+    "date": "2026-02-25",
+    "start": 14,
+    "end": 15,
+    "label": "Work Strategy Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Discuss strategies for upcoming projects.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/49"
+  },
+  {
+    "id": "50",
+    "date": "2026-03-01",
+    "start": 18,
+    "end": 19,
+    "label": "Family Outing",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Family outing to the zoo.",
+    "location": "City Zoo",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "51",
+    "date": "2026-03-05",
+    "start": 11,
+    "end": 12,
+    "label": "Doctor's Appointment",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      11,
+      0
+    ],
+    "endTime": [
+      12,
+      0
+    ],
+    "description": "Routine check-up with the doctor.",
+    "location": "Health Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "52",
+    "date": "2026-03-10",
+    "start": 19,
+    "end": 20,
+    "label": "Movie Night",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Watch a movie with friends.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "53",
+    "date": "2026-03-15",
+    "start": 9,
+    "end": 10,
+    "label": "Morning Yoga",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      9,
+      0
+    ],
+    "endTime": [
+      10,
+      0
+    ],
+    "description": "Start the day with yoga.",
+    "location": "Yoga Studio",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      15
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "54",
+    "date": "2026-03-20",
+    "start": 18,
+    "end": 19,
+    "label": "Dinner with Family",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Family dinner to catch up.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "55",
+    "date": "2026-03-25",
+    "start": 14,
+    "end": 15,
+    "label": "Work Workshop",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Workshop on professional development.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/55"
+  },
+  {
+    "id": "56",
+    "date": "2026-03-30",
+    "start": 19,
+    "end": 20,
+    "label": "Friends Game Night",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Game night with friends.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "57",
+    "date": "2026-04-01",
+    "start": 10,
+    "end": 11,
+    "label": "Health Screening",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Annual health screening.",
+    "location": "Health Clinic",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": ""
+  },
+  {
+    "id": "58",
+    "date": "2026-04-05",
+    "start": 14,
+    "end": 15,
+    "label": "Quarterly Review",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Review quarterly performance.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/58"
+  },
+  {
+    "id": "59",
+    "date": "2026-04-10",
+    "start": 18,
+    "end": 19,
+    "label": "Family Picnic",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Family picnic at the park.",
+    "location": "City Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "60",
+    "date": "2026-04-15",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Check",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Check on wellness goals.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "61",
+    "date": "2026-04-20",
+    "start": 19,
+    "end": 20,
+    "label": "Dinner with Neighbors",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Dinner with neighbors to socialize.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "neighbor1@example.com",
+      "neighbor2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "62",
+    "date": "2026-04-25",
+    "start": 14,
+    "end": 15,
+    "label": "Work Planning Session",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Planning session for upcoming projects.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/62"
+  },
+  {
+    "id": "63",
+    "date": "2026-05-01",
+    "start": 10,
+    "end": 11,
+    "label": "Personal Development Course",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Course on personal development skills.",
+    "location": "Online",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "64",
+    "date": "2026-05-05",
+    "start": 15,
+    "end": 16,
+    "label": "Family Game Night",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      15,
+      0
+    ],
+    "endTime": [
+      16,
+      0
+    ],
+    "description": "Game night with family.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "65",
+    "date": "2026-05-10",
+    "start": 20,
+    "end": 21,
+    "label": "Dinner with Friends",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      20,
+      0
+    ],
+    "endTime": [
+      21,
+      0
+    ],
+    "description": "Dinner at a new restaurant.",
+    "location": "New Restaurant",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "66",
+    "date": "2026-05-15",
+    "start": 14,
+    "end": 15,
+    "label": "Work Conference",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Attend an industry conference.",
+    "location": "Convention Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/66"
+  },
+  {
+    "id": "67",
+    "date": "2026-05-20",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Check-in",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Check on wellness progress.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "68",
+    "date": "2026-05-25",
+    "start": 18,
+    "end": 19,
+    "label": "Family BBQ",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "BBQ with family in the backyard.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "69",
+    "date": "2026-06-01",
+    "start": 10,
+    "end": 11,
+    "label": "Personal Reflection",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Time for personal reflection and goal setting.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "70",
+    "date": "2026-06-05",
+    "start": 14,
+    "end": 15,
+    "label": "Work Team Building",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Team building activities.",
+    "location": "Outdoor Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/70"
+  },
+  {
+    "id": "71",
+    "date": "2026-06-10",
+    "start": 19,
+    "end": 20,
+    "label": "Friends BBQ",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "BBQ with friends at the park.",
+    "location": "City Park",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "72",
+    "date": "2026-06-15",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Retreat",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Retreat focused on wellness and mindfulness.",
+    "location": "Retreat Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "73",
+    "date": "2026-06-20",
+    "start": 19,
+    "end": 20,
+    "label": "Family Movie Night",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Watch a family-friendly movie together.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "74",
+    "date": "2026-06-25",
+    "start": 14,
+    "end": 15,
+    "label": "Work Feedback Session",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Session for feedback on work projects.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/74"
+  },
+  {
+    "id": "75",
+    "date": "2026-07-01",
+    "start": 10,
+    "end": 11,
+    "label": "Personal Goal Setting",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Set personal goals for the month.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "76",
+    "date": "2026-07-05",
+    "start": 19,
+    "end": 20,
+    "label": "Friends Night Out",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Night out with friends.",
+    "location": "Local Bar",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "77",
+    "date": "2026-07-10",
+    "start": 14,
+    "end": 15,
+    "label": "Work Team Lunch",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Team lunch to discuss progress.",
+    "location": "Café",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/77"
+  },
+  {
+    "id": "78",
+    "date": "2026-07-15",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Check-in",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Check on wellness goals.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "79",
+    "date": "2026-07-20",
+    "start": 19,
+    "end": 20,
+    "label": "Family Dinner",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Dinner with family.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "80",
+    "date": "2026-07-25",
+    "start": 14,
+    "end": 15,
+    "label": "Work Review Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Review of project milestones.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/80"
+  },
+  {
+    "id": "81",
+    "date": "2026-08-01",
+    "start": 10,
+    "end": 11,
+    "label": "Personal Reflection",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Time for personal reflection and planning.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "82",
+    "date": "2026-08-05",
+    "start": 18,
+    "end": 19,
+    "label": "Friends Gathering",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      18,
+      0
+    ],
+    "endTime": [
+      19,
+      0
+    ],
+    "description": "Gathering with friends for dinner.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "83",
+    "date": "2026-08-10",
+    "start": 14,
+    "end": 15,
+    "label": "Work Strategy Session",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Strategize for upcoming projects.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/83"
+  },
+  {
+    "id": "84",
+    "date": "2026-08-15",
+    "start": 19,
+    "end": 20,
+    "label": "Family Movie Night",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Watch a family movie together.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "85",
+    "date": "2026-08-20",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Workshop",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Workshop on wellness practices.",
+    "location": "Community Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "86",
+    "date": "2026-08-25",
+    "start": 14,
+    "end": 15,
+    "label": "Work Feedback Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Feedback session on work projects.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/86"
+  },
+  {
+    "id": "87",
+    "date": "2026-09-01",
+    "start": 10,
+    "end": 11,
+    "label": "Personal Development Session",
+    "calendar": "Personal",
+    "color": "#9C27B0",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Session for personal development.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "88",
+    "date": "2026-09-05",
+    "start": 19,
+    "end": 20,
+    "label": "Friends Night Out",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Night out with friends.",
+    "location": "Local Bar",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "89",
+    "date": "2026-09-10",
+    "start": 14,
+    "end": 15,
+    "label": "Work Planning Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Meeting to plan upcoming projects.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/89"
+  },
+  {
+    "id": "90",
+    "date": "2026-09-15",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Check-in",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Check on wellness goals.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "91",
+    "date": "2026-09-20",
+    "start": 19,
+    "end": 20,
+    "label": "Family Dinner",
+    "calendar": "Family",
+    "color": "#FFEB3B",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Dinner with family.",
+    "location": "Home",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "family_member1@example.com",
+      "family_member2@example.com"
+    ],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "92",
+    "date": "2026-09-25",
+    "start": 14,
+    "end": 15,
+    "label": "Work Review Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Review of project progress.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/92"
+  },
+  {
+    "id": "93",
+    "date": "2026-09-30",
+    "start": 19,
+    "end": 20,
+    "label": "Friends Gathering",
+    "calendar": "Friends",
+    "color": "#3F51B5",
+    "startTime": [
+      19,
+      0
+    ],
+    "endTime": [
+      20,
+      0
+    ],
+    "description": "Gathering with friends for dinner.",
+    "location": "Friend's house",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "friend1@example.com",
+      "friend2@example.com"
+    ],
+    "reminders": [
+      60
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "94",
+    "date": "2026-10-05",
+    "start": 10,
+    "end": 11,
+    "label": "Wellness Workshop",
+    "calendar": "Wellness",
+    "color": "#4CAF50",
+    "startTime": [
+      10,
+      0
+    ],
+    "endTime": [
+      11,
+      0
+    ],
+    "description": "Workshop on wellness practices.",
+    "location": "Community Center",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [],
+    "reminders": [
+      30
+    ],
+    "busy": false,
+    "visibility": "public",
+    "meetingLink": ""
+  },
+  {
+    "id": "95",
+    "date": "2026-10-10",
+    "start": 14,
+    "end": 15,
+    "label": "Work Strategy Meeting",
+    "calendar": "Work",
+    "color": "#FF5722",
+    "startTime": [
+      14,
+      0
+    ],
+    "endTime": [
+      15,
+      0
+    ],
+    "description": "Meeting to strategize for upcoming work.",
+    "location": "Office",
+    "allDay": false,
+    "recurrence": "none",
+    "recurrenceEndDate": null,
+    "attendees": [
+      "team_member1@example.com",
+      "team_member2@example.com"
+    ],
+    "reminders": [
+      15
+    ],
+    "busy": true,
+    "visibility": "private",
+    "meetingLink": "https://example.com/meeting/95"
+  }
+]

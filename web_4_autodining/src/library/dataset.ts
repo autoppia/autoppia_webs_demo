@@ -619,17 +619,32 @@ function writeCachedRestaurants(items: RestaurantGenerated[]): void {
 
 // Normalization
 function normalizeRestaurants(items: RestaurantGenerated[]): RestaurantGenerated[] {
-  return items.map((r, index) => ({
-    id: r.id || `gen-${index + 1}`,
-    name: r.name || `Restaurant ${index + 1}`,
-    image: r.image?.startsWith("/images/") ? r.image : `/images/restaurant${(index % 19) + 1}.jpg`,
-    cuisine: r.cuisine || "International",
-    area: r.area || "Downtown",
-    reviews: r.reviews ?? 0,
-    stars: r.stars ?? 4,
-    price: r.price || "$$",
-    bookings: r.bookings ?? 0,
-  }));
+  return items.map((r, index) => {
+    const fallbackName = (r as any)?.namepool;
+    const normalizedName = typeof r.name === "string" && r.name.trim().length > 0
+      ? r.name.trim()
+      : typeof fallbackName === "string" && fallbackName.trim().length > 0
+        ? fallbackName.trim()
+        : `Restaurant ${index + 1}`;
+
+    const providedImage = r.image;
+    const normalizedImage =
+      typeof providedImage === "string" && providedImage.trim().length > 0
+        ? providedImage
+        : `/images/restaurant${(index % 19) + 1}.jpg`;
+
+    return {
+      id: r.id || `gen-${index + 1}`,
+      name: normalizedName,
+      image: normalizedImage,
+      cuisine: r.cuisine || (r as any)?.cuisine || "International",
+      area: r.area || (r as any)?.area || "Downtown",
+      reviews: r.reviews ?? 0,
+      stars: r.stars ?? 4,
+      price: r.price || (r as any)?.staticPrices || "$$",
+      bookings: r.bookings ?? (r as any)?.staticBookings ?? 0,
+    };
+  });
 }
 
 export let dynamicRestaurants: RestaurantGenerated[] = [];
@@ -650,92 +665,45 @@ export function getRestaurants(): RestaurantGenerated[] {
     }));
 }
 
-export async function initializeRestaurants(): Promise<RestaurantGenerated[]> {
-  // If DB mode is enabled, skip the local cache so changes take effect immediately
-  let skipCache = false;
+export async function initializeRestaurants(seedValue?: number | null): Promise<RestaurantGenerated[]> {
+  // Check if v2 (DB mode) is enabled
+  let dbModeEnabled = false;
   try {
     const { isDbLoadModeEnabled } = await import("@/shared/seeded-loader");
-    skipCache = isDbLoadModeEnabled();
+    dbModeEnabled = isDbLoadModeEnabled();
   } catch {}
 
-  if (!skipCache) {
-    // Prefer cache first on client
-    const cached = readCachedRestaurants();
-    if (cached && cached.length > 0) {
-      dynamicRestaurants = normalizeRestaurants(cached);
-      return dynamicRestaurants;
-    }
-  }
-  // DB mode check and fetch
-  try {
-    const { isDbLoadModeEnabled, fetchPoolInfo, fetchSeededSelection, getSeedValueFromEnv } = await import("@/shared/seeded-loader");
-    console.log("isDbLoadModeEnabled: ", isDbLoadModeEnabled());
-    if (isDbLoadModeEnabled()) {
-      const info = await fetchPoolInfo("web_4_autodining", "restaurants");
-      let poolSize = info?.pool_size ?? 0;
-      // If pool is missing or too small, and DB mode is on, try to auto-generate and save to DB
-      if (!info || poolSize < 50) {
-        try {
-          const { generateProjectData } = await import("@/shared/data-generator");
-          const gen = await generateProjectData("web_4_autodining", 100, ["International", "Italian", "Japanese", "Mexican", "American"]);
-          console.log("Auto-generated for DB mode:", gen);
-        } catch (e) {
-          console.warn("[autodining] Auto-generation for DB mode failed:", e);
-        }
-      }
+  // Determine the seed to use
+  let effectiveSeed: number;
+  
+  effectiveSeed = dbModeEnabled ? seedValue ?? 1 : 1;
 
-      // Attempt to load from DB regardless; after possible generation above
-      const seed = getSeedValueFromEnv(1);
-      const fromDb = await fetchSeededSelection<RestaurantGenerated>({
-        projectKey: "web_4_autodining",
-        entityType: "restaurants",
-        seedValue: seed,
-        limit: 100,
-        method: "shuffle",
-      });
-      console.log("Fetched from DB:", fromDb);
-      if (fromDb && fromDb.length > 0) {
-        dynamicRestaurants = normalizeRestaurants(fromDb);
-        writeCachedRestaurants(dynamicRestaurants);
-        return dynamicRestaurants;
-      }
-    }
-  } catch (err) {
-    console.warn("[autodining] DB load attempt failed:", err);
-  }
-  // Generation fallback
+  // Load from DB with the determined seed
   try {
-    const { isDataGenerationEnabled, generateProjectData } = await import("@/shared/data-generator");
-    console.log("isDataGenerationEnabled: ", isDataGenerationEnabled());
-    if (isDataGenerationEnabled()) {
-      const result = await generateProjectData("web_4_autodining", 60, ["International", "Italian", "Japanese", "Mexican", "American"]);
-      console.log("Generated restaurants:", result);
-      if (result.success && result.data.length > 0) {
-        dynamicRestaurants = normalizeRestaurants(result.data as RestaurantGenerated[]);
-        writeCachedRestaurants(dynamicRestaurants);
-        return dynamicRestaurants;
-      } else {
-        console.warn("[autodining] Data generation returned empty or failed; falling back to static dataset.");
-        dynamicRestaurants = normalizeRestaurants(
-          RestaurantsData.map((item, index) => ({
-            id: `restaurant-${item.id}`,
-            name: item.namepool,
-            image: `/images/restaurant${(index % 19) + 1}.jpg`,
-            stars: item.staticStars,
-            reviews: item.staticReviews,
-            cuisine: item.cuisine,
-            price: item.staticPrices,
-            bookings: item.staticBookings,
-            area: item.area,
-          })) as unknown as RestaurantGenerated[]
-        );
-        writeCachedRestaurants(dynamicRestaurants);
-        return dynamicRestaurants;
-      }
+    // Clear existing restaurants to force fresh load
+    dynamicRestaurants = [];
+    const { fetchSeededSelection } = await import("@/shared/seeded-loader");
+    const fromDb = await fetchSeededSelection<RestaurantGenerated>({
+      projectKey: "web_4_autodining",
+      entityType: "restaurants",
+      seedValue: effectiveSeed,
+      limit: 100,
+      method: "distribute",
+      filterKey: "cuisine",
+    });
+    
+    console.log(`[autodining] Fetched from DB with seed=${effectiveSeed}:`, fromDb);
+    
+    if (fromDb && fromDb.length > 0) {
+      dynamicRestaurants = normalizeRestaurants(fromDb);
+      // Don't cache when using seeds to ensure each seed gets fresh data
+      return dynamicRestaurants;
+    } else {
+      console.warn(`[autodining] No data returned from DB with seed=${effectiveSeed}`);
+      throw new Error(`[autodining] No data found for seed=${effectiveSeed}`);
     }
   } catch (err) {
-    console.warn("[autodining] Data generation request failed:", err);
+    console.error(`[autodining] Failed to load from DB with seed=${effectiveSeed}:`, err);
+    throw err;
   }
-  dynamicRestaurants = [];
-  return dynamicRestaurants;
 }

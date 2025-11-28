@@ -1,516 +1,245 @@
-import { isDataGenerationEnabled, generateProjectData } from "@/shared/data-generator";
-import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
+"use client";
+
 import type { User, Post, Job, Recommendation } from "@/library/dataset";
+import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+
+const PROJECT_KEY = "web_9_autoconnect";
+
+const FALLBACK_USERS: User[] = [
+  {
+    username: "alexsmith",
+    name: "Alex Smith",
+    avatar: "https://randomuser.me/api/portraits/men/11.jpg",
+    bio: "Product designer crafting end-to-end experiences.",
+    title: "Lead Product Designer",
+    about:
+      "Designer with 8+ years leading cross-functional teams to ship delightful SaaS experiences. Passionate about accessibility, rapid prototyping, and mentoring early career designers.",
+    experience: [
+      {
+        title: "Lead Product Designer",
+        company: "Northstar Studio",
+        logo: "https://logo.clearbit.com/northstar.com",
+        duration: "Jan 2022 – Present · 2 yrs",
+        location: "Remote",
+        description:
+          "Driving the design vision for a suite of B2B tools, collaborating with research, product, and engineering.",
+      },
+    ],
+  },
+  {
+    username: "maria.lee",
+    name: "Maria Lee",
+    avatar: "https://randomuser.me/api/portraits/women/21.jpg",
+    bio: "Software engineer obsessed with DX & tooling.",
+    title: "Senior Software Engineer",
+    experience: [
+      {
+        title: "Senior SWE",
+        company: "Pulse Systems",
+        logo: "https://logo.clearbit.com/pulsesys.com",
+        duration: "Apr 2020 – Present · 4 yrs",
+        location: "New York, USA",
+        description:
+          "Building internal developer tools in React, Node, and GraphQL; leading migration to typed APIs.",
+      },
+    ],
+  },
+];
+
+const FALLBACK_POSTS: Post[] = [
+  {
+    id: "p-fallback-1",
+    user: FALLBACK_USERS[0],
+    content: "Shipped a design system refresh that cut build time by 30%. 🎉",
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
+    likes: 42,
+    liked: false,
+    comments: [],
+  },
+  {
+    id: "p-fallback-2",
+    user: FALLBACK_USERS[1],
+    content: "Speaking at FrontendConf about scaling developer portals next month!",
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+    likes: 18,
+    liked: false,
+    comments: [],
+  },
+];
+
+const FALLBACK_JOBS: Job[] = [
+  {
+    id: "j-fallback-1",
+    title: "Sr. Frontend Engineer",
+    company: "Arcadia Labs",
+    location: "Remote",
+    logo: "https://logo.clearbit.com/arcadialabs.com",
+    salary: "$130k - $150k",
+    type: "Full-time",
+    experience: "5+ years",
+    description:
+      "Own the dashboard experience for our analytics platform. Work with React/TypeScript and GraphQL.",
+    postedDate: new Date().toISOString(),
+    applicationCount: 82,
+    companySize: "100-250",
+    industry: "Software",
+    remote: true,
+  },
+];
+
+const FALLBACK_RECOMMENDATIONS: Recommendation[] = [
+  {
+    id: "r-fallback-1",
+    type: "user",
+    title: "Jordan Patel",
+    description: "Staff Engineer · Replatform initiatives, API design",
+    reason: "People you may know",
+    relevanceScore: 0.92,
+    category: "people",
+    image: "https://randomuser.me/api/portraits/men/52.jpg",
+    metadata: { location: "Toronto, CA", industry: "Software" },
+  },
+];
+
+const FALLBACK_MAP: Record<string, any[]> = {
+  users: FALLBACK_USERS,
+  posts: FALLBACK_POSTS,
+  jobs: FALLBACK_JOBS,
+  recommendations: FALLBACK_RECOMMENDATIONS,
+};
+
+type LoadOptions = {
+  limit?: number;
+  method?: "select" | "shuffle" | "filter" | "distribute";
+  filterKey?: string;
+  filterValues?: string[];
+};
 
 /**
- * Initialize users data - either from database, AI generation, or fallback to static data
+ * Get v2 seed from window (synchronized by SeedContext)
  */
-export async function initializeUsers(): Promise<User[]> {
-  // Check if database mode is enabled and we're in the browser (not during build)
-  if (isDbLoadModeEnabled() && typeof window !== "undefined") {
-    console.log('🗄️ Database mode enabled, loading users from database...');
-    try {
-      const dbData = await fetchSeededSelection({
-        projectKey: "web_9_autoconnect_users",
-        entityType: "users",
-        seedValue: 1, // Use default seed when no seed is provided
-        limit: 50
-      });
-      
-      if (dbData && dbData.length > 0) {
-        console.log(`✅ Loaded ${dbData.length} users from database`);
-        return dbData as User[];
-      } else {
-        console.log('⚠️ No data found in database, falling back to static data');
-      }
-    } catch (error) {
-      console.warn('⚠️ Database load failed, falling back to static data:', error);
-    }
+const getRuntimeV2Seed = (): number | null => {
+  if (typeof window === "undefined") return null;
+  const value = (window as any).__autoconnectV2Seed;
+  if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
+    return value;
   }
+  return null;
+};
 
-  // If DB mode is enabled but we're server-side (during build), use static data
-  if (isDbLoadModeEnabled() && typeof window === "undefined") {
-    console.log('📊 DB mode enabled but running server-side, using static user data');
-    return getStaticUsers();
-  }
-
-  // Check if data generation is enabled
-  if (!isDataGenerationEnabled()) {
-    console.log('📊 Data generation disabled, using static user data');
-    return getStaticUsers();
-  }
-
-  // Check for cached data first
-  const cacheKey = "autoconnect_generated_users_v1";
-  const cached = typeof window !== "undefined" ? localStorage.getItem(cacheKey) : null;
-  
-  if (cached) {
-    try {
-      const parsedData = JSON.parse(cached);
-      console.log('💾 Using cached user data:', parsedData.length, 'users');
-      return parsedData;
-    } catch (error) {
-      console.warn('⚠️ Failed to parse cached data, regenerating...', error);
-    }
-  }
-
-  console.log('🚀 Generating users for Autoconnect...');
-  
+function resolveSeed(entityType: string, v2SeedValue?: number | null): number {
+  let dbModeEnabled = false;
   try {
-    const result = await generateProjectData("web_9_autoconnect_users", 30, undefined, true); // Always save to DB when generating
-    
-    if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} users and saved to database`);
-      
-      // Cache the results
-      if (typeof window !== "undefined") {
-        localStorage.setItem(cacheKey, JSON.stringify(result.data));
-        console.log('💾 Cached results in localStorage (autoconnect_generated_users_v1)');
-      }
-      
-      return result.data;
-    } else {
-      console.warn('⚠️ Data generation failed, falling back to static data:', result.error);
-      return getStaticUsers();
-    }
-  } catch (error) {
-    console.error('❌ Data generation error, falling back to static data:', error);
-    return getStaticUsers();
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {
+    dbModeEnabled = false;
   }
+
+  if (dbModeEnabled) {
+    // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
+    if (typeof v2SeedValue === "number" && v2SeedValue >= 1 && v2SeedValue <= 300) {
+      return v2SeedValue;
+    }
+    // Try to get from window
+    const fromWindow = getRuntimeV2Seed();
+    if (fromWindow !== null) {
+      return fromWindow;
+    }
+    // Default to 1 if no v2-seed provided
+    return 1;
+  }
+
+  // If v2 is NOT enabled, automatically use seed=1
+  return 1;
 }
 
-/**
- * Initialize posts data - either from database, AI generation, or fallback to static data
- */
-export async function initializePosts(): Promise<Post[]> {
-  // Check if database mode is enabled and we're in the browser (not during build)
-  if (isDbLoadModeEnabled() && typeof window !== "undefined") {
-    console.log('🗄️ Database mode enabled, loading posts from database...');
-    try {
-      const dbData = await fetchSeededSelection({
-        projectKey: "web_9_autoconnect_posts",
-        entityType: "posts",
-        seedValue: 1,
-        limit: 50
-      });
-      
-      if (dbData && dbData.length > 0) {
-        console.log(`✅ Loaded ${dbData.length} posts from database`);
-        return dbData as Post[];
-      } else {
-        console.log('⚠️ No data found in database, falling back to static data');
-      }
-    } catch (error) {
-      console.warn('⚠️ Database load failed, falling back to static data:', error);
-    }
-  }
-
-  // If DB mode is enabled but we're server-side (during build), use static data
-  if (isDbLoadModeEnabled() && typeof window === "undefined") {
-    console.log('📊 DB mode enabled but running server-side, using static post data');
-    return getStaticPosts();
-  }
-
-  // Check if data generation is enabled
-  if (!isDataGenerationEnabled()) {
-    console.log('📊 Data generation disabled, using static post data');
-    return getStaticPosts();
-  }
-
-  // Check for cached data first
-  const cacheKey = "autoconnect_generated_posts_v1";
-  const cached = typeof window !== "undefined" ? localStorage.getItem(cacheKey) : null;
-  
-  if (cached) {
-    try {
-      const parsedData = JSON.parse(cached);
-      console.log('💾 Using cached post data:', parsedData.length, 'posts');
-      return parsedData;
-    } catch (error) {
-      console.warn('⚠️ Failed to parse cached data, regenerating...', error);
-    }
-  }
-
-  console.log('🚀 Generating posts for Autoconnect...');
-  
-  try {
-    const result = await generateProjectData("web_9_autoconnect_posts", 20, undefined, true); // Always save to DB when generating
-    
-    if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} posts and saved to database`);
-      
-      // Cache the results
-      if (typeof window !== "undefined") {
-        localStorage.setItem(cacheKey, JSON.stringify(result.data));
-        console.log('💾 Cached results in localStorage (autoconnect_generated_posts_v1)');
-      }
-      
-      return result.data;
-    } else {
-      console.warn('⚠️ Data generation failed, falling back to static data:', result.error);
-      return getStaticPosts();
-    }
-  } catch (error) {
-    console.error('❌ Data generation error, falling back to static data:', error);
-    return getStaticPosts();
-  }
-}
-
-/**
- * Initialize jobs data - either from database, AI generation, or fallback to static data
- */
-export async function initializeJobs(): Promise<Job[]> {
-  // Check if database mode is enabled and we're in the browser (not during build)
-  if (isDbLoadModeEnabled() && typeof window !== "undefined") {
-    console.log('🗄️ Database mode enabled, loading jobs from database...');
-    try {
-      const dbData = await fetchSeededSelection({
-        projectKey: "web_9_autoconnect_jobs",
-        entityType: "jobs",
-        seedValue: 1,
-        limit: 50
-      });
-      
-      if (dbData && dbData.length > 0) {
-        console.log(`✅ Loaded ${dbData.length} jobs from database`);
-        return dbData as Job[];
-      } else {
-        console.log('⚠️ No data found in database, falling back to static data');
-      }
-    } catch (error) {
-      console.warn('⚠️ Database load failed, falling back to static data:', error);
-    }
-  }
-
-  // If DB mode is enabled but we're server-side (during build), use static data
-  if (isDbLoadModeEnabled() && typeof window === "undefined") {
-    console.log('📊 DB mode enabled but running server-side, using static job data');
-    return getStaticJobs();
-  }
-
-  // Check if data generation is enabled
-  if (!isDataGenerationEnabled()) {
-    console.log('📊 Data generation disabled, using static job data');
-    return getStaticJobs();
-  }
-
-  // Check for cached data first
-  const cacheKey = "autoconnect_generated_jobs_v1";
-  const cached = typeof window !== "undefined" ? localStorage.getItem(cacheKey) : null;
-  
-  if (cached) {
-    try {
-      const parsedData = JSON.parse(cached);
-      console.log('💾 Using cached job data:', parsedData.length, 'jobs');
-      return parsedData;
-    } catch (error) {
-      console.warn('⚠️ Failed to parse cached data, regenerating...', error);
-    }
-  }
-
-  console.log('🚀 Generating jobs for Autoconnect...');
-  
-  try {
-    const result = await generateProjectData("web_9_autoconnect_jobs", 25, undefined, true); // Always save to DB when generating
-    
-    if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} jobs and saved to database`);
-      
-      // Cache the results
-      if (typeof window !== "undefined") {
-        localStorage.setItem(cacheKey, JSON.stringify(result.data));
-        console.log('💾 Cached results in localStorage (autoconnect_generated_jobs_v1)');
-      }
-      
-      return result.data;
-    } else {
-      console.warn('⚠️ Data generation failed, falling back to static data:', result.error);
-      return getStaticJobs();
-    }
-  } catch (error) {
-    console.error('❌ Data generation error, falling back to static data:', error);
-    return getStaticJobs();
-  }
-}
-
-/**
- * Clear all cached data
- */
-export function clearAutoconnectCache(): void {
+async function loadEntity<T>(
+  entityType: string,
+  options: LoadOptions,
+  v2SeedValue?: number | null
+): Promise<T[]> {
   if (typeof window !== "undefined") {
-    localStorage.removeItem("autoconnect_generated_users_v1");
-    localStorage.removeItem("autoconnect_generated_posts_v1");
-    localStorage.removeItem("autoconnect_generated_jobs_v1");
-    console.log('🗑️ Cleared autoconnect cache');
-  }
-}
-
-// Static data fallbacks
-function getStaticUsers(): User[] {
-  return [
-    {
-      username: "johndoe",
-      name: "John Doe",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      bio: "Software Engineer passionate about building products.",
-      title: "Software Engineer",
-      about: "Hello, I'm John! I specialize in frontend engineering and building delightful web experiences for users. I love JavaScript, React, and solving interesting UI problems. Always looking for new tech to learn!\n\nBS in Computer Science from MIT, 2017.",
-      experience: [
-        {
-          title: "Software Engineer",
-          company: "Google",
-          logo: "https://logo.clearbit.com/google.com",
-          duration: "Sep 2018 - Present • 5 yrs 9 mos",
-          location: "Mountain View, California",
-          description: "Working on scalable dashboards for Google Cloud platform. Building performant UIs in React, collaborating with cross-functional teams."
-        }
-      ]
-    },
-    {
-      username: "janedoe",
-      name: "Jane Doe",
-      avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-      bio: "Product Manager & startup enthusiast.",
-      title: "Product Manager",
-      about: "I'm passionate about building products that users love. I have experience in both B2B and B2C products, with a focus on user research and data-driven decision making.\n\nMBA from Stanford, 2019.",
-      experience: [
-        {
-          title: "Senior Product Manager",
-          company: "Meta",
-          logo: "https://logo.clearbit.com/meta.com",
-          duration: "Jan 2020 - Present • 4 yrs 1 mo",
-          location: "Menlo Park, California",
-          description: "Leading product strategy for social commerce features. Working with engineering, design, and data science teams to deliver user-centric solutions."
-        }
-      ]
-    },
-    {
-      username: "mikejohnson",
-      name: "Mike Johnson",
-      avatar: "https://randomuser.me/api/portraits/men/45.jpg",
-      bio: "UX Designer focused on creating intuitive experiences.",
-      title: "Senior UX Designer",
-      about: "I design digital experiences that are both beautiful and functional. I believe in user-centered design and enjoy solving complex problems through research and iteration.\n\nMFA in Design from Art Center, 2018.",
-      experience: [
-        {
-          title: "Senior UX Designer",
-          company: "Apple",
-          logo: "https://logo.clearbit.com/apple.com",
-          duration: "Mar 2019 - Present • 4 yrs 11 mos",
-          location: "Cupertino, California",
-          description: "Designing user interfaces for iOS and macOS applications. Collaborating with product managers and engineers to create cohesive user experiences."
-        }
-      ]
-    }
-  ];
-}
-
-function getStaticPosts(): Post[] {
-  return [
-    {
-      id: "1",
-      user: {
-        username: "johndoe",
-        name: "John Doe",
-        avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-        bio: "Software Engineer passionate about building products.",
-        title: "Software Engineer"
-      },
-      content: "Just shipped a new feature that our users have been asking for! It's amazing to see the impact of good engineering on user experience. #engineering #productivity",
-      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-      likes: 12,
-      liked: false,
-      comments: [
-        {
-          id: "c1",
-          user: {
-            username: "janedoe",
-            name: "Jane Doe",
-            avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-            bio: "Product Manager & startup enthusiast.",
-            title: "Product Manager"
-          },
-          text: "Great work John! The user feedback has been amazing.",
-          timestamp: new Date(Date.now() - 1000 * 60 * 20).toISOString()
-        }
-      ],
-      image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=720&h=420&fit=crop&crop=entropy&auto=format&q=80"
-    },
-    {
-      id: "2",
-      user: {
-        username: "janedoe",
-        name: "Jane Doe",
-        avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-        bio: "Product Manager & startup enthusiast.",
-        title: "Product Manager"
-      },
-      content: "Excited to be speaking at the Product Management Conference next month about building user-centric products! Who else is attending?",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-      likes: 8,
-      liked: false,
-      comments: []
-    }
-  ];
-}
-
-function getStaticJobs(): Job[] {
-  return [
-    {
-      id: "j1",
-      title: "Senior Frontend Developer",
-      company: "Tech Innovations",
-      location: "Remote",
-      logo: "https://logo.clearbit.com/techinnovations.com",
-      salary: "$120,000 - $150,000",
-      type: "Full-time",
-      experience: "5+ years",
-      description: "We're looking for a Senior Frontend Developer to join our growing team. You'll be responsible for building scalable, performant web applications using React, TypeScript, and modern frontend technologies.",
-      requirements: [
-        "5+ years of experience with React, TypeScript, and modern JavaScript",
-        "Strong understanding of CSS, HTML, and responsive design",
-        "Experience with state management libraries (Redux, Zustand, etc.)",
-        "Familiarity with testing frameworks (Jest, React Testing Library)"
-      ],
-      benefits: [
-        "Competitive salary and equity package",
-        "Flexible remote work policy",
-        "Health, dental, and vision insurance",
-        "Professional development budget"
-      ],
-      postedDate: "2024-01-15",
-      applicationCount: 47,
-      companySize: "50-100 employees",
-      industry: "Technology",
-      remote: true
-    },
-    {
-      id: "j2",
-      title: "Product Manager",
-      company: "StartupCo",
-      location: "San Francisco, CA",
-      logo: "https://logo.clearbit.com/startupco.com",
-      salary: "$130,000 - $160,000",
-      type: "Full-time",
-      experience: "3+ years",
-      description: "Join our fast-growing startup as a Product Manager. You'll work closely with engineering and design teams to build products that our customers love.",
-      requirements: [
-        "3+ years of product management experience",
-        "Strong analytical and problem-solving skills",
-        "Experience with user research and data analysis",
-        "Excellent communication and collaboration skills"
-      ],
-      benefits: [
-        "Competitive salary and stock options",
-        "Health insurance and wellness benefits",
-        "Flexible PTO policy",
-        "Learning and development opportunities"
-      ],
-      postedDate: "2024-01-20",
-      applicationCount: 23,
-      companySize: "10-50 employees",
-      industry: "Technology",
-      remote: false
-    }
-  ];
-}
-
-function getStaticRecommendations(): Recommendation[] {
-  return [
-    {
-      id: "r1",
-      type: "user",
-      title: "Sarah Chen - UX Designer",
-      description: "Senior UX Designer at Google with 8+ years experience in mobile design",
-      reason: "Based on your interest in design and mobile development",
-      relevanceScore: 0.92,
-      category: "Design",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face&auto=format&q=80",
-      metadata: {
-        location: "San Francisco, CA",
-        company: "Google",
-        skills: ["Figma", "User Research", "Mobile Design"]
-      }
-    },
-    {
-      id: "r2",
-      type: "job",
-      title: "Senior Product Manager",
-      description: "Lead product strategy for a fast-growing fintech startup",
-      reason: "Matches your product management background and fintech interest",
-      relevanceScore: 0.88,
-      category: "Product Management",
-      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=300&h=300&fit=crop&crop=entropy&auto=format&q=80",
-      metadata: {
-        location: "New York, NY",
-        company: "FinTech Startup",
-        salary: "$140,000 - $180,000",
-        experience: "5+ years"
-      }
-    }
-  ];
-}
-
-/**
- * Initialize recommendations data - either from database, AI generation, or fallback to static data
- */
-export async function initializeRecommendations(): Promise<Recommendation[]> {
-  const projectKey = "web_9_autoconnect_recommendations";
-  const entityType = "recommendations";
-  const cacheKey = `autoconnect_generated_${entityType}_v1`;
-
-  if (isDbLoadModeEnabled() && typeof window !== "undefined") {
-    console.log(`🗄️ Database mode enabled, loading ${entityType} from database...`);
-    try {
-      const dbData = await fetchSeededSelection({
-        projectKey,
-        entityType,
-        seedValue: 1,
-        limit: 50
-      });
-      if (dbData && dbData.length > 0) {
-        console.log(`✅ Loaded ${dbData.length} ${entityType} from database`);
-        return dbData as Recommendation[];
-      } else {
-        console.log(`⚠️ No data found in database for ${entityType}, falling back to generation/static`);
-      }
-    } catch (error) {
-      console.warn(`⚠️ Database load failed for ${entityType}, falling back to generation/static:`, error);
-    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
-  if (!isDataGenerationEnabled()) {
-    console.log(`📊 Data generation disabled for ${entityType}, using static data`);
-    return getStaticRecommendations();
-  }
+  const seed = resolveSeed(entityType, v2SeedValue);
 
-  const cached = typeof window !== "undefined" ? localStorage.getItem(cacheKey) : null;
-  if (cached) {
-    try {
-      const parsedData = JSON.parse(cached);
-      console.log(`💾 Using cached ${entityType} data:`, parsedData.length, entityType);
-      return parsedData;
-    } catch (error) {
-      console.warn(`⚠️ Failed to parse cached ${entityType} data, regenerating...`, error);
-    }
-  }
-
-  console.log(`🚀 Generating ${entityType} for Autoconnect...`);
   try {
-    const result = await generateProjectData(projectKey, 50, undefined, true); // Always save to DB when generating
-    if (result.success && result.data.length > 0) {
-      console.log(`✅ Generated ${result.data.length} ${entityType} and saved to database`);
-      if (typeof window !== "undefined") {
-        localStorage.setItem(cacheKey, JSON.stringify(result.data));
-        console.log(`💾 Cached results in localStorage (${cacheKey})`);
-      }
-      return result.data as Recommendation[];
-    } else {
-      console.warn(`⚠️ Data generation failed for ${entityType}, falling back to static data:`, result.error);
-      return getStaticRecommendations();
+    const payload = await fetchSeededSelection<T>({
+      projectKey: PROJECT_KEY,
+      entityType,
+      seedValue: seed,
+      limit: options.limit ?? 100,
+      method: options.method ?? "shuffle",
+      filterKey: options.filterKey,
+      filterValues: options.filterValues,
+    });
+
+    if (payload && payload.length > 0) {
+      console.log(`[autoconnect] Loaded ${payload.length} ${entityType} with seed=${seed}`);
+      return payload;
     }
+
+    console.warn(
+      `[autoconnect] Empty dataset for ${entityType} (seed=${seed}). Falling back to local sample data.`
+    );
   } catch (error) {
-    console.error(`❌ Data generation error for ${entityType}, falling back to static data:`, error);
-    return getStaticRecommendations();
+    console.error(
+      `[autoconnect] Failed to load ${entityType} from dataset (seed=${seed}). Using fallback.`,
+      error
+    );
   }
+
+  const fallback = FALLBACK_MAP[entityType];
+  if (fallback && fallback.length > 0) {
+    return fallback as T[];
+  }
+
+  return [];
+}
+
+export async function initializeUsers(v2SeedValue?: number | null): Promise<User[]> {
+  return loadEntity<User>(
+    "users",
+    {
+      limit: 80,
+      method: "shuffle",
+    },
+    v2SeedValue
+  );
+}
+
+export async function initializePosts(v2SeedValue?: number | null): Promise<Post[]> {
+  return loadEntity<Post>(
+    "posts",
+    {
+      limit: 60,
+      method: "shuffle",
+    },
+    v2SeedValue
+  );
+}
+
+export async function initializeJobs(v2SeedValue?: number | null): Promise<Job[]> {
+  return loadEntity<Job>(
+    "jobs",
+    {
+      limit: 60,
+      method: "shuffle",
+    },
+    v2SeedValue
+  );
+}
+
+export async function initializeRecommendations(
+  v2SeedValue?: number | null
+): Promise<Recommendation[]> {
+  return loadEntity<Recommendation>(
+    "recommendations",
+    {
+      limit: 50,
+      method: "shuffle",
+    },
+    v2SeedValue
+  );
 }
