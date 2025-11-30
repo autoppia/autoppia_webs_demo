@@ -5,9 +5,9 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeedRouter } from "@/dynamic/seed";
 import { getMovies } from "@/dynamic/v2-data";
-import { EVENT_TYPES, logEvent } from "@/library/events";
+import { EVENT_TYPES, logEvent } from "@/events";
 
 const MIN_PASSWORD_LENGTH = 6;
 const FALLBACK_MOVIE_ID = "movie-v2-001";
@@ -164,4 +164,3 @@ export default function RegisterPage() {
     </main>
   );
 }
-

@@ -1,4 +1,4 @@
-import type { Movie } from "@/data/movies";
+import type { Movie } from "@/models";
 import { SeedLink } from "@/components/ui/SeedLink";
 
 interface SpotlightRowProps {

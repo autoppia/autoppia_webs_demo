@@ -4,9 +4,9 @@ import { type FormEvent, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useSeedRouter } from "@/dynamic/seed";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { EVENT_TYPES, logEvent } from "@/library/events";
+import { EVENT_TYPES, logEvent } from "@/events";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -40,7 +40,7 @@ export default function LoginPage() {
         <p className="text-sm uppercase tracking-[0.3em] text-white/60">Autocinema</p>
         <h1 className="mt-2 text-3xl font-semibold">Sign in to start</h1>
         <p className="text-white/70">
-          Enter the credential provided in your task instructions. The UI will simply record the authentication events.
+          Enter the credential provided in your task instructions. This is a local sign‑in for demo purposes.
         </p>
       </div>
       <form className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6" onSubmit={handleSubmit}>

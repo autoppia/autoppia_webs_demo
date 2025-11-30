@@ -38,14 +38,14 @@
       "@/context/*": [
         "src/context/*"
       ],
-      "@/data/*": [
-        "src/data/*"
+      "@/models/*": [
+        "src/models/*"
       ],
-      "@/library/*": [
-        "src/library/*"
+      "@/utils/*": [
+        "src/utils/*"
       ],
-      "@/shared/*": [
-        "src/shared/*"
+      "@/dynamic/*": [
+        "src/dynamic/*"
       ]
     }
   },

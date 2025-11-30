@@ -9,7 +9,6 @@ export {
   getAvailableYears,
   searchMovies,
   isDynamicModeEnabled,
-  getLayoutConfig,
 } from "./data-provider";
 export type { MovieSearchFilters } from "./data-provider";
 

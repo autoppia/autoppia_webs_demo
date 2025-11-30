@@ -1,31 +1,29 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { findUser, type UserRecord } from "@/data/users";
-import { EVENT_TYPES, logEvent } from "@/library/events";
-import { readJson, writeJson } from "@/shared/storage";
-
-interface AuthUser {
-  username: string;
-  allowedMovies: string[];
-}
+import type { AuthUser, RegisterInput, UserRecord } from "@/models";
+import { findUser } from "@/models/users";
+import { EVENT_TYPES, logEvent } from "@/events";
+import { readJson, writeJson } from "@/utils/storage";
 
 interface AuthContextValue {
   currentUser: AuthUser | null;
   isAuthenticated: boolean;
+  watchlist: string[];
+  isInWatchlist: (movieId: string) => boolean;
+  addToWatchlist: (movieId: string) => void;
+  removeFromWatchlist: (movieId: string) => void;
+  addAssignedMovie: (movieId: string) => void;
+  removeAssignedMovie: (movieId: string) => void;
   login: (username: string, password: string) => Promise<void>;
   register: (input: RegisterInput) => Promise<void>;
   logout: () => void;
 }
 
-interface RegisterInput {
-  username: string;
-  password: string;
-  allowedMovies?: string[];
-}
-
 const STORAGE_KEY = "autocinemaUser";
 const CUSTOM_USERS_KEY = "autocinemaCustomUsers";
+const WATCHLIST_KEY_PREFIX = "autocinemaWatchlist:";
+const buildWatchlistKey = (username: string) => `${WATCHLIST_KEY_PREFIX}${username.toLowerCase()}`;
 
 interface CustomUserRecord extends AuthUser {
   password: string;
@@ -65,6 +63,7 @@ const persistCustomUsers = (users: UserRecord[]) => {
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [customUsers, setCustomUsers] = useState<UserRecord[]>([]);
+  const [watchlist, setWatchlist] = useState<string[]>([]);
 
   useEffect(() => {
     try {
@@ -78,6 +77,84 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     setCustomUsers(getStoredCustomUsers());
   }, []);
+
+  // Load watchlist whenever the current user changes
+  useEffect(() => {
+    if (!currentUser) {
+      setWatchlist([]);
+      return;
+    }
+    const key = buildWatchlistKey(currentUser.username);
+    const list = readJson<string[]>(key, []) ?? [];
+    setWatchlist(Array.isArray(list) ? list : []);
+  }, [currentUser]);
+
+  const persistWatchlist = useCallback(
+    (username: string, list: string[]) => {
+      writeJson(buildWatchlistKey(username), list);
+    },
+    []
+  );
+
+  const isInWatchlist = useCallback(
+    (movieId: string) => {
+      if (!currentUser) return false;
+      return watchlist.includes(movieId);
+    },
+    [currentUser, watchlist]
+  );
+
+  const addToWatchlist = useCallback(
+    (movieId: string) => {
+      if (!currentUser) return;
+      setWatchlist((prev) => {
+        if (prev.includes(movieId)) return prev;
+        const next = [...prev, movieId];
+        persistWatchlist(currentUser.username, next);
+        return next;
+      });
+    },
+    [currentUser, persistWatchlist]
+  );
+
+  const removeFromWatchlist = useCallback(
+    (movieId: string) => {
+      if (!currentUser) return;
+      setWatchlist((prev) => {
+        if (!prev.includes(movieId)) return prev;
+        const next = prev.filter((id) => id !== movieId);
+        persistWatchlist(currentUser.username, next);
+        return next;
+      });
+    },
+    [currentUser, persistWatchlist]
+  );
+
+  const addAssignedMovie = useCallback(
+    (movieId: string) => {
+      setCurrentUser((prev) => {
+        if (!prev) return prev;
+        if (prev.allowedMovies.includes(movieId)) return prev;
+        const nextUser: AuthUser = { ...prev, allowedMovies: [...prev.allowedMovies, movieId] };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
+        return nextUser;
+      });
+    },
+    []
+  );
+
+  const removeAssignedMovie = useCallback(
+    (movieId: string) => {
+      setCurrentUser((prev) => {
+        if (!prev) return prev;
+        if (!prev.allowedMovies.includes(movieId)) return prev;
+        const nextUser: AuthUser = { ...prev, allowedMovies: prev.allowedMovies.filter((id) => id !== movieId) };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
+        return nextUser;
+      });
+    },
+    []
+  );
 
   const resolveUserRecord = useCallback(
     (username: string): UserRecord | undefined => {
@@ -218,17 +295,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     setCurrentUser(null);
     localStorage.removeItem(STORAGE_KEY);
+    setWatchlist([]);
   }, [currentUser]);
 
   const value = useMemo(
     () => ({
       currentUser,
       isAuthenticated: Boolean(currentUser),
+      watchlist,
+      isInWatchlist,
+      addToWatchlist,
+      removeFromWatchlist,
+      addAssignedMovie,
+      removeAssignedMovie,
       login,
       register,
       logout,
     }),
-    [currentUser, login, logout, register]
+    [currentUser, watchlist, isInWatchlist, addToWatchlist, removeFromWatchlist, addAssignedMovie, removeAssignedMovie, login, logout, register]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

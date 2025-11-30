@@ -6,18 +6,23 @@ import { MovieDetailHero } from "@/components/movies/MovieDetailHero";
 import { MovieMeta } from "@/components/movies/MovieMeta";
 import { RelatedMovies } from "@/components/movies/RelatedMovies";
 import { CommentsPanel, type CommentEntry } from "@/components/movies/CommentsPanel";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { getMovieById, getRelatedMovies } from "@/dynamic/v2-data";
 import { SeedLink } from "@/components/ui/SeedLink";
-import type { Movie } from "@/data/movies";
+import type { Movie, MovieEditorData } from "@/models";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
-import { collectFilmChangeMetadata, editorDataToFilmPayload, movieToFilmPayload } from "@/utils/eventPayloads";
+import { MovieEditor } from "@/components/movies/MovieEditor";
+import { collectFilmChangeMetadata, editorDataToFilmPayload, movieToFilmPayload } from "@/events/payloads";
+import { applyDynamicWrapper, useSeedValue } from "@/components/ui/variants";
+import { DynamicText } from "@/components/ui/DynamicText";
+import { DynamicHeading, DynamicSection } from "@/components/ui/DynamicBlock";
+import { RatingStars } from "@/components/ui/RatingStars";
+import { readJson, writeJson } from "@/utils/storage";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
-  "/media/gallery/people/person2.png",
+  "/media/gallery/people/person2.jpg",
   "/media/gallery/people/person3.jpg",
   "/media/gallery/people/person4.jpg",
 ];
@@ -42,10 +47,12 @@ export default function MovieDetailPage() {
   const params = useParams<{ movieId: string }>();
   const movieId = decodeURIComponent(params.movieId);
   const movie = getMovieById(movieId);
-  const { currentUser } = useAuth();
+  const { currentUser, isAuthenticated, isInWatchlist, addToWatchlist, removeFromWatchlist } = useAuth();
+  const seed = useSeedValue();
 
   const [comments, setComments] = useState(() => (movie ? createMockComments(movie) : []));
   const [message, setMessage] = useState<string | null>(null);
+  const [userRating, setUserRating] = useState<number>(0);
 
   if (!movie) {
     return (
@@ -70,6 +77,19 @@ export default function MovieDetailPage() {
     logEvent(EVENT_TYPES.FILM_DETAIL, payload);
   }, [movie]);
 
+  // Load current user's rating for this movie
+  useEffect(() => {
+    if (!movie) return;
+    const username = currentUser?.username;
+    if (!username) {
+      setUserRating(0);
+      return;
+    }
+    const key = `autocinemaRatings:${username.toLowerCase()}`;
+    const map = readJson<Record<string, number>>(key, {}) ?? {};
+    setUserRating(map[movie.id] ?? 0);
+  }, [movie, currentUser]);
+
   const handleWatchTrailer = () => {
     if (!movie) return;
     const payload = movieToFilmPayload(movie);
@@ -82,7 +102,7 @@ export default function MovieDetailPage() {
   const handleDelete = () => {
     const payload = movieToFilmPayload(movie);
     logEvent(EVENT_TYPES.DELETE_FILM, payload);
-    setMessage("Delete event recorded. No data was removed.");
+    setMessage("Delete action noted. No data was changed.");
   };
 
   const handleEditSubmit = (data: MovieEditorData) => {
@@ -94,23 +114,50 @@ export default function MovieDetailPage() {
       previous_values,
       changed_fields,
     });
-    setMessage("Edit event recorded for auditing purposes.");
+    setMessage("Changes saved for this page.");
   };
+
+  const inWatchlist = isAuthenticated && movie ? isInWatchlist(movie.id) : false;
 
   const handleWatchlist = () => {
     if (!movie) return;
+    if (!isAuthenticated) {
+      window.alert("Please sign in to use your watchlist.");
+      return;
+    }
     const payload = movieToFilmPayload(movie);
-    logEvent(EVENT_TYPES.ADD_TO_WATCHLIST, payload);
-  };
-
-  const handleShare = () => {
-    if (!movie) return;
-    const payload = movieToFilmPayload(movie);
-    logEvent(EVENT_TYPES.SHARE_MOVIE, payload);
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href).catch(() => {});
+    if (inWatchlist) {
+      removeFromWatchlist(movie.id);
+      setMessage("Removed from watchlist.");
+      logEvent(EVENT_TYPES.REMOVE_FROM_WATCHLIST, payload);
+    } else {
+      addToWatchlist(movie.id);
+      setMessage("Added to watchlist.");
+      logEvent(EVENT_TYPES.ADD_TO_WATCHLIST, payload);
+      // New event for backend parser compatibility
+      logEvent(EVENT_TYPES.ADD_PRODUCT_TO_WATCHLIST, payload);
     }
   };
+
+  const handleRate = (value: number) => {
+    if (!movie) return;
+    if (!isAuthenticated) {
+      window.alert("Please sign in to rate movies.");
+      return;
+    }
+    const username = currentUser?.username;
+    if (!username) return;
+    const key = `autocinemaRatings:${username.toLowerCase()}`;
+    const map = readJson<Record<string, number>>(key, {}) ?? {};
+    const next = { ...map, [movie.id]: value };
+    writeJson(key, next);
+    setUserRating(value);
+    const payload = movieToFilmPayload(movie);
+    logEvent(EVENT_TYPES.RATE_FILM, { ...payload, rating: value });
+    setMessage(`Thanks for rating: ${value}★`);
+  };
+
+  // Share removed per request
 
   const handleCommentSubmit = ({ author, message }: { author: string; message: string }) => {
     const entry: CommentEntry = {
@@ -140,15 +187,27 @@ export default function MovieDetailPage() {
         movie={movie}
         onWatchTrailer={handleWatchTrailer}
         onWatchlist={handleWatchlist}
-        onShare={handleShare}
+        canUseWatchlist={isAuthenticated}
+        inWatchlist={inWatchlist}
       />
+      <section className="rounded-3xl border border-white/10 bg-white/5 p-4 text-white">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-wide text-white/60">Your rating</p>
+            <div className="mt-1">
+              <RatingStars value={userRating} onChange={handleRate} disabled={!isAuthenticated} />
+            </div>
+          </div>
+          <p className="text-sm text-white/60">Average: ⭐ {movie.rating} • {movie.duration}m • {movie.year}</p>
+        </div>
+      </section>
       <MovieMeta movie={movie} />
-      {canManageMovie && (
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white">
-          <h2 className="text-xl font-semibold">Validator actions</h2>
-          <p className="text-sm text-white/60">
-            Use these controls to simulate edits or deletions. They simply emit events, mirroring the Django workflow.
-          </p>
+      {canManageMovie && applyDynamicWrapper(seed, "validator-actions",
+        <DynamicSection className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white">
+          <DynamicHeading className="text-xl font-semibold">Validator actions</DynamicHeading>
+          <DynamicText as="p" className="text-sm text-white/60" variantKey="validator-copy">
+            Use these controls to simulate edits or deletions. These actions are for auditing only.
+          </DynamicText>
           <div className="mt-4 flex flex-wrap gap-3">
             <Button
               variant="ghost"
@@ -158,8 +217,8 @@ export default function MovieDetailPage() {
               Delete movie
             </Button>
           </div>
-          <MovieEditor movie={movie} onSubmit={handleEditSubmit} submitLabel="Record edit event" />
-        </section>
+          <MovieEditor movie={movie} onSubmit={handleEditSubmit} submitLabel="Save changes" />
+        </DynamicSection>
       )}
       <RelatedMovies movies={relatedMovies} />
       <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
