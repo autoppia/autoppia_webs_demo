@@ -320,6 +320,14 @@ deploy_webs_server() {
   echo "📂 Deploying $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
   pushd "$dir" >/dev/null
 
+  # Create .env file if it doesn't exist (docker-compose requires it)
+  # Note: .env can be empty - OPENAI_API_KEY is only needed for optional data generation endpoints
+  # Each web already has its static datasets in initial_data/, so LLM is not required for basic operation
+  if [ ! -f ".env" ]; then
+    echo "[INFO] Creating .env file (empty - LLM not required, datasets already in initial_data/)..."
+    touch .env
+  fi
+
   docker compose -p "$name" down --volumes || true
 
   local cache_flag=""
