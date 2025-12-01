@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import type { Product } from "@/context/CartContext";
 import { useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { cn } from "@/library/utils";

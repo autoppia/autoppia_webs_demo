@@ -12,7 +12,7 @@ import {
   clearWishlist,
   type WishlistItem,
 } from "@/library/wishlist";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/button";

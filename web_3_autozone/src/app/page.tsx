@@ -10,7 +10,7 @@ import { getProductsByCategory, getLayoutConfig, getEffectiveSeed } from "@/dyna
 import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ArrowRight, Calendar, Package, ShieldCheck, Sparkles } from "lucide-react";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { SafeImage } from "@/components/ui/SafeImage";
 import {
   getWishlistItems,

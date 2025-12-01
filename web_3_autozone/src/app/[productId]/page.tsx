@@ -9,7 +9,7 @@ import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { Suspense } from "react";
 import { getProductById } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";

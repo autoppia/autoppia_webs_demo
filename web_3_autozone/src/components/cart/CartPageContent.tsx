@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { BadgeCheck, Minus, Plus, ShieldCheck, Truck, X } from "lucide-react";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 
 interface CartItem {
   id: string;

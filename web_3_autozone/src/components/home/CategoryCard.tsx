@@ -4,7 +4,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { SafeImage } from "@/components/ui/SafeImage";
 
 interface CategoryItem {

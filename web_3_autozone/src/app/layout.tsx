@@ -1,5 +1,5 @@
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/layout/Header";
+import { Footer } from "@/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 // DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
@@ -7,8 +7,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
-import { BodyWrapper } from "@/components/layout/BodyWrapper";
-import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import { BodyWrapper } from "@/layout/BodyWrapper";
+import { DataReadyGate } from "@/layout/DataReadyGate";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -33,16 +33,12 @@ export default function RootLayout({
             <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
               <Header />
             </Suspense>
-            <Suspense fallback={<div className="min-h-screen bg-gray-100" />}>
-              <DataReadyGate>
-                <BodyWrapper>
-                  {children}
-                </BodyWrapper>
-              </DataReadyGate>
-            </Suspense>
-            <Suspense fallback={<div className="h-32 bg-white" />}>
-              <Footer />
-            </Suspense>
+            <DataReadyGate>
+              <BodyWrapper>
+                {children}
+              </BodyWrapper>
+            </DataReadyGate>
+            <Footer />
           </CartProvider>
         </SeedProvider>
       </body>

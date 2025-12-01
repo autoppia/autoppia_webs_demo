@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { ToastContainer, toast } from "react-toastify";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";

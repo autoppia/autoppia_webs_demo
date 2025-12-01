@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeed } from "@/context/SeedContext";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/dynamic/v1-layouts";

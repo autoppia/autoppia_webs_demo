@@ -6,7 +6,7 @@ import { useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useEffect, useMemo, useState } from "react";
 import type { Product } from "@/context/CartContext";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { searchProducts } from "@/dynamic/v2-data";
