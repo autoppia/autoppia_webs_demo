@@ -29,8 +29,8 @@ const parseSeedValue = (value: string | null): number | null => {
 export class DynamicDataProvider {
   private static instance: DynamicDataProvider;
   private products: Product[] = [];
-  private isEnabled: boolean = false;
-  private ready: boolean = false;
+  private isEnabled = false;
+  private ready = false;
   private readyPromise: Promise<void>;
 
   private constructor() {
@@ -104,16 +104,23 @@ export class DynamicDataProvider {
     return this.products.filter((product) => product.category === category);
   }
 
-  public getFeaturedProducts(count: number = 4): Product[] {
+  public getFeaturedProducts(count = 4): Product[] {
     return this.products.slice(0, count);
   }
 
   public searchProducts(query: string): Product[] {
-    const lowercaseQuery = query.toLowerCase();
-    return this.products.filter((product) => 
-      product.title.toLowerCase().includes(lowercaseQuery) ||
-      product.description?.toLowerCase().includes(lowercaseQuery) ||
-      product.brand?.toLowerCase().includes(lowercaseQuery)
+    const trimmed = query.trim().toLowerCase();
+    if (!trimmed) return this.products;
+
+    return this.products.filter((product) =>
+      [
+        product.title,
+        product.description,
+        product.brand,
+        product.category,
+      ]
+        .filter(Boolean)
+        .some((value) => value?.toString().toLowerCase().includes(trimmed))
     );
   }
 
@@ -123,7 +130,7 @@ export class DynamicDataProvider {
 
   // Get effective seed value - returns 1 (default) when dynamic HTML is disabled
   // Validates seed is between 1-300, defaults to 1 if invalid
-  public getEffectiveSeed(providedSeed: number = 1): number {
+  public getEffectiveSeed(providedSeed = 1): number {
     if (!this.isEnabled) {
       return 1;
     }

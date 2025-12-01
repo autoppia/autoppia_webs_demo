@@ -22,43 +22,43 @@ export function Footer() {
     {
       title: getText("get_to_know_us"),
       links: [
-        "Careers",
-        "Blog",
-        "About Autozone",
-        "Investor Relations",
-        "Autozone Devices",
-        "Autozone Science",
+        { label: "Careers", query: "careers" },
+        { label: "Blog", query: "blog" },
+        { label: "About Autozone", query: "about" },
+        { label: "Investor Relations", query: "investor relations" },
+        { label: "Autozone Devices", query: "devices" },
+        { label: "Autozone Science", query: "science" },
       ],
     },
     {
       title: getText("make_money_with_us"),
       links: [
-        "Sell products on Autozone",
-        "Sell on Autozone Business",
-        "Sell apps on Autozone",
-        "Become an Affiliate",
-        "Advertise Your Products",
-        "Self-Publish with Us",
+        { label: "Sell products on Autozone", query: "sell products" },
+        { label: "Sell on Autozone Business", query: "business marketplace" },
+        { label: "Sell apps on Autozone", query: "sell apps" },
+        { label: "Become an Affiliate", query: "affiliate" },
+        { label: "Advertise Your Products", query: "advertising" },
+        { label: "Self-Publish with Us", query: "self publish" },
       ],
     },
     {
       title: getText("payment_products"),
       links: [
-        "Autozone Business Card",
-        "Shop with Points",
-        "Reload Your Balance",
-        "Autozone Currency Converter",
+        { label: "Autozone Business Card", query: "business card" },
+        { label: "Shop with Points", query: "points" },
+        { label: "Reload Your Balance", query: "balance" },
+        { label: "Autozone Currency Converter", query: "currency" },
       ],
     },
     {
       title: getText("let_us_help_you"),
       links: [
-        "Autozone and COVID-19",
-        "Your Account",
-        "Your Orders",
-        "Shipping Rates & Policies",
-        "Returns & Replacements",
-        "Help",
+        { label: "Autozone and COVID-19", query: "policy" },
+        { label: "Your Account", query: "account" },
+        { label: "Your Orders", query: "orders" },
+        { label: "Shipping Rates & Policies", query: "shipping" },
+        { label: "Returns & Replacements", query: "returns" },
+        { label: "Help", query: "customer service" },
       ],
     },
   ];
@@ -82,54 +82,52 @@ export function Footer() {
           <div className="grid gap-10 lg:grid-cols-[1.8fr,1fr]">
             <div className="space-y-5">
               <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/60">
-                Operating system
+                About Autozone
               </p>
               <h2 className="text-3xl font-semibold leading-tight">
-                Commerce autopilot for every installation team
+                Everything you need, shipped with care
               </h2>
               <p className="max-w-2xl text-base text-white/70">
-                Tightly orchestrate procurement, delivery, and service follow-ups
-                across every Autozone workflow. One dashboard tracks installs,
-                automations, and savings in real time.
+                Autozone is your one-stop marketplace for electronics, home upgrades,
+                fitness gear, and daily essentials. Reliable delivery, clear support,
+                and trusted sellers keep every order simple.
               </p>
               <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  onClick={() =>
-                    scrollToTop()
-                  }
+                  onClick={() => router.push("/search?q=deals")}
                   className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg"
                 >
-                  Schedule a walkthrough
+                  Browse deals
                 </button>
                 <button
                   type="button"
-                  onClick={() => router.push("/search?q=platform")}
+                  onClick={() => router.push("/search?q=customer%20service")}
                   className="rounded-full border border-white/40 px-5 py-2 text-sm font-semibold text-white/80 hover:border-white"
                 >
-                  Explore the platform
+                  Talk to support
                 </button>
               </div>
             </div>
             <div className="grid gap-4">
               <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur">
                 <p className="text-sm uppercase tracking-[0.35em] text-white/50">
-                  Uptime
+                  On-time delivery
                 </p>
-                <p className="mt-2 text-3xl font-semibold text-white">99.98%</p>
+                <p className="mt-2 text-3xl font-semibold text-white">99.2%</p>
                 <p className="text-sm text-white/70">
-                  Always-on logistics visibility for distributed teams.
+                  Average across the last 30 days with real-time tracking.
                 </p>
               </div>
               <div className="rounded-2xl border border-white/15 bg-white/5 p-4 backdrop-blur">
                 <p className="text-sm uppercase tracking-[0.35em] text-white/50">
-                  Installs powered
+                  Verified items
                 </p>
                 <p className="mt-2 text-3xl font-semibold text-white">
-                  2.4M+
+                  240k+
                 </p>
                 <p className="text-sm text-white/70">
-                  Hands-off scheduling and coordination every quarter.
+                  Products rated 4 stars and above by Autozone shoppers.
                 </p>
               </div>
             </div>
@@ -143,12 +141,17 @@ export function Footer() {
                 </p>
                 <ul className="space-y-2 text-sm text-white/70">
                   {column.links.map((item) => (
-                    <li key={item}>
+                    <li key={item.label}>
                       <button
                         type="button"
+                        onClick={() =>
+                          router.push(
+                            `/search?q=${encodeURIComponent(item.query || item.label)}`
+                          )
+                        }
                         className="text-left text-white/70 hover:text-white"
                       >
-                        {item}
+                        {item.label}
                       </button>
                     </li>
                   ))}
@@ -167,11 +170,11 @@ export function Footer() {
                   WEB3
                 </span>
               </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
-                  English
-                </button>
-                <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
+            <div className="flex flex-wrap items-center gap-3">
+              <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
+                English
+              </button>
+              <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
                   USD - U.S. Dollar
                 </button>
                 <button className="inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs">
@@ -188,8 +191,8 @@ export function Footer() {
               </div>
             </div>
             <p className="mt-4 text-xs text-white/60">
-              © {new Date().getFullYear()} Autozone. Unified commerce infrastructure
-              for installation-ready organizations.
+              © {new Date().getFullYear()} Autozone. Marketplace for trusted sellers,
+              fast delivery, and everyday essentials.
             </p>
           </div>
         </div>

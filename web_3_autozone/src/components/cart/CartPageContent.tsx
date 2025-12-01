@@ -10,7 +10,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { BadgeCheck, Minus, Plus, ShieldCheck, Truck, X } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 
@@ -46,10 +46,10 @@ export function CartPageContent() {
     "Cart overview"
   );
   const cartTitle = toSentenceCase(getText("shopping_cart"), "Shopping cart");
-  const emptyCartTitle = toSentenceCase(getText("empty_cart"), "Empty cart");
+  const emptyCartTitle = toSentenceCase(getText("empty_cart"), "Your cart is empty");
   const emptyCartMessage = toSentenceCase(
     getText("empty_cart_message"),
-    "Empty cart message"
+    "Add items to see them here"
   );
   const continueShoppingLabel = toSentenceCase(
     getText("continue_shopping"),
@@ -111,7 +111,7 @@ export function CartPageContent() {
           <SectionHeading
             eyebrow={cartEyebrow}
             title={cartTitle}
-            description="Review every kit before locking delivery windows."
+            description="Review every item, quantity, and total before checkout."
           />
           {items.length === 0 ? (
             <BlurCard className="p-10 text-center md:p-12">
@@ -140,12 +140,13 @@ export function CartPageContent() {
                   <BlurCard key={item.id} className="p-5">
                     <div className="flex flex-col gap-4 md:flex-row">
                       <div className="relative h-28 w-28 flex-shrink-0 rounded-2xl border border-white/60 bg-white">
-                        <Image
+                        <SafeImage
                           src={item.image}
                           alt={item.title}
                           fill
                           sizes="120px"
                           className="object-contain p-3"
+                          fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
                         />
                         <button
                           type="button"
@@ -248,7 +249,7 @@ export function CartPageContent() {
               <div className="flex gap-2">
                 <Input
                   id="promo"
-                  placeholder="e.g. INSTALL10"
+                  placeholder="e.g. SAVE10"
                   disabled
                   className="rounded-full border-slate-200 bg-white"
                 />
@@ -306,15 +307,15 @@ export function CartPageContent() {
                 {getText("proceed_to_checkout", "Checkout")}
               </Button>
             )}
-            <div className="flex flex-wrap gap-3 text-xs text-slate-500">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4" />
-                Buyer protection
-              </div>
-              <div className="flex items-center gap-2">
-                <Truck className="h-4 w-4" />
-                Fast routing
-              </div>
+              <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4" />
+                  Buyer protection
+                </div>
+                <div className="flex items-center gap-2">
+                  <Truck className="h-4 w-4" />
+                  Fast shipping
+                </div>
               <div className="flex items-center gap-2">
                 <BadgeCheck className="h-4 w-4" />
                 Verified partners

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 const AUTO_DELAY = 5000;
 
@@ -70,12 +70,13 @@ export function HeroSlider() {
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
-            <Image
+            <SafeImage
               src={slide.url}
               alt={getText(slide.altKey)}
               fill
               className="object-cover"
               priority={index === 0}
+              fallbackSrc="/images/slider/amazon_slider_1.jpg"
             />
           </div>
         ))}
@@ -85,10 +86,10 @@ export function HeroSlider() {
 
       <div className="absolute bottom-6 left-6 right-6 space-y-2">
         <p className="text-xs uppercase tracking-[0.4em] text-white/70">
-          Live install network
+          Fresh arrivals daily
         </p>
         <p className="text-2xl font-semibold leading-snug lg:text-3xl">
-          Orchestrate every drop-off, install, and compliance check in one view.
+          Shop trusted brands, local favorites, and fast-shipping essentials in one place.
         </p>
       </div>
 

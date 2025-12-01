@@ -30,17 +30,17 @@ export default function RootLayout({
         <SeedProvider>
           <CartProvider>
             {/* <NotificationBanner /> */}
-            <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
+            <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200" />}>
               <Header />
             </Suspense>
-            <Suspense fallback={<div className="min-h-screen bg-gray-100"></div>}>
+            <Suspense fallback={<div className="min-h-screen bg-gray-100" />}>
               <DataReadyGate>
                 <BodyWrapper>
                   {children}
                 </BodyWrapper>
               </DataReadyGate>
             </Suspense>
-            <Suspense fallback={<div className="h-32 bg-white"></div>}>
+            <Suspense fallback={<div className="h-32 bg-white" />}>
               <Footer />
             </Suspense>
           </CartProvider>

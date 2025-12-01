@@ -27,7 +27,7 @@ function mapSeedToVariant(seed: number): number {
 export function generateElementId(
   seed: number,
   elementType: string,
-  index: number = 0
+  index = 0
 ): string {
   const variants = SEMANTIC_ID_MAP[elementType];
   

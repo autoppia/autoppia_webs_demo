@@ -38,21 +38,6 @@ export function Header() {
     { label: "Fitness", value: "fitness" },
   ];
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  
-  const accountActions = [
-    { label: "View orders", href: "/checkout" },
-    { label: "Saved wishlist", href: "/wishlist" },
-    { label: "Account settings", href: "/search?q=account" },
-  ];
-
-  const secondaryLinks = [
-    { label: "Operations", href: "/#operations" },
-    { label: "Wishlist", href: "/wishlist" },
-    { label: "Search", href: "/search" },
-    { label: "Cart", href: "/cart" },
-    { label: "Checkout", href: "/checkout" },
-    { label: "Support", href: "/search?q=customer%20service" },
-  ];
 
   const buildSearchUrl = (value: string, category?: string) => {
     const trimmed = value.trim();
@@ -71,8 +56,8 @@ export function Header() {
   const { seed } = useSeed();
   const layoutConfig = getLayoutConfig(seed);
   const layoutClasses = getLayoutClasses(layoutConfig);
-  const liveRoutes = 18 + (seed % 7);
-  const liveCrews = 52 + (seed % 11);
+  const liveOrders = 182 + (seed % 43);
+  const liveSupport = 24 - (seed % 5);
 
   const accountRef = useRef<HTMLDivElement>(null);
   const categoryRef = useRef<HTMLDivElement>(null);
@@ -114,12 +99,6 @@ export function Header() {
     }
   }, [mobileMenuOpen]);
 
-
-  const handleAccountAction = (action: { label: string; href: string }) => {
-    setAccountMenuOpen(false);
-    router.push(action.href);
-  };
-
   const handleHeaderNav = (
     label: string,
     href: string,
@@ -149,7 +128,7 @@ export function Header() {
     router.push(buildSearchUrl(searchQuery, selectedCategory.value));
   };
 
-  const getComponentOrder = (config: any) => {
+  const getComponentOrder = (config: ReturnType<typeof getLayoutConfig>) => {
     const orderMap: Record<string, string[]> = {
       logo: ["logo", "search", "nav"],
       search: ["search", "logo", "nav"],
@@ -235,7 +214,7 @@ export function Header() {
                           }}
                       placeholder={getText(
                         "search_placeholder",
-                        "Search deployments, kits, crews"
+                        "Search products, brands, and categories"
                       )}
                           className="h-9 flex-1 rounded-full border border-slate-200 bg-white/90 px-3 text-sm shadow-inner focus-visible:ring-2 focus-visible:ring-slate-400"
                         />
@@ -303,7 +282,7 @@ export function Header() {
                         }}
                       placeholder={getText(
                         "search_placeholder",
-                        "Search deployments, kits, crews"
+                        "Search products, brands, and categories"
                       )}
                         className="h-full min-h-[48px] flex-1 border-none bg-transparent px-4 text-sm focus-visible:ring-0"
                       />
@@ -356,54 +335,6 @@ export function Header() {
                       key="nav"
                       className="hidden flex-1 items-center justify-end gap-3 md:flex"
                     >
-
-                      <div
-                        id={getId("account_dropdown")}
-                        ref={accountRef}
-                        className="relative hidden text-xs text-slate-600 lg:block"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setAccountMenuOpen((prev) => !prev)}
-                          className="text-left"
-                        >
-                          <span className="text-[11px] uppercase tracking-[0.3em] text-slate-400">
-                            {getText("account_greeting")}
-                          </span>
-                          <div className="flex items-center gap-1 text-sm font-semibold text-slate-700">
-                            {getText("account_lists")}
-                            <ChevronDown size={12} />
-                          </div>
-                        </button>
-                        {accountMenuOpen && (
-                          <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-2xl border border-slate-100 bg-white p-3 shadow-2xl">
-                            {accountActions.map((action) => (
-                              <button
-                                key={action.label}
-                                type="button"
-                                onClick={() => handleAccountAction(action)}
-                                className="block w-full rounded-xl px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"
-                              >
-                                {action.label}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleHeaderNav("Returns", "/search?q=returns", "primary_nav")
-                        }
-                        className="hidden text-left text-xs font-semibold text-slate-600 hover:text-slate-900 md:block"
-                      >
-                        <span className="block text-[11px] uppercase tracking-[0.35em] text-slate-400">
-                          {getText("returns")}
-                        </span>
-                        <span className="text-sm">{getText("orders")}</span>
-                      </button>
-
                       <SeedLink
                         id={getId("cart_link")}
                         href="/cart"
@@ -481,24 +412,9 @@ export function Header() {
                 </button>
               </SeedLink>
 
-              <div className="flex flex-1 gap-3 md:gap-4">
-                {secondaryLinks.map((link) => (
-                  <button
-                    key={link.label}
-                    type="button"
-                    onClick={() =>
-                      handleHeaderNav(link.label, link.href, "secondary_nav")
-                    }
-                    className="whitespace-nowrap rounded-full px-3.5 py-1.5 text-[13px] font-semibold text-white/80 transition hover:bg-white/10 hover:text-white"
-                  >
-                    {link.label}
-                  </button>
-                ))}
-              </div>
-
               <div className="hidden items-center gap-2 text-xs uppercase tracking-[0.35em] text-white/70 md:flex">
                 <Globe className="h-4 w-4" />
-                {liveRoutes} routes · {liveCrews} crews
+                {liveOrders} orders today · {liveSupport} agents online
               </div>
             </div>
           </div>
@@ -529,54 +445,6 @@ export function Header() {
               >
                 <X className="h-5 w-5" />
               </button>
-            </div>
-            <div className="mt-6 flex-1 overflow-y-auto space-y-6">
-              <div>
-                <p className="section-eyebrow text-[10px] text-slate-400">
-                  Quick actions
-                </p>
-                <div className="mt-3 grid gap-3">
-                  {accountActions.map((action) => (
-                    <button
-                      key={action.label}
-                      type="button"
-                      onClick={() => {
-                        handleAccountAction(action);
-                        setMobileMenuOpen(false);
-                      }}
-                      className="rounded-2xl border border-slate-200 px-4 py-3 text-left text-sm font-semibold text-slate-700 hover:border-slate-400"
-                    >
-                      {action.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="subtle-divider" />
-
-              <div>
-                <p className="section-eyebrow text-[10px] text-slate-400">
-                  Browse
-                </p>
-                <div className="mt-3 grid gap-2">
-                  {secondaryLinks.map((link) => (
-                    <button
-                      key={link.label}
-                      type="button"
-                      className="rounded-xl px-3 py-2 text-left text-sm text-slate-600 hover:bg-slate-50"
-                      onClick={() => {
-                        handleHeaderNav(link.label, link.href, "secondary_nav");
-                        setMobileMenuOpen(false);
-                      }}
-                    >
-                      {link.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="subtle-divider" />
-
             </div>
           </div>
         </div>

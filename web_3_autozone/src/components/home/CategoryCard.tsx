@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 interface CategoryItem {
   image: string;
@@ -29,7 +29,7 @@ interface CategoryCardProps {
   seed: number;
 }
 
-const getCardShiftClasses = (seed: number = 1) => {
+const getCardShiftClasses = (seed = 1) => {
   const marginLeftRightOptions = ["ml-0", "ml-2", "ml-4", "mr-2", "mr-4"];
   const marginTopOptions = ["mt-2", "mt-12", "mt-4", "mt-16", "mt-24"];
   const index = seed % marginLeftRightOptions.length;
@@ -67,70 +67,58 @@ export function CategoryCard({
 
         {singleImage ? (
           <SeedLink
-            href={footerLink?.href || "#"}
+            href={footerLink?.href || "/search"}
             className="block relative h-60 w-full hover:opacity-90 transition-opacity"
           >
-            <Image
+            <SafeImage
               src={singleImage}
               alt={title}
               fill
               className="object-cover"
+              fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
             />
           </SeedLink>
         ) : (
           <div className={`grid ${gridCols[columns]} gap-4`}>
             {items.map((item, index) => (
-              <a
+              <button
                 key={`${item.title}-${index}`}
-                href={item.link ? `#${item.link.replace('/', '')}` : "#"}
+                type="button"
                 title={item.link ? `View ${item.title} - ${item.link}` : item.title}
-                onMouseEnter={() => {
-                  if (item.link && item.link !== "#") {
-                    const basePath = `${window.location.pathname}${window.location.search}`;
-                    window.history.replaceState(
-                      null,
-                      '',
-                      `${basePath}#${item.link.replace('/', '')}`
-                    );
-                  }
+                onClick={() => {
+                  if (!item.link) return;
+                  logEvent(EVENT_TYPES.VIEW_DETAIL, {
+                    title: item.title,
+                    section: title,
+                    price: item.price || "$0.00",
+                    rating: item.rating ?? 0,
+                    brand: item.brand || "Generic",
+                    category: item.category || title || "Uncategorized",
+                  });
+                  router.push(item.link);
                 }}
-                onMouseLeave={() => {
-                  const basePath = `${window.location.pathname}${window.location.search}`;
-                  window.history.replaceState(null, '', basePath);
-                }}
-                onClick={(e) => {
-                  if (item.link && item.link !== "#") {
-                    e.preventDefault();
-                    logEvent(EVENT_TYPES.VIEW_DETAIL, {
-                      title: item.title,
-                      section: title,
-                      price: item.price || "$0.00",
-                      rating: item.rating ?? 0,
-                      brand: item.brand || "Generic",
-                      category: item.category || title || "Uncategorized",
-                    });
-                    router.push(item.link);
-                  }
-                }}
-                className="space-y-2 hover:opacity-90 transition-opacity block no-underline text-inherit cursor-pointer group"
+                disabled={!item.link}
+                className={`space-y-2 transition-opacity block no-underline text-inherit group ${
+                  item.link ? "hover:opacity-90 cursor-pointer" : "cursor-not-allowed opacity-70"
+                }`}
               >
                 <div className="relative h-36 w-full">
-                  <Image
+                  <SafeImage
                     src={item.image}
                     alt={item.title}
-                    width={150}
-                    height={150}
-                    className="object-cover w-auto h-auto"
+                    fill
+                    className="object-cover rounded-xl"
+                    fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
                   />
                   {/* URL Display on Hover - only show if there's a valid link */}
-                  {item.link && item.link !== "#" && (
+                  {item.link && (
                     <div className="absolute bottom-2 left-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 truncate pointer-events-none">
                       {item.link}
                     </div>
                   )}
                 </div>
                 <h3 className="text-sm hover:text-blue-600">{item.title}</h3>
-              </a>
+              </button>
             ))}
           </div>
         )}

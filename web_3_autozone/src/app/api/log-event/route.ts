@@ -1,11 +1,17 @@
 // src/app/api/log-event/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.API_URL || "http://app:8080";
 
+type LogEventBody = {
+  event_name?: string;
+  user_id?: string | null;
+  data?: Record<string, unknown>;
+};
+
 export async function POST(req: NextRequest) {
-  let body: any;
+  let body: LogEventBody;
 
   // 1) Validar y parsear JSON
   try {
@@ -25,7 +31,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    body = JSON.parse(raw);
+    body = JSON.parse(raw) as LogEventBody;
   } catch (err) {
     console.error("Error parsing request body:", err);
     return NextResponse.json(

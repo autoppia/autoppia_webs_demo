@@ -57,7 +57,7 @@ export function useSeedLayout() {
   }, [isDynamicEnabled, seed]);
 
   const getElementAttributes = useCallback(
-    (elementType: string, index: number = 0) => {
+    (elementType: string, index = 0) => {
       if (isV3Active) {
         return getV3ElementAttributes(elementType, index);
       }
@@ -93,7 +93,7 @@ export function useSeedLayout() {
   );
 
   const generateId = useCallback(
-    (context: string, index: number = 0) => {
+    (context: string, index = 0) => {
       if (isV3Active) {
         return getV3Id(context, index);
       }
@@ -120,9 +120,9 @@ export function useSeedLayout() {
       if (!isDynamicEnabled) {
         return;
       }
-      Object.entries(cssVariables).forEach(([property, value]) => {
-        element.style.setProperty(property, value);
-      });
+      for (const [property, value] of Object.entries(cssVariables)) {
+        element.style.setProperty(property, String(value));
+      }
     },
     [cssVariables, isDynamicEnabled]
   );

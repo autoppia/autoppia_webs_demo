@@ -8,14 +8,15 @@ import { ToastContainer, toast } from "react-toastify";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BadgeCheck, ShieldCheck, Truck } from "lucide-react";
+import { SafeImage } from "@/components/ui/SafeImage";
 
 export default function CheckoutPage() {
   const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
   const { getText, getId } = useV3Attributes();
 
-  const shipping = parseFloat((Math.random() * 5 + 2).toFixed(2));
-  const tax = parseFloat((totalAmount * 0.08).toFixed(2));
+  const shipping = Number.parseFloat((Math.random() * 5 + 2).toFixed(2));
+  const tax = Number.parseFloat((totalAmount * 0.08).toFixed(2));
   const orderTotal = totalAmount + tax + shipping;
 
   const deliveryDate1 = "Tomorrow, Jul 19";
@@ -97,11 +98,15 @@ export default function CheckoutPage() {
                       key={item.id}
                       className="flex items-center gap-4 rounded-2xl border border-white/60 bg-white/80 p-3"
                     >
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="h-14 w-14 rounded-2xl bg-white object-contain p-2"
-                      />
+                      <div className="relative h-14 w-14 rounded-2xl bg-white">
+                        <SafeImage
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-contain p-2"
+                          fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
+                        />
+                      </div>
                       <div className="flex-1 text-sm text-slate-600">
                         <p className="font-semibold text-slate-900">
                           {item.title}
@@ -188,11 +193,11 @@ export default function CheckoutPage() {
                 </Button>
                 <p className="text-center text-xs text-slate-500">
                   {getText("by_placing_order")}{" "}
-                  <a href="#" className="underline text-indigo-600">
+                  <a href="/search?q=privacy" className="underline text-indigo-600">
                     {getText("privacy_notice")}
                   </a>{" "}
                   and{" "}
-                  <a href="#" className="underline text-indigo-600">
+                  <a href="/search?q=terms" className="underline text-indigo-600">
                     {getText("conditions_of_use")}
                   </a>
                   .
@@ -204,11 +209,11 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Truck className="h-4 w-4" />
-                    Fast routing
+                    Fast shipping
                   </div>
                   <div className="flex items-center gap-2">
                     <BadgeCheck className="h-4 w-4" />
-                    Compliance ready
+                    Secure checkout
                   </div>
                 </div>
               </BlurCard>

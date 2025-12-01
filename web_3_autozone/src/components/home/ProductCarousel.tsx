@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import type { Product } from "@/context/CartContext";
@@ -9,6 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { BlurCard } from "@/components/ui/BlurCard";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { cn } from "@/library/utils";
 
 interface ProductCarouselProps {
@@ -29,6 +29,10 @@ export function ProductCarousel({
   const router = useSeedRouter();
   const { addToCart } = useCart();
   const [progressStep, setProgressStep] = useState(0);
+  const progressMarkers = useMemo(
+    () => Array.from({ length: PROGRESS_SEGMENTS }, (_, idx) => `step-${idx + 1}`),
+    []
+  );
 
   const scroll = (direction: "left" | "right") => {
     if (!containerRef.current) return;
@@ -49,8 +53,10 @@ export function ProductCarousel({
   useEffect(() => {
     const node = containerRef.current;
     if (!node) return;
+    const totalItems = products.length;
 
     const handleScroll = () => {
+      if (!totalItems) return;
       const maxScroll = node.scrollWidth - node.clientWidth || 1;
       const ratio = node.scrollLeft / maxScroll;
       setProgressStep(
@@ -63,7 +69,7 @@ export function ProductCarousel({
 
     node.addEventListener("scroll", handleScroll, { passive: true });
     return () => node.removeEventListener("scroll", handleScroll);
-  }, [products.length]);
+  }, [products]);
 
   const handleViewProduct = (product: Product) => {
     logEvent(EVENT_TYPES.VIEW_DETAIL, {
@@ -145,11 +151,12 @@ export function ProductCarousel({
                   className="relative h-40 w-full cursor-pointer overflow-hidden rounded-2xl bg-slate-50"
                   onClick={() => handleViewProduct(product)}
                 >
-                  <Image
+                  <SafeImage
                     src={product.image}
                     alt={product.title || "Product image"}
                     fill
                     className="object-contain transition-transform duration-300 hover:scale-105"
+                    fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
                   />
                   {product.price && (
                     <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow">
@@ -193,9 +200,9 @@ export function ProductCarousel({
 
       <div className="flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
-          {Array.from({ length: PROGRESS_SEGMENTS }).map((_, index) => (
+          {progressMarkers.map((marker, index) => (
             <span
-              key={`${title}-progress-${index}`}
+              key={`${title}-progress-${marker}`}
               className={cn(
                 "h-1.5 w-10 rounded-full transition",
                 index === progressStep ? "bg-slate-900" : "bg-slate-200"

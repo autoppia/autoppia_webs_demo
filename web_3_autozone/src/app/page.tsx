@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { BlurCard } from "@/components/ui/BlurCard";
@@ -12,6 +11,7 @@ import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ArrowRight, Calendar, Package, ShieldCheck, Sparkles } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/library/events";
+import { SafeImage } from "@/components/ui/SafeImage";
 import {
   getWishlistItems,
   onWishlistChange,
@@ -43,65 +43,26 @@ function HomeContent() {
       FitnessProducts.length ===
     0;
 
-  const serviceTools = [
-    {
-      title: "Track an order",
-      description: "Live status for delivery and install.",
-      icon: Package,
-      actionLabel: "Open tracker",
-      href: "/cart",
-      badge: "Live ETA",
-      metric: "12 routes in motion",
-    },
-    {
-      title: "Schedule delivery",
-      description: "Lock a time that works for your team.",
-      icon: Calendar,
-      actionLabel: "Choose slot",
-      href: "/checkout",
-      badge: "Slots",
-      metric: "Next window 2:15 PM",
-    },
-    {
-      title: "Crew sync board",
-      description: "Auto-assign installers based on skills.",
-      icon: Sparkles,
-      actionLabel: "Open board",
-      href: "/search?q=crew",
-      badge: "Crew Ops",
-      metric: "8 crews ready",
-    },
-    {
-      title: "Risk & compliance",
-      description: "Instant incident reports & sign-offs.",
-      icon: ShieldCheck,
-      actionLabel: "Review logs",
-      href: "/search?q=audits",
-      badge: "Audit",
-      metric: "Last review 4h ago",
-    },
-  ];
-
   const heroKpis = [
     {
-      label: "Install readiness",
-      value: `${78 + (seed % 12)}%`,
-      delta: "+8.4%",
-      caption: "Crews confirmed this week",
+      label: "On-time delivery",
+      value: `${94 + (seed % 4)}%`,
+      delta: "+3.1%",
+      caption: "Orders landed as promised",
       trend: "up" as const,
     },
     {
-      label: "Avg SLA",
-      value: `${48 - (seed % 10)}h`,
-      delta: "-4h",
-      caption: "From click to install",
+      label: "Avg arrival",
+      value: `${2 + (seed % 3)} days`,
+      delta: "-0.4d",
+      caption: "Coast-to-coast shipping",
       trend: "down" as const,
     },
     {
-      label: "Carbon saved",
-      value: `${14 + (seed % 6)}t`,
-      delta: "+2.1t",
-      caption: "Optimized routing offsets",
+      label: "Customer rating",
+      value: `${(4.6 + (seed % 3) * 0.1).toFixed(1)} ★`,
+      delta: "+210",
+      caption: "New verified reviews",
       trend: "up" as const,
     },
   ];
@@ -109,7 +70,7 @@ function HomeContent() {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[] | null>(null);
   const navigateWithTracking = (
     href: string,
-    payload: { label: string; source: string } & Record<string, any>
+    payload: { label: string; source: string } & Record<string, unknown>
   ) => {
     router.push(href);
   };
@@ -123,14 +84,6 @@ function HomeContent() {
       source: "wishlist_preview",
     });
     router.push(`/${item.id}`);
-  };
-
-  const handleHeroCta = (href: string, label: string) => {
-    navigateWithTracking(href, {
-      section: "hero",
-      label,
-      source: "hero_cta",
-    });
   };
 
   const carouselConfigs = [
@@ -162,7 +115,7 @@ function HomeContent() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     window.scrollTo({ left: 0 });
-  }, [seed]);
+  }, []);
 
   return (
     <main
@@ -171,34 +124,15 @@ function HomeContent() {
       <div className={`relative z-10 px-4 pb-16 ${layoutClasses.content}`}>
         <section className="omnizon-container grid gap-10 pb-24 pt-28 lg:grid-cols-[1.1fr,0.9fr]">
           <div className="space-y-6">
-            <span className="pill pill-muted">AUTOMATED COMMERCE</span>
+            <span className="pill pill-muted">EVERYDAY MARKETPLACE</span>
             <h1 className="text-4xl font-semibold text-slate-900 md:text-5xl">
-              Operational commerce for every install-ready team
+              Everything for home, tech, and daily life-delivered fast
             </h1>
             <p className="text-base text-slate-600 md:text-lg">
-              Deploy kits, lock delivery windows, and clear compliance in one view.
-              Autozone orchestrates the messy middle so your crews stay focused on
-              installs—not admin work.
+              Stock up on essentials, upgrade your setup, or grab a quick gift.
+              Autozone keeps inventory fresh, routes shipping intelligently, and
+              makes checkout effortless.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() =>
-                  handleHeroCta("/search?q=deployments", "launch_deployments")
-                }
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-elevated"
-              >
-                Launch deployments
-                <ArrowRight className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleHeroCta("/search?q=operations", "talk_to_ops")}
-                className="rounded-full border border-slate-200 px-6 py-3 text-sm font-semibold text-slate-700 hover:border-slate-400"
-              >
-                Talk to ops
-              </button>
-            </div>
             <div className="kpi-grid pt-2">
               {heroKpis.map((kpi) => (
                 <KpiStat key={kpi.label} {...kpi} />
@@ -209,13 +143,13 @@ function HomeContent() {
             <HeroSlider />
             <BlurCard className="absolute -bottom-10 left-1/2 w-[85%] -translate-x-1/2 px-5 py-4 text-sm text-slate-600 shadow-elevated">
               <p className="text-[10px] uppercase tracking-[0.4em] text-slate-400">
-                Install intelligence
+                Local availability
               </p>
               <p className="text-base font-semibold text-slate-900">
-                {82 + (seed % 7)} kits scanning in the Bay Area
+                {82 + (seed % 7)} products ready to ship near you
               </p>
               <p className="text-xs text-slate-500">
-                Auto-balancing trucks across Daly City · San Jose · Oakland
+                Same-day eligible in Daly City · San Jose · Oakland
               </p>
             </BlurCard>
           </div>
@@ -227,61 +161,12 @@ function HomeContent() {
           </div>
         )}
 
-        <section id="operations" className="omnizon-container mt-12 space-y-8">
-          <SectionHeading
-            eyebrow="Operations control"
-            title="Keep every order moving forward"
-            description="Schedule, track, and clear compliance from one command center. Every tile is live with telemetry from crews and partners."
-          />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {serviceTools.map((tool) => (
-              <BlurCard
-                key={tool.title}
-                interactive
-                className="group flex h-full flex-col gap-4 p-5"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="rounded-2xl bg-slate-900/10 p-3 text-slate-900">
-                    <tool.icon className="h-5 w-5" />
-                  </div>
-                  <span className="rounded-full bg-slate-900 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-white">
-                    {tool.badge}
-                  </span>
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-lg font-semibold text-slate-900">
-                    {tool.title}
-                  </h3>
-                  <p className="text-sm text-slate-500">{tool.description}</p>
-                </div>
-                <p className="text-sm font-semibold text-slate-700">
-                  {tool.metric}
-                </p>
-                <button
-                  type="button"
-                  onClick={() =>
-                    navigateWithTracking(tool.href, {
-                      label: tool.title,
-                      source: "service_tools",
-                      action: tool.actionLabel,
-                    })
-                  }
-                  className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-slate-900"
-                >
-                  {tool.actionLabel}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
-              </BlurCard>
-            ))}
-          </div>
-        </section>
-
         {wishlistItems && wishlistItems.length > 0 && (
           <section id="wishlist" className="omnizon-container mt-16 space-y-6">
             <SectionHeading
               eyebrow="Saved wishlist"
-              title="Items you saved for later"
-              description="Revisit any item to pick up where you left off or drop it into your next install run."
+              title="Saved for later"
+              description="Pick up where you left off, compare, or move items straight into the cart."
               actions={
                 <button
                   type="button"
@@ -307,12 +192,13 @@ function HomeContent() {
                   className="min-w-[260px] p-4"
                 >
                   <div className="relative h-36 w-full overflow-hidden rounded-2xl bg-slate-50">
-                    <Image
+                    <SafeImage
                       src={item.image}
                       alt={item.title}
                       fill
                       sizes="260px"
                       className="object-contain"
+                      fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
                     />
                     {item.price && (
                       <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow">
@@ -354,7 +240,7 @@ function HomeContent() {
           <SectionHeading
             eyebrow="Product highlights"
             title="Trusted picks by category"
-            description="High-performing bundles and replacement parts curated by the Autozone ops brain."
+            description="High-performing gear, gifts, and everyday essentials curated for Autozone shoppers."
             actions={
               <button
                 type="button"

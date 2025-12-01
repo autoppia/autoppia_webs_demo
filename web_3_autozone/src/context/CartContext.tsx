@@ -134,7 +134,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   // Load cart from localStorage on initial load
   useEffect(() => {
     const parsedCart = readJson<CartState>("omnizonCart", null);
-    if (parsedCart && parsedCart.items) {
+    if (parsedCart?.items) {
       dispatch({ type: "CLEAR_CART" });
       for (const item of parsedCart.items) {
         for (let i = 0; i < item.quantity; i++) {

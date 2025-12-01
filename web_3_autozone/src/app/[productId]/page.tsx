@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Star, Share2, Heart, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,8 @@ import {
   isInWishlist,
   toggleWishlistItem,
 } from "@/library/wishlist";
+import { SafeImage } from "@/components/ui/SafeImage";
+import { getCategoryFallback } from "@/data/products-enhanced";
 
 
 // Static date to avoid hydration mismatch
@@ -43,6 +44,7 @@ function ProductContent() {
 
   const { seed } = useSeed();
   const order = seed % 3;
+  const fallbackImage = getCategoryFallback(product?.category);
 
   useEffect(() => {
     setIsLoading(true);
@@ -97,7 +99,9 @@ function ProductContent() {
   }, [product?.image]);
 
   useEffect(() => {
-    setActiveImage(0);
+    if (product?.id) {
+      setActiveImage(0);
+    }
   }, [product?.id]);
 
   const specEntries = useMemo(
@@ -140,9 +144,9 @@ function ProductContent() {
   const highlightBullets = useMemo(() => {
     if (!product?.description) {
       return [
-        "Designed for multi-location deployment teams.",
-        "Pairs with Autozone install scheduling.",
-        "Eligible for carbon-neutral routing offsets.",
+        "Built for everyday use with durable materials.",
+        "Ships fast with easy returns included.",
+        "Well-reviewed by shoppers for value and quality.",
       ];
     }
     return product.description.split("\n\n").slice(0, 4);
@@ -219,6 +223,7 @@ function ProductContent() {
         className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 focus:border-slate-400 focus:outline-none"
         value={quantity}
         onChange={(e) => {
+          if (!product) return;
           const newQty = Number.parseInt(e.target.value);
           setQuantity(newQty);
           logEvent(EVENT_TYPES.QUANTITY_CHANGED, {
@@ -280,16 +285,24 @@ function ProductContent() {
     </Button>
   );
 
+  const actionMap = {
+    quantity: quantityInput,
+    add: addToCartButton,
+    buy: buyNowButton,
+  };
+
   // Predefined orders
-  const layouts = [
-    [quantityInput, addToCartButton, buyNowButton],
-    [buyNowButton, quantityInput, addToCartButton],
-    [addToCartButton, buyNowButton, quantityInput],
+  const layouts: Array<Array<keyof typeof actionMap>> = [
+    ["quantity", "add", "buy"],
+    ["buy", "quantity", "add"],
+    ["add", "buy", "quantity"],
   ];
 
   const handleAddToCart = () => {
     if (!product) return;
-    Array.from({ length: quantity }).forEach(() => addToCart(product));
+    for (let index = 0; index < quantity; index += 1) {
+      addToCart(product);
+    }
     logEvent(EVENT_TYPES.ADD_TO_CART, {
       productId: product.id,
       title: product.title,
@@ -382,7 +395,7 @@ function ProductContent() {
                 <div className="flex gap-3 overflow-x-auto lg:flex-col lg:overflow-y-auto">
                   {galleryImages.map((src, index) => (
                     <button
-                      key={`${src}-${index}`}
+                      key={src}
                       type="button"
                       onClick={() => setActiveImage(index)}
                       className={`relative h-20 w-20 rounded-2xl border-2 p-1 transition ${
@@ -391,23 +404,25 @@ function ProductContent() {
                           : "border-transparent opacity-60 hover:opacity-100"
                       }`}
                     >
-                      <Image
+                      <SafeImage
                         src={src}
                         alt={`${product.title} thumbnail ${index + 1}`}
                         fill
                         sizes="80px"
                         className="rounded-xl object-contain"
+                        fallbackSrc={fallbackImage}
                       />
                     </button>
                   ))}
                 </div>
                 <div className="relative aspect-square rounded-[32px] border border-white/50 bg-white">
-                  <Image
+                  <SafeImage
                     src={galleryImages[activeImage] ?? product.image}
                     alt={product.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 600px"
                     className="object-contain p-6"
+                    fallbackSrc={fallbackImage}
                   />
                 </div>
               </div>
@@ -481,11 +496,11 @@ function ProductContent() {
 
             <BlurCard className="space-y-3 p-6">
               <h3 className="text-lg font-semibold text-slate-900">
-                Why ops teams pick it
+                Why shoppers love it
               </h3>
               <ul className="space-y-2 text-sm text-slate-600">
-                {highlightBullets.map((point, idx) => (
-                  <li key={`${point}-${idx}`} className="flex gap-2">
+                {highlightBullets.map((point) => (
+                  <li key={`${point}-${product?.id ?? "detail"}`} className="flex gap-2">
                     <span className="mt-1 h-1.5 w-1.5 rounded-full bg-slate-900" />
                     {point}
                   </li>
@@ -504,10 +519,10 @@ function ProductContent() {
                 {product.price}
               </div>
               <p className="text-sm text-slate-600">
-                {getText("free_delivery")} <strong>{DELIVERY_DATE}</strong> — Autozone crews available
+                {getText("free_delivery")} <strong>{DELIVERY_DATE}</strong> — Autozone courier partners
               </p>
-              {layouts[order].map((element, index) => (
-                <div key={index}>{element}</div>
+              {layouts[order].map((elementKey) => (
+                <div key={elementKey}>{actionMap[elementKey]}</div>
               ))}
               <dl className="grid gap-2 text-xs text-slate-500">
                 <div className="flex justify-between">
@@ -535,7 +550,7 @@ function ProductContent() {
 
             <BlurCard className="space-y-4 p-5" data-variant="muted">
               <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-slate-400">
-                <span>Delivery intelligence</span>
+                <span>Shipping options</span>
                 <button
                   type="button"
                   onClick={handleExploreToggle}
@@ -556,15 +571,15 @@ function ProductContent() {
                 <ul className="space-y-2 text-sm text-slate-600">
                   <li>
                     {getText("white_glove_option") ||
-                      "White-glove install scheduling available during checkout."}
+                      "Choose standard, expedited, or same-day when available."}
                   </li>
                   <li>
                     {getText("carbon_offset") ||
-                      "Eligible for carbon-neutral delivery credits."}
+                      "Free returns within 30 days on most items."}
                   </li>
                   <li>
                     {getText("bundle_service") ||
-                      "Bundle with counter accessories for automatic discounts."}
+                      "Bundle matching accessories for automatic discounts."}
                   </li>
                 </ul>
               )}
@@ -589,8 +604,8 @@ function ProductContent() {
           <section className="mt-16 space-y-6">
             <SectionHeading
               eyebrow={getText("about_this_item")}
-              title="Deployment notes"
-              description="What crews and coordinators call out when rolling this kit into the field."
+              title="Product details"
+              description="What shoppers and our product team call out before you add it to cart."
             />
             <BlurCard className="p-6">
               <ul className="list-disc space-y-2 pl-5 text-sm text-slate-600">

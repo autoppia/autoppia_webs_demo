@@ -1,7 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useCart } from "@/context/CartContext";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
@@ -13,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { searchProducts } from "@/dynamic/v2-data";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { SafeImage } from "@/components/ui/SafeImage";
 import { cn } from "@/library/utils";
 import { LayoutGrid, List, SlidersHorizontal } from "lucide-react";
 
@@ -20,7 +20,7 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
   const router = useSeedRouter();
   const urlQuery = searchParams.get("q") ?? "";
-  const query = urlQuery.toLowerCase() || "1";
+  const query = urlQuery.trim().toLowerCase();
   const categoryParam = (searchParams.get("category") ?? "all").toLowerCase();
   const { addToCart } = useCart();
   const { getText, getId } = useV3Attributes();
@@ -32,6 +32,11 @@ export default function SearchPage() {
   const [activeCategory, setActiveCategory] = useState<string>(categoryParam || "all");
   const [sortOption, setSortOption] = useState<"relevance" | "price-asc" | "price-desc" | "rating">("relevance");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [formError, setFormError] = useState<string | null>(null);
+  const categoryLabel =
+    activeCategory === "all"
+      ? "All products"
+      : activeCategory.replace(/\b\w/g, (char) => char.toUpperCase());
 
   useEffect(() => {
     setLocalQuery(urlQuery);
@@ -42,21 +47,21 @@ export default function SearchPage() {
   }, [categoryParam]);
 
   const quickFilters = [
-    { label: "Install kits", query: "install" },
-    { label: "Ops hardware", query: "hardware" },
-    { label: "Field audio", query: "microphone" },
-    { label: "Smart notebooks", query: "notebook" },
-    { label: "Desks & mounts", query: "desk" },
+    { label: "Top deals", query: "deal" },
+    { label: "Home essentials", query: "home" },
+    { label: "Kitchen finds", query: "kitchen" },
+    { label: "Fitness gear", query: "fitness" },
+    { label: "Headphones", query: "headphone" },
   ];
 
   const baseResults = searchProducts(query);
   const availableCategories = useMemo(() => {
     const options = new Set<string>(["all"]);
-    baseResults.forEach((product) => {
+    for (const product of baseResults) {
       if (product.category) {
         options.add(product.category.toLowerCase());
       }
-    });
+    }
     return Array.from(options);
   }, [baseResults]);
 
@@ -78,8 +83,9 @@ export default function SearchPage() {
 
   const categoryFilteredResults = useMemo(() => {
     if (!activeCategory || activeCategory === "all") return filteredResults;
-    return filteredResults.filter((product) =>
-      (product.category || "").toLowerCase().includes(activeCategory)
+    const normalizedCategory = activeCategory.toLowerCase();
+    return filteredResults.filter(
+      (product) => (product.category || "").toLowerCase() === normalizedCategory
     );
   }, [filteredResults, activeCategory]);
 
@@ -110,7 +116,11 @@ export default function SearchPage() {
   const handleSearchSubmit = (event?: React.FormEvent) => {
     event?.preventDefault();
     const trimmed = localQuery.trim();
-    if (!trimmed && activeCategory === "all") return;
+    if (!trimmed && activeCategory === "all") {
+      setFormError("Enter a product or choose a category to search.");
+      return;
+    }
+    setFormError(null);
     router.push(buildSearchUrl(trimmed, activeCategory));
   };
 
@@ -118,6 +128,7 @@ export default function SearchPage() {
     const next = value.toLowerCase() || "all";
     if (next === activeCategory) return;
     setActiveCategory(next);
+    setFormError(null);
     logEvent(EVENT_TYPES.CATEGORY_FILTER, {
       category: next,
       query: localQuery.trim() || urlQuery,
@@ -160,23 +171,21 @@ export default function SearchPage() {
       interactive
       className="flex min-h-[320px] flex-col gap-3 p-4"
     >
-      <div
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         onClick={() => handleViewProduct(product)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") handleViewProduct(product);
-        }}
-        className="relative h-48 w-full overflow-hidden rounded-2xl bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+        aria-label={`View ${product.title}`}
+        className="relative h-48 w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
       >
-        <Image
+        <SafeImage
           src={product.image}
           alt={product.title}
           fill
           sizes="(max-width: 768px) 50vw, 320px"
           className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+          fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
         />
-      </div>
+      </button>
       <div className="space-y-1 text-sm">
         <p className="line-clamp-2 font-semibold text-slate-900">
           {product.title}
@@ -219,23 +228,21 @@ export default function SearchPage() {
       interactive
       className="flex flex-col gap-4 p-4 md:flex-row md:items-center"
     >
-      <div
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         onClick={() => handleViewProduct(product)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") handleViewProduct(product);
-        }}
-        className="relative h-32 w-full overflow-hidden rounded-2xl bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:h-28 md:w-32"
+        aria-label={`View ${product.title}`}
+        className="relative h-32 w-full overflow-hidden rounded-2xl bg-slate-50 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 md:h-28 md:w-32"
       >
-        <Image
+        <SafeImage
           src={product.image}
           alt={product.title}
           fill
           sizes="(max-width: 768px) 50vw, 180px"
           className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+          fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
         />
-      </div>
+      </button>
       <div className="flex flex-1 flex-col gap-2 text-sm">
         <p className="text-lg font-semibold text-slate-900">{product.title}</p>
         <p className="text-slate-500">{product.brand || product.category}</p>
@@ -271,55 +278,30 @@ export default function SearchPage() {
           <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
             {getText("search_results_for")}
           </p>
-          <p className="text-2xl font-semibold text-slate-900">{urlQuery || "All products"}</p>
+          <p className="text-2xl font-semibold text-slate-900">
+            {urlQuery || categoryLabel}
+          </p>
           <p className="text-sm text-slate-500">
-            {resultCount} {resultCount === 1 ? "kit" : "kits"} live
+            {resultCount} {resultCount === 1 ? "item" : "items"} ready · {categoryLabel}
           </p>
         </div>
         <form onSubmit={handleSearchSubmit} className="space-y-3">
           <Input
             value={localQuery}
-            onChange={(event) => setLocalQuery(event.target.value)}
-            placeholder={getText("search_placeholder", "Search installations, kits, teams")}
+            onChange={(event) => {
+              setLocalQuery(event.target.value);
+              if (formError) setFormError(null);
+            }}
+            placeholder={getText("search_placeholder", "Search products, brands, and categories")}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm"
           />
           <Button type="submit" className="w-full rounded-full bg-slate-900 text-white">
             {getText("search_cta", "Search")}
           </Button>
+          {formError && (
+            <p className="text-xs font-semibold text-red-600">{formError}</p>
+          )}
         </form>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Quick filters
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {quickFilters.map((filter) => (
-              <button
-                key={filter.label}
-                type="button"
-                onClick={() =>
-                  setActiveQuickFilter((prev) =>
-                    prev === filter.query ? null : filter.query
-                  )
-                }
-                className={cn(
-                  "rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em]",
-                  activeQuickFilter === filter.query
-                    ? "border-slate-900 bg-slate-900 text-white"
-                    : "border-slate-200 text-slate-600 hover:border-slate-400"
-                )}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={() => setActiveQuickFilter(null)}
-            className="mt-3 text-xs font-semibold text-slate-500 underline-offset-4 hover:underline"
-          >
-            Clear filters
-          </button>
-        </div>
         <div className="subtle-divider" />
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
@@ -373,8 +355,8 @@ export default function SearchPage() {
       <div className="space-y-6">
         <SectionHeading
           eyebrow="Search"
-          title={`${getText("search_results_for")}: ${urlQuery || "auto suggestions"}`}
-          description="Refine kits, accessories, and install hardware without leaving the page. Sort, filter, or switch layouts while keeping context."
+          title={`${getText("search_results_for")}: ${urlQuery || categoryLabel || "recommended picks"}`}
+          description="Refine products, compare accessories, and explore curated bundles without losing your place. Sort, filter, or switch layouts while keeping context."
           actions={
             <div className="flex gap-2">
               <Button
@@ -397,7 +379,7 @@ export default function SearchPage() {
         <div className="flex flex-col gap-3 rounded-[32px] border border-white/60 bg-white/80 px-4 py-3 shadow-sm md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <SlidersHorizontal className="h-4 w-4" />
-            {resultCount} {resultCount === 1 ? "kit" : "kits"} available
+            {resultCount} {resultCount === 1 ? "item" : "items"} available
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <select
