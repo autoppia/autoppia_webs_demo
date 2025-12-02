@@ -233,8 +233,9 @@ function CardScroller({
   const checkScroll = () => {
     if (ref.current) {
       const { scrollLeft, scrollWidth, clientWidth } = ref.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+      // Usar un pequeño margen para evitar problemas de precisión
+      setCanScrollLeft(scrollLeft > 10);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
   };
 
@@ -255,20 +256,28 @@ function CardScroller({
       ro.observe(ref.current);
     }
     window.addEventListener("resize", scheduleCheck);
+    // Verificar también cuando cambian los children
+    scheduleCheck();
     return () => {
       window.removeEventListener("resize", scheduleCheck);
       if (ro && ref.current) ro.disconnect();
       if (rafIdRef.current !== null) cancelAnimationFrame(rafIdRef.current);
       tickingRef.current = false;
     };
-  }, []);
+  }, [children]); // Agregar children como dependencia para actualizar cuando cambien
 
   const scroll = (direction: "left" | "right") => {
     if (ref.current) {
-      const scrollAmount = 300;
+      // Ancho de tarjeta (320px) + gap (16px) = 336px
+      // Scroll por el ancho exacto de una tarjeta
+      const cardWidth = 320;
+      const gap = 16;
+      const scrollAmount = cardWidth + gap;
+
       const newScrollLeft =
         ref.current.scrollLeft +
         (direction === "left" ? -scrollAmount : scrollAmount);
+
       ref.current.scrollTo({ left: newScrollLeft, behavior: "smooth" });
 
       // Log scroll event
@@ -281,32 +290,51 @@ function CardScroller({
   }
 
   return (
-    <div className="relative">
+    <div className="relative group">
+      {/* Flecha izquierda - fuera del contenedor */}
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+          className="absolute -left-5 top-1/2 -translate-y-1/2 z-20 
+            w-12 h-12 flex items-center justify-center
+            bg-white/95 backdrop-blur-sm border-2 border-gray-200 
+            rounded-full shadow-xl hover:shadow-2xl
+            hover:bg-emerald-50 hover:border-emerald-400 hover:scale-110
+            transition-all duration-300 ease-out"
           data-testid={`scroll-left-${seed ?? 1}`}
-          aria-label={getText("scroll_left")}
+          aria-label={getText("scroll_left") || "Scroll left"}
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-6 h-6 text-gray-700 group-hover:text-emerald-600" />
         </button>
       )}
+
+      {/* Flecha derecha - fuera del contenedor */}
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+          className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 
+            w-12 h-12 flex items-center justify-center
+            bg-white/95 backdrop-blur-sm border-2 border-gray-200 
+            rounded-full shadow-xl hover:shadow-2xl
+            hover:bg-emerald-50 hover:border-emerald-400 hover:scale-110
+            transition-all duration-300 ease-out"
           data-testid={`scroll-right-${seed ?? 1}`}
-          aria-label={getText("scroll_right")}
+          aria-label={getText("scroll_right") || "Scroll right"}
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-6 h-6 text-gray-700 group-hover:text-emerald-600" />
         </button>
       )}
+
+      {/* Contenedor con padding para mostrar media tarjeta del siguiente */}
       <div
         ref={ref}
-        className="flex gap-4 pb-4 scroll-smooth overflow-x-auto overflow-y-hidden no-scrollbar"
+        className="flex gap-4 pb-4 px-5 scroll-smooth overflow-x-auto overflow-y-hidden no-scrollbar"
         data-testid={cardContainerVariation.dataTestId}
         onScroll={scheduleCheck}
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
       >
         {children}
       </div>
