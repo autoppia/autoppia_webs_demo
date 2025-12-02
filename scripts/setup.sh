@@ -398,16 +398,29 @@ deploy_webs_server() {
         echo "  ⚠️  No initial data found for $project (will need to generate)"
       fi
     else
-      echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  fi
+done
+
+echo "✅ Master pools ready"
+
+# If DB mode (v2) is disabled, sync originals into data so endpoints serve originals
+if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = false ]; then
+  echo "🔄 V2 DB mode disabled → syncing original datasets into data/ for all projects"
+  for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
+    ORIG_DIR="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/original"
+    DATA_DIR="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data"
+    if [ -d "$ORIG_DIR" ]; then
+      mkdir -p "$DATA_DIR"
+      cp "$ORIG_DIR"/*.json "$DATA_DIR"/ 2>/dev/null || true
     fi
   done
-  
-  echo "✅ Master pools ready"
-  
-  # Copy data to container if webs_server is running
-  if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
-    echo "📦 Copying data pools to webs_server container..."
-    for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
+fi
+
+# Copy data to container if webs_server is running
+if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
+  echo "📦 Copying data pools to webs_server container..."
+  for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
       if [ -f "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" ]; then
         echo "  → Copying $project to container..."
         docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
@@ -500,10 +513,10 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_webs_server
-    deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-    # deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    # deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    # deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+    # deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+    #deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
     # deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
     # deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
     # deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"

@@ -768,6 +768,26 @@ async def load_dataset_endpoint(
                 detail=f"No file-based data found for project={project_key}. Generate data first.",
             )
 
+        # If V2 DB mode is disabled, return full pool (original dataset) without seeded selection
+        if os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}:
+            metadata = {
+                "source": "file_storage",
+                "projectKey": project_key,
+                "entityType": entity_type,
+                "seed": seed_value,
+                "limit": len(file_data_pool),
+                "method": "full",
+                "filterKey": filter_key,
+                "filterValues": None,
+                "totalAvailable": len(file_data_pool),
+            }
+            return DatasetLoadResponse(
+                message=f"DB mode disabled; returning full dataset ({len(file_data_pool)} items)",
+                metadata=metadata,
+                data=file_data_pool,
+                count=len(file_data_pool),
+            )
+
         # Apply seeded selection based on requested method
         method_normalized = (method or "select").lower()
         selected: List[Dict[str, Any]]

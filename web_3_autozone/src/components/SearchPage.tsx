@@ -186,7 +186,10 @@ export default function SearchPage() {
       <div className="flex items-center justify-between text-sm font-semibold text-slate-900">
         <span>{product.price}</span>
         <span className="text-xs text-emerald-600">
-          {product.rating ?? "4.8"} ★
+          {product.rating ? product.rating.toFixed(1) : "4.8"} ★
+          {product.reviews !== undefined && (
+            <span className="text-slate-500"> ({product.reviews})</span>
+          )}
         </span>
       </div>
       <div className="flex gap-2">

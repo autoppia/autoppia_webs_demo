@@ -92,24 +92,29 @@ export function ProductCarousel({
 
   const exploreHref = `/search?q=${encodeURIComponent(title)}`;
 
+  // Don't render if no products
+  if (!products || products.length === 0) {
+    return null;
+  }
+
   return (
     <BlurCard
       id={getId("product_carousel")}
-      className="relative flex flex-col overflow-hidden"
+      className="relative flex flex-col overflow-hidden shadow-lg"
       data-seed={seed}
     >
-      <div className="flex flex-col gap-2 px-5 pt-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 px-6 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.35em] text-slate-400">
+          <p className="text-[11px] uppercase tracking-[0.35em] text-slate-500 font-medium">
             Featured collection
           </p>
-          <h2 className="text-2xl font-semibold text-slate-900">{title}</h2>
+          <h2 className="mt-1 text-2xl font-bold text-slate-900">{title}</h2>
         </div>
         <div className="hidden items-center gap-2 sm:flex">
           <button
             type="button"
             onClick={() => scroll("left")}
-            className="rounded-full border border-slate-200 bg-white/80 p-2 text-slate-700 shadow-sm"
+            className="rounded-full border border-slate-300 bg-white p-2.5 text-slate-700 shadow-md hover:bg-slate-50 hover:shadow-lg transition-all duration-200"
             aria-label={getText("scroll_left")}
           >
             <ChevronLeft size={20} />
@@ -117,7 +122,7 @@ export function ProductCarousel({
           <button
             type="button"
             onClick={() => scroll("right")}
-            className="rounded-full border border-slate-200 bg-white/80 p-2 text-slate-700 shadow-sm"
+            className="rounded-full border border-slate-300 bg-white p-2.5 text-slate-700 shadow-md hover:bg-slate-50 hover:shadow-lg transition-all duration-200"
             aria-label={getText("scroll_right")}
           >
             <ChevronRight size={20} />
@@ -139,46 +144,64 @@ export function ProductCarousel({
             >
               <BlurCard
                 interactive
-                className="flex h-full flex-col gap-3 rounded-3xl border-white/50 bg-white/85 p-4"
+                className="flex h-full flex-col gap-3 rounded-3xl border border-slate-200/60 bg-white/95 p-4 shadow-md hover:shadow-xl transition-all duration-300"
               >
                 <div
-                  className="relative h-40 w-full cursor-pointer overflow-hidden rounded-2xl bg-slate-50"
+                  className="relative h-44 w-full cursor-pointer overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100"
                   onClick={() => handleViewProduct(product)}
                 >
                   <Image
-                    src={product.image}
+                    src={product.image || "/images/placeholder-product.jpg"}
                     alt={product.title || "Product image"}
                     fill
-                    className="object-contain transition-transform duration-300 hover:scale-105"
+                    className="object-contain p-2 transition-transform duration-300 hover:scale-110"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/images/placeholder-product.jpg";
+                    }}
                   />
                   {product.price && (
-                    <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow">
+                    <span className="absolute left-3 top-3 rounded-full bg-slate-900/95 px-3 py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur-sm">
                       {product.price}
                     </span>
                   )}
+                  {product.rating && (
+                    <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-md backdrop-blur-sm">
+                      <span className="text-yellow-500">★</span>
+                      <span>{product.rating.toFixed(1)}</span>
+                      {product.reviews !== undefined && (
+                        <span className="text-slate-500">({product.reviews})</span>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <div className="flex-1 space-y-1">
-                  <p className="line-clamp-2 text-sm font-semibold text-slate-900">
+                <div className="flex-1 space-y-1.5">
+                  <p className="line-clamp-2 text-sm font-bold text-slate-900 leading-tight">
                     {product.title}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs font-medium text-slate-600">
                     {product.brand || product.category}
                   </p>
+                  {product.description && (
+                    <p className="line-clamp-2 text-xs text-slate-500 leading-relaxed">
+                      {product.description}
+                    </p>
+                  )}
                 </div>
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
+                <div className="flex items-center justify-between gap-2 pt-1">
                   <button
                     type="button"
                     onClick={() => handleViewProduct(product)}
-                    className="text-slate-500 underline decoration-dotted underline-offset-4"
+                    className="text-xs font-semibold text-slate-600 underline decoration-dotted underline-offset-4 hover:text-slate-900 transition-colors"
                   >
                     Details
                   </button>
                   <button
                     type="button"
                     onClick={() => handleQuickAdd(product)}
-                    className="inline-flex items-center gap-1 rounded-full bg-slate-900 px-3 py-1 text-white"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-800 active:scale-95 transition-all duration-200 shadow-md"
                   >
-                    <Plus className="h-3 w-3" />
+                    <Plus className="h-3.5 w-3.5" />
                     Quick add
                   </button>
                 </div>
@@ -191,14 +214,16 @@ export function ProductCarousel({
         <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white/90 to-transparent" />
       </div>
 
-      <div className="flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 px-6 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           {Array.from({ length: PROGRESS_SEGMENTS }).map((_, index) => (
             <span
               key={`${title}-progress-${index}`}
               className={cn(
-                "h-1.5 w-10 rounded-full transition",
-                index === progressStep ? "bg-slate-900" : "bg-slate-200"
+                "h-2 w-12 rounded-full transition-all duration-300",
+                index === progressStep 
+                  ? "bg-slate-900 shadow-md" 
+                  : "bg-slate-200 hover:bg-slate-300"
               )}
             />
           ))}
@@ -208,9 +233,9 @@ export function ProductCarousel({
           onClick={() => {
             router.push(exploreHref);
           }}
-          className="text-sm font-semibold text-slate-700 underline-offset-4 hover:underline"
+          className="text-sm font-bold text-slate-700 underline-offset-4 hover:text-slate-900 hover:underline transition-colors"
         >
-          View more in {title}
+          View more in {title} →
         </button>
       </div>
     </BlurCard>

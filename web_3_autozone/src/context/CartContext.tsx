@@ -13,6 +13,7 @@ export interface Product {
   description?: string;
   category?: string;
   rating?: number;
+  reviews?: number;
   brand?: string;
   inStock?: boolean;
   color?: string;

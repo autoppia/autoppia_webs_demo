@@ -75,8 +75,10 @@ export async function initializeProducts(
   limit: number = 100
 ): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  if (!dbModeEnabled) { 
-    return fallbackProducts as Product[];
+  if (!dbModeEnabled) {
+    const normalized = normalizeProductImages(fallbackProducts as Product[]);
+    dynamicProducts = normalized;
+    return normalized;
   }
   // Wait a bit for SeedContext to sync v2Seed to window if needed
   if (typeof window !== "undefined" && dbModeEnabled) {
@@ -95,9 +97,8 @@ export async function initializeProducts(
   });
 
   if (!Array.isArray(products) || products.length === 0) {
-    throw new Error(
-      `[autozone] No products returned from dataset (seed=${effectiveSeed})`
-    );
+    console.warn(`[autozone] No products returned from dataset (seed=${effectiveSeed}), falling back to local data`);
+    return fallbackProducts as Product[];
   }
 
   dynamicProducts = normalizeProductImages(products);

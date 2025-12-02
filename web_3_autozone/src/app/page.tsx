@@ -144,32 +144,42 @@ function HomeContent() {
           </div>
         </div>
         {/* Product Carousels */}
-        <div className="omnizon-container mt-6 space-y-6">
-          <ProductCarousel
-            title="Top Sellers In Kitchen"
-            products={kitchenProducts}
-            seed={seed}
-          />
-          <ProductCarousel
-            title="Top Sellers In Technology"
-            products={techProducts}
-            seed={seed}
-          />
-          <ProductCarousel
-            title="Top Sellers In Home"
-            products={HomeProducts}
-            seed={seed}
-          />
-          <ProductCarousel
-            title="Top Sellers In Electronics"
-            products={ElectronicProducts}
-            seed={seed}
-          />
-          <ProductCarousel
-            title="Top Sellers In Fitness"
-            products={FitnessProducts}
-            seed={seed}
-          />
+        <div className="omnizon-container mt-8 space-y-8">
+          {kitchenProducts.length > 0 && (
+            <ProductCarousel
+              title="Top Sellers In Kitchen"
+              products={kitchenProducts}
+              seed={seed}
+            />
+          )}
+          {techProducts.length > 0 && (
+            <ProductCarousel
+              title="Top Sellers In Technology"
+              products={techProducts}
+              seed={seed}
+            />
+          )}
+          {HomeProducts.length > 0 && (
+            <ProductCarousel
+              title="Top Sellers In Home"
+              products={HomeProducts}
+              seed={seed}
+            />
+          )}
+          {ElectronicProducts.length > 0 && (
+            <ProductCarousel
+              title="Top Sellers In Electronics"
+              products={ElectronicProducts}
+              seed={seed}
+            />
+          )}
+          {FitnessProducts.length > 0 && (
+            <ProductCarousel
+              title="Top Sellers In Fitness"
+              products={FitnessProducts}
+              seed={seed}
+            />
+          )}
         </div>
       </div>
     </main>

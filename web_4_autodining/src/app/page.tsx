@@ -522,8 +522,27 @@ function HomePageContent() {
     };
   }, [v2Seed, resolvedSeeds.base, resolvedSeeds.v2, seed]);
 
-  const iconRestaurants = useMemo(() => list.slice(15, 30), [list]);
-  const awardRestaurants = useMemo(() => list.slice(30, 50), [list]);
+  // Filter restaurants by price category
+  const expensiveRestaurants = useMemo(() => {
+    return list.filter((r) => {
+      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+      return priceCount >= 4; // $$$$ or more
+    }).slice(0, 5);
+  }, [list]);
+
+  const mediumRestaurants = useMemo(() => {
+    return list.filter((r) => {
+      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+      return priceCount >= 2 && priceCount <= 3; // $$ or $$$
+    }).slice(0, 5);
+  }, [list]);
+
+  const cheapRestaurants = useMemo(() => {
+    return list.filter((r) => {
+      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+      return priceCount === 1; // $
+    }).slice(0, 5);
+  }, [list]);
 
   return (
     <main suppressHydrationWarning>
@@ -681,188 +700,92 @@ function HomePageContent() {
         </section>
 
         {/* Main Content - Cards, Sections, etc. */}
-        {isLoading || !isReady || list.length === 0 ? null : wrapButton ? (
-          <div data-testid={`section-wrapper-${seed ?? 1}`}>
-            <section
-              id={getId("section_lunch")}
-              className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
-              data-testid={sectionLayoutVariation.dataTestId}
-            >
-              <h2 className="text-2xl font-bold mb-4">
-                {getText("section_lunch")}
-              </h2>
-              <CardScroller
-                title={getText("section_lunch")}
-                layoutSeed={layoutSeed}
+        {isLoading || !isReady || list.length === 0 ? null : (
+          <>
+            {/* Expensive Restaurants ($$$$) */}
+            {expensiveRestaurants.length > 0 && (
+              <section
+                id={getId("section_expensive")}
+                className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
+                data-testid={sectionLayoutVariation.dataTestId}
               >
-                {filtered.map((r) => (
-                  <RestaurantCard
-                    key={r.id + "-lunch"}
-                    r={r}
-                    date={date}
-                    people={people}
-                    time={time}
-                    layoutSeed={layoutSeed}
-                  />
-                ))}
-              </CardScroller>
-            </section>
-          </div>
-        ) : (
-          <section
-            id={getId("section_lunch")}
-            className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
-            data-testid={sectionLayoutVariation.dataTestId}
-          >
-            <h2 className="text-2xl font-bold mb-4">
-              {getText("section_lunch")}
-            </h2>
-            <CardScroller
-              title={getText("section_lunch")}
-              layoutSeed={layoutSeed}
-            >
-              {filtered.map((r) => (
-                <RestaurantCard
-                  key={r.id + "-lunch"}
-                  r={r}
-                  date={date}
-                  people={people}
-                  time={time}
-                  layoutSeed={layoutSeed}
-                />
-              ))}
-            </CardScroller>
-          </section>
-        )}
-
-        {/* Introducing OpenDinning Icons Section */}
-        {wrapButton ? (
-          <div data-testid={`icon-section-wrapper-${seed ?? 1}`}>
-            <section
-              id={getId("section_icons")}
-              className={`${sectionLayoutVariation.className} ${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
-              data-testid={sectionLayoutVariation.dataTestId}
-            >
-              <div className="flex flex-row justify-between items-center mb-1">
-                <div>
-                  <h2 className="text-2xl md:text-2xl font-bold">
-                    {getText("section_icons")}
-                  </h2>
-                  <div className="text-base text-gray-600 mt-1 mb-3">
-                    {getText("section_icons_subtitle")}
-                  </div>
-                </div>
-                <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
-                  {getText("explore_icons")}
-                </button>
-              </div>
-              <CardScroller
-                title={getText("section_icons")}
-                layoutSeed={layoutSeed}
-              >
-                {iconRestaurants.map((r) => (
-                  <RestaurantCard
-                    key={r.id + "-icon"}
-                    r={r}
-                    date={date}
-                    people={people}
-                    time={time}
-                    layoutSeed={layoutSeed}
-                  />
-                ))}
-              </CardScroller>
-            </section>
-          </div>
-        ) : (
-          <section
-            id={getId("section_icons")}
-            className={`${sectionLayoutVariation.className} ${marginTop} rounded-xl bg-[#f7f7f6] border px-4`}
-            data-testid={sectionLayoutVariation.dataTestId}
-          >
-            <div className="flex flex-row justify-between items-center mb-1">
-              <div>
-                <h2 className="text-2xl md:text-2xl font-bold">
-                  {getText("section_icons")}
+                <h2 className="text-2xl font-bold mb-4">
+                  {getText("section_expensive")}
                 </h2>
-                <div className="text-base text-gray-600 mt-1 mb-3">
-                  {getText("section_icons_subtitle")}
-                </div>
-              </div>
-              <button className="border px-5 py-2 rounded-md text-base font-semibold hover:bg-gray-100 whitespace-nowrap h-12">
-                {getText("explore_icons")}
-              </button>
-            </div>
-            <CardScroller
-              title={getText("section_icons")}
-              layoutSeed={layoutSeed}
-            >
-              {iconRestaurants.map((r) => (
-                <RestaurantCard
-                  key={r.id + "-icon"}
-                  r={r}
-                  date={date}
-                  people={people}
-                  time={time}
+                <CardScroller
+                  title={getText("section_expensive")}
                   layoutSeed={layoutSeed}
-                />
-              ))}
-            </CardScroller>
-          </section>
-        )}
+                >
+                  {expensiveRestaurants.map((r) => (
+                    <RestaurantCard
+                      key={r.id + "-expensive"}
+                      r={r}
+                      date={date}
+                      people={people}
+                      time={time}
+                      layoutSeed={layoutSeed}
+                    />
+                  ))}
+                </CardScroller>
+              </section>
+            )}
 
-        {/* Award Winners Section */}
-        {wrapButton ? (
-          <div data-testid={`award-section-wrapper-${seed ?? 1}`}>
-            <section
-              id={getId("section_awards")}
-              className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
-              data-testid={sectionLayoutVariation.dataTestId}
-            >
-              <h2 className="text-2xl font-bold mb-4">
-                {getText("section_awards")}
-              </h2>
-              <CardScroller
-                title={getText("section_awards")}
-                layoutSeed={layoutSeed}
+            {/* Medium Price Restaurants ($$-$$$) */}
+            {mediumRestaurants.length > 0 && (
+              <section
+                id={getId("section_medium")}
+                className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
+                data-testid={sectionLayoutVariation.dataTestId}
               >
-                {awardRestaurants.map((r) => (
-                  <RestaurantCard
-                    key={r.id + "-award"}
-                    r={r}
-                    date={date}
-                    people={people}
-                    time={time}
-                    layoutSeed={layoutSeed}
-                  />
-                ))}
-              </CardScroller>
-            </section>
-          </div>
-        ) : (
-          <section
-            id={getId("section_awards")}
-            className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
-            data-testid={sectionLayoutVariation.dataTestId}
-          >
-            <h2 className="text-2xl font-bold mb-4">
-              {getText("section_awards")}
-            </h2>
-            <CardScroller
-              title={getText("section_awards")}
-              layoutSeed={layoutSeed}
-            >
-              {awardRestaurants.map((r) => (
-                <RestaurantCard
-                  key={r.id + "-award"}
-                  r={r}
-                  date={date}
-                  people={people}
-                  time={time}
+                <h2 className="text-2xl font-bold mb-4">
+                  {getText("section_medium")}
+                </h2>
+                <CardScroller
+                  title={getText("section_medium")}
                   layoutSeed={layoutSeed}
-                />
-              ))}
-            </CardScroller>
-          </section>
+                >
+                  {mediumRestaurants.map((r) => (
+                    <RestaurantCard
+                      key={r.id + "-medium"}
+                      r={r}
+                      date={date}
+                      people={people}
+                      time={time}
+                      layoutSeed={layoutSeed}
+                    />
+                  ))}
+                </CardScroller>
+              </section>
+            )}
+
+            {/* Cheap Restaurants ($) */}
+            {cheapRestaurants.length > 0 && (
+              <section
+                id={getId("section_cheap")}
+                className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
+                data-testid={sectionLayoutVariation.dataTestId}
+              >
+                <h2 className="text-2xl font-bold mb-4">
+                  {getText("section_cheap")}
+                </h2>
+                <CardScroller
+                  title={getText("section_cheap")}
+                  layoutSeed={layoutSeed}
+                >
+                  {cheapRestaurants.map((r) => (
+                    <RestaurantCard
+                      key={r.id + "-cheap"}
+                      r={r}
+                      date={date}
+                      people={people}
+                      time={time}
+                      layoutSeed={layoutSeed}
+                    />
+                  ))}
+                </CardScroller>
+              </section>
+            )}
+          </>
         )}
       </section>
     </main>

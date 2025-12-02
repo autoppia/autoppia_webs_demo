@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { BodyWrapper } from "@/components/layout/BodyWrapper";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import { SeedRedirect } from "@/components/layout/SeedRedirect";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -29,6 +30,9 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <SeedProvider>
           <CartProvider>
+            <Suspense fallback={null}>
+              <SeedRedirect />
+            </Suspense>
             {/* <NotificationBanner /> */}
             <Suspense fallback={<div className="h-16 bg-white border-b border-gray-200"></div>}>
               <Header />

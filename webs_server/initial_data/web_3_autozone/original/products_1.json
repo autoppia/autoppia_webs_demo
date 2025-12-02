@@ -8,7 +8,8 @@
     "category": "Kitchen",
     "rating": 4.5,
     "brand": "BlendPro",
-    "inStock": true
+    "inStock": true,
+    "reviews": 272
   },
   {
     "id": "kitchen-2",
@@ -19,7 +20,8 @@
     "category": "Kitchen",
     "rating": 4.7,
     "brand": "ChefMaster",
-    "inStock": true
+    "inStock": true,
+    "reviews": 402
   },
   {
     "id": "kitchen-3",
@@ -30,7 +32,8 @@
     "category": "Kitchen",
     "rating": 4.6,
     "brand": "BrewTech",
-    "inStock": true
+    "inStock": true,
+    "reviews": 138
   },
   {
     "id": "electronics-1",
@@ -41,7 +44,8 @@
     "category": "Electronics",
     "rating": 4.4,
     "brand": "SoundWave",
-    "inStock": true
+    "inStock": true,
+    "reviews": 96
   },
   {
     "id": "electronics-2",
@@ -52,7 +56,8 @@
     "category": "Electronics",
     "rating": 4.5,
     "brand": "PowerTech",
-    "inStock": true
+    "inStock": true,
+    "reviews": 128
   },
   {
     "id": "electronics-3",
@@ -63,7 +68,8 @@
     "category": "Electronics",
     "rating": 4.8,
     "brand": "StoragePro",
-    "inStock": true
+    "inStock": true,
+    "reviews": 268
   },
   {
     "id": "home-1",
@@ -74,7 +80,8 @@
     "category": "Home",
     "rating": 4.6,
     "brand": "ComfortZone",
-    "inStock": true
+    "inStock": true,
+    "reviews": 134
   },
   {
     "id": "home-2",
@@ -85,7 +92,8 @@
     "category": "Home",
     "rating": 4.5,
     "brand": "HomeStyle",
-    "inStock": true
+    "inStock": true,
+    "reviews": 260
   },
   {
     "id": "home-3",
@@ -96,7 +104,8 @@
     "category": "Home",
     "rating": 4.7,
     "brand": "SleepWell",
-    "inStock": true
+    "inStock": true,
+    "reviews": 401
   },
   {
     "id": "fitness-1",
@@ -107,7 +116,8 @@
     "category": "Fitness",
     "rating": 4.6,
     "brand": "FitRecover",
-    "inStock": true
+    "inStock": true,
+    "reviews": 188
   },
   {
     "id": "fitness-2",
@@ -118,7 +128,8 @@
     "category": "Fitness",
     "rating": 4.4,
     "brand": "ActiveGear",
-    "inStock": true
+    "inStock": true,
+    "reviews": 62
   },
   {
     "id": "fitness-3",
@@ -129,7 +140,8 @@
     "category": "Fitness",
     "rating": 4.5,
     "brand": "HealthTrack",
-    "inStock": true
+    "inStock": true,
+    "reviews": 110
   },
   {
     "id": "technology-1",
@@ -140,7 +152,8 @@
     "category": "Technology",
     "rating": 4.7,
     "brand": "GameForce",
-    "inStock": true
+    "inStock": true,
+    "reviews": 257
   },
   {
     "id": "technology-2",
@@ -151,7 +164,8 @@
     "category": "Technology",
     "rating": 4.6,
     "brand": "SkyCam",
-    "inStock": true
+    "inStock": true,
+    "reviews": 219
   },
   {
     "id": "technology-3",
@@ -162,7 +176,8 @@
     "category": "Technology",
     "rating": 4.5,
     "brand": "LightWorks",
-    "inStock": true
+    "inStock": true,
+    "reviews": 247
   },
   {
     "id": "kitchen-v2-1",
@@ -173,7 +188,8 @@
     "category": "Kitchen",
     "rating": 4.5,
     "brand": "BlendWave",
-    "inStock": true
+    "inStock": true,
+    "reviews": 287
   },
   {
     "id": "kitchen-v2-2",
@@ -184,7 +200,8 @@
     "category": "Kitchen",
     "rating": 4.4,
     "brand": "EdgePro",
-    "inStock": true
+    "inStock": true,
+    "reviews": 127
   },
   {
     "id": "kitchen-v2-3",
@@ -195,7 +212,8 @@
     "category": "Kitchen",
     "rating": 4.6,
     "brand": "MeasureMaster",
-    "inStock": true
+    "inStock": true,
+    "reviews": 251
   },
   {
     "id": "kitchen-v2-4",
@@ -206,7 +224,8 @@
     "category": "Kitchen",
     "rating": 4.7,
     "brand": "ChefWave",
-    "inStock": true
+    "inStock": true,
+    "reviews": 242
   },
   {
     "id": "kitchen-v2-5",
@@ -217,7 +236,8 @@
     "category": "Kitchen",
     "rating": 4.3,
     "brand": "IronStone",
-    "inStock": true
+    "inStock": true,
+    "reviews": 88
   },
   {
     "id": "kitchen-v2-6",
@@ -228,7 +248,8 @@
     "category": "Kitchen",
     "rating": 4.5,
     "brand": "BakeCraft",
-    "inStock": true
+    "inStock": true,
+    "reviews": 174
   },
   {
     "id": "kitchen-v2-7",
@@ -239,7 +260,8 @@
     "category": "Kitchen",
     "rating": 4.6,
     "brand": "PrepEase",
-    "inStock": true
+    "inStock": true,
+    "reviews": 175
   },
   {
     "id": "kitchen-v2-8",
@@ -250,7 +272,8 @@
     "category": "Kitchen",
     "rating": 4.4,
     "brand": "FrostFlow",
-    "inStock": true
+    "inStock": true,
+    "reviews": 152
   },
   {
     "id": "electronics-v2-1",
@@ -261,7 +284,8 @@
     "category": "Electronics",
     "rating": 4.4,
     "brand": "BeamLite",
-    "inStock": true
+    "inStock": true,
+    "reviews": 68
   },
   {
     "id": "electronics-v2-2",
@@ -272,7 +296,8 @@
     "category": "Electronics",
     "rating": 4.6,
     "brand": "TrailBeam",
-    "inStock": true
+    "inStock": true,
+    "reviews": 165
   },
   {
     "id": "electronics-v2-3",
@@ -283,7 +308,8 @@
     "category": "Electronics",
     "rating": 4.5,
     "brand": "LumaHome",
-    "inStock": true
+    "inStock": true,
+    "reviews": 214
   },
   {
     "id": "electronics-v2-4",
@@ -294,7 +320,8 @@
     "category": "Electronics",
     "rating": 4.4,
     "brand": "PortLink",
-    "inStock": true
+    "inStock": true,
+    "reviews": 192
   },
   {
     "id": "electronics-v2-5",
@@ -305,7 +332,8 @@
     "category": "Electronics",
     "rating": 4.3,
     "brand": "SnapView",
-    "inStock": true
+    "inStock": true,
+    "reviews": 93
   },
   {
     "id": "electronics-v2-6",
@@ -316,7 +344,8 @@
     "category": "Electronics",
     "rating": 4.5,
     "brand": "SecureNest",
-    "inStock": true
+    "inStock": true,
+    "reviews": 151
   },
   {
     "id": "electronics-v2-9",
@@ -327,7 +356,8 @@
     "category": "Electronics",
     "rating": 4.5,
     "brand": "SyncWise",
-    "inStock": true
+    "inStock": true,
+    "reviews": 194
   },
   {
     "id": "electronics-v2-10",
@@ -338,7 +368,8 @@
     "category": "Electronics",
     "rating": 4.4,
     "brand": "TypeWave",
-    "inStock": true
+    "inStock": true,
+    "reviews": 143
   },
   {
     "id": "home-v2-1",
@@ -349,7 +380,8 @@
     "category": "Home",
     "rating": 4.6,
     "brand": "PureBreeze",
-    "inStock": true
+    "inStock": true,
+    "reviews": 236
   },
   {
     "id": "home-v2-2",
@@ -360,7 +392,8 @@
     "category": "Home",
     "rating": 4.5,
     "brand": "WarmGlow",
-    "inStock": true
+    "inStock": true,
+    "reviews": 240
   },
   {
     "id": "home-v2-3",
@@ -371,7 +404,8 @@
     "category": "Home",
     "rating": 4.3,
     "brand": "OrganizeIt",
-    "inStock": true
+    "inStock": true,
+    "reviews": 78
   },
   {
     "id": "home-v2-4",
@@ -382,7 +416,8 @@
     "category": "Home",
     "rating": 4.6,
     "brand": "LiftDesk",
-    "inStock": true
+    "inStock": true,
+    "reviews": 138
   },
   {
     "id": "home-v2-5",
@@ -393,7 +428,8 @@
     "category": "Home",
     "rating": 4.5,
     "brand": "LuxeSeat",
-    "inStock": true
+    "inStock": true,
+    "reviews": 163
   },
   {
     "id": "home-v2-6",
@@ -404,7 +440,8 @@
     "category": "Home",
     "rating": 4.4,
     "brand": "GreenNest",
-    "inStock": true
+    "inStock": true,
+    "reviews": 69
   },
   {
     "id": "home-v2-7",
@@ -415,7 +452,8 @@
     "category": "Home",
     "rating": 4.6,
     "brand": "DustAway",
-    "inStock": true
+    "inStock": true,
+    "reviews": 248
   },
   {
     "id": "home-v2-8",
@@ -426,7 +464,8 @@
     "category": "Home",
     "rating": 4.4,
     "brand": "ComfortEase",
-    "inStock": true
+    "inStock": true,
+    "reviews": 111
   },
   {
     "id": "home-v2-9",
@@ -437,7 +476,8 @@
     "category": "Home",
     "rating": 4.5,
     "brand": "ShelfCraft",
-    "inStock": true
+    "inStock": true,
+    "reviews": 253
   },
   {
     "id": "home-v2-10",
@@ -448,7 +488,8 @@
     "category": "Home",
     "rating": 4.6,
     "brand": "CalmRest",
-    "inStock": true
+    "inStock": true,
+    "reviews": 251
   },
   {
     "id": "fitness-v2-1",
@@ -459,7 +500,8 @@
     "category": "Fitness",
     "rating": 4.7,
     "brand": "FlexFit",
-    "inStock": true
+    "inStock": true,
+    "reviews": 255
   },
   {
     "id": "fitness-v2-2",
@@ -470,7 +512,8 @@
     "category": "Fitness",
     "rating": 4.5,
     "brand": "StrideTech",
-    "inStock": true
+    "inStock": true,
+    "reviews": 165
   },
   {
     "id": "fitness-v2-3",
@@ -481,7 +524,8 @@
     "category": "Fitness",
     "rating": 4.3,
     "brand": "CardioPulse",
-    "inStock": true
+    "inStock": true,
+    "reviews": 58
   },
   {
     "id": "fitness-v2-4",
@@ -492,7 +536,8 @@
     "category": "Fitness",
     "rating": 4.6,
     "brand": "ZenFlow",
-    "inStock": true
+    "inStock": true,
+    "reviews": 223
   },
   {
     "id": "fitness-v2-5",
@@ -503,7 +548,8 @@
     "category": "Fitness",
     "rating": 4.5,
     "brand": "PowerBell",
-    "inStock": true
+    "inStock": true,
+    "reviews": 235
   },
   {
     "id": "fitness-v2-6",
@@ -514,7 +560,8 @@
     "category": "Fitness",
     "rating": 4.4,
     "brand": "CoreSphere",
-    "inStock": true
+    "inStock": true,
+    "reviews": 91
   },
   {
     "id": "fitness-v2-7",
@@ -525,7 +572,8 @@
     "category": "Fitness",
     "rating": 4.6,
     "brand": "WaveRow",
-    "inStock": true
+    "inStock": true,
+    "reviews": 177
   },
   {
     "id": "fitness-v2-8",
@@ -536,7 +584,8 @@
     "category": "Fitness",
     "rating": 4.3,
     "brand": "GripForce",
-    "inStock": true
+    "inStock": true,
+    "reviews": 135
   },
   {
     "id": "fitness-v2-9",
@@ -547,6 +596,7 @@
     "category": "Fitness",
     "rating": 4.4,
     "brand": "StepFit",
-    "inStock": true
+    "inStock": true,
+    "reviews": 60
   }
 ]

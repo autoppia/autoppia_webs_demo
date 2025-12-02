@@ -35,11 +35,7 @@ export class DynamicDataProvider {
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
-    if (typeof window === "undefined") {
-      this.ready = true;
-      this.readyPromise = Promise.resolve();
-      return;
-    }
+    // Always initialize products, even in SSR (will use fallback)
     this.readyPromise = this.initializeProducts();
   }
 
@@ -76,9 +72,15 @@ export class DynamicDataProvider {
     try {
       const v2Seed = this.getV2SeedFromUrl();
       this.products = await initializeProducts(v2Seed);
+      // Ensure products is always an array
+      if (!Array.isArray(this.products)) {
+        console.warn("[autozone] Products is not an array, defaulting to empty array");
+        this.products = [];
+      }
     } catch (error) {
       console.error("[autozone] Failed to initialize products", error);
-      throw error;
+      // Fallback to empty array instead of throwing
+      this.products = [];
     } finally {
       this.ready = true;
     }
@@ -93,22 +95,34 @@ export class DynamicDataProvider {
   }
 
   public getProducts(): Product[] {
-    return this.products; // Return empty until ready when generation is enabled
+    return Array.isArray(this.products) ? this.products : [];
   }
 
   public getProductById(id: string): Product | undefined {
+    if (!Array.isArray(this.products)) {
+      return undefined;
+    }
     return this.products.find((product) => product.id === id);
   }
 
   public getProductsByCategory(category: string): Product[] {
+    if (!Array.isArray(this.products)) {
+      return [];
+    }
     return this.products.filter((product) => product.category === category);
   }
 
   public getFeaturedProducts(count: number = 4): Product[] {
+    if (!Array.isArray(this.products)) {
+      return [];
+    }
     return this.products.slice(0, count);
   }
 
   public searchProducts(query: string): Product[] {
+    if (!Array.isArray(this.products)) {
+      return [];
+    }
     const lowercaseQuery = query.toLowerCase();
     return this.products.filter((product) => 
       product.title.toLowerCase().includes(lowercaseQuery) ||
