@@ -29,36 +29,30 @@ export function FilterBar({
           <h2 className="text-2xl font-semibold">{totalResults} Curated movies</h2>
         </div>
         <div className="flex flex-1 flex-wrap items-center gap-3 md:justify-end">
-          <label className="flex flex-col text-xs uppercase tracking-wide text-white/60">
-            Genre
-            <select
-              value={selectedGenre}
-              onChange={(event) => onGenreChange(event.target.value)}
-              className="mt-1 rounded-xl border border-white/10 bg-black/40 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-secondary"
-            >
-              <option value="">All genres</option>
-              {genres.map((genre) => (
-                <option key={genre} value={genre}>
-                  {genre}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col text-xs uppercase tracking-wide text-white/60">
-            Year
-            <select
-              value={selectedYear}
-              onChange={(event) => onYearChange(event.target.value)}
-              className="mt-1 rounded-xl border border-white/10 bg-black/40 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-secondary"
-            >
-              <option value="">All years</option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </label>
+          <select
+            value={selectedGenre}
+            onChange={(event) => onGenreChange(event.target.value)}
+            className="h-[46px] min-w-[140px] rounded-xl border border-white/10 bg-black/40 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-secondary"
+          >
+            <option value="">All genres</option>
+            {genres.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+          <select
+            value={selectedYear}
+            onChange={(event) => onYearChange(event.target.value)}
+            className="h-[46px] min-w-[140px] rounded-xl border border-white/10 bg-black/40 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-secondary"
+          >
+            <option value="">All years</option>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
           <Button
             type="button"
             variant="ghost"
