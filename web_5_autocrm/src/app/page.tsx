@@ -5,8 +5,7 @@ import { SeedLink } from "@/components/ui/SeedLink";
 import { Briefcase, Users, Calendar, FileText, Clock, Settings2 } from "lucide-react";
 import { Suspense, useState, useEffect, useRef, useMemo } from "react";
 import { useSeed } from "@/context/SeedContext";
-import { getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useProjectData } from "@/shared/universal-loader";
 // import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
@@ -19,28 +18,8 @@ import { useProjectData } from "@/shared/universal-loader";
 function DashboardContent() {
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  const layoutSeed = resolvedSeeds.v1 ?? seed;
   
-  // Calculate layout variation (1-10) from v1 seed
-  const layoutVariation = useMemo(() => {
-    if (layoutSeed < 1 || layoutSeed > 300) return 1;
-    return ((layoutSeed - 1) % 10) + 1;
-  }, [layoutSeed]);
-  
-  // Log v1 info when it changes (only once per unique v1 seed)
-  const lastV1SeedRef = useRef<number | null>(null);
-  useEffect(() => {
-    const currentV1Seed = resolvedSeeds.v1 ?? resolvedSeeds.base;
-    // Only log if v1 seed actually changed
-    if (lastV1SeedRef.current !== currentV1Seed) {
-      if (resolvedSeeds.v1 !== null) {
-        console.log(`[autocrm] V1 Layout - Seed: ${resolvedSeeds.v1}, Variation: #${layoutVariation} (of 10)`);
-      } else if (resolvedSeeds.base) {
-        console.log(`[autocrm] V1 Layout - Using base seed: ${resolvedSeeds.base}, Variation: #${layoutVariation} (of 10)`);
-      }
-      lastV1SeedRef.current = currentV1Seed;
-    }
-  }, [resolvedSeeds.v1, resolvedSeeds.base, layoutVariation]);
+  // LAYOUT FIJO - Sin variaciones, siempre como seed 1
   
   // Log v2 info when it changes (only once per unique v2 seed)
   const lastV2SeedRef = useRef<number | null>(null);
@@ -53,8 +32,7 @@ function DashboardContent() {
     }
   }, [resolvedSeeds.v2, resolvedSeeds.base, seed]);
   
-  const layoutConfig = getLayoutConfig(layoutSeed);
-  const layoutClasses = getLayoutClasses(layoutConfig);
+  // LAYOUT FIJO - Sin variaciones, siempre como seed 1
   const { getText, getId } = useDynamicStructure();
   const searchParams = useSearchParams();
   
@@ -87,9 +65,9 @@ function DashboardContent() {
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });
 
   return (
-    <section className={`${layoutClasses.spacing}`}>
+    <section>
       <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">{getText("dashboard_title", "Dashboard")}</h1>
-      <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 ${layoutClasses.cards}`}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
         {/* Card 1: Matters */}
         <SeedLink
           href="/matters"

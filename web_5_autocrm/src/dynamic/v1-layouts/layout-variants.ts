@@ -140,14 +140,13 @@ const elementPositioning: Record<number, ElementPositioning> = {
   }
 };
 
+/**
+ * LAYOUT FIJO - Siempre como seed 1
+ * Tu sitio web es lo que es, sin variaciones
+ */
 export function getLayoutVariant(seed: number): LayoutVariant {
-  // Validate seed range (1-300)
-  if (seed < 1 || seed > 300) {
-    seed = 1;
-  }
-
-  // Apply the seed mapping formula: ((seed % 30) + 1) % 10 || 10
-  const mappedSeed = ((seed % 30) + 1) % 10 || 10;
+  // LAYOUT FIJO - Siempre usar seed 1
+  const mappedSeed = 1;
   
   const buttonLayoutTypes = ['standard', 'split', 'stacked', 'circular', 'floating', 'inline', 'card', 'minimal'] as const;
   const labelStyles = ['pill', 'tag', 'badge', 'chip', 'dot', 'underline', 'border', 'gradient'] as const;

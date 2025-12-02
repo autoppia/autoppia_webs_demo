@@ -8,6 +8,7 @@ import { useRestaurants } from "@/contexts/RestaurantContext";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar, Clock, Home, Phone, Gift, ChevronRight, Loader2 } from "lucide-react";
 import { useRef } from "react";
+import QuickOrderModal from "../food/QuickOrderModal";
 
 interface EditableTimeProps {
   value: string;
@@ -115,6 +116,7 @@ export default function CartPage() {
   const [deliveryTime, setDeliveryTime] = useState<
     "express" | "standard" | "scheduled"
   >("standard");
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false);
   const { restaurants, isLoading } = useRestaurants();
   const restaurant =
     items.length > 0
@@ -144,6 +146,19 @@ export default function CartPage() {
     setStandardTime(restaurant?.deliveryTime || "20-30 min");
     setPickupTime(restaurant?.pickupTime || "10-20 min");
   }, [restaurant?.deliveryTime, restaurant?.pickupTime]);
+
+  // Listen for global quick-order trigger (from navbar)
+  useEffect(() => {
+    const handler = () => setQuickOrderOpen(true);
+    if (typeof window !== "undefined") {
+      window.addEventListener("autodelivery:openQuickOrder", handler);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autodelivery:openQuickOrder", handler);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (hydrated && items.length > 0) {
@@ -869,14 +884,16 @@ export default function CartPage() {
               value={form.name}
               onChange={handleChange}
             />
-            <Input
-              id={customerAddressId}
-              required
-              name="address"
-              placeholder={customerAddressPlaceholder}
-              value={form.address}
-              onChange={handleChange}
-            />
+            {mode === "delivery" && (
+              <Input
+                id={customerAddressId}
+                required
+                name="address"
+                placeholder={customerAddressPlaceholder}
+                value={form.address}
+                onChange={handleChange}
+              />
+            )}
             <Input
               id={customerPhoneId}
               required
@@ -897,6 +914,33 @@ export default function CartPage() {
               {placeOrderLabel}
             </Button>
           </form>
+          <QuickOrderModal open={quickOrderOpen} onOpenChange={setQuickOrderOpen} />
+          <Dialog open={isContactModalOpen} onOpenChange={setIsContactModalOpen}>
+            <DialogContent className="max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Add contact number</DialogTitle>
+              </DialogHeader>
+              <Input
+                id="contact-number-modal-input"
+                value={form.phone}
+                placeholder={customerPhonePlaceholder}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    phone: e.target.value,
+                  }))
+                }
+              />
+              <div className="flex justify-end">
+                <Button
+                  className="mt-3"
+                  onClick={() => setIsContactModalOpen(false)}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </>
       )}
       {editingItem && editingMenuItem && (

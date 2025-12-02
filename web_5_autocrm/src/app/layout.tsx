@@ -6,8 +6,7 @@ import React, { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import UserNameBadge from "@/components/UserNameBadge";
 import { SeedProvider } from "@/context/SeedContext";
-import { getEffectiveSeed, getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1
 import ClientProviders from "./ClientProviders";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
 
@@ -32,11 +31,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // For server-side rendering, we'll use default values
-  // The actual seed will be handled in client components
-  const seed = 1; // Default seed for SSR
-  const layoutConfig = getLayoutConfig(seed);
-  const layoutClasses = getLayoutClasses(layoutConfig);
+  // LAYOUT FIJO - Sin variaciones
 
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -50,7 +45,7 @@ export default function RootLayout({
           </Suspense>
           <ClientProviders>
           <nav
-            className={`w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30 ${layoutClasses.header}`}
+            className="w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30"
             style={{
               WebkitBackdropFilter: "blur(8px)",
               backdropFilter: "blur(8px)",
@@ -76,7 +71,7 @@ export default function RootLayout({
               <Sidebar />
             </Suspense>
             <main
-              className={`flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto ${layoutClasses.content}`}
+              className="flex-1 relative p-10 min-h-[calc(100vh-5rem)] overflow-y-auto"
               style={{
                 paddingLeft: 60,
                 paddingRight: 60,
