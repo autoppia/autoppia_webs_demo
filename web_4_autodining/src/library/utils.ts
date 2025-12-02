@@ -119,7 +119,7 @@ export class SeedVariationManager {
       },
       // Layout C: Right side relative positioned buttons (Seeds 3, 6, 9)
       { 
-        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative ml-2", 
+        className: "px-4 py-2 rounded-lg text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative ml-2", 
         dataTestId: "search-btn-layout-c-right",
         position: 'relative'
       },
@@ -137,7 +137,7 @@ export class SeedVariationManager {
       },
       // Layout C: Left side relative positioned buttons (Seeds 3, 6, 9)
       { 
-        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative mr-2", 
+        className: "px-4 py-2 rounded-lg text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative mr-2", 
         dataTestId: "search-btn-layout-c-left",
         position: 'relative'
       },
@@ -155,7 +155,7 @@ export class SeedVariationManager {
       },
       // Layout C: Right side relative positioned buttons (Seeds 3, 6, 9)
       { 
-        className: "px-4 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative ml-2", 
+        className: "px-4 py-2 rounded-lg text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] relative ml-2", 
         dataTestId: "search-btn-layout-c-right",
         position: 'relative'
       },
