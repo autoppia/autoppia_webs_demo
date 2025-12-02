@@ -14,9 +14,10 @@ COPY web_3_autozone/package.json web_3_autozone/package-lock.json ./
 # Install dependencies (including dev dependencies needed for building)
 RUN npm ci
 
+# Copy original dataset files for fallback FIRST (before copying project)
+RUN mkdir -p src/data/original
+COPY webs_server/initial_data/web_3_autozone/original/products_1.json src/data/original/products_1.json
 COPY web_3_autozone/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_3_autozone/original/ src/data/original/
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions
