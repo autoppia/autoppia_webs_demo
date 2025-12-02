@@ -576,7 +576,8 @@ function EmailItem({
         variant="ghost"
         size="icon"
         className={cn(
-          "h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity",
+          "h-6 w-6 transition-opacity",
+          email.isStarred ? "opacity-100" : "opacity-0 group-hover:opacity-100",
           currentVariant.id === 2 && "star-container",
           currentVariant.id === 3 && "star-icon",
           currentVariant.id === 4 && "star-element",
@@ -615,7 +616,20 @@ function EmailItem({
       id="view-email"
       className="flex-1 grid grid-cols-12 gap-4 min-w-0">
         {/* Sender */}
-        <div className="col-span-3 min-w-0 mt-3">
+        <div className="col-span-3 min-w-0 mt-3 flex items-center gap-2">
+          <div className="w-11 h-11 rounded-full bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
+            {email.from.avatar ? (
+              <img
+                src={email.from.avatar}
+                alt={email.from.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-xs font-semibold text-muted-foreground">
+                {email.from.name.slice(0, 1).toUpperCase()}
+              </span>
+            )}
+          </div>
           <p
             className={cn("text-sm truncate", !email.isRead && "font-semibold")}
           >

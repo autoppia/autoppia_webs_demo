@@ -16,7 +16,7 @@ function GmailContent() {
   const { resolvedSeeds } = useSeed();
   const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base;
   const seedStructure = Number(searchParams.get("seed-structure") ?? "1");
-  const effectiveSeed = getEffectiveSeed(layoutSeed);
+  const effectiveSeed = getEffectiveSeed(layoutSeed || 1);
   const layoutConfig = getLayoutConfig(effectiveSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
   const textStructure = getEffectiveTextStructure(seedStructure);

@@ -179,35 +179,36 @@ function RestaurantCard({
         {/* Content overlay at bottom */}
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
           <SeedLink href={`/restaurant/${encodeURIComponent(r.id)}`}>
-            <h3 className="font-bold text-xl mb-2 hover:text-[#46a758] transition-colors drop-shadow-lg">
+            <h3 className="font-bold text-xl mb-0 hover:text-[#46a758] transition-colors drop-shadow-lg">
               {r.name}
             </h3>
           </SeedLink>
-          <div className="flex items-center gap-2 mb-3">
-            <StarRating count={starsCount} /> {/* Usar stars (entero) */}
-            <span className="text-sm font-semibold drop-shadow">
-              {ratingValue.toFixed(1)} {/* Usar rating (con decimales) */}
-              {reviewsCount > 0 && ` (${reviewsCount} reviews)`}
-            </span>
-            <span className="text-xs text-gray-200 opacity-80">•</span>
-            <span className="text-xs text-gray-200 opacity-80">{r.area}</span>
-          </div>
-          <div className="flex justify-end mt-4">
-            <SeedLink
-              id={getId("book_button")}
-              href={buildBookingHref(r.id, time, {
-                people,
-                date: formattedDate,
-              })}
-              className={`${bookButtonVariation.className} text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors`}
-              data-testid={bookButtonVariation.dataTestId}
-              style={{ position: bookButtonVariation.position as any }}
-              onClick={() =>
-                logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })
-              }
-            >
-              {bookNowLabel || "Book now"}
-            </SeedLink>
+          <div className="mb-3">
+            <div className="flex items-center gap-2 mb-0">
+              <StarRating count={starsCount} /> {/* Usar stars (entero) */}
+              <span className="text-sm font-semibold drop-shadow">
+                {ratingValue.toFixed(1)} {/* Usar rating (con decimales) */}
+                {reviewsCount > 0 && ` (${reviewsCount} reviews)`}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-200 opacity-80">{r.area}</span>
+              <SeedLink
+                id={getId("book_button")}
+                href={buildBookingHref(r.id, time, {
+                  people,
+                  date: formattedDate,
+                })}
+                className={`${bookButtonVariation.className} text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors`}
+                data-testid={bookButtonVariation.dataTestId}
+                style={{ position: bookButtonVariation.position as any }}
+                onClick={() =>
+                  logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })
+                }
+              >
+                {bookNowLabel || "Book now"}
+              </SeedLink>
+            </div>
           </div>
         </div>
       </div>
