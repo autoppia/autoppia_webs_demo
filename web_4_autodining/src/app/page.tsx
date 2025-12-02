@@ -192,7 +192,9 @@ function RestaurantCard({
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-200 opacity-80">{r.area}</span>
+              <span className="text-xs text-gray-200 opacity-80 font-bold">
+                {r.area}
+              </span>
               <SeedLink
                 id={getId("book_button")}
                 href={buildBookingHref(r.id, time, {
@@ -698,8 +700,11 @@ function HomePageContent() {
         </div>
 
         {/* Search and Filters */}
-        <section className="flex flex-wrap gap-4 items-end mt-6">
-          <Popover open={dateOpen} onOpenChange={setDateOpen}>
+        <section
+          className="flex flex-wrap gap-4 items-end mt-6 relative w-full"
+          style={{ minHeight: "auto", visibility: "visible", display: "flex" }}
+        >
+          <Popover open={dateOpen} onOpenChange={setDateOpen} modal={false}>
             <PopoverTrigger asChild>
               <Button
                 id={getId("date_picker")}
@@ -717,7 +722,12 @@ function HomePageContent() {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent
+              className="w-auto p-0 z-[100]"
+              align="start"
+              side="bottom"
+              sideOffset={8}
+            >
               <Calendar
                 mode="single"
                 selected={date}
@@ -727,7 +737,7 @@ function HomePageContent() {
             </PopoverContent>
           </Popover>
 
-          <Popover open={timeOpen} onOpenChange={setTimeOpen}>
+          <Popover open={timeOpen} onOpenChange={setTimeOpen} modal={false}>
             <PopoverTrigger asChild>
               <Button
                 id={getId("time_picker")}
@@ -741,7 +751,12 @@ function HomePageContent() {
                 {time}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent
+              className="w-auto p-0 z-[100]"
+              align="start"
+              side="bottom"
+              sideOffset={8}
+            >
               <div className="p-2">
                 {timeOptions.map((t) => (
                   <Button
@@ -760,7 +775,7 @@ function HomePageContent() {
             </PopoverContent>
           </Popover>
 
-          <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
+          <Popover open={peopleOpen} onOpenChange={setPeopleOpen} modal={false}>
             <PopoverTrigger asChild>
               <Button
                 id={getId("people_picker")}
@@ -776,7 +791,12 @@ function HomePageContent() {
                 {people} {people === 1 ? personLabel : peopleLabel}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent
+              className="w-auto p-0 z-[100]"
+              align="start"
+              side="bottom"
+              sideOffset={8}
+            >
               <div className="p-2">
                 {peopleOptions.map((n) => (
                   <Button
@@ -798,9 +818,8 @@ function HomePageContent() {
           <input
             id={getId("search_input")}
             type="text"
-            placeholder={getText("search_placeholder")}
-            className={`${searchBarVariation.className} min-w-[400px] flex-1`}
-            data-testid={searchBarVariation.dataTestId}
+            placeholder={getText("search_placeholder") || "Search"}
+            className="min-w-[400px] flex-1 px-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]"
             value={search}
             onChange={handleSearchChange}
           />

@@ -21,11 +21,14 @@ export default function RestaurantsListPage() {
   const setCuisine = useSearchStore(s => s.setCuisine);
   const rating = useSearchStore(s => s.rating);
   const setRating = useSearchStore(s => s.setRating);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 9;
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
 
   const { restaurants, isLoading } = useRestaurants();
   const cuisineOptions = Array.from(new Set(restaurants.map((r) => r.cuisine)));
-  const ratingOptions = [4, 4.5, 5];
+  // Offer granular filters even if most items are high-rated
+  const ratingOptions = [2.5, 3, 3.5, 4, 4.5, 5];
 
   const filtered = restaurants.filter((r) => {
     const text = search.trim().toLowerCase();
@@ -38,6 +41,22 @@ export default function RestaurantsListPage() {
       (!rating || r.rating >= parseFloat(rating))
     );
   });
+
+  // Reset pagination on filter changes
+  useEffect(() => {
+    setPage(1);
+  }, [search, cuisine, rating]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginated = filtered.slice(startIndex, endIndex);
 
   const isFiltered = !!search || cuisine || rating;
 
@@ -139,8 +158,8 @@ export default function RestaurantsListPage() {
         className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 ${layout.grid.containerClass}`}
         {...layout.getElementAttributes('restaurants-grid', 0)}
       >
-        {filtered.length > 0 ? (
-          filtered.map((r, index) => (
+        {paginated.length > 0 ? (
+          paginated.map((r, index) => (
             <div
               key={r.id}
               className={layout.grid.itemClass}
@@ -165,6 +184,37 @@ export default function RestaurantsListPage() {
           </div>
         )}
       </div>
+
+      {filtered.length > itemsPerPage && (
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-sm text-muted-foreground">
+            Showing {startIndex + 1}–{Math.min(endIndex, filtered.length)} of {filtered.length}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page === 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              {...layout.getElementAttributes('pagination-prev', 0)}
+            >
+              Prev
+            </Button>
+            <div className="text-sm font-medium">
+              Page {page} of {totalPages}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page === totalPages}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              {...layout.getElementAttributes('pagination-next', 0)}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
       <QuickOrderModal open={quickOrderOpen} onOpenChange={setQuickOrderOpen} />
     </section>
   );

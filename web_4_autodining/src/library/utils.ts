@@ -893,12 +893,8 @@ export class SeedVariationManager {
         className: "px-5 py-2 rounded-lg text-lg bg-orange-600 text-white hover:bg-orange-700",
         dataTestId: "search-btn-time-dropdown-active",
         position: 'relative'
-      },
-      "pageLayout": {
-        className: "max-w-6xl mx-auto px-4 py-8 bg-orange-50",
-        dataTestId: "page-layout-time-dropdown-active",
-        layoutType: 'block'
       }
+      // Removed pageLayout to prevent layout compression
     },
     "DATE_DROPDOWN_OPENED": {
       "dropdown": {
@@ -915,12 +911,8 @@ export class SeedVariationManager {
         className: "px-5 py-2 rounded-lg text-lg bg-purple-600 text-white hover:bg-purple-700",
         dataTestId: "search-btn-date-dropdown-active",
         position: 'relative'
-      },
-      "pageLayout": {
-        className: "max-w-6xl mx-auto px-4 py-8 bg-purple-50",
-        dataTestId: "page-layout-date-dropdown-active",
-        layoutType: 'block'
       }
+      // Removed pageLayout to prevent layout compression
     },
     "PEOPLE_DROPDOWN_OPENED": {
       "dropdown": {
@@ -937,12 +929,8 @@ export class SeedVariationManager {
         className: "px-5 py-2 rounded-lg text-lg bg-pink-600 text-white hover:bg-pink-700",
         dataTestId: "search-btn-people-dropdown-active",
         position: 'relative'
-      },
-      "pageLayout": {
-        className: "max-w-6xl mx-auto px-4 py-8 bg-pink-50",
-        dataTestId: "page-layout-people-dropdown-active",
-        layoutType: 'block'
       }
+      // Removed pageLayout to prevent layout compression
     },
     "SCROLL_VIEW": {
       "cardContainer": {
