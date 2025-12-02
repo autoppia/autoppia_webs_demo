@@ -86,29 +86,14 @@ export default function RestaurantPage() {
     layoutSeed
   );
 
-  // Create layout based on seed
-  const layout = useMemo(() => {
-    const wrap = layoutSeed % 2 === 0;
-    const justifyClass = [
-      "justify-start",
-      "justify-center",
-      "justify-end",
-      "justify-between",
-      "justify-around",
-    ][layoutSeed % 5];
-    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][
-      layoutSeed % 5
-    ];
-    const justify = [
-      "flex-start",
-      "center",
-      "flex-end",
-      "space-between",
-      "space-around",
-    ][layoutSeed % 5];
-    const marginTop = [0, 16, 32, 48, 64][layoutSeed % 5];
-    return { wrap, justifyClass, marginTopClass, justify, marginTop };
-  }, [layoutSeed]);
+  // LAYOUT FIJO - Siempre como seed 6
+  const layout = {
+    wrap: false, // seed 6 % 2 = 0 (false)
+    justifyClass: "justify-start", // seed 6 % 5 = 1 → índice 1
+    marginTopClass: "mt-0", // seed 6 % 5 = 1 → índice 1
+    justify: "flex-start", // seed 6 % 5 = 1 → índice 1
+    marginTop: 0, // seed 6 % 5 = 1 → índice 1
+  };
 
   useEffect(() => {
     // Ensure data is initialized and loaded from DB or generator as configured

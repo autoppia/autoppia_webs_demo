@@ -1255,19 +1255,60 @@ export function useSeedVariation(
   eventType?: string,
   seedOverride?: number
 ) {
-  const { resolvedSeeds } = useSeed();
+  // LAYOUT FIJO - Siempre usar Layout C (seed 6)
+  // Tu sitio web es lo que es, sin variaciones basadas en seed
+  const FIXED_LAYOUT_C_SEED = 6; // Seed 6 usa Layout C
 
-  // If seedOverride is provided, use it; otherwise use v1 from resolvedSeeds
+  // Permitir eventos especiales (como MENU_VIEWED) que pueden cambiar temporalmente
+  // Pero para variaciones normales, siempre usar Layout C (seed 6)
+  const { resolvedSeeds } = useSeed();
   const seed = seedOverride ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
 
+  // Verificar si hay eventos activos primero (estos tienen prioridad)
+  const activeEvents = SeedVariationManager.getActiveEvents();
+  if (eventType || activeEvents.length > 0) {
+    // Para eventos, usar el sistema normal
+    return {
+      className: SeedVariationManager.getClassName(type, seed, eventType),
+      style: SeedVariationManager.getStyle(type, seed, eventType),
+      dataTestId: SeedVariationManager.getDataTestId(type, seed, eventType),
+      xpath: SeedVariationManager.getXPath(type, seed, eventType),
+      layoutType: SeedVariationManager.getLayoutType(type, seed, eventType),
+      position: SeedVariationManager.getPosition(type, seed, eventType),
+      seed: FIXED_LAYOUT_C_SEED,
+      activeEvents: SeedVariationManager.getActiveEvents(),
+      registerEvent:
+        SeedVariationManager.registerEvent.bind(SeedVariationManager),
+      clearEvents: SeedVariationManager.clearEvents.bind(SeedVariationManager),
+    };
+  }
+
+  // Para variaciones normales, siempre usar Layout C (seed 6)
+  // Usar seed 6 directamente para que el sistema calcule el Layout C automáticamente
   return {
-    className: SeedVariationManager.getClassName(type, seed, eventType),
-    style: SeedVariationManager.getStyle(type, seed, eventType),
-    dataTestId: SeedVariationManager.getDataTestId(type, seed, eventType),
-    xpath: SeedVariationManager.getXPath(type, seed, eventType),
-    layoutType: SeedVariationManager.getLayoutType(type, seed, eventType),
-    position: SeedVariationManager.getPosition(type, seed, eventType),
-    seed,
+    className: SeedVariationManager.getClassName(
+      type,
+      FIXED_LAYOUT_C_SEED,
+      eventType
+    ),
+    style: SeedVariationManager.getStyle(type, FIXED_LAYOUT_C_SEED, eventType),
+    dataTestId: SeedVariationManager.getDataTestId(
+      type,
+      FIXED_LAYOUT_C_SEED,
+      eventType
+    ),
+    xpath: SeedVariationManager.getXPath(type, FIXED_LAYOUT_C_SEED, eventType),
+    layoutType: SeedVariationManager.getLayoutType(
+      type,
+      FIXED_LAYOUT_C_SEED,
+      eventType
+    ),
+    position: SeedVariationManager.getPosition(
+      type,
+      FIXED_LAYOUT_C_SEED,
+      eventType
+    ),
+    seed: FIXED_LAYOUT_C_SEED,
     activeEvents: SeedVariationManager.getActiveEvents(),
     registerEvent:
       SeedVariationManager.registerEvent.bind(SeedVariationManager),

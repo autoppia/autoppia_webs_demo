@@ -1,10 +1,8 @@
 /**
- * V1 Layout Variations System for web_4_autodining
- *
- * Changes HTML structure and layout based on v1 seed.
+ * LAYOUT FIJO - Siempre como seed 6 (Layout C)
+ * Tu sitio web es lo que es, sin variaciones
+ * La seed en la URL se mantiene pero no afecta el layout
  */
-
-import { getLayoutIndexFromSeed } from "@/library/utils";
 
 export interface SeedLayoutConfig {
   // Layout variations
@@ -16,46 +14,32 @@ export interface SeedLayoutConfig {
   marginBottomClass: string;
 }
 
+// LAYOUT FIJO COMO SEED 6 - Siempre estos valores
+const FIXED_LAYOUT_SEED_6: SeedLayoutConfig = {
+  marginTop: 0,
+  wrapButton: false,
+  justifyClass: "justify-start",
+  gapClass: "gap-2",
+  marginTopClass: "mt-0",
+  marginBottomClass: "mb-0",
+};
+
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
+  return false; // Siempre deshabilitado - el layout nunca cambia
 }
 
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled()) {
-    return {
-      marginTop: 0,
-      wrapButton: false,
-      justifyClass: "justify-start",
-      gapClass: "gap-2",
-      marginTopClass: "mt-0",
-      marginBottomClass: "mb-0",
-    };
-  }
-
-  const effectiveSeed = seed ?? 1;
-  const layoutIndex = getLayoutIndexFromSeed(effectiveSeed);
-
-  const justifyClasses = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"];
-  const gapClasses = ["gap-2", "gap-3", "gap-4", "gap-5", "gap-6"];
-  const marginTopClasses = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"];
-  const marginBottomClasses = ["mb-0", "mb-4", "mb-8", "mb-12", "mb-16"];
-
-  return {
-    marginTop: (layoutIndex % 5) * 4,
-    wrapButton: layoutIndex % 2 === 0,
-    justifyClass: justifyClasses[layoutIndex % justifyClasses.length],
-    gapClass: gapClasses[layoutIndex % gapClasses.length],
-    marginTopClass: marginTopClasses[layoutIndex % marginTopClasses.length],
-    marginBottomClass: marginBottomClasses[layoutIndex % marginBottomClasses.length],
-  };
+  // Siempre devolver el layout fijo de seed 6, ignorando la seed
+  return FIXED_LAYOUT_SEED_6;
 }
 
 export function getLayoutClasses(seed?: number): string {
-  const config = getEffectiveLayoutConfig(seed);
-  return `${config.justifyClass} ${config.gapClass} ${config.marginTopClass} ${config.marginBottomClass}`;
+  // Siempre las mismas clases
+  return "justify-start gap-2 mt-0 mb-0";
 }
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  return getEffectiveLayoutConfig(seed);
+  // Siempre el mismo layout
+  return FIXED_LAYOUT_SEED_6;
 }
 

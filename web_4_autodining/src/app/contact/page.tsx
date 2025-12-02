@@ -1,10 +1,9 @@
 "use client";
 
 import { useSeed } from "@/context/SeedContext";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import Navbar from "@/components/Navbar";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,45 +23,6 @@ export default function ContactPage() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
-
-  // Use seed-based layout variations
-  const pageLayoutVariation = useSeedVariation(
-    "pageLayout",
-    undefined,
-    layoutSeed
-  );
-  const formVariation = useSeedVariation("form", undefined, layoutSeed);
-  const sectionLayoutVariation = useSeedVariation(
-    "sectionLayout",
-    undefined,
-    layoutSeed
-  );
-
-  // Calculate layout variation for styling
-  const layoutMode = useMemo(() => ((layoutSeed % 3) + 3) % 3, [layoutSeed]);
-  const layoutVariation = useMemo(() => {
-    return {
-      textAlign: [
-        "text-left md:text-left",
-        "text-center",
-        "text-left md:text-right",
-      ][layoutMode],
-      gridCols: [
-        "grid-cols-1 md:grid-cols-2",
-        "grid-cols-1 md:grid-cols-3",
-        "grid-cols-1 md:grid-cols-2",
-      ][layoutMode],
-    };
-  }, [layoutMode]);
-
-  const sectionOrder = useMemo(() => {
-    const sequences: Record<number, ("info" | "form" | "faq")[]> = {
-      0: ["info", "form", "faq"],
-      1: ["form", "info", "faq"],
-      2: ["faq", "info", "form"],
-    };
-    return sequences[layoutMode];
-  }, [layoutMode]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,18 +86,9 @@ export default function ContactPage() {
   return (
     <main>
       <Navbar />
-      <div
-        className={`${
-          pageLayoutVariation.className || "max-w-6xl mx-auto px-4 py-8"
-        }`}
-        data-testid={pageLayoutVariation.dataTestId}
-      >
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
-        <div
-          className={`mb-12 ${
-            hasSeedParam ? layoutVariation.textAlign : "text-center"
-          }`}
-        >
+        <div className="mb-12 text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Get in Touch
           </h1>
@@ -147,204 +98,187 @@ export default function ContactPage() {
           </p>
         </div>
 
-        {sectionOrder.map((sectionKey) => {
-          if (sectionKey === "info") {
-            return (
-              <section
-                key="info"
-                className={`${sectionLayoutVariation.className || "mb-12"}`}
-                data-testid={sectionLayoutVariation.dataTestId}
-              >
-                <div className={`grid ${layoutVariation.gridCols} gap-6`}>
-                  {contactInfo.map((info, index) => (
-                    <a
-                      key={index}
-                      href={info.link}
-                      className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758]"
-                      onClick={() =>
-                        logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, {
-                          type: info.title,
-                          layoutSeed,
-                        })
-                      }
-                    >
-                      <div className="text-[#46a758] mb-4">{info.icon}</div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {info.title}
-                      </h3>
-                      <p className="text-gray-600">{info.content}</p>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            );
-          }
-
-          if (sectionKey === "form") {
-            return (
-              <section
-                key="form"
-                className={`${sectionLayoutVariation.className || "mb-12"}`}
-              >
-                <div className="bg-white border border-gray-200 rounded-2xl p-8 md:p-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                    Send us a Message
-                  </h2>
-                  <p className="text-gray-600 mb-8">
-                    Prefer the personal touch? Drop us a note and our concierge
-                    team will respond promptly.
-                  </p>
-
-                  {submitted && (
-                    <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
-                      Thank you for your message! We'll get back to you soon.
-                    </div>
-                  )}
-
-                  <form
-                    onSubmit={handleSubmit}
-                    className={formVariation.className || "space-y-6"}
-                  >
-                    {/* First row: Name, Email, Subject in horizontal layout */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div>
-                        <label
-                          htmlFor="name"
-                          className="block text-sm font-medium text-gray-700 mb-2"
-                        >
-                          Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          required
-                          value={formData.name}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="email"
-                          className="block text-sm font-medium text-gray-700 mb-2"
-                        >
-                          Email *
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          required
-                          value={formData.email}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none"
-                          placeholder="your.email@example.com"
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="subject"
-                          className="block text-sm font-medium text-gray-700 mb-2"
-                        >
-                          Subject *
-                        </label>
-                        <input
-                          type="text"
-                          id="subject"
-                          name="subject"
-                          required
-                          value={formData.subject}
-                          onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none"
-                          placeholder="What's this about?"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Second row: Message and Button side by side */}
-                    <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-start">
-                      <div>
-                        <label
-                          htmlFor="message"
-                          className="block text-sm font-medium text-gray-700 mb-2"
-                        >
-                          Message *
-                        </label>
-                        <textarea
-                          id="message"
-                          name="message"
-                          required
-                          value={formData.message}
-                          onChange={handleChange}
-                          rows={6}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none resize-none"
-                          placeholder="Tell us more about your inquiry..."
-                        />
-                      </div>
-                      <div className="flex items-end md:items-start md:pt-8">
-                        <Button
-                          type="submit"
-                          className="bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 whitespace-nowrap"
-                        >
-                          <Send className="w-5 h-5" />
-                          Send Message
-                        </Button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </section>
-            );
-          }
-
-          return (
-            <section
-              key="faq"
-              className={`${sectionLayoutVariation.className || "mb-12"}`}
-            >
-              <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-                  Frequently Asked Questions
-                </h2>
-                <div
-                  className={`${
-                    layoutMode === 0 ? "space-y-4" : "grid gap-4 md:grid-cols-3"
-                  }`}
+        {/* Main Content: Contact Info + Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Contact Information */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Contact Information
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Feel free to reach out through any of these channels. We're here
+              to help!
+            </p>
+            <div className="space-y-4">
+              {contactInfo.map((info, index) => (
+                <a
+                  key={index}
+                  href={info.link}
+                  className="flex items-start gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-[#46a758] transition-all duration-300 group"
+                  onClick={() =>
+                    logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, {
+                      type: info.title,
+                      layoutSeed,
+                    })
+                  }
                 >
-                  {[
-                    {
-                      title: "How do I make a reservation?",
-                      description:
-                        "Search for a restaurant, pick a date and time, and complete the booking in seconds.",
-                    },
-                    {
-                      title: "Can I cancel my reservation?",
-                      description:
-                        "Yes—up to 24 hours before your booking time. Details are in your confirmation email.",
-                    },
-                    {
-                      title: "Is there a booking fee?",
-                      description:
-                        "No, our service is free. You only pay the restaurant when you dine.",
-                    },
-                  ].map((item) => (
-                    <div
-                      key={item.title}
-                      className="bg-white rounded-lg p-6 shadow-sm"
-                    >
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-600">{item.description}</p>
-                    </div>
-                  ))}
+                  <div className="text-[#46a758] group-hover:scale-110 transition-transform">
+                    {info.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      {info.title}
+                    </h3>
+                    <p className="text-gray-600">{info.content}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Send us a Message
+            </h2>
+            <div className="bg-white border border-gray-200 rounded-2xl p-8">
+              {submitted && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
+                  Thank you for your message! We'll get back to you soon.
                 </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Name */}
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    placeholder="Your full name"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+
+                {/* Subject */}
+                <div>
+                  <label
+                    htmlFor="subject"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Subject *
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    required
+                    value={formData.subject}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none transition-colors"
+                    placeholder="What's this about?"
+                  />
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Message *
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={6}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none resize-none transition-colors"
+                    placeholder="Tell us more about your inquiry..."
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-2">
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <Send className="w-5 h-5" />
+                    Send Message
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+            Frequently Asked Questions
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                title: "How do I make a reservation?",
+                description:
+                  "Search for a restaurant, pick a date and time, and complete the booking in seconds.",
+              },
+              {
+                title: "Can I cancel my reservation?",
+                description:
+                  "Yes—up to 24 hours before your booking time. Details are in your confirmation email.",
+              },
+              {
+                title: "Is there a booking fee?",
+                description:
+                  "No, our service is free. You only pay the restaurant when you dine.",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="bg-white rounded-lg p-6 shadow-sm"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600">{item.description}</p>
               </div>
-            </section>
-          );
-        })}
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   );

@@ -23,7 +23,7 @@ import { RestaurantsData } from "@/library/dataset";
 import { getRestaurants, initializeRestaurants } from "@/dynamic/v2-data";
 import type { RestaurantData } from "@/dynamic/v2-data";
 import { useSearchParams } from "next/navigation";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { buildBookingHref } from "@/utils/bookingPaths";
@@ -127,21 +127,7 @@ function RestaurantCard({
 
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
 
-  // Use seed-based variations with event support
-  const restaurantCardVariation = useSeedVariation("restaurantCard");
-  const bookButtonVariation = useSeedVariation("bookButton");
-
-  // Create layout based on seed
-  const layout = {
-    wrap: seed % 2 === 0, // Even seeds wrap, odd seeds don't
-    justify: [
-      "flex-start",
-      "center",
-      "flex-end",
-      "space-between",
-      "space-around",
-    ][seed % 5],
-  };
+  // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
 
   const viewDetailsLabel = getText("view_details") || "View details";
   const bookNowLabel = getText("book_now") || "Book now";
@@ -154,9 +140,7 @@ function RestaurantCard({
 
   return (
     <div
-      className={`w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl`}
-      data-testid={restaurantCardVariation.dataTestId}
-      style={restaurantCardVariation.style}
+      className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl"
     >
       <div className="relative w-full h-[280px] overflow-hidden">
         <img
@@ -198,9 +182,7 @@ function RestaurantCard({
               <SeedLink
                 id={getId("view_details_button")}
                 href={`/restaurant/${encodeURIComponent(r.id)}`}
-                className={`${bookButtonVariation.className} text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors`}
-                data-testid={bookButtonVariation.dataTestId}
-                style={{ position: bookButtonVariation.position as any }}
+                className="text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors"
                 onClick={() =>
                   logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })
                 }
@@ -218,11 +200,9 @@ function RestaurantCard({
 function CardScroller({
   children,
   title,
-  layoutSeed,
 }: {
   children: React.ReactNode;
   title: string;
-  layoutSeed: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const tickingRef = useRef(false);
@@ -232,11 +212,7 @@ function CardScroller({
   const { getText } = useV3Attributes();
   const { seed } = useSeed(); // Get seed from context for data-testid
 
-  const cardContainerVariation = useSeedVariation(
-    "cardContainer",
-    undefined,
-    layoutSeed
-  );
+  // LAYOUT FIJO - Sin variaciones
   const childCount = React.Children.count(children);
 
   const checkScroll = () => {
@@ -338,7 +314,6 @@ function CardScroller({
       <div
         ref={ref}
         className="flex gap-4 pb-4 px-5 scroll-smooth overflow-x-auto overflow-y-hidden no-scrollbar"
-        data-testid={cardContainerVariation.dataTestId}
         onScroll={scheduleCheck}
         style={{
           scrollbarWidth: "none",
@@ -351,12 +326,7 @@ function CardScroller({
   );
 }
 
-function getLayoutVariant(seed: number) {
-  return {
-    marginTop: ["mt-4", "mt-6", "mt-8", "mt-10", "mt-12"][seed % 5],
-    wrapButton: seed % 3 === 0, // Every 3rd seed wraps the button
-  };
-}
+// LAYOUT FIJO - Sin variaciones
 
 // Client-only component that uses seed from context
 function HomePageContent() {
@@ -381,7 +351,7 @@ function HomePageContent() {
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const seedParam = searchParams?.get("seed");
-  const layoutSeed = seedParam ? resolvedSeeds.v1 ?? seed : 2;
+  // Layout completamente fijo - layoutSeed ya no se usa para variaciones
 
   // Redirect to default seed=6 if none provided
   useEffect(() => {
@@ -393,79 +363,11 @@ function HomePageContent() {
     }
   }, [seedParam, router]);
 
-  // Calculate layout variation (1-10) from v1 seed
-  // COMMON FORMULA across all webs
-  const layoutVariation = useMemo(() => {
-    if (layoutSeed < 1 || layoutSeed > 300) return 1;
-    return ((layoutSeed % 30) + 1) % 10 || 10;
-  }, [layoutSeed]);
+  // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
 
-  // Log v1 info when it changes (only once per unique v1 seed)
-  const lastV1SeedRef = useRef<number | null>(null);
-  useEffect(() => {
-    const currentV1Seed = seedParam
-      ? resolvedSeeds.v1 ?? resolvedSeeds.base
-      : layoutSeed;
-    // Only log if v1 seed actually changed
-    if (lastV1SeedRef.current !== currentV1Seed) {
-      if (resolvedSeeds.v1 !== null) {
-        console.log(
-          `[autodining] V1 Layout - Seed: ${
-            seedParam ? resolvedSeeds.v1 : layoutSeed
-          }, Variation: #${layoutVariation} (of 10)`
-        );
-      } else if (resolvedSeeds.base) {
-        console.log(
-          `[autodining] V1 Layout - Using base seed: ${
-            seedParam ? resolvedSeeds.base : layoutSeed
-          }, Variation: #${layoutVariation} (of 10)`
-        );
-      }
-      lastV1SeedRef.current = currentV1Seed;
-    }
-  }, [
-    resolvedSeeds.v1,
-    resolvedSeeds.base,
-    layoutVariation,
-    layoutSeed,
-    seedParam,
-  ]);
-
-  const { marginTop, wrapButton } = useMemo(
-    () => getLayoutVariant(layoutSeed),
-    [layoutSeed]
-  );
-
-  // Use seed-based variations with event support (pass v1 seed)
-  const searchBarVariation = useSeedVariation(
-    "searchBar",
-    undefined,
-    layoutSeed
-  );
-  const searchButtonVariation = useSeedVariation(
-    "searchButton",
-    undefined,
-    layoutSeed
-  );
-  const pageLayoutVariation = useSeedVariation(
-    "pageLayout",
-    undefined,
-    layoutSeed
-  );
-  const sectionLayoutVariation = useSeedVariation(
-    "sectionLayout",
-    undefined,
-    layoutSeed
-  );
-
+  // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
   const searchButtonLabel = getText("search_button") || "Search";
-  const searchButtonClassName = seedParam
-    ? searchButtonVariation.className
-    : "ml-3 px-8 py-3 rounded-lg text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] transition-colors shadow-sm min-w-[120px]";
-  const searchButtonStyle =
-    seedParam && searchButtonVariation.position
-      ? { position: searchButtonVariation.position as any }
-      : undefined;
+  const searchButtonClassName = "ml-3 px-8 py-3 rounded-lg text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] transition-colors shadow-sm min-w-[120px]";
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -676,10 +578,7 @@ function HomePageContent() {
       <Navbar />
 
       {/* Hero Section */}
-      <section
-        className={`${pageLayoutVariation.className} mb-10`}
-        data-testid={pageLayoutVariation.dataTestId}
-      >
+      <section className="mb-10">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-lime-500 text-white px-8 py-10 shadow-2xl">
           <div className="absolute inset-0 opacity-10 bg-[url('/images/restaurant1.jpg')] bg-cover bg-center" />
           <div className="relative max-w-3xl space-y-3">
@@ -831,27 +730,12 @@ function HomePageContent() {
             value={search}
             onChange={handleSearchChange}
           />
-          {wrapButton ? (
-            <div data-testid={`wrapper-${seed ?? 1}`}>
-              <button
-                id={getId("search_button")}
-                className={searchButtonClassName}
-                data-testid={searchButtonVariation.dataTestId}
-                style={searchButtonStyle}
-              >
-                {searchButtonLabel}
-              </button>
-            </div>
-          ) : (
-            <button
-              id={getId("search_button")}
-              className={searchButtonClassName}
-              data-testid={searchButtonVariation.dataTestId}
-              style={searchButtonStyle}
-            >
-              {searchButtonLabel}
-            </button>
-          )}
+          <button
+            id={getId("search_button")}
+            className={searchButtonClassName}
+          >
+            {searchButtonLabel}
+          </button>
         </section>
 
         {/* Main Content - Cards, Sections, etc. */}
@@ -861,8 +745,7 @@ function HomePageContent() {
             {expensiveRestaurants.length > 0 && (
               <section
                 id={getId("section_expensive")}
-                className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
-                data-testid={sectionLayoutVariation.dataTestId}
+                className="px-4"
               >
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
@@ -874,7 +757,6 @@ function HomePageContent() {
                 </div>
                 <CardScroller
                   title={getText("section_expensive")}
-                  layoutSeed={layoutSeed}
                 >
                   {expensiveRestaurants.map((r) => (
                     <RestaurantCard
@@ -893,8 +775,7 @@ function HomePageContent() {
             {mediumRestaurants.length > 0 && (
               <section
                 id={getId("section_medium")}
-                className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
-                data-testid={sectionLayoutVariation.dataTestId}
+                className="px-4 mt-8"
               >
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
@@ -925,8 +806,7 @@ function HomePageContent() {
             {cheapRestaurants.length > 0 && (
               <section
                 id={getId("section_cheap")}
-                className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
-                data-testid={sectionLayoutVariation.dataTestId}
+                className="px-4 mt-8"
               >
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">

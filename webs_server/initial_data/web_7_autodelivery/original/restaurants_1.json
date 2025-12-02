@@ -62,11 +62,18 @@
     ],
     "reviews": [
       {
-        "author": "Maria G.",
+        "author": "Diego A.",
         "rating": 5,
-        "comment": "Excellent food and great service!",
-        "date": "2025-12-01",
-        "avatar": ""
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "25-35 min",
@@ -118,11 +125,18 @@
     ],
     "reviews": [
       {
-        "author": "Pierre D.",
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
         "rating": 5,
-        "comment": "Authentic French cuisine!",
-        "date": "2025-12-02",
-        "avatar": ""
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "30-40 min",
@@ -179,11 +193,18 @@
     ],
     "reviews": [
       {
-        "author": "Yuki T.",
-        "rating": 5,
-        "comment": "Best sushi in town!",
-        "date": "2025-12-03",
-        "avatar": ""
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "40-55 min",
@@ -240,11 +261,18 @@
     ],
     "reviews": [
       {
-        "author": "Carlos M.",
-        "rating": 4,
-        "comment": "Great Mexican food!",
-        "date": "2025-12-04",
-        "avatar": ""
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "45-60 min",
@@ -296,11 +324,18 @@
     ],
     "reviews": [
       {
-        "author": "Somsak K.",
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
         "rating": 5,
-        "comment": "Authentic Thai flavors!",
-        "date": "2025-12-05",
-        "avatar": ""
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "20-30 min",
@@ -352,11 +387,18 @@
     ],
     "reviews": [
       {
-        "author": "Raj K.",
-        "rating": 5,
-        "comment": "Delicious Indian food!",
-        "date": "2025-12-06",
-        "avatar": ""
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "50-65 min",
@@ -408,11 +450,18 @@
     ],
     "reviews": [
       {
-        "author": "Wei L.",
-        "rating": 4,
-        "comment": "Good Chinese food!",
-        "date": "2025-12-07",
-        "avatar": ""
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "25-35 min",
@@ -464,11 +513,18 @@
     ],
     "reviews": [
       {
-        "author": "Dimitris P.",
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
         "rating": 5,
-        "comment": "Authentic Greek food!",
-        "date": "2025-12-08",
-        "avatar": ""
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "30-40 min",
@@ -520,11 +576,18 @@
     ],
     "reviews": [
       {
-        "author": "Sofia R.",
-        "rating": 5,
-        "comment": "Amazing paella!",
-        "date": "2025-12-09",
-        "avatar": ""
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "40-55 min",
@@ -576,11 +639,18 @@
     ],
     "reviews": [
       {
-        "author": "Min J.",
-        "rating": 4,
-        "comment": "Great Korean food!",
-        "date": "2025-12-10",
-        "avatar": ""
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "45-60 min",
@@ -632,11 +702,18 @@
     ],
     "reviews": [
       {
-        "author": "Mehmet A.",
-        "rating": 4,
-        "comment": "Good Turkish food!",
-        "date": "2025-12-11",
-        "avatar": ""
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "20-30 min",
@@ -693,11 +770,18 @@
     ],
     "reviews": [
       {
-        "author": "John D.",
-        "rating": 5,
-        "comment": "Best steak in town!",
-        "date": "2025-12-12",
-        "avatar": ""
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "50-65 min",
@@ -749,11 +833,18 @@
     ],
     "reviews": [
       {
-        "author": "Linh N.",
+        "author": "Diego A.",
         "rating": 5,
-        "comment": "Authentic pho!",
-        "date": "2025-12-13",
-        "avatar": ""
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "25-35 min",
@@ -805,11 +896,18 @@
     ],
     "reviews": [
       {
-        "author": "Giuseppe M.",
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
         "rating": 5,
-        "comment": "Like Nonna's cooking!",
-        "date": "2025-12-14",
-        "avatar": ""
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "30-40 min",
@@ -861,11 +959,18 @@
     ],
     "reviews": [
       {
-        "author": "Rodrigo S.",
-        "rating": 4,
-        "comment": "Great Brazilian food!",
-        "date": "2025-12-15",
-        "avatar": ""
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "40-55 min",
@@ -917,11 +1022,18 @@
     ],
     "reviews": [
       {
-        "author": "Layla H.",
+        "author": "Diego A.",
         "rating": 5,
-        "comment": "Authentic Lebanese food!",
-        "date": "2025-12-16",
-        "avatar": ""
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "45-60 min",
@@ -973,11 +1085,18 @@
     ],
     "reviews": [
       {
-        "author": "James W.",
-        "rating": 4,
-        "comment": "Traditional British pub food!",
-        "date": "2025-12-17",
-        "avatar": ""
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "20-30 min",
@@ -1029,11 +1148,18 @@
     ],
     "reviews": [
       {
-        "author": "Hans M.",
-        "rating": 4,
-        "comment": "Good German food!",
-        "date": "2025-12-18",
-        "avatar": ""
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "50-65 min",
@@ -1094,7 +1220,14 @@
         "rating": 5,
         "comment": "Best Argentine steak!",
         "date": "2025-12-19",
-        "avatar": ""
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "25-35 min",
@@ -1146,11 +1279,18 @@
     ],
     "reviews": [
       {
-        "author": "Akira T.",
-        "rating": 4,
-        "comment": "Fresh and delicious!",
-        "date": "2025-12-20",
-        "avatar": ""
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
       }
     ],
     "deliveryTime": "30-40 min",

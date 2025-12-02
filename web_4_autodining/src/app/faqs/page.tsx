@@ -17,17 +17,14 @@ export default function FaqsPage() {
   const layoutSeed = resolvedSeeds.v1 ?? seed;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  // Use seed-based layout variations
+  // LAYOUT FIJO - Siempre como seed 6
   const pageLayoutVariation = useSeedVariation("pageLayout", undefined, layoutSeed);
   const sectionLayoutVariation = useSeedVariation("sectionLayout", undefined, layoutSeed);
 
-  // Calculate layout variation for styling
-  const layoutVariation = useMemo(() => {
-    const variationIndex = ((layoutSeed % 30) + 1) % 10 || 10;
-    return {
-      textAlign: variationIndex % 3 === 0 ? "text-center" : "text-left",
-    };
-  }, [layoutSeed]);
+  // Valores fijos como seed 6
+  const layoutVariation = {
+    textAlign: "text-left",
+  };
 
   const faqs: FAQItem[] = [
     {

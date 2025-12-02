@@ -63,34 +63,14 @@ export default function Page() {
 
   const [data, setData] = useState<RestaurantView | null>(null);
 
-  // Create layout based on seed
-  const layout = useMemo(() => {
-    const wrap = layoutSeed % 2 === 0;
-    const justifyClass = [
-      "justify-start",
-      "justify-center",
-      "justify-end",
-      "justify-between",
-      "justify-around",
-    ][layoutSeed % 5];
-    const gapClass = ["gap-2", "gap-3", "gap-4", "gap-5", "gap-6"][
-      layoutSeed % 5
-    ];
-    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][
-      layoutSeed % 5
-    ];
-    const marginBottomClass = ["mb-0", "mb-4", "mb-8", "mb-12", "mb-16"][
-      layoutSeed % 5
-    ];
-
-    return {
-      wrap,
-      justifyClass,
-      gapClass,
-      marginTopClass,
-      marginBottomClass,
-    };
-  }, [layoutSeed]);
+  // LAYOUT FIJO - Siempre como seed 6
+  const layout = {
+    wrap: false, // seed 6 (par) = false
+    justifyClass: "justify-start", // seed 6 % 5 = 1 → índice 1 = justify-start
+    gapClass: "gap-2", // seed 6 % 5 = 1 → índice 1 = gap-2
+    marginTopClass: "mt-0", // seed 6 % 5 = 1 → índice 1 = mt-0
+    marginBottomClass: "mb-0", // seed 6 % 5 = 1 → índice 1 = mb-0
+  };
 
   // Use seed-based variations (pass v1 seed)
   const formVariation = useSeedVariation("form", undefined, layoutSeed);
