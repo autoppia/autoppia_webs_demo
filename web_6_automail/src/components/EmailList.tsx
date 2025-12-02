@@ -59,6 +59,8 @@ export function EmailList({ textStructure }: EmailListProps) {
     prevPage,
     updateComposeData,
     toggleCompose,
+    currentPage,
+    itemsPerPage,
   } = useEmail();
 
   const formatTimestamp = (date: Date) => {
@@ -191,6 +193,10 @@ export function EmailList({ textStructure }: EmailListProps) {
 
   const unreadCount = filteredEmails.filter((email) => !email.isRead).length;
 
+  // Calculate pagination range
+  const paginationStart = filteredEmails.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const paginationEnd = Math.min(currentPage * itemsPerPage, filteredEmails.length);
+
   // Function to highlight search terms
   const highlightSearchTerm = (text: string, searchTerm: string) => {
     if (!searchTerm) return text;
@@ -218,7 +224,7 @@ export function EmailList({ textStructure }: EmailListProps) {
 
   return (
     <div
-      className="flex flex-col h-full bg-background"
+      className="flex flex-col h-full bg-background px-6"
       data-testid="email-list"
       suppressHydrationWarning
     >
@@ -237,7 +243,9 @@ export function EmailList({ textStructure }: EmailListProps) {
           </Button>
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <span>
-              {filteredEmails.length === 0 ? "0" : `1-${filteredEmails.length}`}{" "}
+              {filteredEmails.length === 0 
+                ? "0" 
+                : `${paginationStart}-${paginationEnd}`}{" "}
               of {filteredEmails.length}
             </span>
             <Button

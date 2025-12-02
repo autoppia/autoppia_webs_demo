@@ -105,14 +105,30 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   };
 
   const handleQuickOrder = (restaurant: typeof restaurants[0]) => {
-    logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, {
-      restaurantId: restaurant.id,
-      restaurantName: restaurant.name,
-      cuisine: restaurant.cuisine
-    });
-    onOpenChange(false);
-    // Navigate to restaurant page to start ordering
-    window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
+    // Add first menu item (or skip if none)
+    if (restaurant.menu && restaurant.menu.length > 0) {
+      const firstItem = restaurant.menu[0];
+      addToCart(firstItem, restaurant.id);
+      logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, {
+        restaurantId: restaurant.id,
+        restaurantName: restaurant.name,
+        cuisine: restaurant.cuisine,
+        itemId: firstItem.id,
+        itemName: firstItem.name,
+      });
+      onOpenChange(false);
+      window.location.href = getNavigationUrl("/cart");
+    } else {
+      logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, {
+        restaurantId: restaurant.id,
+        restaurantName: restaurant.name,
+        cuisine: restaurant.cuisine,
+        itemId: null,
+        itemName: null,
+      });
+      onOpenChange(false);
+      window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
+    }
   };
 
   const handleQuickAddPopular = (restaurant: typeof restaurants[0]) => {

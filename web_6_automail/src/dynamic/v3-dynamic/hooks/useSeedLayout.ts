@@ -15,10 +15,7 @@ import { useV3Attributes } from "./useV3Attributes";
 export function useSeedLayout() {
   const { resolvedSeeds } = useSeedContext();
 
-  const layoutSeed = useMemo(() => {
-    return resolvedSeeds.v1 ?? resolvedSeeds.base;
-  }, [resolvedSeeds.v1, resolvedSeeds.base]);
-
+  // LAYOUT FIJO - La seed se mantiene en URL para V2 (datos) y V3 (texto), pero el layout (V1) es siempre fijo
   const v2Seed = useMemo(() => {
     return resolvedSeeds.v2 ?? null;
   }, [resolvedSeeds.v2]);
@@ -36,26 +33,19 @@ export function useSeedLayout() {
 
   const isDynamicEnabled = isDynamicModeEnabled();
 
+  // LAYOUT FIJO - Siempre usar seed=1 para layout (V1)
+  // La seed se mantiene en URL para V2 (datos) y V3 (texto)
   const seed = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return 1;
-    }
-    return layoutSeed;
-  }, [isDynamicEnabled, layoutSeed]);
+    return 1; // Siempre fijo para layout
+  }, []);
 
   const layout = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return getLayoutVariant(1);
-    }
-    return getLayoutVariant(seed);
-  }, [isDynamicEnabled, seed]);
+    return getLayoutVariant(1); // Siempre layout de seed=1
+  }, []);
 
   const cssVariables = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return generateCSSVariables(1);
-    }
-    return generateCSSVariables(seed);
-  }, [isDynamicEnabled, seed]);
+    return generateCSSVariables(1); // Siempre CSS variables de seed=1
+  }, []);
 
   const getElementAttributes = useCallback(
     (elementType: string, index: number = 0) => {

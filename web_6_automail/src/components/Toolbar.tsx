@@ -137,7 +137,7 @@ export function Toolbar({ onMenuClick, textStructure }: ToolbarProps) {
       currentVariant.id === 9 && "terminal-header",
       currentVariant.id === 10 && "magazine-header"
     )}>
-      <div className="flex items-center justify-between h-full px-4 gap-4">
+      <div className="flex items-center justify-between h-full px-6 gap-4">
         {/* Left Section - Menu and Logo */}
         <div className="flex items-center gap-4">
           <Button

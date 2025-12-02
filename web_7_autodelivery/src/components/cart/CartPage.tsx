@@ -279,7 +279,7 @@ export default function CartPage() {
   const placeOrderAria = getAria("place-order-button", "Place order");
 
   return (
-    <div id="cart-page-container" className={`max-w-3xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
+    <div id="cart-page-container" className={`max-w-4xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
       <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
@@ -867,7 +867,7 @@ export default function CartPage() {
             id="order-form"
             ref={formRef}
             onSubmit={handleSubmit}
-            className="bg-white rounded-xl shadow p-6 max-w-lg mx-auto flex flex-col gap-4"
+            className="bg-white rounded-xl shadow p-6 w-full flex flex-col gap-4"
           >
             <h2
               className="font-semibold text-xl mb-2"

@@ -343,8 +343,13 @@ export const LAYOUT_VARIANTS: LayoutVariant[] = [
   }
 ];
 
+/**
+ * LAYOUT FIJO - Siempre como seed 1
+ * Tu sitio web es lo que es, sin variaciones
+ */
 export function getLayoutVariant(seed: number): LayoutVariant {
-  const variantIndex = (seed - 1) % LAYOUT_VARIANTS.length;
+  // LAYOUT FIJO - Siempre usar seed 1
+  const variantIndex = (1 - 1) % LAYOUT_VARIANTS.length;
   return LAYOUT_VARIANTS[variantIndex];
 }
 

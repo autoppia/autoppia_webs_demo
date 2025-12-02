@@ -225,7 +225,7 @@ export function EmailView({ textStructure }: EmailViewProps) {
       suppressHydrationWarning
     >
       {/* Top Toolbar */}
-      <div className="flex items-center justify-between p-4 toolbar-glass">
+      <div className="flex items-center justify-between px-6 py-4 toolbar-glass">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
