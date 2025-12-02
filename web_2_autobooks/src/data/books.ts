@@ -109,14 +109,23 @@ const normalizeCast = (cast?: string[] | string): string[] => {
 
 const buildPosterPath = (imagePath?: string): string => {
   if (!imagePath) return DEFAULT_POSTER;
+
   const normalized = imagePath.replace(/^\/+/, "");
   const filename = normalized.split("/").pop();
+
+  // Try manifest by full path, then by filename, then by prefix
   const prefix = filename?.split(".")[0]?.split("_")[0] ?? "";
-  const match = IMAGE_LOOKUP.get(prefix);
-  if (match) {
-    return `/${match}`;
+  const manifestMatch =
+    IMAGE_LOOKUP.get(normalized) ||
+    (filename ? IMAGE_LOOKUP.get(filename) : undefined) ||
+    IMAGE_LOOKUP.get(prefix);
+
+  if (manifestMatch) {
+    return `/${manifestMatch}`;
   }
-  return DEFAULT_POSTER;
+
+  // Otherwise fall back to the provided path (it will resolve if the file exists in /public)
+  return `/${normalized}`;
 };
 
 const generateFallbackId = (): string => {
