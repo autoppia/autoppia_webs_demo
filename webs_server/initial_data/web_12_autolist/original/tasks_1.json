@@ -2,152 +2,152 @@
   {
     "id": "task-1",
     "name": "Complete project proposal",
-    "description": "Write and submit the quarterly project proposal for Q1 2026. Include budget estimates, timeline, and resource requirements.",
+    "description": "Write and submit the quarterly project proposal with all required documentation",
     "priority": 1,
     "status": "pending",
-    "createdAt": "2025-12-01",
-    "due_date": "2025-12-20",
-    "completed_at": null
+    "createdAt": "2025-01-15",
+    "dueDate": "2025-01-20",
+    "tags": ["work", "important"]
   },
   {
     "id": "task-2",
-    "name": "Review team performance metrics",
-    "description": "Analyze Q4 team metrics and prepare comprehensive feedback reports for each team member. Schedule one-on-one meetings.",
+    "name": "Review team performance",
+    "description": "Analyze Q1 team metrics and prepare feedback for team members",
     "priority": 2,
-    "status": "in_progress",
-    "createdAt": "2025-11-28",
-    "due_date": "2025-12-15",
-    "completed_at": null
+    "status": "in-progress",
+    "createdAt": "2025-01-14",
+    "dueDate": "2025-01-18",
+    "tags": ["work", "management"]
   },
   {
     "id": "task-3",
-    "name": "Update API documentation",
-    "description": "Refresh API documentation and user guides with latest endpoints and examples. Ensure all code samples are working.",
+    "name": "Update documentation",
+    "description": "Update project documentation with latest changes and improvements",
     "priority": 3,
     "status": "pending",
-    "createdAt": "2025-11-30",
-    "due_date": "2025-12-18",
-    "completed_at": null
+    "createdAt": "2025-01-13",
+    "dueDate": "2025-01-25",
+    "tags": ["documentation"]
   },
   {
     "id": "task-4",
-    "name": "Schedule team retrospective meeting",
-    "description": "Plan and schedule next week's team retrospective. Prepare agenda and gather feedback from team members.",
-    "priority": 4,
+    "name": "Schedule team meeting",
+    "description": "Organize and schedule the monthly team meeting with agenda",
+    "priority": 2,
     "status": "completed",
-    "createdAt": "2025-11-25",
-    "due_date": "2025-12-05",
-    "completed_at": "2025-12-05"
+    "createdAt": "2025-01-12",
+    "dueDate": "2025-01-15",
+    "tags": ["meeting", "work"]
   },
   {
     "id": "task-5",
-    "name": "Set up CI/CD pipeline",
-    "description": "Configure continuous integration and deployment pipeline for the new microservices. Set up automated testing and deployment workflows.",
+    "name": "Prepare presentation",
+    "description": "Create presentation slides for the upcoming client meeting",
     "priority": 1,
-    "status": "in_progress",
-    "createdAt": "2025-11-27",
-    "due_date": "2025-12-25",
-    "completed_at": null
+    "status": "pending",
+    "createdAt": "2025-01-11",
+    "dueDate": "2025-01-17",
+    "tags": ["presentation", "important"]
   },
   {
     "id": "task-6",
-    "name": "Design UI mockups for new features",
-    "description": "Create comprehensive UI mockups for the upcoming features. Include mobile and desktop versions. Get stakeholder approval.",
+    "name": "Code review",
+    "description": "Review pull requests and provide feedback to development team",
     "priority": 2,
-    "status": "pending",
-    "createdAt": "2025-12-02",
-    "due_date": "2025-12-22",
-    "completed_at": null
+    "status": "in-progress",
+    "createdAt": "2025-01-10",
+    "dueDate": "2025-01-16",
+    "tags": ["code", "review"]
   },
   {
     "id": "task-7",
-    "name": "Test newly implemented features",
-    "description": "Perform thorough testing of newly implemented features. Write test cases and document any bugs found. Prepare test report.",
-    "priority": 1,
-    "status": "completed",
-    "createdAt": "2025-11-20",
-    "due_date": "2025-12-10",
-    "completed_at": "2025-12-10"
+    "name": "Update dependencies",
+    "description": "Update project dependencies to latest stable versions",
+    "priority": 3,
+    "status": "pending",
+    "createdAt": "2025-01-09",
+    "dueDate": "2025-01-22",
+    "tags": ["maintenance"]
   },
   {
     "id": "task-8",
-    "name": "Fix critical bugs in production",
-    "description": "Address critical bugs reported in production. Prioritize security issues and user-facing problems. Deploy hotfixes.",
+    "name": "Fix critical bug",
+    "description": "Investigate and fix the critical bug reported in production",
     "priority": 1,
-    "status": "in_progress",
-    "createdAt": "2025-12-01",
-    "due_date": "2025-12-08",
-    "completed_at": null
+    "status": "in-progress",
+    "createdAt": "2025-01-08",
+    "dueDate": "2025-01-14",
+    "tags": ["bug", "urgent"]
   },
   {
     "id": "task-9",
-    "name": "Plan tasks for next sprint",
-    "description": "Break down epics into user stories and tasks for the next sprint. Estimate effort and assign to team members.",
-    "priority": 3,
+    "name": "Write unit tests",
+    "description": "Add comprehensive unit tests for the new feature module",
+    "priority": 2,
     "status": "pending",
-    "createdAt": "2025-11-29",
-    "due_date": "2025-12-12",
-    "completed_at": null
+    "createdAt": "2025-01-07",
+    "dueDate": "2025-01-19",
+    "tags": ["testing", "development"]
   },
   {
     "id": "task-10",
-    "name": "Update project dependencies",
-    "description": "Update all project dependencies to latest stable versions. Test compatibility and fix any breaking changes.",
+    "name": "Design user interface",
+    "description": "Create mockups and design the new user interface components",
     "priority": 2,
-    "status": "completed",
-    "createdAt": "2025-11-15",
-    "due_date": "2025-12-01",
-    "completed_at": "2025-12-01"
+    "status": "pending",
+    "createdAt": "2025-01-06",
+    "dueDate": "2025-01-21",
+    "tags": ["design", "ui"]
   },
   {
     "id": "task-11",
-    "name": "Organize project files and documentation",
-    "description": "Clean up project repository structure. Organize files into proper directories and update documentation index.",
-    "priority": 4,
-    "status": "pending",
-    "createdAt": "2025-12-03",
-    "due_date": "2025-12-20",
-    "completed_at": null
+    "name": "Deploy to staging",
+    "description": "Deploy the latest version to staging environment for testing",
+    "priority": 2,
+    "status": "completed",
+    "createdAt": "2025-01-05",
+    "dueDate": "2025-01-12",
+    "tags": ["deployment"]
   },
   {
     "id": "task-12",
-    "name": "Prepare quarterly presentation",
-    "description": "Create presentation slides for quarterly business review. Include metrics, achievements, and roadmap for next quarter.",
-    "priority": 1,
-    "status": "in_progress",
-    "createdAt": "2025-11-26",
-    "due_date": "2025-12-15",
-    "completed_at": null
+    "name": "Optimize database queries",
+    "description": "Review and optimize slow database queries for better performance",
+    "priority": 3,
+    "status": "pending",
+    "createdAt": "2025-01-04",
+    "dueDate": "2025-01-23",
+    "tags": ["optimization", "database"]
   },
   {
     "id": "task-13",
-    "name": "Conduct code review sessions",
-    "description": "Review pending pull requests and provide constructive feedback. Ensure code quality and adherence to standards.",
+    "name": "Setup CI/CD pipeline",
+    "description": "Configure continuous integration and deployment pipeline",
     "priority": 2,
-    "status": "pending",
-    "createdAt": "2025-12-02",
-    "due_date": "2025-12-19",
-    "completed_at": null
+    "status": "in-progress",
+    "createdAt": "2025-01-03",
+    "dueDate": "2025-01-17",
+    "tags": ["ci-cd", "devops"]
   },
   {
     "id": "task-14",
-    "name": "Implement authentication improvements",
-    "description": "Enhance authentication system with multi-factor authentication support. Improve security and user experience.",
+    "name": "Security audit",
+    "description": "Conduct security audit and fix any vulnerabilities found",
     "priority": 1,
     "status": "pending",
-    "createdAt": "2025-11-30",
-    "due_date": "2025-12-28",
-    "completed_at": null
+    "createdAt": "2025-01-02",
+    "dueDate": "2025-01-16",
+    "tags": ["security", "important"]
   },
   {
     "id": "task-15",
-    "name": "Optimize database queries",
-    "description": "Analyze slow database queries and optimize them. Add proper indexes and refactor inefficient queries.",
+    "name": "Plan sprint",
+    "description": "Plan tasks and priorities for the next development sprint",
     "priority": 2,
-    "status": "completed",
-    "createdAt": "2025-11-18",
-    "due_date": "2025-12-05",
-    "completed_at": "2025-12-04"
+    "status": "pending",
+    "createdAt": "2025-01-01",
+    "dueDate": "2025-01-15",
+    "tags": ["planning", "sprint"]
   }
 ]
 

@@ -1,6 +1,5 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { Trip } from "@/data/trips-enhanced";
-import fallbackTrips from "../../data/original/trips_1.json";
 
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
@@ -148,8 +147,7 @@ export async function initializeTrips(
   const effectiveSeed = resolveSeed(seedOverride);
 
   if (!dbEnabled) {
-    console.log(`[autodrive] V2 disabled, using original dataset`);
-    return (fallbackTrips as Trip[]).slice(0, limit);
+    return generateDeterministicTrips(effectiveSeed, limit);
   }
 
   try {
@@ -172,7 +170,7 @@ export async function initializeTrips(
       `[autodrive] No trips returned from dataset (seed=${effectiveSeed})`
     );
   } catch (error) {
-    console.error("[autodrive] Failed to load trips from dataset, using original dataset", error);
-    return (fallbackTrips as Trip[]).slice(0, limit);
+    console.error("[autodrive] Failed to load trips from dataset", error);
+    return generateDeterministicTrips(effectiveSeed, limit);
   }
 }

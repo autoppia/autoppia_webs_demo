@@ -94,7 +94,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
-ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2,v3}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"
@@ -107,20 +107,7 @@ ENABLE_DYNAMIC_V4="${ENABLE_DYNAMIC_V4:-false}"
 # 3. NORMALIZE VALUES
 # ============================================================================
 
-# Normalize all boolean flags at once
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
-  eval "$var=\$(normalize_bool \"\$$var\")"
-done
-
-# Check for invalid booleans
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
-  if [ "$(eval echo \$$var)" = "__INVALID__" ]; then
-    echo "❌ Invalid boolean flag: $var. Use true/false (or yes/no, 1/0)."
-    exit 1
-  fi
-done
-
-# Normalize dynamic versions
+# Normalize dynamic versions FIRST (before mapping)
 ENABLED_DYNAMIC_VERSIONS_NORMALIZED="$(normalize_versions "$ENABLED_DYNAMIC_VERSIONS")"
 if [ "$ENABLED_DYNAMIC_VERSIONS_NORMALIZED" = "__INVALID__" ]; then
   echo "❌ Invalid --enabled_dynamic_versions value. Expected comma-separated tokens like v1,v2 or [v1,v2] where each token matches ^v[0-9]+$"
@@ -163,6 +150,19 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
     esac
   done
 fi
+
+# Normalize all boolean flags AFTER version mapping (so mapped values are preserved)
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+  eval "$var=\$(normalize_bool \"\$$var\")"
+done
+
+# Check for invalid booleans
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+  if [ "$(eval echo \$$var)" = "__INVALID__" ]; then
+    echo "❌ Invalid boolean flag: $var. Use true/false (or yes/no, 1/0)."
+    exit 1
+  fi
+done
 
 # ============================================================================
 # 5. VALIDATE CONFIGURATION

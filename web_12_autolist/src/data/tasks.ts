@@ -1,5 +1,4 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import fallbackTasks from "./original/tasks_1.json";
 
 type AutolistWindow = Window & {
   __autolistV2Seed?: number | null;
@@ -36,13 +35,6 @@ export async function loadTasks(
   const dbMode = isDbLoadModeEnabled();
   let effectiveSeed = 1;
   
-  // If V2 is NOT enabled, return original dataset immediately
-  if (!dbMode) {
-    console.log("[autolist] DB mode disabled, using original dataset");
-    const originalTasks = (fallbackTasks as RemoteTask[]).slice(0, limit);
-    return originalTasks;
-  }
-  
   if (dbMode) {
     if (typeof window === "undefined") {
       effectiveSeed = 1;
@@ -55,7 +47,6 @@ export async function loadTasks(
     }
   }
 
-  // Load from DB with the determined seed
   try {
     const tasks = await fetchSeededSelection<RemoteTask>({
       projectKey: "web_12_autolist",
@@ -72,14 +63,11 @@ export async function loadTasks(
       return tasks;
     }
 
-    console.warn(
-      `[autolist] No tasks returned from dataset (seed=${effectiveSeed}), using original dataset fallback`
+    throw new Error(
+      `[autolist] No tasks returned from dataset (seed=${effectiveSeed})`
     );
   } catch (error) {
-    console.error("[autolist] Failed to load tasks from dataset, using original dataset fallback:", error);
+    console.error("[autolist] Failed to load tasks from dataset:", error);
+    throw error;
   }
-
-  // Fallback to original dataset
-  const originalTasks = (fallbackTasks as RemoteTask[]).slice(0, limit);
-  return originalTasks;
 }

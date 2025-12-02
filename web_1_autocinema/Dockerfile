@@ -1,7 +1,7 @@
 # Stage 0: prod deps only (no dev deps like biome)
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY web_1_autocinema/package.json web_1_autocinema/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # Stage 1: build with dev deps
@@ -9,16 +9,20 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY web_1_autocinema/package.json web_1_autocinema/package-lock.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
 RUN npm ci
 
-# Copy project files
-COPY web_1_autocinema/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_1_autocinema/original/movies_1.json src/data/original/movies_1.json
+COPY . .
 
+# Build args for environment flags and API URL
+# Build arguments for dynamic versions
+ARG ENABLE_DYNAMIC_V1=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V1=$ENABLE_DYNAMIC_V1
+
+ARG ENABLE_DYNAMIC_V2_AI_GENERATE=false
+ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE=$ENABLE_DYNAMIC_V2_AI_GENERATE
 
 ARG ENABLE_DYNAMIC_V2_DB_MODE=false
 ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE=$ENABLE_DYNAMIC_V2_DB_MODE

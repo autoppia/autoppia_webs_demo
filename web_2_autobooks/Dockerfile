@@ -15,9 +15,6 @@ COPY web_2_autobooks/package.json web_2_autobooks/package-lock.json ./
 RUN npm ci
 
 COPY web_2_autobooks/ .
-# Copy original dataset files for fallback
-COPY webs_server/initial_data/web_2_autobooks/original/books_1.json src/data/original/books_1.json
-
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

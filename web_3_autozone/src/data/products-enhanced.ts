@@ -1,6 +1,5 @@
 import type { Product } from "@/context/CartContext";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import fallbackProducts from "./original/products_1.json";
 
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
@@ -75,13 +74,6 @@ export async function initializeProducts(
 ): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   
-  if (!dbModeEnabled) {
-    console.log(`[autozone] V2 disabled, using original dataset`);
-    const products = (fallbackProducts as Product[]).slice(0, limit);
-    dynamicProducts = normalizeProductImages(products);
-    return dynamicProducts;
-  }
-  
   // Wait a bit for SeedContext to sync v2Seed to window if needed
   if (typeof window !== "undefined" && dbModeEnabled) {
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -89,28 +81,21 @@ export async function initializeProducts(
   
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
-  try {
-    const products = await fetchSeededSelection<Product>({
-      projectKey: "web_3_autozone",
-      entityType: "products",
-      seedValue: effectiveSeed,
-      limit,
-      method: "distribute",
-      filterKey: "category",
-    });
+  const products = await fetchSeededSelection<Product>({
+    projectKey: "web_3_autozone",
+    entityType: "products",
+    seedValue: effectiveSeed,
+    limit,
+    method: "distribute",
+    filterKey: "category",
+  });
 
-    if (!Array.isArray(products) || products.length === 0) {
-      throw new Error(
-        `[autozone] No products returned from dataset (seed=${effectiveSeed})`
-      );
-    }
-
-    dynamicProducts = normalizeProductImages(products);
-    return dynamicProducts;
-  } catch (error) {
-    console.error("[autozone] Failed to load products from dataset, using original dataset", error);
-    const products = (fallbackProducts as Product[]).slice(0, limit);
-    dynamicProducts = normalizeProductImages(products);
-    return dynamicProducts;
+  if (!Array.isArray(products) || products.length === 0) {
+    throw new Error(
+      `[autozone] No products returned from dataset (seed=${effectiveSeed})`
+    );
   }
+
+  dynamicProducts = normalizeProductImages(products);
+  return dynamicProducts;
 }
