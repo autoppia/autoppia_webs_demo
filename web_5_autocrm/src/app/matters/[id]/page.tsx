@@ -284,90 +284,73 @@ function MatterDetailPageContent() {
           {tab === "Overview" && (
             <div>
               <h2 className="font-bold text-lg mb-4">Matter Overview</h2>
-              <ul className="list-disc ml-6 text-zinc-600">
-                <li>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </li>
-                <li>
-                  Billable time:{" "}
-                  <span className="font-bold text-zinc-800">-- h</span>
-                </li>
-                <li>Most recent activity, e.g. document signed.</li>
-              </ul>
+              <div className="space-y-4 text-zinc-600">
+                <div>
+                  <p className="mb-2">
+                    <strong className="text-zinc-800">Case Type:</strong> {currentMatter.name}
+                  </p>
+                  <p className="mb-2">
+                    <strong className="text-zinc-800">Client:</strong> {currentMatter.client}
+                  </p>
+                  <p className="mb-2">
+                    <strong className="text-zinc-800">Status:</strong> {currentMatter.status}
+                  </p>
+                </div>
+                <div className="border-t border-zinc-200 pt-4">
+                  <p className="mb-2">
+                    <strong className="text-zinc-800">Billable time:</strong>{" "}
+                    <span className="font-bold text-zinc-800">
+                      {Math.floor(Math.random() * 40 + 10)} hours
+                    </span>
+                  </p>
+                  <p className="mb-2">
+                    <strong className="text-zinc-800">Last updated:</strong> {currentMatter.updated}
+                  </p>
+                  <p>
+                    <strong className="text-zinc-800">Most recent activity:</strong> Matter reviewed and documentation updated.
+                  </p>
+                </div>
+              </div>
             </div>
           )}
           {tab === "Documents" && (
             <div>
               <h2 className="font-bold text-lg mb-4">Matter Documents</h2>
-              <ul className="ml-3 text-zinc-600">
-                <li>[Doc1.pdf] Signed | see Files tab</li>
-                <li>[Agreement.docx] Draft | see Files tab</li>
+              <ul className="space-y-2 ml-3 text-zinc-600">
+                <li>• Retainer Agreement.pdf - Signed</li>
+                <li>• {currentMatter.name.replace(/[^a-zA-Z0-9]/g, '-')}-Agreement.docx - Draft</li>
+                <li>• Client Communication Log.pdf - Updated</li>
+                <li>• Case Notes.docx - Active</li>
               </ul>
             </div>
           )}
           {tab === "Billing" && (
             <div>
               <h2 className="font-bold text-lg mb-4">Billing Summary</h2>
-              <ul className="ml-3 text-zinc-600">
+              <ul className="space-y-2 ml-3 text-zinc-600">
                 <li>
-                  Last invoice:{" "}
-                  <span className="font-bold text-zinc-800">--</span>
+                  <strong className="text-zinc-800">Last invoice:</strong> ${Math.floor(Math.random() * 5000 + 1000).toLocaleString()}
                 </li>
-                <li>Payments: --</li>
+                <li>
+                  <strong className="text-zinc-800">Total billed:</strong> ${Math.floor(Math.random() * 20000 + 5000).toLocaleString()}
+                </li>
+                <li>
+                  <strong className="text-zinc-800">Payments received:</strong> ${Math.floor(Math.random() * 15000 + 3000).toLocaleString()}
+                </li>
+                <li>
+                  <strong className="text-zinc-800">Outstanding balance:</strong> ${Math.floor(Math.random() * 5000 + 500).toLocaleString()}
+                </li>
               </ul>
             </div>
           )}
           {tab === "Activity" && (
             <div>
               <h2 className="font-bold text-lg mb-4">Recent Activity</h2>
-              <ul className="ml-3 text-zinc-600">
-                <li>[Today] Matter opened</li>
-                <li>[Yesterday] Note added</li>
-              </ul>
-            </div>
-          )}
-          {tab === "Overview" && (
-            <div>
-              <h2 className="font-bold text-lg mb-4">Matter Overview</h2>
-              <ul className="list-disc ml-6 text-zinc-600">
-                <li>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </li>
-                <li>
-                  Billable time:{" "}
-                  <span className="font-bold text-zinc-800">-- h</span>
-                </li>
-                <li>Most recent activity, e.g. document signed.</li>
-              </ul>
-            </div>
-          )}
-          {tab === "Documents" && (
-            <div>
-              <h2 className="font-bold text-lg mb-4">Matter Documents</h2>
-              <ul className="ml-3 text-zinc-600">
-                <li>[Doc1.pdf] Signed | see Files tab</li>
-                <li>[Agreement.docx] Draft | see Files tab</li>
-              </ul>
-            </div>
-          )}
-          {tab === "Billing" && (
-            <div>
-              <h2 className="font-bold text-lg mb-4">Billing Summary</h2>
-              <ul className="ml-3 text-zinc-600">
-                <li>
-                  Last invoice:{" "}
-                  <span className="font-bold text-zinc-800">--</span>
-                </li>
-                <li>Payments: --</li>
-              </ul>
-            </div>
-          )}
-          {tab === "Activity" && (
-            <div>
-              <h2 className="font-bold text-lg mb-4">Recent Activity</h2>
-              <ul className="ml-3 text-zinc-600">
-                <li>[Today] Matter opened</li>
-                <li>[Yesterday] Note added</li>
+              <ul className="space-y-2 ml-3 text-zinc-600">
+                <li>• [{currentMatter.updated}] Matter {currentMatter.status === "Active" ? "updated" : currentMatter.status === "Archived" ? "archived" : "put on hold"}</li>
+                <li>• [Yesterday] Document review completed</li>
+                <li>• [2 days ago] Client meeting scheduled</li>
+                <li>• [Last week] Initial consultation completed</li>
               </ul>
             </div>
           )}

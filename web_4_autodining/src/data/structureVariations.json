@@ -78,9 +78,10 @@
         "pick": "Pick",
         "person_cap": "Person",
         "people_cap": "People",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search-restaurant",
@@ -179,9 +180,10 @@
         "pick": "Choose",
         "person_cap": "Guest",
         "people_cap": "Guests",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "restaurant-finder",
@@ -280,9 +282,10 @@
         "pick": "Pick",
         "person_cap": "Person",
         "people_cap": "People",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "find",
@@ -381,9 +384,10 @@
         "pick": "Select",
         "person_cap": "Guest",
         "people_cap": "Guests",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "venue-search",
@@ -482,9 +486,10 @@
         "pick": "Pick",
         "person_cap": "Person",
         "people_cap": "People",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "find-food",
@@ -583,9 +588,10 @@
         "pick": "Select",
         "person_cap": "Guest",
         "people_cap": "Guests",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "venue-finder",
@@ -655,9 +661,10 @@
         "view_reservation": "View",
         "modify_booking": "Change",
         "cancel_booking": "Cancel",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "food-search",
@@ -727,9 +734,10 @@
         "view_reservation": "Details",
         "modify_booking": "Modify",
         "cancel_booking": "Cancel",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "restaurant-search",
@@ -799,9 +807,10 @@
         "view_reservation": "View booking",
         "modify_booking": "Change",
         "cancel_booking": "Cancel",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search-food",
@@ -871,9 +880,10 @@
         "view_reservation": "View",
         "modify_booking": "Edit",
         "cancel_booking": "X",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "s",
@@ -972,9 +982,10 @@
         "pick": "Pick",
         "person_cap": "Person",
         "people_cap": "Guests",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search-loc",
@@ -1073,9 +1084,10 @@
         "pick": "Select",
         "person_cap": "Guest",
         "people_cap": "Guests",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "cuisine-search",
@@ -1174,9 +1186,10 @@
         "pick": "Pick",
         "person_cap": "1",
         "people_cap": "ppl",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "find",
@@ -1275,9 +1288,10 @@
         "pick": "Pick",
         "person_cap": "Person",
         "people_cap": "People",
-        "section_expensive": "Fine Dining",
-        "section_medium": "Mid-Range",
-        "section_cheap": "Budget-Friendly"
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search",

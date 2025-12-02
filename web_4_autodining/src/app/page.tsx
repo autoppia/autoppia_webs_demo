@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect, useMemo, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -55,11 +56,33 @@ const defaultRestaurants = RestaurantsData.map((item, index) => ({
   times: ["1:00 PM"],
 }));
 
+const staticById = new Map(
+  RestaurantsData.map((item, index) => [
+    item.id ?? `restaurant-${index + 1}`,
+    {
+      stars: item.staticStars,
+      reviews: item.staticReviews,
+      price: item.staticPrices,
+      area: item.area,
+      cuisine: item.cuisine,
+    },
+  ])
+);
+
 function StarRating({ count }: { count: number }) {
+  // Round the rating to get number of filled stars
+  // 4.3 → 4 stars, 4.7 → 5 stars, 4.6 → 5 stars
+  const filledStars = Math.round(count);
+  const clamped = Math.max(0, Math.min(5, filledStars));
   return (
-    <span className="text-[#46a758] text-xl align-middle mr-1">
+    <span className="text-lg align-middle mr-1">
       {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i}>{i < count ? "★" : "☆"}</span>
+        <span
+          key={i}
+          className={i < clamped ? "text-yellow-400" : "text-gray-400"}
+        >
+          ★
+        </span>
       ))}
     </span>
   );
@@ -115,66 +138,68 @@ function RestaurantCard({
   const viewDetailsLabel = getText("view_details") || "View details";
   const bookNowLabel = getText("book_now") || "Book now";
 
+  // Use the actual rating from the restaurant data
+  const ratingValue = r.stars ?? 4.5;
+  const reviewsCount = r.reviews || 0;
+  const priceTag = r.price || "$$";
+
   return (
     <div
-      className={`w-[255px] flex-shrink-0 rounded-xl border shadow-sm bg-white overflow-hidden`}
+      className={`w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl`}
       data-testid={restaurantCardVariation.dataTestId}
       style={restaurantCardVariation.style}
     >
-      <div className="w-full h-40 overflow-hidden">
+      <div className="relative w-full h-[280px] overflow-hidden">
         <img
           src={r.image}
           alt={r.name}
           className="w-full h-full object-cover"
         />
-      </div>
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+        {/* Badges at top */}
+        <div className="absolute top-0 left-0 right-0 p-3 flex justify-between items-start z-10">
+          <span className="px-3 py-1.5 rounded-full bg-orange-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg">
+            {r.cuisine}
+          </span>
+          <span className="px-3 py-1.5 rounded-full bg-yellow-500/90 backdrop-blur-sm text-white text-xs font-bold shadow-lg">
+            {priceTag}
+          </span>
+        </div>
+
+        {/* Content overlay at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
           <SeedLink href={`/restaurant/${encodeURIComponent(r.id)}`}>
-            <h3 className="font-semibold text-lg hover:text-[#46a758] transition-colors">
+            <h3 className="font-bold text-xl mb-2 hover:text-[#46a758] transition-colors drop-shadow-lg">
               {r.name}
             </h3>
           </SeedLink>
-          <div className="flex items-center">
-            <StarRating count={r.stars} />
-            <span className="text-sm text-gray-600">({r.reviews})</span>
+          <div className="flex items-center gap-2 mb-3">
+            <StarRating count={ratingValue} />
+            <span className="text-sm font-semibold drop-shadow">
+              {ratingValue.toFixed(1)}
+              {reviewsCount > 0 && ` (${reviewsCount} reviews)`}
+            </span>
+            <span className="text-xs text-gray-200 opacity-80">•</span>
+            <span className="text-xs text-gray-200 opacity-80">{r.area}</span>
           </div>
-        </div>
-        <p className="text-gray-600 text-sm mb-2">{r.cuisine}</p>
-        <p className="text-gray-500 text-xs mb-3">{r.area}</p>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">{r.price}</span>
-          <span className="text-xs text-gray-500">
-            {r.bookings} {getText("booked_today")}
-          </span>
-        </div>
-        <div
-          className={`mt-3 flex ${layout.wrap ? "flex-wrap" : "flex-nowrap"} ${
-            layout.justify
-          } gap-2`}
-        >
-          <SeedLink
-            id={getId("view_details_button")}
-            href={`/restaurant/${encodeURIComponent(r.id)}`}
-            className="text-sm text-blue-600 hover:text-blue-800"
-            onClick={() =>
-              logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })
-            }
-          >
-            {viewDetailsLabel}
-          </SeedLink>
-          <SeedLink
-            id={getId("book_button")}
-            href={buildBookingHref(r.id, time, { people, date: formattedDate })}
-            className={`${bookButtonVariation.className} text-sm`}
-            data-testid={bookButtonVariation.dataTestId}
-            style={{ position: bookButtonVariation.position as any }}
-            onClick={() =>
-              logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })
-            }
+          <div className="flex justify-end mt-4">
+            <SeedLink
+              id={getId("book_button")}
+              href={buildBookingHref(r.id, time, {
+                people,
+                date: formattedDate,
+              })}
+              className={`${bookButtonVariation.className} text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors`}
+              data-testid={bookButtonVariation.dataTestId}
+              style={{ position: bookButtonVariation.position as any }}
+              onClick={() =>
+                logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })
+              }
             >
-              {bookNowLabel}
-          </SeedLink>
+              {bookNowLabel || "Book now"}
+            </SeedLink>
+          </div>
         </div>
       </div>
     </div>
@@ -257,16 +282,16 @@ function CardScroller({
 
   return (
     <div className="relative">
-      {/*{canScrollLeft && (*/}
-      <button
-        onClick={() => scroll("left")}
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
-        data-testid={`scroll-left-${seed ?? 1}`}
-        aria-label={getText("scroll_left")}
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-      {/*)}*/}
+      {canScrollLeft && (
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border rounded-full p-2 shadow-lg hover:bg-gray-50"
+          data-testid={`scroll-left-${seed ?? 1}`}
+          aria-label={getText("scroll_left")}
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      )}
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
@@ -277,10 +302,9 @@ function CardScroller({
           <ChevronRight className="w-5 h-5" />
         </button>
       )}
-      {/* Scrollable Content */}
       <div
         ref={ref}
-        className={`flex gap-4 pb-4 scroll-smooth pl-1 pr-10 overflow-x-auto overflow-y-hidden`}
+        className="flex gap-4 pb-4 scroll-smooth overflow-x-auto overflow-y-hidden no-scrollbar"
         data-testid={cardContainerVariation.dataTestId}
         onScroll={scheduleCheck}
       >
@@ -299,6 +323,7 @@ function getLayoutVariant(seed: number) {
 
 // Client-only component that uses seed from context
 function HomePageContent() {
+  const router = useRouter();
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -318,7 +343,17 @@ function HomePageContent() {
   const { seed, resolvedSeeds } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const seedParam = searchParams?.get("seed");
-  const layoutSeed = seedParam ? (resolvedSeeds.v1 ?? seed) : 2;
+  const layoutSeed = seedParam ? resolvedSeeds.v1 ?? seed : 2;
+
+  // Redirect to default seed=6 if none provided
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!seedParam) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("seed", "6");
+      router.replace(`${url.pathname}?${url.searchParams.toString()}`);
+    }
+  }, [seedParam, router]);
 
   // Calculate layout variation (1-10) from v1 seed
   // COMMON FORMULA across all webs
@@ -330,12 +365,16 @@ function HomePageContent() {
   // Log v1 info when it changes (only once per unique v1 seed)
   const lastV1SeedRef = useRef<number | null>(null);
   useEffect(() => {
-    const currentV1Seed = seedParam ? resolvedSeeds.v1 ?? resolvedSeeds.base : layoutSeed;
+    const currentV1Seed = seedParam
+      ? resolvedSeeds.v1 ?? resolvedSeeds.base
+      : layoutSeed;
     // Only log if v1 seed actually changed
     if (lastV1SeedRef.current !== currentV1Seed) {
       if (resolvedSeeds.v1 !== null) {
         console.log(
-          `[autodining] V1 Layout - Seed: ${seedParam ? resolvedSeeds.v1 : layoutSeed}, Variation: #${layoutVariation} (of 10)`
+          `[autodining] V1 Layout - Seed: ${
+            seedParam ? resolvedSeeds.v1 : layoutSeed
+          }, Variation: #${layoutVariation} (of 10)`
         );
       } else if (resolvedSeeds.base) {
         console.log(
@@ -346,7 +385,13 @@ function HomePageContent() {
       }
       lastV1SeedRef.current = currentV1Seed;
     }
-  }, [resolvedSeeds.v1, resolvedSeeds.base, layoutVariation, layoutSeed, seedParam]);
+  }, [
+    resolvedSeeds.v1,
+    resolvedSeeds.base,
+    layoutVariation,
+    layoutSeed,
+    seedParam,
+  ]);
 
   const { marginTop, wrapButton } = useMemo(
     () => getLayoutVariant(layoutSeed),
@@ -378,7 +423,7 @@ function HomePageContent() {
   const searchButtonLabel = getText("search_button") || "Search";
   const searchButtonClassName = seedParam
     ? searchButtonVariation.className
-    : "ml-3 px-6 py-2 rounded-full text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] transition-colors shadow-sm";
+    : "ml-3 px-8 py-3 rounded-lg text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] transition-colors shadow-sm min-w-[120px]";
   const searchButtonStyle =
     seedParam && searchButtonVariation.position
       ? { position: searchButtonVariation.position as any }
@@ -490,18 +535,26 @@ function HomePageContent() {
 
         // Only update state if this effect hasn't been cancelled
         if (!cancelled) {
-          const fresh = getRestaurants().map((r) => ({
-            id: r.id,
-            name: r.name,
-            image: r.image,
-            cuisine: r.cuisine ?? "International",
-            area: r.area ?? "Downtown",
-            reviews: r.reviews ?? 0,
-            stars: r.stars ?? 4,
-            price: r.price ?? "$$",
-            bookings: r.bookings ?? 0,
-            times: ["1:00 PM"],
-          }));
+          const fresh = getRestaurants().map((r) => {
+            const staticDefaults =
+              staticById.get(r.id) ||
+              staticById.get(r.id?.toString().replace("restaurant-", ""));
+            const reviews = r.reviews ?? staticDefaults?.reviews ?? 64;
+            // Always use the actual rating from dataset, even if no reviews yet
+            const stars = r.stars ?? staticDefaults?.stars ?? 4.5;
+            return {
+              id: r.id,
+              name: r.name,
+              image: r.image,
+              cuisine: r.cuisine ?? staticDefaults?.cuisine ?? "International",
+              area: r.area ?? staticDefaults?.area ?? "Downtown",
+              reviews,
+              stars,
+              price: r.price ?? staticDefaults?.price ?? "$$",
+              bookings: r.bookings ?? 0,
+              times: ["1:00 PM"],
+            };
+          });
           const mapped = fresh.length > 0 ? fresh : defaultRestaurants;
           setList(mapped);
           setIsReady(mapped.length > 0);
@@ -522,27 +575,32 @@ function HomePageContent() {
     };
   }, [v2Seed, resolvedSeeds.base, resolvedSeeds.v2, seed]);
 
-  // Filter restaurants by price category
   const expensiveRestaurants = useMemo(() => {
-    return list.filter((r) => {
-      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
-      return priceCount >= 4; // $$$$ or more
-    }).slice(0, 5);
-  }, [list]);
+    return filtered
+      .filter((r) => {
+        const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+        return priceCount >= 4; // $$$$ or more
+      })
+      .slice(0, 8);
+  }, [filtered]);
 
   const mediumRestaurants = useMemo(() => {
-    return list.filter((r) => {
-      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
-      return priceCount >= 2 && priceCount <= 3; // $$ or $$$
-    }).slice(0, 5);
-  }, [list]);
+    return filtered
+      .filter((r) => {
+        const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+        return priceCount >= 2 && priceCount <= 3; // $$ or $$$
+      })
+      .slice(0, 8);
+  }, [filtered]);
 
   const cheapRestaurants = useMemo(() => {
-    return list.filter((r) => {
-      const priceCount = (r.price || "").match(/\$/g)?.length || 0;
-      return priceCount === 1; // $
-    }).slice(0, 5);
-  }, [list]);
+    return filtered
+      .filter((r) => {
+        const priceCount = (r.price || "").match(/\$/g)?.length || 0;
+        return priceCount === 1; // $
+      })
+      .slice(0, 8);
+  }, [filtered]);
 
   return (
     <main suppressHydrationWarning>
@@ -564,13 +622,38 @@ function HomePageContent() {
 
       {/* Hero Section */}
       <section
-        className={pageLayoutVariation.className}
+        className={`${pageLayoutVariation.className} mb-10`}
         data-testid={pageLayoutVariation.dataTestId}
       >
-        <h1 className="text-4xl font-bold mb-6">{getText("hero_title")}</h1>
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-lime-500 text-white px-8 py-10 shadow-2xl">
+          <div className="absolute inset-0 opacity-10 bg-[url('/images/restaurant1.jpg')] bg-cover bg-center" />
+          <div className="relative max-w-3xl space-y-3">
+            <p className="uppercase tracking-[0.3em] text-sm font-semibold">
+              Curated dining
+            </p>
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+              Book standout tables, by cuisine, mood, or budget
+            </h1>
+            <p className="text-white/80 text-lg">
+              Fresh picks updated daily. Choose your vibe, we’ll handle the
+              details.
+            </p>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <span className="px-3 py-1 bg-white/15 rounded-full text-sm backdrop-blur-sm">
+                Trending tonight
+              </span>
+              <span className="px-3 py-1 bg-white/15 rounded-full text-sm backdrop-blur-sm">
+                Chef-owned
+              </span>
+              <span className="px-3 py-1 bg-white/15 rounded-full text-sm backdrop-blur-sm">
+                Group friendly
+              </span>
+            </div>
+          </div>
+        </div>
 
         {/* Search and Filters */}
-        <section className="flex flex-wrap gap-4 items-end">
+        <section className="flex flex-wrap gap-4 items-end mt-6">
           <Popover open={dateOpen} onOpenChange={setDateOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -671,7 +754,7 @@ function HomePageContent() {
             id={getId("search_input")}
             type="text"
             placeholder={getText("search_placeholder")}
-            className={`${searchBarVariation.className} min-w-[250px] flex-1`}
+            className={`${searchBarVariation.className} min-w-[400px] flex-1`}
             data-testid={searchBarVariation.dataTestId}
             value={search}
             onChange={handleSearchChange}
@@ -709,9 +792,14 @@ function HomePageContent() {
                 className={`${sectionLayoutVariation.className} px-4 ${marginTop}`}
                 data-testid={sectionLayoutVariation.dataTestId}
               >
-                <h2 className="text-2xl font-bold mb-4">
-                  {getText("section_expensive")}
-                </h2>
+                <div className="mb-6">
+                  <h2 className="text-3xl font-bold mb-2">
+                    {getText("section_expensive") || "Expensive"}
+                  </h2>
+                  <p className="text-gray-600 text-lg">
+                    Fine dining experiences for special occasions
+                  </p>
+                </div>
                 <CardScroller
                   title={getText("section_expensive")}
                   layoutSeed={layoutSeed}
@@ -723,7 +811,6 @@ function HomePageContent() {
                       date={date}
                       people={people}
                       time={time}
-                      layoutSeed={layoutSeed}
                     />
                   ))}
                 </CardScroller>
@@ -737,9 +824,14 @@ function HomePageContent() {
                 className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
                 data-testid={sectionLayoutVariation.dataTestId}
               >
-                <h2 className="text-2xl font-bold mb-4">
-                  {getText("section_medium")}
-                </h2>
+                <div className="mb-6">
+                  <h2 className="text-3xl font-bold mb-2">
+                    {getText("section_medium") || "Mid ticket"}
+                  </h2>
+                  <p className="text-gray-600 text-lg">
+                    Great value restaurants for everyday dining
+                  </p>
+                </div>
                 <CardScroller
                   title={getText("section_medium")}
                   layoutSeed={layoutSeed}
@@ -751,7 +843,6 @@ function HomePageContent() {
                       date={date}
                       people={people}
                       time={time}
-                      layoutSeed={layoutSeed}
                     />
                   ))}
                 </CardScroller>
@@ -765,9 +856,14 @@ function HomePageContent() {
                 className={`${sectionLayoutVariation.className} ${marginTop} px-4`}
                 data-testid={sectionLayoutVariation.dataTestId}
               >
-                <h2 className="text-2xl font-bold mb-4">
-                  {getText("section_cheap")}
-                </h2>
+                <div className="mb-6">
+                  <h2 className="text-3xl font-bold mb-2">
+                    {getText("section_cheap") || "Cheap"}
+                  </h2>
+                  <p className="text-gray-600 text-lg">
+                    Budget-friendly options without compromising quality
+                  </p>
+                </div>
                 <CardScroller
                   title={getText("section_cheap")}
                   layoutSeed={layoutSeed}
@@ -779,7 +875,6 @@ function HomePageContent() {
                       date={date}
                       people={people}
                       time={time}
-                      layoutSeed={layoutSeed}
                     />
                   ))}
                 </CardScroller>

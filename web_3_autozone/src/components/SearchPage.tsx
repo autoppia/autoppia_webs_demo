@@ -49,14 +49,20 @@ export default function SearchPage() {
     { label: "Desks & mounts", query: "desk" },
   ];
 
-  const baseResults = searchProducts(query);
+  const baseResults = useMemo(() => {
+    const results = searchProducts(query);
+    return Array.isArray(results) ? results : [];
+  }, [query]);
+  
   const availableCategories = useMemo(() => {
     const options = new Set<string>(["all"]);
-    baseResults.forEach((product) => {
-      if (product.category) {
-        options.add(product.category.toLowerCase());
-      }
-    });
+    if (Array.isArray(baseResults)) {
+      baseResults.forEach((product) => {
+        if (product.category) {
+          options.add(product.category.toLowerCase());
+        }
+      });
+    }
     return Array.from(options);
   }, [baseResults]);
 
@@ -68,6 +74,7 @@ export default function SearchPage() {
     return params.toString() ? `/search?${params.toString()}` : "/search";
   };
   const filteredResults = useMemo(() => {
+    if (!Array.isArray(baseResults)) return [];
     if (!activeQuickFilter) return baseResults;
     return baseResults.filter((product) =>
       `${product.title} ${product.category}`
@@ -77,6 +84,7 @@ export default function SearchPage() {
   }, [baseResults, activeQuickFilter]);
 
   const categoryFilteredResults = useMemo(() => {
+    if (!Array.isArray(filteredResults)) return [];
     if (!activeCategory || activeCategory === "all") return filteredResults;
     return filteredResults.filter((product) =>
       (product.category || "").toLowerCase().includes(activeCategory)

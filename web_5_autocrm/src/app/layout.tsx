@@ -9,6 +9,7 @@ import { SeedProvider } from "@/context/SeedContext";
 import { getEffectiveSeed, getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import ClientProviders from "./ClientProviders";
+import { SeedRedirect } from "@/components/layout/SeedRedirect";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <SeedProvider>
+          <Suspense fallback={null}>
+            <SeedRedirect />
+          </Suspense>
           <ClientProviders>
           <nav
             className={`w-full h-20 flex items-center px-10 shadow-sm bg-white gap-6 sticky top-0 z-30 ${layoutClasses.header}`}

@@ -5,7 +5,6 @@
  */
 
 import { initializeRestaurants, getRestaurants } from '@/data/restaurants-enhanced';
-import { getEffectiveSeed } from '@/shared/seed-resolver';
 
 export interface RestaurantData {
   id: string;
@@ -50,7 +49,7 @@ export class DynamicDataProvider {
     }
 
     try {
-      const v2Seed = getEffectiveSeed();
+      const v2Seed = undefined;
       await initializeRestaurants(v2Seed);
       this.restaurants = getRestaurants();
       this.ready = true;
@@ -120,4 +119,3 @@ export { initializeRestaurants, getRestaurants };
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
 export const getEffectiveSeedValue = (providedSeed?: number) => dynamicDataProvider.getEffectiveSeed(providedSeed);
 export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
-

@@ -35,6 +35,8 @@ export class DynamicDataProvider {
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
+    // Ensure products is always an array, never undefined
+    this.products = [];
     // Always initialize products, even in SSR (will use fallback)
     this.readyPromise = this.initializeProducts();
   }
@@ -71,15 +73,16 @@ export class DynamicDataProvider {
   private async initializeProducts(): Promise<void> {
     try {
       const v2Seed = this.getV2SeedFromUrl();
-      this.products = await initializeProducts(v2Seed);
+      const loadedProducts = await initializeProducts(v2Seed);
       // Ensure products is always an array
-      if (!Array.isArray(this.products)) {
-        console.warn("[autozone] Products is not an array, defaulting to empty array");
+      if (Array.isArray(loadedProducts) && loadedProducts.length > 0) {
+        this.products = loadedProducts;
+      } else {
+        console.warn("[autozone] Products not loaded properly, using empty array");
         this.products = [];
       }
     } catch (error) {
       console.error("[autozone] Failed to initialize products", error);
-      // Fallback to empty array instead of throwing
       this.products = [];
     } finally {
       this.ready = true;

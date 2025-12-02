@@ -74,33 +74,40 @@ export async function initializeProducts(
   v2SeedValue?: number | null,
   limit: number = 100
 ): Promise<Product[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
-  if (!dbModeEnabled) {
-    const normalized = normalizeProductImages(fallbackProducts as Product[]);
-    dynamicProducts = normalized;
-    return normalized;
-  }
-  // Wait a bit for SeedContext to sync v2Seed to window if needed
-  if (typeof window !== "undefined" && dbModeEnabled) {
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
-  
-  const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+  try {
+    const dbModeEnabled = isDbLoadModeEnabled();
+    if (!dbModeEnabled) {
+      const normalized = normalizeProductImages(fallbackProducts as Product[]);
+      dynamicProducts = normalized;
+      return normalized;
+    }
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined" && dbModeEnabled) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
-  const products = await fetchSeededSelection<Product>({
-    projectKey: "web_3_autozone",
-    entityType: "products",
-    seedValue: effectiveSeed,
-    limit,
-    method: "distribute",
-    filterKey: "category",
-  });
+    const products = await fetchSeededSelection<Product>({
+      projectKey: "web_3_autozone",
+      entityType: "products",
+      seedValue: effectiveSeed,
+      limit,
+      method: "distribute",
+      filterKey: "category",
+    });
 
-  if (!Array.isArray(products) || products.length === 0) {
-    console.warn(`[autozone] No products returned from dataset (seed=${effectiveSeed}), falling back to local data`);
-    return fallbackProducts as Product[];
+    if (!Array.isArray(products) || products.length === 0) {
+      console.warn(`[autozone] No products returned from dataset (seed=${effectiveSeed}), falling back to local data`);
+      const fallback = Array.isArray(fallbackProducts) ? (fallbackProducts as Product[]) : [];
+      return normalizeProductImages(fallback);
+    }
+
+    dynamicProducts = normalizeProductImages(products);
+    return dynamicProducts;
+  } catch (error) {
+    console.error("[autozone] Error in initializeProducts, returning fallback", error);
+    const fallback = Array.isArray(fallbackProducts) ? (fallbackProducts as Product[]) : [];
+    return normalizeProductImages(fallback);
   }
-
-  dynamicProducts = normalizeProductImages(products);
-  return dynamicProducts;
 }
