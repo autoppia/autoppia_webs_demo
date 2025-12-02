@@ -196,19 +196,16 @@ function RestaurantCard({
                 {r.area}
               </span>
               <SeedLink
-                id={getId("book_button")}
-                href={buildBookingHref(r.id, time, {
-                  people,
-                  date: formattedDate,
-                })}
+                id={getId("view_details_button")}
+                href={`/restaurant/${encodeURIComponent(r.id)}`}
                 className={`${bookButtonVariation.className} text-sm bg-[#46a758] hover:bg-[#3d8f4a] text-white px-4 py-2 rounded-lg font-semibold transition-colors`}
                 data-testid={bookButtonVariation.dataTestId}
                 style={{ position: bookButtonVariation.position as any }}
                 onClick={() =>
-                  logEvent(EVENT_TYPES.BOOK_RESTAURANT, { restaurantId: r.id })
+                  logEvent(EVENT_TYPES.VIEW_RESTAURANT, { restaurantId: r.id })
                 }
               >
-                {bookNowLabel || "Book now"}
+                {viewDetailsLabel || "View details"}
               </SeedLink>
             </div>
           </div>
@@ -375,6 +372,7 @@ function HomePageContent() {
   const [dateOpen, setDateOpen] = useState(false);
   const [timeOpen, setTimeOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { getText, getId } = useV3Attributes();
   const searchParams = useSearchParams();
   const personLabel = getText("person") || "Guest";
@@ -498,7 +496,17 @@ function HomePageContent() {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-    logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    // Only log search event after user stops typing (debounce) to avoid breaking layout
+    // The search event no longer triggers layout variations, so we can log it less frequently
+    searchTimeoutRef.current = setTimeout(() => {
+      if (value.trim()) {
+        logEvent(EVENT_TYPES.SEARCH_RESTAURANT, { query: value });
+      }
+    }, 500);
   };
 
   const handleTimeSelect = (t: string) => {

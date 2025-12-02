@@ -71,6 +71,19 @@ export default function RestaurantsListPage() {
     });
   }, [search, cuisine, rating, filtered.length, restaurants.length]);
 
+  // Listen to global quick-order trigger from navbar
+  useEffect(() => {
+    const handler = () => setQuickOrderOpen(true);
+    if (typeof window !== "undefined") {
+      window.addEventListener("autodelivery:openQuickOrder", handler);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autodelivery:openQuickOrder", handler);
+      }
+    };
+  }, []);
+
   if (isLoading && restaurants.length === 0) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -84,74 +97,66 @@ export default function RestaurantsListPage() {
       className={layout.generateSeedClass('restaurants-section')}
       {...layout.getElementAttributes('restaurants-section', 0)}
     >
-      <div className="flex w-full justify-end mb-4">
-        <Button
-          className="bg-green-600 hover:bg-green-700"
-          onClick={() => {
-            logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, { source: "restaurants_home" });
-            setQuickOrderOpen(true);
-          }}
-          id={getId("quick_order_button", "quick-order-button")}
-          aria-label={getAria("quick_order_button", getText("quick_order_button", "Quick Order"))}
-          {...layout.getElementAttributes('quick-order-button', 0)}
-        >
-          {getText("quick_order_button", "Quick Order")}
-        </Button>
-      </div>
       <div 
-        className={`flex flex-col md:flex-row gap-4 mb-8 items-center ${layout.searchBar.containerClass}`}
+        className={`mb-8 bg-white/80 backdrop-blur border border-zinc-200/70 shadow-sm rounded-xl px-4 py-3 flex flex-col gap-3 ${layout.searchBar.containerClass}`}
         {...layout.getElementAttributes('search-filters', 0)}
       >
-        <Input
-          type="text"
-          placeholder="Search by name, cuisine, or menu..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className={`max-w-xs ${layout.searchBar.inputClass}`}
-          {...layout.getElementAttributes('search-input', 0)}
-        />
-        <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
-          <SelectTrigger 
-            className={`w-40 ${layout.generateSeedClass('cuisine-select')}`}
-            {...layout.getElementAttributes('cuisine-select', 0)}
-          >
-            <SelectValue placeholder="All cuisines" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem key="all" value="all">All cuisines</SelectItem>
-            {cuisineOptions.map(opt => (
-              <SelectItem key={opt} value={opt}>{opt}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
-          <SelectTrigger 
-            className={`w-32 ${layout.generateSeedClass('rating-select')}`}
-            {...layout.getElementAttributes('rating-select', 0)}
-          >
-            <SelectValue placeholder="All ratings" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem key="all" value="all">All ratings</SelectItem>
-            {ratingOptions.map(opt => (
-              <SelectItem key={opt} value={opt.toString()}>{opt}+</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col md:flex-row md:items-center gap-3">
+          <Input
+            type="text"
+            placeholder="Search by name, cuisine, or menu..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className={`flex-1 rounded-lg border-zinc-200 shadow-xs focus:ring-2 focus:ring-emerald-500 ${layout.searchBar.inputClass}`}
+            {...layout.getElementAttributes('search-input', 0)}
+          />
+          <div className="flex flex-row gap-3 shrink-0">
+            <Select value={cuisine || "all"} onValueChange={v => setCuisine(v === "all" ? "" : v)}>
+              <SelectTrigger 
+                className={`w-44 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('cuisine-select')}`}
+                {...layout.getElementAttributes('cuisine-select', 0)}
+              >
+                <SelectValue placeholder="All cuisines" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key="all" value="all">All cuisines</SelectItem>
+                {cuisineOptions.map(opt => (
+                  <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={rating || "all"} onValueChange={v => setRating(v === "all" ? "" : v)}>
+              <SelectTrigger 
+                className={`w-36 rounded-lg border-zinc-200 shadow-xs ${layout.generateSeedClass('rating-select')}`}
+                {...layout.getElementAttributes('rating-select', 0)}
+              >
+                <SelectValue placeholder="All ratings" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem key="all" value="all">All ratings</SelectItem>
+                {ratingOptions.map(opt => (
+                  <SelectItem key={opt} value={opt.toString()}>{opt}+</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
         {isFiltered && (
-          <Button
-            type="button"
-            variant="ghost"
-            className={`ml-3 mt-2 md:mt-0 ${layout.generateSeedClass('reset-filters-btn')}`}
-            onClick={() => {
-              setSearch("");
-              setCuisine("");
-              setRating("");
-            }}
-            {...layout.getElementAttributes('reset-filters-btn', 0)}
-          >
-            Reset filters
-          </Button>
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="ghost"
+              className={`text-emerald-700 hover:text-emerald-800 ${layout.generateSeedClass('reset-filters-btn')}`}
+              onClick={() => {
+                setSearch("");
+                setCuisine("");
+                setRating("");
+              }}
+              {...layout.getElementAttributes('reset-filters-btn', 0)}
+            >
+              Reset filters
+            </Button>
+          </div>
         )}
       </div>
       <div 

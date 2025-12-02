@@ -807,33 +807,8 @@ export class SeedVariationManager {
   // Event-based layout variations - these override seed-based variations when events occur
   // Focus on structural changes rather than visibility changes
   private static eventVariations: EventLayoutVariation = {
-    "SEARCH_RESTAURANT": {
-      "searchBar": {
-        className: "w-full px-6 py-3 border-2 rounded-xl bg-yellow-50 focus:outline-none focus:ring-2 focus:ring-yellow-500",
-        dataTestId: "search-bar-event-active",
-        position: 'relative'
-      },
-      "searchButton": {
-        className: "px-6 py-3 rounded-xl text-lg bg-yellow-600 text-white hover:bg-yellow-700 animate-pulse",
-        dataTestId: "search-btn-event-active",
-        position: 'relative'
-      },
-      "restaurantCard": {
-        className: "rounded-xl border-2 shadow-lg bg-yellow-50 w-[255px] flex-shrink-0 overflow-hidden flex flex-col justify-between",
-        dataTestId: "restaurant-card-event-active",
-        layoutType: 'flex'
-      },
-      "pageLayout": {
-        className: "max-w-6xl mx-auto px-4 py-8 bg-yellow-50",
-        dataTestId: "page-layout-search-active",
-        layoutType: 'block'
-      },
-      "cardContainer": {
-        className: "flex overflow-x-auto gap-4 bg-yellow-100 p-2 rounded-lg",
-        dataTestId: "card-container-search-active",
-        layoutType: 'flex'
-      }
-    },
+    // Removed SEARCH_RESTAURANT variations to prevent layout breaking when searching
+    // Seed-based variations should always take priority
     "VIEW_RESTAURANT": {
       "restaurantCard": {
         className: "rounded-xl border-2 shadow-xl bg-blue-50 w-[255px] flex-shrink-0 overflow-hidden flex flex-col justify-between",

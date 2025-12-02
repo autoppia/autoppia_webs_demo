@@ -14,6 +14,7 @@ import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 
 type RestaurantView = {
   id: string;
@@ -100,6 +101,11 @@ export default function Page() {
   );
   const pageLayoutVariation = useSeedVariation(
     "pageLayout",
+    undefined,
+    layoutSeed
+  );
+  const imageContainerVariation = useSeedVariation(
+    "imageContainer",
     undefined,
     layoutSeed
   );
@@ -204,24 +210,22 @@ export default function Page() {
     <main suppressHydrationWarning>
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="mb-10 w-full px-4">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-lime-500 text-white px-8 py-10 shadow-2xl w-full">
-          <div className="absolute inset-0 opacity-10 bg-[url('/images/restaurant1.jpg')] bg-cover bg-center" />
-          <div className="relative max-w-3xl space-y-3">
-            <p className="uppercase tracking-[0.3em] text-sm font-semibold">
-              Curated dining
-            </p>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-              Book standout tables, by cuisine, mood, or budget
-            </h1>
-            <p className="text-white/80 text-lg">
-              Fresh picks updated daily. Choose your vibe, we'll handle the
-              details.
-            </p>
-          </div>
+      {/* Hero Banner - Restaurant Image */}
+      <div
+        className={`w-full h-[340px] bg-gray-200 ${imageContainerVariation.position} ${imageContainerVariation.className} mb-10`}
+        data-testid={imageContainerVariation.dataTestId}
+      >
+        <div className="relative w-full h-full">
+          {data?.image && (
+            <Image
+              src={data.image}
+              alt={data.name || "Restaurant"}
+              fill
+              className="object-cover"
+            />
+          )}
         </div>
-      </section>
+      </div>
 
       <div className="max-w-2xl mx-auto px-4 pb-10">
         <h2 className="font-bold text-lg mt-8 mb-4">
