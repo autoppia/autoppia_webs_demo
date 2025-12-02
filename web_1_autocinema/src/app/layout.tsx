@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { BodyWrapper } from "@/components/layout/BodyWrapper";
 import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import { SeedRedirect } from "@/components/layout/SeedRedirect";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -28,6 +29,9 @@ export default function RootLayout({
       <body className={`${inter.className} bg-neutral-950 text-white`} suppressHydrationWarning>
         <AuthProvider>
           <SeedProvider>
+            <Suspense fallback={null}>
+              <SeedRedirect />
+            </Suspense>
             <Suspense fallback={<div className="h-16 w-full bg-neutral-900" />}>
               <Header />
             </Suspense>

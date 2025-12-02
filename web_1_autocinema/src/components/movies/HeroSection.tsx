@@ -73,24 +73,24 @@ export function HeroSection({
             </Button>
           </form>
 
-          <dl className="mt-6 grid grid-cols-2 gap-6 text-sm text-white/80 sm:grid-cols-3">
-            <div>
-              <dt className="text-white/60">Average duration</dt>
-              <dd className="text-2xl font-semibold text-white">{stats.avgDuration}m</dd>
+          <dl className="mt-8 grid grid-cols-3 gap-4 text-sm">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <dt className="text-xs uppercase tracking-wide text-white/60">Average duration</dt>
+              <dd className="mt-2 text-3xl font-bold text-white">{stats.avgDuration}m</dd>
             </div>
-            <div>
-              <dt className="text-white/60">Average rating</dt>
-              <dd className="text-2xl font-semibold text-white">{stats.avgRating}</dd>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <dt className="text-xs uppercase tracking-wide text-white/60">Average rating</dt>
+              <dd className="mt-2 text-3xl font-bold text-white">{stats.avgRating}</dd>
             </div>
-            <div>
-              <dt className="text-white/60">Genres</dt>
-              <dd className="text-2xl font-semibold text-white">{stats.genres}</dd>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <dt className="text-xs uppercase tracking-wide text-white/60">Genres</dt>
+              <dd className="mt-2 text-3xl font-bold text-white">{stats.genres}</dd>
             </div>
           </dl>
         </div>
 
         <div className="grid gap-4 lg:w-1/2" id="genres">
-          {featuredMovies.slice(0, 3).map((movie) => (
+          {featuredMovies.slice(0, 2).map((movie) => (
             <div key={movie.id} className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
               <div className="flex items-center justify-between text-xs uppercase text-white/60">
                 <span>{movie.genres[0] || "Cinematic"}</span>

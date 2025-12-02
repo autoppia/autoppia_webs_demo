@@ -16,16 +16,10 @@ export function MovieGrid({ movies, onSelectMovie, layoutClass }: MovieGridProps
     );
   }
 
-  const shouldUseDefaultGrid = !layoutClass || layoutClass.includes("cards-grid");
-  const combinedClasses = [
-    shouldUseDefaultGrid ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "",
-    layoutClass ?? "",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
+  // Always use 3 columns on large screens, ignore layout variants
+  // Force grid layout regardless of layoutClass prop
   return (
-    <div className={combinedClasses}>
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {movies.map((movie) => (
         <MovieCard key={movie.id} movie={movie} onSelect={onSelectMovie} />
       ))}

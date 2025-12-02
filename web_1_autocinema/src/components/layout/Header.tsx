@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { Film, Shuffle } from "lucide-react";
+import { Film } from "lucide-react";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { Button } from "@/components/ui/button";
 import { useSeed } from "@/context/SeedContext";
 import { getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/dynamic/v1-layouts";
@@ -18,7 +16,7 @@ const NAV_LINKS = [
 ];
 
 export function Header() {
-  const { seed, setSeed, resolvedSeeds } = useSeed();
+  const { seed, resolvedSeeds } = useSeed();
   const { currentUser, logout } = useAuth();
   const layoutSeed = resolvedSeeds.v1 ?? seed;
   const layoutConfig = getLayoutConfig(layoutSeed);
@@ -29,15 +27,6 @@ export function Header() {
       (isSeedThree ? "navbar-floating-left" : "navbar-floating-right") :
       "";
 
-  const layoutLabel = useMemo(() => {
-    if (!layoutConfig) return "Default";
-    return layoutConfig.contentGrid.replace(/\b\w/g, (char) => char.toUpperCase());
-  }, [layoutConfig]);
-
-  const shuffleLayout = () => {
-    const nextSeed = Math.floor(Math.random() * 300) + 1;
-    setSeed(nextSeed);
-  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur">
@@ -89,21 +78,6 @@ export function Header() {
             </>
           )}
         </nav>
-
-        <div className="flex items-center gap-3">
-          <div className="hidden text-xs text-white/60 sm:block">
-            Layout: <span className="font-semibold text-white">{layoutLabel}</span>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="border border-white/10 bg-white/5 text-white hover:bg-white/10"
-            onClick={shuffleLayout}
-          >
-            <Shuffle className="h-4 w-4" />
-            Shuffle layout
-          </Button>
-        </div>
       </div>
     </header>
   );

@@ -82,7 +82,7 @@ export default function MovieDetailPage() {
   const handleDelete = () => {
     const payload = movieToFilmPayload(movie);
     logEvent(EVENT_TYPES.DELETE_FILM, payload);
-    setMessage("Delete event recorded. No data was removed.");
+    setMessage("Film deleted successfully.");
   };
 
   const handleEditSubmit = (data: MovieEditorData) => {
@@ -94,7 +94,7 @@ export default function MovieDetailPage() {
       previous_values,
       changed_fields,
     });
-    setMessage("Edit event recorded for auditing purposes.");
+    setMessage("Film edited successfully.");
   };
 
   const handleWatchlist = () => {
@@ -145,9 +145,9 @@ export default function MovieDetailPage() {
       <MovieMeta movie={movie} />
       {canManageMovie && (
         <section className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white">
-          <h2 className="text-xl font-semibold">Validator actions</h2>
+          <h2 className="text-xl font-semibold">Manage Movie</h2>
           <p className="text-sm text-white/60">
-            Use these controls to simulate edits or deletions. They simply emit events, mirroring the Django workflow.
+            Edit or delete this movie from the catalog.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Button
@@ -158,7 +158,7 @@ export default function MovieDetailPage() {
               Delete movie
             </Button>
           </div>
-          <MovieEditor movie={movie} onSubmit={handleEditSubmit} submitLabel="Record edit event" />
+          <MovieEditor movie={movie} onSubmit={handleEditSubmit} submitLabel="Edit Film" />
         </section>
       )}
       <RelatedMovies movies={relatedMovies} />

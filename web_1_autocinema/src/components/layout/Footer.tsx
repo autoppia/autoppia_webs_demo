@@ -67,7 +67,6 @@ export function Footer() {
       </div>
       <div className="border-t border-white/5 bg-neutral-950/70">
         <div className="mx-auto flex w-full flex-col gap-3 px-6 py-4 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
-          <p>Base seed #{seed} → layout variant #{layoutSeed}.</p>
           <p>&copy; {new Date().getFullYear()} Autoppia Experiments</p>
         </div>
       </div>

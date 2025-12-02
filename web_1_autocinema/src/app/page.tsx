@@ -19,6 +19,9 @@ import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useSeed } from "@/context/SeedContext";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ContactSection } from "@/components/contact/ContactSection";
+import { Pagination } from "@/components/ui/Pagination";
+
+const MOVIES_PER_PAGE = 10;
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -32,6 +35,7 @@ function HomeContent() {
   const initialSearch = searchParams.get("search") ?? "";
   const initialGenre = searchParams.get("genre") ?? "";
   const initialYear = searchParams.get("year") ?? "";
+  const currentPage = Number.parseInt(searchParams.get("page") || "1", 10);
 
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedGenre, setSelectedGenre] = useState(initialGenre);
@@ -55,9 +59,16 @@ function HomeContent() {
     });
   }, [searchQuery, selectedGenre, selectedYear]);
 
+  const totalPages = Math.ceil(filteredMovies.length / MOVIES_PER_PAGE);
+  const paginatedMovies = useMemo(() => {
+    const startIndex = (currentPage - 1) * MOVIES_PER_PAGE;
+    return filteredMovies.slice(startIndex, startIndex + MOVIES_PER_PAGE);
+  }, [filteredMovies, currentPage]);
+
   const updateQueryString = (next: { search?: string; genre?: string; year?: string }) => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("seed");
+    params.delete("page"); // Reset to page 1 when filters change
 
     if (next.search !== undefined) {
       if (next.search) params.set("search", next.search);
@@ -124,7 +135,7 @@ function HomeContent() {
   const thrillerFocus = useMemo(() => getMoviesByGenre("Thriller").slice(0, 5), []);
 
   return (
-    <main className={`w-full space-y-8 px-6 py-8 ${layoutClasses.spacing}`}>
+    <main className={`mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8 ${layoutClasses.spacing}`}>
       <HeroSection
         featuredMovies={featuredMovies}
         searchQuery={searchQuery}
@@ -144,7 +155,15 @@ function HomeContent() {
         totalResults={filteredMovies.length}
       />
 
-      <MovieGrid movies={filteredMovies} onSelectMovie={handleSelectMovie} layoutClass={layoutClasses.cards} />
+      <MovieGrid movies={paginatedMovies} onSelectMovie={handleSelectMovie} layoutClass={layoutClasses.cards} />
+
+      {filteredMovies.length > MOVIES_PER_PAGE && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filteredMovies.length}
+        />
+      )}
 
       <SpotlightRow
         title="Drama focus"

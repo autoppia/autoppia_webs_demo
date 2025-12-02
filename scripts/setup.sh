@@ -317,6 +317,13 @@ deploy_webs_server() {
     exit 1
   fi
 
+  # Check if webs_server is already running
+  if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
+    echo "✅ webs_server is already running - skipping deployment"
+    echo "   HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
+    return 0
+  fi
+
   echo "📂 Deploying $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
   pushd "$dir" >/dev/null
 

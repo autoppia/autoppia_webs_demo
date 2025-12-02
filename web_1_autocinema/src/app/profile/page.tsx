@@ -131,7 +131,7 @@ export default function ProfilePage() {
       },
     });
     setPreviousProfileValues(profileForm);
-    setProfileMessage("User edit event recorded.");
+    setProfileMessage("Profile updated successfully.");
   };
 
   const handleEntryEdit = (baseMovie: Movie, data: MovieEditorData) => {
@@ -143,19 +143,19 @@ export default function ProfilePage() {
       previous_values,
       changed_fields,
     });
-    setFilmMessage(`Edit event recorded for ${baseMovie.title}.`);
+    setFilmMessage(`Film edited: ${baseMovie.title}`);
   };
 
   const handleEntryDelete = (baseMovie: Movie) => {
     const payload = movieToFilmPayload(baseMovie);
     logEvent(EVENT_TYPES.DELETE_FILM, payload);
-    setFilmMessage(`Delete event recorded for ${baseMovie.title}.`);
+    setFilmMessage(`Film deleted: ${baseMovie.title}`);
   };
 
   const handleAddFilm = (data: MovieEditorData) => {
     const payload = editorDataToFilmPayload(Math.floor(Date.now() / 1000), data);
     logEvent(EVENT_TYPES.ADD_FILM, payload);
-    setAddFilmMessage(`Add film event recorded for ${payload.name}.`);
+    setAddFilmMessage(`Film added: ${payload.name}`);
     setAddFilmKey((prev) => prev + 1);
   };
 
@@ -172,8 +172,8 @@ export default function ProfilePage() {
       )}
 
       <section className="space-y-6 rounded-3xl border border-white/10 bg-white/5 p-6">
-        <h2 className="text-xl font-semibold text-white">Record user edits</h2>
-        <p className="text-sm text-white/70">Simulate the settings update flow and emit an EditUserEvent payload.</p>
+        <h2 className="text-xl font-semibold text-white">Edit Profile</h2>
+        <p className="text-sm text-white/70">Update your profile information and preferences.</p>
         <form className="space-y-4" onSubmit={handleProfileSubmit}>
           <div className="grid gap-4 md:grid-cols-2">
             <label className="text-xs uppercase tracking-wide text-white/60">
@@ -218,7 +218,7 @@ export default function ProfilePage() {
           </label>
           <div className="flex flex-wrap gap-3">
             <Button type="submit" className="rounded-full bg-secondary text-black hover:bg-secondary/80">
-              Record edit user event
+              Edit Profile
             </Button>
           </div>
         </form>
@@ -265,7 +265,7 @@ export default function ProfilePage() {
                 </>
               ) : (
                 <p className="text-sm text-white/60">
-                  This movie is not available in the current dataset, but you can still trigger edit/delete events for auditing.
+                  This movie is not available in the current dataset, but you can still edit or delete it.
                 </p>
               )}
               <div className="mt-4 flex flex-wrap gap-3">
@@ -285,7 +285,7 @@ export default function ProfilePage() {
                   Delete movie
                 </Button>
               </div>
-              <MovieEditor movie={baseMovie} onSubmit={(data) => handleEntryEdit(baseMovie, data)} submitLabel="Record edit event" />
+              <MovieEditor movie={baseMovie} onSubmit={(data) => handleEntryEdit(baseMovie, data)} submitLabel="Edit Film" />
             </div>
           );
         })}
@@ -293,8 +293,8 @@ export default function ProfilePage() {
 
       <section className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-6">
         <div>
-          <h2 className="text-xl font-semibold text-white">Record add film event</h2>
-          <p className="text-sm text-white/70">Use the editor to simulate adding a new film into the catalog.</p>
+          <h2 className="text-xl font-semibold text-white">Add Film</h2>
+          <p className="text-sm text-white/70">Add a new film to the catalog.</p>
         </div>
         {addFilmMessage && (
           <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">{addFilmMessage}</p>
@@ -303,7 +303,7 @@ export default function ProfilePage() {
           key={`add-film-${addFilmKey}`}
           movie={addFilmTemplate}
           onSubmit={handleAddFilm}
-          submitLabel="Record add film event"
+          submitLabel="Add Film"
         />
       </section>
     </main>
