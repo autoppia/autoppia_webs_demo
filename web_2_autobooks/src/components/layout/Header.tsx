@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { BookOpen } from "lucide-react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
@@ -23,11 +22,6 @@ export function Header() {
   const baseSeed = resolvedSeeds.base ?? seed;
   const layoutConfig = applyLayoutOverrides(getLayoutConfig(layoutSeed), baseSeed);
   const layoutClasses = getLayoutClasses(layoutConfig);
-
-  const layoutLabel = useMemo(() => {
-    if (!layoutConfig) return "Default";
-    return layoutConfig.contentGrid.replace(/\b\w/g, (char) => char.toUpperCase());
-  }, [layoutConfig]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur">
@@ -73,11 +67,6 @@ export function Header() {
           )}
         </nav>
 
-        <div className="flex items-center gap-3 text-xs text-white/70">
-          <span className="hidden sm:block text-white/50">Layout</span>
-          <span className="rounded-full border border-[#89d6ff]/30 bg-[#102636]/80 px-3 py-1 text-[#8dd5ff]">{layoutLabel}</span>
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-white/70">Seed #{seed}</span>
-        </div>
       </div>
     </header>
   );

@@ -26,9 +26,9 @@ export function FilterBar({
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-white/60">Our collection</p>
-          <h2 className="text-2xl font-semibold">{totalResults} curated movies</h2>
+          <h2 className="text-2xl font-semibold">{totalResults} Curated movies</h2>
         </div>
-        <div className="flex flex-1 flex-wrap gap-3 md:justify-end">
+        <div className="flex flex-1 flex-wrap items-center gap-3 md:justify-end">
           <label className="flex flex-col text-xs uppercase tracking-wide text-white/60">
             Genre
             <select
@@ -65,7 +65,7 @@ export function FilterBar({
             onClick={onClear}
             className="h-[46px] rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10"
           >
-            Clear
+            Clear filters
           </Button>
         </div>
       </div>

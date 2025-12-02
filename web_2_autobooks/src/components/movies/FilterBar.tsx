@@ -26,9 +26,9 @@ export function FilterBar({
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-white/60">Living catalog</p>
-          <h2 className="text-2xl font-semibold">{totalResults} curated books</h2>
+          <h2 className="text-2xl font-semibold">{totalResults} Curated books</h2>
         </div>
-        <div className="flex flex-1 flex-wrap gap-3 md:justify-end">
+        <div className="flex flex-1 flex-wrap items-center gap-3 md:justify-end">
           <label className="flex flex-col text-xs uppercase tracking-wide text-white/60">
             Genre
             <select

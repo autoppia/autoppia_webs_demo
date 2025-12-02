@@ -21,6 +21,9 @@ import type { Book } from "@/data/books";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ContactSection } from "@/components/contact/ContactSection";
 import { CuratorBrief } from "@/components/books/CuratorBrief";
+import { Pagination } from "@/components/ui/Pagination";
+
+const BOOKS_PER_PAGE = 9;
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -34,6 +37,7 @@ function HomeContent() {
   const initialSearch = searchParams.get("search") ?? "";
   const initialGenre = searchParams.get("genre") ?? "";
   const initialYear = searchParams.get("year") ?? "";
+  const currentPage = Number.parseInt(searchParams.get("page") || "1", 10);
 
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedGenre, setSelectedGenre] = useState(initialGenre);
@@ -43,7 +47,7 @@ function HomeContent() {
     setSearchQuery(initialSearch);
     setSelectedGenre(initialGenre);
     setSelectedYear(initialYear);
-  }, [initialSearch, initialGenre, initialYear]);
+  }, [initialSearch, initialGenre, initialYear, currentPage]);
 
   const featuredBooks = useMemo(() => getFeaturedBooks(4), []);
   const genres = useMemo(() => getAvailableGenres(), []);
@@ -57,7 +61,13 @@ function HomeContent() {
     });
   }, [searchQuery, selectedGenre, selectedYear]);
 
-  const updateQueryString = (next: { search?: string; genre?: string; year?: string }) => {
+  const totalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE);
+  const paginatedBooks = useMemo(() => {
+    const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+    return filteredBooks.slice(startIndex, startIndex + BOOKS_PER_PAGE);
+  }, [filteredBooks, currentPage]);
+
+  const updateQueryString = (next: { search?: string; genre?: string; year?: string; page?: number }) => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("seed");
 
@@ -73,6 +83,10 @@ function HomeContent() {
       if (next.year) params.set("year", next.year);
       else params.delete("year");
     }
+    if (next.page !== undefined) {
+      if (next.page > 1) params.set("page", next.page.toString());
+      else params.delete("page");
+    }
 
     const query = params.toString();
     router.push(query ? `/?${query}` : "/");
@@ -82,26 +96,26 @@ function HomeContent() {
     logEvent(EVENT_TYPES.SEARCH_BOOK, {
       query: searchQuery,
     });
-    updateQueryString({ search: searchQuery });
+    updateQueryString({ search: searchQuery, page: 1 });
   };
 
   const handleGenreChange = (value: string) => {
     setSelectedGenre(value);
     logEvent(EVENT_TYPES.FILTER_BOOK, { genre: value ? { name: value } : null });
-    updateQueryString({ genre: value });
+    updateQueryString({ genre: value, page: 1 });
   };
 
   const handleYearChange = (value: string) => {
     setSelectedYear(value);
     logEvent(EVENT_TYPES.FILTER_BOOK, { year: value ? Number.parseInt(value, 10) : null });
-    updateQueryString({ year: value });
+    updateQueryString({ year: value, page: 1 });
   };
 
   const handleClear = () => {
     setSelectedGenre("");
     setSelectedYear("");
     setSearchQuery("");
-    updateQueryString({ search: "", genre: "", year: "" });
+    updateQueryString({ search: "", genre: "", year: "", page: 1 });
   };
 
   const handleSelectBook = (book: Book) => {
@@ -117,7 +131,7 @@ function HomeContent() {
   const thrillerFocus = useMemo(() => getBooksByGenre("Thriller").slice(0, 5), []);
 
   return (
-    <main className={`mx-auto max-w-6xl space-y-8 px-4 py-8 ${layoutClasses.spacing}`}>
+    <main className={`max-w-7xl mx-auto w-full space-y-8 px-4 sm:px-6 lg:px-8 py-8 ${layoutClasses.spacing}`}>
       <HeroSection
         featuredMovies={featuredBooks}
         searchQuery={searchQuery}
@@ -138,7 +152,15 @@ function HomeContent() {
 
       <CuratorBrief totalBooks={filteredBooks.length} />
 
-      <MovieGrid movies={filteredBooks} onSelectMovie={handleSelectBook} layoutClass={layoutClasses.cards} />
+      <MovieGrid movies={paginatedBooks} onSelectMovie={handleSelectBook} layoutClass={layoutClasses.cards} />
+
+      {filteredBooks.length > BOOKS_PER_PAGE && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filteredBooks.length}
+        />
+      )}
 
       <SpotlightRow
         title="Fiction focus"

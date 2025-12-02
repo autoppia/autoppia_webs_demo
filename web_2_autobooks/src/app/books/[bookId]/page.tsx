@@ -102,7 +102,7 @@ export default function BookDetailPage() {
       rating: book.rating,
       pages: book.duration,
     });
-    setMessage("Delete event recorded. No data was removed.");
+    setMessage("Book deleted successfully.");
   };
 
   const handleEditSubmit = (data: MovieEditorData) => {
@@ -142,7 +142,7 @@ export default function BookDetailPage() {
       previous_values: previousValues,
       changed_fields: changedFields,
     });
-    setMessage("Edit event recorded for auditing purposes.");
+    setMessage("Book edited successfully.");
   };
 
   const handleWatchlist = () => {
@@ -197,10 +197,9 @@ export default function BookDetailPage() {
       <MovieMeta movie={book} />
       {canManageBook && (
         <section className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white">
-          <h2 className="text-xl font-semibold">Validator actions</h2>
+          <h2 className="text-xl font-semibold">Manage Book</h2>
           <p className="text-sm text-white/60">
-            Use these controls to simulate edits or deletions. They simply emit
-            events, mirroring the Django workflow.
+            Edit or delete this book from the catalog.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Button
@@ -214,7 +213,7 @@ export default function BookDetailPage() {
           <MovieEditor
             movie={book}
             onSubmit={handleEditSubmit}
-            submitLabel="Record edit event"
+            submitLabel="Edit Book"
           />
         </section>
       )}

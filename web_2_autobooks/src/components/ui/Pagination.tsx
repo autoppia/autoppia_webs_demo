@@ -41,7 +41,7 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
       <div className="text-sm text-white/70">
         Showing <span className="font-semibold text-white">{startItem}</span> to{" "}
         <span className="font-semibold text-white">{endItem}</span> of{" "}
-        <span className="font-semibold text-white">{totalItems}</span> movies
+        <span className="font-semibold text-white">{totalItems}</span> books
       </div>
       
       <div className="flex items-center gap-2">
@@ -58,14 +58,12 @@ export function Pagination({ currentPage, totalPages, totalItems }: PaginationPr
 
         <div className="flex items-center gap-1">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-            // Show first page, last page, current page, and pages around current
             const showPage =
               page === 1 ||
               page === totalPages ||
               (page >= currentPage - 1 && page <= currentPage + 1);
 
             if (!showPage) {
-              // Show ellipsis
               const prevPage = page - 1;
               if (
                 prevPage === 1 ||

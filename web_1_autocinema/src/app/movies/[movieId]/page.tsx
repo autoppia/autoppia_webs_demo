@@ -5,19 +5,29 @@ import { useParams } from "next/navigation";
 import { MovieDetailHero } from "@/components/movies/MovieDetailHero";
 import { MovieMeta } from "@/components/movies/MovieMeta";
 import { RelatedMovies } from "@/components/movies/RelatedMovies";
-import { CommentsPanel, type CommentEntry } from "@/components/movies/CommentsPanel";
+import {
+  CommentsPanel,
+  type CommentEntry,
+} from "@/components/movies/CommentsPanel";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { getMovieById, getRelatedMovies } from "@/dynamic/v2-data";
 import { SeedLink } from "@/components/ui/SeedLink";
 import type { Movie } from "@/data/movies";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
-import { collectFilmChangeMetadata, editorDataToFilmPayload, movieToFilmPayload } from "@/utils/eventPayloads";
+import {
+  MovieEditor,
+  type MovieEditorData,
+} from "@/components/movies/MovieEditor";
+import {
+  collectFilmChangeMetadata,
+  editorDataToFilmPayload,
+  movieToFilmPayload,
+} from "@/utils/eventPayloads";
 
 const AVATARS = [
   "/media/gallery/people/person1.jpg",
-  "/media/gallery/people/person2.png",
+  "/media/gallery/people/person2.jpg",
   "/media/gallery/people/person3.jpg",
   "/media/gallery/people/person4.jpg",
 ];
@@ -26,7 +36,9 @@ function createMockComments(movie: Movie): CommentEntry[] {
   const snippets = [
     `${movie.title} bends genres in the best way possible.`,
     `Loved the way ${movie.director} lets the cast improvise in act two.`,
-    `If you enjoy ${movie.genres[0] || "experimental"} films, this is a wild ride.`,
+    `If you enjoy ${
+      movie.genres[0] || "experimental"
+    } films, this is a wild ride.`,
   ];
   return snippets.map((snippet, index) => ({
     id: `${movie.id}-${index}`,
@@ -44,7 +56,9 @@ export default function MovieDetailPage() {
   const movie = getMovieById(movieId);
   const { currentUser } = useAuth();
 
-  const [comments, setComments] = useState(() => (movie ? createMockComments(movie) : []));
+  const [comments, setComments] = useState(() =>
+    movie ? createMockComments(movie) : []
+  );
   const [message, setMessage] = useState<string | null>(null);
 
   if (!movie) {
@@ -52,8 +66,13 @@ export default function MovieDetailPage() {
       <main className="mx-auto max-w-4xl px-4 py-16 text-white">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
           <h1 className="text-3xl font-semibold">Movie not found</h1>
-          <p className="mt-3 text-white/70">Try selecting a different seed or explore the full library.</p>
-          <SeedLink href="/" className="mt-6 inline-flex rounded-full border border-white/10 px-6 py-3 text-sm uppercase tracking-wide text-secondary">
+          <p className="mt-3 text-white/70">
+            Try selecting a different seed or explore the full library.
+          </p>
+          <SeedLink
+            href="/"
+            className="mt-6 inline-flex rounded-full border border-white/10 px-6 py-3 text-sm uppercase tracking-wide text-secondary"
+          >
             Back to home
           </SeedLink>
         </div>
@@ -61,7 +80,10 @@ export default function MovieDetailPage() {
     );
   }
 
-  const relatedMovies = useMemo(() => getRelatedMovies(movie.id, 4), [movie.id]);
+  const relatedMovies = useMemo(
+    () => getRelatedMovies(movie.id, 4),
+    [movie.id]
+  );
   const canManageMovie = Boolean(currentUser?.allowedMovies.includes(movie.id));
 
   useEffect(() => {
@@ -88,7 +110,10 @@ export default function MovieDetailPage() {
   const handleEditSubmit = (data: MovieEditorData) => {
     const original = movieToFilmPayload(movie);
     const updated = editorDataToFilmPayload(original.id, data);
-    const { changed_fields, previous_values } = collectFilmChangeMetadata(original, updated);
+    const { changed_fields, previous_values } = collectFilmChangeMetadata(
+      original,
+      updated
+    );
     logEvent(EVENT_TYPES.EDIT_FILM, {
       ...updated,
       previous_values,
@@ -112,7 +137,13 @@ export default function MovieDetailPage() {
     }
   };
 
-  const handleCommentSubmit = ({ author, message }: { author: string; message: string }) => {
+  const handleCommentSubmit = ({
+    author,
+    message,
+  }: {
+    author: string;
+    message: string;
+  }) => {
     const entry: CommentEntry = {
       id: `${movie.id}-comment-${Date.now()}`,
       author,
@@ -135,7 +166,11 @@ export default function MovieDetailPage() {
 
   return (
     <main className="mx-auto max-w-5xl space-y-8 px-4 py-10 text-white">
-      {message && <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">{message}</p>}
+      {message && (
+        <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
+          {message}
+        </p>
+      )}
       <MovieDetailHero
         movie={movie}
         onWatchTrailer={handleWatchTrailer}
@@ -158,7 +193,11 @@ export default function MovieDetailPage() {
               Delete movie
             </Button>
           </div>
-          <MovieEditor movie={movie} onSubmit={handleEditSubmit} submitLabel="Edit Film" />
+          <MovieEditor
+            movie={movie}
+            onSubmit={handleEditSubmit}
+            submitLabel="Edit Film"
+          />
         </section>
       )}
       <RelatedMovies movies={relatedMovies} />

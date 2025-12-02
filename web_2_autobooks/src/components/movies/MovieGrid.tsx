@@ -16,8 +16,9 @@ export function MovieGrid({ movies, onSelectMovie, layoutClass }: MovieGridProps
     );
   }
 
+  // Always use 3 columns on large screens, ignore layout variants
   return (
-    <div className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${layoutClass}`}>
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {movies.map((movie) => (
         <MovieCard key={movie.id} movie={movie} onSelect={onSelectMovie} />
       ))}

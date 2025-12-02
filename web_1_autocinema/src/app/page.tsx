@@ -21,7 +21,7 @@ import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { ContactSection } from "@/components/contact/ContactSection";
 import { Pagination } from "@/components/ui/Pagination";
 
-const MOVIES_PER_PAGE = 10;
+const MOVIES_PER_PAGE = 9;
 
 function HomeContent() {
   const searchParams = useSearchParams();
