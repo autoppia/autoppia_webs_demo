@@ -1,6 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import fallbackProducts from "../../../../webs_server/initial_data/web_3_autozone/original/products_1.json";
+import fallbackProducts from "../../data/original/products_1.json";
 
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;

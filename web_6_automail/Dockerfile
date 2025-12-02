@@ -16,7 +16,7 @@ RUN npm ci
 
 COPY web_6_automail/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_6_automail/original/ webs_server/initial_data/web_6_automail/original/
+COPY webs_server/initial_data/web_6_automail/original/emails_1.json src/data/original/emails_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

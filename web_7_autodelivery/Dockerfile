@@ -16,7 +16,7 @@ RUN npm ci
 
 COPY web_7_autodelivery/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_7_autodelivery/original/ webs_server/initial_data/web_7_autodelivery/original/
+COPY webs_server/initial_data/web_7_autodelivery/original/restaurants_1.json src/data/original/restaurants_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

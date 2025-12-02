@@ -16,7 +16,8 @@ RUN npm ci
 
 COPY web_11_autocalendar/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_11_autocalendar/original/ webs_server/initial_data/web_11_autocalendar/original/
+COPY webs_server/initial_data/web_11_autocalendar/original/events_1.json src/data/original/events_1.json
+COPY webs_server/initial_data/web_11_autocalendar/original/calendar_events_1.json src/data/original/calendar_events_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

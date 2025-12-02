@@ -16,7 +16,7 @@ RUN npm install
 
 COPY web_4_autodining/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_4_autodining/original/ webs_server/initial_data/web_4_autodining/original/
+COPY webs_server/initial_data/web_4_autodining/original/restaurants_1.json src/data/original/restaurants_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

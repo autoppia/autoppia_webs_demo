@@ -1,7 +1,7 @@
 services:
   web:
     build:
-      context: ...
+      context: ..
       dockerfile: web_1_autocinema/Dockerfile
       args:
         ENABLE_DYNAMIC_V1: ${ENABLE_DYNAMIC_V1:-false}

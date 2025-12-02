@@ -16,7 +16,10 @@ RUN npm install
 
 COPY web_9_autoconnect/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_9_autoconnect/original/ webs_server/initial_data/web_9_autoconnect/original/
+COPY webs_server/initial_data/web_9_autoconnect/original/recommendations_1.json src/data/original/recommendations_1.json
+COPY webs_server/initial_data/web_9_autoconnect/original/jobs_1.json src/data/original/jobs_1.json
+COPY webs_server/initial_data/web_9_autoconnect/original/posts_1.json src/data/original/posts_1.json
+COPY webs_server/initial_data/web_9_autoconnect/original/users_1.json src/data/original/users_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

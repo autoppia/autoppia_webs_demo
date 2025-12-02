@@ -16,7 +16,7 @@ RUN npm ci
 
 COPY web_8_autolodge/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_8_autolodge/original/ webs_server/initial_data/web_8_autolodge/original/
+COPY webs_server/initial_data/web_8_autolodge/original/hotels_1.json src/data/original/hotels_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

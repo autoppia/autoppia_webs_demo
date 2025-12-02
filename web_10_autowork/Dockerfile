@@ -16,7 +16,7 @@ RUN npm ci
 
 COPY web_10_autowork/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_10_autowork/original/ webs_server/initial_data/web_10_autowork/original/
+COPY webs_server/initial_data/web_10_autowork/original/ src/data/original/
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

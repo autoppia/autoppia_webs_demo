@@ -16,17 +16,9 @@ RUN npm ci
 
 # Copy project files
 COPY web_1_autocinema/ .
-
-# Copy original dataset files for fallback (to where the code expects them)
+# Copy original dataset files for fallback
 COPY webs_server/initial_data/web_1_autocinema/original/movies_1.json src/data/original/movies_1.json
 
-# Build args for environment flags and API URL
-# Build arguments for dynamic versions
-ARG ENABLE_DYNAMIC_V1=false
-ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V1=$ENABLE_DYNAMIC_V1
-
-ARG ENABLE_DYNAMIC_V2_AI_GENERATE=false
-ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE=$ENABLE_DYNAMIC_V2_AI_GENERATE
 
 ARG ENABLE_DYNAMIC_V2_DB_MODE=false
 ENV NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE=$ENABLE_DYNAMIC_V2_DB_MODE

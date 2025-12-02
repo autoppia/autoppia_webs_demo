@@ -16,7 +16,7 @@ RUN npm ci
 
 COPY web_3_autozone/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_3_autozone/original/ webs_server/initial_data/web_3_autozone/original/
+COPY webs_server/initial_data/web_3_autozone/original/ src/data/original/
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

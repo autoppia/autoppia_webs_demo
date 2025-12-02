@@ -16,7 +16,7 @@ RUN npm ci
 
 COPY web_12_autolist/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_12_autolist/original/ webs_server/initial_data/web_12_autolist/original/
+COPY webs_server/initial_data/web_12_autolist/original/tasks_1.json src/data/original/tasks_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

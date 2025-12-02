@@ -16,7 +16,7 @@ RUN npm install
 
 COPY web_13_autodrive/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_13_autodrive/original/ webs_server/initial_data/web_13_autodrive/original/
+COPY webs_server/initial_data/web_13_autodrive/original/trips_1.json src/data/original/trips_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions
