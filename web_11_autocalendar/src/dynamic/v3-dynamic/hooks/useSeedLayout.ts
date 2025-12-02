@@ -128,19 +128,15 @@ export function useSeedLayout() {
   // Check if dynamic mode is enabled
   const isDynamicEnabled = isDynamicModeEnabled();
   
+  // LAYOUT FIJO - Siempre usar seed=1 para layout (V1)
+  // La seed se mantiene en URL para V2 (datos) y V3 (texto)
   const seed = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return 1;
-    }
-    return layoutSeed;
-  }, [isDynamicEnabled, layoutSeed]);
+    return 1; // Siempre fijo para layout
+  }, []);
   
   const layout = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return getSeedLayout(1);
-    }
-    return getSeedLayout(seed);
-  }, [isDynamicEnabled, seed]);
+    return getSeedLayout(1); // Siempre layout de seed=1
+  }, []);
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {

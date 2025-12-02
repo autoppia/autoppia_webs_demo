@@ -1520,10 +1520,11 @@ function CalendarApp() {
   };
 
   const layoutClasses = getLayoutClasses();
-  const relocateCalendar = seed === 4 || seed === 7;
+  // LAYOUT FIJO - Siempre Layout 1 (seed=1), estas condiciones nunca se cumplirán
+  const relocateCalendar = false; // Siempre false porque seed=1 nunca es 4 ni 7
   // Position helpers to prevent overlaps for floating mini calendar
   // Place at bottom; if right panel exists, anchor to left side instead of right
-  const miniCalHorizontal = relocateCalendar ? 'left-6' : 'right-6';
+  const miniCalHorizontal = 'right-6'; // Siempre a la derecha porque relocateCalendar siempre es false
 
   return (
     <main className={`flex min-h-screen w-full bg-[#fbfafa] text-[#382f3f] ${layoutClasses.mainContainer}`}>
@@ -1557,7 +1558,7 @@ function CalendarApp() {
           )}
         </aside>
       )}
-  <section className={`${layoutClasses.contentContainer} flex flex-col h-screen overflow-visible ${relocateCalendar ? 'pr-[560px]' : ''}`}>
+  <section className={`${layoutClasses.contentContainer} flex flex-col h-screen overflow-visible px-6 ${relocateCalendar ? 'pr-[560px]' : ''}`}>
         {/* Navigation - positioned based on layout config */}
         {currentVariant.layout.navigation !== 'none' && (
           <nav className={`w-full flex flex-wrap items-center justify-between ${layoutClasses.navHeight} px-6 border-b border-[#e5e5e5] bg-white sticky top-0 z-10 ${layoutClasses.navContainer} gap-2`}>
@@ -1588,8 +1589,8 @@ function CalendarApp() {
               {renderNavigationComponents()}
             </div>
             <div className={`flex items-center gap-2 flex-wrap ${isSidebarTop && isNavTop ? 'flex-col gap-2 flex-1 min-w-[260px]' : 'flex-1 min-w-[260px] justify-end'}`}>
-              {(currentVariant.layout.search === 'top' || seed === 6 || seed === 9) && (
-                <div className={`relative z-20 ${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full flex-1 min-w-[200px]' : (seed === 6 || seed === 9 ? 'w-[240px]' : 'hidden md:block')} max-w-[360px]`}>
+              {(currentVariant.layout.search === 'top') && (
+                <div className={`relative z-20 ${currentVariant.layout.sidebar === 'top' && currentVariant.layout.navigation === 'top' ? 'w-full flex-1 min-w-[200px]' : 'hidden md:block'} max-w-[360px]`}>
                   <Input
                     {...getElementAttributes('search-input', 0)}
                     value={searchQuery}

@@ -37,19 +37,12 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
   const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(1));
   const [isDynamicHTMLEnabled, setIsDynamicHTMLEnabled] = useState(false);
 
-  // Update layout when seed changes
+  // LAYOUT FIJO - Siempre usar Layout 1 (seed 1)
+  // La seed se mantiene en URL para V2 y V3, pero el layout (V1) es siempre fijo
   useEffect(() => {
-    const dynamicEnabled = isDynamicEnabled();
-    setIsDynamicHTMLEnabled(dynamicEnabled);
-
-    if (dynamicEnabled && resolvedSeeds.v1 !== null) {
-      // Use the centralized getSeedLayout function
-      const seedLayoutConfig = getSeedLayout(layoutSeed);
-      setCurrentVariant(getLayoutVariant(seedLayoutConfig.id));
-    } else {
-      setCurrentVariant(getLayoutVariant(1));
-    }
-  }, [layoutSeed, resolvedSeeds.v1]);
+    setIsDynamicHTMLEnabled(false);
+    setCurrentVariant(getLayoutVariant(1)); // Siempre usar layout de seed=1
+  }, []);
 
   const updateLayout = useCallback((newSeed: number) => {
     // This is now handled by SeedContext.setSeed
