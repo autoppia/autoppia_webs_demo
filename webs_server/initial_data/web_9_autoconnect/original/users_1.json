@@ -1,0 +1,297 @@
+[
+  {
+    "username": "sarah.chen",
+    "name": "Sarah Chen",
+    "avatar": "/media/avatars/person1.jpg",
+    "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
+    "title": "Senior UX Designer",
+    "about": "Hello! I'm Sarah, a UX Designer passionate about creating intuitive and delightful user experiences. I specialize in mobile design, user research, and design systems. I love collaborating with cross-functional teams to bring ideas to life.\n\nI've worked on various products at Google, focusing on accessibility and inclusive design. Always learning and exploring new design trends and technologies.",
+    "experience": [
+      {
+        "title": "Senior UX Designer",
+        "company": "Google",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Jan 2019 - Present • 6 yrs",
+        "location": "San Francisco, CA",
+        "description": "Leading UX design for mobile applications, conducting user research, and collaborating with product and engineering teams to deliver exceptional user experiences."
+      },
+      {
+        "title": "UX Designer",
+        "company": "Airbnb",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Mar 2016 - Dec 2018 • 2 yrs 9 mos",
+        "location": "San Francisco, CA",
+        "description": "Designed user interfaces for booking experiences and improved conversion rates through iterative design and user testing."
+      }
+    ]
+  },
+  {
+    "username": "michael.rodriguez",
+    "name": "Michael Rodriguez",
+    "avatar": "/media/avatars/person2.jpg",
+    "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
+    "title": "Full Stack Developer",
+    "about": "Hi, I'm Michael! I'm a full stack developer with over 7 years of experience building modern web applications. I love working with React, TypeScript, Node.js, and cloud technologies.\n\nI'm passionate about clean code, performance optimization, and mentoring junior developers. Always excited about new technologies and best practices in software development.",
+    "experience": [
+      {
+        "title": "Full Stack Developer",
+        "company": "Stripe",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Jun 2020 - Present • 4 yrs 6 mos",
+        "location": "San Francisco, CA",
+        "description": "Developing payment processing APIs and dashboard interfaces. Building scalable backend services and frontend applications using React and Node.js."
+      }
+    ]
+  },
+  {
+    "username": "emily.patel",
+    "name": "Emily Patel",
+    "avatar": "/media/avatars/person3.jpg",
+    "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
+    "title": "Product Manager",
+    "about": "Hello! I'm Emily, a product manager with 6 years of experience in fintech and mobile applications. I enjoy the challenge of balancing user needs, business goals, and technical constraints.\n\nI specialize in product strategy, user research, and cross-functional collaboration. My background in engineering helps me communicate effectively with technical teams.",
+    "experience": [
+      {
+        "title": "Senior Product Manager",
+        "company": "Square",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Aug 2021 - Present • 3 yrs 4 mos",
+        "location": "San Francisco, CA",
+        "description": "Leading product strategy for mobile payment solutions. Working with design, engineering, and business teams to ship features that drive user engagement and revenue."
+      },
+      {
+        "title": "Product Manager",
+        "company": "PayPal",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Jan 2019 - Jul 2021 • 2 yrs 6 mos",
+        "location": "San Jose, CA",
+        "description": "Managed product roadmap for merchant services. Conducted user research and defined product requirements for new features."
+      }
+    ]
+  },
+  {
+    "username": "david.kim",
+    "name": "David Kim",
+    "avatar": "/media/avatars/person4.jpg",
+    "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
+    "title": "Senior Data Scientist",
+    "about": "Hi, I'm David! I'm a data scientist with expertise in machine learning, predictive analytics, and data visualization. I love solving complex problems using data and algorithms.\n\nWith over 8 years of experience, I've worked on recommendation systems, fraud detection, and customer analytics. I'm passionate about using AI to create value for businesses and users.",
+    "experience": [
+      {
+        "title": "Senior Data Scientist",
+        "company": "Netflix",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Mar 2019 - Present • 5 yrs 9 mos",
+        "location": "Los Gatos, CA",
+        "description": "Building recommendation algorithms and personalization systems. Developing machine learning models to improve content discovery and user engagement."
+      }
+    ]
+  },
+  {
+    "username": "lisa.anderson",
+    "name": "Lisa Anderson",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
+    "title": "Marketing Director",
+    "about": "Hello! I'm Lisa, a marketing director with 10+ years of experience in digital marketing and brand strategy. I specialize in growth marketing, content strategy, and brand development.\n\nI've helped scale multiple startups and established brands through data-driven marketing campaigns. Always exploring new channels and strategies to reach audiences effectively.",
+    "experience": [
+      {
+        "title": "Marketing Director",
+        "company": "HubSpot",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Jan 2020 - Present • 4 yrs 11 mos",
+        "location": "Cambridge, MA",
+        "description": "Leading marketing strategy and campaigns for SaaS products. Managing cross-functional teams and driving brand awareness and customer acquisition."
+      }
+    ]
+  },
+  {
+    "username": "james.wilson",
+    "name": "James Wilson",
+    "avatar": "/media/avatars/person1.jpg",
+    "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
+    "title": "Senior DevOps Engineer",
+    "about": "Hi, I'm James! I'm a DevOps engineer with expertise in cloud infrastructure, CI/CD pipelines, and system automation. I love building reliable and scalable systems.\n\nWith experience at scale, I've managed infrastructure serving millions of users. I'm passionate about infrastructure as code, monitoring, and optimizing system performance.",
+    "experience": [
+      {
+        "title": "Senior DevOps Engineer",
+        "company": "Amazon Web Services",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Sep 2018 - Present • 6 yrs 3 mos",
+        "location": "Seattle, WA",
+        "description": "Designing and managing cloud infrastructure. Automating deployments and monitoring systems for high availability and performance."
+      }
+    ]
+  },
+  {
+    "username": "maria.garcia",
+    "name": "Maria Garcia",
+    "avatar": "/media/avatars/person2.jpg",
+    "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
+    "title": "Backend Engineer",
+    "about": "Hello! I'm Maria, a backend engineer with 6 years of experience building scalable distributed systems. I specialize in microservices architecture, API design, and database optimization.\n\nI'm passionate about system reliability, performance, and clean architecture. Always learning new technologies and patterns to build better systems.",
+    "experience": [
+      {
+        "title": "Backend Engineer",
+        "company": "Uber",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Apr 2021 - Present • 3 yrs 8 mos",
+        "location": "San Francisco, CA",
+        "description": "Developing microservices and APIs for ride-sharing platform. Working on payment processing, driver matching, and real-time location services."
+      }
+    ]
+  },
+  {
+    "username": "robert.lee",
+    "name": "Robert Lee",
+    "avatar": "/media/avatars/person3.jpg",
+    "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
+    "title": "Frontend Architect",
+    "about": "Hi, I'm Robert! I'm a frontend architect with over 9 years of experience building complex web applications. I specialize in React, TypeScript, and design systems.\n\nI love creating reusable component libraries and establishing frontend architecture patterns. Always exploring new frameworks and best practices to improve developer experience.",
+    "experience": [
+      {
+        "title": "Frontend Architect",
+        "company": "Meta",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Jan 2018 - Present • 7 yrs",
+        "location": "Menlo Park, CA",
+        "description": "Leading frontend architecture and design system development. Building component libraries and establishing patterns for large-scale applications."
+      }
+    ]
+  },
+  {
+    "username": "jennifer.brown",
+    "name": "Jennifer Brown",
+    "avatar": "/media/avatars/person4.jpg",
+    "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
+    "title": "UX Researcher",
+    "about": "Hello! I'm Jennifer, a UX researcher with 5 years of experience conducting user research and usability studies. I specialize in qualitative research methods and translating insights into actionable design recommendations.\n\nI'm passionate about understanding users deeply and ensuring products meet real needs. Always curious about human behavior and how people interact with technology.",
+    "experience": [
+      {
+        "title": "UX Researcher",
+        "company": "Microsoft",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Mar 2020 - Present • 4 yrs 9 mos",
+        "location": "Redmond, WA",
+        "description": "Conducting user research for productivity software. Running usability studies, interviews, and surveys to inform product decisions."
+      }
+    ]
+  },
+  {
+    "username": "william.taylor",
+    "name": "William Taylor",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
+    "title": "Engineering Manager",
+    "about": "Hi, I'm William! I'm an engineering manager with 12 years of experience, including 5 years in leadership roles. I specialize in team management, technical architecture, and agile methodologies.\n\nI love helping teams deliver high-quality software while maintaining a healthy work environment. Always focused on process improvement and team development.",
+    "experience": [
+      {
+        "title": "Engineering Manager",
+        "company": "Salesforce",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Jun 2019 - Present • 5 yrs 6 mos",
+        "location": "San Francisco, CA",
+        "description": "Managing engineering team of 10 developers. Leading technical decisions, sprint planning, and career development for team members."
+      },
+      {
+        "title": "Senior Software Engineer",
+        "company": "Oracle",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Aug 2014 - May 2019 • 4 yrs 9 mos",
+        "location": "Redwood City, CA",
+        "description": "Developing enterprise software solutions. Building scalable applications and mentoring junior engineers."
+      }
+    ]
+  },
+  {
+    "username": "amanda.white",
+    "name": "Amanda White",
+    "avatar": "/media/avatars/person1.jpg",
+    "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
+    "title": "Design Lead",
+    "about": "Hello! I'm Amanda, a design lead with 8 years of experience in product design and design systems. I specialize in creating cohesive design languages and leading design teams.\n\nI'm passionate about inclusive design, accessibility, and establishing design processes. Always working to bridge the gap between design and engineering.",
+    "experience": [
+      {
+        "title": "Design Lead",
+        "company": "Adobe",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Jan 2021 - Present • 4 yrs",
+        "location": "San Jose, CA",
+        "description": "Leading design team and establishing design system for creative software. Creating design guidelines and component libraries."
+      }
+    ]
+  },
+  {
+    "username": "chris.martinez",
+    "name": "Chris Martinez",
+    "avatar": "/media/avatars/person2.jpg",
+    "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
+    "title": "Senior Mobile Developer",
+    "about": "Hi, I'm Chris! I'm a mobile developer with 7 years of experience building native and cross-platform mobile applications. I specialize in iOS, Android, and React Native.\n\nI love creating smooth user experiences and optimizing app performance. Always exploring new mobile technologies and best practices.",
+    "experience": [
+      {
+        "title": "Senior Mobile Developer",
+        "company": "Spotify",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Aug 2020 - Present • 4 yrs 4 mos",
+        "location": "New York, NY",
+        "description": "Developing iOS and Android applications for music streaming. Building features for music discovery and playback experience."
+      }
+    ]
+  },
+  {
+    "username": "nicole.thompson",
+    "name": "Nicole Thompson",
+    "avatar": "/media/avatars/person3.jpg",
+    "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
+    "title": "Security Engineer",
+    "about": "Hello! I'm Nicole, a security engineer with 6 years of experience in application security and threat detection. I specialize in secure coding practices, penetration testing, and security architecture.\n\nI'm passionate about protecting user data and building secure systems. Always staying updated on the latest security threats and best practices.",
+    "experience": [
+      {
+        "title": "Security Engineer",
+        "company": "Cloudflare",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Feb 2021 - Present • 4 yrs 10 mos",
+        "location": "San Francisco, CA",
+        "description": "Identifying and mitigating security vulnerabilities. Conducting security audits and implementing security best practices for web applications."
+      }
+    ]
+  },
+  {
+    "username": "daniel.clark",
+    "name": "Daniel Clark",
+    "avatar": "/media/avatars/person4.jpg",
+    "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
+    "title": "Senior QA Engineer",
+    "about": "Hi, I'm Daniel! I'm a QA engineer with 8 years of experience in test automation and quality assurance. I specialize in building automated test frameworks and integrating testing into CI/CD pipelines.\n\nI love finding bugs before users do and ensuring software quality at scale. Always exploring new testing tools and methodologies.",
+    "experience": [
+      {
+        "title": "Senior QA Engineer",
+        "company": "Atlassian",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Oct 2019 - Present • 5 yrs 2 mos",
+        "location": "San Francisco, CA",
+        "description": "Building automated test suites for collaboration software. Developing test frameworks and maintaining test infrastructure."
+      }
+    ]
+  },
+  {
+    "username": "sophia.davis",
+    "name": "Sophia Davis",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
+    "title": "Senior Technical Writer",
+    "about": "Hello! I'm Sophia, a technical writer with 5 years of experience creating documentation for developers and users. I specialize in API documentation, user guides, and developer tutorials.\n\nI'm passionate about making complex technical concepts accessible to all audiences. Always working to improve documentation clarity and usability.",
+    "experience": [
+      {
+        "title": "Senior Technical Writer",
+        "company": "GitHub",
+        "logo": "/media/avatars/default-avatar.jpg",
+        "duration": "Mar 2020 - Present • 4 yrs 9 mos",
+        "location": "San Francisco, CA",
+        "description": "Creating documentation for developer tools and APIs. Writing tutorials, guides, and maintaining developer documentation websites."
+      }
+    ]
+  }
+]
+

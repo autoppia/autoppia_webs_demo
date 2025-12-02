@@ -1,0 +1,1134 @@
+[
+  {
+    "id": "movie-original-001",
+    "title": "The Godfather",
+    "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+    "year": 1972,
+    "duration": 175,
+    "rating": 4.8,
+    "director": "Francis Ford Coppola",
+    "cast": [
+      "Marlon Brando",
+      "Al Pacino",
+      "James Caan",
+      "Robert Duvall"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=UaVTIH8mujA",
+    "image_path": "gallery/the-godfather.jpg",
+    "genres": [
+      "Crime",
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-002",
+    "title": "Pulp Fiction",
+    "description": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+    "year": 1994,
+    "duration": 154,
+    "rating": 4.7,
+    "director": "Quentin Tarantino",
+    "cast": [
+      "John Travolta",
+      "Uma Thurman",
+      "Samuel L. Jackson",
+      "Bruce Willis"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=s7EdQ4FqbhY",
+    "image_path": "gallery/pulp-fiction.jpg",
+    "genres": [
+      "Crime",
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-003",
+    "title": "The Dark Knight",
+    "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+    "year": 2008,
+    "duration": 152,
+    "rating": 4.9,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Christian Bale",
+      "Heath Ledger",
+      "Aaron Eckhart",
+      "Michael Caine"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=EXeTwQWrcwY",
+    "image_path": "gallery/the-dark-knight.jpg",
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-004",
+    "title": "Forrest Gump",
+    "description": "The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75.",
+    "year": 1994,
+    "duration": 142,
+    "rating": 4.6,
+    "director": "Robert Zemeckis",
+    "cast": [
+      "Tom Hanks",
+      "Robin Wright",
+      "Gary Sinise",
+      "Sally Field"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=bLvqoHBptjg",
+    "image_path": "gallery/forrest-gump.jpg",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-005",
+    "title": "Inception",
+    "description": "A skilled thief is given a chance at redemption if he can pull off an impossible heist: planting an idea in someone's mind through dream-sharing technology.",
+    "year": 2010,
+    "duration": 148,
+    "rating": 4.8,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Marion Cotillard",
+      "Tom Hardy",
+      "Ellen Page"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=YoHD9XEInc0",
+    "image_path": "gallery/inception.jpg",
+    "genres": [
+      "Action",
+      "Sci-Fi",
+      "Thriller"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-006",
+    "title": "The Matrix",
+    "description": "A computer hacker learns about the true nature of reality and his role in the war against its controllers.",
+    "year": 1999,
+    "duration": 136,
+    "rating": 4.7,
+    "director": "The Wachowskis",
+    "cast": [
+      "Keanu Reeves",
+      "Laurence Fishburne",
+      "Carrie-Anne Moss",
+      "Hugo Weaving"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=vKQi3bBA1y8",
+    "image_path": "gallery/the-matrix.jpg",
+    "genres": [
+      "Action",
+      "Sci-Fi"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-007",
+    "title": "Goodfellas",
+    "description": "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners.",
+    "year": 1990,
+    "duration": 146,
+    "rating": 4.8,
+    "director": "Martin Scorsese",
+    "cast": [
+      "Robert De Niro",
+      "Ray Liotta",
+      "Joe Pesci",
+      "Lorraine Bracco"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=qo5jJpHtI1Y",
+    "image_path": "gallery/goodfellas.jpg",
+    "genres": [
+      "Crime",
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-008",
+    "title": "The Shawshank Redemption",
+    "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+    "year": 1994,
+    "duration": 142,
+    "rating": 4.9,
+    "director": "Frank Darabont",
+    "cast": [
+      "Tim Robbins",
+      "Morgan Freeman",
+      "Bob Gunton",
+      "William Sadler"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=6hB3S9bIaco",
+    "image_path": "gallery/the-shawshank-redemption.jpg",
+    "genres": [
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-009",
+    "title": "Fight Club",
+    "description": "An insomniac office worker and a devil-may-care soapmaker form an underground fight club that evolves into something much bigger.",
+    "year": 1999,
+    "duration": 139,
+    "rating": 4.7,
+    "director": "David Fincher",
+    "cast": [
+      "Brad Pitt",
+      "Edward Norton",
+      "Helena Bonham Carter",
+      "Meat Loaf"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=SUXWAEX2jlg",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-010",
+    "title": "Interstellar",
+    "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    "year": 2014,
+    "duration": 169,
+    "rating": 4.7,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Matthew McConaughey",
+      "Anne Hathaway",
+      "Jessica Chastain",
+      "Michael Caine"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=zSWdZVtXT7E",
+    "image_path": "gallery/interstellar.jpg",
+    "genres": [
+      "Adventure",
+      "Drama",
+      "Sci-Fi"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-011",
+    "title": "Titanic",
+    "description": "A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic.",
+    "year": 1997,
+    "duration": 194,
+    "rating": 4.6,
+    "director": "James Cameron",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Kate Winslet",
+      "Billy Zane",
+      "Kathy Bates"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=kVrqfYjkTdQ",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-012",
+    "title": "Gladiator",
+    "description": "A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery.",
+    "year": 2000,
+    "duration": 155,
+    "rating": 4.8,
+    "director": "Ridley Scott",
+    "cast": [
+      "Russell Crowe",
+      "Joaquin Phoenix",
+      "Connie Nielsen",
+      "Oliver Reed"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=owK1qxDselE",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-013",
+    "title": "The Lord of the Rings: The Fellowship of the Ring",
+    "description": "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth.",
+    "year": 2001,
+    "duration": 178,
+    "rating": 4.8,
+    "director": "Peter Jackson",
+    "cast": [
+      "Elijah Wood",
+      "Ian McKellen",
+      "Orlando Bloom",
+      "Viggo Mortensen"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=V75dMMIW2B4",
+    "image_path": "gallery/the-lord-of-the-rings-the-fellowship-of-the-ring.jpg",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-014",
+    "title": "Schindler's List",
+    "description": "In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution.",
+    "year": 1993,
+    "duration": 195,
+    "rating": 4.9,
+    "director": "Steven Spielberg",
+    "cast": [
+      "Liam Neeson",
+      "Ralph Fiennes",
+      "Ben Kingsley",
+      "Caroline Goodall"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=gG22XNhtnoY",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Biography",
+      "Drama",
+      "History"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-015",
+    "title": "The Departed",
+    "description": "An undercover cop and a mob informant both attempt to identify each other while infiltrating an Irish gang in South Boston.",
+    "year": 2006,
+    "duration": 151,
+    "rating": 4.7,
+    "director": "Martin Scorsese",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Matt Damon",
+      "Jack Nicholson",
+      "Mark Wahlberg"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=iQpb1LoeVUc",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-016",
+    "title": "Saving Private Ryan",
+    "description": "Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose brothers have been killed in action.",
+    "year": 1998,
+    "duration": 169,
+    "rating": 4.8,
+    "director": "Steven Spielberg",
+    "cast": [
+      "Tom Hanks",
+      "Matt Damon",
+      "Tom Sizemore",
+      "Edward Burns"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=zwhP5b4tD6g",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama",
+      "War"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-017",
+    "title": "The Green Mile",
+    "description": "The lives of guards on Death Row are affected by one of their charges: a black man accused of child murder and rape.",
+    "year": 1999,
+    "duration": 189,
+    "rating": 4.7,
+    "director": "Frank Darabont",
+    "cast": [
+      "Tom Hanks",
+      "Michael Clarke Duncan",
+      "David Morse",
+      "Bonnie Hunt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=Ki4haFrqSrw",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Fantasy"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-018",
+    "title": "The Silence of the Lambs",
+    "description": "A young F.B.I. cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer.",
+    "year": 1991,
+    "duration": 118,
+    "rating": 4.8,
+    "director": "Jonathan Demme",
+    "cast": [
+      "Jodie Foster",
+      "Anthony Hopkins",
+      "Scott Glenn",
+      "Ted Levine"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=RuX2MQeb8UM",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-019",
+    "title": "Se7en",
+    "description": "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
+    "year": 1995,
+    "duration": 127,
+    "rating": 4.7,
+    "director": "David Fincher",
+    "cast": [
+      "Morgan Freeman",
+      "Brad Pitt",
+      "Kevin Spacey",
+      "Gwyneth Paltrow"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=znmZoVkCjpI",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Mystery"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-020",
+    "title": "The Lion King",
+    "description": "Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.",
+    "year": 1994,
+    "duration": 88,
+    "rating": 4.6,
+    "director": "Roger Allers, Rob Minkoff",
+    "cast": [
+      "Matthew Broderick",
+      "Jeremy Irons",
+      "James Earl Jones",
+      "Moira Kelly"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=4sj1MT05lAA",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Drama"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-021",
+    "title": "Toy Story",
+    "description": "A cowboy doll is profoundly threatened and jealous when a new spaceman action figure supplants him as top toy in a boy's bedroom.",
+    "year": 1995,
+    "duration": 81,
+    "rating": 4.7,
+    "director": "John Lasseter",
+    "cast": [
+      "Tom Hanks",
+      "Tim Allen",
+      "Don Rickles",
+      "Jim Varney"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=v-PjgYDrg70",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Comedy"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-022",
+    "title": "Finding Nemo",
+    "description": "After his son is captured in the Great Barrier Reef and taken to Sydney, a timid clownfish sets out on a journey to bring him home.",
+    "year": 2003,
+    "duration": 100,
+    "rating": 4.6,
+    "director": "Andrew Stanton, Lee Unkrich",
+    "cast": [
+      "Albert Brooks",
+      "Ellen DeGeneres",
+      "Alexander Gould",
+      "Willem Dafoe"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=wZdpNglLbt8",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Comedy"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-023",
+    "title": "Up",
+    "description": "78-year-old Carl Fredricksen travels to Paradise Falls in his house equipped with balloons, inadvertently taking a young stowaway.",
+    "year": 2009,
+    "duration": 96,
+    "rating": 4.7,
+    "director": "Pete Docter, Bob Peterson",
+    "cast": [
+      "Ed Asner",
+      "Christopher Plummer",
+      "Jordan Nagai",
+      "Bob Peterson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ORFWdXl_zJ4",
+    "image_path": "gallery/up.jpeg",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Comedy"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-024",
+    "title": "The Incredibles",
+    "description": "A family of undercover superheroes, while trying to live the quiet suburban life, are forced into action to save the world.",
+    "year": 2004,
+    "duration": 115,
+    "rating": 4.6,
+    "director": "Brad Bird",
+    "cast": [
+      "Craig T. Nelson",
+      "Holly Hunter",
+      "Samuel L. Jackson",
+      "Jason Lee"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=eZbzbC9285I",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Action",
+      "Adventure"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-025",
+    "title": "Monsters, Inc.",
+    "description": "In order to power the city, monsters have to scare children so that they scream. However, the children are toxic to the monsters.",
+    "year": 2001,
+    "duration": 92,
+    "rating": 4.5,
+    "director": "Pete Docter, David Silverman",
+    "cast": [
+      "John Goodman",
+      "Billy Crystal",
+      "Mary Gibbs",
+      "Steve Buscemi"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=cvOQeozL4S0",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Comedy"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-026",
+    "title": "Ratatouille",
+    "description": "A rat who can cook makes an unusual alliance with a young kitchen worker at a famous restaurant.",
+    "year": 2007,
+    "duration": 111,
+    "rating": 4.6,
+    "director": "Brad Bird, Jan Pinkava",
+    "cast": [
+      "Patton Oswalt",
+      "Ian Holm",
+      "Lou Romano",
+      "Brian Dennehy"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=c3sBBRxDAqk",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Comedy",
+      "Family"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-027",
+    "title": "WALL-E",
+    "description": "In the distant future, a small waste-collecting robot inadvertently embarks on a space journey that will ultimately decide the fate of mankind.",
+    "year": 2008,
+    "duration": 98,
+    "rating": 4.7,
+    "director": "Andrew Stanton",
+    "cast": [
+      "Ben Burtt",
+      "Elissa Knight",
+      "Jeff Garlin",
+      "Fred Willard"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=alIq_wG9FNk",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-028",
+    "title": "Inside Out",
+    "description": "After young Riley is uprooted from her Midwest life and moved to San Francisco, her emotions - Joy, Fear, Anger, Disgust and Sadness - conflict on how best to navigate a new city.",
+    "year": 2015,
+    "duration": 95,
+    "rating": 4.7,
+    "director": "Pete Docter, Ronnie Del Carmen",
+    "cast": [
+      "Amy Poehler",
+      "Bill Hader",
+      "Lewis Black",
+      "Mindy Kaling"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=yRUAzGQ3nSY",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Comedy"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-029",
+    "title": "Coco",
+    "description": "Aspiring musician Miguel, confronted with his family's ancestral ban on music, enters the Land of the Dead to find his great-great-grandfather.",
+    "year": 2017,
+    "duration": 105,
+    "rating": 4.7,
+    "director": "Lee Unkrich, Adrian Molina",
+    "cast": [
+      "Anthony Gonzalez",
+      "Gael Garc\u00eda Bernal",
+      "Benjamin Bratt",
+      "Alanna Ubach"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=Rvr68u6k5sI",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-030",
+    "title": "Soul",
+    "description": "After landing the gig of a lifetime, a New York jazz pianist suddenly finds himself trapped in a strange land between Earth and the afterlife.",
+    "year": 2020,
+    "duration": 100,
+    "rating": 4.6,
+    "director": "Pete Docter, Kemp Powers",
+    "cast": [
+      "Jamie Foxx",
+      "Tina Fey",
+      "Graham Norton",
+      "Rachel House"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=Gs9v8FzKK6I",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Comedy",
+      "Drama"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-031",
+    "title": "John Wick",
+    "description": "An ex-hit-man comes out of retirement to track down the gangsters that took everything from him.",
+    "year": 2014,
+    "duration": 101,
+    "rating": 4.6,
+    "director": "Chad Stahelski, David Leitch",
+    "cast": [
+      "Keanu Reeves",
+      "Michael Nyqvist",
+      "Alfie Allen",
+      "Willem Dafoe"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=2AUmvWm5ZDQ",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Action",
+      "Crime",
+      "Thriller"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-032",
+    "title": "Mad Max: Fury Road",
+    "description": "In a post-apocalyptic wasteland, Max teams up with a mysterious woman to escape from a tyrannical warlord.",
+    "year": 2015,
+    "duration": 120,
+    "rating": 4.7,
+    "director": "George Miller",
+    "cast": [
+      "Tom Hardy",
+      "Charlize Theron",
+      "Nicholas Hoult",
+      "Hugh Keays-Byrne"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=hEJnMQG9ev8",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Sci-Fi"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-033",
+    "title": "Django Unchained",
+    "description": "With the help of a German bounty hunter, a freed slave sets out to rescue his wife from a brutal Mississippi plantation owner.",
+    "year": 2012,
+    "duration": 165,
+    "rating": 4.7,
+    "director": "Quentin Tarantino",
+    "cast": [
+      "Jamie Foxx",
+      "Christoph Waltz",
+      "Leonardo DiCaprio",
+      "Kerry Washington"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=eUdM9vrCEnQ",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama",
+      "Western"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-034",
+    "title": "The Revenant",
+    "description": "A frontiersman on a fur trading expedition in the 1820s fights for survival after being mauled by a bear and left for dead.",
+    "year": 2015,
+    "duration": 156,
+    "rating": 4.6,
+    "director": "Alejandro Gonz\u00e1lez I\u00f1\u00e1rritu",
+    "cast": [
+      "Leonardo DiCaprio",
+      "Tom Hardy",
+      "Domhnall Gleeson",
+      "Will Poulter"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=LoebZZ8K5N0",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Drama"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-035",
+    "title": "No Country for Old Men",
+    "description": "Violence and mayhem ensue after a hunter stumbles upon a drug deal gone wrong and more than two million dollars in cash near the Rio Grande.",
+    "year": 2007,
+    "duration": 122,
+    "rating": 4.7,
+    "director": "Joel Coen, Ethan Coen",
+    "cast": [
+      "Tommy Lee Jones",
+      "Javier Bardem",
+      "Josh Brolin",
+      "Woody Harrelson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=38A__WT3-o0",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-036",
+    "title": "Parasite",
+    "description": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+    "year": 2019,
+    "duration": 132,
+    "rating": 4.8,
+    "director": "Bong Joon-ho",
+    "cast": [
+      "Song Kang-ho",
+      "Lee Sun-kyun",
+      "Cho Yeo-jeong",
+      "Choi Woo-shik"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=5xH0HfJHsaY",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Comedy",
+      "Drama",
+      "Thriller"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-037",
+    "title": "Get Out",
+    "description": "A young African-American visits his white girlfriend's parents for the weekend, where his uneasiness about their reception of him eventually reaches a boiling point.",
+    "year": 2017,
+    "duration": 104,
+    "rating": 4.6,
+    "director": "Jordan Peele",
+    "cast": [
+      "Daniel Kaluuya",
+      "Allison Williams",
+      "Bradley Whitford",
+      "Catherine Keener"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=DzfpyUB60YY",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Horror",
+      "Mystery",
+      "Thriller"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-038",
+    "title": "Her",
+    "description": "In a near future, a lonely writer develops an unlikely relationship with an operating system designed to meet his every need.",
+    "year": 2013,
+    "duration": 126,
+    "rating": 4.6,
+    "director": "Spike Jonze",
+    "cast": [
+      "Joaquin Phoenix",
+      "Scarlett Johansson",
+      "Amy Adams",
+      "Rooney Mara"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ne6p6MfLBxc",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama",
+      "Romance",
+      "Sci-Fi"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-039",
+    "title": "La La Land",
+    "description": "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future.",
+    "year": 2016,
+    "duration": 128,
+    "rating": 4.6,
+    "director": "Damien Chazelle",
+    "cast": [
+      "Ryan Gosling",
+      "Emma Stone",
+      "John Legend",
+      "Rosemarie DeWitt"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=0pdqf4P9MB8",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Comedy",
+      "Drama",
+      "Music"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-040",
+    "title": "Whiplash",
+    "description": "A promising young drummer enrolls at a cut-throat music conservatory where his dreams of greatness are mentored by an instructor.",
+    "year": 2014,
+    "duration": 107,
+    "rating": 4.7,
+    "director": "Damien Chazelle",
+    "cast": [
+      "Miles Teller",
+      "J.K. Simmons",
+      "Paul Reiser",
+      "Melissa Benoist"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=7d_jQycdQGo",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama",
+      "Music"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-041",
+    "title": "The Social Network",
+    "description": "As Harvard student Mark Zuckerberg creates the social networking site that would become Facebook, he is sued by the twins who claimed he stole their idea.",
+    "year": 2010,
+    "duration": 120,
+    "rating": 4.7,
+    "director": "David Fincher",
+    "cast": [
+      "Jesse Eisenberg",
+      "Andrew Garfield",
+      "Justin Timberlake",
+      "Armie Hammer"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=lB95KLmpLR4",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Biography",
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-042",
+    "title": "The Prestige",
+    "description": "After a tragic accident, two stage magicians engage in a battle to create the ultimate illusion while sacrificing everything they have.",
+    "year": 2006,
+    "duration": 130,
+    "rating": 4.7,
+    "director": "Christopher Nolan",
+    "cast": [
+      "Hugh Jackman",
+      "Christian Bale",
+      "Michael Caine",
+      "Scarlett Johansson"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=o4gHCmTQDVI",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama",
+      "Mystery",
+      "Sci-Fi"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-043",
+    "title": "Eternal Sunshine of the Spotless Mind",
+    "description": "When their relationship turns sour, a couple undergoes a medical procedure to have each other erased from their memories.",
+    "year": 2004,
+    "duration": 108,
+    "rating": 4.7,
+    "director": "Michel Gondry",
+    "cast": [
+      "Jim Carrey",
+      "Kate Winslet",
+      "Tom Wilkinson",
+      "Elijah Wood"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=rb9a00fX33U",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Drama",
+      "Romance",
+      "Sci-Fi"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-044",
+    "title": "The Big Lebowski",
+    "description": "Jeff 'The Dude' Lebowski is mistaken for a millionaire of the same name and finds himself in a convoluted plot involving a kidnapping.",
+    "year": 1998,
+    "duration": 117,
+    "rating": 4.6,
+    "director": "Joel Coen, Ethan Coen",
+    "cast": [
+      "Jeff Bridges",
+      "John Goodman",
+      "Julianne Moore",
+      "Steve Buscemi"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=cd-go0oBF4Y",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Comedy",
+      "Crime"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-045",
+    "title": "The Grand Budapest Hotel",
+    "description": "A writer encounters the owner of an aging high-class hotel, who tells him of his early years serving as a lobby boy in the hotel's glorious years.",
+    "year": 2014,
+    "duration": 99,
+    "rating": 4.6,
+    "director": "Wes Anderson",
+    "cast": [
+      "Ralph Fiennes",
+      "F. Murray Abraham",
+      "Mathieu Amalric",
+      "Adrien Brody"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=1Fg5iWmQjwk",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Adventure",
+      "Comedy",
+      "Drama"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-046",
+    "title": "Am\u00e9lie",
+    "description": "Am\u00e9lie is an innocent and naive girl in Paris with her own sense of justice. She decides to help those around her and find love.",
+    "year": 2001,
+    "duration": 122,
+    "rating": 4.6,
+    "director": "Jean-Pierre Jeunet",
+    "cast": [
+      "Audrey Tautou",
+      "Mathieu Kassovitz",
+      "Rufus",
+      "Lorella Cravotta"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=HECa3bAFAYk",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Comedy",
+      "Romance"
+    ],
+    "category": "Comedy"
+  },
+  {
+    "id": "movie-original-047",
+    "title": "Drive",
+    "description": "A mysterious Hollywood stuntman and mechanic moonlights as a getaway driver and finds himself in trouble when he helps out his neighbor.",
+    "year": 2011,
+    "duration": 100,
+    "rating": 4.6,
+    "director": "Nicolas Winding Refn",
+    "cast": [
+      "Ryan Gosling",
+      "Carey Mulligan",
+      "Bryan Cranston",
+      "Albert Brooks"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=KBiOF3y1W0Y",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Crime",
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-048",
+    "title": "Oldboy",
+    "description": "After being kidnapped and imprisoned for fifteen years, Oh Dae-Su is released, only to find that he must find his captor in five days.",
+    "year": 2003,
+    "duration": 120,
+    "rating": 4.7,
+    "director": "Park Chan-wook",
+    "cast": [
+      "Choi Min-sik",
+      "Yoo Ji-tae",
+      "Kang Hye-jeong",
+      "Kim Byeong-Ok"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=2Hjjq8VeKpM",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Action",
+      "Drama",
+      "Mystery"
+    ],
+    "category": "Action"
+  },
+  {
+    "id": "movie-original-049",
+    "title": "City of God",
+    "description": "In the slums of Rio, two kids' paths diverge as one struggles to become a photographer and the other a kingpin.",
+    "year": 2002,
+    "duration": 130,
+    "rating": 4.8,
+    "director": "Fernando Meirelles, K\u00e1tia Lund",
+    "cast": [
+      "Alexandre Rodrigues",
+      "Leandro Firmino",
+      "Phellipe Haagensen",
+      "Douglas Silva"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=dcUOO4Itgmw",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Crime",
+      "Drama"
+    ],
+    "category": "Drama"
+  },
+  {
+    "id": "movie-original-050",
+    "title": "Spirited Away",
+    "description": "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits.",
+    "year": 2001,
+    "duration": 125,
+    "rating": 4.8,
+    "director": "Hayao Miyazaki",
+    "cast": [
+      "Rumi Hiiragi",
+      "Miyu Irino",
+      "Mari Natsuki",
+      "Takeshi Naito"
+    ],
+    "trailer_url": "https://www.youtube.com/watch?v=ByXuk9QqQkk",
+    "image_path": "gallery/available_soon.png",
+    "genres": [
+      "Animation",
+      "Adventure",
+      "Family"
+    ],
+    "category": "Comedy"
+  }
+]

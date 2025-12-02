@@ -1,0 +1,138 @@
+[
+  {
+    "title": "Build e-commerce website with React and Node.js",
+    "status": "In progress",
+    "start": "Nov 25",
+    "activity": "last active today on Time logged this week: 42:00 hrs ($3,150)",
+    "time": "42:00 hrs ($3,150)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Develop mobile app for fitness tracking",
+    "status": "Pending",
+    "start": "Nov 28",
+    "activity": "last active 2 days ago on Initial project setup",
+    "time": "0:00 hrs ($0)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Create data visualization dashboard",
+    "status": "Completed",
+    "start": "Oct 15",
+    "activity": "last active 3 weeks ago on Deployed to production",
+    "time": "85:00 hrs ($6,800)",
+    "timestr": "Total time logged:",
+    "active": false
+  },
+  {
+    "title": "Build authentication system with JWT",
+    "status": "Completed",
+    "start": "Nov 1",
+    "activity": "last active 2 weeks ago on Deployed to production",
+    "time": "38:00 hrs ($2,660)",
+    "timestr": "Total time logged:",
+    "active": false
+  },
+  {
+    "title": "Design and implement REST API",
+    "status": "In progress",
+    "start": "Nov 20",
+    "activity": "last active yesterday on Time logged this week: 56:00 hrs ($3,920)",
+    "time": "56:00 hrs ($3,920)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Set up CI/CD pipeline with Docker",
+    "status": "In progress",
+    "start": "Nov 22",
+    "activity": "last active today on Time logged this week: 28:00 hrs ($1,820)",
+    "time": "28:00 hrs ($1,820)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Build real-time chat application",
+    "status": "Pending",
+    "start": "Dec 1",
+    "activity": "last active 3 days ago on Project planning",
+    "time": "0:00 hrs ($0)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Create automated testing suite",
+    "status": "In review",
+    "start": "Nov 18",
+    "activity": "last active 5 days ago on Final test review",
+    "time": "72:00 hrs ($3,600)",
+    "timestr": "Total time logged:",
+    "active": false
+  },
+  {
+    "title": "Develop payment processing integration",
+    "status": "Completed",
+    "start": "Oct 28",
+    "activity": "last active 4 weeks ago on Deployed to production",
+    "time": "64:00 hrs ($4,480)",
+    "timestr": "Total time logged:",
+    "active": false
+  },
+  {
+    "title": "Build admin dashboard with analytics",
+    "status": "In progress",
+    "start": "Nov 15",
+    "activity": "last active today on Time logged this week: 45:00 hrs ($3,375)",
+    "time": "45:00 hrs ($3,375)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Design responsive website layout",
+    "status": "Pending",
+    "start": "Nov 30",
+    "activity": "last active 1 day ago on Initial mockup design",
+    "time": "0:00 hrs ($0)",
+    "timestr": "Time logged this week:",
+    "active": false
+  },
+  {
+    "title": "Implement user authentication flow",
+    "status": "Completed",
+    "start": "Nov 5",
+    "activity": "last active 3 weeks ago on Deployed to production",
+    "time": "52:00 hrs ($3,640)",
+    "timestr": "Total time logged:",
+    "active": false
+  },
+  {
+    "title": "Build machine learning model for recommendations",
+    "status": "In progress",
+    "start": "Nov 12",
+    "activity": "last active yesterday on Time logged this week: 38:00 hrs ($3,040)",
+    "time": "38:00 hrs ($3,040)",
+    "timestr": "Time logged this week:",
+    "active": true
+  },
+  {
+    "title": "Create API documentation and testing",
+    "status": "In review",
+    "start": "Nov 10",
+    "activity": "last active 4 days ago on Documentation review",
+    "time": "48:00 hrs ($2,160)",
+    "timestr": "Total time logged:",
+    "active": false
+  },
+  {
+    "title": "Develop cloud infrastructure setup",
+    "status": "Completed",
+    "start": "Oct 20",
+    "activity": "last active 5 weeks ago on Infrastructure deployed",
+    "time": "96:00 hrs ($6,720)",
+    "timestr": "Total time logged:",
+    "active": false
+  }
+]
+

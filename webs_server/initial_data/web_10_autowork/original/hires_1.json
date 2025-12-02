@@ -1,0 +1,153 @@
+[
+  {
+    "name": "Sarah Chen",
+    "country": "United States",
+    "rate": "$75.00/hr",
+    "rating": 4.9,
+    "jobs": 342,
+    "role": "Senior Full Stack Developer",
+    "avatar": "/media/avatars/person1.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Michael Rodriguez",
+    "country": "Spain",
+    "rate": "$65.00/hr",
+    "rating": 4.8,
+    "jobs": 287,
+    "role": "DevOps Engineer",
+    "avatar": "/media/avatars/person2.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Emily Patel",
+    "country": "India",
+    "rate": "$70.00/hr",
+    "rating": 4.7,
+    "jobs": 198,
+    "role": "Product Manager",
+    "avatar": "/media/avatars/person3.jpg",
+    "rehire": true
+  },
+  {
+    "name": "David Kim",
+    "country": "South Korea",
+    "rate": "$80.00/hr",
+    "rating": 4.9,
+    "jobs": 156,
+    "role": "Data Scientist",
+    "avatar": "/media/avatars/person4.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Lisa Anderson",
+    "country": "United Kingdom",
+    "rate": "$60.00/hr",
+    "rating": 4.6,
+    "jobs": 234,
+    "role": "UX Designer",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "rehire": true
+  },
+  {
+    "name": "James Wilson",
+    "country": "Australia",
+    "rate": "$72.00/hr",
+    "rating": 4.8,
+    "jobs": 289,
+    "role": "Backend Engineer",
+    "avatar": "/media/avatars/person1.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Maria Garcia",
+    "country": "Mexico",
+    "rate": "$55.00/hr",
+    "rating": 4.7,
+    "jobs": 312,
+    "role": "Frontend Developer",
+    "avatar": "/media/avatars/person2.jpg",
+    "rehire": false
+  },
+  {
+    "name": "Robert Lee",
+    "country": "Canada",
+    "rate": "$68.00/hr",
+    "rating": 4.8,
+    "jobs": 201,
+    "role": "Mobile Developer",
+    "avatar": "/media/avatars/person3.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Jennifer Brown",
+    "country": "United States",
+    "rate": "$50.00/hr",
+    "rating": 4.6,
+    "jobs": 278,
+    "role": "QA Engineer",
+    "avatar": "/media/avatars/person4.jpg",
+    "rehire": true
+  },
+  {
+    "name": "William Taylor",
+    "country": "Ireland",
+    "rate": "$85.00/hr",
+    "rating": 4.9,
+    "jobs": 145,
+    "role": "Security Engineer",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "rehire": false
+  },
+  {
+    "name": "Amanda White",
+    "country": "New Zealand",
+    "rate": "$58.00/hr",
+    "rating": 4.7,
+    "jobs": 267,
+    "role": "UI Designer",
+    "avatar": "/media/avatars/person1.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Chris Martinez",
+    "country": "Brazil",
+    "rate": "$62.00/hr",
+    "rating": 4.6,
+    "jobs": 298,
+    "role": "Full Stack Developer",
+    "avatar": "/media/avatars/person2.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Nicole Thompson",
+    "country": "United States",
+    "rate": "$65.00/hr",
+    "rating": 4.7,
+    "jobs": 178,
+    "role": "UX Researcher",
+    "avatar": "/media/avatars/person3.jpg",
+    "rehire": false
+  },
+  {
+    "name": "Daniel Clark",
+    "country": "United Kingdom",
+    "rate": "$45.00/hr",
+    "rating": 4.8,
+    "jobs": 223,
+    "role": "Technical Writer",
+    "avatar": "/media/avatars/person4.jpg",
+    "rehire": true
+  },
+  {
+    "name": "Sophia Davis",
+    "country": "Germany",
+    "rate": "$70.00/hr",
+    "rating": 4.8,
+    "jobs": 192,
+    "role": "DevOps Engineer",
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "rehire": true
+  }
+]
+

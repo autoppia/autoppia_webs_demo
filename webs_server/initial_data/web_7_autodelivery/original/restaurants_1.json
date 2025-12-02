@@ -1,0 +1,478 @@
+[
+  {
+    "id": "1",
+    "name": "Bella Vista",
+    "description": "Authentic Italian cuisine with fresh ingredients and traditional recipes.",
+    "image": "/images/restaurant1.jpg",
+    "cuisine": "Italian",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "1-1",
+        "name": "Margherita Pizza",
+        "description": "Classic pizza with fresh mozzarella, basil, and tomato sauce.",
+        "price": 14.99,
+        "image": "/images/restaurant1.jpg",
+        "sizes": [
+          {"name": "Small", "cal": 450, "priceMod": 0},
+          {"name": "Medium", "cal": 650, "priceMod": 3.5},
+          {"name": "Large", "cal": 900, "priceMod": 7.0}
+        ]
+      },
+      {
+        "id": "1-2",
+        "name": "Spaghetti Carbonara",
+        "description": "Creamy pasta with pancetta, eggs, and parmesan cheese.",
+        "price": 16.50,
+        "image": "/images/restaurant1.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 520, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Maria G.", "rating": 5, "comment": "Excellent food and great service!", "date": "2025-12-01", "avatar": ""}
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Le Jardin",
+    "description": "Fine French dining experience in an elegant atmosphere.",
+    "image": "/images/restaurant2.jpg",
+    "cuisine": "French",
+    "rating": 4.9,
+    "menu": [
+      {
+        "id": "2-1",
+        "name": "Coq au Vin",
+        "description": "Traditional French dish with chicken braised in wine.",
+        "price": 24.99,
+        "image": "/images/restaurant2.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 580, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Pierre D.", "rating": 5, "comment": "Authentic French cuisine!", "date": "2025-12-02", "avatar": ""}
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Sakura Sushi",
+    "description": "Fresh sushi and Japanese dishes made with premium ingredients.",
+    "image": "/images/restaurant3.jpg",
+    "cuisine": "Japanese",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "3-1",
+        "name": "Salmon Sashimi",
+        "description": "Fresh salmon sashimi served with soy sauce and wasabi.",
+        "price": 18.50,
+        "image": "/images/restaurant3.jpg",
+        "sizes": [
+          {"name": "6 pieces", "cal": 180, "priceMod": 0},
+          {"name": "12 pieces", "cal": 360, "priceMod": 8.0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Yuki T.", "rating": 5, "comment": "Best sushi in town!", "date": "2025-12-03", "avatar": ""}
+    ]
+  },
+  {
+    "id": "4",
+    "name": "El Mariachi",
+    "description": "Vibrant Mexican cuisine with authentic flavors and spices.",
+    "image": "/images/restaurant4.jpg",
+    "cuisine": "Mexican",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "4-1",
+        "name": "Tacos al Pastor",
+        "description": "Traditional tacos with marinated pork, pineapple, and cilantro.",
+        "price": 12.99,
+        "image": "/images/restaurant4.jpg",
+        "sizes": [
+          {"name": "3 tacos", "cal": 420, "priceMod": 0},
+          {"name": "5 tacos", "cal": 700, "priceMod": 8.0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Carlos M.", "rating": 4, "comment": "Great Mexican food!", "date": "2025-12-04", "avatar": ""}
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Thai Garden",
+    "description": "Authentic Thai dishes with bold flavors and fresh herbs.",
+    "image": "/images/restaurant5.jpg",
+    "cuisine": "Thai",
+    "rating": 4.5,
+    "menu": [
+      {
+        "id": "5-1",
+        "name": "Pad Thai",
+        "description": "Stir-fried rice noodles with shrimp, eggs, and tamarind sauce.",
+        "price": 15.99,
+        "image": "/images/restaurant5.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 480, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Somsak K.", "rating": 5, "comment": "Authentic Thai flavors!", "date": "2025-12-05", "avatar": ""}
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Taj Mahal",
+    "description": "Traditional Indian cuisine with aromatic spices and rich curries.",
+    "image": "/images/restaurant6.jpg",
+    "cuisine": "Indian",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "6-1",
+        "name": "Butter Chicken",
+        "description": "Creamy tomato-based curry with tender chicken pieces.",
+        "price": 17.99,
+        "image": "/images/restaurant6.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 550, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Raj K.", "rating": 5, "comment": "Delicious Indian food!", "date": "2025-12-06", "avatar": ""}
+    ]
+  },
+  {
+    "id": "7",
+    "name": "Golden Dragon",
+    "description": "Classic Chinese dishes prepared with traditional techniques.",
+    "image": "/images/restaurant7.jpg",
+    "cuisine": "Chinese",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "7-1",
+        "name": "Kung Pao Chicken",
+        "description": "Spicy stir-fried chicken with peanuts and vegetables.",
+        "price": 16.99,
+        "image": "/images/restaurant7.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 520, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Wei L.", "rating": 4, "comment": "Good Chinese food!", "date": "2025-12-07", "avatar": ""}
+    ]
+  },
+  {
+    "id": "8",
+    "name": "Athena's Table",
+    "description": "Greek Mediterranean cuisine with fresh ingredients and traditional recipes.",
+    "image": "/images/restaurant8.jpg",
+    "cuisine": "Greek",
+    "rating": 4.5,
+    "menu": [
+      {
+        "id": "8-1",
+        "name": "Gyro Plate",
+        "description": "Seasoned meat with pita, tzatziki, and fresh vegetables.",
+        "price": 14.99,
+        "image": "/images/restaurant8.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 580, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Dimitris P.", "rating": 5, "comment": "Authentic Greek food!", "date": "2025-12-08", "avatar": ""}
+    ]
+  },
+  {
+    "id": "9",
+    "name": "La Paella",
+    "description": "Spanish tapas and paella made with authentic ingredients.",
+    "image": "/images/restaurant9.jpg",
+    "cuisine": "Spanish",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "9-1",
+        "name": "Seafood Paella",
+        "description": "Traditional Spanish rice dish with mixed seafood and saffron.",
+        "price": 28.99,
+        "image": "/images/restaurant9.jpg",
+        "sizes": [
+          {"name": "For 2", "cal": 650, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Sofia R.", "rating": 5, "comment": "Amazing paella!", "date": "2025-12-09", "avatar": ""}
+    ]
+  },
+  {
+    "id": "10",
+    "name": "Seoul Kitchen",
+    "description": "Korean BBQ and traditional dishes with bold flavors.",
+    "image": "/images/restaurant10.jpg",
+    "cuisine": "Korean",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "10-1",
+        "name": "Bulgogi Bowl",
+        "description": "Marinated beef with rice and vegetables.",
+        "price": 16.99,
+        "image": "/images/restaurant10.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 620, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Min J.", "rating": 4, "comment": "Great Korean food!", "date": "2025-12-10", "avatar": ""}
+    ]
+  },
+  {
+    "id": "11",
+    "name": "Istanbul Bistro",
+    "description": "Turkish cuisine with kebabs, mezes, and traditional dishes.",
+    "image": "/images/restaurant11.jpg",
+    "cuisine": "Turkish",
+    "rating": 4.4,
+    "menu": [
+      {
+        "id": "11-1",
+        "name": "Chicken Kebab",
+        "description": "Grilled chicken skewers with rice and salad.",
+        "price": 15.99,
+        "image": "/images/restaurant11.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 580, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Mehmet A.", "rating": 4, "comment": "Good Turkish food!", "date": "2025-12-11", "avatar": ""}
+    ]
+  },
+  {
+    "id": "12",
+    "name": "The Steakhouse",
+    "description": "Premium steaks and American classics in a warm atmosphere.",
+    "image": "/images/restaurant12.jpg",
+    "cuisine": "American",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "12-1",
+        "name": "Ribeye Steak",
+        "description": "Premium ribeye steak cooked to perfection with sides.",
+        "price": 32.99,
+        "image": "/images/restaurant12.jpg",
+        "sizes": [
+          {"name": "8 oz", "cal": 720, "priceMod": 0},
+          {"name": "12 oz", "cal": 1080, "priceMod": 12.0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "John D.", "rating": 5, "comment": "Best steak in town!", "date": "2025-12-12", "avatar": ""}
+    ]
+  },
+  {
+    "id": "13",
+    "name": "Pho Saigon",
+    "description": "Authentic Vietnamese pho and traditional dishes.",
+    "image": "/images/restaurant13.jpg",
+    "cuisine": "Vietnamese",
+    "rating": 4.5,
+    "menu": [
+      {
+        "id": "13-1",
+        "name": "Beef Pho",
+        "description": "Traditional Vietnamese noodle soup with beef and herbs.",
+        "price": 13.99,
+        "image": "/images/restaurant13.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 450, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Linh N.", "rating": 5, "comment": "Authentic pho!", "date": "2025-12-13", "avatar": ""}
+    ]
+  },
+  {
+    "id": "14",
+    "name": "Trattoria Nonna",
+    "description": "Family-style Italian restaurant with homemade pasta and sauces.",
+    "image": "/images/restaurant14.jpg",
+    "cuisine": "Italian",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "14-1",
+        "name": "Lasagna",
+        "description": "Homemade lasagna with meat sauce and cheese.",
+        "price": 18.99,
+        "image": "/images/restaurant14.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 680, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Giuseppe M.", "rating": 5, "comment": "Like Nonna's cooking!", "date": "2025-12-14", "avatar": ""}
+    ]
+  },
+  {
+    "id": "15",
+    "name": "Carnaval Grill",
+    "description": "Brazilian churrasco and traditional dishes with bold flavors.",
+    "image": "/images/restaurant15.jpg",
+    "cuisine": "Brazilian",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "15-1",
+        "name": "Picanha",
+        "description": "Premium Brazilian cut of beef grilled to perfection.",
+        "price": 26.99,
+        "image": "/images/restaurant15.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 750, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Rodrigo S.", "rating": 4, "comment": "Great Brazilian food!", "date": "2025-12-15", "avatar": ""}
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Beirut Express",
+    "description": "Lebanese and Mediterranean cuisine with fresh ingredients.",
+    "image": "/images/restaurant16.jpg",
+    "cuisine": "Mediterranean",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "16-1",
+        "name": "Shawarma Plate",
+        "description": "Marinated meat with hummus, tabbouleh, and pita.",
+        "price": 15.99,
+        "image": "/images/restaurant16.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 620, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Layla H.", "rating": 5, "comment": "Authentic Lebanese food!", "date": "2025-12-16", "avatar": ""}
+    ]
+  },
+  {
+    "id": "17",
+    "name": "The Queen's Pub",
+    "description": "British pub classics with fish and chips and traditional fare.",
+    "image": "/images/restaurant17.jpg",
+    "cuisine": "British",
+    "rating": 4.4,
+    "menu": [
+      {
+        "id": "17-1",
+        "name": "Fish and Chips",
+        "description": "Beer-battered fish with crispy chips and mushy peas.",
+        "price": 16.99,
+        "image": "/images/restaurant17.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 890, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "James W.", "rating": 4, "comment": "Traditional British pub food!", "date": "2025-12-17", "avatar": ""}
+    ]
+  },
+  {
+    "id": "18",
+    "name": "Bavarian Haus",
+    "description": "German cuisine with schnitzels, sausages, and hearty dishes.",
+    "image": "/images/restaurant18.jpg",
+    "cuisine": "German",
+    "rating": 4.5,
+    "menu": [
+      {
+        "id": "18-1",
+        "name": "Wiener Schnitzel",
+        "description": "Breaded veal cutlet with lemon and potatoes.",
+        "price": 19.99,
+        "image": "/images/restaurant18.jpg",
+        "sizes": [
+          {"name": "Regular", "cal": 720, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Hans M.", "rating": 4, "comment": "Good German food!", "date": "2025-12-18", "avatar": ""}
+    ]
+  },
+  {
+    "id": "19",
+    "name": "El Gaucho",
+    "description": "Argentine steakhouse with premium cuts and traditional sides.",
+    "image": "/images/restaurant19.jpg",
+    "cuisine": "Argentine",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "19-1",
+        "name": "Argentine Ribeye",
+        "description": "Premium grass-fed ribeye with chimichurri sauce.",
+        "price": 29.99,
+        "image": "/images/restaurant19.jpg",
+        "sizes": [
+          {"name": "12 oz", "cal": 950, "priceMod": 0},
+          {"name": "16 oz", "cal": 1260, "priceMod": 8.0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Diego A.", "rating": 5, "comment": "Best Argentine steak!", "date": "2025-12-19", "avatar": ""}
+    ]
+  },
+  {
+    "id": "20",
+    "name": "Pacific Sushi Bar",
+    "description": "Modern sushi bar with fresh seafood and creative rolls.",
+    "image": "/images/restaurant1.jpg",
+    "cuisine": "Japanese",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "20-1",
+        "name": "Rainbow Roll",
+        "description": "Assorted fish with avocado and cucumber roll.",
+        "price": 17.99,
+        "image": "/images/restaurant1.jpg",
+        "sizes": [
+          {"name": "8 pieces", "cal": 320, "priceMod": 0}
+        ]
+      }
+    ],
+    "reviews": [
+      {"author": "Akira T.", "rating": 4, "comment": "Fresh and delicious!", "date": "2025-12-20", "avatar": ""}
+    ]
+  }
+]

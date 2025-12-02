@@ -159,10 +159,18 @@ function ClientsDirectoryContent() {
               className="group flex flex-col md:grid md:grid-cols-7 items-center px-5 py-3 md:px-10 md:py-4 gap-3 md:gap-0 hover:bg-accent-forest/5 transition cursor-pointer"
             >
               <div className="col-span-3 flex items-center gap-4 min-w-0">
-                <div className="w-12 h-12 bg-accent-forest/10 flex items-center justify-center rounded-full text-accent-forest font-bold text-xl">
-                  <User className="w-5 h-5 md:hidden text-accent-forest" />
-                  <span className="hidden md:block">{getInitials(c.name)}</span>
-                </div>
+                {c.avatar ? (
+                  <img
+                    src={c.avatar}
+                    alt={`${c.name} avatar`}
+                    className="w-12 h-12 rounded-full object-cover border border-zinc-200"
+                  />
+                ) : (
+                  <div className="w-12 h-12 bg-accent-forest/10 flex items-center justify-center rounded-full text-accent-forest font-bold text-xl">
+                    <User className="w-5 h-5 md:hidden text-accent-forest" />
+                    <span className="hidden md:block">{getInitials(c.name)}</span>
+                  </div>
+                )}
                 <div className="flex flex-col min-w-0">
                   <span
                     id={`client-name-${c.id}`}

@@ -1,0 +1,762 @@
+[
+  {
+    "id": 1,
+    "image": "/images/hotel1.jpeg",
+    "title": "Pineview Chalet",
+    "location": "Lake Tahoe, USA",
+    "rating": 4.8,
+    "reviews": 210,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 230,
+    "host": {
+      "name": "Emily",
+      "since": 2,
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udcbb",
+        "title": "Dedicated workspace",
+        "desc": "Desk and fast wifi for remote work."
+      },
+      {
+        "icon": "\ud83d\udccd",
+        "title": "Great location",
+        "desc": "Walkable to key spots and transit."
+      },
+      {
+        "icon": "\ud83d\udd0d",
+        "title": "Easy check-in",
+        "desc": "Smart lock with contactless entry."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "image": "/images/hotel2.jpeg",
+    "title": "Seaside Retreat",
+    "location": "Malibu, USA",
+    "rating": 4.7,
+    "reviews": 185,
+    "guests": 6,
+    "maxGuests": 6,
+    "bedrooms": 3,
+    "beds": 4,
+    "baths": 3,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 410,
+    "host": {
+      "name": "Noah",
+      "since": 3,
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\ude97",
+        "title": "Free parking",
+        "desc": "Private spot next to the property."
+      },
+      {
+        "icon": "\ud83c\udf73",
+        "title": "Equipped kitchen",
+        "desc": "Full kitchen with coffee and basics."
+      },
+      {
+        "icon": "\ud83e\uddfa",
+        "title": "Washer & dryer",
+        "desc": "In-unit laundry for longer stays."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "image": "/images/hotel3.png",
+    "title": "Hudson Loft",
+    "location": "New York, USA",
+    "rating": 4.6,
+    "reviews": 320,
+    "guests": 2,
+    "maxGuests": 2,
+    "bedrooms": 1,
+    "beds": 1,
+    "baths": 1,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 260,
+    "host": {
+      "name": "Sofia",
+      "since": 4,
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83c\udfca",
+        "title": "Pool access",
+        "desc": "Outdoor pool with loungers."
+      },
+      {
+        "icon": "\u2744\ufe0f",
+        "title": "Climate control",
+        "desc": "Central AC and heating."
+      },
+      {
+        "icon": "\ud83c\udf05",
+        "title": "Balcony views",
+        "desc": "Terrace with seating and sunset views."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "image": "/images/hotel4.png",
+    "title": "Alpine Escape",
+    "location": "Aspen, USA",
+    "rating": 4.9,
+    "reviews": 240,
+    "guests": 5,
+    "maxGuests": 5,
+    "bedrooms": 3,
+    "beds": 4,
+    "baths": 3,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 380,
+    "host": {
+      "name": "Liam",
+      "since": 5,
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83e\udd5e",
+        "title": "Breakfast included",
+        "desc": "Daily continental breakfast."
+      },
+      {
+        "icon": "\ud83d\udc3e",
+        "title": "Pet friendly",
+        "desc": "Well-behaved pets welcome."
+      },
+      {
+        "icon": "\ud83d\udcaa",
+        "title": "Gym access",
+        "desc": "On-site fitness room."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "image": "/images/hotel5.png",
+    "title": "Desert Oasis",
+    "location": "Sedona, USA",
+    "rating": 4.5,
+    "reviews": 160,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 240,
+    "host": {
+      "name": "Amelia",
+      "since": 6,
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udd25",
+        "title": "Fireplace",
+        "desc": "Cozy indoor fireplace."
+      },
+      {
+        "icon": "\ud83c\udfd4\ufe0f",
+        "title": "Scenic views",
+        "desc": "Panoramic mountain or water views."
+      },
+      {
+        "icon": "\ud83d\udec1",
+        "title": "Hot tub",
+        "desc": "Private hot tub for guests."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "image": "/images/hotel6.png",
+    "title": "Canal House",
+    "location": "Amsterdam, Netherlands",
+    "rating": 4.7,
+    "reviews": 195,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 1,
+    "beds": 2,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 290,
+    "host": {
+      "name": "Oliver",
+      "since": 2,
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udcbb",
+        "title": "Dedicated workspace",
+        "desc": "Desk and fast wifi for remote work."
+      },
+      {
+        "icon": "\ud83d\udccd",
+        "title": "Great location",
+        "desc": "Walkable to key spots and transit."
+      },
+      {
+        "icon": "\ud83d\udd0d",
+        "title": "Easy check-in",
+        "desc": "Smart lock with contactless entry."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "image": "/images/hotel7.jpg",
+    "title": "Summit Lodge",
+    "location": "Banff, Canada",
+    "rating": 4.8,
+    "reviews": 175,
+    "guests": 6,
+    "maxGuests": 6,
+    "bedrooms": 3,
+    "beds": 4,
+    "baths": 3,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 320,
+    "host": {
+      "name": "Ava",
+      "since": 3,
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\ude97",
+        "title": "Free parking",
+        "desc": "Private spot next to the property."
+      },
+      {
+        "icon": "\ud83c\udf73",
+        "title": "Equipped kitchen",
+        "desc": "Full kitchen with coffee and basics."
+      },
+      {
+        "icon": "\ud83e\uddfa",
+        "title": "Washer & dryer",
+        "desc": "In-unit laundry for longer stays."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "image": "/images/hotel8.jpg",
+    "title": "Harbour Suites",
+    "location": "Sydney, Australia",
+    "rating": 4.6,
+    "reviews": 260,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 310,
+    "host": {
+      "name": "Lucas",
+      "since": 4,
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83c\udfca",
+        "title": "Pool access",
+        "desc": "Outdoor pool with loungers."
+      },
+      {
+        "icon": "\u2744\ufe0f",
+        "title": "Climate control",
+        "desc": "Central AC and heating."
+      },
+      {
+        "icon": "\ud83c\udf05",
+        "title": "Balcony views",
+        "desc": "Terrace with seating and sunset views."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "image": "/images/hotel9.jpg",
+    "title": "Old Town Residence",
+    "location": "Prague, Czech Republic",
+    "rating": 4.7,
+    "reviews": 180,
+    "guests": 3,
+    "maxGuests": 3,
+    "bedrooms": 1,
+    "beds": 2,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 250,
+    "host": {
+      "name": "Mia",
+      "since": 5,
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83e\udd5e",
+        "title": "Breakfast included",
+        "desc": "Daily continental breakfast."
+      },
+      {
+        "icon": "\ud83d\udc3e",
+        "title": "Pet friendly",
+        "desc": "Well-behaved pets welcome."
+      },
+      {
+        "icon": "\ud83d\udcaa",
+        "title": "Gym access",
+        "desc": "On-site fitness room."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "image": "/images/hotel10.jpg",
+    "title": "Riverfront Hotel",
+    "location": "Portland, USA",
+    "rating": 4.5,
+    "reviews": 140,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 220,
+    "host": {
+      "name": "Ethan",
+      "since": 6,
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udd25",
+        "title": "Fireplace",
+        "desc": "Cozy indoor fireplace."
+      },
+      {
+        "icon": "\ud83c\udfd4\ufe0f",
+        "title": "Scenic views",
+        "desc": "Panoramic mountain or water views."
+      },
+      {
+        "icon": "\ud83d\udec1",
+        "title": "Hot tub",
+        "desc": "Private hot tub for guests."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "image": "/images/hotel11.png",
+    "title": "Tropical Bungalow",
+    "location": "Bali, Indonesia",
+    "rating": 4.8,
+    "reviews": 220,
+    "guests": 2,
+    "maxGuests": 2,
+    "bedrooms": 1,
+    "beds": 1,
+    "baths": 1,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 210,
+    "host": {
+      "name": "Emily",
+      "since": 2,
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udcbb",
+        "title": "Dedicated workspace",
+        "desc": "Desk and fast wifi for remote work."
+      },
+      {
+        "icon": "\ud83d\udccd",
+        "title": "Great location",
+        "desc": "Walkable to key spots and transit."
+      },
+      {
+        "icon": "\ud83d\udd0d",
+        "title": "Easy check-in",
+        "desc": "Smart lock with contactless entry."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "image": "/images/hotel12.png",
+    "title": "Nordic Cabin",
+    "location": "Reykjavik, Iceland",
+    "rating": 4.6,
+    "reviews": 170,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 260,
+    "host": {
+      "name": "Noah",
+      "since": 3,
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\ude97",
+        "title": "Free parking",
+        "desc": "Private spot next to the property."
+      },
+      {
+        "icon": "\ud83c\udf73",
+        "title": "Equipped kitchen",
+        "desc": "Full kitchen with coffee and basics."
+      },
+      {
+        "icon": "\ud83e\uddfa",
+        "title": "Washer & dryer",
+        "desc": "In-unit laundry for longer stays."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "image": "/images/hotel13.jpg",
+    "title": "Vineyard Villa",
+    "location": "Tuscany, Italy",
+    "rating": 4.9,
+    "reviews": 205,
+    "guests": 6,
+    "maxGuests": 6,
+    "bedrooms": 3,
+    "beds": 4,
+    "baths": 3,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 370,
+    "host": {
+      "name": "Sofia",
+      "since": 4,
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83c\udfca",
+        "title": "Pool access",
+        "desc": "Outdoor pool with loungers."
+      },
+      {
+        "icon": "\u2744\ufe0f",
+        "title": "Climate control",
+        "desc": "Central AC and heating."
+      },
+      {
+        "icon": "\ud83c\udf05",
+        "title": "Balcony views",
+        "desc": "Terrace with seating and sunset views."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "image": "/images/hotel14.png",
+    "title": "Beachfront Haven",
+    "location": "Algarve, Portugal",
+    "rating": 4.7,
+    "reviews": 190,
+    "guests": 5,
+    "maxGuests": 5,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 330,
+    "host": {
+      "name": "Liam",
+      "since": 5,
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83e\udd5e",
+        "title": "Breakfast included",
+        "desc": "Daily continental breakfast."
+      },
+      {
+        "icon": "\ud83d\udc3e",
+        "title": "Pet friendly",
+        "desc": "Well-behaved pets welcome."
+      },
+      {
+        "icon": "\ud83d\udcaa",
+        "title": "Gym access",
+        "desc": "On-site fitness room."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "image": "/images/hotel15.jpg",
+    "title": "City Lights Hotel",
+    "location": "Tokyo, Japan",
+    "rating": 4.6,
+    "reviews": 230,
+    "guests": 3,
+    "maxGuests": 3,
+    "bedrooms": 1,
+    "beds": 2,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 280,
+    "host": {
+      "name": "Amelia",
+      "since": 6,
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udd25",
+        "title": "Fireplace",
+        "desc": "Cozy indoor fireplace."
+      },
+      {
+        "icon": "\ud83c\udfd4\ufe0f",
+        "title": "Scenic views",
+        "desc": "Panoramic mountain or water views."
+      },
+      {
+        "icon": "\ud83d\udec1",
+        "title": "Hot tub",
+        "desc": "Private hot tub for guests."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "image": "/images/hotel16.png",
+    "title": "Garden Riad",
+    "location": "Marrakech, Morocco",
+    "rating": 4.5,
+    "reviews": 155,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 240,
+    "host": {
+      "name": "Oliver",
+      "since": 2,
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udcbb",
+        "title": "Dedicated workspace",
+        "desc": "Desk and fast wifi for remote work."
+      },
+      {
+        "icon": "\ud83d\udccd",
+        "title": "Great location",
+        "desc": "Walkable to key spots and transit."
+      },
+      {
+        "icon": "\ud83d\udd0d",
+        "title": "Easy check-in",
+        "desc": "Smart lock with contactless entry."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "image": "/images/hotel17.png",
+    "title": "Highlands Cottage",
+    "location": "Edinburgh, UK",
+    "rating": 4.7,
+    "reviews": 165,
+    "guests": 5,
+    "maxGuests": 5,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 260,
+    "host": {
+      "name": "Ava",
+      "since": 3,
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\ude97",
+        "title": "Free parking",
+        "desc": "Private spot next to the property."
+      },
+      {
+        "icon": "\ud83c\udf73",
+        "title": "Equipped kitchen",
+        "desc": "Full kitchen with coffee and basics."
+      },
+      {
+        "icon": "\ud83e\uddfa",
+        "title": "Washer & dryer",
+        "desc": "In-unit laundry for longer stays."
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "image": "/images/hotel18.png",
+    "title": "Coastal Breeze Inn",
+    "location": "San Sebasti\u00e1n, Spain",
+    "rating": 4.6,
+    "reviews": 185,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 270,
+    "host": {
+      "name": "Lucas",
+      "since": 4,
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83c\udfca",
+        "title": "Pool access",
+        "desc": "Outdoor pool with loungers."
+      },
+      {
+        "icon": "\u2744\ufe0f",
+        "title": "Climate control",
+        "desc": "Central AC and heating."
+      },
+      {
+        "icon": "\ud83c\udf05",
+        "title": "Balcony views",
+        "desc": "Terrace with seating and sunset views."
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "image": "/images/hotel19.jpg",
+    "title": "Lakeview Lodge",
+    "location": "Queenstown, New Zealand",
+    "rating": 4.8,
+    "reviews": 200,
+    "guests": 6,
+    "maxGuests": 6,
+    "bedrooms": 3,
+    "beds": 4,
+    "baths": 3,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 360,
+    "host": {
+      "name": "Mia",
+      "since": 5,
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83e\udd5e",
+        "title": "Breakfast included",
+        "desc": "Daily continental breakfast."
+      },
+      {
+        "icon": "\ud83d\udc3e",
+        "title": "Pet friendly",
+        "desc": "Well-behaved pets welcome."
+      },
+      {
+        "icon": "\ud83d\udcaa",
+        "title": "Gym access",
+        "desc": "On-site fitness room."
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "image": "/images/hotel20.jpg",
+    "title": "Historic Boutique",
+    "location": "Charleston, USA",
+    "rating": 4.7,
+    "reviews": 175,
+    "guests": 4,
+    "maxGuests": 4,
+    "bedrooms": 2,
+    "beds": 3,
+    "baths": 2,
+    "datesFrom": "2025-06-01",
+    "datesTo": "2025-12-31",
+    "price": 300,
+    "host": {
+      "name": "Ethan",
+      "since": 6,
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "amenities": [
+      {
+        "icon": "\ud83d\udd25",
+        "title": "Fireplace",
+        "desc": "Cozy indoor fireplace."
+      },
+      {
+        "icon": "\ud83c\udfd4\ufe0f",
+        "title": "Scenic views",
+        "desc": "Panoramic mountain or water views."
+      },
+      {
+        "icon": "\ud83d\udec1",
+        "title": "Hot tub",
+        "desc": "Private hot tub for guests."
+      }
+    ]
+  }
+]

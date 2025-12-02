@@ -148,13 +148,22 @@ function ClientProfilePageContent() {
         id="client-profile-card"
         className="rounded-2xl bg-white shadow-card p-8 flex flex-col md:flex-row items-center md:items-start gap-7 border border-zinc-100"
       >
-        <div
-          id={`client-avatar-${client.id}`}
-          className="w-20 h-20 rounded-full bg-accent-forest/10 flex items-center justify-center text-accent-forest text-4xl font-bold"
-        >
-          <span className="hidden md:block">{getInitials(client.name)}</span>
-          <User className="w-9 h-9 md:hidden" />
-        </div>
+        {client.avatar ? (
+          <img
+            id={`client-avatar-${client.id}`}
+            src={client.avatar}
+            alt={`${client.name} avatar`}
+            className="w-20 h-20 rounded-full object-cover border border-zinc-200"
+          />
+        ) : (
+          <div
+            id={`client-avatar-${client.id}`}
+            className="w-20 h-20 rounded-full bg-accent-forest/10 flex items-center justify-center text-accent-forest text-4xl font-bold"
+          >
+            <span className="hidden md:block">{getInitials(client.name)}</span>
+            <User className="w-9 h-9 md:hidden" />
+          </div>
+        )}
         <div className="flex flex-col gap-2 flex-1 min-w-0 text-center md:text-left">
           <span
             id={`client-name-${client.id}`}

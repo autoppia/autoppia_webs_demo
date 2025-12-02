@@ -1,0 +1,453 @@
+[
+  {
+    "id": "j1",
+    "title": "Senior Frontend Developer",
+    "company": "Tech Innovations",
+    "location": "San Francisco, CA",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$140,000 - $180,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "We're looking for a Senior Frontend Developer to join our growing team. You'll be responsible for building scalable, performant web applications using React, TypeScript, and modern frontend technologies. Work with an amazing team on products that millions of users depend on.",
+    "requirements": [
+      "5+ years of experience with React, TypeScript, and modern JavaScript",
+      "Strong understanding of CSS, HTML, and responsive design",
+      "Experience with state management libraries (Redux, Zustand)",
+      "Familiarity with testing frameworks (Jest, React Testing Library)",
+      "Excellent communication and collaboration abilities"
+    ],
+    "benefits": [
+      "Competitive salary and equity package",
+      "Flexible remote work policy",
+      "Comprehensive health insurance",
+      "401(k) matching program",
+      "Professional development budget"
+    ],
+    "postedDate": "2025-12-01",
+    "applicationCount": 47,
+    "companySize": "50-100 employees",
+    "industry": "Technology",
+    "remote": true
+  },
+  {
+    "id": "j2",
+    "title": "Product Manager",
+    "company": "FinTech Solutions",
+    "location": "New York, NY",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$130,000 - $160,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "Join our product team to lead the development of innovative financial technology products. You'll work closely with engineering, design, and business teams to define product strategy and execute on the roadmap.",
+    "requirements": [
+      "4+ years of product management experience",
+      "Experience in fintech or financial services",
+      "Strong analytical and problem-solving skills",
+      "Excellent communication and stakeholder management",
+      "Technical background is a plus"
+    ],
+    "benefits": [
+      "Competitive compensation package",
+      "Health, dental, and vision insurance",
+      "Unlimited PTO",
+      "Stock options",
+      "Learning and development opportunities"
+    ],
+    "postedDate": "2025-11-30",
+    "applicationCount": 62,
+    "companySize": "100-500 employees",
+    "industry": "Financial Services",
+    "remote": false
+  },
+  {
+    "id": "j3",
+    "title": "UX Designer",
+    "company": "Creative Agency",
+    "location": "Remote",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$90,000 - $120,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We're seeking a talented UX Designer to create intuitive and delightful user experiences. You'll work on a variety of client projects, from mobile apps to web platforms, conducting user research and designing user flows.",
+    "requirements": [
+      "3+ years of UX design experience",
+      "Proficiency in Figma, Sketch, or Adobe XD",
+      "Strong portfolio demonstrating user-centered design",
+      "Experience with user research and usability testing",
+      "Excellent collaboration skills"
+    ],
+    "benefits": [
+      "Remote-first culture",
+      "Flexible working hours",
+      "Health insurance",
+      "Annual design conference budget",
+      "Latest hardware and software"
+    ],
+    "postedDate": "2025-11-29",
+    "applicationCount": 38,
+    "companySize": "10-50 employees",
+    "industry": "Design",
+    "remote": true
+  },
+  {
+    "id": "j4",
+    "title": "Data Scientist",
+    "company": "AI Research Lab",
+    "location": "Seattle, WA",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$150,000 - $200,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "Join our research team to work on cutting-edge machine learning projects. You'll develop models, analyze large datasets, and collaborate with engineers to deploy ML solutions at scale.",
+    "requirements": [
+      "5+ years of experience in data science or machine learning",
+      "Strong Python skills (NumPy, Pandas, Scikit-learn)",
+      "Experience with deep learning frameworks (TensorFlow, PyTorch)",
+      "PhD or Master's in Computer Science, Statistics, or related field",
+      "Strong publication record preferred"
+    ],
+    "benefits": [
+      "Competitive salary with equity",
+      "Research publication support",
+      "Conference attendance budget",
+      "Top-tier health insurance",
+      "Collaborative research environment"
+    ],
+    "postedDate": "2025-11-28",
+    "applicationCount": 89,
+    "companySize": "50-100 employees",
+    "industry": "Research",
+    "remote": false
+  },
+  {
+    "id": "j5",
+    "title": "DevOps Engineer",
+    "company": "Cloud Services Inc",
+    "location": "Austin, TX",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$120,000 - $150,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We're looking for a DevOps Engineer to help scale our cloud infrastructure. You'll work on CI/CD pipelines, container orchestration, and monitoring systems to ensure high availability and performance.",
+    "requirements": [
+      "4+ years of DevOps or SRE experience",
+      "Strong knowledge of AWS, GCP, or Azure",
+      "Experience with Kubernetes and Docker",
+      "Proficiency in infrastructure as code (Terraform, CloudFormation)",
+      "Strong scripting skills (Bash, Python)"
+    ],
+    "benefits": [
+      "Competitive salary",
+      "Comprehensive benefits package",
+      "Professional development budget",
+      "Flexible remote work options",
+      "Stock options"
+    ],
+    "postedDate": "2025-11-27",
+    "applicationCount": 55,
+    "companySize": "200-500 employees",
+    "industry": "Cloud Services",
+    "remote": true
+  },
+  {
+    "id": "j6",
+    "title": "Backend Engineer",
+    "company": "E-Commerce Platform",
+    "location": "San Francisco, CA",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$130,000 - $170,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "Join our backend engineering team to build scalable APIs and microservices. You'll work with Node.js, Python, or Go to develop systems that handle millions of requests daily.",
+    "requirements": [
+      "5+ years of backend development experience",
+      "Strong knowledge of Node.js, Python, or Go",
+      "Experience with microservices architecture",
+      "Database design and optimization skills",
+      "Understanding of distributed systems"
+    ],
+    "benefits": [
+      "Competitive compensation",
+      "Health and wellness benefits",
+      "401(k) matching",
+      "Flexible work schedule",
+      "Team building events"
+    ],
+    "postedDate": "2025-11-26",
+    "applicationCount": 71,
+    "companySize": "500-1000 employees",
+    "industry": "E-Commerce",
+    "remote": false
+  },
+  {
+    "id": "j7",
+    "title": "Mobile Developer (iOS/Android)",
+    "company": "Social Media App",
+    "location": "Los Angeles, CA",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$110,000 - $145,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "We're seeking a Mobile Developer to build native iOS and Android applications. You'll work on features that millions of users interact with daily, focusing on performance and user experience.",
+    "requirements": [
+      "4+ years of mobile development experience",
+      "Strong Swift/Kotlin skills",
+      "Experience with React Native is a plus",
+      "Understanding of mobile UI/UX best practices",
+      "Experience with app store deployment"
+    ],
+    "benefits": [
+      "Competitive salary",
+      "Health insurance",
+      "Unlimited PTO",
+      "Latest mobile devices",
+      "Professional development support"
+    ],
+    "postedDate": "2025-11-25",
+    "applicationCount": 43,
+    "companySize": "100-200 employees",
+    "industry": "Social Media",
+    "remote": true
+  },
+  {
+    "id": "j8",
+    "title": "Security Engineer",
+    "company": "Cybersecurity Firm",
+    "location": "Boston, MA",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$140,000 - $180,000",
+    "type": "Full-time",
+    "experience": "5+ years",
+    "description": "Join our security team to protect our systems and user data. You'll conduct security audits, implement security best practices, and respond to security incidents.",
+    "requirements": [
+      "5+ years of security engineering experience",
+      "Knowledge of penetration testing and vulnerability assessment",
+      "Experience with secure coding practices",
+      "Understanding of OWASP Top 10",
+      "Relevant certifications (CISSP, CEH) preferred"
+    ],
+    "benefits": [
+      "Competitive salary",
+      "Security training and certifications",
+      "Health insurance",
+      "401(k) matching",
+      "Remote work options"
+    ],
+    "postedDate": "2025-11-24",
+    "applicationCount": 28,
+    "companySize": "50-100 employees",
+    "industry": "Cybersecurity",
+    "remote": true
+  },
+  {
+    "id": "j9",
+    "title": "QA Engineer",
+    "company": "Software Development",
+    "location": "Denver, CO",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$85,000 - $115,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "We're looking for a QA Engineer to ensure the quality of our software products. You'll write and maintain automated tests, conduct manual testing, and work closely with developers to identify and fix bugs.",
+    "requirements": [
+      "3+ years of QA engineering experience",
+      "Experience with test automation frameworks (Selenium, Cypress)",
+      "Strong understanding of testing methodologies",
+      "Programming skills (JavaScript, Python)",
+      "Attention to detail and analytical thinking"
+    ],
+    "benefits": [
+      "Competitive salary",
+      "Health benefits",
+      "Professional development",
+      "Flexible schedule",
+      "Team-oriented culture"
+    ],
+    "postedDate": "2025-11-23",
+    "applicationCount": 52,
+    "companySize": "100-200 employees",
+    "industry": "Software",
+    "remote": false
+  },
+  {
+    "id": "j10",
+    "title": "Engineering Manager",
+    "company": "Tech Startup",
+    "location": "Remote",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$160,000 - $200,000",
+    "type": "Full-time",
+    "experience": "7+ years",
+    "description": "Lead a team of talented engineers in building innovative products. You'll manage team performance, drive technical decisions, and help engineers grow in their careers.",
+    "requirements": [
+      "7+ years of engineering experience with 3+ years in leadership",
+      "Experience managing engineering teams",
+      "Strong technical background",
+      "Excellent communication and leadership skills",
+      "Experience with agile methodologies"
+    ],
+    "benefits": [
+      "Competitive salary and equity",
+      "Remote-first culture",
+      "Health insurance",
+      "Unlimited PTO",
+      "Leadership development programs"
+    ],
+    "postedDate": "2025-11-22",
+    "applicationCount": 35,
+    "companySize": "50-100 employees",
+    "industry": "Technology",
+    "remote": true
+  },
+  {
+    "id": "j11",
+    "title": "Design Lead",
+    "company": "Product Design Studio",
+    "location": "Portland, OR",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$125,000 - $155,000",
+    "type": "Full-time",
+    "experience": "6+ years",
+    "description": "Lead our design team in creating beautiful and functional user experiences. You'll establish design processes, mentor designers, and collaborate with product and engineering teams.",
+    "requirements": [
+      "6+ years of design experience with leadership experience",
+      "Strong portfolio of product design work",
+      "Proficiency in design tools (Figma, Sketch)",
+      "Experience building design systems",
+      "Excellent communication and presentation skills"
+    ],
+    "benefits": [
+      "Competitive compensation",
+      "Design conference budget",
+      "Latest design tools and hardware",
+      "Health insurance",
+      "Creative work environment"
+    ],
+    "postedDate": "2025-11-21",
+    "applicationCount": 41,
+    "companySize": "20-50 employees",
+    "industry": "Design",
+    "remote": false
+  },
+  {
+    "id": "j12",
+    "title": "UX Researcher",
+    "company": "User Experience Agency",
+    "location": "Chicago, IL",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$95,000 - $125,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "Conduct user research to inform product design decisions. You'll plan and execute user studies, analyze findings, and present insights to product and design teams.",
+    "requirements": [
+      "4+ years of UX research experience",
+      "Strong knowledge of research methods",
+      "Experience with usability testing",
+      "Excellent analytical and communication skills",
+      "Degree in HCI, Psychology, or related field"
+    ],
+    "benefits": [
+      "Competitive salary",
+      "Research tools and equipment",
+      "Conference attendance",
+      "Health benefits",
+      "Professional development"
+    ],
+    "postedDate": "2025-11-20",
+    "applicationCount": 33,
+    "companySize": "50-100 employees",
+    "industry": "Research",
+    "remote": true
+  },
+  {
+    "id": "j13",
+    "title": "Marketing Director",
+    "company": "B2B SaaS Company",
+    "location": "Atlanta, GA",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$135,000 - $170,000",
+    "type": "Full-time",
+    "experience": "8+ years",
+    "description": "Lead our marketing team to drive brand awareness and customer acquisition. You'll develop marketing strategy, manage campaigns, and work with cross-functional teams to achieve business goals.",
+    "requirements": [
+      "8+ years of marketing experience with leadership experience",
+      "Experience in B2B SaaS marketing",
+      "Strong analytical and strategic thinking",
+      "Excellent communication and leadership skills",
+      "Experience with digital marketing channels"
+    ],
+    "benefits": [
+      "Competitive salary",
+      "Health insurance",
+      "401(k) matching",
+      "Marketing budget",
+      "Leadership development"
+    ],
+    "postedDate": "2025-11-19",
+    "applicationCount": 59,
+    "companySize": "200-500 employees",
+    "industry": "SaaS",
+    "remote": false
+  },
+  {
+    "id": "j14",
+    "title": "Technical Writer",
+    "company": "Developer Tools",
+    "location": "Remote",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$80,000 - $110,000",
+    "type": "Full-time",
+    "experience": "3+ years",
+    "description": "Create clear and comprehensive documentation for developers. You'll write API docs, tutorials, and guides that help developers use our tools effectively.",
+    "requirements": [
+      "3+ years of technical writing experience",
+      "Strong writing and editing skills",
+      "Technical background preferred",
+      "Experience with documentation tools",
+      "Ability to explain complex concepts clearly"
+    ],
+    "benefits": [
+      "Remote-first culture",
+      "Competitive salary",
+      "Health insurance",
+      "Professional development",
+      "Flexible schedule"
+    ],
+    "postedDate": "2025-11-18",
+    "applicationCount": 27,
+    "companySize": "100-200 employees",
+    "industry": "Developer Tools",
+    "remote": true
+  },
+  {
+    "id": "j15",
+    "title": "Full Stack Developer",
+    "company": "Web Agency",
+    "location": "Miami, FL",
+    "logo": "/media/avatars/default-avatar.jpg",
+    "salary": "$100,000 - $135,000",
+    "type": "Full-time",
+    "experience": "4+ years",
+    "description": "Build full-stack web applications for a variety of clients. You'll work with React, Node.js, and modern web technologies to create engaging digital experiences.",
+    "requirements": [
+      "4+ years of full-stack development experience",
+      "Strong React and Node.js skills",
+      "Database design experience",
+      "Understanding of web performance optimization",
+      "Ability to work on multiple projects"
+    ],
+    "benefits": [
+      "Competitive salary",
+      "Health insurance",
+      "Flexible work hours",
+      "Professional development",
+      "Creative work environment"
+    ],
+    "postedDate": "2025-11-17",
+    "applicationCount": 48,
+    "companySize": "20-50 employees",
+    "industry": "Web Development",
+    "remote": true
+  }
+]
+

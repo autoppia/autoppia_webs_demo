@@ -1,5 +1,6 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import imageManifest from "@/data/imageManifest.json";
+import fallbackBooks from "./original/books_1.json";
 
 export interface Book {
   id: string;
@@ -158,26 +159,36 @@ let booksCache: Book[] = [];
 
 export async function initializeBooks(v2SeedValue?: number | null, limit = 300): Promise<Book[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
+  if (!dbModeEnabled) {
+    booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
+    return booksCache;
+  }
   if (dbModeEnabled && typeof window !== "undefined" && v2SeedValue == null) {
     await new Promise((resolve) => setTimeout(resolve, 75));
   }
   const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
 
-  const books = await fetchSeededSelection<DatasetBook>({
-    projectKey: "web_2_autobooks",
-    entityType: "books",
-    seedValue: effectiveSeed,
-    limit,
-    method: "distribute",
-    filterKey: "category",
-  });
+  try {
+    const books = await fetchSeededSelection<DatasetBook>({
+      projectKey: "web_2_autobooks",
+      entityType: "books",
+      seedValue: effectiveSeed,
+      limit,
+      method: "distribute",
+      filterKey: "category",
+    });
 
-  if (!Array.isArray(books) || books.length === 0) {
-    throw new Error(`[autobooks] No books returned from dataset (seed=${effectiveSeed})`);
+    if (!Array.isArray(books) || books.length === 0) {
+      throw new Error(`[autobooks] No books returned from dataset (seed=${effectiveSeed})`);
+    }
+
+    booksCache = books.map(normalizeBook);
+    return booksCache;
+  } catch (error) {
+    console.warn("[autobooks] Falling back to static books:", error);
+    booksCache = (fallbackBooks as DatasetBook[]).map(normalizeBook);
+    return booksCache;
   }
-
-  booksCache = books.map(normalizeBook);
-  return booksCache;
 }
 
 export const getCachedBooks = () => booksCache;

@@ -1,0 +1,182 @@
+[
+  {
+    "id": "CL-001",
+    "name": "TechCorp Industries",
+    "email": "legal@techcorp.com",
+    "matters": 3,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-002",
+    "name": "Global Finance Ltd",
+    "email": "contact@globalfinance.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-003",
+    "name": "Smith & Associates",
+    "email": "info@smithlaw.com",
+    "matters": 5,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-004",
+    "name": "Johnson Manufacturing",
+    "email": "legal@johnsonmfg.com",
+    "matters": 1,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-005",
+    "name": "Green Energy Solutions",
+    "email": "counsel@greenenergy.com",
+    "matters": 4,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-006",
+    "name": "Williams Real Estate",
+    "email": "law@williamsre.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-007",
+    "name": "Brown Pharmaceuticals",
+    "email": "legal@brownpharma.com",
+    "matters": 3,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "On Hold",
+    "last": "1w ago"
+  },
+  {
+    "id": "CL-008",
+    "name": "Davis Technology Group",
+    "email": "contact@davistech.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "Active",
+    "last": "4d ago"
+  },
+  {
+    "id": "CL-009",
+    "name": "Miller Construction Co",
+    "email": "legal@millerconstruction.com",
+    "matters": 1,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-010",
+    "name": "Wilson Investment Fund",
+    "email": "compliance@wilsonfund.com",
+    "matters": 6,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-011",
+    "name": "Moore Entertainment",
+    "email": "legal@mooreent.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-012",
+    "name": "Taylor & Sons",
+    "email": "info@taylorsons.com",
+    "matters": 3,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-013",
+    "name": "Anderson Logistics",
+    "email": "legal@andersonlog.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "On Hold",
+    "last": "2w ago"
+  },
+  {
+    "id": "CL-014",
+    "name": "Thomas Medical Group",
+    "email": "compliance@thomasmedical.com",
+    "matters": 4,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-015",
+    "name": "Jackson Financial Services",
+    "email": "legal@jacksonfs.com",
+    "matters": 3,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  },
+  {
+    "id": "CL-016",
+    "name": "White Consulting",
+    "email": "contact@whiteconsulting.com",
+    "matters": 1,
+    "avatar": "/media/avatars/person1.jpg",
+    "status": "Active",
+    "last": "5d ago"
+  },
+  {
+    "id": "CL-017",
+    "name": "Harris Communications",
+    "email": "legal@harriscom.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person2.jpg",
+    "status": "Active",
+    "last": "1d ago"
+  },
+  {
+    "id": "CL-018",
+    "name": "Martin Healthcare",
+    "email": "counsel@martinhealth.com",
+    "matters": 5,
+    "avatar": "/media/avatars/person3.jpg",
+    "status": "Active",
+    "last": "Today"
+  },
+  {
+    "id": "CL-019",
+    "name": "Thompson Retail Group",
+    "email": "legal@thompsonretail.com",
+    "matters": 2,
+    "avatar": "/media/avatars/person4.jpg",
+    "status": "Active",
+    "last": "3d ago"
+  },
+  {
+    "id": "CL-020",
+    "name": "Garcia Ventures",
+    "email": "info@garciaventures.com",
+    "matters": 4,
+    "avatar": "/media/avatars/default-avatar.jpg",
+    "status": "Active",
+    "last": "2d ago"
+  }
+]

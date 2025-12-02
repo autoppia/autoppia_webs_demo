@@ -1,0 +1,307 @@
+[
+  {
+    "id": "p1",
+    "user": {
+      "username": "sarah.chen",
+      "name": "Sarah Chen",
+      "avatar": "/media/avatars/person1.jpg",
+      "bio": "Senior UX Designer at Google with 8+ years of experience in mobile and web design.",
+      "title": "Senior UX Designer"
+    },
+    "content": "Just wrapped up an amazing design sprint! Excited to share some insights from my recent project on mobile accessibility. Hope it helps others working on inclusive design.",
+    "timestamp": "2025-12-01T10:30:00.000Z",
+    "likes": 127,
+    "liked": false,
+    "comments": [
+      {
+        "id": "c1",
+        "user": {
+          "username": "michael.rodriguez",
+          "name": "Michael Rodriguez",
+          "avatar": "/media/avatars/person2.jpg",
+          "bio": "Full Stack Developer specializing in React and Node.js.",
+          "title": "Full Stack Developer"
+        },
+        "text": "Great work, Sarah! Accessibility is so important. Would love to hear more about your process.",
+        "timestamp": "2025-12-01T11:15:00.000Z"
+      }
+    ],
+    "image": "/media/posts/goodfellas.jpg"
+  },
+  {
+    "id": "p2",
+    "user": {
+      "username": "michael.rodriguez",
+      "name": "Michael Rodriguez",
+      "avatar": "/media/avatars/person2.jpg",
+      "bio": "Full Stack Developer specializing in React and Node.js. Building scalable web applications.",
+      "title": "Full Stack Developer"
+    },
+    "content": "Just shipped a major feature update! Built with React and TypeScript, focusing on performance and user experience. Grateful for an amazing team that made this possible.",
+    "timestamp": "2025-11-30T14:20:00.000Z",
+    "likes": 89,
+    "liked": true,
+    "comments": [
+      {
+        "id": "c2",
+        "user": {
+          "username": "emily.patel",
+          "name": "Emily Patel",
+          "avatar": "/media/avatars/person3.jpg",
+          "bio": "Product Manager with a focus on fintech and mobile applications.",
+          "title": "Product Manager"
+        },
+        "text": "Congratulations on the launch! The new features look amazing.",
+        "timestamp": "2025-11-30T15:45:00.000Z"
+      }
+    ],
+    "image": "/media/posts/inception.jpg"
+  },
+  {
+    "id": "p3",
+    "user": {
+      "username": "emily.patel",
+      "name": "Emily Patel",
+      "avatar": "/media/avatars/person3.jpg",
+      "bio": "Product Manager with a focus on fintech and mobile applications. Building products users love.",
+      "title": "Product Manager"
+    },
+    "content": "Reflecting on this year's product launches. Key learning: always start with user problems, not solutions. What's been your biggest product lesson this year?",
+    "timestamp": "2025-11-29T09:15:00.000Z",
+    "likes": 156,
+    "liked": false,
+    "comments": [
+      {
+        "id": "c3",
+        "user": {
+          "username": "david.kim",
+          "name": "David Kim",
+          "avatar": "/media/avatars/person4.jpg",
+          "bio": "Data Scientist specializing in machine learning and predictive analytics.",
+          "title": "Senior Data Scientist"
+        },
+        "text": "Absolutely agree! User-centric approach always leads to better outcomes.",
+        "timestamp": "2025-11-29T10:30:00.000Z"
+      },
+      {
+        "id": "c4",
+        "user": {
+          "username": "lisa.anderson",
+          "name": "Lisa Anderson",
+          "avatar": "/media/avatars/default-avatar.jpg",
+          "bio": "Marketing Director with expertise in digital marketing and brand strategy.",
+          "title": "Marketing Director"
+        },
+        "text": "Great insight! Starting with problems helps align the entire team.",
+        "timestamp": "2025-11-29T11:00:00.000Z"
+      }
+    ],
+    "image": "/media/posts/forrest-gump.jpg"
+  },
+  {
+    "id": "p4",
+    "user": {
+      "username": "david.kim",
+      "name": "David Kim",
+      "avatar": "/media/avatars/person4.jpg",
+      "bio": "Data Scientist specializing in machine learning and predictive analytics. Turning data into insights.",
+      "title": "Senior Data Scientist"
+    },
+    "content": "Excited to present our latest research on recommendation systems at the AI conference next month! Using deep learning to improve personalization. Open to connecting with others working in this space.",
+    "timestamp": "2025-11-28T16:45:00.000Z",
+    "likes": 203,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/profile_33.jpg"
+  },
+  {
+    "id": "p5",
+    "user": {
+      "username": "lisa.anderson",
+      "name": "Lisa Anderson",
+      "avatar": "/media/avatars/default-avatar.jpg",
+      "bio": "Marketing Director with expertise in digital marketing and brand strategy. Growing brands through data-driven campaigns.",
+      "title": "Marketing Director"
+    },
+    "content": "Just wrapped up Q4 planning. Focusing on content marketing and community building. Always amazed by the power of authentic storytelling in brand building.",
+    "timestamp": "2025-11-27T13:20:00.000Z",
+    "likes": 94,
+    "liked": true,
+    "comments": [],
+    "image": "/media/posts/profile_119.jpg"
+  },
+  {
+    "id": "p6",
+    "user": {
+      "username": "james.wilson",
+      "name": "James Wilson",
+      "avatar": "/media/avatars/person1.jpg",
+      "bio": "DevOps Engineer focused on cloud infrastructure and automation. Scaling systems for millions of users.",
+      "title": "Senior DevOps Engineer"
+    },
+    "content": "Infrastructure as code makes deployments so much smoother! Just migrated another service to Kubernetes. The reliability improvements are incredible. What's your favorite IaC tool?",
+    "timestamp": "2025-11-26T08:30:00.000Z",
+    "likes": 112,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/profile_138.jpg"
+  },
+  {
+    "id": "p7",
+    "user": {
+      "username": "maria.garcia",
+      "name": "Maria Garcia",
+      "avatar": "/media/avatars/person2.jpg",
+      "bio": "Software Engineer specializing in backend systems and distributed computing. Building robust APIs.",
+      "title": "Backend Engineer"
+    },
+    "content": "Celebrating 3 years at this amazing company! Grateful for all the learning opportunities and the incredible team. Here's to many more years of building great products together.",
+    "timestamp": "2025-11-25T12:00:00.000Z",
+    "likes": 178,
+    "liked": false,
+    "comments": [
+      {
+        "id": "c5",
+        "user": {
+          "username": "robert.lee",
+          "name": "Robert Lee",
+          "avatar": "/media/avatars/person3.jpg",
+          "bio": "Frontend Architect creating beautiful and performant web experiences.",
+          "title": "Frontend Architect"
+        },
+        "text": "Congratulations Maria! It's been great working with you!",
+        "timestamp": "2025-11-25T13:15:00.000Z"
+      }
+    ],
+    "image": "/media/posts/profile_173.jpg"
+  },
+  {
+    "id": "p8",
+    "user": {
+      "username": "robert.lee",
+      "name": "Robert Lee",
+      "avatar": "/media/avatars/person3.jpg",
+      "bio": "Frontend Architect creating beautiful and performant web experiences. React, TypeScript, and design systems.",
+      "title": "Frontend Architect"
+    },
+    "content": "Just released our new design system! After months of work, we now have a comprehensive component library that makes building consistent UIs so much faster. Huge thanks to the team!",
+    "timestamp": "2025-11-24T15:30:00.000Z",
+    "likes": 145,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/profile_227.jpg"
+  },
+  {
+    "id": "p9",
+    "user": {
+      "username": "jennifer.brown",
+      "name": "Jennifer Brown",
+      "avatar": "/media/avatars/person4.jpg",
+      "bio": "UX Researcher focused on understanding user needs and behaviors. Bridging research and design.",
+      "title": "UX Researcher"
+    },
+    "content": "Finished analyzing user interviews from last month. Key insight: users value simplicity over features. Sometimes less really is more. What user insights have surprised you recently?",
+    "timestamp": "2025-11-23T10:45:00.000Z",
+    "likes": 98,
+    "liked": true,
+    "comments": [],
+    "image": "/media/posts/profile_70.jpg"
+  },
+  {
+    "id": "p10",
+    "user": {
+      "username": "william.taylor",
+      "name": "William Taylor",
+      "avatar": "/media/avatars/default-avatar.jpg",
+      "bio": "Technical Lead managing engineering teams and delivering high-quality software. Agile methodologies.",
+      "title": "Engineering Manager"
+    },
+    "content": "Team retrospective yesterday was eye-opening. The shift to async standups has improved productivity and work-life balance. Always important to adapt processes to team needs.",
+    "timestamp": "2025-11-22T14:20:00.000Z",
+    "likes": 76,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/autoppia_logo.png"
+  },
+  {
+    "id": "p11",
+    "user": {
+      "username": "amanda.white",
+      "name": "Amanda White",
+      "avatar": "/media/avatars/person1.jpg",
+      "bio": "Design Lead creating cohesive design systems and user experiences. Leading design teams.",
+      "title": "Design Lead"
+    },
+    "content": "Design critique sessions are one of my favorite parts of the week. Love seeing how the team pushes each other to create better work. Collaboration really makes everything stronger.",
+    "timestamp": "2025-11-21T11:30:00.000Z",
+    "likes": 87,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/banner.png"
+  },
+  {
+    "id": "p12",
+    "user": {
+      "username": "chris.martinez",
+      "name": "Chris Martinez",
+      "avatar": "/media/avatars/person2.jpg",
+      "bio": "Mobile Developer building native iOS and Android applications. React Native enthusiast.",
+      "title": "Senior Mobile Developer"
+    },
+    "content": "Just optimized our app's startup time by 40%! The key was lazy loading and better state management. Performance improvements always feel so satisfying. What's your go-to performance optimization technique?",
+    "timestamp": "2025-11-20T09:15:00.000Z",
+    "likes": 134,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/profile.jpg"
+  },
+  {
+    "id": "p13",
+    "user": {
+      "username": "nicole.thompson",
+      "name": "Nicole Thompson",
+      "avatar": "/media/avatars/person3.jpg",
+      "bio": "Security Engineer focused on application security and threat detection. Protecting user data.",
+      "title": "Security Engineer"
+    },
+    "content": "Security awareness training with the team today! Reminder: security is everyone's responsibility. Small habits like regular updates and strong passwords make a big difference.",
+    "timestamp": "2025-11-19T16:00:00.000Z",
+    "likes": 102,
+    "liked": true,
+    "comments": [],
+    "image": "/media/posts/goodfellas.jpg"
+  },
+  {
+    "id": "p14",
+    "user": {
+      "username": "daniel.clark",
+      "name": "Daniel Clark",
+      "avatar": "/media/avatars/person4.jpg",
+      "bio": "QA Engineer ensuring software quality through automated testing. Test automation and CI/CD.",
+      "title": "Senior QA Engineer"
+    },
+    "content": "Our test coverage just hit 85%! Huge milestone for the team. Automated testing has caught so many issues before production. Investing in quality pays off.",
+    "timestamp": "2025-11-18T13:45:00.000Z",
+    "likes": 91,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/inception.jpg"
+  },
+  {
+    "id": "p15",
+    "user": {
+      "username": "sophia.davis",
+      "name": "Sophia Davis",
+      "avatar": "/media/avatars/default-avatar.jpg",
+      "bio": "Technical Writer creating clear documentation and developer guides. Making complex concepts accessible.",
+      "title": "Senior Technical Writer"
+    },
+    "content": "Documentation is code! Just rewrote our API docs with clearer examples and better structure. Good docs reduce support requests and help developers onboard faster. Always worth the investment.",
+    "timestamp": "2025-11-17T10:20:00.000Z",
+    "likes": 115,
+    "liked": false,
+    "comments": [],
+    "image": "/media/posts/forrest-gump.jpg"
+  }
+]
+

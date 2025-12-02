@@ -1,0 +1,168 @@
+[
+  {
+    "id": "kitchen-1",
+    "title": "Professional Blender",
+    "price": "$89.99",
+    "image": "/images/homepage_categories/blender.jpg",
+    "description": "High-speed professional blender with multiple speed settings and durable stainless steel blades.",
+    "category": "Kitchen",
+    "rating": 4.5,
+    "brand": "BlendPro",
+    "inStock": true
+  },
+  {
+    "id": "kitchen-2",
+    "title": "Stainless Steel Cookware Set",
+    "price": "$149.99",
+    "image": "/images/homepage_categories/cookware.jpg",
+    "description": "10-piece cookware set with non-stick coating and heat-resistant handles.",
+    "category": "Kitchen",
+    "rating": 4.7,
+    "brand": "ChefMaster",
+    "inStock": true
+  },
+  {
+    "id": "kitchen-3",
+    "title": "Premium Coffee Machine",
+    "price": "$199.99",
+    "image": "/images/homepage_categories/coffee_machine.jpg",
+    "description": "Programmable coffee maker with thermal carafe and auto-shutoff feature.",
+    "category": "Kitchen",
+    "rating": 4.6,
+    "brand": "BrewTech",
+    "inStock": true
+  },
+  {
+    "id": "electronics-1",
+    "title": "Wireless Bluetooth Speaker",
+    "price": "$79.99",
+    "image": "/images/homepage_categories/bluetooth_speaker.jpg",
+    "description": "Portable Bluetooth speaker with 20-hour battery life and waterproof design.",
+    "category": "Electronics",
+    "rating": 4.4,
+    "brand": "SoundWave",
+    "inStock": true
+  },
+  {
+    "id": "electronics-2",
+    "title": "High-Speed USB-C Charger",
+    "price": "$29.99",
+    "image": "/images/homepage_categories/charger.jpg",
+    "description": "Fast charging USB-C adapter with multiple ports and compact design.",
+    "category": "Electronics",
+    "rating": 4.5,
+    "brand": "PowerTech",
+    "inStock": true
+  },
+  {
+    "id": "electronics-3",
+    "title": "Portable External SSD",
+    "price": "$119.99",
+    "image": "/images/homepage_categories/external_ssd.jpg",
+    "description": "1TB external SSD with USB 3.0 interface for fast data transfer.",
+    "category": "Electronics",
+    "rating": 4.8,
+    "brand": "StoragePro",
+    "inStock": true
+  },
+  {
+    "id": "home-1",
+    "title": "Modern Sofa Set",
+    "price": "$899.99",
+    "image": "/images/homepage_categories/sofa.jpg",
+    "description": "Comfortable 3-seater sofa with premium fabric upholstery and sturdy frame.",
+    "category": "Home",
+    "rating": 4.6,
+    "brand": "ComfortZone",
+    "inStock": true
+  },
+  {
+    "id": "home-2",
+    "title": "Coffee Table with Storage",
+    "price": "$249.99",
+    "image": "/images/homepage_categories/coffee_table.jpg",
+    "description": "Stylish coffee table with hidden storage compartment and modern design.",
+    "category": "Home",
+    "rating": 4.5,
+    "brand": "HomeStyle",
+    "inStock": true
+  },
+  {
+    "id": "home-3",
+    "title": "Luxury Bedding Set",
+    "price": "$129.99",
+    "image": "/images/homepage_categories/bedding.jpg",
+    "description": "Premium cotton bedding set including sheets, pillowcases, and duvet cover.",
+    "category": "Home",
+    "rating": 4.7,
+    "brand": "SleepWell",
+    "inStock": true
+  },
+  {
+    "id": "fitness-1",
+    "title": "Therapy Foam Roller",
+    "price": "$39.99",
+    "image": "/images/homepage_categories/foam_roller.jpg",
+    "description": "Durable foam roller for muscle recovery and flexibility training.",
+    "category": "Fitness",
+    "rating": 4.6,
+    "brand": "FitRecover",
+    "inStock": true
+  },
+  {
+    "id": "fitness-2",
+    "title": "Portable Cooler Bag",
+    "price": "$49.99",
+    "image": "/images/homepage_categories/cooler.jpg",
+    "description": "Insulated cooler bag perfect for gym, picnics, and outdoor activities.",
+    "category": "Fitness",
+    "rating": 4.4,
+    "brand": "ActiveGear",
+    "inStock": true
+  },
+  {
+    "id": "fitness-3",
+    "title": "Smart Fitness Scale",
+    "price": "$79.99",
+    "image": "/images/homepage_categories/smart_scale.jpg",
+    "description": "Digital scale with body composition analysis and Bluetooth connectivity.",
+    "category": "Fitness",
+    "rating": 4.5,
+    "brand": "HealthTrack",
+    "inStock": true
+  },
+  {
+    "id": "technology-1",
+    "title": "Gaming Laptop",
+    "price": "$1299.99",
+    "image": "/images/homepage_categories/gaming_laptop.jpg",
+    "description": "High-performance gaming laptop with RGB keyboard and dedicated graphics card.",
+    "category": "Technology",
+    "rating": 4.7,
+    "brand": "GameForce",
+    "inStock": true
+  },
+  {
+    "id": "technology-2",
+    "title": "Premium Drone",
+    "price": "$599.99",
+    "image": "/images/homepage_categories/drone.jpg",
+    "description": "4K camera drone with GPS navigation and 30-minute flight time.",
+    "category": "Technology",
+    "rating": 4.6,
+    "brand": "SkyCam",
+    "inStock": true
+  },
+  {
+    "id": "technology-3",
+    "title": "Ergonomic Desk Lamp",
+    "price": "$59.99",
+    "image": "/images/homepage_categories/desk_lamp.jpg",
+    "description": "LED desk lamp with adjustable brightness and color temperature control.",
+    "category": "Technology",
+    "rating": 4.5,
+    "brand": "LightWorks",
+    "inStock": true
+  }
+]
+

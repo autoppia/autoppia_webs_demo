@@ -1,0 +1,1078 @@
+[
+  {
+    "id": "email1",
+    "from": {
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@techcorp.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Kickoff Meeting - Q4 Strategy",
+    "body": "Hi,\n\nI'd like to schedule a project kickoff meeting for our Q4 strategy initiative. Please let me know your availability for next week.\n\nBest regards,\nSarah",
+    "snippet": "I'd like to schedule a project kickoff meeting for our Q4 strategy initiative...",
+    "timestamp": "2025-12-01T09:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread1",
+    "attachments": []
+  },
+  {
+    "id": "email2",
+    "from": {
+      "name": "Michael Chen",
+      "email": "michael.chen@designstudio.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Re: Design Mockups Ready for Review",
+    "body": "Hello,\n\nThe design mockups for the new website are ready. I've attached them for your review. Let me know your thoughts!\n\nThanks,\nMichael",
+    "snippet": "The design mockups for the new website are ready...",
+    "timestamp": "2025-12-01T10:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread2",
+    "attachments": [
+      {
+        "id": "attach1",
+        "name": "mockups-v2.pdf",
+        "size": 2456789,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email3",
+    "from": {
+      "name": "Emily Rodriguez",
+      "email": "emily.r@startup.io",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Partnership Opportunity Discussion",
+    "body": "Hi there,\n\nI hope this email finds you well. I wanted to reach out about a potential partnership opportunity that might interest you. Are you available for a call this week?\n\nBest,\nEmily",
+    "snippet": "I wanted to reach out about a potential partnership opportunity...",
+    "timestamp": "2025-12-01T14:15:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "business",
+        "name": "Business",
+        "color": "#0b8043",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread3",
+    "attachments": []
+  },
+  {
+    "id": "email4",
+    "from": {
+      "name": "David Kim",
+      "email": "david.kim@financegroup.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Quarterly Report - Q3 2025",
+    "body": "Dear Team,\n\nPlease find attached the quarterly financial report for Q3 2025. Review at your convenience and let me know if you have any questions.\n\nRegards,\nDavid",
+    "snippet": "Please find attached the quarterly financial report for Q3 2025...",
+    "timestamp": "2025-12-02T08:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread4",
+    "attachments": [
+      {
+        "id": "attach2",
+        "name": "Q3-2025-Report.pdf",
+        "size": 3456789,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email5",
+    "from": {
+      "name": "Lisa Anderson",
+      "email": "lisa.anderson@marketing.co",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Campaign Launch - Tomorrow at 9 AM",
+    "body": "Hi,\n\nJust a reminder that our new marketing campaign launches tomorrow at 9 AM. All assets are ready and approved. Looking forward to seeing the results!\n\nCheers,\nLisa",
+    "snippet": "Just a reminder that our new marketing campaign launches tomorrow...",
+    "timestamp": "2025-12-02T16:45:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread5",
+    "attachments": []
+  },
+  {
+    "id": "email6",
+    "from": {
+      "name": "James Wilson",
+      "email": "james.wilson@consulting.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Invoice #INV-2025-001",
+    "body": "Dear Client,\n\nPlease find attached invoice #INV-2025-001 for services rendered. Payment is due within 30 days.\n\nThank you,\nJames",
+    "snippet": "Please find attached invoice #INV-2025-001 for services rendered...",
+    "timestamp": "2025-12-03T11:20:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "finance",
+        "name": "Finance",
+        "color": "#f15c00",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread6",
+    "attachments": [
+      {
+        "id": "attach3",
+        "name": "INV-2025-001.pdf",
+        "size": 123456,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email7",
+    "from": {
+      "name": "Maria Garcia",
+      "email": "maria.garcia@hrdep.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Team Building Event - Save the Date",
+    "body": "Hello Everyone,\n\nSave the date for our annual team building event on December 15th. More details to follow soon!\n\nBest,\nMaria",
+    "snippet": "Save the date for our annual team building event on December 15th...",
+    "timestamp": "2025-12-03T13:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "personal",
+        "name": "Personal",
+        "color": "#8e24aa",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread7",
+    "attachments": []
+  },
+  {
+    "id": "email8",
+    "from": {
+      "name": "Robert Taylor",
+      "email": "robert.taylor@techsupport.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "System Maintenance - Scheduled for Saturday",
+    "body": "Hi,\n\nThis is to inform you that system maintenance is scheduled for this Saturday from 2 AM to 6 AM. Services will be temporarily unavailable during this time.\n\nThanks,\nRobert",
+    "snippet": "System maintenance is scheduled for this Saturday from 2 AM to 6 AM...",
+    "timestamp": "2025-12-03T15:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread8",
+    "attachments": []
+  },
+  {
+    "id": "email9",
+    "from": {
+      "name": "Jennifer Lee",
+      "email": "jennifer.lee@research.org",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Research Paper Submission Deadline",
+    "body": "Dear Colleague,\n\nJust a friendly reminder that the deadline for the research paper submission is December 10th. Please submit your papers through the portal.\n\nBest regards,\nJennifer",
+    "snippet": "The deadline for the research paper submission is December 10th...",
+    "timestamp": "2025-12-04T09:15:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread9",
+    "attachments": []
+  },
+  {
+    "id": "email10",
+    "from": {
+      "name": "Thomas Brown",
+      "email": "thomas.brown@sales.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Follow-up: Product Demo Request",
+    "body": "Hi,\n\nFollowing up on our conversation, I'd like to schedule a product demo for next week. What day works best for you?\n\nThanks,\nThomas",
+    "snippet": "I'd like to schedule a product demo for next week...",
+    "timestamp": "2025-12-04T11:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "sales",
+        "name": "Sales",
+        "color": "#e67c73",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread10",
+    "attachments": []
+  },
+  {
+    "id": "email11",
+    "from": {
+      "name": "Amanda White",
+      "email": "amanda.white@training.net",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Training Session Registration Open",
+    "body": "Hello,\n\nRegistration for the upcoming leadership training session is now open. Limited spots available, so please register soon!\n\nBest,\nAmanda",
+    "snippet": "Registration for the upcoming leadership training session is now open...",
+    "timestamp": "2025-12-04T14:20:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread11",
+    "attachments": []
+  },
+  {
+    "id": "email12",
+    "from": {
+      "name": "Daniel Martinez",
+      "email": "daniel.martinez@legal.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Contract Review - Please Review and Sign",
+    "body": "Dear Sir/Madam,\n\nPlease review the attached contract and let me know if you have any questions. Once approved, please sign and return.\n\nRegards,\nDaniel",
+    "snippet": "Please review the attached contract and let me know if you have any questions...",
+    "timestamp": "2025-12-05T08:30:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread12",
+    "attachments": [
+      {
+        "id": "attach4",
+        "name": "Contract-2025-Review.pdf",
+        "size": 3456789,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email13",
+    "from": {
+      "name": "Rachel Green",
+      "email": "rachel.green@support.io",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Ticket #12345 - Issue Resolved",
+    "body": "Hi,\n\nYour support ticket #12345 has been resolved. Please confirm that everything is working correctly now.\n\nBest regards,\nRachel",
+    "snippet": "Your support ticket #12345 has been resolved...",
+    "timestamp": "2025-12-05T10:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "support",
+        "name": "Support",
+        "color": "#c7254e",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread13",
+    "attachments": []
+  },
+  {
+    "id": "email14",
+    "from": {
+      "name": "Christopher Moore",
+      "email": "chris.moore@newsletter.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Weekly Newsletter - December 1st Edition",
+    "body": "Hello,\n\nCheck out this week's newsletter with industry updates and company news. Don't forget to share with your colleagues!\n\nThanks,\nChris",
+    "snippet": "Check out this week's newsletter with industry updates...",
+    "timestamp": "2025-12-05T12:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "newsletter",
+        "name": "Newsletter",
+        "color": "#7986cb",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread14",
+    "attachments": []
+  },
+  {
+    "id": "email15",
+    "from": {
+      "name": "Patricia Davis",
+      "email": "patricia.davis@events.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Event Invitation: Annual Conference 2026",
+    "body": "Dear Colleague,\n\nYou're invited to our annual conference in January 2026. Early bird registration is available until December 15th.\n\nLooking forward to seeing you there!\nPatricia",
+    "snippet": "You're invited to our annual conference in January 2026...",
+    "timestamp": "2025-12-05T15:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "events",
+        "name": "Events",
+        "color": "#009688",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread15",
+    "attachments": []
+  },
+  {
+    "id": "email16",
+    "from": {
+      "name": "Kevin Jackson",
+      "email": "kevin.jackson@devteam.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Code Review Request - Feature Branch",
+    "body": "Hi,\n\nCould you please review the code changes in the feature branch? Pull request is ready for review.\n\nThanks,\nKevin",
+    "snippet": "Could you please review the code changes in the feature branch...",
+    "timestamp": "2025-12-06T09:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread16",
+    "attachments": []
+  },
+  {
+    "id": "email17",
+    "from": {
+      "name": "Nicole Thompson",
+      "email": "nicole.thompson@feedback.org",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Survey: Help Us Improve Our Services",
+    "body": "Hello,\n\nWe'd love to hear your feedback! Please take a moment to complete our brief survey and help us improve our services.\n\nThank you,\nNicole",
+    "snippet": "We'd love to hear your feedback! Please take a moment to complete our brief survey...",
+    "timestamp": "2025-12-06T11:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "feedback",
+        "name": "Feedback",
+        "color": "#f6bf26",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread17",
+    "attachments": []
+  },
+  {
+    "id": "email18",
+    "from": {
+      "name": "Andrew Harris",
+      "email": "andrew.harris@security.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Security Alert: Password Reset Required",
+    "body": "Hi,\n\nFor security reasons, please reset your password by clicking the link below. This is a required security update.\n\nBest,\nAndrew",
+    "snippet": "For security reasons, please reset your password...",
+    "timestamp": "2025-12-06T13:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "security",
+        "name": "Security",
+        "color": "#d93025",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread18",
+    "attachments": []
+  },
+  {
+    "id": "email19",
+    "from": {
+      "name": "Samantha Clark",
+      "email": "samantha.clark@client.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Re: Proposal Review - Questions",
+    "body": "Hi,\n\nI've reviewed the proposal and have a few questions. Could we schedule a call to discuss them in detail?\n\nThanks,\nSamantha",
+    "snippet": "I've reviewed the proposal and have a few questions...",
+    "timestamp": "2025-12-06T14:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread19",
+    "attachments": []
+  },
+  {
+    "id": "email20",
+    "from": {
+      "name": "Ryan Lewis",
+      "email": "ryan.lewis@partners.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Partnership Agreement - Final Version",
+    "body": "Hello,\n\nPlease find attached the final version of our partnership agreement. Let me know if you have any final changes.\n\nBest,\nRyan",
+    "snippet": "Please find attached the final version of our partnership agreement...",
+    "timestamp": "2025-12-07T08:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread20",
+    "attachments": [
+      {
+        "id": "attach5",
+        "name": "Partnership-Agreement-Final.pdf",
+        "size": 4567890,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email21",
+    "from": {
+      "name": "Lauren Walker",
+      "email": "lauren.walker@hr.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Benefits Enrollment - Open Until Dec 15",
+    "body": "Hello,\n\nDon't forget that benefits enrollment is open until December 15th. Please complete your selections before the deadline.\n\nBest,\nLauren",
+    "snippet": "Don't forget that benefits enrollment is open until December 15th...",
+    "timestamp": "2025-12-07T10:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "hr",
+        "name": "HR",
+        "color": "#7b1fa2",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread21",
+    "attachments": []
+  },
+  {
+    "id": "email22",
+    "from": {
+      "name": "Jonathan Young",
+      "email": "jonathan.young@analytics.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Monthly Analytics Report - November 2025",
+    "body": "Hi,\n\nHere's your monthly analytics report for November 2025. Key metrics show strong growth across all channels.\n\nRegards,\nJonathan",
+    "snippet": "Here's your monthly analytics report for November 2025...",
+    "timestamp": "2025-12-07T12:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread22",
+    "attachments": [
+      {
+        "id": "attach6",
+        "name": "Analytics-Nov-2025.pdf",
+        "size": 2345678,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email23",
+    "from": {
+      "name": "Michelle King",
+      "email": "michelle.king@promotions.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Special Offer - 50% Off Annual Subscription",
+    "body": "Hello,\n\nAs a valued customer, we're offering you 50% off an annual subscription. This offer expires December 31st. Don't miss out!\n\nBest,\nMichelle",
+    "snippet": "As a valued customer, we're offering you 50% off an annual subscription...",
+    "timestamp": "2025-12-07T14:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "promotions",
+        "name": "Promotions",
+        "color": "#f4511e",
+        "type": "user"
+      }
+    ],
+    "category": "promotions",
+    "threadId": "thread23",
+    "attachments": []
+  },
+  {
+    "id": "email24",
+    "from": {
+      "name": "Brandon Wright",
+      "email": "brandon.wright@operations.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Office Hours Update - Holiday Schedule",
+    "body": "Hi Everyone,\n\nPlease note that our office will have reduced hours during the holiday season. Check the attached schedule for details.\n\nThanks,\nBrandon",
+    "snippet": "Please note that our office will have reduced hours during the holiday season...",
+    "timestamp": "2025-12-08T08:30:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread24",
+    "attachments": [
+      {
+        "id": "attach7",
+        "name": "Holiday-Schedule-2025.pdf",
+        "size": 123456,
+        "type": "application/pdf",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "id": "email25",
+    "from": {
+      "name": "Stephanie Lopez",
+      "email": "stephanie.lopez@projects.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Project Status Update - Phase 2 Complete",
+    "body": "Hi Team,\n\nGreat news! Phase 2 of the project is now complete. We're on track for the final phase. Well done everyone!\n\nBest,\nStephanie",
+    "snippet": "Great news! Phase 2 of the project is now complete...",
+    "timestamp": "2025-12-08T11:00:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread25",
+    "attachments": []
+  },
+  {
+    "id": "email26",
+    "from": {
+      "name": "Nathan Hill",
+      "email": "nathan.hill@webinar.com",
+      "avatar": "/media/avatars/person1.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Webinar Reminder: Digital Marketing Strategies",
+    "body": "Hello,\n\nThis is a reminder that our webinar on Digital Marketing Strategies is tomorrow at 2 PM. Join us for valuable insights!\n\nSee you there,\nNathan",
+    "snippet": "This is a reminder that our webinar on Digital Marketing Strategies is tomorrow...",
+    "timestamp": "2025-12-08T15:00:00Z",
+    "isRead": false,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "events",
+        "name": "Events",
+        "color": "#009688",
+        "type": "user"
+      }
+    ],
+    "category": "updates",
+    "threadId": "thread26",
+    "attachments": []
+  },
+  {
+    "id": "email27",
+    "from": {
+      "name": "Olivia Scott",
+      "email": "olivia.scott@compliance.com",
+      "avatar": "/media/avatars/person2.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Compliance Training - Mandatory Completion",
+    "body": "Hi,\n\nPlease complete the mandatory compliance training by December 20th. This is required for all employees. Access the training portal through the link below.\n\nThanks,\nOlivia",
+    "snippet": "Please complete the mandatory compliance training by December 20th...",
+    "timestamp": "2025-12-09T09:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread27",
+    "attachments": []
+  },
+  {
+    "id": "email28",
+    "from": {
+      "name": "Justin Green",
+      "email": "justin.green@clientrelations.com",
+      "avatar": "/media/avatars/person3.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Client Feedback - Very Positive Response",
+    "body": "Hi,\n\nJust wanted to share that we received very positive feedback from the client on your recent work. Great job!\n\nBest,\nJustin",
+    "snippet": "Just wanted to share that we received very positive feedback from the client...",
+    "timestamp": "2025-12-09T13:00:00Z",
+    "isRead": true,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread28",
+    "attachments": []
+  },
+  {
+    "id": "email29",
+    "from": {
+      "name": "Ashley Adams",
+      "email": "ashley.adams@accounts.com",
+      "avatar": "/media/avatars/person4.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Monthly Statement - November 2025",
+    "body": "Dear Customer,\n\nYour monthly statement for November 2025 is now available. Please review and let us know if you have any questions.\n\nRegards,\nAshley",
+    "snippet": "Your monthly statement for November 2025 is now available...",
+    "timestamp": "2025-12-09T16:00:00Z",
+    "isRead": true,
+    "isStarred": false,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": false,
+    "labels": [
+      {
+        "id": "finance",
+        "name": "Finance",
+        "color": "#f15c00",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread29",
+    "attachments": []
+  },
+  {
+    "id": "email30",
+    "from": {
+      "name": "Eric Baker",
+      "email": "eric.baker@management.com",
+      "avatar": "/media/avatars/default-avatar.jpg"
+    },
+    "to": [
+      {
+        "name": "Me",
+        "email": "me@gmail.com"
+      }
+    ],
+    "subject": "Year-End Review Meeting - Schedule",
+    "body": "Hi,\n\nLet's schedule your year-end review meeting. Please share your availability for the next two weeks.\n\nBest,\nEric",
+    "snippet": "Let's schedule your year-end review meeting...",
+    "timestamp": "2025-12-10T10:00:00Z",
+    "isRead": false,
+    "isStarred": true,
+    "isSnoozed": false,
+    "isDraft": false,
+    "isImportant": true,
+    "labels": [
+      {
+        "id": "work",
+        "name": "Work",
+        "color": "#4285f4",
+        "type": "user"
+      }
+    ],
+    "category": "primary",
+    "threadId": "thread30",
+    "attachments": []
+  }
+]

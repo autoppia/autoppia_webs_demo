@@ -15,6 +15,7 @@ import {
 } from "@/utils/restaurantDataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { restaurants as originalRestaurants } from "@/data/restaurants";
+import fallbackRestaurants from "./original/restaurants_1.json";
 
 // Configuration for data generation
 const DATA_GENERATION_CONFIG = {
@@ -157,6 +158,8 @@ export async function initializeRestaurants(v2SeedValue?: number | null): Promis
     effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
     effectiveSeed = 1; // If v2 is NOT enabled, automatically use seed=1
+    const normalized = normalizeRestaurantImages(fallbackRestaurants as Restaurant[]);
+    return normalized;
   }
 
   try {
@@ -181,7 +184,8 @@ export async function initializeRestaurants(v2SeedValue?: number | null): Promis
     }
   } catch (err) {
     console.error(`[autodelivery] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    throw err;
+    const normalized = normalizeRestaurantImages(fallbackRestaurants as Restaurant[]);
+    return normalized;
   }
 }
 

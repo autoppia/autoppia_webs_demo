@@ -1,6 +1,7 @@
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { EVENTS_DATASET, CalendarEvent } from "@/library/dataset";
 import { generateDeterministicEvents } from "@/data/seeded-events";
+import fallbackCalendarEvents from "../../data/original/calendar_events_1.json";
 
 const PROJECT_KEY = "web_11_autocalendar";
 const ENTITY_TYPE = "calendar_events";
@@ -46,11 +47,10 @@ export async function initializeEvents(
     effectiveSeed = clampSeed(v2Seed, 1);
   }
 
-  const fallback = () =>
-    generateDeterministicEvents(effectiveSeed, EVENTS_DATASET.length);
-
+  // If V2 is NOT enabled, return original dataset immediately
   if (!dbModeEnabled) {
-    return fallback();
+    console.log("[AutoCalendar] DB mode disabled, using original calendar_events dataset");
+    return (fallbackCalendarEvents as CalendarEvent[]).map((e) => ({ ...e }));
   }
 
   try {
@@ -66,12 +66,14 @@ export async function initializeEvents(
     }
   } catch (error) {
     console.error(
-      "[AutoCalendar] Failed to load events from dataset (seed:",
+      "[AutoCalendar] Failed to load calendar_events from dataset (seed:",
       effectiveSeed,
-      ")",
+      "), using original dataset fallback",
       error
     );
   }
 
-  return fallback();
+  // Fallback to original dataset
+  console.log("[AutoCalendar] Falling back to original calendar_events dataset");
+  return (fallbackCalendarEvents as CalendarEvent[]).map((e) => ({ ...e }));
 }

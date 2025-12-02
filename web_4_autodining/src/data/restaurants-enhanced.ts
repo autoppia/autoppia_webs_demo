@@ -7,6 +7,7 @@
 
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { RestaurantsData } from "@/library/dataset";
+import fallbackRestaurants from "./original/restaurants_1.json";
 
 export interface RestaurantGenerated {
   id: string;
@@ -88,6 +89,11 @@ export async function initializeRestaurants(seedValue?: number | null): Promise<
   let effectiveSeed: number;
   effectiveSeed = dbModeEnabled ? seedValue ?? 1 : 1;
 
+  if (!dbModeEnabled) {
+    dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as RestaurantGenerated[]);
+    return dynamicRestaurants;
+  }
+
   // Load from DB with the determined seed
   try {
     // Clear existing restaurants to force fresh load
@@ -113,7 +119,7 @@ export async function initializeRestaurants(seedValue?: number | null): Promise<
     }
   } catch (err) {
     console.error(`[autodining] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    throw err;
+    dynamicRestaurants = normalizeRestaurants(fallbackRestaurants as RestaurantGenerated[]);
+    return dynamicRestaurants;
   }
 }
-
