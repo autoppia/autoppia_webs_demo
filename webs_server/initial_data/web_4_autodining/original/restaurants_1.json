@@ -8,10 +8,11 @@
     "namepool": "Le Jardin",
     "cuisine": "French",
     "area": "Castro",
-    "staticReviews": 305,
-    "staticBookings": 204,
-    "staticStars": 4.6,
-    "staticPrices": "$$$$",
+    "reviews": 305,
+    "bookings": 204,
+    "rating": 4.6,
+    "stars": 5,
+    "price": "$$$$",
     "image": "/images/restaurant1.jpg"
   },
   {
@@ -23,10 +24,11 @@
     "namepool": "Bella Vista",
     "cuisine": "Italian",
     "area": "North Beach",
-    "staticReviews": 453,
-    "staticBookings": 102,
-    "staticStars": 4.8,
-    "staticPrices": "$$$$",
+    "reviews": 453,
+    "bookings": 102,
+    "rating": 4.8,
+    "stars": 5,
+    "price": "$$$$",
     "image": "/images/restaurant2.jpg"
   },
   {
@@ -38,10 +40,11 @@
     "namepool": "Sakura Sushi",
     "cuisine": "Japanese",
     "area": "North Beach",
-    "staticReviews": 288,
-    "staticBookings": 177,
-    "staticStars": 4.8,
-    "staticPrices": "$$$$",
+    "reviews": 288,
+    "bookings": 177,
+    "rating": 4.8,
+    "stars": 5,
+    "price": "$$$$",
     "image": "/images/restaurant3.jpg"
   },
   {
@@ -53,10 +56,11 @@
     "namepool": "The Steakhouse",
     "cuisine": "American",
     "area": "Financial District",
-    "staticReviews": 398,
-    "staticBookings": 121,
-    "staticStars": 4.8,
-    "staticPrices": "$$$$",
+    "reviews": 398,
+    "bookings": 121,
+    "rating": 4.8,
+    "stars": 5,
+    "price": "$$$$",
     "image": "/images/restaurant4.jpg"
   },
   {
@@ -68,10 +72,11 @@
     "namepool": "La Paella",
     "cuisine": "Spanish",
     "area": "North Beach",
-    "staticReviews": 340,
-    "staticBookings": 119,
-    "staticStars": 4.6,
-    "staticPrices": "$$$$",
+    "reviews": 340,
+    "bookings": 119,
+    "rating": 4.6,
+    "stars": 5,
+    "price": "$$$$",
     "image": "/images/restaurant5.jpg"
   },
   {
@@ -83,10 +88,11 @@
     "namepool": "El Mariachi",
     "cuisine": "Mexican",
     "area": "Downtown",
-    "staticReviews": 243,
-    "staticBookings": 77,
-    "staticStars": 4.6,
-    "staticPrices": "$$$",
+    "reviews": 243,
+    "bookings": 77,
+    "rating": 4.6,
+    "stars": 5,
+    "price": "$$$",
     "image": "/images/restaurant6.jpg"
   },
   {
@@ -98,10 +104,11 @@
     "namepool": "Thai Garden",
     "cuisine": "Thai",
     "area": "Financial District",
-    "staticReviews": 180,
-    "staticBookings": 112,
-    "staticStars": 4.5,
-    "staticPrices": "$$$",
+    "reviews": 180,
+    "bookings": 112,
+    "rating": 4.5,
+    "stars": 5,
+    "price": "$$$",
     "image": "/images/restaurant7.jpg"
   },
   {
@@ -113,10 +120,11 @@
     "namepool": "Taj Mahal",
     "cuisine": "Indian",
     "area": "Downtown",
-    "staticReviews": 274,
-    "staticBookings": 123,
-    "staticStars": 4.7,
-    "staticPrices": "$$",
+    "reviews": 274,
+    "bookings": 123,
+    "rating": 4.7,
+    "stars": 5,
+    "price": "$$",
     "image": "/images/restaurant8.jpg"
   },
   {
@@ -128,10 +136,11 @@
     "namepool": "Seoul Kitchen",
     "cuisine": "Korean",
     "area": "Financial District",
-    "staticReviews": 227,
-    "staticBookings": 100,
-    "staticStars": 4.8,
-    "staticPrices": "$$",
+    "reviews": 227,
+    "bookings": 100,
+    "rating": 4.8,
+    "stars": 5,
+    "price": "$$",
     "image": "/images/restaurant9.jpg"
   },
   {
@@ -143,10 +152,11 @@
     "namepool": "Istanbul Bistro",
     "cuisine": "Turkish",
     "area": "Tenderloin",
-    "staticReviews": 270,
-    "staticBookings": 72,
-    "staticStars": 4.4,
-    "staticPrices": "$$",
+    "reviews": 270,
+    "bookings": 72,
+    "rating": 4.4,
+    "stars": 4,
+    "price": "$$",
     "image": "/images/restaurant10.jpg"
   },
   {
@@ -158,10 +168,11 @@
     "namepool": "Pho Saigon",
     "cuisine": "Vietnamese",
     "area": "Castro",
-    "staticReviews": 166,
-    "staticBookings": 59,
-    "staticStars": 4.6,
-    "staticPrices": "$",
+    "reviews": 166,
+    "bookings": 59,
+    "rating": 4.6,
+    "stars": 5,
+    "price": "$",
     "image": "/images/restaurant11.jpg"
   },
   {
@@ -173,10 +184,11 @@
     "namepool": "Athena's Table",
     "cuisine": "Greek",
     "area": "Chinatown",
-    "staticReviews": 165,
-    "staticBookings": 100,
-    "staticStars": 4.5,
-    "staticPrices": "$",
+    "reviews": 165,
+    "bookings": 100,
+    "rating": 4.5,
+    "stars": 5,
+    "price": "$",
     "image": "/images/restaurant12.jpg"
   },
   {
@@ -188,10 +200,11 @@
     "namepool": "Golden Dragon",
     "cuisine": "Chinese",
     "area": "Richmond",
-    "staticReviews": 158,
-    "staticBookings": 108,
-    "staticStars": 4.3,
-    "staticPrices": "$",
+    "reviews": 158,
+    "bookings": 108,
+    "rating": 4.3,
+    "stars": 4,
+    "price": "$",
     "image": "/images/restaurant13.jpg"
   },
   {
@@ -203,10 +216,11 @@
     "namepool": "Carnaval Grill",
     "cuisine": "Brazilian",
     "area": "Union Square",
-    "staticReviews": 215,
-    "staticBookings": 109,
-    "staticStars": 4.6,
-    "staticPrices": "$",
+    "reviews": 215,
+    "bookings": 109,
+    "rating": 4.6,
+    "stars": 5,
+    "price": "$",
     "image": "/images/restaurant14.jpg"
   },
   {
@@ -218,10 +232,75 @@
     "namepool": "Beirut Express",
     "cuisine": "Lebanese",
     "area": "Tenderloin",
-    "staticReviews": 159,
-    "staticBookings": 94,
-    "staticStars": 4.4,
-    "staticPrices": "$",
+    "reviews": 159,
+    "bookings": 94,
+    "rating": 4.4,
+    "stars": 4,
+    "price": "$",
     "image": "/images/restaurant15.jpg"
+  },
+  {
+    "id": "16",
+    "country": {
+      "code": "US",
+      "name": "United States"
+    },
+    "namepool": "L'Atelier",
+    "cuisine": "French",
+    "area": "Nob Hill",
+    "reviews": 412,
+    "bookings": 189,
+    "rating": 4.9,
+    "stars": 5,
+    "price": "$$$$",
+    "image": "/images/restaurant16.jpg"
+  },
+  {
+    "id": "17",
+    "country": {
+      "code": "US",
+      "name": "United States"
+    },
+    "namepool": "Spice Route",
+    "cuisine": "Indian",
+    "area": "Mission",
+    "reviews": 198,
+    "bookings": 87,
+    "rating": 4.5,
+    "stars": 5,
+    "price": "$$$",
+    "image": "/images/restaurant17.jpg"
+  },
+  {
+    "id": "18",
+    "country": {
+      "code": "US",
+      "name": "United States"
+    },
+    "namepool": "The Noodle House",
+    "cuisine": "Asian Fusion",
+    "area": "SoMa",
+    "reviews": 142,
+    "bookings": 68,
+    "rating": 4.4,
+    "stars": 4,
+    "price": "$",
+    "image": "/images/restaurant18.jpg"
+  },
+  {
+    "id": "19",
+    "country": {
+      "code": "US",
+      "name": "United States"
+    },
+    "namepool": "Mediterranean Breeze",
+    "cuisine": "Mediterranean",
+    "area": "Marina",
+    "reviews": 187,
+    "bookings": 91,
+    "rating": 4.6,
+    "stars": 5,
+    "price": "$$",
+    "image": "/images/restaurant19.jpg"
   }
 ]

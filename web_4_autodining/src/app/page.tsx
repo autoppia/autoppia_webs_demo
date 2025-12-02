@@ -28,6 +28,7 @@ import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
 import { buildBookingHref } from "@/utils/bookingPaths";
 import Navbar from "@/components/Navbar";
+import fallbackRestaurants from "@/data/original/restaurants_1.json";
 
 type UiRestaurant = {
   id: string;
@@ -36,33 +37,40 @@ type UiRestaurant = {
   cuisine: string;
   area: string;
   reviews: number;
-  stars: number;
+  rating: number; // rating con decimales (ej: 4.6, 4.8)
+  stars: number; // stars entero 1-5 ya redondeado
   price: string;
   bookings: number;
   times: string[];
 };
 
 // Default restaurants array from jsonData (fallback when dynamic data unavailable)
-const defaultRestaurants = RestaurantsData.map((item, index) => ({
-  id: `restaurant-${item.id ?? index + 1}`,
-  name: item.namepool,
-  image: `/images/restaurant${(index % 19) + 1}.jpg`,
-  stars: item.staticStars,
-  reviews: item.staticReviews,
-  cuisine: item.cuisine,
-  price: item.staticPrices,
-  bookings: item.staticBookings,
-  area: item.area,
-  times: ["1:00 PM"],
-}));
+// Usar el JSON actualizado directamente que ya tiene rating y stars separados
+const defaultRestaurants = (fallbackRestaurants as any[]).map(
+  (item, index) => ({
+    id: `restaurant-${item.id ?? index + 1}`,
+    name: item.namepool,
+    image: item.image || `/images/restaurant${(index % 19) + 1}.jpg`,
+    rating: item.rating ?? 4.5,
+    stars: item.stars ?? 5,
+    reviews: item.reviews ?? 0,
+    cuisine: item.cuisine,
+    price: item.price ?? "$$",
+    bookings: item.bookings ?? 0,
+    area: item.area,
+    times: ["1:00 PM"],
+  })
+);
 
 const staticById = new Map(
-  RestaurantsData.map((item, index) => [
+  (fallbackRestaurants as any[]).map((item, index) => [
     item.id ?? `restaurant-${index + 1}`,
     {
-      stars: item.staticStars,
-      reviews: item.staticReviews,
-      price: item.staticPrices,
+      rating: item.rating ?? 4.5,
+      stars: item.stars ?? 5,
+      reviews: item.reviews ?? 0,
+      bookings: item.bookings ?? 0,
+      price: item.price ?? "$$",
       area: item.area,
       cuisine: item.cuisine,
     },
@@ -70,10 +78,9 @@ const staticById = new Map(
 );
 
 function StarRating({ count }: { count: number }) {
-  // Round the rating to get number of filled stars
-  // 4.3 → 4 stars, 4.7 → 5 stars, 4.6 → 5 stars
-  const filledStars = Math.round(count);
-  const clamped = Math.max(0, Math.min(5, filledStars));
+  // count ya viene como entero (1-5) del JSON, no necesitamos round
+  // Solo asegurar que esté en el rango válido
+  const clamped = Math.max(1, Math.min(5, Math.floor(count)));
   return (
     <span className="text-lg align-middle mr-1">
       {Array.from({ length: 5 }).map((_, i) => (
@@ -100,7 +107,8 @@ function RestaurantCard({
     cuisine: string;
     area: string;
     reviews: number;
-    stars: number;
+    rating: number; // rating con decimales
+    stars: number; // stars entero 1-5
     price: string;
     bookings: number;
     image: string;
@@ -138,8 +146,9 @@ function RestaurantCard({
   const viewDetailsLabel = getText("view_details") || "View details";
   const bookNowLabel = getText("book_now") || "Book now";
 
-  // Use the actual rating from the restaurant data
-  const ratingValue = r.stars ?? 4.5;
+  // Usar rating para el número y stars para las estrellas
+  const ratingValue = r.rating ?? 4.5; // Para mostrar el número (con decimales)
+  const starsCount = r.stars ?? 5; // Para mostrar las estrellas (ya viene redondeado)
   const reviewsCount = r.reviews || 0;
   const priceTag = r.price || "$$";
 
@@ -175,9 +184,9 @@ function RestaurantCard({
             </h3>
           </SeedLink>
           <div className="flex items-center gap-2 mb-3">
-            <StarRating count={ratingValue} />
+            <StarRating count={starsCount} /> {/* Usar stars (entero) */}
             <span className="text-sm font-semibold drop-shadow">
-              {ratingValue.toFixed(1)}
+              {ratingValue.toFixed(1)} {/* Usar rating (con decimales) */}
               {reviewsCount > 0 && ` (${reviewsCount} reviews)`}
             </span>
             <span className="text-xs text-gray-200 opacity-80">•</span>
@@ -567,9 +576,15 @@ function HomePageContent() {
             const staticDefaults =
               staticById.get(r.id) ||
               staticById.get(r.id?.toString().replace("restaurant-", ""));
+
+            // Priorizar valores directos del restaurante, luego defaults, luego fallback
+            const rating = (r as any).rating ?? staticDefaults?.rating ?? 4.5;
+            const stars =
+              (r as any).stars ?? staticDefaults?.stars ?? Math.round(rating);
             const reviews = r.reviews ?? staticDefaults?.reviews ?? 64;
-            // Always use the actual rating from dataset, even if no reviews yet
-            const stars = r.stars ?? staticDefaults?.stars ?? 4.5;
+            const bookings = r.bookings ?? staticDefaults?.bookings ?? 0;
+            const price = r.price ?? staticDefaults?.price ?? "$$";
+
             return {
               id: r.id,
               name: r.name,
@@ -577,9 +592,10 @@ function HomePageContent() {
               cuisine: r.cuisine ?? staticDefaults?.cuisine ?? "International",
               area: r.area ?? staticDefaults?.area ?? "Downtown",
               reviews,
+              rating,
               stars,
-              price: r.price ?? staticDefaults?.price ?? "$$",
-              bookings: r.bookings ?? 0,
+              price,
+              bookings,
               times: ["1:00 PM"],
             };
           });
