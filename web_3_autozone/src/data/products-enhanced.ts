@@ -1,5 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import fallbackProducts from "./original/products_1.json"
 
 const clampSeed = (value: number, fallback: number = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
@@ -34,7 +35,8 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
 };
 
 const normalizeImageUrl = (image?: string, category?: string): string => {
-  if (!image) return getCategoryFallback(category);
+  const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";
+  if (!image) return getCategoryFallback(category, DEFAULT);
 
   if (image.startsWith("/images/")) {
     return image;
@@ -46,10 +48,10 @@ const normalizeImageUrl = (image?: string, category?: string): string => {
     return `${image}${sep}w=150&h=150&fit=crop&crop=entropy&auto=format&q=60`;
   }
 
-  return getCategoryFallback(category);
+  return getCategoryFallback(category, DEFAULT);
 };
 
-const getCategoryFallback = (category?: string): string => {
+const getCategoryFallback = (category: string | undefined, fallback: string): string => {
   const map: Record<string, string> = {
     Kitchen: "/images/homepage_categories/cookware.jpg",
     Electronics: "/images/homepage_categories/smart_tv.jpg",
@@ -57,7 +59,7 @@ const getCategoryFallback = (category?: string): string => {
     Home: "/images/homepage_categories/sofa.jpg",
     Fitness: "/images/homepage_categories/foam_roller.jpg",
   };
-  return map[category || ""] || "/images/homepage_categories/coffee_machine.jpg";
+  return map[category || ""] || fallback;
 };
 
 const normalizeProductImages = (products: Product[]): Product[] =>
@@ -73,7 +75,9 @@ export async function initializeProducts(
   limit: number = 100
 ): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
-  
+  if (!dbModeEnabled) { 
+    return fallbackProducts as Product[];
+  }
   // Wait a bit for SeedContext to sync v2Seed to window if needed
   if (typeof window !== "undefined" && dbModeEnabled) {
     await new Promise(resolve => setTimeout(resolve, 100));
