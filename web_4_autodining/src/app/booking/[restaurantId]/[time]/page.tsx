@@ -9,7 +9,7 @@ import { EVENT_TYPES, logEvent } from "@/library/events";
 import dayjs from "dayjs";
 import { countries } from "@/library/dataset";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
@@ -63,32 +63,7 @@ export default function Page() {
 
   const [data, setData] = useState<RestaurantView | null>(null);
 
-  // LAYOUT FIJO - Siempre como seed 6
-  const layout = {
-    wrap: false, // seed 6 (par) = false
-    justifyClass: "justify-start", // seed 6 % 5 = 1 → índice 1 = justify-start
-    gapClass: "gap-2", // seed 6 % 5 = 1 → índice 1 = gap-2
-    marginTopClass: "mt-0", // seed 6 % 5 = 1 → índice 1 = mt-0
-    marginBottomClass: "mb-0", // seed 6 % 5 = 1 → índice 1 = mb-0
-  };
-
-  // Use seed-based variations (pass v1 seed)
-  const formVariation = useSeedVariation("form", undefined, layoutSeed);
-  const bookButtonVariation = useSeedVariation(
-    "bookButton",
-    undefined,
-    layoutSeed
-  );
-  const pageLayoutVariation = useSeedVariation(
-    "pageLayout",
-    undefined,
-    layoutSeed
-  );
-  const imageContainerVariation = useSeedVariation(
-    "imageContainer",
-    undefined,
-    layoutSeed
-  );
+  // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
 
   const restaurantInfo = {
     restaurantId,
@@ -191,10 +166,7 @@ export default function Page() {
       <Navbar />
 
       {/* Hero Banner - Restaurant Image */}
-      <div
-        className={`w-full h-[340px] bg-gray-200 ${imageContainerVariation.position} ${imageContainerVariation.className} mb-10`}
-        data-testid={imageContainerVariation.dataTestId}
-      >
+      <div className="w-full h-[340px] bg-gray-200 mb-10">
         <div className="relative w-full h-full">
           {data?.image && (
             <Image
@@ -370,7 +342,6 @@ export default function Page() {
           id={getId("confirm_button")}
           onClick={handleReservation}
           className="w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white py-6 text-lg rounded-lg font-semibold mt-6 transition-colors shadow-sm"
-          data-testid={bookButtonVariation.dataTestId}
         >
           {getText("confirm_booking") || "Complete Reservation"}
         </Button>

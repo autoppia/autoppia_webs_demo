@@ -139,9 +139,7 @@ function RestaurantCard({
   const priceTag = r.price || "$$";
 
   return (
-    <div
-      className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl"
-    >
+    <div className="w-[320px] flex-shrink-0 rounded-xl overflow-hidden shadow-lg bg-white hover:-translate-y-1 transition-all duration-300 hover:shadow-xl">
       <div className="relative w-full h-[280px] overflow-hidden">
         <img
           src={r.image}
@@ -366,8 +364,6 @@ function HomePageContent() {
   // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
 
   // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
-  const searchButtonLabel = getText("search_button") || "Search";
-  const searchButtonClassName = "ml-3 px-8 py-3 rounded-lg text-lg bg-[#46a758] text-white hover:bg-[#3d8f4a] transition-colors shadow-sm min-w-[120px]";
 
   function toLocalISO(date: Date): string {
     const pad = (n: number) => String(n).padStart(2, "0");
@@ -578,8 +574,8 @@ function HomePageContent() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="mb-10">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-lime-500 text-white px-8 py-10 shadow-2xl">
+      <section className="mb-10 px-6">
+        <div className="relative overflow-hidden bg-gradient-to-r from-emerald-700 via-emerald-600 to-lime-500 text-white px-8 py-10 shadow-2xl">
           <div className="absolute inset-0 opacity-10 bg-[url('/images/restaurant1.jpg')] bg-cover bg-center" />
           <div className="relative max-w-3xl space-y-3">
             <p className="uppercase tracking-[0.3em] text-sm font-semibold">
@@ -608,134 +604,142 @@ function HomePageContent() {
 
         {/* Search and Filters */}
         <section
-          className="flex flex-wrap gap-4 items-end mt-6 relative w-full"
+          className="flex flex-wrap gap-4 items-end justify-between mt-6 mb-8 relative w-full px-6"
           style={{ minHeight: "auto", visibility: "visible", display: "flex" }}
         >
-          <Popover open={dateOpen} onOpenChange={setDateOpen} modal={false}>
-            <PopoverTrigger asChild>
-              <Button
-                id={getId("date_picker")}
-                variant="outline"
-                className="w-[200px] justify-start text-left font-normal"
-                onClick={() =>
-                  logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, { action: "open" })
-                }
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? (
-                  format(date, "PPP")
-                ) : (
-                  <span>{getText("date_picker")}</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-auto p-0 z-[100]"
-              align="start"
-              side="bottom"
-              sideOffset={8}
-            >
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={handleDateSelect}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-
-          <Popover open={timeOpen} onOpenChange={setTimeOpen} modal={false}>
-            <PopoverTrigger asChild>
-              <Button
-                id={getId("time_picker")}
-                variant="outline"
-                className="w-[150px] justify-start text-left font-normal"
-                onClick={() =>
-                  logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, { action: "open" })
-                }
-              >
-                <ClockIcon className="mr-2 h-4 w-4" />
-                {time}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-auto p-0 z-[100]"
-              align="start"
-              side="bottom"
-              sideOffset={8}
-            >
-              <div className="p-2">
-                {timeOptions.map((t) => (
-                  <Button
-                    key={t}
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      handleTimeSelect(t);
-                      setTimeOpen(false);
-                    }}
-                  >
-                    {t}
-                  </Button>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
-
-          <Popover open={peopleOpen} onOpenChange={setPeopleOpen} modal={false}>
-            <PopoverTrigger asChild>
-              <Button
-                id={getId("people_picker")}
-                variant="outline"
-                className="w-[150px] justify-start text-left font-normal"
-                onClick={() =>
-                  logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, {
-                    action: "open",
-                  })
-                }
-              >
-                <UserIcon className="mr-2 h-4 w-4" />
-                {people} {people === 1 ? personLabel : peopleLabel}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-auto p-0 z-[100]"
-              align="start"
-              side="bottom"
-              sideOffset={8}
-            >
-              <div className="p-2">
-                {peopleOptions.map((n) => (
-                  <Button
-                    key={n}
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      handlePeopleSelect(n);
-                      setPeopleOpen(false);
-                    }}
-                  >
-                    {n} {n === 1 ? personLabel : peopleLabel}
-                  </Button>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
-          {/* Search box & button */}
+          {/* Search input - left side */}
           <input
             id={getId("search_input")}
             type="text"
-            placeholder={getText("search_placeholder") || "Search"}
-            className="min-w-[400px] flex-1 px-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]"
+            placeholder={
+              getText("search_placeholder") || "Search restaurant, cuisine..."
+            }
+            className="min-w-[400px] flex-1 h-9 px-4 border rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758]"
             value={search}
             onChange={handleSearchChange}
           />
-          <button
-            id={getId("search_button")}
-            className={searchButtonClassName}
-          >
-            {searchButtonLabel}
-          </button>
+
+          {/* Filters - right side */}
+          <div className="flex gap-4 items-end">
+            <Popover open={dateOpen} onOpenChange={setDateOpen} modal={false}>
+              <PopoverTrigger asChild>
+                <Button
+                  id={getId("date_picker")}
+                  variant="outline"
+                  className="w-[200px] justify-start text-left font-normal"
+                  onClick={() =>
+                    logEvent(EVENT_TYPES.DATE_DROPDOWN_OPENED, {
+                      action: "open",
+                    })
+                  }
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? (
+                    format(date, "PPP")
+                  ) : (
+                    <span>{getText("date_picker")}</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-auto p-0 z-[100]"
+                align="start"
+                side="bottom"
+                sideOffset={8}
+              >
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateSelect}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+
+            <Popover open={timeOpen} onOpenChange={setTimeOpen} modal={false}>
+              <PopoverTrigger asChild>
+                <Button
+                  id={getId("time_picker")}
+                  variant="outline"
+                  className="w-[150px] justify-start text-left font-normal"
+                  onClick={() =>
+                    logEvent(EVENT_TYPES.TIME_DROPDOWN_OPENED, {
+                      action: "open",
+                    })
+                  }
+                >
+                  <ClockIcon className="mr-2 h-4 w-4" />
+                  {time}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-auto p-0 z-[100]"
+                align="start"
+                side="bottom"
+                sideOffset={8}
+              >
+                <div className="p-2">
+                  {timeOptions.map((t) => (
+                    <Button
+                      key={t}
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        handleTimeSelect(t);
+                        setTimeOpen(false);
+                      }}
+                    >
+                      {t}
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            <Popover
+              open={peopleOpen}
+              onOpenChange={setPeopleOpen}
+              modal={false}
+            >
+              <PopoverTrigger asChild>
+                <Button
+                  id={getId("people_picker")}
+                  variant="outline"
+                  className="w-[150px] justify-start text-left font-normal"
+                  onClick={() =>
+                    logEvent(EVENT_TYPES.PEOPLE_DROPDOWN_OPENED, {
+                      action: "open",
+                    })
+                  }
+                >
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  {people} {people === 1 ? personLabel : peopleLabel}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-auto p-0 z-[100]"
+                align="start"
+                side="bottom"
+                sideOffset={8}
+              >
+                <div className="p-2">
+                  {peopleOptions.map((n) => (
+                    <Button
+                      key={n}
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        handlePeopleSelect(n);
+                        setPeopleOpen(false);
+                      }}
+                    >
+                      {n} {n === 1 ? personLabel : peopleLabel}
+                    </Button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
         </section>
 
         {/* Main Content - Cards, Sections, etc. */}
@@ -743,10 +747,7 @@ function HomePageContent() {
           <>
             {/* Expensive Restaurants ($$$$) */}
             {expensiveRestaurants.length > 0 && (
-              <section
-                id={getId("section_expensive")}
-                className="px-4"
-              >
+              <section id={getId("section_expensive")} className="px-6">
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
                     {getText("section_expensive") || "Expensive"}
@@ -755,9 +756,7 @@ function HomePageContent() {
                     Fine dining experiences for special occasions
                   </p>
                 </div>
-                <CardScroller
-                  title={getText("section_expensive")}
-                >
+                <CardScroller title={getText("section_expensive")}>
                   {expensiveRestaurants.map((r) => (
                     <RestaurantCard
                       key={r.id + "-expensive"}
@@ -773,10 +772,7 @@ function HomePageContent() {
 
             {/* Medium Price Restaurants ($$-$$$) */}
             {mediumRestaurants.length > 0 && (
-              <section
-                id={getId("section_medium")}
-                className="px-4 mt-8"
-              >
+              <section id={getId("section_medium")} className="px-6 mt-8">
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
                     {getText("section_medium") || "Mid ticket"}
@@ -785,10 +781,7 @@ function HomePageContent() {
                     Great value restaurants for everyday dining
                   </p>
                 </div>
-                <CardScroller
-                  title={getText("section_medium")}
-                  layoutSeed={layoutSeed}
-                >
+                <CardScroller title={getText("section_medium")}>
                   {mediumRestaurants.map((r) => (
                     <RestaurantCard
                       key={r.id + "-medium"}
@@ -804,10 +797,7 @@ function HomePageContent() {
 
             {/* Cheap Restaurants ($) */}
             {cheapRestaurants.length > 0 && (
-              <section
-                id={getId("section_cheap")}
-                className="px-4 mt-8"
-              >
+              <section id={getId("section_cheap")} className="px-6 mt-8">
                 <div className="mb-6">
                   <h2 className="text-3xl font-bold mb-2">
                     {getText("section_cheap") || "Cheap"}
@@ -816,10 +806,7 @@ function HomePageContent() {
                     Budget-friendly options without compromising quality
                   </p>
                 </div>
-                <CardScroller
-                  title={getText("section_cheap")}
-                  layoutSeed={layoutSeed}
-                >
+                <CardScroller title={getText("section_cheap")}>
                   {cheapRestaurants.map((r) => (
                     <RestaurantCard
                       key={r.id + "-cheap"}

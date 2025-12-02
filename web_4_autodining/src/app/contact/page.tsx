@@ -114,7 +114,7 @@ export default function ContactPage() {
                 <a
                   key={index}
                   href={info.link}
-                  className="flex items-start gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-[#46a758] transition-all duration-300 group"
+                  className="flex items-start gap-4 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md hover:border-[#46a758] transition-all duration-300 group cursor-default"
                   onClick={() =>
                     logEvent(EVENT_TYPES.CONTACT_CARD_CLICK, {
                       type: info.title,

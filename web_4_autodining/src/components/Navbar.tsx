@@ -21,7 +21,7 @@ export default function Navbar({
 
   return (
     <nav className="w-full border-b bg-white sticky top-0 z-10">
-      <div className="w-full flex items-center h-20 px-2 pl-2 pr-8 gap-6">
+      <div className="w-full flex items-center h-20 px-6 gap-6">
         {/* Logo section - always on left */}
         <div className="flex items-center gap-3 ml-0">
           <SeedLink href="/">

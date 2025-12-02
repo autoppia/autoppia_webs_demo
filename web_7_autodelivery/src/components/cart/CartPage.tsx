@@ -108,6 +108,7 @@ export default function CartPage() {
   ];
   const [selectedDropoff, setSelectedDropoff] = useState("Leave it at my door");
   const [isPickupInfoModalOpen, setIsPickupInfoModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   // MODE State
   const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
   const formRef = useRef<HTMLFormElement>(null);
@@ -240,7 +241,9 @@ export default function CartPage() {
   };
 
   const quantityLabel = getText("quantity-label", "Quantity");
-  const deliveryInformationTitle = getText("delivery-information-title", "Delivery Information");
+  const deliveryInformationTitle = mode === "pickup"
+    ? getText("delivery-information-title", "Pickup Details")
+    : getText("delivery-information-title", "Delivery Information");
   const deliveryInfoAttributes = layout.getElementAttributes("delivery-information-title", 0);
   const deliveryInformationId = getId(
     "delivery-information-title",
@@ -602,9 +605,7 @@ export default function CartPage() {
               <div
                 id="contact-number-selector"
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
-                onClick={() =>
-                  formRef.current?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => setIsContactModalOpen(true)}
               >
                 <Phone className="w-5 h-5 text-zinc-500" />
                 <span className="font-semibold">
@@ -632,9 +633,7 @@ export default function CartPage() {
               <div
                 id="pickup-contact-number-selector"
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
-                onClick={() =>
-                  formRef.current?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => setIsContactModalOpen(true)}
               >
                 <Phone className="w-5 h-5 text-zinc-500" />
                 <span className="font-semibold">

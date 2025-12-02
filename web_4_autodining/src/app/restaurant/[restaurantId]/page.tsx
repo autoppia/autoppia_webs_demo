@@ -18,7 +18,7 @@ import { format } from "date-fns";
 import Image from "next/image";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
@@ -74,17 +74,7 @@ export default function RestaurantPage() {
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const layoutSeed = resolvedSeeds.v1 ?? seed;
 
-  // Use seed-based variations (pass v1 seed)
-  const bookButtonVariation = useSeedVariation(
-    "bookButton",
-    undefined,
-    layoutSeed
-  );
-  const imageContainerVariation = useSeedVariation(
-    "imageContainer",
-    undefined,
-    layoutSeed
-  );
+  // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
 
   // LAYOUT FIJO - Siempre como seed 6
   const layout = {
@@ -254,10 +244,7 @@ export default function RestaurantPage() {
         </div>
       )}
       {/* Banner Image */}
-      <div
-        className={`w-full h-[340px] bg-gray-200 ${imageContainerVariation.position} ${imageContainerVariation.className}`}
-        data-testid={imageContainerVariation.dataTestId}
-      >
+      <div className="w-full h-[340px] bg-gray-200">
         <div className="relative w-full h-full">
           {r && (
             <Image src={r.image} alt={r.name} fill className="object-cover" />
@@ -656,7 +643,6 @@ export default function RestaurantPage() {
               <Button
                 id={getId("book_button")}
                 className="w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-sm transition-colors"
-                data-testid={bookButtonVariation.dataTestId}
               >
                 {bookNowLabel || "Book Now"}
               </Button>

@@ -181,7 +181,7 @@ export default function HelpPage() {
               <a
                 key={index}
                 href={section.link}
-                className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758] text-center"
+                className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758] text-center cursor-default"
               >
                 <div className="text-[#46a758] mb-4 flex justify-center">{section.icon}</div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{section.title}</h3>

@@ -78,11 +78,11 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
               <p className="text-lg leading-relaxed max-w-3xl">
                 At AutoDining, we believe that great food deserves great
-                experiences. Our mission is to simplify restaurant
-                discovery and reservation booking, ensuring that every
-                dining experience is seamless, enjoyable, and
-                unforgettable. We're committed to connecting diners with
-                the perfect restaurant for every occasion.
+                experiences. Our mission is to simplify restaurant discovery and
+                reservation booking, ensuring that every dining experience is
+                seamless, enjoyable, and unforgettable. We're committed to
+                connecting diners with the perfect restaurant for every
+                occasion.
               </p>
             </div>
           </section>
@@ -104,9 +104,7 @@ export default function AboutPage() {
                     })
                   }
                 >
-                  <div className="text-[#46a758] mb-4">
-                    {feature.icon}
-                  </div>
+                  <div className="text-[#46a758] mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {feature.title}
                   </h3>
@@ -154,26 +152,24 @@ export default function AboutPage() {
               Our Values
             </h2>
             <div className="space-y-6">
-              {["Excellence", "Integrity", "Innovation"].map(
-                (value, idx) => (
-                  <div
-                    key={value}
-                    className="border-l-4 border-[#46a758] pl-6 py-2"
-                  >
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      {value}
-                    </h3>
-                    <p className="text-gray-600">
-                      {idx === 0 &&
-                        "We strive for excellence in everything we do, from restaurant curation to customer service."}
-                      {idx === 1 &&
-                        "We maintain the highest standards of integrity and transparency in all our operations."}
-                      {idx === 2 &&
-                        "We continuously innovate to provide the best possible experience for our users."}
-                    </p>
-                  </div>
-                )
-              )}
+              {["Excellence", "Integrity", "Innovation"].map((value, idx) => (
+                <div
+                  key={value}
+                  className="border-l-4 border-[#46a758] pl-6 py-2"
+                >
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {value}
+                  </h3>
+                  <p className="text-gray-600">
+                    {idx === 0 &&
+                      "We strive for excellence in everything we do, from restaurant curation to customer service."}
+                    {idx === 1 &&
+                      "We maintain the highest standards of integrity and transparency in all our operations."}
+                    {idx === 2 &&
+                      "We continuously innovate to provide the best possible experience for our users."}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
         </div>

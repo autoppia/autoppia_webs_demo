@@ -1,9 +1,8 @@
 "use client";
 
 import { useSeed } from "@/context/SeedContext";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
 import Navbar from "@/components/Navbar";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { SeedLink } from "@/components/ui/SeedLink";
 
@@ -16,15 +15,6 @@ export default function FaqsPage() {
   const { seed, resolvedSeeds } = useSeed();
   const layoutSeed = resolvedSeeds.v1 ?? seed;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  // LAYOUT FIJO - Siempre como seed 6
-  const pageLayoutVariation = useSeedVariation("pageLayout", undefined, layoutSeed);
-  const sectionLayoutVariation = useSeedVariation("sectionLayout", undefined, layoutSeed);
-
-  // Valores fijos como seed 6
-  const layoutVariation = {
-    textAlign: "text-left",
-  };
 
   const faqs: FAQItem[] = [
     {
@@ -76,10 +66,9 @@ export default function FaqsPage() {
   return (
     <main>
       <Navbar />
-      <div className={`${pageLayoutVariation.className || "max-w-6xl mx-auto px-4 py-8"}`} 
-           data-testid={pageLayoutVariation.dataTestId}>
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
-        <div className={`mb-12 ${layoutVariation.textAlign}`}>
+        <div className="mb-12 text-left">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             Frequently Asked Questions
           </h1>
@@ -90,8 +79,7 @@ export default function FaqsPage() {
         </div>
 
         {/* FAQ Section */}
-        <div className={`${sectionLayoutVariation.className || "mb-12"}`} 
-             data-testid={sectionLayoutVariation.dataTestId}>
+        <div className="mb-12">
           <div className="space-y-4">
             {faqs.map((faq, index) => (
               <div
@@ -122,7 +110,7 @@ export default function FaqsPage() {
         </div>
 
         {/* Still Need Help Section */}
-        <div className={`${sectionLayoutVariation.className || "mb-12"}`}>
+        <div className="mb-12">
           <div className="bg-gradient-to-r from-[#46a758] to-[#3d8f4e] rounded-2xl p-8 md:p-12 text-white text-center">
             <h2 className="text-3xl font-bold mb-4">Still have questions?</h2>
             <p className="text-lg mb-6 opacity-90">
