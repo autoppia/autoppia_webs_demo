@@ -34,23 +34,13 @@ export function isDynamicEnabled(): boolean {
 }
 
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled()) {
-    return DEFAULT_LAYOUT;
-  }
-  return getSeedLayout(seed);
+  // LAYOUT FIJO - Siempre devolver el layout por defecto
+  return DEFAULT_LAYOUT;
 }
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  if (!seed || seed < 1 || seed > 300) {
-    return DEFAULT_LAYOUT;
-  }
-
-  if (seed % 10 === 5) {
-    return getLayoutByIndex(2);
-  }
-
-  const layoutIndex = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
-  return getLayoutByIndex(layoutIndex);
+  // LAYOUT FIJO - Siempre devolver el layout por defecto
+  return DEFAULT_LAYOUT;
 }
 
 function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
