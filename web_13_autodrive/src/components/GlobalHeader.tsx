@@ -142,34 +142,34 @@ export default function GlobalHeader({ preserveSeed = true }: Props) {
                   </button>
                   <button
                     className="flex flex-col items-center justify-center w-20 cursor-pointer"
-                    onClick={() => setProfileOpen(false)}
+                    onClick={() => {
+                      setProfileOpen(false);
+                      router.push("/contact");
+                    }}
                   >
                     <span className="rounded bg-gray-100 w-[38px] h-[38px] shadow flex items-center justify-center mb-1">
                       <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                        <rect width="20" height="14" x="2" y="5" rx="4" fill="#111" />
-                        <rect width="5" height="8" x="5" y="8" rx="2.5" fill="#fff" />
+                        <rect x="3" y="5" width="18" height="14" rx="2" stroke="#444" strokeWidth="1.8" fill="none"/>
+                        <path d="M3 7l9 5 9-5" stroke="#444" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </span>
-                    <span className="text-xs font-medium text-black">Wallet</span>
+                    <span className="text-xs font-medium text-black">Contact</span>
                   </button>
                   <button
                     className="flex flex-col items-center justify-center w-20 cursor-pointer"
-                    onClick={() => setProfileOpen(false)}
+                    onClick={() => {
+                      setProfileOpen(false);
+                      router.push("/ride/trip");
+                    }}
                   >
                     <span className="rounded bg-gray-100 w-[38px] h-[38px] shadow flex items-center justify-center mb-1">
                       <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                        <rect
-                          width="18"
-                          height="18"
-                          x="3"
-                          y="3"
-                          rx="4"
-                          fill="#f3f3f3"
-                        />
-                        <rect width="10" height="4" x="7" y="8" rx="2" fill="#333" />
+                        <path d="M5 17h14v2H5v-2zm2.5-7L6 7h12l-1.5 3H7.5z" stroke="#444" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="8.5" cy="13" r="1.5" stroke="#444" strokeWidth="1.8" fill="none"/>
+                        <circle cx="15.5" cy="13" r="1.5" stroke="#444" strokeWidth="1.8" fill="none"/>
                       </svg>
                     </span>
-                    <span className="text-xs font-medium text-black">Activity</span>
+                    <span className="text-xs font-medium text-black">Ride</span>
                   </button>
                 </div>
                 <div className="flex flex-col divide-y">
