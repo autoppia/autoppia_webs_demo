@@ -22,9 +22,18 @@ import { SafeImage } from "@/components/ui/SafeImage";
 import { getCategoryFallback } from "@/data/products-enhanced";
 
 
-// Static date to avoid hydration mismatch
-const DELIVERY_DATE = "Sunday, October 13";
 const DELIVERY_ADDRESS = "Daly City 94016";
+
+// Generate dynamic delivery date (2-3 days from today)
+const getDeliveryDate = () => {
+  const date = new Date();
+  date.setDate(date.getDate() + (2 + Math.floor(Math.random() * 2)));
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+};
 
 function ProductContent() {
   const router = useSeedRouter();
@@ -45,6 +54,12 @@ function ProductContent() {
   const { seed } = useSeed();
   const order = seed % 3;
   const fallbackImage = getCategoryFallback(product?.category);
+  const [deliveryDate, setDeliveryDate] = useState<string>("");
+  
+  useEffect(() => {
+    // Set delivery date on client side to avoid hydration mismatch
+    setDeliveryDate(getDeliveryDate());
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -88,14 +103,8 @@ function ProductContent() {
 
   const galleryImages = useMemo(() => {
     if (!product?.image) return [];
-    const separator = product.image.includes("?") ? "&" : "?";
-    const variants = [
-      product.image,
-      `${product.image}${separator}angle=left`,
-      `${product.image}${separator}angle=detail`,
-      `${product.image}${separator}angle=packaging`,
-    ];
-    return Array.from(new Set(variants));
+    // Just show one image since we don't have multiple angles
+    return [product.image];
   }, [product?.image]);
 
   useEffect(() => {
@@ -107,9 +116,9 @@ function ProductContent() {
   const specEntries = useMemo(
     () =>
       [
-        { label: getText("brand"), value: product?.brand },
-        { label: getText("color"), value: product?.color },
-        { label: getText("size"), value: product?.size },
+        { label: "Brand", value: product?.brand },
+        { label: "Color", value: product?.color },
+        { label: "Size", value: product?.size },
         {
           label: "Dimensions",
           value:
@@ -120,11 +129,11 @@ function ProductContent() {
               : undefined,
         },
         {
-          label: getText("category", "Category"),
+          label: "Category",
           value: product?.category,
         },
         {
-          label: getText("care_instructions", "Care instructions"),
+          label: "Care Instructions",
           value: product?.careInstructions,
         },
       ].filter((entry) => entry.value),
@@ -137,7 +146,6 @@ function ProductContent() {
       product?.dimensions?.length,
       product?.dimensions?.width,
       product?.size,
-      getText,
     ]
   );
 
@@ -216,7 +224,7 @@ function ProductContent() {
         htmlFor={getId("quantity_select")}
         className="mb-1 block text-xs font-semibold uppercase tracking-[0.3em] text-slate-400"
       >
-        {getText("quantity")}
+        QUANTITY
       </label>
       <select
         id={getId("quantity_select")}
@@ -257,7 +265,7 @@ function ProductContent() {
         router.push("/cart");
       }}
     >
-      {getText("add_to_cart")}
+      Add to Cart
     </Button>
   );
 
@@ -281,7 +289,7 @@ function ProductContent() {
         router.push("/checkout");
       }}
     >
-      {getText("buy_now")}
+      Buy Now
     </Button>
   );
 
@@ -341,19 +349,17 @@ function ProductContent() {
             size={18}
             className={`${
               i < fullStars
-                ? "text-amazon-darkYellow fill-amazon-darkYellow"
+                ? "text-amber-500 fill-amber-500"
                 : i === fullStars && hasHalfStar
-                ? "text-amazon-darkYellow fill-amazon-darkYellow"
+                ? "text-amber-500 fill-amber-500"
                 : "text-gray-300"
             }`}
           />
         ))}
-        <span className="ml-2 text-blue-600">
+        <span className="ml-2 text-blue-600 text-sm font-medium">
           {rating.toFixed(1)}
-          {reviews !== undefined && reviews > 0 ? (
-            <> ({reviews} {reviews === 1 ? 'review' : 'reviews'})</>
-          ) : (
-            <> {getText("ratings")}</>
+          {reviews !== undefined && reviews > 0 && (
+            <> ({reviews.toLocaleString()} {reviews === 1 ? 'review' : 'reviews'})</>
           )}
         </span>
       </div>
@@ -438,7 +444,7 @@ function ProductContent() {
             <BlurCard className="space-y-4 p-6">
               <div className="space-y-2">
                 <p className="text-xs uppercase tracking-[0.35em] text-slate-400">
-                  {getText("visit_store")} {product.brand} {getText("store")}
+                  VISIT {product.brand} STORE
                 </p>
                 <h1 className="text-3xl font-semibold text-slate-900">
                   {product.title}
@@ -478,7 +484,7 @@ function ProductContent() {
                   {formattedPrice}
                 </span>
                 <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.4em] text-emerald-700">
-                  {getText("in_stock")}
+                  IN STOCK
                 </span>
               </div>
               <div className="space-y-3 text-sm text-slate-600">
@@ -519,45 +525,43 @@ function ProductContent() {
           <div className="space-y-6">
             <BlurCard className="space-y-4 p-6">
               <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-slate-400">
-                <span>{getText("buy_new")}</span>
-                <span>{getText("deliver_to")} {DELIVERY_ADDRESS}</span>
+                <span>BUY NEW</span>
+                <span>DELIVER TO {DELIVERY_ADDRESS}</span>
               </div>
               <div className="text-3xl font-semibold text-slate-900">
                 {product.price}
               </div>
               <p className="text-sm text-slate-600">
-                {getText("free_delivery")} <strong>{DELIVERY_DATE}</strong> — Autozone courier partners
+                Free delivery <strong>{deliveryDate}</strong> — Autozone courier partners
               </p>
               {layouts[order].map((elementKey) => (
                 <div key={elementKey}>{actionMap[elementKey]}</div>
               ))}
               <dl className="grid gap-2 text-xs text-slate-500">
                 <div className="flex justify-between">
-                  <dt>{getText("ships_from")}</dt>
+                  <dt>Ships from</dt>
                   <dd className="text-slate-900">Autozone Fulfillment</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt>{getText("sold_by")}</dt>
+                  <dt>Sold by</dt>
                   <dd className="text-slate-900">
                     {product.brand || "Verified Partner"}
                   </dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt>{getText("returns_policy")}</dt>
-                  <dd className="text-slate-900">{getText("day_refund")}</dd>
+                  <dt>Returns</dt>
+                  <dd className="text-slate-900">30-day refund policy</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt>{getText("payment")}</dt>
-                  <dd className="text-slate-900">
-                    {getText("secure_transaction")}
-                  </dd>
+                  <dt>Payment</dt>
+                  <dd className="text-slate-900">Secure transaction</dd>
                 </div>
               </dl>
             </BlurCard>
 
             <BlurCard className="space-y-4 p-5" data-variant="muted">
               <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-slate-400">
-                <span>Shipping options</span>
+                <span>SHIPPING OPTIONS</span>
                 <button
                   type="button"
                   onClick={handleExploreToggle}
@@ -568,25 +572,22 @@ function ProductContent() {
                   ) : (
                     <ChevronDown className="h-3 w-3" />
                   )}
-                  {getText("see_more") || "Expand"}
+                  {isExploreOpen ? "Collapse" : "Expand"}
                 </button>
               </div>
               <p className="text-sm text-slate-600">
-                {getText("deliver_to")} {DELIVERY_ADDRESS}
+                Deliver to {DELIVERY_ADDRESS}
               </p>
               {isExploreOpen && (
                 <ul className="space-y-2 text-sm text-slate-600">
                   <li>
-                    {getText("white_glove_option") ||
-                      "Choose standard, expedited, or same-day when available."}
+                    • Choose standard, expedited, or same-day when available.
                   </li>
                   <li>
-                    {getText("carbon_offset") ||
-                      "Free returns within 30 days on most items."}
+                    • Free returns within 30 days on most items.
                   </li>
                   <li>
-                    {getText("bundle_service") ||
-                      "Bundle matching accessories for automatic discounts."}
+                    • Bundle matching accessories for automatic discounts.
                   </li>
                 </ul>
               )}
@@ -596,7 +597,7 @@ function ProductContent() {
                   className="rounded border-slate-300 text-slate-900 focus:ring-slate-400"
                   id="gift-receipt"
                 />
-                <label htmlFor="gift-receipt">{getText("add_gift_receipt")}</label>
+                <label htmlFor="gift-receipt">Add gift receipt</label>
               </div>
               {addedToCart && (
                 <div className="rounded-full bg-emerald-100 px-4 py-2 text-center text-sm font-semibold text-emerald-700">
@@ -610,8 +611,8 @@ function ProductContent() {
         {product.description && (
           <section className="mt-16 space-y-6">
             <SectionHeading
-              eyebrow={getText("about_this_item")}
-              title="Product details"
+              eyebrow="ABOUT THIS ITEM"
+              title="Product Details"
               description="What shoppers and our product team call out before you add it to cart."
             />
             <BlurCard className="p-6">

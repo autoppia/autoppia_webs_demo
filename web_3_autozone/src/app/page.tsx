@@ -4,12 +4,10 @@ import { HeroSlider } from "@/components/home/HeroSlider";
 import { ProductCarousel } from "@/components/home/ProductCarousel";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { KpiStat } from "@/components/ui/KpiStat";
 import { Suspense } from "react";
-import { getProductsByCategory, getLayoutConfig, getEffectiveSeed } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
+import { getProductsByCategory, getEffectiveSeed } from "@/dynamic/v2-data";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { ArrowRight, Calendar, Package, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Package, ShieldCheck, Sparkles } from "lucide-react";
 import { logEvent, EVENT_TYPES } from "@/events";
 import { SafeImage } from "@/components/ui/SafeImage";
 import {
@@ -23,57 +21,24 @@ function HomeContent() {
   const { resolvedSeeds } = useSeed();
   const router = useSeedRouter();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base ?? 1;
-  const v1Seed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? v2Seed;
   const seed = getEffectiveSeed(v2Seed);
-  const layoutConfig = getLayoutConfig(v1Seed);
-  const layoutClasses = getLayoutClasses(layoutConfig);
 
   // Dynamic product groupings
   const kitchenProducts = getProductsByCategory("Kitchen");
   const techProducts = getProductsByCategory("Technology");
-  const HomeProducts = getProductsByCategory("Home");
-  const ElectronicProducts = getProductsByCategory("Electronics");
-  const FitnessProducts = getProductsByCategory("Fitness");
+  const homeProducts = getProductsByCategory("Home");
+  const electronicProducts = getProductsByCategory("Electronics");
+  const fitnessProducts = getProductsByCategory("Fitness");
 
   const isLoadingProducts =
     kitchenProducts.length +
       techProducts.length +
-      HomeProducts.length +
-      ElectronicProducts.length +
-      FitnessProducts.length ===
+      homeProducts.length +
+      electronicProducts.length +
+      fitnessProducts.length ===
     0;
 
-  const heroKpis = [
-    {
-      label: "On-time delivery",
-      value: `${94 + (seed % 4)}%`,
-      delta: "+3.1%",
-      caption: "Orders landed as promised",
-      trend: "up" as const,
-    },
-    {
-      label: "Avg arrival",
-      value: `${2 + (seed % 3)} days`,
-      delta: "-0.4d",
-      caption: "Coast-to-coast shipping",
-      trend: "down" as const,
-    },
-    {
-      label: "Customer rating",
-      value: `${(4.6 + (seed % 3) * 0.1).toFixed(1)} ★`,
-      delta: "+210",
-      caption: "New verified reviews",
-      trend: "up" as const,
-    },
-  ];
-
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[] | null>(null);
-  const navigateWithTracking = (
-    href: string,
-    payload: { label: string; source: string } & Record<string, unknown>
-  ) => {
-    router.push(href);
-  };
 
   const handleWishlistProduct = (item: WishlistItem) => {
     logEvent(EVENT_TYPES.VIEW_DETAIL, {
@@ -87,17 +52,17 @@ function HomeContent() {
   };
 
   const carouselConfigs = [
-    { title: "Top Sellers In Kitchen", products: kitchenProducts },
-    { title: "Top Sellers In Technology", products: techProducts },
-    { title: "Top Sellers In Home", products: HomeProducts },
-    { title: "Top Sellers In Electronics", products: ElectronicProducts },
-    { title: "Top Sellers In Fitness", products: FitnessProducts },
+    { title: "Kitchen Essentials", products: kitchenProducts },
+    { title: "Technology & Gadgets", products: techProducts },
+    { title: "Home & Living", products: homeProducts },
+    { title: "Electronics", products: electronicProducts },
+    { title: "Fitness & Wellness", products: fitnessProducts },
   ];
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
-    const webAgentId = params.get("X-WebAgent-Id"); // AI param
+    const webAgentId = params.get("X-WebAgent-Id");
     const userId = params.get("user");
 
     if (webAgentId) localStorage.setItem("web_agent_id", webAgentId);
@@ -118,40 +83,54 @@ function HomeContent() {
   }, []);
 
   return (
-    <main
-      className={`min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 ${layoutClasses.spacing} overflow-x-hidden`}
-    >
-      <div className={`relative z-10 px-4 pb-16 ${layoutClasses.content}`}>
-        <section className="omnizon-container grid gap-10 pb-24 pt-28 lg:grid-cols-[1.1fr,0.9fr]">
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 overflow-x-hidden">
+      <div className="relative z-10 px-4 pb-16">
+        {/* Hero Section */}
+        <section className="omnizon-container grid gap-10 pb-12 pt-28 lg:grid-cols-[1.1fr,0.9fr]">
           <div className="space-y-6">
             <span className="pill pill-muted">EVERYDAY MARKETPLACE</span>
             <h1 className="text-4xl font-semibold text-slate-900 md:text-5xl">
-              Everything for home, tech, and daily life-delivered fast
+              Everything for home, tech, and daily life
             </h1>
             <p className="text-base text-slate-600 md:text-lg">
-              Stock up on essentials, upgrade your setup, or grab a quick gift.
-              Autozone keeps inventory fresh, routes shipping intelligently, and
-              makes checkout effortless.
+              Shop essentials, upgrade your setup, or find the perfect gift.
+              Fast shipping and easy returns on thousands of products.
             </p>
-            <div className="kpi-grid pt-2">
-              {heroKpis.map((kpi) => (
-                <KpiStat key={kpi.label} {...kpi} />
-              ))}
+            <div className="flex flex-wrap gap-3 pt-1 text-sm text-slate-700">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 shadow-sm">
+                <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                Free returns
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 shadow-sm">
+                <Package className="h-4 w-4 text-indigo-600" />
+                Fast shipping
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 shadow-sm">
+                <Sparkles className="h-4 w-4 text-amber-500" />
+                Daily deals
+              </span>
+            </div>
+            
+            {/* Popular Categories */}
+            <div className="pt-4 space-y-3">
+              <p className="text-xs uppercase tracking-[0.3em] text-slate-400 font-semibold">
+                Popular Categories
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {["Kitchen", "Electronics", "Technology", "Home", "Fitness"].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => router.push(`/search?category=${cat.toLowerCase()}`)}
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:border-slate-400 hover:bg-slate-50 transition-colors"
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           <div className="relative">
             <HeroSlider />
-            <BlurCard className="absolute -bottom-10 left-1/2 w-[85%] -translate-x-1/2 px-5 py-4 text-sm text-slate-600 shadow-elevated">
-              <p className="text-[10px] uppercase tracking-[0.4em] text-slate-400">
-                Local availability
-              </p>
-              <p className="text-base font-semibold text-slate-900">
-                {82 + (seed % 7)} products ready to ship near you
-              </p>
-              <p className="text-xs text-slate-500">
-                Same-day eligible in Daly City · San Jose · Oakland
-              </p>
-            </BlurCard>
           </div>
         </section>
 
@@ -161,12 +140,13 @@ function HomeContent() {
           </div>
         )}
 
+        {/* Wishlist Section */}
         {wishlistItems && wishlistItems.length > 0 && (
-          <section id="wishlist" className="omnizon-container mt-16 space-y-6">
+          <section id="wishlist" className="omnizon-container mt-8 space-y-6">
             <SectionHeading
               eyebrow="Saved wishlist"
               title="Saved for later"
-              description="Pick up where you left off, compare, or move items straight into the cart."
+              description="Pick up where you left off or move items to your cart."
               actions={
                 <button
                   type="button"
@@ -189,7 +169,8 @@ function HomeContent() {
                 <BlurCard
                   key={item.id}
                   interactive
-                  className="min-w-[260px] p-4"
+                  className="min-w-[260px] p-4 cursor-pointer"
+                  onClick={() => handleWishlistProduct(item)}
                 >
                   <div className="relative h-36 w-full overflow-hidden rounded-2xl bg-slate-50">
                     <SafeImage
@@ -198,7 +179,7 @@ function HomeContent() {
                       fill
                       sizes="260px"
                       className="object-contain"
-                      fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
+                      fallbackSrc="/images/homepage_categories/default.jpg"
                     />
                     {item.price && (
                       <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-900 shadow">
@@ -218,14 +199,10 @@ function HomeContent() {
                     <span className="font-semibold text-slate-900">
                       {item.price}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => handleWishlistProduct(item)}
-                      className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-white"
-                    >
-                      View product
-                      <ArrowRight className="h-4 w-4" />
-                    </button>
+                    <span className="inline-flex items-center gap-2 text-xs text-slate-600">
+                      View details
+                      <ArrowRight className="h-3 w-3" />
+                    </span>
                   </div>
                 </BlurCard>
               ))}
@@ -233,26 +210,22 @@ function HomeContent() {
           </section>
         )}
 
+        {/* Product Highlights */}
         <section
           id="product-highlights"
-          className="omnizon-container mt-16 space-y-8"
+          className="omnizon-container mt-8 space-y-8"
         >
           <SectionHeading
             eyebrow="Product highlights"
-            title="Trusted picks by category"
-            description="High-performing gear, gifts, and everyday essentials curated for Autozone shoppers."
+            title="Shop by category"
+            description="Discover high-quality products curated for every need."
             actions={
               <button
                 type="button"
-                onClick={() =>
-                  navigateWithTracking("/search", {
-                    label: "browse_catalog",
-                    source: "highlights_header",
-                  })
-                }
+                onClick={() => router.push("/search")}
                 className="rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400"
               >
-                Browse catalog
+                Browse all
               </button>
             }
           />

@@ -60,9 +60,9 @@ export function HeroSlider() {
   return (
     <div
       id={getId("hero_slider")}
-      className="relative h-[400px] w-full overflow-hidden bg-gradient-to-br from-amazon-lightBlue to-amazon-blue"
+      className="relative h-[400px] w-full overflow-hidden rounded-3xl bg-gradient-to-br from-amazon-lightBlue to-amazon-blue"
     >
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 rounded-3xl overflow-hidden">
         {sliderImages.map((slide, index) => (
           <div
             key={slide.id}

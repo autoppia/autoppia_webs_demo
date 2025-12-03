@@ -1,7 +1,6 @@
 import { Header } from "@/layout/Header";
 import { Footer } from "@/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
-// DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -9,8 +8,6 @@ import { Suspense } from "react";
 import "./globals.css";
 import { BodyWrapper } from "@/layout/BodyWrapper";
 import { DataReadyGate } from "@/layout/DataReadyGate";
-import { BodyWrapper } from "@/components/layout/BodyWrapper";
-import { DataReadyGate } from "@/components/layout/DataReadyGate";
 import { SeedRedirect } from "@/components/layout/SeedRedirect";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });

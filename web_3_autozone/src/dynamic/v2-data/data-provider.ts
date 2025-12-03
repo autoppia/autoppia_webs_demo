@@ -115,7 +115,7 @@ export class DynamicDataProvider {
     return this.products.filter((product) => product.category === category);
   }
 
-  public getFeaturedProducts(count: number = 4): Product[] {
+  public getFeaturedProducts(count = 4): Product[] {
     if (!Array.isArray(this.products)) {
       return [];
     }

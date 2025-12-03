@@ -23,33 +23,27 @@ export function Footer() {
     {
       title: "Shop",
       links: [
-        { text: "All Products", href: "/" },
-        { text: "Search", href: "/search" },
-        { text: "Shopping Cart", href: "/cart" },
+        { text: "All Products", href: "/search", clickable: true },
+        { text: "Wishlist", href: "/wishlist", clickable: true },
+        { text: "Shopping Cart", href: "/cart", clickable: true },
       ],
     },
     {
       title: "Your Account",
       links: [
-        { text: "Your Orders", href: "/cart" },
-        { text: "Checkout", href: "/checkout" },
+        { text: "Orders", href: "/cart", clickable: true },
+        { text: "Checkout", href: "/checkout", clickable: true },
+        { text: "Saved Items", href: "/wishlist", clickable: true },
       ],
     },
     {
       title: "Customer Service",
       links: [
-        { text: "Help Center", href: "/" },
-        { text: "Shipping Info", href: "/" },
-        { text: "Returns", href: "/" },
+        { text: "Help Center", href: "/", clickable: false },
+        { text: "Shipping Info", href: "/", clickable: false },
+        { text: "Returns Policy", href: "/", clickable: false },
       ],
     },
-  ];
-
-  const quickLinks = [
-    { label: "Shop all products", href: "/search" },
-    { label: "View cart", href: "/cart" },
-    { label: "Wishlist", href: "/wishlist" },
-    { label: "Checkout", href: "/checkout" },
   ];
 
   return (
@@ -99,35 +93,28 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            <div className="space-y-3">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
-                Shop & manage
-              </p>
-              <ul className="space-y-2 text-sm text-white/80">
-                {quickLinks.map((link) => (
-                  <li key={link.label}>
-                    <button
-                      type="button"
-                      onClick={() => router.push(link.href)}
-                      className="text-left text-white/80 hover:text-white"
-                    >
-                      {link.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {infoColumns.map((column) => (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {linkColumns.map((column) => (
               <div key={column.title} className="space-y-3">
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
                   {column.title}
                 </p>
-                <ul className="space-y-2 text-sm text-white/50">
-                  {column.links.map((label) => (
-                    <li key={label}>
-                      <span className="cursor-not-allowed text-white/50">{label}</span>
+                <ul className="space-y-2 text-sm text-white/70">
+                  {column.links.map((link) => (
+                    <li key={link.text}>
+                      {link.clickable ? (
+                        <button
+                          type="button"
+                          onClick={() => router.push(link.href)}
+                          className="text-left hover:text-white transition-colors"
+                        >
+                          {link.text}
+                        </button>
+                      ) : (
+                        <span className="text-white/50 cursor-default">
+                          {link.text}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -146,24 +133,24 @@ export function Footer() {
                 </span>
               </div>
             <div className="flex flex-wrap items-center gap-3">
-              <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
+              <span className="rounded-full border border-white/30 px-3 py-1 text-xs text-white/60 cursor-default">
                 English
-              </button>
-              <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
-                  USD - U.S. Dollar
-                </button>
-                <button className="inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs">
-                  <span className="relative h-3 w-5">
-                    <Image
-                      src="/images/others/us_flag.png"
-                      alt="United States"
-                      fill
-                      className="object-cover"
-                    />
-                  </span>
-                  United States
-                </button>
-              </div>
+              </span>
+              <span className="rounded-full border border-white/30 px-3 py-1 text-xs text-white/60 cursor-default">
+                USD - U.S. Dollar
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs text-white/60 cursor-default">
+                <span className="relative h-3 w-5">
+                  <Image
+                    src="/images/others/us_flag.png"
+                    alt="United States"
+                    fill
+                    className="object-cover"
+                  />
+                </span>
+                United States
+              </span>
+            </div>
             </div>
             <p className="mt-4 text-xs text-white/60">
               © {new Date().getFullYear()} Autozone. Marketplace for trusted sellers,
