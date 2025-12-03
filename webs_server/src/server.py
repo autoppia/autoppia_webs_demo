@@ -667,7 +667,7 @@ async def generate_dataset_smart_endpoint(request: SmartGenerationRequest):
             examples=examples,
             count=request.count,
             categories=metadata.get("categories"),
-            additional_requirements=str(additional_requirements) + '\n' + str(metadata.get("requirements")),
+            additional_requirements=str(additional_requirements) + "\n" + str(metadata.get("requirements")),
             project_key=request.project_key,
             entity_type=request.entity_type,
             seed_value=request.seed_value,
@@ -1001,10 +1001,10 @@ class SeedResolveResponse(BaseModel):
 async def resolve_seeds_endpoint(request: SeedResolveRequest):
     """
     Resolves a base seed into deterministic v1, v2, v3 seeds.
-    
+
     This service centralizes seed resolution logic so all webs use the same formulas.
     Each version (v1, v2, v3) can be enabled/disabled independently.
-    
+
     Example:
         POST /seeds/resolve
         {
@@ -1013,7 +1013,7 @@ async def resolve_seeds_endpoint(request: SeedResolveRequest):
             "v2_enabled": true,
             "v3_enabled": false
         }
-        
+
         Returns:
         {
             "base": 42,
