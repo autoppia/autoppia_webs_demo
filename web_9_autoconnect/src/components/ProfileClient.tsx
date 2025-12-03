@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { type User, type Post } from "@/library/dataset";
 import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
@@ -30,7 +30,61 @@ function ProfileContent({ username }: { username: string }) {
   const [connectState, setConnectState] = useState<
     "connect" | "pending" | "connected"
   >("connect");
-  
+
+  // LocalStorage state for About editing
+  const [aboutText, setAboutText] = useState(user?.about || "");
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [newPostContent, setNewPostContent] = useState("");
+
+  // Load saved about from localStorage
+  useEffect(() => {
+    if (isSelf && user) {
+      const savedAbout = localStorage.getItem(`profile_about_${user.username}`);
+      if (savedAbout) {
+        setAboutText(savedAbout);
+      } else if (user.about) {
+        setAboutText(user.about);
+      }
+    }
+  }, [isSelf, user]);
+
+  // Load saved posts from localStorage
+  const getLocalPosts = (): Post[] => {
+    if (typeof window === "undefined" || !isSelf || !user) return [];
+    const savedPosts = localStorage.getItem(`profile_posts_${user.username}`);
+    if (savedPosts) {
+      try {
+        return JSON.parse(savedPosts);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  };
+
+  const [localPosts, setLocalPosts] = useState<Post[]>(getLocalPosts);
+  const [postsState, setPostsState] = useState<Record<string, { likes: number; liked: boolean; comments: Post['comments'] }>>({});
+
+  // Load posts state from localStorage (likes and comments)
+  useEffect(() => {
+    if (user) {
+      const savedState = localStorage.getItem(`profile_posts_state_${user.username}`);
+      if (savedState) {
+        try {
+          setPostsState(JSON.parse(savedState));
+        } catch {
+          setPostsState({});
+        }
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (isSelf && user) {
+      setLocalPosts(getLocalPosts());
+    }
+  }, [isSelf, user]);
+
   useEffect(() => {
     if (user) {
       const payload = {
@@ -46,10 +100,32 @@ function ProfileContent({ username }: { username: string }) {
   }, [user]);
 
   if (!user)
-    return <div className="text-center text-red-600 mt-8">{getText("profile_not_found", "User not found.")}</div>;
+    return (
+      <div className="text-center text-red-600 mt-8">
+        {getText("profile_not_found", "User not found.")}
+      </div>
+    );
 
   const posts = mockPosts.filter((p) => p.user.username === user.username);
-  const shuffledPosts = getShuffledItems(posts, layoutSeed);
+  const allPosts = isSelf ? [...localPosts, ...posts] : posts;
+  
+  // Merge posts with saved state (likes and comments) - recalculate when postsState changes
+  const postsWithState = useMemo(() => {
+    return allPosts.map(post => {
+      const state = postsState[post.id];
+      if (state) {
+        return {
+          ...post,
+          likes: state.likes,
+          liked: state.liked,
+          comments: state.comments || post.comments,
+        };
+      }
+      return post;
+    });
+  }, [allPosts, postsState]);
+  
+  const shuffledPosts = getShuffledItems(postsWithState, layoutSeed);
   const profileClasses = getLayoutClasses(layout, "profileLayout");
 
   const handleConnect = () => {
@@ -68,71 +144,234 @@ function ProfileContent({ username }: { username: string }) {
     setTimeout(() => setConnectState("connected"), 1000);
   };
 
+  const handleSaveAbout = () => {
+    if (isSelf && user) {
+      localStorage.setItem(`profile_about_${user.username}`, aboutText);
+      setIsEditingAbout(false);
+    }
+  };
+
+  const handleSubmitPost = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPostContent.trim() || !isSelf || !user) return;
+
+    const newPost: Post = {
+      id: `local_${Date.now()}`,
+      user: user,
+      content: newPostContent,
+      timestamp: new Date().toISOString(),
+      likes: 0,
+      liked: false,
+      comments: [],
+    };
+
+    const updatedPosts = [newPost, ...localPosts];
+    setLocalPosts(updatedPosts);
+    localStorage.setItem(
+      `profile_posts_${user.username}`,
+      JSON.stringify(updatedPosts)
+    );
+    setNewPostContent("");
+
+    logEvent(EVENT_TYPES.POST_STATUS, {
+      userName: user.name,
+      content: newPost.content,
+      postId: newPost.id,
+    });
+  };
+
+  const handleLike = (postId: string) => {
+    const post = allPosts.find((p) => p.id === postId);
+    if (!post || !user) return;
+
+    const currentState = postsState[postId] || {
+      likes: post.likes || 0,
+      liked: post.liked || false,
+      comments: post.comments || [],
+    };
+
+    const newLiked = !currentState.liked;
+    const newLikes = newLiked ? currentState.likes + 1 : Math.max(0, currentState.likes - 1);
+
+    const updatedState = {
+      ...postsState,
+      [postId]: {
+        ...currentState,
+        likes: newLikes,
+        liked: newLiked,
+      },
+    };
+
+    setPostsState(updatedState);
+    localStorage.setItem(`profile_posts_state_${user.username}`, JSON.stringify(updatedState));
+
+    logEvent(EVENT_TYPES.LIKE_POST, {
+      postId,
+      action: newLiked ? "liked" : "unliked",
+    });
+  };
+
+  const handleAddComment = (postId: string, text: string) => {
+    const post = allPosts.find((p) => p.id === postId);
+    if (!post || !user || !text.trim()) return;
+
+    const currentState = postsState[postId] || {
+      likes: post.likes || 0,
+      liked: post.liked || false,
+      comments: post.comments || [],
+    };
+
+    const newComment = {
+      id: `comment_${Date.now()}`,
+      user: currentUser,
+      text: text.trim(),
+      timestamp: new Date().toISOString(),
+    };
+
+    const updatedState = {
+      ...postsState,
+      [postId]: {
+        ...currentState,
+        comments: [...(currentState.comments || []), newComment],
+      },
+    };
+
+    setPostsState(updatedState);
+    localStorage.setItem(`profile_posts_state_${user.username}`, JSON.stringify(updatedState));
+
+    logEvent(EVENT_TYPES.COMMENT_ON_POST, {
+      postId,
+      commentId: newComment.id,
+      commentText: text,
+    });
+  };
+
+  // Company logo mapping for better logos
+  const getCompanyLogo = (company: string, fallback: string): string => {
+    const logoMap: Record<string, string> = {
+      Google: "https://logo.clearbit.com/google.com",
+      "Y Combinator": "https://logo.clearbit.com/ycombinator.com",
+      Adobe: "/media/companies/adobe-logo.svg",
+      Square: "https://logo.clearbit.com/square.com",
+      PayPal: "https://logo.clearbit.com/paypal.com",
+      Microsoft: "https://logo.clearbit.com/microsoft.com",
+      Apple: "https://logo.clearbit.com/apple.com",
+      Amazon: "https://logo.clearbit.com/amazon.com",
+      Meta: "https://logo.clearbit.com/meta.com",
+      Netflix: "https://logo.clearbit.com/netflix.com",
+    };
+    return logoMap[company] || fallback;
+  };
+
   const renderProfileHeader = () => (
-    <div className="bg-white rounded-lg shadow p-6 flex flex-col sm:flex-row items-center gap-6 mb-8">
-      <Avatar src={user.avatar} alt={user.name} size={85} />
-      <div className="text-center sm:text-left flex flex-col gap-2 flex-1">
-        <div className="flex flex-wrap gap-2 items-center justify-center sm:justify-start">
-          <div className="text-xl font-bold">{user.name}</div>
-          <div className="text-blue-700 font-medium">{user.title}</div>
+    <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col sm:flex-row items-center gap-6 mb-6">
+      <Avatar src={user.avatar} alt={user.name} size={100} />
+      <div className="text-center sm:text-left flex flex-col gap-3 flex-1">
+        <div className="flex flex-wrap gap-3 items-center justify-center sm:justify-start">
+          <div className="text-2xl font-bold text-gray-900">{user.name}</div>
+          <div className="text-blue-600 font-semibold text-lg">{user.title}</div>
           {!isSelf &&
             (connectState === "connect" ? (
               <button
-                className="ml-2 px-4 py-1 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700"
+                className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg"
                 onClick={handleConnect}
               >
                 {getText("profile_connect", "Connect")}
               </button>
             ) : connectState === "pending" ? (
               <button
-                className="ml-2 px-4 py-1 rounded-full font-medium transition-colors text-white bg-gray-400 cursor-wait"
+                className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-gray-400 cursor-wait"
                 disabled
               >
                 {getText("profile_pending", "Pending...")}
               </button>
             ) : (
-              <span className="ml-2 px-4 py-1 rounded-full font-medium transition-colors text-white bg-green-600 cursor-default select-none">
+              <span className="ml-2 px-6 py-2 rounded-full font-medium transition-colors text-white bg-green-600 cursor-default select-none">
                 {getText("profile_message", "Message")}
               </span>
             ))}
         </div>
-        <div className="text-gray-600 mt-2">{user.bio}</div>
+        <div className="text-gray-600 text-base">{user.bio}</div>
       </div>
     </div>
   );
 
-  const renderAbout = () => (
-    user.about && (
-      <div className="bg-gray-100 border rounded-lg p-5 mb-6">
-        <h3 className="font-bold text-lg mb-2">{getText("profile_about", "About")}</h3>
-        <p className="whitespace-pre-line text-gray-900">{user.about}</p>
-      </div>
-    )
-  );
+  const renderAbout = () => {
+    const displayAbout = isSelf ? aboutText : user.about;
+    if (!displayAbout && !isSelf) return null;
 
-  const renderExperience = () => (
-    user.experience && user.experience.length > 0 && (
-      <div className="bg-gray-100 border rounded-lg p-5 mb-8">
-        <h3 className="font-bold text-lg mb-4">{getText("profile_experience", "Experience")}</h3>
+    return (
+      <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-xl text-gray-900">
+            {getText("profile_about", "About")}
+          </h3>
+          {isSelf && (
+            <button
+              onClick={() => {
+                if (isEditingAbout) {
+                  handleSaveAbout();
+                } else {
+                  setIsEditingAbout(true);
+                }
+              }}
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors"
+            >
+              {isEditingAbout ? "💾 Save" : "✏️ Edit"}
+            </button>
+          )}
+        </div>
+        {isEditingAbout && isSelf ? (
+          <textarea
+            value={aboutText}
+            onChange={(e) => setAboutText(e.target.value)}
+            className="w-full border-2 border-blue-200 rounded-lg p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[150px] resize-y"
+            placeholder="Tell us about yourself..."
+            onBlur={handleSaveAbout}
+          />
+        ) : (
+          <p className="whitespace-pre-line text-gray-800 text-base leading-relaxed">
+            {displayAbout || "No about information yet."}
+          </p>
+        )}
+      </div>
+    );
+  };
+
+  const renderExperience = () =>
+    user.experience &&
+    user.experience.length > 0 && (
+      <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <h3 className="font-bold text-xl text-gray-900 mb-6">
+          {getText("profile_experience", "Experience")}
+        </h3>
         <div className="flex flex-col gap-6">
           {user.experience.map((exp, i) => (
             <div
               key={i}
-              className="flex flex-col sm:flex-row gap-4 border-b last:border-b-0 pb-4 last:pb-0"
+              className="flex flex-col sm:flex-row gap-4 pb-6 last:pb-0 border-b last:border-b-0 border-gray-200"
             >
-              <img
-                src={exp.logo}
-                alt={`${exp.company} logo`}
-                className="w-12 h-12 rounded bg-white border object-contain mx-auto sm:mx-0"
-              />
+              <div className="flex-shrink-0">
+                <img
+                  src={getCompanyLogo(exp.company, exp.logo)}
+                  alt={`${exp.company} logo`}
+                  className="w-16 h-16 rounded-lg bg-white border-2 border-gray-100 object-contain shadow-sm"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = exp.logo;
+                  }}
+                />
+              </div>
               <div className="flex-1">
-                <div className="font-semibold">{exp.title}</div>
-                <div className="font-medium text-blue-800">{exp.company}</div>
-                <div className="text-xs text-gray-500">{exp.duration}</div>
-                <div className="text-xs text-gray-500 mb-1">
-                  {exp.location}
+                <div className="font-bold text-lg text-gray-900 mb-1">
+                  {exp.title}
                 </div>
-                <div className="text-gray-700 text-sm leading-normal">
+                <div className="font-semibold text-blue-700 text-base mb-2">
+                  {exp.company}
+                </div>
+                <div className="text-sm text-gray-600 mb-1">{exp.duration}</div>
+                <div className="text-sm text-gray-600 mb-3">{exp.location}</div>
+                <div className="text-gray-700 text-sm leading-relaxed">
                   {exp.description}
                 </div>
               </div>
@@ -140,22 +379,63 @@ function ProfileContent({ username }: { username: string }) {
           ))}
         </div>
       </div>
-    )
-  );
+    );
 
   const renderPosts = () => (
     <div>
-      <h2 className="font-semibold text-lg mb-4">{getText("profile_posts_by", "Posts by")} {user.name}:</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-bold text-xl text-gray-900">
+          {getText("profile_posts_by", "Posts by")} {user.name}
+        </h2>
+      </div>
+
+      {/* Post creation form for self */}
+      {isSelf && (
+        <form
+          onSubmit={handleSubmitPost}
+          className="bg-white rounded-xl shadow-lg p-6 mb-6"
+        >
+          <div className="flex gap-4">
+            <Avatar src={user.avatar} alt={user.name} size={48} />
+            <div className="flex-1">
+              <textarea
+                value={newPostContent}
+                onChange={(e) => setNewPostContent(e.target.value)}
+                placeholder="Share something..."
+                className="w-full border-2 border-gray-200 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[100px] resize-y"
+                maxLength={500}
+              />
+              <div className="flex items-center justify-between mt-3">
+                <span className="text-xs text-gray-500">
+                  {newPostContent.length}/500
+                </span>
+                <button
+                  type="submit"
+                  disabled={!newPostContent.trim()}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors shadow-md hover:shadow-lg"
+                >
+                  Post
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      )}
+
       <div className="space-y-4">
         {shuffledPosts.length === 0 ? (
-          <div className="text-gray-500 italic">{getText("profile_no_posts", "No posts yet.")}</div>
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+            <div className="text-gray-500 italic text-lg">
+              {getText("profile_no_posts", "No posts yet.")}
+            </div>
+          </div>
         ) : (
           shuffledPosts.map((post) => (
             <Post
               key={post.id}
-              post={{ ...post, liked: false }}
-              onLike={() => {}}
-              onAddComment={() => {}}
+              post={post}
+              onLike={handleLike}
+              onAddComment={handleAddComment}
             />
           ))
         )}
@@ -163,7 +443,7 @@ function ProfileContent({ username }: { username: string }) {
     </div>
   );
 
-  if (layout.profileLayout === 'sidebar') {
+  if (layout.profileLayout === "sidebar") {
     return (
       <section className={profileClasses}>
         <div className="lg:col-span-2">
@@ -179,7 +459,7 @@ function ProfileContent({ username }: { username: string }) {
   }
 
   return (
-    <section className={profileClasses}>
+    <section className={`${profileClasses} max-w-4xl mx-auto px-6`}>
       {renderProfileHeader()}
       {renderAbout()}
       {renderExperience()}

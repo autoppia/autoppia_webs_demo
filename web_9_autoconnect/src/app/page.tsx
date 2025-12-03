@@ -8,7 +8,6 @@ import Avatar from "@/components/Avatar";
 import Post from "@/components/Post";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
-import UserSearchBar from "@/components/UserSearchBar";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
 import {
@@ -121,9 +120,24 @@ function HomeContent() {
   const shuffledPosts = getShuffledItems(posts, layoutSeed);
   const sidebarClasses = getLayoutClasses(layout, 'sidebarPosition');
   const postBoxClasses = getLayoutClasses(layout, 'postBoxPosition');
-  const searchClasses = getLayoutClasses(layout, 'searchPosition');
 
-  const renderSidebar = (_position: 'left' | 'right' | 'top' | 'bottom') => null;
+  const renderSidebar = (position: 'left' | 'right' | 'top' | 'bottom') => {
+    if (position === 'left') {
+      return (
+        <aside className="w-[300px] flex-shrink-0 hidden lg:block">
+          <LeftSidebar />
+        </aside>
+      );
+    }
+    if (position === 'right') {
+      return (
+        <aside className="w-[300px] flex-shrink-0 hidden lg:block">
+          <RightSidebar />
+        </aside>
+      );
+    }
+    return null;
+  };
 
   const renderPostBox = () => {
     if (layout.postBoxPosition === 'left' || layout.postBoxPosition === 'right') {
@@ -211,13 +225,8 @@ function HomeContent() {
       return (
         <>
           {renderSidebar('left')}
-          <main className="w-full max-w-[700px] mx-auto flex-1">
+          <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
             <section>
-              {layout.searchPosition === 'main' && (
-                <div className={searchClasses}>
-                  <UserSearchBar />
-                </div>
-              )}
               {renderPostBox()}
               <div className="space-y-4">
                 {shuffledPosts.map((post) => (
@@ -255,13 +264,8 @@ function HomeContent() {
       return (
         <>
           {renderSidebar('top')}
-          <main className="w-full max-w-[700px] mx-auto flex-1">
+          <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
             <section>
-              {layout.searchPosition === 'main' && (
-                <div className={searchClasses}>
-                  <UserSearchBar />
-                </div>
-              )}
               {renderPostBox()}
               <div className="space-y-4">
                 {shuffledPosts.map((post) => (
@@ -282,13 +286,8 @@ function HomeContent() {
     if (layout.mainLayout === 'sidebar-bottom') {
       return (
         <>
-          <main className="w-full max-w-[700px] mx-auto flex-1">
+          <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
             <section>
-              {layout.searchPosition === 'main' && (
-                <div className={searchClasses}>
-                  <UserSearchBar />
-                </div>
-              )}
               {renderPostBox()}
               <div className="space-y-4">
                 {shuffledPosts.map((post) => (
@@ -310,13 +309,8 @@ function HomeContent() {
     return (
       <>
         {renderSidebar('left')}
-        <main className="w-full max-w-[700px] mx-auto flex-1">
+        <main className="w-full max-w-[950px] mx-auto flex-1 px-6">
           <section>
-            {layout.searchPosition === 'main' && (
-              <div className={searchClasses}>
-                <UserSearchBar />
-              </div>
-            )}
             {renderPostBox()}
             <div className="space-y-4">
               {shuffledPosts.map((post) => (
@@ -339,21 +333,6 @@ function HomeContent() {
 
   return (
     <div className={`${getMainLayoutClasses()} ${wrapperPadding}`}>
-      {/* Debug indicator for dynamic structure */}
-      <div className="w-full px-4 mb-2 text-xs text-gray-500">nav_home: {getText("nav_home", "Home")}</div>
-      {/* Floating Search */}
-      {layout.searchPosition === 'floating' && (
-        <div className={searchClasses}>
-          <UserSearchBar />
-        </div>
-      )}
-      {/* Fallback: ensure search is accessible on small screens when header/sidebar may hide it */}
-      {layout.searchPosition !== 'main' && (
-        <div className="w-full px-4 mt-2 sm:hidden">
-          <UserSearchBar />
-        </div>
-      )}
-      
       {renderMainContent()}
     </div>
   );

@@ -1,15 +1,13 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { getEffectiveSeed, getLayoutConfig, isDynamicModeEnabled } from "@/dynamic/v2-data";
 import { useSeed } from "@/context/SeedContext";
+import { isDynamicModeEnabled } from "@/dynamic/v2-data";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Layout configuration types
 export interface LayoutConfig {
   searchBar: {
     position: 'top' | 'right' | 'bottom' | 'left' | 'center';
@@ -17,7 +15,7 @@ export interface LayoutConfig {
     className: string;
   };
   propertyDetail: {
-    layout: 'sidebar' | 'grid' | 'stack' | 'horizontal' | 'vertical';
+    layout: 'sidebar' | 'grid' | 'stack' | 'horizontal' | 'vertical' | 'wide' | 'narrow';
     wrapper: 'div' | 'section' | 'article' | 'main';
     className: string;
   };
@@ -28,151 +26,32 @@ export interface LayoutConfig {
   };
 }
 
-// Enhanced seed-based layout configurations with proper spacing
-export function getSeedLayout(seed?: number, pageType: 'stay' | 'confirm' = 'stay'): LayoutConfig {
-  // If no seed provided, return default layout
-  if (!seed) {
-    const defaultOrder = pageType === 'confirm' 
-      ? ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'confirm']
-      : ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'];
-    
-    return {
-      searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center mb-6' },
-      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: defaultOrder, 
-        wrapper: 'div', 
-        className: 'flex flex-col gap-6' 
-      }
-    };
-  }
+// Static layout (seed does not change structure)
+export function getSeedLayout(_seed?: number, pageType: 'stay' | 'confirm' = 'stay'): LayoutConfig {
+  const defaultOrder = pageType === 'confirm'
+    ? ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'confirm']
+    : ['search', 'view', 'dates', 'guests', 'message', 'wishlist', 'share', 'back', 'reserve'];
 
-  // Normalize seed to 1-10 range
-  const normalizedSeed = ((seed - 1) % 10) + 1;
-
-  // Get the appropriate element order based on page type
-  const getElementOrder = (baseOrder: string[]) => {
-    return pageType === 'confirm' 
-      ? baseOrder.map(el => el === 'reserve' ? 'confirm' : el)
-      : baseOrder;
-  };
-
-  const layouts: Record<number, LayoutConfig> = {
-    1: {
-      searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6' },
-      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'message', 'share', 'guests', 'wishlist', 'back', 'view', 'dates', 'reserve']), 
-        wrapper: 'div', 
-        className: 'flex flex-col gap-6' 
-      }
-    },
-    2: {
-      searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
-      propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'reserve', 'back', 'view', 'dates', 'guests', 'message', 'share', 'wishlist']), 
-        wrapper: 'article', 
-        className: 'flex flex-col gap-8' 
-      }
-    },
-    3: {
-      searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6' },
-      propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-6xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'wishlist', 'guests', 'dates', 'view', 'share', 'message', 'back', 'reserve']), 
-        wrapper: 'section', 
-        className: 'flex flex-col gap-4' 
-      }
-    },
-    4: {
-      searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6' },
-      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'dates', 'view', 'reserve', 'back', 'share', 'message', 'guests', 'wishlist']), 
-        wrapper: 'div', 
-        className: 'flex flex-col gap-5' 
-      }
-    },
-    5: {
-      searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6' },
-      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'back', 'reserve', 'message', 'share', 'view', 'dates', 'guests', 'wishlist']), 
-        wrapper: 'aside', 
-        className: 'flex flex-col gap-7' 
-      }
-    },
-    6: {
-      searchBar: { position: 'top', wrapper: 'section', className: 'w-full flex justify-center mb-6 bg-purple-50 p-4 rounded-lg' },
-      propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'share', 'wishlist', 'guests', 'dates', 'view', 'message', 'back', 'reserve']), 
-        wrapper: 'div', 
-        className: 'flex flex-col gap-6' 
-      }
-    },
-    7: {
-      searchBar: { position: 'right', wrapper: 'aside', className: 'w-full flex justify-end mb-6' },
-      propertyDetail: { layout: 'vertical', wrapper: 'main', className: 'max-w-4xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'view', 'dates', 'reserve', 'back', 'message', 'share', 'guests', 'wishlist']), 
-        wrapper: 'article', 
-        className: 'flex flex-col gap-8' 
-      }
-    },
-    8: {
-      searchBar: { position: 'bottom', wrapper: 'footer', className: 'w-full flex justify-center mt-8 mb-6 bg-green-50 p-4 rounded-lg' },
-      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-6xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'guests', 'message', 'share', 'wishlist', 'view', 'dates', 'back', 'reserve']), 
-        wrapper: 'section', 
-        className: 'flex flex-col gap-5' 
-      }
-    },
-    9: {
-      searchBar: { position: 'left', wrapper: 'nav', className: 'w-full flex justify-start mb-6 bg-orange-50 p-4 rounded-lg' },
-      propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-3xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'reserve', 'back', 'wishlist', 'share', 'message', 'view', 'dates', 'guests']), 
-        wrapper: 'div', 
-        className: 'flex flex-col gap-6' 
-      }
-    },
-    10: {
-      searchBar: { position: 'center', wrapper: 'header', className: 'w-full flex justify-center mb-6 bg-indigo-50 p-4 rounded-lg' },
-      propertyDetail: { layout: 'vertical', wrapper: 'section', className: 'max-w-5xl mx-auto px-4 py-8' },
-      eventElements: { 
-        order: getElementOrder(['search', 'message', 'share', 'back', 'reserve', 'view', 'dates', 'guests', 'wishlist']), 
-        wrapper: 'aside', 
-        className: 'flex flex-col gap-7' 
-      }
+  return {
+    searchBar: { position: 'top', wrapper: 'div', className: 'w-full flex justify-center mb-6' },
+    propertyDetail: { layout: 'vertical', wrapper: 'div', className: 'max-w-4xl mx-auto px-4 py-8' },
+    eventElements: {
+      order: defaultOrder,
+      wrapper: 'div',
+      className: 'flex flex-col gap-6'
     }
   };
-
-  return layouts[normalizedSeed] || layouts[1];
 }
 
-// Hook to get current seed and layout with dynamic HTML support
+// Hook to get current seed and static layout
 export function useSeedLayout(pageType: 'stay' | 'confirm' = 'stay') {
-  // Use SeedContext for unified seed management
   const { resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base;
-  
-  // Check if dynamic mode is enabled
-  const isDynamicEnabled = isDynamicModeEnabled();
-  
-  const seed = useMemo(() => {
-    if (!isDynamicEnabled) {
-      // When disabled, return default seed (1)
-      return 1;
-    }
-    
-    // When enabled, use resolved v1 seed (or base as fallback)
-    return layoutSeed;
-  }, [isDynamicEnabled, layoutSeed]);
-  
+  const seed = resolvedSeeds.base ?? 1;
+
+  // Dynamic flag remains for compatibility but layout is static
+  const isDynamicEnabled = useMemo(() => false, []);
+
   const layout = useMemo(() => getSeedLayout(seed, pageType), [seed, pageType]);
-  
-  return { seed, layout };
+
+  return { seed, layout, isDynamicEnabled };
 }

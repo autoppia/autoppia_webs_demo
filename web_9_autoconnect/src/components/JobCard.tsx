@@ -15,6 +15,16 @@ export default function JobCard({
 }) {
   const [applied, setApplied] = useState<"none" | "pending" | "done">("none");
   const { getText } = useV3Attributes();
+  const [avatarError, setAvatarError] = useState(false);
+
+  // Generate a unique avatar based on job ID
+  const getAvatarUrl = () => {
+    // Extract number from job ID (e.g., "j1" -> 1, "j15" -> 15)
+    const jobNumber = parseInt(job.id.replace(/\D/g, "")) || 1;
+    // Use a range of avatar IDs (1-70) from pravatar.cc
+    const avatarId = ((jobNumber - 1) % 70) + 1;
+    return `https://i.pravatar.cc/150?img=${avatarId}`;
+  };
 
   const handleApply = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -50,11 +60,12 @@ export default function JobCard({
       onClick={handleViewJob}
     >
       <Image
-        src={job.logo}
+        src={avatarError ? job.logo : getAvatarUrl()}
         alt={job.company}
         width={48}
         height={48}
-        className="rounded-md bg-gray-100"
+        className="rounded-full object-cover bg-gray-100"
+        onError={() => setAvatarError(true)}
       />
       <div className="flex-1">
         <div className="font-bold text-blue-800 text-lg leading-tight hover:text-blue-600">
