@@ -12,7 +12,7 @@
         "name": "Margherita Pizza",
         "description": "Classic pizza with fresh mozzarella, basil, and tomato sauce.",
         "price": 14.99,
-        "image": "/images/restaurant1.jpg",
+        "image": "/images/menu/margherita.jpg",
         "sizes": [
           {
             "name": "Small",
@@ -36,7 +36,7 @@
         "name": "Spaghetti Carbonara",
         "description": "Creamy pasta with pancetta, eggs, and parmesan cheese.",
         "price": 16.5,
-        "image": "/images/restaurant1.jpg",
+        "image": "/images/menu/Spaghetti-Carbonara.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -46,30 +46,30 @@
         ]
       },
       {
-        "id": "1-auto-2",
+        "id": "1-3",
         "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
+        "description": "Wood-fired bread with garlic butter and herbs.",
         "price": 5.5,
-        "image": "/images/restaurant1.jpg"
+        "image": "/images/menu/garlic-bread.jpeg"
       },
       {
-        "id": "1-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant1.jpg"
+        "id": "1-4",
+        "name": "Penne Pasta",
+        "description": "Italian penne pasta with marinara or alfredo sauce.",
+        "price": 14.99,
+        "image": "/images/menu/penne.jpg"
       }
     ],
     "reviews": [
       {
-        "author": "Diego A.",
+        "author": "Maria G.",
         "rating": 5,
-        "comment": "Best Argentine steak!",
+        "comment": "Absolutely delicious Italian food!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
       {
-        "author": "Mar\u00eda P.",
+        "author": "María P.",
         "rating": 4.5,
         "comment": "Great flavors and fast delivery.",
         "date": "2025-12-19",
@@ -85,14 +85,14 @@
     "description": "Fine French dining experience in an elegant atmosphere.",
     "image": "/images/restaurant2.jpg",
     "cuisine": "French",
-    "rating": 4.6,
+    "rating": 4.9,
     "menu": [
       {
         "id": "2-1",
         "name": "Coq au Vin",
         "description": "Traditional French dish with chicken braised in wine.",
         "price": 24.99,
-        "image": "/images/restaurant2.jpg",
+        "image": "/images/menu/coq-au-vin.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -102,25 +102,11 @@
         ]
       },
       {
-        "id": "2-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant2.jpg"
-      },
-      {
-        "id": "2-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant2.jpg"
-      },
-      {
-        "id": "2-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant2.jpg"
+        "id": "2-2",
+        "name": "French Onion Soup",
+        "description": "Classic soup with caramelized onions and melted cheese.",
+        "price": 9.99,
+        "image": "/images/menu/onion-soup.jpg"
       }
     ],
     "reviews": [
@@ -134,7 +120,7 @@
       {
         "author": "Sophie L.",
         "rating": 5,
-        "comment": "Loved the desserts, will reorder.",
+        "comment": "Elegant French cuisine, highly recommend!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person2.jpg"
       }
@@ -148,14 +134,14 @@
     "description": "Fresh sushi and Japanese dishes made with premium ingredients.",
     "image": "/images/restaurant3.jpg",
     "cuisine": "Japanese",
-    "rating": 4.2,
+    "rating": 4.7,
     "menu": [
       {
         "id": "3-1",
         "name": "Salmon Sashimi",
         "description": "Fresh salmon sashimi served with soy sauce and wasabi.",
         "price": 18.5,
-        "image": "/images/restaurant3.jpg",
+        "image": "/images/menu/salmon-sashimi.jpeg",
         "sizes": [
           {
             "name": "6 pieces",
@@ -170,25 +156,18 @@
         ]
       },
       {
-        "id": "3-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant3.jpg"
+        "id": "3-2",
+        "name": "California Roll",
+        "description": "Classic sushi roll with crab, avocado, and cucumber.",
+        "price": 12.99,
+        "image": "/images/menu/california_roll.jpg"
       },
       {
-        "id": "3-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant3.jpg"
-      },
-      {
-        "id": "3-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant3.jpg"
+        "id": "3-3",
+        "name": "Gyoza",
+        "description": "Japanese pan-fried dumplings with savory filling.",
+        "price": 8.99,
+        "image": "/images/menu/gyoza.jpg"
       }
     ],
     "reviews": [
@@ -216,14 +195,14 @@
     "description": "Vibrant Mexican cuisine with authentic flavors and spices.",
     "image": "/images/restaurant4.jpg",
     "cuisine": "Mexican",
-    "rating": 3.9,
+    "rating": 4.6,
     "menu": [
       {
         "id": "4-1",
         "name": "Tacos al Pastor",
         "description": "Traditional tacos with marinated pork, pineapple, and cilantro.",
         "price": 12.99,
-        "image": "/images/restaurant4.jpg",
+        "image": "/images/menu/tacos-al-pastor.jpeg",
         "sizes": [
           {
             "name": "3 tacos",
@@ -238,37 +217,30 @@
         ]
       },
       {
-        "id": "4-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant4.jpg"
+        "id": "4-2",
+        "name": "Chicken Burrito",
+        "description": "Large flour tortilla filled with chicken, rice, beans, and salsa.",
+        "price": 11.99,
+        "image": "/images/menu/chicken-burrito.jpg"
       },
       {
-        "id": "4-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant4.jpg"
-      },
-      {
-        "id": "4-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant4.jpg"
+        "id": "4-3",
+        "name": "Chorizo",
+        "description": "Spicy Mexican sausage served with warm tortillas.",
+        "price": 10.99,
+        "image": "/images/menu/chorizo.jpg"
       }
     ],
     "reviews": [
       {
         "author": "Diego A.",
         "rating": 5,
-        "comment": "Best Argentine steak!",
+        "comment": "Amazing authentic Mexican food!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
       {
-        "author": "Mar\u00eda P.",
+        "author": "María P.",
         "rating": 4.5,
         "comment": "Great flavors and fast delivery.",
         "date": "2025-12-19",
@@ -291,7 +263,7 @@
         "name": "Pad Thai",
         "description": "Stir-fried rice noodles with shrimp, eggs, and tamarind sauce.",
         "price": 15.99,
-        "image": "/images/restaurant5.jpg",
+        "image": "/images/menu/pad-thai.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -299,27 +271,6 @@
             "priceMod": 0
           }
         ]
-      },
-      {
-        "id": "5-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant5.jpg"
-      },
-      {
-        "id": "5-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant5.jpg"
-      },
-      {
-        "id": "5-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant5.jpg"
       }
     ],
     "reviews": [
@@ -333,7 +284,7 @@
       {
         "author": "Sophie L.",
         "rating": 5,
-        "comment": "Loved the desserts, will reorder.",
+        "comment": "Love the authentic Thai flavors!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person2.jpg"
       }
@@ -347,14 +298,14 @@
     "description": "Traditional Indian cuisine with aromatic spices and rich curries.",
     "image": "/images/restaurant6.jpg",
     "cuisine": "Indian",
-    "rating": 3.2,
+    "rating": 4.7,
     "menu": [
       {
         "id": "6-1",
         "name": "Butter Chicken",
         "description": "Creamy tomato-based curry with tender chicken pieces.",
         "price": 17.99,
-        "image": "/images/restaurant6.jpg",
+        "image": "/images/menu/butter-chicken.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -364,25 +315,18 @@
         ]
       },
       {
-        "id": "6-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant6.jpg"
+        "id": "6-2",
+        "name": "Tandoori Chicken",
+        "description": "Marinated chicken roasted in a clay oven.",
+        "price": 16.99,
+        "image": "/images/menu/tandoori-chicken.jpg"
       },
       {
-        "id": "6-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant6.jpg"
-      },
-      {
-        "id": "6-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant6.jpg"
+        "id": "6-3",
+        "name": "Naan Bread",
+        "description": "Freshly baked Indian flatbread.",
+        "price": 3.99,
+        "image": "/images/menu/naan.jpg"
       }
     ],
     "reviews": [
@@ -410,14 +354,14 @@
     "description": "Classic Chinese dishes prepared with traditional techniques.",
     "image": "/images/restaurant7.jpg",
     "cuisine": "Chinese",
-    "rating": 4.0,
+    "rating": 4.6,
     "menu": [
       {
         "id": "7-1",
         "name": "Kung Pao Chicken",
         "description": "Spicy stir-fried chicken with peanuts and vegetables.",
         "price": 16.99,
-        "image": "/images/restaurant7.jpg",
+        "image": "/images/menu/kung-pao-chicken.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -427,37 +371,23 @@
         ]
       },
       {
-        "id": "7-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant7.jpg"
-      },
-      {
-        "id": "7-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant7.jpg"
-      },
-      {
-        "id": "7-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant7.jpg"
+        "id": "7-2",
+        "name": "General Tso's Chicken",
+        "description": "Crispy chicken in a sweet and spicy sauce.",
+        "price": 15.99,
+        "image": "/images/menu/general-tso-s.jpeg"
       }
     ],
     "reviews": [
       {
         "author": "Diego A.",
         "rating": 5,
-        "comment": "Best Argentine steak!",
+        "comment": "Best Chinese food in town!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
       {
-        "author": "Mar\u00eda P.",
+        "author": "María P.",
         "rating": 4.5,
         "comment": "Great flavors and fast delivery.",
         "date": "2025-12-19",
@@ -473,14 +403,14 @@
     "description": "Greek Mediterranean cuisine with fresh ingredients and traditional recipes.",
     "image": "/images/restaurant8.jpg",
     "cuisine": "Greek",
-    "rating": 2.8,
+    "rating": 4.5,
     "menu": [
       {
         "id": "8-1",
         "name": "Gyro Plate",
         "description": "Seasoned meat with pita, tzatziki, and fresh vegetables.",
         "price": 14.99,
-        "image": "/images/restaurant8.jpg",
+        "image": "/images/menu/gyro-plate.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -490,25 +420,18 @@
         ]
       },
       {
-        "id": "8-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant8.jpg"
+        "id": "8-2",
+        "name": "Greek Salad",
+        "description": "Fresh vegetables with feta cheese and olives.",
+        "price": 9.99,
+        "image": "/images/menu/greek-salad.jpg"
       },
       {
-        "id": "8-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant8.jpg"
-      },
-      {
-        "id": "8-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant8.jpg"
+        "id": "8-3",
+        "name": "Spanakopita",
+        "description": "Spinach and feta cheese wrapped in flaky phyllo dough.",
+        "price": 8.99,
+        "image": "/images/menu/spanakopita.jpg"
       }
     ],
     "reviews": [
@@ -522,7 +445,7 @@
       {
         "author": "Sophie L.",
         "rating": 5,
-        "comment": "Loved the desserts, will reorder.",
+        "comment": "Best Greek food I've had!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person2.jpg"
       }
@@ -536,14 +459,14 @@
     "description": "Spanish tapas and paella made with authentic ingredients.",
     "image": "/images/restaurant9.jpg",
     "cuisine": "Spanish",
-    "rating": 3.7,
+    "rating": 4.7,
     "menu": [
       {
         "id": "9-1",
         "name": "Seafood Paella",
         "description": "Traditional Spanish rice dish with mixed seafood and saffron.",
         "price": 28.99,
-        "image": "/images/restaurant9.jpg",
+        "image": "/images/menu/seafood-paella.jpeg",
         "sizes": [
           {
             "name": "For 2",
@@ -553,25 +476,11 @@
         ]
       },
       {
-        "id": "9-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant9.jpg"
-      },
-      {
-        "id": "9-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant9.jpg"
-      },
-      {
-        "id": "9-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant9.jpg"
+        "id": "9-2",
+        "name": "Patatas Bravas",
+        "description": "Crispy fried potatoes with spicy tomato sauce.",
+        "price": 7.99,
+        "image": "/images/menu/patatas-bravas.jpg"
       }
     ],
     "reviews": [
@@ -599,14 +508,14 @@
     "description": "Korean BBQ and traditional dishes with bold flavors.",
     "image": "/images/restaurant10.jpg",
     "cuisine": "Korean",
-    "rating": 4.1,
+    "rating": 4.6,
     "menu": [
       {
         "id": "10-1",
         "name": "Bulgogi Bowl",
         "description": "Marinated beef with rice and vegetables.",
         "price": 16.99,
-        "image": "/images/restaurant10.jpg",
+        "image": "/images/menu/bulgogi-bowl.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -614,39 +523,18 @@
             "priceMod": 0
           }
         ]
-      },
-      {
-        "id": "10-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant10.jpg"
-      },
-      {
-        "id": "10-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant10.jpg"
-      },
-      {
-        "id": "10-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant10.jpg"
       }
     ],
     "reviews": [
       {
         "author": "Diego A.",
         "rating": 5,
-        "comment": "Best Argentine steak!",
+        "comment": "Delicious Korean BBQ!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
       {
-        "author": "Mar\u00eda P.",
+        "author": "María P.",
         "rating": 4.5,
         "comment": "Great flavors and fast delivery.",
         "date": "2025-12-19",
@@ -662,14 +550,14 @@
     "description": "Turkish cuisine with kebabs, mezes, and traditional dishes.",
     "image": "/images/restaurant11.jpg",
     "cuisine": "Turkish",
-    "rating": 3.0,
+    "rating": 4.4,
     "menu": [
       {
         "id": "11-1",
         "name": "Chicken Kebab",
         "description": "Grilled chicken skewers with rice and salad.",
         "price": 15.99,
-        "image": "/images/restaurant11.jpg",
+        "image": "/images/menu/chicken-kebab.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -679,25 +567,11 @@
         ]
       },
       {
-        "id": "11-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant11.jpg"
-      },
-      {
-        "id": "11-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant11.jpg"
-      },
-      {
-        "id": "11-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant11.jpg"
+        "id": "11-2",
+        "name": "Lamb Kebab",
+        "description": "Tender grilled lamb skewers with traditional spices.",
+        "price": 18.99,
+        "image": "/images/menu/lamb-kebab.jpg"
       }
     ],
     "reviews": [
@@ -711,7 +585,7 @@
       {
         "author": "Sophie L.",
         "rating": 5,
-        "comment": "Loved the desserts, will reorder.",
+        "comment": "Amazing Turkish cuisine!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person2.jpg"
       }
@@ -725,14 +599,14 @@
     "description": "Premium steaks and American classics in a warm atmosphere.",
     "image": "/images/restaurant12.jpg",
     "cuisine": "American",
-    "rating": 2.6,
+    "rating": 4.8,
     "menu": [
       {
         "id": "12-1",
         "name": "Ribeye Steak",
         "description": "Premium ribeye steak cooked to perfection with sides.",
         "price": 32.99,
-        "image": "/images/restaurant12.jpg",
+        "image": "/images/menu/ribeye-steak.jpeg",
         "sizes": [
           {
             "name": "8 oz",
@@ -747,32 +621,25 @@
         ]
       },
       {
-        "id": "12-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant12.jpg"
+        "id": "12-2",
+        "name": "Cheeseburger",
+        "description": "Juicy beef patty with cheese, lettuce, tomato, and pickles.",
+        "price": 14.99,
+        "image": "/images/menu/cheeseburger.jpg"
       },
       {
-        "id": "12-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant12.jpg"
-      },
-      {
-        "id": "12-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant12.jpg"
+        "id": "12-3",
+        "name": "Mashed Potatoes",
+        "description": "Creamy mashed potatoes with butter and cream.",
+        "price": 6.99,
+        "image": "/images/menu/mashed-potatoes.jpg"
       }
     ],
     "reviews": [
       {
         "author": "Carlos R.",
         "rating": 4.7,
-        "comment": "Authentic taste, good pricing.",
+        "comment": "Best steaks in town!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
@@ -793,14 +660,14 @@
     "description": "Authentic Vietnamese pho and traditional dishes.",
     "image": "/images/restaurant13.jpg",
     "cuisine": "Vietnamese",
-    "rating": 4.4,
+    "rating": 4.5,
     "menu": [
       {
         "id": "13-1",
         "name": "Beef Pho",
         "description": "Traditional Vietnamese noodle soup with beef and herbs.",
         "price": 13.99,
-        "image": "/images/restaurant13.jpg",
+        "image": "/images/menu/beef-pho.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -810,37 +677,23 @@
         ]
       },
       {
-        "id": "13-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant13.jpg"
-      },
-      {
-        "id": "13-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant13.jpg"
-      },
-      {
-        "id": "13-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant13.jpg"
+        "id": "13-2",
+        "name": "Banh Mi",
+        "description": "Vietnamese sandwich with pork, pickled vegetables, and herbs.",
+        "price": 9.99,
+        "image": "/images/menu/banh-mi.jpg"
       }
     ],
     "reviews": [
       {
         "author": "Diego A.",
         "rating": 5,
-        "comment": "Best Argentine steak!",
+        "comment": "Authentic Vietnamese flavors!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
       {
-        "author": "Mar\u00eda P.",
+        "author": "María P.",
         "rating": 4.5,
         "comment": "Great flavors and fast delivery.",
         "date": "2025-12-19",
@@ -856,14 +709,14 @@
     "description": "Family-style Italian restaurant with homemade pasta and sauces.",
     "image": "/images/restaurant14.jpg",
     "cuisine": "Italian",
-    "rating": 3.3,
+    "rating": 4.8,
     "menu": [
       {
         "id": "14-1",
         "name": "Lasagna",
         "description": "Homemade lasagna with meat sauce and cheese.",
         "price": 18.99,
-        "image": "/images/restaurant14.jpg",
+        "image": "/images/menu/lasagna.jpg",
         "sizes": [
           {
             "name": "Regular",
@@ -873,25 +726,18 @@
         ]
       },
       {
-        "id": "14-auto-1",
+        "id": "14-2",
         "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "description": "Classic Italian dessert with mascarpone and espresso.",
         "price": 7.5,
-        "image": "/images/restaurant14.jpg"
+        "image": "/images/menu/tiramisu.jpeg"
       },
       {
-        "id": "14-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant14.jpg"
-      },
-      {
-        "id": "14-auto-3",
+        "id": "14-3",
         "name": "Mushroom Risotto",
         "description": "Creamy arborio rice with porcini mushrooms.",
         "price": 13.5,
-        "image": "/images/restaurant14.jpg"
+        "image": "/images/menu/mushroom-risotto.jpeg"
       }
     ],
     "reviews": [
@@ -905,7 +751,7 @@
       {
         "author": "Sophie L.",
         "rating": 5,
-        "comment": "Loved the desserts, will reorder.",
+        "comment": "Like eating at Nonna's house!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person2.jpg"
       }
@@ -919,14 +765,14 @@
     "description": "Brazilian churrasco and traditional dishes with bold flavors.",
     "image": "/images/restaurant15.jpg",
     "cuisine": "Brazilian",
-    "rating": 3.8,
+    "rating": 4.6,
     "menu": [
       {
         "id": "15-1",
         "name": "Picanha",
         "description": "Premium Brazilian cut of beef grilled to perfection.",
         "price": 26.99,
-        "image": "/images/restaurant15.jpg",
+        "image": "/images/menu/ribeye.jpg",
         "sizes": [
           {
             "name": "Regular",
@@ -934,34 +780,13 @@
             "priceMod": 0
           }
         ]
-      },
-      {
-        "id": "15-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant15.jpg"
-      },
-      {
-        "id": "15-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant15.jpg"
-      },
-      {
-        "id": "15-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant15.jpg"
       }
     ],
     "reviews": [
       {
         "author": "Carlos R.",
         "rating": 4.7,
-        "comment": "Authentic taste, good pricing.",
+        "comment": "Authentic Brazilian churrasco!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
@@ -982,14 +807,14 @@
     "description": "Lebanese and Mediterranean cuisine with fresh ingredients.",
     "image": "/images/restaurant16.jpg",
     "cuisine": "Mediterranean",
-    "rating": 2.9,
+    "rating": 4.7,
     "menu": [
       {
         "id": "16-1",
         "name": "Shawarma Plate",
         "description": "Marinated meat with hummus, tabbouleh, and pita.",
         "price": 15.99,
-        "image": "/images/restaurant16.jpg",
+        "image": "/images/menu/shawarma-plate.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -999,37 +824,23 @@
         ]
       },
       {
-        "id": "16-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant16.jpg"
-      },
-      {
-        "id": "16-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant16.jpg"
-      },
-      {
-        "id": "16-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant16.jpg"
+        "id": "16-2",
+        "name": "Hummus",
+        "description": "Creamy chickpea dip with olive oil and pita bread.",
+        "price": 7.99,
+        "image": "/images/menu/hummus.jpg"
       }
     ],
     "reviews": [
       {
-        "author": "Diego A.",
+        "author": "Layla H.",
         "rating": 5,
-        "comment": "Best Argentine steak!",
+        "comment": "Best Mediterranean food!",
         "date": "2025-12-19",
         "avatar": "/media/gallery/people/person1.jpg"
       },
       {
-        "author": "Mar\u00eda P.",
+        "author": "María P.",
         "rating": 4.5,
         "comment": "Great flavors and fast delivery.",
         "date": "2025-12-19",
@@ -1045,14 +856,14 @@
     "description": "British pub classics with fish and chips and traditional fare.",
     "image": "/images/restaurant17.jpg",
     "cuisine": "British",
-    "rating": 4.5,
+    "rating": 4.4,
     "menu": [
       {
         "id": "17-1",
         "name": "Fish and Chips",
         "description": "Beer-battered fish with crispy chips and mushy peas.",
         "price": 16.99,
-        "image": "/images/restaurant17.jpg",
+        "image": "/images/menu/fish-and-chips.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -1060,47 +871,19 @@
             "priceMod": 0
           }
         ]
-      },
-      {
-        "id": "17-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant17.jpg"
-      },
-      {
-        "id": "17-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant17.jpg"
-      },
-      {
-        "id": "17-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant17.jpg"
       }
     ],
     "reviews": [
       {
-        "author": "John K.",
-        "rating": 4.0,
-        "comment": "Solid portions and friendly service.",
-        "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person1.jpg"
-      },
-      {
-        "author": "Sophie L.",
-        "rating": 5,
-        "comment": "Loved the desserts, will reorder.",
-        "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person2.jpg"
+        "author": "James W.",
+        "rating": 4,
+        "comment": "Traditional British pub food!",
+        "date": "2025-12-17",
+        "avatar": ""
       }
     ],
-    "deliveryTime": "20-30 min",
-    "pickupTime": "12 min"
+    "deliveryTime": "30-40 min",
+    "pickupTime": "15 min"
   },
   {
     "id": "18",
@@ -1108,14 +891,14 @@
     "description": "German cuisine with schnitzels, sausages, and hearty dishes.",
     "image": "/images/restaurant18.jpg",
     "cuisine": "German",
-    "rating": 3.4,
+    "rating": 4.5,
     "menu": [
       {
         "id": "18-1",
         "name": "Wiener Schnitzel",
         "description": "Breaded veal cutlet with lemon and potatoes.",
         "price": 19.99,
-        "image": "/images/restaurant18.jpg",
+        "image": "/images/menu/wiener-schnitzel.jpeg",
         "sizes": [
           {
             "name": "Regular",
@@ -1123,47 +906,19 @@
             "priceMod": 0
           }
         ]
-      },
-      {
-        "id": "18-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant18.jpg"
-      },
-      {
-        "id": "18-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant18.jpg"
-      },
-      {
-        "id": "18-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant18.jpg"
       }
     ],
     "reviews": [
       {
-        "author": "Carlos R.",
-        "rating": 4.7,
-        "comment": "Authentic taste, good pricing.",
-        "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person1.jpg"
-      },
-      {
-        "author": "Emily S.",
-        "rating": 4.8,
-        "comment": "Everything was fresh and tasty.",
-        "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person2.jpg"
+        "author": "Hans M.",
+        "rating": 4,
+        "comment": "Good German food!",
+        "date": "2025-12-18",
+        "avatar": ""
       }
     ],
-    "deliveryTime": "50-65 min",
-    "pickupTime": "15 min"
+    "deliveryTime": "35-45 min",
+    "pickupTime": "12 min"
   },
   {
     "id": "19",
@@ -1171,14 +926,14 @@
     "description": "Argentine steakhouse with premium cuts and traditional sides.",
     "image": "/images/restaurant19.jpg",
     "cuisine": "Argentine",
-    "rating": 4.9,
+    "rating": 4.7,
     "menu": [
       {
         "id": "19-1",
         "name": "Argentine Ribeye",
         "description": "Premium grass-fed ribeye with chimichurri sauce.",
         "price": 29.99,
-        "image": "/images/restaurant19.jpg",
+        "image": "/images/menu/argentine-ribeye.jpeg",
         "sizes": [
           {
             "name": "12 oz",
@@ -1191,27 +946,6 @@
             "priceMod": 8.0
           }
         ]
-      },
-      {
-        "id": "19-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant19.jpg"
-      },
-      {
-        "id": "19-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant19.jpg"
-      },
-      {
-        "id": "19-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant19.jpg"
       }
     ],
     "reviews": [
@@ -1220,33 +954,26 @@
         "rating": 5,
         "comment": "Best Argentine steak!",
         "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person1.jpg"
-      },
-      {
-        "author": "Mar\u00eda P.",
-        "rating": 4.5,
-        "comment": "Great flavors and fast delivery.",
-        "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person2.jpg"
+        "avatar": ""
       }
     ],
-    "deliveryTime": "25-35 min",
-    "pickupTime": "18 min"
+    "deliveryTime": "40-50 min",
+    "pickupTime": "15 min"
   },
   {
     "id": "20",
     "name": "Pacific Sushi Bar",
     "description": "Modern sushi bar with fresh seafood and creative rolls.",
-    "image": "/images/restaurant1.jpg",
+    "image": "/images/restaurant20.jpg",
     "cuisine": "Japanese",
-    "rating": 4.3,
+    "rating": 4.6,
     "menu": [
       {
         "id": "20-1",
         "name": "Rainbow Roll",
         "description": "Assorted fish with avocado and cucumber roll.",
         "price": 17.99,
-        "image": "/images/restaurant1.jpg",
+        "image": "/images/menu/rainbow-roll.jpeg",
         "sizes": [
           {
             "name": "8 pieces",
@@ -1256,44 +983,1445 @@
         ]
       },
       {
-        "id": "20-auto-1",
-        "name": "Tiramisu",
-        "description": "Classic Italian dessert with mascarpone & espresso.",
-        "price": 7.5,
-        "image": "/images/restaurant1.jpg"
-      },
-      {
-        "id": "20-auto-2",
-        "name": "Garlic Bread",
-        "description": "Wood-fired bread with garlic butter.",
-        "price": 5.5,
-        "image": "/images/restaurant1.jpg"
-      },
-      {
-        "id": "20-auto-3",
-        "name": "Mushroom Risotto",
-        "description": "Creamy arborio rice with porcini mushrooms.",
-        "price": 13.5,
-        "image": "/images/restaurant1.jpg"
+        "id": "20-2",
+        "name": "Nigiri Platter",
+        "description": "Assortment of fresh nigiri sushi.",
+        "price": 22.99,
+        "image": "/images/menu/nigiri.jpg"
       }
     ],
     "reviews": [
       {
-        "author": "John K.",
-        "rating": 4.0,
-        "comment": "Solid portions and friendly service.",
-        "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person1.jpg"
+        "author": "Akira T.",
+        "rating": 4,
+        "comment": "Fresh and delicious!",
+        "date": "2025-12-20",
+        "avatar": ""
+      }
+    ],
+    "deliveryTime": "35-45 min",
+    "pickupTime": "18 min"
+  },
+  {
+    "id": "21",
+    "name": "Lucky Wok",
+    "description": "Traditional Chinese cuisine with authentic recipes and fresh ingredients.",
+    "image": "/images/restaurant21.jpg",
+    "cuisine": "Chinese",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "21-1",
+        "name": "General Tso's Chicken",
+        "description": "Crispy chicken in a sweet and spicy sauce with vegetables.",
+        "price": 11.9,
+        "image": "/images/menu/general-tso-s.jpeg"
       },
       {
-        "author": "Sophie L.",
+        "id": "21-2",
+        "name": "Special Lo Mein",
+        "description": "Stir-fried egg noodles with mixed vegetables and protein.",
+        "price": 17,
+        "image": "/images/menu/special-lo-mein.jpeg",
+        "sizes": [
+          {
+            "name": "Small",
+            "cal": 230,
+            "priceMod": 0
+          },
+          {
+            "name": "Medium",
+            "cal": 320,
+            "priceMod": 0.9
+          },
+          {
+            "name": "Large",
+            "cal": 480,
+            "priceMod": 1.6
+          }
+        ]
+      },
+      {
+        "id": "21-3",
+        "name": "Premium Fried Rice",
+        "description": "Wok-fried rice with egg, vegetables, and your choice of protein.",
+        "price": 18.5,
+        "image": "/images/menu/premium-fried-rice.jpeg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Blake J.",
+        "rating": 4,
+        "comment": "Best meal I've had in a while.",
+        "date": "2024-11-17",
+        "avatar": "https://randomuser.me/api/portraits/women/76.jpg"
+      },
+      {
+        "author": "Emma S.",
         "rating": 5,
-        "comment": "Loved the desserts, will reorder.",
-        "date": "2025-12-19",
-        "avatar": "/media/gallery/people/person2.jpg"
+        "comment": "Quick delivery, amazing food.",
+        "date": "2025-09-25",
+        "avatar": "https://randomuser.me/api/portraits/women/61.jpg"
+      }
+    ],
+    "deliveryTime": "50-65 min",
+    "pickupTime": "6 min"
+  },
+  {
+    "id": "22",
+    "name": "Prime Cut Steakhouse",
+    "description": "Premium steaks and classic cuts prepared to perfection.",
+    "image": "/images/restaurant22.jpg",
+    "cuisine": "Steakhouse",
+    "rating": 4.9,
+    "menu": [
+      {
+        "id": "22-1",
+        "name": "New York Strip",
+        "description": "Premium NY strip steak grilled to your preference.",
+        "price": 19.5,
+        "image": "/images/menu/new-york-strip.jpeg"
+      },
+      {
+        "id": "22-2",
+        "name": "Prime Rib",
+        "description": "Slow-roasted prime rib with au jus and horseradish.",
+        "price": 20.7,
+        "image": "/images/menu/prime-rib.jpeg"
+      },
+      {
+        "id": "22-3",
+        "name": "Classic Porterhouse",
+        "description": "Massive porterhouse steak with perfect marbling.",
+        "price": 24.3,
+        "image": "/images/menu/ribeye.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Hayden Y.",
+        "rating": 4,
+        "comment": "Amazing food! Will definitely order again.",
+        "date": "2025-12-10",
+        "avatar": "https://randomuser.me/api/portraits/women/74.jpg"
+      },
+      {
+        "author": "Reese D.",
+        "rating": 4,
+        "comment": "Fast delivery and great taste.",
+        "date": "2025-03-09",
+        "avatar": "https://randomuser.me/api/portraits/men/87.jpg"
+      },
+      {
+        "author": "Skylar L.",
+        "rating": 5,
+        "comment": "Best meal I've had in a while.",
+        "date": "2024-09-17",
+        "avatar": "https://randomuser.me/api/portraits/women/23.jpg"
+      }
+    ],
+    "deliveryTime": "45-55 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "23",
+    "name": "Sweet Haven Bakery",
+    "description": "Artisan desserts and baked goods made fresh daily.",
+    "image": "/images/restaurant23.jpg",
+    "cuisine": "Desserts",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "23-1",
+        "name": "Chocolate Brownie",
+        "description": "Rich, fudgy chocolate brownie with walnuts.",
+        "price": 6.6,
+        "image": "/images/menu/deluxe-brownie.jpeg"
+      },
+      {
+        "id": "23-2",
+        "name": "Fruit Tart",
+        "description": "Buttery tart shell with pastry cream and fresh seasonal fruit.",
+        "price": 8.7,
+        "image": "/images/menu/tart.jpg"
+      },
+      {
+        "id": "23-3",
+        "name": "Cheesecake",
+        "description": "Classic New York style cheesecake with graham cracker crust.",
+        "price": 8.4,
+        "image": "/images/menu/cheesecake.jpg"
+      },
+      {
+        "id": "23-4",
+        "name": "Chocolate Cake",
+        "description": "Decadent multi-layer chocolate cake with ganache.",
+        "price": 9.5,
+        "image": "/images/menu/chocolate_cake.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Zion L.",
+        "rating": 4,
+        "comment": "Exceeded my expectations!",
+        "date": "2024-05-18",
+        "avatar": "https://randomuser.me/api/portraits/men/44.jpg"
+      },
+      {
+        "author": "Jamie W.",
+        "rating": 5,
+        "comment": "Best desserts in town!",
+        "date": "2025-10-16",
+        "avatar": "https://randomuser.me/api/portraits/men/77.jpg"
+      },
+      {
+        "author": "Dakota H.",
+        "rating": 4,
+        "comment": "Fresh ingredients and perfect flavors.",
+        "date": "2025-06-25",
+        "avatar": "https://randomuser.me/api/portraits/men/56.jpg"
       }
     ],
     "deliveryTime": "30-40 min",
+    "pickupTime": "14 min"
+  },
+  {
+    "id": "24",
+    "name": "Corner Deli & Cafe",
+    "description": "Classic New York deli favorites made fresh to order.",
+    "image": "/images/restaurant24.jpg",
+    "cuisine": "Deli",
+    "rating": 4.9,
+    "featured": true,
+    "menu": [
+      {
+        "id": "24-1",
+        "name": "Reuben Sandwich",
+        "description": "Corned beef, sauerkraut, Swiss cheese, and Russian dressing on rye.",
+        "price": 9.7,
+        "image": "/images/menu/reuben.jpeg",
+        "sizes": [
+          {
+            "name": "Half",
+            "cal": 230,
+            "priceMod": 0
+          },
+          {
+            "name": "Full",
+            "cal": 480,
+            "priceMod": 4.0
+          }
+        ]
+      },
+      {
+        "id": "24-2",
+        "name": "Pastrami Sandwich",
+        "description": "Hot pastrami piled high with mustard on rye bread.",
+        "price": 9.8,
+        "image": "/images/menu/pastrami.jpg"
+      },
+      {
+        "id": "24-3",
+        "name": "Matzo Ball Soup",
+        "description": "Traditional Jewish soup with fluffy matzo balls.",
+        "price": 5.7,
+        "image": "/images/menu/matzo-soup.jpg"
+      },
+      {
+        "id": "24-4",
+        "name": "Lox & Bagel",
+        "description": "Smoked salmon with cream cheese, capers, and onions.",
+        "price": 12.5,
+        "image": "/images/menu/lox.jpeg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Noah J.",
+        "rating": 4,
+        "comment": "Perfect for a quick and tasty meal.",
+        "date": "2024-11-15",
+        "avatar": "https://randomuser.me/api/portraits/women/42.jpg"
+      },
+      {
+        "author": "Avery L.",
+        "rating": 5,
+        "comment": "Amazing food! Will definitely order again.",
+        "date": "2024-02-19",
+        "avatar": "https://randomuser.me/api/portraits/women/45.jpg"
+      }
+    ],
+    "deliveryTime": "40-55 min",
+    "pickupTime": "25 min"
+  },
+  {
+    "id": "25",
+    "name": "Tokyo Sushi House",
+    "description": "Authentic Japanese cuisine with fresh sushi and traditional dishes.",
+    "image": "/images/restaurant25.jpg",
+    "cuisine": "Japanese",
+    "rating": 4.7,
+    "featured": true,
+    "menu": [
+      {
+        "id": "25-1",
+        "name": "Tonkotsu Ramen",
+        "description": "Rich pork bone broth with noodles, chashu, and soft-boiled egg.",
+        "price": 15.0,
+        "image": "/images/menu/tonkotsu.jpg"
+      },
+      {
+        "id": "25-2",
+        "name": "Sashimi Platter",
+        "description": "Assorted fresh raw fish sliced to perfection.",
+        "price": 19.5,
+        "image": "/images/menu/salmon-sashimi.jpeg"
+      },
+      {
+        "id": "25-3",
+        "name": "Gyoza",
+        "description": "Pan-fried Japanese dumplings with dipping sauce.",
+        "price": 8.9,
+        "image": "/images/menu/gyoza.jpg"
+      },
+      {
+        "id": "25-4",
+        "name": "Chicken Teriyaki",
+        "description": "Grilled chicken glazed with sweet teriyaki sauce.",
+        "price": 14.3,
+        "image": "/images/menu/teriyaki.jpeg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Ben A.",
+        "rating": 4,
+        "comment": "Amazing food! Will definitely order again.",
+        "date": "2025-01-04",
+        "avatar": "https://randomuser.me/api/portraits/men/68.jpg"
+      },
+      {
+        "author": "Quinn W.",
+        "rating": 5,
+        "comment": "Quick delivery, amazing food.",
+        "date": "2025-10-17",
+        "avatar": "https://randomuser.me/api/portraits/men/77.jpg"
+      },
+      {
+        "author": "Noah A.",
+        "rating": 5,
+        "comment": "Excellent quality and taste.",
+        "date": "2024-08-01",
+        "avatar": "https://randomuser.me/api/portraits/women/84.jpg"
+      }
+    ],
+    "deliveryTime": "40-55 min",
+    "pickupTime": "25 min"
+  },
+  {
+    "id": "26",
+    "name": "The Dessert Lounge",
+    "description": "Elegant desserts and sweet treats for every occasion.",
+    "image": "/images/restaurant26.jpg",
+    "cuisine": "Desserts",
+    "rating": 4.3,
+    "menu": [
+      {
+        "id": "26-1",
+        "name": "Gourmet Ice Cream",
+        "description": "Premium ice cream in various flavors.",
+        "price": 7.4,
+        "image": "/images/menu/signature-ice-cream.jpeg"
+      },
+      {
+        "id": "26-2",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone and espresso.",
+        "price": 8.7,
+        "image": "/images/menu/tiramisu.jpeg"
+      },
+      {
+        "id": "26-3",
+        "name": "Lava Cake",
+        "description": "Warm chocolate cake with molten center and vanilla ice cream.",
+        "price": 9.9,
+        "image": "/images/menu/lava-cake.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Chris T.",
+        "rating": 4,
+        "comment": "Quick delivery, amazing food.",
+        "date": "2024-04-20",
+        "avatar": "https://randomuser.me/api/portraits/men/70.jpg"
+      },
+      {
+        "author": "Reese L.",
+        "rating": 5,
+        "comment": "Fast delivery and great taste.",
+        "date": "2025-11-18",
+        "avatar": "https://randomuser.me/api/portraits/women/72.jpg"
+      },
+      {
+        "author": "Frank Y.",
+        "rating": 4,
+        "comment": "Sweet treats done right!",
+        "date": "2024-05-05",
+        "avatar": "https://randomuser.me/api/portraits/men/23.jpg"
+      },
+      {
+        "author": "Parker L.",
+        "rating": 5,
+        "comment": "Absolutely loved it!",
+        "date": "2025-11-07",
+        "avatar": "https://randomuser.me/api/portraits/women/4.jpg"
+      }
+    ],
+    "deliveryTime": "50-65 min",
+    "pickupTime": "6 min"
+  },
+  {
+    "id": "27",
+    "name": "Aloha Hawaiian Grill",
+    "description": "Island-inspired dishes with tropical flavors and fresh ingredients.",
+    "image": "/images/restaurant27.jpg",
+    "cuisine": "Hawaiian",
+    "rating": 4.9,
+    "menu": [
+      {
+        "id": "27-1",
+        "name": "Kalua Pork",
+        "description": "Slow-roasted pork with traditional Hawaiian spices.",
+        "price": 16.1,
+        "image": "/images/menu/pulled-pork.jpg"
+      },
+      {
+        "id": "27-2",
+        "name": "Spam Musubi",
+        "description": "Hawaiian sushi roll with grilled spam and rice.",
+        "price": 9.3,
+        "image": "/images/menu/spam-musubi.jpeg"
+      },
+      {
+        "id": "27-3",
+        "name": "Poke Bowl",
+        "description": "Fresh ahi tuna with rice, vegetables, and sesame dressing.",
+        "price": 15.0,
+        "image": "/images/menu/salmon-poke.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Jack L.",
+        "rating": 4,
+        "comment": "Quick delivery, amazing food.",
+        "date": "2025-09-22",
+        "avatar": "https://randomuser.me/api/portraits/women/21.jpg"
+      },
+      {
+        "author": "Rowan W.",
+        "rating": 4,
+        "comment": "Best meal I've had in a while.",
+        "date": "2024-05-04",
+        "avatar": "https://randomuser.me/api/portraits/women/46.jpg"
+      },
+      {
+        "author": "Logan M.",
+        "rating": 4,
+        "comment": "Perfect for a quick and tasty meal.",
+        "date": "2024-03-09",
+        "avatar": "https://randomuser.me/api/portraits/men/7.jpg"
+      }
+    ],
+    "deliveryTime": "20-30 min",
     "pickupTime": "20 min"
+  },
+  {
+    "id": "28",
+    "name": "Cedar Middle Eastern Cafe",
+    "description": "Authentic Middle Eastern flavors with fresh herbs and spices.",
+    "image": "/images/restaurant28.jpg",
+    "cuisine": "Middle Eastern",
+    "rating": 4.5,
+    "menu": [
+      {
+        "id": "28-1",
+        "name": "Hummus Platter",
+        "description": "Creamy chickpea dip with olive oil and warm pita bread.",
+        "price": 8.5,
+        "image": "/images/menu/hummus.jpg"
+      },
+      {
+        "id": "28-2",
+        "name": "Lamb Kebab",
+        "description": "Grilled lamb skewers with Middle Eastern spices.",
+        "price": 17.9,
+        "image": "/images/menu/lamb-kebab.jpg"
+      },
+      {
+        "id": "28-3",
+        "name": "Tabbouleh Salad",
+        "description": "Fresh parsley salad with bulgur, tomatoes, and lemon.",
+        "price": 9.3,
+        "image": "/images/menu/tabbouleh.jpeg"
+      },
+      {
+        "id": "28-4",
+        "name": "Warm Pita Bread",
+        "description": "Freshly baked pita bread served warm.",
+        "price": 3.8,
+        "image": "/images/menu/pita.jpeg"
+      },
+      {
+        "id": "28-5",
+        "name": "Baba Ganoush",
+        "description": "Smoky roasted eggplant dip with tahini and garlic.",
+        "price": 8.9,
+        "image": "/images/menu/signature-baba-ganoush.jpeg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Finley B.",
+        "rating": 4,
+        "comment": "Will be ordering from here regularly.",
+        "date": "2024-06-25",
+        "avatar": "https://randomuser.me/api/portraits/women/75.jpg"
+      },
+      {
+        "author": "Ben L.",
+        "rating": 4,
+        "comment": "One of my favorite places to order from.",
+        "date": "2025-07-28",
+        "avatar": "https://randomuser.me/api/portraits/men/42.jpg"
+      },
+      {
+        "author": "Casey R.",
+        "rating": 5,
+        "comment": "The food was hot and fresh.",
+        "date": "2025-09-22",
+        "avatar": "https://randomuser.me/api/portraits/men/24.jpg"
+      }
+    ],
+    "deliveryTime": "30-45 min",
+    "pickupTime": "14 min"
+  },
+  {
+    "id": "29",
+    "name": "Sugar & Spice Patisserie",
+    "description": "French-inspired pastries and desserts crafted with care.",
+    "image": "/images/restaurant29.jpg",
+    "cuisine": "Desserts",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "29-1",
+        "name": "Artisan Ice Cream",
+        "description": "Small-batch ice cream in rotating flavors.",
+        "price": 6.8,
+        "image": "/images/menu/signature-ice-cream.jpeg"
+      },
+      {
+        "id": "29-2",
+        "name": "New York Cheesecake",
+        "description": "Rich and creamy cheesecake with graham cracker crust.",
+        "price": 9.0,
+        "image": "/images/menu/cheesecake.jpg",
+        "sizes": [
+          {
+            "name": "Slice",
+            "cal": 380,
+            "priceMod": 0
+          },
+          {
+            "name": "Whole Cake",
+            "cal": 3040,
+            "priceMod": 28.0
+          }
+        ]
+      },
+      {
+        "id": "29-3",
+        "name": "Belgian Waffle",
+        "description": "Light and crispy waffle with fresh berries and whipped cream.",
+        "price": 10.5,
+        "image": "/images/menu/belgian-waffle.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Riley A.",
+        "rating": 4,
+        "comment": "Quick delivery, amazing food.",
+        "date": "2024-05-21",
+        "avatar": "https://randomuser.me/api/portraits/women/64.jpg"
+      },
+      {
+        "author": "River K.",
+        "rating": 5,
+        "comment": "Great service and delicious food.",
+        "date": "2024-07-07",
+        "avatar": "https://randomuser.me/api/portraits/men/94.jpg"
+      }
+    ],
+    "deliveryTime": "50-60 min",
+    "pickupTime": "11 min"
+  },
+  {
+    "id": "30",
+    "name": "Brooklyn Delicatessen",
+    "description": "Traditional deli classics with generous portions and fresh ingredients.",
+    "image": "/images/restaurant30.jpg",
+    "cuisine": "Deli",
+    "rating": 4.3,
+    "featured": true,
+    "menu": [
+      {
+        "id": "30-1",
+        "name": "Smoked Lox Platter",
+        "description": "Premium smoked salmon with cream cheese, bagel, and fixings.",
+        "price": 14.8,
+        "image": "/images/menu/lox.jpeg"
+      },
+      {
+        "id": "30-2",
+        "name": "Potato Latkes",
+        "description": "Crispy potato pancakes served with sour cream and applesauce.",
+        "price": 8.1,
+        "image": "/images/menu/latkes.jpeg"
+      },
+      {
+        "id": "30-3",
+        "name": "Bagel with Cream Cheese",
+        "description": "Fresh-baked bagel with your choice of cream cheese.",
+        "price": 4.5,
+        "image": "/images/menu/everything-bagel.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Hayden B.",
+        "rating": 4,
+        "comment": "Amazing food! Will definitely order again.",
+        "date": "2025-02-02",
+        "avatar": "https://randomuser.me/api/portraits/women/12.jpg"
+      },
+      {
+        "author": "Emma M.",
+        "rating": 5,
+        "comment": "Exceeded my expectations!",
+        "date": "2024-11-11",
+        "avatar": "https://randomuser.me/api/portraits/women/47.jpg"
+      }
+    ],
+    "deliveryTime": "30-45 min",
+    "pickupTime": "12 min"
+  },
+  {
+    "id": "31",
+    "name": "Noodle Haven",
+    "description": "Authentic ramen and Japanese noodle dishes made with rich broths.",
+    "image": "/images/restaurant31.jpg",
+    "cuisine": "Japanese",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "31-1",
+        "name": "Shoyu Ramen",
+        "description": "Traditional soy sauce based ramen with pork chashu and soft egg.",
+        "price": 14.99,
+        "image": "/images/menu/ramen-house.jpg"
+      },
+      {
+        "id": "31-2",
+        "name": "Chicken Pho",
+        "description": "Vietnamese-style noodle soup with tender chicken and herbs.",
+        "price": 13.99,
+        "image": "/images/menu/chicken-pho.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Michael T.",
+        "rating": 5,
+        "comment": "Best ramen in the city!",
+        "date": "2025-12-01",
+        "avatar": "https://randomuser.me/api/portraits/men/32.jpg"
+      },
+      {
+        "author": "Lisa K.",
+        "rating": 4.5,
+        "comment": "Rich broth and perfect noodles.",
+        "date": "2025-11-28",
+        "avatar": "https://randomuser.me/api/portraits/women/55.jpg"
+      }
+    ],
+    "deliveryTime": "35-45 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "32",
+    "name": "Ocean Pearl Sushi",
+    "description": "Premium sushi and sashimi with the freshest catch of the day.",
+    "image": "/images/restaurant32.jpg",
+    "cuisine": "Japanese",
+    "rating": 4.9,
+    "featured": true,
+    "menu": [
+      {
+        "id": "32-1",
+        "name": "Ahi Tuna Poke",
+        "description": "Fresh ahi tuna with avocado, seaweed, and sesame dressing.",
+        "price": 16.99,
+        "image": "/images/menu/ahi-tuna.jpg"
+      },
+      {
+        "id": "32-2",
+        "name": "Spicy Tuna Roll",
+        "description": "Fresh tuna with spicy mayo and cucumber.",
+        "price": 13.99,
+        "image": "/images/menu/spicy_tuna_roll.jpg"
+      },
+      {
+        "id": "32-3",
+        "name": "Sashimi Platter",
+        "description": "Assorted premium sashimi selection.",
+        "price": 24.99,
+        "image": "/images/menu/sashimi_platter.jpg"
+      },
+      {
+        "id": "32-4",
+        "name": "California Roll",
+        "description": "Classic crab, avocado, and cucumber roll.",
+        "price": 11.99,
+        "image": "/images/menu/cali-roll.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Sarah W.",
+        "rating": 5,
+        "comment": "Incredibly fresh fish! Best sushi I've had.",
+        "date": "2025-12-02",
+        "avatar": "https://randomuser.me/api/portraits/women/68.jpg"
+      },
+      {
+        "author": "David L.",
+        "rating": 5,
+        "comment": "The sashimi platter is amazing!",
+        "date": "2025-11-30",
+        "avatar": "https://randomuser.me/api/portraits/men/45.jpg"
+      },
+      {
+        "author": "Jessica M.",
+        "rating": 4.8,
+        "comment": "High quality and great presentation.",
+        "date": "2025-11-25",
+        "avatar": "https://randomuser.me/api/portraits/women/33.jpg"
+      }
+    ],
+    "deliveryTime": "40-50 min",
+    "pickupTime": "20 min"
+  },
+  {
+    "id": "33",
+    "name": "Spice Route Curry House",
+    "description": "Authentic Indian curries and tandoori specialties with aromatic spices.",
+    "image": "/images/restaurant33.jpg",
+    "cuisine": "Indian",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "33-1",
+        "name": "Chicken Tikka Masala",
+        "description": "Tender chicken in a creamy tomato curry sauce.",
+        "price": 16.99,
+        "image": "/images/menu/tikka.jpg"
+      },
+      {
+        "id": "33-2",
+        "name": "Paneer Tikka",
+        "description": "Grilled cottage cheese with Indian spices and herbs.",
+        "price": 14.99,
+        "image": "/images/menu/paneer.jpg"
+      },
+      {
+        "id": "33-3",
+        "name": "Lamb Curry",
+        "description": "Slow-cooked lamb in aromatic curry sauce.",
+        "price": 18.99,
+        "image": "/images/menu/curry-house.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Raj P.",
+        "rating": 5,
+        "comment": "Tastes like home! Authentic flavors.",
+        "date": "2025-12-03",
+        "avatar": "https://randomuser.me/api/portraits/men/52.jpg"
+      },
+      {
+        "author": "Amanda G.",
+        "rating": 4.5,
+        "comment": "Love the spice levels, perfectly balanced.",
+        "date": "2025-11-29",
+        "avatar": "https://randomuser.me/api/portraits/women/41.jpg"
+      }
+    ],
+    "deliveryTime": "45-55 min",
+    "pickupTime": "18 min"
+  },
+  {
+    "id": "34",
+    "name": "The Burger Joint",
+    "description": "Classic American burgers and comfort food with a modern twist.",
+    "image": "/images/restaurant34.jpg",
+    "cuisine": "American",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "34-1",
+        "name": "Classic Burger",
+        "description": "Juicy beef patty with lettuce, tomato, and special sauce.",
+        "price": 12.99,
+        "image": "/images/menu/burger_haven.jpg"
+      },
+      {
+        "id": "34-2",
+        "name": "Crispy Chicken Sandwich",
+        "description": "Fried chicken breast with coleslaw and spicy mayo.",
+        "price": 11.99,
+        "image": "/images/menu/chicken-sandwich.jpg"
+      },
+      {
+        "id": "34-3",
+        "name": "Mac & Cheese",
+        "description": "Creamy three-cheese macaroni with breadcrumb topping.",
+        "price": 8.99,
+        "image": "/images/menu/mac-cheese.jpg"
+      },
+      {
+        "id": "34-4",
+        "name": "Veggie Burger",
+        "description": "Plant-based patty with avocado and grilled vegetables.",
+        "price": 11.99,
+        "image": "/images/menu/veggie_burger.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Tom B.",
+        "rating": 4.8,
+        "comment": "Best burgers in town, hands down!",
+        "date": "2025-12-01",
+        "avatar": "https://randomuser.me/api/portraits/men/28.jpg"
+      },
+      {
+        "author": "Rachel D.",
+        "rating": 4.5,
+        "comment": "The veggie burger is surprisingly good!",
+        "date": "2025-11-27",
+        "avatar": "https://randomuser.me/api/portraits/women/38.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "12 min"
+  },
+  {
+    "id": "35",
+    "name": "Smoke & Fire BBQ",
+    "description": "Slow-smoked meats and authentic BBQ with homemade sauces.",
+    "image": "/images/restaurant35.jpg",
+    "cuisine": "BBQ",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "35-1",
+        "name": "BBQ Ribs",
+        "description": "Slow-smoked pork ribs with tangy BBQ sauce.",
+        "price": 22.99,
+        "image": "/images/menu/bbq-pit.jpg"
+      },
+      {
+        "id": "35-2",
+        "name": "Brisket Platter",
+        "description": "Tender smoked brisket with coleslaw and beans.",
+        "price": 24.99,
+        "image": "/images/menu/steakhouse-prime.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "James R.",
+        "rating": 5,
+        "comment": "The ribs are fall-off-the-bone tender!",
+        "date": "2025-12-02",
+        "avatar": "https://randomuser.me/api/portraits/men/65.jpg"
+      },
+      {
+        "author": "Michelle S.",
+        "rating": 4.7,
+        "comment": "Amazing BBQ, worth every penny.",
+        "date": "2025-11-28",
+        "avatar": "https://randomuser.me/api/portraits/women/51.jpg"
+      }
+    ],
+    "deliveryTime": "50-60 min",
+    "pickupTime": "25 min"
+  },
+  {
+    "id": "36",
+    "name": "Pizza Paradise",
+    "description": "New York style pizza with creative toppings and classic favorites.",
+    "image": "/images/restaurant36.jpg",
+    "cuisine": "Italian",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "36-1",
+        "name": "Pepperoni Classic",
+        "description": "Traditional pepperoni pizza with mozzarella cheese.",
+        "price": 15.99,
+        "image": "/images/menu/pepperoni.jpg",
+        "sizes": [
+          {
+            "name": "Small",
+            "cal": 520,
+            "priceMod": 0
+          },
+          {
+            "name": "Large",
+            "cal": 1040,
+            "priceMod": 6.0
+          }
+        ]
+      },
+      {
+        "id": "36-2",
+        "name": "Vegetarian Supreme",
+        "description": "Loaded with fresh vegetables and herbs.",
+        "price": 14.99,
+        "image": "/images/menu/vegetarian_pizza.jpg"
+      },
+      {
+        "id": "36-3",
+        "name": "Pizza Deluxe",
+        "description": "Combination of premium meats and vegetables.",
+        "price": 17.99,
+        "image": "/images/menu/pizza-palace.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Anthony M.",
+        "rating": 4.8,
+        "comment": "Reminds me of authentic NY pizza!",
+        "date": "2025-12-01",
+        "avatar": "https://randomuser.me/api/portraits/men/36.jpg"
+      },
+      {
+        "author": "Nicole P.",
+        "rating": 4.6,
+        "comment": "Great crust and fresh toppings.",
+        "date": "2025-11-26",
+        "avatar": "https://randomuser.me/api/portraits/women/29.jpg"
+      }
+    ],
+    "deliveryTime": "35-45 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "37",
+    "name": "Olympus Grill",
+    "description": "Traditional Greek souvlaki and Mediterranean specialties.",
+    "image": "/images/restaurant37.jpg",
+    "cuisine": "Greek",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "37-1",
+        "name": "Chicken Souvlaki",
+        "description": "Grilled chicken skewers with pita and tzatziki sauce.",
+        "price": 14.99,
+        "image": "/images/menu/chicken-souvlaki.jpg"
+      },
+      {
+        "id": "37-2",
+        "name": "Lamb Gyro",
+        "description": "Tender lamb with onions, tomatoes, and yogurt sauce.",
+        "price": 15.99,
+        "image": "/images/menu/gyro.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "George K.",
+        "rating": 4.7,
+        "comment": "Authentic Greek flavors!",
+        "date": "2025-12-02",
+        "avatar": "https://randomuser.me/api/portraits/men/48.jpg"
+      },
+      {
+        "author": "Elena D.",
+        "rating": 4.5,
+        "comment": "Reminds me of Greece, delicious!",
+        "date": "2025-11-30",
+        "avatar": "https://randomuser.me/api/portraits/women/62.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "14 min"
+  },
+  {
+    "id": "38",
+    "name": "Falafel Kingdom",
+    "description": "Authentic Middle Eastern falafel and kebabs made fresh daily.",
+    "image": "/images/restaurant38.jpg",
+    "cuisine": "Middle Eastern",
+    "rating": 4.5,
+    "featured": true,
+    "menu": [
+      {
+        "id": "38-1",
+        "name": "Falafel Platter",
+        "description": "Crispy chickpea fritters with tahini, hummus, and pita.",
+        "price": 12.99,
+        "image": "/images/menu/falafel-king.jpg"
+      },
+      {
+        "id": "38-2",
+        "name": "Mixed Kebab Plate",
+        "description": "Combination of chicken and lamb kebabs with rice.",
+        "price": 17.99,
+        "image": "/images/menu/kebab-express.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Omar H.",
+        "rating": 4.8,
+        "comment": "Best falafel I've ever had!",
+        "date": "2025-12-03",
+        "avatar": "https://randomuser.me/api/portraits/men/72.jpg"
+      },
+      {
+        "author": "Fatima A.",
+        "rating": 4.5,
+        "comment": "So fresh and flavorful!",
+        "date": "2025-11-29",
+        "avatar": "https://randomuser.me/api/portraits/women/58.jpg"
+      },
+      {
+        "author": "Chris L.",
+        "rating": 4.3,
+        "comment": "Great vegetarian options.",
+        "date": "2025-11-25",
+        "avatar": "https://randomuser.me/api/portraits/men/19.jpg"
+      }
+    ],
+    "deliveryTime": "25-35 min",
+    "pickupTime": "10 min"
+  },
+  {
+    "id": "39",
+    "name": "Waffle Works",
+    "description": "All-day breakfast featuring gourmet waffles and brunch classics.",
+    "image": "/images/restaurant39.jpg",
+    "cuisine": "Breakfast",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "39-1",
+        "name": "Classic Belgian Waffle",
+        "description": "Fluffy waffle with maple syrup and butter.",
+        "price": 9.99,
+        "image": "/images/menu/waffle-works.jpg"
+      },
+      {
+        "id": "39-2",
+        "name": "Chicken & Waffles",
+        "description": "Crispy fried chicken on top of our signature waffle.",
+        "price": 14.99,
+        "image": "/images/menu/chicken-waffle.jpg"
+      },
+      {
+        "id": "39-3",
+        "name": "Egg & Cheese Sandwich",
+        "description": "Scrambled eggs with melted cheese on a toasted bagel.",
+        "price": 7.99,
+        "image": "/images/menu/egg-cheese.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Jennifer H.",
+        "rating": 5,
+        "comment": "Perfect brunch spot! Waffles are amazing.",
+        "date": "2025-12-02",
+        "avatar": "https://randomuser.me/api/portraits/women/44.jpg"
+      },
+      {
+        "author": "Mark T.",
+        "rating": 4.5,
+        "comment": "Chicken and waffles combo is unbeatable!",
+        "date": "2025-11-28",
+        "avatar": "https://randomuser.me/api/portraits/men/58.jpg"
+      }
+    ],
+    "deliveryTime": "25-35 min",
+    "pickupTime": "12 min"
+  },
+  {
+    "id": "40",
+    "name": "Green Leaf Bistro",
+    "description": "Fresh, healthy meals with organic ingredients and vegan options.",
+    "image": "/images/restaurant40.jpg",
+    "cuisine": "Healthy",
+    "rating": 4.6,
+    "featured": true,
+    "menu": [
+      {
+        "id": "40-1",
+        "name": "Quinoa Power Bowl",
+        "description": "Quinoa with roasted vegetables, avocado, and tahini dressing.",
+        "price": 13.99,
+        "image": "/images/menu/quinoa-bowl.jpg"
+      },
+      {
+        "id": "40-2",
+        "name": "Berry Superfood Salad",
+        "description": "Mixed greens with berries, nuts, and balsamic vinaigrette.",
+        "price": 11.99,
+        "image": "/images/menu/berry-salad.jpg"
+      },
+      {
+        "id": "40-3",
+        "name": "Vegan Wrap",
+        "description": "Grilled vegetables and hummus in a whole wheat wrap.",
+        "price": 10.99,
+        "image": "/images/menu/vegan_wrap.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Olivia M.",
+        "rating": 5,
+        "comment": "Finally, healthy food that tastes amazing!",
+        "date": "2025-12-03",
+        "avatar": "https://randomuser.me/api/portraits/women/65.jpg"
+      },
+      {
+        "author": "Ryan K.",
+        "rating": 4.6,
+        "comment": "Great vegan options, very fresh.",
+        "date": "2025-12-01",
+        "avatar": "https://randomuser.me/api/portraits/men/41.jpg"
+      },
+      {
+        "author": "Emma W.",
+        "rating": 4.5,
+        "comment": "The quinoa bowl is my go-to meal!",
+        "date": "2025-11-27",
+        "avatar": "https://randomuser.me/api/portraits/women/36.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "41",
+    "name": "Barcelona Tapas Bar",
+    "description": "Authentic Spanish tapas and small plates perfect for sharing.",
+    "image": "/images/restaurant41.jpg",
+    "cuisine": "Spanish",
+    "rating": 4.8,
+    "featured": true,
+    "menu": [
+      {
+        "id": "41-1",
+        "name": "Classic Tapas Platter",
+        "description": "Assorted Spanish tapas including chorizo, olives, and cheese.",
+        "price": 16.99,
+        "image": "/images/menu/classic_tapas.jpg"
+      },
+      {
+        "id": "41-2",
+        "name": "Spanish Tortilla",
+        "description": "Traditional potato and egg omelette served warm.",
+        "price": 9.99,
+        "image": "/images/menu/special_tortilla.jpg"
+      },
+      {
+        "id": "41-3",
+        "name": "Spicy Croquetas",
+        "description": "Crispy ham and cheese croquettes with aioli.",
+        "price": 11.99,
+        "image": "/images/menu/spicy_croquetas.jpg"
+      },
+      {
+        "id": "41-4",
+        "name": "Tapas Sampler",
+        "description": "Chef's selection of our best tapas dishes.",
+        "price": 18.99,
+        "image": "/images/menu/tapas-bar.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Carlos M.",
+        "rating": 5,
+        "comment": "Feels like I'm back in Barcelona! Authentic tapas.",
+        "date": "2025-12-04",
+        "avatar": "https://randomuser.me/api/portraits/men/73.jpg"
+      },
+      {
+        "author": "Isabella R.",
+        "rating": 4.7,
+        "comment": "Perfect for sharing with friends. Love the variety!",
+        "date": "2025-12-02",
+        "avatar": "https://randomuser.me/api/portraits/women/67.jpg"
+      },
+      {
+        "author": "Marco P.",
+        "rating": 4.8,
+        "comment": "The croquetas are to die for!",
+        "date": "2025-11-30",
+        "avatar": "https://randomuser.me/api/portraits/men/54.jpg"
+      }
+    ],
+    "deliveryTime": "35-45 min",
+    "pickupTime": "18 min"
+  },
+  {
+    "id": "42",
+    "name": "Taco Fiesta",
+    "description": "Authentic Mexican street tacos and traditional favorites.",
+    "image": "/images/restaurant42.jpg",
+    "cuisine": "Mexican",
+    "rating": 4.7,
+    "menu": [
+      {
+        "id": "42-1",
+        "name": "Carne Asada Tacos",
+        "description": "Grilled beef tacos with cilantro, onions, and lime.",
+        "price": 13.99,
+        "image": "/images/menu/asada-taco.jpg",
+        "sizes": [
+          {
+            "name": "3 tacos",
+            "cal": 450,
+            "priceMod": 0
+          },
+          {
+            "name": "5 tacos",
+            "cal": 750,
+            "priceMod": 6.0
+          }
+        ]
+      },
+      {
+        "id": "42-2",
+        "name": "Taco Platter",
+        "description": "Mixed taco platter with beef, chicken, and carnitas.",
+        "price": 16.99,
+        "image": "/images/menu/taco-fiesta.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Miguel S.",
+        "rating": 5,
+        "comment": "Best street tacos outside of Mexico!",
+        "date": "2025-12-03",
+        "avatar": "https://randomuser.me/api/portraits/men/62.jpg"
+      },
+      {
+        "author": "Ana L.",
+        "rating": 4.5,
+        "comment": "Fresh and authentic. Love the carne asada!",
+        "date": "2025-12-01",
+        "avatar": "https://randomuser.me/api/portraits/women/52.jpg"
+      }
+    ],
+    "deliveryTime": "25-35 min",
+    "pickupTime": "10 min"
+  },
+  {
+    "id": "43",
+    "name": "Bagel Brothers",
+    "description": "New York style bagels and deli sandwiches made fresh daily.",
+    "image": "/images/restaurant43.jpg",
+    "cuisine": "Deli",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "43-1",
+        "name": "Bagel with Lox",
+        "description": "Fresh bagel with smoked salmon, cream cheese, capers, and onions.",
+        "price": 14.99,
+        "image": "/images/menu/bagel-bros.jpg"
+      },
+      {
+        "id": "43-2",
+        "name": "Deli Combo",
+        "description": "Choice of sandwich with pickle and chips.",
+        "price": 12.99,
+        "image": "/images/menu/deli-central.jpg"
+      },
+      {
+        "id": "43-3",
+        "name": "Premium Lox Platter",
+        "description": "Deluxe smoked salmon with all the fixings.",
+        "price": 18.99,
+        "image": "/images/menu/deluxe-lox.jpeg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "David G.",
+        "rating": 4.8,
+        "comment": "Best bagels in the city! So fresh.",
+        "date": "2025-12-04",
+        "avatar": "https://randomuser.me/api/portraits/men/38.jpg"
+      },
+      {
+        "author": "Rebecca N.",
+        "rating": 4.5,
+        "comment": "The lox is incredible, very generous portions.",
+        "date": "2025-12-02",
+        "avatar": "https://randomuser.me/api/portraits/women/48.jpg"
+      }
+    ],
+    "deliveryTime": "20-30 min",
+    "pickupTime": "8 min"
+  },
+  {
+    "id": "44",
+    "name": "Pasta Fresca",
+    "description": "Handmade Italian pasta and traditional sauces made from scratch.",
+    "image": "/images/restaurant44.jpg",
+    "cuisine": "Italian",
+    "rating": 4.9,
+    "featured": true,
+    "menu": [
+      {
+        "id": "44-1",
+        "name": "Fresh Pasta Special",
+        "description": "Daily handmade pasta with seasonal sauce.",
+        "price": 17.99,
+        "image": "/images/menu/pasta-fresca.jpg"
+      },
+      {
+        "id": "44-2",
+        "name": "Grilled Chicken Pasta",
+        "description": "Tender grilled chicken over linguine with garlic cream sauce.",
+        "price": 16.99,
+        "image": "/images/menu/grilled_chicken.jpg"
+      },
+      {
+        "id": "44-3",
+        "name": "Porterhouse Steak",
+        "description": "Classic porterhouse with Italian herbs and roasted vegetables.",
+        "price": 28.99,
+        "image": "/images/menu/classic-porterhouse.jpeg",
+        "sizes": [
+          {
+            "name": "12 oz",
+            "cal": 890,
+            "priceMod": 0
+          },
+          {
+            "name": "16 oz",
+            "cal": 1180,
+            "priceMod": 10.0
+          }
+        ]
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Giuseppe R.",
+        "rating": 5,
+        "comment": "Reminds me of my nonna's cooking! Perfetto!",
+        "date": "2025-12-04",
+        "avatar": "https://randomuser.me/api/portraits/men/67.jpg"
+      },
+      {
+        "author": "Maria F.",
+        "rating": 4.9,
+        "comment": "The fresh pasta makes all the difference!",
+        "date": "2025-12-03",
+        "avatar": "https://randomuser.me/api/portraits/women/56.jpg"
+      },
+      {
+        "author": "Thomas B.",
+        "rating": 4.8,
+        "comment": "Best Italian food I've had in years.",
+        "date": "2025-12-01",
+        "avatar": "https://randomuser.me/api/portraits/men/44.jpg"
+      }
+    ],
+    "deliveryTime": "40-50 min",
+    "pickupTime": "20 min"
+  },
+  {
+    "id": "45",
+    "name": "Island Poke Bowl Co.",
+    "description": "Fresh Hawaiian poke bowls with premium fish and island flavors.",
+    "image": "/images/restaurant45.jpg",
+    "cuisine": "Hawaiian",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "45-1",
+        "name": "Signature Poke Bowl",
+        "description": "Choice of fresh fish with rice, seaweed, and island toppings.",
+        "price": 15.99,
+        "image": "/images/menu/poke-bowl-co.jpg"
+      },
+      {
+        "id": "45-2",
+        "name": "Deluxe Spam Musubi",
+        "description": "Premium spam musubi with special sauce and sesame seeds.",
+        "price": 8.99,
+        "image": "/images/menu/deluxe-spam-musubi.jpeg"
+      },
+      {
+        "id": "45-3",
+        "name": "Kalua Pork Bowl",
+        "description": "Slow-roasted kalua pork over rice with Hawaiian mac salad.",
+        "price": 14.99,
+        "image": "/images/menu/original-kalua-pork.jpeg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Keanu H.",
+        "rating": 5,
+        "comment": "Tastes like home! Authentic Hawaiian flavors.",
+        "date": "2025-12-04",
+        "avatar": "https://randomuser.me/api/portraits/men/71.jpg"
+      },
+      {
+        "author": "Leilani M.",
+        "rating": 4.8,
+        "comment": "So fresh! The poke bowl is amazing.",
+        "date": "2025-12-03",
+        "avatar": "https://randomuser.me/api/portraits/women/63.jpg"
+      },
+      {
+        "author": "Jake W.",
+        "rating": 4.7,
+        "comment": "Best poke bowls in town, hands down.",
+        "date": "2025-12-01",
+        "avatar": "https://randomuser.me/api/portraits/men/49.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "15 min"
   }
 ]

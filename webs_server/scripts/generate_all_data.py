@@ -13,6 +13,7 @@ Usage:
 Optional filters:
   --projects web_2_autobooks,web_5_autocrm
 """
+
 from __future__ import annotations
 
 import argparse
@@ -59,8 +60,7 @@ def discover_projects_and_entities(initial_data_dir: str) -> Dict[str, Set[str]]
         if entity_types:
             projects[project_key] = entity_types
 
-    sorted_projects = dict(sorted(projects.items(), key=lambda x: int(x[0].split('_')[1])))
-
+    sorted_projects = dict(sorted(projects.items(), key=lambda x: int(x[0].split("_")[1])))
 
     return sorted_projects
 
@@ -209,5 +209,3 @@ if __name__ == "__main__":
     # Example usage:
     # python webs_server/scripts/generate_all_data.py   --base-url http://127.0.0.1:8090   --count 5   --mode append --initial-data-dir=~autoppia_webs_demo/webs_server/initial_data
     raise SystemExit(main(sys.argv[1:]))
-
-
