@@ -14,13 +14,24 @@ export interface RemoteTask {
   completed_at?: string | null;
 }
 
+interface LocalTaskData {
+  id?: string | number;
+  name?: string;
+  description?: string;
+  priority?: number;
+  status?: string;
+  createdAt?: string;
+  dueDate?: string;
+  tags?: string[];
+}
+
 /**
  * Load tasks from local JSON file (fallback when v2 is disabled or backend unavailable)
  */
 async function loadTasksFromLocal(limit: number = 80): Promise<RemoteTask[]> {
   try {
     // Transform local JSON format to RemoteTask format
-    const localTasks = (tasksData as any[]).slice(0, limit).map((task: any) => ({
+    const localTasks = (tasksData as LocalTaskData[]).slice(0, limit).map((task: LocalTaskData) => ({
       id: task.id?.toString(),
       name: task.name,
       description: task.description,
