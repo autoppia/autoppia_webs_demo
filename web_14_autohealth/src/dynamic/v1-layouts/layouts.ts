@@ -30,7 +30,7 @@ const isDynamicFlagEnabled = (): boolean => {
 const TOTAL_LAYOUT_VARIANTS = 10;
 
 export function isDynamicEnabled(): boolean {
-  return isDynamicFlagEnabled();
+  return false; // Siempre deshabilitado - el layout nunca cambia
 }
 
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
