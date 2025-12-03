@@ -32,8 +32,8 @@ const generateId = () =>
 
 const defaultTeams: Team[] = [
   {
-    id: "autolist-devs",
-    name: "AutoList Devs",
+    id: "autolist-dev",
+    name: "AutoList Dev",
     description: "Core builders for AutoList frontends",
     members: [
       { id: "alex@example.com", name: "Alex Carter", role: "Lead Engineer" },
@@ -53,13 +53,27 @@ export function TeamsProvider({ children }: { children: React.ReactNode }) {
       if (raw) {
         const parsed = JSON.parse(raw) as Team[];
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setTeams(parsed);
+          // Ensure default team exists in the loaded teams
+          const hasDefaultTeam = parsed.some(t => t.id === "autolist-dev");
+          if (!hasDefaultTeam) {
+            // Add default team if it doesn't exist
+            setTeams([...defaultTeams, ...parsed]);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...defaultTeams, ...parsed]));
+          } else {
+            setTeams(parsed);
+          }
         } else {
           setTeams(defaultTeams);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultTeams));
         }
+      } else {
+        // No localStorage, initialize with default team
+        setTeams(defaultTeams);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultTeams));
       }
     } catch (error) {
       console.warn("[TeamsContext] Failed to load teams from storage", error);
+      setTeams(defaultTeams);
     }
   }, []);
 

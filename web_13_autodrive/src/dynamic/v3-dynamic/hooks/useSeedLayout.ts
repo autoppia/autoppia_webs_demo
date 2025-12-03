@@ -1,6 +1,6 @@
 // src/dynamic/v3-dynamic/hooks/useSeedLayout.ts
 import { useMemo, useCallback } from 'react';
-import { getSeedLayout, isDynamicEnabled } from '../../v1-layouts/layouts';
+import { getSeedLayout } from '../../v1-layouts/layouts';
 import { getLayoutConfig } from '../../v2-data/data-provider';
 import { getTextForElement, type ElementKey } from '../utils/textVariants';
 import { useSeed as useSeedContext } from '@/context/SeedContext';
@@ -129,45 +129,21 @@ function generateElementId(seed: number, elementType: string, index: number): st
 }
 
 export function useSeedLayout() {
-  // Use SeedContext for unified seed management
   const { resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeedContext();
   
-  // Use resolved v1 seed for structure (layout)
-  const structureSeed = useMemo(() => {
-    return resolvedSeeds.v1 ?? resolvedSeeds.base;
-  }, [resolvedSeeds.v1, resolvedSeeds.base]);
+  // Force fixed layout/ids; keep base seed for preservation
+  const structureSeed = useMemo(() => resolvedSeeds.base, [resolvedSeeds.base]);
+  const dynamicSeed = useMemo(() => resolvedSeeds.base, [resolvedSeeds.base]);
+  const v2Seed = useMemo(() => resolvedSeeds.v2 ?? null, [resolvedSeeds.v2]);
   
-  // Use resolved v3 seed for dynamic (HTML/text), or v1 if v3 not enabled
-  const dynamicSeed = useMemo(() => {
-    return resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
-  }, [resolvedSeeds.v3, resolvedSeeds.v1, resolvedSeeds.base]);
+  const isDynamicEnabledState = false;
+  const structureSeedActive = false;
+  const dynamicSeedActive = false;
   
-  const v2Seed = useMemo(() => {
-    return resolvedSeeds.v2 ?? null;
-  }, [resolvedSeeds.v2]);
-  
-  // Check if dynamic mode is enabled
-  const isDynamicEnabledState = isDynamicEnabled();
-  
-  // Determine if structure and dynamic are active based on resolved seeds
-  const structureSeedActive = useMemo(() => {
-    return isDynamicEnabledState && resolvedSeeds.v1 !== null;
-  }, [isDynamicEnabledState, resolvedSeeds.v1]);
-  
-  const dynamicSeedActive = useMemo(() => {
-    return isDynamicEnabledState && (resolvedSeeds.v3 !== null || resolvedSeeds.v1 !== null);
-  }, [isDynamicEnabledState, resolvedSeeds.v3, resolvedSeeds.v1]);
-  
-  // Calculate layout based on structure seed
-  const layout = useMemo(() => {
-    if (isDynamicEnabledState && structureSeedActive) {
-      return getLayoutConfig(structureSeed);
-    }
-    return getLayoutConfig(1);
-  }, [isDynamicEnabledState, structureSeedActive, structureSeed]);
+  const layout = useMemo(() => getLayoutConfig(1), []);
 
-  const isDynamicStructureActive = isDynamicEnabledState && structureSeedActive;
-  const isDynamicHtmlActive = isDynamicEnabledState && dynamicSeedActive;
+  const isDynamicStructureActive = false;
+  const isDynamicHtmlActive = false;
 
   // Function to generate element attributes for a specific element type
   const getElementAttributes = useCallback((elementType: string, index: number = 0) => {
@@ -176,72 +152,33 @@ export function useSeedLayout() {
       'data-element-type': elementType 
     };
     
-    if (!isDynamicHtmlActive) {
-      return baseAttrs;
-    }
-    
-    // Generate dynamic attributes based on seed (semantic id)
-    return { 
-      ...baseAttrs,
-      id: generateElementId(dynamicSeed, elementType, index), 
-      'data-seed': dynamicSeed.toString(),
-      'data-variant': (dynamicSeed % 10).toString(),
-      'data-xpath': `//${elementType}[@data-seed='${dynamicSeed}']`
-    };
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return baseAttrs;
+  }, []);
 
   // Function to get XPath selector for an element
   const getElementXPath = useCallback((elementType: string) => {
-    if (!isDynamicHtmlActive) {
-      return `//${elementType}[@id='${elementType}-0']`;
-    }
-    // Generate dynamic XPath based on seed
-    return `//${elementType}[@data-seed='${dynamicSeed}']`;
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return `//${elementType}[@id='${elementType}-0']`;
+  }, []);
 
   // Function to reorder elements
   const reorderElements = useCallback(<T extends { id?: string; name?: string; type?: string }>(elements: T[]) => {
-    if (!isDynamicHtmlActive || elements.length === 0) {
-      return elements;
-    }
-    // Simple reordering based on seed (cycle through elements)
-    const reordered = [...elements];
-    const rotations = (dynamicSeed - 1 + elements.length) % elements.length;
-    if (rotations === 0) {
-      return elements;
-    }
-    for (let i = 0; i < rotations; i++) {
-      reordered.push(reordered.shift()!);
-    }
-    return reordered;
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return elements;
+  }, []);
 
   // Function to generate element ID
   const generateId = useCallback((context: string, index: number = 0) => {
-    if (!isDynamicHtmlActive) {
-      return `${context}-${index}`;
-    }
-    return generateElementId(dynamicSeed, context, index);
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return `${context}-${index}`;
+  }, []);
 
   // Function to get layout classes for specific element types
   const getLayoutClasses = useCallback((elementType: 'container' | 'item' | 'button' | 'ride-card' | 'driver-card') => {
-    if (!isDynamicHtmlActive) {
-      return '';
-    }
-    // Generate dynamic classes based on seed
-    return `dynamic-${elementType} seed-${dynamicSeed}`;
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return '';
+  }, []);
 
   // Function to apply CSS variables to an element
   const applyCSSVariables = useCallback((element: HTMLElement) => {
-    if (!isDynamicHtmlActive) {
-      return;
-    }
-    // Apply basic dynamic CSS variables
-    element.style.setProperty('--seed', dynamicSeed.toString());
-    element.style.setProperty('--variant', (dynamicSeed % 10).toString());
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return;
+  }, []);
 
   // Function to get current layout information
   const getLayoutInfo = useCallback(() => {
@@ -259,29 +196,18 @@ export function useSeedLayout() {
 
   // Function to generate a unique class name based on seed
   const generateSeedClass = useCallback((baseClass: string) => {
-    if (!isDynamicHtmlActive) {
-      return baseClass;
-    }
-    return `${baseClass}-seed-${dynamicSeed}`;
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return baseClass;
+  }, []);
 
   // Function to create a dynamic style object
   const createDynamicStyles = useCallback((baseStyles: React.CSSProperties = {}) => {
-    if (!isDynamicHtmlActive) {
-      return baseStyles;
-    }
-    return {
-      ...baseStyles,
-      '--seed': dynamicSeed.toString(),
-      '--variant': (dynamicSeed % 10).toString()
-    };
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return baseStyles;
+  }, []);
 
   // Function to get dynamic text for an element type with fallback
   const getText = useCallback((key: ElementKey, fallback: string): string => {
-    if (!isDynamicHtmlActive) return fallback;
-    return getTextForElement(dynamicSeed, key, fallback);
-  }, [dynamicSeed, isDynamicHtmlActive]);
+    return fallback;
+  }, []);
 
   // Helper function to generate navigation URLs with seed parameter
   // Delegates to SeedContext which handles unified seed preservation

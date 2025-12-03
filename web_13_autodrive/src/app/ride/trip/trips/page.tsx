@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import RideNavbar from "../../../../components/RideNavbar";
+import GlobalHeader from "@/components/GlobalHeader";
 import { logEvent, EVENT_TYPES } from "@/library/event";
 import {simulatedTrips, rides, DriverType, RideType, Trip} from "@/data/trips-enhanced";
 
@@ -43,34 +43,36 @@ function TripCard({ trip }: { trip: Trip }) {
   };
   
   return (
-    <div className="bg-gray-100 rounded-2xl flex items-center px-8 py-7 gap-7 mb-6">
+    <div className="bg-white border border-gray-200 rounded-2xl flex items-center px-8 py-6 gap-7 mb-6 shadow-sm">
       <img
-        src={trip.ride.icon}
+        src={trip.ride.image || trip.ride.icon}
         alt="Car"
-        className="w-36 h-24 object-contain mr-6"
+        className="w-40 h-32 object-cover rounded-lg border border-gray-100"
       />
       <div className="flex-1 flex flex-col gap-1">
-        <div className="font-bold text-xl mb-1 flex items-center gap-3">
+        <div className="font-bold text-xl mb-1 flex items-center gap-3 text-[#1b5fa7]">
           Confirmed
           <span className="font-normal text-base text-gray-700">
             {trip.ride.name}
           </span>
         </div>
-        <div className="text-gray-800 text-base">
+        <div className="text-sm text-gray-600 flex items-center gap-2">
+          <span className="inline-flex items-center justify-center w-2 h-2 rounded-full bg-green-500" />
           {formatDateShort(trip.date, trip.time)}
         </div>
+        <div className="text-xs text-gray-500">{trip.pickup} → {trip.dropoff}</div>
       </div>
       <div className="flex flex-col justify-between items-end h-full gap-2">
         <button
           {...getElementAttributes('trips-card-details', 0)}
-          className="flex items-center gap-2 px-4 py-1 mt-0 bg-white border border-gray-300 rounded-lg text-black font-medium text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-[#2095d2] text-white rounded-lg font-semibold text-sm shadow hover:bg-[#1273a0] transition"
           onClick={handleTripDetailsClick}
         >
           <svg width="18" height="18" fill="none" viewBox="0 0 20 20">
-            <rect width="20" height="20" rx="10" fill="#2095d2" />
+            <rect width="20" height="20" rx="10" fill="#fff" />
             <path
               d="M6.5 10.5L9 13l4.5-4.5"
-              stroke="#fff"
+              stroke="#2095d2"
               strokeWidth="1.6"
               strokeLinecap="round"
             />
@@ -89,32 +91,32 @@ function PastSection() {
     address: "100 Van Ness",
     datetime: "7/17/2025 • 11:55:31 AM",
     price: 24.75,
-    map: "/map.png",
+    map: "/map-static.png",
   };
   const cards = [
     {
       title: "1 Hotel San Francisco",
       datetime: "7/17/2025 • 11:21:08 AM",
       price: 26.6,
-      car: "/car1.jpg",
+      car: "/car1.png",
     },
     {
       title: "The Landing San Francisco Apartments",
       datetime: "6/13/2024 • 6:17:48 PM",
       price: 24.7,
-      car: "/car2.jpg",
+      car: "/car2.png",
     },
     {
       title: "Avis Car Rental",
       datetime: "6/13/2024 • 10:45:32 AM",
       price: 24.7,
-      car: "/car3.jpg",
+      car: "/car3.png",
     },
     {
       title: "The Landing San Francisco Apartments",
       datetime: "6/12/2024 • 9:04:31 PM",
       price: 19.0,
-      car: "/car1.jpg",
+      car: "/car4.png",
     },
   ];
   return (
@@ -146,7 +148,7 @@ function PastSection() {
         <img
           src={featured.map}
           alt="Map"
-          className="rounded-md w-[220px] h-[150px] object-cover"
+          className="rounded-md w-[280px] h-[180px] object-cover"
         />
         <div className="flex-1 flex flex-col gap-1">
           <div className="text-[1.2rem] font-bold mb-1">{featured.address}</div>
@@ -202,28 +204,28 @@ function PastSection() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
+      <div className="grid grid-cols-1 gap-6 w-full max-w-4xl">
         {cards.map((card) => (
           <div
-            className="bg-white rounded-2xl shadow flex flex-col md:flex-row items-center px-6 py-6 gap-5 mb-6 border border-gray-200 min-w-0"
+            className="bg-white rounded-2xl shadow-lg flex flex-col sm:flex-row items-stretch px-6 py-6 gap-6 mb-4 border border-gray-200 min-w-0"
             key={card.title + card.datetime}
           >
             <img
               src={card.car}
               alt="Car"
-              className="w-24 h-16 object-contain md:mr-6 mb-3 md:mb-0 flex-shrink-0"
+              className="w-full sm:w-64 h-40 sm:h-44 object-cover mb-3 sm:mb-0 flex-shrink-0 rounded-xl shadow-sm"
             />
             <div className="flex-1 flex flex-col gap-1 justify-center min-w-0 w-full">
-              <div className="font-bold text-[1.15rem] mb-1 truncate max-w-full break-words">
+              <div className="font-bold text-[1.25rem] mb-1 truncate max-w-full break-words">
                 {card.title}
               </div>
-              <div className="text-gray-800 text-sm mb-0.5 truncate max-w-full break-words">
+              <div className="text-gray-800 text-sm mb-1 truncate max-w-full break-words">
                 {card.datetime}
               </div>
-              <div className="text-base">${card.price}</div>
-              <div className="flex gap-4 mt-3 flex-wrap">
+              <div className="text-lg font-semibold text-[#2095d2] mb-1">${card.price}</div>
+              <div className="flex gap-5 mt-3 flex-wrap">
                 <button
-                  className="flex items-center gap-1 text-black text-xs"
+                  className="flex items-center gap-1 text-black text-sm"
                   onClick={() => router.push("/help")}
                 >
                   <svg width="16" height="16" fill="none" viewBox="0 0 20 20">
@@ -241,7 +243,7 @@ function PastSection() {
                   </svg>
                   Help
                 </button>
-                <button className="flex items-center gap-1 text-black text-xs">
+                <button className="flex items-center gap-1 text-black text-sm">
                   <svg width="16" height="16" fill="none" viewBox="0 0 20 20">
                     <rect width="20" height="20" rx="4" fill="#2095d2" />
                     <path
@@ -252,7 +254,7 @@ function PastSection() {
                   </svg>
                   Details
                 </button>
-                <button className="flex items-center gap-1 text-black text-xs">
+                <button className="flex items-center gap-1 text-black text-sm">
                   <svg width="16" height="16" fill="none" viewBox="0 0 20 20">
                     <rect
                       x="3"
@@ -275,11 +277,7 @@ function PastSection() {
           </div>
         ))}
       </div>
-      <div className="w-full flex items-center justify-end pr-3 mt-2 mb-10">
-        <button className="text-[#2095d2] rounded-lg px-4 py-2 text-[15px] font-semibold hover:bg-[#e6f6fc] transition">
-          More
-        </button>
-      </div>
+      {/* More button hidden when there are no more trips */}
     </>
   );
 }
@@ -343,7 +341,7 @@ export default function TripsDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#fafbfc]">
-      <RideNavbar activeTab="mytrips" />
+      <GlobalHeader />
       {loading ? (
         <div className="flex w-full h-[70vh] items-center justify-center">
           <div className="flex items-center gap-6 w-full max-w-[500px] justify-end pr-12">

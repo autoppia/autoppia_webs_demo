@@ -9,7 +9,7 @@ import {
   useCallback,
   Suspense,
 } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   resolveSeeds,
   resolveSeedsSync,
@@ -34,13 +34,13 @@ interface SeedContextType {
 }
 
 const SeedContext = createContext<SeedContextType>({
-  seed: 4,
+  seed: 1,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
-  resolvedSeeds: resolveSeedsSync(4),
+  resolvedSeeds: resolveSeedsSync(1),
 });
 
-const DEFAULT_SEED = 4;
+const DEFAULT_SEED = 1;
 
 // Internal component that handles URL params
 function SeedInitializer({
@@ -49,14 +49,28 @@ function SeedInitializer({
   onSeedFromUrl: (seed: number | null) => void;
 }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const urlSeed = searchParams.get("seed");
     if (urlSeed) {
       const parsedSeed = Number.parseInt(urlSeed, 10);
-      onSeedFromUrl(Number.isNaN(parsedSeed) ? null : clampBaseSeed(parsedSeed));
+      if (Number.isNaN(parsedSeed)) {
+        // Invalid seed, redirect to seed=1
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("seed", "1");
+        router.replace(`${pathname}?${params.toString()}`);
+        onSeedFromUrl(1);
+      } else {
+        onSeedFromUrl(clampBaseSeed(parsedSeed));
+      }
     } else {
-      onSeedFromUrl(null);
+      // No seed in URL, redirect to seed=1
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("seed", "1");
+      router.replace(`${pathname}?${params.toString()}`);
+      onSeedFromUrl(1);
     }
     
     // Log enable_dynamic if present (user explicitly set it)
@@ -66,7 +80,7 @@ function SeedInitializer({
     } else {
       console.log("[SeedContext:web12] No enable_dynamic in URL, using env vars as default");
     }
-  }, [searchParams, onSeedFromUrl]);
+  }, [searchParams, onSeedFromUrl, router, pathname]);
 
   return null;
 }

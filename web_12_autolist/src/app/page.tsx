@@ -12,6 +12,7 @@ import {
   SyncOutlined,
   EditOutlined,
   DeleteOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Calendar, Popover, Modal } from "antd";
 import { useState, useRef, useEffect } from "react";
@@ -20,7 +21,7 @@ import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { loadTasks, RemoteTask } from "@/data/tasks";
-import { TeamsProvider } from "@/context/TeamsContext";
+import { TeamsProvider, useTeams } from "@/context/TeamsContext";
 import { ProjectsProvider } from "@/context/ProjectsContext";
 
 // Import debug utilities in development
@@ -548,6 +549,7 @@ export default function Home() {
   const [selectedView, setSelectedView] = useState<ViewMode>("inbox");
   const [chatMessages, setChatMessages] = useState<Record<string, ChatMessage[]>>({});
   const [chatDrafts, setChatDrafts] = useState<Record<string, string>>({});
+  const [snackbar, setSnackbar] = useState<{ message: string; visible: boolean }>({ message: "", visible: false });
 
   useEffect(() => {
     let cancelled = false;
@@ -556,9 +558,14 @@ export default function Home() {
       setTasksLoading(true);
       setTasksError(null);
       try {
-        const remoteTasks = await loadTasks(v2Seed ?? undefined);
+        const result = await loadTasks(v2Seed ?? undefined);
         if (cancelled) return;
-        const normalized = remoteTasks.map((task, index) =>
+        
+        if (result.error) {
+          setTasksError(result.error);
+        }
+        
+        const normalized = result.tasks.map((task, index) =>
           normalizeRemoteTask(task, index)
         );
         const initialActive = normalized.filter((task) => !task.completedAt);
@@ -618,6 +625,9 @@ export default function Home() {
   function handleDeleteTask(id: string) {
     setTasks((tasks) => tasks.filter((t) => t.id !== id));
     if (editIndex !== null && tasks[editIndex]?.id === id) setEditIndex(null);
+    // Show snackbar
+    setSnackbar({ message: "Task deleted", visible: true });
+    setTimeout(() => setSnackbar({ message: "", visible: false }), 3000);
   }
   function handleCompleteTask(id: string) {
     setTasks((tasks) => {
@@ -631,6 +641,9 @@ export default function Home() {
       );
       return tasks.filter((v, i) => i !== idx);
     });
+    // Show snackbar
+    setSnackbar({ message: "Task done successfully", visible: true });
+    setTimeout(() => setSnackbar({ message: "", visible: false }), 3000);
   }
 
   // Compute counts at the top-level for Sidebar display
@@ -865,7 +878,7 @@ function renderCompleted() {
     );
   }
 
-  function renderChatPlaceholder(chatId: string) {
+function renderChatPlaceholder(chatId: string) {
   const conv = chatConversations[chatId.replace("chat-", "")];
     const title = conv?.name ? `Chat with ${conv.name}` : "Chat";
     const role = conv?.role ?? "Conversation";
@@ -972,6 +985,196 @@ function renderCompleted() {
     );
   }
 
+  function TeamDetails({ teamId }: { teamId: string }) {
+    const { teams } = useTeams();
+    const team = teams.find((t) => t.id === teamId);
+
+    if (!team) {
+      return (
+        <div className="flex-1 flex flex-col items-center w-full text-center pt-28 pb-12 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+          <div className="bg-white shadow rounded-xl border border-gray-200 px-6 py-10 text-gray-600">
+            Team not found.
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex-1 flex flex-col w-full pt-8 pb-12 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen px-6">
+        <div className="max-w-6xl mx-auto w-full">
+          {/* Header */}
+          <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 mb-6">
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{team.name}</h1>
+                <p className="text-gray-600 mb-4">{team.description || "Team workspace"}</p>
+                <div className="flex items-center gap-6 text-sm text-gray-500">
+                  <span className="flex items-center gap-2">
+                    <TeamOutlined />
+                    {team.members.length} {team.members.length === 1 ? 'member' : 'members'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Team Members Section */}
+          <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 mb-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Team Members</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {team.members.map((m, index) => {
+                const avatarUrl = `https://i.pravatar.cc/150?img=${index + 1}`;
+                return (
+                  <div key={m.id} className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white hover:border-[#d1453b] hover:shadow-md transition-all">
+                    <div className="relative flex-shrink-0">
+                      <img
+                        src={avatarUrl}
+                        alt={m.name}
+                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#f6d7d1] to-[#e8c4bc] flex items-center justify-center text-base font-bold text-[#9b2b22] hidden">
+                        {m.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-gray-900 text-base truncate">{m.name}</div>
+                      <div className="text-sm text-gray-600 truncate">{m.role}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {team.members.length === 0 && (
+              <div className="text-center py-12 text-gray-500">
+                <TeamOutlined className="text-4xl mb-3 opacity-50" />
+                <p>No members in this team yet.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Team Stats Section */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
+              <div className="text-sm text-gray-600 mb-1">Total Members</div>
+              <div className="text-3xl font-bold text-gray-900">{team.members.length}</div>
+            </div>
+            <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
+              <div className="text-sm text-gray-600 mb-1">Active Projects</div>
+              <div className="text-3xl font-bold text-gray-900">0</div>
+            </div>
+            <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
+              <div className="text-sm text-gray-600 mb-1">Completed Tasks</div>
+              <div className="text-3xl font-bold text-gray-900">0</div>
+            </div>
+          </div>
+
+          {/* Team Activity Chart */}
+          <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Team Activity</h2>
+            <div className="relative h-64">
+              <svg className="w-full h-full" viewBox="0 0 800 200" preserveAspectRatio="none">
+                {/* Grid lines */}
+                <defs>
+                  <linearGradient id="activityGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#d1453b" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#d1453b" stopOpacity="0.05" />
+                  </linearGradient>
+                </defs>
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <line
+                    key={`grid-${i}`}
+                    x1="0"
+                    y1={40 + i * 40}
+                    x2="800"
+                    y2={40 + i * 40}
+                    stroke="#e5e7eb"
+                    strokeWidth="1"
+                    strokeDasharray="4,4"
+                  />
+                ))}
+                {/* Data points and line */}
+                <polyline
+                  points="50,160 150,140 250,120 350,100 450,80 550,90 650,70 750,60"
+                  fill="url(#activityGradient)"
+                  stroke="#d1453b"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {/* Data points */}
+                {[
+                  { x: 50, y: 160 },
+                  { x: 150, y: 140 },
+                  { x: 250, y: 120 },
+                  { x: 350, y: 100 },
+                  { x: 450, y: 80 },
+                  { x: 550, y: 90 },
+                  { x: 650, y: 70 },
+                  { x: 750, y: 60 },
+                ].map((point, i) => (
+                  <g key={`point-${i}`}>
+                    <circle
+                      cx={point.x}
+                      cy={point.y}
+                      r="6"
+                      fill="#fff"
+                      stroke="#d1453b"
+                      strokeWidth="2"
+                    />
+                    <circle
+                      cx={point.x}
+                      cy={point.y}
+                      r="4"
+                      fill="#d1453b"
+                    />
+                  </g>
+                ))}
+                {/* X-axis labels */}
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'].map((label, i) => (
+                  <text
+                    key={`label-${i}`}
+                    x={50 + i * 100}
+                    y="195"
+                    textAnchor="middle"
+                    className="text-xs fill-gray-500"
+                    fontSize="12"
+                  >
+                    {label}
+                  </text>
+                ))}
+                {/* Y-axis labels */}
+                {[0, 25, 50, 75, 100].map((value, i) => (
+                  <text
+                    key={`y-label-${i}`}
+                    x="20"
+                    y={200 - i * 40}
+                    textAnchor="end"
+                    className="text-xs fill-gray-500"
+                    fontSize="12"
+                  >
+                    {value}
+                  </text>
+                ))}
+              </svg>
+            </div>
+            <div className="mt-4 flex items-center justify-center gap-6 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#d1453b]"></div>
+                <span>Tasks Completed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <ProjectsProvider>
       <TeamsProvider>
@@ -993,18 +1196,29 @@ function renderCompleted() {
           renderGettingStarted()
         ) : selectedView.startsWith("chat-") ? (
           renderChatPlaceholder(selectedView)
+        ) : selectedView.startsWith("team-") ? (
+          <TeamDetails teamId={selectedView.replace("team-", "")} />
         ) : (
           <div className="flex-1 flex flex-col items-center w-full text-center pt-36 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
             <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-inbox', 0)}>
               {getText('heading-inbox', 'Add Tasks To Your Todo List')}
             </h1>
+            {tasksError && (
+              <div className="mb-6 px-6 py-4 bg-blue-50 border-2 border-blue-200 rounded-xl text-blue-800 text-sm max-w-2xl shadow-sm">
+                <div className="font-semibold mb-1">ℹ️ Usando datos locales</div>
+                <div className="text-blue-700">{tasksError}</div>
+                <div className="mt-3 text-xs text-blue-600">
+                  <p>Las tareas se están cargando desde el archivo JSON local. Si quieres usar el backend, asegúrate de que esté corriendo.</p>
+                </div>
+              </div>
+            )}
             <Modal
               open={editIndex !== null}
               footer={null}
               centered
               onCancel={() => setEditIndex(null)}
               title={getText('modal-edit-title', 'Edit Task')}
-              destroyOnClose
+              destroyOnHidden
               width={530}
             >
               {editIndex !== null && (
@@ -1185,9 +1399,36 @@ function renderCompleted() {
             )}
           </div>
         )}
-      </main>
-    </DynamicLayout>
-    </TeamsProvider>
+          </main>
+        </DynamicLayout>
+        {/* Snackbar for notifications */}
+        {snackbar.visible && (
+          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 fade-in duration-300">
+            <div className="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 min-w-[250px] max-w-md">
+              <div className="flex-1 text-sm font-medium">{snackbar.message}</div>
+              <button
+                onClick={() => setSnackbar({ message: "", visible: false })}
+                className="text-white/70 hover:text-white transition-colors"
+                aria-label="Close"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+      </TeamsProvider>
     </ProjectsProvider>
   );
 }

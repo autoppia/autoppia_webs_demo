@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import RideNavbar from "../../../components/RideNavbar";
+import GlobalHeader from "@/components/GlobalHeader";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "../../../components/DynamicLayout";
 import SiteElements from "../../../components/SiteElements";
@@ -646,7 +646,7 @@ const RIDE_TEMPLATES = [
   {
     name: "AutoDriverX",
     icon: "https://ext.same-assets.com/407674263/3757967630.png",
-    image: "/car1.jpg",
+    image: "/car1.png",
     desc: "Affordable rides, all to yourself",
     seats: 4,
     basePrice: 26.6,
@@ -654,7 +654,7 @@ const RIDE_TEMPLATES = [
   {
     name: "Comfort",
     icon: "https://ext.same-assets.com/407674263/2600779409.svg",
-    image: "/car2.jpg",
+    image: "/car2.png",
     desc: "Newer cars with extra legroom",
     seats: 4,
     basePrice: 31.5,
@@ -662,7 +662,7 @@ const RIDE_TEMPLATES = [
   {
     name: "AutoDriverXL",
     icon: "https://ext.same-assets.com/407674263/2882408466.svg",
-    image: "/car3.jpg",
+    image: "/car3.png",
     desc: "Affordable rides for groups up to 6",
     seats: 6,
     basePrice: 27.37,
@@ -764,6 +764,11 @@ export default function RideTripPage() {
   const [rides, setRides] = useState(() =>
     generateSeededRides(v2Seed ?? 1)
   );
+  const [stats, setStats] = useState({
+    totalTrips: 0,
+    activeRiders: 0,
+    availableDrivers: 0,
+  });
 
   useEffect(() => {
     setRides(generateSeededRides(v2Seed ?? 1));
@@ -782,6 +787,31 @@ export default function RideTripPage() {
     if (date && time) setPickupScheduled({ date, time });
     else setPickupScheduled(null);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    
+    // Calculate total trips from localStorage (cancelled trips are tracked)
+    let totalTrips = 0;
+    try {
+      const cancelledTrips = JSON.parse(localStorage.getItem("cancelledTrips") || "[]");
+      // Base trips completed (simulatedTrips has 3, but we can count more)
+      totalTrips = 3 + cancelledTrips.length;
+    } catch {
+      totalTrips = 3;
+    }
+
+    // Simulate active riders and available drivers based on seed for consistency
+    const seed = v2Seed ?? 1;
+    const activeRiders = 1247 + (seed * 47) % 523;
+    const availableDrivers = 458 + (seed * 32) % 142;
+
+    setStats({
+      totalTrips: totalTrips || 12, // Fallback to 12 if no trips
+      activeRiders,
+      availableDrivers,
+    });
+  }, [v2Seed]);
 
   function formatDateTime(date: string, time: string) {
     // MMM DD, HH:MM AM/PM
@@ -847,12 +877,22 @@ export default function RideTripPage() {
   }
 
   // Header component
-  const header = <RideNavbar activeTab="ride" />;
+  const header = <GlobalHeader />;
 
   // Booking section component
   const booking = (
-    <section className="w-[340px] bg-white rounded-xl shadow p-6 flex flex-col gap-2 max-lg:w-full">
-      <div className="text-lg font-semibold mb-3" {...getElementAttributes('trip-get-trip-heading', 0)}>{getText('trip-get-trip-heading', 'Get a trip')}</div>
+    <section className="w-[500px] bg-white rounded-xl shadow-lg p-8 flex flex-col gap-5 max-lg:w-full h-[calc(100vh-6rem)]">
+      <div className="mb-2">
+        <h2 className="text-xl font-bold mb-1" {...getElementAttributes('trip-get-trip-heading', 0)}>{getText('trip-get-trip-heading', 'Book your ride')}</h2>
+        <p className="text-sm text-gray-600">Enter your pickup and destination to get started</p>
+      </div>
+      <div className="mb-4 flex-1 min-h-0">
+        <img
+          src="/dashboard.jpg"
+          alt="Dashboard"
+          className="w-full h-full rounded-lg object-cover shadow-sm"
+        />
+      </div>
       <PlaceSelect
         value={pickup}
         setValue={setPickup}
@@ -960,6 +1000,42 @@ export default function RideTripPage() {
       >
         {loading ? getText('searching-label', 'Searching...') : getText('search-button', 'Search')}
       </button>
+
+      {/* Stats Section */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100/50">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2095d2]/10 mb-2">
+              <svg width="16" height="16" fill="none" viewBox="0 0 20 20" className="text-[#2095d2]">
+                <path d="M10 2L3 7v11h14V7l-7-5z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                <path d="M7 10h6M7 14h6" stroke="currentColor" strokeWidth="1.2"/>
+              </svg>
+            </div>
+            <div className="text-2xl font-bold text-[#2095d2]">{stats.totalTrips}+</div>
+            <div className="text-xs text-gray-600 mt-0.5">Total Trips</div>
+          </div>
+          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-green-50 to-green-100/50">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 mb-2">
+              <svg width="16" height="16" fill="none" viewBox="0 0 20 20" className="text-green-600">
+                <circle cx="10" cy="7" r="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                <path d="M4 17v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+              </svg>
+            </div>
+            <div className="text-2xl font-bold text-green-600">{stats.activeRiders.toLocaleString()}</div>
+            <div className="text-xs text-gray-600 mt-0.5">Active Riders</div>
+          </div>
+          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-purple-50 to-purple-100/50">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/10 mb-2">
+              <svg width="16" height="16" fill="none" viewBox="0 0 20 20" className="text-purple-600">
+                <rect x="4" y="5" width="12" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                <path d="M6 8h8M6 11h5" stroke="currentColor" strokeWidth="1.2"/>
+              </svg>
+            </div>
+            <div className="text-2xl font-bold text-purple-600">{stats.availableDrivers}</div>
+            <div className="text-xs text-gray-600 mt-0.5">Available Drivers</div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 
@@ -1067,52 +1143,47 @@ export default function RideTripPage() {
   // Map section component
   const map = (
     <section className="flex-1 min-w-0">
-      <div className="w-full h-full min-h-[640px] flex items-center justify-center rounded-2xl border border-gray-100 overflow-hidden bg-gray-100">
+      <div className="w-full h-[calc(100vh-6rem)] rounded-2xl border border-gray-200 overflow-hidden bg-gray-100 shadow-lg relative">
         <img
-          src="/map.jpg"
+          src="/map2.png"
           alt="Map"
-          className="object-none w-full max-h-[700px]"
+          className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
     </section>
   );
 
-  // Hero section component (placeholder for trip page)
-  const hero = (
-    <div className="w-full bg-white rounded-xl shadow p-6">
-      <h2 className="text-2xl font-bold mb-4" {...getElementAttributes('trip-hero-title', 0)}>{getText('trip-hero-title', 'Plan Your Trip')}</h2>
-      <p className="text-gray-600" {...getElementAttributes('trip-hero-subtitle', 0)}>{getText('trip-hero-subtitle', 'Choose your pickup and destination to get started.')}</p>
-    </div>
-  );
+  // Hero section component (removed - not needed)
+  const hero = null;
 
-  // Footer component (placeholder)
-  const footer = (
-    <footer className="bg-gray-100 py-4 px-4">
-      <div className="max-w-7xl mx-auto text-center text-gray-600 text-sm">
-        <p>{getText('footer-copy', '© 2024 AutoDriver. All rights reserved.')}</p>
-      </div>
-    </footer>
-  );
 
   return (
     <div className="min-h-screen w-full bg-[#f5fbfc]">
       <DynamicLayout
         header={header}
         main={
-          <div className="flex gap-8 mt-8 px-10 pb-32 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
-            <SiteElements>
-              {{
-                header,
-                hero,
-                booking,
-                map,
-                rides: ridesSection,
-                footer
-              }}
-            </SiteElements>
+          <div className="flex gap-8 mt-8 px-10 max-lg:flex-col max-lg:px-2 max-lg:gap-4 h-[calc(100vh-5rem)]">
+            {showRides ? (
+              <div className="flex gap-8 w-full max-lg:flex-col">
+                <div className="w-[500px] max-lg:w-full">
+                  {booking}
+                </div>
+                <div className="flex-1">
+                  {ridesSection}
+                </div>
+              </div>
+            ) : (
+              <div className="flex gap-8 w-full max-lg:flex-col items-start">
+                <div className="w-[500px] max-lg:w-full">
+                  {booking}
+                </div>
+                <div className="flex-1">
+                  {map}
+                </div>
+              </div>
+            )}
           </div>
         }
-        footer={footer}
       />
       {pickup && dropoff && showRides && (
         <div className="fixed z-50 left-1/2 bottom-8 -translate-x-1/2 max-w-lg w-[calc(100vw-32px)] drop-shadow-xl bg-transparent pointer-events-none max-lg:bottom-2">

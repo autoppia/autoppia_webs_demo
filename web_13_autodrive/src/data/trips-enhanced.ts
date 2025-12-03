@@ -34,19 +34,19 @@ export interface RideType {
 export const rides: RideType[] = [
   {
     name: "AutoDriverX",
-    image: "/car1.jpg",
+    image: "/car1.png",
     icon: "https://ext.same-assets.com/407674263/3757967630.png",
     price: 26.6,
   },
   {
     name: "Comfort",
-    image: "/car2.jpg",
+    image: "/car2.png",
     icon: "https://ext.same-assets.com/407674263/2600779409.svg",
     price: 31.5,
   },
   {
     name: "AutoDriverXL",
-    image: "/car3.jpg",
+    image: "/car3.png",
     icon: "https://ext.same-assets.com/407674263/2882408466.svg",
     price: 27.37,
   },

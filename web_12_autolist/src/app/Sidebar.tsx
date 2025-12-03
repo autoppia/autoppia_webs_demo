@@ -289,6 +289,7 @@ export default function Sidebar({
                     {...attributes}
                     data-xpath={xpath}
                     className={item.className}
+                    onClick={item.onClick}
                   >
                     {item.icon}
                     <span className="flex-1">{item.label}</span>

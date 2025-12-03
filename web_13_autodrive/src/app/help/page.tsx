@@ -1,127 +1,197 @@
 "use client";
 
+import { SeedLink } from "@/components/ui/SeedLink";
+import GlobalHeader from "@/components/GlobalHeader";
+
 const categories = [
-  { label: "Riders", icon: (
-    <svg width="42" height="42" fill="none" viewBox="0 0 40 40"><rect x="3" y="11" width="34" height="21" rx="7" stroke="#222" strokeWidth="2"/><circle cx="12.5" cy="28.5" r="2.5" fill="#222"/><circle cx="27.5" cy="28.5" r="2.5" fill="#222"/></svg>
-  ) },
-  { label: "Driving & Delivering", icon: (
-    <svg width="42" height="42" fill="none" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" stroke="#222" strokeWidth="2"/><path d="M13 28l4.2-8.6a3 3 0 0 1 2.7-1.7h4.2a3 3 0 0 1 2.7 1.7l4.2 8.6" stroke="#222" strokeWidth="2"/><circle cx="15.5" cy="28.5" r="2.5" fill="#222"/><circle cx="24.5" cy="28.5" r="2.5" fill="#222"/></svg>
-  ) },
-  { label: "Uber Eats", icon: (
-    <svg width="42" height="42" fill="none" viewBox="0 0 40 40"><rect x="7" y="13" width="26" height="16" rx="4" stroke="#222" strokeWidth="2"/><rect x="9" y="18" width="8" height="4" rx="2" fill="#222"/><rect x="23" y="18" width="8" height="4" rx="2" fill="#222"/></svg>
-  ) },
-  { label: "Merchants & Restaurants", icon: (
-    <svg width="42" height="42" fill="none" viewBox="0 0 40 40"><rect x="8" y="16" width="24" height="14" rx="4" stroke="#222" strokeWidth="2"/><rect x="12" y="19" width="4" height="7" fill="#222"/><rect x="24" y="19" width="4" height="7" fill="#222"/></svg>
-  ) },
-  { label: "Bikes & Scooters", icon: (
-    <svg width="42" height="42" fill="none" viewBox="0 0 40 40"><circle cx="13" cy="27" r="3" stroke="#222" strokeWidth="2"/><circle cx="27" cy="27" r="3" stroke="#222" strokeWidth="2"/><path d="M13 27h14" stroke="#222" strokeWidth="2"/><path d="M20 14v9" stroke="#222" strokeWidth="2"/></svg>
-  ) },
-  { label: "Uber for Business", icon: (
-    <svg width="42" height="42" fill="none" viewBox="0 0 40 40"><rect x="11" y="22" width="18" height="7" rx="2" stroke="#222" strokeWidth="2"/><rect x="15" y="11" width="10" height="7" rx="2" stroke="#222" strokeWidth="2"/></svg>
-  ) },
-  { label: "Freight", icon: (
-    <svg width="42" height="42" fill="none" viewBox="0 0 40 40"><rect x="10" y="18" width="20" height="8" rx="2" stroke="#222" strokeWidth="2"/><rect x="15" y="14" width="10" height="4" rx="2" stroke="#222" strokeWidth="2"/></svg>
-  ) },
+  {
+    title: "Booking & ETA",
+    desc: "Pickups, destinations, live map issues, ETA delays.",
+    badge: "Live map",
+  },
+  {
+    title: "Payments & fares",
+    desc: "Price estimates, promo codes, refunds, receipts.",
+    badge: "Billing",
+  },
+  {
+    title: "Safety & support",
+    desc: "Trip safety, contact support, report an incident.",
+    badge: "Safety",
+  },
+  {
+    title: "Trips & history",
+    desc: "Past trips, exports, itinerary details, receipts.",
+    badge: "Trips",
+  },
+  {
+    title: "Account & devices",
+    desc: "Login, notifications, language, accessibility.",
+    badge: "Account",
+  },
+  {
+    title: "Vehicles & charging",
+    desc: "Car options, EV charging stops, comfort settings.",
+    badge: "Vehicles",
+  },
+];
+
+const quickHelp = [
+  {
+    title: "Map or rides not loading",
+    items: [
+      "Check that pickup and destination are set; rides unlock after both fields are filled.",
+      "Refresh the route map. We ship a static map fallback (map-static.png) if live tiles fail.",
+      "Still blank? Clear cache/local storage and retry.",
+    ],
+  },
+  {
+    title: "Need a receipt or invoice",
+    items: [
+      "Open My trips → select the trip → tap “Details”.",
+      "Export as PDF or send to your email on file.",
+    ],
+  },
+  {
+    title: "Edit or cancel a trip",
+    items: [
+      "Go to Upcoming → Trip details → Edit pickup/dropoff.",
+      "Cancels are free within the grace window shown on the card.",
+    ],
+  },
 ];
 
 export default function HelpPage() {
-  return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <header className="w-full h-[54px] flex items-center justify-between px-10 bg-black border-b border-black">
-        <div className="text-white font-medium text-[24px] tracking-tight">Uber</div>
-        <nav className="flex items-center gap-5">
-          <span className="text-white text-[15px]">🌐 EN</span>
-          <span className="text-white text-[15px] flex items-center"><svg width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" stroke="#fff" strokeWidth="1.4"/></svg> <span className="ml-1">Log in</span></span>
-        </nav>
-      </header>
-      <div className="w-full border-b bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto py-3 px-8">
-          <span className="text-2xl font-medium text-black border-b-2 border-black pb-2">Help</span>
-        </div>
+  const footer = (
+    <footer className="bg-gray-100 py-8 px-4">
+      <div className="max-w-7xl mx-auto text-center text-gray-600">
+        <p>© 2025 AutoDriver. All rights reserved.</p>
       </div>
-      <main className="flex-1 flex flex-col items-center justify-start pt-16 pb-0 px-4 w-full">
-        <h1 className="text-5xl font-bold text-black mb-4">Welcome to Uber Support</h1>
-        <div className="text-gray-800 text-lg mb-12 text-center max-w-3xl">
-          We're here to help. Looking for customer service contact information? Explore support resources for the relevant products below to find the best way to reach out about your issue.
-        </div>
-        <div className="flex flex-wrap items-stretch justify-center gap-8 w-full max-w-[1400px]">
-          {categories.map((cat) => (
-            <div key={cat.label} className="bg-[#f6f6f6] rounded-md flex flex-col items-center justify-center w-[190px] h-[180px] p-5 transition hover:bg-gray-200 cursor-pointer">
-              <span>{cat.icon}</span>
-              <span className="font-bold text-lg text-black mt-7 text-center ">{cat.label}</span>
+    </footer>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#f5fbfc] text-slate-900 flex flex-col">
+      <GlobalHeader />
+
+      <main className="flex-1">
+        <section className="bg-gradient-to-b from-white via-[#e8f4fb] to-[#f5fbfc] border-b border-slate-200">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+            <div className="flex flex-col gap-3">
+              <p className="text-sm font-semibold text-[#2095d2] uppercase tracking-[0.08em]">Help</p>
+              <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight">
+                We’re here to keep every ride on track
+              </h1>
+              <p className="text-lg text-slate-600 max-w-3xl">
+                Browse guided fixes, see the status of your trips, or reach out to our crew.
+                Your seed data and layout stay intact while you navigate.
+              </p>
             </div>
-          ))}
-        </div>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 sm:p-5">
+                <div className="text-sm font-semibold text-slate-600 mb-2">Search help</div>
+                <div className="flex items-center gap-3 bg-[#f6f9fb] border border-slate-200 rounded-lg px-3 py-3">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 20 20" className="text-slate-500">
+                    <path
+                      d="M15.54 14.13l-3.65-3.65a5.24 5.24 0 0 0 1.03-3.13 5.25 5.25 0 1 0-5.25 5.25c1.15 0 2.22-.39 3.13-1.03l3.65 3.65a.75.75 0 1 0 1.06-1.06zm-9.29-3.63a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <input
+                    className="flex-1 bg-transparent outline-none text-base placeholder:text-slate-400"
+                    placeholder="Type a question (e.g. “why is the map blank?”)"
+                  />
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3 text-sm">
+                  <span className="px-3 py-1 bg-[#e8f4fb] text-[#2095d2] rounded-full">Map & ETA</span>
+                  <span className="px-3 py-1 bg-[#e8f4fb] text-[#2095d2] rounded-full">Payments</span>
+                  <span className="px-3 py-1 bg-[#e8f4fb] text-[#2095d2] rounded-full">Account</span>
+                </div>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 sm:p-5 flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-sm font-semibold text-slate-600 mb-1">Live status</div>
+                  <div className="text-base text-slate-700">All systems operational</div>
+                  <div className="text-xs text-emerald-600 mt-1">Seeds, maps, and rides are responding normally.</div>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-100 rounded-lg text-emerald-700 text-sm">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  Online
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-10">
+              {categories.map((cat) => (
+                <div
+                  key={cat.title}
+                  className="bg-white border border-slate-200 rounded-xl shadow-sm p-5 flex flex-col gap-3 hover:border-[#2095d2] hover:shadow-md transition"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-semibold text-[#2095d2] px-2 py-1 bg-[#e8f4fb] rounded-full">
+                      {cat.badge}
+                    </div>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 18 18" className="text-slate-400">
+                      <path d="M6 7l3 3 3-3" stroke="currentColor" strokeWidth="2" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-lg font-semibold text-slate-900">{cat.title}</div>
+                    <p className="text-sm text-slate-600 mt-1">{cat.desc}</p>
+                  </div>
+                  <button className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-[#2095d2] hover:underline">
+                    View guides
+                    <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+                      <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+          <div className="grid gap-5 lg:grid-cols-3">
+            {quickHelp.map((card) => (
+              <div key={card.title} className="bg-white border border-slate-200 rounded-xl shadow-sm p-5 flex flex-col gap-3">
+                <div className="text-sm font-semibold text-[#2095d2]">{card.title}</div>
+                <ul className="space-y-2 text-sm text-slate-700 list-disc list-inside">
+                  {card.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div className="text-lg font-semibold text-slate-900">Still need help?</div>
+              <p className="text-sm text-slate-600">
+                Drop us a note and we’ll keep your seed intact while we troubleshoot.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <SeedLink
+                href="/contact"
+                className="px-4 py-2 rounded-lg bg-[#2095d2] text-white font-semibold shadow hover:bg-[#177bab] transition"
+              >
+                Contact support
+              </SeedLink>
+              <SeedLink
+                href="/ride/trip/trips"
+                className="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:border-[#2095d2] transition"
+              >
+                View trip history
+              </SeedLink>
+            </div>
+          </div>
+        </section>
       </main>
-      <div className="flex-1" />
-      <footer className="w-full bg-black text-white pt-14 pb-7 px-2 mt-16">
-        <div className="max-w-7xl mx-auto flex flex-wrap gap-12 justify-between items-start">
-          <div className="mb-10 mr-12">
-            <div className="mb-3 text-xl font-bold">Uber</div>
-            <div className="flex flex-col gap-5 mt-6">
-              <div>
-                <span className="block font-semibold mb-2">Company</span>
-                <ul className="text-sm space-y-1 opacity-80">
-                  <li>About us</li>
-                  <li>Newsroom</li>
-                  <li>Investors</li>
-                  <li>Blog</li>
-                  <li>Careers</li>
-                </ul>
-              </div>
-              <div className="mt-7">
-                <span className="block font-semibold mb-2">Products</span>
-                <ul className="text-sm space-y-1 opacity-80">
-                  <li>Ride</li>
-                  <li>Drive</li>
-                  <li>Eat</li>
-                  <li>Uber for Business</li>
-                  <li>Uber Freight</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="mb-10">
-            <span className="block font-semibold mb-2">Global Citizenship</span>
-            <ul className="text-sm space-y-1 opacity-80">
-              <li>Safety</li>
-              <li>Security</li>
-              <li>Diversity</li>
-              <li>Transparency</li>
-            </ul>
-          </div>
-          <div className="mb-10">
-            <span className="block font-semibold mb-2">Innovation</span>
-            <ul className="text-sm space-y-1 opacity-80">
-              <li>AI</li>
-            </ul>
-          </div>
-          <div className="mb-10 flex flex-col items-center justify-between gap-3 min-w-[220px]">
-            <div className="flex gap-5 mt-5 pb-4">
-              <span className="inline-block"><svg width='20' height='20' fill='none' viewBox='0 0 20 20'><circle cx='10' cy='10' r='9.5' stroke='#fff' strokeWidth='1.3'/></svg></span>
-              <span className="inline-block"><svg width='20' height='20' fill='none' viewBox='0 0 20 20'><rect x='4' y='8' width='12' height='8' rx='4' fill='#fff'/></svg></span>
-              <span className="inline-block"><svg width='20' height='20' fill='none' viewBox='0 0 20 20'><rect x='4' y='4' width='12' height='12' rx='6' fill='#fff'/></svg></span>
-              <span className="inline-block"><svg width='20' height='20' fill='none' viewBox='0 0 20 20'><circle cx='10' cy='10' r='9.5' stroke='#fff' strokeWidth='1.3'/></svg></span>
-              <span className="inline-block"><svg width='20' height='20' fill='none' viewBox='0 0 20 20'><circle cx='10' cy='10' r='6' stroke='#fff' strokeWidth='1.3'/></svg></span>
-            </div>
-            <div className="flex gap-4 mb-4">
-              <img className="h-10" alt="Google Play" src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" />
-              <img className="h-10" alt="App Store" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" />
-            </div>
-            <div className="flex gap-4 mt-3">
-              <span className="text-white opacity-80 text-sm">© 2025 Uber Technologies Inc.</span>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto flex flex-row flex-wrap items-center justify-between mt-10 gap-3 opacity-70 text-sm">
-          <div className="flex flex-row gap-7 items-center">
-            <span>Privacy</span> <span>Accessibility</span> <span>Terms</span>
-          </div>
-          <div className="flex flex-row gap-4 items-center">
-            <span>🌐 EN</span> <span><svg width='16' height='16' fill='none' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7' stroke='#fff' strokeWidth='1.5'/></svg></span>
-          </div>
-        </div>
-      </footer>
+
+      {footer}
     </div>
   );
 }

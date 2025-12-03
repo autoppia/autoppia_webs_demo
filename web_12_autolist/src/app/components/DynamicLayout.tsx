@@ -136,7 +136,7 @@ export default function DynamicLayout({ children, sidebarProps }: DynamicLayoutP
 function Footer() {
   return (
     <footer className="p-4 bg-gray-50 border-t border-gray-200 text-center text-gray-600">
-      <p>&copy; 2024 AutoList. All rights reserved.</p>
+      <p>&copy; 2025 AutoList. All rights reserved.</p>
     </footer>
   );
 }

@@ -22,14 +22,8 @@ const truthy = (value?: string | null) =>
   ["true", "1", "yes", "on"].includes(value.toLowerCase());
 
 export function isDynamicEnabled(): boolean {
-  return (
-    truthy(process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE) ||
-    truthy(process.env.DYNAMIC_HTML_STRUCTURE) ||
-    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) ||
-    truthy(process.env.ENABLE_DYNAMIC_V1) ||
-    truthy(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) ||
-    truthy(process.env.ENABLE_DYNAMIC_V3)
-  );
+  // V1 dynamic layout disabled (fixed layout)
+  return false;
 }
 
 export function getSeedLayout(seed?: number): LayoutConfig {
