@@ -2,6 +2,7 @@
 Centralized seed resolution service.
 Takes a base seed and derives v1, v2, v3 seeds deterministically.
 """
+
 from typing import Dict, Optional
 
 
@@ -29,15 +30,15 @@ def derive_seed(
 ) -> int:
     """
     Derive a version-specific seed from base seed using deterministic formula.
-    
+
     Formula: ((base_seed * multiplier + offset) % max_value) + 1
-    
+
     Args:
         base_seed: The base seed value (1-999)
         multiplier: Multiplier for the formula (e.g., 29, 53, 71)
         max_value: Maximum value for the derived seed (e.g., 300, 100)
         offset: Optional offset (default: 0)
-    
+
     Returns:
         Derived seed value (1 to max_value)
     """
@@ -56,7 +57,7 @@ def resolve_seeds(
 ) -> Dict[str, any]:
     """
     Resolve base seed into v1, v2, v3 seeds based on enabled flags and configs.
-    
+
     Args:
         base_seed: Base seed value (will be clamped to 1-999)
         v1_enabled: Whether v1 (layout/content variations) is enabled
@@ -65,7 +66,7 @@ def resolve_seeds(
         v1_config: Optional config for v1: {max, multiplier, offset}
         v2_config: Optional config for v2: {max, multiplier, offset}
         v3_config: Optional config for v3: {max, multiplier, offset}
-    
+
     Returns:
         Dictionary with:
         {
@@ -118,4 +119,3 @@ def resolve_seeds(
         )
 
     return result
-
