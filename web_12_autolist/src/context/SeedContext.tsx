@@ -106,10 +106,8 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
       setSeedState(urlSeed);
       setUrlSeedProcessed(true);
     } else if (urlSeedProcessed) {
-      // URL seed was removed, but we already processed it
-      // Don't fallback to localStorage if user explicitly removed seed from URL
-      console.log(`[SeedContext:web12] Seed removed from URL, using default: ${DEFAULT_SEED}`);
-      setSeedState(DEFAULT_SEED);
+      // URL seed was removed; keep current seed to avoid losing it mid-navigation
+      console.log("[SeedContext:web12] Seed removed from URL, keeping current seed value");
     }
   }, [urlSeedProcessed]);
 

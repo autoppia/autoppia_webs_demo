@@ -228,6 +228,8 @@ app = FastAPI(
 
 # Add CORS middleware to allow requests from Next.js local development
 LOCALHOST_PORTS = [f"http://localhost:{port}" for port in range(8000, 8021)] + ["http://localhost:8090"]
+# Allow 0.0.0.0 hosts used by some dev setups (e.g., npm run dev --hostname 0.0.0.0 --port 3001)
+ZERO_HOST_PORTS = [f"http://0.0.0.0:{port}" for port in range(8000, 8021)] + ["http://0.0.0.0:8090", "http://0.0.0.0:3000", "http://0.0.0.0:3001"]
 INTERNAL_PORTS = [
     "http://app:8002",
     "http://app:8003",
@@ -235,7 +237,7 @@ INTERNAL_PORTS = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=INTERNAL_PORTS + LOCALHOST_PORTS + ["http://127.0.0.1:3000"],
+    allow_origins=INTERNAL_PORTS + LOCALHOST_PORTS + ZERO_HOST_PORTS + ["http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers

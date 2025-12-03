@@ -1,24 +1,27 @@
-// Set default environment variables for local development
-// For local development (non-Docker), always enable dynamic HTML
-// Docker builds will override these values via build args
-const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
-const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
+// Set default environment variables. Keep dynamic HTML OFF by default to avoid layout shuffling.
+const isDockerBuild = process.env.DOCKER_BUILD === "true" || process.env.NODE_ENV === "production";
+const isLocalDev = process.env.NODE_ENV !== "production" && !process.env.DOCKER_BUILD;
 
-// For local development, set defaults; Docker overrides
+// Disable V1 dynamic layout/HTML unless explicitly enabled
 if (!process.env.ENABLE_DYNAMIC_V1) {
-  process.env.ENABLE_DYNAMIC_V1 = isLocalDev ? 'true' : 'false';
+  process.env.ENABLE_DYNAMIC_V1 = "false";
 }
-if (isLocalDev) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'true';
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = "false";
 }
 // Dynamic HTML structure flag (controls seed-based structure)
 if (!process.env.DYNAMIC_HTML_STRUCTURE) {
-  process.env.DYNAMIC_HTML_STRUCTURE = 'false';
+  process.env.DYNAMIC_HTML_STRUCTURE = "false";
 }
 if (!process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE) {
   process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE = process.env.DYNAMIC_HTML_STRUCTURE;
+}
+// Keep V3 dynamic classes/IDs off unless explicitly enabled
+if (!process.env.ENABLE_DYNAMIC_V3) {
+  process.env.ENABLE_DYNAMIC_V3 = "false";
+}
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) {
+  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 = "false";
 }
 
 // Debug: Print environment variables

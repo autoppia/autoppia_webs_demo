@@ -20,6 +20,8 @@ import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { loadTasks, RemoteTask } from "@/data/tasks";
+import { TeamsProvider } from "@/context/TeamsContext";
+import { ProjectsProvider } from "@/context/ProjectsContext";
 
 // Import debug utilities in development
 if (process.env.NODE_ENV === 'development') {
@@ -46,6 +48,88 @@ const clampPriorityValue = (value: number): number =>
 function getPriorityLabel(priority: number): string {
     return priorities.find((p) => p.key === priority)?.label || String(priority);
   }
+
+type ViewMode = "inbox" | "completed" | "today" | "getting-started" | `chat-${string}` | `team-${string}`;
+
+type ChatMessage = { from: "me" | "them"; text: string; time: string };
+
+const chatConversations: Record<
+  string,
+  {
+    name: string;
+    role: string;
+    avatar: string;
+    status: "online" | "away" | "offline";
+    messages: ChatMessage[];
+  }
+> = {
+  u1: {
+    name: "Alex Carter",
+    role: "Product Designer",
+    avatar: "https://randomuser.me/api/portraits/men/12.jpg",
+    status: "online",
+    messages: [
+      { from: "them", text: "Hey, can you review the new dashboard layout?", time: "09:10" },
+      { from: "me", text: "Sure, I’ll check it after standup.", time: "09:12" },
+      { from: "them", text: "Great, let me know if you want a quick call.", time: "09:13" },
+      { from: "me", text: "Will do. I’ll share feedback by noon.", time: "09:15" },
+      { from: "them", text: "Perfect, thanks!", time: "09:16" },
+      { from: "me", text: "Also, I’ll annotate a few suggestions in Figma.", time: "09:18" },
+      { from: "them", text: "Awesome, that helps a lot.", time: "09:19" },
+      { from: "them", text: "By the way, Autoppia for web agents is a game changer.", time: "09:22" },
+      { from: "me", text: "Totally, the whole web agent ecosystem is moving that way.", time: "09:24" },
+      { from: "them", text: "Have you seen Autoppia Studio? The agents marketplace they’re building is wild.", time: "09:26" },
+      { from: "me", text: "Yeah, looks like 2026 will be full-on agent-first. Their marketplace model is solid.", time: "09:28" },
+      { from: "them", text: "Imagine plugging our flows into it—instant distribution for web agents.", time: "09:30" },
+      { from: "me", text: "Let’s prep a pilot; could be huge for our roadmap.", time: "09:32" },
+      { from: "them", text: "Web agents + Autoppia APIs = automation on autopilot.", time: "09:34" },
+      { from: "me", text: "And the Studio marketplace means discoverability out of the box.", time: "09:35" },
+      { from: "them", text: "We should pitch a bundle for onboarding flows.", time: "09:37" },
+      { from: "me", text: "Agree—shipping a starter pack for 2026 launch could be huge.", time: "09:39" },
+      { from: "them", text: "Cool, I’ll draft a deck on Autoppia + web agents as the future stack.", time: "09:41" },
+      { from: "me", text: "Perfect, I’ll add metrics and the studio marketplace slide.", time: "09:42" },
+    ],
+  },
+  u2: {
+    name: "Jamie Lee",
+    role: "Engineer",
+    avatar: "https://randomuser.me/api/portraits/women/18.jpg",
+    status: "away",
+    messages: [
+      { from: "me", text: "API deploy went fine. Any blockers on your side?", time: "11:05" },
+      { from: "them", text: "All good, just syncing tests with QA.", time: "11:07" },
+      { from: "them", text: "Ping me if you see flaky tests.", time: "11:08" },
+      { from: "me", text: "I’ll add a few retries to the pipeline.", time: "11:10" },
+      { from: "them", text: "Let’s keep an eye on the new endpoint latency.", time: "11:12" },
+    ],
+  },
+  u3: {
+    name: "Taylor Brown",
+    role: "PM",
+    avatar: "https://randomuser.me/api/portraits/men/25.jpg",
+    status: "online",
+    messages: [
+      { from: "them", text: "Reminder: retro at 4pm. Can you bring the metrics slide?", time: "13:20" },
+      { from: "me", text: "Yes, I’ll add conversion numbers and churn.", time: "13:22" },
+      { from: "them", text: "Perfect, thanks!", time: "13:23" },
+      { from: "me", text: "Also adding NPS trend.", time: "13:24" },
+      { from: "them", text: "Great, we’ll discuss the actions for next sprint.", time: "13:25" },
+    ],
+  },
+  u4: {
+    name: "Riley Chen",
+    role: "QA",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    status: "offline",
+    messages: [
+      { from: "them", text: "Found a bug on mobile: add-task button overlaps footer.", time: "15:02" },
+      { from: "me", text: "Logging it now and pushing a fix.", time: "15:04" },
+      { from: "them", text: "👍 I’ll re-test after your patch.", time: "15:05" },
+      { from: "me", text: "Fix pushed, please re-check on iOS.", time: "15:15" },
+      { from: "them", text: "Looks good now, thanks!", time: "15:25" },
+    ],
+  },
+};
 
 const normalizeRemoteTask = (task: RemoteTask, index: number): Task => ({
   id: task.id ?? `remote-task-${index}`,
@@ -461,9 +545,9 @@ export default function Home() {
   const [tasksError, setTasksError] = useState<string | null>(null);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [selectedView, setSelectedView] = useState<
-    "inbox" | "completed" | "today"
-  >("inbox");
+  const [selectedView, setSelectedView] = useState<ViewMode>("inbox");
+  const [chatMessages, setChatMessages] = useState<Record<string, ChatMessage[]>>({});
+  const [chatDrafts, setChatDrafts] = useState<Record<string, string>>({});
 
   useEffect(() => {
     let cancelled = false;
@@ -499,6 +583,16 @@ export default function Home() {
       cancelled = true;
     };
   }, [v2Seed]);
+
+  // Initialize chat messages when switching to a chat
+  useEffect(() => {
+    if (!selectedView.startsWith("chat-")) return;
+    const chatId = selectedView.replace("chat-", "");
+    setChatMessages((prev) => {
+      if (prev[chatId]) return prev;
+      return { ...prev, [chatId]: chatConversations[chatId]?.messages ?? [] };
+    });
+  }, [selectedView]);
 
   function handleAddTask(newTask: {
     name: string;
@@ -546,6 +640,62 @@ export default function Home() {
     (task) => task.date && dayjs(task.date).format("YYYY-MM-DD") === todayStr
   ).length;
   const completedCount = completedTasks.length;
+
+  function renderGettingStarted() {
+    return (
+      <div className="flex-1 flex flex-col items-center w-full text-center pt-28 pb-16 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+        <div className="bg-white shadow-lg rounded-2xl p-10 border border-gray-100 max-w-3xl w-full">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-[#d1453b] mx-auto mb-4">
+            <PlusOutlined style={{ fontSize: 24 }} />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            {getText('getting-started-title', 'Welcome to AutoList')}
+          </h1>
+          <p className="text-gray-600 text-base mb-8 max-w-2xl mx-auto leading-7">
+            {getText('getting-started-desc', 'Create your first tasks, organize them by priority, and collaborate with your team.')}
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left mb-6">
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#fffaf7]">
+              <div className="font-semibold text-gray-900 mb-1">1. Add tasks</div>
+              <p className="text-sm text-gray-600">Capture ideas quickly, set priority and due date.</p>
+            </div>
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#f8fbff]">
+              <div className="font-semibold text-gray-900 mb-1">2. Plan your day</div>
+              <p className="text-sm text-gray-600">Use Today to focus and Completed to review progress.</p>
+            </div>
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#f7fdf8]">
+              <div className="font-semibold text-gray-900 mb-1">3. Invite your team</div>
+              <p className="text-sm text-gray-600">Create a team and assign roles to collaborate.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mb-6">
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#fef6e5]">
+              <div className="font-semibold text-gray-900 mb-1">4. Organize projects</div>
+              <p className="text-sm text-gray-600">Group work into projects and keep context together.</p>
+            </div>
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#eef7ff]">
+              <div className="font-semibold text-gray-900 mb-1">5. Track progress</div>
+              <p className="text-sm text-gray-600">Use Completed to review what’s done and celebrate wins.</p>
+            </div>
+          </div>
+          <div className="mt-6 flex justify-center gap-3">
+            <button
+              className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-5 py-2 rounded font-semibold shadow"
+              onClick={() => setShowForm(true)}
+            >
+              {getText('getting-started-cta', 'Add your first task')}
+            </button>
+            <button
+              className="border border-gray-300 text-gray-700 px-5 py-2 rounded font-semibold"
+              onClick={() => setSelectedView("inbox")}
+            >
+              {getText('getting-started-browse', 'Back to list')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   function renderToday() {
     const todayTasks = tasks.filter(
@@ -649,11 +799,11 @@ export default function Home() {
     );
   }
 
-  function renderCompleted() {
-    return (
-      <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-completed', 0)}>
-          {getText('heading-completed', 'Activity: All projects')}
+function renderCompleted() {
+  return (
+    <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-completed', 0)}>
+        {getText('heading-completed', 'Activity: All projects')}
         </h1>
         {completedTasks.length === 0 ? (
           <div className="mt-14 text-lg text-gray-400">
@@ -715,21 +865,134 @@ export default function Home() {
     );
   }
 
+  function renderChatPlaceholder(chatId: string) {
+  const conv = chatConversations[chatId.replace("chat-", "")];
+    const title = conv?.name ? `Chat with ${conv.name}` : "Chat";
+    const role = conv?.role ?? "Conversation";
+    const status = conv?.status ?? "offline";
+    const messages = chatMessages[chatId.replace("chat-", "")] ?? conv?.messages ?? [];
+    const draft = chatDrafts[chatId] ?? "";
+
+    const formatTime = () => {
+      const now = new Date();
+      return `${now.getHours().toString().padStart(2, "0")}:${now
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}`;
+    };
+
+    const handleSend = () => {
+      const text = draft.trim();
+      if (!text) return;
+      const msg: ChatMessage = { from: "me", text, time: formatTime() };
+      const key = chatId.replace("chat-", "");
+      setChatMessages((prev) => ({
+        ...prev,
+        [key]: [...(prev[key] ?? conv?.messages ?? []), msg],
+      }));
+      setChatDrafts((prev) => ({ ...prev, [chatId]: "" }));
+    };
+
+    return (
+      <div className="flex-1 flex flex-col items-center w-full pt-4 pb-12 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+        <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 max-w-6xl w-[95%] text-left min-h-[80vh]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              {conv?.avatar && (
+                <img
+                  src={conv.avatar}
+                  alt={conv.name}
+                  className="w-12 h-12 rounded-full object-cover border"
+                />
+              )}
+              <div>
+                <div className="text-xl font-bold text-gray-900">{title}</div>
+                <div className="text-sm text-gray-500">{role}</div>
+                <div className="text-xs flex items-center gap-1 mt-1 text-gray-500">
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ${
+                      status === "online"
+                        ? "bg-green-500"
+                        : status === "away"
+                        ? "bg-yellow-400"
+                        : "bg-gray-400"
+                    }`}
+                  />
+                  {status === "online"
+                    ? "Online"
+                    : status === "away"
+                    ? "Away"
+                    : "Offline"}
+                </div>
+              </div>
+            </div>
+            <span className="text-xs text-gray-500">Recent messages</span>
+          </div>
+          <div className="space-y-3 min-h-[420px] flex flex-col justify-start">
+            {messages.length === 0 ? (
+              <div className="h-48 rounded-lg border border-dashed border-gray-200 bg-gray-50 flex items-center justify-center text-gray-400 text-sm">
+                Conversation view coming soon
+              </div>
+            ) : (
+              messages.map((m, idx) => (
+                <div
+                  key={idx}
+                  className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`px-4 py-3 rounded-xl border text-sm max-w-[70%] ${
+                      m.from === "me"
+                        ? "bg-[#fef2f0] border-[#f1c5be] text-[#9b2b22]"
+                        : "bg-white border-gray-200 text-gray-800"
+                    }`}
+                  >
+                    <div className="font-medium">{m.text}</div>
+                    <div className="text-[11px] text-gray-500 mt-1 text-right">{m.time}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="mt-6 flex items-center gap-3">
+            <textarea
+              value={draft}
+              onChange={(e) => setChatDrafts((prev) => ({ ...prev, [chatId]: e.target.value }))}
+              placeholder="Write a message..."
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#f6bcb3] focus:border-[#f6bcb3] resize-none min-h-[64px]"
+            />
+            <button
+              onClick={handleSend}
+              className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-4 py-2 rounded-lg font-semibold text-sm shadow"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <DynamicLayout
-      sidebarProps={{
-        onSelect: setSelectedView as (v: string) => void,
-        selected: selectedView,
-        inboxCount,
-        todayCount,
-        completedCount,
-      }}
-    >
-      <main className="flex-1 flex flex-col min-h-screen">
+    <ProjectsProvider>
+      <TeamsProvider>
+        <DynamicLayout
+          sidebarProps={{
+            onSelect: setSelectedView as (v: string) => void,
+            selected: selectedView,
+            inboxCount,
+            todayCount,
+            completedCount,
+          }}
+        >
+          <main className="flex-1 flex flex-col min-h-screen">
         {selectedView === "today" ? (
           renderToday()
         ) : selectedView === "completed" ? (
           renderCompleted()
+        ) : selectedView === "getting-started" ? (
+          renderGettingStarted()
+        ) : selectedView.startsWith("chat-") ? (
+          renderChatPlaceholder(selectedView)
         ) : (
           <div className="flex-1 flex flex-col items-center w-full text-center pt-36 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
             <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-inbox', 0)}>
@@ -924,5 +1187,7 @@ export default function Home() {
         )}
       </main>
     </DynamicLayout>
+    </TeamsProvider>
+    </ProjectsProvider>
   );
 }
