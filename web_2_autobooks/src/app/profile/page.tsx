@@ -58,12 +58,12 @@ export default function ProfilePage() {
       username: currentUser.username,
       changes: data,
     });
-    setMessage(`Changes for ${bookId} were recorded (event only).`);
+    setMessage(`Book edited: ${bookId}`);
   };
 
   const handleDelete = (bookId: string) => {
     logEvent(EVENT_TYPES.DELETE_BOOK, { book_id: bookId, username: currentUser.username });
-    setMessage(`Delete event for ${bookId} was recorded.`);
+    setMessage(`Book deleted: ${bookId}`);
   };
 
   return (
@@ -98,7 +98,7 @@ export default function ProfilePage() {
               </>
             ) : (
               <p className="text-sm text-white/60">
-                This book is not available in the current dataset, but you can still trigger edit/delete events for auditing.
+                This book is not available in the current dataset, but you can still edit or delete it.
               </p>
             )}
             <div className="mt-4 flex flex-wrap gap-3">
@@ -121,7 +121,7 @@ export default function ProfilePage() {
             <MovieEditor
               movie={book ?? buildFallbackBook(bookId)}
               onSubmit={(data) => handleEditSubmit(bookId, data)}
-              submitLabel="Record edit event"
+              submitLabel="Edit Book"
             />
           </div>
         ))}

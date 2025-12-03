@@ -329,7 +329,7 @@ function ProductContent() {
     ));
   };
 
-  const renderStars = (rating: number) => {
+  const renderStars = (rating: number, reviews?: number) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
 
@@ -348,7 +348,14 @@ function ProductContent() {
             }`}
           />
         ))}
-        <span className="ml-2 text-blue-600">{rating} {getText("ratings")}</span>
+        <span className="ml-2 text-blue-600">
+          {rating.toFixed(1)}
+          {reviews !== undefined && reviews > 0 ? (
+            <> ({reviews} {reviews === 1 ? 'review' : 'reviews'})</>
+          ) : (
+            <> {getText("ratings")}</>
+          )}
+        </span>
       </div>
     );
   };
@@ -466,7 +473,7 @@ function ProductContent() {
                 </button>
               </div>
               <div className="flex flex-wrap items-center gap-4">
-                {renderStars(rating)}
+                {renderStars(rating, product.reviews)}
                 <span className="text-2xl font-semibold text-slate-900">
                   {formattedPrice}
                 </span>

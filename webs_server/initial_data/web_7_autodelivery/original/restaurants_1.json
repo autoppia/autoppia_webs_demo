@@ -1,0 +1,1299 @@
+[
+  {
+    "id": "1",
+    "name": "Bella Vista",
+    "description": "Authentic Italian cuisine with fresh ingredients and traditional recipes.",
+    "image": "/images/restaurant1.jpg",
+    "cuisine": "Italian",
+    "rating": 4.8,
+    "menu": [
+      {
+        "id": "1-1",
+        "name": "Margherita Pizza",
+        "description": "Classic pizza with fresh mozzarella, basil, and tomato sauce.",
+        "price": 14.99,
+        "image": "/images/restaurant1.jpg",
+        "sizes": [
+          {
+            "name": "Small",
+            "cal": 450,
+            "priceMod": 0
+          },
+          {
+            "name": "Medium",
+            "cal": 650,
+            "priceMod": 3.5
+          },
+          {
+            "name": "Large",
+            "cal": 900,
+            "priceMod": 7.0
+          }
+        ]
+      },
+      {
+        "id": "1-2",
+        "name": "Spaghetti Carbonara",
+        "description": "Creamy pasta with pancetta, eggs, and parmesan cheese.",
+        "price": 16.5,
+        "image": "/images/restaurant1.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 520,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "1-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant1.jpg"
+      },
+      {
+        "id": "1-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant1.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "25-35 min",
+    "pickupTime": "10 min"
+  },
+  {
+    "id": "2",
+    "name": "Le Jardin",
+    "description": "Fine French dining experience in an elegant atmosphere.",
+    "image": "/images/restaurant2.jpg",
+    "cuisine": "French",
+    "rating": 4.6,
+    "menu": [
+      {
+        "id": "2-1",
+        "name": "Coq au Vin",
+        "description": "Traditional French dish with chicken braised in wine.",
+        "price": 24.99,
+        "image": "/images/restaurant2.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 580,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "2-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant2.jpg"
+      },
+      {
+        "id": "2-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant2.jpg"
+      },
+      {
+        "id": "2-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant2.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "12 min"
+  },
+  {
+    "id": "3",
+    "name": "Sakura Sushi",
+    "description": "Fresh sushi and Japanese dishes made with premium ingredients.",
+    "image": "/images/restaurant3.jpg",
+    "cuisine": "Japanese",
+    "rating": 4.2,
+    "menu": [
+      {
+        "id": "3-1",
+        "name": "Salmon Sashimi",
+        "description": "Fresh salmon sashimi served with soy sauce and wasabi.",
+        "price": 18.5,
+        "image": "/images/restaurant3.jpg",
+        "sizes": [
+          {
+            "name": "6 pieces",
+            "cal": 180,
+            "priceMod": 0
+          },
+          {
+            "name": "12 pieces",
+            "cal": 360,
+            "priceMod": 8.0
+          }
+        ]
+      },
+      {
+        "id": "3-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant3.jpg"
+      },
+      {
+        "id": "3-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant3.jpg"
+      },
+      {
+        "id": "3-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant3.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "40-55 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "4",
+    "name": "El Mariachi",
+    "description": "Vibrant Mexican cuisine with authentic flavors and spices.",
+    "image": "/images/restaurant4.jpg",
+    "cuisine": "Mexican",
+    "rating": 3.9,
+    "menu": [
+      {
+        "id": "4-1",
+        "name": "Tacos al Pastor",
+        "description": "Traditional tacos with marinated pork, pineapple, and cilantro.",
+        "price": 12.99,
+        "image": "/images/restaurant4.jpg",
+        "sizes": [
+          {
+            "name": "3 tacos",
+            "cal": 420,
+            "priceMod": 0
+          },
+          {
+            "name": "5 tacos",
+            "cal": 700,
+            "priceMod": 8.0
+          }
+        ]
+      },
+      {
+        "id": "4-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant4.jpg"
+      },
+      {
+        "id": "4-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant4.jpg"
+      },
+      {
+        "id": "4-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant4.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "45-60 min",
+    "pickupTime": "18 min"
+  },
+  {
+    "id": "5",
+    "name": "Thai Garden",
+    "description": "Authentic Thai dishes with bold flavors and fresh herbs.",
+    "image": "/images/restaurant5.jpg",
+    "cuisine": "Thai",
+    "rating": 3.5,
+    "menu": [
+      {
+        "id": "5-1",
+        "name": "Pad Thai",
+        "description": "Stir-fried rice noodles with shrimp, eggs, and tamarind sauce.",
+        "price": 15.99,
+        "image": "/images/restaurant5.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 480,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "5-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant5.jpg"
+      },
+      {
+        "id": "5-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant5.jpg"
+      },
+      {
+        "id": "5-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant5.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "20-30 min",
+    "pickupTime": "20 min"
+  },
+  {
+    "id": "6",
+    "name": "Taj Mahal",
+    "description": "Traditional Indian cuisine with aromatic spices and rich curries.",
+    "image": "/images/restaurant6.jpg",
+    "cuisine": "Indian",
+    "rating": 3.2,
+    "menu": [
+      {
+        "id": "6-1",
+        "name": "Butter Chicken",
+        "description": "Creamy tomato-based curry with tender chicken pieces.",
+        "price": 17.99,
+        "image": "/images/restaurant6.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 550,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "6-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant6.jpg"
+      },
+      {
+        "id": "6-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant6.jpg"
+      },
+      {
+        "id": "6-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant6.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "50-65 min",
+    "pickupTime": "10 min"
+  },
+  {
+    "id": "7",
+    "name": "Golden Dragon",
+    "description": "Classic Chinese dishes prepared with traditional techniques.",
+    "image": "/images/restaurant7.jpg",
+    "cuisine": "Chinese",
+    "rating": 4.0,
+    "menu": [
+      {
+        "id": "7-1",
+        "name": "Kung Pao Chicken",
+        "description": "Spicy stir-fried chicken with peanuts and vegetables.",
+        "price": 16.99,
+        "image": "/images/restaurant7.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 520,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "7-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant7.jpg"
+      },
+      {
+        "id": "7-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant7.jpg"
+      },
+      {
+        "id": "7-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant7.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "25-35 min",
+    "pickupTime": "12 min"
+  },
+  {
+    "id": "8",
+    "name": "Athena's Table",
+    "description": "Greek Mediterranean cuisine with fresh ingredients and traditional recipes.",
+    "image": "/images/restaurant8.jpg",
+    "cuisine": "Greek",
+    "rating": 2.8,
+    "menu": [
+      {
+        "id": "8-1",
+        "name": "Gyro Plate",
+        "description": "Seasoned meat with pita, tzatziki, and fresh vegetables.",
+        "price": 14.99,
+        "image": "/images/restaurant8.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 580,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "8-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant8.jpg"
+      },
+      {
+        "id": "8-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant8.jpg"
+      },
+      {
+        "id": "8-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant8.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "9",
+    "name": "La Paella",
+    "description": "Spanish tapas and paella made with authentic ingredients.",
+    "image": "/images/restaurant9.jpg",
+    "cuisine": "Spanish",
+    "rating": 3.7,
+    "menu": [
+      {
+        "id": "9-1",
+        "name": "Seafood Paella",
+        "description": "Traditional Spanish rice dish with mixed seafood and saffron.",
+        "price": 28.99,
+        "image": "/images/restaurant9.jpg",
+        "sizes": [
+          {
+            "name": "For 2",
+            "cal": 650,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "9-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant9.jpg"
+      },
+      {
+        "id": "9-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant9.jpg"
+      },
+      {
+        "id": "9-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant9.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "40-55 min",
+    "pickupTime": "18 min"
+  },
+  {
+    "id": "10",
+    "name": "Seoul Kitchen",
+    "description": "Korean BBQ and traditional dishes with bold flavors.",
+    "image": "/images/restaurant10.jpg",
+    "cuisine": "Korean",
+    "rating": 4.1,
+    "menu": [
+      {
+        "id": "10-1",
+        "name": "Bulgogi Bowl",
+        "description": "Marinated beef with rice and vegetables.",
+        "price": 16.99,
+        "image": "/images/restaurant10.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 620,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "10-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant10.jpg"
+      },
+      {
+        "id": "10-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant10.jpg"
+      },
+      {
+        "id": "10-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant10.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "45-60 min",
+    "pickupTime": "20 min"
+  },
+  {
+    "id": "11",
+    "name": "Istanbul Bistro",
+    "description": "Turkish cuisine with kebabs, mezes, and traditional dishes.",
+    "image": "/images/restaurant11.jpg",
+    "cuisine": "Turkish",
+    "rating": 3.0,
+    "menu": [
+      {
+        "id": "11-1",
+        "name": "Chicken Kebab",
+        "description": "Grilled chicken skewers with rice and salad.",
+        "price": 15.99,
+        "image": "/images/restaurant11.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 580,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "11-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant11.jpg"
+      },
+      {
+        "id": "11-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant11.jpg"
+      },
+      {
+        "id": "11-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant11.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "20-30 min",
+    "pickupTime": "10 min"
+  },
+  {
+    "id": "12",
+    "name": "The Steakhouse",
+    "description": "Premium steaks and American classics in a warm atmosphere.",
+    "image": "/images/restaurant12.jpg",
+    "cuisine": "American",
+    "rating": 2.6,
+    "menu": [
+      {
+        "id": "12-1",
+        "name": "Ribeye Steak",
+        "description": "Premium ribeye steak cooked to perfection with sides.",
+        "price": 32.99,
+        "image": "/images/restaurant12.jpg",
+        "sizes": [
+          {
+            "name": "8 oz",
+            "cal": 720,
+            "priceMod": 0
+          },
+          {
+            "name": "12 oz",
+            "cal": 1080,
+            "priceMod": 12.0
+          }
+        ]
+      },
+      {
+        "id": "12-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant12.jpg"
+      },
+      {
+        "id": "12-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant12.jpg"
+      },
+      {
+        "id": "12-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant12.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "50-65 min",
+    "pickupTime": "12 min"
+  },
+  {
+    "id": "13",
+    "name": "Pho Saigon",
+    "description": "Authentic Vietnamese pho and traditional dishes.",
+    "image": "/images/restaurant13.jpg",
+    "cuisine": "Vietnamese",
+    "rating": 4.4,
+    "menu": [
+      {
+        "id": "13-1",
+        "name": "Beef Pho",
+        "description": "Traditional Vietnamese noodle soup with beef and herbs.",
+        "price": 13.99,
+        "image": "/images/restaurant13.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 450,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "13-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant13.jpg"
+      },
+      {
+        "id": "13-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant13.jpg"
+      },
+      {
+        "id": "13-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant13.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "25-35 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "14",
+    "name": "Trattoria Nonna",
+    "description": "Family-style Italian restaurant with homemade pasta and sauces.",
+    "image": "/images/restaurant14.jpg",
+    "cuisine": "Italian",
+    "rating": 3.3,
+    "menu": [
+      {
+        "id": "14-1",
+        "name": "Lasagna",
+        "description": "Homemade lasagna with meat sauce and cheese.",
+        "price": 18.99,
+        "image": "/images/restaurant14.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 680,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "14-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant14.jpg"
+      },
+      {
+        "id": "14-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant14.jpg"
+      },
+      {
+        "id": "14-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant14.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "18 min"
+  },
+  {
+    "id": "15",
+    "name": "Carnaval Grill",
+    "description": "Brazilian churrasco and traditional dishes with bold flavors.",
+    "image": "/images/restaurant15.jpg",
+    "cuisine": "Brazilian",
+    "rating": 3.8,
+    "menu": [
+      {
+        "id": "15-1",
+        "name": "Picanha",
+        "description": "Premium Brazilian cut of beef grilled to perfection.",
+        "price": 26.99,
+        "image": "/images/restaurant15.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 750,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "15-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant15.jpg"
+      },
+      {
+        "id": "15-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant15.jpg"
+      },
+      {
+        "id": "15-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant15.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "40-55 min",
+    "pickupTime": "20 min"
+  },
+  {
+    "id": "16",
+    "name": "Beirut Express",
+    "description": "Lebanese and Mediterranean cuisine with fresh ingredients.",
+    "image": "/images/restaurant16.jpg",
+    "cuisine": "Mediterranean",
+    "rating": 2.9,
+    "menu": [
+      {
+        "id": "16-1",
+        "name": "Shawarma Plate",
+        "description": "Marinated meat with hummus, tabbouleh, and pita.",
+        "price": 15.99,
+        "image": "/images/restaurant16.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 620,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "16-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant16.jpg"
+      },
+      {
+        "id": "16-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant16.jpg"
+      },
+      {
+        "id": "16-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant16.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "45-60 min",
+    "pickupTime": "10 min"
+  },
+  {
+    "id": "17",
+    "name": "The Queen's Pub",
+    "description": "British pub classics with fish and chips and traditional fare.",
+    "image": "/images/restaurant17.jpg",
+    "cuisine": "British",
+    "rating": 4.5,
+    "menu": [
+      {
+        "id": "17-1",
+        "name": "Fish and Chips",
+        "description": "Beer-battered fish with crispy chips and mushy peas.",
+        "price": 16.99,
+        "image": "/images/restaurant17.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 890,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "17-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant17.jpg"
+      },
+      {
+        "id": "17-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant17.jpg"
+      },
+      {
+        "id": "17-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant17.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "20-30 min",
+    "pickupTime": "12 min"
+  },
+  {
+    "id": "18",
+    "name": "Bavarian Haus",
+    "description": "German cuisine with schnitzels, sausages, and hearty dishes.",
+    "image": "/images/restaurant18.jpg",
+    "cuisine": "German",
+    "rating": 3.4,
+    "menu": [
+      {
+        "id": "18-1",
+        "name": "Wiener Schnitzel",
+        "description": "Breaded veal cutlet with lemon and potatoes.",
+        "price": 19.99,
+        "image": "/images/restaurant18.jpg",
+        "sizes": [
+          {
+            "name": "Regular",
+            "cal": 720,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "18-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant18.jpg"
+      },
+      {
+        "id": "18-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant18.jpg"
+      },
+      {
+        "id": "18-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant18.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Carlos R.",
+        "rating": 4.7,
+        "comment": "Authentic taste, good pricing.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Emily S.",
+        "rating": 4.8,
+        "comment": "Everything was fresh and tasty.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "50-65 min",
+    "pickupTime": "15 min"
+  },
+  {
+    "id": "19",
+    "name": "El Gaucho",
+    "description": "Argentine steakhouse with premium cuts and traditional sides.",
+    "image": "/images/restaurant19.jpg",
+    "cuisine": "Argentine",
+    "rating": 4.9,
+    "menu": [
+      {
+        "id": "19-1",
+        "name": "Argentine Ribeye",
+        "description": "Premium grass-fed ribeye with chimichurri sauce.",
+        "price": 29.99,
+        "image": "/images/restaurant19.jpg",
+        "sizes": [
+          {
+            "name": "12 oz",
+            "cal": 950,
+            "priceMod": 0
+          },
+          {
+            "name": "16 oz",
+            "cal": 1260,
+            "priceMod": 8.0
+          }
+        ]
+      },
+      {
+        "id": "19-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant19.jpg"
+      },
+      {
+        "id": "19-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant19.jpg"
+      },
+      {
+        "id": "19-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant19.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "Diego A.",
+        "rating": 5,
+        "comment": "Best Argentine steak!",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Mar\u00eda P.",
+        "rating": 4.5,
+        "comment": "Great flavors and fast delivery.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "25-35 min",
+    "pickupTime": "18 min"
+  },
+  {
+    "id": "20",
+    "name": "Pacific Sushi Bar",
+    "description": "Modern sushi bar with fresh seafood and creative rolls.",
+    "image": "/images/restaurant1.jpg",
+    "cuisine": "Japanese",
+    "rating": 4.3,
+    "menu": [
+      {
+        "id": "20-1",
+        "name": "Rainbow Roll",
+        "description": "Assorted fish with avocado and cucumber roll.",
+        "price": 17.99,
+        "image": "/images/restaurant1.jpg",
+        "sizes": [
+          {
+            "name": "8 pieces",
+            "cal": 320,
+            "priceMod": 0
+          }
+        ]
+      },
+      {
+        "id": "20-auto-1",
+        "name": "Tiramisu",
+        "description": "Classic Italian dessert with mascarpone & espresso.",
+        "price": 7.5,
+        "image": "/images/restaurant1.jpg"
+      },
+      {
+        "id": "20-auto-2",
+        "name": "Garlic Bread",
+        "description": "Wood-fired bread with garlic butter.",
+        "price": 5.5,
+        "image": "/images/restaurant1.jpg"
+      },
+      {
+        "id": "20-auto-3",
+        "name": "Mushroom Risotto",
+        "description": "Creamy arborio rice with porcini mushrooms.",
+        "price": 13.5,
+        "image": "/images/restaurant1.jpg"
+      }
+    ],
+    "reviews": [
+      {
+        "author": "John K.",
+        "rating": 4.0,
+        "comment": "Solid portions and friendly service.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person1.jpg"
+      },
+      {
+        "author": "Sophie L.",
+        "rating": 5,
+        "comment": "Loved the desserts, will reorder.",
+        "date": "2025-12-19",
+        "avatar": "/media/gallery/people/person2.jpg"
+      }
+    ],
+    "deliveryTime": "30-40 min",
+    "pickupTime": "20 min"
+  }
+]

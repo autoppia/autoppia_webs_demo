@@ -3,27 +3,20 @@
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { DynamicLayout } from "@/components/DynamicLayout";
-import { 
-  getEffectiveSeed, 
-  getLayoutConfig
-} from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1, la seed se mantiene en URL para V2 y V3
 import { getEffectiveTextStructure } from "@/utils/textStructureProvider";
 import { useSeed } from "@/context/SeedContext";
 
 function GmailContent() {
   const searchParams = useSearchParams();
   const { resolvedSeeds } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base;
+  // La seed se mantiene en URL para V2 (datos) y V3 (texto), pero el layout (V1) es fijo como seed=1
   const seedStructure = Number(searchParams.get("seed-structure") ?? "1");
-  const effectiveSeed = getEffectiveSeed(layoutSeed);
-  const layoutConfig = getLayoutConfig(effectiveSeed);
-  const layoutClasses = getLayoutClasses(layoutConfig);
   const textStructure = getEffectiveTextStructure(seedStructure);
 
   return (
-    <div className={`min-h-screen bg-background ${layoutClasses.spacing}`}>
-      <DynamicLayout key={`${effectiveSeed}-${seedStructure}`} textStructure={textStructure} />
+    <div className="min-h-screen bg-background">
+      <DynamicLayout key={`1-${seedStructure}`} textStructure={textStructure} />
     </div>
   );
 }

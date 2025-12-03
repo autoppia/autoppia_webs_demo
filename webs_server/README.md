@@ -271,7 +271,7 @@ Generate a JSON dataset with OpenAI and save it to file storage under `/app/data
   * **Summary:** Generate synthetic data and (optionally) save to file storage
 
 Requirements:
-  * Set `OPENAI_API_KEY` in your environment.
+  * **Optional:** Set `OPENAI_API_KEY` in your environment only if you want to generate additional data. Each web already has static datasets in `initial_data/`, so this endpoint is **not required** for basic operation.
   * To save, provide both `project_key` and `entity_type`. The server saves to `/app/data/<project_key>/data/`.
 
 Request Body (DataGenerationRequest):
@@ -393,7 +393,7 @@ CREATE INDEX idx_events_web_agent_id ON events(web_agent_id);
 | `DB_POOL_MAX` | 50 | Maximum active database connections in the pool |
 | `GZIP_MIN_SIZE` | 1000 | Minimum response size (in bytes) before applying GZIP compression |
 | `LOG_LEVEL` | info | Logging level for the application (`DEBUG`, `INFO`, `WARNING`, `ERROR`) |
-| `OPENAI_API_KEY` | — | Required for `/datasets/generate` |
+| `OPENAI_API_KEY` | — | **Optional** - Only needed if you want to use `/datasets/generate` or `/datasets/generate-smart` to generate additional data. Each web already has static datasets in `initial_data/`, so LLM is **not required** for basic operation. |
 | `DATA_BASE_PATH` | `/app/data` | Base path for file storage (mounted volume) |
 | `DATA_FILE_MAX_BYTES` | `2097152` | Max JSON file size before rollover (bytes, default 2 MiB) |
 

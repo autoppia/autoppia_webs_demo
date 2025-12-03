@@ -19,7 +19,7 @@ export function MovieCard({ movie, onSelect }: MovieCardProps) {
       data-variant={variant}
     >
       <div
-        className="aspect-[2/3] w-full rounded-2xl bg-cover bg-center"
+        className="aspect-[2/3] w-full max-w-[200px] mx-auto rounded-xl bg-cover bg-center"
         style={{ backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.5)), url(${movie.poster}), url('/media/gallery/default_movie.png')` }}
         aria-label={`${movie.title} poster`}
       />

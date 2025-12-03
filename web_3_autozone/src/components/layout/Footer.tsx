@@ -6,6 +6,7 @@ import { getLayoutConfig } from "@/dynamic/v2-data";
 import { getLayoutClasses } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { SeedLink } from "@/components/ui/SeedLink";
 
 export function Footer() {
   const { seed } = useSeed();
@@ -18,47 +19,28 @@ export function Footer() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const infoColumns = [
+  const linkColumns = [
     {
-      title: getText("get_to_know_us"),
+      title: "Shop",
       links: [
-        "Careers",
-        "Blog",
-        "About Autozone",
-        "Investor Relations",
-        "Autozone Devices",
-        "Autozone Science",
+        { text: "All Products", href: "/" },
+        { text: "Search", href: "/search" },
+        { text: "Shopping Cart", href: "/cart" },
       ],
     },
     {
-      title: getText("make_money_with_us"),
+      title: "Your Account",
       links: [
-        "Sell products on Autozone",
-        "Sell on Autozone Business",
-        "Sell apps on Autozone",
-        "Become an Affiliate",
-        "Advertise Your Products",
-        "Self-Publish with Us",
+        { text: "Your Orders", href: "/cart" },
+        { text: "Checkout", href: "/checkout" },
       ],
     },
     {
-      title: getText("payment_products"),
+      title: "Customer Service",
       links: [
-        "Autozone Business Card",
-        "Shop with Points",
-        "Reload Your Balance",
-        "Autozone Currency Converter",
-      ],
-    },
-    {
-      title: getText("let_us_help_you"),
-      links: [
-        "Autozone and COVID-19",
-        "Your Account",
-        "Your Orders",
-        "Shipping Rates & Policies",
-        "Returns & Replacements",
-        "Help",
+        { text: "Help Center", href: "/" },
+        { text: "Shipping Info", href: "/" },
+        { text: "Returns", href: "/" },
       ],
     },
   ];

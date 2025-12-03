@@ -1,0 +1,22 @@
+[
+  {"id": 1, "name": "Merger-Agreement-Final.pdf", "size": "1.2 MB", "version": "v3", "updated": "Today", "status": "Signed"},
+  {"id": 2, "name": "IP-Portfolio-Analysis.docx", "size": "456 KB", "version": "v2", "updated": "Yesterday", "status": "Draft"},
+  {"id": 3, "name": "Contract-Terms-2025.pdf", "size": "789 KB", "version": "v1", "updated": "2d ago", "status": "Under Review"},
+  {"id": 4, "name": "Compliance-Report-2025.pdf", "size": "2.1 MB", "version": "v1", "updated": "3d ago", "status": "Submitted"},
+  {"id": 5, "name": "Employment-Contract-Template.docx", "size": "234 KB", "version": "v1", "updated": "1w ago", "status": "Approved"},
+  {"id": 6, "name": "Estate-Planning-Documents.pdf", "size": "567 KB", "version": "v2", "updated": "Today", "status": "Signed"},
+  {"id": 7, "name": "Property-Title-Report.pdf", "size": "1.5 MB", "version": "v1", "updated": "Yesterday", "status": "Under Review"},
+  {"id": 8, "name": "Litigation-Brief-Draft.docx", "size": "892 KB", "version": "v4", "updated": "2d ago", "status": "Draft"},
+  {"id": 9, "name": "Trademark-Application-Form.pdf", "size": "345 KB", "version": "v1", "updated": "3d ago", "status": "Submitted"},
+  {"id": 10, "name": "Partnership-Agreement-Final.pdf", "size": "678 KB", "version": "v3", "updated": "Today", "status": "Signed"},
+  {"id": 11, "name": "Labor-Dispute-Memo.docx", "size": "412 KB", "version": "v2", "updated": "1w ago", "status": "Draft"},
+  {"id": 12, "name": "Environmental-Compliance-Checklist.pdf", "size": "289 KB", "version": "v1", "updated": "Yesterday", "status": "Approved"},
+  {"id": 13, "name": "Patent-Application-Package.pdf", "size": "3.2 MB", "version": "v1", "updated": "2d ago", "status": "Submitted"},
+  {"id": 14, "name": "Joint-Venture-Agreement.docx", "size": "1.1 MB", "version": "v2", "updated": "3d ago", "status": "Under Review"},
+  {"id": 15, "name": "License-Agreement-Template.pdf", "size": "445 KB", "version": "v1", "updated": "1w ago", "status": "Approved"},
+  {"id": 16, "name": "Property-Due-Diligence-Report.pdf", "size": "2.8 MB", "version": "v1", "updated": "Yesterday", "status": "Under Review"},
+  {"id": 17, "name": "Lease-Agreement-Review.docx", "size": "567 KB", "version": "v1", "updated": "2d ago", "status": "Approved"},
+  {"id": 18, "name": "FDA-Submission-Package.pdf", "size": "4.5 MB", "version": "v2", "updated": "2w ago", "status": "Submitted"},
+  {"id": 19, "name": "Privacy-Policy-Review.docx", "size": "378 KB", "version": "v3", "updated": "Today", "status": "Draft"},
+  {"id": 20, "name": "Software-License-Agreement.pdf", "size": "623 KB", "version": "v2", "updated": "1d ago", "status": "Under Review"}
+]

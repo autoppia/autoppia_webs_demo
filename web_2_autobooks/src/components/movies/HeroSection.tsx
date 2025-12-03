@@ -32,14 +32,13 @@ export function HeroSection({ searchQuery, onSearchChange, onSearchSubmit, featu
         <div className="lg:w-1/2">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.4em] text-[#9fe6ff]">
             <Sparkles className="h-4 w-4" />
-            Readers Lab
+            Book Search
           </div>
           <h1 className="mt-3 text-4xl font-semibold leading-tight lg:text-5xl">
-            Discover neural-written books, hybrid genres, and unexpected narratives.
+            Find your next great read in seconds.
           </h1>
           <p className="mt-4 text-lg text-white/70">
-            Search hundreds of procedurally generated books sourced straight from our datasets service. No backend, no CMS
-            – just shelves that reconfigure on every seed.
+            Browse thousands of books from every genre and era. Search by author, title, or discover new favorites by exploring our curated collections.
           </p>
 
           <form
@@ -61,16 +60,16 @@ export function HeroSection({ searchQuery, onSearchChange, onSearchSubmit, featu
             </Button>
           </form>
 
-          <dl className="mt-6 grid grid-cols-2 gap-6 text-sm text-white/80 sm:grid-cols-3">
-            <div>
+          <dl className="mt-6 grid grid-cols-2 gap-4 text-sm text-white/80 sm:grid-cols-3">
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3">
               <dt className="text-white/60">Average pages</dt>
               <dd className="text-2xl font-semibold text-white">{stats.avgPages}p</dd>
             </div>
-            <div>
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3">
               <dt className="text-white/60">Average rating</dt>
               <dd className="text-2xl font-semibold text-white">{stats.avgRating}</dd>
             </div>
-            <div>
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3">
               <dt className="text-white/60">Genres</dt>
               <dd className="text-2xl font-semibold text-white">{stats.genres}</dd>
             </div>
@@ -78,7 +77,7 @@ export function HeroSection({ searchQuery, onSearchChange, onSearchSubmit, featu
         </div>
 
         <div className="grid gap-4 lg:w-1/2" id="genres">
-          {featuredMovies.slice(0, 3).map((movie) => (
+          {featuredMovies.slice(0, 2).map((movie) => (
             <div key={movie.id} className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
               <div className="flex items-center justify-between text-xs uppercase text-white/60">
                 <span>{movie.genres[0] || "Literature"}</span>

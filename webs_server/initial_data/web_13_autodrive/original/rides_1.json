@@ -1,0 +1,289 @@
+[
+  {
+    "id": "r1",
+    "name": "AutoDriverX",
+    "image": "/car1.jpg",
+    "icon": "/car1.jpg",
+    "price": 26.6,
+    "oldPrice": 32,
+    "seats": 4,
+    "eta": "2 min away",
+    "desc": "Affordable everyday rides",
+    "recommended": true,
+    "waitTime": "< 5 min",
+    "perMile": 1.25,
+    "perMinute": 0.45,
+    "features": [
+      "Standard comfort",
+      "Climate control"
+    ]
+  },
+  {
+    "id": "r2",
+    "name": "Comfort",
+    "image": "/car2.jpg",
+    "icon": "/car2.jpg",
+    "price": 31.5,
+    "oldPrice": 38,
+    "seats": 4,
+    "eta": "3 min away",
+    "desc": "Quieter rides with newer cars",
+    "recommended": false,
+    "waitTime": "< 7 min",
+    "perMile": 1.55,
+    "perMinute": 0.55,
+    "features": [
+      "Extra legroom",
+      "Professional drivers"
+    ]
+  },
+  {
+    "id": "r3",
+    "name": "AutoDriverXL",
+    "image": "/car3.jpg",
+    "icon": "/car3.jpg",
+    "price": 27.4,
+    "oldPrice": 34.5,
+    "seats": 6,
+    "eta": "4 min away",
+    "desc": "Spacious rides for groups",
+    "recommended": false,
+    "waitTime": "< 8 min",
+    "perMile": 1.35,
+    "perMinute": 0.50,
+    "features": [
+      "Extra seating",
+      "Larger vehicles"
+    ]
+  },
+  {
+    "id": "r4",
+    "name": "Premium",
+    "image": "/car1.jpg",
+    "icon": "/car1.jpg",
+    "price": 45.8,
+    "oldPrice": 55,
+    "seats": 4,
+    "eta": "5 min away",
+    "desc": "Luxury vehicles for special occasions",
+    "recommended": false,
+    "waitTime": "< 10 min",
+    "perMile": 2.20,
+    "perMinute": 0.80,
+    "features": [
+      "Luxury cars",
+      "Premium experience"
+    ]
+  },
+  {
+    "id": "r5",
+    "name": "Economy",
+    "image": "/car2.jpg",
+    "icon": "/car2.jpg",
+    "price": 22.3,
+    "oldPrice": 28,
+    "seats": 4,
+    "eta": "1 min away",
+    "desc": "Budget-friendly option",
+    "recommended": true,
+    "waitTime": "< 3 min",
+    "perMile": 1.10,
+    "perMinute": 0.40,
+    "features": [
+      "Low cost",
+      "Quick pickup"
+    ]
+  },
+  {
+    "id": "r6",
+    "name": "Electric",
+    "image": "/car3.jpg",
+    "icon": "/car3.jpg",
+    "price": 29.2,
+    "oldPrice": 35,
+    "seats": 4,
+    "eta": "3 min away",
+    "desc": "Eco-friendly electric vehicles",
+    "recommended": true,
+    "waitTime": "< 6 min",
+    "perMile": 1.40,
+    "perMinute": 0.50,
+    "features": [
+      "Zero emissions",
+      "Quiet ride"
+    ]
+  },
+  {
+    "id": "r7",
+    "name": "Business",
+    "image": "/car1.jpg",
+    "icon": "/car1.jpg",
+    "price": 38.5,
+    "oldPrice": 46,
+    "seats": 4,
+    "eta": "4 min away",
+    "desc": "Professional rides for business",
+    "recommended": false,
+    "waitTime": "< 8 min",
+    "perMile": 1.85,
+    "perMinute": 0.65,
+    "features": [
+      "WiFi included",
+      "Business class"
+    ]
+  },
+  {
+    "id": "r8",
+    "name": "Family",
+    "image": "/car2.jpg",
+    "icon": "/car2.jpg",
+    "price": 35.7,
+    "oldPrice": 42,
+    "seats": 7,
+    "eta": "5 min away",
+    "desc": "Extra space for families",
+    "recommended": false,
+    "waitTime": "< 9 min",
+    "perMile": 1.70,
+    "perMinute": 0.60,
+    "features": [
+      "Child seats available",
+      "Family friendly"
+    ]
+  },
+  {
+    "id": "r9",
+    "name": "Express",
+    "image": "/car3.jpg",
+    "icon": "/car3.jpg",
+    "price": 28.9,
+    "oldPrice": 34,
+    "seats": 4,
+    "eta": "1 min away",
+    "desc": "Fastest pickup time",
+    "recommended": true,
+    "waitTime": "< 2 min",
+    "perMile": 1.35,
+    "perMinute": 0.48,
+    "features": [
+      "Quick pickup",
+      "Efficient routes"
+    ]
+  },
+  {
+    "id": "r10",
+    "name": "Night",
+    "image": "/car1.jpg",
+    "icon": "/car1.jpg",
+    "price": 33.2,
+    "oldPrice": 40,
+    "seats": 4,
+    "eta": "3 min away",
+    "desc": "Available 24/7",
+    "recommended": false,
+    "waitTime": "< 7 min",
+    "perMile": 1.60,
+    "perMinute": 0.55,
+    "features": [
+      "24/7 service",
+      "Safe night rides"
+    ]
+  },
+  {
+    "id": "r11",
+    "name": "SUV",
+    "image": "/car2.jpg",
+    "icon": "/car2.jpg",
+    "price": 42.1,
+    "oldPrice": 50,
+    "seats": 6,
+    "eta": "6 min away",
+    "desc": "Large SUVs for comfort",
+    "recommended": false,
+    "waitTime": "< 12 min",
+    "perMile": 2.00,
+    "perMinute": 0.70,
+    "features": [
+      "Spacious interior",
+      "Premium SUVs"
+    ]
+  },
+  {
+    "id": "r12",
+    "name": "Shared",
+    "image": "/car3.jpg",
+    "icon": "/car3.jpg",
+    "price": 18.5,
+    "oldPrice": 25,
+    "seats": 4,
+    "eta": "4 min away",
+    "desc": "Share your ride, save money",
+    "recommended": true,
+    "waitTime": "< 8 min",
+    "perMile": 0.90,
+    "perMinute": 0.35,
+    "features": [
+      "Cost sharing",
+      "Meet new people"
+    ]
+  },
+  {
+    "id": "r13",
+    "name": "Luxury",
+    "image": "/car1.jpg",
+    "icon": "/car1.jpg",
+    "price": 52.4,
+    "oldPrice": 65,
+    "seats": 4,
+    "eta": "7 min away",
+    "desc": "Top-tier luxury experience",
+    "recommended": false,
+    "waitTime": "< 15 min",
+    "perMile": 2.50,
+    "perMinute": 0.90,
+    "features": [
+      "Premium cars",
+      "Chauffeur service"
+    ]
+  },
+  {
+    "id": "r14",
+    "name": "Van",
+    "image": "/car2.jpg",
+    "icon": "/car2.jpg",
+    "price": 48.6,
+    "oldPrice": 58,
+    "seats": 8,
+    "eta": "8 min away",
+    "desc": "Large capacity for groups",
+    "recommended": false,
+    "waitTime": "< 14 min",
+    "perMile": 2.30,
+    "perMinute": 0.75,
+    "features": [
+      "Group transportation",
+      "8+ seats"
+    ]
+  },
+  {
+    "id": "r15",
+    "name": "Standard",
+    "image": "/car3.jpg",
+    "icon": "/car3.jpg",
+    "price": 24.7,
+    "oldPrice": 30,
+    "seats": 4,
+    "eta": "2 min away",
+    "desc": "Standard reliable rides",
+    "recommended": true,
+    "waitTime": "< 5 min",
+    "perMile": 1.20,
+    "perMinute": 0.42,
+    "features": [
+      "Reliable service",
+      "Good value"
+    ]
+  }
+]
+
+

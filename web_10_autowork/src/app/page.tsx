@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { title } from "process";
 import { ToastContainer, toast } from "react-toastify";
@@ -865,6 +866,7 @@ function PostJobWizard({
 }
 
 export default function Home() {
+	const pathname = usePathname();
 	const [showPostJob, setShowPostJob] = useState(false);
 	const [hasSeenInitialLoad, setHasSeenInitialLoad] = useState(false);
 	const { layout, getElementAttributes, getText } = useSeedLayout();
@@ -926,7 +928,7 @@ export default function Home() {
 
 	// Create section components
 	const JobsSection = () => (
-		<div>
+		<div id="jobs">
 			<div className="flex items-center justify-between mb-8">
 				<h2
 					className="text-2xl font-semibold"
@@ -1012,7 +1014,7 @@ export default function Home() {
 	);
 
 	const HiresSection = () => (
-		<section className="px-10 mt-14 px-4">
+		<section id="hires" className="px-10 mt-14 px-4">
 			<div className="flex items-center justify-between mb-7">
 				<h2
 					className="text-2xl font-semibold"
@@ -1077,7 +1079,7 @@ export default function Home() {
 	);
 
 	const ExpertsSection = () => (
-		<section className="px-10 mt-16 px-4">
+		<section id="experts" className="px-10 mt-16 px-4">
 			<h2
 				className="text-2xl font-semibold mb-7"
 				{...getElementAttributes('experts-heading', 0)}
@@ -1162,11 +1164,16 @@ export default function Home() {
 		experts: <ExpertsSection key="experts" />,
 	};
 
-	// Render sections in the order specified by layout
+	// Render sections based on route: jobs/hires/experts show only their section; home shows all
 	const renderSections = () => {
-		return layout.mainSections.map((sectionKey) => {
-			return sectionMap[sectionKey as keyof typeof sectionMap];
-		});
+		let allowed = layout.mainSections;
+		if (pathname?.includes('/jobs')) allowed = ['jobs'];
+		else if (pathname?.includes('/hires')) allowed = ['hires'];
+		else if (pathname?.includes('/experts')) allowed = ['experts'];
+
+		return allowed
+			.map((sectionKey) => sectionMap[sectionKey as keyof typeof sectionMap])
+			.filter(Boolean);
 	};
 
 	return (

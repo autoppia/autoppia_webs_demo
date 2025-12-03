@@ -60,7 +60,7 @@ export function HeroSlider() {
   return (
     <div
       id={getId("hero_slider")}
-      className="relative h-[320px] w-full overflow-hidden rounded-[32px] bg-slate-900 text-white shadow-elevated lg:h-[420px]"
+      className="relative h-[400px] w-full overflow-hidden bg-gradient-to-br from-amazon-lightBlue to-amazon-blue"
     >
       <div className="absolute inset-0">
         {sliderImages.map((slide, index) => (
@@ -72,7 +72,7 @@ export function HeroSlider() {
           >
             <SafeImage
               src={slide.url}
-              alt={getText(slide.altKey)}
+              alt={getText(slide.altKey, "Shop Autozone")}
               fill
               className="object-cover"
               priority={index === 0}

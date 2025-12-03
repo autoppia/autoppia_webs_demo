@@ -1,7 +1,7 @@
 # Stage 0: prod deps only (no dev deps like biome)
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY web_3_autozone/package.json web_3_autozone/package-lock.json ./
 RUN npm ci --omit=dev
 
 # Stage 1: build with dev deps
@@ -9,12 +9,15 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY web_3_autozone/package.json web_3_autozone/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
 RUN npm ci
 
-COPY . .
+# Copy original dataset files for fallback FIRST (before copying project)
+RUN mkdir -p src/data/original
+COPY webs_server/initial_data/web_3_autozone/original/products_1.json src/data/original/products_1.json
+COPY web_3_autozone/ .
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

@@ -159,8 +159,10 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
     // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
     effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
-    // If v2 is NOT enabled, automatically use seed=1
+    // If v2 is NOT enabled, return static dataset
     effectiveSeed = 1;
+    dynamicClients = originalClients.map((c, i) => normalizeClient(c, i));
+    return dynamicClients;
   }
 
   // Load from DB with the determined seed
@@ -187,7 +189,8 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
     }
   } catch (err) {
     console.error(`[autocrm] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    throw err;
+    dynamicClients = originalClients.map((c, i) => normalizeClient(c, i));
+    return dynamicClients;
   }
 }
 
@@ -508,4 +511,3 @@ export {
   dynamicEvents as events,
   dynamicLogs as logs,
 };
-

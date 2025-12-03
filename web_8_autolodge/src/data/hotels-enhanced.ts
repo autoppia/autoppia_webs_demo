@@ -1,5 +1,6 @@
 import { isDbLoadModeEnabled, fetchSeededSelection } from "@/shared/seeded-loader";
 import { Hotel } from "@/types/hotel";
+import fallbackHotels from "./original/hotels_1.json";
 
 /**
  * Get v2 seed from window (synchronized by SeedContext)
@@ -34,8 +35,10 @@ export async function initializeHotels(v2SeedValue?: number | null): Promise<Hot
     // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
     effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
-    // If v2 is NOT enabled, automatically use seed=1
+    // If v2 is NOT enabled, automatically use seed=1 and skip DB
     effectiveSeed = 1;
+    console.log("[autolodge] DB mode disabled, using static fallback data (seed=1)");
+    return (fallbackHotels as Hotel[]).map((h) => ({ ...h }));
   }
 
   // Load from DB with the determined seed
@@ -59,7 +62,8 @@ export async function initializeHotels(v2SeedValue?: number | null): Promise<Hot
     }
   } catch (err) {
     console.error(`[autolodge] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    throw err;
+    console.log("[autolodge] Falling back to static hotels dataset");
+    return (fallbackHotels as Hotel[]).map((h) => ({ ...h }));
   }
 }
 

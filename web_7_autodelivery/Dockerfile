@@ -1,7 +1,7 @@
 # Stage 0: prod deps only (no dev deps like biome)
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY web_7_autodelivery/package.json web_7_autodelivery/package-lock.json ./
 RUN npm ci --omit=dev
 
 # Stage 1: build with dev deps
@@ -9,12 +9,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY web_7_autodelivery/package.json web_7_autodelivery/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
 RUN npm ci
 
-COPY . .
+COPY web_7_autodelivery/ .
+# Copy original dataset files for fallback
+COPY webs_server/initial_data/web_7_autodelivery/original/restaurants_1.json src/data/original/restaurants_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

@@ -1,0 +1,22 @@
+[
+  {"id": 1, "matter": "Corporate Merger", "client": "TechCorp Industries", "date": "2025-12-01", "hours": 3.5, "description": "Merger agreement review and analysis", "status": "Billable"},
+  {"id": 2, "matter": "IP Portfolio Review", "client": "TechCorp Industries", "date": "2025-12-02", "hours": 2.0, "description": "Intellectual property assessment", "status": "Billable"},
+  {"id": 3, "matter": "Contract Negotiation", "client": "TechCorp Industries", "date": "2025-12-03", "hours": 4.0, "description": "Contract terms negotiation call", "status": "Billed"},
+  {"id": 4, "matter": "Regulatory Compliance", "client": "Global Finance Ltd", "date": "2025-12-01", "hours": 2.5, "description": "Compliance documentation review", "status": "Billable"},
+  {"id": 5, "matter": "Employment Agreement", "client": "Global Finance Ltd", "date": "2025-12-04", "hours": 1.5, "description": "Draft employment contract", "status": "Billable"},
+  {"id": 6, "matter": "Estate Planning", "client": "Smith & Associates", "date": "2025-12-01", "hours": 2.0, "description": "Estate planning consultation", "status": "Billable"},
+  {"id": 7, "matter": "Real Estate Transaction", "client": "Smith & Associates", "date": "2025-12-02", "hours": 3.0, "description": "Property title review", "status": "Billed"},
+  {"id": 8, "matter": "Litigation Defense", "client": "Smith & Associates", "date": "2025-12-03", "hours": 5.0, "description": "Case preparation and strategy", "status": "Billable"},
+  {"id": 9, "matter": "Trademark Application", "client": "Smith & Associates", "date": "2025-12-04", "hours": 1.0, "description": "Trademark filing preparation", "status": "Billable"},
+  {"id": 10, "matter": "Partnership Agreement", "client": "Smith & Associates", "date": "2025-12-05", "hours": 3.5, "description": "Partnership terms drafting", "status": "Billable"},
+  {"id": 11, "matter": "Labor Dispute Resolution", "client": "Johnson Manufacturing", "date": "2025-12-01", "hours": 4.5, "description": "Labor dispute mediation", "status": "Billed"},
+  {"id": 12, "matter": "Environmental Compliance", "client": "Green Energy Solutions", "date": "2025-12-02", "hours": 2.5, "description": "Environmental regulations review", "status": "Billable"},
+  {"id": 13, "matter": "Patent Filing", "client": "Green Energy Solutions", "date": "2025-12-03", "hours": 3.0, "description": "Patent application preparation", "status": "Billable"},
+  {"id": 14, "matter": "Joint Venture Agreement", "client": "Green Energy Solutions", "date": "2025-12-04", "hours": 4.0, "description": "JV agreement negotiation", "status": "Billable"},
+  {"id": 15, "matter": "Licensing Agreement", "client": "Green Energy Solutions", "date": "2025-12-05", "hours": 2.0, "description": "License terms review", "status": "Billable"},
+  {"id": 16, "matter": "Property Acquisition", "client": "Williams Real Estate", "date": "2025-12-02", "hours": 2.5, "description": "Property due diligence", "status": "Billable"},
+  {"id": 17, "matter": "Lease Agreement Review", "client": "Williams Real Estate", "date": "2025-12-03", "hours": 1.5, "description": "Lease terms analysis", "status": "Billed"},
+  {"id": 18, "matter": "FDA Approval Process", "client": "Brown Pharmaceuticals", "date": "2025-11-25", "hours": 5.0, "description": "FDA submission preparation", "status": "Billable"},
+  {"id": 19, "matter": "Data Privacy Compliance", "client": "Davis Technology Group", "date": "2025-12-01", "hours": 3.5, "description": "Privacy policy review", "status": "Billable"},
+  {"id": 20, "matter": "Software License Agreement", "client": "Davis Technology Group", "date": "2025-12-04", "hours": 2.5, "description": "Software license drafting", "status": "Billable"}
+]

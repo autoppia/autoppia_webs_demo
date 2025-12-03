@@ -1,63 +1,28 @@
 "use client";
 
-import { SeedLink } from "@/components/ui/SeedLink";
 import { useSeed } from "@/context/SeedContext";
-import { pickVariant } from "@/components/ui/variants";
-
-const QUICK_LINKS = [
-  { label: "Now Showing" },
-  { label: "Genres" },
-  { label: "Watchlists" },
-];
-
-const ABOUT_LINKS = [
-  { label: "Manifesto" },
-  { label: "Tech Stack" },
-  { label: "Feedback" },
-];
+import { getLayoutConfig } from "@/dynamic/v2-data";
+import { getLayoutClasses } from "@/dynamic/v1-layouts";
 
 export function Footer() {
-  const { seed } = useSeed();
-  // Dynamic (seed-based) styling
-  const footerVariant = pickVariant(seed, "footer", 2);
+  const { seed, resolvedSeeds } = useSeed();
+  const layoutSeed = resolvedSeeds.v1 ?? seed;
+  const config = getLayoutConfig(layoutSeed);
+  const classes = getLayoutClasses(config);
 
   return (
-    <footer className={`border-t border-white/10 bg-neutral-950/90 text-white/70 ${footerVariant === 1 ? "backdrop-blur" : ""}`}>
-      <div className="mx-auto flex w-full flex-col gap-8 px-6 py-12 md:flex-row md:justify-between">
-        <div className="max-w-md">
+    <footer className={`border-t border-white/10 bg-neutral-950/90 text-white/70 ${classes.footer}`}>
+      <div className="mx-auto max-w-4xl px-6 py-12">
+        <div className="text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-secondary">Autocinema</p>
-          <h3 className="mt-3 text-2xl font-semibold text-white">Generative stories for adventurous moviegoers.</h3>
-          <p className="mt-3 text-sm text-white/60">
-            Built with Next.js and Tailwind. Data is loaded from the shared datasets API so you can explore every variant without a backend.
+          <h3 className="mt-3 text-2xl font-semibold text-white">Your ultimate movie search engine.</h3>
+          <p className="mt-4 text-base text-white/70 leading-relaxed max-w-2xl mx-auto">
+            Find the perfect movie in seconds. From timeless classics to the latest releases, our search engine lets you explore thousands of films by genre, decade, style, or mood. Type what you're looking for and start discovering. Whether you're in the mood for a heart-wrenching drama, an edge-of-your-seat thriller, or a mind-bending sci-fi adventure, your next cinematic obsession is waiting.
           </p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-8 text-sm" id="about">
-          <div>
-            <p className="text-xs uppercase tracking-wide text-white/40">Browse</p>
-            <ul className="mt-3 space-y-2">
-              {QUICK_LINKS.map((link) => (
-                <li key={link.label}>
-                  <span className="text-white/70">{link.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-wide text-white/40">Project</p>
-            <ul className="mt-3 space-y-2">
-              {ABOUT_LINKS.map((link) => (
-                <li key={link.label}>
-                  <span className="text-white/70">{link.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </div>
       <div className="border-t border-white/5 bg-neutral-950/70">
         <div className="mx-auto flex w-full flex-col gap-3 px-6 py-4 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
-          <p>Autocinema</p>
           <p>&copy; {new Date().getFullYear()} Autoppia Experiments</p>
         </div>
       </div>

@@ -1,15 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { getSeedLayout, SeedLayout, isDynamicEnabled } from "@/dynamic/v1-layouts";
+import React, { createContext, useContext, useCallback } from "react";
 import { useSeed } from "@/context/SeedContext";
+import type { SeedLayout } from "@/dynamic/v1-layouts";
 
 declare global {
   interface Window {
     __autodeliveryV2Seed?: number | null;
-  }
-  interface WindowEventMap {
-    "autodelivery:v2SeedChange": CustomEvent<{ seed: number | null }>;
   }
 }
 
@@ -25,77 +22,103 @@ interface LayoutContextType extends SeedLayout {
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
+// Fixed layout matching the preferred (seed 26) look, but static
+const STATIC_LAYOUT: SeedLayout = {
+  seed: 26,
+  layoutId: 1,
+  searchBar: {
+    position: "left",
+    containerClass: "",
+    inputClass: "",
+    wrapperClass: "",
+    xpath: "",
+  },
+  navbar: {
+    logoPosition: "left",
+    cartPosition: "right",
+    menuPosition: "center",
+    containerClass: "",
+    xpath: "",
+  },
+  navigation: {
+    logoPosition: "left",
+    cartPosition: "right",
+    menuPosition: "center",
+    containerClass: "",
+    logoClass: "",
+    cartClass: "",
+    menuClass: "",
+    xpath: "",
+  },
+  hero: {
+    buttonPosition: "right",
+    buttonClass: "",
+    containerClass: "",
+    xpath: "",
+  },
+  restaurantCard: {
+    containerClass: "",
+    imageClass: "",
+    titleClass: "",
+    descriptionClass: "",
+    buttonClass: "",
+    xpath: "",
+  },
+  cart: {
+    iconClass: "",
+    badgeClass: "",
+    pageContainerClass: "",
+    itemClass: "",
+    buttonClass: "",
+    xpath: "",
+  },
+  modal: {
+    containerClass: "",
+    contentClass: "",
+    headerClass: "",
+    bodyClass: "",
+    footerClass: "",
+    buttonClass: "",
+    xpath: "",
+  },
+  grid: {
+    containerClass: "",
+    itemClass: "",
+    paginationClass: "",
+    xpath: "",
+  },
+  restaurantDetail: {
+    elementOrder: ["header", "menu", "reviews"],
+    containerClass: "",
+    headerClass: "",
+    menuClass: "",
+    reviewsClass: "",
+    xpath: "",
+  },
+};
+
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
-  // Use SeedContext for unified seed management
-  const { seed: baseSeed, resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? baseSeed;
+  const { seed, resolvedSeeds, getNavigationUrl: seedGetNavigationUrl } = useSeed();
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-  
-  const [seed, setSeed] = useState(baseSeed);
-  const [layout, setLayout] = useState<SeedLayout>(() => getSeedLayout(layoutSeed));
-  const [isDynamicMode, setIsDynamicMode] = useState(false);
 
-  useEffect(() => {
-    setIsDynamicMode(isDynamicEnabled());
-  }, []);
+  const getElementAttributes = (elementType: string, index: number = 0): Record<string, string> => ({
+    id: `${elementType}-${index}`,
+    "data-element-type": elementType,
+  });
 
-  // Sync with SeedContext
-  useEffect(() => {
-    setSeed(baseSeed);
-    setLayout(getSeedLayout(layoutSeed));
-  }, [baseSeed, layoutSeed]);
+  const generateId = (context: string, index: number = 0) => `${context}-${index}`;
 
-  // Sync v2Seed to window for backward compatibility
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    window.__autodeliveryV2Seed = v2Seed ?? null;
-    window.dispatchEvent(new CustomEvent("autodelivery:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
-    console.log("[LayoutProvider] v2-seed", v2Seed);
-  }, [v2Seed]);
+  const generateSeedClass = (baseClass: string) => baseClass;
 
-  const getElementAttributes = (elementType: string, index: number = 0): Record<string, string> => {
-    if (!isDynamicMode) {
-      return {
-        id: `${elementType}-${index}`,
-        "data-element-type": elementType,
-      };
-    }
-    return {
-      id: `${elementType}-${seed}-${index}`,
-      "data-seed": seed.toString(),
-      "data-variant": (seed % 10).toString(),
-      "data-element-type": elementType,
-      "data-layout-id": layout.layoutId.toString(),
-    };
-  };
-
-  const generateId = (context: string, index: number = 0) => {
-    if (!isDynamicMode) {
-      return `${context}-${index}`;
-    }
-    return `${context}-${seed}-${index}`;
-  };
-
-  const generateSeedClass = (baseClass: string) => {
-    if (!isDynamicMode) {
-      return baseClass;
-    }
-    return `${baseClass}-seed-${seed}`;
-  };
-
-  // Helper function to generate navigation URLs with seed parameter
-  // Note: This is kept for backward compatibility, but SeedLink/useSeedRouter use SeedContext directly
-  const getNavigationUrl = useCallback((path: string): string => {
-    // Delegate to SeedContext's getNavigationUrl for consistency
-    return seedGetNavigationUrl(path);
-  }, [seedGetNavigationUrl]);
+  const getNavigationUrl = useCallback(
+    (path: string): string => seedGetNavigationUrl(path),
+    [seedGetNavigationUrl]
+  );
 
   const value: LayoutContextType = {
-    ...layout,
+    ...STATIC_LAYOUT,
     seed,
-    isDynamicMode,
+    isDynamicMode: false,
     v2Seed,
     getElementAttributes,
     generateId,

@@ -94,7 +94,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
-ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1,v2,v3}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"
@@ -107,20 +107,7 @@ ENABLE_DYNAMIC_V4="${ENABLE_DYNAMIC_V4:-false}"
 # 3. NORMALIZE VALUES
 # ============================================================================
 
-# Normalize all boolean flags at once
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
-  eval "$var=\$(normalize_bool \"\$$var\")"
-done
-
-# Check for invalid booleans
-for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
-  if [ "$(eval echo \$$var)" = "__INVALID__" ]; then
-    echo "❌ Invalid boolean flag: $var. Use true/false (or yes/no, 1/0)."
-    exit 1
-  fi
-done
-
-# Normalize dynamic versions
+# Normalize dynamic versions FIRST (before mapping)
 ENABLED_DYNAMIC_VERSIONS_NORMALIZED="$(normalize_versions "$ENABLED_DYNAMIC_VERSIONS")"
 if [ "$ENABLED_DYNAMIC_VERSIONS_NORMALIZED" = "__INVALID__" ]; then
   echo "❌ Invalid --enabled_dynamic_versions value. Expected comma-separated tokens like v1,v2 or [v1,v2] where each token matches ^v[0-9]+$"
@@ -163,6 +150,19 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
     esac
   done
 fi
+
+# Normalize all boolean flags AFTER version mapping (so mapped values are preserved)
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+  eval "$var=\$(normalize_bool \"\$$var\")"
+done
+
+# Check for invalid booleans
+for var in ENABLE_DYNAMIC_V1 ENABLE_DYNAMIC_V2_AI_GENERATE ENABLE_DYNAMIC_V2_DB_MODE ENABLE_DYNAMIC_V3 ENABLE_DYNAMIC_V4 FAST_MODE; do
+  if [ "$(eval echo \$$var)" = "__INVALID__" ]; then
+    echo "❌ Invalid boolean flag: $var. Use true/false (or yes/no, 1/0)."
+    exit 1
+  fi
+done
 
 # ============================================================================
 # 5. VALIDATE CONFIGURATION
@@ -317,8 +317,23 @@ deploy_webs_server() {
     exit 1
   fi
 
+  # Check if webs_server is already running
+  if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
+    echo "✅ webs_server is already running - skipping deployment"
+    echo "   HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
+    return 0
+  fi
+
   echo "📂 Deploying $name (HTTP→$WEBS_PORT, DB→$WEBS_PG_PORT)..."
   pushd "$dir" >/dev/null
+
+  # Create .env file if it doesn't exist (docker-compose requires it)
+  # Note: .env can be empty - OPENAI_API_KEY is only needed for optional data generation endpoints
+  # Each web already has its static datasets in initial_data/, so LLM is not required for basic operation
+  if [ ! -f ".env" ]; then
+    echo "[INFO] Creating .env file (empty - LLM not required, datasets already in initial_data/)..."
+    touch .env
+  fi
 
   docker compose -p "$name" down --volumes || true
 
@@ -383,33 +398,45 @@ deploy_webs_server() {
         echo "  ⚠️  No initial data found for $project (will need to generate)"
       fi
     else
-      echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  fi
+done
+
+echo "✅ Master pools ready"
+
+# If DB mode (v2) is disabled, we won't sync into repo; originals will be copied directly into the container later
+
+# Copy data to container if webs_server is running (and avoid touching repo data)
+if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
+  echo "📦 Copying data pools to webs_server container..."
+  for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
+    SRC_MAIN="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json"
+    SRC_ORIG_DIR="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/original"
+    SRC_DATA_DIR="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data"
+    if [ -f "$SRC_MAIN" ]; then
+      echo "  → Copying $project to container..."
+      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
+      docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
+      # Prefer originals if DB mode is disabled; otherwise copy data files
+      if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = false ] && [ -d "$SRC_ORIG_DIR" ]; then
+        for data_file in "$SRC_ORIG_DIR"/*.json; do
+          if [ -f "$data_file" ]; then
+            docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
+          fi
+        done
+      elif [ -d "$SRC_DATA_DIR" ]; then
+        for data_file in "$SRC_DATA_DIR"/*.json; do
+          if [ -f "$data_file" ]; then
+            docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
+          fi
+        done
+      fi
+      docker exec -u root webs_server-app-1 chown -R appuser:appuser /app/data/$project 2>/dev/null || true
+      echo "  ✅ $project copied to container"
     fi
   done
-  
-  echo "✅ Master pools ready"
-  
-  # Copy data to container if webs_server is running
-  if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
-    echo "📦 Copying data pools to webs_server container..."
-    for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
-      if [ -f "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" ]; then
-        echo "  → Copying $project to container..."
-        docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
-        docker cp "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
-        if [ -d "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data" ]; then
-          for data_file in "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data"/*.json; do
-            if [ -f "$data_file" ]; then
-              docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
-            fi
-          done
-        fi
-        docker exec -u root webs_server-app-1 chown -R appuser:appuser /app/data/$project 2>/dev/null || true
-        echo "  ✅ $project copied to container"
-      fi
-    done
-    echo "✅ Data pools copied to container"
-  fi
+  echo "✅ Data pools copied to container"
+fi
 
   popd >/dev/null
   echo "✅ $name running on HTTP→localhost:$WEBS_PORT, DB→localhost:$WEBS_PG_PORT"
@@ -485,19 +512,19 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_webs_server
-    deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
-    deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    # deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+    # deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
+    #deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    # deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    #deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    #deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    # deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    # deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    # deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    # deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    # deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    # deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    # deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
 #    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)

@@ -73,11 +73,15 @@
         "terms_of_use": "OpenDinning Terms of Use",
         "privacy_policy": "Privacy Policy",
         "message_rates": "Message & data rates may apply. You can opt out of receiving text messages at any time in your account settings or by replying STOP.",
-        "notify_me": "🔔 Notify me",
+        "notify_me": "\ud83d\udd14 Notify me",
         "please_select_time": "Please select a time",
         "pick": "Pick",
         "person_cap": "Person",
-        "people_cap": "People"
+        "people_cap": "People",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search-restaurant",
@@ -92,7 +96,10 @@
         "restaurant_card": "restaurant-card",
         "section_lunch": "section-lunch",
         "section_icons": "section-icons",
-        "section_awards": "section-awards"
+        "section_awards": "section-awards",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -168,11 +175,15 @@
         "terms_of_use": "Terms of Service",
         "privacy_policy": "Privacy Terms",
         "message_rates": "Standard messaging rates apply. Opt out anytime via account settings or reply STOP.",
-        "notify_me": "🔔 Notify when available",
+        "notify_me": "\ud83d\udd14 Notify when available",
         "please_select_time": "Please choose a time",
         "pick": "Choose",
         "person_cap": "Guest",
-        "people_cap": "Guests"
+        "people_cap": "Guests",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "restaurant-finder",
@@ -187,7 +198,10 @@
         "restaurant_card": "venue-card",
         "section_lunch": "lunch-section",
         "section_icons": "premium-section",
-        "section_awards": "awards-section"
+        "section_awards": "awards-section",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -215,8 +229,8 @@
         "book_now": "Book",
         "booked_today": "bookings",
         "reviews": "reviews",
-        "scroll_left": "←",
-        "scroll_right": "→",
+        "scroll_left": "\u2190",
+        "scroll_right": "\u2192",
         "loading": "...",
         "restaurant_not_found": "Not found",
         "return_to_home": "Home",
@@ -263,11 +277,15 @@
         "terms_of_use": "Terms",
         "privacy_policy": "Privacy",
         "message_rates": "Msg rates apply. Reply STOP to opt out.",
-        "notify_me": "🔔 Notify",
+        "notify_me": "\ud83d\udd14 Notify",
         "please_select_time": "Pick time",
         "pick": "Pick",
         "person_cap": "Person",
-        "people_cap": "People"
+        "people_cap": "People",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "find",
@@ -282,7 +300,10 @@
         "restaurant_card": "card",
         "section_lunch": "lunch",
         "section_icons": "icons",
-        "section_awards": "awards"
+        "section_awards": "awards",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -358,11 +379,15 @@
         "terms_of_use": "Service Agreement",
         "privacy_policy": "Privacy Guidelines",
         "message_rates": "Communication rates applicable. Unsubscribe anytime through account preferences or STOP reply.",
-        "notify_me": "🔔 Alert when available",
+        "notify_me": "\ud83d\udd14 Alert when available",
         "please_select_time": "Kindly select a time",
         "pick": "Select",
         "person_cap": "Guest",
-        "people_cap": "Guests"
+        "people_cap": "Guests",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "venue-search",
@@ -377,7 +402,10 @@
         "restaurant_card": "venue-card",
         "section_lunch": "lunch-reservations",
         "section_icons": "signature-venues",
-        "section_awards": "acclaimed-restaurants"
+        "section_awards": "acclaimed-restaurants",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -453,11 +481,15 @@
         "terms_of_use": "Our rules",
         "privacy_policy": "Privacy stuff",
         "message_rates": "Texts cost money. Reply STOP to quit.",
-        "notify_me": "🔔 Tell me",
+        "notify_me": "\ud83d\udd14 Tell me",
         "please_select_time": "Pick a time",
         "pick": "Pick",
         "person_cap": "Person",
-        "people_cap": "People"
+        "people_cap": "People",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "find-food",
@@ -472,7 +504,10 @@
         "restaurant_card": "spot",
         "section_lunch": "lunch",
         "section_icons": "popular",
-        "section_awards": "best"
+        "section_awards": "best",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -548,11 +583,15 @@
         "terms_of_use": "Service Terms",
         "privacy_policy": "Privacy Protocols",
         "message_rates": "Communication fees may apply. Opt-out available via settings or STOP.",
-        "notify_me": "🔔 Notify availability",
+        "notify_me": "\ud83d\udd14 Notify availability",
         "please_select_time": "Please select dining time",
         "pick": "Select",
         "person_cap": "Guest",
-        "people_cap": "Guests"
+        "people_cap": "Guests",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "venue-finder",
@@ -567,7 +606,10 @@
         "restaurant_card": "establishment",
         "section_lunch": "midday",
         "section_icons": "distinguished",
-        "section_awards": "michelin"
+        "section_awards": "michelin",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -618,7 +660,11 @@
         "confirmation_message": "Table booked!",
         "view_reservation": "View",
         "modify_booking": "Change",
-        "cancel_booking": "Cancel"
+        "cancel_booking": "Cancel",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "food-search",
@@ -633,7 +679,10 @@
         "restaurant_card": "place",
         "section_lunch": "lunch",
         "section_icons": "hot",
-        "section_awards": "best"
+        "section_awards": "best",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -684,7 +733,11 @@
         "confirmation_message": "Reservation confirmed!",
         "view_reservation": "Details",
         "modify_booking": "Modify",
-        "cancel_booking": "Cancel"
+        "cancel_booking": "Cancel",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "restaurant-search",
@@ -699,7 +752,10 @@
         "restaurant_card": "venue",
         "section_lunch": "lunch-sec",
         "section_icons": "premium-sec",
-        "section_awards": "awards-sec"
+        "section_awards": "awards-sec",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -750,7 +806,11 @@
         "confirmation_message": "Table booked!",
         "view_reservation": "View booking",
         "modify_booking": "Change",
-        "cancel_booking": "Cancel"
+        "cancel_booking": "Cancel",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search-food",
@@ -765,7 +825,10 @@
         "restaurant_card": "rest-card",
         "section_lunch": "lunch-opts",
         "section_icons": "featured",
-        "section_awards": "top"
+        "section_awards": "top",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -792,7 +855,7 @@
         "view_details": "Info",
         "book_now": "Book",
         "booked_today": "booked",
-        "reviews": "★",
+        "reviews": "\u2605",
         "scroll_left": "<",
         "scroll_right": ">",
         "loading": "...",
@@ -801,13 +864,13 @@
         "overview": "Info",
         "menu": "Menu",
         "photos": "Pics",
-        "reviews_tab": "★",
+        "reviews_tab": "\u2605",
         "make_reservation": "Book",
         "select_date": "Day",
         "select_time_slot": "Time",
         "number_of_guests": "Ppl",
         "confirm_booking": "OK",
-        "booking_confirmed": "✓",
+        "booking_confirmed": "\u2713",
         "reservation_details": "Details",
         "date": "Date",
         "time": "Time",
@@ -816,7 +879,11 @@
         "confirmation_message": "Done!",
         "view_reservation": "View",
         "modify_booking": "Edit",
-        "cancel_booking": "X"
+        "cancel_booking": "X",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "s",
@@ -831,7 +898,10 @@
         "restaurant_card": "c",
         "section_lunch": "l",
         "section_icons": "ic",
-        "section_awards": "aw"
+        "section_awards": "aw",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -907,11 +977,15 @@
         "terms_of_use": "Terms",
         "privacy_policy": "Privacy",
         "message_rates": "Message rates apply. Reply STOP to opt out.",
-        "notify_me": "🔔 Notify",
+        "notify_me": "\ud83d\udd14 Notify",
         "please_select_time": "Select time",
         "pick": "Pick",
         "person_cap": "Person",
-        "people_cap": "Guests"
+        "people_cap": "Guests",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search-loc",
@@ -926,7 +1000,10 @@
         "restaurant_card": "rest-card",
         "section_lunch": "sec-lunch",
         "section_icons": "sec-icons",
-        "section_awards": "sec-awards"
+        "section_awards": "sec-awards",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -1002,11 +1079,15 @@
         "terms_of_use": "Terms",
         "privacy_policy": "Privacy",
         "message_rates": "Message rates apply. Opt out via STOP.",
-        "notify_me": "🔔 Notify",
+        "notify_me": "\ud83d\udd14 Notify",
         "please_select_time": "Select a time",
         "pick": "Select",
         "person_cap": "Guest",
-        "people_cap": "Guests"
+        "people_cap": "Guests",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "cuisine-search",
@@ -1021,7 +1102,10 @@
         "restaurant_card": "restaurant",
         "section_lunch": "lunch-section",
         "section_icons": "exclusive-section",
-        "section_awards": "acclaimed-section"
+        "section_awards": "acclaimed-section",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -1048,22 +1132,22 @@
         "view_details": "Check out",
         "book_now": "Get it",
         "booked_today": "got",
-        "reviews": "⭐",
-        "scroll_left": "←",
-        "scroll_right": "→",
+        "reviews": "\u2b50",
+        "scroll_left": "\u2190",
+        "scroll_right": "\u2192",
         "loading": "...",
         "restaurant_not_found": "Nope",
         "return_to_home": "Back",
         "overview": "About",
         "menu": "Food",
         "photos": "Pics",
-        "reviews_tab": "⭐",
+        "reviews_tab": "\u2b50",
         "make_reservation": "Book",
         "select_date": "Day",
         "select_time_slot": "When",
         "number_of_guests": "#",
         "confirm_booking": "OK",
-        "booking_confirmed": "✓",
+        "booking_confirmed": "\u2713",
         "reservation_details": "Info",
         "date": "Day",
         "time": "Time",
@@ -1080,7 +1164,7 @@
         "view_full_menu": "All",
         "collapse_menu": "Hide",
         "what_people_saying": "Reviews",
-        "overall_ratings": "⭐",
+        "overall_ratings": "\u2b50",
         "reviews_disclaimer": "Real reviews.",
         "you_almost_done": "Almost!",
         "diner_details": "Info",
@@ -1097,11 +1181,15 @@
         "terms_of_use": "Rules",
         "privacy_policy": "Privacy",
         "message_rates": "Texts cost. STOP to quit.",
-        "notify_me": "🔔",
+        "notify_me": "\ud83d\udd14",
         "please_select_time": "Pick time",
         "pick": "Pick",
         "person_cap": "1",
-        "people_cap": "ppl"
+        "people_cap": "ppl",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "find",
@@ -1116,7 +1204,10 @@
         "restaurant_card": "c",
         "section_lunch": "lu",
         "section_icons": "ic",
-        "section_awards": "aw"
+        "section_awards": "aw",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     },
     {
@@ -1192,11 +1283,15 @@
         "terms_of_use": "Terms",
         "privacy_policy": "Privacy",
         "message_rates": "Message rates apply. STOP to opt out.",
-        "notify_me": "🔔 Notify",
+        "notify_me": "\ud83d\udd14 Notify",
         "please_select_time": "Pick time",
         "pick": "Pick",
         "person_cap": "Person",
-        "people_cap": "People"
+        "people_cap": "People",
+        "section_expensive": "Expensive",
+        "section_medium": "Mid-range",
+        "section_cheap": "Cheap",
+        "cheap": "Cheap"
       },
       "ids": {
         "search_input": "search",
@@ -1211,10 +1306,11 @@
         "restaurant_card": "card",
         "section_lunch": "lunch",
         "section_icons": "icons",
-        "section_awards": "awards"
+        "section_awards": "awards",
+        "section_expensive": "section-expensive",
+        "section_medium": "section-medium",
+        "section_cheap": "section-cheap"
       }
     }
   ]
 }
-
-

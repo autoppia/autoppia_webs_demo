@@ -1,0 +1,139 @@
+[
+  {
+    "id": "pl1",
+    "label": "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+    "main": "1 Hotel San Francisco",
+    "sub": "8 Mission St, San Francisco, CA 94105, USA",
+    "category": "hotel",
+    "latitude": 37.7937,
+    "longitude": -122.3929
+  },
+  {
+    "id": "pl2",
+    "label": "San Francisco Airport (SFO) - San Francisco, CA 94128, USA",
+    "main": "San Francisco Airport",
+    "sub": "San Francisco, CA 94128, USA",
+    "category": "airport",
+    "latitude": 37.6213,
+    "longitude": -122.3790
+  },
+  {
+    "id": "pl3",
+    "label": "Golden Gate Bridge - San Francisco, CA 94129, USA",
+    "main": "Golden Gate Bridge",
+    "sub": "San Francisco, CA 94129, USA",
+    "category": "landmark",
+    "latitude": 37.8199,
+    "longitude": -122.4783
+  },
+  {
+    "id": "pl4",
+    "label": "Union Square - San Francisco, CA 94108, USA",
+    "main": "Union Square",
+    "sub": "San Francisco, CA 94108, USA",
+    "category": "shopping",
+    "latitude": 37.7879,
+    "longitude": -122.4075
+  },
+  {
+    "id": "pl5",
+    "label": "Fisherman's Wharf - San Francisco, CA 94133, USA",
+    "main": "Fisherman's Wharf",
+    "sub": "San Francisco, CA 94133, USA",
+    "category": "attraction",
+    "latitude": 37.8080,
+    "longitude": -122.4177
+  },
+  {
+    "id": "pl6",
+    "label": "Alcatraz Island - San Francisco, CA 94133, USA",
+    "main": "Alcatraz Island",
+    "sub": "San Francisco, CA 94133, USA",
+    "category": "attraction",
+    "latitude": 37.8267,
+    "longitude": -122.4230
+  },
+  {
+    "id": "pl7",
+    "label": "Chase Center - 1 Warriors Way, San Francisco, CA 94158, USA",
+    "main": "Chase Center",
+    "sub": "1 Warriors Way, San Francisco, CA 94158, USA",
+    "category": "venue",
+    "latitude": 37.7680,
+    "longitude": -122.3879
+  },
+  {
+    "id": "pl8",
+    "label": "Moscone Center - 747 Howard St, San Francisco, CA 94103, USA",
+    "main": "Moscone Center",
+    "sub": "747 Howard St, San Francisco, CA 94103, USA",
+    "category": "venue",
+    "latitude": 37.7849,
+    "longitude": -122.4094
+  },
+  {
+    "id": "pl9",
+    "label": "Lombard Street - San Francisco, CA 94133, USA",
+    "main": "Lombard Street",
+    "sub": "San Francisco, CA 94133, USA",
+    "category": "landmark",
+    "latitude": 37.8024,
+    "longitude": -122.4186
+  },
+  {
+    "id": "pl10",
+    "label": "Golden Gate Park - San Francisco, CA 94117, USA",
+    "main": "Golden Gate Park",
+    "sub": "San Francisco, CA 94117, USA",
+    "category": "park",
+    "latitude": 37.7694,
+    "longitude": -122.4862
+  },
+  {
+    "id": "pl11",
+    "label": "Palace of Fine Arts - San Francisco, CA 94123, USA",
+    "main": "Palace of Fine Arts",
+    "sub": "San Francisco, CA 94123, USA",
+    "category": "landmark",
+    "latitude": 37.8026,
+    "longitude": -122.4488
+  },
+  {
+    "id": "pl12",
+    "label": "Pier 39 - San Francisco, CA 94133, USA",
+    "main": "Pier 39",
+    "sub": "San Francisco, CA 94133, USA",
+    "category": "shopping",
+    "latitude": 37.8087,
+    "longitude": -122.4098
+  },
+  {
+    "id": "pl13",
+    "label": "Cable Car Museum - 1201 Mason St, San Francisco, CA 94108, USA",
+    "main": "Cable Car Museum",
+    "sub": "1201 Mason St, San Francisco, CA 94108, USA",
+    "category": "museum",
+    "latitude": 37.7947,
+    "longitude": -122.4117
+  },
+  {
+    "id": "pl14",
+    "label": "Coit Tower - 1 Telegraph Hill Blvd, San Francisco, CA 94133, USA",
+    "main": "Coit Tower",
+    "sub": "1 Telegraph Hill Blvd, San Francisco, CA 94133, USA",
+    "category": "landmark",
+    "latitude": 37.8024,
+    "longitude": -122.4058
+  },
+  {
+    "id": "pl15",
+    "label": "Twin Peaks - San Francisco, CA 94114, USA",
+    "main": "Twin Peaks",
+    "sub": "San Francisco, CA 94114, USA",
+    "category": "landmark",
+    "latitude": 37.7544,
+    "longitude": -122.4477
+  }
+]
+
+

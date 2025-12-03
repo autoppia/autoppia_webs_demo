@@ -8,6 +8,7 @@ import { useRestaurants } from "@/contexts/RestaurantContext";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar, Clock, Home, Phone, Gift, ChevronRight, Loader2 } from "lucide-react";
 import { useRef } from "react";
+import QuickOrderModal from "../food/QuickOrderModal";
 
 interface EditableTimeProps {
   value: string;
@@ -108,12 +109,14 @@ export default function CartPage() {
   ];
   const [selectedDropoff, setSelectedDropoff] = useState("Leave it at my door");
   const [isPickupInfoModalOpen, setIsPickupInfoModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   // MODE State
   const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
   const formRef = useRef<HTMLFormElement>(null);
   const [deliveryTime, setDeliveryTime] = useState<
     "express" | "standard" | "scheduled"
   >("standard");
+  const [quickOrderOpen, setQuickOrderOpen] = useState(false);
   const { restaurants, isLoading } = useRestaurants();
   const restaurant =
     items.length > 0
@@ -143,6 +146,19 @@ export default function CartPage() {
     setStandardTime(restaurant?.deliveryTime || "20-30 min");
     setPickupTime(restaurant?.pickupTime || "10-20 min");
   }, [restaurant?.deliveryTime, restaurant?.pickupTime]);
+
+  // Listen for global quick-order trigger (from navbar)
+  useEffect(() => {
+    const handler = () => setQuickOrderOpen(true);
+    if (typeof window !== "undefined") {
+      window.addEventListener("autodelivery:openQuickOrder", handler);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("autodelivery:openQuickOrder", handler);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (hydrated && items.length > 0) {
@@ -240,7 +256,9 @@ export default function CartPage() {
   };
 
   const quantityLabel = getText("quantity-label", "Quantity");
-  const deliveryInformationTitle = getText("delivery-information-title", "Delivery Information");
+  const deliveryInformationTitle = mode === "pickup"
+    ? getText("delivery-information-title", "Pickup Details")
+    : getText("delivery-information-title", "Delivery Information");
   const deliveryInfoAttributes = layout.getElementAttributes("delivery-information-title", 0);
   const deliveryInformationId = getId(
     "delivery-information-title",
@@ -261,7 +279,7 @@ export default function CartPage() {
   const placeOrderAria = getAria("place-order-button", "Place order");
 
   return (
-    <div id="cart-page-container" className={`max-w-3xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
+    <div id="cart-page-container" className={`max-w-4xl mx-auto mt-8 px-4 ${layout.cart.pageContainerClass}`}>
       <div id="delivery-mode-selector" className="flex justify-center mb-7 mt-2">
         <div className="flex gap-0 bg-zinc-100 rounded-full shadow-inner p-1 w-fit">
           <button
@@ -602,9 +620,7 @@ export default function CartPage() {
               <div
                 id="contact-number-selector"
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
-                onClick={() =>
-                  formRef.current?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => setIsContactModalOpen(true)}
               >
                 <Phone className="w-5 h-5 text-zinc-500" />
                 <span className="font-semibold">
@@ -632,9 +648,7 @@ export default function CartPage() {
               <div
                 id="pickup-contact-number-selector"
                 className="flex items-center gap-3 py-3 cursor-pointer hover:bg-zinc-50 rounded-xl px-2"
-                onClick={() =>
-                  formRef.current?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => setIsContactModalOpen(true)}
               >
                 <Phone className="w-5 h-5 text-zinc-500" />
                 <span className="font-semibold">
@@ -853,7 +867,7 @@ export default function CartPage() {
             id="order-form"
             ref={formRef}
             onSubmit={handleSubmit}
-            className="bg-white rounded-xl shadow p-6 max-w-lg mx-auto flex flex-col gap-4"
+            className="bg-white rounded-xl shadow p-6 w-full flex flex-col gap-4"
           >
             <h2
               className="font-semibold text-xl mb-2"
@@ -870,14 +884,16 @@ export default function CartPage() {
               value={form.name}
               onChange={handleChange}
             />
-            <Input
-              id={customerAddressId}
-              required
-              name="address"
-              placeholder={customerAddressPlaceholder}
-              value={form.address}
-              onChange={handleChange}
-            />
+            {mode === "delivery" && (
+              <Input
+                id={customerAddressId}
+                required
+                name="address"
+                placeholder={customerAddressPlaceholder}
+                value={form.address}
+                onChange={handleChange}
+              />
+            )}
             <Input
               id={customerPhoneId}
               required
@@ -898,6 +914,33 @@ export default function CartPage() {
               {placeOrderLabel}
             </Button>
           </form>
+          <QuickOrderModal open={quickOrderOpen} onOpenChange={setQuickOrderOpen} />
+          <Dialog open={isContactModalOpen} onOpenChange={setIsContactModalOpen}>
+            <DialogContent className="max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Add contact number</DialogTitle>
+              </DialogHeader>
+              <Input
+                id="contact-number-modal-input"
+                value={form.phone}
+                placeholder={customerPhonePlaceholder}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    phone: e.target.value,
+                  }))
+                }
+              />
+              <div className="flex justify-end">
+                <Button
+                  className="mt-3"
+                  onClick={() => setIsContactModalOpen(false)}
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </>
       )}
       {editingItem && editingMenuItem && (

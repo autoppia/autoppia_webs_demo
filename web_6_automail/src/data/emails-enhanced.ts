@@ -15,6 +15,7 @@ import {
 } from "@/utils/emailDataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 import { systemLabels as importedSystemLabels, userLabels as importedUserLabels } from "@/library/dataset";
+import fallbackEmails from "./original/emails_1.json";
 
 // Re-export labels from dataset
 export const systemLabels: Label[] = importedSystemLabels;
@@ -300,8 +301,11 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
     // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
     effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
-    // If v2 is NOT enabled, automatically use seed=1
+    // If v2 is NOT enabled, use static dataset
     effectiveSeed = 1;
+    const fallback = normalizeEmailTimestamps(fallbackEmails as Email[]);
+    dynamicEmails = fallback;
+    return fallback;
   }
 
   // Load from DB with the determined seed
@@ -328,7 +332,7 @@ export async function initializeEmails(v2SeedValue?: number | null): Promise<Ema
     }
   } catch (err) {
     console.error(`[automail] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    const fallback = normalizeEmailTimestamps([...originalEmails]);
+    const fallback = normalizeEmailTimestamps(fallbackEmails as Email[]);
     dynamicEmails = fallback;
     return fallback;
   }

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EVENT_TYPES, logEvent } from "@/components/library/events";
-import { Search, Clock, Star, MapPin, Zap, Loader2 } from "lucide-react";
+import { Search, Clock, Star, MapPin, Zap, Loader2, Timer } from "lucide-react";
 import { useCartStore } from "@/store/cart-store";
 import { useSeedLayout } from "@/hooks/use-seed-layout";
 import { useRestaurants } from "@/contexts/RestaurantContext";
@@ -105,14 +105,30 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
   };
 
   const handleQuickOrder = (restaurant: typeof restaurants[0]) => {
-    logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, {
-      restaurantId: restaurant.id,
-      restaurantName: restaurant.name,
-      cuisine: restaurant.cuisine
-    });
-    onOpenChange(false);
-    // Navigate to restaurant page to start ordering
-    window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
+    // Add first menu item (or skip if none)
+    if (restaurant.menu && restaurant.menu.length > 0) {
+      const firstItem = restaurant.menu[0];
+      addToCart(firstItem, restaurant.id);
+      logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, {
+        restaurantId: restaurant.id,
+        restaurantName: restaurant.name,
+        cuisine: restaurant.cuisine,
+        itemId: firstItem.id,
+        itemName: firstItem.name,
+      });
+      onOpenChange(false);
+      window.location.href = getNavigationUrl("/cart");
+    } else {
+      logEvent(EVENT_TYPES.QUICK_ORDER_STARTED, {
+        restaurantId: restaurant.id,
+        restaurantName: restaurant.name,
+        cuisine: restaurant.cuisine,
+        itemId: null,
+        itemName: null,
+      });
+      onOpenChange(false);
+      window.location.href = getNavigationUrl(`/restaurants/${restaurant.id}`);
+    }
   };
 
   const handleQuickAddPopular = (restaurant: typeof restaurants[0]) => {
@@ -241,9 +257,15 @@ export default function QuickOrderModal({ open, onOpenChange }: QuickOrderModalP
                   <span>{restaurant.cuisine}</span>
                 </div>
                 
-                <div className="flex items-center gap-2 text-sm text-zinc-600 mb-3">
-                  <Clock className="h-3 w-3" />
-                  <span>{restaurant.deliveryTime}</span>
+                <div className="flex items-center gap-4 text-sm text-zinc-600 mb-3">
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    <span>{restaurant.deliveryTime || "30-45 min"}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Timer className="h-3 w-3" />
+                    <span>Pickup {restaurant.pickupTime || "12-18 min"}</span>
+                  </div>
                 </div>
 
                 <div className="flex gap-2">

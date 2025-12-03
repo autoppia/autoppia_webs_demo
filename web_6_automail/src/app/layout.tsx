@@ -7,8 +7,7 @@ import { EmailProvider } from "@/contexts/EmailContext";
 import { LayoutProvider } from "@/contexts/LayoutContext";
 // DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
-import { getEffectiveSeed, getLayoutConfig } from "@/dynamic/v2-data";
-import { getLayoutClasses } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1, la seed se mantiene en URL para V2 y V3
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,16 +22,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // For server-side rendering, we'll use default values
-  // The actual seed will be handled in client components
-  const seed = 1; // Default seed for SSR
-  const layoutConfig = getLayoutConfig(seed);
-  const layoutClasses = getLayoutClasses(layoutConfig);
+  // LAYOUT FIJO - Sin variaciones, la seed se mantiene en URL para V2 y V3
 
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={`${inter.className} ${layoutClasses.spacing}`} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
           <Suspense fallback={<div className="min-h-screen bg-background" />}>
             <SeedProvider>

@@ -6,6 +6,7 @@ import ClientBody from "./ClientBody";
 // DynamicStructureProvider removed - now using v3-dynamic
 import { SeedProvider } from "@/context/SeedContext";
 import { Suspense } from "react";
+import { SeedRedirect } from "@/components/layout/SeedRedirect";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,9 @@ export default function RootLayout({
         <ClientBody>
           <Suspense fallback={<div>Loading...</div>}>
             <SeedProvider>
+              <Suspense fallback={null}>
+                <SeedRedirect />
+              </Suspense>
               {children}
             </SeedProvider>
           </Suspense>

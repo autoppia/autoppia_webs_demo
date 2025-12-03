@@ -35,11 +35,9 @@ export class DynamicDataProvider {
 
   private constructor() {
     this.isEnabled = isDynamicHtmlEnabled();
-    if (typeof window === "undefined") {
-      this.ready = true;
-      this.readyPromise = Promise.resolve();
-      return;
-    }
+    // Ensure products is always an array, never undefined
+    this.products = [];
+    // Always initialize products, even in SSR (will use fallback)
     this.readyPromise = this.initializeProducts();
   }
 
@@ -75,10 +73,17 @@ export class DynamicDataProvider {
   private async initializeProducts(): Promise<void> {
     try {
       const v2Seed = this.getV2SeedFromUrl();
-      this.products = await initializeProducts(v2Seed);
+      const loadedProducts = await initializeProducts(v2Seed);
+      // Ensure products is always an array
+      if (Array.isArray(loadedProducts) && loadedProducts.length > 0) {
+        this.products = loadedProducts;
+      } else {
+        console.warn("[autozone] Products not loaded properly, using empty array");
+        this.products = [];
+      }
     } catch (error) {
       console.error("[autozone] Failed to initialize products", error);
-      throw error;
+      this.products = [];
     } finally {
       this.ready = true;
     }
@@ -93,18 +98,27 @@ export class DynamicDataProvider {
   }
 
   public getProducts(): Product[] {
-    return this.products; // Return empty until ready when generation is enabled
+    return Array.isArray(this.products) ? this.products : [];
   }
 
   public getProductById(id: string): Product | undefined {
+    if (!Array.isArray(this.products)) {
+      return undefined;
+    }
     return this.products.find((product) => product.id === id);
   }
 
   public getProductsByCategory(category: string): Product[] {
+    if (!Array.isArray(this.products)) {
+      return [];
+    }
     return this.products.filter((product) => product.category === category);
   }
 
-  public getFeaturedProducts(count = 4): Product[] {
+  public getFeaturedProducts(count: number = 4): Product[] {
+    if (!Array.isArray(this.products)) {
+      return [];
+    }
     return this.products.slice(0, count);
   }
 

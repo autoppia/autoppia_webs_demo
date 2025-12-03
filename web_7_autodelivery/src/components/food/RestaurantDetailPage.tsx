@@ -14,12 +14,12 @@ import { SafeImage } from "@/components/ui/SafeImage";
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <span className="inline-block text-yellow-500 align-middle">
+    <span className="inline-flex items-center gap-1 text-yellow-500 align-middle">
       {[1, 2, 3, 4, 5].map((num) => (
         <svg
           key={num}
           className={`inline w-4 h-4 ${
-            num > Math.round(rating) ? "opacity-25" : ""
+            num > Math.round(rating) ? "opacity-30" : ""
           }`}
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -27,6 +27,7 @@ function Stars({ rating }: { rating: number }) {
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.987a1 1 0 00.95.69h4.2c.969 0 1.371 1.24.588 1.81l-3.4 2.47a1 1 0 00-.364 1.118l1.286 3.987c.3.921-.755 1.688-1.54 1.118l-3.4-2.47a1 1 0 00-1.176 0l-3.4 2.47c-.784.57-1.838-.197-1.54-1.118l1.286-3.987a1 1 0 00-.364-1.118l-3.4-2.47c-.783-.57-.38-1.81.588-1.81h4.2a1 1 0 00.95-.69l1.286-3.987z" />
         </svg>
       ))}
+      <span className="text-sm font-semibold text-zinc-700">{rating.toFixed(1)}</span>
     </span>
   );
 }
@@ -206,173 +207,163 @@ export default function RestaurantDetailPage({
     }
   }
 
-  // Render elements based on the dynamic order
-  const renderElement = (elementType: string) => {
-    switch (elementType) {
-      case 'header':
-        return (
-          <div 
-            key="header"
-            className={`flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-6 ${layout.restaurantDetail.headerClass} ds-${seedStructure}`}
-            {...layout.getElementAttributes('restaurant-header', 0)}
-          >
-            <div className="relative w-full md:w-72 h-48 rounded-xl overflow-hidden shadow">
-              <SafeImage
-                src={restaurant.image}
-                alt={restaurant.name}
-                fill
-                style={{ objectFit: "cover" }}
-                sizes="(max-width: 768px) 100vw, 400px"
-              />
-            </div>
-            <div className="flex-1">
-              <h1 
-                className={`text-3xl font-bold mb-1 ${layout.generateSeedClass('restaurant-name')} ds-${seedStructure}`}
-                id={getId('restaurant-name', `restaurant-name-${seedStructure}`)}
-                aria-label={getAria('restaurant-name', restaurant.name)}
-              >
-                {getText('restaurant-name', restaurant.name)}
-              </h1>
-              <div 
-                className={`text-zinc-500 mb-2 ${layout.generateSeedClass('restaurant-meta')} ds-${seedStructure}`}
-                id={getId('restaurant-meta', `restaurant-meta-${seedStructure}`)}
-                aria-label={getAria('restaurant-meta', `${restaurant.cuisine} · ${restaurant.rating}`)}
-              >
-                {getText('restaurant-meta', `${restaurant.cuisine} · ★ ${restaurant.rating}`)}
-              </div>
-              <p 
-                className={`text-zinc-600 mb-2 ${layout.generateSeedClass('restaurant-description')} ds-${seedStructure}`}
-                id={getId('restaurant-description', `restaurant-description-${seedStructure}`)}
-                aria-label={getAria('restaurant-description', restaurant.description)}
-              >
-                {getText('restaurant-description', restaurant.description)}
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                className={`${layout.generateSeedClass('back-button')} ds-${seedStructure}`}
-                id={getId('back-button', `back-button-${seedStructure}`)}
-                onClick={() => {
-                  logEvent(EVENT_TYPES.BACK_TO_ALL_RESTAURANTS, {
-                    fromRestaurantId: restaurant.id,
-                    fromRestaurantName: restaurant.name,
-                  });
-                  // Navigate to restaurants page (seed-structure will be preserved automatically)
-                  router.push('/restaurants');
-                }}
-                aria-label={getAria('back-button', 'Back to all restaurants')}
-              >
-                {getText('back-button', '← Back to all restaurants')}
-              </Button>
-            </div>
-          </div>
-        );
-      
-      case 'menu':
-        return (
-          <div key="menu">
-            <h2 
-              className={`text-xl font-bold mb-4 mt-10 ${layout.generateSeedClass('menu-title')} ds-${seedStructure}`}
-              id={getId('menu-title', `menu-title-${seedStructure}`)}
-              aria-label={getAria('menu-title', 'Menu')}
-            >
-              {getText('menu-title', 'Menu')}
-            </h2>
-            <div 
-              className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${layout.restaurantDetail.menuClass}`}
-              {...layout.getElementAttributes('menu-grid', 0)}
-            >
-              {restaurant.menu.map((item, index) => (
-                <div
-                  key={item.id}
-                  className={`bg-white rounded-lg shadow p-4 flex flex-col ${layout.generateSeedClass('menu-item')} ds-${seedStructure}`}
-                  id={getId(`menu-item-${index}`, `menu-item-${seedStructure}-${index}`)}
-                >
-                  <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
-                    <SafeImage
-                      src={item.image}
-                      alt={getText(`menu-item-name-${index}`, item.name)}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div 
-                    className={`font-bold text-lg mb-1 ${layout.generateSeedClass('menu-item-name')} ds-${seedStructure}`}
-                    id={getId(`menu-item-name-${index}`, `menu-item-name-${seedStructure}-${index}`)}
-                    aria-label={getAria(`menu-item-name-${index}`, item.name)}
-                  >
-                    {getText(`menu-item-name-${index}`, item.name)}
-                  </div>
-                  <div 
-                    className={`text-zinc-500 text-sm mb-2 flex-1 ${layout.generateSeedClass('menu-item-description')} ds-${seedStructure}`}
-                    id={getId(`menu-item-description-${index}`, `menu-item-description-${seedStructure}-${index}`)}
-                    aria-label={getAria(`menu-item-description-${index}`, item.description)}
-                  >
-                    {getText(`menu-item-description-${index}`, item.description)}
-                  </div>
-                  <div className="flex items-center justify-between mt-auto">
-                    <span 
-                      className={`font-semibold text-green-700 text-base ${layout.generateSeedClass('menu-item-price')} ds-${seedStructure}`}
-                      id={getId(`menu-item-price-${index}`, `menu-item-price-${seedStructure}-${index}`)}
-                      aria-label={getAria(`menu-item-price-${index}`, `$${item.price.toFixed(2)}`)}
-                    >
-                      ${item.price.toFixed(2)}
-                    </span>
-                    <Button
-                      size="sm"
-                      id={getId('add-to-cart-btn', `add-to-cart-btn-${seedStructure}-${index}`)}
-                      className={`${layout.generateSeedClass('add-to-cart-btn')} ds-${seedStructure}`}
-                      onClick={() => {
-                        logEvent(EVENT_TYPES.ADD_TO_CART_MODAL_OPEN, {
-                          restaurantId: restaurant.id,
-                          restaurantName: restaurant.name,
-                          itemId: item.id,
-                          itemName: item.name,
-                          itemPrice: item.price,
-                        });
-                        const itemWithRestaurant = {
-                          ...item,
-                          restaurantId: restaurant.id,
-                          restaurantName: restaurant.name
-                        };
-
-                        setModalOpen(true);
-                        setModalItem(itemWithRestaurant);
-                      }}
-                      aria-label={getAria('add-to-cart-btn', 'Add to Cart')}
-                    >
-                      {getText('add-to-cart-btn', 'Add to Cart')}
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      
-      case 'reviews':
-        return (
-          <ReviewsSection 
-            key="reviews"
-            reviews={restaurant.reviews} 
-            isAdmin={isAdmin} 
-            restaurant={restaurant} 
-          />
-        );
-      
-      default:
-        return null;
-    }
-  };
-
   return (
     <div 
       className={`max-w-5xl mx-auto px-2 sm:px-0 ${layout.restaurantDetail.containerClass} ds-${seedStructure}`}
       id={getId('restaurant-detail-page', `restaurant-detail-page-${seedStructure}`)}
       aria-label={getAria('restaurant-detail-page', 'Restaurant detail page')}
     >
-      {/* Render elements in the dynamic order */}
-      {layout.restaurantDetail.elementOrder.map((elementType) => renderElement(elementType))}
+      {/* Header */}
+      <div 
+        className={`flex flex-col md:flex-row gap-6 md:items-center mt-6 mb-8 ${layout.restaurantDetail.headerClass} ds-${seedStructure}`}
+        {...layout.getElementAttributes('restaurant-header', 0)}
+      >
+        <div className="relative w-full md:w-80 h-52 rounded-xl overflow-hidden shadow">
+          <SafeImage
+            src={restaurant.image}
+            alt={restaurant.name}
+            fill
+            style={{ objectFit: "cover" }}
+            sizes="(max-width: 768px) 100vw, 400px"
+          />
+        </div>
+        <div className="flex-1 space-y-2">
+          <div className="flex items-center gap-3">
+            <h1 
+              className={`text-3xl font-bold ${layout.generateSeedClass('restaurant-name')} ds-${seedStructure}`}
+              id={getId('restaurant-name', `restaurant-name-${seedStructure}`)}
+              aria-label={getAria('restaurant-name', restaurant.name)}
+            >
+              {getText('restaurant-name', restaurant.name)}
+            </h1>
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-700 bg-green-50 border border-green-100 px-2 py-1 rounded-full">
+              ★ {restaurant.rating.toFixed(1)}
+            </span>
+          </div>
+          <div 
+            className={`text-zinc-600 ${layout.generateSeedClass('restaurant-meta')} ds-${seedStructure}`}
+            id={getId('restaurant-meta', `restaurant-meta-${seedStructure}`)}
+            aria-label={getAria('restaurant-meta', `${restaurant.cuisine} · ${restaurant.rating}`)}
+          >
+            {getText('restaurant-meta', `${restaurant.cuisine} · ${restaurant.menu.length} dishes`)}
+          </div>
+          <p 
+            className={`text-zinc-600 ${layout.generateSeedClass('restaurant-description')} ds-${seedStructure}`}
+            id={getId('restaurant-description', `restaurant-description-${seedStructure}`)}
+            aria-label={getAria('restaurant-description', restaurant.description)}
+          >
+            {getText('restaurant-description', restaurant.description)}
+          </p>
+          <div className="flex gap-3 pt-1">
+            <span className="text-sm text-zinc-500">Delivery {restaurant.deliveryTime || "30-45 min"}</span>
+            <span className="text-sm text-zinc-500">Pickup {restaurant.pickupTime || "12-18 min"}</span>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className={`${layout.generateSeedClass('back-button')} ds-${seedStructure}`}
+            id={getId('back-button', `back-button-${seedStructure}`)}
+            onClick={() => {
+              logEvent(EVENT_TYPES.BACK_TO_ALL_RESTAURANTS, {
+                fromRestaurantId: restaurant.id,
+                fromRestaurantName: restaurant.name,
+              });
+              router.push('/restaurants');
+            }}
+            aria-label={getAria('back-button', 'Back to all restaurants')}
+          >
+            {getText('back-button', '← Back to all restaurants')}
+          </Button>
+        </div>
+      </div>
+
+      {/* Menu */}
+      <div>
+        <h2 
+          className={`text-xl font-bold mb-4 ${layout.generateSeedClass('menu-title')} ds-${seedStructure}`}
+          id={getId('menu-title', `menu-title-${seedStructure}`)}
+          aria-label={getAria('menu-title', 'Menu')}
+        >
+          {getText('menu-title', 'Menu')}
+        </h2>
+        <div 
+          className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${layout.restaurantDetail.menuClass}`}
+          {...layout.getElementAttributes('menu-grid', 0)}
+        >
+          {restaurant.menu.map((item, index) => (
+            <div
+              key={item.id}
+              className={`bg-white rounded-lg shadow p-4 flex flex-col ${layout.generateSeedClass('menu-item')} ds-${seedStructure}`}
+              id={getId(`menu-item-${index}`, `menu-item-${seedStructure}-${index}`)}
+            >
+              <div className="relative w-full h-32 mb-3 rounded-md overflow-hidden">
+                <SafeImage
+                  src={item.image}
+                  alt={getText(`menu-item-name-${index}`, item.name)}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div 
+                className={`font-bold text-lg mb-1 ${layout.generateSeedClass('menu-item-name')} ds-${seedStructure}`}
+                id={getId(`menu-item-name-${index}`, `menu-item-name-${seedStructure}-${index}`)}
+                aria-label={getAria(`menu-item-name-${index}`, item.name)}
+              >
+                {getText(`menu-item-name-${index}`, item.name)}
+              </div>
+              <div 
+                className={`text-zinc-500 text-sm mb-2 flex-1 ${layout.generateSeedClass('menu-item-description')} ds-${seedStructure}`}
+                id={getId(`menu-item-description-${index}`, `menu-item-description-${seedStructure}-${index}`)}
+                aria-label={getAria(`menu-item-description-${index}`, item.description)}
+              >
+                {getText(`menu-item-description-${index}`, item.description)}
+              </div>
+              <div className="flex items-center justify-between mt-auto">
+                <span 
+                  className={`font-semibold text-green-700 text-base ${layout.generateSeedClass('menu-item-price')} ds-${seedStructure}`}
+                  id={getId(`menu-item-price-${index}`, `menu-item-price-${seedStructure}-${index}`)}
+                  aria-label={getAria(`menu-item-price-${index}`, `$${item.price.toFixed(2)}`)}
+                >
+                  ${item.price.toFixed(2)}
+                </span>
+                <Button
+                  size="sm"
+                  id={getId('add-to-cart-btn', `add-to-cart-btn-${seedStructure}-${index}`)}
+                  className={`${layout.generateSeedClass('add-to-cart-btn')} ds-${seedStructure}`}
+                  onClick={() => {
+                    logEvent(EVENT_TYPES.ADD_TO_CART_MODAL_OPEN, {
+                      restaurantId: restaurant.id,
+                      restaurantName: restaurant.name,
+                      itemId: item.id,
+                      itemName: item.name,
+                      itemPrice: item.price,
+                    });
+                    const itemWithRestaurant = {
+                      ...item,
+                      restaurantId: restaurant.id,
+                      restaurantName: restaurant.name
+                    };
+
+                    setModalOpen(true);
+                    setModalItem(itemWithRestaurant);
+                  }}
+                  aria-label={getAria('add-to-cart-btn', 'Add to Cart')}
+                >
+                  {getText('add-to-cart-btn', 'Add to Cart')}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Reviews */}
+      <ReviewsSection 
+        key="reviews"
+        reviews={restaurant.reviews} 
+        isAdmin={isAdmin} 
+        restaurant={restaurant} 
+      />
       
       {/* Modal for item customizations */}
       {modalOpen && modalItem && (

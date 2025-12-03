@@ -18,7 +18,7 @@ import { format } from "date-fns";
 import Image from "next/image";
 import { useSeed } from "@/context/SeedContext";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
+// LAYOUT FIJO - Sin variaciones V1
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { initializeRestaurants, getRestaurants } from "@/dynamic/v2-data";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
@@ -35,7 +35,8 @@ type RestaurantView = {
   id: string;
   name: string;
   image: string;
-  rating: number;
+  rating: number; // rating con decimales
+  stars: number; // stars entero 1-5
   reviews: number;
   bookings: number;
   price: string;
@@ -58,7 +59,7 @@ export default function RestaurantPage() {
   const [timeOpen, setTimeOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const { getText, getId } = useV3Attributes();
-  
+
   // Define labels with fallbacks
   const personLabel = getText("person") || "Guest";
   const peopleLabel = getText("people") || "Guests";
@@ -73,19 +74,16 @@ export default function RestaurantPage() {
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   const layoutSeed = resolvedSeeds.v1 ?? seed;
 
-  // Use seed-based variations (pass v1 seed)
-  const bookButtonVariation = useSeedVariation("bookButton", undefined, layoutSeed);
-  const imageContainerVariation = useSeedVariation("imageContainer", undefined, layoutSeed);
-  
-  // Create layout based on seed
-  const layout = useMemo(() => {
-    const wrap = layoutSeed % 2 === 0;
-    const justifyClass = ["justify-start", "justify-center", "justify-end", "justify-between", "justify-around"][layoutSeed % 5];
-    const marginTopClass = ["mt-0", "mt-4", "mt-8", "mt-12", "mt-16"][layoutSeed % 5];
-    const justify = ["flex-start", "center", "flex-end", "space-between", "space-around"][layoutSeed % 5];
-    const marginTop = [0, 16, 32, 48, 64][layoutSeed % 5];
-    return { wrap, justifyClass, marginTopClass, justify, marginTop };
-  }, [layoutSeed]);
+  // LAYOUT COMPLETAMENTE FIJO - Sin variaciones
+
+  // LAYOUT FIJO - Siempre como seed 6
+  const layout = {
+    wrap: false, // seed 6 % 2 = 0 (false)
+    justifyClass: "justify-start", // seed 6 % 5 = 1 → índice 1
+    marginTopClass: "mt-0", // seed 6 % 5 = 1 → índice 1
+    justify: "flex-start", // seed 6 % 5 = 1 → índice 1
+    marginTop: 0, // seed 6 % 5 = 1 → índice 1
+  };
 
   useEffect(() => {
     // Ensure data is initialized and loaded from DB or generator as configured
@@ -100,17 +98,26 @@ export default function RestaurantPage() {
         const list = getRestaurants();
         const found = list.find((x) => x.id === id) || list[0];
         if (found) {
+          // Usar rating y stars separados
+          const rating = (found as any).rating ?? found.stars ?? 4.5;
+          const stars = (found as any).stars ?? Math.round(rating);
+
           const mapped: RestaurantView = {
             id: found.id,
             name: found.name,
             image: found.image,
-            rating: Number(found.stars ?? 4),
+            rating: Number(rating),
+            stars: Number(stars),
             reviews: Number(found.reviews ?? 0),
             bookings: Number(found.bookings ?? 0),
             price: String(found.price ?? "$$"),
             cuisine: String(found.cuisine ?? "International"),
             tags: ["cozy", "modern", "casual"],
-            desc: `Enjoy a delightful experience at ${found.name}, offering a fusion of flavors in the heart of ${found.area ?? "Downtown"}.`,
+            desc: `Enjoy a delightful experience at ${
+              found.name
+            }, offering a fusion of flavors in the heart of ${
+              found.area ?? "Downtown"
+            }.`,
             photos,
           };
           setR(mapped);
@@ -122,7 +129,9 @@ export default function RestaurantPage() {
       }
     };
     run();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [id, v2Seed]);
 
   useEffect(() => {
@@ -135,7 +144,8 @@ export default function RestaurantPage() {
       area: "test",
       reviews: r?.reviews ?? 0,
       bookings: r?.bookings ?? 0,
-      rating: r?.rating ?? 0,
+      rating: r?.rating ?? 4.5,
+      stars: r?.stars ?? 5,
     });
   }, [id, r]);
   const formattedDate = date ? format(date, "yyyy-MM-dd") : "2025-05-20";
@@ -215,13 +225,18 @@ export default function RestaurantPage() {
     }
   };
 
-  const wrapperClass = `flex ${layout.justifyClass} ${layout.marginTopClass} mb-7 ${layout.wrap ? "flex-wrap" : ""}`;
+  const wrapperClass = `flex ${layout.justifyClass} ${
+    layout.marginTopClass
+  } mb-7 ${layout.wrap ? "flex-wrap" : ""}`;
   return (
     <main>
       {isGenerating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-[#46a758] animate-spin" aria-hidden="true" />
+            <div
+              className="h-12 w-12 rounded-full border-4 border-gray-300 border-t-[#46a758] animate-spin"
+              aria-hidden="true"
+            />
             <div className="text-gray-700 text-base font-medium text-center">
               Data is being generated by AI this may take some time
             </div>
@@ -229,33 +244,35 @@ export default function RestaurantPage() {
         </div>
       )}
       {/* Banner Image */}
-      <div className={`w-full h-[340px] bg-gray-200 ${imageContainerVariation.position} ${imageContainerVariation.className}`} data-testid={imageContainerVariation.dataTestId}>
+      <div className="w-full h-[340px] bg-gray-200">
         <div className="relative w-full h-full">
-          {r && <Image src={r.image} alt={r.name} fill className="object-cover" />}
+          {r && (
+            <Image src={r.image} alt={r.name} fill className="object-cover" />
+          )}
         </div>
       </div>
       {/* Info and reservation */}
-      <div className="flex flex-col md:flex-row justify-between gap-10 px-8 max-w-screen-2xl mx-auto">
+      <div className="flex flex-col md:flex-row justify-between gap-10 px-4 md:px-8 w-full max-w-[1400px] mx-auto">
         {/* Info (details section, tags, desc, photos) */}
-        <div className="pt-12 pb-10 flex-1 min-w-0">
+        <div className="pt-8 md:pt-12 pb-10 flex-1 min-w-0">
           {/* Title & details row */}
           <h1 className="text-4xl font-bold mb-2">{r?.name ?? "Loading..."}</h1>
           <div className="flex items-center gap-4 text-lg mb-4">
             <span className="flex items-center text-[#46a758] text-xl font-semibold">
-              {Array.from({ length: Math.round(r?.rating ?? 4) }).map((_, i) => (
+              {Array.from({ length: r?.stars ?? 5 }).map((_, i) => (
                 <span key={i}>★</span>
               ))}
-              {Array.from({ length: 5 - Math.round(r?.rating ?? 4) }).map((_, i) => (
-                <span key={`empty-${i}`} className="text-gray-300">★</span>
+              {Array.from({ length: 5 - (r?.stars ?? 5) }).map((_, i) => (
+                <span key={`empty-${i}`} className="text-gray-300">
+                  ★
+                </span>
               ))}
             </span>
             <span className="text-base flex items-center gap-2">
               <span className="font-bold">
-                {r?.rating?.toFixed(2) ?? "4.20"}
+                {r?.rating?.toFixed(1) ?? "4.5"}
               </span>
-              <span className="text-gray-700">
-                {r?.reviews ?? 20} Reviews
-              </span>
+              <span className="text-gray-700">{r?.reviews ?? 0} Reviews</span>
             </span>
             <span className="text-base flex items-center gap-2">
               💵 {r?.price ?? "$$"}
@@ -277,307 +294,359 @@ export default function RestaurantPage() {
           </div>
           {/* Description */}
           {r?.desc && (
-            <div className="mb-7 text-[17px] text-gray-700 max-w-2xl">
+            <div className="mb-8 text-lg text-gray-700 leading-relaxed">
               {r.desc}
             </div>
           )}
           {/* Photos Grid */}
           {r?.photos && (
             <>
-              <h2 className="text-2xl font-bold mb-3">
-                {r.photos.length} {getText("photos_count")}
-              </h2>
-              <div className="grid grid-cols-3 gap-3 w-full max-w-2xl mb-9">
+              <h2 className="text-2xl font-bold mb-5 mt-10">Photos</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-12">
                 {r.photos.map((url: string, i: number) => (
                   <img
                     key={i}
                     src={url}
-                    alt=""
-                    className="rounded-lg object-cover aspect-square w-full h-[112px] md:h-[140px]"
+                    alt={`${r?.name} photo ${i + 1}`}
+                    className="rounded-lg object-cover aspect-square w-full h-[160px] md:h-[200px] hover:opacity-90 transition-opacity cursor-pointer shadow-md"
                   />
                 ))}
               </div>
             </>
           )}
           {/* Menu Section */}
-          <section className="max-w-2xl w-full mb-10">
-            <h2 className="text-2xl font-bold mb-3 mt-8">{getText("menu")}</h2>
-            <div className="flex gap-6 border-b mb-5">
-              <button className="border-b-2 border-[#46a758] text-[#46a758] font-semibold px-4 py-2 -mb-px bg-white">
-                {getText("main_menu")}
-              </button>
-            </div>
-            <div className="space-y-6">
-              <div>
-                <div className="font-bold text-lg mb-3">{getText("starters")}</div>
-                <div className="grid grid-cols-2 gap-y-2">
-                  <div>
-                    <div className="font-semibold">Cheese Board</div>
-                    <div className="text-sm text-gray-600">
-                      assorted artisan cheeses
-                    </div>
-                  </div>
-                  <div className="text-right font-bold">$14.00</div>
-
-                  <div>
-                    <div className="font-semibold">Smoked Salmon Tartine</div>
-                    <div className="text-sm text-gray-600">
-                      capers, crème fraîche
-                    </div>
-                  </div>
-                  <div className="text-right font-bold">$12.00</div>
-
-                  <div>
-                    <div className="font-semibold">Escargot</div>
-                    <div className="text-sm text-gray-600">
-                      with garlic butter
-                    </div>
-                  </div>
-                  <div className="text-right font-bold">$16.00</div>
-                </div>
+          <section className="w-full mb-10">
+            <h2 className="text-2xl font-bold mb-4 mt-8">
+              {getText("menu") || "Menu"}
+            </h2>
+            <div className="bg-white border rounded-lg p-6">
+              <div className="flex gap-6 border-b mb-6 pb-2">
+                <button className="border-b-2 border-[#46a758] text-[#46a758] font-semibold px-4 py-2 -mb-px bg-white">
+                  {getText("main_menu") || "Main Menu"}
+                </button>
               </div>
-              {showFullMenu && (
+              <div className="space-y-8">
                 <div>
-                  <div className="font-bold text-lg mb-3">{getText("mains")}</div>
-                  <div className="grid grid-cols-2 gap-y-2">
-                    <div className="font-semibold">Coq au Vin</div>
-                    <div className="text-right font-bold">$26.00</div>
-                    <div className="font-semibold">Ratatouille</div>
-                    <div className="text-right font-bold">$20.00</div>
+                  <div className="font-bold text-lg mb-4 text-gray-900">
+                    {getText("starters") || "Starters"}
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-start border-b pb-3">
+                      <div className="flex-1">
+                        <div className="font-semibold text-gray-900">
+                          Cheese Board
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          Assorted artisan cheeses with honey and nuts
+                        </div>
+                      </div>
+                      <div className="text-right font-bold text-gray-900 ml-4">
+                        $14.00
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-start border-b pb-3">
+                      <div className="flex-1">
+                        <div className="font-semibold text-gray-900">
+                          Smoked Salmon Tartine
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          Capers, crème fraîche, dill, and red onion
+                        </div>
+                      </div>
+                      <div className="text-right font-bold text-gray-900 ml-4">
+                        $12.00
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-start border-b pb-3">
+                      <div className="flex-1">
+                        <div className="font-semibold text-gray-900">
+                          Escargot
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          Traditional French preparation with garlic butter
+                        </div>
+                      </div>
+                      <div className="text-right font-bold text-gray-900 ml-4">
+                        $16.00
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
-              <div className="flex justify-center my-7">
-                {layout.wrap ? (
-                  <div className={wrapperClass}>
-                    {" "}
-                    <Button
-                      className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
-                      onClick={handleToggleMenu}
-                    >
-                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
-                    </Button>
-                  </div>
-                ) : (
-                  <div className={wrapperClass.replace("flex-wrap", "")}>
-                    <Button
-                      className="border px-10 py-3 text-lg rounded font-semibold bg-white hover:bg-gray-50 text-black"
-                      onClick={handleToggleMenu}
-                    >
-                      {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
-                    </Button>
+                {showFullMenu && (
+                  <div>
+                    <div className="font-bold text-lg mb-4 text-gray-900">
+                      {getText("mains") || "Main Courses"}
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-start border-b pb-3">
+                        <div className="flex-1">
+                          <div className="font-semibold text-gray-900">
+                            Coq au Vin
+                          </div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            Classic French braised chicken in wine sauce
+                          </div>
+                        </div>
+                        <div className="text-right font-bold text-gray-900 ml-4">
+                          $26.00
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-start border-b pb-3">
+                        <div className="flex-1">
+                          <div className="font-semibold text-gray-900">
+                            Ratatouille
+                          </div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            Provençal vegetable stew with herbs
+                          </div>
+                        </div>
+                        <div className="text-right font-bold text-gray-900 ml-4">
+                          $20.00
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
+                <div className="flex justify-center pt-4">
+                  <Button
+                    className="border-2 border-gray-300 px-8 py-2.5 rounded-lg font-semibold bg-white hover:bg-gray-50 text-gray-700 transition-colors"
+                    onClick={handleToggleMenu}
+                  >
+                    {showFullMenu ? collapseMenuLabel : viewFullMenuLabel}
+                  </Button>
+                </div>
               </div>
             </div>
           </section>
-          {/* Reviews Section */}
-          <section className="max-w-2xl w-full mb-10">
-            <h2 className="text-2xl font-bold mb-5 mt-10">
-              {getText("reviews_tab")}
-            </h2>
-            <div className="font-bold mb-2">{getText("reviews_tab")}</div>
-            <div className="mb-4 text-gray-700">
-              {getText("reviews_tab")}
+          {/* Additional Info Section */}
+          <section className="w-full mb-10 mt-10">
+            <h2 className="text-2xl font-bold mb-6">About This Place</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 border border-gray-200">
+                <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
+                  <span>🍽️</span> Cuisine
+                </h3>
+                <p className="text-gray-700 font-medium">
+                  {r?.cuisine ?? "International"}
+                </p>
+              </div>
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 border border-gray-200">
+                <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
+                  <span>💰</span> Price Range
+                </h3>
+                <p className="text-gray-700 font-medium">{r?.price ?? "$$"}</p>
+              </div>
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 border border-gray-200">
+                <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
+                  <span>📍</span> Location
+                </h3>
+                <p className="text-gray-700 font-medium">
+                  {r?.desc?.includes("heart of")
+                    ? r.desc.split("heart of")[1]?.replace(".", "")?.trim()
+                    : "Downtown"}
+                </p>
+              </div>
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 border border-gray-200">
+                <h3 className="font-semibold text-base mb-2 text-gray-900 flex items-center gap-2">
+                  <span>⏰</span> Popular Times
+                </h3>
+                <p className="text-gray-700 font-medium">7:00 PM - 9:00 PM</p>
+              </div>
             </div>
-            {/* Ratings bar chart (simplified) */}
-            <div className="mb-6 space-y-1">
-              {[5, 4, 3, 2, 1].map((star) => (
-                <div key={star} className="flex items-center gap-2">
-                  <span className="w-5 text-right">{star}</span>
-                  <span className="w-20 bg-red-200 h-3 rounded">
-                    <span
-                      className={`block h-3 rounded bg-[#46a758]`}
-                      style={{ width: `${star * 12}%` }}
-                    />
-                  </span>
+          </section>
+
+          {/* Reviews Section - Simplified */}
+          <section className="w-full mb-10">
+            <h2 className="text-2xl font-bold mb-6">
+              {getText("reviews_tab") || "Customer Reviews"}
+            </h2>
+            <div className="bg-white border-2 border-gray-200 rounded-xl p-8 shadow-sm">
+              <div className="flex items-center gap-6 mb-6">
+                <div className="text-5xl font-bold text-gray-900">
+                  {r?.rating?.toFixed(1) ?? "4.5"}
                 </div>
-              ))}
+                <div>
+                  <div className="flex items-center text-[#46a758] text-2xl mb-2">
+                    {Array.from({ length: r?.stars ?? 5 }).map((_, i) => (
+                      <span key={i}>★</span>
+                    ))}
+                  </div>
+                  <div className="text-gray-600 text-base font-medium">
+                    Based on {r?.reviews ?? 0} verified reviews
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-700 text-lg leading-relaxed">
+                Customers consistently praise the exceptional atmosphere and
+                outstanding food quality at {r?.name ?? "this restaurant"}.
+                Recent reviews highlight the excellent service, authentic
+                flavors, and memorable dining experience. Many guests return
+                regularly and recommend it to friends and family.
+              </p>
             </div>
           </section>
         </div>
-        {/* Reservation Box - now more detailed per screenshot */}
-        <div className="rounded-xl border bg-white shadow-sm p-6 w-full max-w-sm mt-[-120px] md:mt-16 self-start">
-          <h2 className="font-bold text-lg mb-2 text-center">
-            {getText("make_reservation")}
+        {/* Reservation Box - sticky and always visible */}
+        <div className="rounded-xl border-2 border-gray-200 bg-white shadow-lg p-6 w-full max-w-sm md:sticky md:top-8 self-start">
+          <h2 className="font-bold text-xl mb-4 text-center text-gray-900">
+            {getText("make_reservation") || "Make a Reservation"}
           </h2>
-          <div className="flex flex-col gap-3">
-            {/* People select (demo, not fully interactive) */}
-            <Popover open={peopleOpen} onOpenChange={setPeopleOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  id={getId("people_picker")}
-                  variant="outline"
-                  className="flex items-center gap-2 min-w-[100px] justify-start"
-                >
-                  <UserIcon className="h-5 w-5 text-gray-700" />
-                  {people ? `${people} ${people === 1 ? personLabel : peopleLabel}` : `${pickLabel} ${peopleLabel}`}
-                  <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-32 p-1">
-                {peopleOptions.map((n) => (
-                  <Button
-                    key={n}
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      handlePeopleSelect(n);
-                      setPeopleOpen(false);
-                    }}
-                  >
-                    {n} {n === 1 ? personLabel : peopleLabel}
-                  </Button>
-                ))}
-              </PopoverContent>
-            </Popover>
-            {/* Date/time row */}
-            <div className="flex gap-2">
-              <Popover open={dateOpen} onOpenChange={setDateOpen}>
+          <div className="flex flex-col gap-4">
+            {/* People select */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                {getText("number_of_guests") || "Number of Guests"}
+              </label>
+              <Popover
+                open={peopleOpen}
+                onOpenChange={setPeopleOpen}
+                modal={false}
+              >
                 <PopoverTrigger asChild>
                   <Button
-                    id={getId("date_picker")}
+                    id={getId("people_picker")}
                     variant="outline"
-                    className="flex items-center gap-2 min-w-[120px] justify-start"
+                    className="w-full flex items-center justify-between border-gray-300 hover:border-[#46a758]"
                   >
-                    <CalendarIcon className="h-5 w-5 text-gray-700" />
-                    {date ? format(date, "MMM d") : selectDateLabel}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(d) => {
-                      handleDateSelect(d);
-                      setDateOpen(false);
-                    }}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <Popover open={timeOpen} onOpenChange={setTimeOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    id={getId("time_picker")}
-                    variant="outline"
-                    className="flex items-center gap-2 min-w-[120px] justify-start"
-                  >
-                    <ClockIcon className="h-5 w-5 text-gray-700" />
-                    {time ? time : selectTimeLabel}
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="h-5 w-5 text-gray-600" />
+                      <span className="text-gray-700">
+                        {people
+                          ? `${people} ${
+                              people === 1 ? personLabel : peopleLabel
+                            }`
+                          : `${pickLabel} ${peopleLabel}`}
+                      </span>
+                    </div>
                     <ChevronDownIcon className="h-4 w-4 text-gray-400" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-36 p-1">
-                  {timeOptions.map((t) => (
+                <PopoverContent className="w-full p-1" align="start">
+                  {peopleOptions.map((n) => (
                     <Button
-                      key={t}
+                      key={n}
                       variant="ghost"
                       className="w-full justify-start"
                       onClick={() => {
-                        handleTimeSelect(t);
-                        setTimeOpen(false);
+                        handlePeopleSelect(n);
+                        setPeopleOpen(false);
                       }}
                     >
-                      {t}
+                      {n} {n === 1 ? personLabel : peopleLabel}
                     </Button>
                   ))}
                 </PopoverContent>
               </Popover>
             </div>
-            {/* Booking button - only show when date, time, and people are selected */}
-            <div className="mt-3">
-              {time === "3:00 PM" ? (
-                <div className="flex gap-1 mt-2">
-                  <Button
-                    variant="outline"
-                    className="text-[#46a758] border-[#46a758] px-4 py-2 text-base flex items-center gap-2"
-                  >
-                    <span>{time}</span>
-                    <span className="ml-2">{getText("notify_me") || "Notify Me"}</span>
-                  </Button>
-                </div>
-              ) : time && date && people ? (
-                layout.wrap ? (
-                  <div
-                    className="mt-2"
-                    style={{ marginTop: layout.marginTop }}
-                    data-testid={`book-btn-wrapper-${layoutSeed}`}
-                  >
-                    <div
-                      className="flex gap-1"
-                      style={{ justifyContent: layout.justify }}
+            {/* Date/time row */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  {getText("date") || "Date"}
+                </label>
+                <Popover
+                  open={dateOpen}
+                  onOpenChange={setDateOpen}
+                  modal={false}
+                >
+                  <PopoverTrigger asChild>
+                    <Button
+                      id={getId("date_picker")}
+                      variant="outline"
+                      className="w-full flex items-center justify-between border-gray-300 hover:border-[#46a758]"
                     >
-                      <SeedLink
-                        href={buildBookingHref(id, time, { date: formattedDate, people })}
-                        onClick={() =>
-                          logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                            restaurantId: id,
-                            restaurantName: r?.name ?? "",
-                            cuisine: r?.cuisine ?? "",
-                            desc: r?.desc ?? "",
-                            area: "test",
-                            reviews: r?.reviews ?? 0,
-                            bookings: r?.bookings ?? 0,
-                            rating: r?.rating ?? 0,
-                            date: formattedDate,
-                            time,
-                            people,
-                          })
-                        }
-                      >
-                        <Button
-                          id={getId("book_button")}
-                          className={`${bookButtonVariation.className || "bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-2 rounded-lg"} font-semibold text-sm`}
-                          data-testid={bookButtonVariation.dataTestId}
-                        >
-                          {bookNowLabel}
-                        </Button>
-                      </SeedLink>
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    className="flex gap-1 mt-2"
-                    style={{
-                      justifyContent: layout.justify,
-                      marginTop: layout.marginTop,
-                    }}
-                  >
-                    <SeedLink
-                      href={buildBookingHref(id, time, { date: formattedDate, people })}
-                      onClick={() =>
-                        logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
-                          restaurantId: id,
-                          restaurantName: r?.name ?? "",
-                          cuisine: r?.cuisine ?? "",
-                          desc: r?.desc ?? "",
-                          area: "test",
-                          reviews: r?.reviews ?? 0,
-                          bookings: r?.bookings ?? 0,
-                          rating: r?.rating ?? 0,
-                          date: formattedDate,
-                          time,
-                          people,
-                        })
-                      }
+                      <div className="flex items-center gap-2">
+                        <CalendarIcon className="h-5 w-5 text-gray-600" />
+                        <span className="text-gray-700">
+                          {date ? format(date, "MMM d") : selectDateLabel}
+                        </span>
+                      </div>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={(d) => {
+                        handleDateSelect(d);
+                        setDateOpen(false);
+                      }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  {getText("time") || "Time"}
+                </label>
+                <Popover
+                  open={timeOpen}
+                  onOpenChange={setTimeOpen}
+                  modal={false}
+                >
+                  <PopoverTrigger asChild>
+                    <Button
+                      id={getId("time_picker")}
+                      variant="outline"
+                      className="w-full flex items-center justify-between border-gray-300 hover:border-[#46a758]"
                     >
+                      <div className="flex items-center gap-2">
+                        <ClockIcon className="h-5 w-5 text-gray-600" />
+                        <span className="text-gray-700">
+                          {time ? time : selectTimeLabel}
+                        </span>
+                      </div>
+                      <ChevronDownIcon className="h-4 w-4 text-gray-400" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-36 p-1" align="start">
+                    {timeOptions.map((t) => (
                       <Button
-                        id={getId("book_button")}
-                        className={`${bookButtonVariation.className || "bg-[#46a758] hover:bg-[#3d8f4e] text-white px-6 py-2 rounded-lg"} font-semibold text-sm`}
-                        data-testid={bookButtonVariation.dataTestId}
+                        key={t}
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => {
+                          handleTimeSelect(t);
+                          setTimeOpen(false);
+                        }}
                       >
-                        {bookNowLabel}
+                        {t}
                       </Button>
-                    </SeedLink>
-                  </div>
-                )
-              ) : (
-                <div className="text-gray-500 text-sm mt-2">
-                  {getText("please_select_time")}
-                </div>
-              )}
+                    ))}
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
+            {/* Booking button - always visible */}
+            <SeedLink
+              href={buildBookingHref(id, time || "1:00 PM", {
+                date: formattedDate,
+                people: people || 2,
+              })}
+              onClick={() =>
+                logEvent(EVENT_TYPES.BOOK_RESTAURANT, {
+                  restaurantId: id,
+                  restaurantName: r?.name ?? "",
+                  cuisine: r?.cuisine ?? "",
+                  desc: r?.desc ?? "",
+                  area: "test",
+                  reviews: r?.reviews ?? 0,
+                  bookings: r?.bookings ?? 0,
+                  rating: r?.rating ?? 0,
+                  date: formattedDate,
+                  time: time || "1:00 PM",
+                  people: people || 2,
+                })
+              }
+            >
+              <Button
+                id={getId("book_button")}
+                className="w-full bg-[#46a758] hover:bg-[#3d8f4a] text-white px-6 py-3 rounded-lg font-semibold text-base shadow-sm transition-colors"
+              >
+                {bookNowLabel || "Book Now"}
+              </Button>
+            </SeedLink>
           </div>
         </div>
       </div>

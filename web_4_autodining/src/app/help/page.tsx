@@ -1,10 +1,9 @@
 "use client";
 
 import { useSeed } from "@/context/SeedContext";
-import { useSeedVariation } from "@/dynamic/v1-layouts";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import Navbar from "@/components/Navbar";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { ChevronDown, ChevronUp, Search, BookOpen, HelpCircle, MessageCircle, Calendar } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -24,31 +23,6 @@ export default function HelpPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
-  // Use seed-based layout variations
-  const pageLayoutVariation = useSeedVariation("pageLayout", undefined, layoutSeed);
-  const sectionLayoutVariation = useSeedVariation("sectionLayout", undefined, layoutSeed);
-
-  // Calculate layout variation for styling
-  const layoutMode = useMemo(() => (layoutSeed % 3 + 3) % 3, [layoutSeed]);
-  const layoutVariation = useMemo(() => {
-    return {
-      textAlign: ["text-left md:text-left", "text-center", "text-left md:text-right"][layoutMode],
-      helpGrid:
-        layoutMode === 1
-          ? "grid grid-cols-1 md:grid-cols-3 gap-6"
-          : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
-    };
-  }, [layoutMode]);
-
-  const sectionOrder = useMemo(() => {
-    const sequences: Record<number, ("search" | "help" | "filters" | "faq" | "cta")[]> = {
-      0: ["search", "help", "filters", "faq", "cta"],
-      1: ["help", "search", "faq", "filters", "cta"],
-      2: ["filters", "help", "search", "faq", "cta"],
-    };
-    return sequences[layoutMode];
-  }, [layoutMode]);
 
   const faqs: FAQItem[] = [
     {
@@ -174,10 +148,9 @@ export default function HelpPage() {
   return (
     <main>
       <Navbar />
-      <div className={`${pageLayoutVariation.className || "max-w-6xl mx-auto px-4 py-8"}`} 
-           data-testid={pageLayoutVariation.dataTestId}>
+      <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
-        <div className={`mb-12 ${hasSeedParam ? layoutVariation.textAlign : "text-center"}`}>
+        <div className="mb-12 text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
             How can we help you?
           </h1>
@@ -187,146 +160,123 @@ export default function HelpPage() {
           </p>
         </div>
 
-        {sectionOrder.map((sectionKey) => {
-          if (sectionKey === "search") {
-            return (
-              <section
-                key="search"
-                className={`${sectionLayoutVariation.className || "mb-12"}`}
-                data-testid={sectionLayoutVariation.dataTestId}
+        {/* Search Section */}
+        <section className="mb-12">
+          <div className="relative max-w-2xl mx-auto">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search for help..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none text-lg"
+            />
+          </div>
+        </section>
+
+        {/* Help Sections */}
+        <section className="mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {helpSections.map((section, index) => (
+              <a
+                key={index}
+                href={section.link}
+                className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758] text-center cursor-default"
               >
-                <div className="relative max-w-2xl mx-auto">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    placeholder="Search for help..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#46a758] focus:border-[#46a758] outline-none text-lg"
-                  />
-                </div>
-              </section>
-            );
-          }
+                <div className="text-[#46a758] mb-4 flex justify-center">{section.icon}</div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{section.title}</h3>
+                <p className="text-gray-600 text-sm">{section.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
 
-          if (sectionKey === "help") {
-            return (
-              <section key="help" className={`${sectionLayoutVariation.className || "mb-12"}`}>
-                <div className={layoutVariation.helpGrid}>
-                  {helpSections.map((section, index) => (
-                    <a
-                      key={index}
-                      href={section.link}
-                      className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 hover:border-[#46a758] text-center"
-                    >
-                      <div className="text-[#46a758] mb-4 flex justify-center">{section.icon}</div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">{section.title}</h3>
-                      <p className="text-gray-600 text-sm">{section.description}</p>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            );
-          }
+        {/* Category Filters */}
+        <section className="mb-8">
+          <div className="flex flex-wrap gap-3 justify-center">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => {
+                  setSelectedCategory(category);
+                  logEvent(EVENT_TYPES.HELP_CATEGORY_SELECTED, {
+                    category,
+                    layoutSeed,
+                  });
+                }}
+                className={`px-6 py-2 rounded-full font-medium transition-colors ${
+                  selectedCategory === category
+                    ? "bg-[#46a758] text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </button>
+            ))}
+          </div>
+        </section>
 
-          if (sectionKey === "filters") {
-            return (
-              <section key="filters" className={`${sectionLayoutVariation.className || "mb-8"}`}>
-                <div
-                  className={`flex flex-wrap gap-3 ${
-                    layoutMode === 2 ? "justify-start md:justify-between" : "justify-center"
-                  }`}
+        {/* FAQ Section */}
+        <section className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {filteredFAQs.map((faq, index) => (
+              <div
+                key={index}
+                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <button
+                  onClick={() => toggleFAQ(index, faq)}
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
                 >
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        logEvent(EVENT_TYPES.HELP_CATEGORY_SELECTED, {
-                          category,
-                          layoutSeed,
-                        });
-                      }}
-                      className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                        selectedCategory === category
-                          ? "bg-[#46a758] text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
-                    >
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </section>
-            );
-          }
-
-          if (sectionKey === "faq") {
-            return (
-              <section key="faq" className={`${sectionLayoutVariation.className || "mb-12"}`}>
-                <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                  Frequently Asked Questions
-                </h2>
-                <div className={`${layoutMode === 0 ? "space-y-4" : "grid gap-4 md:grid-cols-2"}`}>
-                  {filteredFAQs.map((faq, index) => (
-                    <div
-                      key={index}
-                      className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
-                    >
-                      <button
-                        onClick={() => toggleFAQ(index, faq)}
-                        className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
-                      >
-                        <div className="flex-1">
-                          <span className="text-xs font-semibold text-[#46a758] uppercase tracking-wide mr-3">
-                            {faq.category}
-                          </span>
-                          <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
-                        </div>
-                        {openIndex === index ? (
-                          <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
-                        )}
-                      </button>
-                      {openIndex === index && (
-                        <div className="px-6 pb-5 pt-0">
-                          <div className="pl-0 border-l-4 border-[#46a758] pl-4">
-                            <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
-                          </div>
-                        </div>
-                      )}
+                  <div className="flex-1">
+                    <span className="text-xs font-semibold text-[#46a758] uppercase tracking-wide mr-3">
+                      {faq.category}
+                    </span>
+                    <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
+                  </div>
+                  {openIndex === index ? (
+                    <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 ml-4" />
+                  )}
+                </button>
+                {openIndex === index && (
+                  <div className="px-6 pb-5 pt-0">
+                    <div className="pl-0 border-l-4 border-[#46a758] pl-4">
+                      <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
                     </div>
-                  ))}
-                </div>
-                {filteredFAQs.length === 0 && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500 text-lg">
-                      No results found. Try adjusting your search or category filter.
-                    </p>
                   </div>
                 )}
-              </section>
-            );
-          }
-
-          return (
-            <section key="cta" className={`${sectionLayoutVariation.className || "mb-12"}`}>
-              <div className="bg-gradient-to-r from-[#46a758] to-[#3d8f4e] rounded-2xl p-8 md:p-12 text-white text-center">
-                <h2 className="text-3xl font-bold mb-4">Still need help?</h2>
-                <p className="text-lg mb-6 opacity-90">
-                  Can't find what you're looking for? Our support team is ready to assist you.
-                </p>
-                <a
-                  href="/contact"
-                  className="inline-block bg-white text-[#46a758] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  Contact Support
-                </a>
               </div>
-            </section>
-          );
-        })}
+            ))}
+          </div>
+          {filteredFAQs.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">
+                No results found. Try adjusting your search or category filter.
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* CTA Section */}
+        <section className="mb-12">
+          <div className="bg-gradient-to-r from-[#46a758] to-[#3d8f4e] rounded-2xl p-8 md:p-12 text-white text-center">
+            <h2 className="text-3xl font-bold mb-4">Still need help?</h2>
+            <p className="text-lg mb-6 opacity-90">
+              Can't find what you're looking for? Our support team is ready to assist you.
+            </p>
+            <a
+              href="/contact"
+              className="inline-block bg-white text-[#46a758] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              Contact Support
+            </a>
+          </div>
+        </section>
       </div>
     </main>
   );

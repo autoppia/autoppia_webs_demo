@@ -28,17 +28,17 @@ const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
   // Use SeedContext for unified seed management
   const { seed: baseSeed, resolvedSeeds, setSeed: setSeedInContext, getNavigationUrl: seedGetNavigationUrl } = useSeed();
-  const layoutSeed = resolvedSeeds.v1 ?? baseSeed;
+  // LAYOUT FIJO - La seed se mantiene en URL para V2 y V3, pero el layout (V1) es siempre fijo como seed=1
   const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
   
   const [seed, setSeed] = useState(baseSeed);
-  const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(layoutSeed));
+  const [currentVariant, setCurrentVariant] = useState<LayoutVariant>(getLayoutVariant(1));
   
-  // Sync with SeedContext
+  // Sync with SeedContext - la seed se mantiene pero el layout siempre es seed=1
   useEffect(() => {
     setSeed(baseSeed);
-    setCurrentVariant(getLayoutVariant(layoutSeed));
-  }, [baseSeed, layoutSeed]);
+    setCurrentVariant(getLayoutVariant(1)); // Siempre usar layout de seed=1
+  }, [baseSeed]);
 
   // Sync v2Seed to window for backward compatibility
   useEffect(() => {
@@ -48,10 +48,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     console.log("[LayoutContext] v2-seed set", { v2Seed });
   }, [v2Seed]);
 
-  // Update variant when layoutSeed changes
-  useEffect(() => {
-    setCurrentVariant(getLayoutVariant(layoutSeed));
-  }, [layoutSeed]);
+  // LAYOUT FIJO - Siempre usar layout de seed=1
 
   const handleSetSeed = (newSeed: number) => {
     if (newSeed >= 1 && newSeed <= 300) {

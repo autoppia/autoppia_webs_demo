@@ -1,13 +1,14 @@
-import { Header } from "@/layout/Header";
-import { Footer } from "@/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { SeedProvider } from "@/context/SeedContext";
 import { AuthProvider } from "@/context/AuthContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
-import { BodyWrapper } from "@/layout/BodyWrapper";
-import { DataReadyGate } from "@/layout/DataReadyGate";
+import { BodyWrapper } from "@/components/layout/BodyWrapper";
+import { DataReadyGate } from "@/components/layout/DataReadyGate";
+import { SeedRedirect } from "@/components/layout/SeedRedirect";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -28,14 +29,19 @@ export default function RootLayout({
       <body className={`${inter.className} bg-neutral-950 text-white`} suppressHydrationWarning>
         <AuthProvider>
           <SeedProvider>
+            <Suspense fallback={null}>
+              <SeedRedirect />
+            </Suspense>
             <Suspense fallback={<div className="h-16 w-full bg-neutral-900" />}>
               <Header />
             </Suspense>
-            <DataReadyGate>
-              <BodyWrapper>
-                {children}
-              </BodyWrapper>
-            </DataReadyGate>
+            <Suspense fallback={<div className="min-h-screen bg-neutral-950" />}>
+              <DataReadyGate>
+                <BodyWrapper>
+                  {children}
+                </BodyWrapper>
+              </DataReadyGate>
+            </Suspense>
             <Footer />
           </SeedProvider>
         </AuthProvider>

@@ -1,5 +1,6 @@
 import type { Product } from "@/context/CartContext";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
+import fallbackProducts from "./original/products_1.json"
 
 type SeedWindow = typeof window & { __autozoneV2Seed?: number | null };
 
@@ -36,7 +37,8 @@ const resolveSeed = (dbModeEnabled: boolean, v2SeedValue?: number | null): numbe
 };
 
 const normalizeImageUrl = (image?: string, category?: string): string => {
-  if (!image) return getCategoryFallback(category);
+  const DEFAULT = "/images/homepage_categories/coffee_machine.jpg";
+  if (!image) return getCategoryFallback(category, DEFAULT);
 
   if (image.startsWith("/images/")) {
     return image;
@@ -48,7 +50,7 @@ const normalizeImageUrl = (image?: string, category?: string): string => {
     return `${image}${sep}w=150&h=150&fit=crop&crop=entropy&auto=format&q=60`;
   }
 
-  return getCategoryFallback(category);
+  return getCategoryFallback(category, DEFAULT);
 };
 
 export const categoryFallbacks: Record<string, string> = {
@@ -75,30 +77,40 @@ export async function initializeProducts(
   v2SeedValue?: number | null,
   limit = 100
 ): Promise<Product[]> {
-  const dbModeEnabled = isDbLoadModeEnabled();
-  
-  // Wait a bit for SeedContext to sync v2Seed to window if needed
-  if (typeof window !== "undefined" && dbModeEnabled) {
-    await new Promise(resolve => setTimeout(resolve, 100));
+  try {
+    const dbModeEnabled = isDbLoadModeEnabled();
+    if (!dbModeEnabled) {
+      const normalized = normalizeProductImages(fallbackProducts as Product[]);
+      dynamicProducts = normalized;
+      return normalized;
+    }
+    // Wait a bit for SeedContext to sync v2Seed to window if needed
+    if (typeof window !== "undefined" && dbModeEnabled) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
+
+    const products = await fetchSeededSelection<Product>({
+      projectKey: "web_3_autozone",
+      entityType: "products",
+      seedValue: effectiveSeed,
+      limit,
+      method: "distribute",
+      filterKey: "category",
+    });
+
+    if (!Array.isArray(products) || products.length === 0) {
+      console.warn(`[autozone] No products returned from dataset (seed=${effectiveSeed}), falling back to local data`);
+      const fallback = Array.isArray(fallbackProducts) ? (fallbackProducts as Product[]) : [];
+      return normalizeProductImages(fallback);
+    }
+
+    dynamicProducts = normalizeProductImages(products);
+    return dynamicProducts;
+  } catch (error) {
+    console.error("[autozone] Error in initializeProducts, returning fallback", error);
+    const fallback = Array.isArray(fallbackProducts) ? (fallbackProducts as Product[]) : [];
+    return normalizeProductImages(fallback);
   }
-  
-  const effectiveSeed = resolveSeed(dbModeEnabled, v2SeedValue);
-
-  const products = await fetchSeededSelection<Product>({
-    projectKey: "web_3_autozone",
-    entityType: "products",
-    seedValue: effectiveSeed,
-    limit,
-    method: "distribute",
-    filterKey: "category",
-  });
-
-  if (!Array.isArray(products) || products.length === 0) {
-    throw new Error(
-      `[autozone] No products returned from dataset (seed=${effectiveSeed})`
-    );
-  }
-
-  dynamicProducts = normalizeProductImages(products);
-  return dynamicProducts;
 }

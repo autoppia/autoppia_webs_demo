@@ -86,3 +86,6 @@ cython_debug/
 */.next/
 */node_modules/
 *pnpm-lock.yaml
+
+# Local copies of fallback datasets (copied during Docker build)
+web_*/src/data/original/*.json

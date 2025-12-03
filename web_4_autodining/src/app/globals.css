@@ -77,3 +77,10 @@
   display: none !important;
 }
 
+/* Hide scrollbars for custom carousels */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

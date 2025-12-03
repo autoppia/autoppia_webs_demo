@@ -1,7 +1,7 @@
 # Stage 0: prod deps only (no dev deps like biome)
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY web_6_automail/package.json web_6_automail/package-lock.json ./
 RUN npm ci --omit=dev
 
 # Stage 1: build with dev deps
@@ -9,12 +9,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY web_6_automail/package.json web_6_automail/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
 RUN npm ci
 
-COPY . .
+COPY web_6_automail/ .
+# Copy original dataset files for fallback
+COPY webs_server/initial_data/web_6_automail/original/emails_1.json src/data/original/emails_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

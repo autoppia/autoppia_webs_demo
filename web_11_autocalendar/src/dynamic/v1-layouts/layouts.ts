@@ -26,46 +26,14 @@ export interface SeedLayoutConfig {
 
 const TOTAL_LAYOUT_VARIANTS = 20;
 
+/**
+ * LAYOUT FIJO - Siempre como seed 1 (Layout 1)
+ * Tu sitio web es lo que es, sin variaciones
+ * La seed en la URL se mantiene pero no afecta el layout
+ */
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  // If no seed provided or dynamic HTML is disabled, return default
-  if (!seed || seed < 1 || seed > 300) {
-    return getDefaultLayout();
-  }
-
-  // Special case: Seeds 160-170 should use the same layout as seed 80 (Layout 3)
-  if (seed >= 160 && seed <= 170) {
-    return getLayoutByIndex(3);
-  }
-
-  // Special case: Seeds 5,15,25,35,45,55,65,75...295 should use Layout 2
-  if (seed % 10 === 5) {
-    return getLayoutByIndex(2);
-  }
-
-  // Special case: Seed 8 should use Layout 1
-  if (seed === 8) {
-    return getLayoutByIndex(1);
-  }
-
-  // Special cases: New unique layouts for specific seeds
-  const specialLayouts: { [key: number]: number } = {
-    180: 11, // Layout 11 - Ultra-wide Timeline
-    190: 18, // Layout 18 - Split View with Events
-    200: 20, // Layout 20 - Asymmetric Calendar
-    210: 14, // Layout 14 - Dashboard-style Calendar
-    250: 15, // Layout 15 - Magazine-style Agenda
-    260: 19, // Layout 19 - Kanban-Style Events
-    270: 17, // Layout 17 - Premium Calendar Showcase
-  };
-
-  if (specialLayouts[seed]) {
-    return getLayoutByIndex(specialLayouts[seed]);
-  }
-
-  // Map seed (1-300) to layout index (1-total variants)
-  const layoutIndex = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
-
-  return getLayoutByIndex(layoutIndex);
+  // LAYOUT FIJO - Siempre devolver Layout 1 (seed 1)
+  return getLayoutByIndex(1);
 }
 
 export function getLayoutClasses(seed?: number): string {
@@ -515,24 +483,13 @@ function getDefaultLayout(): SeedLayoutConfig {
 
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicEnabled(): boolean {
-  const rawFlag =
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE ??
-    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
-    process.env.ENABLE_DYNAMIC_V1_STRUCTURE ??
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
-    process.env.ENABLE_DYNAMIC_V1 ??
-    '';
-
-  const normalized = rawFlag.toString().trim().toLowerCase();
-  return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';
+  return false; // Siempre deshabilitado - el layout nunca cambia
 }
 
 // Helper function to get effective layout config
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled()) {
-    return getDefaultLayout();
-  }
-  return getSeedLayout(seed);
+  // Siempre devolver el layout fijo de seed 1, ignorando la seed
+  return getLayoutByIndex(1);
 }
 
 // Helper function to get URL search params with seed validation

@@ -181,24 +181,18 @@ const LAYOUT_VARIATIONS: SeedLayoutConfig[] = [
   },
 ];
 
+/**
+ * LAYOUT FIJO - Siempre como seed 1 (Layout 0)
+ * Tu sitio web es lo que es, sin variaciones
+ * La seed en la URL se mantiene pero no afecta el layout
+ */
 export function isDynamicEnabled(): boolean {
-  const raw = (
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
-    process.env.ENABLE_DYNAMIC_V1 ??
-    ""
-  )
-    .toString()
-    .toLowerCase();
-  return raw === "true" || raw === "1" || raw === "yes" || raw === "on";
+  return false; // Siempre deshabilitado - el layout nunca cambia
 }
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled() || !seed) {
-    return LAYOUT_VARIATIONS[0];
-  }
-
-  const layoutIndex = ((Math.floor(seed) - 1) % LAYOUT_VARIATIONS.length) + 1;
-  return getLayoutByIndex(layoutIndex);
+  // LAYOUT FIJO - Siempre devolver Layout 0 (seed 1)
+  return LAYOUT_VARIATIONS[0];
 }
 
 function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
@@ -207,7 +201,8 @@ function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
 }
 
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  return getSeedLayout(seed);
+  // Siempre devolver el layout fijo de seed 1, ignorando la seed
+  return LAYOUT_VARIATIONS[0];
 }
 
 export function getLayoutClasses(

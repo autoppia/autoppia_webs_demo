@@ -24,25 +24,39 @@ export class DynamicDataProvider {
 
   private constructor() {
     this.isEnabled = this.resolveV2Enabled();
-    if (typeof window === "undefined") {
-      this.ready = true;
-      this.readyPromise = Promise.resolve();
-      return;
-    }
-
-    if (!this.isEnabled) {
-      this.ready = true;
-      this.readyPromise = Promise.resolve();
-      return;
-    }
-
     this.handleSeedEvent = this.handleSeedEvent.bind(this);
-    window.addEventListener(
-      "autodelivery:v2SeedChange",
-      this.handleSeedEvent as EventListener
-    );
+    this.readyPromise = this.bootstrap();
+  }
 
-    this.readyPromise = this.loadData();
+  /**
+   * Initializes data depending on whether V2 (DB mode) is enabled.
+   * When V2 is disabled, we still load the static originals so the UI never renders empty.
+   */
+  private async bootstrap(): Promise<void> {
+    // Always ensure restaurants are populated, even when V2 is off.
+    if (!this.isEnabled) {
+      try {
+        this.restaurants = await initializeRestaurants(1);
+        this.testimonials = getRandomTestimonials(5);
+        this.ready = true;
+        this.notifyRestaurants();
+        this.notifyTestimonials();
+      } catch (error) {
+        console.error("[DynamicDataProvider] Failed to load fallback data:", error);
+        this.ready = true;
+      }
+      return;
+    }
+
+    // When V2 is enabled, listen for seed changes on the client
+    if (typeof window !== "undefined") {
+      window.addEventListener(
+        "autodelivery:v2SeedChange",
+        this.handleSeedEvent as EventListener
+      );
+    }
+
+    await this.loadData();
   }
 
   public static getInstance(): DynamicDataProvider {

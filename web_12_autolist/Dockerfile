@@ -1,7 +1,7 @@
 # Stage 0: prod deps only (no dev deps like biome)
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY web_12_autolist/package.json web_12_autolist/package-lock.json ./
 RUN npm ci --omit=dev
 
 # Stage 1: build with dev deps
@@ -9,12 +9,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY web_12_autolist/package.json web_12_autolist/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
 RUN npm ci
 
-COPY . .
+COPY web_12_autolist/ .
+# Copy original dataset files for fallback
+COPY webs_server/initial_data/web_12_autolist/original/tasks_1.json src/data/original/tasks_1.json
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions

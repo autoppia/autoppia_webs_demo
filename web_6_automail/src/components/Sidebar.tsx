@@ -71,7 +71,9 @@ export function Sidebar({ textStructure }: SidebarProps) {
         (email) =>
           !email.isDraft &&
           email.from.email !== "me@gmail.com" &&
-          !email.labels.some((l) => ["sent", "spam", "trash", "archive"].includes(l.id))
+          !email.labels.some((l) =>
+            ["sent", "spam", "trash", "archive"].includes(l.id)
+          )
       ).length,
       starred: emails.filter(
         (email) =>
@@ -91,7 +93,8 @@ export function Sidebar({ textStructure }: SidebarProps) {
       ).length,
       drafts: emails.filter(
         (email) =>
-          email.isDraft && !email.labels.some((l) => ["trash", "archive"].includes(l.id))
+          email.isDraft &&
+          !email.labels.some((l) => ["trash", "archive"].includes(l.id))
       ).length,
       important: emails.filter(
         (email) =>
@@ -130,15 +133,69 @@ export function Sidebar({ textStructure }: SidebarProps) {
   const labelCounts = getLabelCounts();
 
   const navigationItems: NavigationItem[] = [
-    { id: "inbox", label: textStructure?.inbox_label || getText("inbox"), icon: Inbox, count: counts.inbox, type: "folder" },
-    { id: "starred", label: textStructure?.starred_label || getText("starred"), icon: Star, count: counts.starred, type: "folder" },
-    { id: "snoozed", label: "Snoozed", icon: Clock, count: counts.snoozed, type: "folder" },
-    { id: "sent", label: textStructure?.sent_label || getText("sent"), icon: Send, count: counts.sent, type: "folder" },
-    { id: "drafts", label: textStructure?.drafts_label || getText("drafts"), icon: FileText, count: counts.drafts, type: "folder" },
-    { id: "important", label: "Important", icon: AlertTriangle, count: counts.important, type: "folder" },
-    { id: "archive", label: "Archive", icon: PenTool, count: counts.archive, type: "folder" },
-    { id: "spam", label: "Spam", icon: Mail, count: counts.spam, type: "folder" },
-    { id: "trash", label: textStructure?.trash_label || getText("trash"), icon: Trash2, count: counts.trash, type: "folder" },
+    {
+      id: "inbox",
+      label: textStructure?.inbox_label || getText("inbox"),
+      icon: Inbox,
+      count: counts.inbox,
+      type: "folder",
+    },
+    {
+      id: "starred",
+      label: textStructure?.starred_label || getText("starred"),
+      icon: Star,
+      count: counts.starred,
+      type: "folder",
+    },
+    {
+      id: "snoozed",
+      label: "Snoozed",
+      icon: Clock,
+      count: counts.snoozed,
+      type: "folder",
+    },
+    {
+      id: "sent",
+      label: textStructure?.sent_label || getText("sent"),
+      icon: Send,
+      count: counts.sent,
+      type: "folder",
+    },
+    {
+      id: "drafts",
+      label: textStructure?.drafts_label || getText("drafts"),
+      icon: FileText,
+      count: counts.drafts,
+      type: "folder",
+    },
+    {
+      id: "important",
+      label: "Important",
+      icon: AlertTriangle,
+      count: counts.important,
+      type: "folder",
+    },
+    {
+      id: "archive",
+      label: "Archive",
+      icon: PenTool,
+      count: counts.archive,
+      type: "folder",
+    },
+    {
+      id: "spam",
+      label: "Spam",
+      icon: Mail,
+      count: counts.spam,
+      type: "folder",
+    },
+    {
+      id: "trash",
+      label: textStructure?.trash_label || getText("trash"),
+      icon: Trash2,
+      count: counts.trash,
+      type: "folder",
+    },
   ];
 
   const handleItemClick = (item: NavigationItem) => {
@@ -154,7 +211,8 @@ export function Sidebar({ textStructure }: SidebarProps) {
   };
 
   const isActive = (item: NavigationItem) => {
-    if (item.type === "folder") return currentFilter.folder === item.id && !currentFilter.label;
+    if (item.type === "folder")
+      return currentFilter.folder === item.id && !currentFilter.label;
     return currentFilter.label === item.id;
   };
 
@@ -227,19 +285,27 @@ export function Sidebar({ textStructure }: SidebarProps) {
             <PenTool className="h-4 w-4" />
             Compose
           </Button>
-          
+
           <div className="flex items-center gap-2 flex-wrap">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item);
               return (
                 <Button
-                  id={textStructure?.ids[`${item.id}_btn` as keyof typeof textStructure.ids] || item.id}
+                  id={
+                    textStructure?.ids[
+                      `${item.id}_btn` as keyof typeof textStructure.ids
+                    ] || item.id
+                  }
                   key={item.id}
                   variant={active ? "secondary" : "ghost"}
                   className="h-8 px-3 text-sm font-normal rounded-lg"
                   onClick={() => handleItemClick(item)}
-                  aria-label={textStructure?.aria_labels[`${item.id}_nav` as keyof typeof textStructure.aria_labels] || `Navigate to ${item.label}`}
+                  aria-label={
+                    textStructure?.aria_labels[
+                      `${item.id}_nav` as keyof typeof textStructure.aria_labels
+                    ] || `Navigate to ${item.label}`
+                  }
                 >
                   <Icon className="h-4 w-4" />
                   <span className="ml-2">{item.label}</span>
@@ -269,102 +335,130 @@ export function Sidebar({ textStructure }: SidebarProps) {
               className={getComposeButtonClasses()}
               size="lg"
               id={textStructure?.ids.compose_button || getId("compose_button")}
-              aria-label={textStructure?.aria_labels.compose_button || "Compose new email"}
+              aria-label={
+                textStructure?.aria_labels.compose_button || "Compose new email"
+              }
             >
               <PenTool className="h-4 w-4" />
-              {textStructure?.compose_button || 'Compose'}
+              {textStructure?.compose_button || "Compose"}
             </Button>
           </div>
 
           <ScrollArea className="flex-1 px-2">
-        <div className="space-y-1 pb-4">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item);
-            return (
-              <Button
-                id={textStructure?.ids[`${item.id}_btn` as keyof typeof textStructure.ids] || item.id}
-                key={item.id}
-                variant={active ? "secondary" : "ghost"}
-                className={cn("w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover", active && "sidebar-item-active")}
-                onClick={() => handleItemClick(item)}
-                aria-label={textStructure?.aria_labels[`${item.id}_nav` as keyof typeof textStructure.aria_labels] || `Navigate to ${item.label}`}
-              >
-                <Icon className="h-4 w-4" />
-                <span className="flex-1 text-left">{item.label}</span>
-                {item.count && item.count > 0 && (
-                  <Badge variant="secondary" className="h-5 px-1.5 text-xs">
-                    {item.count > 99 ? "99+" : item.count}
-                  </Badge>
-                )}
-              </Button>
-            );
-          })}
-        </div>
-
-        <Separator className="my-4" />
-
-        <div className="space-y-1 pb-4">
-          <div className="flex items-center justify-between px-3 py-2">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Labels
-            </span>
-            <div className="!block !visible !opacity-100">
-              <DynamicElement elementType="create-label-button" index={0}>
-                <CreateLabelDialog />
-              </DynamicElement>
+            <div className="space-y-1 pb-4">
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item);
+                return (
+                  <Button
+                    id={
+                      textStructure?.ids[
+                        `${item.id}_btn` as keyof typeof textStructure.ids
+                      ] || item.id
+                    }
+                    key={item.id}
+                    variant={active ? "secondary" : "ghost"}
+                    className={cn(
+                      "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover",
+                      active && "sidebar-item-active"
+                    )}
+                    onClick={() => handleItemClick(item)}
+                    aria-label={
+                      textStructure?.aria_labels[
+                        `${item.id}_nav` as keyof typeof textStructure.aria_labels
+                      ] || `Navigate to ${item.label}`
+                    }
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {item.count && item.count > 0 && (
+                      <Badge variant="secondary" className="h-5 px-1.5 text-xs">
+                        {item.count > 99 ? "99+" : item.count}
+                      </Badge>
+                    )}
+                  </Button>
+                );
+              })}
             </div>
-          </div>
-          {customLabels.map((label) => (
-            <Button
-              key={label.id}
-              variant={currentFilter.label === label.id ? "secondary" : "ghost"}
-              className={cn("w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover", currentFilter.label === label.id && "sidebar-item-active")}
-              onClick={() => setFilter({ folder: "inbox", label: label.id })}
-            >
-              <div className="h-3 w-3 rounded-full" style={{ backgroundColor: label.color }} />
-              <span className="flex-1 text-left">{label.name}</span>
-              {labelCounts[label.id] && labelCounts[label.id] > 0 && (
-                <Badge variant="secondary" className="h-5 px-1.5 text-xs">
-                  {labelCounts[label.id] > 99 ? "99+" : labelCounts[label.id]}
-                </Badge>
-              )}
-            </Button>
-          ))}
-        </div>
 
-        <Separator className="my-4" />
+            <Separator className="my-4" />
 
-        <div className="space-y-1 pb-4">
-          <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            More
-          </div>
-          <Button id="contacts-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
-            <Users className="h-4 w-4" />
-            Contacts
-          </Button>
-          <Button id="chats-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
-            <MessageSquare className="h-4 w-4" />
-            Chats
-          </Button>
-          <Button id="settings-button" variant="ghost" className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal">
-            <Settings className="h-4 w-4" />
-            Settings
-          </Button>
-        </div>
-      </ScrollArea>
+            <div className="space-y-1 pb-4">
+              <div className="flex items-center justify-between px-3 py-2">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Labels
+                </span>
+                <div className="!block !visible !opacity-100">
+                  <DynamicElement elementType="create-label-button" index={0}>
+                    <CreateLabelDialog />
+                  </DynamicElement>
+                </div>
+              </div>
+              {customLabels.map((label) => (
+                <Button
+                  key={label.id}
+                  variant={
+                    currentFilter.label === label.id ? "secondary" : "ghost"
+                  }
+                  className={cn(
+                    "w-full justify-start gap-3 h-9 px-3 text-sm font-normal rounded-lg sidebar-item-hover",
+                    currentFilter.label === label.id && "sidebar-item-active"
+                  )}
+                  onClick={() =>
+                    setFilter({ folder: "inbox", label: label.id })
+                  }
+                >
+                  <div
+                    className="h-3 w-3 rounded-full"
+                    style={{ backgroundColor: label.color }}
+                  />
+                  <span className="flex-1 text-left">{label.name}</span>
+                  {labelCounts[label.id] && labelCounts[label.id] > 0 && (
+                    <Badge variant="secondary" className="h-5 px-1.5 text-xs">
+                      {labelCounts[label.id] > 99
+                        ? "99+"
+                        : labelCounts[label.id]}
+                    </Badge>
+                  )}
+                </Button>
+              ))}
+            </div>
 
-      <div className="p-4 border-t border-border">
-        <div className="text-xs text-muted-foreground">
-          <div className="flex justify-between mb-1">
-            <span>Storage used</span>
-            <span>2.1 GB of 15 GB</span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-1">
-            <div className="bg-primary h-1 rounded-full" style={{ width: "14%" }} />
-          </div>
-        </div>
-      </div>
+            <Separator className="my-4" />
+
+            <div className="space-y-1 pb-4">
+              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                More
+              </div>
+              <div className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal text-muted-foreground flex items-center rounded-lg">
+                <Users className="h-4 w-4" />
+                Contacts
+              </div>
+              <div className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal text-muted-foreground flex items-center rounded-lg">
+                <MessageSquare className="h-4 w-4" />
+                Chats
+              </div>
+              <div className="w-full justify-start gap-3 h-8 px-3 text-sm font-normal text-muted-foreground flex items-center rounded-lg">
+                <Settings className="h-4 w-4" />
+                Settings
+              </div>
+            </div>
+
+            <div className="px-3 py-4">
+              <div className="text-xs text-muted-foreground">
+                <div className="flex justify-between mb-1">
+                  <span>Storage used</span>
+                  <span>2.1 GB of 15 GB</span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-1">
+                  <div
+                    className="bg-primary h-1 rounded-full"
+                    style={{ width: "14%" }}
+                  />
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
         </>
       )}
     </div>

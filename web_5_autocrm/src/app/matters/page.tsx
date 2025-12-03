@@ -2,9 +2,8 @@
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import {
-  Briefcase,
-  Plus,
   FileText,
+  Plus,
   CheckCircle,
   XCircle,
   Archive,
@@ -14,6 +13,7 @@ import {
   Filter,
   ArrowUpDown,
   Pencil,
+  User,
 } from "lucide-react";
 import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
@@ -23,6 +23,7 @@ import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
+import { clients as staticClients } from "@/library/dataset";
 
 const STORAGE_KEY = "matters";
 
@@ -92,6 +93,27 @@ function MattersListPageContent() {
     entityType: "matters",
     seedValue: v2Seed,
   });
+  
+  // Load clients to get avatars
+  const { data: clientsData } = useProjectData<any>({
+    projectKey: "web_5_autocrm",
+    entityType: "clients",
+    seedValue: v2Seed,
+  });
+  
+  const clients = useMemo(() => {
+    return (clientsData && clientsData.length > 0 ? clientsData : staticClients).map((c: any) => ({
+      id: c.id,
+      name: c.name ?? c.title ?? "",
+      avatar: c.avatar ?? "",
+    }));
+  }, [clientsData]);
+  
+  const getClientAvatar = (clientName: string): string => {
+    const client = clients.find((c) => c.name === clientName);
+    return client?.avatar || "";
+  };
+  
   console.log("[MattersPage] API response", {
     seed: v2Seed,
     count: data?.length ?? 0,
@@ -370,7 +392,7 @@ function MattersListPageContent() {
                 isSelected(matter.id) ? "ring-2 ring-accent-forest/30" : ""
               }`}
             >
-              <div className="absolute top-4 left-4">
+              <div className="absolute top-1/2 left-4 -translate-y-1/2">
                 <input
                   type="checkbox"
                   checked={isSelected(matter.id)}
@@ -385,8 +407,24 @@ function MattersListPageContent() {
                 className="block p-6 pl-16"
               >
                 <div className="flex justify-between items-start">
-                  <div className="flex gap-4">
-                    <Briefcase className="w-6 h-6 text-zinc-400" />
+                  <div className="flex gap-4 items-center">
+                    {getClientAvatar(matter.client) ? (
+                      <img
+                        src={getClientAvatar(matter.client)}
+                        alt={`${matter.client} avatar`}
+                        className="w-12 h-12 rounded-full object-cover border border-zinc-200 flex-shrink-0"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.classList.remove('hidden');
+                        }}
+                      />
+                    ) : null}
+                    <div className={`w-12 h-12 rounded-full bg-accent-forest/10 flex items-center justify-center flex-shrink-0 ${getClientAvatar(matter.client) ? 'hidden' : ''}`}>
+                      <User className="w-6 h-6 text-accent-forest" />
+                    </div>
+                    <FileText className="w-6 h-6 text-zinc-400 flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-lg">{matter.name}</h3>
                       <p className="text-zinc-600 mt-1">{matter.client}</p>

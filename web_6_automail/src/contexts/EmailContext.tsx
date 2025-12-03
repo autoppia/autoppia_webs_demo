@@ -97,7 +97,7 @@ const initialState: EmailState = {
   composeData: initialComposeData,
   searchQuery: "",
   currentPage: 1,
-  itemsPerPage: 50, // Show all emails on one page since we only have 10
+  itemsPerPage: 15,
   customLabels: [...userLabels], // Start with default Work and Personal labels
   editingDraftId: null,
 };
