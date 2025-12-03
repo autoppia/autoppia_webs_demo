@@ -11,6 +11,17 @@ export default function ClientBody({
   useEffect(() => {
     // This runs only on the client after hydration
     document.body.className = "antialiased";
+
+    // Ensure a default seed=1 in the URL (for consistent state) without reload
+    try {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.get("seed")) {
+        url.searchParams.set("seed", "1");
+        window.history.replaceState({}, "", url.toString());
+      }
+    } catch {
+      // ignore URL errors
+    }
   }, []);
 
   return <div className="antialiased">{children}</div>;

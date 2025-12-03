@@ -23,45 +23,8 @@ export interface SeedLayoutConfig {
 const TOTAL_LAYOUT_VARIANTS = 20;
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  // If no seed provided or dynamic HTML is disabled, return default
-  if (!seed || seed < 1 || seed > 300) {
-    return getDefaultLayout();
-  }
-
-  // Special case: Seeds 160-170 should use the same layout as seed 80 (Layout 3)
-  if (seed >= 160 && seed <= 170) {
-    return getLayoutByIndex(3);
-  }
-
-  // Special case: Seeds 5,15,25,35,45,55,65,75...295 should use Layout 2
-  if (seed % 10 === 5) {
-    return getLayoutByIndex(2);
-  }
-
-  // Special case: Seed 8 should use Layout 1
-  if (seed === 8) {
-    return getLayoutByIndex(1);
-  }
-
-  // Special cases: New unique layouts for specific seeds
-  const specialLayouts: { [key: number]: number } = {
-    180: 11, // New Layout 11 - Ultra-wide layout
-    190: 18, // New Layout 18 - Split-screen layout
-    200: 20, // New Layout 20 - Asymmetric layout
-    210: 14, // New Layout 14 - Dashboard-style layout
-    250: 15, // New Layout 15 - Magazine-style layout
-    260: 19, // New Layout 19 - Card-stack layout
-    270: 17, // New Layout 17 - Premium showcase layout
-  };
-
-  if (specialLayouts[seed]) {
-    return getLayoutByIndex(specialLayouts[seed]);
-  }
-
-  // Map seed (1-300) to layout index (1-total variants)
-  const layoutIndex = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
-
-  return getLayoutByIndex(layoutIndex);
+  // Static layout: ignore seed and return default
+  return getDefaultLayout();
 }
 
 function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {

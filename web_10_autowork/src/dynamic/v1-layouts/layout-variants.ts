@@ -521,8 +521,7 @@ export const LAYOUT_VARIANTS: LayoutVariant[] = [
 ];
 
 export function getLayoutVariant(seed: number): LayoutVariant {
-  const variantIndex = (seed - 1) % LAYOUT_VARIANTS.length;
-  return LAYOUT_VARIANTS[variantIndex];
+  return LAYOUT_VARIANTS[0]; // Static layout
 }
 
 export function getSeedFromUrl(): number {

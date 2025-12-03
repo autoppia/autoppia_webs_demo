@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from "react";
 import Avatar from "@/components/Avatar";
 import UserSearchBar from "./UserSearchBar";
 import { useSeed } from "@/context/SeedContext";
@@ -6,17 +8,46 @@ import {
   getLayoutClasses,
 } from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
-
-const currentUser = dynamicDataProvider.getUsers()[2] || dynamicDataProvider.getUsers()[0];
+import type { User } from "@/library/dataset";
 
 export default function LeftSidebar() {
   const { seed, resolvedSeeds } = useSeed();
   const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
   const searchClasses = getLayoutClasses(layout, "searchPosition");
+  
+  // Get current user inside component to avoid undefined error
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [recentConnections, setRecentConnections] = useState<User[]>([]);
+  
+  useEffect(() => {
+    const users = dynamicDataProvider.getUsers();
+    const user = users[2] || users[0];
+    if (user) {
+      setCurrentUser(user);
+      // Get recent connections (other users, excluding current user)
+      const connections = users
+        .filter((u) => u.username !== user.username)
+        .slice(0, 3);
+      setRecentConnections(connections);
+    }
+  }, []);
+
+  // Show loading state or placeholder if user not ready
+  if (!currentUser) {
+    return (
+      <aside className="bg-white rounded-lg shadow p-5 mb-5 sticky top-20">
+        <div className="flex flex-col items-center gap-2 mb-4">
+          <div className="w-20 h-20 rounded-full bg-gray-200 animate-pulse" />
+          <div className="h-5 w-32 bg-gray-200 rounded animate-pulse" />
+          <div className="h-4 w-24 bg-gray-200 rounded animate-pulse" />
+        </div>
+      </aside>
+    );
+  }
 
   return (
-    <aside className="bg-white rounded-lg shadow p-5 mb-5 sticky top-20">
+    <aside className="bg-white rounded-lg shadow p-5 mb-5 sticky top-20 min-h-[calc(100vh-6rem)]">
       {/* Always show SearchBar at top */}
       <div className={`${searchClasses} mb-4`}>
         <UserSearchBar />
@@ -35,7 +66,7 @@ export default function LeftSidebar() {
             500
           </span>
         </div>
-        <div className="text-blue-700 font-semibold cursor-pointer mb-1 underline">
+        <div className="text-gray-500 text-xs mb-1">
           View all analytics
         </div>
       </div>
@@ -50,6 +81,61 @@ export default function LeftSidebar() {
 
       <div className="mt-3 text-gray-600 text-sm cursor-pointer hover:text-blue-600">
         <span>&#9734;</span> Saved items
+      </div>
+
+      {/* Curioso: Estadísticas divertidas */}
+      <div className="mt-4 pt-4 border-t">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 mb-3">
+          <div className="text-xs font-semibold text-indigo-700 mb-1">🎯 Network Stats</div>
+          <div className="text-2xl font-bold text-indigo-900">2.4K+</div>
+          <div className="text-xs text-gray-600">Connections this week</div>
+        </div>
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3 mb-3">
+          <div className="text-xs font-semibold text-purple-700 mb-1">🚀 Trending</div>
+          <div className="text-sm text-gray-700">#TechJobs</div>
+          <div className="text-xs text-gray-500 mt-1">15.2K posts today</div>
+        </div>
+      </div>
+
+      {/* Additional content to make sidebar longer */}
+      <div className="mt-4 pt-4 border-t">
+        <h3 className="font-bold text-sm mb-3 text-gray-700">👥 Recent Connections</h3>
+        <div className="space-y-2 text-xs">
+          {recentConnections.length > 0 ? (
+            recentConnections.map((connection) => (
+              <div key={connection.username} className="flex items-center gap-2 text-gray-600">
+                <Avatar 
+                  src={connection.avatar} 
+                  alt={connection.name} 
+                  size={24}
+                  href={`/profile/${connection.username}`}
+                />
+                <span className="truncate">{connection.name}</span>
+              </div>
+            ))
+          ) : (
+            <>
+              <div className="flex items-center gap-2 text-gray-600">
+                <div className="w-6 h-6 rounded-full bg-gray-300"></div>
+                <span>Loading...</span>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-4 pt-4 border-t">
+        <h3 className="font-bold text-sm mb-3 text-gray-700">📌 Featured Posts</h3>
+        <div className="space-y-2 text-xs text-gray-600">
+          <div className="p-2 bg-gray-50 rounded">
+            <div className="font-semibold text-gray-700">Tips for remote work</div>
+            <div className="text-gray-500 mt-1">2.5K views</div>
+          </div>
+          <div className="p-2 bg-gray-50 rounded">
+            <div className="font-semibold text-gray-700">Career growth strategies</div>
+            <div className="text-gray-500 mt-1">1.8K views</div>
+          </div>
+        </div>
       </div>
     </aside>
   );

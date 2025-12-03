@@ -1,14 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { usePathname } from "next/navigation";
-import UserSearchBar from "./UserSearchBar";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
 import {
   getEffectiveLayoutConfig,
   getLayoutClasses,
-  getShuffledItems,
 } from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
@@ -19,6 +18,16 @@ export default function HeaderNav() {
   const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
   const { getId, getClass } = useV3Attributes();
+  
+  // Fix hydration error: use state to get user only on client side
+  const [profileUsername, setProfileUsername] = useState<string>("alexsmith");
+  
+  useEffect(() => {
+    // Only get user on client side to avoid hydration mismatch
+    const users = dynamicDataProvider.getUsers();
+    const username = users[2]?.username || users[0]?.username || "alexsmith";
+    setProfileUsername(username);
+  }, []);
 
   const applyVariant = (type: string, base: string) => {
     const variant = getClass(type, "");
@@ -55,20 +64,16 @@ export default function HeaderNav() {
       idKey: "nav_recommendations_link",
     },
     {
-      href: `/profile/${(dynamicDataProvider.getUsers()[0]?.username) || "alexsmith"}`,
+      href: `/profile/${profileUsername}`,
       label: "Profile",
       eventType: EVENT_TYPES.PROFILE_NAVBAR,
-      eventData: { label: "Profile", username: dynamicDataProvider.getUsers()[0]?.username || "alexsmith" },
+      eventData: { label: "Profile", username: profileUsername },
       idKey: "nav_profile_link",
     }
   ];
 
-  const shuffledNavItems = getShuffledItems(navItems, layoutSeed);
-
-  const searchClasses = getLayoutClasses(layout, "searchPosition");
-
   const getHeaderClasses = () => {
-    const baseClasses = "flex items-center border-b bg-white px-4 shadow-sm";
+    const baseClasses = "flex items-center border-b bg-white shadow-sm";
     
     switch (layout.headerPosition) {
       case 'top':
@@ -90,7 +95,7 @@ export default function HeaderNav() {
       case 'right':
         return "flex flex-col items-start gap-4 h-full py-4 px-3";
       default:
-        return "flex items-center gap-4 w-full max-w-6xl mx-auto";
+        return "flex items-center w-full max-w-[1570px] mx-auto px-6 gap-2";
     }
   };
 
@@ -100,41 +105,42 @@ export default function HeaderNav() {
       case 'right':
         return "flex flex-col gap-2";
       default:
-        return "flex gap-2 ml-4";
+        return "flex gap-2";
     }
   };
 
   return (
     <header className={getHeaderClasses()}>
       <div className={getHeaderContentClasses()}>
-        <div className="text-white bg-blue-600 px-2 py-2">
-          <SeedLink
-            href="/"
-            id={getId("logo_link")}
-            className={applyVariant("nav-link", "flex items-center gap-2")}
-          >
-            <span className="font-bold text-xl tracking-tight text-white">
-              AutoConnect
-            </span>
-          </SeedLink>
-        </div>
-        {/* Always show UserSearchBar in header for all layouts */}
-        <div className={searchClasses}>
-          <UserSearchBar />
-        </div>
-        <nav className={getNavClasses()}>
-          {shuffledNavItems.map((item) => (
+        <div className="flex items-center w-[300px]">
+          <div className="text-white bg-blue-600 px-4 py-2 rounded">
             <SeedLink
-              key={item.href}
-              href={item.href}
-              id={getId(item.idKey)}
-              className={applyVariant("nav-link", linkClass(item.href))}
-              onClick={() => logEvent(item.eventType, item.eventData)}
+              href="/"
+              id={getId("logo_link")}
+              className={applyVariant("nav-link", "flex items-center gap-2")}
             >
-              {item.label}
+              <span className="font-bold text-xl tracking-tight text-white">
+                AutoConnect
+              </span>
             </SeedLink>
-          ))}
-        </nav>
+          </div>
+        </div>
+        <div className="flex-1"></div>
+        <div className="flex items-center justify-end w-[300px]">
+          <nav className={getNavClasses()}>
+            {navItems.map((item) => (
+              <SeedLink
+                key={item.href}
+                href={item.href}
+                id={getId(item.idKey)}
+                className={applyVariant("nav-link", linkClass(item.href))}
+                onClick={() => logEvent(item.eventType, item.eventData)}
+              >
+                {item.label}
+              </SeedLink>
+            ))}
+          </nav>
+        </div>
       </div>
     </header>
   );

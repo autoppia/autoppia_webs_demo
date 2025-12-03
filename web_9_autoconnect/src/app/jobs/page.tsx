@@ -89,42 +89,42 @@ function JobsContent() {
         return false;
       }
 
-             // Salary filter
-       if (filters.salary && job.salary) {
-         const salaryRange = filters.salary;
-         const jobSalary = job.salary.replace(/[$,]/g, "");
-         const salaryMatch = jobSalary.match(/(\d+)/g);
-         
-         if (salaryMatch && salaryMatch.length >= 2) {
-           const minSalary = parseInt(salaryMatch[0]);
-           const maxSalary = parseInt(salaryMatch[1]);
-           
-           // Check if the job's salary range overlaps with the selected filter range
-           switch (salaryRange) {
-             case "0-50000":
-               if (minSalary >= 50000) return false;
-               break;
-             case "50000-75000":
-               if (maxSalary < 50000 || minSalary > 75000) return false;
-               break;
-             case "75000-100000":
-               if (maxSalary < 75000 || minSalary > 100000) return false;
-               break;
-             case "100000-125000":
-               if (maxSalary < 100000 || minSalary > 125000) return false;
-               break;
-             case "125000-150000":
-               if (maxSalary < 125000 || minSalary > 150000) return false;
-               break;
-             case "150000+":
-               if (maxSalary < 150000) return false;
-               break;
-           }
-         } else {
-           // If we can't parse the salary properly, exclude the job
-           return false;
-         }
-       }
+      // Salary filter
+      if (filters.salary && job.salary) {
+        const salaryRange = filters.salary;
+        const jobSalary = job.salary.replace(/[$,]/g, "");
+        const salaryMatch = jobSalary.match(/(\d+)/g);
+
+        if (salaryMatch && salaryMatch.length >= 2) {
+          const minSalary = parseInt(salaryMatch[0]);
+          const maxSalary = parseInt(salaryMatch[1]);
+
+          // Check if the job's salary range overlaps with the selected filter range
+          switch (salaryRange) {
+            case "0-50000":
+              if (minSalary >= 50000) return false;
+              break;
+            case "50000-75000":
+              if (maxSalary < 50000 || minSalary > 75000) return false;
+              break;
+            case "75000-100000":
+              if (maxSalary < 75000 || minSalary > 100000) return false;
+              break;
+            case "100000-125000":
+              if (maxSalary < 100000 || minSalary > 125000) return false;
+              break;
+            case "125000-150000":
+              if (maxSalary < 125000 || minSalary > 150000) return false;
+              break;
+            case "150000+":
+              if (maxSalary < 150000) return false;
+              break;
+          }
+        } else {
+          // If we can't parse the salary properly, exclude the job
+          return false;
+        }
+      }
 
       return true;
     });
@@ -178,44 +178,58 @@ function JobsContent() {
 
   return (
     <section>
-      <h1 className="font-bold text-2xl mb-6">{getText("jobs_title", "Job Search")}</h1>
-      
+      <h1 className="font-bold text-2xl mb-6">
+        {getText("jobs_title", "Job Search")}
+      </h1>
+
       {/* Search Bar */}
       <div className="mb-6">
         <input
           className="w-full rounded-full border border-gray-300 px-4 py-2 outline-blue-500"
           value={filters.search}
           onChange={handleSearchInput}
-          placeholder={getText("jobs_search_placeholder", "Search jobs by title or company...")}
+          placeholder={getText(
+            "jobs_search_placeholder",
+            "Search jobs by title or company..."
+          )}
         />
       </div>
 
-      {/* Filters */}
-      <div className={`bg-white rounded-lg shadow p-4 ${filtersClasses}`}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-lg">{getText("jobs_filters_title", "Filters")}</h2>
+      {/* Filters Header */}
+      <div className="mb-3">
+        <div className="flex items-center justify-between">
+          <h2 className="font-bold text-base text-gray-900">
+            {getText("jobs_filters_title", "Filters")}
+          </h2>
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="text-blue-600 hover:text-blue-800 text-sm"
-              >
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
               {getText("jobs_clear_filters", "Clear all filters")}
             </button>
           )}
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      </div>
+
+      {/* Filters Card */}
+      <div
+        className={`bg-white rounded-lg shadow border border-gray-200 p-6 mb-6 ${filtersClasses}`}
+      >
+        <div className="flex flex-wrap items-end gap-4">
           {/* Experience Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="flex-1 min-w-[160px]">
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
               {getText("jobs_experience_label", "Experience Level")}
             </label>
             <select
               value={filters.experience}
               onChange={(e) => handleFilterChange("experience", e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">{getText("jobs_experience_any", "Any Experience")}</option>
+              <option value="">
+                {getText("jobs_experience_any", "Any Experience")}
+              </option>
               {uniqueExperiences.map((experience) => (
                 <option key={experience} value={experience}>
                   {experience}
@@ -225,34 +239,38 @@ function JobsContent() {
           </div>
 
           {/* Salary Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="flex-1 min-w-[160px]">
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
               {getText("jobs_salary_label", "Salary Range")}
             </label>
             <select
               value={filters.salary}
               onChange={(e) => handleFilterChange("salary", e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               {salaryRanges.map((range) => (
                 <option key={range.value} value={range.value}>
-                  {range.value === "" ? getText("jobs_salary_any", "Any Salary") : range.label}
+                  {range.value === ""
+                    ? getText("jobs_salary_any", "Any Salary")
+                    : range.label}
                 </option>
               ))}
             </select>
           </div>
 
           {/* Location Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="flex-1 min-w-[160px]">
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
               {getText("jobs_location_label", "Location")}
             </label>
             <select
               value={filters.location}
               onChange={(e) => handleFilterChange("location", e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">{getText("jobs_location_any", "Any Location")}</option>
+              <option value="">
+                {getText("jobs_location_any", "Any Location")}
+              </option>
               {uniqueLocations.map((location) => (
                 <option key={location} value={location}>
                   {location}
@@ -262,30 +280,29 @@ function JobsContent() {
           </div>
 
           {/* Remote Filter */}
-          <div className="flex items-center">
-            <label className="flex items-center">
+          <div className="flex items-center mb-1.5">
+            <label className="flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 checked={filters.remote}
                 onChange={(e) => handleFilterChange("remote", e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
               />
-              <span className="ml-2 text-sm font-medium text-gray-700">
+              <span className="ml-2 text-sm font-medium text-gray-700 whitespace-nowrap">
                 {getText("jobs_remote_only", "Remote Only")}
               </span>
             </label>
           </div>
-        </div>
-      </div>
-       {/* Search Button */}
-      <div className="mt-4 flex justify-end">
-        <button
+
+          {/* Search Button */}
+          <button
             id="search-job-btn"
             onClick={triggerSearchEvent}
-            className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
-         >
-          {getText("jobs_search_button", "Search")}
-        </button>
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors text-sm font-medium mb-1.5"
+          >
+            {getText("jobs_search_button", "Search")}
+          </button>
+        </div>
       </div>
       {/* Results Count */}
       <div className="mb-4">
@@ -307,8 +324,6 @@ function JobsContent() {
           shuffledJobs.map((job) => <JobCard key={job.id} job={job} />)
         )}
       </div>
-
-
     </section>
   );
 }

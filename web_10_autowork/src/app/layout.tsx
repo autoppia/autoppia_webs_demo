@@ -5,6 +5,7 @@ import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
 import { SeedLink } from "@/components/ui/SeedLink";
+import { Briefcase, Users, Sparkles } from "lucide-react";
 import { SeedProvider } from "@/context/SeedContext";
 
 const geistSans = Geist({
@@ -19,24 +20,16 @@ const geistMono = Geist_Mono({
 
 const sidebarLinks = [
   {
-    label: "Jobs",
-    icon: "https://ext.same-assets.com/1836270417/794014782.svg",
-    onclick:"/"
+    label: "Jobs Dashboard",
+    href: "/jobs"
   },
   {
-    label: "Talent",
-    icon: "https://ext.same-assets.com/1836270417/1421870143.svg",
-      onclick:"/"
+    label: "Hires Dashboard",
+    href: "/hires"
   },
   {
-    label: "Reports",
-    icon: "https://ext.same-assets.com/1836270417/3460757120.svg",
-      onclick:"/"
-  },
-  {
-    label: "Messages",
-    icon: "https://ext.same-assets.com/1836270417/236507066.svg",
-      onclick:"/"
+    label: "Expert One-on-One",
+    href: "/experts"
   },
 ];
 const topIcons = [
@@ -78,11 +71,13 @@ export default function RootLayout({
                   {sidebarLinks.map((link) => (
                     <SeedLink
                       key={link.label}
-                      href="/"
+                      href={link.href}
                       className="flex items-center gap-4 px-3 py-2 rounded-lg transition bg-transparent hover:bg-[#e6f9fb] text-base hover:text-[#08b4ce]"
                     >
-                      <img src={link.icon} alt="" className="w-5 h-8" />{" "}
-                      {link.label}
+                      {link.label.includes("Jobs") && <Briefcase className="w-5 h-5" />}
+                      {link.label.includes("Hires") && <Users className="w-5 h-5" />}
+                      {link.label.includes("Expert") && <Sparkles className="w-5 h-5" />}
+                      <span>{link.label}</span>
                     </SeedLink>
                   ))}
                 </nav>

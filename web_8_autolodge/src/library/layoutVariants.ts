@@ -32,9 +32,8 @@ export interface LayoutConfig {
 }
 
 export function getSeedLayout(seed: number): LayoutConfig {
-  // Support seeds 1-300 by mapping to 1-10 range
-  // Use modulo 30 for less obvious pattern, similar to web_6_automail
-  const normalizedSeed = ((seed % 30) + 1) % 10 || 10;
+  // Static layout: ignore seed
+  const normalizedSeed = 1;
   
   const layouts: Record<number, LayoutConfig> = {
     1: {
