@@ -47,3 +47,4 @@ export function SeedRedirect() {
 
   return null; // This component doesn't render anything
 }
+
