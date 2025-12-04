@@ -12,7 +12,8 @@ WORKDIR /app
 COPY web_14_autohealth/package.json web_14_autohealth/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
-RUN npm install
+# Use npm ci to install exactly what's in package-lock.json (prevents version mismatches)
+RUN npm ci
 
 # Copy original dataset files for fallback
 COPY webs_server/initial_data/web_14_autohealth/original/ webs_server/initial_data/web_14_autohealth/original/

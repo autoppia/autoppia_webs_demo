@@ -12,7 +12,8 @@ WORKDIR /app
 COPY web_4_autodining/package.json web_4_autodining/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
-RUN npm install
+# Use npm ci to install exactly what's in package-lock.json (prevents version mismatches)
+RUN npm ci
 
 COPY web_4_autodining/ .
 # Copy original dataset files for fallback
