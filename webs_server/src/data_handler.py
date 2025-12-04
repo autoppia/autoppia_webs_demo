@@ -114,9 +114,10 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
     Otherwise, loads from data/ directory as referenced in main.json.
     """
     # Check if V2 DB mode is disabled - if so, load from original/ directory
-    v2_db_mode = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
+    # v2_disabled is True when ENABLE_DYNAMIC_V2_DB_MODE is "false", "0", "no", or "off"
+    v2_disabled = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
     
-    if v2_db_mode:
+    if v2_disabled:
         # V2 disabled: load from original/ directory (high quality dataset)
         original_dir = f"{BASE_PATH}/{web_name}/original"
         if not os.path.exists(original_dir):
