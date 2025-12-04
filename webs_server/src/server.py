@@ -226,7 +226,7 @@ app = FastAPI(
     redoc_url=None,
 )
 
-# Add CORS middleware to allow requests from Next.js local development
+# Add CORS middleware to allow requests from local dev and production subdomains
 LOCALHOST_PORTS = [f"http://localhost:{port}" for port in range(8000, 8021)] + ["http://localhost:8090"]
 # Allow 0.0.0.0 hosts used by some dev setups (e.g., npm run dev --hostname 0.0.0.0 --port 3001)
 ZERO_HOST_PORTS = [f"http://0.0.0.0:{port}" for port in range(8000, 8021)] + ["http://0.0.0.0:8090", "http://0.0.0.0:3000", "http://0.0.0.0:3001"]
@@ -234,10 +234,19 @@ INTERNAL_PORTS = [
     "http://app:8002",
     "http://app:8003",
 ]
+# Allow any subdomain of autoppia.com over HTTPS (e.g., https://autocinema.autoppia.com)
+AUTOPPIA_SUBDOMAIN_REGEX = r"^https?://[a-zA-Z0-9-]+\.autoppia\.com$"
+AUTOPPIA_SUBDOMAIN = [
+    "https://autocinema.autoppia.com",
+    "https://autobooks.autoppia.com",
+    "https://autozone.com.autoppia.com",
+    "https://api-benchmark.autoppia.com",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=INTERNAL_PORTS + LOCALHOST_PORTS + ZERO_HOST_PORTS + ["http://127.0.0.1:3000"],
+    allow_origins= AUTOPPIA_SUBDOMAIN + INTERNAL_PORTS + ZERO_HOST_PORTS + LOCALHOST_PORTS + ["http://127.0.0.1:3000"],
+    allow_origin_regex=AUTOPPIA_SUBDOMAIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
