@@ -12,7 +12,8 @@ WORKDIR /app
 COPY web_13_autodrive/package.json web_13_autodrive/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
-RUN npm install
+# Use npm ci to install exactly what's in package-lock.json (prevents version mismatches)
+RUN npm ci
 
 COPY web_13_autodrive/ .
 # Copy original dataset files for fallback

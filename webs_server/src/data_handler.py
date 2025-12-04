@@ -109,6 +109,61 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
     """
     Load and return all JSON objects referenced in main.json for a given web_name.
     If entity_type is provided, only load files listed under that entity key.
+    
+    If V2 DB mode is disabled, loads from original/ directory directly (high quality, fewer records).
+    Otherwise, loads from data/ directory as referenced in main.json.
+    """
+    # Check if V2 DB mode is disabled - if so, load from original/ directory
+    v2_db_mode = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
+    
+    if v2_db_mode:
+        # V2 disabled: load from original/ directory (high quality dataset)
+        original_dir = f"{BASE_PATH}/{web_name}/original"
+        if not os.path.exists(original_dir):
+            # Fallback to main.json if original/ doesn't exist
+            return _load_from_main_json(web_name, entity_type)
+        
+        all_data: List[Dict[str, Any]] = []
+        # Load all JSON files from original/ directory
+        if entity_type:
+            # Load specific entity type
+            original_file = f"{original_dir}/{entity_type}_1.json"
+            if os.path.exists(original_file):
+                try:
+                    with open(original_file, "r", encoding="utf-8") as f:
+                        contents = json.load(f)
+                        if isinstance(contents, list):
+                            all_data.extend(contents)
+                        elif isinstance(contents, dict):
+                            all_data.append(contents)
+                except Exception as e:
+                    print(f"Error reading file {original_file}: {e}")
+        else:
+            # Load all JSON files from original/
+            for filename in sorted(os.listdir(original_dir)):
+                if not filename.endswith(".json"):
+                    continue
+                original_file = f"{original_dir}/{filename}"
+                try:
+                    with open(original_file, "r", encoding="utf-8") as f:
+                        contents = json.load(f)
+                        if isinstance(contents, list):
+                            all_data.extend(contents)
+                        elif isinstance(contents, dict):
+                            all_data.append(contents)
+                except Exception as e:
+                    print(f"Error reading file {original_file}: {e}")
+                    continue
+        
+        return all_data
+    else:
+        # V2 enabled: load from main.json (which references data/ directory)
+        return _load_from_main_json(web_name, entity_type)
+
+
+def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Helper function to load data from main.json (used when V2 is enabled or as fallback).
     """
     main_path = get_main_path(web_name)
     if not os.path.exists(main_path):
