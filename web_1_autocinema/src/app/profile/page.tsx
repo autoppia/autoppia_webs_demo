@@ -9,7 +9,11 @@ import { Input } from "@/components/ui/input";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { MovieEditor, type MovieEditorData } from "@/components/movies/MovieEditor";
 import type { Movie } from "@/data/movies";
-import { collectFilmChangeMetadata, editorDataToFilmPayload, movieToFilmPayload } from "@/events/payloads";
+import {
+  collectFilmChangeMetadata,
+  editorDataToFilmPayload,
+  movieToFilmPayload,
+} from "@/utils/eventPayloads";
 
 type ProfileFormState = {
   firstName: string;
