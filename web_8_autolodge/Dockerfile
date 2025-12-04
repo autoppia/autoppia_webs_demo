@@ -2,7 +2,8 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 COPY web_8_autolodge/package.json web_8_autolodge/package-lock.json ./
-RUN npm ci --omit=dev
+# Retry npm ci up to 3 times on network errors
+RUN for i in 1 2 3; do npm ci --omit=dev && break || (echo "Attempt $i failed, retrying..." && sleep 5); done
 
 # Stage 1: build with dev deps
 FROM node:20-alpine AS builder
@@ -12,7 +13,8 @@ WORKDIR /app
 COPY web_8_autolodge/package.json web_8_autolodge/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
-RUN npm ci
+# Retry npm ci up to 3 times on network errors
+RUN for i in 1 2 3; do npm ci && break || (echo "Attempt $i failed, retrying..." && sleep 5); done
 
 COPY web_8_autolodge/ .
 # Copy original dataset files for fallback
