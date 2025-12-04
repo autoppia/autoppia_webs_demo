@@ -9,14 +9,15 @@ import { useCallback } from "react";
  */
 export function useSeedRouter() {
   const router = useNextRouter();
+  type NavigationOptions = Parameters<typeof router.push>[1];
   const { getNavigationUrl } = useSeed();
 
-  const push = useCallback((href: string, options?: any) => {
+  const push = useCallback((href: string, options?: NavigationOptions) => {
     const urlWithSeed = getNavigationUrl(href);
     return router.push(urlWithSeed, options);
   }, [router, getNavigationUrl]);
 
-  const replace = useCallback((href: string, options?: any) => {
+  const replace = useCallback((href: string, options?: NavigationOptions) => {
     const urlWithSeed = getNavigationUrl(href);
     return router.replace(urlWithSeed, options);
   }, [router, getNavigationUrl]);
@@ -27,4 +28,3 @@ export function useSeedRouter() {
     replace,
   };
 }
-

@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { EVENT_TYPES, logEvent } from "@/library/events";
+import { EVENT_TYPES, logEvent } from "@/events";
+import { DynamicText } from "@/components/ui/DynamicText";
+import { DynamicSection } from "@/components/ui/DynamicBlock";
+import { useSeedValue } from "@/components/ui/variants";
 
 export function ContactSection() {
   const [name, setName] = useState("");
@@ -11,6 +14,7 @@ export function ContactSection() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sent">("idle");
+  const seed = useSeedValue();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,27 +31,28 @@ export function ContactSection() {
   };
 
   return (
-    <section
+    <DynamicSection
       id="contact"
       className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#05070d] via-[#0d101c] to-[#020306] p-6 text-white shadow-2xl"
+      variantKey={`contact-${seed}`}
     >
       <div className="grid gap-6 md:grid-cols-2">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-secondary">Contact</p>
           <h2 className="mt-3 text-3xl font-semibold">Need a new cinematic brief?</h2>
-          <p className="mt-2 text-sm text-white/70">
+          <DynamicText className="mt-2 text-sm text-white/70" variantKey="contact-copy">
             Share your validation request (user journey, seed, constraints) and we'll route it to the appropriate web
-            agent. Every submission is logged as an event for easy auditing.
-          </p>
+            agent. Every submission is forwarded for auditing.
+          </DynamicText>
           <ul className="mt-4 space-y-2 text-sm text-white/70">
-            <li>• Custom hero/layout mixes</li>
-            <li>• Seed curation for movie drops</li>
-            <li>• Issues spotted by miners</li>
+            <DynamicText as="li" className="list-none" variantKey="contact-bullet">• Custom hero/layout mixes</DynamicText>
+            <DynamicText as="li" className="list-none" variantKey="contact-bullet">• Seed curation for movie drops</DynamicText>
+            <DynamicText as="li" className="list-none" variantKey="contact-bullet">• Issues spotted by miners</DynamicText>
           </ul>
           {status === "sent" && (
-            <p className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">
-              Message logged. Thanks for keeping the reel alive.
-            </p>
+            <DynamicText as="p" className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200" variantKey="contact-success">
+              Message sent. Thanks for keeping the reel alive.
+            </DynamicText>
           )}
         </div>
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -93,6 +98,6 @@ export function ContactSection() {
           </Button>
         </form>
       </div>
-    </section>
+    </DynamicSection>
   );
 }

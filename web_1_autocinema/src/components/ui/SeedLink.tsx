@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSeed } from "@/context/SeedContext";
 import type { ComponentProps } from "react";
+import { useSeedValue, pickVariant, variantId, applyDynamicWrapper } from "@/components/ui/variants";
 
 interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
   href: string;
@@ -14,10 +15,21 @@ interface SeedLinkProps extends Omit<ComponentProps<typeof Link>, 'href'> {
  */
 export function SeedLink({ href, preserveSeed = true, ...props }: SeedLinkProps) {
   const { getNavigationUrl } = useSeed();
+  // Dynamic (seed-based) attrs/wrappers
+  const seed = useSeedValue();
+  const variant = pickVariant(seed, "seed-link", 3);
   
   // If preserveSeed is false or href starts with http (external link), use original href
   const finalHref = (!preserveSeed || href.startsWith('http')) ? href : getNavigationUrl(href);
   
-  return <Link href={finalHref} {...props} />;
-}
+  const link = (
+    <Link
+      href={finalHref}
+      data-variant={variant}
+      id={variantId(seed, "link")}
+      {...props}
+    />
+  );
 
+  return <>{applyDynamicWrapper(seed, "link", link)}</>;
+}

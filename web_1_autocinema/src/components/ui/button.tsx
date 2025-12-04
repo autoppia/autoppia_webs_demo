@@ -1,8 +1,8 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-
-import { cn } from "@/library/utils"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
+import { useSeedValue, pickVariant, variantId, applyDynamicWrapper } from "@/components/ui/variants";
+import { cn } from "@/utils/library_utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -32,26 +32,38 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  asChild?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
+    // Dynamic (seed-based) styling/attrs
+    const seed = useSeedValue();
+    const flavor = pickVariant(seed, "button-shell", 3);
+
+    const Comp = asChild ? Slot : "button";
+    const button = (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          flavor === 1 ? "ring-1 ring-white/10" : "",
+          flavor === 2 ? "shadow-lg shadow-secondary/10" : ""
+        )}
         ref={ref}
+        data-variant={flavor}
+        id={variantId(seed, "btn")}
         {...props}
       />
-    )
+    );
+
+    return <>{applyDynamicWrapper(seed, "btn", button)}</>;
   }
 )
-Button.displayName = "Button"
+Button.displayName = "Button";
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

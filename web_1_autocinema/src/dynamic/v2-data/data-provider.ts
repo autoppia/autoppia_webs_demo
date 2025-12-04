@@ -1,7 +1,7 @@
-import type { Movie } from "@/data/movies";
-import { initializeMovies } from "@/data/movies";
-import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
-import { clampBaseSeed } from "@/shared/seed-resolver";
+import type { Movie } from "@/models";
+import { initializeMovies } from "@/models/movies";
+import { clampBaseSeed } from "@/dynamic/seed";
+import { isDynamicEnabled } from "../seed/flags";
 
 export interface MovieSearchFilters {
   genre?: string;
@@ -147,10 +147,6 @@ export class DynamicDataProvider {
   public isDynamicModeEnabled(): boolean {
     return this.isEnabled;
   }
-
-  public getLayoutConfig(seed?: number) {
-    return getEffectiveLayoutConfig(seed);
-  }
 }
 
 export const dynamicDataProvider = DynamicDataProvider.getInstance();
@@ -164,4 +160,3 @@ export const getMoviesByGenre = (genre: string) => dynamicDataProvider.getMovies
 export const getAvailableGenres = () => dynamicDataProvider.getAvailableGenres();
 export const getAvailableYears = () => dynamicDataProvider.getAvailableYears();
 export const isDynamicModeEnabled = () => dynamicDataProvider.isDynamicModeEnabled();
-export const getLayoutConfig = (seed?: number) => dynamicDataProvider.getLayoutConfig(seed);
