@@ -207,7 +207,7 @@ echo "      V3 (HTML structure)  →  $ENABLE_DYNAMIC_V3"
 echo "      V4 (seed HTML)       →  $ENABLE_DYNAMIC_V4"
 echo "    Enabled versions       →  ${ENABLED_DYNAMIC_VERSIONS:-<none>}"
 echo "    Fast mode              →  $FAST_MODE"
-echo "    Host data path         →  ${WEBS_DATA_PATH:-<default: \$DEMOS_DIR/webs_server/initial_data>}"
+echo "    Host data path         →  ${WEBS_DATA_PATH:-<default: ~/webs_data (copied from repo)>}"
 echo ""
 
 # ============================================================================
@@ -342,7 +342,29 @@ deploy_webs_server() {
 
   (
     # Calculate absolute path for webs_data (works on any server)
-    WEBS_DATA_ABS_PATH="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}"
+    # Use a temp directory outside repo to avoid modifying repo files
+    if [ -z "${WEBS_DATA_PATH:-}" ]; then
+      WEBS_DATA_ABS_PATH="${HOME}/webs_data"
+    else
+      WEBS_DATA_ABS_PATH="$WEBS_DATA_PATH"
+    fi
+    
+    # Source data directory (in repo, read-only)
+    INITIAL_DATA_DIR="$DEMOS_DIR/webs_server/initial_data"
+    
+    # Initialize data directory if it doesn't exist (copy from repo)
+    # This copies both 'original/' (high quality, fewer records) and 'data/' (more records)
+    # The container will use 'original/' if v2 is disabled, 'data/' if v2 is enabled
+    if [ ! -d "$WEBS_DATA_ABS_PATH" ] || [ -z "$(ls -A "$WEBS_DATA_ABS_PATH" 2>/dev/null)" ]; then
+      echo "  [INFO] Initializing data directory from repo (first time only)..."
+      echo "  [INFO] Copying both 'original/' (high quality) and 'data/' (more records) directories..."
+      mkdir -p "$WEBS_DATA_ABS_PATH"
+      if [ -d "$INITIAL_DATA_DIR" ]; then
+        cp -r "$INITIAL_DATA_DIR"/* "$WEBS_DATA_ABS_PATH/" 2>/dev/null || true
+        echo "  ✅ Data copied from $INITIAL_DATA_DIR to $WEBS_DATA_ABS_PATH"
+        echo "  ✅ Both 'original/' and 'data/' directories are available"
+      fi
+    fi
     
     export \
       WEB_PORT="$WEBS_PORT" \
@@ -385,20 +407,24 @@ deploy_webs_server() {
 
   # Initialize master data pools if they don't exist
   echo "📦 Checking for initial data pools..."
-  mkdir -p "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}"
+  # Use the same WEBS_DATA_PATH that was set in deploy_webs_server
+  if [ -z "${WEBS_DATA_PATH:-}" ]; then
+    WEBS_DATA_PATH="${HOME}/webs_data"
+  fi
+  mkdir -p "$WEBS_DATA_PATH"
   
   for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
-    if [ ! -f "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" ]; then
+    if [ ! -f "$WEBS_DATA_PATH/$project/main.json" ]; then
       echo "  → Initializing $project master pool (100 records)..."
-      mkdir -p "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data"
+      mkdir -p "$WEBS_DATA_PATH/$project/data"
       if [ -d "$DEMOS_DIR/webs_server/initial_data/$project" ]; then
-        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/"
+        cp -r "$DEMOS_DIR/webs_server/initial_data/$project"/* "$WEBS_DATA_PATH/$project/"
         echo "  ✅ $project master pool initialized"
       else
         echo "  ⚠️  No initial data found for $project (will need to generate)"
       fi
     else
-  echo "  ✓ $project master pool already exists ($(cat "${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
+  echo "  ✓ $project master pool already exists ($(cat "$WEBS_DATA_PATH/$project/main.json" | grep -o '"./data/[^"]*"' | wc -l) files)"
   fi
 done
 
@@ -410,9 +436,9 @@ echo "✅ Master pools ready"
 if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
   echo "📦 Copying data pools to webs_server container..."
   for project in web_1_autocinema web_2_autobooks web_3_autozone web_4_autodining web_5_autocrm web_6_automail web_7_autodelivery web_8_autolodge web_9_autoconnect web_10_autowork web_11_autocalendar web_12_autolist web_13_autodrive; do
-    SRC_MAIN="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/main.json"
-    SRC_ORIG_DIR="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/original"
-    SRC_DATA_DIR="${WEBS_DATA_PATH:-$DEMOS_DIR/webs_server/initial_data}/$project/data"
+    SRC_MAIN="$WEBS_DATA_PATH/$project/main.json"
+    SRC_ORIG_DIR="$WEBS_DATA_PATH/$project/original"
+    SRC_DATA_DIR="$WEBS_DATA_PATH/$project/data"
     if [ -f "$SRC_MAIN" ]; then
       echo "  → Copying $project to container..."
       docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
