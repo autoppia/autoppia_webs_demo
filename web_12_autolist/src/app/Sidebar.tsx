@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import {
   UserOutlined,
@@ -16,8 +16,11 @@ import {
   NumberOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
-import Image from "next/image";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import { useTeams } from "@/context/TeamsContext";
+import { useProjects } from "@/context/ProjectsContext";
+import { CreateProjectModal } from "./components/CreateProjectModal";
+import CreateTeamModal from "./components/CreateTeamModal";
 
 type SidebarItem = {
   id: string;
@@ -43,13 +46,24 @@ export default function Sidebar({
   completedCount?: number;
   className?: string;
 }) {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const [teamModalOpen, setTeamModalOpen] = useState(false);
+  const [chatsOpen, setChatsOpen] = useState(true);
   const { reorderElements, getElementAttributes, getElementXPath, isDynamicEnabled } = useSeedLayout();
+  const { teams, addTeam } = useTeams();
+  const { projects, addProject } = useProjects();
 
   // Define all sidebar navigation items
   const navItems: SidebarItem[] = useMemo(() => [
     {
-      id: "inbox",
-      label: "Inbox",
+      id: "tasks-header",
+      label: "Tasks",
+      icon: null,
+      className: "flex items-center text-xs font-semibold text-gray-500 uppercase tracking-wide px-2.5 py-2"
+    },
+    {
+      id: "backlog",
+      label: "Backlog",
       icon: <InboxOutlined />,
       count: inboxCount,
       onClick: () => onSelect?.("inbox"),
@@ -87,40 +101,53 @@ export default function Sidebar({
       id: "more",
       label: "More",
       icon: <MenuOutlined />,
-      className: "flex items-center gap-2 text-[15px] px-2.5 py-2 cursor-pointer rounded-lg text-black bg-gray-100 mt-2",
+      className: "flex items-center gap-2 text-[15px] px-2.5 py-2 rounded-lg text-gray-600 mt-1 cursor-default",
     },
   ], [selected, inboxCount, todayCount, completedCount, onSelect]);
 
   // Define project items
-  const projectItems: SidebarItem[] = useMemo(() => [
-    {
-      id: "getting-started",
-      label: "Getting Started",
+  const projectItems: SidebarItem[] = useMemo(() => {
+    if (!projects || projects.length === 0) return [];
+    return projects.map((project) => ({
+      id: project.id,
+      label: project.name,
       icon: <NumberOutlined className="text-lg mr-2" />,
-      count: 13,
+      count: project.badge ? Number(project.badge) : undefined,
+      onClick: () => onSelect?.("getting-started"),
       className: "flex items-center gap-2 py-2 text-[15px] text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg",
-    },
-  ], []);
+    }));
+  }, [projects, onSelect]);
+
+  const teamItems: SidebarItem[] = useMemo(() => {
+    return teams.map((team) => ({
+      id: team.id,
+      label: team.name,
+      icon: <TeamOutlined className="text-lg mr-2" />,
+      onClick: () => onSelect?.(`team-${team.id}`),
+      className: "flex items-center gap-2 py-2 text-[15px] text-gray-800 cursor-pointer hover:bg-gray-100 rounded-lg",
+    }));
+  }, [teams, onSelect]);
+
+  const chatUsers = useMemo(
+    () => [
+      { id: "u1", name: "Alex Carter", role: "Product Designer", status: "online", avatar: "https://randomuser.me/api/portraits/men/12.jpg" },
+      { id: "u2", name: "Jamie Lee", role: "Engineer", status: "away", avatar: "https://randomuser.me/api/portraits/women/18.jpg" },
+      { id: "u3", name: "Taylor Brown", role: "PM", status: "online", avatar: "https://randomuser.me/api/portraits/men/25.jpg" },
+      { id: "u4", name: "Riley Chen", role: "QA", status: "offline", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+    ],
+    []
+  );
+  const handleChatSelect = (userId: string) => {
+    onSelect?.(`chat-${userId}`);
+  };
 
   // Define bottom section items
-  const bottomItems: SidebarItem[] = useMemo(() => [
-    {
-      id: "add-team",
-      label: "Add a team",
-      icon: <TeamOutlined />,
-      className: "text-gray-700 mt-1 flex items-center pl-0",
-    },
-    {
-      id: "help",
-      label: "Help & resources",
-      icon: <QuestionCircleOutlined className="text-lg" />,
-      className: "flex items-center mt-3 mb-2 text-gray-700 gap-2",
-    },
-  ], []);
+  const bottomItems: SidebarItem[] = useMemo(() => [], []);
 
   // Shuffle items based on seed when v1 is enabled
   const shuffledNavItems = isDynamicEnabled ? reorderElements(navItems) : navItems;
   const shuffledProjectItems = isDynamicEnabled ? reorderElements(projectItems) : projectItems;
+  const shuffledTeamItems = isDynamicEnabled ? reorderElements(teamItems) : teamItems;
   const shuffledBottomItems = isDynamicEnabled ? reorderElements(bottomItems) : bottomItems;
 
   const sidebarAttributes = getElementAttributes("sidebar", 0);
@@ -130,7 +157,7 @@ export default function Sidebar({
     <aside 
       {...sidebarAttributes}
       data-xpath={sidebarXPath}
-      className={className || "w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-between fixed top-0 left-0 h-full px-4 pb-4 pt-2 z-30"}
+      className={className || "w-[280px] bg-[#f8f6f2] border-r border-gray-200 min-h-screen flex flex-col justify-start items-start gap-3 fixed top-0 left-0 h-full px-4 pb-4 pt-2 z-30"}
     >
       <div
         {...getElementAttributes("sidebar_top_section", 0)}
@@ -142,7 +169,7 @@ export default function Sidebar({
           data-xpath={getElementXPath("sidebar_profile")}
           className="flex items-center mb-6 px-1 gap-2"
         >
-          <div className="bg-[#d1453b] px-3 py-1 rounded flex items-center h-9 w-full">
+          <div className="bg-[#d1453b] px-6 py-4 rounded-lg flex items-center justify-center h-14 w-full shadow-sm">
             <span className="font-bold text-white text-lg w-full text-center">
               AutoList
             </span>
@@ -181,81 +208,181 @@ export default function Sidebar({
           {...getElementAttributes("sidebar_projects", 0)}
           data-xpath={getElementXPath("sidebar_projects")}
         >
+        <div className="flex items-center justify-between mb-2 mt-5">
           <div 
             {...getElementAttributes("sidebar_projects_header", 0)}
             data-xpath={getElementXPath("sidebar_projects_header")}
-            className="flex items-center mb-2 mt-7 text-md font-bold text-gray-700 cursor-pointer select-none"
+            className="flex items-center text-md font-bold text-gray-700 cursor-pointer select-none"
           >
             <DownOutlined className="mr-2 text-xs" style={{ fontSize: 15 }} />{" "}
             My Projects
           </div>
-          <ul 
-            {...getElementAttributes("sidebar_project_list", 0)}
-            data-xpath={getElementXPath("sidebar_project_list")}
+        </div>
+        <ul 
+          {...getElementAttributes("sidebar_project_list", 0)}
+          data-xpath={getElementXPath("sidebar_project_list")}
+          className="ml-2"
+          >
+            {shuffledProjectItems.length === 0 ? (
+              <li className="text-sm text-gray-500 py-1 px-1">No projects yet</li>
+            ) : (
+              shuffledProjectItems.map((item, index) => {
+                const attributes = getElementAttributes("sidebar_project_item", index);
+                const xpath = getElementXPath("sidebar_project_item");
+                return (
+                  <li
+                    key={item.id}
+                    {...attributes}
+                    data-xpath={xpath}
+                    className={item.className}
+                    onClick={item.onClick}
+                  >
+                    {item.icon}
+                    <span className="flex-1">
+                      {item.label} {item.id === "getting-started" && <span className="ml-1 text-base">👋</span>}
+                    </span>
+                    {item.count !== undefined && (
+                      <span className="bg-gray-200 text-xs py-0.5 px-2 rounded-full">
+                        {item.count}
+                      </span>
+                    )}
+                  </li>
+                );
+              })
+            )}
+          </ul>
+          <div className="mt-2">
+            <Button
+              size="small"
+              className="w-full text-left text-[#d1453b]"
+              type="text"
+              icon={<PlusOutlined />}
+              onClick={() => setProjectModalOpen(true)}
+            >
+              Add project
+            </Button>
+          </div>
+
+          <div 
+            {...getElementAttributes("sidebar_teams_header", 0)}
+            data-xpath={getElementXPath("sidebar_teams_header")}
+            className="flex items-center mb-2 mt-6 text-md font-bold text-gray-700 cursor-pointer select-none"
+          >
+            <TeamOutlined className="mr-2 text-sm" /> My Teams
+          </div>
+          <ul
+            {...getElementAttributes("sidebar_team_list", 0)}
+            data-xpath={getElementXPath("sidebar_team_list")}
             className="ml-2"
           >
-            {shuffledProjectItems.map((item, index) => {
-              const attributes = getElementAttributes("sidebar_project_item", index);
-              const xpath = getElementXPath("sidebar_project_item");
-              return (
-                <li
-                  key={item.id}
-                  {...attributes}
-                  data-xpath={xpath}
-                  className={item.className}
-                >
-                  {item.icon}
-                  <span className="flex-1">
-                    {item.label} {item.id === "getting-started" && <span className="ml-1 text-base">👋</span>}
-                  </span>
-                  {item.count !== undefined && (
-                    <span className="bg-gray-200 text-xs py-0.5 px-2 rounded-full">
-                      {item.count}
-                    </span>
-                  )}
-                </li>
-              );
-            })}
+            {shuffledTeamItems.length === 0 ? (
+              <li className="text-sm text-gray-500 py-1 px-1 flex items-center gap-2">
+                <TeamOutlined className="text-sm" /> No teams yet
+              </li>
+            ) : (
+              shuffledTeamItems.map((item, index) => {
+                const attributes = getElementAttributes("sidebar_team_item", index);
+                const xpath = getElementXPath("sidebar_team_item");
+                return (
+                  <li
+                    key={item.id}
+                    {...attributes}
+                    data-xpath={xpath}
+                    className={item.className}
+                    onClick={item.onClick}
+                  >
+                    {item.icon}
+                    <span className="flex-1">{item.label}</span>
+                  </li>
+                );
+              })
+            )}
           </ul>
+          <div className="mt-2">
+            <Button
+              size="small"
+              className="w-full text-left text-[#d1453b]"
+              type="text"
+              icon={<PlusOutlined />}
+              onClick={() => setTeamModalOpen(true)}
+            >
+              Add a team
+            </Button>
+          </div>
         </div>
       </div>
-      <div 
-        {...getElementAttributes("sidebar_bottom_section", 0)}
-        data-xpath={getElementXPath("sidebar_bottom_section")}
-        className="px-1"
-      >
-        {shuffledBottomItems.map((item, index) => {
-          const attributes = getElementAttributes("sidebar_bottom_item", index);
-          const xpath = getElementXPath("sidebar_bottom_item");
-          
-          if (item.id === "add-team") {
-            return (
-              <Button
-                key={item.id}
-                {...attributes}
-                data-xpath={xpath}
-                icon={item.icon}
-                type="text"
-                className={item.className}
+      <div className="mt-3 px-1">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center font-bold text-gray-700 text-md">
+            <DownOutlined className="mr-2 text-xs" /> Chats
+          </div>
+          <Button
+            size="small"
+            type="link"
+            className="p-0 h-auto text-[#d1453b]"
+            onClick={() => setChatsOpen((v) => !v)}
+          >
+            {chatsOpen ? "Hide" : "Show"}
+          </Button>
+        </div>
+        {chatsOpen && (
+          <div className="space-y-2">
+            {chatUsers.map((user) => (
+              <div
+                key={user.id}
+                className="flex items-center gap-2 p-2 rounded-lg border border-gray-200 bg-white shadow-sm cursor-pointer hover:bg-gray-50"
+                onClick={() => handleChatSelect(user.id)}
               >
-                <span className="ml-2">{item.label}</span>
-              </Button>
-            );
-          }
-          
-          return (
-            <div
-              key={item.id}
-              {...attributes}
-              data-xpath={xpath}
-              className={item.className}
-            >
-              {item.icon}
-              <span className="text-sm">{item.label}</span>
-            </div>
-          );
-        })}
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-9 h-9 rounded-full object-cover border"
+                />
+                <div className="flex-1">
+                  <div className="text-sm font-semibold text-gray-800">{user.name}</div>
+                  <div className="text-xs text-gray-500">{user.role}</div>
+                </div>
+                <span
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    user.status === "online"
+                      ? "bg-green-500"
+                      : user.status === "away"
+                      ? "bg-yellow-400"
+                      : "bg-gray-400"
+                  }`}
+                  title={user.status}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+      <div className="mt-4 px-1">
+        <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white shadow-sm p-3">
+          <img
+            src="https://randomuser.me/api/portraits/men/1.jpg"
+            alt="John Wick"
+            className="w-10 h-10 rounded-full object-cover border"
+          />
+          <div>
+            <div className="font-semibold text-gray-900">John Wick</div>
+            <div className="text-xs text-gray-500">Tech Lead</div>
+          </div>
+        </div>
+      </div>
+      <CreateProjectModal open={projectModalOpen} onClose={() => setProjectModalOpen(false)} />
+      <CreateTeamModal
+        open={teamModalOpen}
+        onCancel={() => setTeamModalOpen(false)}
+        onOk={(values) => {
+          addTeam({
+            name: values.name,
+            description: values.description,
+            members: values.members ?? [],
+          });
+          setTeamModalOpen(false);
+        }}
+      />
     </aside>
   );
 }

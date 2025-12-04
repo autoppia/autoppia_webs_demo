@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import RideNavbar from "../../../../components/RideNavbar";
+import GlobalHeader from "@/components/GlobalHeader";
 import { rides } from "@/data/trips-enhanced";
 
 function formatDateTime(date: string, time: string) {
@@ -45,10 +45,10 @@ export default function ConfirmationPage() {
   }, []);
   return (
     <div className="min-h-screen bg-[#f5fbfc]">
-      <RideNavbar activeTab="ride" />
+      <GlobalHeader />
       <div className="flex gap-8 mt-8 px-10 pb-10 max-lg:flex-col max-lg:px-2 max-lg:gap-4">
         {/* Left panel: loader or confirmation */}
-        <section className="w-[380px] bg-white rounded-2xl shadow-xl p-8 flex flex-col max-lg:w-full border border-gray-100 min-h-[500px]">
+        <section className="w-[500px] bg-white rounded-2xl shadow-xl p-8 flex flex-col max-lg:w-full border border-gray-100 min-h-[500px]">
           {loading ? (
             <div className="flex flex-col h-full w-full justify-center items-center py-28">
               <svg
@@ -79,144 +79,202 @@ export default function ConfirmationPage() {
             </div>
           ) : (
             <div className="flex flex-col h-full">
-              <div className="flex items-center gap-4 mb-4">
+              {/* 1. Title */}
+              <div className="mb-6">
+                <div className="font-bold text-2xl leading-tight text-[#2095d2] mb-3">
+                  Thank you for reserving your ride
+                </div>
+                <div className="w-full bg-[#e6f6fc] text-[#2095d2] px-4 py-2.5 text-[15px] font-medium rounded-md border border-[#2095d2] text-center">
+                  {ride.name} reserved
+                </div>
+              </div>
+
+              {/* 2. Price - Full width */}
+              <div className="mb-6 w-full bg-gradient-to-r from-[#2095d2] to-[#1273a0] rounded-xl p-6 text-white">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <svg width="28" height="28" fill="none" viewBox="0 0 20 20">
+                      <rect
+                        x="2"
+                        y="8"
+                        width="16"
+                        height="8"
+                        rx="2"
+                        fill="#fff"
+                      />
+                      <rect x="4" y="12" width="12" height="2" rx="1" fill="#2095d2" />
+                    </svg>
+                    <div>
+                      <div className="text-3xl font-bold">
+                        ${ride.price.toFixed(2)}
+                      </div>
+                      <div className="text-sm text-blue-100 mt-1">
+                        Visa ••••1270
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Large car image */}
+              <div className="mb-6">
                 <img
-                  src={ride.image}
+                  src="/car2.png"
                   alt={ride.name}
-                  className="w-16 h-16 rounded-xl bg-[#e6f6fc] object-contain border border-[#2095d2]"
+                  className="w-full h-64 rounded-xl object-cover shadow-lg"
                 />
-                <div>
-                  <div className="font-bold text-2xl leading-tight text-[#2095d2]">
-                    Thank you for reserving your ride
+              </div>
+
+              {/* 4. Driver info with avatar and stats */}
+              <div className="mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative">
+                    <img
+                      src={`https://i.pravatar.cc/150?img=${(data.rideIdx % 10) + 1}`}
+                      alt="Driver"
+                      className="w-16 h-16 rounded-full object-cover border-2 border-[#2095d2]"
+                    />
+                    <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
                   </div>
-                  <span className="inline-block bg-[#e6f6fc] text-[#2095d2] px-3 py-1.5 text-[14px] font-medium rounded-md mt-2 border border-[#2095d2]">
-                    {ride.name} reserved
-                  </span>
+                  <div className="flex-1">
+                    <div className="font-bold text-xl text-gray-900">
+                      {["Michael Chen", "Sarah Johnson", "David Martinez", "Emily Rodriguez"][data.rideIdx % 4]}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Your driver
+                    </div>
+                  </div>
+                </div>
+
+                {/* Driver stats */}
+                <div className="grid grid-cols-3 gap-3 mt-4">
+                  <div className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-[#2095d2]">
+                      {["4.9", "4.8", "5.0", "4.7"][data.rideIdx % 4]}
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">Rating</div>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-[#2095d2]">
+                      {["1.2k", "850", "2.1k", "650"][data.rideIdx % 4]}
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">Trips</div>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-[#2095d2]">
+                      {["3", "2", "5", "2"][data.rideIdx % 4]} min
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">ETA</div>
+                  </div>
                 </div>
               </div>
-              <div className="border-b mt-4 mb-6 border-[#2095d2]"></div>
-              <div className="mb-4 flex items-start text-base">
-                <svg
-                  width="24"
-                  height="24"
-                  fill="none"
-                  className="mr-3 mt-1"
-                  viewBox="0 0 24 24"
-                >
-                  <rect
-                    x="4"
-                    y="4"
-                    width="16"
-                    height="16"
-                    rx="4"
-                    fill="#2095d2"
-                  />
-                  <text
-                    x="12"
-                    y="17"
-                    textAnchor="middle"
-                    fontSize="11"
-                    fill="#fff"
+
+              {/* Additional trip details */}
+              <div className="mt-auto pt-6 border-t border-gray-200">
+                <div className="mb-4 flex items-start text-base">
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    className="mr-3 mt-1"
+                    viewBox="0 0 24 24"
                   >
-                    30
-                  </text>
-                </svg>
-                <div>
-                  <span className="font-bold text-[#2095d2]">
-                    {formatDateTime(data.date, data.time)}
-                  </span>
-                  <br />
-                  <span className="text-gray-600">
-                    Your driver will wait until 5 min after time.
-                  </span>
-                </div>
-              </div>
-              <div className="mb-4 text-base">
-                <div className="flex gap-3 mb-2">
-                  <span className="mt-1">
-                    <svg
-                      width="18"
-                      height="18"
+                    <rect
+                      x="4"
+                      y="4"
+                      width="16"
+                      height="16"
+                      rx="4"
                       fill="#2095d2"
-                      viewBox="0 0 20 20"
+                    />
+                    <text
+                      x="12"
+                      y="17"
+                      textAnchor="middle"
+                      fontSize="11"
+                      fill="#fff"
                     >
-                      <circle cx="10" cy="10" r="8" />
-                      <circle cx="10" cy="10" r="3" fill="#fff" />
-                    </svg>
-                  </span>
+                      30
+                    </text>
+                  </svg>
                   <div>
-                    <div className="font-semibold text-[#2095d2]">
-                      {data.pickup ? data.pickup.split(" - ")[0] : "--"}
+                    <span className="font-bold text-[#2095d2]">
+                      {formatDateTime(data.date, data.time)}
+                    </span>
+                    <br />
+                    <span className="text-gray-600 text-sm">
+                      Your driver will wait until 5 min after time.
+                    </span>
+                  </div>
+                </div>
+                <div className="mb-4 text-base">
+                  <div className="flex gap-3 mb-2">
+                    <span className="mt-1">
+                      <svg
+                        width="18"
+                        height="18"
+                        fill="#2095d2"
+                        viewBox="0 0 20 20"
+                      >
+                        <circle cx="10" cy="10" r="8" />
+                        <circle cx="10" cy="10" r="3" fill="#fff" />
+                      </svg>
+                    </span>
+                    <div>
+                      <div className="font-semibold text-[#2095d2] text-sm">
+                        {data.pickup ? data.pickup.split(" - ")[0] : "--"}
+                      </div>
+                      <div className="text-gray-500 text-xs">
+                        {data.pickup ? data.pickup.split(" - ")[1] : ""}
+                      </div>
                     </div>
-                    <div className="text-gray-500 text-[15px]">
-                      {data.pickup ? data.pickup.split(" - ")[1] : ""}
+                  </div>
+                  <div className="flex gap-3 mb-2">
+                    <span className="mt-1">
+                      <svg
+                        width="18"
+                        height="18"
+                        fill="#2095d2"
+                        viewBox="0 0 20 20"
+                      >
+                        <circle cx="10" cy="10" r="8" />
+                        <circle cx="10" cy="10" r="3" fill="#fff" />
+                      </svg>
+                    </span>
+                    <div>
+                      <div className="font-semibold text-[#2095d2] text-sm">
+                        {data.dropoff ? data.dropoff.split(" - ")[0] : "--"}
+                      </div>
+                      <div className="text-gray-500 text-xs">
+                        {data.dropoff ? data.dropoff.split(" - ")[1] : ""}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-3 mb-2">
-                  <span className="mt-1">
-                    <svg
-                      width="18"
-                      height="18"
-                      fill="#2095d2"
-                      viewBox="0 0 20 20"
-                    >
-                      <circle cx="10" cy="10" r="8" />
-                      <circle cx="10" cy="10" r="3" fill="#fff" />
-                    </svg>
-                  </span>
-                  <div>
-                    <div className="font-semibold text-[#2095d2]">
-                      {data.dropoff ? data.dropoff.split(" - ")[0] : "--"}
-                    </div>
-                    <div className="text-gray-500 text-[15px]">
-                      {data.dropoff ? data.dropoff.split(" - ")[1] : ""}
-                    </div>
-                  </div>
+                <button
+                  className="mt-4 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition"
+                  onClick={() => {
+                    setLoading(true);
+                    setTimeout(() => {
+                      router.push("/ride/trip/trips");
+                    }, 800);
+                  }}
+                >
+                  View and track your trip
+                </button>
+                <div className="text-xs text-gray-600 mt-4 text-center">
+                  You'll see driver and car details shortly before your pickup.
                 </div>
-              </div>
-              <div className="mb-4 flex items-center gap-3">
-                <svg width="22" height="22" fill="none" viewBox="0 0 20 20">
-                  <rect
-                    x="2"
-                    y="8"
-                    width="16"
-                    height="8"
-                    rx="2"
-                    fill="#2095d2"
-                  />
-                  <rect x="4" y="12" width="12" height="2" rx="1" fill="#fff" />
-                </svg>
-                <span className="text-lg font-bold text-[#2095d2]">
-                  ${ride.price.toFixed(2)}
-                </span>
-                <span className="text-sm text-gray-600 ml-2">
-                  Visa ••••1270
-                </span>
-              </div>
-              <button
-                className="mt-6 w-full bg-[#2095d2] text-white font-bold rounded-md py-3 text-lg hover:bg-[#1273a0] transition"
-                onClick={() => {
-                  setLoading(true);
-                  setTimeout(() => {
-                    router.push("/ride/trip/trips");
-                  }, 800);
-                }}
-              >
-                View and track your trip
-              </button>
-              <div className="text-xs text-gray-600 mt-6">
-                You'll see driver and car details shortly before your pickup.
               </div>
             </div>
           )}
         </section>
         <section className="flex-1 min-w-0">
-          <div className="w-full h-full min-h-[640px] flex items-center justify-center rounded-2xl border border-gray-100 overflow-hidden bg-gray-100">
+          <div className="w-full h-full min-h-[640px] flex items-center justify-center rounded-2xl border border-gray-100 overflow-hidden bg-gray-100 relative">
             <img
-              src="/map.jpg"
-              alt="Map"
-              // className="object-contain max-h-[320px] w-full"
+              src="/ride.png"
+              alt="Ride"
+              className="w-full h-full object-cover"
             />
           </div>
         </section>

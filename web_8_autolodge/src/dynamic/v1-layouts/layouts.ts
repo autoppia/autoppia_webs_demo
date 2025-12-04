@@ -23,7 +23,7 @@ export interface SeedLayoutConfig {
 const TOTAL_LAYOUT_VARIANTS = 20;
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  // Dynamic v1 layouts disabled: always return default
+  // LAYOUT FIJO - Siempre devolver el layout por defecto
   return getDefaultLayout();
 }
 
@@ -351,15 +351,13 @@ function getDefaultLayout(): SeedLayoutConfig {
 
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
+  return false; // Siempre deshabilitado - el layout nunca cambia
 }
 
 // Helper function to get effective layout config
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled()) {
-    return getDefaultLayout();
-  }
-  return getSeedLayout(seed);
+  // LAYOUT FIJO - Siempre devolver el layout por defecto
+  return getDefaultLayout();
 }
 
 // Helper function to generate CSS classes based on layout config

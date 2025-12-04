@@ -4,14 +4,11 @@
 const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
 
-// For local development, always default to true unless explicitly set to false
+// Disable dynamic layout/HTML by default
 if (!process.env.ENABLE_DYNAMIC_V1) {
-  process.env.ENABLE_DYNAMIC_V1 = isLocalDev ? 'true' : 'false';
+  process.env.ENABLE_DYNAMIC_V1 = 'false';
 }
-// For local development, always force NEXT_PUBLIC_ENABLE_DYNAMIC_V1 to true
-if (isLocalDev) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'true';
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
+if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) {
   process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
 }
 

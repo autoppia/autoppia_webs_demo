@@ -1,524 +1,1403 @@
 "use client";
-import { SeedLink } from "@/components/ui/SeedLink";
-import { useEffect, useState } from "react";
-import { whenDataReady, isDataReady } from "@/dynamic/v2-data";
+import { useState, useRef, useEffect } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
-import { EVENT_TYPES, logEvent, EventType } from "@/library/event";
+import { useSeedLayout } from "@/dynamic/v3-dynamic";
+import GlobalHeader from "@/components/GlobalHeader";
+import { EVENT_TYPES, logEvent } from "@/library/event";
 import DynamicLayout from "@/components/DynamicLayout";
 import SiteElements from "@/components/SiteElements";
-import { useSeedLayout } from "@/dynamic/v3-dynamic";
 
-const SUGGESTIONS = [
-  "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
-  "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
-  "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
-  "1001 Castro Street - 1001 Castro St, San Francisco, CA 94114, USA",
-    "The Ritz-Carlton - 600 Stockton St, San Francisco, CA 94108, USA",
-    "Fairmont San Francisco - 950 Mason St, San Francisco, CA 94108, USA",
-    "Hotel Nikko - 222 Mason St, San Francisco, CA 94102, USA",
-    "Palace Hotel - 2 New Montgomery St, San Francisco, CA 94105, USA",
-    "InterContinental San Francisco - 888 Howard St, San Francisco, CA 94103, USA",
-    "Hotel Zephyr - 250 Beach St, San Francisco, CA 94133, USA",
-    "Hotel Zoe Fisherman's Wharf - 425 North Point St, San Francisco, CA 94133, USA",
-    "The Clift Royal Sonesta Hotel - 495 Geary St, San Francisco, CA 94102, USA",
-    "The Marker San Francisco - 501 Geary St, San Francisco, CA 94102, USA",
-    "Hilton San Francisco Union Square - 333 O'Farrell St, San Francisco, CA 94102, USA",
-    "Parc 55 San Francisco - 55 Cyril Magnin St, San Francisco, CA 94102, USA",
-    "Hotel Kabuki - 1625 Post St, San Francisco, CA 94115, USA",
-    "Hotel G San Francisco - 386 Geary St, San Francisco, CA 94102, USA",
-    "The Westin St. Francis - 335 Powell St, San Francisco, CA 94102, USA",
-    "Hotel Vitale - 8 Mission St, San Francisco, CA 94105, USA",
-    "Argonaut Hotel - 495 Jefferson St, San Francisco, CA 94109, USA",
-    "Hotel Emblem - 562 Sutter St, San Francisco, CA 94102, USA",
-    "Hotel Triton - 342 Grant Ave, San Francisco, CA 94108, USA",
-    "Hotel North Beach - 935 Kearny St, San Francisco, CA 94133, USA",
-    "Hotel Spero - 405 Taylor St, San Francisco, CA 94102, USA",
-    "Hotel Caza - 1300 Columbus Ave, San Francisco, CA 94133, USA",
-    "The Donatello - 501 Post St, San Francisco, CA 94102, USA",
-    "Hotel Abri - 127 Ellis St, San Francisco, CA 94102, USA",
-    "Hotel Fusion - 140 Ellis St, San Francisco, CA 94102, USA",
-    "Hotel Whitcomb - 1231 Market St, San Francisco, CA 94103, USA",
-    "Hotel Majestic - 1500 Sutter St, San Francisco, CA 94109, USA",
-
+// const PLACES = [
+//   {
+//     label: "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+//     main: "1 Hotel San Francisco",
+//     sub: "8 Mission St, San Francisco, CA 94105, USA",
+//   },
+//   {
+//     label: "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+//     main: "100 Van Ness",
+//     sub: "100 Van Ness Ave, San Francisco, CA 94102, USA",
+//   },
+//   {
+//     label:
+//       "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+//     main: "1000 Chestnut Street Apartments",
+//     sub: "1000 Chestnut St, San Francisco, CA 94109, USA",
+//   },
+//   {
+//     label:
+//       "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+//     main: "1030 Post Street Apartments",
+//     sub: "1030 Post St #112, San Francisco, CA 94109, USA",
+//   },
+// ];
+const PLACES = [
+  {
+    label: "1 Hotel San Francisco - 8 Mission St, San Francisco, CA 94105, USA",
+    main: "1 Hotel San Francisco",
+    sub: "8 Mission St, San Francisco, CA 94105, USA",
+  },
+  {
+    label: "100 Van Ness - 100 Van Ness Ave, San Francisco, CA 94102, USA",
+    main: "100 Van Ness",
+    sub: "100 Van Ness Ave, San Francisco, CA 94102, USA",
+  },
+  {
+    label:
+      "1000 Chestnut Street Apartments - 1000 Chestnut St, San Francisco, CA 94109, USA",
+    main: "1000 Chestnut Street Apartments",
+    sub: "1000 Chestnut St, San Francisco, CA 94109, USA",
+  },
+  {
+    label:
+      "1030 Post Street Apartments - 1030 Post St #112, San Francisco, CA 94109, USA",
+    main: "1030 Post Street Apartments",
+    sub: "1030 Post St #112, San Francisco, CA 94109, USA",
+  },
+  {
+    label: "The Ritz-Carlton - 600 Stockton St, San Francisco, CA 94108, USA",
+    main: "The Ritz-Carlton",
+    sub: "600 Stockton St, San Francisco, CA 94108, USA",
+  },
+  {
+    label:
+      "Fairmont San Francisco - 950 Mason St, San Francisco, CA 94108, USA",
+    main: "Fairmont San Francisco",
+    sub: "950 Mason St, San Francisco, CA 94108, USA",
+  },
+  {
+    label: "Hotel Nikko - 222 Mason St, San Francisco, CA 94102, USA",
+    main: "Hotel Nikko",
+    sub: "222 Mason St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Palace Hotel - 2 New Montgomery St, San Francisco, CA 94105, USA",
+    main: "Palace Hotel",
+    sub: "2 New Montgomery St, San Francisco, CA 94105, USA",
+  },
+  {
+    label:
+      "InterContinental San Francisco - 888 Howard St, San Francisco, CA 94103, USA",
+    main: "InterContinental San Francisco",
+    sub: "888 Howard St, San Francisco, CA 94103, USA",
+  },
+  {
+    label: "Hotel Zephyr - 250 Beach St, San Francisco, CA 94133, USA",
+    main: "Hotel Zephyr",
+    sub: "250 Beach St, San Francisco, CA 94133, USA",
+  },
+  {
+    label:
+      "Hotel Zoe Fisherman's Wharf - 425 North Point St, San Francisco, CA 94133, USA",
+    main: "Hotel Zoe Fisherman's Wharf",
+    sub: "425 North Point St, San Francisco, CA 94133, USA",
+  },
+  {
+    label:
+      "The Clift Royal Sonesta Hotel - 495 Geary St, San Francisco, CA 94102, USA",
+    main: "The Clift Royal Sonesta Hotel",
+    sub: "495 Geary St, San Francisco, CA 94102, USA",
+  },
+  {
+    label:
+      "The Marker San Francisco - 501 Geary St, San Francisco, CA 94102, USA",
+    main: "The Marker San Francisco",
+    sub: "501 Geary St, San Francisco, CA 94102, USA",
+  },
+  {
+    label:
+      "Hilton San Francisco Union Square - 333 O'Farrell St, San Francisco, CA 94102, USA",
+    main: "Hilton San Francisco Union Square",
+    sub: "333 O'Farrell St, San Francisco, CA 94102, USA",
+  },
+  {
+    label:
+      "Parc 55 San Francisco - 55 Cyril Magnin St, San Francisco, CA 94102, USA",
+    main: "Parc 55 San Francisco",
+    sub: "55 Cyril Magnin St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Hotel Kabuki - 1625 Post St, San Francisco, CA 94115, USA",
+    main: "Hotel Kabuki",
+    sub: "1625 Post St, San Francisco, CA 94115, USA",
+  },
+  {
+    label: "Hotel G San Francisco - 386 Geary St, San Francisco, CA 94102, USA",
+    main: "Hotel G San Francisco",
+    sub: "386 Geary St, San Francisco, CA 94102, USA",
+  },
+  {
+    label:
+      "The Westin St. Francis - 335 Powell St, San Francisco, CA 94102, USA",
+    main: "The Westin St. Francis",
+    sub: "335 Powell St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Hotel Vitale - 8 Mission St, San Francisco, CA 94105, USA",
+    main: "Hotel Vitale",
+    sub: "8 Mission St, San Francisco, CA 94105, USA",
+  },
+  {
+    label: "Argonaut Hotel - 495 Jefferson St, San Francisco, CA 94109, USA",
+    main: "Argonaut Hotel",
+    sub: "495 Jefferson St, San Francisco, CA 94109, USA",
+  },
+  {
+    label: "Hotel Emblem - 562 Sutter St, San Francisco, CA 94102, USA",
+    main: "Hotel Emblem",
+    sub: "562 Sutter St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Hotel Triton - 342 Grant Ave, San Francisco, CA 94108, USA",
+    main: "Hotel Triton",
+    sub: "342 Grant Ave, San Francisco, CA 94108, USA",
+  },
+  {
+    label: "Hotel North Beach - 935 Kearny St, San Francisco, CA 94133, USA",
+    main: "Hotel North Beach",
+    sub: "935 Kearny St, San Francisco, CA 94133, USA",
+  },
+  {
+    label: "Hotel Spero - 405 Taylor St, San Francisco, CA 94102, USA",
+    main: "Hotel Spero",
+    sub: "405 Taylor St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Hotel Caza - 1300 Columbus Ave, San Francisco, CA 94133, USA",
+    main: "Hotel Caza",
+    sub: "1300 Columbus Ave, San Francisco, CA 94133, USA",
+  },
+  {
+    label: "The Donatello - 501 Post St, San Francisco, CA 94102, USA",
+    main: "The Donatello",
+    sub: "501 Post St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Hotel Abri - 127 Ellis St, San Francisco, CA 94102, USA",
+    main: "Hotel Abri",
+    sub: "127 Ellis St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Hotel Fusion - 140 Ellis St, San Francisco, CA 94102, USA",
+    main: "Hotel Fusion",
+    sub: "140 Ellis St, San Francisco, CA 94102, USA",
+  },
+  {
+    label: "Hotel Whitcomb - 1231 Market St, San Francisco, CA 94103, USA",
+    main: "Hotel Whitcomb",
+    sub: "1231 Market St, San Francisco, CA 94103, USA",
+  },
+  {
+    label: "Hotel Majestic - 1500 Sutter St, San Francisco, CA 94109, USA",
+    main: "Hotel Majestic",
+    sub: "1500 Sutter St, San Francisco, CA 94109, USA",
+  },
 ];
 
-function AutocompleteInput({
-  placeholder,
-  icon,
+function PlaceSelect({
   value,
   setValue,
-  eventType,
-}: {
-  placeholder: string;
-  icon: React.ReactNode;
-  value: string;
-  setValue: (v: string) => void;
-  eventType: EventType;
-}) {
-  const [show, setShow] = useState(false);
-  const options = SUGGESTIONS.filter((s) =>
-    s.toLowerCase().includes(value.toLowerCase())
-  );
-  return (
-    <div className="relative w-full">
-      <div className="flex items-center w-full bg-white border border-gray-200 rounded-md focus-within:border-[#2095d2] transition">
-        <span className="pl-3 pr-2 text-lg text-gray-400 flex items-center">
-          {icon}
-        </span>
-        <input
-          className="flex-1 px-0 py-3 bg-transparent border-none focus:outline-none text-base placeholder:text-gray-400"
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-            setShow(true);
-            console.log(`🔍 Input "${placeholder}" changed:`, { 
-              eventType, 
-              value: e.target.value
-            });
-            
-            // Log the enter event (existing functionality)
-            logEvent(eventType, { 
-              value: e.target.value,
-              inputType: placeholder.toLowerCase().includes('location') ? 'location' : 'destination',
-              timestamp: new Date().toISOString()
-            });
-            
-            // Log search event when user types (new functionality)
-            if (e.target.value.trim()) {
-              const searchEventType = placeholder.toLowerCase().includes('location') 
-                ? EVENT_TYPES.SEARCH_LOCATION 
-                : EVENT_TYPES.SEARCH_DESTINATION;
-              
-              logEvent(searchEventType, { 
-                value: e.target.value,
-                inputType: placeholder.toLowerCase().includes('location') ? 'location' : 'destination',
-                timestamp: new Date().toISOString(),
-                searchType: 'typing'
-              });
-            }
-          }}
-          onFocus={() => setShow(true)}
-          onBlur={() => setTimeout(() => setShow(false), 120)}
-        />
-        <span className="px-3 text-gray-400">
-          <svg width="18" height="18" fill="none" viewBox="0 0 20 20">
-            <path
-              fill="currentColor"
-              d="M15.54 14.13l-3.65-3.65a5.24 5.24 0 0 0 1.03-3.13 5.25 5.25 0 1 0-5.25 5.25c1.15 0 2.22-.39 3.13-1.03l3.65 3.65a.75.75 0 1 0 1.06-1.06zm-9.29-3.63a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0z"
-            />
-          </svg>
-        </span>
-      </div>
-      {show && (
-        <div className="absolute left-0 right-0 bg-white shadow-lg rounded-b-md py-2 mt-1 z-20 border border-t-0 border-gray-200">
-          {options.length === 0 ? (
-            <div className="px-4 py-2 text-gray-500 text-sm">No results</div>
-          ) : (
-            options.map((s, i) => (
-              <button
-                type="button"
-                key={s}
-                className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-100 transition text-sm text-gray-800"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  console.log(`🎯 Dropdown option selected for "${placeholder}":`, { eventType, value: s });
-                  setValue(s);
-                  setShow(false);
-                  logEvent(eventType, { 
-                    value: s,
-                    inputType: placeholder.toLowerCase().includes('location') ? 'location' : 'destination',
-                    selectionMethod: 'dropdown',
-                    timestamp: new Date().toISOString()
-                  });
-                  console.log(`✅ logEvent called for dropdown selection "${placeholder}"`);
-                }}
-              >
-                <span className="mr-2 text-gray-400">{icon}</span>
-                <span>{s}</span>
-              </button>
-            ))
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ProfileDropdown({
+  placeholder,
   open,
   setOpen,
-  router,
 }: {
+  value: string | null;
+  setValue: (x: string | null) => void;
+  placeholder: string;
   open: boolean;
   setOpen: (v: boolean) => void;
-  router: ReturnType<typeof useSeedRouter>;
 }) {
-  if (!open) return null;
+  const [searchValue, setSearchValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [inputWidth, setInputWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    function handle(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener("mousedown", handle);
+    return () => document.removeEventListener("mousedown", handle);
+  }, [open, setOpen]);
+
+  useEffect(() => {
+    if (ref.current && open) {
+      const width = ref.current.getBoundingClientRect().width;
+      setInputWidth(width);
+    }
+  }, [open]);
+
   return (
-    <div className="fixed inset-0 z-40" onClick={() => setOpen(false)}>
+    <div ref={ref} className="mb-3 w-full relative">
       <div
-        className="absolute right-4 top-14 min-w-[340px] max-w-[98vw] bg-white rounded-2xl shadow-2xl py-4 px-1 z-50 flex flex-col select-none"
-        style={{ boxShadow: "0 6px 32px rgba(0,0,0,.22)" }}
-        onClick={(e) => e.stopPropagation()}
+        className={`flex items-center px-3 py-2 rounded border bg-white shadow-sm focus-within:border-[#2095d2] cursor-pointer relative ${
+          open ? "border-[#2095d2] ring-2 ring-[#2095d2]" : "border-gray-300"
+        }`}
+        onClick={() => {
+          if (!isTyping) {
+            setOpen(true);
+          }
+        }}
+        tabIndex={0}
+        style={{ paddingRight: 42 }}
       >
-        <div className="px-4 pb-3 flex items-center border-b">
-          <div className="flex-1">
-            <div className="text-xl font-bold">Federico Lopez</div>
-            <div className="flex items-center text-sm text-gray-600 gap-1 mt-1">
-              <span className="text-[#FBBF24] text-[16px] mr-0.5">★</span>4.89 •
-              Uber One
-            </div>
+        <span className="text-gray-600 mr-2">
+          <svg
+            width="18"
+            height="18"
+            className=""
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <circle
+              cx="10"
+              cy="10"
+              r="8"
+              stroke="#2095d2"
+              strokeWidth="2"
+              fill="#e6f6fc"
+            />
+            <circle cx="10" cy="10" r="3" fill="#2095d2" />
+          </svg>
+        </span>
+        <input
+          value={isTyping ? searchValue : value ? value : ""}
+          readOnly={!isTyping}
+          placeholder={placeholder}
+          className="flex-1 bg-transparent border-none outline-none text-[16px] placeholder:text-gray-400 pr-8"
+          style={{ paddingRight: 32 }}
+          onFocus={() => {
+            if (!isTyping) {
+              setIsTyping(true);
+              setSearchValue("");
+            }
+            // Log enter event when user focuses on input
+            const enterEventType = placeholder.toLowerCase().includes("pickup")
+              ? EVENT_TYPES.ENTER_LOCATION
+              : EVENT_TYPES.ENTER_DESTINATION;
+
+            logEvent(enterEventType, {
+              inputType: placeholder.toLowerCase().includes("pickup")
+                ? "location"
+                : "destination",
+              timestamp: new Date().toISOString(),
+              page: "trip_form",
+              action: "focus",
+            });
+          }}
+          onBlur={() => {
+            // Delay to allow for dropdown selection
+            setTimeout(() => {
+              if (!open) {
+                setIsTyping(false);
+                setSearchValue("");
+              }
+            }, 200);
+          }}
+          onKeyDown={(e) => {
+            if (isTyping && e.key === "Enter" && searchValue.trim()) {
+              e.preventDefault();
+
+              // Check if there's an exact match
+              const exactMatch = PLACES.find(
+                (option) =>
+                  option.label.toLowerCase() === searchValue.toLowerCase()
+              );
+
+              if (exactMatch) {
+                // Use exact match if found
+                setValue(exactMatch.label);
+                setOpen(false);
+                setIsTyping(false);
+                setSearchValue("");
+
+                // Log ENTER event for exact match
+                const enterEventType = placeholder
+                  .toLowerCase()
+                  .includes("pickup")
+                  ? EVENT_TYPES.ENTER_LOCATION
+                  : EVENT_TYPES.ENTER_DESTINATION;
+
+                logEvent(enterEventType, {
+                  value: exactMatch.label,
+                  inputType: placeholder.toLowerCase().includes("pickup")
+                    ? "location"
+                    : "destination",
+                  timestamp: new Date().toISOString(),
+                  page: "trip_form",
+                  selectionMethod: "enter_key_exact_match",
+                  selectedOption: {
+                    main: exactMatch.main,
+                    sub: exactMatch.sub,
+                    full: exactMatch.label,
+                  },
+                });
+
+                if (typeof window !== "undefined") {
+                  sessionStorage.setItem(
+                    placeholder === "Pickup location"
+                      ? "__ud_pickup"
+                      : "__ud_dropoff",
+                    exactMatch.label
+                  );
+                }
+              } else {
+                // Use custom value if no exact match
+                setValue(searchValue);
+                setOpen(false);
+                setIsTyping(false);
+                const customOption = searchValue;
+                setSearchValue("");
+
+                // Log ENTER event for custom value
+                const enterEventType = placeholder
+                  .toLowerCase()
+                  .includes("pickup")
+                  ? EVENT_TYPES.ENTER_LOCATION
+                  : EVENT_TYPES.ENTER_DESTINATION;
+
+                logEvent(enterEventType, {
+                  value: customOption,
+                  inputType: placeholder.toLowerCase().includes("pickup")
+                    ? "location"
+                    : "destination",
+                  timestamp: new Date().toISOString(),
+                  page: "trip_form",
+                  selectionMethod: "enter_key_custom",
+                  isCustomValue: true,
+                  searchValue: customOption,
+                });
+
+                if (typeof window !== "undefined") {
+                  sessionStorage.setItem(
+                    placeholder === "Pickup location"
+                      ? "__ud_pickup"
+                      : "__ud_dropoff",
+                    customOption
+                  );
+                }
+              }
+            }
+          }}
+          onChange={(e) => {
+            if (isTyping) {
+              const newValue = e.target.value;
+              setSearchValue(newValue);
+
+              // Open dropdown when user starts typing
+              if (!open && newValue.trim()) {
+                setOpen(true);
+              }
+
+              // Log SEARCH event when user types
+              if (newValue.trim()) {
+                const searchEventType = placeholder
+                  .toLowerCase()
+                  .includes("pickup")
+                  ? EVENT_TYPES.SEARCH_LOCATION
+                  : EVENT_TYPES.SEARCH_DESTINATION;
+
+                const matchedResults = PLACES.filter(
+                  (option) =>
+                    option.label
+                      .toLowerCase()
+                      .includes(newValue.toLowerCase()) ||
+                    option.main
+                      .toLowerCase()
+                      .includes(newValue.toLowerCase()) ||
+                    option.sub.toLowerCase().includes(newValue.toLowerCase())
+                );
+
+                logEvent(searchEventType, {
+                  value: newValue,
+                  inputType: placeholder.toLowerCase().includes("pickup")
+                    ? "location"
+                    : "destination",
+                  timestamp: new Date().toISOString(),
+                  searchType: "typing",
+                  page: "trip_form",
+                  matchedResults: matchedResults.length,
+                  hasMatches: matchedResults.length > 0,
+                  searchLength: newValue.length,
+                });
+              }
+            }
+          }}
+        />
+        {isTyping && searchValue.trim() && (
+          <div className="text-xs text-gray-500 mt-1 px-1">
+            Press Enter to use "{searchValue}"
           </div>
-          <span className="rounded-full bg-gray-100 w-[44px] h-[44px] flex items-center justify-center ml-1">
-            <svg width="26" height="26" fill="none" viewBox="0 0 20 20">
-              <circle cx="10" cy="10" r="8" stroke="#bbb" strokeWidth="2" />
-              <ellipse cx="10" cy="8" rx="3.1" ry="3.2" fill="#ececec" />
-              <ellipse cx="10" cy="18" rx="5" ry="4" fill="#ececec" />
+        )}
+        {open ? (
+          <button
+            tabIndex={-1}
+            type="button"
+            aria-label="Close dropdown"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(false);
+            }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white"
+            style={{ pointerEvents: "auto" }}
+          >
+            <svg width="20" height="20" fill="none" viewBox="0 0 19 19">
+              <circle cx="9.5" cy="9.5" r="7" stroke="#222" strokeWidth="1.3" />
+              <path
+                d="M12 8.41 10.41 10 12 11.59a1 1 0 0 1-1.42 1.42L9 11.41 7.41 13a1 1 0 0 1-1.42-1.42L7.59 10 6 8.41A1 1 0 0 1 7.41 7L9 8.59 10.59 7A1 1 0 0 1 12 8.41Z"
+                fill="#222"
+              />
+            </svg>
+          </button>
+        ) : (
+          value && (
+            <button
+              tabIndex={-1}
+              type="button"
+              aria-label="Clear selection"
+              onClick={(e) => {
+                e.stopPropagation();
+                setValue(null);
+                setIsTyping(false);
+                setSearchValue("");
+              }}
+              className="absolute right-8 top-1/2 -translate-y-1/2 z-10 bg-white"
+              style={{ pointerEvents: "auto" }}
+            >
+              <svg width="20" height="20" fill="none" viewBox="0 0 19 19">
+                <circle
+                  cx="9.5"
+                  cy="9.5"
+                  r="7"
+                  stroke="#222"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M12 8.41 10.41 10 12 11.59a1 1 0 0 1-1.42 1.42L9 11.41 7.41 13a1 1 0 0 1-1.42-1.42L7.59 10 6 8.41A1 1 0 0 1 7.41 7L9 8.59 10.59 7A1 1 0 0 1 12 8.41Z"
+                  fill="#222"
+                />
+              </svg>
+            </button>
+          )
+        )}
+        {!open && !value && (
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <svg width="14" height="14" fill="none" viewBox="0 0 10 10">
+              <path d="M2 4l3 3 3-3" stroke="#888" strokeWidth="1.3" />
             </svg>
           </span>
-        </div>
-        <div className="flex gap-3 px-4 py-4">
-          <button
-            className="flex flex-col items-center justify-center w-20 cursor-pointer"
-            onClick={() => {
-              setOpen(false);
-              router.push("/help");
-            }}
-          >
-            <span className="rounded bg-gray-100 w-[38px] h-[38px] shadow flex items-center justify-center mb-1">
-              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="9" stroke="#444" strokeWidth="2" />
-                <path d="M12 8v4l2.3 2.3" stroke="#444" strokeWidth="1.4" />
-              </svg>
-            </span>
-            <span className="text-xs font-medium text-black">Help</span>
-          </button>
-          <button
-            className="flex flex-col items-center justify-center w-20 cursor-pointer"
-            onClick={() => setOpen(false)}
-          >
-            <span className="rounded bg-gray-100 w-[38px] h-[38px] shadow flex items-center justify-center mb-1">
-              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                <rect width="20" height="14" x="2" y="5" rx="4" fill="#111" />
-                <rect width="5" height="8" x="5" y="8" rx="2.5" fill="#fff" />
-              </svg>
-            </span>
-            <span className="text-xs font-medium text-black">Wallet</span>
-          </button>
-          <button
-            className="flex flex-col items-center justify-center w-20 cursor-pointer"
-            onClick={() => setOpen(false)}
-          >
-            <span className="rounded bg-gray-100 w-[38px] h-[38px] shadow flex items-center justify-center mb-1">
-              <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-                <rect
-                  width="18"
-                  height="18"
-                  x="3"
-                  y="3"
-                  rx="4"
-                  fill="#f3f3f3"
-                />
-                <rect width="10" height="4" x="7" y="8" rx="2" fill="#333" />
-              </svg>
-            </span>
-            <span className="text-xs font-medium text-black">Activity</span>
-          </button>
-        </div>
-        <div className="flex flex-col divide-y">
-          <button
-            className="flex items-center px-5 py-3 gap-3 hover:bg-gray-100 text-[16px] font-medium"
-            onClick={() => setOpen(false)}
-          >
-            <svg width="22" height="22" fill="none" viewBox="0 0 20 20">
-              <circle cx="10" cy="10" r="8" stroke="#444" strokeWidth="2" />
-              <ellipse cx="10" cy="8" rx="3.1" ry="3.2" fill="#ececec" />
-              <ellipse cx="10" cy="18" rx="5" ry="4" fill="#ececec" />
-            </svg>{" "}
-            Manage account
-          </button>
-          <button
-            className="flex items-center px-5 py-3 gap-3 hover:bg-gray-100 text-[16px] font-medium"
-            onClick={() => {
-              setOpen(false);
-              router.push("/ride/trip");
-            }}
-          >
-            <svg width="22" height="22" fill="none" viewBox="0 0 20 20">
-              <rect x="4" y="4" width="12" height="12" rx="6" fill="#222" />
-              <path
-                d="M10 7v3l2 2"
-                stroke="#fff"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>{" "}
-            Ride
-          </button>
-          <button
-            className="flex items-center px-5 py-3 gap-3 hover:bg-gray-100 text-[16px] font-medium"
-            onClick={() => setOpen(false)}
-          >
-            <svg width="22" height="22" fill="none" viewBox="0 0 20 20">
-              <rect x="5" y="7" width="10" height="6" rx="2" fill="#222" />
-              <path d="M10 3v4M10 13v4" stroke="#222" strokeWidth="1.5" />
-            </svg>{" "}
-            Drive & deliver
-          </button>
-          <button
-            className="flex items-center px-5 py-3 gap-3 hover:bg-gray-100 text-[16px] font-medium"
-            onClick={() => setOpen(false)}
-          >
-            <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-              <rect width="18" height="14" x="3" y="7" rx="4" fill="#fff" />
-              <rect width="5" height="8" x="5" y="10" rx="2.5" fill="#111" />
-            </svg>{" "}
-            Uber for Business
-          </button>
-        </div>
-        <div className="mt-3 px-5">
-          <button className="w-full bg-gray-100 rounded-lg py-3 text-base font-semibold text-red-600 hover:bg-gray-200 mt-2 mb-1">
-            Sing Out
-          </button>
-        </div>
+        )}
       </div>
+      {open && (
+        <div
+          ref={menuRef}
+          className="absolute left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+          style={{
+            minWidth: "100%",
+            maxWidth: inputWidth ? inputWidth : "100%",
+            width: inputWidth || undefined,
+          }}
+        >
+          {(() => {
+            const filteredOptions = PLACES.filter((option) => {
+              if (!isTyping || !searchValue.trim()) {
+                return true; // Show all options when not typing or search is empty
+              }
+
+              const searchLower = searchValue.toLowerCase();
+              return (
+                option.label.toLowerCase().includes(searchLower) ||
+                option.main.toLowerCase().includes(searchLower) ||
+                option.sub.toLowerCase().includes(searchLower)
+              );
+            });
+
+            // Add custom option if user is typing and there are no exact matches
+            const hasExactMatch = filteredOptions.some(
+              (option) =>
+                option.label.toLowerCase() === searchValue.toLowerCase()
+            );
+
+            const showCustomOption =
+              isTyping && searchValue.trim() && !hasExactMatch;
+
+            return (
+              <>
+                {filteredOptions.map((option) => (
+                  <button
+                    key={option.label}
+                    type="button"
+                    onClick={() => {
+                      setValue(option.label);
+                      setOpen(false);
+                      setIsTyping(false);
+                      setSearchValue("");
+
+                      // Log ENTER event when user selects from dropdown
+                      const enterEventType = placeholder
+                        .toLowerCase()
+                        .includes("pickup")
+                        ? EVENT_TYPES.ENTER_LOCATION
+                        : EVENT_TYPES.ENTER_DESTINATION;
+
+                      logEvent(enterEventType, {
+                        value: option.label,
+                        inputType: placeholder.toLowerCase().includes("pickup")
+                          ? "location"
+                          : "destination",
+                        timestamp: new Date().toISOString(),
+                        page: "trip_form",
+                        selectionMethod: "dropdown",
+                        selectedOption: {
+                          main: option.main,
+                          sub: option.sub,
+                          full: option.label,
+                        },
+                        wasTyping: isTyping,
+                        searchValue: isTyping ? searchValue : null,
+                      });
+
+                      if (typeof window !== "undefined") {
+                        sessionStorage.setItem(
+                          placeholder === "Pickup location"
+                            ? "__ud_pickup"
+                            : "__ud_dropoff",
+                          option.label
+                        );
+                      }
+                    }}
+                    className={`flex gap-3 w-full text-left items-start px-3 py-3 border-b last:border-b-0 border-gray-100 hover:bg-[#e6f6fc] ${
+                      value === option.label ? "bg-[#f6fafc]" : ""
+                    }`}
+                  >
+                    <span className="mt-0.5">
+                      <svg
+                        width="20"
+                        height="20"
+                        fill="none"
+                        viewBox="0 0 20 20"
+                      >
+                        <circle
+                          cx="10"
+                          cy="10"
+                          r="8"
+                          stroke="#2095d2"
+                          strokeWidth="2"
+                          fill="#e6f6fc"
+                        />
+                        <circle cx="10" cy="10" r="3" fill="#2095d2" />
+                      </svg>
+                    </span>
+                    <span className="flex flex-col">
+                      <span
+                        className={`text-black text-[15px] leading-[1.2] ${
+                          value === option.label ? "font-bold" : ""
+                        }`}
+                      >
+                        {option.main}
+                      </span>
+                      <span className="text-xs text-gray-700 leading-tight mt-0.5">
+                        {option.sub}
+                      </span>
+                    </span>
+                  </button>
+                ))}
+
+                {showCustomOption && (
+                  <button
+                    key="custom-option"
+                    type="button"
+                    onClick={() => {
+                      setValue(searchValue);
+                      setOpen(false);
+                      setIsTyping(false);
+                      const customOption = searchValue;
+                      setSearchValue("");
+
+                      // Log ENTER event for custom value
+                      const enterEventType = placeholder
+                        .toLowerCase()
+                        .includes("pickup")
+                        ? EVENT_TYPES.ENTER_LOCATION
+                        : EVENT_TYPES.ENTER_DESTINATION;
+
+                      logEvent(enterEventType, {
+                        value: customOption,
+                        inputType: placeholder.toLowerCase().includes("pickup")
+                          ? "location"
+                          : "destination",
+                        timestamp: new Date().toISOString(),
+                        page: "trip_form",
+                        selectionMethod: "custom_input",
+                        isCustomValue: true,
+                        searchValue: customOption,
+                      });
+
+                      if (typeof window !== "undefined") {
+                        sessionStorage.setItem(
+                          placeholder === "Pickup location"
+                            ? "__ud_pickup"
+                            : "__ud_dropoff",
+                          customOption
+                        );
+                      }
+                    }}
+                    className="flex gap-3 w-full text-left items-start px-3 py-3 border-b last:border-b-0 border-gray-100 hover:bg-[#e6f6fc] bg-blue-50"
+                  >
+                    <span className="mt-0.5">
+                      <svg
+                        width="20"
+                        height="20"
+                        fill="none"
+                        viewBox="0 0 20 20"
+                      >
+                        <rect
+                          x="4"
+                          y="4"
+                          width="12"
+                          height="12"
+                          rx="6"
+                          stroke="#2095d2"
+                          strokeWidth="2"
+                          fill="#e6f6fc"
+                        />
+                        <path
+                          d="M10 7v6M7 10h6"
+                          stroke="#2095d2"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="text-black text-[15px] leading-[1.2] font-medium">
+                        Use "{searchValue}"
+                      </span>
+                      <span className="text-xs text-gray-700 leading-tight mt-0.5">
+                        Custom location
+                      </span>
+                    </span>
+                  </button>
+                )}
+              </>
+            );
+          })()}
+        </div>
+      )}
     </div>
   );
 }
 
-function HomePage() {
-  const router = useSeedRouter();
-  const [profileOpen, setProfileOpen] = useState(false);
-  const { getElementAttributes, getText } = useSeedLayout();
-  const [generating, setGenerating] = useState(true);
+const RIDE_TEMPLATES = [
+  {
+    name: "AutoDriverX",
+    icon: "https://ext.same-assets.com/407674263/3757967630.png",
+    image: "/car1.png",
+    desc: "Affordable rides, all to yourself",
+    seats: 4,
+    basePrice: 26.6,
+  },
+  {
+    name: "Comfort",
+    icon: "https://ext.same-assets.com/407674263/2600779409.svg",
+    image: "/car2.png",
+    desc: "Newer cars with extra legroom",
+    seats: 4,
+    basePrice: 31.5,
+  },
+  {
+    name: "AutoDriverXL",
+    icon: "https://ext.same-assets.com/407674263/2882408466.svg",
+    image: "/car3.png",
+    desc: "Affordable rides for groups up to 6",
+    seats: 6,
+    basePrice: 27.37,
+  },
+  {
+    name: "Executive",
+    icon: "https://ext.same-assets.com/407674263/1505241019.svg",
+    image: "/dashboard.jpg",
+    desc: "Premium rides with professional drivers",
+    seats: 4,
+    basePrice: 45.0,
+  },
+];
 
-  useEffect(() => {
-    let mounted = true;
-    if (isDataReady()) {
-      setGenerating(false);
-      return;
-    }
-    (async () => {
-      setGenerating(true);
-      try {
-        await whenDataReady();
-      } finally {
-        if (mounted) setGenerating(false);
-      }
-    })();
-    return () => { mounted = false; };
-  }, []);
+const seededRandom = (seed: number) => {
+  let value = seed || 1;
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296;
+    return value / 4294967296;
+  };
+};
 
-  // Header component
-  const header = (
-    <header className="bg-white shadow-md w-full sticky top-0 z-20">
-      <nav className="max-w-7xl mx-auto flex items-center justify-between py-2 px-4">
-        <div
-          className="font-bold text-xl tracking-tight text-[#2095d2] cursor-pointer hover:opacity-80 transition"
-          onClick={() => router.push("/")}
-        >
-          AutoDriver
-        </div>
-        <ul className="hidden md:flex space-x-6">
-          <li>
-            <button
-              className="hover:text-[#2095d2] transition"
-              onClick={() => router.push("/ride/trip")}
-            >
-              {getText('nav-ride', 'Ride')}
-            </button>
-          </li>
-          <li>
-            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
-              {getText('nav-drive', 'Drive')}
-            </SeedLink>
-          </li>
-          <li>
-            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
-              {getText('nav-business', 'Business')}
-            </SeedLink>
-          </li>
-          <li>
-            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
-              AutoDriver Eats
-            </SeedLink>
-          </li>
-          <li>
-            <SeedLink href="#" className="hover:text-[#2095d2] transition" preserveSeed={false}>
-              About
-            </SeedLink>
-          </li>
-        </ul>
-        <div className="flex items-center space-x-2">
-          <SeedLink
-            href="#"
-            className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
-            preserveSeed={false}
-          >
-            ES
-          </SeedLink>
-          <SeedLink
-            href="/help"
-            className="px-3 py-1 text-sm rounded hover:bg-gray-100 transition hidden md:block"
-          >
-            {getText('nav-help', 'Help')}
-          </SeedLink>
-          <button
-            className="bg-[#2095d2] text-white text-sm px-4 py-1 rounded-md font-semibold shadow hover:bg-[#1273a0] transition relative"
-            onClick={() => setProfileOpen(!profileOpen)}
-          >
-            Federico
-            <svg
-              width="18"
-              height="18"
-              fill="none"
-              viewBox="0 0 18 18"
-              className="inline-block ml-2"
-            >
-              <path d="M6 8l3 3 3-3" stroke="#fff" strokeWidth="2.1" />
-            </svg>
-          </button>
-          <ProfileDropdown
-            open={profileOpen}
-            setOpen={setProfileOpen}
-            router={router}
-          />
-        </div>
-      </nav>
-    </header>
-  );
+function formatEta(minutesFromNow: number): string {
+  const etaTime = new Date();
+  etaTime.setMinutes(etaTime.getMinutes() + minutesFromNow);
+  const timeString = etaTime.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  return `${minutesFromNow} min away · ${timeString}`;
+}
 
-  // Hero section component
-  const hero = (
-    <section className="flex flex-col md:flex-row items-center justify-center min-h-[calc(100vh-80px)] px-4 max-w-7xl mx-auto w-full gap-10">
-      {/* Hero text and form */}
-      <div className="flex-1 flex flex-col items-center md:items-start justify-center z-10">
-        <h1 className="font-extrabold text-4xl md:text-5xl mb-2 text-[#2095d2] text-center md:text-left drop-shadow" {...getElementAttributes('hero-title', 0)}>
-          {getText('hero-title', 'Go anywhere with AutoDriver')}
-        </h1>
-        <h2 className="text-2xl md:text-3xl mb-7 text-gray-900 text-center md:text-left font-medium" {...getElementAttributes('hero-subtitle', 0)}>
-          {getText('hero-subtitle', 'Your ride, your way.\nRequest, explore, arrive.')}
-        </h2>
-        <div className="w-full max-w-md mx-auto md:mx-0 mt-2 bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 mb-8 border border-gray-100">
-          <button
-            {...getElementAttributes('get-trip-button', 0)}
-            className="bg-[#2095d2] text-white px-6 py-4 rounded-md font-bold text-xl hover:bg-[#1273a0] transition shadow-lg"
-            onClick={() => {
-              console.log("Logging GET_TRIP_CLICK");
-              logEvent(EVENT_TYPES.SEE_PRICES, { 
-                timestamp: new Date().toISOString(),
-                sourcePage: 'home',
-                buttonType: 'get_trip',
-                action: 'navigate_to_trip_form'
-              });
-              router.push("/ride/trip");
-            }}
-          >
-            {getText('get-trip-button', 'Get a Trip')}
-          </button>
-        </div>
-      </div>
-      {/* Car image */}
-      <div className="flex-1 flex items-center justify-center z-0">
-        <img
-          src="/dashboard.jpg"
-          alt="Car"
-          className="w-[22rem] h-64 md:w-[36rem] md:h-[22rem] object-contain drop-shadow-xl"
-        />
-      </div>
-    </section>
-  );
+function generateSeededRides(seed: number) {
+  const rng = seededRandom(seed);
+  const recommendedIdx = Math.floor(rng() * RIDE_TEMPLATES.length);
 
-  // Booking section component (placeholder for now)
-  const booking = (
-    <div className="w-full max-w-md mx-auto bg-white rounded-xl shadow-md p-6 flex flex-col space-y-4 border border-gray-100">
-      <h3 className="text-lg font-semibold mb-3" {...getElementAttributes('quick-booking-title', 0)}>{getText('quick-booking-title', 'Quick Booking')}</h3>
-      <button
-        {...getElementAttributes('book-now-button', 0)}
-        className="bg-[#2095d2] text-white px-6 py-3 rounded-md font-bold hover:bg-[#1273a0] transition"
-        onClick={() => {
-          logEvent(EVENT_TYPES.EXPLORE_FEATURES, { 
-            timestamp: new Date().toISOString(),
-            sourcePage: 'home',
-            feature: 'quick_booking'
-          });
-          router.push("/ride/trip");
-        }}
-      >
-        {getText('book-now-button', 'Book Now')}
-      </button>
-    </div>
-  );
+  return RIDE_TEMPLATES.map((template, idx) => {
+    const surgeMultiplier = 0.85 + rng() * 0.4; // 0.85 - 1.25
+    const price = Number((template.basePrice * surgeMultiplier).toFixed(2));
+    const oldPrice = Number((price * (1.05 + rng() * 0.15)).toFixed(2));
+    const minutesAway = 1 + Math.floor(rng() * 5);
 
-  // Map section component (placeholder for now)
-  const map = (
-    <div className="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center" {...getElementAttributes('map-view', 0)}>
-      <div className="text-gray-500">{getText('map-view-label', 'Map View')}</div>
-    </div>
-  );
+    return {
+      ...template,
+      price,
+      oldPrice,
+      eta: formatEta(minutesAway),
+      recommended: idx === recommendedIdx,
+    };
+  });
+}
 
-  // Rides section component (placeholder for now)
-  const rides = (
-    <div className="w-full bg-white rounded-xl shadow-md p-6 border border-gray-100">
-      <h3 className="text-lg font-semibold mb-3" {...getElementAttributes('available-rides-title', 0)}>{getText('available-rides-title', 'Available Rides')}</h3>
-      <div className="space-y-2">
-        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-          <span>AutoDriverX</span>
-          <span className="font-bold text-[#2095d2]">$26.60</span>
-        </div>
-        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-          <span>Comfort</span>
-          <span className="font-bold text-[#2095d2]">$31.50</span>
-        </div>
-      </div>
-    </div>
-  );
-
-  // Footer component (placeholder for now)
-  const footer = (
-    <footer className="bg-gray-100 py-8 px-4" {...getElementAttributes('footer', 0)}>
-      <div className="max-w-7xl mx-auto text-center text-gray-600">
-        <p>{getText('footer-copy', '© 2024 AutoDriver. All rights reserved.')}</p>
-      </div>
-    </footer>
-  );
-
+function Spinner() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-[#eaf6fd] via-[#f5fbfc] to-[#eaf6fd] overflow-x-hidden">
-      {generating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <div className="bg-white rounded-xl shadow-lg px-6 py-4 text-center">
-            <div className="flex items-center justify-center mb-3">
-              <span className="inline-block w-5 h-5 mr-2 border-2 border-[#2095d2] border-t-transparent rounded-full animate-spin"></span>
-              <span className="text-[#2095d2] font-semibold">Data Generation is in progress</span>
-            </div>
-            <div className="text-gray-600 text-sm">This may take some time…</div>
-          </div>
-        </div>
-      )}
-      <DynamicLayout
-        header={header}
-        main={
-          <SiteElements>
-            {{
-              header,
-              hero,
-              booking,
-              map,
-              rides,
-              footer
-            }}
-          </SiteElements>
-        }
-        footer={footer}
-      />
+    <div className="flex flex-col items-center justify-center w-full h-full py-32">
+      <svg
+        className="animate-spin text-blue-500"
+        width="58"
+        height="58"
+        fill="none"
+        viewBox="0 0 58 58"
+      >
+        <circle
+          cx="29"
+          cy="29"
+          r="25"
+          stroke="#2095d2"
+          strokeWidth="6"
+          className="opacity-30"
+        />
+        <path
+          d="M54 29A25 25 0 0 1 29 54"
+          stroke="#2095d2"
+          strokeWidth="6"
+          strokeLinecap="round"
+        />
+      </svg>
+      <p className="mt-10 text-lg font-medium text-[#212121]">
+        Preparing available options for your trip, please wait...
+      </p>
     </div>
   );
 }
 
 export default function Home() {
-  // In the future, logic can be added here to decide which page to show.
-  return <HomePage />;
+  const router = useSeedRouter();
+  const { getElementAttributes, getText, v2Seed } = useSeedLayout();
+  const [pickupOpen, setPickupOpen] = useState(false);
+  const [dropoffOpen, setDropoffOpen] = useState(false);
+  const [pickup, setPickup] = useState<string | null>(null);
+  const [dropoff, setDropoff] = useState<string | null>(null);
+  const [pickupScheduled, setPickupScheduled] = useState<null | {
+    date: string;
+    time: string;
+  }>(null);
+  const [showRides, setShowRides] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedRideIdx, setSelectedRideIdx] = useState<number | null>(null);
+  const [rides, setRides] = useState(() => generateSeededRides(v2Seed ?? 1));
+  const [stats, setStats] = useState({
+    totalTrips: 0,
+    activeRiders: 0,
+    availableDrivers: 0,
+  });
+
+  useEffect(() => {
+    setRides(generateSeededRides(v2Seed ?? 1));
+    setSelectedRideIdx(null);
+  }, [v2Seed]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const pick = sessionStorage.getItem("__ud_pickup");
+    const drop = sessionStorage.getItem("__ud_dropoff");
+    if (pick) setPickup(pick);
+    if (drop) setDropoff(drop);
+
+    const date = sessionStorage.getItem("ud_pickupdate");
+    const time = sessionStorage.getItem("ud_pickuptime");
+    if (date && time) setPickupScheduled({ date, time });
+    else setPickupScheduled(null);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Calculate total trips from localStorage (cancelled trips are tracked)
+    let totalTrips = 0;
+    try {
+      const cancelledTrips = JSON.parse(
+        localStorage.getItem("cancelledTrips") || "[]"
+      );
+      // Base trips completed (simulatedTrips has 3, but we can count more)
+      totalTrips = 3 + cancelledTrips.length;
+    } catch {
+      totalTrips = 3;
+    }
+
+    // Simulate active riders and available drivers based on seed for consistency
+    const seed = v2Seed ?? 1;
+    const activeRiders = 1247 + ((seed * 47) % 523);
+    const availableDrivers = 458 + ((seed * 32) % 142);
+
+    setStats({
+      totalTrips: totalTrips || 12, // Fallback to 12 if no trips
+      activeRiders,
+      availableDrivers,
+    });
+  }, [v2Seed]);
+
+  function formatDateTime(date: string, time: string) {
+    // MMM DD, HH:MM AM/PM
+    const d = new Date(`${date}T${time}`);
+    const mmmd = d.toLocaleString("en-US", { month: "short", day: "numeric" });
+    const hma = d.toLocaleString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return `${mmmd}, ${hma}`;
+  }
+
+  function handleSearch() {
+    if (pickup && dropoff) {
+      // 🔹 log the SEARCH event
+      logEvent(EVENT_TYPES.SEARCH, {
+        pickup,
+        dropoff,
+        scheduled: pickupScheduled
+          ? `${pickupScheduled.date} ${pickupScheduled.time}`
+          : "now",
+        timestamp: new Date().toISOString(),
+        hasPickup: !!pickup,
+        hasDropoff: !!dropoff,
+        isScheduled: !!pickupScheduled,
+        pickupLength: pickup?.length || 0,
+        dropoffLength: dropoff?.length || 0,
+      });
+
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setShowRides(true);
+      }, 20);
+    }
+  }
+
+  useEffect(() => {
+    if (!pickup || !dropoff) {
+      setShowRides(false);
+      setLoading(false);
+    }
+  }, [pickup, dropoff]);
+
+  // For SSR/CSR compatibility, get pathname reactively
+  const [currentPath, setCurrentPath] = useState("");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
+
+  // Determine if "My trips" is active
+  let isTripsActive = false;
+  if (typeof window !== "undefined") {
+    isTripsActive = window.location.pathname === "/ride/trip/trips";
+  } else {
+    isTripsActive = currentPath === "/ride/trip/trips";
+  }
+
+  // Header component
+  const header = <GlobalHeader />;
+
+  // Booking section component
+  const booking = (
+    <section className="w-[500px] bg-white rounded-xl shadow-lg p-8 flex flex-col gap-5 max-lg:w-full h-[calc(100vh-6rem)]">
+      <div className="mb-2">
+        <h2
+          className="text-xl font-bold mb-1"
+          {...getElementAttributes("trip-get-trip-heading", 0)}
+        >
+          {getText("trip-get-trip-heading", "Book your ride")}
+        </h2>
+        <p className="text-sm text-gray-600">
+          Enter your pickup and destination to get started
+        </p>
+      </div>
+      <div className="mb-4 flex-1 min-h-0">
+        <img
+          src="/dashboard.jpg"
+          alt="Dashboard"
+          className="w-full h-full rounded-lg object-cover shadow-sm"
+        />
+      </div>
+      <PlaceSelect
+        value={pickup}
+        setValue={setPickup}
+        placeholder={getText("pickup-placeholder", "Pickup location")}
+        open={pickupOpen}
+        setOpen={setPickupOpen}
+      />
+      <PlaceSelect
+        value={dropoff}
+        setValue={setDropoff}
+        placeholder={getText("dropoff-placeholder", "Dropoff location")}
+        open={dropoffOpen}
+        setOpen={setDropoffOpen}
+      />
+      <div
+        className="flex items-center bg-gray-100 rounded-md px-4 py-3 mb-3 text-base font-[500] cursor-pointer border border-gray-200 h-12 select-none mt-0"
+        onClick={() => router.push("/ride/trip/pickupnow")}
+      >
+        <svg
+          width="18"
+          height="18"
+          fill="none"
+          className="mr-2"
+          viewBox="0 0 20 20"
+        >
+          <circle
+            cx="10"
+            cy="10"
+            r="8"
+            fill="#fff"
+            stroke="#2095d2"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M6 10h4.2a2 2 0 0 1 2 2v2"
+            stroke="#2095d2"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+          />
+        </svg>
+        <span className="font-bold mr-1 text-[#2095d2]">
+          {pickupScheduled
+            ? getText("pickup-label", "Pick up:")
+            : getText("pickup-now-label", "Pickup now")}
+        </span>
+        {pickupScheduled ? (
+          <span className="ml-1 font-[500]">
+            {formatDateTime(pickupScheduled.date, pickupScheduled.time)}
+          </span>
+        ) : null}
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          className="ml-auto"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M6 4l4 4-4 4"
+            stroke="#2095d2"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+      <div className="flex items-center bg-gray-100 rounded-md px-3 py-2 text-sm font-medium mb-4">
+        <svg
+          width="15"
+          height="15"
+          fill="none"
+          viewBox="0 0 16 16"
+          className="mr-2"
+        >
+          <circle
+            cx="7.5"
+            cy="7.5"
+            r="6.5"
+            stroke="#2095d2"
+            strokeWidth="1.4"
+            fill="#e6f6fc"
+          />
+          <path
+            d="M6.9 6.9a1.2 1.2 0 1 1 2.2 0c0 .6-.5 1-1.1 1-.7 0-1.1-.4-1.1-1zM7.5 10.2c.9 0 2.1.2 2.5.6-.4.4-1.6.7-2.5.7s-2.1-.3-2.5-.7c.4-.4 1.6-.6 2.5-.6z"
+            fill="#2095d2"
+          />
+        </svg>
+        <span>{getText("for-me-label", "For me")}</span>
+        <svg
+          width="10"
+          height="10"
+          fill="none"
+          viewBox="0 0 10 10"
+          className="ml-auto"
+        >
+          <path d="M2 4l3 3 3-3" stroke="#2095d2" strokeWidth="1.3" />
+        </svg>
+      </div>
+      <button
+        {...getElementAttributes("search-button", 0)}
+        onClick={handleSearch}
+        className={`rounded-md h-10 font-bold mb-2 transition ${
+          !pickup || !dropoff || loading
+            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+            : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
+        }`}
+        disabled={!pickup || !dropoff || loading}
+      >
+        {loading
+          ? getText("searching-label", "Searching...")
+          : getText("search-button", "Search")}
+      </button>
+
+      {/* Stats Section */}
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100/50">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2095d2]/10 mb-2">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                viewBox="0 0 20 20"
+                className="text-[#2095d2]"
+              >
+                <path
+                  d="M10 2L3 7v11h14V7l-7-5z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+                <path
+                  d="M7 10h6M7 14h6"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                />
+              </svg>
+            </div>
+            <div className="text-2xl font-bold text-[#2095d2]">
+              {stats.totalTrips}+
+            </div>
+            <div className="text-xs text-gray-600 mt-0.5">Total Trips</div>
+          </div>
+          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-green-50 to-green-100/50">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 mb-2">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                viewBox="0 0 20 20"
+                className="text-green-600"
+              >
+                <circle
+                  cx="10"
+                  cy="7"
+                  r="3"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+                <path
+                  d="M4 17v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+              </svg>
+            </div>
+            <div className="text-2xl font-bold text-green-600">
+              {stats.activeRiders.toLocaleString()}
+            </div>
+            <div className="text-xs text-gray-600 mt-0.5">Active Riders</div>
+          </div>
+          <div className="flex flex-col items-center text-center p-3 rounded-lg bg-gradient-to-br from-purple-50 to-purple-100/50">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/10 mb-2">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                viewBox="0 0 20 20"
+                className="text-purple-600"
+              >
+                <rect
+                  x="4"
+                  y="5"
+                  width="12"
+                  height="10"
+                  rx="2"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+                <path
+                  d="M6 8h8M6 11h5"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                />
+              </svg>
+            </div>
+            <div className="text-2xl font-bold text-purple-600">
+              {stats.availableDrivers}
+            </div>
+            <div className="text-xs text-gray-600 mt-0.5">
+              Available Drivers
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  // Rides section component
+  const ridesSection = loading ? (
+    <section className="flex-1 flex flex-col items-center justify-center">
+      <Spinner />
+    </section>
+  ) : pickup && dropoff && showRides ? (
+    <section
+      className="flex-1"
+      style={{ width: "100%", maxWidth: "none", minWidth: 0 }}
+    >
+      <h1
+        className="text-3xl font-bold mb-2"
+        {...getElementAttributes("choose-ride-title", 0)}
+      >
+        {getText("choose-ride-title", "Choose a ride")}
+      </h1>
+      <div
+        className="text-lg font-semibold mb-6"
+        {...getElementAttributes("recommended-label", 0)}
+      >
+        {getText("recommended-label", "Recommended")}
+      </div>
+      <div className="space-y-5" style={{ width: "100%", maxWidth: "none" }}>
+        {rides.map((ride, idx) => (
+          <div
+            key={ride.name}
+            onClick={() => {
+              setSelectedRideIdx(idx);
+              // 🔹 log the SELECT_CAR event
+              logEvent(EVENT_TYPES.SELECT_CAR, {
+                rideId: idx,
+                rideName: ride.name,
+                rideType: ride.name,
+                price: ride.price,
+                oldPrice: ride.oldPrice,
+                seats: ride.seats,
+                eta: ride.eta,
+                pickup,
+                dropoff,
+                scheduled: pickupScheduled
+                  ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                  : "now",
+                timestamp: new Date().toISOString(),
+                priceDifference: ride.oldPrice - ride.price,
+                discountPercentage: (
+                  ((ride.oldPrice - ride.price) / ride.oldPrice) *
+                  100
+                ).toFixed(2),
+                isRecommended: ride.recommended || false,
+              });
+            }}
+            className={
+              "flex items-center gap-8 rounded-2xl px-8 py-8 cursor-pointer transition" +
+              (selectedRideIdx === idx
+                ? " border-2 border-[#2095d2] bg-[#e6f6fc] shadow-xl"
+                : " border-2 border-gray-200 bg-white hover:bg-gray-50 shadow-md")
+            }
+            style={{
+              width: "100%",
+              maxWidth: "none",
+              minHeight: "240px",
+              outline: selectedRideIdx === idx ? "2px solid #2095d2" : "none",
+            }}
+            tabIndex={0}
+          >
+            <img
+              src={ride.image}
+              alt={ride.name}
+              className="rounded-xl w-80 h-64 object-cover bg-gray-200 flex-shrink-0 shadow-xl"
+            />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="font-bold text-2xl">{ride.name}</span>
+                <svg width="24" height="24" fill="none" viewBox="0 0 16 16">
+                  <rect
+                    x="2"
+                    y="2"
+                    width="12"
+                    height="12"
+                    rx="6"
+                    stroke="#2095d2"
+                    strokeWidth="1.5"
+                    fill="#e6f6fc"
+                  />
+                  <text
+                    x="8"
+                    y="12"
+                    textAnchor="middle"
+                    fontSize="11"
+                    fill="#2095d2"
+                    fontWeight="bold"
+                  >
+                    {ride.seats}
+                  </text>
+                </svg>
+              </div>
+              <div className="text-base text-gray-700 font-semibold mb-2">
+                {ride.eta}
+              </div>
+              <div className="text-base text-gray-600">{ride.desc}</div>
+            </div>
+            <div className="text-right pr-2 flex-shrink-0">
+              <div className="font-bold text-3xl text-[#2095d2] mb-1">
+                ${ride.price.toFixed(2)}
+              </div>
+              <div className="line-through text-base text-gray-400">
+                ${ride.oldPrice.toFixed(2)}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ) : null;
+
+  // Map section component
+  const map = (
+    <section className="flex-1 min-w-0">
+      <div className="w-full h-[calc(100vh-6rem)] rounded-2xl border border-gray-200 overflow-hidden bg-gray-100 shadow-lg relative">
+        <img
+          src="/map2.png"
+          alt="Map"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
+    </section>
+  );
+
+  // Hero section component (removed - not needed)
+  const hero = null;
+
+  return (
+    <div className="min-h-screen w-full bg-[#f5fbfc]">
+      <DynamicLayout
+        header={header}
+        main={
+          <div className="flex gap-8 mt-8 px-10 max-lg:flex-col max-lg:px-2 max-lg:gap-4 h-[calc(100vh-5rem)]">
+            {showRides ? (
+              <div className="flex gap-8 w-full max-lg:flex-col">
+                <div className="w-[500px] max-lg:w-full">{booking}</div>
+                <div
+                  className="flex-1 min-w-0"
+                  style={{ maxWidth: "100%", width: "100%" }}
+                >
+                  {ridesSection}
+                </div>
+              </div>
+            ) : (
+              <div className="flex gap-8 w-full max-lg:flex-col items-start">
+                <div className="w-[500px] max-lg:w-full">{booking}</div>
+                <div className="flex-1">{map}</div>
+              </div>
+            )}
+          </div>
+        }
+      />
+      {pickup && dropoff && showRides && (
+        <div className="fixed z-50 left-1/2 bottom-8 -translate-x-1/2 max-w-lg w-[calc(100vw-32px)] drop-shadow-xl bg-transparent pointer-events-none max-lg:bottom-2">
+          <div className="flex items-center bg-white rounded-xl shadow-lg px-6 py-5 gap-6 max-lg:min-w-0 max-lg:w-full max-lg:px-3 pointer-events-auto">
+            <div className="flex items-center gap-2 mr-6">
+              <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
+                <rect
+                  x="1"
+                  y="4"
+                  width="18"
+                  height="12"
+                  rx="3"
+                  fill="#8FCB81"
+                />
+                <path
+                  d="M3 10h14"
+                  stroke="#fff"
+                  strokeLinecap="round"
+                  strokeWidth="2"
+                />
+              </svg>
+              <span className="text-[#2095d2] font-bold">Cash</span>
+            </div>
+            <button
+              className={`flex-1 font-bold px-6 py-2 rounded-md text-lg shadow transition disabled:bg-gray-200 disabled:text-gray-400 ${
+                selectedRideIdx === null
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-[#2095d2] text-white hover:bg-[#1273a0]"
+              }`}
+              disabled={selectedRideIdx === null}
+              onClick={() => {
+                if (selectedRideIdx !== null) {
+                  const selectedRide = rides[selectedRideIdx];
+                  // 🔹 log the RESERVE_RIDE event
+                  logEvent(EVENT_TYPES.RESERVE_RIDE, {
+                    rideId: selectedRideIdx,
+                    rideName: selectedRide.name,
+                    rideType: selectedRide.name,
+                    price: selectedRide.price,
+                    oldPrice: selectedRide.oldPrice,
+                    seats: selectedRide.seats,
+                    eta: selectedRide.eta,
+                    pickup,
+                    dropoff,
+                    scheduled: pickupScheduled
+                      ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                      : "now",
+                    timestamp: new Date().toISOString(),
+                    priceDifference: selectedRide.oldPrice - selectedRide.price,
+                    discountPercentage: (
+                      ((selectedRide.oldPrice - selectedRide.price) /
+                        selectedRide.oldPrice) *
+                      100
+                    ).toFixed(2),
+                    isRecommended: selectedRide.recommended || false,
+                    tripDetails: {
+                      pickup,
+                      dropoff,
+                      scheduled: pickupScheduled
+                        ? `${pickupScheduled.date} ${pickupScheduled.time}`
+                        : "now",
+                      rideType: selectedRide.name,
+                      price: selectedRide.price,
+                      totalSeats: selectedRide.seats,
+                      estimatedArrival: selectedRide.eta,
+                    },
+                  });
+
+                  if (typeof window !== "undefined") {
+                    sessionStorage.setItem(
+                      "__ud_selectedRideIdx",
+                      String(selectedRideIdx)
+                    );
+                    sessionStorage.setItem("__ud_pickup", pickup || "");
+                    sessionStorage.setItem("__ud_dropoff", dropoff || "");
+                  }
+                  router.push("/ride/trip/confirmation");
+                }
+              }}
+            >
+              {selectedRideIdx === null
+                ? getText("select-ride-label", "Select a ride")
+                : getText("reserve-ride-label", "Reserve ride")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { useAutoworkData } from "@/hooks/useAutoworkData";
 import { writeJson } from "@/shared/storage";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
 
 const POPULAR_SKILLS = [
   "JavaScript",
@@ -45,9 +46,11 @@ const BUDGET_TYPE_OPTIONS = [
 function PostJobWizard({
   open,
   onClose,
+  onJobCreated,
 }: {
   open: boolean;
   onClose: () => void;
+  onJobCreated?: (job: any) => void;
 }) {
   const { layout, getElementAttributes, getText, shuffleList } = useSeedLayout();
   const [step, setStep] = useState(1);
@@ -229,21 +232,44 @@ function PostJobWizard({
   return open ? (
     <>
       <ToastContainer />
-      <div className="fixed inset-0 z-50 bg-white flex flex-col min-h-screen">
-        <header className="h-16 flex items-center px-8 border-b border-gray-200 bg-white shadow-sm">
-          <span className="font-bold text-lg tracking-wide text-[#253037]">
-            topwork
-          </span>
-        </header>
-        <form
-          className="flex-1 flex flex-col xl:flex-row xl:items-center xl:justify-center px-6 py-14 xl:py-0"
+      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4" onClick={close}>
+        <div 
+          className="bg-white rounded-2xl shadow-2xl w-[900px] h-[700px] flex flex-col overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <header className="h-16 flex items-center justify-between px-8 border-b border-gray-200 bg-white shrink-0">
+            <span className="font-bold text-lg tracking-wide text-[#253037]">
+              Create Job
+            </span>
+            <button
+              onClick={() => {
+                logEvent(EVENT_TYPES.CLOSE_POST_A_JOB_WINDOW, {
+                  step,
+                  title: form.title,
+                  skills: form.skills,
+                  scope: form.scope,
+                  duration: form.duration,
+                  budgetType: form.budgetType,
+                  rateFrom: form.rateFrom,
+                  rateTo: form.rateTo,
+                  description: form.description,
+                });
+                close();
+              }}
+              className="text-2xl text-[#253037] font-bold hover:text-gray-600 transition w-8 h-8 flex items-center justify-center"
+            >
+              ×
+            </button>
+          </header>
+          <form
+            className="flex-1 flex flex-col xl:flex-row xl:items-start overflow-y-auto px-10 py-10"
           onSubmit={(e) => {
             e.preventDefault();
             if (step < totalSteps) next();
           }}
         >
           {/* Left: Step title & description */}
-          <div className="flex-1 mb-12 xl:mb-0 xl:max-w-xl xl:pr-7">
+          <div className="flex-1 mb-12 xl:mb-0 xl:max-w-xl xl:pr-12">
             <div className="flex items-center gap-4 mb-4 text-[#7b858b] font-medium text-base">
               <span>{progress}</span>
               <span className="text-xs font-normal">Job post</span>
@@ -289,7 +315,7 @@ function PostJobWizard({
             )}
           </div>
           {/* Right: Step content */}
-          <div className="flex-1 xl:border-l border-gray-200 xl:pl-8 flex flex-col gap-7">
+          <div className="flex-1 xl:border-l border-gray-200 xl:pl-12 flex flex-col gap-7 max-w-2xl">
             {currentStepKey === 'title' && (
               <>
                 <label
@@ -405,7 +431,7 @@ function PostJobWizard({
                   )}
                   <button
                     {...getElementAttributes('add-skill-button', 0)}
-                    className="rounded bg-[#08b4ce] text-white px-4 py-2 h-11 ml-2 font-bold hover:bg-[#0999ac]"
+                    className="rounded bg-[#08b4ce] text-white px-6 py-2 h-11 ml-2 font-semibold hover:bg-[#0999ac] transition whitespace-nowrap"
                     type="button"
                     onClick={() => {
                       const skill = form.customSkill.trim();
@@ -422,7 +448,7 @@ function PostJobWizard({
                       }
                     }}
                   >
-                    {getText("add-skill-button-label", "Add")}
+                    {getText("add-skill-button-label", "Add it")}
                   </button>
                 </div>
                 <div className="mb-2 text-xs text-[#4a545b]">
@@ -727,12 +753,7 @@ function PostJobWizard({
           </div>
         </form>
         {/* Navigation bottom */}
-        <div className={`flex px-5 py-4 border-t border-gray-200 items-center bg-white ${
-          layout.buttonPositions.back === 'left' && layout.buttonPositions.submit === 'right' ? 'justify-between' :
-          layout.buttonPositions.back === 'center' && layout.buttonPositions.submit === 'center' ? 'justify-center gap-4' :
-          layout.buttonPositions.back === 'right' && layout.buttonPositions.submit === 'left' ? 'justify-between flex-row-reverse' :
-          'justify-between'
-        }`}>
+        <div className="flex px-10 py-5 border-t border-gray-200 items-center bg-white shrink-0 justify-between">
           <button
             {...getElementAttributes('back-button', 0)}
             type="button"
@@ -754,9 +775,7 @@ function PostJobWizard({
               });
               back();
             }}
-            className={`px-7 py-2 rounded-lg border text-[#253037] bg-white hover:bg-gray-50 shadow-sm ${
-              layout.buttonPositions.back === 'center' ? 'order-2' : ''
-            }`}
+            className="px-7 py-2 rounded-lg border text-[#253037] bg-white hover:bg-gray-50 shadow-sm"
             disabled={step === 1}
           >
             {backButtonLabel}
@@ -766,9 +785,7 @@ function PostJobWizard({
             <button
               {...getElementAttributes('next-button', step)}
               type="button"
-              className={`px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700 ${
-                layout.buttonPositions.submit === 'center' ? 'order-1' : ''
-              }`}
+              className="px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700"
               onClick={handleStepNext}
             >
               {nextButtonLabel}
@@ -778,6 +795,36 @@ function PostJobWizard({
               {...getElementAttributes('submit-job-button', 0)}
               type="submit"
               onClick={() => {
+                // Create job object
+                const newJob = {
+                  id: `job_${Date.now()}`,
+                  title: form.title,
+                  status: "Pending",
+                  start: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                  timestr: "Time logged this week:",
+                  time: "0:00 hrs ($0)",
+                  activity: "last active just now on Initial project setup",
+                  skills: form.skills,
+                  scope: form.scope,
+                  duration: form.duration,
+                  budgetType: form.budgetType,
+                  rateFrom: form.rateFrom,
+                  rateTo: form.rateTo,
+                  description: form.description,
+                };
+
+                // Save to localStorage
+                try {
+                  const existingJobs = JSON.parse(
+                    window.localStorage.getItem("autowork_user_jobs") || "[]"
+                  );
+                  existingJobs.unshift(newJob); // Add to beginning
+                  window.localStorage.setItem("autowork_user_jobs", JSON.stringify(existingJobs));
+                } catch (err) {
+                  console.error("Failed to save job to localStorage:", err);
+                }
+
+                // Log event
                 logEvent(EVENT_TYPES.SUBMIT_JOB, {
                   step,
                   title: form.title,
@@ -789,77 +836,38 @@ function PostJobWizard({
                   rateTo: form.rateTo,
                   description: form.description,
                 });
+
+                // Call callback to update parent
+                if (onJobCreated) {
+                  onJobCreated(newJob);
+                }
+
                 toast.success("Job Submitted successfully!");
+                
+                // Close wizard and reset form
+                setTimeout(() => {
+                  close();
+                  setForm({
+                    title: "",
+                    skills: [],
+                    customSkill: "",
+                    scope: "",
+                    duration: "",
+                    budgetType: "hourly",
+                    rateFrom: "",
+                    rateTo: "",
+                    description: "",
+                    attachments: [],
+                  });
+                }, 1000);
               }}
-              className={`px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700 ${
-                layout.buttonPositions.submit === 'center' ? 'order-1' : 'ml-2'
-              }`}
+              className="px-7 py-2 rounded-lg bg-[#1fc12c] text-white text-base font-semibold shadow-sm hover:bg-green-700"
             >
               {nextButtonLabel}
             </button>
           )}
         </div>
-        {/* Close icon */}
-        <button
-          {...getElementAttributes('close-post-job-button', 0)}
-          onClick={() => {
-            logEvent(EVENT_TYPES.CLOSE_POST_A_JOB_WINDOW, {
-              step,
-              title: form.title,
-              skills: form.skills,
-              scope: form.scope,
-              duration: form.duration,
-              budgetType: form.budgetType,
-              rateFrom: form.rateFrom,
-              rateTo: form.rateTo,
-              description: form.description,
-            });
-            close();
-          }}
-          className={`absolute text-xl text-[#253037] font-bold ${
-            layout.buttonPositions.close === 'top-left' ? 'top-4 left-4' :
-            layout.buttonPositions.close === 'top-right' ? 'top-4 right-4' :
-            layout.buttonPositions.close === 'bottom-left' ? 
-              // Smart positioning to avoid overlap with navigation buttons
-              (() => {
-                const backPos = layout.buttonPositions.back as string;
-                const submitPos = layout.buttonPositions.submit as string;
-                
-                // If back is left and submit is right (justify-between), move close to top-right to avoid both
-                if (backPos === 'left' && submitPos === 'right') return 'top-4 right-4';
-                // If back button is on left and submit is centered, move close to right
-                if (backPos === 'left' && submitPos === 'center') return 'bottom-4 right-4';
-                // If both back and submit are centered, move close to top-right to avoid navigation area
-                if (backPos === 'center' && submitPos === 'center') return 'top-4 right-4';
-                // If back is centered and submit is right, move close to left
-                if (backPos === 'center' && submitPos === 'right') return 'bottom-4 left-4';
-                // Default to bottom-left if no conflicts
-                return 'bottom-4 left-4';
-              })() :
-            layout.buttonPositions.close === 'bottom-right' ? 
-              // Smart positioning to avoid overlap with navigation buttons
-              (() => {
-                const backPos = layout.buttonPositions.back as string;
-                const submitPos = layout.buttonPositions.submit as string;
-                
-                // If back is left and submit is right (justify-between), move close to top-left to avoid both
-                if (backPos === 'left' && submitPos === 'right') return 'top-4 left-4';
-                // If back is right and submit is left (justify-between), move close to top-right to avoid both
-                if (backPos === 'right' && submitPos === 'left') return 'top-4 right-4';
-                // If submit button is on right, move close to left
-                if (submitPos === 'right') return 'bottom-4 left-4';
-                // If back button is on right, move close to left
-                if (backPos === 'right') return 'bottom-4 left-4';
-                // If both back and submit are centered, move close to top-left to avoid navigation area
-                if (backPos === 'center' && submitPos === 'center') return 'top-4 left-4';
-                // Default to bottom-right if no conflicts
-                return 'bottom-4 right-4';
-              })() :
-            'top-4 right-4'
-          }`}
-        >
-          ×
-        </button>
+        </div>
       </div>
     </>
   ) : null;
@@ -869,11 +877,31 @@ export default function Home() {
 	const pathname = usePathname();
 	const [showPostJob, setShowPostJob] = useState(false);
 	const [hasSeenInitialLoad, setHasSeenInitialLoad] = useState(false);
+	const [userJobs, setUserJobs] = useState<any[]>([]);
 	const { layout, getElementAttributes, getText } = useSeedLayout();
 
 	const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
 	const hiresState = useAutoworkData<any>("web_10_autowork_hires", 6);
 	const expertsState = useAutoworkData<any>("web_10_autowork_experts", 6);
+
+	// Load user jobs from localStorage
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		try {
+			const saved = window.localStorage.getItem("autowork_user_jobs");
+			if (saved) {
+				const jobs = JSON.parse(saved);
+				setUserJobs(jobs);
+			}
+		} catch (err) {
+			console.error("Failed to load user jobs from localStorage:", err);
+		}
+	}, []);
+
+	// Combine user jobs with fetched jobs (user jobs first)
+	const allJobs = useMemo(() => {
+		return [...userJobs, ...jobsState.data];
+	}, [userJobs, jobsState.data]);
 
 	const isLoading = jobsState.isLoading || hiresState.isLoading || expertsState.isLoading;
 	const errorMessage = jobsState.error || hiresState.error || expertsState.error;
@@ -927,235 +955,546 @@ export default function Home() {
 	}, [isLoading, jobsState.data, hiresState.data, expertsState.data]);
 
 	// Create section components
-	const JobsSection = () => (
-		<div id="jobs">
-			<div className="flex items-center justify-between mb-8">
-				<h2
-					className="text-2xl font-semibold"
-					{...getElementAttributes('jobs-heading', 0)}
-				>
-					{getText('jobs-heading', 'Your jobs')}
-				</h2>
-				<button
-					{...getElementAttributes('post-job-button', 0)}
-					type="button"
-					className={`inline-flex items-center px-5 py-2 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-sm text-base transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
-						layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
-						layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
-					}`}
-					onClick={() => {
-						setShowPostJob(true);
-						logEvent(EVENT_TYPES.POST_A_JOB, {
-							source: "button",
-							page: "home",
-						});
-					}}
-				>
-					{getText('post-job-button-label', '+ Post a job')}
-				</button>
-			</div>
-			<div className="grid gap-7 grid-cols-1 md:grid-cols-2">
-				{jobsState.data.map((job: any, i: number) => (
-					<div
-						key={i}
-						{...getElementAttributes('job-item', i)}
-						className="bg-white shadow rounded-xl px-7 py-6 flex flex-col gap-2 border border-gray-100"
-					>
-						<div className="flex flex-wrap justify-between items-center gap-4">
-							<span className="text-lg font-medium text-[#253037]">
-								{job.title}
-							</span>
-							<span
-								className="inline-block px-3 py-1 rounded-full text-xs font-semibold"
-								style={{
-									background:
-										job.status === "Completed"
-											? "#ebcf95"
-											: job.status === "In progress"
-											? "#08b4ce10"
-											: job.status === "Pending"
-											? "#b0627510"
-											: job.status === "In review"
-											? "#cea2ab50"
-											: "#cad2d0",
-									color:
-										job.status === "Completed"
-											? "#253037"
-											: job.status === "In progress"
-											? "#08b4ce"
-											: job.status === "Pending"
-											? "#b06275"
-											: job.status === "In review"
-											? "#b06275"
-											: "#253037",
-								}}
-							>
-								{job.status}
-							</span>
-						</div>
-						<div className="text-xs text-gray-500 mb-2">
-							Date started {job.start}
-						</div>
-						<div className="flex flex-wrap justify-between items-end">
-							<div>
-								<span className="block text-sm font-medium text-gray-600">
-									{job.timestr}{" "}
-									<span className="font-bold text-black">{job.time}</span>
-								</span>
-								<span className="block text-xs text-gray-400 mt-1">
-									{job.activity}
-								</span>
-							</div>
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-	);
+	const JobsSection = () => {
+		const totalJobs = allJobs.length;
+		const completedJobs = allJobs.filter((j: any) => j.status === "Completed").length;
+		const inProgressJobs = allJobs.filter((j: any) => j.status === "In progress").length;
+		
+		const getStatusColor = (status: string) => {
+			switch (status) {
+				case "Completed":
+					return {
+						bg: "bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200",
+						badge: "bg-green-100 text-green-800 border border-green-300",
+						icon: "text-yellow-600",
+					};
+				case "In progress":
+					return {
+						bg: "bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200",
+						badge: "bg-purple-100 text-purple-800 border border-purple-300",
+						icon: "text-blue-600",
+					};
+				case "Pending":
+					return {
+						bg: "bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200",
+						badge: "bg-gray-100 text-gray-800 border border-gray-300",
+						icon: "text-orange-600",
+					};
+				case "In review":
+					return {
+						bg: "bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200",
+						badge: "bg-indigo-100 text-indigo-800 border border-indigo-300",
+						icon: "text-pink-600",
+					};
+				default:
+					return {
+						bg: "bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200",
+						badge: "bg-gray-100 text-gray-800 border border-gray-300",
+						icon: "text-gray-600",
+					};
+			}
+		};
 
-	const HiresSection = () => (
-		<section id="hires" className="px-10 mt-14 px-4">
-			<div className="flex items-center justify-between mb-7">
-				<h2
-					className="text-2xl font-semibold"
-					{...getElementAttributes('hires-heading', 0)}
-				>
-					{getText('hires-heading', 'Your hires')}
-				</h2>
-				<a
-					href="#"
-					className="text-[#08b4ce] text-sm font-medium hover:underline"
-				>
-					View all your hires
-				</a>
-			</div>
-			<div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-				{hiresState.data.map((hire: any) => (
-					<div
-						key={hire.name}
-						className="bg-white rounded-xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100"
-					>
-						<div className="flex items-center gap-4 mb-1">
-							<img
-								src={hire.avatar}
-								alt={hire.name}
-								className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-							/>
-							<div>
-								<div className="font-semibold text-lg text-[#253037]">
-									{hire.name}
-								</div>
-								<div className="text-xs text-gray-500">{hire.country}</div>
-							</div>
-						</div>
-						<div className="flex items-center gap-2 text-sm text-[#08b4ce] font-semibold mb-1">
-							{hire.rate}
-							<span className="text-gray-400 font-normal ml-2">
-								• {hire.role}
-							</span>
-						</div>
-						<div className="flex items-center gap-4 text-xs mt-1 text-gray-500">
-							<span className="flex items-center gap-1">
-								<svg
-									className="w-4 h-4 text-[#ebcf95]"
-									fill="currentColor"
-									viewBox="0 0 20 20"
-								>
-									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-								</svg>{" "}
-								{hire.rating}
-							</span>
-							<span> {hire.jobs} jobs</span>
-						</div>
-						{hire.rehire && (
-							<span className="mt-2 w-32 inline-block text-xs bg-[#e6f9fb] text-[#08b4ce] font-medium px-2 py-1 rounded">
-								Available for rehire
-							</span>
-						)}
-					</div>
-				))}
-			</div>
-		</section>
-	);
-
-	const ExpertsSection = () => (
-		<section id="experts" className="px-10 mt-16 px-4">
-			<h2
-				className="text-2xl font-semibold mb-7"
-				{...getElementAttributes('experts-heading', 0)}
-			>
-				{getText('experts-heading', "Review your project's goals with an expert, one-on-one")}
-			</h2>
-			<div className="grid gap-7 md:grid-cols-2">
-				{expertsState.data.map((expert: any, i: number) => (
-					<div
-						key={expert.name}
-						className="bg-white rounded-2xl shadow px-6 py-5 flex flex-col gap-2 border border-gray-100 relative"
-					>
-						<div className="flex items-center gap-3 mb-3 mt-2">
-							<img
-								src={expert.avatar}
-								alt={expert.name}
-								className="w-12 h-12 rounded-full object-cover border border-[#cad2d0] shadow"
-							/>
-							<div>
-								<div className="font-semibold text-lg text-[#253037] leading-tight">
-									{expert.name}
-								</div>
-								<div className="text-xs text-gray-500">{expert.country}</div>
-							</div>
-						</div>
-						<div className="text-sm font-semibold text-[#253037] mb-1">
-							{expert.role}
-						</div>
-						<div className="flex items-center gap-4 text-[#6c7280] text-xs mb-1">
-							<span>
-								<span className="font-bold text-base text-[#253037]">
-									{expert.rate}
-								</span>
-							</span>
-							<span className="flex items-center gap-1">
-								<svg
-									className="w-4 h-4 text-[#ebcf95]"
-									fill="currentColor"
-									viewBox="0 0 20 20"
-								>
-									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
-								</svg>{" "}
-								{expert.rating}
-							</span>
-							<span className="ml-1">{expert.jobs}</span>
-						</div>
-						<div className="text-[15px] text-gray-700 mb-2 leading-tight">
-							{expert.desc}
-						</div>
-						<div className="flex items-center gap-2 text-[#1964e2] text-base font-semibold py-2 mb-2">
-							<svg width="22" height="22" fill="none" viewBox="0 0 24 24">
-								<path
-									stroke="#1964e2"
-									strokeWidth="1.4"
-									d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
-								/>
-							</svg>
-							<span>{expert.consultation}</span>
-						</div>
-						<SeedLink
-							href={`/expert/${(expert as any).slug ?? expert.name
-								.toLowerCase()
-								.replace(/\s+/g, "-")
-								.replace(/\./g, "")}`}
-							passHref
-							prefetch={false}
-							{...getElementAttributes('book-consultation-button', i)}
-							className="w-full mt-1 py-2 border border-gray-300 rounded-xl bg-white font-semibold text-lg text-[#253037] shadow hover:bg-[#f4f7fa] transition text-center flex items-center justify-center"
+		return (
+			<section id="jobs" className="px-10 mt-14 px-4">
+				{/* Header with Stats */}
+				<div className="mb-8">
+					<div className="flex items-center justify-between mb-6">
+						<h2
+							className="text-3xl font-bold text-gray-900"
+							{...getElementAttributes('jobs-heading', 0)}
 						>
-							{getText('book-consultation-button-label', 'Book a consultation')}
-						</SeedLink>
+							{getText('jobs-heading', 'Jobs Dashboard')}
+						</h2>
+						<button
+							{...getElementAttributes('post-job-button', 0)}
+							type="button"
+							className={`inline-flex items-center px-6 py-3 rounded-full bg-[#1fc12c] hover:bg-[#199225] text-white font-semibold shadow-md hover:shadow-lg text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#199225] ${
+								layout.buttonPositions.postJob === 'left' ? 'ml-auto' :
+								layout.buttonPositions.postJob === 'center' ? 'mx-auto' : ''
+							}`}
+							onClick={() => {
+								setShowPostJob(true);
+								logEvent(EVENT_TYPES.POST_A_JOB, {
+									source: "button",
+									page: "home",
+								});
+							}}
+						>
+							{getText('post-job-button-label', '+ Create posting')}
+						</button>
 					</div>
-				))}
-			</div>
-		</section>
-	);
+					
+					{/* Stats Cards */}
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+						<div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">Total Jobs</p>
+									<p className="text-3xl font-bold text-gray-700">{totalJobs}</p>
+								</div>
+								<div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+									</svg>
+								</div>
+							</div>
+						</div>
+						
+						<div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">Completed</p>
+									<p className="text-3xl font-bold text-green-700">{completedJobs}</p>
+								</div>
+								<div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+								</div>
+							</div>
+						</div>
+						
+						<div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">In Progress</p>
+									<p className="text-3xl font-bold text-blue-700">{inProgressJobs}</p>
+								</div>
+								<div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Jobs Cards Grid */}
+				<div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+					{allJobs.map((job: any, i: number) => {
+						const statusColors = getStatusColor(job.status);
+						return (
+							<div
+								key={i}
+								{...getElementAttributes('job-item', i)}
+								className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group"
+							>
+								<div className="flex items-start justify-between mb-4">
+									<h3 className="text-lg font-bold text-gray-900 flex-1 pr-4">
+										{job.title}
+									</h3>
+									<span
+										className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap ${statusColors.badge}`}
+									>
+										{job.status}
+									</span>
+								</div>
+								
+								<div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+									<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+									</svg>
+									<span>Started {job.start}</span>
+								</div>
+
+								<div className={`rounded-lg p-4 mb-4 border ${statusColors.bg}`}>
+									<div className="flex items-center gap-2 mb-2">
+										<svg className={`w-5 h-5 ${statusColors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+										</svg>
+										<span className="text-sm font-medium text-gray-700">
+											{job.timestr}
+										</span>
+									</div>
+									<div className="text-xl font-bold text-gray-900">
+										{job.time}
+									</div>
+								</div>
+
+								<div className="flex items-start gap-2 pt-3 border-t border-gray-100">
+									<svg className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+									<span className="text-xs text-gray-500 leading-relaxed">
+										{job.activity}
+									</span>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</section>
+		);
+	};
+
+	const HiresSection = () => {
+		const router = useSeedRouter();
+		
+		// Helper function to generate slug from name
+		const generateSlug = (name: string): string => {
+			return name
+				.toLowerCase()
+				.replace(/[^a-z0-9]+/g, '-')
+				.replace(/(^-|-$)/g, '');
+		};
+
+		// Helper function to handle navigation to expert profile
+		const handleViewProfile = (hire: any) => {
+			const slug = hire.slug || generateSlug(hire.name);
+			router.push(`/expert/${slug}`);
+		};
+
+		const totalHires = hiresState.data.length;
+		const availableHires = hiresState.data.filter((h: any) => h.rehire).length;
+		const avgRating = hiresState.data.length > 0
+			? (hiresState.data.reduce((acc: number, h: any) => acc + parseFloat(h.rating || 0), 0) / hiresState.data.length).toFixed(1)
+			: "0.0";
+
+		return (
+			<section id="hires" className="px-10 mt-14 px-4">
+				{/* Header with Stats */}
+				<div className="mb-8">
+					<h2
+						className="text-3xl font-bold text-gray-900 mb-6"
+						{...getElementAttributes('hires-heading', 0)}
+					>
+						{getText('hires-heading', 'Hires Dashboard')}
+					</h2>
+					
+					{/* Stats Cards */}
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+						<div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">Total Hires</p>
+									<p className="text-3xl font-bold text-blue-700">{totalHires}</p>
+								</div>
+								<div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+									</svg>
+								</div>
+							</div>
+						</div>
+						
+						<div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">Available</p>
+									<p className="text-3xl font-bold text-green-700">{availableHires}</p>
+								</div>
+								<div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+								</div>
+							</div>
+						</div>
+						
+						<div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">Avg. Rating</p>
+									<p className="text-3xl font-bold text-yellow-700">{avgRating}</p>
+								</div>
+								<div className="w-12 h-12 bg-yellow-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+										<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+									</svg>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Hire Cards Grid */}
+				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{hiresState.data.map((hire: any) => (
+						<div
+							key={hire.name}
+							className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group"
+						>
+							<div className="flex items-start gap-4 mb-4">
+								<div className="relative">
+									<img
+										src={hire.avatar}
+										alt={hire.name}
+										className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-blue-400 transition-colors"
+									/>
+									{hire.rehire && (
+										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+									)}
+								</div>
+								<div className="flex-1 min-w-0">
+									<div className="font-bold text-lg text-gray-900 mb-1">
+										{hire.name}
+									</div>
+									<div className="flex items-center gap-1 text-sm text-gray-500 mb-2">
+										<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+										</svg>
+										{hire.country}
+									</div>
+									<div className="text-sm font-semibold text-blue-600 mb-1">
+										{hire.rate}
+									</div>
+									<div className="text-sm text-gray-600">
+										{hire.role}
+									</div>
+								</div>
+							</div>
+							
+							<div className="flex items-center gap-4 mb-4 pt-3 border-t border-gray-100">
+								<span className="flex items-center gap-1 text-sm">
+									<svg
+										className="w-4 h-4 text-yellow-400"
+										fill="currentColor"
+										viewBox="0 0 20 20"
+									>
+										<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+									</svg>
+									<span className="font-semibold text-gray-700">{hire.rating}</span>
+								</span>
+								<span className="text-sm text-gray-500">•</span>
+								<span className="text-sm text-gray-600">{hire.jobs} jobs</span>
+							</div>
+							
+							{hire.rehire ? (
+								<button
+									onClick={() => handleViewProfile(hire)}
+									className="w-full mt-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+								>
+									Available for rehire
+								</button>
+							) : (
+								<button
+									disabled
+									className="w-full mt-4 bg-gray-100 text-gray-500 border border-gray-300 font-medium py-2.5 px-4 rounded-lg cursor-not-allowed"
+								>
+									Not available for rehire
+								</button>
+							)}
+						</div>
+					))}
+				</div>
+			</section>
+		);
+	};
+
+	const ExpertsSection = () => {
+		const router = useSeedRouter();
+		const [favorites, setFavorites] = useState<Set<string>>(new Set());
+		
+		// Load favorites from localStorage
+		useEffect(() => {
+			if (typeof window === "undefined") return;
+			try {
+				const saved = localStorage.getItem("autowork_expert_favorites");
+				if (saved) {
+					setFavorites(new Set(JSON.parse(saved)));
+				}
+			} catch (err) {
+				console.error("Failed to load favorites:", err);
+			}
+		}, []);
+
+		// Save favorites to localStorage
+		const saveFavorites = (newFavorites: Set<string>) => {
+			setFavorites(newFavorites);
+			if (typeof window !== "undefined") {
+				try {
+					localStorage.setItem("autowork_expert_favorites", JSON.stringify(Array.from(newFavorites)));
+				} catch (err) {
+					console.error("Failed to save favorites:", err);
+				}
+			}
+		};
+
+		const toggleFavorite = (expertName: string, e: React.MouseEvent) => {
+			e.preventDefault();
+			e.stopPropagation();
+			const newFavorites = new Set(favorites);
+			if (newFavorites.has(expertName)) {
+				newFavorites.delete(expertName);
+				logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
+					action: "unfavorite_expert",
+					expertName,
+				});
+			} else {
+				newFavorites.add(expertName);
+				logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
+					action: "favorite_expert",
+					expertName,
+				});
+			}
+			saveFavorites(newFavorites);
+		};
+		
+		const totalExperts = expertsState.data.length;
+		const avgRating = expertsState.data.length > 0
+			? (expertsState.data.reduce((acc: number, e: any) => acc + parseFloat(e.rating || 0), 0) / expertsState.data.length).toFixed(1)
+			: "0.0";
+
+		const handleViewExpert = (expert: any) => {
+			const slug = (expert as any).slug ?? expert.name
+				.toLowerCase()
+				.replace(/\s+/g, "-")
+				.replace(/\./g, "");
+			router.push(`/expert/${slug}`);
+		};
+
+		return (
+			<section id="experts" className="px-10 mt-16 px-4">
+				{/* Header with Stats */}
+				<div className="mb-8">
+					<h2
+						className="text-3xl font-bold text-gray-900 mb-6"
+						{...getElementAttributes('experts-heading', 0)}
+					>
+						{getText('experts-heading', "Expert one-on-one to review your goals")}
+					</h2>
+					
+					{/* Stats Cards */}
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+						<div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">Available Experts</p>
+									<p className="text-3xl font-bold text-purple-700">{totalExperts}</p>
+								</div>
+								<div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+									</svg>
+								</div>
+							</div>
+						</div>
+						
+						<div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200 shadow-sm">
+							<div className="flex items-center justify-between">
+								<div>
+									<p className="text-sm text-gray-600 mb-1">Avg. Rating</p>
+									<p className="text-3xl font-bold text-yellow-700">{avgRating}</p>
+								</div>
+								<div className="w-12 h-12 bg-yellow-200 rounded-full flex items-center justify-center">
+									<svg className="w-6 h-6 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+										<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+									</svg>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Expert Cards Grid */}
+				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{expertsState.data.map((expert: any, i: number) => {
+						const isFavorite = favorites.has(expert.name);
+						return (
+							<div
+								key={expert.name}
+								className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 group relative"
+							>
+								{/* Favorite Button */}
+								<button
+									type="button"
+									onClick={(e) => toggleFavorite(expert.name, e)}
+									className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
+									title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+								>
+									<svg
+										className={`w-5 h-5 transition-colors ${
+											isFavorite ? "text-red-500 fill-red-500" : "text-gray-400"
+										}`}
+										fill={isFavorite ? "currentColor" : "none"}
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+										/>
+									</svg>
+								</button>
+
+								<div className="flex items-start gap-4 mb-4 pr-8">
+									<div className="relative flex-shrink-0">
+										<img
+											src={expert.avatar}
+											alt={expert.name}
+											className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-purple-400 transition-colors"
+										/>
+										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+									</div>
+									<div className="flex-1 min-w-0">
+										<div className="font-bold text-lg text-gray-900 mb-1">
+											{expert.name}
+										</div>
+										<div className="flex items-center gap-1 text-sm text-gray-500 mb-2">
+											<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+											</svg>
+											{expert.country}
+										</div>
+										<div className="text-sm font-semibold text-gray-800 mb-1">
+											{expert.role}
+										</div>
+									</div>
+								</div>
+
+								<div className="flex items-center gap-3 mb-3">
+									<span className="text-sm font-semibold text-blue-600">
+										{expert.rate}
+									</span>
+									<span className="flex items-center gap-1 text-sm">
+										<svg
+											className="w-4 h-4 text-yellow-400"
+											fill="currentColor"
+											viewBox="0 0 20 20"
+										>
+											<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.234c.969 0 1.371 1.24.588 1.81l-3.424 2.49a1 1 0 00-.364 1.118l1.286 3.965c.3.921-.755 1.688-1.539 1.118l-3.424-2.49a1 1 0 00-1.176 0l-3.424 2.49c-.783.57-1.838-.197-1.539-1.118l1.286-3.965a1 1 0 00-.364-1.118L2.22 9.392c-.783-.57-.38-1.81.588-1.81h4.234a1 1 0 00.95-.69l1.286-3.965z" />
+										</svg>
+										<span className="font-semibold text-gray-700">{expert.rating}</span>
+									</span>
+									<span className="text-sm text-gray-500">•</span>
+									<span className="text-sm text-gray-600">{expert.jobs} reviews</span>
+								</div>
+
+								<div className="text-sm text-gray-700 mb-4 leading-relaxed line-clamp-3">
+									{expert.desc}
+								</div>
+
+								<div className="flex items-center gap-2 text-blue-600 font-semibold mb-4 pb-4 border-b border-gray-100">
+									<svg width="20" height="20" fill="none" viewBox="0 0 24 24" className="text-blue-600">
+										<path
+											stroke="currentColor"
+											strokeWidth="1.5"
+											d="M7.75 8.5h8.5M7.75 11.75h5.5M17.25 6.25V5A2.25 2.25 0 0 0 15 2.75H5A2.25 2.25 0 0 0 2.75 5v8A2.25 2.25 0 0 0 5 15.25h1.25m1 4.5h10A2.25 2.25 0 0 0 19.5 17.5v-6.25m-6.75 7.75-2.25-2.25m0 0 .446-.447c.267-.268.661-.306.93-.05l.424.406c.27.257.662.241.919-.03a.656.656 0 0 0-.018-.908l-.36-.356c-.26-.257-.239-.668.033-.917l.349-.327a.873.873 0 0 1 1.17.003l1.222 1.125c.32.294.843.217 1.064-.167l.022-.037M19.5 13V5A2.25 2.25 0 0 0 17.25 2.75H7a2.25 2.25 0 0 0-2.25 2.25v8c0 .414.336.75.75.75h12.5a.75.75 0 0 0 .75-.75Z"
+										/>
+									</svg>
+									<span className="text-base">{expert.consultation}</span>
+								</div>
+
+								<button
+									onClick={() => handleViewExpert(expert)}
+									{...getElementAttributes('book-consultation-button', i)}
+									className="w-full mt-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+								>
+									{getText('book-consultation-button-label', 'Consult an expert')}
+								</button>
+							</div>
+						);
+					})}
+				</div>
+			</section>
+		);
+	};
 
 	// Create section map for dynamic ordering
 	const sectionMap = {
@@ -1196,7 +1535,13 @@ export default function Home() {
 				</div>
 			)}
 			{renderSections()}
-			<PostJobWizard open={showPostJob} onClose={() => setShowPostJob(false)} />
+			<PostJobWizard 
+				open={showPostJob} 
+				onClose={() => setShowPostJob(false)}
+				onJobCreated={(job) => {
+					setUserJobs(prev => [job, ...prev]);
+				}}
+			/>
 		</main>
 	);
 }

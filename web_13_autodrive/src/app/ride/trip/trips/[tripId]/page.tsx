@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import RideNavbar from "../../../../../components/RideNavbar";
+import GlobalHeader from "@/components/GlobalHeader";
 import { EVENT_TYPES, logEvent } from "@/library/event";
 import { simulatedTrips, rides } from "@/data/trips-enhanced";
 
@@ -84,7 +84,7 @@ export default function TripDetailsPage() {
 
   return (
     <div className="min-h-screen bg-[#fafbfc]">
-      <RideNavbar activeTab="mytrips" />
+      <GlobalHeader />
       <div className="flex flex-col items-center pt-10 pb-32">
         <button
           className="flex text-lg items-center text-[#2095d2] mb-10 ml-[-620px] font-bold hover:underline"

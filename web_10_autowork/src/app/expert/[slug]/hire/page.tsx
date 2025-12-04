@@ -1,3 +1,4 @@
+import { use } from "react";
 import HireFormWrapperClient from "./HireFormWrapperClient";
 
 export const dynamicParams = true;
@@ -7,7 +8,6 @@ export default function HireExpertPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  // @ts-expect-error Next passes Promise for params; treated as resolved at runtime
-  const { slug } = params as { slug: string };
+  const { slug } = use(params);
   return <HireFormWrapperClient slug={slug} />;
 }

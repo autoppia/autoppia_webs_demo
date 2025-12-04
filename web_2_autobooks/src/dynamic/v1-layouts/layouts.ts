@@ -20,369 +20,53 @@ export interface SeedLayoutConfig {
   colorScheme: 'default' | 'inverted' | 'monochrome' | 'accent';
 }
 
-const TOTAL_LAYOUT_VARIANTS = 20;
+// LAYOUT FIJO - Layout 16 (correspondiente a seed 36)
+// Mobile-first layout - responsive design
+const FIXED_LAYOUT: SeedLayoutConfig = {
+  headerOrder: ['search', 'nav', 'logo'],
+  searchPosition: 'center',
+  navbarStyle: 'top',
+  contentGrid: 'default',
+  cardLayout: 'column',
+  buttonStyle: 'rounded',
+  footerStyle: 'default',
+  spacing: 'normal',
+  borderRadius: 'medium',
+  colorScheme: 'default',
+};
 
 export function getSeedLayout(seed?: number): SeedLayoutConfig {
-  if (!seed || seed < 1) {
-    // When no seed is provided, return layout index 1 (Classic Amazon-style layout)
-    // This is the layout that is "at seed=1" meaning layout index 1
-    return getLayoutByIndex(1);
-  }
-  const layoutIndex = ((Math.floor(seed) - 1) % TOTAL_LAYOUT_VARIANTS) + 1;
-  return getLayoutByIndex(layoutIndex);
+  // LAYOUT FIJO - Siempre devolver Layout 16 (correspondiente a seed 36)
+  return FIXED_LAYOUT;
 }
 
 function getLayoutByIndex(layoutIndex: number): SeedLayoutConfig {
-  switch (layoutIndex) {
-    case 1:
-      // Classic Amazon-style layout - clean and familiar
-      return {
-        headerOrder: ['logo', 'search', 'nav'],
-        searchPosition: 'center',
-        navbarStyle: 'top',
-        contentGrid: 'default',
-        cardLayout: 'grid',
-        buttonStyle: 'default',
-        footerStyle: 'default',
-        spacing: 'normal',
-        borderRadius: 'medium',
-        colorScheme: 'default',
-      };
-
-    case 2:
-      // Modern minimalist layout - clean and spacious
-      return {
-        headerOrder: ['logo', 'nav', 'search'],
-        searchPosition: 'right',
-        navbarStyle: 'top',
-        contentGrid: 'centered',
-        cardLayout: 'grid',
-        buttonStyle: 'minimal',
-        footerStyle: 'minimal',
-        spacing: 'loose',
-        borderRadius: 'large',
-        colorScheme: 'monochrome',
-      };
-
-    case 3:
-      // Search-focused layout - emphasizes search functionality
-      return {
-        headerOrder: ['search', 'logo', 'nav'],
-        searchPosition: 'full-width',
-        navbarStyle: 'top',
-        contentGrid: 'wide',
-        cardLayout: 'masonry',
-        buttonStyle: 'outlined',
-        footerStyle: 'expanded',
-        spacing: 'normal',
-        borderRadius: 'small',
-        colorScheme: 'accent',
-      };
-
-    case 4:
-      // Navigation-heavy layout - emphasizes navigation
-      return {
-        headerOrder: ['nav', 'logo', 'search'],
-        searchPosition: 'left',
-        navbarStyle: 'top',
-        contentGrid: 'reverse',
-        cardLayout: 'row',
-        buttonStyle: 'rounded',
-        footerStyle: 'centered',
-        spacing: 'tight',
-        borderRadius: 'large',
-        colorScheme: 'inverted',
-      };
-
-    case 5:
-      // Compact layout - space-efficient design
-      return {
-        headerOrder: ['logo', 'search', 'nav'],
-        searchPosition: 'center',
-        navbarStyle: 'top',
-        contentGrid: 'narrow',
-        cardLayout: 'column',
-        buttonStyle: 'default',
-        footerStyle: 'minimal',
-        spacing: 'tight',
-        borderRadius: 'small',
-        colorScheme: 'default',
-      };
-
-    case 6:
-      // Floating header layout - modern floating design
-      return {
-        headerOrder: ['logo', 'nav', 'search'],
-        searchPosition: 'right',
-        navbarStyle: 'floating',
-        contentGrid: 'default',
-        cardLayout: 'grid',
-        buttonStyle: 'rounded',
-        footerStyle: 'default',
-        spacing: 'normal',
-        borderRadius: 'medium',
-        colorScheme: 'accent',
-      };
-
-    case 7:
-      // Hidden navigation layout - clean content focus
-      return {
-        headerOrder: ['logo', 'search', 'nav'],
-        searchPosition: 'center',
-        navbarStyle: 'hidden-top',
-        contentGrid: 'centered',
-        cardLayout: 'masonry',
-        buttonStyle: 'minimal',
-        footerStyle: 'expanded',
-        spacing: 'loose',
-        borderRadius: 'none',
-        colorScheme: 'monochrome',
-      };
-
-    case 8:
-      // Wide layout - maximizes content area
-      return {
-        headerOrder: ['search', 'nav', 'logo'],
-        searchPosition: 'full-width',
-        navbarStyle: 'top',
-        contentGrid: 'wide',
-        cardLayout: 'row',
-        buttonStyle: 'outlined',
-        footerStyle: 'centered',
-        spacing: 'normal',
-        borderRadius: 'medium',
-        colorScheme: 'inverted',
-      };
-
-    case 9:
-      // Side navigation layout - unique sidebar approach
-      return {
-        headerOrder: ['nav', 'logo', 'search'],
-        searchPosition: 'center',
-        navbarStyle: 'side',
-        contentGrid: 'default',
-        cardLayout: 'grid',
-        buttonStyle: 'default',
-        footerStyle: 'default',
-        spacing: 'normal',
-        borderRadius: 'medium',
-        colorScheme: 'default',
-      };
-
-    case 10:
-      // Premium layout - sophisticated design
-      return {
-        headerOrder: ['logo', 'search', 'nav'],
-        searchPosition: 'right',
-        navbarStyle: 'top',
-        contentGrid: 'reverse',
-        cardLayout: 'masonry',
-        buttonStyle: 'rounded',
-        footerStyle: 'expanded',
-        spacing: 'loose',
-        borderRadius: 'large',
-        colorScheme: 'accent',
-      };
-
-    case 11:
-      // Ultra-wide layout - maximizes screen real estate
-      return {
-        headerOrder: ['search', 'logo', 'nav'],
-        searchPosition: 'full-width',
-        navbarStyle: 'top',
-        contentGrid: 'wide',
-        cardLayout: 'row',
-        buttonStyle: 'minimal',
-        footerStyle: 'minimal',
-        spacing: 'tight',
-        borderRadius: 'none',
-        colorScheme: 'monochrome',
-      };
-
-    case 12:
-      // Compact sidebar layout - space-efficient design
-      return {
-        headerOrder: ['nav', 'logo', 'search'],
-        searchPosition: 'left',
-        navbarStyle: 'top', // Changed from 'side' to 'top' for better visibility
-        contentGrid: 'narrow',
-        cardLayout: 'column',
-        buttonStyle: 'outlined',
-        footerStyle: 'default',
-        spacing: 'tight',
-        borderRadius: 'small',
-        colorScheme: 'default',
-      };
-
-    case 13:
-      // Minimalist centered layout - clean and focused
-      return {
-        headerOrder: ['logo', 'search', 'nav'],
-        searchPosition: 'center',
-        navbarStyle: 'hidden-top',
-        contentGrid: 'centered',
-        cardLayout: 'grid',
-        buttonStyle: 'minimal',
-        footerStyle: 'minimal',
-        spacing: 'loose',
-        borderRadius: 'large',
-        colorScheme: 'monochrome',
-      };
-
-    case 14:
-      // Dashboard-style layout - data-focused design
-      return {
-        headerOrder: ['nav', 'search', 'logo'],
-        searchPosition: 'right',
-        navbarStyle: 'top',
-        contentGrid: 'reverse',
-        cardLayout: 'masonry',
-        buttonStyle: 'default',
-        footerStyle: 'expanded',
-        spacing: 'normal',
-        borderRadius: 'medium',
-        colorScheme: 'inverted',
-      };
-
-    case 15:
-      // Magazine-style layout - editorial design
-      return {
-        headerOrder: ['logo', 'nav', 'search'],
-        searchPosition: 'full-width',
-        navbarStyle: 'top',
-        contentGrid: 'wide',
-        cardLayout: 'masonry',
-        buttonStyle: 'rounded',
-        footerStyle: 'expanded',
-        spacing: 'loose',
-        borderRadius: 'large',
-        colorScheme: 'accent',
-      };
-
-    case 16:
-      // Mobile-first layout - responsive design
-      return {
-        headerOrder: ['search', 'nav', 'logo'],
-        searchPosition: 'center',
-        navbarStyle: 'top', // Changed from 'floating' to 'top' for better visibility
-        contentGrid: 'default',
-        cardLayout: 'column',
-        buttonStyle: 'rounded',
-        footerStyle: 'default',
-        spacing: 'normal',
-        borderRadius: 'medium',
-        colorScheme: 'default',
-      };
-
-    case 17:
-      // Premium showcase layout - luxury design
-      return {
-        headerOrder: ['logo', 'search', 'nav'],
-        searchPosition: 'right',
-        navbarStyle: 'top',
-        contentGrid: 'centered',
-        cardLayout: 'grid',
-        buttonStyle: 'rounded',
-        footerStyle: 'expanded',
-        spacing: 'loose',
-        borderRadius: 'large',
-        colorScheme: 'accent',
-      };
-
-    case 18:
-      // Split-screen layout - dual-pane design
-      return {
-        headerOrder: ['logo', 'nav', 'search'],
-        searchPosition: 'right',
-        navbarStyle: 'top',
-        contentGrid: 'reverse',
-        cardLayout: 'row',
-        buttonStyle: 'outlined',
-        footerStyle: 'minimal',
-        spacing: 'normal',
-        borderRadius: 'medium',
-        colorScheme: 'inverted',
-      };
-
-    case 19:
-      // Card-stack layout - layered design
-      return {
-        headerOrder: ['search', 'logo', 'nav'],
-        searchPosition: 'center',
-        navbarStyle: 'top',
-        contentGrid: 'wide',
-        cardLayout: 'masonry',
-        buttonStyle: 'rounded',
-        footerStyle: 'expanded',
-        spacing: 'loose',
-        borderRadius: 'large',
-        colorScheme: 'accent',
-      };
-
-    case 20:
-      // Asymmetric layout - unbalanced design
-      return {
-        headerOrder: ['nav', 'search', 'logo'],
-        searchPosition: 'left',
-        navbarStyle: 'top',
-        contentGrid: 'reverse',
-        cardLayout: 'grid',
-        buttonStyle: 'minimal',
-        footerStyle: 'centered',
-        spacing: 'tight',
-        borderRadius: 'small',
-        colorScheme: 'monochrome',
-      };
-
-    default:
-      return getDefaultLayout();
-  }
+  // LAYOUT FIJO - Siempre devolver Layout 16 (correspondiente a seed 36)
+  return FIXED_LAYOUT;
 }
 
 function getDefaultLayout(): SeedLayoutConfig {
-  // Return layout 1 (Classic Amazon-style layout) as the default
-  // This is the layout that is "at seed=1" meaning layout index 1
-  return getLayoutByIndex(1);
+  // LAYOUT FIJO - Siempre devolver Layout 16 (correspondiente a seed 36)
+  return FIXED_LAYOUT;
 }
 
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
+  return false; // Siempre deshabilitado - el layout nunca cambia (fijado a seed 36, layout 16)
 }
 
 // Helper function to get effective layout config
 export function getEffectiveLayoutConfig(seed?: number): SeedLayoutConfig {
-  if (!isDynamicEnabled()) {
-    // When dynamic is disabled, return layout index 1 (Classic Amazon-style layout)
-    // This is the layout that is "at seed=1" meaning layout index 1
-    return getLayoutByIndex(1);
-  }
-  return getSeedLayout(seed);
+  // LAYOUT FIJO - Siempre devolver Layout 16 (correspondiente a seed 36)
+  return FIXED_LAYOUT;
 }
 
 export function applyLayoutOverrides(
   config: SeedLayoutConfig,
   baseSeed?: number
 ): SeedLayoutConfig {
-  const shouldApplyOverride =
-    typeof baseSeed === "number" && Number.isFinite(baseSeed) && baseSeed % 10 === 3;
-
-  if (shouldApplyOverride) {
-    return {
-      ...config,
-      headerOrder: ['nav', 'logo', 'search'],
-      searchPosition: 'full-width',
-      navbarStyle: 'side',
-      contentGrid: 'centered',
-      cardLayout: 'row',
-      buttonStyle: 'rounded',
-      footerStyle: 'centered',
-      spacing: 'loose',
-      borderRadius: 'large',
-      colorScheme: 'accent',
-    };
-  }
-
+  // LAYOUT FIJO - Ya no se aplican overrides, siempre retornar el config original
+  // (layout fijado a seed 36, layout 16)
   return config;
 }
 

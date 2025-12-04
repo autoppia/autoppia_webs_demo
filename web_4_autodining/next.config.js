@@ -1,16 +1,10 @@
-// Set default environment variables for local development
+// Force V1 dynamic layout off (layout is fixed by design)
 const isDockerBuild = process.env.DOCKER_BUILD === 'true' || process.env.NODE_ENV === 'production';
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.DOCKER_BUILD;
-
-// Handle ENABLE_DYNAMIC_V1_STRUCTURE
-if (!process.env.ENABLE_DYNAMIC_V1_STRUCTURE) {
-  process.env.ENABLE_DYNAMIC_V1_STRUCTURE = isLocalDev ? 'true' : 'false';
-}
-if (isLocalDev) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = 'true';
-} else if (!process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE) {
-  process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = 'false';
-}
+process.env.ENABLE_DYNAMIC_V1 = 'false';
+process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 = 'false';
+process.env.ENABLE_DYNAMIC_V1_STRUCTURE = 'false';
+process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE = 'false';
 
 // Debug: Print environment variables
 console.log('🔍 AutoDining - Environment variables:');

@@ -52,18 +52,29 @@ export async function fetchSeededSelection<T = unknown>(
     params.set("filter_values", options.filterValues.join(","));
   }
 
-  const resp = await fetch(`${baseUrl}/datasets/load?${params.toString()}`, {
-    method: "GET",
-  });
+  try {
+    const resp = await fetch(`${baseUrl}/datasets/load?${params.toString()}`, {
+      method: "GET",
+    });
 
-  if (!resp.ok) {
-    throw new Error(
-      `[seeded-loader] Request failed ${resp.status}: ${await resp
-        .text()
-        .catch(() => "error")}`
-    );
+    if (!resp.ok) {
+      throw new Error(
+        `[seeded-loader] Request failed ${resp.status}: ${await resp
+          .text()
+          .catch(() => "error")}`
+      );
+    }
+
+    const payload = await resp.json();
+    return (payload?.data ?? []) as T[];
+  } catch (error) {
+    // If it's a network error (fetch failed), throw a descriptive error
+    if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('Failed to fetch'))) {
+      const networkError = new Error(`Network error: Server at ${baseUrl} is not available. Please ensure the backend server is running.`);
+      networkError.name = 'NetworkError';
+      throw networkError;
+    }
+    // Re-throw other errors
+    throw error;
   }
-
-  const payload = await resp.json();
-  return (payload?.data ?? []) as T[];
 }

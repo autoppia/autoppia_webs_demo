@@ -9,7 +9,6 @@ import {
   generateElementId,
   generateCSSVariables,
   generateLayoutClasses,
-  isDynamicEnabled as isStructureDynamicEnabled,
 } from "@/dynamic/v1-layouts";
 import { useSeed as useSeedContext } from "@/context/SeedContext";
 import { useV3Attributes } from "./useV3Attributes";
@@ -19,41 +18,31 @@ export function useSeedLayout() {
     useSeedContext();
 
   const structureSeed = useMemo(() => {
-    return resolvedSeeds.v1 ?? resolvedSeeds.base;
-  }, [resolvedSeeds.v1, resolvedSeeds.base]);
+    return resolvedSeeds.base;
+  }, [resolvedSeeds.base]);
 
   const dynamicSeed = useMemo(() => {
-    return resolvedSeeds.v3 ?? resolvedSeeds.v1 ?? resolvedSeeds.base;
-  }, [resolvedSeeds.v3, resolvedSeeds.v1, resolvedSeeds.base]);
+    return resolvedSeeds.v3 ?? resolvedSeeds.base;
+  }, [resolvedSeeds.v3, resolvedSeeds.base]);
 
   const v2Seed = useMemo(() => {
     return resolvedSeeds.v2 ?? null;
   }, [resolvedSeeds.v2]);
 
-  // Check if v1 is enabled - use structureDynamicEnabled check OR if v1 seed is resolved
-  const isV1Enabled = resolvedSeeds.v1 !== null;
-  const isDynamicEnabled = isStructureDynamicEnabled() || isV1Enabled;
+  // V1 dynamic layout is disabled to keep the structure fixed.
+  const isDynamicEnabled = false;
 
   const layout = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return getSeedLayout(1);
-    }
-    return getSeedLayout(structureSeed);
-  }, [isDynamicEnabled, structureSeed]);
+    return getSeedLayout(1);
+  }, []);
 
   const layoutVariant = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return getLayoutVariant(1);
-    }
-    return getLayoutVariant(structureSeed);
-  }, [isDynamicEnabled, structureSeed]);
+    return getLayoutVariant(1);
+  }, []);
 
   const cssVariables = useMemo(() => {
-    if (!isDynamicEnabled) {
-      return generateCSSVariables(1);
-    }
-    return generateCSSVariables(structureSeed);
-  }, [isDynamicEnabled, structureSeed]);
+    return generateCSSVariables(1);
+  }, []);
 
   const {
     v3Seed,

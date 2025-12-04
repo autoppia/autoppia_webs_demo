@@ -3,7 +3,6 @@
 import { Suspense } from "react";
 import type { LayoutConfig } from "@/dynamic/v1-layouts";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
-import Navbar from "./Navbar";
 import Sidebar from "../Sidebar";
 
 // Type for element configuration that can be any of the layout elements
@@ -52,12 +51,6 @@ function DynamicLayoutContent({ children, sidebarProps }: DynamicLayoutProps) {
 
   // Render elements in the correct order based on layout config
   const baseElements = [
-    {
-      key: "header",
-      id: "header",
-      component: <Navbar className={layout.elements.header.className} />,
-      config: layout.elements.header,
-    },
     {
       key: "sidebar",
       id: "sidebar",
@@ -143,7 +136,7 @@ export default function DynamicLayout({ children, sidebarProps }: DynamicLayoutP
 function Footer() {
   return (
     <footer className="p-4 bg-gray-50 border-t border-gray-200 text-center text-gray-600">
-      <p>&copy; 2024 AutoList. All rights reserved.</p>
+      <p>&copy; 2025 AutoList. All rights reserved.</p>
     </footer>
   );
 }

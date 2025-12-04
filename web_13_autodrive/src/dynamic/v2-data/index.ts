@@ -22,4 +22,4 @@ export {
 export { initializeTrips } from "./trips-loader";
 
 // Export whenReady as alias for compatibility
-export const whenReady = whenDataReady;
+export { whenDataReady as whenReady } from "./data-provider";

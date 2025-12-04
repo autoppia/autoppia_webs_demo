@@ -42,14 +42,14 @@ function getEnabledFlagsInternal(): { v1: boolean; v2: boolean; v3: boolean } {
   // First, try to get from URL parameter (user explicitly set it)
   const urlFlags = parseEnableDynamicFromUrl();
   if (urlFlags) {
-    return urlFlags;
+    // v1 is intentionally forced off so layout stays fixed
+    return { v1: false, v2: urlFlags.v2, v3: urlFlags.v3 };
   }
   
   // Fallback to environment variables (deployment default)
-  // These are set when deploying: v1=true, v2=true, v3=true by default
+  // v1 is forced off by default; v2/v3 honor envs.
   return {
-    v1: boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1) ||
-        boolFromEnv(process.env.ENABLE_DYNAMIC_V1),
+    v1: false,
     v2: boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE) ||
         boolFromEnv(process.env.ENABLE_DYNAMIC_V2_DB_MODE),
     v3: boolFromEnv(process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3) ||
@@ -185,4 +185,3 @@ export const seedResolverConfig = {
   base: BASE_SEED,
   getEnabledFlags,
 };
-

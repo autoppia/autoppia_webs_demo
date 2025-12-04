@@ -65,6 +65,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-y: scroll;
+  }
+
+  /* Wider container for header (requested) */
+  .max-w-7xl {
+    max-width: 140rem;
   }
 }
 
@@ -257,5 +263,11 @@
   .map-section,
   .rides-section {
     @apply transition-all duration-300;
+  }
+
+  /* Force full width for ride cards */
+  .rides-section,
+  .rides-section * {
+    max-width: none !important;
   }
 }

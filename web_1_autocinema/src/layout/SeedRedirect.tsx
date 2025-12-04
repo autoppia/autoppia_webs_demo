@@ -2,22 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { getEnabledFlags } from "@/shared/seed-resolver";
 
 /**
- * Default seed to use when v1 is enabled but no seed is in the URL.
- * This should be set to the seed that shows the web best.
- * Change this value if you find a better-looking seed.
+ * Default seed to use when no seed is in the URL.
+ * Layout está fijado al correspondiente a seed 36 (layout 16).
  */
-const DEFAULT_V1_SEED = 36;
+const DEFAULT_SEED = 36;
 
 /**
- * Component that redirects to a default seed URL if:
- * - v1 is enabled
- * - No seed parameter exists in the URL
- *
- * This ensures that v1-enabled sites always have a seed in the URL for consistent behavior.
- * The default seed is set to the one that shows the web best.
+ * Component that redirects to seed=36 URL if no seed parameter exists in the URL.
+ * Esto asegura que siempre haya un seed en la URL, aunque el layout esté fijo.
  */
 export function SeedRedirect() {
   const searchParams = useSearchParams();
@@ -32,13 +26,6 @@ export function SeedRedirect() {
     // Prevent multiple redirects
     if (hasRedirectedRef.current) return;
 
-    // Check if v1 is enabled
-    const enabledFlags = getEnabledFlags();
-    if (!enabledFlags.v1) {
-      // v1 is not enabled, no need to redirect
-      return;
-    }
-
     // Check if seed parameter exists in URL
     const seedParam = searchParams.get("seed");
     if (seedParam) {
@@ -46,17 +33,11 @@ export function SeedRedirect() {
       return;
     }
 
-    // v1 is enabled but no seed in URL - redirect to add default seed
+    // No seed in URL - redirect to add default seed (36)
     hasRedirectedRef.current = true;
 
     const params = new URLSearchParams(searchParams.toString());
-    params.set("seed", DEFAULT_V1_SEED.toString());
-
-    // Preserve enable_dynamic if it exists
-    const enableDynamic = searchParams.get("enable_dynamic");
-    if (enableDynamic) {
-      params.set("enable_dynamic", enableDynamic);
-    }
+    params.set("seed", DEFAULT_SEED.toString());
 
     const newUrl = `${pathname}?${params.toString()}`;
 

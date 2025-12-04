@@ -77,7 +77,7 @@ export interface SeedLayout {
 }
 // Helper function to check if dynamic HTML is enabled
 export function isDynamicEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === 'true';
+  return false; // Siempre deshabilitado - el layout nunca cambia
 }
 // Generate class name variations based on seed
 const generateVariations = (baseClass: string, seed: number): string => {
@@ -136,111 +136,85 @@ function getLayoutId(seed: number): number {
 }
 // Generate layout configuration based on seed
 export function getSeedLayout(seed: number = 6): SeedLayout {
-  const effectiveSeed = getEffectiveSeed(seed);
-  const layoutId = getLayoutId(effectiveSeed);
-  const layoutIndex = layoutId - 1;
-  const pickFrom = <T,>(arr: T[]): T => arr[layoutIndex % arr.length];
-  // Search bar positions
-  const searchPositions: Array<'left' | 'center' | 'right' | 'top' | 'bottom'> = [
-    'right', 'center', 'top', 'bottom', 'left', 'right', 'center', 'top', 'bottom', 'left'
-  ];
-  const navCycle: Array<'left' | 'center' | 'right'> = ['left', 'center', 'right'];
-  // Hero button positions
-  const heroPositions: Array<'left' | 'center' | 'right'> = [
-    'center', 'left', 'right', 'center', 'left', 'right', 'center', 'left', 'right', 'center'
-  ];
+  // LAYOUT FIJO - Siempre usar seed 6 (layout 7)
+  // Seed 6 → layoutId = 6 → layoutIndex = 5
+  // Para layoutIndex 5: searchPosition='left', heroPosition='right', detailOrder index 5=['reviews', 'menu', 'header']
+  // navBase = 5 % 3 = 2 → logo='right', cart='left', menu='center'
+  const fixedSeed = 6;
+  const fixedLayoutId = 6;
+  const fixedLayoutIndex = 5;
   
-  // Restaurant detail element orders
-  const elementOrders = [
-    ['header', 'menu', 'reviews'], // Default order
-    ['header', 'reviews', 'menu'], // Reviews before menu
-    ['menu', 'header', 'reviews'], // Menu first
-    ['reviews', 'header', 'menu'], // Reviews first
-    ['menu', 'reviews', 'header'], // Menu and reviews before header
-    ['reviews', 'menu', 'header'], // Reviews and menu before header
-    ['header', 'menu', 'reviews'], // Back to default
-    ['header', 'reviews', 'menu'], // Reviews before menu
-    ['menu', 'header', 'reviews'], // Menu first
-    ['reviews', 'header', 'menu'], // Reviews first
-  ];
-  const searchPosition = pickFrom(searchPositions);
-  const heroPosition = pickFrom(heroPositions);
-  const detailOrder = elementOrders[layoutIndex % elementOrders.length];
-  const navBase = layoutIndex % navCycle.length;
-  const logoPosition = navCycle[navBase];
-  const cartPosition = navCycle[(navBase + 1) % navCycle.length];
-  const menuPosition = navCycle[(navBase + 2) % navCycle.length];
   return {
-    seed: effectiveSeed,
-    layoutId: layoutId,
+    seed: fixedSeed,
+    layoutId: fixedLayoutId,
     searchBar: {
-      position: searchPosition,
-      containerClass: generateVariations('search-container', effectiveSeed),
-      inputClass: generateVariations('search-input', effectiveSeed),
-      wrapperClass: layoutId % 3 === 0 ? generateVariations('search-wrapper', effectiveSeed) : undefined,
-      xpath: generateXPath('input', effectiveSeed),
+      position: 'left',
+      containerClass: generateVariations('search-container', fixedSeed),
+      inputClass: generateVariations('search-input', fixedSeed),
+      wrapperClass: undefined,
+      xpath: generateXPath('input', fixedSeed),
     },
     navbar: {
-      logoPosition,
-      cartPosition,
-      menuPosition,
-      containerClass: generateVariations('navbar-container', effectiveSeed),
-      xpath: generateXPath('nav', effectiveSeed),
+      logoPosition: 'right',
+      cartPosition: 'left',
+      menuPosition: 'center',
+      containerClass: generateVariations('navbar-container', fixedSeed),
+      xpath: generateXPath('nav', fixedSeed),
     },
     navigation: {
-      logoPosition,
-      cartPosition,
-      menuPosition,
-      containerClass: generateVariations('navbar-container', effectiveSeed),
-      logoClass: generateVariations('navbar-logo', effectiveSeed),
-      cartClass: generateVariations('navbar-cart', effectiveSeed),
-      menuClass: generateVariations('navbar-menu', effectiveSeed),
-      xpath: generateXPath('nav', effectiveSeed),
+      logoPosition: 'right',
+      cartPosition: 'left',
+      menuPosition: 'center',
+      containerClass: generateVariations('navbar-container', fixedSeed),
+      logoClass: generateVariations('navbar-logo', fixedSeed),
+      cartClass: generateVariations('navbar-cart', fixedSeed),
+      menuClass: generateVariations('navbar-menu', fixedSeed),
+      xpath: generateXPath('nav', fixedSeed),
     },
     hero: {
-      buttonPosition: heroPosition,
-      buttonClass: generateVariations('hero-button', effectiveSeed),
-      containerClass: generateVariations('hero-container', effectiveSeed),
-      xpath: generateXPath('section', effectiveSeed),
+      buttonPosition: 'right',
+      buttonClass: generateVariations('hero-button', fixedSeed),
+      containerClass: generateVariations('hero-container', fixedSeed),
+      xpath: generateXPath('section', fixedSeed),
     },
     restaurantCard: {
-      containerClass: generateVariations('restaurant-card', effectiveSeed),
-      imageClass: generateVariations('restaurant-image', effectiveSeed),
-      titleClass: generateVariations('restaurant-title', effectiveSeed),
-      descriptionClass: generateVariations('restaurant-description', effectiveSeed),
-      buttonClass: generateVariations('restaurant-button', effectiveSeed),
-      xpath: generateXPath('div', effectiveSeed),
+      containerClass: generateVariations('restaurant-card', fixedSeed),
+      imageClass: generateVariations('restaurant-image', fixedSeed),
+      titleClass: generateVariations('restaurant-title', fixedSeed),
+      descriptionClass: generateVariations('restaurant-description', fixedSeed),
+      buttonClass: generateVariations('restaurant-button', fixedSeed),
+      xpath: generateXPath('div', fixedSeed),
     },
     cart: {
-      iconClass: generateVariations('cart-icon', effectiveSeed),
-      badgeClass: generateVariations('cart-badge', effectiveSeed),
-      pageContainerClass: generateVariations('cart-page-container', effectiveSeed),
-      itemClass: generateVariations('cart-item', effectiveSeed),
-      buttonClass: generateVariations('cart-button', effectiveSeed),
-      xpath: generateXPath('button', effectiveSeed),
+      iconClass: generateVariations('cart-icon', fixedSeed),
+      badgeClass: generateVariations('cart-badge', fixedSeed),
+      pageContainerClass: generateVariations('cart-page-container', fixedSeed),
+      itemClass: generateVariations('cart-item', fixedSeed),
+      buttonClass: generateVariations('cart-button', fixedSeed),
+      xpath: generateXPath('button', fixedSeed),
     },
     modal: {
-      containerClass: generateVariations('modal-container', effectiveSeed),
-      contentClass: generateVariations('modal-content', effectiveSeed),
-      headerClass: generateVariations('modal-header', effectiveSeed),
-      bodyClass: generateVariations('modal-body', effectiveSeed),
-      footerClass: generateVariations('modal-footer', effectiveSeed),
-      buttonClass: generateVariations('modal-button', effectiveSeed),
-      xpath: generateXPath('div', effectiveSeed),
+      containerClass: generateVariations('modal-container', fixedSeed),
+      contentClass: generateVariations('modal-content', fixedSeed),
+      headerClass: generateVariations('modal-header', fixedSeed),
+      bodyClass: generateVariations('modal-body', fixedSeed),
+      footerClass: generateVariations('modal-footer', fixedSeed),
+      buttonClass: generateVariations('modal-button', fixedSeed),
+      xpath: generateXPath('div', fixedSeed),
     },
     grid: {
-      containerClass: generateVariations('grid-container', effectiveSeed),
-      itemClass: generateVariations('grid-item', effectiveSeed),
-      paginationClass: generateVariations('pagination', effectiveSeed),
-      xpath: generateXPath('div', effectiveSeed),
+      containerClass: generateVariations('grid-container', fixedSeed),
+      itemClass: generateVariations('grid-item', fixedSeed),
+      paginationClass: generateVariations('pagination', fixedSeed),
+      xpath: generateXPath('div', fixedSeed),
     },
     restaurantDetail: {
-      elementOrder: detailOrder,
-      containerClass: generateVariations('restaurant-detail-container', effectiveSeed),
-      headerClass: generateVariations('restaurant-detail-header', effectiveSeed),
-      menuClass: generateVariations('restaurant-detail-menu', effectiveSeed),
-      reviewsClass: generateVariations('restaurant-detail-reviews', effectiveSeed),
-      xpath: generateXPath('section', effectiveSeed),
+      elementOrder: ['reviews', 'menu', 'header'],
+      containerClass: generateVariations('restaurant-detail-container', fixedSeed),
+      headerClass: generateVariations('restaurant-detail-header', fixedSeed),
+      menuClass: generateVariations('restaurant-detail-menu', fixedSeed),
+      reviewsClass: generateVariations('restaurant-detail-reviews', fixedSeed),
+      xpath: generateXPath('section', fixedSeed),
     },
   };
 }
@@ -282,7 +256,8 @@ export function generateUrlWithSeed(baseUrl: string, seed: number): string {
 
 // Helper function to get effective layout config (alias for getSeedLayout)
 export function getEffectiveLayoutConfig(seed?: number): SeedLayout {
-  return getSeedLayout(seed ?? 6);
+  // LAYOUT FIJO - Siempre devolver el layout correspondiente a seed 6
+  return getSeedLayout(6);
 }
 
 // Helper function to generate layout classes from seed

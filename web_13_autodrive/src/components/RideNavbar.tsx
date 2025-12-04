@@ -36,10 +36,18 @@ export default function RideNavbar({ activeTab }: RideNavbarProps) {
           </li>
           <li>
             <button
-              className="text-black cursor-not-allowed opacity-60"
-              disabled
+              className="transition font-bold border-b-2 border-transparent text-black hover:text-[#2095d2]"
+              onClick={() => router.push("/about")}
             >
-              Package
+              About
+            </button>
+          </li>
+          <li>
+            <button
+              className="transition font-bold border-b-2 border-transparent text-black hover:text-[#2095d2]"
+              onClick={() => router.push("/help")}
+            >
+              Help
             </button>
           </li>
         </ul>

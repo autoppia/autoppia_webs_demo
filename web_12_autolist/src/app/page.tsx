@@ -12,6 +12,7 @@ import {
   SyncOutlined,
   EditOutlined,
   DeleteOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Calendar, Popover, Modal } from "antd";
 import { useState, useRef, useEffect } from "react";
@@ -20,6 +21,8 @@ import DynamicLayout from "./components/DynamicLayout";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { useSeedLayout } from "@/dynamic/v3-dynamic";
 import { loadTasks, RemoteTask } from "@/data/tasks";
+import { TeamsProvider, useTeams } from "@/context/TeamsContext";
+import { ProjectsProvider } from "@/context/ProjectsContext";
 
 // Import debug utilities in development
 if (process.env.NODE_ENV === 'development') {
@@ -46,6 +49,88 @@ const clampPriorityValue = (value: number): number =>
 function getPriorityLabel(priority: number): string {
     return priorities.find((p) => p.key === priority)?.label || String(priority);
   }
+
+type ViewMode = "inbox" | "completed" | "today" | "getting-started" | `chat-${string}` | `team-${string}`;
+
+type ChatMessage = { from: "me" | "them"; text: string; time: string };
+
+const chatConversations: Record<
+  string,
+  {
+    name: string;
+    role: string;
+    avatar: string;
+    status: "online" | "away" | "offline";
+    messages: ChatMessage[];
+  }
+> = {
+  u1: {
+    name: "Alex Carter",
+    role: "Product Designer",
+    avatar: "https://randomuser.me/api/portraits/men/12.jpg",
+    status: "online",
+    messages: [
+      { from: "them", text: "Hey, can you review the new dashboard layout?", time: "09:10" },
+      { from: "me", text: "Sure, I’ll check it after standup.", time: "09:12" },
+      { from: "them", text: "Great, let me know if you want a quick call.", time: "09:13" },
+      { from: "me", text: "Will do. I’ll share feedback by noon.", time: "09:15" },
+      { from: "them", text: "Perfect, thanks!", time: "09:16" },
+      { from: "me", text: "Also, I’ll annotate a few suggestions in Figma.", time: "09:18" },
+      { from: "them", text: "Awesome, that helps a lot.", time: "09:19" },
+      { from: "them", text: "By the way, Autoppia for web agents is a game changer.", time: "09:22" },
+      { from: "me", text: "Totally, the whole web agent ecosystem is moving that way.", time: "09:24" },
+      { from: "them", text: "Have you seen Autoppia Studio? The agents marketplace they’re building is wild.", time: "09:26" },
+      { from: "me", text: "Yeah, looks like 2026 will be full-on agent-first. Their marketplace model is solid.", time: "09:28" },
+      { from: "them", text: "Imagine plugging our flows into it—instant distribution for web agents.", time: "09:30" },
+      { from: "me", text: "Let’s prep a pilot; could be huge for our roadmap.", time: "09:32" },
+      { from: "them", text: "Web agents + Autoppia APIs = automation on autopilot.", time: "09:34" },
+      { from: "me", text: "And the Studio marketplace means discoverability out of the box.", time: "09:35" },
+      { from: "them", text: "We should pitch a bundle for onboarding flows.", time: "09:37" },
+      { from: "me", text: "Agree—shipping a starter pack for 2026 launch could be huge.", time: "09:39" },
+      { from: "them", text: "Cool, I’ll draft a deck on Autoppia + web agents as the future stack.", time: "09:41" },
+      { from: "me", text: "Perfect, I’ll add metrics and the studio marketplace slide.", time: "09:42" },
+    ],
+  },
+  u2: {
+    name: "Jamie Lee",
+    role: "Engineer",
+    avatar: "https://randomuser.me/api/portraits/women/18.jpg",
+    status: "away",
+    messages: [
+      { from: "me", text: "API deploy went fine. Any blockers on your side?", time: "11:05" },
+      { from: "them", text: "All good, just syncing tests with QA.", time: "11:07" },
+      { from: "them", text: "Ping me if you see flaky tests.", time: "11:08" },
+      { from: "me", text: "I’ll add a few retries to the pipeline.", time: "11:10" },
+      { from: "them", text: "Let’s keep an eye on the new endpoint latency.", time: "11:12" },
+    ],
+  },
+  u3: {
+    name: "Taylor Brown",
+    role: "PM",
+    avatar: "https://randomuser.me/api/portraits/men/25.jpg",
+    status: "online",
+    messages: [
+      { from: "them", text: "Reminder: retro at 4pm. Can you bring the metrics slide?", time: "13:20" },
+      { from: "me", text: "Yes, I’ll add conversion numbers and churn.", time: "13:22" },
+      { from: "them", text: "Perfect, thanks!", time: "13:23" },
+      { from: "me", text: "Also adding NPS trend.", time: "13:24" },
+      { from: "them", text: "Great, we’ll discuss the actions for next sprint.", time: "13:25" },
+    ],
+  },
+  u4: {
+    name: "Riley Chen",
+    role: "QA",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    status: "offline",
+    messages: [
+      { from: "them", text: "Found a bug on mobile: add-task button overlaps footer.", time: "15:02" },
+      { from: "me", text: "Logging it now and pushing a fix.", time: "15:04" },
+      { from: "them", text: "👍 I’ll re-test after your patch.", time: "15:05" },
+      { from: "me", text: "Fix pushed, please re-check on iOS.", time: "15:15" },
+      { from: "them", text: "Looks good now, thanks!", time: "15:25" },
+    ],
+  },
+};
 
 const normalizeRemoteTask = (task: RemoteTask, index: number): Task => ({
   id: task.id ?? `remote-task-${index}`,
@@ -461,9 +546,10 @@ export default function Home() {
   const [tasksError, setTasksError] = useState<string | null>(null);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [selectedView, setSelectedView] = useState<
-    "inbox" | "completed" | "today"
-  >("inbox");
+  const [selectedView, setSelectedView] = useState<ViewMode>("inbox");
+  const [chatMessages, setChatMessages] = useState<Record<string, ChatMessage[]>>({});
+  const [chatDrafts, setChatDrafts] = useState<Record<string, string>>({});
+  const [snackbar, setSnackbar] = useState<{ message: string; visible: boolean }>({ message: "", visible: false });
 
   useEffect(() => {
     let cancelled = false;
@@ -472,9 +558,14 @@ export default function Home() {
       setTasksLoading(true);
       setTasksError(null);
       try {
-        const remoteTasks = await loadTasks(v2Seed ?? undefined);
+        const result = await loadTasks(v2Seed ?? undefined);
         if (cancelled) return;
-        const normalized = remoteTasks.map((task, index) =>
+        
+        if (result.error) {
+          setTasksError(result.error);
+        }
+        
+        const normalized = result.tasks.map((task, index) =>
           normalizeRemoteTask(task, index)
         );
         const initialActive = normalized.filter((task) => !task.completedAt);
@@ -500,6 +591,16 @@ export default function Home() {
     };
   }, [v2Seed]);
 
+  // Initialize chat messages when switching to a chat
+  useEffect(() => {
+    if (!selectedView.startsWith("chat-")) return;
+    const chatId = selectedView.replace("chat-", "");
+    setChatMessages((prev) => {
+      if (prev[chatId]) return prev;
+      return { ...prev, [chatId]: chatConversations[chatId]?.messages ?? [] };
+    });
+  }, [selectedView]);
+
   function handleAddTask(newTask: {
     name: string;
     description: string;
@@ -524,6 +625,9 @@ export default function Home() {
   function handleDeleteTask(id: string) {
     setTasks((tasks) => tasks.filter((t) => t.id !== id));
     if (editIndex !== null && tasks[editIndex]?.id === id) setEditIndex(null);
+    // Show snackbar
+    setSnackbar({ message: "Task deleted", visible: true });
+    setTimeout(() => setSnackbar({ message: "", visible: false }), 3000);
   }
   function handleCompleteTask(id: string) {
     setTasks((tasks) => {
@@ -537,6 +641,9 @@ export default function Home() {
       );
       return tasks.filter((v, i) => i !== idx);
     });
+    // Show snackbar
+    setSnackbar({ message: "Task done successfully", visible: true });
+    setTimeout(() => setSnackbar({ message: "", visible: false }), 3000);
   }
 
   // Compute counts at the top-level for Sidebar display
@@ -546,6 +653,62 @@ export default function Home() {
     (task) => task.date && dayjs(task.date).format("YYYY-MM-DD") === todayStr
   ).length;
   const completedCount = completedTasks.length;
+
+  function renderGettingStarted() {
+    return (
+      <div className="flex-1 flex flex-col items-center w-full text-center pt-28 pb-16 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+        <div className="bg-white shadow-lg rounded-2xl p-10 border border-gray-100 max-w-3xl w-full">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-[#d1453b] mx-auto mb-4">
+            <PlusOutlined style={{ fontSize: 24 }} />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            {getText('getting-started-title', 'Welcome to AutoList')}
+          </h1>
+          <p className="text-gray-600 text-base mb-8 max-w-2xl mx-auto leading-7">
+            {getText('getting-started-desc', 'Create your first tasks, organize them by priority, and collaborate with your team.')}
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left mb-6">
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#fffaf7]">
+              <div className="font-semibold text-gray-900 mb-1">1. Add tasks</div>
+              <p className="text-sm text-gray-600">Capture ideas quickly, set priority and due date.</p>
+            </div>
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#f8fbff]">
+              <div className="font-semibold text-gray-900 mb-1">2. Plan your day</div>
+              <p className="text-sm text-gray-600">Use Today to focus and Completed to review progress.</p>
+            </div>
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#f7fdf8]">
+              <div className="font-semibold text-gray-900 mb-1">3. Invite your team</div>
+              <p className="text-sm text-gray-600">Create a team and assign roles to collaborate.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mb-6">
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#fef6e5]">
+              <div className="font-semibold text-gray-900 mb-1">4. Organize projects</div>
+              <p className="text-sm text-gray-600">Group work into projects and keep context together.</p>
+            </div>
+            <div className="p-4 rounded-xl border border-gray-200 bg-[#eef7ff]">
+              <div className="font-semibold text-gray-900 mb-1">5. Track progress</div>
+              <p className="text-sm text-gray-600">Use Completed to review what’s done and celebrate wins.</p>
+            </div>
+          </div>
+          <div className="mt-6 flex justify-center gap-3">
+            <button
+              className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-5 py-2 rounded font-semibold shadow"
+              onClick={() => setShowForm(true)}
+            >
+              {getText('getting-started-cta', 'Add your first task')}
+            </button>
+            <button
+              className="border border-gray-300 text-gray-700 px-5 py-2 rounded font-semibold"
+              onClick={() => setSelectedView("inbox")}
+            >
+              {getText('getting-started-browse', 'Back to list')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   function renderToday() {
     const todayTasks = tasks.filter(
@@ -649,11 +812,11 @@ export default function Home() {
     );
   }
 
-  function renderCompleted() {
-    return (
-      <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-completed', 0)}>
-          {getText('heading-completed', 'Activity: All projects')}
+function renderCompleted() {
+  return (
+    <div className="flex-1 flex flex-col items-center w-full text-center pt-32 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-completed', 0)}>
+        {getText('heading-completed', 'Activity: All projects')}
         </h1>
         {completedTasks.length === 0 ? (
           <div className="mt-14 text-lg text-gray-400">
@@ -715,33 +878,347 @@ export default function Home() {
     );
   }
 
+function renderChatPlaceholder(chatId: string) {
+  const conv = chatConversations[chatId.replace("chat-", "")];
+    const title = conv?.name ? `Chat with ${conv.name}` : "Chat";
+    const role = conv?.role ?? "Conversation";
+    const status = conv?.status ?? "offline";
+    const messages = chatMessages[chatId.replace("chat-", "")] ?? conv?.messages ?? [];
+    const draft = chatDrafts[chatId] ?? "";
+
+    const formatTime = () => {
+      const now = new Date();
+      return `${now.getHours().toString().padStart(2, "0")}:${now
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}`;
+    };
+
+    const handleSend = () => {
+      const text = draft.trim();
+      if (!text) return;
+      const msg: ChatMessage = { from: "me", text, time: formatTime() };
+      const key = chatId.replace("chat-", "");
+      setChatMessages((prev) => ({
+        ...prev,
+        [key]: [...(prev[key] ?? conv?.messages ?? []), msg],
+      }));
+      setChatDrafts((prev) => ({ ...prev, [chatId]: "" }));
+    };
+
+    return (
+      <div className="flex-1 flex flex-col items-center w-full pt-4 pb-12 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+        <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 max-w-6xl w-[95%] text-left min-h-[80vh]">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              {conv?.avatar && (
+                <img
+                  src={conv.avatar}
+                  alt={conv.name}
+                  className="w-12 h-12 rounded-full object-cover border"
+                />
+              )}
+              <div>
+                <div className="text-xl font-bold text-gray-900">{title}</div>
+                <div className="text-sm text-gray-500">{role}</div>
+                <div className="text-xs flex items-center gap-1 mt-1 text-gray-500">
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full ${
+                      status === "online"
+                        ? "bg-green-500"
+                        : status === "away"
+                        ? "bg-yellow-400"
+                        : "bg-gray-400"
+                    }`}
+                  />
+                  {status === "online"
+                    ? "Online"
+                    : status === "away"
+                    ? "Away"
+                    : "Offline"}
+                </div>
+              </div>
+            </div>
+            <span className="text-xs text-gray-500">Recent messages</span>
+          </div>
+          <div className="space-y-3 min-h-[420px] flex flex-col justify-start">
+            {messages.length === 0 ? (
+              <div className="h-48 rounded-lg border border-dashed border-gray-200 bg-gray-50 flex items-center justify-center text-gray-400 text-sm">
+                Conversation view coming soon
+              </div>
+            ) : (
+              messages.map((m, idx) => (
+                <div
+                  key={idx}
+                  className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`px-4 py-3 rounded-xl border text-sm max-w-[70%] ${
+                      m.from === "me"
+                        ? "bg-[#fef2f0] border-[#f1c5be] text-[#9b2b22]"
+                        : "bg-white border-gray-200 text-gray-800"
+                    }`}
+                  >
+                    <div className="font-medium">{m.text}</div>
+                    <div className="text-[11px] text-gray-500 mt-1 text-right">{m.time}</div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="mt-6 flex items-center gap-3">
+            <textarea
+              value={draft}
+              onChange={(e) => setChatDrafts((prev) => ({ ...prev, [chatId]: e.target.value }))}
+              placeholder="Write a message..."
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#f6bcb3] focus:border-[#f6bcb3] resize-none min-h-[64px]"
+            />
+            <button
+              onClick={handleSend}
+              className="bg-[#d1453b] hover:bg-[#c0342f] text-white px-4 py-2 rounded-lg font-semibold text-sm shadow"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function TeamDetails({ teamId }: { teamId: string }) {
+    const { teams } = useTeams();
+    const team = teams.find((t) => t.id === teamId);
+
+    if (!team) {
+      return (
+        <div className="flex-1 flex flex-col items-center w-full text-center pt-28 pb-12 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
+          <div className="bg-white shadow rounded-xl border border-gray-200 px-6 py-10 text-gray-600">
+            Team not found.
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex-1 flex flex-col w-full pt-8 pb-12 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen px-6">
+        <div className="max-w-6xl mx-auto w-full">
+          {/* Header */}
+          <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 mb-6">
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{team.name}</h1>
+                <p className="text-gray-600 mb-4">{team.description || "Team workspace"}</p>
+                <div className="flex items-center gap-6 text-sm text-gray-500">
+                  <span className="flex items-center gap-2">
+                    <TeamOutlined />
+                    {team.members.length} {team.members.length === 1 ? 'member' : 'members'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Team Members Section */}
+          <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100 mb-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Team Members</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {team.members.map((m, index) => {
+                const avatarUrl = `https://i.pravatar.cc/150?img=${index + 1}`;
+                return (
+                  <div key={m.id} className="flex items-center gap-4 p-4 rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white hover:border-[#d1453b] hover:shadow-md transition-all">
+                    <div className="relative flex-shrink-0">
+                      <img
+                        src={avatarUrl}
+                        alt={m.name}
+                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const fallback = target.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#f6d7d1] to-[#e8c4bc] flex items-center justify-center text-base font-bold text-[#9b2b22] hidden">
+                        {m.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-gray-900 text-base truncate">{m.name}</div>
+                      <div className="text-sm text-gray-600 truncate">{m.role}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {team.members.length === 0 && (
+              <div className="text-center py-12 text-gray-500">
+                <TeamOutlined className="text-4xl mb-3 opacity-50" />
+                <p>No members in this team yet.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Team Stats Section */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
+              <div className="text-sm text-gray-600 mb-1">Total Members</div>
+              <div className="text-3xl font-bold text-gray-900">{team.members.length}</div>
+            </div>
+            <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
+              <div className="text-sm text-gray-600 mb-1">Active Projects</div>
+              <div className="text-3xl font-bold text-gray-900">0</div>
+            </div>
+            <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
+              <div className="text-sm text-gray-600 mb-1">Completed Tasks</div>
+              <div className="text-3xl font-bold text-gray-900">0</div>
+            </div>
+          </div>
+
+          {/* Team Activity Chart */}
+          <div className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Team Activity</h2>
+            <div className="relative h-64">
+              <svg className="w-full h-full" viewBox="0 0 800 200" preserveAspectRatio="none">
+                {/* Grid lines */}
+                <defs>
+                  <linearGradient id="activityGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#d1453b" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#d1453b" stopOpacity="0.05" />
+                  </linearGradient>
+                </defs>
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <line
+                    key={`grid-${i}`}
+                    x1="0"
+                    y1={40 + i * 40}
+                    x2="800"
+                    y2={40 + i * 40}
+                    stroke="#e5e7eb"
+                    strokeWidth="1"
+                    strokeDasharray="4,4"
+                  />
+                ))}
+                {/* Data points and line */}
+                <polyline
+                  points="50,160 150,140 250,120 350,100 450,80 550,90 650,70 750,60"
+                  fill="url(#activityGradient)"
+                  stroke="#d1453b"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {/* Data points */}
+                {[
+                  { x: 50, y: 160 },
+                  { x: 150, y: 140 },
+                  { x: 250, y: 120 },
+                  { x: 350, y: 100 },
+                  { x: 450, y: 80 },
+                  { x: 550, y: 90 },
+                  { x: 650, y: 70 },
+                  { x: 750, y: 60 },
+                ].map((point, i) => (
+                  <g key={`point-${i}`}>
+                    <circle
+                      cx={point.x}
+                      cy={point.y}
+                      r="6"
+                      fill="#fff"
+                      stroke="#d1453b"
+                      strokeWidth="2"
+                    />
+                    <circle
+                      cx={point.x}
+                      cy={point.y}
+                      r="4"
+                      fill="#d1453b"
+                    />
+                  </g>
+                ))}
+                {/* X-axis labels */}
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'].map((label, i) => (
+                  <text
+                    key={`label-${i}`}
+                    x={50 + i * 100}
+                    y="195"
+                    textAnchor="middle"
+                    className="text-xs fill-gray-500"
+                    fontSize="12"
+                  >
+                    {label}
+                  </text>
+                ))}
+                {/* Y-axis labels */}
+                {[0, 25, 50, 75, 100].map((value, i) => (
+                  <text
+                    key={`y-label-${i}`}
+                    x="20"
+                    y={200 - i * 40}
+                    textAnchor="end"
+                    className="text-xs fill-gray-500"
+                    fontSize="12"
+                  >
+                    {value}
+                  </text>
+                ))}
+              </svg>
+            </div>
+            <div className="mt-4 flex items-center justify-center gap-6 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#d1453b]"></div>
+                <span>Tasks Completed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <DynamicLayout
-      sidebarProps={{
-        onSelect: setSelectedView as (v: string) => void,
-        selected: selectedView,
-        inboxCount,
-        todayCount,
-        completedCount,
-      }}
-    >
-      <main className="flex-1 flex flex-col min-h-screen">
+    <ProjectsProvider>
+      <TeamsProvider>
+        <DynamicLayout
+          sidebarProps={{
+            onSelect: setSelectedView as (v: string) => void,
+            selected: selectedView,
+            inboxCount,
+            todayCount,
+            completedCount,
+          }}
+        >
+          <main className="flex-1 flex flex-col min-h-screen">
         {selectedView === "today" ? (
           renderToday()
         ) : selectedView === "completed" ? (
           renderCompleted()
+        ) : selectedView === "getting-started" ? (
+          renderGettingStarted()
+        ) : selectedView.startsWith("chat-") ? (
+          renderChatPlaceholder(selectedView)
+        ) : selectedView.startsWith("team-") ? (
+          <TeamDetails teamId={selectedView.replace("team-", "")} />
         ) : (
           <div className="flex-1 flex flex-col items-center w-full text-center pt-36 bg-gradient-to-b from-[#fdede7] via-[#f7fafc] to-white min-h-screen">
             <h1 className="text-3xl font-bold text-gray-900 mb-6" {...getElementAttributes('heading-inbox', 0)}>
               {getText('heading-inbox', 'Add Tasks To Your Todo List')}
             </h1>
+            {tasksError && (
+              <div className="mb-6 px-6 py-4 bg-blue-50 border-2 border-blue-200 rounded-xl text-blue-800 text-sm max-w-2xl shadow-sm">
+                <div className="font-semibold mb-1">ℹ️ Usando datos locales</div>
+                <div className="text-blue-700">{tasksError}</div>
+                <div className="mt-3 text-xs text-blue-600">
+                  <p>Las tareas se están cargando desde el archivo JSON local. Si quieres usar el backend, asegúrate de que esté corriendo.</p>
+                </div>
+              </div>
+            )}
             <Modal
               open={editIndex !== null}
               footer={null}
               centered
               onCancel={() => setEditIndex(null)}
               title={getText('modal-edit-title', 'Edit Task')}
-              destroyOnClose
+              destroyOnHidden
               width={530}
             >
               {editIndex !== null && (
@@ -922,7 +1399,36 @@ export default function Home() {
             )}
           </div>
         )}
-      </main>
-    </DynamicLayout>
+          </main>
+        </DynamicLayout>
+        {/* Snackbar for notifications */}
+        {snackbar.visible && (
+          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 fade-in duration-300">
+            <div className="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-3 min-w-[250px] max-w-md">
+              <div className="flex-1 text-sm font-medium">{snackbar.message}</div>
+              <button
+                onClick={() => setSnackbar({ message: "", visible: false })}
+                className="text-white/70 hover:text-white transition-colors"
+                aria-label="Close"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+      </TeamsProvider>
+    </ProjectsProvider>
   );
 }

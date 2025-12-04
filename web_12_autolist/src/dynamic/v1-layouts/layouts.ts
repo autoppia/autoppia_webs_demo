@@ -56,12 +56,12 @@ const LAYOUTS: Record<number, LayoutConfig> = {
       },
       content: {
         order: 3,
-        className: 'flex-1 ml-[280px] flex flex-col min-h-screen pt-16 mt-0'
+        className: 'flex-1 ml-[280px] flex flex-col min-h-screen pt-16 pb-24 mt-0'
       },
       footer: {
         order: 4,
-        position: 'static',
-        className: 'mt-auto p-4 bg-gray-50 border-t border-gray-200'
+        position: 'fixed',
+        className: 'fixed bottom-0 left-0 right-0 w-full p-4 bg-gray-50 border-t border-gray-200 text-center text-gray-600'
       }
     }
   },
@@ -380,27 +380,8 @@ function parseEnableDynamicFromUrl(): boolean | null {
  * @returns boolean indicating if dynamic HTML is enabled
  */
 export function isDynamicEnabled(): boolean {
-  const fromUrl = parseEnableDynamicFromUrl();
-  if (fromUrl !== null) {
-    return fromUrl;
-  }
-
-  const rawFlag =
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE ??
-    process.env.NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE ??
-    process.env.ENABLE_DYNAMIC_V1_STRUCTURE ??
-    process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 ??
-    process.env.ENABLE_DYNAMIC_V1 ??
-    '';
-
-  if (!rawFlag) {
-    return true;
-  }
-
-  const normalized = rawFlag.toString().trim().toLowerCase();
-  if (TRUE_VALUES.has(normalized)) return true;
-  if (FALSE_VALUES.has(normalized)) return false;
-  return true;
+  // V1 structure shuffling is disabled to keep layout fixed/stable.
+  return false;
 }
 
 /**
