@@ -66,8 +66,9 @@ EXPOSE 8010
 # Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
 # so they don't need to be set here. They're already in the JavaScript code.
 
-# Copy package files first
+# Copy package files first (npm ci requires package-lock.json)
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/package-lock.json ./package-lock.json
 
 # Install only production dependencies
 RUN npm ci --omit=dev --ignore-scripts
