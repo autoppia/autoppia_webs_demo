@@ -53,11 +53,13 @@ ENV NODE_ENV=production
 ENV PORT=8004
 EXPOSE 8004
 
-# prod deps only (from deps stage)
-COPY --from=deps /app/node_modules ./node_modules
+# Copy package files first
+COPY --from=builder /app/package.json ./package.json
+
+# Install only production dependencies
+RUN npm ci --omit=dev --ignore-scripts
 
 # app artifacts
-COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 

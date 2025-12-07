@@ -65,9 +65,14 @@ EXPOSE 8013
 # Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
 # so they don't need to be set here. They're already in the JavaScript code.
 
+# Copy package files first
+COPY --from=builder /app/package.json ./package.json
+
+# Install only production dependencies
+RUN npm ci --omit=dev --ignore-scripts
+
+# app artifacts
 COPY --from=builder /app/.next ./.next
 #COPY --from=builder /app/public ./public
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
 
 CMD ["npm", "start"]
