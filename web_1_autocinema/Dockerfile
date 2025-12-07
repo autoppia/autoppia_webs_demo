@@ -3,7 +3,7 @@ FROM node:20-alpine AS deps
 WORKDIR /app
 COPY web_1_autocinema/package.json web_1_autocinema/package-lock.json ./
 # Retry npm ci up to 3 times on network errors
-RUN for i in 1 2 3; do npm ci --omit=dev && break || (echo "Attempt $i failed, retrying..." && sleep 5); done
+RUN set -e; for i in 1 2 3; do npm ci --omit=dev && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 # Stage 1: build with dev deps
 FROM node:20-alpine AS builder
@@ -14,7 +14,7 @@ COPY web_1_autocinema/package.json web_1_autocinema/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
 # Retry npm ci up to 3 times on network errors
-RUN for i in 1 2 3; do npm ci && break || (echo "Attempt $i failed, retrying..." && sleep 5); done
+RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_1_autocinema/ .
 
