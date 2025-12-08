@@ -553,7 +553,21 @@ function PropertyDetailContent() {
               };
               setUserReviews((prev) => [nextReview, ...prev]);
               logEvent(EVENT_TYPES.SUBMIT_REVIEW, {
-                hotelId: prop.id,
+                hotel: {
+                  id: prop.id,
+                  title: prop.title,
+                  location: prop.location,
+                  price: prop.price,
+                  rating: prop.rating,
+                  reviews: prop.reviews,
+                  datesFrom: prop.datesFrom,
+                  datesTo: prop.datesTo,
+                  guests: prop.guests,
+                  maxGuests: prop.maxGuests,
+                  amenities: prop.amenities?.map((a) => a.title),
+                  host: prop.host,
+                },
+                review: nextReview,
                 rating: reviewForm.rating,
                 commentLength: reviewForm.comment.trim().length,
                 name: nextReview.name,
