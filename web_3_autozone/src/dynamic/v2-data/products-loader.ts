@@ -1,7 +1,9 @@
 import type { Product } from "@/context/CartContext";
 import { fetchSeededSelection, isDbLoadModeEnabled } from "@/shared/seeded-loader";
 
-const clampSeed = (value: number, fallback: number = 1): number =>
+type SeedWindow = typeof window & { __autozoneV2Seed?: number | null };
+
+const clampSeed = (value: number, fallback = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
 /**
@@ -9,7 +11,7 @@ const clampSeed = (value: number, fallback: number = 1): number =>
  */
 const getRuntimeV2Seed = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autozoneV2Seed;
+  const value = (window as SeedWindow).__autozoneV2Seed;
   if (typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 300) {
     return value;
   }
@@ -70,7 +72,7 @@ let dynamicProducts: Product[] = [];
 
 export async function initializeProducts(
   v2SeedValue?: number | null,
-  limit: number = 100
+  limit = 100
 ): Promise<Product[]> {
   const dbModeEnabled = isDbLoadModeEnabled();
   

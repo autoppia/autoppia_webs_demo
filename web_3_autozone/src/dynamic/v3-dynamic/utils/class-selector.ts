@@ -27,7 +27,7 @@ function mapSeedToVariant(seed: number): number {
 export function getClassForElement(
   seed: number,
   classType: string,
-  fallback: string = ''
+  fallback = ''
 ): string {
   const variants = CLASS_VARIANTS_MAP[classType];
   

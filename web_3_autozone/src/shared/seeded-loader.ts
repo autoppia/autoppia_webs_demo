@@ -20,18 +20,12 @@ export function isDbLoadModeEnabled(): boolean {
   return raw === "true";
 }
 
-export function getSeedValueFromEnv(defaultSeed: number = 1): number {
+export function getSeedValueFromEnv(defaultSeed = 1): number {
   // Always return default seed (v2-seed comes from URL parameter, not env vars)
   return defaultSeed;
 }
 
 export async function fetchSeededSelection<T = unknown>(options: SeededLoadOptions): Promise<T[]> {
-  // Si el modo DB está deshabilitado, NO hacer ninguna llamada HTTP
-  if (!isDbLoadModeEnabled()) {
-    console.log(`[seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
-    return [] as T[];
-  }
-
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? getSeedValueFromEnv(1);
   const limit = options.limit ?? 50;
