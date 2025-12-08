@@ -1,5 +1,14 @@
 import { useMemo, useCallback } from "react";
-import { getSeedLayout, getLayoutClasses } from "@/dynamic/v1-layouts";
+import {
+  getLayoutVariant,
+  generateElementAttributes,
+  getXPathSelector,
+  getElementOrder,
+  generateElementId,
+  generateCSSVariables,
+  generateLayoutClasses,
+} from "@/dynamic/v1-layouts";
+import { isDynamicModeEnabled } from "@/dynamic/v2-data";
 import { useSeed as useSeedContext } from "@/context/SeedContext";
 import { useV3Attributes } from "./useV3Attributes";
 
@@ -24,25 +33,40 @@ export function useSeedLayout() {
     getClass,
   } = useV3Attributes();
 
-  const layout = useMemo(() => {
-    return getSeedLayout(layoutSeed);
-  }, [layoutSeed]);
+  const isDynamicEnabled = isDynamicModeEnabled();
 
-  const layoutClassesObj = useMemo(() => {
-    return getLayoutClasses(layout);
-  }, [layout]);
+  const seed = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return 1;
+    }
+    return layoutSeed;
+  }, [isDynamicEnabled, layoutSeed]);
+
+  const layout = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return getLayoutVariant(1);
+    }
+    return getLayoutVariant(seed);
+  }, [isDynamicEnabled, seed]);
+
+  const cssVariables = useMemo(() => {
+    if (!isDynamicEnabled) {
+      return generateCSSVariables(1);
+    }
+    return generateCSSVariables(seed);
+  }, [isDynamicEnabled, seed]);
 
   const getElementAttributes = useCallback(
-    (elementType: string, index: number = 0) => {
+    (elementType: string, index = 0) => {
       if (isV3Active) {
         return getV3ElementAttributes(elementType, index);
       }
-      return {
-        id: `${elementType}-${index}`,
-        "data-element-type": elementType,
-      };
+      if (!isDynamicEnabled) {
+        return { id: `${elementType}-${index}`, "data-element-type": elementType };
+      }
+      return generateElementAttributes(elementType, seed, index);
     },
-    [isV3Active, getV3ElementAttributes]
+    [seed, isDynamicEnabled, isV3Active, getV3ElementAttributes]
   );
 
   const getElementXPath = useCallback(
@@ -50,42 +74,118 @@ export function useSeedLayout() {
       if (isV3Active) {
         return getV3XPath(elementType);
       }
-      return `//${elementType}[@id='${elementType}-0']`;
+      if (!isDynamicEnabled) {
+        return `//${elementType}[@id='${elementType}-0']`;
+      }
+      return getXPathSelector(elementType, seed);
     },
-    [isV3Active, getV3XPath]
+    [seed, isDynamicEnabled, isV3Active, getV3XPath]
+  );
+
+  const reorderElements = useCallback(
+    <T extends { id?: string; name?: string }>(elements: T[]) => {
+      if (!isDynamicEnabled) {
+        return elements;
+      }
+      return getElementOrder(seed, elements);
+    },
+    [seed, isDynamicEnabled]
   );
 
   const generateId = useCallback(
-    (context: string, index: number = 0) => {
+    (context: string, index = 0) => {
       if (isV3Active) {
         return getV3Id(context, index);
       }
-      return `${context}-${index}`;
+      if (!isDynamicEnabled) {
+        return `${context}-${index}`;
+      }
+      return generateElementId(seed, context, index);
     },
-    [isV3Active, getV3Id]
+    [seed, isDynamicEnabled, isV3Active, getV3Id]
   );
+
+  const getLayoutClasses = useCallback(
+    (elementType: "container" | "item" | "button" | "checkbox") => {
+      if (!isDynamicEnabled) {
+        return "";
+      }
+      return generateLayoutClasses(seed, elementType);
+    },
+    [seed, isDynamicEnabled]
+  );
+
+  const applyCSSVariables = useCallback(
+    (element: HTMLElement) => {
+      if (!isDynamicEnabled) {
+        return;
+      }
+      for (const [property, value] of Object.entries(cssVariables)) {
+        element.style.setProperty(property, String(value));
+      }
+    },
+    [cssVariables, isDynamicEnabled]
+  );
+
+  const getLayoutInfo = useCallback(() => {
+    return {
+      seed,
+      layout,
+      cssVariables,
+      isDynamicEnabled,
+      layoutType: layout.layoutType,
+      buttonLayout: layout.buttonLayout,
+      labelStyle: layout.labelStyle,
+      spacing: layout.spacing,
+      elementOrder: layout.elementOrder,
+    };
+  }, [seed, layout, cssVariables, isDynamicEnabled]);
 
   const generateSeedClass = useCallback(
     (baseClass: string) => {
-      if (!isV3Active) {
+      if (!isDynamicEnabled && !isV3Active) {
         return baseClass;
       }
-      const activeSeed = isV3Active ? v3Seed : layoutSeed;
+      const activeSeed = isV3Active ? v3Seed : seed;
       return `${baseClass}-seed-${activeSeed}`;
     },
-    [layoutSeed, isV3Active, v3Seed]
+    [seed, isDynamicEnabled, isV3Active, v3Seed]
+  );
+
+  const createDynamicStyles = useCallback(
+    (baseStyles: React.CSSProperties = {}) => {
+      if (!isDynamicEnabled) {
+        return baseStyles;
+      }
+      return {
+        ...baseStyles,
+        ...Object.fromEntries(
+          Object.entries(cssVariables).map(([key, value]) => [
+            key.replace("--", ""),
+            value,
+          ])
+        ),
+      };
+    },
+    [cssVariables, isDynamicEnabled]
   );
 
   return {
-    seed: layoutSeed,
+    seed,
     layout,
-    layoutClasses: layoutClassesObj,
+    cssVariables,
+    isDynamicEnabled,
     v2Seed,
     v3Seed,
     getElementAttributes,
     getElementXPath,
+    reorderElements,
     generateId,
+    getLayoutClasses,
+    applyCSSVariables,
+    getLayoutInfo,
     generateSeedClass,
+    createDynamicStyles,
     getText,
     getClass,
   };

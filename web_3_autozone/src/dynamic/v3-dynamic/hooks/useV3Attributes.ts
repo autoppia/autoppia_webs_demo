@@ -31,7 +31,7 @@ export function useV3Attributes() {
    * Returns id, data-* attributes, etc.
    */
   const getElementAttributes = useCallback(
-    (elementType: string, index: number = 0) => {
+    (elementType: string, index = 0) => {
       const baseAttrs = {
         id: index > 0 ? `${elementType}-${index}` : elementType,
         'data-element-type': elementType,
@@ -73,7 +73,7 @@ export function useV3Attributes() {
    * Get CSS class variant for a class type
    */
   const getClass = useCallback(
-    (classType: string, fallback: string = ''): string => {
+    (classType: string, fallback = ''): string => {
       if (!isActive) return fallback;
       return getClassForElement(v3Seed, classType, fallback);
     },
@@ -84,7 +84,7 @@ export function useV3Attributes() {
    * Generate a unique ID for an element
    */
   const getId = useCallback(
-    (elementType: string, index: number = 0): string => {
+    (elementType: string, index = 0): string => {
       if (!isActive) {
         return index > 0 ? `${elementType}-${index}` : elementType;
       }
@@ -117,6 +117,4 @@ export function useV3Attributes() {
     getXPath,
   };
 }
-
-export type { };
 
