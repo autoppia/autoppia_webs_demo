@@ -12,6 +12,7 @@ import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { useSeedLayout } from "@/library/utils";
 import type { Hotel } from "@/types/hotel";
+import { useWishlist } from "@/hooks/useWishlist";
 
 type GuestsCount = {
   adults: number;
@@ -52,6 +53,12 @@ function clamp(value: number, min: number, max: number) {
 function HomeContent() {
   const { getText, getId, getClass } = useV3Attributes();
   const searchParams = useSearchParams();
+  const {
+    isInWishlist,
+    addToWishlist,
+    removeFromWishlist,
+    ready: wishlistReady,
+  } = useWishlist();
 
   const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
     from: null,
@@ -68,6 +75,9 @@ function HomeContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [isLoadingHotels, setIsLoadingHotels] = useState(true);
+  const [minRating, setMinRating] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  const [region, setRegion] = useState<string>("all");
 
   useEffect(() => {
     const urlSearch = searchParams.get("search") ?? "";
@@ -134,6 +144,22 @@ function HomeContent() {
     };
   }, []);
 
+  const regions = useMemo(() => {
+    const unique = new Set<string>();
+    hotels.forEach((hotel) => {
+      const [, country] = hotel.location.split(",").map((part) => part.trim());
+      if (country) {
+        unique.add(country);
+      }
+    });
+    return Array.from(unique);
+  }, [hotels]);
+
+  const maxPriceAvailable = useMemo(
+    () => hotels.reduce((max, hotel) => Math.max(max, hotel.price), 0),
+    [hotels]
+  );
+
   const filteredHotels = useMemo(() => {
     return hotels.filter((hotel) => {
       if (committedSearch.trim()) {
@@ -173,9 +199,24 @@ function HomeContent() {
         return false;
       }
 
+      if (minRating > 0 && hotel.rating < minRating) {
+        return false;
+      }
+
+      if (maxPrice !== null && hotel.price > maxPrice) {
+        return false;
+      }
+
+      if (region !== "all") {
+        const [, country] = hotel.location.split(",").map((part) => part.trim());
+        if (!country || country.toLowerCase() !== region.toLowerCase()) {
+          return false;
+        }
+      }
+
       return true;
     });
-  }, [hotels, committedSearch, dateRange, guests]);
+  }, [committedSearch, dateRange, guests, hotels, maxPrice, minRating, region]);
 
   const itemsPerPage = 8;
   const totalPages = Math.max(1, Math.ceil(filteredHotels.length / itemsPerPage));
@@ -421,6 +462,42 @@ function HomeContent() {
       ? orderedComponents
       : defaultOrder.map((key) => eventComponents[key]).filter(Boolean);
 
+  const handleApplyFilters = () => {
+    logEvent(EVENT_TYPES.APPLY_FILTERS, {
+      minRating,
+      maxPrice,
+      region,
+      results: filteredHotels.length,
+    });
+    setCurrentPage(1);
+  };
+
+  const handleToggleWishlist = (hotelId: number) => {
+    const hotel = hotels.find((item) => item.id === hotelId);
+    if (!hotel) return;
+    const alreadyWishlisted = isInWishlist.has(hotelId);
+
+    if (alreadyWishlisted) {
+      removeFromWishlist(hotelId);
+      logEvent(EVENT_TYPES.REMOVE_FROM_WISHLIST, {
+        id: hotel.id,
+        title: hotel.title,
+        location: hotel.location,
+        price: hotel.price,
+        rating: hotel.rating,
+      });
+    } else {
+      addToWishlist(hotel);
+      logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+        id: hotel.id,
+        title: hotel.title,
+        location: hotel.location,
+        price: hotel.price,
+        rating: hotel.rating,
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col w-full items-center mt-4 pb-12">
       <SearchWrapperTag className={`w-full flex justify-center ${searchWrapperClass}`}>
@@ -432,6 +509,99 @@ function HomeContent() {
       </SearchWrapperTag>
 
       <section className="w-full flex flex-col items-center mt-8">
+        <div className="w-full mb-6">
+          <div className="w-full bg-white border border-neutral-200 shadow-sm rounded-full px-4 py-3 flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                Rating
+              </span>
+              <div className="flex gap-2">
+                {[0, 4, 4.5, 4.7].map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setMinRating(value)}
+                    className={`px-3 py-1.5 text-sm rounded-full border transition ${
+                      minRating === value
+                        ? "bg-[#616882] text-white border-[#616882]"
+                        : "bg-white border-neutral-300 text-neutral-700"
+                    }`}
+                  >
+                    {value === 0 ? "Any" : `${value}+`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 flex-1 min-w-[220px]">
+              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                Max price
+              </span>
+              <div className="flex items-center gap-3 w-full">
+                <input
+                  id="price-filter"
+                  type="range"
+                  min={50}
+                  max={Math.max(500, maxPriceAvailable || 500)}
+                  value={maxPrice ?? Math.max(500, maxPriceAvailable || 500)}
+                  onChange={(event) => setMaxPrice(Number(event.target.value))}
+                  className="accent-[#616882] w-full"
+                />
+                <span className="text-sm font-medium text-neutral-700 min-w-[70px] text-right">
+                  {maxPrice ? `$${maxPrice}` : "No cap"}
+                </span>
+                <button
+                  className="text-xs text-neutral-500 underline"
+                  onClick={() => setMaxPrice(null)}
+                  type="button"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+                Region
+              </span>
+              <select
+                id="region-filter"
+                className="border border-neutral-300 bg-white text-sm rounded-full px-3 py-2 text-neutral-800 shadow-sm"
+                value={region}
+                onChange={(event) => setRegion(event.target.value)}
+              >
+                <option value="all">All</option>
+                {regions.map((regionName) => (
+                  <option key={regionName} value={regionName}>
+                    {regionName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2 ml-auto">
+              <button
+                type="button"
+                className="px-4 py-2 rounded-full border border-neutral-300 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 transition"
+                onClick={() => {
+                  setMinRating(0);
+                  setMaxPrice(null);
+                  setRegion("all");
+                }}
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 rounded-full bg-[#616882] text-white font-semibold hover:bg-[#7b86aa] transition shadow-sm"
+                onClick={handleApplyFilters}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+
         {paginatedResults.length === 0 ? (
           <div
             id={getId("no_results")}
@@ -442,40 +612,37 @@ function HomeContent() {
         ) : (
           <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
             {paginatedResults.map((hotel, index) => (
-              <PropertyCard key={`${hotel.id}-${index}`} {...hotel} />
+              <PropertyCard
+                key={`${hotel.id}-${index}`}
+                {...hotel}
+                wishlisted={wishlistReady && isInWishlist.has(hotel.id)}
+                onToggleWishlist={handleToggleWishlist}
+              />
             ))}
           </div>
         )}
       </section>
 
       {totalPages > 1 && (
-        <div className="flex mt-6 gap-2 items-center justify-center">
+        <div className="flex mt-6 gap-4 items-center justify-center">
           <button
             onClick={() =>
               setCurrentPage((prev) => clamp(prev - 1, 1, totalPages))
             }
             disabled={currentPage === 1}
-            className="px-3 py-1 rounded border disabled:opacity-50"
+            className="px-4 py-2 rounded border bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-100 transition-colors"
           >
             Prev
           </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={`page-${index + 1}`}
-              onClick={() => setCurrentPage(index + 1)}
-              className={`px-3 py-1 rounded border ${
-                currentPage === index + 1 ? "bg-gray-300" : ""
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
+          <span className="text-sm text-neutral-600">
+            Page {currentPage} of {totalPages}
+          </span>
           <button
             onClick={() =>
               setCurrentPage((prev) => clamp(prev + 1, 1, totalPages))
             }
             disabled={currentPage === totalPages}
-            className="px-3 py-1 rounded border disabled:opacity-50"
+            className="px-4 py-2 rounded border bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-100 transition-colors"
           >
             Next
           </button>
@@ -501,4 +668,3 @@ export default function Home() {
     </Suspense>
   );
 }
-

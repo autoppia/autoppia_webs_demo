@@ -1,6 +1,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { SeedLink } from "./ui/SeedLink";
+import type { Hotel } from "@/types/hotel";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {
@@ -64,6 +65,9 @@ export function PropertyCard({
   id,
   datesFrom,
   datesTo,
+  href,
+  onToggleWishlist,
+  wishlisted = false,
 }: {
   image: string;
   title: string;
@@ -73,14 +77,17 @@ export function PropertyCard({
   id: number;
   datesFrom: string;
   datesTo: string;
-}) {
+  href?: string;
+  onToggleWishlist?: (hotelId: number) => void;
+  wishlisted?: boolean;
+} & Partial<Hotel>) {
   return (
     <SeedLink
-      href={`/stay/${id}`}
+      href={href ?? `/stay/${id}`}
       className="group relative block overflow-hidden rounded-xl border border-neutral-200 bg-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
       aria-label={`View details for ${title}`}
     >
-      <div className="bg-white max-w-[275px] rounded-3xl shadow-md border flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
+      <div className="bg-white max-w-[275px] rounded-3xl shadow-md border border-neutral-200 flex flex-col overflow-hidden group relative transition hover:-translate-y-0.5 hover:shadow-xl cursor-pointer">
         <div className="relative aspect-[1.25/1] overflow-hidden">
           <Image
             src={image}
@@ -90,27 +97,37 @@ export function PropertyCard({
             quality={30}
             className="w-full h-full object-cover group-hover:scale-105 transition"
           />
-          {/* <button className="absolute top-3 right-3 p-2 bg-white/80 rounded-full z-10 border border-neutral-200 hover:bg-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              width={22}
-              height={22}
-              className="text-neutral-600"
+          {onToggleWishlist && (
+            <button
+              aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+              className="absolute top-3 right-3 p-2 bg-white/80 rounded-full z-10 border border-neutral-200 hover:bg-white"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onToggleWishlist(id);
+              }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-              />
-            </svg>
-          </button> */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill={wishlisted ? "#ef4444" : "none"}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                width={22}
+                height={22}
+                className={wishlisted ? "text-red-500" : "text-neutral-600"}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                />
+              </svg>
+            </button>
+          )}
         </div>
         <div className="p-4 flex flex-col gap-1 pb-2">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 text-neutral-800">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="#FF5A5F"

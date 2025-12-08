@@ -8,9 +8,12 @@ export default function Header() {
   const { getText, getId } = useV3Attributes();
   const navItems = [
     { name: getText("nav_stays", "Stays"), href: "/", id: getId("nav_stays_link") },
+    { name: "Popular", href: "/popular", id: getId("nav_popular_link") },
+    { name: "Help", href: "/help", id: getId("nav_help_link") },
+    { name: "Wishlist", href: "/wishlist", id: getId("nav_wishlist_link") },
   ];
   return (
-    <header className="w-full flex flex-col items-center border-b bg-white sticky top-0 z-20">
+    <header className="w-full flex flex-col items-center border-b border-neutral-200 bg-white sticky top-0 z-20">
       <nav className="w-full max-w-7xl flex items-center justify-between py-2 px-3 md:px-0">
         <div className="flex items-center gap-2 min-w-[130px]">
           <SeedLink id={getId("logo_link")} href="/" className="flex items-center gap-1 select-none">
@@ -47,8 +50,7 @@ export default function Header() {
             );
           })}
         </div>
-        {/* Empty flex spacer for right align if needed */}
-        <div className="min-w-[130px]" />
+        <div className="min-w-[130px] flex justify-end" />
       </nav>
     </header>
   );

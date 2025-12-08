@@ -58,6 +58,7 @@ function ConfirmPageContent() {
   const urlCheckin = search.get("checkin");
   const urlCheckout = search.get("checkout");
   const urlGuests = search.get("guests");
+  const bookingSource = search.get("source") ?? "direct";
 
   // Validate URL parameters
   const parseDateSafely = (dateStr: string | null): Date | null => {
@@ -139,6 +140,7 @@ function ConfirmPageContent() {
     }
   }, [toast]);
 
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("card");
   // Payment form state
   const [cardNumber, setCardNumber] = useState("");
   const [exp, setExp] = useState("");
@@ -155,12 +157,14 @@ function ConfirmPageContent() {
 
   // Validation
   const canPay =
-    cardFilled && expFilled && cvvFilled && zipFilled && countryFilled;
-  const showCardError = hasTriedSubmit && !cardFilled;
-  const showExpError = hasTriedSubmit && !expFilled;
-  const showCvvError = hasTriedSubmit && !cvvFilled;
-  const showZipError = hasTriedSubmit && !zipFilled;
-  const showCountryError = hasTriedSubmit && !countryFilled;
+    paymentMethod === "cash" ||
+    (cardFilled && expFilled && cvvFilled && zipFilled && countryFilled);
+  const showCardError = hasTriedSubmit && paymentMethod === "card" && !cardFilled;
+  const showExpError = hasTriedSubmit && paymentMethod === "card" && !expFilled;
+  const showCvvError = hasTriedSubmit && paymentMethod === "card" && !cvvFilled;
+  const showZipError = hasTriedSubmit && paymentMethod === "card" && !zipFilled;
+  const showCountryError =
+    hasTriedSubmit && paymentMethod === "card" && !countryFilled;
 
   useEffect(() => {
     const storageKey = "reserveEventLogged";
@@ -304,8 +308,45 @@ function ConfirmPageContent() {
           </section>
           <section className="mb-12">
             <div className="font-semibold text-[19px] mb-4 flex items-center justify-between">{getText("pay_with", "Pay with")}</div>
+            <div className="flex flex-col gap-3 mb-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="radio"
+                  name="payment-method"
+                  checked={paymentMethod === "card"}
+                  onChange={() => {
+                    setPaymentMethod("card");
+                    logEvent(EVENT_TYPES.PAYMENT_METHOD_SELECTED, {
+                      method: "card",
+                      hotelId: prop.id,
+                    });
+                  }}
+                />
+                <span className="text-base font-medium">
+                  {getText("card_method", "Credit or debit card")}
+                </span>
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="radio"
+                  name="payment-method"
+                  checked={paymentMethod === "cash"}
+                  onChange={() => {
+                    setPaymentMethod("cash");
+                    logEvent(EVENT_TYPES.PAYMENT_METHOD_SELECTED, {
+                      method: "cash_on_arrival",
+                      hotelId: prop.id,
+                    });
+                  }}
+                />
+                <span className="text-base font-medium">
+                  Cash on arrival
+                </span>
+              </label>
+            </div>
+
             <div className="border rounded-2xl bg-white overflow-hidden mb-5">
-              <div className="flex items-center px-4 py-4 text-base font-medium cursor-pointer select-none gap-2">
+              <div className="flex items-center px-4 py-4 text-base font-medium select-none gap-2">
                 <svg width="23" height="23" fill="none" viewBox="0 0 20 20">
                   <rect width="20" height="20" rx="7" fill="#f6f6f6" />
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -329,7 +370,7 @@ function ConfirmPageContent() {
                   <path d="M7 10l5 5 5-5" stroke="#222" strokeWidth="1.8" />
                 </svg>
               </div>
-              <div className="border-t px-0.5 pb-2 pt-3">
+              <div className={`border-t px-0.5 pb-2 pt-3 ${paymentMethod !== "card" ? "opacity-60 pointer-events-none" : ""}`}>
                 <div className="px-3">
                   <label className="block text-xs mb-1 font-semibold text-neutral-600">{getText("card_number", "Card number")}</label>
                   <input
@@ -342,6 +383,7 @@ function ConfirmPageContent() {
                       showCardError ? "border-red-500 ring-red-200" : ""
                     }`}
                     maxLength={19}
+                    disabled={paymentMethod !== "card"}
                   />
                   {showCardError && (
                     <p className="text-red-500 text-sm mt-1">{getText("card_number_required", "Card number is required")}</p>
@@ -359,6 +401,7 @@ function ConfirmPageContent() {
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                         showExpError ? "border-red-500 ring-red-200" : ""
                       }`}
+                      disabled={paymentMethod !== "card"}
                     />
                     {showExpError && (
                       <p className="text-red-500 text-sm mt-1">{getText("expiration_required", "Expiration is required")}</p>
@@ -375,6 +418,7 @@ function ConfirmPageContent() {
                       className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                         showCvvError ? "border-red-500 ring-red-200" : ""
                       }`}
+                      disabled={paymentMethod !== "card"}
                     />
                     {showCvvError && (
                       <p className="text-red-500 text-sm mt-1">{getText("cvv_required", "CVV is required")}</p>
@@ -392,6 +436,7 @@ function ConfirmPageContent() {
                     className={`w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200 ${
                       showZipError ? "border-red-500 ring-red-200" : ""
                     }`}
+                    disabled={paymentMethod !== "card"}
                   />
                   {showZipError && (
                     <p className="text-red-500 text-sm mt-1">{getText("zip_required", "ZIP code is required")}</p>
@@ -404,6 +449,7 @@ function ConfirmPageContent() {
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
                     className="w-full border rounded-md px-3 py-2 text-[16px] bg-white focus:ring-2 ring-neutral-200"
+                    disabled={paymentMethod !== "card"}
                   >
                     <option>United States</option>
                     <option>Canada</option>
@@ -417,6 +463,11 @@ function ConfirmPageContent() {
                 </div>
               </div>
             </div>
+            {paymentMethod === "cash" && (
+              <div className="border rounded-xl bg-amber-50 text-amber-900 px-4 py-3 text-sm">
+                Pay the host on arrival. We will hold your reservation until check-in.
+              </div>
+            )}
           </section>
           <section className="mb-12 pt-2 border-t border-neutral-200">
             <div className="font-bold text-[20px] mb-1 mt-5">{getText("message_host_title", "Message the Host")}</div>
@@ -549,21 +600,25 @@ function ConfirmPageContent() {
                 cleaningFee,
                 serviceFee,
                 total,
-                cardNumber,
-                expiration: exp,
-                cvv,
-                zip,
-                country,
+                paymentMethod,
+                cardNumber: paymentMethod === "card" ? cardNumber : undefined,
+                expiration: paymentMethod === "card" ? exp : undefined,
+                cvv: paymentMethod === "card" ? cvv : undefined,
+                zip: paymentMethod === "card" ? zip : undefined,
+                country: paymentMethod === "card" ? country : undefined,
+                source: bookingSource,
                 hotel: prop,
               });
 
               showToast(getText("reservation_complete", "✅ Reservation complete! Thank you! 🙏"));
               // Reset form fields
-              setCardNumber("");
-              setExp("");
-              setCvv("");
-              setZip("");
-              setCountry("United States");
+              if (paymentMethod === "card") {
+                setCardNumber("");
+                setExp("");
+                setCvv("");
+                setZip("");
+                setCountry("United States");
+              }
               setHasTriedSubmit(false);
             }}
           >
