@@ -3,6 +3,7 @@
  * 
  * Loads different data subsets based on v2 seed.
  */
+import { dynamicDataProvider } from "./data-provider";
 
 export { initializeProducts } from './products-loader';
 export { 
@@ -14,10 +15,10 @@ export {
   getStaticRefreshSpace,
   getLayoutConfig,
   getEffectiveSeed,
-  searchProducts
+  searchProducts,
+  isDynamicModeEnabled,
 } from './data-provider';
 export type { Product } from '@/context/CartContext';
 
 // Export whenReady function
 export const whenReady = () => dynamicDataProvider.whenReady();
-

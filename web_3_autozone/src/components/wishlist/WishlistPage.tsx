@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/SafeImage";
 
-import { useCart } from "@/context/CartContext";
+import { type Product, useCart } from "@/context/CartContext";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import {
   getWishlistItems,
@@ -12,7 +12,7 @@ import {
   clearWishlist,
   type WishlistItem,
 } from "@/library/wishlist";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/button";
@@ -66,7 +66,7 @@ export function WishlistPage() {
   };
 
   const handleAddToCart = (item: WishlistItem) => {
-    addToCart(item as any);
+    addToCart(item as Product);
     logEvent(EVENT_TYPES.ADD_TO_CART, {
       productId: item.id,
       title: item.title,
@@ -90,7 +90,7 @@ export function WishlistPage() {
     <section className="omnizon-container space-y-8 py-28">
       <SectionHeading
         eyebrow="Wishlist"
-        title="Saved installs and hardware"
+        title="Saved items and ideas"
         description="Everything you flagged for later lives here. Drop items into the cart, jump to product detail, or clear the list."
         actions={
           items.length > 0 && (
@@ -113,8 +113,8 @@ export function WishlistPage() {
                 Nothing saved yet
               </p>
               <p className="mt-2 text-sm">
-                Browse the catalog and tap “Wishlist” on any kit to keep it here
-                for later.
+                Browse the catalog and tap “Wishlist” on any product to keep it
+                here for later.
               </p>
               <Button
                 className="mt-4 rounded-full bg-slate-900 px-6 py-3 text-white"
@@ -132,12 +132,13 @@ export function WishlistPage() {
                     onClick={() => router.push(`/${item.id}`)}
                     className="relative h-40 w-full overflow-hidden rounded-2xl bg-slate-50"
                   >
-                    <Image
+                    <SafeImage
                       src={item.image}
                       alt={item.title}
                       fill
                       sizes="(max-width:768px) 50vw, 260px"
                       className="object-contain p-3"
+                      fallbackSrc="/images/homepage_categories/coffee_machine.jpg"
                     />
                   </button>
                   <div className="mt-3 flex-1 space-y-1 text-sm">
@@ -189,9 +190,9 @@ export function WishlistPage() {
           <div className="rounded-2xl border border-white/70 bg-white/80 p-4 text-sm text-slate-600">
             <p className="font-semibold text-slate-900">Workflow tips</p>
             <ul className="mt-2 space-y-1 list-disc pl-4">
-              <li>Share the page link to align with partners.</li>
-              <li>Convert items directly into install orders.</li>
-              <li>Tap an item to open the detailed PDP view.</li>
+              <li>Share the page link to align with friends or teammates.</li>
+              <li>Move items into the cart to lock pricing and delivery.</li>
+              <li>Tap an item to open the detailed product page.</li>
             </ul>
           </div>
           {items.length > 0 && (

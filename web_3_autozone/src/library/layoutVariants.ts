@@ -1,4 +1,4 @@
-import { type ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithoutRef } from "react"
 import { seededRandom, seededRandomItem } from "@/library/utils"
 
 export interface LayoutVariantAttributes {
@@ -12,20 +12,20 @@ export interface LayoutVariantAttributes {
 }
 
 // Layout variants for different component types
-const containerVariants = [
+const containerVariants: LayoutVariantAttributes[] = [
   { className: "flex flex-col", "data-layout": "vertical" },
   { className: "flex flex-row", "data-layout": "horizontal" },
   { className: "grid grid-cols-2", "data-layout": "grid-2" },
   { className: "grid grid-cols-3", "data-layout": "grid-3" },
 ]
 
-const buttonVariants = [
+const buttonVariants: LayoutVariantAttributes[] = [
   { className: "rounded-full", "data-variant": "circular" },
   { className: "rounded-lg", "data-variant": "rounded" },
   { className: "rounded-none", "data-variant": "square" },
 ]
 
-const itemVariants = [
+const itemVariants: LayoutVariantAttributes[] = [
   { className: "hover:scale-105 transition-transform", "data-variant": "scale" },
   { className: "hover:rotate-1 transition-transform", "data-variant": "rotate" },
   { className: "hover:translate-y-1 transition-transform", "data-variant": "translate" },
@@ -34,16 +34,16 @@ const itemVariants = [
 // Generate deterministic CSS properties based on seed
 function generateDynamicStyles(seed: string): Partial<CSSStyleDeclaration> {
   const styleVariants = [
-    { borderRadius: seededRandom(seed + "radius") * 16 + "px" },
-    { transform: `rotate(${seededRandom(seed + "rotate") * 360}deg)` },
-    { padding: seededRandom(seed + "padding") * 20 + "px" },
+    { borderRadius: `${seededRandom(`${seed}radius`) * 16}px` },
+    { transform: `rotate(${seededRandom(`${seed}rotate`) * 360}deg)` },
+    { padding: `${seededRandom(`${seed}padding`) * 20}px` },
   ]
   
-  return seededRandomItem(styleVariants, seed + "style")
+  return seededRandomItem(styleVariants, `${seed}style`)
 }
 
 // Map component types to their variant sets
-const variantMap = {
+const variantMap: Record<string, LayoutVariantAttributes[]> = {
   CAROUSEL_CONTAINER: containerVariants,
   CAROUSEL_PREV: buttonVariants,
   CAROUSEL_NEXT: buttonVariants,
@@ -57,7 +57,7 @@ const variantMap = {
 export function generateAttributes(eventType?: string, seed?: string): LayoutVariantAttributes {
   if (!eventType || !seed) return {}
   
-  const variants = variantMap[eventType as keyof typeof variantMap] || []
+  const variants = variantMap[eventType] || []
   if (!variants.length) return {}
   
   const variant = seededRandomItem(variants, seed + eventType)

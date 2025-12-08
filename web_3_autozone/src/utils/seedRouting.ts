@@ -46,9 +46,9 @@ export function withSeedAndParams(
   const params = new URLSearchParams();
   
   // Add provided query params
-  Object.entries(queryParams).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(queryParams)) {
     params.set(key, value);
-  });
+  }
   
   // Preserve seed-structure if present
   if (searchParams) {
@@ -67,4 +67,3 @@ export function withSeedAndParams(
   const queryString = params.toString();
   return queryString ? `${basePath}?${queryString}` : basePath;
 }
-

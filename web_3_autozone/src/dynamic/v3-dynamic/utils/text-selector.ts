@@ -11,7 +11,7 @@ type TextVariantMap = Record<TextKey, string>;
 
 const VARIANTS: Record<number, TextVariantMap> = Object.fromEntries(
   Object.entries(textVariantsJson as Record<string, TextVariantMap>).map(([k, v]) => [
-    parseInt(k, 10),
+    Number.parseInt(k, 10),
     v,
   ])
 );
@@ -40,7 +40,7 @@ export function getTextForElement(
   const variantIndex = mapSeedToVariant(seed);
   const variant = VARIANTS[variantIndex];
   
-  return (variant && variant[key]) || fallback;
+  return variant?.[key] || fallback;
 }
 
 /**
@@ -58,4 +58,3 @@ export function getAvailableTextKeys(): TextKey[] {
   const firstVariant = VARIANTS[1] || {};
   return Object.keys(firstVariant);
 }
-

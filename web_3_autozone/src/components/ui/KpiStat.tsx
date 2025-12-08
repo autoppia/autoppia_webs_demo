@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 import { cn } from "@/library/utils";
