@@ -2,25 +2,64 @@
 
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { useV3Attributes } from "@/dynamic/v3-dynamic";
-import { logEvent, EVENT_TYPES } from "@/library/events";
+import { logEvent, EVENT_TYPES } from "@/events";
 import { ToastContainer, toast } from "react-toastify";
 import { BlurCard } from "@/components/ui/BlurCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { BadgeCheck, ShieldCheck, Truck } from "lucide-react";
+import { BadgeCheck, ShieldCheck, Truck, ShoppingBag } from "lucide-react";
+import { SafeImage } from "@/components/ui/SafeImage";
+import { useSeedRouter } from "@/hooks/useSeedRouter";
+import { useEffect } from "react";
 
 export default function CheckoutPage() {
+  const router = useSeedRouter();
   const { state, clearCart } = useCart();
   const { items, totalItems, totalAmount } = state;
-  const { getText, getId } = useV3Attributes();
 
-  const shipping = parseFloat((Math.random() * 5 + 2).toFixed(2));
-  const tax = parseFloat((totalAmount * 0.08).toFixed(2));
+  // Free shipping over $50, otherwise $5.99
+  const shipping = totalAmount >= 50 ? 0 : 5.99;
+  const tax = Number.parseFloat((totalAmount * 0.08).toFixed(2));
   const orderTotal = totalAmount + tax + shipping;
 
-  const deliveryDate1 = "Tomorrow, Jul 19";
-  const deliveryDate2 = "Monday, Jul 21";
-  const arrivalText = "Arriving Jul 19, 2024";
+  const deliveryDate = new Date();
+  deliveryDate.setDate(deliveryDate.getDate() + 2);
+  const formattedDate = deliveryDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
+
+  useEffect(() => {
+    if (totalItems === 0) {
+      toast.info("Your cart is empty. Redirecting to shop...");
+      setTimeout(() => router.push("/search"), 2000);
+    }
+  }, [totalItems, router]);
+
+  if (totalItems === 0) {
+    return (
+      <>
+        <ToastContainer />
+        <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white py-20">
+          <div className="omnizon-container text-center space-y-6">
+            <ShoppingBag className="h-16 w-16 mx-auto text-slate-300" />
+            <h1 className="text-2xl font-semibold text-slate-900">
+              Your cart is empty
+            </h1>
+            <p className="text-slate-600">
+              Add some products to your cart to continue shopping.
+            </p>
+            <Button
+              onClick={() => router.push("/search")}
+              className="rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-8 py-3 text-white shadow-lg"
+            >
+              Browse Products
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -29,12 +68,12 @@ export default function CheckoutPage() {
         <div className="omnizon-container space-y-10">
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
-              Autozone
+              Autozone Checkout
             </p>
             <h1 className="text-3xl font-semibold text-slate-900">
-              {getText("checkout")}{" "}
+              Review Your Order{" "}
               <span className="text-indigo-600">
-                ({totalItems} {getText("items")})
+                ({totalItems} {totalItems === 1 ? "item" : "items"})
               </span>
             </h1>
           </div>
@@ -42,130 +81,139 @@ export default function CheckoutPage() {
           <div className="grid gap-10 lg:grid-cols-[1.2fr,0.8fr]">
             <div className="space-y-6">
               <SectionHeading
-                eyebrow="Timeline"
-                title="Review and confirm your order"
-                description="Shipping, payment, and items are locked in once you place the order."
+                eyebrow="Order timeline"
+                title="Review and confirm"
+                description="Please verify your shipping address, payment method, and items before placing your order."
               />
+
+              {/* Step 1: Shipping Address */}
               <BlurCard className="flex gap-4 p-5">
-                <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+                <div className="flex-shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white h-fit">
                   1
                 </div>
-                <div className="space-y-2 text-sm text-slate-600">
+                <div className="flex-1 space-y-2 text-sm">
                   <p className="text-base font-semibold text-slate-900">
-                    {getText("shipping_address")}
+                    Shipping Address
                   </p>
-                  <p>
-                    John Doe · 123 Main St · Cityville, ST 12345
+                  <p className="text-slate-700">
+                    <strong>John Doe</strong>
+                    <br />
+                    123 Main Street
+                    <br />
+                    Cityville, ST 12345
                   </p>
-                  <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
-                    Earliest arrival — {deliveryDate1}
+                  <p className="text-xs uppercase tracking-[0.3em] text-emerald-600 font-semibold">
+                    Estimated Delivery: {formattedDate}
                   </p>
-                  <button className="text-xs font-semibold text-indigo-600 underline">
-                    {getText("add_delivery_instructions")}
-                  </button>
                 </div>
               </BlurCard>
 
+              {/* Step 2: Payment Method */}
               <BlurCard className="flex gap-4 p-5">
-                <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+                <div className="flex-shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white h-fit">
                   2
                 </div>
-                <div className="space-y-2 text-sm text-slate-600">
+                <div className="flex-1 space-y-2 text-sm">
                   <p className="text-base font-semibold text-slate-900">
-                    {getText("payment_method")}
+                    Payment Method
                   </p>
-                  <p>{getText("paying_with")} MasterCard ending in 1234</p>
-                  <p>{getText("billing_address_same")}</p>
-                  <p className="text-xs uppercase tracking-[0.4em] text-slate-400">
-                    Backup arrival — {deliveryDate2}
+                  <p className="text-slate-700">
+                    MasterCard ending in 1234
+                  </p>
+                  <p className="text-slate-600 text-xs">
+                    Billing address matches shipping address
                   </p>
                 </div>
               </BlurCard>
 
+              {/* Step 3: Review Items */}
               <BlurCard className="p-5">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex-shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
                     3
                   </div>
                   <p className="text-base font-semibold text-slate-900">
-                    {getText("review_items")}
+                    Order Items
                   </p>
                 </div>
-                <div className="mt-4 space-y-3">
+                <div className="space-y-3">
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-4 rounded-2xl border border-white/60 bg-white/80 p-3"
+                      className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-3"
                     >
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="h-14 w-14 rounded-2xl bg-white object-contain p-2"
-                      />
-                      <div className="flex-1 text-sm text-slate-600">
-                        <p className="font-semibold text-slate-900">
+                      <div className="relative h-16 w-16 flex-shrink-0 rounded-xl bg-slate-50 overflow-hidden">
+                        <SafeImage
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-contain p-2"
+                          fallbackSrc="/images/homepage_categories/default.jpg"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-900 truncate">
                           {item.title}
                         </p>
-                        <p>
-                          {getText("quantity")}: {item.quantity}
+                        <p className="text-sm text-slate-600">
+                          Qty: {item.quantity} × {item.price}
                         </p>
-                        <p>
-                          {getText("price")}: {item.price}
+                        <p className="text-sm font-semibold text-slate-900">
+                          ${(Number.parseFloat(item.price.replace("$", "")) * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 text-xs uppercase tracking-[0.4em] text-slate-400">
-                  {arrivalText}
-                </p>
               </BlurCard>
             </div>
 
+            {/* Order Summary Sidebar */}
             <div className="space-y-6">
               <BlurCard className="space-y-5 p-6 lg:sticky lg:top-24">
                 <div className="rounded-2xl bg-gradient-to-r from-indigo-500 to-sky-500 px-4 py-3 text-white">
-                  <p className="text-xs uppercase tracking-[0.4em]">
-                    Final review
+                  <p className="text-xs uppercase tracking-[0.4em] font-semibold">
+                    Order Summary
                   </p>
-                  <p>
-                    {getText("qualifies_for_delivery")}{" "}
-                    <span className="font-semibold">
-                      {getText("free_delivery")}
-                    </span>
-                  </p>
+                  {shipping === 0 && (
+                    <p className="text-sm mt-1">
+                      🎉 You qualify for <strong>free shipping</strong>!
+                    </p>
+                  )}
                 </div>
-                <div className="text-sm text-slate-600">
-                  <div className="flex justify-between">
-                    <span>{getText("items")}</span>
+
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between text-slate-600">
+                    <span>Subtotal ({totalItems} {totalItems === 1 ? "item" : "items"})</span>
                     <span className="font-semibold text-slate-900">
                       ${totalAmount.toFixed(2)}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>{getText("shipping_handling")}</span>
+                  <div className="flex justify-between text-slate-600">
+                    <span>Shipping & Handling</span>
                     <span className="font-semibold text-slate-900">
-                      ${shipping.toFixed(2)}
+                      {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
                     </span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>{getText("estimated_tax")}</span>
+                  <div className="flex justify-between text-slate-600">
+                    <span>Estimated Tax</span>
                     <span className="font-semibold text-slate-900">
                       ${tax.toFixed(2)}
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between border-t border-white/50 pt-3">
-                  <span className="text-sm font-semibold text-slate-600">
-                    {getText("order_total")}
+
+                <div className="flex items-center justify-between border-t border-slate-200 pt-4">
+                  <span className="text-sm font-semibold text-slate-700">
+                    Order Total
                   </span>
-                  <span className="text-2xl font-semibold text-slate-900">
+                  <span className="text-2xl font-bold text-slate-900">
                     ${orderTotal.toFixed(2)}
                   </span>
                 </div>
+
                 <Button
-                  id={getId("checkout_button")}
-                  className="w-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-4 text-lg font-semibold text-white shadow-lg"
+                  className="w-full rounded-full bg-gradient-to-r from-indigo-500 to-sky-500 px-6 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all"
                   onClick={() => {
                     logEvent(EVENT_TYPES.ORDER_COMPLETED, {
                       items: items.map((item) => ({
@@ -180,35 +228,46 @@ export default function CheckoutPage() {
                       shipping: shipping.toFixed(2),
                       orderTotal: orderTotal.toFixed(2),
                     });
-                    toast.success("Order placed successfully!");
-                    clearCart();
+                    toast.success("🎉 Order placed successfully!");
+                    setTimeout(() => {
+                      clearCart();
+                      router.push("/");
+                    }, 1500);
                   }}
                 >
-                  {getText("place_order", "Proceed")}
+                  Place Order
                 </Button>
+
                 <p className="text-center text-xs text-slate-500">
-                  {getText("by_placing_order")}{" "}
-                  <a href="#" className="underline text-indigo-600">
-                    {getText("privacy_notice")}
-                  </a>{" "}
+                  By placing your order, you agree to our{" "}
+                  <button
+                    onClick={() => router.push("/")}
+                    className="underline text-indigo-600 hover:text-indigo-700"
+                  >
+                    Privacy Policy
+                  </button>{" "}
                   and{" "}
-                  <a href="#" className="underline text-indigo-600">
-                    {getText("conditions_of_use")}
-                  </a>
+                  <button
+                    onClick={() => router.push("/")}
+                    className="underline text-indigo-600 hover:text-indigo-700"
+                  >
+                    Terms of Service
+                  </button>
                   .
                 </p>
-                <div className="flex flex-wrap gap-3 text-xs text-slate-500">
+
+                <div className="flex flex-wrap gap-3 pt-2 text-xs text-slate-600 border-t border-slate-200">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4" />
-                    Buyer protection
+                    <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                    <span>Buyer Protection</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Truck className="h-4 w-4" />
-                    Fast routing
+                    <Truck className="h-4 w-4 text-indigo-600" />
+                    <span>Fast Shipping</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <BadgeCheck className="h-4 w-4" />
-                    Compliance ready
+                    <BadgeCheck className="h-4 w-4 text-sky-600" />
+                    <span>Secure Checkout</span>
                   </div>
                 </div>
               </BlurCard>

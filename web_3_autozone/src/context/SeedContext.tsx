@@ -157,7 +157,7 @@ export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const v2Seed = resolvedSeeds.v2 ?? resolvedSeeds.base;
-    (window as any).__autozoneV2Seed = v2Seed ?? null;
+    window.__autozoneV2Seed = v2Seed ?? null;
     window.dispatchEvent(new CustomEvent("autozone:v2SeedChange", { detail: { seed: v2Seed ?? null } }));
     console.log("[SeedContext:web3] v2-seed synced to window:", v2Seed);
   }, [resolvedSeeds.v2, resolvedSeeds.base]);

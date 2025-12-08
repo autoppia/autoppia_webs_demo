@@ -83,6 +83,19 @@ const nextConfig = {
     ENABLE_DYNAMIC_V4: process.env.ENABLE_DYNAMIC_V4,
     NEXT_PUBLIC_ENABLE_DYNAMIC_V4: process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V4,
   },
+  async headers() {
+    return [
+      {
+        source: "/media/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=14400, s-maxage=14400, immutable, no-transform",
+          },
+        ],
+      },
+    ];
+  },
   // experimental: {
   //   allowedDevOrigins: ['https://be96-72-255-23-44.ngrok-free.app'], // ← your ngrok public URL
   // },

@@ -6,6 +6,13 @@
 
 export { getSeedLayout, isDynamicEnabled, getEffectiveLayoutConfig, getLayoutClasses } from './layouts';
 export type { SeedLayoutConfig } from './layouts';
-export { getLayoutVariant } from './layout-variants';
+export {
+  getLayoutVariant,
+  generateElementAttributes,
+  getXPathSelector,
+  getElementOrder,
+  generateElementId,
+  generateCSSVariables,
+  generateLayoutClasses,
+} from './layout-variants';
 export type { LayoutVariant } from './layout-variants';
-

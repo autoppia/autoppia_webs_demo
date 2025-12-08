@@ -5,11 +5,22 @@
  */
 
 // V1: Layout variations (common across all webs)
-export * from './v1-layouts';
+export {
+  getSeedLayout,
+  isDynamicEnabled,
+  getEffectiveLayoutConfig,
+  getLayoutClasses,
+  getLayoutVariant,
+  generateElementAttributes,
+  getXPathSelector,
+  getElementOrder,
+  generateElementId as generateV1ElementId,
+  generateCSSVariables,
+  generateLayoutClasses as generateLayoutClassesV1,
+} from './v1-layouts';
 
 // V2: Data loading (specific to this web)
 export * from './v2-data';
 
 // V3: Anti-scraping attributes (specific to this web)
 export * from './v3-dynamic';
-

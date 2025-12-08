@@ -23,24 +23,25 @@ export function Footer() {
     {
       title: "Shop",
       links: [
-        { text: "All Products", href: "/" },
-        { text: "Search", href: "/search" },
-        { text: "Shopping Cart", href: "/cart" },
+        { text: "All Products", href: "/search", clickable: true },
+        { text: "Wishlist", href: "/wishlist", clickable: true },
+        { text: "Shopping Cart", href: "/cart", clickable: true },
       ],
     },
     {
       title: "Your Account",
       links: [
-        { text: "Your Orders", href: "/cart" },
-        { text: "Checkout", href: "/checkout" },
+        { text: "Orders", href: "/cart", clickable: true },
+        { text: "Checkout", href: "/checkout", clickable: true },
+        { text: "Saved Items", href: "/wishlist", clickable: true },
       ],
     },
     {
       title: "Customer Service",
       links: [
-        { text: "Help Center", href: "/" },
-        { text: "Shipping Info", href: "/" },
-        { text: "Returns", href: "/" },
+        { text: "Help Center", href: "/", clickable: false },
+        { text: "Shipping Info", href: "/", clickable: false },
+        { text: "Returns Policy", href: "/", clickable: false },
       ],
     },
   ];
@@ -61,30 +62,59 @@ export function Footer() {
         </div>
 
         <div className="omnizon-container relative z-10 space-y-12 py-16">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl font-semibold">Autozone</h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
-              Your trusted online marketplace for electronics, home goods, and
-              more.
-            </p>
+          <div className="grid gap-10 lg:grid-cols-[1.8fr,1fr]">
+            <div className="space-y-5">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-white/60">
+                About Autozone
+              </p>
+              <h2 className="text-3xl font-semibold leading-tight">
+                Everything you need, shipped with care
+              </h2>
+              <p className="max-w-2xl text-base text-white/70">
+                Autozone is your one-stop marketplace for electronics, home upgrades,
+                fitness gear, and daily essentials. Reliable delivery, clear support,
+                and trusted sellers keep every order simple.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => router.push("/search")}
+                  className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-slate-900 shadow-lg"
+                >
+                  Browse deals
+                </button>
+                <a
+                  href="mailto:support@autozone.example"
+                  className="rounded-full border border-white/40 px-5 py-2 text-sm font-semibold text-white/80 hover:border-white"
+                >
+                  Talk to support
+                </a>
+              </div>
+            </div>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3 max-w-3xl mx-auto">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {linkColumns.map((column) => (
               <div key={column.title} className="space-y-3">
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">
                   {column.title}
                 </p>
                 <ul className="space-y-2 text-sm text-white/70">
-                  {column.links.map((item) => (
-                    <li key={item.text}>
-                      <button
-                        type="button"
-                        onClick={() => router.push(item.href)}
-                        className="text-left text-white/70 hover:text-white transition-colors"
-                      >
-                        {item.text}
-                      </button>
+                  {column.links.map((link) => (
+                    <li key={link.text}>
+                      {link.clickable ? (
+                        <button
+                          type="button"
+                          onClick={() => router.push(link.href)}
+                          className="text-left hover:text-white transition-colors"
+                        >
+                          {link.text}
+                        </button>
+                      ) : (
+                        <span className="text-white/50 cursor-default">
+                          {link.text}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -102,29 +132,29 @@ export function Footer() {
                   WEB3
                 </span>
               </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
-                  English
-                </button>
-                <button className="rounded-full border border-white/30 px-3 py-1 text-xs">
-                  USD - U.S. Dollar
-                </button>
-                <button className="inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs">
-                  <span className="relative h-3 w-5">
-                    <Image
-                      src="/images/others/us_flag.png"
-                      alt="United States"
-                      fill
-                      className="object-cover"
-                    />
-                  </span>
-                  United States
-                </button>
-              </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="rounded-full border border-white/30 px-3 py-1 text-xs text-white/60 cursor-default">
+                English
+              </span>
+              <span className="rounded-full border border-white/30 px-3 py-1 text-xs text-white/60 cursor-default">
+                USD - U.S. Dollar
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1 text-xs text-white/60 cursor-default">
+                <span className="relative h-3 w-5">
+                  <Image
+                    src="/images/others/us_flag.png"
+                    alt="United States"
+                    fill
+                    className="object-cover"
+                  />
+                </span>
+                United States
+              </span>
+            </div>
             </div>
             <p className="mt-4 text-xs text-white/60">
-              © {new Date().getFullYear()} Autozone. Your trusted online
-              shopping destination.
+              © {new Date().getFullYear()} Autozone. Marketplace for trusted sellers,
+              fast delivery, and everyday essentials.
             </p>
           </div>
         </div>
