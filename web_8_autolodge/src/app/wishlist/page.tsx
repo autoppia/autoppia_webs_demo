@@ -43,7 +43,13 @@ function WishlistContent() {
                 {...hotel}
                 href={`/stay/${hotel.id}?source=wishlist`}
                 wishlisted
-                onToggleWishlist={() => removeFromWishlist(hotel.id)}
+                onToggleWishlist={() => {
+                  removeFromWishlist(hotel.id);
+                  logEvent(EVENT_TYPES.REMOVE_FROM_WISHLIST, {
+                    id: hotel.id,
+                    title: hotel.title,
+                  });
+                }}
               />
               <div className="mt-2 flex justify-between items-center">
                 <SeedLink
@@ -60,7 +66,13 @@ function WishlistContent() {
                 </SeedLink>
                 <button
                   className="text-xs text-neutral-500 underline"
-                  onClick={() => removeFromWishlist(hotel.id)}
+                  onClick={() => {
+                    removeFromWishlist(hotel.id);
+                    logEvent(EVENT_TYPES.REMOVE_FROM_WISHLIST, {
+                      id: hotel.id,
+                      title: hotel.title,
+                    });
+                  }}
                 >
                   Remove
                 </button>
