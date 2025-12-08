@@ -44,6 +44,22 @@ ENV API_URL=$API_URL
 ARG NEXT_PUBLIC_API_URL=http://localhost:8090
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
+# Build arg for Git commit hash (passed from setup.sh)
+ARG GIT_COMMIT_HASH=unknown
+
+# Extract version from package.json and combine with Git hash for automatic versioning
+# Format: "1.0.0+abc1234" (base version + git hash)
+# This ensures each build has a unique version without manual updates
+RUN BASE_VERSION=$(node -p "require('./package.json').version") && \
+    if [ "$GIT_COMMIT_HASH" != "unknown" ] && [ -n "$GIT_COMMIT_HASH" ]; then \
+      WEB_VERSION="${BASE_VERSION}+${GIT_COMMIT_HASH}"; \
+    else \
+      WEB_VERSION="$BASE_VERSION"; \
+    fi && \
+    echo "NEXT_PUBLIC_WEB_VERSION=$WEB_VERSION" > .env.local && \
+    echo "WEB_VERSION=$WEB_VERSION" >> .env.local && \
+    echo "✅ Auto-version: $WEB_VERSION"
+
 RUN npm run build
 
 # Stage 2: Create the lean production image

@@ -247,13 +247,44 @@ setup_docker() {
   fi
 }
 
+# Get Git commit hash for automatic versioning
+# If web_dir is provided, returns the hash of the last commit that modified that directory
+# Otherwise, returns the hash of the current HEAD
+get_git_commit_hash() {
+  local web_dir="${1:-}"
+  local repo_root="$DEMOS_DIR"
+  
+  if ! command -v git >/dev/null 2>&1 || [ ! -d "$repo_root/.git" ]; then
+    echo "unknown"
+    return
+  fi
+  
+  if [ -n "$web_dir" ]; then
+    # Get the hash of the last commit that modified files in this web directory
+    # This ensures each web gets its own version based on when it was last changed
+    local hash=$(git -C "$repo_root" log -1 --format=%h -- "$web_dir/" 2>/dev/null)
+    if [ -n "$hash" ]; then
+      echo "$hash"
+    else
+      # Fallback: if no commits found for this directory, use HEAD
+      git -C "$repo_root" rev-parse --short HEAD 2>/dev/null || echo "unknown"
+    fi
+  else
+    # No directory specified, use HEAD
+    git -C "$repo_root" rev-parse --short HEAD 2>/dev/null || echo "unknown"
+  fi
+}
+
 # Export environment variables for deployment
 export_env_vars() {
   local web_port="$1"
   local db_port="$2"
+  local web_dir="${3:-}"  # Optional: web directory name (e.g., "web_1_autocinema")
+  local git_hash=$(get_git_commit_hash "$web_dir")
   export \
     WEB_PORT="$web_port" \
     POSTGRES_PORT="$db_port" \
+    GIT_COMMIT_HASH="$git_hash" \
     ENABLE_DYNAMIC_V1="$ENABLE_DYNAMIC_V1" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V1="$ENABLE_DYNAMIC_V1" \
     ENABLE_DYNAMIC_V2_AI_GENERATE="$ENABLE_DYNAMIC_V2_AI_GENERATE" \
@@ -297,7 +328,8 @@ deploy_project() {
   [ "$FAST_MODE" = false ] && cache_flag="--no-cache"
 
   (
-    export_env_vars "$web_port" "$db_port"
+    # Pass the web directory name (e.g., "web_1_autocinema") to get its specific commit hash
+    export_env_vars "$web_port" "$db_port" "$name"
     docker compose -p "$project_name" build $cache_flag
     docker compose -p "$project_name" up -d
   )
@@ -538,19 +570,19 @@ case "$WEB_DEMO" in
     ;;
   all)
     deploy_webs_server
-    deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
+    #deploy_project "web_1_autocinema" "$WEB_PORT" "" "movies_${WEB_PORT}"
     deploy_project "web_2_autobooks" "$((WEB_PORT + 1))" "" "books_$((WEB_PORT + 1))"
-    deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
-    deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
-    deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
-    deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
-    deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
-    deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
-    deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
-    deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
-    deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
-    deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
-    deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
+    # deploy_project "web_3_autozone" "$((WEB_PORT + 2))" "" "autozone_$((WEB_PORT + 2))"
+    # deploy_project "web_4_autodining" "$((WEB_PORT + 3))" "" "autodining_$((WEB_PORT + 3))"
+    # deploy_project "web_5_autocrm" "$((WEB_PORT + 4))" "" "autocrm_$((WEB_PORT + 4))"
+    # deploy_project "web_6_automail" "$((WEB_PORT + 5))" "" "automail_$((WEB_PORT + 5))"
+    # deploy_project "web_7_autodelivery" "$((WEB_PORT + 6))" "" "autodelivery_$((WEB_PORT + 6))"
+    # deploy_project "web_8_autolodge" "$((WEB_PORT + 7))" "" "autolodge_$((WEB_PORT + 7))"
+    # deploy_project "web_9_autoconnect" "$((WEB_PORT + 8))" "" "autoconnect_$((WEB_PORT + 8))"
+    # deploy_project "web_10_autowork" "$((WEB_PORT + 9))" "" "autowork_$((WEB_PORT + 9))"
+    # deploy_project "web_11_autocalendar" "$((WEB_PORT + 10))" "" "autocalendar_$((WEB_PORT + 10))"
+    # deploy_project "web_12_autolist" "$((WEB_PORT + 11))" "" "autolist_$((WEB_PORT + 11))"
+    # deploy_project "web_13_autodrive" "$((WEB_PORT + 12))" "" "autodrive_$((WEB_PORT + 12))"
 #    deploy_project "web_14_autohealth" "$((WEB_PORT + 13))" "" "autohealth_$((WEB_PORT + 13))"
     ;;
   *)
