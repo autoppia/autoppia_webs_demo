@@ -76,7 +76,6 @@ function HomeContent() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [isLoadingHotels, setIsLoadingHotels] = useState(true);
   const [minRating, setMinRating] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [region, setRegion] = useState<string>("all");
 
   useEffect(() => {
@@ -110,7 +109,7 @@ function HomeContent() {
       try {
         // Wait for provider to be ready
         await dynamicDataProvider.whenReady();
-        
+
         const providerHotels = dynamicDataProvider.getHotels();
         setHotels(providerHotels.map(normalizeHotelDates));
         console.log('[HomeContent] Hotels loaded:', providerHotels.length);
@@ -155,11 +154,6 @@ function HomeContent() {
     return Array.from(unique);
   }, [hotels]);
 
-  const maxPriceAvailable = useMemo(
-    () => hotels.reduce((max, hotel) => Math.max(max, hotel.price), 0),
-    [hotels]
-  );
-
   const filteredHotels = useMemo(() => {
     return hotels.filter((hotel) => {
       if (committedSearch.trim()) {
@@ -203,10 +197,6 @@ function HomeContent() {
         return false;
       }
 
-      if (maxPrice !== null && hotel.price > maxPrice) {
-        return false;
-      }
-
       if (region !== "all") {
         const [, country] = hotel.location.split(",").map((part) => part.trim());
         if (!country || country.toLowerCase() !== region.toLowerCase()) {
@@ -216,7 +206,7 @@ function HomeContent() {
 
       return true;
     });
-  }, [committedSearch, dateRange, guests, hotels, maxPrice, minRating, region]);
+  }, [committedSearch, dateRange, guests, hotels, minRating, region]);
 
   const itemsPerPage = 8;
   const totalPages = Math.max(1, Math.ceil(filteredHotels.length / itemsPerPage));
@@ -464,8 +454,7 @@ function HomeContent() {
 
   const handleApplyFilters = () => {
     logEvent(EVENT_TYPES.APPLY_FILTERS, {
-      minRating,
-      maxPrice,
+      rating: minRating,
       region,
       results: filteredHotels.length,
     });
@@ -508,100 +497,67 @@ function HomeContent() {
         </EventWrapperTag>
       </SearchWrapperTag>
 
-      <section className="w-full flex flex-col items-center mt-8">
-        <div className="w-full mb-6">
-          <div className="w-full bg-white border border-neutral-200 shadow-sm rounded-full px-4 py-3 flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-                Rating
-              </span>
-              <div className="flex gap-2">
-                {[0, 4, 4.5, 4.7].map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    onClick={() => setMinRating(value)}
-                    className={`px-3 py-1.5 text-sm rounded-full border transition ${
-                      minRating === value
-                        ? "bg-[#616882] text-white border-[#616882]"
-                        : "bg-white border-neutral-300 text-neutral-700"
-                    }`}
-                  >
-                    {value === 0 ? "Any" : `${value}+`}
-                  </button>
-                ))}
-              </div>
-            </div>
+      <div className="w-full mt-6">
+        <div className="w-full bg-white border border-neutral-200 shadow-sm rounded-full px-4 py-3 flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+              Rating
+            </span>
+            <select
+              id="rating-filter"
+              className="border border-neutral-300 bg-white text-sm rounded-full px-3 py-2 text-neutral-800 shadow-sm"
+              value={minRating}
+              onChange={(event) => setMinRating(Number(event.target.value))}
+            >
+              <option value={0}>Any</option>
+              <option value={4}>4.0+</option>
+              <option value={4.5}>4.5+</option>
+              <option value={4.7}>4.7+</option>
+            </select>
+          </div>
 
-            <div className="flex items-center gap-3 flex-1 min-w-[220px]">
-              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-                Max price
-              </span>
-              <div className="flex items-center gap-3 w-full">
-                <input
-                  id="price-filter"
-                  type="range"
-                  min={50}
-                  max={Math.max(500, maxPriceAvailable || 500)}
-                  value={maxPrice ?? Math.max(500, maxPriceAvailable || 500)}
-                  onChange={(event) => setMaxPrice(Number(event.target.value))}
-                  className="accent-[#616882] w-full"
-                />
-                <span className="text-sm font-medium text-neutral-700 min-w-[70px] text-right">
-                  {maxPrice ? `$${maxPrice}` : "No cap"}
-                </span>
-                <button
-                  className="text-xs text-neutral-500 underline"
-                  onClick={() => setMaxPrice(null)}
-                  type="button"
-                >
-                  Clear
-                </button>
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
+              Region
+            </span>
+            <select
+              id="region-filter"
+              className="border border-neutral-300 bg-white text-sm rounded-full px-3 py-2 text-neutral-800 shadow-sm"
+              value={region}
+              onChange={(event) => setRegion(event.target.value)}
+            >
+              <option value="all">All</option>
+              {regions.map((regionName) => (
+                <option key={regionName} value={regionName}>
+                  {regionName}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-                Region
-              </span>
-              <select
-                id="region-filter"
-                className="border border-neutral-300 bg-white text-sm rounded-full px-3 py-2 text-neutral-800 shadow-sm"
-                value={region}
-                onChange={(event) => setRegion(event.target.value)}
-              >
-                <option value="all">All</option>
-                {regions.map((regionName) => (
-                  <option key={regionName} value={regionName}>
-                    {regionName}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex items-center gap-2 ml-auto">
-              <button
-                type="button"
-                className="px-4 py-2 rounded-full border border-neutral-300 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 transition"
-                onClick={() => {
-                  setMinRating(0);
-                  setMaxPrice(null);
-                  setRegion("all");
-                }}
-              >
-                Reset
-              </button>
-              <button
-                type="button"
-                className="px-4 py-2 rounded-full bg-[#616882] text-white font-semibold hover:bg-[#7b86aa] transition shadow-sm"
-                onClick={handleApplyFilters}
-              >
-                Apply
-              </button>
-            </div>
+          <div className="flex items-center gap-2 ml-auto">
+            <button
+              type="button"
+              className="px-4 py-2 rounded-full border border-neutral-300 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 transition"
+              onClick={() => {
+                setMinRating(0);
+                setRegion("all");
+              }}
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-full bg-[#616882] text-white font-semibold hover:bg-[#7b86aa] transition shadow-sm"
+              onClick={handleApplyFilters}
+            >
+              Apply
+            </button>
           </div>
         </div>
+      </div>
 
+      <section className="w-full flex flex-col items-center mt-8">
         {paginatedResults.length === 0 ? (
           <div
             id={getId("no_results")}
@@ -624,7 +580,7 @@ function HomeContent() {
       </section>
 
       {totalPages > 1 && (
-        <div className="flex mt-6 gap-4 items-center justify-center">
+        <div className="flex mt-6 gap-2 items-center justify-center">
           <button
             onClick={() =>
               setCurrentPage((prev) => clamp(prev - 1, 1, totalPages))
