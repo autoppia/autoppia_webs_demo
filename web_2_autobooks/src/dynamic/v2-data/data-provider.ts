@@ -59,10 +59,13 @@ export class DynamicDataProvider {
   private async loadBooks(): Promise<void> {
     try {
       this.getBaseSeed();
-      this.books = await initializeBooks();
+      const loadedBooks = await initializeBooks();
+      // Asegurar que books siempre sea un array
+      this.books = Array.isArray(loadedBooks) ? loadedBooks : [];
     } catch (error) {
       console.error("[autobooks] Failed to initialize books", error);
-      throw error;
+      // En caso de error, usar array vacío en lugar de lanzar error
+      this.books = [];
     } finally {
       this.ready = true;
     }
@@ -77,24 +80,33 @@ export class DynamicDataProvider {
   }
 
   public getBooks(): Book[] {
-    return this.books;
+    return Array.isArray(this.books) ? this.books : [];
   }
 
   public getBookById(id: string): Book | undefined {
+    if (!Array.isArray(this.books)) {
+      return undefined;
+    }
     return this.books.find((book) => book.id === id);
   }
 
   public getFeaturedBooks(count = 6): Book[] {
+    if (!Array.isArray(this.books)) {
+      return [];
+    }
     return this.books.slice(0, count);
   }
 
   public findRelatedBooks(bookId: string, limit = 4): Book[] {
+    if (!Array.isArray(this.books)) {
+      return [];
+    }
     const current = this.getBookById(bookId);
     const pool = this.books.filter((book) => book.id !== bookId);
 
-    if (current && current.genres.length > 0) {
+    if (current && current.genres && current.genres.length > 0) {
       const primaryGenre = current.genres[0];
-      const sameGenre = pool.filter((book) => book.genres.includes(primaryGenre));
+      const sameGenre = pool.filter((book) => book.genres && book.genres.includes(primaryGenre));
       if (sameGenre.length >= limit) {
         return sameGenre.slice(0, limit);
       }
@@ -104,6 +116,9 @@ export class DynamicDataProvider {
   }
 
   public searchBooks(query: string, filters?: BookSearchFilters): Book[] {
+    if (!Array.isArray(this.books)) {
+      return [];
+    }
     const normalizedQuery = query.trim().toLowerCase();
     return this.books.filter((book) => {
       const matchesQuery =
@@ -111,9 +126,9 @@ export class DynamicDataProvider {
         book.title.toLowerCase().includes(normalizedQuery) ||
         book.synopsis.toLowerCase().includes(normalizedQuery) ||
         book.director.toLowerCase().includes(normalizedQuery) ||
-        book.cast.some((actor) => actor.toLowerCase().includes(normalizedQuery));
+        (book.cast && book.cast.some((actor) => actor.toLowerCase().includes(normalizedQuery)));
 
-      const matchesGenre = !filters?.genre || book.genres.includes(filters.genre);
+      const matchesGenre = !filters?.genre || (book.genres && book.genres.includes(filters.genre));
       const matchesYear = !filters?.year || book.year === filters.year;
 
       return matchesQuery && matchesGenre && matchesYear;
@@ -121,20 +136,31 @@ export class DynamicDataProvider {
   }
 
   public getBooksByGenre(genre: string): Book[] {
-    return this.books.filter((book) => book.genres.includes(genre));
+    if (!Array.isArray(this.books)) {
+      return [];
+    }
+    return this.books.filter((book) => book.genres && book.genres.includes(genre));
   }
 
   public getAvailableGenres(): string[] {
+    if (!Array.isArray(this.books)) {
+      return [];
+    }
     const genres = new Set<string>();
     for (const book of this.books) {
-      for (const genre of book.genres) {
-        if (genre) genres.add(genre);
+      if (book.genres && Array.isArray(book.genres)) {
+        for (const genre of book.genres) {
+          if (genre) genres.add(genre);
+        }
       }
     }
     return Array.from(genres).sort((a, b) => a.localeCompare(b));
   }
 
   public getAvailableYears(): number[] {
+    if (!Array.isArray(this.books)) {
+      return [];
+    }
     const years = new Set<number>();
     for (const book of this.books) {
       if (book.year) {

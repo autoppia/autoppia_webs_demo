@@ -32,6 +32,12 @@ export function getApiBaseUrl(): string {
 export async function fetchSeededSelection<T = unknown>(
   options: SeededLoadOptions
 ): Promise<T[]> {
+  // Si el modo DB está deshabilitado, NO hacer ninguna llamada HTTP
+  if (!isDbLoadModeEnabled()) {
+    console.log(`[seeded-loader] DB mode disabled, skipping API call for ${options.entityType}`);
+    return [] as T[];
+  }
+
   const baseUrl = getApiBaseUrl();
   const seed = options.seedValue ?? 1;
   const limit = options.limit ?? 50;

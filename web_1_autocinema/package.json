@@ -25,7 +25,7 @@
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.475.0",
-    "next": "^15.2.0",
+    "next": "^15.4.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.56.2",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.3.3",
     "@types/node": "^20",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
@@ -46,5 +46,9 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "overrides": {
+    "glob": ">=10.5.0",
+    "js-yaml": ">=4.1.1"
   }
 }

@@ -3,7 +3,7 @@ FROM node:20-alpine AS deps
 WORKDIR /app
 COPY web_11_autocalendar/package.json web_11_autocalendar/package-lock.json ./
 # Retry npm ci up to 3 times on network errors
-RUN for i in 1 2 3; do npm ci --omit=dev && break || (echo "Attempt $i failed, retrying..." && sleep 5); done
+RUN set -e; for i in 1 2 3; do npm ci --omit=dev && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 # Stage 1: build with dev deps
 FROM node:20-alpine AS builder
@@ -14,7 +14,7 @@ COPY web_11_autocalendar/package.json web_11_autocalendar/package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for building)
 # Retry npm ci up to 3 times on network errors
-RUN for i in 1 2 3; do npm ci && break || (echo "Attempt $i failed, retrying..." && sleep 5); done
+RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retrying..."; sleep 5; done; exit 1
 
 COPY web_11_autocalendar/ .
 # Copy original dataset files for fallback
@@ -66,11 +66,14 @@ EXPOSE 8010
 # Note: NEXT_PUBLIC_* variables are embedded at build time in the .next bundle,
 # so they don't need to be set here. They're already in the JavaScript code.
 
-# prod deps only (from deps stage)
-COPY --from=deps /app/node_modules ./node_modules
+# Copy package files first (npm ci requires package-lock.json)
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/package-lock.json ./package-lock.json
+
+# Install only production dependencies
+RUN npm ci --omit=dev --ignore-scripts
 
 # app artifacts
-COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/.next ./.next
 #COPY --from=builder /app/public ./public
 
