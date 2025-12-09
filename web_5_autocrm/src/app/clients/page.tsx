@@ -62,6 +62,11 @@ function ClientsDirectoryContent() {
       })),
     [data]
   );
+  const [clientList, setClientList] = useState(clients);
+
+  useEffect(() => {
+    setClientList(clients);
+  }, [clients]);
   const seedRouter = useSeedRouter();
   const { getText, getId } = useDynamicStructure();
   const storageKey = useMemo(
@@ -71,13 +76,13 @@ function ClientsDirectoryContent() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (clients.length === 0) return;
+    if (clientList.length === 0) return;
     try {
-      window.localStorage.setItem(storageKey, JSON.stringify(clients));
+      window.localStorage.setItem(storageKey, JSON.stringify(clientList));
     } catch (error) {
       console.warn("[ClientsPage] Failed to cache clients", error);
     }
-  }, [clients, storageKey]);
+  }, [clientList, storageKey]);
 
   useEffect(() => {
     if (query.trim()) {
@@ -89,11 +94,11 @@ function ClientsDirectoryContent() {
   const [matterFilter, setMatterFilter] = useState<string>("all");
 
   const statusOptions = useMemo(() => {
-    const set = new Set(clients.map((c) => c.status || "Active"));
+    const set = new Set(clientList.map((c) => c.status || "Active"));
     return Array.from(set);
-  }, [clients]);
+  }, [clientList]);
 
-  const filtered = clients.filter((c) => {
+  const filtered = clientList.filter((c) => {
     const matchesQuery =
       c.name.toLowerCase().includes(query.toLowerCase()) ||
       c.email.toLowerCase().includes(query.toLowerCase());
@@ -122,27 +127,30 @@ function ClientsDirectoryContent() {
     });
   }, [statusFilter, matterFilter, query, filtered.length]);
 
-  const addClient = () => {
-    const newClient = {
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newClient, setNewClient] = useState({
+    name: "",
+    email: "",
+    status: "Active",
+    matters: 1,
+  });
+
+  const handleAddClient = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!newClient.name.trim() || !newClient.email.trim()) return;
+    const clientRecord = {
       id: `CL-${Math.floor(Math.random() * 9000) + 1000}`,
-      name: "New Client",
-      email: "newclient@example.com",
-      matters: 1,
+      name: newClient.name.trim(),
+      email: newClient.email.trim(),
+      matters: Number(newClient.matters) || 1,
       avatar: "",
-      status: "Active",
+      status: newClient.status,
       last: "Today",
     };
-    logEvent(EVENT_TYPES.ADD_CLIENT, newClient);
-    const next = [newClient, ...clients];
-    // replace local storage cache
-    if (typeof window !== "undefined") {
-      try {
-        window.localStorage.setItem(storageKey, JSON.stringify(next));
-      } catch {
-        /* ignore */
-      }
-    }
-    window.location.reload();
+    setClientList((prev) => [clientRecord, ...prev]);
+    logEvent(EVENT_TYPES.ADD_CLIENT, clientRecord);
+    setShowAddModal(false);
+    setNewClient({ name: "", email: "", status: "Active", matters: 1 });
   };
 
   const handleClientClick = (client: (typeof clients)[number]) => {
@@ -159,7 +167,7 @@ function ClientsDirectoryContent() {
         <div className="flex justify-end">
           <button
             className="px-4 py-2 rounded-2xl bg-accent-forest text-white font-semibold shadow-sm"
-            onClick={addClient}
+            onClick={() => setShowAddModal(true)}
           >
             Add client
           </button>
@@ -214,6 +222,81 @@ function ClientsDirectoryContent() {
           </div>
         </div>
       </DynamicElement>
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-30">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-semibold">Add client</h2>
+              <button
+                className="text-zinc-500 hover:text-zinc-700"
+                onClick={() => setShowAddModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <form className="flex flex-col gap-3" onSubmit={handleAddClient}>
+              <label className="text-sm text-zinc-600">
+                Name
+                <input
+                  className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                  value={newClient.name}
+                  onChange={(e) => setNewClient((prev) => ({ ...prev, name: e.target.value }))}
+                  required
+                />
+              </label>
+              <label className="text-sm text-zinc-600">
+                Email
+                <input
+                  className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                  type="email"
+                  value={newClient.email}
+                  onChange={(e) => setNewClient((prev) => ({ ...prev, email: e.target.value }))}
+                  required
+                />
+              </label>
+              <div className="flex gap-3">
+                <label className="text-sm text-zinc-600 flex-1">
+                  Matters
+                  <input
+                    className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                    type="number"
+                    min={1}
+                    value={newClient.matters}
+                    onChange={(e) => setNewClient((prev) => ({ ...prev, matters: Number(e.target.value) }))}
+                  />
+                </label>
+                <label className="text-sm text-zinc-600 flex-1">
+                  Status
+                  <select
+                    className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                    value={newClient.status}
+                    onChange={(e) => setNewClient((prev) => ({ ...prev, status: e.target.value }))}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </label>
+              </div>
+              <div className="flex justify-end gap-2 mt-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-xl border border-zinc-200 text-sm"
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-accent-forest text-white text-sm font-semibold"
+                >
+                  Add client
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {isLoading && (
         <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading clients..."} />
       )}

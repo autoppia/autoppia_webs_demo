@@ -110,13 +110,20 @@ export default function DocumentsPage() {
   };
 
   const saveRename = (fileId: number | string) => {
-    if (!renameValue.trim()) return;
+    const trimmed = renameValue.trim();
+    if (!trimmed) return;
+    const target = files.find((f) => f.id === fileId);
+    const previousName = target?.name ?? "";
     setFiles((prev) =>
       prev.map((file) =>
-        file.id === fileId ? { ...file, name: renameValue.trim() } : file
+        file.id === fileId ? { ...file, name: trimmed } : file
       )
     );
-    logEvent(EVENT_TYPES.DOCUMENT_RENAMED, { id: fileId, newName: renameValue.trim() });
+    logEvent(EVENT_TYPES.DOCUMENT_RENAMED, {
+      id: fileId,
+      newName: trimmed,
+      previousName,
+    });
     setRenamingId(null);
     setRenameValue("");
   };

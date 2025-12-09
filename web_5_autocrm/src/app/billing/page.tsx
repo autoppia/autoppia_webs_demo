@@ -182,14 +182,31 @@ export default function BillingPage() {
     });
   }, [logs, query, dateFilter, customDate]);
 
+  const dateFilterLabel = useMemo(() => {
+    switch (dateFilter) {
+      case "today":
+        return "Today";
+      case "this_week":
+        return "This week";
+      case "prev_two_weeks":
+        return "Previous 2 weeks";
+      case "this_month":
+        return "This month";
+      case "custom":
+        return customDate ? `Date ${customDate}` : "Custom date";
+      default:
+        return "All";
+    }
+  }, [dateFilter, customDate]);
+
   useEffect(() => {
     logEvent(EVENT_TYPES.BILLING_SEARCH, {
       query,
-      date_filter: dateFilter,
+      date_filter: dateFilterLabel,
       custom_date: customDate || null,
       results: filteredLogs.length,
     });
-  }, [query, dateFilter, customDate, filteredLogs.length]);
+  }, [query, dateFilterLabel, customDate, filteredLogs.length]);
 
   return (
     <section>
