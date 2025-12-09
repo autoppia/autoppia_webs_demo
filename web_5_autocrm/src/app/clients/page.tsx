@@ -84,12 +84,6 @@ function ClientsDirectoryContent() {
     }
   }, [clientList, storageKey]);
 
-  useEffect(() => {
-    if (query.trim()) {
-      logEvent(EVENT_TYPES.SEARCH_CLIENT, { query });
-    }
-  }, [query]);
-
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [matterFilter, setMatterFilter] = useState<string>("all");
 
@@ -119,13 +113,18 @@ function ClientsDirectoryContent() {
   });
 
   useEffect(() => {
+    if (query.trim()) {
+      logEvent(EVENT_TYPES.SEARCH_CLIENT, { query });
+    }
+  }, [query]);
+
+  useEffect(() => {
     logEvent(EVENT_TYPES.FILTER_CLIENTS, {
       status: statusFilter,
       matters: matterFilter,
-      query,
       results: filtered.length,
     });
-  }, [statusFilter, matterFilter, query, filtered.length]);
+  }, [statusFilter, matterFilter, filtered.length]);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [newClient, setNewClient] = useState({
