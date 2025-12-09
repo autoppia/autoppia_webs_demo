@@ -85,11 +85,65 @@ function ClientsDirectoryContent() {
     }
   }, [query]);
 
-  const filtered = clients.filter(
-    (c) =>
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [matterFilter, setMatterFilter] = useState<string>("all");
+
+  const statusOptions = useMemo(() => {
+    const set = new Set(clients.map((c) => c.status || "Active"));
+    return Array.from(set);
+  }, [clients]);
+
+  const filtered = clients.filter((c) => {
+    const matchesQuery =
       c.name.toLowerCase().includes(query.toLowerCase()) ||
-      c.email.toLowerCase().includes(query.toLowerCase())
-  );
+      c.email.toLowerCase().includes(query.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || c.status.toLowerCase() === statusFilter.toLowerCase();
+
+    const matchesMatters =
+      matterFilter === "all"
+        ? true
+        : matterFilter === "1-2"
+          ? c.matters <= 2
+          : matterFilter === "3-4"
+            ? c.matters >= 3 && c.matters <= 4
+            : c.matters >= 5;
+
+    return matchesQuery && matchesStatus && matchesMatters;
+  });
+
+  useEffect(() => {
+    logEvent(EVENT_TYPES.FILTER_CLIENTS, {
+      status: statusFilter,
+      matters: matterFilter,
+      query,
+      results: filtered.length,
+    });
+  }, [statusFilter, matterFilter, query, filtered.length]);
+
+  const addClient = () => {
+    const newClient = {
+      id: `CL-${Math.floor(Math.random() * 9000) + 1000}`,
+      name: "New Client",
+      email: "newclient@example.com",
+      matters: 1,
+      avatar: "",
+      status: "Active",
+      last: "Today",
+    };
+    logEvent(EVENT_TYPES.ADD_CLIENT, newClient);
+    const next = [newClient, ...clients];
+    // replace local storage cache
+    if (typeof window !== "undefined") {
+      try {
+        window.localStorage.setItem(storageKey, JSON.stringify(next));
+      } catch {
+        /* ignore */
+      }
+    }
+    window.location.reload();
+  };
 
   const handleClientClick = (client: (typeof clients)[number]) => {
     logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, client);
@@ -102,6 +156,14 @@ function ClientsDirectoryContent() {
         <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
           {getText("clients_title", "Clients")}
         </h1>
+        <div className="flex justify-end">
+          <button
+            className="px-4 py-2 rounded-2xl bg-accent-forest text-white font-semibold shadow-sm"
+            onClick={addClient}
+          >
+            Add client
+          </button>
+        </div>
       </DynamicElement>
       
       <DynamicElement elementType="section" index={1} className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-0 mb-10">
@@ -118,15 +180,39 @@ function ClientsDirectoryContent() {
             aria-label="Search clients"
           />
         </div>
-        <DynamicButton
-          eventType="SEARCH_CLIENT"
-          index={0}
-          className="flex-shrink-0 flex items-center gap-2 px-5 h-12 ml-0 md:ml-4 font-medium rounded-2xl bg-white border border-zinc-200 text-zinc-700 shadow-sm hover:bg-zinc-50 transition"
-          id={getId("filter_button")}
-          aria-label={getText("filter_by", "Filter By")}
-        >
-          <Filter className="w-4 h-4" /> {getText("filter_by", "Filter By")}
-        </DynamicButton>
+        <div className="flex flex-wrap items-center gap-3 ml-0 md:ml-4">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-zinc-500" />
+            <label className="text-sm text-zinc-600">Status</label>
+            <select
+              id={getId("status_filter")}
+              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              {statusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-zinc-600">Matters</label>
+            <select
+              id={getId("matters_filter")}
+              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              value={matterFilter}
+              onChange={(e) => setMatterFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="1-2">1-2</option>
+              <option value="3-4">3-4</option>
+              <option value="5plus">5+</option>
+            </select>
+          </div>
+        </div>
       </DynamicElement>
       {isLoading && (
         <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading clients..."} />
