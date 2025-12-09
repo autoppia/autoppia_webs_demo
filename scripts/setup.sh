@@ -9,6 +9,7 @@
 #   --postgres_port=PORT          Set base postgres port (default: 5434)
 #   --webs_port=PORT              Set webs_server port (default: 8090)
 #   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
+#   --api_url=URL                 Public API URL for frontends (overrides NEXT_PUBLIC_API_URL; default: http://localhost:<webs_port>)
 #   --demo=NAME                   Deploy specific demo: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, or all (default: all)
 #   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
 #                                            v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
@@ -41,6 +42,7 @@ Options:
   --postgres_port=PORT          Set base postgres port (default: 5434)
   --webs_port=PORT              Set webs_server port (default: 8090)
   --webs_postgres=PORT          Set webs_server postgres port (default: 5437)
+  --api_url=URL                 Public API URL for frontends (overrides NEXT_PUBLIC_API_URL; default: http://localhost:<webs_port>)
   --demo=NAME                   One of: movies, autocinema, books, autobooks, autozone, autodining, autocrm, automail, autodelivery, autolodge, autoconnect, autowork, autocalendar, autolist, autodrive, autohealth, all (default: all)
   --enabled_dynamic_versions=[v1,v2,v3]   Enable specific dynamic versions (default: v1)
                                             v2 enables DB mode (load pre-generated data from DB via ?v2-seed=X in URL)
@@ -76,6 +78,7 @@ for ARG in "$@"; do
     --web_port=*)        WEB_PORT="${ARG#*=}" ;;
     --postgres_port=*)   POSTGRES_PORT="${ARG#*=}" ;;
     --webs_port=*)       WEBS_PORT="${ARG#*=}" ;;
+    --api_url=*)         API_URL_OVERRIDE="${ARG#*=}" ;;
     --webs_postgres=*)   WEBS_PG_PORT="${ARG#*=}" ;;
     --demo=*)            WEB_DEMO="${ARG#*=}" ;;
     --enable_db_mode=*)  ENABLE_DYNAMIC_V2_DB_MODE="${ARG#*=}" ;;
@@ -281,6 +284,12 @@ export_env_vars() {
   local db_port="$2"
   local web_dir="${3:-}"  # Optional: web directory name (e.g., "web_1_autocinema")
   local git_hash=$(get_git_commit_hash "$web_dir")
+  # Allow overriding the public API URL via CLI/env; fallback to localhost when not set --api_url=https://api-benchmark.autoppia.com
+
+  local resolved_api_url="${API_URL_OVERRIDE:-${NEXT_PUBLIC_API_URL_OVERRIDE:-}}"
+  if [ -z "$resolved_api_url" ]; then
+    resolved_api_url="http://localhost:$WEBS_PORT"
+  fi
   export \
     WEB_PORT="$web_port" \
     POSTGRES_PORT="$db_port" \
@@ -296,7 +305,7 @@ export_env_vars() {
     ENABLE_DYNAMIC_V4="$ENABLE_DYNAMIC_V4" \
     NEXT_PUBLIC_ENABLE_DYNAMIC_V4="$ENABLE_DYNAMIC_V4" \
     API_URL="http://app:8080" \
-    NEXT_PUBLIC_API_URL="http://localhost:$WEBS_PORT" \
+    NEXT_PUBLIC_API_URL="$resolved_api_url" \
     ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS" \
     NEXT_PUBLIC_ENABLED_DYNAMIC_VERSIONS="$ENABLED_DYNAMIC_VERSIONS"
 }
