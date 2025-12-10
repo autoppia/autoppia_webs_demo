@@ -39,6 +39,16 @@ console.log(
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    const destination = process.env.INTERNAL_API_URL || 'http://app:8090';
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${destination}/:path*`,
+      },
+    ];
+  },
+
   devIndicators: false,
   images: {
     unoptimized: true,

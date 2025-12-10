@@ -234,10 +234,13 @@ INTERNAL_PORTS = [
     "http://app:8002",
     "http://app:8003",
 ]
+# Allow any autoppia.com subdomain (production & staging frontends share one API)
+AUTOPPIA_ORIGIN_REGEX = r"https?://([a-zA-Z0-9-]+\\.)*autoppia\\.com"
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=INTERNAL_PORTS + LOCALHOST_PORTS + ZERO_HOST_PORTS + ["http://127.0.0.1:3000"],
+    allow_origin_regex=AUTOPPIA_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers

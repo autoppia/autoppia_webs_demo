@@ -9,14 +9,14 @@ services:
         ENABLE_DYNAMIC_V2_DB_MODE: ${ENABLE_DYNAMIC_V2_DB_MODE:-false}
         ENABLE_DYNAMIC_V3: ${ENABLE_DYNAMIC_V3:-false}
         ENABLE_DYNAMIC_V4: ${ENABLE_DYNAMIC_V4:-false}
-        API_URL: ${API_URL:-http://app:8080}
+        API_URL: ${API_URL:-http://app:8090}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8090}
         GIT_COMMIT_HASH: ${GIT_COMMIT_HASH:-unknown}
     ports:
       - "127.0.0.1:${WEB_PORT}:8005"
     restart: always
     environment:
-      - API_URL=${API_URL:-http://app:8080}
+      - API_URL=${API_URL:-http://app:8090}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8090}
       - PORT=8005
       - NODE_ENV=production

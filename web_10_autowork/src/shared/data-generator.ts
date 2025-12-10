@@ -484,21 +484,18 @@ export function isDataGenerationEnabled(): boolean {
  * Get API base URL
  */
 export function getApiBaseUrl(): string {
-  // In the browser, prefer a host-accessible URL (localhost or current hostname on 8090)
-  if (typeof window !== 'undefined') {
-    // If a public URL is provided AND not pointing to an internal Docker hostname, use it
-    const pub = process.env.NEXT_PUBLIC_API_URL || '';
-    const looksInternal = /(^|\/)app:\d+/.test(pub) || /(^|\/)webs_server-app-1:\d+/.test(pub);
-    if (pub && !looksInternal) return pub;
-    const { protocol, hostname } = window.location;
-    return `${protocol}//${hostname}:8090`;
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
+  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
+  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
+
+  if (envUrl && (!(envIsLocal) || originIsLocal)) {
+    return envUrl;
   }
-  // On the server (SSR/edge), prefer internal Docker hostname for fast, reliable access
-  return (
-    process.env.API_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    'http://app:8080'
-  );
+  if (origin) {
+    return `${origin}/api`;
+  }
+  return envUrl || "http://app:8090";
 }
 
 // -----------------------
