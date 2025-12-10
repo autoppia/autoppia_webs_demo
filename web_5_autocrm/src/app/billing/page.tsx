@@ -2,11 +2,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Timer, PlayCircle, PauseCircle, Plus, Trash2, Pencil } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DEMO_LOGS } from "@/library/dataset";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
 import { CalendarDays, Search } from "lucide-react";
+import { initializeLogs } from "@/data/crm-enhanced";
 
 const normalizeLog = (log: any, index: number) => ({
   id: log?.id ?? Date.now() + index,
@@ -41,9 +41,13 @@ export default function BillingPage() {
     error,
     sample: (data || []).slice(0, 3),
   });
-  const normalizedDemo = useMemo(() => DEMO_LOGS.map((l, idx) => normalizeLog(l, idx)), []);
+  const [fallbackLogs, setFallbackLogs] = useState<any[]>([]);
+  useEffect(() => {
+    initializeLogs().then(setFallbackLogs);
+  }, []);
   const normalizedApi = useMemo(() => (data || []).map((l, idx) => normalizeLog(l, idx)), [data]);
-  const resolvedLogs = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const normalizedFallback = useMemo(() => fallbackLogs.map((l, idx) => normalizeLog(l, idx)), [fallbackLogs]);
+  const resolvedLogs = normalizedApi.length > 0 ? normalizedApi : normalizedFallback;
   const [timerActive, setTimerActive] = useState(false);
   const [timerSec, setTimerSec] = useState(0);
   const [manual, setManual] = useState({

@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo, Suspense } from "react";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { User, Filter, ChevronRight, Search } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { clients as staticClients } from "@/library/dataset";
+import { initializeClients } from "@/data/crm-enhanced";
 import { useProjectData } from "@/shared/universal-loader";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
@@ -41,14 +41,17 @@ function ClientsDirectoryContent() {
     entityType: 'clients',
     generateCount: 60,
     version: 'v1',
-    fallback: () => staticClients,
     seedValue: v2Seed ?? undefined,
   });
+  const [fallbackClients, setFallbackClients] = useState<any[]>([]);
+  useEffect(() => {
+    initializeClients().then(setFallbackClients);
+  }, []);
   console.log("[ClientsPage] useProjectData response", { count: data?.length ?? 0, isLoading, error });
 
   const clients = useMemo(
     () =>
-      (data && data.length ? data : staticClients).map((c: any, i: number) => ({
+      (data && data.length ? data : fallbackClients).map((c: any, i: number) => ({
         id: c.id ?? `CL-${1000 + i}`,
         name: c.name ?? c.title ?? `Client ${i + 1}`,
         email: c.email ?? `client${i + 1}@example.com`,
@@ -60,7 +63,7 @@ function ClientsDirectoryContent() {
         status: c.status ?? "Active",
         last: c.last ?? "Today",
       })),
-    [data]
+    [data, fallbackClients]
   );
   const [clientList, setClientList] = useState(clients);
 

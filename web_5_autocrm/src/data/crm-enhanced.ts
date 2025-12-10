@@ -153,20 +153,15 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
   } catch {}
 
   // Determine the seed to use
-  let effectiveSeed: number;
-  
-  if (dbModeEnabled) {
-    // Wait a bit for SeedContext to sync v2Seed to window if needed
-    if (typeof window !== "undefined") {
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
-    effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
-  } else {
-    // If v2 is NOT enabled, use mounted original dataset as fallback
-    effectiveSeed = 1;
+  const effectiveSeed: number = dbModeEnabled ? (v2SeedValue ?? getRuntimeV2Seed() ?? 1) : 1;
+
+  if (!dbModeEnabled) {
     dynamicClients = (fallbackClients as any[]).map((c, i) => normalizeClient(c, i));
     return dynamicClients;
+  }
+
+  if (typeof window !== "undefined") {
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
 
   // Load from DB with the determined seed
@@ -202,44 +197,55 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
  * Initialize matters with data generation if enabled
  */
 export async function initializeMatters(): Promise<any[]> {
-  if (isDataGenerationAvailable()) {
-    try {
-      if (!isUniqueGenerationEnabled()) {
-        const cached = readCachedMatters();
-        if (cached && cached.length > 0) {
-          dynamicMatters = cached.map(normalizeMatter);
-          return dynamicMatters;
-        }
+  // If DB mode is off, return fallback immediately
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+  if (!dbModeEnabled) {
+    dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
+    return dynamicMatters;
+  }
+
+  // DB mode on or generation allowed
+  if (!isDataGenerationAvailable()) {
+    dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
+    return dynamicMatters;
+  }
+
+  try {
+    if (!isUniqueGenerationEnabled()) {
+      const cached = readCachedMatters();
+      if (cached && cached.length > 0) {
+        dynamicMatters = cached.map(normalizeMatter);
+        return dynamicMatters;
       }
-
-      console.log("🚀 Starting async data generation for matters...");
-
-      const count = DATA_GENERATION_CONFIG.DEFAULT_MATTERS_COUNT;
-      const categories = DATA_GENERATION_CONFIG.AVAILABLE_MATTER_CATEGORIES;
-
-      const generatedMatters = await generateMattersWithFallback(
-        [],
-        count,
-        categories
-      );
-
-      const allowed = new Set(categories);
-      const normalized = generatedMatters.map((m, i) => ({
-        ...normalizeMatter(m, i),
-        status: allowed.has(m.status || "") ? m.status : "Active",
-      }));
-
-      dynamicMatters = normalized;
-      if (!isUniqueGenerationEnabled()) {
-        writeCachedMatters(dynamicMatters);
-      }
-      return dynamicMatters;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate matters while generation is enabled. Error:", error);
-      dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
-      return dynamicMatters;
     }
-  } else {
+
+    console.log("🚀 Starting async data generation for matters...");
+
+    const count = DATA_GENERATION_CONFIG.DEFAULT_MATTERS_COUNT;
+    const categories = DATA_GENERATION_CONFIG.AVAILABLE_MATTER_CATEGORIES;
+
+    const generatedMatters = await generateMattersWithFallback(
+      [],
+      count,
+      categories
+    );
+
+    const allowed = new Set(categories);
+    const normalized = generatedMatters.map((m, i) => ({
+      ...normalizeMatter(m, i),
+      status: allowed.has(m.status || "") ? m.status : "Active",
+    }));
+
+    dynamicMatters = normalized;
+    if (!isUniqueGenerationEnabled()) {
+      writeCachedMatters(dynamicMatters);
+    }
+    return dynamicMatters;
+  } catch (error) {
+    console.warn("⚠️ Failed to generate matters while generation is enabled. Error:", error);
     dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
     return dynamicMatters;
   }
@@ -249,30 +255,39 @@ export async function initializeMatters(): Promise<any[]> {
  * Initialize files with data generation if enabled
  */
 export async function initializeFiles(): Promise<any[]> {
-  if (isDataGenerationAvailable()) {
-    try {
-      if (!isUniqueGenerationEnabled()) {
-        const cached = readCachedFiles();
-        if (cached && cached.length > 0) {
-          dynamicFiles = cached;
-          return dynamicFiles;
-        }
-      }
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+  if (!dbModeEnabled) {
+    dynamicFiles = (fallbackFiles as any[]);
+    return dynamicFiles;
+  }
 
-      const count = DATA_GENERATION_CONFIG.DEFAULT_FILES_COUNT;
-      const generatedFiles = await generateFilesWithFallback([], count);
-      
-      dynamicFiles = generatedFiles;
-      if (!isUniqueGenerationEnabled()) {
-        writeCachedFiles(dynamicFiles);
+  if (!isDataGenerationAvailable()) {
+    dynamicFiles = (fallbackFiles as any[]);
+    return dynamicFiles;
+  }
+
+  try {
+    if (!isUniqueGenerationEnabled()) {
+      const cached = readCachedFiles();
+      if (cached && cached.length > 0) {
+        dynamicFiles = cached;
+        return dynamicFiles;
       }
-      return dynamicFiles;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate files. Error:", error);
-      dynamicFiles = (fallbackFiles as any[]);
-      return dynamicFiles;
     }
-  } else {
+
+    const count = DATA_GENERATION_CONFIG.DEFAULT_FILES_COUNT;
+    const generatedFiles = await generateFilesWithFallback([], count);
+    
+    dynamicFiles = generatedFiles;
+    if (!isUniqueGenerationEnabled()) {
+      writeCachedFiles(dynamicFiles);
+    }
+    return dynamicFiles;
+  } catch (error) {
+    console.warn("⚠️ Failed to generate files. Error:", error);
     dynamicFiles = (fallbackFiles as any[]);
     return dynamicFiles;
   }
@@ -282,30 +297,39 @@ export async function initializeFiles(): Promise<any[]> {
  * Initialize events with data generation if enabled
  */
 export async function initializeEvents(): Promise<any[]> {
-  if (isDataGenerationAvailable()) {
-    try {
-      if (!isUniqueGenerationEnabled()) {
-        const cached = readCachedEvents();
-        if (cached && cached.length > 0) {
-          dynamicEvents = cached;
-          return dynamicEvents;
-        }
-      }
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+  if (!dbModeEnabled) {
+    dynamicEvents = (fallbackEvents as any[]);
+    return dynamicEvents;
+  }
 
-      const count = DATA_GENERATION_CONFIG.DEFAULT_EVENTS_COUNT;
-      const generatedEvents = await generateEventsWithFallback([], count);
-      
-      dynamicEvents = generatedEvents;
-      if (!isUniqueGenerationEnabled()) {
-        writeCachedEvents(dynamicEvents);
+  if (!isDataGenerationAvailable()) {
+    dynamicEvents = (fallbackEvents as any[]);
+    return dynamicEvents;
+  }
+
+  try {
+    if (!isUniqueGenerationEnabled()) {
+      const cached = readCachedEvents();
+      if (cached && cached.length > 0) {
+        dynamicEvents = cached;
+        return dynamicEvents;
       }
-      return dynamicEvents;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate events. Error:", error);
-      dynamicEvents = (fallbackEvents as any[]);
-      return dynamicEvents;
     }
-  } else {
+
+    const count = DATA_GENERATION_CONFIG.DEFAULT_EVENTS_COUNT;
+    const generatedEvents = await generateEventsWithFallback([], count);
+    
+    dynamicEvents = generatedEvents;
+    if (!isUniqueGenerationEnabled()) {
+      writeCachedEvents(dynamicEvents);
+    }
+    return dynamicEvents;
+  } catch (error) {
+    console.warn("⚠️ Failed to generate events. Error:", error);
     dynamicEvents = (fallbackEvents as any[]);
     return dynamicEvents;
   }
@@ -315,30 +339,39 @@ export async function initializeEvents(): Promise<any[]> {
  * Initialize logs with data generation if enabled
  */
 export async function initializeLogs(): Promise<any[]> {
-  if (isDataGenerationAvailable()) {
-    try {
-      if (!isUniqueGenerationEnabled()) {
-        const cached = readCachedLogs();
-        if (cached && cached.length > 0) {
-          dynamicLogs = cached;
-          return dynamicLogs;
-        }
-      }
+  let dbModeEnabled = false;
+  try {
+    dbModeEnabled = isDbLoadModeEnabled();
+  } catch {}
+  if (!dbModeEnabled) {
+    dynamicLogs = (fallbackLogs as any[]);
+    return dynamicLogs;
+  }
 
-      const count = DATA_GENERATION_CONFIG.DEFAULT_LOGS_COUNT;
-      const generatedLogs = await generateLogsWithFallback([], count);
-      
-      dynamicLogs = generatedLogs;
-      if (!isUniqueGenerationEnabled()) {
-        writeCachedLogs(dynamicLogs);
+  if (!isDataGenerationAvailable()) {
+    dynamicLogs = (fallbackLogs as any[]);
+    return dynamicLogs;
+  }
+
+  try {
+    if (!isUniqueGenerationEnabled()) {
+      const cached = readCachedLogs();
+      if (cached && cached.length > 0) {
+        dynamicLogs = cached;
+        return dynamicLogs;
       }
-      return dynamicLogs;
-    } catch (error) {
-      console.warn("⚠️ Failed to generate logs. Error:", error);
-      dynamicLogs = (fallbackLogs as any[]);
-      return dynamicLogs;
     }
-  } else {
+
+    const count = DATA_GENERATION_CONFIG.DEFAULT_LOGS_COUNT;
+    const generatedLogs = await generateLogsWithFallback([], count);
+    
+    dynamicLogs = generatedLogs;
+    if (!isUniqueGenerationEnabled()) {
+      writeCachedLogs(dynamicLogs);
+    }
+    return dynamicLogs;
+  } catch (error) {
+    console.warn("⚠️ Failed to generate logs. Error:", error);
     dynamicLogs = (fallbackLogs as any[]);
     return dynamicLogs;
   }
