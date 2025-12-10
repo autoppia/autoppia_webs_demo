@@ -58,10 +58,13 @@ export function logEvent(eventType: EventType, data: any = {}, extra_headers: Re
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-WebAgent-Id": resolvedWebAgentId,
+      "X-Validator-Id": resolvedValidatorId,
       ...extra_headers,
     },
     body: JSON.stringify(backendPayload),
   }).catch((error) => {
     console.error("❌ Failed to log event:", error);
+    throw error; // User wants errors to fail
   });
 }
