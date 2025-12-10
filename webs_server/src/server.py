@@ -1003,6 +1003,11 @@ class SeedResolveResponse(BaseModel):
     response_model=SeedResolveResponse,
     summary="Resolve base seed into v1/v2/v3 seeds",
 )
+@app.post(
+    "/seeds/resolve/",
+    response_model=SeedResolveResponse,
+    include_in_schema=False,
+)
 async def resolve_seeds_endpoint(request: SeedResolveRequest):
     """
     Resolves a base seed into deterministic v1, v2, v3 seeds.

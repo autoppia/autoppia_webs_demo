@@ -43,13 +43,29 @@ export function logEvent(
     console.error("Error accessing localStorage:", error);
   }
 
-  const payload = {
+  const webAgentId = localStorage.getItem("web_agent_id");
+  const validatorId = localStorage.getItem("validator_id");
+  const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
+  const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
+
+  // Construir el payload completo que espera el backend
+  const eventData = {
     event_name: eventType,
-    data,
+    web_agent_id: resolvedWebAgentId,
     user_id: user,
+    data,
+    timestamp: new Date().toISOString(),
+    validator_id: resolvedValidatorId,
   };
 
-  console.log("📦 Logging Event:", { ...payload, headers: extra_headers });
+  const backendPayload = {
+    web_agent_id: resolvedWebAgentId,
+    web_url: window.location.origin,
+    validator_id: resolvedValidatorId,
+    data: eventData,
+  };
+
+  console.log("📦 Logging Event:", backendPayload);
 
   fetch("/api/log-event", {
     method: "POST",
@@ -57,6 +73,8 @@ export function logEvent(
       "Content-Type": "application/json",
       ...extra_headers,
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(backendPayload),
+  }).catch((error) => {
+    console.error("❌ Failed to log event:", error);
   });
 }

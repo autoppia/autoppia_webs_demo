@@ -1,4 +1,3 @@
-import { getApiBaseUrl } from "@/shared/data-generator";
 
 export const EVENT_TYPES = {
   SCROLL_CAROUSEL: "CAROUSEL_SCROLL",
@@ -32,38 +31,34 @@ export function logEvent(eventType: EventType, data: Record<string, unknown> = {
   const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
   const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
 
-  const payload = {
-    event_name: eventType,
-    data,
-    user_id: user,
-    web_agent_id: resolvedWebAgentId,
-    validator_id: resolvedValidatorId,
-    timestamp: new Date().toISOString(),
-  };
 
-  const headers = {
-    "Content-Type": "application/json",
-    "X-WebAgent-Id": resolvedWebAgentId,
-    "X-Validator-Id": resolvedValidatorId,
-    ...extraHeaders,
+  // Construir el payload completo que espera el backend
+  const eventData = {
+    event_name: eventType,
+    web_agent_id: resolvedWebAgentId,
+    user_id: user,
+    data,
+    timestamp: new Date().toISOString(),
+    validator_id: resolvedValidatorId,
   };
 
   const backendPayload = {
     web_agent_id: resolvedWebAgentId,
-    web_url: window.location?.href || null,
-    data: payload,
+    web_url: window.location.origin,
     validator_id: resolvedValidatorId,
+    data: eventData,
   };
 
-  const backendUrl = `${getApiBaseUrl()}/save_events/`;
+  console.log("🛒 Logging Event:", backendPayload);
 
-  console.log("🛒 Logging Event:", { ...backendPayload, headers });
-
-  fetch(backendUrl, {
+  fetch("/api/log-event", {
     method: "POST",
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+      ...extraHeaders,
+    },
     body: JSON.stringify(backendPayload),
   }).catch((error) => {
-    console.warn("[autozone] Failed to send event", error);
+    console.error("❌ Failed to log event:", error);
   });
 }
