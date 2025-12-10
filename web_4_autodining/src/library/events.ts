@@ -35,55 +35,54 @@ export function logEvent(
 ) {
   if (typeof window === "undefined") return;
 
+  let user = localStorage.getItem("user");
+  if (user === "null") {
+    user = null;
+  }
+  const webAgentId = localStorage.getItem("web_agent_id");
+  const validatorId = localStorage.getItem("validator_id");
+  const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
+  const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
+
+  // Register the event with the SeedVariationManager to trigger layout changes
   try {
-    let user = localStorage.getItem("user");
-    if (user === "null") {
-      user = null;
-    }
-
-    const payload = {
-      event_name: eventType,
-      data,
-      user_id: user,
-    };
-
-    // Solo log en desarrollo
-    if (process.env.NODE_ENV === "development") {
-      console.log("📦 Logging Event:", { ...payload, headers: extra_headers });
-    }
-
-    // Register the event with the SeedVariationManager to trigger layout changes
-    // Envolver en try-catch para que no rompa si hay error
-    try {
-      SeedVariationManager.registerEvent(eventType);
-    } catch (err) {
-      // Ignorar errores en el registro de eventos - no debe romper la página
-      if (process.env.NODE_ENV === "development") {
-        console.warn("⚠️ Error registering event:", err);
-      }
-    }
-
-    // Enviar evento de forma completamente silenciosa (no bloquear la UI si falla)
-    fetch("/api/log-event", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...extra_headers,
-      },
-      body: JSON.stringify(payload),
-    })
-      .catch(() => {
-        // Ignorar errores silenciosamente - no afectar la experiencia del usuario
-      })
-      .finally(() => {
-        // No hacer nada, solo asegurar que no hay efectos secundarios
-      });
+    SeedVariationManager.registerEvent(eventType);
   } catch (err) {
-    // Si algo falla, ignorar completamente - la página debe seguir funcionando
+    // Ignorar errores en el registro de eventos - no debe romper la página
     if (process.env.NODE_ENV === "development") {
-      console.warn("⚠️ Error in logEvent (ignored):", err);
+      console.warn("⚠️ Error registering event:", err);
     }
   }
+
+  // Construir el payload completo que espera el backend
+  const eventData = {
+    event_name: eventType,
+    web_agent_id: resolvedWebAgentId,
+    user_id: user,
+    data,
+    timestamp: new Date().toISOString(),
+    validator_id: resolvedValidatorId,
+  };
+
+  const backendPayload = {
+    web_agent_id: resolvedWebAgentId,
+    web_url: window.location.origin,
+    validator_id: resolvedValidatorId,
+    data: eventData,
+  };
+
+  console.log("📦 Logging Event:", backendPayload);
+
+  fetch("/api/log-event", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...extra_headers,
+    },
+    body: JSON.stringify(backendPayload),
+  }).catch((error) => {
+    console.error("❌ Failed to log event:", error);
+  });
 }
 
 // Helper function to get active events
