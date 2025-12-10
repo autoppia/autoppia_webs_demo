@@ -74,6 +74,7 @@ export default function TemplatesPage() {
       template_id: template.id,
       template_name: template.name,
       subject: template.subject,
+      body: value,
       body_length: value.length,
     });
   };
