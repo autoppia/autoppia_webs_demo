@@ -15,7 +15,11 @@ import {
   isDataGenerationAvailable 
 } from "@/utils/dataGenerator";
 import { fetchSeededSelection, getSeedValueFromEnv, isDbLoadModeEnabled } from "@/shared/seeded-loader";
-import { clients as originalClients, DEMO_MATTERS, DEMO_FILES, EVENTS, DEMO_LOGS } from "@/library/dataset";
+import fallbackClients from "./original/clients_1.json";
+import fallbackMatters from "./original/matters_1.json";
+import fallbackFiles from "./original/files_1.json";
+import fallbackEvents from "./original/events_1.json";
+import fallbackLogs from "./original/logs_1.json";
 
 // Client-side cache keys
 const CACHE_KEYS = {
@@ -33,11 +37,11 @@ function getActiveSeed(defaultSeed: number = 1): number {
 }
 
 // Dynamic data arrays
-let dynamicClients: any[] = isDataGenerationAvailable() ? [] : [...originalClients];
-let dynamicMatters: any[] = isDataGenerationAvailable() ? [] : [...DEMO_MATTERS];
-let dynamicFiles: any[] = isDataGenerationAvailable() ? [] : [...DEMO_FILES];
-let dynamicEvents: any[] = isDataGenerationAvailable() ? [] : [...EVENTS];
-let dynamicLogs: any[] = isDataGenerationAvailable() ? [] : [...DEMO_LOGS];
+let dynamicClients: any[] = isDataGenerationAvailable() ? [] : (fallbackClients as any[]);
+let dynamicMatters: any[] = isDataGenerationAvailable() ? [] : (fallbackMatters as any[]);
+let dynamicFiles: any[] = isDataGenerationAvailable() ? [] : (fallbackFiles as any[]);
+let dynamicEvents: any[] = isDataGenerationAvailable() ? [] : (fallbackEvents as any[]);
+let dynamicLogs: any[] = isDataGenerationAvailable() ? [] : (fallbackLogs as any[]);
 
 // Cache functions
 export function readCachedClients(): any[] | null {
@@ -159,9 +163,9 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
     // If v2 is enabled, use the v2-seed provided OR from window OR default to 1
     effectiveSeed = v2SeedValue ?? getRuntimeV2Seed() ?? 1;
   } else {
-    // If v2 is NOT enabled, return static dataset
+    // If v2 is NOT enabled, use mounted original dataset as fallback
     effectiveSeed = 1;
-    dynamicClients = originalClients.map((c, i) => normalizeClient(c, i));
+    dynamicClients = (fallbackClients as any[]).map((c, i) => normalizeClient(c, i));
     return dynamicClients;
   }
 
@@ -189,7 +193,7 @@ export async function initializeClients(v2SeedValue?: number | null): Promise<an
     }
   } catch (err) {
     console.error(`[autocrm] Failed to load from DB with seed=${effectiveSeed}:`, err);
-    dynamicClients = originalClients.map((c, i) => normalizeClient(c, i));
+    dynamicClients = (fallbackClients as any[]).map((c, i) => normalizeClient(c, i));
     return dynamicClients;
   }
 }
@@ -232,11 +236,11 @@ export async function initializeMatters(): Promise<any[]> {
       return dynamicMatters;
     } catch (error) {
       console.warn("⚠️ Failed to generate matters while generation is enabled. Error:", error);
-      dynamicMatters = [];
+      dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
       return dynamicMatters;
     }
   } else {
-    dynamicMatters = DEMO_MATTERS;
+    dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
     return dynamicMatters;
   }
 }
@@ -265,11 +269,11 @@ export async function initializeFiles(): Promise<any[]> {
       return dynamicFiles;
     } catch (error) {
       console.warn("⚠️ Failed to generate files. Error:", error);
-      dynamicFiles = [];
+      dynamicFiles = (fallbackFiles as any[]);
       return dynamicFiles;
     }
   } else {
-    dynamicFiles = DEMO_FILES;
+    dynamicFiles = (fallbackFiles as any[]);
     return dynamicFiles;
   }
 }
@@ -298,11 +302,11 @@ export async function initializeEvents(): Promise<any[]> {
       return dynamicEvents;
     } catch (error) {
       console.warn("⚠️ Failed to generate events. Error:", error);
-      dynamicEvents = [];
+      dynamicEvents = (fallbackEvents as any[]);
       return dynamicEvents;
     }
   } else {
-    dynamicEvents = EVENTS;
+    dynamicEvents = (fallbackEvents as any[]);
     return dynamicEvents;
   }
 }
@@ -331,11 +335,11 @@ export async function initializeLogs(): Promise<any[]> {
       return dynamicLogs;
     } catch (error) {
       console.warn("⚠️ Failed to generate logs. Error:", error);
-      dynamicLogs = [];
+      dynamicLogs = (fallbackLogs as any[]);
       return dynamicLogs;
     }
   } else {
-    dynamicLogs = DEMO_LOGS;
+    dynamicLogs = (fallbackLogs as any[]);
     return dynamicLogs;
   }
 }
@@ -370,7 +374,7 @@ export async function loadClientsFromDb(seedOverride?: number): Promise<any[]> {
       const supplemented: any[] = [...selected];
       for (const cat of categories) {
         if (!byCategory[cat] || byCategory[cat].length === 0) {
-          const fallback = originalClients.filter((c) => c.status === cat).slice(0, 5);
+          const fallback = (fallbackClients as any[]).filter((c) => c.status === cat).slice(0, 5);
           if (fallback.length > 0) {
             supplemented.push(...fallback);
           }
@@ -496,11 +500,11 @@ export function searchMatters(query: string): any[] {
  * Reset to original data only
  */
 export function resetToOriginalData(): void {
-  dynamicClients = [...originalClients];
-  dynamicMatters = [...DEMO_MATTERS];
-  dynamicFiles = [...DEMO_FILES];
-  dynamicEvents = [...EVENTS];
-  dynamicLogs = [...DEMO_LOGS];
+  dynamicClients = (fallbackClients as any[]).map((c, i) => normalizeClient(c, i));
+  dynamicMatters = (fallbackMatters as any[]).map((m, i) => normalizeMatter(m, i));
+  dynamicFiles = [...(fallbackFiles as any[])];
+  dynamicEvents = [...(fallbackEvents as any[])];
+  dynamicLogs = [...(fallbackLogs as any[])];
 }
 
 // Export the dynamic data arrays for direct access
