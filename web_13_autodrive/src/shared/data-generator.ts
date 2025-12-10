@@ -385,12 +385,18 @@ export function isDataGenerationEnabled(): boolean {
 }
 
 export function getApiBaseUrl(): string {
-  let url = 'http://localhost:8090';
-  if (typeof process !== 'undefined' && process.env) {
-    url = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || url;
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
+  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
+  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
+
+  if (envUrl && (!(envIsLocal) || originIsLocal)) {
+    return envUrl;
   }
-  try { console.log('[web13][data-generator] getApiBaseUrl ->', url); } catch {}
-  return url;
+  if (origin) {
+    return `${origin}/api`;
+  }
+  return envUrl || "http://app:8080";
 }
 
 /* ---------- Convenience wrapper for web13 ---------- */

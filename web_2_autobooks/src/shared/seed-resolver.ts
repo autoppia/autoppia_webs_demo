@@ -57,10 +57,18 @@ export function clampBaseSeed(seed: number): number {
 }
 
 function getApiBaseUrl(): string {
-  if (typeof window !== "undefined") {
-    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
+  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
+  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
+
+  if (envUrl && (!(envIsLocal) || originIsLocal)) {
+    return envUrl;
   }
-  return process.env.API_URL || "http://app:8080";
+  if (origin) {
+    return `${origin}/api`;
+  }
+  return envUrl || "http://app:8080";
 }
 
 function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: boolean; v3: boolean }): ResolvedSeeds {

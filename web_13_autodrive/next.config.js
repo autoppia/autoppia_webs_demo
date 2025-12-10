@@ -26,6 +26,16 @@ console.log('  NEXT_PUBLIC_DYNAMIC_HTML_STRUCTURE:', process.env.NEXT_PUBLIC_DYN
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    const destination = process.env.INTERNAL_API_URL || 'http://webs_server:8090';
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${destination}/:path*`,
+      },
+    ];
+  },
+
   devIndicators: false,
   images: {
     unoptimized: true,

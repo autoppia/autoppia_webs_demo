@@ -27,16 +27,18 @@ export function clampBaseSeed(seed: number, minVal: number = 1, maxVal: number =
  * Get API base URL from environment variables
  */
 function getApiBaseUrl(): string {
-  if (typeof window === "undefined") {
-    return process.env.API_URL || "http://localhost:8080";
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL;
+  const origin = typeof window !== "undefined" ? window.location?.origin : undefined;
+  const envIsLocal = envUrl && (envUrl.includes("localhost") || envUrl.includes("127.0.0.1"));
+  const originIsLocal = origin && (origin.includes("localhost") || origin.includes("127.0.0.1"));
+
+  if (envUrl && (!(envIsLocal) || originIsLocal)) {
+    return envUrl;
   }
-  return (
-    process.env.NEXT_PUBLIC_API_URL ||
-    process.env.API_URL ||
-    (typeof window !== "undefined" && window.location.origin.includes("localhost")
-      ? "http://localhost:8090"
-      : "http://app:8080")
-  );
+  if (origin) {
+    return `${origin}/api`;
+  }
+  return envUrl || "http://app:8080";
 }
 
 /**
