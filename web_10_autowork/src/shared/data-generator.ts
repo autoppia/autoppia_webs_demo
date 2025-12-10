@@ -495,7 +495,7 @@ export function getApiBaseUrl(): string {
   if (origin) {
     return `${origin}/api`;
   }
-  return envUrl || "http://app:8080";
+  return envUrl || "http://app:8090";
 }
 
 // -----------------------

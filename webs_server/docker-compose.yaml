@@ -3,7 +3,7 @@ services:
     user: "0:0"
     build: .
     ports:
-      - "127.0.0.1:${WEB_PORT}:8080"
+      - "127.0.0.1:${WEB_PORT}:8090"
     env_file:
       - .env
     environment:
@@ -11,7 +11,7 @@ services:
       LOG_LEVEL: info
       # ======== Server Settings ========
       HOST: 0.0.0.0
-      PORT: 8080
+      PORT: 8090
 
       # ======== Database ========
       POSTGRES_USER: webs_user

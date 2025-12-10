@@ -68,7 +68,7 @@ function getApiBaseUrl(): string {
   if (origin) {
     return `${origin}/api`;
   }
-  return envUrl || "http://app:8080";
+  return envUrl || "http://app:8090";
 }
 
 function resolveSeedsLocal(baseSeed: number, enabledFlags?: { v1: boolean; v2: boolean; v3: boolean }): ResolvedSeeds {

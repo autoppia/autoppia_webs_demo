@@ -39,7 +39,7 @@ console.log('  NEXT_PUBLIC_ENABLE_DYNAMIC_V1_STRUCTURE:', process.env.NEXT_PUBLI
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
-    const destination = process.env.INTERNAL_API_URL || 'http://webs_server:8090';
+    const destination = process.env.INTERNAL_API_URL || 'http://app:8090';
     return [
       {
         source: '/api/:path*',
