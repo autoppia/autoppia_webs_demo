@@ -62,6 +62,11 @@ function ClientsDirectoryContent() {
       })),
     [data]
   );
+  const [clientList, setClientList] = useState(clients);
+
+  useEffect(() => {
+    setClientList(clients);
+  }, [clients]);
   const seedRouter = useSeedRouter();
   const { getText, getId } = useDynamicStructure();
   const storageKey = useMemo(
@@ -71,13 +76,41 @@ function ClientsDirectoryContent() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (clients.length === 0) return;
+    if (clientList.length === 0) return;
     try {
-      window.localStorage.setItem(storageKey, JSON.stringify(clients));
+      window.localStorage.setItem(storageKey, JSON.stringify(clientList));
     } catch (error) {
       console.warn("[ClientsPage] Failed to cache clients", error);
     }
-  }, [clients, storageKey]);
+  }, [clientList, storageKey]);
+
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [matterFilter, setMatterFilter] = useState<string>("all");
+
+  const statusOptions = useMemo(() => {
+    const set = new Set(clientList.map((c) => c.status || "Active"));
+    return Array.from(set);
+  }, [clientList]);
+
+  const filtered = clientList.filter((c) => {
+    const matchesQuery =
+      c.name.toLowerCase().includes(query.toLowerCase()) ||
+      c.email.toLowerCase().includes(query.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || c.status.toLowerCase() === statusFilter.toLowerCase();
+
+    const matchesMatters =
+      matterFilter === "all"
+        ? true
+        : matterFilter === "1-2"
+          ? c.matters <= 2
+          : matterFilter === "3-4"
+            ? c.matters >= 3 && c.matters <= 4
+            : c.matters >= 5;
+
+    return matchesQuery && matchesStatus && matchesMatters;
+  });
 
   useEffect(() => {
     if (query.trim()) {
@@ -85,11 +118,39 @@ function ClientsDirectoryContent() {
     }
   }, [query]);
 
-  const filtered = clients.filter(
-    (c) =>
-      c.name.toLowerCase().includes(query.toLowerCase()) ||
-      c.email.toLowerCase().includes(query.toLowerCase())
-  );
+  useEffect(() => {
+    logEvent(EVENT_TYPES.FILTER_CLIENTS, {
+      status: statusFilter,
+      matters: matterFilter,
+      results: filtered.length,
+    });
+  }, [statusFilter, matterFilter, filtered.length]);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newClient, setNewClient] = useState({
+    name: "",
+    email: "",
+    status: "Active",
+    matters: 1,
+  });
+
+  const handleAddClient = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!newClient.name.trim() || !newClient.email.trim()) return;
+    const clientRecord = {
+      id: `CL-${Math.floor(Math.random() * 9000) + 1000}`,
+      name: newClient.name.trim(),
+      email: newClient.email.trim(),
+      matters: Number(newClient.matters) || 1,
+      avatar: "",
+      status: newClient.status,
+      last: "Today",
+    };
+    setClientList((prev) => [clientRecord, ...prev]);
+    logEvent(EVENT_TYPES.ADD_CLIENT, clientRecord);
+    setShowAddModal(false);
+    setNewClient({ name: "", email: "", status: "Active", matters: 1 });
+  };
 
   const handleClientClick = (client: (typeof clients)[number]) => {
     logEvent(EVENT_TYPES.VIEW_CLIENT_DETAILS, client);
@@ -102,6 +163,14 @@ function ClientsDirectoryContent() {
         <h1 className="text-3xl md:text-[2.25rem] font-extrabold mb-10 tracking-tight">
           {getText("clients_title", "Clients")}
         </h1>
+        <div className="flex justify-end">
+          <button
+            className="px-4 py-2 rounded-2xl bg-accent-forest text-white font-semibold shadow-sm"
+            onClick={() => setShowAddModal(true)}
+          >
+            Add client
+          </button>
+        </div>
       </DynamicElement>
       
       <DynamicElement elementType="section" index={1} className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-0 mb-10">
@@ -118,16 +187,115 @@ function ClientsDirectoryContent() {
             aria-label="Search clients"
           />
         </div>
-        <DynamicButton
-          eventType="SEARCH_CLIENT"
-          index={0}
-          className="flex-shrink-0 flex items-center gap-2 px-5 h-12 ml-0 md:ml-4 font-medium rounded-2xl bg-white border border-zinc-200 text-zinc-700 shadow-sm hover:bg-zinc-50 transition"
-          id={getId("filter_button")}
-          aria-label={getText("filter_by", "Filter By")}
-        >
-          <Filter className="w-4 h-4" /> {getText("filter_by", "Filter By")}
-        </DynamicButton>
+        <div className="flex flex-wrap items-center gap-3 ml-0 md:ml-4">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-zinc-500" />
+            <label className="text-sm text-zinc-600">Status</label>
+            <select
+              id={getId("status_filter")}
+              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              {statusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-zinc-600">Matters</label>
+            <select
+              id={getId("matters_filter")}
+              className="h-12 rounded-2xl border border-zinc-200 px-3 text-sm font-medium text-zinc-700 bg-white"
+              value={matterFilter}
+              onChange={(e) => setMatterFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="1-2">1-2</option>
+              <option value="3-4">3-4</option>
+              <option value="5plus">5+</option>
+            </select>
+          </div>
+        </div>
       </DynamicElement>
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-30">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-semibold">Add client</h2>
+              <button
+                className="text-zinc-500 hover:text-zinc-700"
+                onClick={() => setShowAddModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            <form className="flex flex-col gap-3" onSubmit={handleAddClient}>
+              <label className="text-sm text-zinc-600">
+                Name
+                <input
+                  className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                  value={newClient.name}
+                  onChange={(e) => setNewClient((prev) => ({ ...prev, name: e.target.value }))}
+                  required
+                />
+              </label>
+              <label className="text-sm text-zinc-600">
+                Email
+                <input
+                  className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                  type="email"
+                  value={newClient.email}
+                  onChange={(e) => setNewClient((prev) => ({ ...prev, email: e.target.value }))}
+                  required
+                />
+              </label>
+              <div className="flex gap-3">
+                <label className="text-sm text-zinc-600 flex-1">
+                  Matters
+                  <input
+                    className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                    type="number"
+                    min={1}
+                    value={newClient.matters}
+                    onChange={(e) => setNewClient((prev) => ({ ...prev, matters: Number(e.target.value) }))}
+                  />
+                </label>
+                <label className="text-sm text-zinc-600 flex-1">
+                  Status
+                  <select
+                    className="mt-1 w-full border border-zinc-200 rounded-xl px-3 py-2 text-sm"
+                    value={newClient.status}
+                    onChange={(e) => setNewClient((prev) => ({ ...prev, status: e.target.value }))}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+                </label>
+              </div>
+              <div className="flex justify-end gap-2 mt-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-xl border border-zinc-200 text-sm"
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-accent-forest text-white text-sm font-semibold"
+                >
+                  Add client
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {isLoading && (
         <LoadingNotice message={getText("loading_message", "Loading...") ?? "Loading clients..."} />
       )}

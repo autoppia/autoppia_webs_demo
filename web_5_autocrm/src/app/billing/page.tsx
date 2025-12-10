@@ -6,6 +6,7 @@ import { DEMO_LOGS } from "@/library/dataset";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
+import { CalendarDays, Search } from "lucide-react";
 
 const normalizeLog = (log: any, index: number) => ({
   id: log?.id ?? Date.now() + index,
@@ -58,6 +59,9 @@ export default function BillingPage() {
     description: "",
     status: "Billable",
   });
+  const [query, setQuery] = useState("");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [customDate, setCustomDate] = useState("");
   useEffect(() => {
     if (isLoading) return;
     setLogs(resolvedLogs);
@@ -146,6 +150,64 @@ export default function BillingPage() {
     setEditingLogId(null);
   }
 
+  const filteredLogs = useMemo(() => {
+    const now = new Date();
+    return logs.filter((l) => {
+      const matchesQuery =
+        l.matter.toLowerCase().includes(query.toLowerCase()) ||
+        l.description.toLowerCase().includes(query.toLowerCase()) ||
+        l.client.toLowerCase().includes(query.toLowerCase());
+
+      let matchesDate = true;
+      const logDate = new Date(l.date);
+
+      if (dateFilter === "today") {
+        const today = now.toISOString().slice(0, 10);
+        matchesDate = l.date === today;
+      } else if (dateFilter === "this_week") {
+        const diff = (now.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24);
+        matchesDate = diff <= 7;
+      } else if (dateFilter === "prev_two_weeks") {
+        const diff = (now.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24);
+        matchesDate = diff > 7 && diff <= 14;
+      } else if (dateFilter === "this_month") {
+        matchesDate =
+          logDate.getFullYear() === now.getFullYear() &&
+          logDate.getMonth() === now.getMonth();
+      } else if (dateFilter === "custom" && customDate) {
+        matchesDate = l.date === customDate;
+      }
+
+      return matchesQuery && matchesDate;
+    });
+  }, [logs, query, dateFilter, customDate]);
+
+  const dateFilterLabel = useMemo(() => {
+    switch (dateFilter) {
+      case "today":
+        return "Today";
+      case "this_week":
+        return "This week";
+      case "prev_two_weeks":
+        return "Previous 2 weeks";
+      case "this_month":
+        return "This month";
+      case "custom":
+        return customDate ? `Date ${customDate}` : "Custom date";
+      default:
+        return "All";
+    }
+  }, [dateFilter, customDate]);
+
+  useEffect(() => {
+    logEvent(EVENT_TYPES.BILLING_SEARCH, {
+      query,
+      date_filter: dateFilterLabel,
+      custom_date: customDate || null,
+      results: filteredLogs.length,
+    });
+  }, [query, dateFilterLabel, customDate, filteredLogs.length]);
+
   return (
     <section>
       <h1 className="text-3xl font-extrabold mb-10 tracking-tight">
@@ -154,6 +216,57 @@ export default function BillingPage() {
       {isLoading && (
         <LoadingNotice message={getText("loading_message", "Loading logs...")} />
       )}
+      <div className="flex flex-col gap-3 mb-6">
+        <div className="flex flex-col md:flex-row gap-3 md:items-center">
+          <div className="relative w-full md:w-80">
+            <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-3" />
+            <input
+              id={getId("billing_search")}
+              className="w-full h-10 pl-9 pr-3 rounded-xl border border-zinc-200 text-sm"
+              placeholder="Search logs by matter, client, or description"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="text-sm text-zinc-600 flex items-center gap-1">
+              <CalendarDays className="w-4 h-4" /> Date filter
+            </label>
+            <select
+              id={getId("date_filter")}
+              className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="today">Today</option>
+              <option value="this_week">This week</option>
+              <option value="prev_two_weeks">Previous 2 weeks</option>
+              <option value="this_month">This month</option>
+              <option value="custom">Specific date</option>
+            </select>
+            {dateFilter === "custom" && (
+              <input
+                type="date"
+                className="h-10 rounded-xl border border-zinc-200 px-3 text-sm"
+                value={customDate}
+                onChange={(e) => setCustomDate(e.target.value)}
+              />
+            )}
+            <button
+              className="h-10 px-4 rounded-xl border border-zinc-200 text-sm"
+              onClick={() => {
+                setQuery("");
+                setDateFilter("all");
+                setCustomDate("");
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="flex gap-4 mb-8">
         <button
           onClick={() => setTab("Logs")}
@@ -282,7 +395,7 @@ export default function BillingPage() {
             {apiError && (
               <div className="text-red-600 px-4 py-2">Failed to load logs: {apiError}</div>
             )}
-            {logs.length === 0 && (
+            {filteredLogs.length === 0 && (
               <div
                 id={getId("no_logs_message")}
                 data-testid="no-logs-message"
@@ -291,7 +404,7 @@ export default function BillingPage() {
                 {getText("no_logs_yet", "No logs yet")}
               </div>
             )}
-            {logs.map((l) => (
+            {filteredLogs.map((l) => (
               <div
                 key={l.id}
                 id={`log-entry-${l.id}`}

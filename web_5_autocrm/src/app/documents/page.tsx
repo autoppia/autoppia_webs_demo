@@ -46,6 +46,8 @@ export default function DocumentsPage() {
   const normalizedApi = useMemo(() => (data || []).map((f, idx) => normalizeFile(f, idx)), [data]);
   const resolvedFiles = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
   const [files, setFiles] = useState(resolvedFiles);
+  const [renamingId, setRenamingId] = useState<number | string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
   useEffect(() => {
     if (isLoading) return;
     setFiles(resolvedFiles);
@@ -102,6 +104,30 @@ export default function DocumentsPage() {
     setFiles((f) => f.filter((fil) => fil.id !== id));
   };
 
+  const startRename = (fileId: number | string, current: string) => {
+    setRenamingId(fileId);
+    setRenameValue(current);
+  };
+
+  const saveRename = (fileId: number | string) => {
+    const trimmed = renameValue.trim();
+    if (!trimmed) return;
+    const target = files.find((f) => f.id === fileId);
+    const previousName = target?.name ?? "";
+    setFiles((prev) =>
+      prev.map((file) =>
+        file.id === fileId ? { ...file, name: trimmed } : file
+      )
+    );
+    logEvent(EVENT_TYPES.DOCUMENT_RENAMED, {
+      id: fileId,
+      newName: trimmed,
+      previousName,
+    });
+    setRenamingId(null);
+    setRenameValue("");
+  };
+
   return (
     <DynamicContainer index={0}>
       <DynamicElement elementType="header" index={0}>
@@ -120,7 +146,7 @@ export default function DocumentsPage() {
       <DynamicElement
         elementType="section"
         index={1}
-        className="mb-10 p-8 rounded-2xl border-2 border-dashed border-accent-forest/40 bg-accent-forest/5 flex flex-col items-center justify-center cursor-pointer hover:bg-accent-forest/10 transition gap-4"
+          className="mb-10 p-8 rounded-2xl border-2 border-dashed border-zinc-200 bg-white flex flex-col items-center justify-center cursor-pointer hover:border-accent-forest hover:bg-accent-forest/5 transition gap-4 shadow-sm"
         onDragOver={(e: React.DragEvent<HTMLDivElement>) => e.preventDefault()}
         onDrop={onDrop}
         onClick={() => fileInput.current && fileInput.current.click()}
@@ -135,7 +161,7 @@ export default function DocumentsPage() {
         <input id={getId("file_input")} data-testid="file-input" type="file" multiple ref={fileInput} onChange={onUpload} className="hidden" />
       </DynamicElement>
 
-      <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <DynamicElement elementType="section" index={2} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {apiError && (
           <div className="col-span-full text-red-600">Failed to load documents: {apiError}</div>
         )}
@@ -143,37 +169,109 @@ export default function DocumentsPage() {
           <div className="col-span-full text-zinc-500">{getText("loading_message", "Loading...") ?? "Loading documents..."}</div>
         )}
         {files.map((file, index) => (
-          <DynamicItem key={file.id} index={index} className="bg-white rounded-2xl border border-zinc-100 shadow-card p-6 flex flex-col gap-3 relative group hover:shadow-lg transition">
-            <div className="flex items-center gap-3 mb-2">
-              <FileText className="w-7 h-7 text-accent-forest/60" />
-              <span id={`document-name-${file.id}`} className="font-bold text-lg text-zinc-800 truncate">{file.name}</span>
-              <span id={`document-version-${file.id}`} className="ml-auto text-xs bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded font-mono uppercase">{file.version}</span>
+          <DynamicItem
+            key={file.id}
+            index={index}
+            className="bg-white rounded-xl border border-zinc-100 shadow-sm p-5 flex flex-col gap-3 relative group hover:shadow-md transition"
+          >
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-9 h-9 rounded-full bg-zinc-100 flex items-center justify-center text-accent-forest">
+                <FileText className="w-5 h-5" />
+              </div>
+              {renamingId === file.id ? (
+                <input
+                  id={`document-rename-${file.id}`}
+                  className="flex-1 border border-zinc-200 rounded-lg px-2 py-1 text-sm"
+                  value={renameValue}
+                  onChange={(e) => setRenameValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") saveRename(file.id);
+                    if (e.key === "Escape") setRenamingId(null);
+                  }}
+                  autoFocus
+                />
+              ) : (
+                <span
+                  id={`document-name-${file.id}`}
+                  className="font-semibold text-zinc-900 truncate"
+                >
+                  {file.name}
+                </span>
+              )}
+              <span
+                id={`document-version-${file.id}`}
+                className="ml-auto text-xs bg-zinc-100 text-zinc-500 px-2 py-0.5 rounded font-mono uppercase"
+              >
+                {file.version}
+              </span>
             </div>
 
-            <div id={`document-metadata-${file.id}`} className="flex gap-3 text-xs text-zinc-500 font-mono">
+            <div
+              id={`document-metadata-${file.id}`}
+              className="flex gap-3 text-xs text-zinc-500 font-mono"
+            >
               <span id={`document-size-${file.id}`}>{file.size}</span>
               <span>·</span>
               <span id={`document-updated-${file.id}`}>{file.updated}</span>
             </div>
 
             <div className="flex items-center gap-2 text-xs">
-              <span id={`document-status-${file.id}`} className={`inline-flex px-3 py-1 rounded-2xl font-semibold text-xs ${file.status === "Signed" ? "bg-accent-forest/10 text-accent-forest" : file.status === "Submitted" ? "bg-blue-100 text-blue-600" : "bg-zinc-200 text-zinc-500"}`}>
+              <span
+                id={`document-status-${file.id}`}
+                className={`inline-flex px-3 py-1 rounded-full font-semibold text-xs ${
+                  file.status === "Signed"
+                    ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                    : file.status === "Submitted"
+                      ? "bg-blue-50 text-blue-600 border border-blue-100"
+                      : "bg-zinc-100 text-zinc-600 border border-zinc-200"
+                }`}
+              >
                 {file.status}
               </span>
-              {file.status === "Signed" && <CheckCircle id={`signed-icon-${file.id}`} className="w-4 h-4 text-accent-forest ml-1" />}
+              {file.status === "Signed" && (
+                <CheckCircle
+                  id={`signed-icon-${file.id}`}
+                  className="w-4 h-4 text-emerald-500 ml-1"
+                />
+              )}
             </div>
 
-            <DynamicButton 
-              eventType="DOCUMENT_DELETED" 
-              index={index} 
-              onClick={() => deleteFile(file.id)} 
-              className="absolute right-5 top-5 text-zinc-400 rounded-full hover:bg-zinc-100 p-2 opacity-70 group-hover:opacity-100 transition" 
-              id={`${getId("delete_document_button")}-${file.id}`}
-              title={getText("delete_button", "Delete Button")} 
-              aria-label={`${getText("delete_button", "Delete Button")} ${file.name}`}
-            >
-              <Trash2 className="w-5 h-5" />
-            </DynamicButton>
+            <div className="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition">
+              {renamingId === file.id ? (
+                <DynamicButton
+                  eventType="DOCUMENT_RENAMED"
+                  index={index}
+                  onClick={() => saveRename(file.id)}
+                  className="text-emerald-600 rounded-full hover:bg-emerald-50 px-3 py-1 text-sm border border-emerald-100"
+                  id={`${getId("save_document_name")}-${file.id}`}
+                  title="Save name"
+                >
+                  Save
+                </DynamicButton>
+              ) : (
+                <DynamicButton
+                  eventType="DOCUMENT_RENAMED"
+                  index={index}
+                  onClick={() => startRename(file.id, file.name)}
+                  className="text-zinc-600 rounded-full hover:bg-zinc-100 px-3 py-1 text-sm border border-zinc-200"
+                  id={`${getId("rename_document_button")}-${file.id}`}
+                  title="Rename document"
+                >
+                  Rename
+                </DynamicButton>
+              )}
+              <DynamicButton
+                eventType="DOCUMENT_DELETED"
+                index={index}
+                onClick={() => deleteFile(file.id)}
+                className="text-zinc-400 rounded-full hover:bg-red-50 hover:text-red-600 p-2 border border-transparent"
+                id={`${getId("delete_document_button")}-${file.id}`}
+                title={getText("delete_button", "Delete Button")}
+                aria-label={`${getText("delete_button", "Delete Button")} ${file.name}`}
+              >
+                <Trash2 className="w-5 h-5" />
+              </DynamicButton>
+            </div>
           </DynamicItem>
         ))}
       </DynamicElement>

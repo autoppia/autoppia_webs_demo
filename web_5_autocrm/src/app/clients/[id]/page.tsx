@@ -45,6 +45,8 @@ const normalizeClient = (client: any, index: number): Client => ({
 function ClientProfilePageContent() {
   const [client, setClient] = useState<Client | null>(null);
   const [isResolving, setIsResolving] = useState(true);
+  const [message, setMessage] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const params = useParams();
   const clientId = params?.id as string;
   const seedRouter = useSeedRouter();
@@ -250,6 +252,31 @@ function ClientProfilePageContent() {
               </li>
             ))}
           </ul>
+          <div className="mt-8 border-t border-zinc-100 pt-5">
+            <h3 className="font-semibold text-zinc-800 mb-3">Send a message</h3>
+            <textarea
+              id={`client-message-${client.id}`}
+              className="w-full border border-zinc-200 rounded-xl p-3 text-sm focus:outline-accent-forest"
+              rows={3}
+              placeholder="Type a quick note to this client..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button
+              className="mt-3 px-4 py-2 rounded-xl bg-accent-forest text-white font-semibold disabled:opacity-50"
+              disabled={!message.trim()}
+              onClick={() => {
+                logEvent(EVENT_TYPES.NEW_LOG_ADDED, {
+                  clientId: client.id,
+                  message: message.trim(),
+                  to: client.email,
+                });
+                setMessage("");
+              }}
+            >
+              Send message
+            </button>
+          </div>
         </section>
 
         {/* Related matters */}
@@ -314,6 +341,38 @@ function ClientProfilePageContent() {
             )}
           </div>
         </section>
+      </div>
+      <div className="flex items-center justify-between">
+        <button
+          className="text-sm text-zinc-500 underline"
+          onClick={() => seedRouter.push("/clients")}
+        >
+          Back to clients
+        </button>
+        <button
+          className="px-4 py-2 rounded-xl bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition"
+          onClick={() => {
+            if (isDeleting) return;
+            setIsDeleting(true);
+            logEvent(EVENT_TYPES.DELETE_CLIENT, client);
+            const cached = typeof window !== "undefined" ? window.localStorage.getItem(storageKey) : null;
+            if (cached) {
+              try {
+                const parsed = JSON.parse(cached);
+                const next = Array.isArray(parsed)
+                  ? parsed.filter((c: any) => c.id !== client.id)
+                  : [];
+                window.localStorage.setItem(storageKey, JSON.stringify(next));
+              } catch (error) {
+                console.warn("Failed to update cached clients", error);
+              }
+            }
+            logEvent(EVENT_TYPES.LOG_DELETE, { clientId: client.id, name: client.name, reason: "deleted_from_profile" });
+            seedRouter.push("/clients");
+          }}
+        >
+          Delete client
+        </button>
       </div>
     </section>
   );
