@@ -66,10 +66,13 @@ export function logEvent(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-WebAgent-Id": resolvedWebAgentId,
+      "X-Validator-Id": resolvedValidatorId,
       ...extra_headers,
     },
     body: JSON.stringify(backendPayload),
   }).catch((error) => {
     console.error("❌ Failed to log event:", error);
+    throw error;
   });
 }
