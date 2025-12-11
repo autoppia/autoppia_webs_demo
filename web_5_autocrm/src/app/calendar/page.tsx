@@ -7,7 +7,6 @@ import {
   Clock,
 } from "lucide-react";
 import { NewEventModal } from "@/components/NewEventModal";
-import { CalendarEvent, COLORS, EVENTS } from "@/library/dataset";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
@@ -15,6 +14,22 @@ import { DynamicElement } from "@/components/DynamicElement";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useProjectData } from "@/shared/universal-loader";
 import { useSeed } from "@/context/SeedContext";
+import { initializeEvents } from "@/data/crm-enhanced";
+
+type CalendarEvent = {
+  id: number;
+  date: string;
+  label: string;
+  time: string;
+  color: keyof typeof COLORS;
+};
+
+const COLORS = {
+  forest: "bg-accent-forest/20 text-accent-forest border-accent-forest/40",
+  indigo: "bg-accent-indigo/20 text-accent-indigo border-accent-indigo/40",
+  blue: "bg-blue-100 text-blue-700 border-blue-300",
+  zinc: "bg-zinc-200 text-zinc-700 border-zinc-300",
+};
 
 const normalizeEvent = (ev: any, index: number): CalendarEvent => ({
   id: ev?.id ?? index + 1,
@@ -74,9 +89,15 @@ export default function CalendarPage() {
   const [curYear, setCurYear] = useState(today.getFullYear());
   const [openEventDate, setOpenEventDate] = useState<string | null>(null);
   const [showPending, setShowPending] = useState(false);
-  const normalizedDemo = useMemo(() => EVENTS.map((ev, idx) => normalizeEvent(ev, idx)), []);
+  const [fallbackEvents, setFallbackEvents] = useState<CalendarEvent[]>([]);
+  useEffect(() => {
+    initializeEvents().then((rows) =>
+      setFallbackEvents(rows.map((ev, idx) => normalizeEvent(ev, idx)))
+    );
+  }, []);
+
   const normalizedApi = useMemo(() => (data || []).map((ev, idx) => normalizeEvent(ev, idx)), [data]);
-  const resolvedEvents = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const resolvedEvents = normalizedApi.length > 0 ? normalizedApi : fallbackEvents;
   const [events, setEvents] = useState<CalendarEvent[]>(resolvedEvents);
   useEffect(() => {
     if (isLoading) return;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
@@ -17,6 +17,7 @@ import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DASHBOARD_HOTELS } from "@/library/dataset";
 import type { Hotel } from "@/types/hotel";
+import { useWishlist } from "@/hooks/useWishlist";
 
 function parseLocalDate(dateString: string | undefined) {
   if (!dateString) {
@@ -59,6 +60,13 @@ function PropertyDetailContent() {
   const { getText, getId, getClass } = useV3Attributes();
   const router = useSeedRouter();
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
+  const {
+    isInWishlist,
+    addToWishlist,
+    removeFromWishlist,
+    ready: wishlistReady,
+  } = useWishlist();
 
   const prop = useMemo<Hotel>(() => {
     const numId = Number(params.id);
@@ -78,6 +86,7 @@ function PropertyDetailContent() {
 
     return getFallbackHotel();
   }, [params.id]);
+  const fromWishlist = searchParams.get("source") === "wishlist";
 
   const stayFrom = useMemo(() => {
     const parsed = parseLocalDate(prop.datesFrom);
@@ -122,6 +131,14 @@ function PropertyDetailContent() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [receiverEmail, setReceiverEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [userReviews, setUserReviews] = useState<
+    { id: string; name: string; rating: number; comment: string; date: string }[]
+  >([]);
+  const [reviewForm, setReviewForm] = useState({
+    name: "",
+    rating: 5,
+    comment: "",
+  });
 
   const nights =
     selectedRange?.from && selectedRange?.to
@@ -186,6 +203,31 @@ function PropertyDetailContent() {
     return () => clearTimeout(timer);
   }, [toastMessage]);
 
+  useEffect(() => {
+    if (!wishlistReady) return;
+    setIsWishlisted(isInWishlist.has(prop.id));
+  }, [isInWishlist, prop.id, wishlistReady]);
+
+  useEffect(() => {
+    const seedReviews = [
+      {
+        id: `${prop.id}-rev-1`,
+        name: "Amelia",
+        rating: Math.min(5, prop.rating + 0.1),
+        comment: "Loved the cozy vibe and quick check-in. Would return!",
+        date: "2025-02-18",
+      },
+      {
+        id: `${prop.id}-rev-2`,
+        name: "Jordan",
+        rating: Math.max(4.5, prop.rating - 0.1),
+        comment: "Great location and spotless rooms. Breakfast could improve.",
+        date: "2025-03-02",
+      },
+    ];
+    setUserReviews(seedReviews);
+  }, [prop.id, prop.rating]);
+
   const handleCalendarSelect = (range: DateRange | undefined) => {
     if (!range) {
       setSelectedRange(undefined);
@@ -222,7 +264,14 @@ function PropertyDetailContent() {
         selected_checkout: format(checkoutDate, "yyyy-MM-dd"),
         selected_dates_from: format(checkinDate, "yyyy-MM-dd"),
         selected_dates_to: format(checkoutDate, "yyyy-MM-dd"),
+        source: fromWishlist ? "wishlist" : "direct",
       });
+      if (fromWishlist) {
+        logEvent(EVENT_TYPES.BOOK_FROM_WISHLIST, {
+          hotelId: prop.id,
+          title: prop.title,
+        });
+      }
       sessionStorage.setItem("reserveEventLogged", "true");
     } catch (error) {
       console.error("❌ logEvent failed", error);
@@ -233,7 +282,9 @@ function PropertyDetailContent() {
         toUtcIsoWithTimezone(checkinDate)
       )}&checkout=${encodeURIComponent(
         toUtcIsoWithTimezone(checkoutDate)
-      )}&guests=${guests}`
+      )}&guests=${guests}${
+        fromWishlist ? "&source=wishlist" : ""
+      }`
     );
   };
 
@@ -354,7 +405,23 @@ function PropertyDetailContent() {
               setIsWishlisted(newState);
 
               if (newState) {
+                addToWishlist(prop);
                 logEvent(EVENT_TYPES.ADD_TO_WISHLIST, {
+                  id: prop.id,
+                  title: prop.title,
+                  location: prop.location,
+                  rating: prop.rating,
+                  reviews: prop.reviews,
+                  price: prop.price,
+                  dates: { from: prop.datesFrom, to: prop.datesTo },
+                  guests: prop.guests,
+                  host: prop.host,
+                  amenities: prop.amenities?.map((a) => a.title),
+                });
+              } else {
+                removeFromWishlist(prop.id);
+                logEvent(EVENT_TYPES.REMOVE_FROM_WISHLIST, {
+                  id: prop.id,
                   title: prop.title,
                   location: prop.location,
                   rating: prop.rating,
@@ -439,7 +506,119 @@ function PropertyDetailContent() {
                 </div>
               </div>
             </div>
-          ))}
+            ))}
+        </div>
+
+        <div className="mt-8 border rounded-2xl p-4 bg-white shadow-sm">
+          <h2 className="font-semibold text-lg mb-4">Guest reviews</h2>
+          <div className="flex flex-col gap-4 mb-5">
+            {userReviews.map((review) => (
+              <div
+                key={review.id}
+                className="border rounded-xl p-3 bg-neutral-50 flex flex-col gap-1"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-neutral-800">
+                    {review.name}
+                  </span>
+                  <span className="text-sm text-amber-600 font-semibold">
+                    {review.rating.toFixed(1)} ★
+                  </span>
+                  <span className="text-xs text-neutral-500 ml-auto">
+                    {review.date}
+                  </span>
+                </div>
+                <p className="text-sm text-neutral-700">{review.comment}</p>
+              </div>
+            ))}
+            {userReviews.length === 0 && (
+              <p className="text-sm text-neutral-500">
+                No reviews yet. Be the first to leave your thoughts!
+              </p>
+            )}
+          </div>
+          <form
+            className="flex flex-col gap-3"
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (!reviewForm.comment.trim()) {
+                return;
+              }
+              const nextReview = {
+                id: `${prop.id}-${Date.now()}`,
+                name: reviewForm.name.trim() || "Guest",
+                rating: reviewForm.rating,
+                comment: reviewForm.comment.trim(),
+                date: new Date().toISOString().slice(0, 10),
+              };
+              setUserReviews((prev) => [nextReview, ...prev]);
+              logEvent(EVENT_TYPES.SUBMIT_REVIEW, {
+                hotel: {
+                  id: prop.id,
+                  title: prop.title,
+                  location: prop.location,
+                  price: prop.price,
+                  rating: prop.rating,
+                  reviews: prop.reviews,
+                  datesFrom: prop.datesFrom,
+                  datesTo: prop.datesTo,
+                  guests: prop.guests,
+                  maxGuests: prop.maxGuests,
+                  amenities: prop.amenities?.map((a) => a.title),
+                  host: prop.host,
+                },
+                review: nextReview,
+                rating: reviewForm.rating,
+                commentLength: reviewForm.comment.trim().length,
+                name: nextReview.name,
+              });
+              setToastMessage("Thanks for sharing your review!");
+              setReviewForm({ name: "", rating: 5, comment: "" });
+            }}
+          >
+            <div className="flex gap-2">
+              <input
+                className="flex-1 border rounded-lg px-3 py-2 text-sm"
+                placeholder="Your name (optional)"
+                value={reviewForm.name}
+                onChange={(event) =>
+                  setReviewForm((prev) => ({ ...prev, name: event.target.value }))
+                }
+              />
+              <select
+                className="w-[120px] border rounded-lg px-3 py-2 text-sm"
+                value={reviewForm.rating}
+                onChange={(event) =>
+                  setReviewForm((prev) => ({
+                    ...prev,
+                    rating: Number(event.target.value),
+                  }))
+                }
+              >
+                {[5, 4.5, 4, 3.5, 3].map((value) => (
+                  <option key={value} value={value}>
+                    {value} ★
+                  </option>
+                ))}
+              </select>
+            </div>
+            <textarea
+              className="border rounded-lg px-3 py-2 text-sm resize-none"
+              rows={3}
+              placeholder="Share your experience..."
+              value={reviewForm.comment}
+              onChange={(event) =>
+                setReviewForm((prev) => ({ ...prev, comment: event.target.value }))
+              }
+            />
+            <button
+              type="submit"
+              className="self-start px-4 py-2 rounded-full bg-[#616882] text-white text-sm font-semibold hover:bg-[#7b86aa] transition disabled:opacity-50"
+              disabled={!reviewForm.comment.trim()}
+            >
+              Submit review
+            </button>
+          </form>
         </div>
 
         <div className="mt-8 border rounded-2xl p-4 bg-white shadow-sm">
@@ -502,8 +681,8 @@ function PropertyDetailContent() {
 
               const nextValue = Math.max(1, Math.min(maxGuestsAllowed, rawValue));
 
-              if (nextValue > guests) {
-                logEvent(EVENT_TYPES.INCREASE_NUMBER_OF_GUESTS, {
+              if (nextValue !== guests) {
+                logEvent(EVENT_TYPES.EDIT_NUMBER_OF_GUESTS, {
                   from: guests,
                   to: nextValue,
                   hotel: prop,
@@ -566,4 +745,3 @@ export default function PropertyDetail() {
     </Suspense>
   );
 }
-

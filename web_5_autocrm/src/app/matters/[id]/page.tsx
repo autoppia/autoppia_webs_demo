@@ -10,9 +10,9 @@ import {
 import React, { useState, useMemo, useEffect, Suspense } from "react";
 import Cookies from "js-cookie";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DEMO_MATTERS } from "@/library/dataset";
 import { useSeed } from "@/context/SeedContext";
 import { useProjectData } from "@/shared/universal-loader";
+import { initializeMatters } from "@/data/crm-enhanced";
 const TABS = [
   { name: "Overview", icon: <Briefcase className="w-5 h-5 mr-1" /> },
   { name: "Documents", icon: <FileText className="w-5 h-5 mr-1" /> },
@@ -124,13 +124,20 @@ function MatterDetailPageContent() {
     seedValue: v2Seed ?? undefined,
   });
 
+  const [fallbackMatters, setFallbackMatters] = useState<Matter[]>([]);
+  useEffect(() => {
+    initializeMatters().then((rows) =>
+      setFallbackMatters(rows.map((m: any, idx: number) => normalizeMatter(m, idx)))
+    );
+  }, []);
+
   const baseMatters = useMemo(() => {
-    const normalizedDemo = DEMO_MATTERS.map((m, idx) => normalizeMatter(m, idx));
     const normalizedApi = (data || []).map((m: any, idx: number) =>
       normalizeMatter(m, idx)
     );
-    return normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
-  }, [data]);
+    if (normalizedApi.length > 0) return normalizedApi;
+    return fallbackMatters;
+  }, [data, fallbackMatters]);
 
   useEffect(() => {
     if (!matterId) return;

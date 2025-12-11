@@ -14,13 +14,13 @@ import { TextStructureConfig } from "@/utils/textStructureProvider";
 import { CreateLabelDialog } from "@/components/CreateLabelDialog";
 import { DynamicElement } from "@/components/DynamicElement";
 import type { EmailFolder } from "@/types/email";
-// import { EVENT_TYPES, logEvent } from "@/library/events";
+import { EVENT_TYPES, logEvent } from "@/library/events";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Inbox,
   Star,
   Clock,
   Send,
-  FileText,
   AlertTriangle,
   Trash2,
   Mail,
@@ -28,6 +28,7 @@ import {
   Users,
   MessageSquare,
   PenTool,
+  FileText,
 } from "lucide-react";
 
 interface NavigationItem {
@@ -35,7 +36,8 @@ interface NavigationItem {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   count?: number;
-  type: "folder" | "label";
+  type: "folder" | "label" | "route";
+  route?: string;
 }
 
 // const folderEventMap = {
@@ -54,6 +56,8 @@ interface SidebarProps {
 export function Sidebar({ textStructure }: SidebarProps) {
   const { currentVariant } = useLayout();
   const { getText, getId } = useDynamicStructure();
+  const router = useRouter();
+  const pathname = usePathname();
   const {
     currentFilter,
     setFilter,
@@ -141,6 +145,13 @@ export function Sidebar({ textStructure }: SidebarProps) {
       type: "folder",
     },
     {
+      id: "templates",
+      label: "Templates",
+      icon: FileText,
+      type: "route",
+      route: "/templates",
+    },
+    {
       id: "starred",
       label: textStructure?.starred_label || getText("starred"),
       icon: Star,
@@ -205,12 +216,18 @@ export function Sidebar({ textStructure }: SidebarProps) {
       //   const eventName = folderEventMap[item.id as keyof typeof folderEventMap];
       //   logEvent(eventName, { label: item.label, id: item.id });
       // }
+    } else if (item.type === "route" && item.route) {
+      logEvent(EVENT_TYPES.VIEW_TEMPLATES, { source: "sidebar" });
+      router.push(item.route);
     } else {
       setFilter({ folder: "inbox", label: item.id });
     }
   };
 
   const isActive = (item: NavigationItem) => {
+    if (item.type === "route") {
+      return pathname?.startsWith(item.route ?? "") ?? false;
+    }
     if (item.type === "folder")
       return currentFilter.folder === item.id && !currentFilter.label;
     return currentFilter.label === item.id;

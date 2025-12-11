@@ -1,10 +1,10 @@
 import { getEffectiveLayoutConfig, isDynamicEnabled } from "@/dynamic/v1-layouts";
 import { isDataGenerationEnabled } from "@/shared/data-generator";
-import { 
-  initializeClients, 
-  initializeMatters, 
-  initializeFiles, 
-  initializeEvents, 
+import {
+  initializeClients,
+  initializeMatters,
+  initializeFiles,
+  initializeEvents,
   initializeLogs,
   loadClientsFromDb,
   loadMattersFromDb,
@@ -51,7 +51,7 @@ export class DynamicDataProvider {
       this.resolveReady = resolve;
     });
     
-    // Initialize data with data generation if enabled
+    // Initialize data with enhanced loader only (no dataset.ts)
     this.initializeData();
   }
 

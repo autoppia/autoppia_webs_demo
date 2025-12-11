@@ -39,6 +39,11 @@ const NAV_ITEMS = [
     idKey: "settings_link",
     href: "/settings",
   },
+  {
+    labelKey: "help_title",
+    idKey: "help_link",
+    href: "/help",
+  },
 ];
 
 export default function Sidebar() {

@@ -94,7 +94,7 @@ WEBS_PORT="${WEBS_PORT:-8090}"
 WEBS_PG_PORT="${WEBS_PG_PORT:-5437}"
 WEB_DEMO="${WEB_DEMO:-all}"
 FAST_MODE="${FAST_MODE:-false}"
-ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-v1}"
+ENABLED_DYNAMIC_VERSIONS="${ENABLED_DYNAMIC_VERSIONS:-}"
 
 # Initialize dynamic version flags (will be set by version mapping)
 ENABLE_DYNAMIC_V1="${ENABLE_DYNAMIC_V1:-false}"
@@ -149,6 +149,8 @@ if [ -n "$ENABLED_DYNAMIC_VERSIONS" ]; then
         ;;
     esac
   done
+else
+  echo "[INFO] No dynamic versions specified; leaving all dynamic flags disabled."
 fi
 
 # Normalize all boolean flags AFTER version mapping (so mapped values are preserved)
@@ -402,6 +404,7 @@ deploy_webs_server() {
       WEB_PORT="$WEBS_PORT" \
       POSTGRES_PORT="$WEBS_PG_PORT" \
       OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
+      ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DYNAMIC_V2_DB_MODE="$ENABLE_DYNAMIC_V2_DB_MODE" \
       NEXT_PUBLIC_ENABLE_DYNAMIC_V2_AI_GENERATE="$ENABLE_DYNAMIC_V2_AI_GENERATE" \
       HOST_UID=$(id -u) \
@@ -471,15 +474,21 @@ if docker ps --format '{{.Names}}' | grep -q "^webs_server-app-1$"; then
     SRC_MAIN="$WEBS_DATA_PATH/$project/main.json"
     SRC_ORIG_DIR="$WEBS_DATA_PATH/$project/original"
     SRC_DATA_DIR="$WEBS_DATA_PATH/$project/data"
+    FALLBACK_ORIG_DIR="$DEMOS_DIR/webs_server/initial_data/$project/original"
+
     if [ -f "$SRC_MAIN" ]; then
       echo "  → Copying $project to container..."
-      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data 2>/dev/null || true
+      docker exec -u root webs_server-app-1 mkdir -p /app/data/$project/data /app/data/$project/original 2>/dev/null || true
       docker cp "$SRC_MAIN" webs_server-app-1:/app/data/$project/main.json 2>/dev/null || true
       # Prefer originals if DB mode is disabled; otherwise copy data files
-      if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = false ] && [ -d "$SRC_ORIG_DIR" ]; then
-        for data_file in "$SRC_ORIG_DIR"/*.json; do
+      if [ "$ENABLE_DYNAMIC_V2_DB_MODE" = false ]; then
+        ORIG_SRC="$SRC_ORIG_DIR"
+        if [ ! -d "$ORIG_SRC" ] || ! ls "$ORIG_SRC"/*.json >/dev/null 2>&1; then
+          ORIG_SRC="$FALLBACK_ORIG_DIR"
+        fi
+        for data_file in "$ORIG_SRC"/*.json; do
           if [ -f "$data_file" ]; then
-            docker cp "$data_file" webs_server-app-1:/app/data/$project/data/ 2>/dev/null || true
+            docker cp "$data_file" webs_server-app-1:/app/data/$project/original/ 2>/dev/null || true
           fi
         done
       elif [ -d "$SRC_DATA_DIR" ]; then

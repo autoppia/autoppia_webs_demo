@@ -8,6 +8,7 @@ import json
 import fcntl
 from datetime import datetime
 from typing import Dict, Any, List, Optional
+from loguru import logger
 
 try:
     from filelock import FileLock
@@ -109,21 +110,35 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
     """
     Load and return all JSON objects referenced in main.json for a given web_name.
     If entity_type is provided, only load files listed under that entity key.
-    
+
     If V2 DB mode is disabled, loads from original/ directory directly (high quality, fewer records).
     Otherwise, loads from data/ directory as referenced in main.json.
     """
     # Check if V2 DB mode is disabled - if so, load from original/ directory
     # v2_disabled is True when ENABLE_DYNAMIC_V2_DB_MODE is "false", "0", "no", or "off"
     v2_disabled = os.getenv("ENABLE_DYNAMIC_V2_DB_MODE", "false").lower() in {"false", "0", "no", "off"}
-    
+
+    logger.info(
+        "Loading data",
+        extra={
+            "web_name": web_name,
+            "entity_type": entity_type,
+            "base_path": BASE_PATH,
+            "v2_disabled": v2_disabled,
+        },
+    )
+
     if v2_disabled:
         # V2 disabled: load from original/ directory (high quality dataset)
         original_dir = f"{BASE_PATH}/{web_name}/original"
         if not os.path.exists(original_dir):
             # Fallback to main.json if original/ doesn't exist
+            logger.warning(
+                "original directory missing, falling back to main.json",
+                extra={"original_dir": original_dir, "web_name": web_name},
+            )
             return _load_from_main_json(web_name, entity_type)
-        
+
         all_data: List[Dict[str, Any]] = []
         # Load all JSON files from original/ directory
         if entity_type:
@@ -153,9 +168,9 @@ def load_all_data(web_name: str, entity_type: Optional[str] = None) -> List[Dict
                         elif isinstance(contents, dict):
                             all_data.append(contents)
                 except Exception as e:
-                    print(f"Error reading file {original_file}: {e}")
+                    logger.error(f"Error reading file {original_file}: {e}")
                     continue
-        
+
         return all_data
     else:
         # V2 enabled: load from main.json (which references data/ directory)
@@ -168,12 +183,14 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
     """
     main_path = get_main_path(web_name)
     if not os.path.exists(main_path):
+        logger.warning("main.json missing for web", extra={"web_name": web_name, "path": main_path})
         return []
 
     try:
         with open(main_path, "r", encoding="utf-8") as f:
             main = json.load(f)
-    except Exception:
+    except Exception as exc:
+        logger.error("Failed to read main.json", extra={"web_name": web_name, "path": main_path, "error": str(exc)})
         return []
 
     all_data: List[Dict[str, Any]] = []
@@ -203,9 +220,11 @@ def _load_from_main_json(web_name: str, entity_type: Optional[str] = None) -> Li
                     elif isinstance(contents, dict):
                         all_data.append(contents)
             except Exception as e:
-                print(f"Error reading file {abs_path}: {e}")
+                logger.error("Error reading referenced data file", extra={"path": abs_path, "error": str(e)})
                 # Skip unreadable or malformed file
                 continue
+        else:
+            logger.warning("Referenced data file missing", extra={"path": abs_path, "rel_path": rel_path, "web_name": web_name})
 
     return all_data
 

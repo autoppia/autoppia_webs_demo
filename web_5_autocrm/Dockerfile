@@ -19,7 +19,7 @@ RUN set -e; for i in 1 2 3; do npm ci && exit 0 || echo "Attempt $i failed, retr
 
 COPY web_5_autocrm/ .
 # Copy original dataset files for fallback
-COPY webs_server/initial_data/web_5_autocrm/original/ webs_server/initial_data/web_5_autocrm/original/
+COPY webs_server/initial_data/web_5_autocrm/original/ src/data/original/
 
 # Build args for environment flags and API URL
 # Build arguments for dynamic versions
