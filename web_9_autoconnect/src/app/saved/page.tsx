@@ -74,9 +74,15 @@ function SavedPostsContent() {
                 </div>
                 <button
                   className="text-sm text-red-600 hover:underline"
-                  onClick={() =>
-                    setSavedPosts((prev) => prev.filter((p) => p.id !== post.id))
-                  }
+                  onClick={() => {
+                    setSavedPosts((prev) => prev.filter((p) => p.id !== post.id));
+                    logEvent(EVENT_TYPES.REMOVE_POST, {
+                      postId: post.id,
+                      author: post.user.username || post.user.name,
+                      content: post.content,
+                      source: "saved_posts_page",
+                    });
+                  }}
                 >
                   Remove
                 </button>

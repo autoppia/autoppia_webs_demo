@@ -47,6 +47,7 @@ function ProfileContent({ username }: { username: string }) {
     user?.experience || []
   );
   const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [isEditingProfileHeader, setIsEditingProfileHeader] = useState(false);
   const [isEditingExperience, setIsEditingExperience] = useState(false);
   const [newPostContent, setNewPostContent] = useState("");
   const [savedPosts, setSavedPosts] = useState<Post[]>([]);
@@ -190,7 +191,7 @@ function ProfileContent({ username }: { username: string }) {
     setTimeout(() => setConnectState("connected"), 1000);
   };
 
-  const handleSaveAbout = () => {
+  const handleSaveProfile = () => {
     if (isSelf && user) {
       const previous = {
         name: user.name,
@@ -211,6 +212,7 @@ function ProfileContent({ username }: { username: string }) {
       localStorage.setItem(`profile_title_${user.username}`, updated.title);
 
       setIsEditingAbout(false);
+      setIsEditingProfileHeader(false);
 
       logEvent(EVENT_TYPES.EDIT_PROFILE, {
         username: user.username,
@@ -270,23 +272,26 @@ function ProfileContent({ username }: { username: string }) {
     setIsEditingExperience(false);
     logEvent(EVENT_TYPES.EDIT_EXPERIENCE, {
       username: user.username,
+      name: user.name,
       experienceCount: experience.length,
       roles: experience.map((exp) => exp?.title),
+      experiences: experience,
     });
   };
 
   const handleAddExperience = () => {
-    setExperience((prev) => [
-      ...prev,
-      {
-        title: "",
-        company: "",
-        logo: "",
-        duration: "",
-        location: "",
-        description: "",
-      },
-    ]);
+    setExperience((prev) => {
+      const sample: ExperienceEntry = {
+        title: "Full Stack Developer",
+        company: "Stripe",
+        logo: "/media/avatars/default-avatar.jpg",
+        duration: "Jun 2020 - Present • 4 yrs 6 mos",
+        location: "San Francisco, CA",
+        description:
+          "Developing payment processing APIs and dashboard interfaces. Building scalable backend services and frontend applications using React and Node.js.",
+      };
+      return [...prev, sample];
+    });
     setIsEditingExperience(true);
   };
 
@@ -377,6 +382,12 @@ function ProfileContent({ username }: { username: string }) {
       author: user.username,
       content: target?.content,
     });
+    logEvent(EVENT_TYPES.REMOVE_POST, {
+      postId,
+      author: user.username,
+      content: target?.content,
+      source: "profile",
+    });
   };
 
   const handleSavePost = (post: Post) => {
@@ -417,23 +428,23 @@ function ProfileContent({ username }: { username: string }) {
       <div className="text-center sm:text-left flex flex-col gap-3 flex-1">
         <div className="flex flex-wrap gap-3 items-center justify-center sm:justify-start">
           <div className="text-2xl font-bold text-gray-900">
-            {isSelf && isEditingAbout ? (
-              <input
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                className="border rounded px-3 py-1 text-base"
-              />
+                {isSelf && isEditingProfileHeader ? (
+                  <input
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className="border rounded px-3 py-1 text-base"
+                  />
             ) : (
               displayName || user.name
             )}
           </div>
           <div className="text-blue-600 font-semibold text-lg">
-            {isSelf && isEditingAbout ? (
-              <input
-                value={titleText}
-                onChange={(e) => setTitleText(e.target.value)}
-                className="border rounded px-3 py-1 text-base"
-              />
+                {isSelf && isEditingProfileHeader ? (
+                  <input
+                    value={titleText}
+                    onChange={(e) => setTitleText(e.target.value)}
+                    className="border rounded px-3 py-1 text-base"
+                  />
             ) : (
               titleText || user.title
             )}
@@ -460,7 +471,7 @@ function ProfileContent({ username }: { username: string }) {
             ))}
         </div>
         <div className="text-gray-600 text-base">
-          {isSelf && isEditingAbout ? (
+          {isSelf && isEditingProfileHeader ? (
             <input
               value={bioText}
               onChange={(e) => setBioText(e.target.value)}
@@ -471,6 +482,22 @@ function ProfileContent({ username }: { username: string }) {
             bioText || user.bio
           )}
         </div>
+        {isSelf && (
+          <div className="ml-auto">
+            <button
+              onClick={() => {
+                if (isEditingProfileHeader) {
+                  handleSaveProfile();
+                } else {
+                  setIsEditingProfileHeader(true);
+                }
+              }}
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors"
+            >
+              {isEditingProfileHeader ? "💾 Save profile" : "✏️ Edit profile"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -489,7 +516,7 @@ function ProfileContent({ username }: { username: string }) {
             <button
               onClick={() => {
                 if (isEditingAbout) {
-                  handleSaveAbout();
+                  handleSaveProfile();
                 } else {
                   setIsEditingAbout(true);
                 }

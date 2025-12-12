@@ -66,8 +66,8 @@ export default function HeaderNav() {
     {
       href: `/profile/${profileUsername}`,
       label: "Profile",
-      eventType: EVENT_TYPES.PROFILE_NAVBAR,
-      eventData: { label: "Profile", username: profileUsername },
+      eventType: null,
+      eventData: null,
       idKey: "nav_profile_link",
     }
   ];
@@ -134,7 +134,11 @@ export default function HeaderNav() {
                 href={item.href}
                 id={getId(item.idKey)}
                 className={applyVariant("nav-link", linkClass(item.href))}
-                onClick={() => logEvent(item.eventType, item.eventData)}
+                onClick={() => {
+                  if (item.eventType) {
+                    logEvent(item.eventType, item.eventData || {});
+                  }
+                }}
               >
                 {item.label}
               </SeedLink>
