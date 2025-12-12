@@ -11,6 +11,13 @@ import {
 import { useV3Attributes } from "@/dynamic/v3-dynamic";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
+import type { Job } from "@/library/dataset";
+import {
+  loadAppliedJobs,
+  persistAppliedJobs,
+  type StoredAppliedJob,
+} from "@/library/localState";
+import Link from "next/link";
 
 interface Filters {
   search: string;
@@ -32,6 +39,17 @@ function JobsContent() {
     location: "",
     remote: false,
   });
+  const [appliedJobs, setAppliedJobs] = useState<
+    Record<string, StoredAppliedJob>
+  >({});
+
+  useEffect(() => {
+    setAppliedJobs(loadAppliedJobs());
+  }, []);
+
+  useEffect(() => {
+    persistAppliedJobs(appliedJobs);
+  }, [appliedJobs]);
 
   // Get jobs from dynamic provider
   const mockJobs = dynamicDataProvider.getJobs();
@@ -183,15 +201,33 @@ function JobsContent() {
     (value) => value !== "" && value !== false
   );
 
+  const handleApplyJob = (job: Job) => {
+    setAppliedJobs((prev) => {
+      if (prev[job.id]) return prev;
+      return {
+        ...prev,
+        [job.id]: { job, appliedAt: new Date().toISOString() },
+      };
+    });
+  };
+
   const shuffledJobs = getShuffledItems(filteredJobs, layoutSeed);
   const jobCardsClasses = getLayoutClasses(layout, "jobCardsLayout");
   const filtersClasses = getLayoutClasses(layout, "filtersPosition");
 
   return (
     <section>
-      <h1 className="font-bold text-2xl mb-6">
-        {getText("jobs_title", "Job Search")}
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-bold text-2xl">
+          {getText("jobs_title", "Job Search")}
+        </h1>
+        <Link
+          href="/jobs/applied"
+          className="text-sm text-blue-700 hover:underline font-semibold"
+        >
+          View applied jobs ({Object.keys(appliedJobs).length})
+        </Link>
+      </div>
 
       {/* Search Bar */}
       <div className="mb-6">
@@ -332,7 +368,14 @@ function JobsContent() {
             </p>
           </div>
         ) : (
-          shuffledJobs.map((job) => <JobCard key={job.id} job={job} />)
+          shuffledJobs.map((job) => (
+            <JobCard
+              key={job.id}
+              job={job}
+              isApplied={Boolean(appliedJobs[job.id])}
+              onApply={handleApplyJob}
+            />
+          ))
         )}
       </div>
     </section>

@@ -13,12 +13,14 @@ export default function Post({
   onAddComment,
   onSave,
   onHide,
+  onDelete,
 }: {
   post: PostType;
   onLike: (postId: string) => void;
   onAddComment: (postId: string, text: string) => void;
   onSave: (post: PostType) => void;
   onHide: (postId: string) => void;
+  onDelete?: (postId: string) => void;
 }) {
   const [comment, setComment] = useState("");
   const { getText, getClass, getId } = useV3Attributes();
@@ -80,7 +82,7 @@ export default function Post({
               logEvent(EVENT_TYPES.SAVE_POST, {
                 postId: post.id,
                 author: post.user.name,
-                content: post.content,
+                postContent: post.content,
               })
             }}
           >
@@ -93,13 +95,21 @@ export default function Post({
               logEvent(EVENT_TYPES.HIDE_POST, {
                 postId: post.id,
                 author: post.user.name,
-                content: post.content,
+                postContent: post.content,
                 reason: "user_hide",
               })
             }}
           >
             Hide
           </button>
+          {onDelete && (
+            <button
+              className="px-2 py-1 rounded border border-red-200 text-red-600 hover:bg-red-50"
+              onClick={() => onDelete(post.id)}
+            >
+              Delete
+            </button>
+          )}
         </div>
       </div>
       <p className="mb-3 text-base whitespace-pre-line break-words">

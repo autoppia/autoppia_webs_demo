@@ -1,14 +1,30 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
 import Image from "next/image";
 import { SeedLink } from "@/components/ui/SeedLink";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
+import {
+  loadAppliedJobs,
+  persistAppliedJobs,
+  type StoredAppliedJob,
+} from "@/library/localState";
 
 function JobDetailContent({ jobId }: { jobId: string }) {
   const job = dynamicDataProvider.getJobById(jobId);
-  const [applied, setApplied] = useState<"none" | "pending" | "done">("none");
+  const [appliedJobs, setAppliedJobs] = useState<
+    Record<string, StoredAppliedJob>
+  >({});
+  const isApplied = useMemo(() => Boolean(appliedJobs[jobId]), [appliedJobs, jobId]);
+
+  useEffect(() => {
+    setAppliedJobs(loadAppliedJobs());
+  }, []);
+
+  useEffect(() => {
+    persistAppliedJobs(appliedJobs);
+  }, [appliedJobs]);
 
   useEffect(() => {
     if (job) {
@@ -41,7 +57,7 @@ function JobDetailContent({ jobId }: { jobId: string }) {
   }
 
   const handleApply = () => {
-    if (applied !== "none") return;
+    if (!job || isApplied) return;
 
     logEvent(EVENT_TYPES.APPLY_FOR_JOB, {
       jobId: job.id,
@@ -50,8 +66,26 @@ function JobDetailContent({ jobId }: { jobId: string }) {
       location: job.location,
     });
 
-    setApplied("pending");
-    setTimeout(() => setApplied("done"), 1000);
+    setAppliedJobs((prev) => ({
+      ...prev,
+      [job.id]: { job, appliedAt: new Date().toISOString() },
+    }));
+  };
+
+  const handleCancel = () => {
+    if (!job || !isApplied) return;
+    setAppliedJobs((prev) => {
+      const next = { ...prev };
+      delete next[job.id];
+      return next;
+    });
+    logEvent(EVENT_TYPES.CANCEL_APPLICATION, {
+      jobId: job.id,
+      jobTitle: job.title,
+      company: job.company,
+      location: job.location,
+      source: "job_detail",
+    });
   };
 
   const formatDate = (dateString: string) => {
@@ -141,23 +175,27 @@ function JobDetailContent({ jobId }: { jobId: string }) {
                   </span>
                 )}
               </div>
-              <button
-                className={`px-6 py-2 rounded-full font-semibold transition ${
-                  applied === "done"
-                    ? "bg-green-600 text-white cursor-default"
-                    : applied === "pending"
-                    ? "bg-gray-400 text-white cursor-wait"
-                    : "bg-blue-600 hover:bg-blue-700 text-white"
-                }`}
-                onClick={handleApply}
-                disabled={applied !== "none"}
-              >
-                {applied === "none"
-                  ? "Apply Now"
-                  : applied === "pending"
-                  ? "Applying..."
-                  : "Applied"}
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  className={`px-6 py-2 rounded-full font-semibold transition ${
+                    isApplied
+                      ? "bg-green-600 text-white cursor-default"
+                      : "bg-blue-600 hover:bg-blue-700 text-white"
+                  }`}
+                  onClick={handleApply}
+                  disabled={isApplied}
+                >
+                  {isApplied ? "Applied" : "Apply Now"}
+                </button>
+                {isApplied && (
+                  <button
+                    onClick={handleCancel}
+                    className="text-sm text-red-600 hover:underline"
+                  >
+                    Cancel application
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

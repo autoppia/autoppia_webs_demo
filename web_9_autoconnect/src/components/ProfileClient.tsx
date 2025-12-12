@@ -13,8 +13,15 @@ import {
 } from "@/dynamic/v1-layouts";
 import { dynamicDataProvider } from "@/dynamic/v2-data";
 import { DataReadyGate } from "@/components/DataReadyGate";
+import {
+  loadHiddenPostIds,
+  loadSavedPosts,
+  persistHiddenPostIds,
+  persistSavedPosts,
+} from "@/library/localState";
 
 function ProfileContent({ username }: { username: string }) {
+  type ExperienceEntry = NonNullable<User["experience"]>[number];
   const { resolvedSeeds, seed } = useSeed();
   const layoutSeed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? seed;
   const layout = getEffectiveLayoutConfig(layoutSeed);
@@ -31,22 +38,58 @@ function ProfileContent({ username }: { username: string }) {
     "connect" | "pending" | "connected"
   >("connect");
 
-  // LocalStorage state for About editing
+  // Local state for profile editing
   const [aboutText, setAboutText] = useState(user?.about || "");
+  const [bioText, setBioText] = useState(user?.bio || "");
+  const [displayName, setDisplayName] = useState(user?.name || "");
+  const [titleText, setTitleText] = useState(user?.title || "");
+  const [experience, setExperience] = useState<ExperienceEntry[]>(
+    user?.experience || []
+  );
   const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [isEditingExperience, setIsEditingExperience] = useState(false);
   const [newPostContent, setNewPostContent] = useState("");
+  const [savedPosts, setSavedPosts] = useState<Post[]>([]);
+  const [hiddenPostIds, setHiddenPostIds] = useState<Set<string>>(new Set());
 
-  // Load saved about from localStorage
+  // Load saved about/name/bio/title/experience from localStorage
   useEffect(() => {
     if (isSelf && user) {
       const savedAbout = localStorage.getItem(`profile_about_${user.username}`);
+      const savedBio = localStorage.getItem(`profile_bio_${user.username}`);
+      const savedName = localStorage.getItem(`profile_name_${user.username}`);
+      const savedTitle = localStorage.getItem(`profile_title_${user.username}`);
+      const savedExp = localStorage.getItem(`profile_exp_${user.username}`);
       if (savedAbout) {
         setAboutText(savedAbout);
       } else if (user.about) {
         setAboutText(user.about);
       }
+      if (savedBio) setBioText(savedBio);
+      else if (user.bio) setBioText(user.bio);
+      if (savedName) setDisplayName(savedName);
+      if (savedTitle) setTitleText(savedTitle);
+      if (savedExp) {
+        try {
+          const parsed = JSON.parse(savedExp);
+          if (Array.isArray(parsed)) setExperience(parsed);
+        } catch {}
+      }
     }
   }, [isSelf, user]);
+
+  useEffect(() => {
+    setSavedPosts(loadSavedPosts());
+    setHiddenPostIds(loadHiddenPostIds());
+  }, []);
+
+  useEffect(() => {
+    persistSavedPosts(savedPosts);
+  }, [savedPosts]);
+
+  useEffect(() => {
+    persistHiddenPostIds(hiddenPostIds);
+  }, [hiddenPostIds]);
 
   // Load saved posts from localStorage
   const getLocalPosts = (): Post[] => {
@@ -125,7 +168,10 @@ function ProfileContent({ username }: { username: string }) {
     });
   }, [allPosts, postsState]);
   
-  const shuffledPosts = getShuffledItems(postsWithState, layoutSeed);
+  const visiblePosts = useMemo(() => {
+    const shuffled = getShuffledItems(postsWithState, layoutSeed);
+    return shuffled.filter((p) => !hiddenPostIds.has(p.id));
+  }, [postsWithState, layoutSeed, hiddenPostIds]);
   const profileClasses = getLayoutClasses(layout, "profileLayout");
 
   const handleConnect = () => {
@@ -146,8 +192,31 @@ function ProfileContent({ username }: { username: string }) {
 
   const handleSaveAbout = () => {
     if (isSelf && user) {
-      localStorage.setItem(`profile_about_${user.username}`, aboutText);
+      const previous = {
+        name: user.name,
+        title: user.title,
+        bio: user.bio,
+        about: user.about,
+      };
+      const updated = {
+        name: displayName || user.name,
+        title: titleText || user.title,
+        bio: bioText || user.bio,
+        about: aboutText,
+      };
+
+      localStorage.setItem(`profile_about_${user.username}`, updated.about);
+      localStorage.setItem(`profile_bio_${user.username}`, updated.bio);
+      localStorage.setItem(`profile_name_${user.username}`, updated.name);
+      localStorage.setItem(`profile_title_${user.username}`, updated.title);
+
       setIsEditingAbout(false);
+
+      logEvent(EVENT_TYPES.EDIT_PROFILE, {
+        username: user.username,
+        previous,
+        updated,
+      });
     }
   };
 
@@ -178,6 +247,47 @@ function ProfileContent({ username }: { username: string }) {
       content: newPost.content,
       postId: newPost.id,
     });
+  };
+
+  const updateExperienceField = (
+    index: number,
+    field: keyof ExperienceEntry,
+    value: string
+  ) => {
+    setExperience((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value } as ExperienceEntry;
+      return next;
+    });
+  };
+
+  const handleSaveExperience = () => {
+    if (!isSelf || !user) return;
+    localStorage.setItem(
+      `profile_exp_${user.username}`,
+      JSON.stringify(experience)
+    );
+    setIsEditingExperience(false);
+    logEvent(EVENT_TYPES.EDIT_EXPERIENCE, {
+      username: user.username,
+      experienceCount: experience.length,
+      roles: experience.map((exp) => exp?.title),
+    });
+  };
+
+  const handleAddExperience = () => {
+    setExperience((prev) => [
+      ...prev,
+      {
+        title: "",
+        company: "",
+        logo: "",
+        duration: "",
+        location: "",
+        description: "",
+      },
+    ]);
+    setIsEditingExperience(true);
   };
 
   const handleLike = (postId: string) => {
@@ -246,6 +356,44 @@ function ProfileContent({ username }: { username: string }) {
     });
   };
 
+  const handleDeletePost = (postId: string) => {
+    if (!isSelf || !user) return;
+    const target = allPosts.find((p) => p.id === postId);
+    setLocalPosts((prev) => {
+      const next = prev.filter((p) => p.id !== postId);
+      localStorage.setItem(
+        `profile_posts_${user.username}`,
+        JSON.stringify(next)
+      );
+      return next;
+    });
+    setPostsState((prev) => {
+      const next = { ...prev };
+      delete next[postId];
+      return next;
+    });
+    logEvent(EVENT_TYPES.DELETE_POST, {
+      postId,
+      author: user.username,
+      content: target?.content,
+    });
+  };
+
+  const handleSavePost = (post: Post) => {
+    setSavedPosts((prev) => {
+      const deduped = prev.filter((p) => p.id !== post.id);
+      return [post, ...deduped];
+    });
+  };
+
+  const handleHidePost = (postId: string) => {
+    setHiddenPostIds((prev) => {
+      const next = new Set(prev);
+      next.add(postId);
+      return next;
+    });
+  };
+
   // Company logo mapping for better logos
   const getCompanyLogo = (company: string, fallback: string): string => {
     const logoMap: Record<string, string> = {
@@ -268,8 +416,28 @@ function ProfileContent({ username }: { username: string }) {
       <Avatar src={user.avatar} alt={user.name} size={100} />
       <div className="text-center sm:text-left flex flex-col gap-3 flex-1">
         <div className="flex flex-wrap gap-3 items-center justify-center sm:justify-start">
-          <div className="text-2xl font-bold text-gray-900">{user.name}</div>
-          <div className="text-blue-600 font-semibold text-lg">{user.title}</div>
+          <div className="text-2xl font-bold text-gray-900">
+            {isSelf && isEditingAbout ? (
+              <input
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                className="border rounded px-3 py-1 text-base"
+              />
+            ) : (
+              displayName || user.name
+            )}
+          </div>
+          <div className="text-blue-600 font-semibold text-lg">
+            {isSelf && isEditingAbout ? (
+              <input
+                value={titleText}
+                onChange={(e) => setTitleText(e.target.value)}
+                className="border rounded px-3 py-1 text-base"
+              />
+            ) : (
+              titleText || user.title
+            )}
+          </div>
           {!isSelf &&
             (connectState === "connect" ? (
               <button
@@ -291,7 +459,18 @@ function ProfileContent({ username }: { username: string }) {
               </span>
             ))}
         </div>
-        <div className="text-gray-600 text-base">{user.bio}</div>
+        <div className="text-gray-600 text-base">
+          {isSelf && isEditingAbout ? (
+            <input
+              value={bioText}
+              onChange={(e) => setBioText(e.target.value)}
+              className="border rounded px-3 py-1 text-base w-full"
+              placeholder="Short headline or bio"
+            />
+          ) : (
+            bioText || user.bio
+          )}
+        </div>
       </div>
     </div>
   );
@@ -338,15 +517,34 @@ function ProfileContent({ username }: { username: string }) {
     );
   };
 
-  const renderExperience = () =>
-    user.experience &&
-    user.experience.length > 0 && (
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-        <h3 className="font-bold text-xl text-gray-900 mb-6">
+  const renderExperience = () => (
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-bold text-xl text-gray-900">
           {getText("profile_experience", "Experience")}
         </h3>
+        {isSelf && (
+          <button
+            onClick={() => {
+              if (isEditingExperience) {
+                handleSaveExperience();
+              } else {
+                setIsEditingExperience(true);
+              }
+            }}
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors"
+          >
+            {isEditingExperience ? "💾 Save" : "✏️ Edit"}
+          </button>
+        )}
+      </div>
+      {experience.length === 0 && !isEditingExperience ? (
+        <div className="text-gray-600 text-sm">
+          {getText("profile_no_experience", "No experience added yet.")}
+        </div>
+      ) : (
         <div className="flex flex-col gap-6">
-          {user.experience.map((exp, i) => (
+          {experience.map((exp, i) => (
             <div
               key={i}
               className="flex flex-col sm:flex-row gap-4 pb-6 last:pb-0 border-b last:border-b-0 border-gray-200"
@@ -362,24 +560,84 @@ function ProfileContent({ username }: { username: string }) {
                   }}
                 />
               </div>
-              <div className="flex-1">
-                <div className="font-bold text-lg text-gray-900 mb-1">
-                  {exp.title}
-                </div>
-                <div className="font-semibold text-blue-700 text-base mb-2">
-                  {exp.company}
-                </div>
-                <div className="text-sm text-gray-600 mb-1">{exp.duration}</div>
-                <div className="text-sm text-gray-600 mb-3">{exp.location}</div>
-                <div className="text-gray-700 text-sm leading-relaxed">
-                  {exp.description}
-                </div>
+              <div className="flex-1 space-y-2">
+                {isEditingExperience ? (
+                  <>
+                    <input
+                      value={exp.title}
+                      onChange={(e) =>
+                        updateExperienceField(i, "title", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2 text-sm"
+                      placeholder="Title"
+                    />
+                    <input
+                      value={exp.company}
+                      onChange={(e) =>
+                        updateExperienceField(i, "company", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2 text-sm"
+                      placeholder="Company"
+                    />
+                    <input
+                      value={exp.duration}
+                      onChange={(e) =>
+                        updateExperienceField(i, "duration", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2 text-sm"
+                      placeholder="Duration"
+                    />
+                    <input
+                      value={exp.location}
+                      onChange={(e) =>
+                        updateExperienceField(i, "location", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2 text-sm"
+                      placeholder="Location"
+                    />
+                    <textarea
+                      value={exp.description}
+                      onChange={(e) =>
+                        updateExperienceField(i, "description", e.target.value)
+                      }
+                      className="w-full border rounded px-3 py-2 text-sm min-h-[80px]"
+                      placeholder="Description"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="font-bold text-lg text-gray-900 mb-1">
+                      {exp.title}
+                    </div>
+                    <div className="font-semibold text-blue-700 text-base mb-2">
+                      {exp.company}
+                    </div>
+                    <div className="text-sm text-gray-600 mb-1">
+                      {exp.duration}
+                    </div>
+                    <div className="text-sm text-gray-600 mb-3">
+                      {exp.location}
+                    </div>
+                    <div className="text-gray-700 text-sm leading-relaxed">
+                      {exp.description}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ))}
         </div>
-      </div>
-    );
+      )}
+      {isSelf && (
+        <button
+          onClick={handleAddExperience}
+          className="mt-4 inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-semibold"
+        >
+          + Add experience
+        </button>
+      )}
+    </div>
+  );
 
   const renderPosts = () => (
     <div>
@@ -423,19 +681,22 @@ function ProfileContent({ username }: { username: string }) {
       )}
 
       <div className="space-y-4">
-        {shuffledPosts.length === 0 ? (
+        {visiblePosts.length === 0 ? (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <div className="text-gray-500 italic text-lg">
               {getText("profile_no_posts", "No posts yet.")}
             </div>
           </div>
         ) : (
-          shuffledPosts.map((post) => (
+          visiblePosts.map((post) => (
             <Post
               key={post.id}
               post={post}
               onLike={handleLike}
               onAddComment={handleAddComment}
+              onSave={handleSavePost}
+              onHide={handleHidePost}
+              onDelete={isSelf ? handleDeletePost : undefined}
             />
           ))
         )}
