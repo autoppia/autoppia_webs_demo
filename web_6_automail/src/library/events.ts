@@ -23,7 +23,19 @@ export const EVENT_TYPES = {
 
     // Theme/Preferences
     THEME_CHANGED: "THEME_CHANGED",
-    SEARCH_EMAIL: "SEARCH_EMAIL"
+    SEARCH_EMAIL: "SEARCH_EMAIL",
+
+    // Pagination
+    EMAILS_NEXT_PAGE: "EMAILS_NEXT_PAGE",
+    EMAILS_PREV_PAGE: "EMAILS_PREV_PAGE",
+
+    // Templates
+    VIEW_TEMPLATES: "VIEW_TEMPLATES",
+    TEMPLATE_SELECTED: "TEMPLATE_SELECTED",
+    TEMPLATE_BODY_EDITED: "TEMPLATE_BODY_EDITED",
+    TEMPLATE_SENT: "TEMPLATE_SENT",
+    TEMPLATE_SAVED_DRAFT: "TEMPLATE_SAVED_DRAFT",
+    TEMPLATE_CANCELED: "TEMPLATE_CANCELED",
 } as const;
 
 export type EventType = (typeof EVENT_TYPES)[keyof typeof EVENT_TYPES];
@@ -41,24 +53,41 @@ export function logEvent<T extends Record<string, unknown>>(
     user = null;
   }
 
-  const payload = {
+  const webAgentId = localStorage.getItem("web_agent_id");
+  const validatorId = localStorage.getItem("validator_id");
+  const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
+  const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
+
+  // Construir el payload completo que espera el backend
+  const eventData = {
     event_name: eventType,
-    data: {
-      ...data,
-      timestamp: new Date().toISOString(),
-      url: window.location.href,
-    },
+    web_agent_id: resolvedWebAgentId,
     user_id: user,
+    data,
+    timestamp: new Date().toISOString(),
+    validator_id: resolvedValidatorId,
   };
 
-  console.log("📦 Logging Event:", { ...payload, headers: extra_headers });
+  const backendPayload = {
+    web_agent_id: resolvedWebAgentId,
+    web_url: window.location.origin,
+    validator_id: resolvedValidatorId,
+    data: eventData,
+  };
+
+  console.log("📦 Logging Event:", backendPayload);
 
   fetch("/api/log-event", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-WebAgent-Id": resolvedWebAgentId,
+      "X-Validator-Id": resolvedValidatorId,
       ...extra_headers,
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(backendPayload),
+  }).catch((error) => {
+    console.error("❌ Failed to log event:", error);
+    throw error;
   });
 }

@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FileText, UploadCloud, CheckCircle, Trash2 } from "lucide-react";
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { DEMO_FILES } from "@/library/dataset";
+import { initializeFiles } from "@/data/crm-enhanced";
 import { DynamicButton } from "@/components/DynamicButton";
 import { DynamicContainer, DynamicItem } from "@/components/DynamicContainer";
 import { DynamicElement } from "@/components/DynamicElement";
@@ -42,9 +42,14 @@ export default function DocumentsPage() {
     error,
     sample: (data || []).slice(0, 3),
   });
-  const normalizedDemo = useMemo(() => DEMO_FILES.map((f, idx) => normalizeFile(f, idx)), []);
+  const [fallbackFiles, setFallbackFiles] = useState<any[]>([]);
+  useEffect(() => {
+    initializeFiles().then((rows) => setFallbackFiles(rows));
+  }, []);
+
   const normalizedApi = useMemo(() => (data || []).map((f, idx) => normalizeFile(f, idx)), [data]);
-  const resolvedFiles = normalizedApi.length > 0 ? normalizedApi : normalizedDemo;
+  const normalizedFallback = useMemo(() => fallbackFiles.map((f, idx) => normalizeFile(f, idx)), [fallbackFiles]);
+  const resolvedFiles = normalizedApi.length > 0 ? normalizedApi : normalizedFallback;
   const [files, setFiles] = useState(resolvedFiles);
   const [renamingId, setRenamingId] = useState<number | string | null>(null);
   const [renameValue, setRenameValue] = useState("");

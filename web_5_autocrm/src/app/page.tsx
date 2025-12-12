@@ -9,6 +9,12 @@ import { useSeed } from "@/context/SeedContext";
 import { useDynamicStructure } from "@/context/DynamicStructureContext";
 import { useProjectData } from "@/shared/universal-loader";
 // import { EVENT_TYPES, logEvent, EventType } from "@/library/events";
+import { initializeClients, initializeEvents, initializeFiles, initializeLogs, initializeMatters } from "@/data/crm-enhanced";
+import fallbackClientsJson from "@/data/original/clients_1.json";
+import fallbackMattersJson from "@/data/original/matters_1.json";
+import fallbackEventsJson from "@/data/original/events_1.json";
+import fallbackFilesJson from "@/data/original/files_1.json";
+import fallbackLogsJson from "@/data/original/logs_1.json";
 
 // interface EventData {
 //   label: string;
@@ -53,13 +59,49 @@ function DashboardContent() {
   const { data: eventsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'events', seedValue: dataSeed });
   const { data: filesData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'files', seedValue: dataSeed });
   const { data: logsData } = useProjectData<any>({ projectKey: 'web_5_autocrm', entityType: 'logs', seedValue: dataSeed });
-  
+
+  const [fallbackCounts, setFallbackCounts] = useState({
+    matters: (fallbackMattersJson as any[]).length,
+    clients: (fallbackClientsJson as any[]).length,
+    events: (fallbackEventsJson as any[]).length,
+    files: (fallbackFilesJson as any[]).length,
+    logs: (fallbackLogsJson as any[]).length,
+  });
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const [clients, matters, events, files, logs] = await Promise.all([
+          initializeClients(),
+          initializeMatters(),
+          initializeEvents(),
+          initializeFiles(),
+          initializeLogs(),
+        ]);
+        if (!alive) return;
+        setFallbackCounts({
+          matters: matters.length,
+          clients: clients.length,
+          events: events.length,
+          files: files.length,
+          logs: logs.length,
+        });
+      } catch (err) {
+        console.warn("[Dashboard] Failed to load fallback counts", err);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const counters = {
-    matters: mattersData?.length || 41,
-    clients: clientsData?.length || 44,
-    events: eventsData?.length || 6,
-    files: filesData?.length || 50,
-    logs: logsData?.length || 36,
+    matters: (mattersData && mattersData.length > 0 ? mattersData.length : fallbackCounts.matters),
+    clients: (clientsData && clientsData.length > 0 ? clientsData.length : fallbackCounts.clients),
+    events: (eventsData && eventsData.length > 0 ? eventsData.length : fallbackCounts.events),
+    files: (filesData && filesData.length > 0 ? filesData.length : fallbackCounts.files),
+    logs: (logsData && logsData.length > 0 ? logsData.length : fallbackCounts.logs),
   };
   
   // const handleClick = (eventType: EventType, data: EventData) => () => logEvent(eventType, { ...data });

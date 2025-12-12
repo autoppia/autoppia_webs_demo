@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { User, Mail, CheckCircle, FileText, Briefcase, Calendar, ChevronRight, Phone } from 'lucide-react';
 import { EVENT_TYPES, logEvent } from "@/library/events";
-import { clients as STATIC_CLIENTS } from '@/library/dataset';
+import { initializeClients } from "@/data/crm-enhanced";
 import { useSeedRouter } from "@/hooks/useSeedRouter";
 import { useSeed } from "@/context/SeedContext";
 import { useProjectData } from "@/shared/universal-loader";
@@ -63,17 +63,20 @@ function ClientProfilePageContent() {
     entityType: "clients",
     generateCount: 60,
     version: "v1",
-    fallback: () => STATIC_CLIENTS,
     seedValue: v2Seed ?? undefined,
   });
+  const [fallbackClients, setFallbackClients] = useState<any[]>([]);
+  useEffect(() => {
+    initializeClients().then(setFallbackClients);
+  }, []);
 
   const baseClients = useMemo(() => {
     const normalizedApi = (data || []).map((c: any, idx: number) =>
       normalizeClient(c, idx)
     );
     if (normalizedApi.length > 0) return normalizedApi;
-    return STATIC_CLIENTS.map((c, idx) => normalizeClient(c, idx));
-  }, [data]);
+    return fallbackClients.map((c, idx) => normalizeClient(c, idx));
+  }, [data, fallbackClients]);
 
   useEffect(() => {
     if (!clientId) return;

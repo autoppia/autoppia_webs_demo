@@ -49,28 +49,36 @@ export function logEvent(
   const resolvedWebAgentId = webAgentId && webAgentId !== "null" ? webAgentId : "1";
   const resolvedValidatorId = validatorId && validatorId !== "null" ? validatorId : "1";
 
-  const payload = {
+  // Construir el payload completo que espera el backend
+  const eventData = {
     event_name: eventType,
-    data: {
-      ...data,
-      timestamp: new Date().toISOString(),
-      url: window.location.href,
-    },
+    web_agent_id: resolvedWebAgentId,
     user_id: user,
+    data,
+    timestamp: new Date().toISOString(),
+    validator_id: resolvedValidatorId,
   };
 
-  const headers = {
-    "Content-Type": "application/json",
-    "X-WebAgent-Id": resolvedWebAgentId,
-    "X-Validator-Id": resolvedValidatorId,
-    ...extraHeaders,
+  const backendPayload = {
+    web_agent_id: resolvedWebAgentId,
+    web_url: window.location.origin,
+    validator_id: resolvedValidatorId,
+    data: eventData,
   };
 
-  console.log("📚 Logging Event:", { ...payload, headers });
+  console.log("📚 Logging Event:", backendPayload);
 
   fetch("/api/log-event", {
     method: "POST",
-    headers,
-    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+      "X-WebAgent-Id": resolvedWebAgentId,
+      "X-Validator-Id": resolvedValidatorId,
+      ...extraHeaders,
+    },
+    body: JSON.stringify(backendPayload),
+  }).catch((error) => {
+    console.error("❌ Failed to log event:", error);
+    throw error;
   });
 }
