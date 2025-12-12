@@ -533,7 +533,7 @@ function ProfileContent({ username }: { username: string }) {
             onChange={(e) => setAboutText(e.target.value)}
             className="w-full border-2 border-blue-200 rounded-lg p-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[150px] resize-y"
             placeholder="Tell us about yourself..."
-            onBlur={handleSaveAbout}
+            onBlur={handleSaveProfile}
           />
         ) : (
           <p className="whitespace-pre-line text-gray-800 text-base leading-relaxed">

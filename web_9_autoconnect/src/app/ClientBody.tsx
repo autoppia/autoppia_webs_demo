@@ -2,6 +2,11 @@
 
 import { useEffect } from "react";
 
+// Provide a defensive noop for scripts that expect a global setter
+if (typeof window !== "undefined" && !(window as any).setBaseWebRoot) {
+  (window as any).setBaseWebRoot = () => {};
+}
+
 export default function ClientBody({
   children,
 }: {
