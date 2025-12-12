@@ -79,36 +79,30 @@ function JobsContent() {
     { value: "150000+", label: "$150,000+" },
   ];
 
-  // Filter jobs based on all criteria
-  const filteredJobs = useMemo(() => {
+  const filterJobsBy = (currentFilters: Filters) => {
     return mockJobs.filter((job) => {
-      // Search filter
       if (
-        filters.search &&
-        !job.title.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !job.company.toLowerCase().includes(filters.search.toLowerCase())
+        currentFilters.search &&
+        !job.title.toLowerCase().includes(currentFilters.search.toLowerCase()) &&
+        !job.company.toLowerCase().includes(currentFilters.search.toLowerCase())
       ) {
         return false;
       }
 
-      // Experience filter
-      if (filters.experience && job.experience !== filters.experience) {
+      if (currentFilters.experience && job.experience !== currentFilters.experience) {
         return false;
       }
 
-      // Location filter
-      if (filters.location && job.location !== filters.location) {
+      if (currentFilters.location && job.location !== currentFilters.location) {
         return false;
       }
 
-      // Remote filter
-      if (filters.remote && !job.remote) {
+      if (currentFilters.remote && !job.remote) {
         return false;
       }
 
-      // Salary filter
-      if (filters.salary && job.salary) {
-        const salaryRange = filters.salary;
+      if (currentFilters.salary && job.salary) {
+        const salaryRange = currentFilters.salary;
         const jobSalary = job.salary.replace(/[$,]/g, "");
         const salaryMatch = jobSalary.match(/(\d+)/g);
 
@@ -116,7 +110,6 @@ function JobsContent() {
           const minSalary = parseInt(salaryMatch[0]);
           const maxSalary = parseInt(salaryMatch[1]);
 
-          // Check if the job's salary range overlaps with the selected filter range
           switch (salaryRange) {
             case "0-50000":
               if (minSalary >= 50000) return false;
@@ -138,14 +131,19 @@ function JobsContent() {
               break;
           }
         } else {
-          // If we can't parse the salary properly, exclude the job
           return false;
         }
       }
 
       return true;
     });
-  }, [filters]);
+  };
+
+  // Filter jobs based on all criteria
+  const filteredJobs = useMemo(
+    () => filterJobsBy(filters),
+    [filters, mockJobs]
+  );
 
   function triggerSearchEvent() {
     const query = filters.search.trim();
@@ -157,15 +155,18 @@ function JobsContent() {
   }
   function handleSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
-    setFilters((prev) => ({ ...prev, search: val }));
+    const nextFilters = { ...filters, search: val };
+    setFilters(nextFilters);
 
-    // if (val.trim().length >= 2) {
-    //   logEvent(EVENT_TYPES.SEARCH_JOBS, {
-    //     query: val.trim(),
-    //     filters: filters,
-    //     resultCount: filteredJobs.length,
-    //   });
-    // }
+    const trimmed = val.trim();
+    if (trimmed.length > 0) {
+      const nextResults = filterJobsBy(nextFilters);
+      logEvent(EVENT_TYPES.SEARCH_JOBS, {
+        query: trimmed,
+        filters: nextFilters,
+        resultCount: nextResults.length,
+      });
+    }
   }
 
   function handleFilterChange(
@@ -185,21 +186,31 @@ function JobsContent() {
     });
   }
 
-  useEffect(() => {
-    const hasFilters = Object.values(filters).some(
-      (value) => value !== "" && value !== false
-    );
-    if (hasFilters) {
-      logEvent(EVENT_TYPES.FILTER_JOBS, {
-        filters,
-        resultCount: filteredJobs.length,
-      });
-    }
-  }, [filters, filteredJobs.length]);
+  const filtersWithoutSearch = {
+    experience: filters.experience,
+    salary: filters.salary,
+    location: filters.location,
+    remote: filters.remote,
+  };
 
-  const hasActiveFilters = Object.values(filters).some(
+  const hasActiveFilters = Object.values(filtersWithoutSearch).some(
     (value) => value !== "" && value !== false
   );
+
+  useEffect(() => {
+    if (!hasActiveFilters) return;
+    logEvent(EVENT_TYPES.FILTER_JOBS, {
+      filters: filtersWithoutSearch,
+      resultCount: filteredJobs.length,
+    });
+  }, [
+    filtersWithoutSearch.experience,
+    filtersWithoutSearch.salary,
+    filtersWithoutSearch.location,
+    filtersWithoutSearch.remote,
+    filteredJobs.length,
+    hasActiveFilters,
+  ]);
 
   const handleApplyJob = (job: Job) => {
     setAppliedJobs((prev) => {
