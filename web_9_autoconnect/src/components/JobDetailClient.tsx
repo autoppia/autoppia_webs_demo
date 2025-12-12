@@ -69,6 +69,14 @@ function JobDetailContent({ jobId }: { jobId: string }) {
       <SeedLink
         href="/jobs"
         className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
+        onClick={() =>
+          logEvent(EVENT_TYPES.BACK_TO_ALL_JOBS, {
+            jobId: job.id,
+            title: job.title,
+            company: job.company,
+            location: job.location,
+          })
+        }
       >
         ← Back to Jobs
       </SeedLink>

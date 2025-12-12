@@ -11,10 +11,14 @@ export default function Post({
   post,
   onLike,
   onAddComment,
+  onSave,
+  onHide,
 }: {
   post: PostType;
   onLike: (postId: string) => void;
   onAddComment: (postId: string, text: string) => void;
+  onSave: (post: PostType) => void;
+  onHide: (postId: string) => void;
 }) {
   const [comment, setComment] = useState("");
   const { getText, getClass, getId } = useV3Attributes();
@@ -67,6 +71,35 @@ export default function Post({
             {post.user.name}
           </SeedLink>
           <div className="text-xs text-gray-500">{timeAgo(post.timestamp)}</div>
+        </div>
+        <div className="ml-auto flex items-center gap-2 text-xs text-gray-500">
+          <button
+            className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+            onClick={() => {
+              onSave(post);
+              logEvent(EVENT_TYPES.SAVE_POST, {
+                postId: post.id,
+                author: post.user.name,
+                content: post.content,
+              })
+            }}
+          >
+            Save
+          </button>
+          <button
+            className="px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+            onClick={() => {
+              onHide(post.id);
+              logEvent(EVENT_TYPES.HIDE_POST, {
+                postId: post.id,
+                author: post.user.name,
+                content: post.content,
+                reason: "user_hide",
+              })
+            }}
+          >
+            Hide
+          </button>
         </div>
       </div>
       <p className="mb-3 text-base whitespace-pre-line break-words">

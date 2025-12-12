@@ -1,6 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
-import { type Job } from "@/library/dataset";
+import { useState, useMemo, useEffect } from "react";
 import JobCard from "@/components/JobCard";
 import { logEvent, EVENT_TYPES } from "@/library/events";
 import { useSeed } from "@/context/SeedContext";
@@ -167,6 +166,18 @@ function JobsContent() {
       remote: false,
     });
   }
+
+  useEffect(() => {
+    const hasFilters = Object.values(filters).some(
+      (value) => value !== "" && value !== false
+    );
+    if (hasFilters) {
+      logEvent(EVENT_TYPES.FILTER_JOBS, {
+        filters,
+        resultCount: filteredJobs.length,
+      });
+    }
+  }, [filters, filteredJobs.length]);
 
   const hasActiveFilters = Object.values(filters).some(
     (value) => value !== "" && value !== false
