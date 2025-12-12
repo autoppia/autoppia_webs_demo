@@ -11,6 +11,11 @@ export default function ClientBody({
   useEffect(() => {
     // This runs only on the client after hydration
     document.body.className = "antialiased";
+
+    // Some embeds expect a global setter; provide a harmless noop to avoid runtime ReferenceError
+    if (typeof window !== "undefined" && !(window as any).setBaseWebRoot) {
+      (window as any).setBaseWebRoot = () => {};
+    }
   }, []);
 
   return <div className="antialiased">{children}</div>;
