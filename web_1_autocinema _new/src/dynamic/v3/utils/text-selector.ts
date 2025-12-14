@@ -7,8 +7,7 @@
 import textVariantsJson from '../data/text-variants.json';
 import { pickVariant } from '../../shared/core';
 
-type TextKey = string;
-type TextVariantMap = Record<TextKey, string>;
+type TextVariantMap = Record<string, string>;
 
 // El JSON ya viene con las claves como strings, las mantenemos así
 const VARIANTS: Record<string, TextVariantMap> = textVariantsJson as Record<string, TextVariantMap>;
@@ -26,7 +25,7 @@ const VARIANT_COUNT = Object.keys(VARIANTS).length;
  */
 export function getTextForElement(
   seed: number,
-  key: TextKey,
+  key: string,
   fallback: string
 ): string {
   // Usar pickVariant con el key como identificador para consistencia
@@ -49,7 +48,7 @@ export function getAllTextsForSeed(seed: number): TextVariantMap {
 /**
  * Get available text keys
  */
-export function getAvailableTextKeys(): TextKey[] {
+export function getAvailableTextKeys(): string[] {
   const firstVariant = VARIANTS["1"] || {};
   return Object.keys(firstVariant);
 }
