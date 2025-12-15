@@ -1,7 +1,8 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { isV1Enabled, isV3Enabled } from "@/dynamic/shared/flags";
 import { HeroSection } from "@/components/movies/HeroSection";
 import { SpotlightRow } from "@/components/movies/SpotlightRow";
 import { getFeaturedMovies, getMoviesByGenre, getAvailableGenres, getMovies } from "@/dynamic/v2-data";
@@ -17,6 +18,23 @@ function HomeContent() {
   const router = useSeedRouter();
   const dyn = useDynamic();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Evitar problemas de hidratación
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Debug: Verificar que V1 y V3 están funcionando
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      console.log("[page.tsx] Debug dinámico:", {
+        seed: dyn.seed,
+        v1Enabled: isV1Enabled(),
+        v3Enabled: isV3Enabled(),
+      });
+    }
+  }, [dyn.seed]);
 
   const featuredMovies = useMemo(() => getFeaturedMovies(6), []);
   const allMovies = useMemo(() => getMovies(), []);
@@ -183,6 +201,7 @@ function HomeContent() {
                 {dyn.v1.wrap("stats-movies-card", (
                   <div
                     id={dyn.v3.id("stats-movies-card")}
+                    data-dyn-key="stats-movies-card"
                     className={cn(
                       "group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105",
                       dyn.v3.class("stats-card", "")
@@ -194,7 +213,9 @@ function HomeContent() {
                     )}>
                       <Film className={cn("h-5 w-5 text-secondary", dyn.v3.class("icon-film", ""))} />
                     </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stats.totalMovies}+</div>
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+                      {isMounted ? `${stats.totalMovies}+` : "0+"}
+                    </div>
                     <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
                       {dyn.v3.text("stats_movies_label", "Movies")}
                     </div>
@@ -216,7 +237,9 @@ function HomeContent() {
                     )}>
                       <Sparkles className={cn("h-5 w-5 text-purple-400", dyn.v3.class("icon-sparkles", ""))} />
                     </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stats.totalGenres}</div>
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+                      {isMounted ? stats.totalGenres : "0"}
+                    </div>
                     <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
                       {dyn.v3.text("stats_genres_label", "Genres")}
                     </div>
@@ -238,7 +261,9 @@ function HomeContent() {
                     )}>
                       <Star className={cn("h-5 w-5 text-yellow-400", dyn.v3.class("icon-star", ""))} />
                     </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stats.avgRating}</div>
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+                      {isMounted ? stats.avgRating : "0.0"}
+                    </div>
                     <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
                       {dyn.v3.text("stats_rating_label", "Avg Rating")}
                     </div>
@@ -260,7 +285,9 @@ function HomeContent() {
                     )}>
                       <Clock className={cn("h-5 w-5 text-blue-400", dyn.v3.class("icon-clock", ""))} />
                     </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">{stats.avgDuration}m</div>
+                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+                      {isMounted ? `${stats.avgDuration}m` : "0m"}
+                    </div>
                     <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
                       {dyn.v3.text("stats_duration_label", "Avg Duration")}
                     </div>
@@ -431,27 +458,25 @@ function HomeContent() {
                 {popularGenres.map((genre, index) => {
                   const genreMovies = getMoviesByGenre(genre);
                   return (
-                    <>
-                      {dyn.v1.wrap(`genre-card-${index}`, (
-                        <SeedLink
-                          key={genre}
-                          href={`/search?genre=${encodeURIComponent(genre)}`}
-                          id={dyn.v3.id("genre-card", index)}
-                          className={cn(
-                            "group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105 text-center",
-                            dyn.v3.class("genre-card", "")
-                          )}
-                        >
-                          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 mb-3 mx-auto group-hover:bg-secondary/30 transition-colors">
-                            <Film className="h-6 w-6 text-secondary" />
-                          </div>
-                          <h3 className="font-bold text-white mb-1">{genre}</h3>
-                          <p className="text-xs text-white/60">
-                            {genreMovies.length} {dyn.v3.text("movies_label", "movies")}
-                          </p>
-                        </SeedLink>
-                      ))}
-                    </>
+                    dyn.v1.wrap(`genre-card-${index}`, (
+                      <SeedLink
+                        key={genre}
+                        href={`/search?genre=${encodeURIComponent(genre)}`}
+                        id={dyn.v3.id("genre-card", index)}
+                        className={cn(
+                          "group relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105 text-center",
+                          dyn.v3.class("genre-card", "")
+                        )}
+                      >
+                        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 mb-3 mx-auto group-hover:bg-secondary/30 transition-colors">
+                          <Film className="h-6 w-6 text-secondary" />
+                        </div>
+                        <h3 className="font-bold text-white mb-1">{genre}</h3>
+                        <p className="text-xs text-white/60">
+                          {genreMovies.length} {dyn.v3.text("movies_label", "movies")}
+                        </p>
+                      </SeedLink>
+                    ), undefined, genre)
                   );
                 })}
               </div>
@@ -478,24 +503,22 @@ function HomeContent() {
                 ))}
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                   {features.map((feature, index) => (
-                    <>
-                      {dyn.v1.wrap(`feature-card-${index}`, (
-                        <div
-                          key={index}
-                          id={dyn.v3.id("feature-card", index)}
-                          className={cn(
-                            "group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:-translate-y-1",
-                            dyn.v3.class("feature-card", "")
-                          )}
-                        >
-                          <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 mb-4 group-hover:bg-secondary/30 transition-colors">
-                            <div className="text-secondary">{feature.icon}</div>
-                          </div>
-                          <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                          <p className="text-sm text-white/70">{feature.description}</p>
+                    dyn.v1.wrap(`feature-card-${index}`, (
+                      <div
+                        key={index}
+                        id={dyn.v3.id("feature-card", index)}
+                        className={cn(
+                          "group rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:-translate-y-1",
+                          dyn.v3.class("feature-card", "")
+                        )}
+                      >
+                        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-secondary/20 mb-4 group-hover:bg-secondary/30 transition-colors">
+                          <div className="text-secondary">{feature.icon}</div>
                         </div>
-                      ))}
-                    </>
+                        <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                        <p className="text-sm text-white/70">{feature.description}</p>
+                      </div>
+                    ), undefined, `feature-${index}`)
                   ))}
                 </div>
               </div>

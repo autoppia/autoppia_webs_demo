@@ -91,7 +91,8 @@ export function applyV1Wrapper(
         });
 
   // Retornar según posición del decoy
-  const fragmentKey = reactKey ?? generateId(seed, componentKey, "wrap");
+  // Usar un key determinístico basado en el seed y componentKey para evitar problemas de hidratación
+  const fragmentKey = reactKey ?? `v1-wrap-${componentKey}-${seed}`;
   
   if (decoyVariant === 1) {
     return React.createElement(

@@ -10,10 +10,18 @@
  * V1 añade wrappers y decoys al DOM para romper XPath
  */
 export function isV1Enabled(): boolean {
-  if (typeof window === "undefined") {
-    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === "true";
+  // En Next.js, las variables NEXT_PUBLIC_* están disponibles tanto en servidor como cliente
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1;
+  const enabled = value === "true" || value === true;
+  
+  // Debug en desarrollo
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    if (!enabled) {
+      console.warn("[dynamic] V1 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V1=true");
+    }
   }
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V1 === "true";
+  
+  return enabled;
 }
 
 /**
@@ -21,8 +29,16 @@ export function isV1Enabled(): boolean {
  * V3 cambia IDs, clases y textos para evitar memorización
  */
 export function isV3Enabled(): boolean {
-  if (typeof window === "undefined") {
-    return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 === "true";
+  // En Next.js, las variables NEXT_PUBLIC_* están disponibles tanto en servidor como cliente
+  const value = process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3;
+  const enabled = value === "true" || value === true;
+  
+  // Debug en desarrollo
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    if (!enabled) {
+      console.warn("[dynamic] V3 está deshabilitado. Para habilitarlo, configura NEXT_PUBLIC_ENABLE_DYNAMIC_V3=true");
+    }
   }
-  return process.env.NEXT_PUBLIC_ENABLE_DYNAMIC_V3 === "true";
+  
+  return enabled;
 }

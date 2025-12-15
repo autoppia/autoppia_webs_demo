@@ -39,11 +39,16 @@ const DEFAULT_POSTER = "/media/gallery/default_movie.png";
 const clampSeed = (value: number, fallback = 1): number =>
   value >= 1 && value <= 300 ? value : fallback;
 
-const getRuntimeV2Seed = (): number | null => {
+const getRuntimeSeed = (): number | null => {
   if (typeof window === "undefined") return null;
-  const value = (window as any).__autocinemaV2Seed;
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return clampSeed(value);
+  // Leer seed directamente de la URL
+  const params = new URLSearchParams(window.location.search);
+  const seedParam = params.get("seed");
+  if (seedParam) {
+    const parsed = Number.parseInt(seedParam, 10);
+    if (Number.isFinite(parsed)) {
+      return clampSeed(parsed);
+    }
   }
   return null;
 };
@@ -55,7 +60,7 @@ const resolveSeed = (dbModeEnabled: boolean, seedValue?: number | null): number 
   if (typeof seedValue === "number" && Number.isFinite(seedValue)) {
     return clampSeed(seedValue);
   }
-  const runtimeSeed = getRuntimeV2Seed();
+  const runtimeSeed = getRuntimeSeed();
   if (runtimeSeed !== null) {
     return runtimeSeed;
   }
@@ -150,7 +155,7 @@ export async function initializeMovies(v2SeedValue?: number | null, limit = 300)
     moviesCache = (fallbackMovies as DatasetMovie[]).map(normalizeMovie);
     return moviesCache;
   }
-  // Wait a bit for SeedContext to sync v2Seed to window if needed
+  // Si no se proporciona seed, leerlo de la URL
   if (dbModeEnabled && typeof window !== "undefined" && v2SeedValue == null) {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }

@@ -26,7 +26,11 @@ export function generateElementId(
   
   if (!variants || variants.length === 0) {
     // Fallback to basic ID
-    return index > 0 ? `${elementType}-${index}` : elementType;
+    const fallbackId = index > 0 ? `${elementType}-${index}` : elementType;
+    if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+      console.warn(`[id-generator] No variants found for "${elementType}", using fallback: "${fallbackId}"`);
+    }
+    return fallbackId;
   }
   
   // Usar pickVariant con el elementType como key para consistencia
@@ -34,7 +38,19 @@ export function generateElementId(
   const baseId = variants[variantIndex] || variants[0];
   
   // Add index suffix if needed
-  return index > 0 ? `${baseId}-${index}` : baseId;
+  const finalId = index > 0 ? `${baseId}-${index}` : baseId;
+  
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development" && elementType === "stats-movies-card") {
+    console.log(`[id-generator] Generated ID for "${elementType}":`, {
+      seed,
+      variantIndex,
+      baseId,
+      finalId,
+      availableVariants: variants.length
+    });
+  }
+  
+  return finalId;
 }
 
 /**

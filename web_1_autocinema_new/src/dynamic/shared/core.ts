@@ -65,14 +65,10 @@ export function generateId(seed: number, key: string, prefix = "dyn"): string {
  * - Si V3 OFF: dyn.v3.text/id/class devuelve valores por defecto
  */
 export function useDynamic() {
-  const { seed, resolvedSeeds } = useSeed();
-  
-  // Usar v3 seed si está disponible, sino usar base seed
-  const v3Seed = resolvedSeeds.v3 ?? seed;
+  const { seed } = useSeed();
   
   return useMemo(() => ({
     seed,
-    v3Seed,
     
     /**
      * V1: Estructura DOM (wrappers y decoys)
@@ -109,7 +105,7 @@ export function useDynamic() {
        */
       text: (key: string, fallback: string) => {
         if (!isV3Enabled()) return fallback;
-        return getTextForElement(v3Seed, key, fallback);
+        return getTextForElement(seed, key, fallback);
       },
       
       /**
@@ -120,7 +116,7 @@ export function useDynamic() {
         if (!isV3Enabled()) {
           return index && index > 0 ? `${elementType}-${index}` : elementType;
         }
-        return generateElementId(v3Seed, elementType, index ?? 0);
+        return generateElementId(seed, elementType, index ?? 0);
       },
       
       /**
@@ -129,7 +125,7 @@ export function useDynamic() {
        */
       class: (classType: string, fallback?: string) => {
         if (!isV3Enabled()) return fallback ?? "";
-        return getClassForElement(v3Seed, classType, fallback ?? "");
+        return getClassForElement(seed, classType, fallback ?? "");
       },
     },
     
@@ -138,5 +134,5 @@ export function useDynamic() {
      */
     pickVariant: (key: string, count: number) => 
       pickVariant(seed, key, count),
-  }), [seed, v3Seed]);
+  }), [seed]);
 }
