@@ -38,6 +38,9 @@ interface Expert {
 export default function ExpertProfileClient({ slug }: { slug: string }) {
   const [expert, setExpert] = useState<Expert | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isHireLater, setIsHireLater] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [contactMessage, setContactMessage] = useState("");
   const router = useRouter();
   const { resolvedSeeds } = useSeed();
   const seed = resolvedSeeds.v1 ?? resolvedSeeds.base ?? 1;
@@ -62,6 +65,20 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             try {
               const favorites = new Set(JSON.parse(favoritesRaw));
               setIsFavorite(favorites.has(found.name));
+            } catch {}
+          }
+
+          const hireLaterRaw = window.localStorage.getItem(
+            "autowork_hire_later_experts"
+          );
+          if (hireLaterRaw) {
+            try {
+              const hireLaterList = JSON.parse(hireLaterRaw);
+              if (Array.isArray(hireLaterList)) {
+                setIsHireLater(
+                  hireLaterList.some((item: any) => (item.slug || item.name) === found.slug)
+                );
+              }
             } catch {}
           }
         }
@@ -251,19 +268,84 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
       <div className="flex items-center justify-end gap-3 pt-4 border-t border-blue-200">
         <HireButton expert={expert} />
         <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            logEvent(EVENT_TYPES.QUICK_HIRE, {
+              expertSlug: expert.slug,
+              expertName: expert.name,
+              source: "expert_profile",
+            });
+            router.push(`/expert/${expert.slug}/hire?quick=1`);
+          }}
+          className="px-6 py-2.5 border-2 border-green-600 text-green-700 rounded-lg font-medium hover:bg-green-50 transition cursor-pointer"
+        >
+          {getText("expert-quick-hire-button-label", "Quick hire")}
+        </button>
+        <button
           {...getElementAttributes("expert-message-button", 0)}
           type="button"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
+            setContactOpen(true);
+            logEvent(EVENT_TYPES.CONTACT_EXPERT_OPENED, {
               expertSlug: expert.slug,
-              action: "message",
+              expertName: expert.name,
             });
           }}
           className="px-6 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-600 hover:text-white transition cursor-pointer"
         >
           {getText("expert-message-button-label", "Contact")}
+        </button>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const raw = window.localStorage.getItem("autowork_hire_later_experts");
+            const list = raw ? JSON.parse(raw) : [];
+            const parsedList = Array.isArray(list) ? list : [];
+            const existingIndex = parsedList.findIndex(
+              (item: any) => (item.slug || item.name) === expert.slug
+            );
+
+            if (existingIndex >= 0) {
+              parsedList.splice(existingIndex, 1);
+              setIsHireLater(false);
+              logEvent(EVENT_TYPES.HIRE_LATER_REMOVED, {
+                expertSlug: expert.slug,
+                expertName: expert.name,
+                source: "expert_profile",
+              });
+            } else {
+              parsedList.push({
+                slug: expert.slug,
+                name: expert.name,
+                role: expert.role,
+                country: expert.country,
+                avatar: expert.avatar,
+                rate: expert.rate,
+              });
+              setIsHireLater(true);
+              logEvent(EVENT_TYPES.HIRE_LATER_ADDED, {
+                expertSlug: expert.slug,
+                expertName: expert.name,
+                source: "expert_profile",
+              });
+            }
+
+            window.localStorage.setItem("autowork_hire_later_experts", JSON.stringify(parsedList));
+          }}
+          className={`px-6 py-2.5 border-2 rounded-lg font-medium transition cursor-pointer ${
+            isHireLater
+              ? "border-orange-500 text-orange-700 bg-orange-50 hover:bg-orange-100"
+              : "border-gray-300 text-gray-700 hover:bg-gray-50"
+          }`}
+        >
+          {isHireLater ? "Remove hire later" : "Hire later"}
         </button>
         <button
           type="button"
@@ -284,19 +366,19 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
 
               if (newFavoriteState) {
                 favorites.add(expert.name);
-                logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
+                logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
                   expertSlug: expert.slug,
                   expertName: expert.name,
-                  action: "favorite_expert",
                   timestamp: Date.now(),
+                  source: "expert_profile",
                 });
               } else {
                 favorites.delete(expert.name);
-                logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
+                logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
                   expertSlug: expert.slug,
                   expertName: expert.name,
-                  action: "unfavorite_expert",
                   timestamp: Date.now(),
+                  source: "expert_profile",
                 });
               }
 
@@ -805,6 +887,60 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           </div>
         </div>
       </main>
+      {contactOpen && expert && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-900">Contact {expert.name}</h3>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => {
+                  setContactOpen(false);
+                  setContactMessage("");
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <label className="text-sm font-medium text-gray-700 mb-2 block">
+              Message
+            </label>
+            <textarea
+              value={contactMessage}
+              onChange={(e) => setContactMessage(e.target.value)}
+              className="w-full min-h-[140px] border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Write a short message to the expert..."
+            />
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                type="button"
+                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                onClick={() => {
+                  setContactOpen(false);
+                  setContactMessage("");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+                onClick={() => {
+                  logEvent(EVENT_TYPES.CONTACT_EXPERT_MESSAGE_SENT, {
+                    expertSlug: expert.slug,
+                    expertName: expert.name,
+                    messageLength: contactMessage.length,
+                  });
+                  setContactOpen(false);
+                  setContactMessage("");
+                }}
+              >
+                Send message
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -43,15 +43,15 @@ export default function FavoritesPage() {
     const newFavorites = new Set(favorites);
     if (newFavorites.has(expertName)) {
       newFavorites.delete(expertName);
-      logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-        action: "unfavorite_expert",
+      logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
         expertName,
+        source: "favorites_page",
       });
     } else {
       newFavorites.add(expertName);
-      logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-        action: "favorite_expert",
+      logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
         expertName,
+        source: "favorites_page",
       });
     }
     saveFavorites(newFavorites);
@@ -96,7 +96,12 @@ export default function FavoritesPage() {
             Start exploring experts and click the heart icon to save them to your favorites.
           </p>
           <button
-            onClick={() => router.push("/experts")}
+            onClick={() => {
+              logEvent(EVENT_TYPES.BROWSE_FAVORITE_EXPERT, {
+                source: "favorites_empty_state",
+              });
+              router.push("/experts");
+            }}
             className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
           >
             Browse Experts
@@ -219,4 +224,3 @@ export default function FavoritesPage() {
     </main>
   );
 }
-

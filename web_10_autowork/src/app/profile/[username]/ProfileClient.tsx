@@ -27,6 +27,19 @@ export default function ProfileClient({ username }: { username: string }) {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [aboutText, setAboutText] = useState("");
   const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [profileFields, setProfileFields] = useState({
+    name: user.name,
+    title: user.title || "",
+    location: user.location || "",
+    email: user.email || "",
+  });
+  const [lastSavedProfile, setLastSavedProfile] = useState({
+    name: user.name,
+    title: user.title || "",
+    location: user.location || "",
+    email: user.email || "",
+  });
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   
   // Mock user profile data
   const user: UserProfile = {
@@ -57,6 +70,25 @@ export default function ProfileClient({ username }: { username: string }) {
         setFavorites(new Set(JSON.parse(savedFavorites)));
       }
       
+      const savedProfile = localStorage.getItem(`profile_info_${username}`);
+      if (savedProfile) {
+        const parsed = JSON.parse(savedProfile);
+        if (parsed) {
+          setProfileFields({
+            name: parsed.name || user.name,
+            title: parsed.title || user.title || "",
+            location: parsed.location || user.location || "",
+            email: parsed.email || user.email || "",
+          });
+          setLastSavedProfile({
+            name: parsed.name || user.name,
+            title: parsed.title || user.title || "",
+            location: parsed.location || user.location || "",
+            email: parsed.email || user.email || "",
+          });
+        }
+      }
+
       // Load about
       const savedAbout = localStorage.getItem(`profile_about_${username}`);
       if (savedAbout) {
@@ -107,6 +139,10 @@ export default function ProfileClient({ username }: { username: string }) {
 
   const handleSaveAbout = () => {
     localStorage.setItem(`profile_about_${username}`, aboutText);
+    logEvent(EVENT_TYPES.EDIT_ABOUT, {
+      username,
+      length: aboutText.length,
+    });
     setIsEditingAbout(false);
   };
 
@@ -120,6 +156,43 @@ export default function ProfileClient({ username }: { username: string }) {
 
   const handleViewJob = (job: any) => {
     router.push("/jobs");
+  };
+
+  const handleSaveProfile = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        `profile_info_${username}`,
+        JSON.stringify(profileFields)
+      );
+    }
+
+    if (profileFields.name !== lastSavedProfile.name) {
+      logEvent(EVENT_TYPES.EDIT_PROFILE_NAME, {
+        username,
+        value: profileFields.name,
+      });
+    }
+    if (profileFields.title !== lastSavedProfile.title) {
+      logEvent(EVENT_TYPES.EDIT_PROFILE_TITLE, {
+        username,
+        value: profileFields.title,
+      });
+    }
+    if (profileFields.location !== lastSavedProfile.location) {
+      logEvent(EVENT_TYPES.EDIT_PROFILE_LOCATION, {
+        username,
+        value: profileFields.location,
+      });
+    }
+    if (profileFields.email !== lastSavedProfile.email) {
+      logEvent(EVENT_TYPES.EDIT_PROFILE_EMAIL, {
+        username,
+        value: profileFields.email,
+      });
+    }
+
+    setLastSavedProfile({ ...profileFields });
+    setIsEditingProfile(false);
   };
 
   return (
@@ -136,28 +209,110 @@ export default function ProfileClient({ username }: { username: string }) {
             <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {user.name}
-            </h1>
-            {user.title && (
-              <div className="text-lg font-medium text-gray-700 mb-2">
-                {user.title}
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                {isEditingProfile ? (
+                  <input
+                    value={profileFields.name}
+                    onChange={(e) =>
+                      setProfileFields((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                    className="text-3xl font-bold text-gray-900 mb-2 w-full border-b border-blue-200 bg-white/50 px-2 py-1 rounded"
+                  />
+                ) : (
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                    {profileFields.name}
+                  </h1>
+                )}
+                {isEditingProfile ? (
+                  <input
+                    value={profileFields.title}
+                    onChange={(e) =>
+                      setProfileFields((prev) => ({ ...prev, title: e.target.value }))
+                    }
+                    className="text-lg font-medium text-gray-700 mb-2 w-full border-b border-blue-200 bg-white/50 px-2 py-1 rounded"
+                    placeholder="Add a title"
+                  />
+                ) : (
+                  profileFields.title && (
+                    <div className="text-lg font-medium text-gray-700 mb-2">
+                      {profileFields.title}
+                    </div>
+                  )
+                )}
+                {isEditingProfile ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <label className="text-sm text-gray-700">
+                      <span className="block text-xs uppercase text-gray-500 mb-1">Location</span>
+                      <input
+                        value={profileFields.location}
+                        onChange={(e) =>
+                          setProfileFields((prev) => ({ ...prev, location: e.target.value }))
+                        }
+                        className="w-full border rounded px-2 py-1"
+                        placeholder="Add a location"
+                      />
+                    </label>
+                    <label className="text-sm text-gray-700">
+                      <span className="block text-xs uppercase text-gray-500 mb-1">Email</span>
+                      <input
+                        value={profileFields.email}
+                        onChange={(e) =>
+                          setProfileFields((prev) => ({ ...prev, email: e.target.value }))
+                        }
+                        className="w-full border rounded px-2 py-1"
+                        placeholder="Add an email"
+                      />
+                    </label>
+                  </div>
+                ) : (
+                  <>
+                    {profileFields.location && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        {profileFields.location}
+                      </div>
+                    )}
+                    {profileFields.email && (
+                      <div className="text-sm text-gray-600">
+                        {profileFields.email}
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-            )}
-            {user.location && (
-              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {user.location}
+              <div className="flex items-start gap-2">
+                {isEditingProfile ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        setProfileFields({ ...lastSavedProfile });
+                        setIsEditingProfile(false);
+                      }}
+                      className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveProfile}
+                      className="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                      Save
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setIsEditingProfile(true)}
+                    className="px-3 py-2 text-sm bg-white text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-50"
+                  >
+                    Edit profile
+                  </button>
+                )}
               </div>
-            )}
-            {user.email && (
-              <div className="text-sm text-gray-600">
-                {user.email}
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
@@ -314,15 +469,15 @@ export default function ProfileClient({ username }: { username: string }) {
                       const newFavorites = new Set(favorites);
                       if (newFavorites.has(expert.name)) {
                         newFavorites.delete(expert.name);
-                        logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-                          action: "unfavorite_expert",
+                        logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
                           expertName: expert.name,
+                          source: "profile_favorites",
                         });
                       } else {
                         newFavorites.add(expert.name);
-                        logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
-                          action: "favorite_expert",
+                        logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
                           expertName: expert.name,
+                          source: "profile_favorites",
                         });
                       }
                       setFavorites(newFavorites);
@@ -386,4 +541,3 @@ export default function ProfileClient({ username }: { username: string }) {
     </main>
   );
 }
-

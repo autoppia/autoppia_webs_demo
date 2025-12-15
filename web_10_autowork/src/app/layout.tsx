@@ -5,9 +5,10 @@ import "./globals.css";
 import ClientBody from "./ClientBody";
 import Script from "next/script";
 import { SeedLink } from "@/components/ui/SeedLink";
-import { Briefcase, Users, Sparkles, Heart, User } from "lucide-react";
+import { Briefcase, Users, Sparkles, Heart, User, Clock3 } from "lucide-react";
 import { SeedProvider } from "@/context/SeedContext";
 import UserDropdown from "./components/UserDropdown";
+import { EVENT_TYPES, logEvent } from "@/library/events";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,11 @@ const sidebarLinks = [
     label: "Favorites",
     href: "/favorites",
     icon: Heart,
+  },
+  {
+    label: "Hire later",
+    href: "/hire-later",
+    icon: Clock3,
   },
   {
     label: "Profile",
@@ -89,6 +95,12 @@ export default function RootLayout({
                         key={link.label}
                         href={link.href}
                         className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 bg-transparent hover:bg-gradient-to-r hover:from-[#e6f9fb] hover:to-[#f0fdfa] text-base font-medium hover:text-[#08b4ce] hover:shadow-sm group"
+                        onClick={() =>
+                          logEvent(EVENT_TYPES.NAVBAR_CLICK, {
+                            label: link.label,
+                            href: link.href,
+                          })
+                        }
                       >
                         <Icon className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         <span>{link.label}</span>
