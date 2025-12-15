@@ -49,13 +49,22 @@ export default function NavLinks() {
     <>
       {links.map((link) => {
         const Icon = link.icon;
+        const specificEvent =
+          {
+            "/jobs": EVENT_TYPES.NAVBAR_JOBS_CLICK,
+            "/hires": EVENT_TYPES.NAVBAR_HIRES_CLICK,
+            "/experts": EVENT_TYPES.NAVBAR_EXPERTS_CLICK,
+            "/favorites": EVENT_TYPES.NAVBAR_FAVORITES_CLICK,
+            "/hire-later": EVENT_TYPES.NAVBAR_HIRE_LATER_CLICK,
+            "/profile/alexsmith": EVENT_TYPES.NAVBAR_PROFILE_CLICK,
+          }[link.href] || EVENT_TYPES.NAVBAR_CLICK;
         return (
           <SeedLink
             key={link.label}
             href={link.href}
             className="flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-200 bg-transparent hover:bg-gradient-to-r hover:from-[#e6f9fb] hover:to-[#f0fdfa] text-base font-medium hover:text-[#08b4ce] hover:shadow-sm group"
             onClick={() =>
-              logEvent(EVENT_TYPES.NAVBAR_CLICK, {
+              logEvent(specificEvent, {
                 label: link.label,
                 href: link.href,
               })

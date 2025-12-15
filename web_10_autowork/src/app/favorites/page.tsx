@@ -37,21 +37,30 @@ export default function FavoritesPage() {
     }
   };
 
-  const toggleFavorite = (expertName: string, e: React.MouseEvent) => {
+  const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: any) => {
     e.preventDefault();
     e.stopPropagation();
+    const slug =
+      expert?.slug ??
+      expertName.toLowerCase().replace(/\s+/g, "-").replace(/\./g, "");
     const newFavorites = new Set(favorites);
     if (newFavorites.has(expertName)) {
       newFavorites.delete(expertName);
       logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
         expertName,
         source: "favorites_page",
+        role: expert?.role,
+        country: expert?.country,
+        expertSlug: slug,
       });
     } else {
       newFavorites.add(expertName);
       logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
         expertName,
         source: "favorites_page",
+        role: expert?.role,
+        country: expert?.country,
+        expertSlug: slug,
       });
     }
     saveFavorites(newFavorites);
@@ -131,7 +140,7 @@ export default function FavoritesPage() {
               {/* Favorite Button */}
               <button
                 type="button"
-                onClick={(e) => toggleFavorite(expert.name, e)}
+                onClick={(e) => toggleFavorite(expert.name, e, expert)}
                 className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
                 title={isFavorite ? "Remove from favorites" : "Add to favorites"}
               >

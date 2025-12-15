@@ -23,6 +23,8 @@ export default function HireButton({
     logEvent(EVENT_TYPES.HIRE_BTN_CLICKED, {
       expertName: expert.name,
       expertSlug: expert.slug,
+      country: expert.country,
+      role: expert.role,
       event: "hire_click",
       timestamp: Date.now(),
     });

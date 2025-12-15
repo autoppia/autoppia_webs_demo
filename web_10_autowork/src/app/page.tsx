@@ -1329,7 +1329,6 @@ export default function Home() {
 	const ExpertsSection = () => {
 		const router = useSeedRouter();
 		const [favorites, setFavorites] = useState<Set<string>>(new Set());
-		const [hireLater, setHireLater] = useState<Set<string>>(new Set());
 		
 		// Load favorites from localStorage
 		useEffect(() => {
@@ -1344,20 +1343,6 @@ export default function Home() {
 			}
 		}, []);
 
-		useEffect(() => {
-			if (typeof window === "undefined") return;
-			try {
-				const saved = localStorage.getItem("autowork_hire_later_experts");
-				if (saved) {
-					const parsed = JSON.parse(saved);
-					if (Array.isArray(parsed)) {
-						setHireLater(new Set(parsed.map((e: any) => e.slug || e.name)));
-					}
-				}
-			} catch (err) {
-				console.error("Failed to load hire-later list:", err);
-			}
-		}, []);
 
 		// Save favorites to localStorage
 		const saveFavorites = (newFavorites: Set<string>) => {
@@ -1371,35 +1356,6 @@ export default function Home() {
 			}
 		};
 
-		const toggleFavorite = (expertName: string, e: React.MouseEvent) => {
-			e.preventDefault();
-			e.stopPropagation();
-			const newFavorites = new Set(favorites);
-			if (newFavorites.has(expertName)) {
-          newFavorites.delete(expertName);
-          logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
-            expertName,
-            source: "experts_grid",
-          });
-        } else {
-          newFavorites.add(expertName);
-          logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
-            expertName,
-            source: "experts_grid",
-          });
-			}
-			saveFavorites(newFavorites);
-		};
-		
-		const persistHireLaterList = (list: any[]) => {
-			try {
-				localStorage.setItem("autowork_hire_later_experts", JSON.stringify(list));
-				setHireLater(new Set(list.map((e) => e.slug || e.name)));
-			} catch (err) {
-				console.error("Failed to save hire later list:", err);
-			}
-		};
-
 		const getExpertSlug = (expert: any) =>
 			(expert as any).slug ??
 			expert.name
@@ -1407,40 +1363,32 @@ export default function Home() {
 				.replace(/\s+/g, "-")
 				.replace(/\./g, "");
 
-		const toggleHireLater = (expert: any, e: React.MouseEvent) => {
+		const toggleFavorite = (expertName: string, e: React.MouseEvent, expert?: any) => {
 			e.preventDefault();
 			e.stopPropagation();
-			const slug = getExpertSlug(expert);
-			const raw = typeof window !== "undefined" ? localStorage.getItem("autowork_hire_later_experts") : null;
-			const list = raw ? (JSON.parse(raw) ?? []) : [];
-			const cleanList = Array.isArray(list) ? list : [];
-			const existingIndex = cleanList.findIndex((item: any) => (item.slug || item.name) === slug);
-
-			if (existingIndex >= 0) {
-				cleanList.splice(existingIndex, 1);
-				logEvent(EVENT_TYPES.HIRE_LATER_REMOVED, {
-					expertName: expert.name,
-					expertSlug: slug,
-					source: "experts_grid",
-				});
-			} else {
-				cleanList.push({
-					slug,
-					name: expert.name,
-					role: expert.role,
-					country: expert.country,
-					avatar: expert.avatar,
-					rate: expert.rate,
-				});
-				logEvent(EVENT_TYPES.HIRE_LATER_ADDED, {
-					expertName: expert.name,
-					expertSlug: slug,
-					source: "experts_grid",
-				});
-			}
-
-			persistHireLaterList(cleanList);
-		};
+			const newFavorites = new Set(favorites);
+			if (newFavorites.has(expertName)) {
+				newFavorites.delete(expertName);
+        logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
+          expertName,
+          source: "experts_grid",
+          role: expert?.role,
+          country: expert?.country,
+          expertSlug: expert?.slug ?? getExpertSlug(expert),
+        });
+      } else {
+        newFavorites.add(expertName);
+        logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
+          expertName,
+          source: "experts_grid",
+          role: expert?.role,
+          country: expert?.country,
+          expertSlug: expert?.slug ?? getExpertSlug(expert),
+        });
+      }
+      saveFavorites(newFavorites);
+    };
+		
 		
 		const totalExperts = expertsState.data.length;
 		const avgRating = expertsState.data.length > 0
@@ -1507,7 +1455,7 @@ export default function Home() {
 								{/* Favorite Button */}
 								<button
 									type="button"
-									onClick={(e) => toggleFavorite(expert.name, e)}
+									onClick={(e) => toggleFavorite(expert.name, e, expert)}
 									className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
 									title={isFavorite ? "Remove from favorites" : "Add to favorites"}
 								>
@@ -1587,26 +1535,13 @@ export default function Home() {
 									<span className="text-base">{expert.consultation}</span>
 								</div>
 
-								<div className="flex flex-col gap-2">
-									<button
-										onClick={() => handleViewExpert(expert)}
-										{...getElementAttributes('book-consultation-button', i)}
-										className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
-									>
-										{getText('book-consultation-button-label', 'Consult an expert')}
-									</button>
-									<button
-										type="button"
-										onClick={(e) => toggleHireLater(expert, e)}
-										className={`w-full py-2.5 px-4 rounded-lg border text-sm font-semibold transition ${
-											hireLater.has(getExpertSlug(expert))
-												? "border-orange-400 bg-orange-50 text-orange-700 hover:bg-orange-100"
-												: "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-										}`}
-									>
-										{hireLater.has(getExpertSlug(expert)) ? "Remove from hire later" : "Hire later"}
-									</button>
-								</div>
+								<button
+									onClick={() => handleViewExpert(expert)}
+									{...getElementAttributes('book-consultation-button', i)}
+									className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+								>
+									{getText('book-consultation-button-label', 'Consult an expert')}
+								</button>
 							</div>
 						);
 					})}

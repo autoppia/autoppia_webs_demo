@@ -272,12 +272,18 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            logEvent(EVENT_TYPES.QUICK_HIRE, {
-              expertSlug: expert.slug,
-              expertName: expert.name,
-              source: "expert_profile",
-            });
-            router.push(`/expert/${expert.slug}/hire?quick=1`);
+          logEvent(EVENT_TYPES.QUICK_HIRE, {
+            expertSlug: expert.slug,
+            expertName: expert.name,
+            country: expert.country,
+            role: expert.role,
+            rate: expert.rate,
+            rating: expert.rating,
+            jobs: expert.jobs,
+            source: "expert_profile",
+          });
+            // End hire flow immediately for quick hire
+            window.alert("Quick hire completed for this expert.");
           }}
           className="px-6 py-2.5 border-2 border-green-600 text-green-700 rounded-lg font-medium hover:bg-green-50 transition cursor-pointer"
         >
@@ -293,6 +299,10 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             logEvent(EVENT_TYPES.CONTACT_EXPERT_OPENED, {
               expertSlug: expert.slug,
               expertName: expert.name,
+              country: expert.country,
+              role: expert.role,
+              rate: expert.rate,
+              rating: expert.rating,
             });
           }}
           className="px-6 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-600 hover:text-white transition cursor-pointer"
@@ -318,6 +328,8 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
               logEvent(EVENT_TYPES.HIRE_LATER_REMOVED, {
                 expertSlug: expert.slug,
                 expertName: expert.name,
+                country: expert.country,
+                role: expert.role,
                 source: "expert_profile",
               });
             } else {
@@ -333,6 +345,8 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
               logEvent(EVENT_TYPES.HIRE_LATER_ADDED, {
                 expertSlug: expert.slug,
                 expertName: expert.name,
+                country: expert.country,
+                role: expert.role,
                 source: "expert_profile",
               });
             }
@@ -369,6 +383,8 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
                 logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
                   expertSlug: expert.slug,
                   expertName: expert.name,
+                  country: expert.country,
+                  role: expert.role,
                   timestamp: Date.now(),
                   source: "expert_profile",
                 });
@@ -377,6 +393,8 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
                 logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
                   expertSlug: expert.slug,
                   expertName: expert.name,
+                  country: expert.country,
+                  role: expert.role,
                   timestamp: Date.now(),
                   source: "expert_profile",
                 });
@@ -929,7 +947,12 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
                   logEvent(EVENT_TYPES.CONTACT_EXPERT_MESSAGE_SENT, {
                     expertSlug: expert.slug,
                     expertName: expert.name,
+                    country: expert.country,
+                    role: expert.role,
+                    rate: expert.rate,
+                    rating: expert.rating,
                     messageLength: contactMessage.length,
+                    message: contactMessage,
                   });
                   setContactOpen(false);
                   setContactMessage("");

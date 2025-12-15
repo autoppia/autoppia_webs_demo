@@ -45,6 +45,8 @@ export default function HireLaterPage() {
     logEvent(EVENT_TYPES.HIRE_LATER_REMOVED, {
       expertSlug: expert.slug,
       expertName: expert.name,
+      country: expert.country,
+      role: expert.role,
       source: "hire_later_page",
     });
   };
@@ -53,6 +55,8 @@ export default function HireLaterPage() {
     logEvent(EVENT_TYPES.HIRE_LATER_START, {
       expertSlug: expert.slug,
       expertName: expert.name,
+      country: expert.country,
+      role: expert.role,
     });
     router.push(`/expert/${expert.slug}/hire`);
   };

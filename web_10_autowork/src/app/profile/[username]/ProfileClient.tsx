@@ -471,12 +471,18 @@ export default function ProfileClient({ username }: { username: string }) {
                         newFavorites.delete(expert.name);
                         logEvent(EVENT_TYPES.FAVORITE_EXPERT_REMOVED, {
                           expertName: expert.name,
+                          expertSlug: expert.slug,
+                          country: expert.country,
+                          role: expert.role,
                           source: "profile_favorites",
                         });
                       } else {
                         newFavorites.add(expert.name);
                         logEvent(EVENT_TYPES.FAVORITE_EXPERT_SELECTED, {
                           expertName: expert.name,
+                          expertSlug: expert.slug,
+                          country: expert.country,
+                          role: expert.role,
                           source: "profile_favorites",
                         });
                       }
