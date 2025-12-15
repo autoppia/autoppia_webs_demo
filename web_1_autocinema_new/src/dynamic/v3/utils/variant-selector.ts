@@ -13,35 +13,10 @@ import { selectVariantIndex } from '../../shared/core';
 export const ID_VARIANTS_MAP: Record<string, string[]> = idVariantsJson;
 export const CLASS_VARIANTS_MAP: Record<string, string[]> = classVariantsJson;
 
-// Text variants: estructura nueva donde cada key tiene su array de variantes
-// Si el JSON viene en formato antiguo (seed-based), lo convertimos
-let TEXT_VARIANTS_MAP: Record<string, string[]> = {};
+// Text variants: estructura donde cada key tiene su array de variantes
+// Formato: { "key1": ["variant1", "variant2", ...], "key2": [...] }
+export const TEXT_VARIANTS_MAP: Record<string, string[]> = textVariantsJson as Record<string, string[]>;
 
-// Detectar si el JSON está en formato antiguo (seed-based) o nuevo (key-based)
-const firstKey = Object.keys(textVariantsJson)[0];
-if (firstKey && typeof (textVariantsJson as any)[firstKey] === 'object' && !Array.isArray((textVariantsJson as any)[firstKey])) {
-  // Formato antiguo: { "1": { "key1": "...", "key2": "..." }, "2": { ... } }
-  // Convertir a formato nuevo: { "key1": ["...", "...", ...], "key2": [...] }
-  const oldFormat = textVariantsJson as Record<string, Record<string, string>>;
-  const allKeys = new Set<string>();
-  
-  // Recopilar todas las keys únicas
-  Object.values(oldFormat).forEach(variant => {
-    Object.keys(variant).forEach(key => allKeys.add(key));
-  });
-  
-  // Convertir a nuevo formato
-  allKeys.forEach(key => {
-    TEXT_VARIANTS_MAP[key] = Object.values(oldFormat)
-      .map(variant => variant[key])
-      .filter((text): text is string => text !== undefined && text !== null);
-  });
-} else {
-  // Formato nuevo: { "key1": ["...", "...", ...], "key2": [...] }
-  TEXT_VARIANTS_MAP = textVariantsJson as Record<string, string[]>;
-}
-
-export { TEXT_VARIANTS_MAP };
 
 /**
  * Get a variant from a dictionary or global JSONs

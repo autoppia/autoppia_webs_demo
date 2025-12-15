@@ -87,11 +87,11 @@ export function HeroSection({
               </div>
               
               <h1 className="text-5xl font-bold leading-[1.1] tracking-tight lg:text-6xl xl:text-7xl mb-6">
-                {dyn.v3.getVariant("hero_title", undefined, "Discover AI-driven stories, remixed genres, and cinematic experiments.")}
+                Discover AI-driven stories, remixed genres, and cinematic experiments.
               </h1>
               
               <p className="text-lg text-white/70 leading-relaxed mb-8">
-                {dyn.v3.getVariant("hero_description", undefined, "Search hundreds of procedurally generated movies loaded directly from our datasets service. No backend, no forms – just cinema.")}
+                Search hundreds of procedurally generated movies loaded directly from our datasets service. No backend, no forms – just cinema.
               </p>
 
               <form
