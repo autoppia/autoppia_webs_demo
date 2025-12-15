@@ -33,8 +33,15 @@ export function generateElementId(
     return fallbackId;
   }
   
-  // Usar pickVariant con el elementType como key para consistencia
-  const variantIndex = pickVariant(seed, elementType, variants.length);
+  // Seed 1 = versión original/base - siempre usar primera variante (índice 0)
+  let variantIndex: number;
+  if (seed === 1) {
+    variantIndex = 0; // Primera variante = original
+  } else {
+    // Otros seeds: usar variantes dinámicas
+    variantIndex = pickVariant(seed, elementType, variants.length);
+  }
+  
   const baseId = variants[variantIndex] || variants[0];
   
   // Add index suffix if needed

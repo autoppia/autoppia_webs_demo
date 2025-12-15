@@ -28,6 +28,13 @@ export function getTextForElement(
   key: string,
   fallback: string
 ): string {
+  // Seed 1 = versión original/base - siempre usar variante "1"
+  if (seed === 1) {
+    const originalVariant = VARIANTS["1"];
+    return (originalVariant && originalVariant[key]) || fallback;
+  }
+  
+  // Otros seeds: usar variantes dinámicas
   // Usar pickVariant con el key como identificador para consistencia
   // El resultado es 0-based, pero VARIANTS usa claves 1-based (strings "1", "2", etc.), así que sumamos 1
   const variantIndex = pickVariant(seed, key, VARIANT_COUNT) + 1;

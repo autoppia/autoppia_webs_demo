@@ -1,6 +1,6 @@
 {
   "1": {
-    "search_placeholder": "Search movies, titles...",
+    "search_placeholder": "Search directors, titles, or moods",
     "play": "Play",
     "add_to_list": "Add to List",
     "my_list": "My List",
@@ -224,7 +224,7 @@
     "learn_more": "Learn"
   },
   "9": {
-    "search_placeholder": "Lookup films, titles...",
+    "search_placeholder": "Share films, discover...",
     "play": "Resume",
     "add_to_list": "Flag",
     "my_list": "Flagged",

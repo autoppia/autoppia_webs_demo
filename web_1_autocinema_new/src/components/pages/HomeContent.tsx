@@ -200,105 +200,117 @@ export function HomeContent() {
                 </div>
               ))}
 
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                {/* Stats Card 1: Movies */}
-                {dyn.v1.wrap("stats-movies-card", (
-                  <div
-                    id={dyn.v3.id("stats-movies-card")}
-                    data-dyn-key="stats-movies-card"
-                    className={cn(
-                      "group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105",
-                      dyn.v3.class("stats-card", "")
-                    )}
-                  >
-                    <div className={cn(
-                      "flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20 mb-3 group-hover:bg-secondary/30 transition-colors",
-                      dyn.v3.class("stats-icon-container", "")
-                    )}>
-                      <Film className={cn("h-5 w-5 text-secondary", dyn.v3.class("icon-film", ""))} />
-                    </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
-                      {isMounted ? `${stats.totalMovies}+` : "0+"}
-                    </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
-                      {dyn.v3.text("stats_movies_label", "Movies")}
-                    </div>
-                  </div>
-                ))}
+              {/* Stats Grid - Orden dinámico según seed */}
+              {(() => {
+                // Definir las 4 stats cards
+                const statsCards = [
+                  {
+                    key: "stats-movies-card",
+                    id: "stats-movies-card",
+                    icon: Film,
+                    iconColor: "secondary",
+                    value: isMounted ? `${stats.totalMovies}+` : "0+",
+                    label: dyn.v3.text("stats_movies_label", "Movies"),
+                    iconBg: "bg-secondary/20",
+                    iconHover: "group-hover:bg-secondary/30",
+                    iconTextColor: "text-secondary",
+                  },
+                  {
+                    key: "stats-genres-card",
+                    id: "stats-genres-card",
+                    icon: Sparkles,
+                    iconColor: "purple",
+                    value: isMounted ? stats.totalGenres : "0",
+                    label: dyn.v3.text("stats_genres_label", "Genres"),
+                    iconBg: "bg-purple-500/20",
+                    iconHover: "group-hover:bg-purple-500/30",
+                    iconTextColor: "text-purple-400",
+                  },
+                  {
+                    key: "stats-rating-card",
+                    id: "stats-rating-card",
+                    icon: Star,
+                    iconColor: "yellow",
+                    value: isMounted ? stats.avgRating : "0.0",
+                    label: dyn.v3.text("stats_rating_label", "Avg Rating"),
+                    iconBg: "bg-yellow-500/20",
+                    iconHover: "group-hover:bg-yellow-500/30",
+                    iconTextColor: "text-yellow-400",
+                  },
+                  {
+                    key: "stats-duration-card",
+                    id: "stats-duration-card",
+                    icon: Clock,
+                    iconColor: "blue",
+                    value: isMounted ? `${stats.avgDuration}m` : "0m",
+                    label: dyn.v3.text("stats_duration_label", "Avg Duration"),
+                    iconBg: "bg-blue-500/20",
+                    iconHover: "group-hover:bg-blue-500/30",
+                    iconTextColor: "text-blue-400",
+                  },
+                ];
+
+                // Orden original (seed=1): Movies, Genres, Rating, Duration
+                const originalOrder = [0, 1, 2, 3];
                 
-                {/* Stats Card 2: Genres */}
-                {dyn.v1.wrap("stats-genres-card", (
-                  <div
-                    id={dyn.v3.id("stats-genres-card")}
-                    className={cn(
-                      "group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105",
-                      dyn.v3.class("stats-card", "")
-                    )}
-                  >
-                    <div className={cn(
-                      "flex items-center justify-center w-10 h-10 rounded-xl bg-purple-500/20 mb-3 group-hover:bg-purple-500/30 transition-colors",
-                      dyn.v3.class("stats-icon-container", "")
-                    )}>
-                      <Sparkles className={cn("h-5 w-5 text-purple-400", dyn.v3.class("icon-sparkles", ""))} />
-                    </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
-                      {isMounted ? stats.totalGenres : "0"}
-                    </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
-                      {dyn.v3.text("stats_genres_label", "Genres")}
-                    </div>
+                // Si seed=1, usar orden original. Si no, usar orden dinámico
+                const orderedCards = dyn.seed === 1 
+                  ? originalOrder.map(i => statsCards[i])
+                  : (() => {
+                      // Generar orden dinámico usando pickVariant
+                      // Usar diferentes keys para generar diferentes órdenes según el seed
+                      const orderVariants = [
+                        [0, 1, 2, 3], // Original: Movies, Genres, Rating, Duration
+                        [1, 0, 3, 2], // Genres, Movies, Duration, Rating
+                        [2, 3, 0, 1], // Rating, Duration, Movies, Genres
+                        [3, 2, 1, 0], // Duration, Rating, Genres, Movies
+                        [0, 2, 1, 3], // Movies, Rating, Genres, Duration
+                        [1, 3, 0, 2], // Genres, Duration, Movies, Rating
+                        [2, 0, 3, 1], // Rating, Movies, Duration, Genres
+                        [3, 1, 2, 0], // Duration, Genres, Rating, Movies
+                        [0, 3, 2, 1], // Movies, Duration, Rating, Genres
+                        [1, 2, 3, 0], // Genres, Rating, Duration, Movies
+                      ];
+                      
+                      const variantIndex = dyn.pickVariant("stats-order", orderVariants.length);
+                      const order = orderVariants[variantIndex];
+                      return order.map(i => statsCards[i]);
+                    })();
+
+                return (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+                    {orderedCards.map((card, index) => {
+                      const IconComponent = card.icon;
+                      return dyn.v1.wrap(card.key, (
+                        <div
+                          key={`${card.key}-${index}`}
+                          id={dyn.v3.id(card.id)}
+                          data-dyn-key={card.key}
+                          className={cn(
+                            "group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105",
+                            dyn.v3.class("stats-card", "")
+                          )}
+                        >
+                          <div className={cn(
+                            "flex items-center justify-center w-10 h-10 rounded-xl mb-3 transition-colors",
+                            card.iconBg,
+                            card.iconHover,
+                            dyn.v3.class("stats-icon-container", "")
+                          )}>
+                            <IconComponent className={cn("h-5 w-5", card.iconTextColor, dyn.v3.class(`icon-${card.iconColor}`, ""))} />
+                          </div>
+                          <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+                            {card.value}
+                          </div>
+                          <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
+                            {card.label}
+                          </div>
+                        </div>
+                      ));
+                    })}
                   </div>
-                ))}
-                
-                {/* Stats Card 3: Avg Rating */}
-                {dyn.v1.wrap("stats-rating-card", (
-                  <div
-                    id={dyn.v3.id("stats-rating-card")}
-                    className={cn(
-                      "group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105",
-                      dyn.v3.class("stats-card", "")
-                    )}
-                  >
-                    <div className={cn(
-                      "flex items-center justify-center w-10 h-10 rounded-xl bg-yellow-500/20 mb-3 group-hover:bg-yellow-500/30 transition-colors",
-                      dyn.v3.class("stats-icon-container", "")
-                    )}>
-                      <Star className={cn("h-5 w-5 text-yellow-400", dyn.v3.class("icon-star", ""))} />
-                    </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
-                      {isMounted ? stats.avgRating : "0.0"}
-                    </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
-                      {dyn.v3.text("stats_rating_label", "Avg Rating")}
-                    </div>
-                  </div>
-                ))}
-                
-                {/* Stats Card 4: Avg Duration */}
-                {dyn.v1.wrap("stats-duration-card", (
-                  <div
-                    id={dyn.v3.id("stats-duration-card")}
-                    className={cn(
-                      "group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-secondary/50 hover:bg-white/10 hover:scale-105",
-                      dyn.v3.class("stats-card", "")
-                    )}
-                  >
-                    <div className={cn(
-                      "flex items-center justify-center w-10 h-10 rounded-xl bg-blue-500/20 mb-3 group-hover:bg-blue-500/30 transition-colors",
-                      dyn.v3.class("stats-icon-container", "")
-                    )}>
-                      <Clock className={cn("h-5 w-5 text-blue-400", dyn.v3.class("icon-clock", ""))} />
-                    </div>
-                    <div className="text-3xl md:text-4xl font-bold text-white mb-1">
-                      {isMounted ? `${stats.avgDuration}m` : "0m"}
-                    </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
-                      {dyn.v3.text("stats_duration_label", "Avg Duration")}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                );
+              })()}
 
               {/* Featured Movies */}
               <div>

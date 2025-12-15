@@ -57,10 +57,19 @@ export function applyV1Wrapper(
   const wrapperVariants = options?.wrapperVariants ?? 2; // Por defecto: con wrapper o sin wrapper
   const decoyVariants = options?.decoyVariants ?? 3; // Por defecto: none, before, after
 
-  // Usar pickVariant con el componentKey específico para este componente
-  // Esto asegura que cada componente tenga sus propias variantes determinísticas
-  const wrapperVariant = pickVariant(seed, `${componentKey}-wrapper`, wrapperVariants);
-  const decoyVariant = pickVariant(seed, `${componentKey}-decoy`, decoyVariants);
+  // Seed 1 = versión original/base - sin wrappers ni decoys
+  let wrapperVariant: number;
+  let decoyVariant: number;
+  
+  if (seed === 1) {
+    // Seed 1: sin wrappers ni decoys (versión original)
+    wrapperVariant = 0;
+    decoyVariant = 0;
+  } else {
+    // Otros seeds: usar variantes dinámicas
+    wrapperVariant = pickVariant(seed, `${componentKey}-wrapper`, wrapperVariants);
+    decoyVariant = pickVariant(seed, `${componentKey}-decoy`, decoyVariants);
+  }
 
   // Aplicar wrapper si la variante lo requiere (variante 0 = sin wrapper, variante 1+ = con wrapper)
   const shouldWrap = wrapperVariant > 0;

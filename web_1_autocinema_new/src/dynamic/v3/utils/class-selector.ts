@@ -28,8 +28,15 @@ export function getClassForElement(
     return fallback;
   }
   
-  // Usar pickVariant con el classType como key para consistencia
-  const variantIndex = pickVariant(seed, classType, variants.length);
+  // Seed 1 = versión original/base - siempre usar primera variante (índice 0)
+  let variantIndex: number;
+  if (seed === 1) {
+    variantIndex = 0; // Primera variante = original
+  } else {
+    // Otros seeds: usar variantes dinámicas
+    variantIndex = pickVariant(seed, classType, variants.length);
+  }
+  
   return variants[variantIndex] || variants[0] || fallback;
 }
 
