@@ -136,6 +136,10 @@ export default function ExpertProfileClient({ slug }: { slug: string }) {
             src={expert.avatar}
             alt={expert.name}
             className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src =
+                "https://ext.same-assets.com/1836270417/1435009301.png";
+            }}
             {...getElementAttributes("expert-avatar", 0)}
           />
           <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>

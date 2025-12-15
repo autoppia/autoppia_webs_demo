@@ -122,6 +122,10 @@ export default function HireLaterPage() {
                   src={expert.avatar}
                   alt={expert.name}
                   className="w-14 h-14 rounded-full object-cover border border-gray-200"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src =
+                      "https://ext.same-assets.com/1836270417/1435009301.png";
+                  }}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-gray-900 truncate">{expert.name}</div>

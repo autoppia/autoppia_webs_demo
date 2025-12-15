@@ -1264,6 +1264,10 @@ export default function Home() {
 										src={hire.avatar}
 										alt={hire.name}
 										className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-blue-400 transition-colors"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        "https://ext.same-assets.com/1836270417/1435009301.png";
+                    }}
 									/>
 									{hire.rehire && (
 										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
@@ -1482,6 +1486,10 @@ export default function Home() {
 											src={expert.avatar}
 											alt={expert.name}
 											className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md group-hover:border-purple-400 transition-colors"
+											onError={(e) => {
+												(e.currentTarget as HTMLImageElement).src =
+													"https://ext.same-assets.com/1836270417/1435009301.png";
+											}}
 										/>
 										<div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
 									</div>

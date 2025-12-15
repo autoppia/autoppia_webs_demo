@@ -17,6 +17,17 @@ interface UserProfile {
 }
 
 export default function ProfileClient({ username }: { username: string }) {
+  // Mock user profile data
+  const user: UserProfile = {
+    username: username || "alexsmith",
+    name: "Alex Smith",
+    avatar: "https://ext.same-assets.com/1836270417/1435009301.png",
+    title: "Project Manager",
+    location: "San Francisco, CA",
+    about: "Experienced project manager specializing in tech and innovation. Love working with talented freelancers to bring creative ideas to life.",
+    email: `${username || "alexsmith"}@autowork.com`,
+  };
+
   const router = useSeedRouter();
   const { getElementAttributes, getText } = useSeedLayout();
   const jobsState = useAutoworkData<any>("web_10_autowork_jobs", 6);
@@ -40,17 +51,6 @@ export default function ProfileClient({ username }: { username: string }) {
     email: user.email || "",
   });
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  
-  // Mock user profile data
-  const user: UserProfile = {
-    username: username || "alexsmith",
-    name: "Alex Smith",
-    avatar: "https://ext.same-assets.com/1836270417/1435009301.png",
-    title: "Project Manager",
-    location: "San Francisco, CA",
-    about: "Experienced project manager specializing in tech and innovation. Love working with talented freelancers to bring creative ideas to life.",
-    email: `${username || "alexsmith"}@autowork.com`,
-  };
 
   // Load user data from localStorage
   useEffect(() => {
@@ -523,6 +523,10 @@ export default function ProfileClient({ username }: { username: string }) {
                       src={expert.avatar}
                       alt={expert.name}
                       className="w-12 h-12 rounded-full object-cover"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src =
+                          "https://ext.same-assets.com/1836270417/1435009301.png";
+                      }}
                     />
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-gray-900 text-sm truncate">
