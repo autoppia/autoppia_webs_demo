@@ -71,22 +71,3 @@ export function getVariant(
   return selectedVariants[variantIndex] || selectedVariants[0];
 }
 
-/**
- * Get multiple variants at once from a dictionary or global JSONs
- * 
- * @param seed - The seed value
- * @param keys - Array of keys to look up
- * @param variants - Optional dictionary to search in
- * @returns Object mapping keys to their selected variants
- */
-export function getVariants(
-  seed: number,
-  keys: string[],
-  variants?: Record<string, string[]>
-): Record<string, string> {
-  return keys.reduce((acc, key) => {
-    acc[key] = getVariant(seed, key, variants);
-    return acc;
-  }, {} as Record<string, string>);
-}
-
