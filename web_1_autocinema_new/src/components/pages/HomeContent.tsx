@@ -13,17 +13,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/library/utils";
 import { useDynamic } from "@/dynamic/shared";
+import { useSeed } from "@/context/SeedContext";
 
 export function HomeContent() {
   const router = useSeedRouter();
   const dyn = useDynamic();
+  const { isSeedReady } = useSeed();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMounted, setIsMounted] = useState(false);
 
-  // Evitar problemas de hidratación
+  // Evitar problemas de hidratación - esperar hasta que el seed esté sincronizado
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  // No renderizar contenido dinámico hasta que el seed esté listo
+  const isReady = isMounted && isSeedReady;
 
   // Debug: Verificar que V1 y V3 están funcionando
   useEffect(() => {
@@ -151,11 +156,11 @@ export function HomeContent() {
 
               {/* Search Bar */}
               {dyn.v1.wrap("home-search-section", (
-                <div className="mb-10">
+                <div className="mb-10 w-full">
                   <form
                     id={dyn.v3.id("search-form")}
                     className={cn(
-                      "flex flex-col gap-3 sm:flex-row max-w-3xl mx-auto",
+                      "flex flex-col gap-3 sm:flex-row w-full",
                       dyn.v3.class("search-form", "")
                     )}
                     onSubmit={(event) => {
@@ -164,7 +169,7 @@ export function HomeContent() {
                     }}
                   >
                     {dyn.v1.wrap("search-input-container", (
-                      <div className="relative flex-1">
+                      <div className="relative flex-1 w-full">
                         <Search
                           id={dyn.v3.id("search-icon")}
                           className={cn(
@@ -176,8 +181,8 @@ export function HomeContent() {
                           type="search"
                           value={searchQuery}
                           onChange={(event) => setSearchQuery(event.target.value)}
-                          placeholder="Search directors, titles, or moods"
-                          className="pl-12 h-14 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
+                          placeholder={dyn.v3.text("search_placeholder", "Search directors, titles, or moods")}
+                          className="pl-12 h-14 w-full min-w-0 bg-white/10 text-white placeholder:text-white/50 border-white/20 focus:border-secondary focus:ring-2 focus:ring-secondary/20 text-base"
                         />
                       </div>
                     ))}
@@ -185,7 +190,7 @@ export function HomeContent() {
                       id={dyn.v3.id("search-submit-button")}
                       type="submit"
                       className={cn(
-                        "h-14 px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base",
+                        "h-14 min-w-[120px] px-8 bg-secondary text-black hover:bg-secondary/90 shadow-lg shadow-secondary/20 font-semibold text-base whitespace-nowrap",
                         dyn.v3.class("search-button", "")
                       )}
                     >
@@ -216,7 +221,7 @@ export function HomeContent() {
                     <div className="text-3xl md:text-4xl font-bold text-white mb-1">
                       {isMounted ? `${stats.totalMovies}+` : "0+"}
                     </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
+                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
                       {dyn.v3.text("stats_movies_label", "Movies")}
                     </div>
                   </div>
@@ -240,7 +245,7 @@ export function HomeContent() {
                     <div className="text-3xl md:text-4xl font-bold text-white mb-1">
                       {isMounted ? stats.totalGenres : "0"}
                     </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
+                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
                       {dyn.v3.text("stats_genres_label", "Genres")}
                     </div>
                   </div>
@@ -264,7 +269,7 @@ export function HomeContent() {
                     <div className="text-3xl md:text-4xl font-bold text-white mb-1">
                       {isMounted ? stats.avgRating : "0.0"}
                     </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
+                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
                       {dyn.v3.text("stats_rating_label", "Avg Rating")}
                     </div>
                   </div>
@@ -288,7 +293,7 @@ export function HomeContent() {
                     <div className="text-3xl md:text-4xl font-bold text-white mb-1">
                       {isMounted ? `${stats.avgDuration}m` : "0m"}
                     </div>
-                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider">
+                    <div className="text-xs text-white/60 font-medium uppercase tracking-wider text-center min-h-[16px]">
                       {dyn.v3.text("stats_duration_label", "Avg Duration")}
                     </div>
                   </div>
@@ -417,7 +422,7 @@ export function HomeContent() {
                             <SeedLink
                               href={`/movies/${movie.id}`}
                               id={dyn.v3.id("featured-movie-view-details-btn", index)}
-                              className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20"
+                              className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20 whitespace-nowrap min-w-[120px]"
                             >
                               <Play className="h-4 w-4" />
                               {dyn.v3.text("view_details", "View Details")}

@@ -40,14 +40,18 @@ export function generateElementId(
   // Add index suffix if needed
   const finalId = index > 0 ? `${baseId}-${index}` : baseId;
   
-  if (typeof window !== "undefined" && process.env.NODE_ENV === "development" && elementType === "stats-movies-card") {
-    console.log(`[id-generator] Generated ID for "${elementType}":`, {
-      seed,
-      variantIndex,
-      baseId,
-      finalId,
-      availableVariants: variants.length
-    });
+  // Debug para elementos importantes
+  if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+    const debugElements = ["stats-movies-card", "search-submit-button", "featured-movie-card"];
+    if (debugElements.includes(elementType)) {
+      console.log(`[id-generator] Generated ID for "${elementType}":`, {
+        seed,
+        variantIndex,
+        baseId,
+        finalId,
+        availableVariants: variants.length
+      });
+    }
   }
   
   return finalId;

@@ -132,14 +132,24 @@ function SeedProviderInner({
   
   // Sincronizar seed cuando cambie la URL
   useEffect(() => {
+    // Leer seed de la URL (prioridad sobre window.__INITIAL_SEED__)
     const urlSeed = searchParams.get("seed");
     if (urlSeed) {
       const parsed = clampBaseSeed(Number.parseInt(urlSeed, 10));
       if (parsed !== seed) {
+        console.log(`[autocinema][seed] Actualizando seed desde URL: ${seed} → ${parsed}`);
         setSeedState(parsed);
       }
       setIsSeedReady(true);
     } else {
+      // Si no hay seed en URL, verificar window.__INITIAL_SEED__
+      if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
+        const initialSeed = clampBaseSeed((window as any).__INITIAL_SEED__);
+        if (initialSeed !== seed) {
+          console.log(`[autocinema][seed] Actualizando seed desde window.__INITIAL_SEED__: ${seed} → ${initialSeed}`);
+          setSeedState(initialSeed);
+        }
+      }
       setIsSeedReady(true);
     }
   }, [searchParams, seed]);

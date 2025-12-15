@@ -27,6 +27,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Inyectar seed desde la URL antes de que React se monte */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const params = new URLSearchParams(window.location.search);
+                  const seed = params.get('seed');
+                  if (seed) {
+                    window.__INITIAL_SEED__ = parseInt(seed, 10);
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.className} bg-neutral-950 text-white`} suppressHydrationWarning>
         <AuthProvider>
           <SeedProvider>

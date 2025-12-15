@@ -21,9 +21,16 @@ import type { ReactNode } from "react";
 
 /**
  * Genera un hash determinístico de una cadena
+ * Versión optimizada que evita números demasiado grandes
  */
 export function hashString(value: string): number {
-  return value.split("").reduce((acc, char) => acc * 31 + char.charCodeAt(0), 7);
+  let hash = 0;
+  for (let i = 0; i < value.length; i++) {
+    const char = value.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer (evita overflow)
+  }
+  return Math.abs(hash);
 }
 
 /**
@@ -36,7 +43,15 @@ export function hashString(value: string): number {
  */
 export function pickVariant(seed: number, key: string, count: number): number {
   if (count <= 1) return 0;
-  return Math.abs(seed + hashString(key)) % count;
+  
+  // Combinar seed y key en una cadena única y hashearla
+  // Esto asegura que cada combinación (seed, key) produzca un hash único
+  const combinedInput = `${key}:${seed}`;
+  const combinedHash = hashString(combinedInput);
+  
+  // Reducir el hash al rango de variantes disponibles
+  // Usar módulo directo para máxima distribución
+  return Math.abs(combinedHash) % count;
 }
 
 /**

@@ -66,13 +66,18 @@ export function applyV1Wrapper(
   const shouldWrap = wrapperVariant > 0;
   
   // Aplicar wrapper si es necesario
+  // Usar div en lugar de span para elementos que necesitan ocupar todo el ancho
+  const useDivWrapper = componentKey.includes("input-container") || componentKey.includes("form") || componentKey.includes("search");
+  const WrapperElement = useDivWrapper ? "div" : "span";
+  
   const core = shouldWrap
     ? React.createElement(
-        "span",
+        WrapperElement,
         {
           "data-dyn-wrap": componentKey,
           "data-v1": "true",
           "data-wrapper-variant": wrapperVariant,
+          className: useDivWrapper ? "w-full" : undefined,
         },
         children
       )
