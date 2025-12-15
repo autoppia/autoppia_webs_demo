@@ -8,6 +8,8 @@ import { Sparkles, TrendingUp, Play, Star, Search as SearchIcon } from "lucide-r
 import { useMemo } from "react";
 import { cn } from "@/library/utils";
 import { useDynamic } from "@/dynamic/shared";
+import { useSeed } from "@/context/SeedContext";
+import { getVariant } from "@/dynamic/v3";
 
 interface HeroSectionProps {
   searchQuery: string;
@@ -25,6 +27,23 @@ export function HeroSection({
   className,
 }: HeroSectionProps) {
   const dyn = useDynamic();
+  const { seed } = useSeed();
+
+  // Variantes locales de IDs específicos del HeroSection (no se reutilizan en otros componentes)
+  // Si no están aquí, se buscarán en id-variants.json (generales)
+  const dynamicV3Ids: Record<string, string[]> = {
+    section: ["hero-section", "main-hero", "primary-hero", "hero-container", "main-section"],
+    title: ["featured-title", "highlighted-title", "spotlight-title", "featured-heading", "main-featured"],
+    button: ["hero-view-details-btn", "view-details-button", "details-action", "view-movie-btn", "details-btn"],
+  };
+
+  // Variantes locales de clases específicas del HeroSection (si las hay)
+  // Si no están aquí, se buscarán en class-variants.json (generales)
+  const dynamicV3Classes: Record<string, string[]> = {
+    // Ejemplo: si necesitáramos clases dinámicas locales
+    // section: ["hero-section", "main-hero-section", "primary-hero-section"],
+  };
+
   const stats = useMemo(() => {
     const totalDuration = featuredMovies.reduce((acc, movie) => acc + movie.duration, 0);
     return {
@@ -42,11 +61,10 @@ export function HeroSection({
     <>
       {dyn.v1.wrap("hero-section", (
         <section
-          id={dyn.v3.id("hero-section")}
+          id={getVariant(seed, "section", dynamicV3Ids)}
           className={cn(
             "relative w-full overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] text-white",
-            className,
-            dyn.v3.class("hero-section", "")
+            className
           )}
         >
       {/* Animated background effects */}
@@ -127,7 +145,7 @@ export function HeroSection({
                   <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/20">
                     <TrendingUp className="h-5 w-5 text-secondary" />
                   </div>
-                  <h2 id={dyn.v3.id("featured-title")} className="text-3xl font-bold">
+                  <h2 id={getVariant(seed, "title", dynamicV3Ids)} className="text-3xl font-bold">
                     {dyn.v3.text("featured_title", "Featured This Week")}
                   </h2>
                 </div>
@@ -187,7 +205,7 @@ export function HeroSection({
                         {/* CTA Button */}
                         <SeedLink
                           href={`/movies/${movie.id}`}
-                          id={dyn.v3.id("hero-view-details-btn")}
+                          id={getVariant(seed, "button", dynamicV3Ids)}
                           className="inline-flex items-center justify-center gap-2 rounded-xl bg-secondary px-6 py-3 text-sm font-bold text-black transition-all hover:bg-secondary/90 hover:scale-105 shadow-lg shadow-secondary/20"
                         >
                           <Play className="h-4 w-4" />

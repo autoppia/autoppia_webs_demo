@@ -11,7 +11,7 @@ import { useSeed } from "@/context/SeedContext";
 import { applyV1Wrapper, type V1WrapperOptions } from "../v1/structure";
 import { isV3Enabled } from "./flags";
 import { generateElementId } from "../v3/utils/id-generator";
-import { getTextForElement } from "../v3/utils/text-selector";
+import { getVariant } from "../v3/utils/variant-selector";
 import { getClassForElement } from "../v3/utils/class-selector";
 import { generateDynamicOrder } from "./order-utils";
 import type { ReactNode } from "react";
@@ -118,10 +118,14 @@ export function useDynamic() {
       /**
        * Obtiene texto dinámico
        * Si V3 está OFF, devuelve fallback
+       * 
+       * @param key - Text key (e.g., 'search_placeholder', 'view_details')
+       * @param fallback - Fallback text if variant not found
+       * @param localVariants - Optional local dictionary for component-specific texts
        */
-      text: (key: string, fallback: string) => {
+      text: (key: string, fallback: string, localVariants?: Record<string, string[]>) => {
         if (!isV3Enabled()) return fallback;
-        return getTextForElement(seed, key, fallback);
+        return getVariant(seed, key, localVariants, fallback);
       },
       
       /**
