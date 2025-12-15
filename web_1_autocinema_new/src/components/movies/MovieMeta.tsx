@@ -4,32 +4,52 @@ interface MovieMetaProps {
   movie: Movie;
 }
 
+import { Clock, Film, User, Users, Calendar } from "lucide-react";
+
 export function MovieMeta({ movie }: MovieMetaProps) {
   return (
-    <section className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white">
+    <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl text-white">
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <h2 className="text-xl font-semibold">Synopsis</h2>
-          <p className="mt-3 text-white/70">{movie.synopsis}</p>
+          <div className="flex items-center gap-3 mb-4">
+            <Film className="h-5 w-5 text-secondary" />
+            <h2 className="text-2xl font-bold">Synopsis</h2>
+          </div>
+          <p className="text-lg text-white/80 leading-relaxed">{movie.synopsis}</p>
         </div>
-        <div>
-          <h3 className="text-xl font-semibold">Film details</h3>
-          <dl className="mt-4 space-y-3 text-sm text-white/70">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
-              <dt>Duration</dt>
-              <dd>{movie.duration} min</dd>
+        <div className="lg:border-l lg:border-white/10 lg:pl-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Film className="h-5 w-5 text-secondary" />
+            <h3 className="text-2xl font-bold">Film Details</h3>
+          </div>
+          <dl className="space-y-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <dt className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <Clock className="h-4 w-4 text-secondary" />
+                Duration
+              </dt>
+              <dd className="text-base font-semibold text-white">{movie.duration} min</dd>
             </div>
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
-              <dt>Genres</dt>
-              <dd>{movie.genres.slice(0, 3).join(", ")}</dd>
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <dt className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <Film className="h-4 w-4 text-secondary" />
+                Genres
+              </dt>
+              <dd className="text-base font-semibold text-white text-right max-w-[60%]">{movie.genres.slice(0, 3).join(", ")}</dd>
             </div>
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
-              <dt>Director</dt>
-              <dd>{movie.director}</dd>
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <dt className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <User className="h-4 w-4 text-secondary" />
+                Director
+              </dt>
+              <dd className="text-base font-semibold text-white text-right max-w-[60%]">{movie.director}</dd>
             </div>
-            <div className="flex items-center justify-between">
-              <dt>Cast</dt>
-              <dd>{movie.cast.slice(0, 4).join(", ") || "Classified"}</dd>
+            <div className="flex items-start justify-between pt-2">
+              <dt className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <Users className="h-4 w-4 text-secondary" />
+                Cast
+              </dt>
+              <dd className="text-base font-semibold text-white text-right max-w-[60%]">{movie.cast.slice(0, 4).join(", ") || "Classified"}</dd>
             </div>
           </dl>
         </div>

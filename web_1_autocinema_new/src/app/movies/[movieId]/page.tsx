@@ -63,20 +63,29 @@ export default function MovieDetailPage() {
 
   if (!movie) {
     return (
-      <main className="mx-auto max-w-4xl px-4 py-16 text-white">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
-          <h1 className="text-3xl font-semibold">Movie not found</h1>
-          <p className="mt-3 text-white/70">
-            Try selecting a different seed or explore the full library.
-          </p>
-          <SeedLink
-            href="/"
-            className="mt-6 inline-flex rounded-full border border-white/10 px-6 py-3 text-sm uppercase tracking-wide text-secondary"
-          >
-            Back to home
-          </SeedLink>
-        </div>
-      </main>
+      <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
+        {/* Background grid pattern */}
+        <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+        {/* Background gradient overlays */}
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
+        <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
+        
+        <main className="relative mx-auto max-w-4xl px-4 py-16 text-white">
+          <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 text-center backdrop-blur-sm shadow-2xl">
+            <h1 className="text-3xl font-semibold">Movie not found</h1>
+            <p className="mt-3 text-white/70">
+              Try selecting a different seed or explore the full library.
+            </p>
+            <SeedLink
+              href="/"
+              className="mt-6 inline-flex rounded-full border border-white/10 px-6 py-3 text-sm uppercase tracking-wide text-secondary hover:bg-secondary/10 transition-colors"
+            >
+              Back to home
+            </SeedLink>
+          </div>
+        </main>
+      </div>
     );
   }
 
@@ -165,43 +174,52 @@ export default function MovieDetailPage() {
   };
 
   return (
-    <main className="mx-auto max-w-5xl space-y-8 px-4 py-10 text-white">
-      {message && (
-        <p className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
-          {message}
-        </p>
-      )}
-      <MovieDetailHero
-        movie={movie}
-        onWatchTrailer={handleWatchTrailer}
-        onWatchlist={handleWatchlist}
-        onShare={handleShare}
-      />
-      <MovieMeta movie={movie} />
-      {canManageMovie && (
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6 text-white">
-          <h2 className="text-xl font-semibold">Manage Movie</h2>
-          <p className="text-sm text-white/60">
-            Edit or delete this movie from the catalog.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Button
-              variant="ghost"
-              className="rounded-full border border-white/10 bg-white/10 text-red-300 hover:bg-red-400/20"
-              onClick={handleDelete}
-            >
-              Delete movie
-            </Button>
+    <div className="w-full bg-gradient-to-br from-[#0a0d14] via-[#141926] to-[#0F172A] relative min-h-screen">
+      {/* Background grid pattern */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+      {/* Background gradient overlays */}
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)] pointer-events-none" />
+      <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
+      
+      <main className="relative mx-auto max-w-6xl space-y-8 px-4 py-10 text-white">
+        {message && (
+          <div className="rounded-xl border border-green-400/30 bg-green-400/10 p-4 backdrop-blur-sm">
+            <p className="text-sm text-green-200">{message}</p>
           </div>
-          <MovieEditor
-            movie={movie}
-            onSubmit={handleEditSubmit}
-            submitLabel="Edit Film"
-          />
-        </section>
-      )}
-      <RelatedMovies movies={relatedMovies} />
-      <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
-    </main>
+        )}
+        <MovieDetailHero
+          movie={movie}
+          onWatchTrailer={handleWatchTrailer}
+          onWatchlist={handleWatchlist}
+          onShare={handleShare}
+        />
+        <MovieMeta movie={movie} />
+        {canManageMovie && (
+          <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-sm shadow-2xl text-white">
+            <h2 className="text-2xl font-bold mb-2">Manage Movie</h2>
+            <p className="text-sm text-white/70 mb-6">
+              Edit or delete this movie from the catalog.
+            </p>
+            <div className="mb-6 flex flex-wrap gap-3">
+              <Button
+                variant="ghost"
+                className="rounded-full border border-red-400/30 bg-red-400/10 text-red-300 hover:bg-red-400/20 transition-colors"
+                onClick={handleDelete}
+              >
+                Delete movie
+              </Button>
+            </div>
+            <MovieEditor
+              movie={movie}
+              onSubmit={handleEditSubmit}
+              submitLabel="Edit Film"
+            />
+          </section>
+        )}
+        <RelatedMovies movies={relatedMovies} />
+        <CommentsPanel comments={comments} onSubmit={handleCommentSubmit} />
+      </main>
+    </div>
   );
 }
