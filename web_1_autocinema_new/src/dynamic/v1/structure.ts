@@ -78,21 +78,28 @@ export function applyV1Wrapper(
       )
     : children;
 
-  // Crear decoy según la variante (0=none, 1=before, 2=after, etc.)
-  const decoy =
-    decoyVariant === 0
-      ? null
-      : React.createElement("span", {
-          "data-decoy": generateId(seed, `${componentKey}-decoy`, "decoy"),
-          className: "hidden",
-          "aria-hidden": "true",
-          "data-v1": "true",
-          "data-decoy-variant": decoyVariant,
-        });
-
   // Retornar según posición del decoy
   // Usar un key determinístico basado en el seed y componentKey para evitar problemas de hidratación
   const fragmentKey = reactKey ?? `v1-wrap-${componentKey}-${seed}`;
+  
+  // TEMPORAL: Deshabilitar decoys para evitar errores de hidratación
+  // TODO: Implementar solución más robusta que maneje SSR correctamente
+  // Los wrappers siguen funcionando, solo los decoys están deshabilitados
+  const decoysEnabled = false;
+  
+  // Si no hay decoy o están deshabilitados, solo retornar el core
+  if (decoyVariant === 0 || !decoysEnabled) {
+    return React.createElement(Fragment, { key: fragmentKey }, core);
+  }
+  
+  // Crear decoy (actualmente deshabilitado)
+  const decoy = React.createElement("span", {
+    "data-decoy": generateId(seed, `${componentKey}-decoy`, "decoy"),
+    className: "hidden",
+    "aria-hidden": "true",
+    "data-v1": "true",
+    "data-decoy-variant": decoyVariant,
+  });
   
   if (decoyVariant === 1) {
     return React.createElement(

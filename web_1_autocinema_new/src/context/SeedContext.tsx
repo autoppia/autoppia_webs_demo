@@ -9,6 +9,7 @@ interface SeedContextType {
   seed: number;
   setSeed: (seed: number) => void;
   getNavigationUrl: (path: string) => string;
+  isSeedReady: boolean; // Indica si el seed está sincronizado con la URL
 }
 
 const DEFAULT_SEED = 1;
@@ -17,6 +18,7 @@ const SeedContext = createContext<SeedContextType>({
   seed: DEFAULT_SEED,
   setSeed: () => {},
   getNavigationUrl: (path: string) => path,
+  isSeedReady: false,
 });
 
 const STORAGE_KEY = "autocinema_seed_base";
@@ -37,38 +39,84 @@ function SeedInitializer({ onSeedFromUrl }: { onSeedFromUrl: (seed: number | nul
   return null;
 }
 
-export const SeedProvider = ({ children }: { children: React.ReactNode }) => {
+export const SeedProvider = ({ 
+  children, 
+  initialSeed 
+}: { 
+  children: React.ReactNode;
+  initialSeed?: number; // Seed desde Server Component (prioridad sobre useSearchParams)
+}) => {
   return (
     <Suspense fallback={children}>
-      <SeedProviderInner>{children}</SeedProviderInner>
+      <SeedProviderInner initialSeed={initialSeed}>{children}</SeedProviderInner>
     </Suspense>
   );
 };
 
-function SeedProviderInner({ children }: { children: React.ReactNode }) {
+function SeedProviderInner({ 
+  children, 
+  initialSeed 
+}: { 
+  children: React.ReactNode;
+  initialSeed?: number;
+}) {
   const searchParams = useSearchParams();
-  const [seed, setSeedState] = useState<number>(DEFAULT_SEED);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
-    if (isInitialized) return;
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const parsed = clampBaseSeed(Number.parseInt(saved, 10));
-          setSeedState(parsed);
-        }
-      } catch (error) {
-        console.error("Error loading seed:", error);
+  
+  // Inicializar seed directamente desde la URL para evitar problemas de hidratación
+  const getInitialSeed = (): number => {
+    // PRIORIDAD 1: Leer de window.__INITIAL_SEED__ inyectado por Server Component
+    // Esto garantiza que SSR y cliente usen el mismo seed desde el inicio
+    if (typeof window !== "undefined" && (window as any).__INITIAL_SEED__ !== undefined) {
+      const serverSeed = (window as any).__INITIAL_SEED__;
+      if (typeof serverSeed === "number" && Number.isFinite(serverSeed)) {
+        return clampBaseSeed(serverSeed);
       }
     }
-    setIsInitialized(true);
-  }, [isInitialized]);
+    
+    // PRIORIDAD 2: Si initialSeed viene como prop, usarlo
+    if (initialSeed !== undefined) {
+      return clampBaseSeed(initialSeed);
+    }
+    
+    // PRIORIDAD 3: Intentar leer de useSearchParams (puede fallar en SSR)
+    try {
+      const urlSeed = searchParams.get("seed");
+      if (urlSeed) {
+        return clampBaseSeed(Number.parseInt(urlSeed, 10));
+      }
+    } catch (error) {
+      // useSearchParams puede fallar durante SSR
+    }
+    
+    // PRIORIDAD 4: Intentar leer de window.location (solo en cliente)
+    if (typeof window !== "undefined") {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const urlSeed = params.get("seed");
+        if (urlSeed) {
+          return clampBaseSeed(Number.parseInt(urlSeed, 10));
+        }
+        
+        // Si no hay seed en URL, intentar localStorage
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          return clampBaseSeed(Number.parseInt(saved, 10));
+        }
+      } catch (error) {
+        // Ignorar errores
+      }
+    }
+    
+    return DEFAULT_SEED;
+  };
+  
+  const [seed, setSeedState] = useState<number>(getInitialSeed);
+  const [isSeedReady, setIsSeedReady] = useState<boolean>(false);
 
   const handleSeedFromUrl = useCallback((urlSeed: number | null) => {
     if (urlSeed !== null) {
       setSeedState(urlSeed);
+      setIsSeedReady(true);
       if (typeof window !== "undefined") {
         try {
           localStorage.setItem(STORAGE_KEY, urlSeed.toString());
@@ -76,7 +124,29 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
           console.error("Error saving seed to localStorage:", error);
         }
       }
+    } else {
+      // Si no hay seed en URL, el seed por defecto está listo
+      setIsSeedReady(true);
     }
+  }, []);
+  
+  // Sincronizar seed cuando cambie la URL
+  useEffect(() => {
+    const urlSeed = searchParams.get("seed");
+    if (urlSeed) {
+      const parsed = clampBaseSeed(Number.parseInt(urlSeed, 10));
+      if (parsed !== seed) {
+        setSeedState(parsed);
+      }
+      setIsSeedReady(true);
+    } else {
+      setIsSeedReady(true);
+    }
+  }, [searchParams, seed]);
+  
+  // Marcar como listo después del primer render del cliente
+  useEffect(() => {
+    setIsSeedReady(true);
   }, []);
 
   useEffect(() => {
@@ -107,7 +177,7 @@ function SeedProviderInner({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl }}>
+    <SeedContext.Provider value={{ seed, setSeed, getNavigationUrl, isSeedReady }}>
       <SeedInitializer onSeedFromUrl={handleSeedFromUrl} />
       {children}
     </SeedContext.Provider>

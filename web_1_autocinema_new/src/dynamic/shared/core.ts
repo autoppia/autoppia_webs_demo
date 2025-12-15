@@ -111,6 +111,9 @@ export function useDynamic() {
       /**
        * Obtiene ID dinámico
        * Si V3 está OFF, devuelve ID por defecto
+       * 
+       * NOTA: Los IDs pueden cambiar entre SSR y cliente debido a diferencias en el seed.
+       * Esto es esperado y se maneja con suppressHydrationWarning en los elementos.
        */
       id: (elementType: string, index?: number) => {
         if (!isV3Enabled()) {
